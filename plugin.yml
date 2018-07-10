@@ -1,0 +1,20 @@
+name: EnchantmentSolution
+version: 1.0.0
+main: org.ctp.enchantmentsolution.EnchantmentSolution
+commands:
+  enchant:
+    aliases: [es,customenchant]
+    description: Add enchantments to items.
+    usage: /enchant <enchant_name> [level]
+  enchantunsafe:
+    aliases: [esu,customenchantunsafe]
+    description: Displays commands
+    usage: /enchantunsafe <enchant_name> [level]
+  info:
+    aliases: [einfo,enchantinfo]
+    description: Gives player information on an enchantment.
+    usage: /info [enchant_name]
+  removeenchant:
+    aliases: [esr,eremove]
+    description: Remove enchantment from item.
+    usage: /removeenchant <enchant_name>

@@ -1,0 +1,12 @@
+# Eclipse stuff
+/.classpath
+/.project
+/.settings
+
+# various other potential build files
+/build
+/bin
+
+# Other Libraries
+*.jar
+/bin/*
