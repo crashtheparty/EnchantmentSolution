@@ -71,8 +71,9 @@ public class Enchantments {
 		if (item == null) {
 			return false;
 		}
+		ItemMeta meta = item.getItemMeta();
 		for(CustomEnchantment enchant : ENCHANTMENTS){
-			if(item.containsEnchantment(enchant.getRelativeEnchantment())){
+			if(meta.hasEnchant(enchant.getRelativeEnchantment())){
 				return false;
 			}
 		}

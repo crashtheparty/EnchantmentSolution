@@ -6,8 +6,8 @@ import org.bukkit.inventory.ItemStack;
 
 public class SmelteryWrapper extends CustomEnchantmentWrapper{
 
-	public SmelteryWrapper(int id) {
-		super(id);
+	public SmelteryWrapper() {
+		super("smeltery");
 	}
 
 	@Override

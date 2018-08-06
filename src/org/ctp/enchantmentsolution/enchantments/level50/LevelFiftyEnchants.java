@@ -4,6 +4,7 @@ import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.level50.custom.Angler;
 import org.ctp.enchantmentsolution.enchantments.level50.custom.Beheading;
 import org.ctp.enchantmentsolution.enchantments.level50.custom.Brine;
+import org.ctp.enchantmentsolution.enchantments.level50.custom.Drowned;
 import org.ctp.enchantmentsolution.enchantments.level50.custom.ExpShare;
 import org.ctp.enchantmentsolution.enchantments.level50.custom.FrequentFlyer;
 import org.ctp.enchantmentsolution.enchantments.level50.custom.Fried;
@@ -22,6 +23,7 @@ import org.ctp.enchantmentsolution.enchantments.level50.custom.Warp;
 import org.ctp.enchantmentsolution.enchantments.level50.vanilla.AquaAffinity;
 import org.ctp.enchantmentsolution.enchantments.level50.vanilla.BaneOfArthropods;
 import org.ctp.enchantmentsolution.enchantments.level50.vanilla.BlastProtection;
+import org.ctp.enchantmentsolution.enchantments.level50.vanilla.Channeling;
 import org.ctp.enchantmentsolution.enchantments.level50.vanilla.CurseOfBinding;
 import org.ctp.enchantmentsolution.enchantments.level50.vanilla.CurseOfVanishing;
 import org.ctp.enchantmentsolution.enchantments.level50.vanilla.DepthStrider;
@@ -32,9 +34,11 @@ import org.ctp.enchantmentsolution.enchantments.level50.vanilla.FireProtection;
 import org.ctp.enchantmentsolution.enchantments.level50.vanilla.Flame;
 import org.ctp.enchantmentsolution.enchantments.level50.vanilla.Fortune;
 import org.ctp.enchantmentsolution.enchantments.level50.vanilla.FrostWalker;
+import org.ctp.enchantmentsolution.enchantments.level50.vanilla.Impaling;
 import org.ctp.enchantmentsolution.enchantments.level50.vanilla.Infinity;
 import org.ctp.enchantmentsolution.enchantments.level50.vanilla.Knockback;
 import org.ctp.enchantmentsolution.enchantments.level50.vanilla.Looting;
+import org.ctp.enchantmentsolution.enchantments.level50.vanilla.Loyalty;
 import org.ctp.enchantmentsolution.enchantments.level50.vanilla.LuckOfTheSea;
 import org.ctp.enchantmentsolution.enchantments.level50.vanilla.Lure;
 import org.ctp.enchantmentsolution.enchantments.level50.vanilla.Mending;
@@ -43,13 +47,13 @@ import org.ctp.enchantmentsolution.enchantments.level50.vanilla.ProjectileProtec
 import org.ctp.enchantmentsolution.enchantments.level50.vanilla.Protection;
 import org.ctp.enchantmentsolution.enchantments.level50.vanilla.Punch;
 import org.ctp.enchantmentsolution.enchantments.level50.vanilla.Respiration;
+import org.ctp.enchantmentsolution.enchantments.level50.vanilla.Riptide;
 import org.ctp.enchantmentsolution.enchantments.level50.vanilla.Sharpness;
 import org.ctp.enchantmentsolution.enchantments.level50.vanilla.SilkTouch;
 import org.ctp.enchantmentsolution.enchantments.level50.vanilla.Smite;
 import org.ctp.enchantmentsolution.enchantments.level50.vanilla.SweepingEdge;
 import org.ctp.enchantmentsolution.enchantments.level50.vanilla.Thorns;
 import org.ctp.enchantmentsolution.enchantments.level50.vanilla.Unbreaking;
-import org.ctp.enchantmentsolution.nms.Version;
 
 public class LevelFiftyEnchants {
 	public static void addDefaultEnchantments() {
@@ -57,6 +61,9 @@ public class LevelFiftyEnchants {
 		DefaultEnchantments.addDefaultEnchantment(new AquaAffinity());
 		DefaultEnchantments.addDefaultEnchantment(new BaneOfArthropods());
 		DefaultEnchantments.addDefaultEnchantment(new BlastProtection());
+		DefaultEnchantments.addDefaultEnchantment(new Channeling());
+		DefaultEnchantments.addDefaultEnchantment(new CurseOfBinding());
+		DefaultEnchantments.addDefaultEnchantment(new CurseOfVanishing());
 		DefaultEnchantments.addDefaultEnchantment(new DepthStrider());
 		DefaultEnchantments.addDefaultEnchantment(new Efficiency());
 		DefaultEnchantments.addDefaultEnchantment(new FeatherFalling());
@@ -64,35 +71,28 @@ public class LevelFiftyEnchants {
 		DefaultEnchantments.addDefaultEnchantment(new FireProtection());
 		DefaultEnchantments.addDefaultEnchantment(new Flame());
 		DefaultEnchantments.addDefaultEnchantment(new Fortune());
+		DefaultEnchantments.addDefaultEnchantment(new FrostWalker());
+		DefaultEnchantments.addDefaultEnchantment(new Impaling());
 		DefaultEnchantments.addDefaultEnchantment(new Infinity());
 		DefaultEnchantments.addDefaultEnchantment(new Knockback());
 		DefaultEnchantments.addDefaultEnchantment(new Looting());
+		DefaultEnchantments.addDefaultEnchantment(new Loyalty());
 		DefaultEnchantments.addDefaultEnchantment(new LuckOfTheSea());
 		DefaultEnchantments.addDefaultEnchantment(new Lure());
+		DefaultEnchantments.addDefaultEnchantment(new Mending());
 		DefaultEnchantments.addDefaultEnchantment(new Power());
 		DefaultEnchantments.addDefaultEnchantment(new ProjectileProtection());
 		DefaultEnchantments.addDefaultEnchantment(new Protection());
 		DefaultEnchantments.addDefaultEnchantment(new Punch());
 		DefaultEnchantments.addDefaultEnchantment(new Respiration());
+		DefaultEnchantments.addDefaultEnchantment(new Riptide());
 		DefaultEnchantments.addDefaultEnchantment(new Sharpness());
 		DefaultEnchantments.addDefaultEnchantment(new SilkTouch());
 		DefaultEnchantments.addDefaultEnchantment(new Smite());
+		DefaultEnchantments.addDefaultEnchantment(new SweepingEdge());
 		DefaultEnchantments.addDefaultEnchantment(new Thorns());
 		DefaultEnchantments.addDefaultEnchantment(new Unbreaking());
 		
-		if(Version.VERSION_NUMBER > 1) {
-			DefaultEnchantments.addDefaultEnchantment(new Mending());
-			DefaultEnchantments.addDefaultEnchantment(new FrostWalker());
-		}
-		
-		if(Version.VERSION_NUMBER > 5) {
-			DefaultEnchantments.addDefaultEnchantment(new CurseOfBinding());
-			DefaultEnchantments.addDefaultEnchantment(new CurseOfVanishing());
-		}
-		
-		if(Version.VERSION_NUMBER > 6) {
-			DefaultEnchantments.addDefaultEnchantment(new SweepingEdge());
-		}
 
 		DefaultEnchantments.addDefaultEnchantment(new Soulbound());
 		DefaultEnchantments.addDefaultEnchantment(new SoulReaper());
@@ -111,9 +111,7 @@ public class LevelFiftyEnchants {
 		DefaultEnchantments.addDefaultEnchantment(new FrequentFlyer());
 		DefaultEnchantments.addDefaultEnchantment(new Tank());
 		DefaultEnchantments.addDefaultEnchantment(new Brine());
-		
-		if(Version.VERSION_NUMBER > 3) {
-			DefaultEnchantments.addDefaultEnchantment(new MagmaWalker());
-		}
+		DefaultEnchantments.addDefaultEnchantment(new MagmaWalker());
+		DefaultEnchantments.addDefaultEnchantment(new Drowned());
 	}
 }

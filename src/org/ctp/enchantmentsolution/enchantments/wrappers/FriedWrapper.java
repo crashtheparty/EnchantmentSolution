@@ -6,8 +6,8 @@ import org.bukkit.inventory.ItemStack;
 
 public class FriedWrapper extends CustomEnchantmentWrapper{
 
-	public FriedWrapper(int id) {
-		super(id);
+	public FriedWrapper() {
+		super("fried");
 	}
 
 	@Override

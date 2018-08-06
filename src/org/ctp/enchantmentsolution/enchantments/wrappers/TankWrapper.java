@@ -6,8 +6,8 @@ import org.bukkit.inventory.ItemStack;
 
 public class TankWrapper extends CustomEnchantmentWrapper{
 
-	public TankWrapper(int id) {
-		super(id);
+	public TankWrapper() {
+		super("tank");
 	}
 
 	@Override

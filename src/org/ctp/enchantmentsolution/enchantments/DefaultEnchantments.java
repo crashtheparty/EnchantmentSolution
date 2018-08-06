@@ -10,6 +10,7 @@ import org.ctp.enchantmentsolution.enchantments.wrappers.AnglerWrapper;
 import org.ctp.enchantmentsolution.enchantments.wrappers.BeheadingWrapper;
 import org.ctp.enchantmentsolution.enchantments.wrappers.BrineWrapper;
 import org.ctp.enchantmentsolution.enchantments.wrappers.CustomEnchantmentWrapper;
+import org.ctp.enchantmentsolution.enchantments.wrappers.DrownedWrapper;
 import org.ctp.enchantmentsolution.enchantments.wrappers.ExpShareWrapper;
 import org.ctp.enchantmentsolution.enchantments.wrappers.FrequentFlyerWrapper;
 import org.ctp.enchantmentsolution.enchantments.wrappers.FriedWrapper;
@@ -30,28 +31,34 @@ import org.ctp.enchantmentsolution.utils.save.ConfigFiles;
 public class DefaultEnchantments {
 	private static List<CustomEnchantment> ENCHANTMENTS = new ArrayList<CustomEnchantment>();
 	
-	public static Enchantment SOULBOUND = new SoulboundWrapper(200);
-	public static Enchantment SOUL_REAPER = new SoulReaperWrapper(201);
-	public static Enchantment SHOCK_ASPECT = new ShockAspectWrapper(202);
-	public static Enchantment LIFE = new LifeWrapper(204);
-	public static Enchantment BEHEADING = new BeheadingWrapper(206);
-	public static Enchantment KNOCKUP = new KnockUpWrapper(205);
-	public static Enchantment WARP = new WarpWrapper(203);
-	public static Enchantment EXP_SHARE = new ExpShareWrapper(207);
-	public static Enchantment MAGMA_WALKER = new MagmaWalkerWrapper(208);
-	public static Enchantment SNIPER = new SniperWrapper(209);
-	public static Enchantment TELEPATHY = new TelepathyWrapper(210);
-	public static Enchantment SMELTERY = new SmelteryWrapper(211);
-	public static Enchantment SACRIFICE = new SacrificeWrapper(212);
-	public static Enchantment ANGLER = new AnglerWrapper(214);
-	public static Enchantment FRIED = new FriedWrapper(215);
-	public static Enchantment FREQUENT_FLYER = new FrequentFlyerWrapper(216);
-	public static Enchantment TANK = new TankWrapper(217);
-	public static Enchantment BRINE = new BrineWrapper(218);
+	public static Enchantment SOULBOUND = new SoulboundWrapper();
+	public static Enchantment SOUL_REAPER = new SoulReaperWrapper();
+	public static Enchantment SHOCK_ASPECT = new ShockAspectWrapper();
+	public static Enchantment LIFE = new LifeWrapper();
+	public static Enchantment BEHEADING = new BeheadingWrapper();
+	public static Enchantment KNOCKUP = new KnockUpWrapper();
+	public static Enchantment WARP = new WarpWrapper();
+	public static Enchantment EXP_SHARE = new ExpShareWrapper();
+	public static Enchantment MAGMA_WALKER = new MagmaWalkerWrapper();
+	public static Enchantment SNIPER = new SniperWrapper();
+	public static Enchantment TELEPATHY = new TelepathyWrapper();
+	public static Enchantment SMELTERY = new SmelteryWrapper();
+	public static Enchantment SACRIFICE = new SacrificeWrapper();
+	public static Enchantment ANGLER = new AnglerWrapper();
+	public static Enchantment FRIED = new FriedWrapper();
+	public static Enchantment FREQUENT_FLYER = new FrequentFlyerWrapper();
+	public static Enchantment TANK = new TankWrapper();
+	public static Enchantment BRINE = new BrineWrapper();
+	public static Enchantment DROWNED = new DrownedWrapper();
 
 	public static List<CustomEnchantment> getEnchantments() {
 		return ENCHANTMENTS;
 	}
+	
+	public static List<CustomEnchantment> getAddedEnchantments() {
+		return LevelThirtyEnchants.getDefaultEnchantments();
+	}
+	
 	public static void addDefaultEnchantment(CustomEnchantment enchant) {
 		ENCHANTMENTS.add(enchant);
 	}

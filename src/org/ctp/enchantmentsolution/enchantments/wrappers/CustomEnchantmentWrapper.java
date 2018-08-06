@@ -6,8 +6,8 @@ import org.ctp.enchantmentsolution.EnchantmentSolution;
 
 public abstract class CustomEnchantmentWrapper extends Enchantment{
 
-	public CustomEnchantmentWrapper(int id) {
-		super(id);
+	public CustomEnchantmentWrapper(String namespace) {
+		super(new NamespacedKey(EnchantmentSolution.PLUGIN, namespace));
 	}
 
 }

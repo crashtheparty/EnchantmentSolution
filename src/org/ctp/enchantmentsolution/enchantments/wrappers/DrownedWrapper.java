@@ -4,40 +4,43 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.enchantments.EnchantmentTarget;
 import org.bukkit.inventory.ItemStack;
 
-public class SoulReaperWrapper extends CustomEnchantmentWrapper{
+public class DrownedWrapper extends CustomEnchantmentWrapper{
 
-	public SoulReaperWrapper() {
-		super("soul_reaper");
-		// TODO Auto-generated constructor stub
-	}
-	
-	@Override
-	public int getMaxLevel() {
-		return 1;
+	public DrownedWrapper() {
+		super("drowned");
 	}
 
 	@Override
 	public String getName() {
-		return "SOUL_REAPER";
+		return "DROWNED";
+	}
+
+	@Override
+	public int getMaxLevel() {
+		return 0;
 	}
 
 	@Override
 	public int getStartLevel() {
+		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
 	public EnchantmentTarget getItemTarget() {
+		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public boolean conflictsWith(Enchantment paramEnchantment) {
+		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public boolean canEnchantItem(ItemStack paramItemStack) {
+		// TODO Auto-generated method stub
 		return false;
 	}
 

@@ -6,8 +6,8 @@ import org.bukkit.inventory.ItemStack;
 
 public class AnglerWrapper extends CustomEnchantmentWrapper{
 
-	public AnglerWrapper(int id) {
-		super(id);
+	public AnglerWrapper() {
+		super("angler");
 	}
 
 	@Override

@@ -3,13 +3,16 @@ package org.ctp.enchantmentsolution.utils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.Vector;
 import org.ctp.enchantmentsolution.enchantments.EnchantmentLevel;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
@@ -102,6 +105,10 @@ public class ItemUtils {
 		List<Material> elytra = new ArrayList<Material>();
 		elytra.add(Material.ELYTRA);
 		itemTypes.put("elytra", elytra);
+		
+		List<Material> trident = new ArrayList<Material>();
+		trident.add(Material.TRIDENT);
+		itemTypes.put("trident", trident);
 
 		List<Material> armor = new ArrayList<Material>();
 		armor.addAll(helmets);
@@ -128,6 +135,7 @@ public class ItemUtils {
 		misc.addAll(carrotStick);
 		misc.addAll(elytra);
 		misc.addAll(hoes);
+		misc.addAll(trident);
 
 		List<Material> all = new ArrayList<Material>();
 		all.addAll(armor);
@@ -253,6 +261,7 @@ public class ItemUtils {
 		repairTypes.put(Material.FISHING_ROD, Arrays.asList(Material.FISHING_ROD, Material.STRING, Material.BOOK, Material.ENCHANTED_BOOK));
 		repairTypes.put(Material.BOOK, Arrays.asList(Material.BOOK, Material.ENCHANTED_BOOK));
 		repairTypes.put(Material.ENCHANTED_BOOK, Arrays.asList(Material.BOOK, Material.ENCHANTED_BOOK));
+		repairTypes.put(Material.TRIDENT, Arrays.asList(Material.BOOK, Material.TRIDENT));
 		return repairTypes;
 	}
 	
@@ -311,6 +320,16 @@ public class ItemUtils {
 		
 		List<EnchantmentLevel> enchantments = Enchantments.combineEnchants(first, second);
 		
+		ItemMeta firstMeta = first.getItemMeta();
+		firstMeta.setLore(null);
+		for (Iterator<java.util.Map.Entry<Enchantment, Integer>> it = firstMeta.getEnchants().entrySet().iterator(); it.hasNext();) {
+			java.util.Map.Entry<Enchantment, Integer> e = it.next();
+			Enchantment enchant = e.getKey();
+			firstMeta.removeEnchant(enchant);
+		}
+		
+		combined.setItemMeta(firstMeta);
+		
 		combined = Enchantments.addEnchantmentsToItem(combined, enchantments);
 		
 		return combined;
@@ -329,9 +348,5 @@ public class ItemUtils {
 			droppedItem.setVelocity(new Vector(0,0,0));
 			droppedItem.teleport(fallback);
 		}
-	}
-	
-	public static void createBook() {
-		
 	}
 }

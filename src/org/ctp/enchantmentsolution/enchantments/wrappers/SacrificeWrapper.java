@@ -6,8 +6,8 @@ import org.bukkit.inventory.ItemStack;
 
 public class SacrificeWrapper extends CustomEnchantmentWrapper{
 
-	public SacrificeWrapper(int id) {
-		super(id);
+	public SacrificeWrapper() {
+		super("sacrifice");
 	}
 
 	@Override

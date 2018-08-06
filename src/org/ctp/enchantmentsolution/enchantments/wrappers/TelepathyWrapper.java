@@ -6,8 +6,8 @@ import org.bukkit.inventory.ItemStack;
 
 public class TelepathyWrapper extends CustomEnchantmentWrapper{
 
-	public TelepathyWrapper(int id) {
-		super(id);
+	public TelepathyWrapper() {
+		super("telepathy");
 		// TODO Auto-generated constructor stub
 	}
 

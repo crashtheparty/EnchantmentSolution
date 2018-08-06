@@ -6,8 +6,8 @@ import org.bukkit.inventory.ItemStack;
 
 public class SniperWrapper extends CustomEnchantmentWrapper{
 
-	public SniperWrapper(int id) {
-		super(id);
+	public SniperWrapper() {
+		super("sniper");
 		// TODO Auto-generated constructor stub
 	}
 

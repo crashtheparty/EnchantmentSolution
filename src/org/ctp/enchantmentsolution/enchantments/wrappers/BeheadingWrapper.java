@@ -6,8 +6,8 @@ import org.bukkit.inventory.ItemStack;
 
 public class BeheadingWrapper extends CustomEnchantmentWrapper{
 
-	public BeheadingWrapper(int id) {
-		super(id);
+	public BeheadingWrapper() {
+		super("beheading");
 	}
 
 	@Override

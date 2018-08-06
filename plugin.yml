@@ -1,6 +1,7 @@
 name: EnchantmentSolution
 version: 1.0.0
 main: org.ctp.enchantmentsolution.EnchantmentSolution
+api-version: 1.13
 commands:
   enchant:
     aliases: [es,customenchant]

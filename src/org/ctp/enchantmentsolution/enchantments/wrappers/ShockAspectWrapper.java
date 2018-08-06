@@ -6,8 +6,8 @@ import org.bukkit.inventory.ItemStack;
 
 public class ShockAspectWrapper extends CustomEnchantmentWrapper{
 
-	public ShockAspectWrapper(int id) {
-		super(id);
+	public ShockAspectWrapper() {
+		super("shock_aspect");
 		// TODO Auto-generated constructor stub
 	}
 	

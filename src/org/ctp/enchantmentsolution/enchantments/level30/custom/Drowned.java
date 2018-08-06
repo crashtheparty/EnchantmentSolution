@@ -1,30 +1,22 @@
-package org.ctp.enchantmentsolution.enchantments.level50.vanilla;
+package org.ctp.enchantmentsolution.enchantments.level30.custom;
 
 import org.apache.commons.lang3.StringUtils;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
+import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.utils.ItemUtils;
 
-public class Unbreaking extends CustomEnchantment{
+public class Drowned extends CustomEnchantment{
 	
 	@Override
 	public Enchantment getRelativeEnchantment() {
-		return Enchantment.DURABILITY;
+		return DefaultEnchantments.DROWNED;
 	}
 
 	@Override
 	public boolean canEnchantItem(Material item) {
 		if(item.equals(Material.BOOK)){
-			return true;
-		}
-		if(ItemUtils.getItemTypes().get("tools").contains(item)){
-			return true;
-		}
-		if(ItemUtils.getItemTypes().get("swords").contains(item)){
-			return true;
-		}
-		if(ItemUtils.getItemTypes().get("armor").contains(item)){
 			return true;
 		}
 		if(ItemUtils.getItemTypes().get("trident").contains(item)){
@@ -35,9 +27,6 @@ public class Unbreaking extends CustomEnchantment{
 
 	@Override
 	public boolean canAnvilItem(Material item) {
-		if(ItemUtils.getItemTypes().get("all").contains(item)){
-			return true;
-		}
 		return canEnchantItem(item);
 	}
 
@@ -51,17 +40,17 @@ public class Unbreaking extends CustomEnchantment{
 
 	@Override
 	public int getMaxLevel() {
-		return 5;
+		return 3;
 	}
 
 	@Override
 	public String getName() {
-		return "unbreaking";
+		return "drowned";
 	}
 
 	@Override
 	public String getDisplayName() {
-		return "Unbreaking";
+		return "Drowned";
 	}
 
 	@Override
@@ -71,33 +60,34 @@ public class Unbreaking extends CustomEnchantment{
 
 	@Override
 	public int getWeight() {
-		return 5;
+		return 2;
 	}
 
 	@Override
 	public int[] enchantability(int level) {
 		int[] levels = new int[2];
-		levels[0] = level * 15 - 10;
-		levels[1] = levels[0] + 40;
+		levels[0] = level * 12;
+		levels[1] = levels[0] + 30;
 		return levels;
 	}
 	
 	public int multiplier(Material material) {
 		if(!(material.equals(Material.BOOK) || material.equals(Material.ENCHANTED_BOOK))) {
-			return 2;
+			return 4;
 		}
-		return 1;
+		return 2;
 	}
 	
 	@Override
 	public String[] getPage() {
 		String pageOne = "Name: " + getDisplayName() + StringUtils.LF + StringUtils.LF;
-		pageOne += "Description: Increases effective durability." + StringUtils.LF;
-		String pageTwo = "Max Level: " + getMaxLevel() + "."+ StringUtils.LF;
+		pageOne += "Description: Drown non-water mobs for a short time." + StringUtils.LF;
+		String pageTwo = "Enabled: " + isEnabled() + ". " + StringUtils.LF;
+		pageTwo += "Max Level: " + getMaxLevel() + "."+ StringUtils.LF;
 		pageTwo += "Weight: " + getWeight() + "."+ StringUtils.LF;
 		pageTwo += "Start Level: " + getStartLevel() + "."+ StringUtils.LF;
-		pageTwo += "Enchantable Items: Tools, Weapons, Armor, Books." + StringUtils.LF;
-		pageTwo += "Anvilable Items: All." + StringUtils.LF;
+		pageTwo += "Enchantable Items: Tridents, Books." + StringUtils.LF;
+		pageTwo += "Anvilable Items: Tridents, Books." + StringUtils.LF;
 		pageTwo += "Treasure Enchantment: " + isTreasure() + ". " + StringUtils.LF;
 		return new String[] {pageOne, pageTwo};
 	}

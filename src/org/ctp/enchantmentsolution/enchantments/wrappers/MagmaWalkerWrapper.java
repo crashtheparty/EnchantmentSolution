@@ -6,8 +6,8 @@ import org.bukkit.inventory.ItemStack;
 
 public class MagmaWalkerWrapper extends CustomEnchantmentWrapper{
 
-	public MagmaWalkerWrapper(int id) {
-		super(id);
+	public MagmaWalkerWrapper() {
+		super("magma_walker");
 		// TODO Auto-generated constructor stub
 	}
 

@@ -74,7 +74,7 @@ public class ConfigFiles {
 		CONFIG.addDefault("level_divisor", 4, new String[] {"Greater numbers allow more anvil uses"});
 		CONFIG.addDefault("level_50_enchants", true, new String[] {"Allow enchantments up to level 50"});
 		
-		for(CustomEnchantment enchant: DefaultEnchantments.getEnchantments()) {
+		for(CustomEnchantment enchant: DefaultEnchantments.getAddedEnchantments()) {
 			if (enchant.getRelativeEnchantment() instanceof CustomEnchantmentWrapper) {
 				CONFIG.addDefault("custom_enchantments." + enchant.getName() + ".enabled", true);
 				CONFIG.addDefault("custom_enchantments." + enchant.getName() + ".treasure", enchant.isTreasure());

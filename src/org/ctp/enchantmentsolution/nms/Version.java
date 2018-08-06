@@ -28,6 +28,7 @@ public class Version {
 		// Check
 		switch(VERSION) {
 		case "1.13":
+		case "1.13-pre7":
 			VERSION_NUMBER = 1;
 			return true;
 		}

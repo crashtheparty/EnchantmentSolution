@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
@@ -83,12 +84,12 @@ public class Anvil {
 				int repairCost = getRepairCost();
 				int playerLevel = player.getLevel();
 				List<String> lore = new ArrayList<String>();
-				if(repairCost <= playerLevel) {
+				if(player.getGameMode().equals(GameMode.CREATIVE) || repairCost <= playerLevel) {
 					combine = new ItemStack(Material.LIME_STAINED_GLASS_PANE);
 					lore.add(ChatColor.GREEN + "Level Cost: " + ChatColor.BLUE + "" + repairCost);
 				}else {
 					combine = new ItemStack(Material.RED_STAINED_GLASS_PANE);
-					if(repairCost > 60) {
+					if(!player.getGameMode().equals(GameMode.CREATIVE) && repairCost > 60) {
 						lore.add(ChatColor.RED + "Level Cost: " + ChatColor.BLUE + "Cannot Repair This Item");
 					}else {
 						lore.add(ChatColor.RED + "Level Cost: " + ChatColor.BLUE + "" + repairCost);
@@ -262,15 +263,23 @@ public class Anvil {
 		}
 	}
 	
-	@SuppressWarnings("deprecation")
 	public void checkAnvilBreak() {
 		double chance = .12;
 		double roll = Math.random();
 		if(chance > roll) {
-			byte data = block.getData();
-			data += 4;
-			if(data > 11) {
-				block.setType(Material.AIR);
+			Material material = Material.AIR;
+			switch(block.getType()) {
+			case ANVIL:
+				material = Material.CHIPPED_ANVIL;
+				break;
+			case CHIPPED_ANVIL:
+				material = Material.DAMAGED_ANVIL;
+				break;
+			default:
+				
+			}
+			block.setType(material);
+			if(material == Material.AIR) {
 				block.getWorld().playSound(block.getLocation(), Sound.BLOCK_ANVIL_DESTROY, 1, 1);
 				for(int i = EnchantmentSolution.ANVILS.size() - 1; i >= 0; i--) {
 					Anvil anvil = EnchantmentSolution.ANVILS.get(i);
@@ -280,7 +289,6 @@ public class Anvil {
 				}
 			} else {
 				block.getWorld().playSound(block.getLocation(), Sound.BLOCK_ANVIL_USE, 1, 1);
-				block.setData(data);
 			}
 		} else {
 			block.getWorld().playSound(block.getLocation(), Sound.BLOCK_ANVIL_USE, 1, 1);

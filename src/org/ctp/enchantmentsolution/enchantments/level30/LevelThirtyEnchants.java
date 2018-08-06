@@ -1,9 +1,14 @@
 package org.ctp.enchantmentsolution.enchantments.level30;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.level30.custom.Angler;
 import org.ctp.enchantmentsolution.enchantments.level30.custom.Beheading;
 import org.ctp.enchantmentsolution.enchantments.level30.custom.Brine;
+import org.ctp.enchantmentsolution.enchantments.level30.custom.Drowned;
 import org.ctp.enchantmentsolution.enchantments.level30.custom.ExpShare;
 import org.ctp.enchantmentsolution.enchantments.level30.custom.FrequentFlyer;
 import org.ctp.enchantmentsolution.enchantments.level30.custom.Fried;
@@ -49,7 +54,10 @@ import org.ctp.enchantmentsolution.enchantments.level30.vanilla.Smite;
 import org.ctp.enchantmentsolution.enchantments.level30.vanilla.SweepingEdge;
 import org.ctp.enchantmentsolution.enchantments.level30.vanilla.Thorns;
 import org.ctp.enchantmentsolution.enchantments.level30.vanilla.Unbreaking;
-import org.ctp.enchantmentsolution.nms.Version;
+import org.ctp.enchantmentsolution.enchantments.level30.vanilla.Channeling;
+import org.ctp.enchantmentsolution.enchantments.level30.vanilla.Impaling;
+import org.ctp.enchantmentsolution.enchantments.level30.vanilla.Loyalty;
+import org.ctp.enchantmentsolution.enchantments.level30.vanilla.Riptide;
 
 public class LevelThirtyEnchants{
 	
@@ -58,6 +66,9 @@ public class LevelThirtyEnchants{
 		DefaultEnchantments.addDefaultEnchantment(new AquaAffinity());
 		DefaultEnchantments.addDefaultEnchantment(new BaneOfArthropods());
 		DefaultEnchantments.addDefaultEnchantment(new BlastProtection());
+		DefaultEnchantments.addDefaultEnchantment(new Channeling());
+		DefaultEnchantments.addDefaultEnchantment(new CurseOfBinding());
+		DefaultEnchantments.addDefaultEnchantment(new CurseOfVanishing());
 		DefaultEnchantments.addDefaultEnchantment(new DepthStrider());
 		DefaultEnchantments.addDefaultEnchantment(new Efficiency());
 		DefaultEnchantments.addDefaultEnchantment(new FeatherFalling());
@@ -65,35 +76,27 @@ public class LevelThirtyEnchants{
 		DefaultEnchantments.addDefaultEnchantment(new FireProtection());
 		DefaultEnchantments.addDefaultEnchantment(new Flame());
 		DefaultEnchantments.addDefaultEnchantment(new Fortune());
+		DefaultEnchantments.addDefaultEnchantment(new FrostWalker());
+		DefaultEnchantments.addDefaultEnchantment(new Impaling());
 		DefaultEnchantments.addDefaultEnchantment(new Infinity());
 		DefaultEnchantments.addDefaultEnchantment(new Knockback());
 		DefaultEnchantments.addDefaultEnchantment(new Looting());
+		DefaultEnchantments.addDefaultEnchantment(new Loyalty());
 		DefaultEnchantments.addDefaultEnchantment(new LuckOfTheSea());
 		DefaultEnchantments.addDefaultEnchantment(new Lure());
+		DefaultEnchantments.addDefaultEnchantment(new Mending());
 		DefaultEnchantments.addDefaultEnchantment(new Power());
 		DefaultEnchantments.addDefaultEnchantment(new ProjectileProtection());
 		DefaultEnchantments.addDefaultEnchantment(new Protection());
 		DefaultEnchantments.addDefaultEnchantment(new Punch());
 		DefaultEnchantments.addDefaultEnchantment(new Respiration());
+		DefaultEnchantments.addDefaultEnchantment(new Riptide());
 		DefaultEnchantments.addDefaultEnchantment(new Sharpness());
 		DefaultEnchantments.addDefaultEnchantment(new SilkTouch());
 		DefaultEnchantments.addDefaultEnchantment(new Smite());
+		DefaultEnchantments.addDefaultEnchantment(new SweepingEdge());
 		DefaultEnchantments.addDefaultEnchantment(new Thorns());
 		DefaultEnchantments.addDefaultEnchantment(new Unbreaking());
-		
-		if(Version.VERSION_NUMBER > 1) {
-			DefaultEnchantments.addDefaultEnchantment(new Mending());
-			DefaultEnchantments.addDefaultEnchantment(new FrostWalker());
-		}
-		
-		if(Version.VERSION_NUMBER > 5) {
-			DefaultEnchantments.addDefaultEnchantment(new CurseOfBinding());
-			DefaultEnchantments.addDefaultEnchantment(new CurseOfVanishing());
-		}
-		
-		if(Version.VERSION_NUMBER > 6) {
-			DefaultEnchantments.addDefaultEnchantment(new SweepingEdge());
-		}
 
 		DefaultEnchantments.addDefaultEnchantment(new Soulbound());
 		DefaultEnchantments.addDefaultEnchantment(new SoulReaper());
@@ -113,8 +116,69 @@ public class LevelThirtyEnchants{
 		DefaultEnchantments.addDefaultEnchantment(new Tank());
 		DefaultEnchantments.addDefaultEnchantment(new Brine());
 		
-		if(Version.VERSION_NUMBER > 3) {
-			DefaultEnchantments.addDefaultEnchantment(new MagmaWalker());
-		}
+		DefaultEnchantments.addDefaultEnchantment(new MagmaWalker());
+		DefaultEnchantments.addDefaultEnchantment(new Drowned());
+	}
+	
+	public static List<CustomEnchantment> getDefaultEnchantments() {
+		if(DefaultEnchantments.getEnchantments().size() > 0) return DefaultEnchantments.getEnchantments();
+		List<CustomEnchantment> enchantments = new ArrayList<CustomEnchantment>();
+		enchantments.add(new AquaAffinity());
+		enchantments.add(new BaneOfArthropods());
+		enchantments.add(new BlastProtection());
+		enchantments.add(new Channeling());
+		enchantments.add(new CurseOfBinding());
+		enchantments.add(new CurseOfVanishing());
+		enchantments.add(new DepthStrider());
+		enchantments.add(new Efficiency());
+		enchantments.add(new FeatherFalling());
+		enchantments.add(new FireAspect());
+		enchantments.add(new FireProtection());
+		enchantments.add(new Flame());
+		enchantments.add(new Fortune());
+		enchantments.add(new FrostWalker());
+		enchantments.add(new Impaling());
+		enchantments.add(new Infinity());
+		enchantments.add(new Knockback());
+		enchantments.add(new Looting());
+		enchantments.add(new Loyalty());
+		enchantments.add(new LuckOfTheSea());
+		enchantments.add(new Lure());
+		enchantments.add(new Mending());
+		enchantments.add(new Power());
+		enchantments.add(new ProjectileProtection());
+		enchantments.add(new Protection());
+		enchantments.add(new Punch());
+		enchantments.add(new Respiration());
+		enchantments.add(new Riptide());
+		enchantments.add(new Sharpness());
+		enchantments.add(new SilkTouch());
+		enchantments.add(new Smite());
+		enchantments.add(new SweepingEdge());
+		enchantments.add(new Thorns());
+		enchantments.add(new Unbreaking());
+
+		enchantments.add(new Soulbound());
+		enchantments.add(new SoulReaper());
+		enchantments.add(new ShockAspect());
+		enchantments.add(new Beheading());
+		enchantments.add(new KnockUp());
+		enchantments.add(new Life());
+		enchantments.add(new Warp());
+		enchantments.add(new ExpShare());
+		enchantments.add(new Sniper());
+		enchantments.add(new Telepathy());
+		enchantments.add(new Smeltery());
+		enchantments.add(new Sacrifice());
+		enchantments.add(new Angler());
+		enchantments.add(new Fried());
+		enchantments.add(new FrequentFlyer());
+		enchantments.add(new Tank());
+		enchantments.add(new Brine());
+		
+		enchantments.add(new MagmaWalker());
+		enchantments.add(new Drowned());
+		
+		return enchantments;
 	}
 }

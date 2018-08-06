@@ -6,8 +6,8 @@ import org.bukkit.inventory.ItemStack;
 
 public class ExpShareWrapper extends CustomEnchantmentWrapper{
 
-	public ExpShareWrapper(int id) {
-		super(id);
+	public ExpShareWrapper() {
+		super("exp_share");
 	}
 
 	@Override

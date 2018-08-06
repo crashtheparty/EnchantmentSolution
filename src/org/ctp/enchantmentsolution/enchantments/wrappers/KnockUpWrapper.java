@@ -6,8 +6,8 @@ import org.bukkit.inventory.ItemStack;
 
 public class KnockUpWrapper extends CustomEnchantmentWrapper{
 
-	public KnockUpWrapper(int id) {
-		super(id);
+	public KnockUpWrapper() {
+		super("knock_ip");
 		// TODO Auto-generated constructor stub
 	}
 

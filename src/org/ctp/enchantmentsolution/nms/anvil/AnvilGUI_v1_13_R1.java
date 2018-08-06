@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.craftbukkit.v1_13_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
@@ -16,6 +17,13 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.inventory.Anvil;
+
+import net.minecraft.server.v1_13_R1.BlockPosition;
+import net.minecraft.server.v1_13_R1.ChatMessage;
+import net.minecraft.server.v1_13_R1.ContainerAnvil;
+import net.minecraft.server.v1_13_R1.EntityHuman;
+import net.minecraft.server.v1_13_R1.EntityPlayer;
+import net.minecraft.server.v1_13_R1.PacketPlayOutOpenWindow;
 
 public class AnvilGUI_v1_13_R1 {
 	private class AnvilContainer extends ContainerAnvil {

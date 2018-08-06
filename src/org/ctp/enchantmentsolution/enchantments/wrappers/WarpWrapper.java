@@ -6,8 +6,8 @@ import org.bukkit.inventory.ItemStack;
 
 public class WarpWrapper extends CustomEnchantmentWrapper{
 
-	public WarpWrapper(int id) {
-		super(id);
+	public WarpWrapper() {
+		super("warp");
 	}
 
 	@Override

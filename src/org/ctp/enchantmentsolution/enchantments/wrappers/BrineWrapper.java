@@ -6,8 +6,8 @@ import org.bukkit.inventory.ItemStack;
 
 public class BrineWrapper extends CustomEnchantmentWrapper{
 
-	public BrineWrapper(int id) {
-		super(id);
+	public BrineWrapper() {
+		super("brine");
 	}
 
 	@Override

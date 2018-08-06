@@ -44,7 +44,7 @@ public class PlayerInteract implements Listener{
 					
 				}, 1l);
 			}
-			if(block.getType().equals(Material.ANVIL)){
+			if(block.getType().equals(Material.ANVIL) || block.getType().equals(Material.CHIPPED_ANVIL) || block.getType().equals(Material.DAMAGED_ANVIL)){
 				Bukkit.getScheduler().scheduleSyncDelayedTask(EnchantmentSolution.PLUGIN, new Runnable() {
 					public void run() {
 						if(event.isCancelled()) return;

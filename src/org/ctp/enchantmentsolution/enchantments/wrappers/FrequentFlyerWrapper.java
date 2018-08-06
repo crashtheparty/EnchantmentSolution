@@ -6,8 +6,8 @@ import org.bukkit.inventory.ItemStack;
 
 public class FrequentFlyerWrapper extends CustomEnchantmentWrapper{
 
-	public FrequentFlyerWrapper(int id) {
-		super(id);
+	public FrequentFlyerWrapper() {
+		super("frequent_flyer");
 	}
 
 	@Override

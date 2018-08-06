@@ -6,25 +6,11 @@ import org.bukkit.enchantments.Enchantment;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.utils.ItemUtils;
 
-public class Unbreaking extends CustomEnchantment{
-	
-	@Override
-	public Enchantment getRelativeEnchantment() {
-		return Enchantment.DURABILITY;
-	}
+public class Loyalty extends CustomEnchantment{
 
 	@Override
 	public boolean canEnchantItem(Material item) {
 		if(item.equals(Material.BOOK)){
-			return true;
-		}
-		if(ItemUtils.getItemTypes().get("tools").contains(item)){
-			return true;
-		}
-		if(ItemUtils.getItemTypes().get("swords").contains(item)){
-			return true;
-		}
-		if(ItemUtils.getItemTypes().get("armor").contains(item)){
 			return true;
 		}
 		if(ItemUtils.getItemTypes().get("trident").contains(item)){
@@ -35,14 +21,14 @@ public class Unbreaking extends CustomEnchantment{
 
 	@Override
 	public boolean canAnvilItem(Material item) {
-		if(ItemUtils.getItemTypes().get("all").contains(item)){
-			return true;
-		}
 		return canEnchantItem(item);
 	}
 
 	@Override
 	public boolean conflictsWith(CustomEnchantment ench) {
+		if(ench.getName().equalsIgnoreCase("riptide")){
+			return true;
+		}
 		if(ench.getName().equalsIgnoreCase(getName())){
 			return true;
 		}
@@ -56,12 +42,12 @@ public class Unbreaking extends CustomEnchantment{
 
 	@Override
 	public String getName() {
-		return "unbreaking";
+		return "loyalty";
 	}
-
+	
 	@Override
 	public String getDisplayName() {
-		return "Unbreaking";
+		return "Loyalty";
 	}
 
 	@Override
@@ -77,9 +63,14 @@ public class Unbreaking extends CustomEnchantment{
 	@Override
 	public int[] enchantability(int level) {
 		int[] levels = new int[2];
-		levels[0] = level * 15 - 10;
+		levels[0] = 11 * level + 7;
 		levels[1] = levels[0] + 40;
 		return levels;
+	}
+
+	@Override
+	public Enchantment getRelativeEnchantment() {
+		return Enchantment.LOYALTY;
 	}
 	
 	public int multiplier(Material material) {
@@ -92,14 +83,13 @@ public class Unbreaking extends CustomEnchantment{
 	@Override
 	public String[] getPage() {
 		String pageOne = "Name: " + getDisplayName() + StringUtils.LF + StringUtils.LF;
-		pageOne += "Description: Increases effective durability." + StringUtils.LF;
+		pageOne += "Description: Returns a thrown trident after it hits something." + StringUtils.LF;
 		String pageTwo = "Max Level: " + getMaxLevel() + "."+ StringUtils.LF;
 		pageTwo += "Weight: " + getWeight() + "."+ StringUtils.LF;
 		pageTwo += "Start Level: " + getStartLevel() + "."+ StringUtils.LF;
-		pageTwo += "Enchantable Items: Tools, Weapons, Armor, Books." + StringUtils.LF;
-		pageTwo += "Anvilable Items: All." + StringUtils.LF;
+		pageTwo += "Enchantable Items: Helmets, Books." + StringUtils.LF;
+		pageTwo += "Anvilable Items: Helmets, Books." + StringUtils.LF;
 		pageTwo += "Treasure Enchantment: " + isTreasure() + ". " + StringUtils.LF;
 		return new String[] {pageOne, pageTwo};
 	}
-
 }

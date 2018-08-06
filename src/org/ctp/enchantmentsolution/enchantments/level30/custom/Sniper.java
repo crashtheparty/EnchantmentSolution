@@ -22,6 +22,9 @@ public class Sniper extends CustomEnchantment{
 		if(ItemUtils.getItemTypes().get("bow").contains(item)){
 			return true;
 		}
+		if(ItemUtils.getItemTypes().get("trident").contains(item)){
+			return true;
+		}
 		return false;
 	}
 
@@ -86,8 +89,8 @@ public class Sniper extends CustomEnchantment{
 		pageTwo += "Max Level: " + getMaxLevel() + "."+ StringUtils.LF;
 		pageTwo += "Weight: " + getWeight() + "."+ StringUtils.LF;
 		pageTwo += "Start Level: " + getStartLevel() + "."+ StringUtils.LF;
-		pageTwo += "Enchantable Items: Bows, Books." + StringUtils.LF;
-		pageTwo += "Anvilable Items: Bows, Books." + StringUtils.LF;
+		pageTwo += "Enchantable Items: Bows, Tridents, Books." + StringUtils.LF;
+		pageTwo += "Anvilable Items: Bows, Tridents, Books." + StringUtils.LF;
 		pageTwo += "Treasure Enchantment: " + isTreasure() + ". " + StringUtils.LF;
 		return new String[] {pageOne, pageTwo};
 	}

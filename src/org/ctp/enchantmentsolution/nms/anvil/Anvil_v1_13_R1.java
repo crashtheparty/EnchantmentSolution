@@ -1,5 +1,6 @@
 package org.ctp.enchantmentsolution.nms.anvil;
 
+import org.bukkit.craftbukkit.v1_13_R1.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemStack;
 
 public class Anvil_v1_13_R1 {

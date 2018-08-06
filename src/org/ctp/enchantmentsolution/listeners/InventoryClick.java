@@ -66,7 +66,7 @@ public class InventoryClick implements Listener {
 						table.setInventory();
 						ItemUtils.giveItemToPlayer(player, item, player.getLocation());
 					}
-				}else if(slot > 17 && slot % 9 >= 3 && slot % 9 <= 8 && item != null && item.getType() != Material.STAINED_GLASS_PANE){
+				}else if(slot > 17 && slot % 9 >= 3 && slot % 9 <= 8 && item != null && item.getType() != Material.RED_STAINED_GLASS_PANE && item.getType() != Material.BLACK_STAINED_GLASS_PANE){
 					int itemSlot = (slot - 18) / 9;
 					int itemLevel = (slot % 9) - 3;
 					table.enchantItem(itemSlot, itemLevel);
@@ -107,7 +107,7 @@ public class InventoryClick implements Listener {
 				int slot = event.getSlot();
 				ItemStack item = event.getClickedInventory().getItem(slot);
 				if(slot == 4) {
-					if(item.getType().equals(Material.LEGACY_STAINED_GLASS_PANE)) {
+					if(item.getType().equals(Material.LIME_STAINED_GLASS_PANE)) {
 						anvil.setOpeningNew(true);
 						Anvil_GUI_NMS.createAnvil(player, anvil);
 					}

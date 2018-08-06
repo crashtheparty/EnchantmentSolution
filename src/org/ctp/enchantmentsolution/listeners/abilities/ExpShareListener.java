@@ -28,7 +28,7 @@ public class ExpShareListener implements Listener{
 					int totalExp = exp;
 					int level = Enchantments.getLevel(killItem, DefaultEnchantments.EXP_SHARE);
 					for(int i = 0; i < exp * level; i++){
-						double chance = (level * .25);
+						double chance = (.50);
 						double random = Math.random();
 						if(chance > random){
 							totalExp++;

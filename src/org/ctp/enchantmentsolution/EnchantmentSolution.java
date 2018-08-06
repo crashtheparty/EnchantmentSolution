@@ -7,6 +7,7 @@ import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.ctp.enchantmentsolution.commands.Enchant;
 import org.ctp.enchantmentsolution.commands.EnchantInfo;
@@ -18,9 +19,11 @@ import org.ctp.enchantmentsolution.inventory.Anvil;
 import org.ctp.enchantmentsolution.inventory.EnchantmentTable;
 import org.ctp.enchantmentsolution.listeners.InventoryClick;
 import org.ctp.enchantmentsolution.listeners.InventoryClose;
+import org.ctp.enchantmentsolution.listeners.PlayerChatTabComplete;
 import org.ctp.enchantmentsolution.listeners.PlayerInteract;
 import org.ctp.enchantmentsolution.listeners.abilities.BeheadingListener;
 import org.ctp.enchantmentsolution.listeners.abilities.BrineListener;
+import org.ctp.enchantmentsolution.listeners.abilities.DrownedListener;
 import org.ctp.enchantmentsolution.listeners.abilities.ExpShareListener;
 import org.ctp.enchantmentsolution.listeners.abilities.FishingListener;
 import org.ctp.enchantmentsolution.listeners.abilities.FrequentFlyerListener;
@@ -35,7 +38,9 @@ import org.ctp.enchantmentsolution.listeners.abilities.SoulboundListener;
 import org.ctp.enchantmentsolution.listeners.abilities.TankListener;
 import org.ctp.enchantmentsolution.listeners.abilities.TelepathyListener;
 import org.ctp.enchantmentsolution.listeners.abilities.WarpListener;
+//import org.ctp.enchantmentsolution.listeners.legacy.UpdateEnchantments;
 import org.ctp.enchantmentsolution.nms.Version;
+import org.ctp.enchantmentsolution.utils.ItemUtils;
 import org.ctp.enchantmentsolution.utils.save.ConfigFiles;
 import org.ctp.enchantmentsolution.utils.save.SaveUtils;
 
@@ -96,19 +101,38 @@ public class EnchantmentSolution extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new FrequentFlyerListener(), this);
 		getServer().getPluginManager().registerEvents(new TankListener(), this);
 		getServer().getPluginManager().registerEvents(new BrineListener(), this);
+		getServer().getPluginManager().registerEvents(new DrownedListener(), this);
 
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN,
 				new MagmaWalkerListener(), 20l, 20l);
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN,
 				new FrequentFlyerListener(), 20l, 20l);
+		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN,
+						new DrownedListener(), 1l, 1l);
 
 		getCommand("Enchant").setExecutor(new Enchant());
 		getCommand("Info").setExecutor(new EnchantInfo());
 		getCommand("RemoveEnchant").setExecutor(new RemoveEnchant());
 		getCommand("EnchantUnsafe").setExecutor(new UnsafeEnchant());
+		getCommand("Enchant").setTabCompleter(new PlayerChatTabComplete());
+		getCommand("Info").setTabCompleter(new PlayerChatTabComplete());
+		getCommand("RemoveEnchant").setTabCompleter(new PlayerChatTabComplete());
+		getCommand("EnchantUnsafe").setTabCompleter(new PlayerChatTabComplete());
 	}
 
 	public void onDisable() {
 		SaveUtils.setMagmaWalkerData();
+		
+		for(EnchantmentTable table : EnchantmentSolution.TABLES){
+			for(ItemStack item : table.getItems()){
+				ItemUtils.giveItemToPlayer(table.getPlayer(), item, table.getPlayer().getLocation());
+			}
+		}
+		for(int i = ANVILS.size() - 1; i >= 0; i--){
+			Anvil anvil = ANVILS.get(i);
+			if(!anvil.isRenaming()) {
+				anvil.close(true);
+			}
+		}
 	}
 }

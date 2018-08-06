@@ -6,8 +6,8 @@ import org.bukkit.inventory.ItemStack;
 
 public class SoulboundWrapper extends CustomEnchantmentWrapper {
 
-	public SoulboundWrapper(int id) {
-		super(id);
+	public SoulboundWrapper() {
+		super("soulbound");
 		// TODO Auto-generated constructor stub
 	}
 

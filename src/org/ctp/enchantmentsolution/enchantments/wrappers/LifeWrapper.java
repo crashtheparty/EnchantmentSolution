@@ -6,8 +6,8 @@ import org.bukkit.inventory.ItemStack;
 
 public class LifeWrapper extends CustomEnchantmentWrapper{
 
-	public LifeWrapper(int id) {
-		super(id);
+	public LifeWrapper() {
+		super("life");
 		// TODO Auto-generated constructor stub
 	}
 
