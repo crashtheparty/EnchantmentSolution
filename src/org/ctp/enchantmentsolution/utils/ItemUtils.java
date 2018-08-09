@@ -3,12 +3,10 @@ package org.ctp.enchantmentsolution.utils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -308,6 +306,7 @@ public class ItemUtils {
 		if(repairType == null) {
 			return null;
 		}
+				
 		if(repairType.equals(RepairType.REPAIR)) {
 			combined = repairItem(combined, first, second);
 		}else if(second.getType().equals(first.getType())) {
@@ -321,14 +320,12 @@ public class ItemUtils {
 		List<EnchantmentLevel> enchantments = Enchantments.combineEnchants(first, second);
 		
 		ItemMeta firstMeta = first.getItemMeta();
-		firstMeta.setLore(null);
-		for (Iterator<java.util.Map.Entry<Enchantment, Integer>> it = firstMeta.getEnchants().entrySet().iterator(); it.hasNext();) {
-			java.util.Map.Entry<Enchantment, Integer> e = it.next();
-			Enchantment enchant = e.getKey();
-			firstMeta.removeEnchant(enchant);
-		}
+		ItemMeta combinedMeta = combined.getItemMeta();
 		
-		combined.setItemMeta(firstMeta);
+		combinedMeta.setDisplayName(firstMeta.getDisplayName());
+		combinedMeta.setLocalizedName(firstMeta.getLocalizedName());
+		
+		combined.setItemMeta(combinedMeta);
 		
 		combined = Enchantments.addEnchantmentsToItem(combined, enchantments);
 		
