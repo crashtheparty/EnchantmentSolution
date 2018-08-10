@@ -15,6 +15,9 @@ public class SweepingEdge extends CustomEnchantment{
 
 	@Override
 	public boolean canEnchantItem(Material item) {
+		if(item.equals(Material.BOOK)){
+			return true;
+		}
 		if(ItemUtils.getItemTypes().get("swords").contains(item)){
 			return true;
 		}

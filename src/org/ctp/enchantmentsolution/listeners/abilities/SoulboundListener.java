@@ -47,6 +47,7 @@ public class SoulboundListener implements Listener{
 			for(ItemStack item : playerItems){
 				event.getDrops().add(item);
 			}
+			SOUL_ITEMS.put(player.getUniqueId().toString(), newItems);
 		}
 	}
 	

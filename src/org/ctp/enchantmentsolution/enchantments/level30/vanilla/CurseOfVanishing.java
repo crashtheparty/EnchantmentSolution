@@ -24,6 +24,9 @@ public class CurseOfVanishing extends CustomEnchantment{
 
 	@Override
 	public boolean canAnvilItem(Material item) {
+		if(item.equals(Material.BOOK)){
+			return true;
+		}
 		if(ItemUtils.getItemTypes().get("all").contains(item)){
 			return true;
 		}
