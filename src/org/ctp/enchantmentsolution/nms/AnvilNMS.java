@@ -1,6 +1,7 @@
 package org.ctp.enchantmentsolution.nms;
 
 import org.bukkit.inventory.ItemStack;
+import org.ctp.enchantmentsolution.nms.anvil.Anvil_v1_13_1_R1;
 import org.ctp.enchantmentsolution.nms.anvil.Anvil_v1_13_R1;
 
 public class AnvilNMS {
@@ -12,6 +13,8 @@ public class AnvilNMS {
 		switch(Version.VERSION_NUMBER) {
 		case 1:
 			return Anvil_v1_13_R1.getRepairCost(item);
+		case 2:
+			return Anvil_v1_13_1_R1.getRepairCost(item);
 		}
 		return 0;
 	}
@@ -20,6 +23,8 @@ public class AnvilNMS {
 		switch(Version.VERSION_NUMBER) {
 		case 1:
 			return Anvil_v1_13_R1.setRepairCost(item, repairCost);
+		case 2:
+			return Anvil_v1_13_1_R1.setRepairCost(item, repairCost);
 		}
 		return item;
 	}

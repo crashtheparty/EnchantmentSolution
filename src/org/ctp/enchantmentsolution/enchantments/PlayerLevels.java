@@ -31,9 +31,27 @@ public class PlayerLevels {
 			}
 		}
 		
-		generateEnchants(levelList);
+		generateEnchants(levelList, false);
 		
 		PLAYER_LEVELS.put(this, levelList);
+	}
+	
+	private PlayerLevels(int books, Material material) {
+		this.books = books;
+		this.player = null;
+		this.material = material;
+		
+		List<Integer> levelList = getIntList(player, books);
+		
+		if(levelList == null){
+			if(DefaultEnchantments.isLevelFiftyEnchants()) {
+				levelList = generateFiftyLevels();
+			} else {
+				levelList = generateThirtyLevels();
+			}
+		}
+		
+		generateEnchants(levelList, true);
 	}
 	
 	
@@ -139,18 +157,19 @@ public class PlayerLevels {
 	}
 
 
-	public void generateEnchants(List<Integer> intList) {
+	public void generateEnchants(List<Integer> intList, boolean treasure) {
 		if(enchants.size() > 0) return;
 		for(int i = 0; i < intList.size(); i++){
 			if(intList.get(i) == -1){
 				enchants.add(new ArrayList<EnchantmentLevel>());
 			}else{
-				enchants.add(Enchantments.generateEnchantments(getMaterial(), intList.get(i), i + 1));
-			}			
+				enchants.add(Enchantments.generateEnchantments(getMaterial(), intList.get(i), i + 1, treasure));
+			}
 		}
 	}
 	
 	public static List<Integer> getIntList(Player player, int books){
+		if(player == null) return null;
 		List<Integer> levelList = null;
 		
 		for (Iterator<java.util.Map.Entry<PlayerLevels, List<Integer>>> it = PLAYER_LEVELS.entrySet().iterator(); it.hasNext();) {
@@ -187,6 +206,13 @@ public class PlayerLevels {
 			}
 		}
 		PLAYER_LEVELS = playerLevels;
+	}
+	
+	public static PlayerLevels generateFakePlayerLevels(Material material) {
+		int random = (int)(Math.random() * 23) + 1;
+		PlayerLevels levels = new PlayerLevels(random, material);
+		
+		return levels;
 	}
 
 }

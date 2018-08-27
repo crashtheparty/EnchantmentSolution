@@ -1,10 +1,10 @@
 package org.ctp.enchantmentsolution.inventory;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -21,7 +21,7 @@ import org.ctp.enchantmentsolution.utils.AnvilUtils.RepairType;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.ItemUtils;
 
-public class Anvil {
+public class Anvil implements InventoryData{
 
 	private Player player;
 	private Inventory inventory;
@@ -44,12 +44,11 @@ public class Anvil {
 	public void setInventory(List<ItemStack> items) {
 		try {
 			openingNew = true;
-			Inventory inv = Bukkit.createInventory(null, 27, ChatColor.BLUE
-					+ "Anvil");
+			Inventory inv = Bukkit.createInventory(null, 27, ChatUtils.getMessage(getCodes(), "anvil.name"));
 	
 			ItemStack mirror = new ItemStack(Material.BLACK_STAINED_GLASS_PANE);
 			ItemMeta mirrorMeta = mirror.getItemMeta();
-			mirrorMeta.setDisplayName(ChatColor.WHITE + "");
+			mirrorMeta.setDisplayName(ChatUtils.getMessage(getCodes(), "anvil.mirror"));
 			mirror.setItemMeta(mirrorMeta);
 			inv.setItem(0, mirror);
 			inv.setItem(1, mirror);
@@ -76,7 +75,7 @@ public class Anvil {
 			
 			ItemStack rename = new ItemStack(Material.LIME_STAINED_GLASS_PANE);
 			ItemMeta renameMeta = rename.getItemMeta();
-			renameMeta.setDisplayName(ChatColor.GREEN + "Rename Items");
+			renameMeta.setDisplayName(ChatUtils.getMessage(getCodes(), "anvil.rename"));
 			rename.setItemMeta(renameMeta);
 			
 			ItemStack combine = null;
@@ -86,30 +85,34 @@ public class Anvil {
 				List<String> lore = new ArrayList<String>();
 				if(player.getGameMode().equals(GameMode.CREATIVE) || repairCost <= playerLevel) {
 					combine = new ItemStack(Material.LIME_STAINED_GLASS_PANE);
-					lore.add(ChatColor.GREEN + "Level Cost: " + ChatColor.BLUE + "" + repairCost);
+					HashMap<String, Object> loreCodes = getCodes();
+					loreCodes.put("%repairCost%", repairCost);
+					lore.add(ChatUtils.getMessage(loreCodes, "anvil.repair-cost"));
 				}else {
 					combine = new ItemStack(Material.RED_STAINED_GLASS_PANE);
 					if(!player.getGameMode().equals(GameMode.CREATIVE) && repairCost > 60) {
-						lore.add(ChatColor.RED + "Level Cost: " + ChatColor.BLUE + "Cannot Repair This Item");
+						lore.add(ChatUtils.getMessage(getCodes(), "anvil.cannot-repair"));
 					}else {
-						lore.add(ChatColor.RED + "Level Cost: " + ChatColor.BLUE + "" + repairCost);
+						HashMap<String, Object> loreCodes = getCodes();
+						loreCodes.put("%repairCost%", repairCost);
+						lore.add(ChatUtils.getMessage(getCodes(), "anvil.repair-cost-high"));
 					}
 				}
 				ItemMeta combineMeta = combine.getItemMeta();
-				combineMeta.setDisplayName(ChatColor.GREEN + "Combine Items");
+				combineMeta.setDisplayName(ChatUtils.getMessage(getCodes(), "anvil.combine"));
 				combineMeta.setLore(lore);
 				combine.setItemMeta(combineMeta);
 				combine.setAmount(repairCost);
 			}else {
 				combine = new ItemStack(Material.BARRIER);
 				ItemMeta combineMeta = combine.getItemMeta();
-				combineMeta.setDisplayName(ChatColor.RED + "Can't Combine Items");
+				combineMeta.setDisplayName(ChatUtils.getMessage(getCodes(), "anvil.cannot-combine"));
 				combine.setItemMeta(combineMeta);
 			}
 			
 			ItemStack barrierRename = new ItemStack(Material.BARRIER);
 			ItemMeta barrierRenameMeta = barrierRename.getItemMeta();
-			barrierRenameMeta.setDisplayName(ChatColor.RED + "Can't Rename Item(s)");
+			barrierRenameMeta.setDisplayName(ChatUtils.getMessage(getCodes(), "anvil.cannot-rename"));
 			barrierRename.setItemMeta(barrierRenameMeta);
 			
 			if(playerItems.size() == 1) {
@@ -233,7 +236,7 @@ public class Anvil {
 			playerItems.clear();
 			checkAnvilBreak();
 		}else {
-			ChatUtils.sendMessage(player, "You may not combine these items!");
+			ChatUtils.sendMessage(player, ChatUtils.getMessage(getCodes(), "anvil.message-cannot-combine"));
 		}
 	}
 	
@@ -281,11 +284,10 @@ public class Anvil {
 			block.setType(material);
 			if(material == Material.AIR) {
 				block.getWorld().playSound(block.getLocation(), Sound.BLOCK_ANVIL_DESTROY, 1, 1);
-				for(int i = EnchantmentSolution.ANVILS.size() - 1; i >= 0; i--) {
-					Anvil anvil = EnchantmentSolution.ANVILS.get(i);
-					if(anvil.getBlock().getLocation().equals(block.getLocation())) {
-						anvil.close(false);
-					}
+				InventoryData data = EnchantmentSolution.getInventory(getPlayer());
+
+				if(data.getBlock().getLocation().equals(block.getLocation())) {
+					data.close(false);
 				}
 			} else {
 				block.getWorld().playSound(block.getLocation(), Sound.BLOCK_ANVIL_USE, 1, 1);
@@ -302,6 +304,12 @@ public class Anvil {
 		if(!external) {
 			player.closeInventory();
 		}
-		EnchantmentSolution.ANVILS.remove(this);
+		EnchantmentSolution.removeInventory(this);
+	}
+
+	public HashMap<String, Object> getCodes() {
+		HashMap<String, Object> codes = new HashMap<String, Object>();
+		codes.put("%player%", player.getName());
+		return codes;
 	}
 }

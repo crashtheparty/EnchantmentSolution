@@ -55,6 +55,30 @@ public class DefaultEnchantments {
 		return ENCHANTMENTS;
 	}
 	
+	public static CustomEnchantment getCustomEnchantment(Enchantment enchant) {
+		for(CustomEnchantment enchantment : ENCHANTMENTS) {
+			if(enchant.equals(enchantment.getRelativeEnchantment())) {
+				if(!enchantment.isEnabled()) {
+					return null;
+				}
+				return enchantment;
+			}
+		}
+		return null;
+	}
+	
+	public static CustomEnchantment getAddedCustomEnchantment(Enchantment enchant) {
+		for(CustomEnchantment enchantment : getAddedEnchantments()) {
+			if(enchant.equals(enchantment.getRelativeEnchantment())) {
+				if(!enchantment.isEnabled()) {
+					return null;
+				}
+				return enchantment;
+			}
+		}
+		return null;
+	}
+	
 	public static List<CustomEnchantment> getAddedEnchantments() {
 		return LevelThirtyEnchants.getDefaultEnchantments();
 	}
@@ -64,10 +88,10 @@ public class DefaultEnchantments {
 	}
 	
 	public static boolean isLevelFiftyEnchants() {
-		if(ConfigFiles.MAIN_CONFIG == null) {
+		if(ConfigFiles.getDefaultConfig() == null) {
 			return true;
 		}
-		return ConfigFiles.MAIN_CONFIG.getBoolean("level_50_enchants");
+		return ConfigFiles.getDefaultConfig().getBoolean("level_50_enchants");
 	}
 	
 	public static void addDefaultEnchantments() {
@@ -82,11 +106,11 @@ public class DefaultEnchantments {
 		for (int i = 0; i < ENCHANTMENTS.size(); i++) {
 			CustomEnchantment enchantment = ENCHANTMENTS.get(i);
 			if (enchantment.getRelativeEnchantment() instanceof CustomEnchantmentWrapper) {
-				if (ConfigFiles.MAIN_CONFIG.getBoolean("custom_enchantments."+enchantment.getName()+".enabled")) {
+				if (ConfigFiles.getEnchantmentConfig().getBoolean("custom_enchantments."+enchantment.getName()+".enabled")) {
 					Enchantments.addEnchantment(enchantment);
 					ENCHANTMENTS.get(i).setEnabled(true);
 				}
-				if (ConfigFiles.MAIN_CONFIG.getBoolean("custom_enchantments."+enchantment.getName()+".treasure")) {
+				if (ConfigFiles.getEnchantmentConfig().getBoolean("custom_enchantments."+enchantment.getName()+".treasure")) {
 					ENCHANTMENTS.get(i).setTreasure(true);
 				}
 			} else {

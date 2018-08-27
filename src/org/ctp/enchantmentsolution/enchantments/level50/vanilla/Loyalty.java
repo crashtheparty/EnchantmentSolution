@@ -87,8 +87,8 @@ public class Loyalty extends CustomEnchantment{
 		String pageTwo = "Max Level: " + getMaxLevel() + "."+ StringUtils.LF;
 		pageTwo += "Weight: " + getWeight() + "."+ StringUtils.LF;
 		pageTwo += "Start Level: " + getStartLevel() + "."+ StringUtils.LF;
-		pageTwo += "Enchantable Items: Helmets, Books." + StringUtils.LF;
-		pageTwo += "Anvilable Items: Helmets, Books." + StringUtils.LF;
+		pageTwo += "Enchantable Items: Tridents, Books." + StringUtils.LF;
+		pageTwo += "Anvilable Items: Tridents, Books." + StringUtils.LF;
 		pageTwo += "Treasure Enchantment: " + isTreasure() + ". " + StringUtils.LF;
 		return new String[] {pageOne, pageTwo};
 	}

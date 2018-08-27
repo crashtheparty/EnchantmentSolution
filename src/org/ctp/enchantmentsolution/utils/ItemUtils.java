@@ -3,6 +3,7 @@ package org.ctp.enchantmentsolution.utils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 import org.bukkit.Location;
@@ -14,6 +15,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.Vector;
 import org.ctp.enchantmentsolution.enchantments.EnchantmentLevel;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
+import org.ctp.enchantmentsolution.enchantments.PlayerLevels;
 import org.ctp.enchantmentsolution.utils.AnvilUtils.RepairType;
 
 public class ItemUtils {
@@ -336,14 +338,44 @@ public class ItemUtils {
 		HashMap<Integer, ItemStack> leftOver = new HashMap<Integer, ItemStack>();
 		leftOver.putAll((player.getInventory().addItem(item)));
 		if (!leftOver.isEmpty()) {
-			fallback.add(0.5, 0.5, 0.5);
-			Item droppedItem = player.getWorld().dropItem(
-					fallback,
-					new ItemStack(leftOver.get(0).getType(),
-							leftOver.get(0).getAmount(), leftOver
-									.get(0).getDurability()));
-			droppedItem.setVelocity(new Vector(0,0,0));
-			droppedItem.teleport(fallback);
+			for (Iterator<java.util.Map.Entry<Integer, ItemStack>> it = leftOver.entrySet().iterator(); it.hasNext();) {
+				java.util.Map.Entry<Integer, ItemStack> e = it.next();
+				fallback.add(0.5, 0.5, 0.5);
+				Item droppedItem = player.getWorld().dropItem(
+						fallback,
+						e.getValue());
+				droppedItem.setVelocity(new Vector(0,0,0));
+				droppedItem.teleport(fallback);
+			}
 		}
+	}
+	
+	public static ItemStack addNMSEnchantment(ItemStack item) {
+		ItemStack returnItem = new ItemStack(item.getType());
+		ItemStack duplicate = item.clone();
+		ItemMeta returnItemMeta = returnItem.getItemMeta();
+		ItemMeta duplicateMeta = duplicate.getItemMeta();
+		
+		returnItemMeta.setDisplayName(duplicateMeta.getDisplayName());
+		returnItemMeta.setLocalizedName(duplicateMeta.getLocalizedName());
+		returnItem.setItemMeta(returnItemMeta);
+		returnItem.setDurability(duplicate.getDurability());
+		
+		List<EnchantmentLevel> enchants = null;
+		while(enchants == null) {
+			PlayerLevels levels = PlayerLevels.generateFakePlayerLevels(returnItem.getType());
+			int i = 0;
+			while(i < 3) {
+				int random = (int)(Math.random() * levels.getEnchants().size());
+				if(levels.getEnchants().get(random).size() > 0) {
+					enchants = levels.getEnchants().get(random);
+					break;
+				}
+			}
+		}
+		
+		returnItem = Enchantments.addEnchantmentsToItem(returnItem, enchants);
+		
+		return returnItem;
 	}
 }

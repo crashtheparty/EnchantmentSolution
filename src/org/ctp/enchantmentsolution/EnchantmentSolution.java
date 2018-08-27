@@ -7,16 +7,16 @@ import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.ctp.enchantmentsolution.commands.Enchant;
 import org.ctp.enchantmentsolution.commands.EnchantInfo;
+import org.ctp.enchantmentsolution.commands.Reload;
 import org.ctp.enchantmentsolution.commands.RemoveEnchant;
 import org.ctp.enchantmentsolution.commands.UnsafeEnchant;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.EnchantmentLevel;
-import org.ctp.enchantmentsolution.inventory.Anvil;
-import org.ctp.enchantmentsolution.inventory.EnchantmentTable;
+import org.ctp.enchantmentsolution.inventory.InventoryData;
 import org.ctp.enchantmentsolution.listeners.InventoryClick;
 import org.ctp.enchantmentsolution.listeners.InventoryClose;
 import org.ctp.enchantmentsolution.listeners.PlayerChatTabComplete;
@@ -38,17 +38,19 @@ import org.ctp.enchantmentsolution.listeners.abilities.SoulboundListener;
 import org.ctp.enchantmentsolution.listeners.abilities.TankListener;
 import org.ctp.enchantmentsolution.listeners.abilities.TelepathyListener;
 import org.ctp.enchantmentsolution.listeners.abilities.WarpListener;
+import org.ctp.enchantmentsolution.listeners.chestloot.ChestLootListener;
+import org.ctp.enchantmentsolution.listeners.fishing.EnchantsFishingListener;
+import org.ctp.enchantmentsolution.listeners.fishing.McMMOFishingListener;
+import org.ctp.enchantmentsolution.listeners.mobs.MobSpawning;
 //import org.ctp.enchantmentsolution.listeners.legacy.UpdateEnchantments;
 import org.ctp.enchantmentsolution.nms.Version;
-import org.ctp.enchantmentsolution.utils.ItemUtils;
 import org.ctp.enchantmentsolution.utils.save.ConfigFiles;
 import org.ctp.enchantmentsolution.utils.save.SaveUtils;
 
 public class EnchantmentSolution extends JavaPlugin {
 
 	public static EnchantmentSolution PLUGIN;
-	public static List<EnchantmentTable> TABLES = new ArrayList<EnchantmentTable>();
-	public static List<Anvil> ANVILS = new ArrayList<Anvil>();
+	public static List<InventoryData> INVENTORIES = new ArrayList<InventoryData>();
 	public static HashMap<Material, HashMap<List<EnchantmentLevel>, Integer>> DEBUG = new HashMap<Material, HashMap<List<EnchantmentLevel>, Integer>>();
 
 	public void onEnable() {
@@ -102,6 +104,13 @@ public class EnchantmentSolution extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new TankListener(), this);
 		getServer().getPluginManager().registerEvents(new BrineListener(), this);
 		getServer().getPluginManager().registerEvents(new DrownedListener(), this);
+		getServer().getPluginManager().registerEvents(new ChestLootListener(), this);
+		getServer().getPluginManager().registerEvents(new MobSpawning(), this);
+		if(Bukkit.getPluginManager().isPluginEnabled("mcMMO")) {
+			getServer().getPluginManager().registerEvents(new McMMOFishingListener(), this);
+		} else {
+			getServer().getPluginManager().registerEvents(new EnchantsFishingListener(), this);
+		}
 
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN,
 				new MagmaWalkerListener(), 20l, 20l);
@@ -114,6 +123,7 @@ public class EnchantmentSolution extends JavaPlugin {
 		getCommand("Info").setExecutor(new EnchantInfo());
 		getCommand("RemoveEnchant").setExecutor(new RemoveEnchant());
 		getCommand("EnchantUnsafe").setExecutor(new UnsafeEnchant());
+		getCommand("ESReload").setExecutor(new Reload());
 		getCommand("Enchant").setTabCompleter(new PlayerChatTabComplete());
 		getCommand("Info").setTabCompleter(new PlayerChatTabComplete());
 		getCommand("RemoveEnchant").setTabCompleter(new PlayerChatTabComplete());
@@ -123,16 +133,27 @@ public class EnchantmentSolution extends JavaPlugin {
 	public void onDisable() {
 		SaveUtils.setMagmaWalkerData();
 		
-		for(EnchantmentTable table : EnchantmentSolution.TABLES){
-			for(ItemStack item : table.getItems()){
-				ItemUtils.giveItemToPlayer(table.getPlayer(), item, table.getPlayer().getLocation());
+		for(int i = INVENTORIES.size() - 1; i >= 0; i--) {
+			InventoryData inv = INVENTORIES.get(i);
+			removeInventory(inv);
+		}
+	}
+	
+	public static InventoryData getInventory(Player player) {
+		for(InventoryData inv : INVENTORIES) {
+			if(inv.getPlayer().getUniqueId().equals(player.getUniqueId())) {
+				return inv;
 			}
 		}
-		for(int i = ANVILS.size() - 1; i >= 0; i--){
-			Anvil anvil = ANVILS.get(i);
-			if(!anvil.isRenaming()) {
-				anvil.close(true);
-			}
-		}
+		
+		return null;
+	}
+	
+	public static void addInventory(InventoryData inv) {
+		INVENTORIES.add(inv);
+	}
+	
+	public static void removeInventory(InventoryData inv) {
+		INVENTORIES.remove(inv);
 	}
 }

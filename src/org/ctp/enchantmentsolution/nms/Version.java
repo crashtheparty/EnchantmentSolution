@@ -13,7 +13,6 @@ public class Version {
 	private static String getVersion() {
 		String a = Bukkit.getVersion();
 		String version = a.substring(a.lastIndexOf(':') + 1, a.lastIndexOf(')')).trim();
-		System.out.println("Version: " + version);
 
 		return version;
 	}
@@ -28,8 +27,10 @@ public class Version {
 		// Check
 		switch(VERSION) {
 		case "1.13":
-		case "1.13-pre7":
 			VERSION_NUMBER = 1;
+			return true;
+		case "1.13.1":
+			VERSION_NUMBER = 2;
 			return true;
 		}
 		return false;

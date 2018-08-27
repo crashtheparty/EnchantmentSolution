@@ -10,9 +10,9 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
-import org.ctp.enchantmentsolution.enchantments.Enchantments;
 import org.ctp.enchantmentsolution.inventory.Anvil;
 import org.ctp.enchantmentsolution.inventory.EnchantmentTable;
+import org.ctp.enchantmentsolution.inventory.InventoryData;
 
 public class PlayerInteract implements Listener{
 	
@@ -28,18 +28,16 @@ public class PlayerInteract implements Listener{
 					public void run() {
 						if(event.isCancelled()) return;
 						Player player = event.getPlayer();
-						EnchantmentTable table = null;
-						int books = Enchantments.getBookshelves(block.getLocation());
-						for (EnchantmentTable t : EnchantmentSolution.TABLES) {
-							if (t.getPlayer().getUniqueId().toString().equals(player.getUniqueId().toString()) && t.getBooks() == books) {
-								table = t;
-							}
+						InventoryData inv = EnchantmentSolution.getInventory(player);
+						if(inv == null) {
+							inv = new EnchantmentTable(player, block);
+							EnchantmentSolution.addInventory(inv);
+						} else if (!(inv instanceof EnchantmentTable)) {
+							inv.close(true);
+							inv = new EnchantmentTable(player, block);
+							EnchantmentSolution.addInventory(inv);
 						}
-						if (table == null) {
-							table = new EnchantmentTable(player, books);
-							EnchantmentSolution.TABLES.add(table);
-						}
-						table.setInventory(null);
+						inv.setInventory(null);
 					}
 					
 				}, 1l);
@@ -49,17 +47,16 @@ public class PlayerInteract implements Listener{
 					public void run() {
 						if(event.isCancelled()) return;
 						Player player = event.getPlayer();
-						Anvil anvil = null;
-						for (Anvil a : EnchantmentSolution.ANVILS) {
-							if (a.getPlayer().getUniqueId().toString().equals(player.getUniqueId().toString())) {
-								anvil = a;
-							}
+						InventoryData inv = EnchantmentSolution.getInventory(player);
+						if(inv == null || !(inv instanceof Anvil)) {
+							inv = new Anvil(player, block);
+							EnchantmentSolution.addInventory(inv);
+						} else if (!(inv instanceof Anvil)) {
+							inv.close(true);
+							inv = new Anvil(player, block);
+							EnchantmentSolution.addInventory(inv);
 						}
-						if (anvil == null) {
-							anvil = new Anvil(player, block);
-							EnchantmentSolution.ANVILS.add(anvil);
-						}
-						anvil.setInventory(null);
+						inv.setInventory(null);
 					}
 					
 				}, 1l);
