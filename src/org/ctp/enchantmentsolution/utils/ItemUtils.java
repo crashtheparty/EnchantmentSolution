@@ -278,11 +278,11 @@ public class ItemUtils {
 		if(amount > 4) amount = 4;
 		int durPerItem = first.getType().getMaxDurability() / 4;
 		ItemStack clone = first.clone();
-		clone.setDurability(first.getDurability());
+		DamageUtils.setDamage(clone, DamageUtils.getDamage(first.getItemMeta()));
 		int level = 0;
-		while(clone.getDurability() > 0) {
+		while(DamageUtils.getDamage(clone.getItemMeta()) > 0) {
 			level++;
-			clone.setDurability((short) (clone.getDurability() - durPerItem));
+			DamageUtils.setDamage(clone, (DamageUtils.getDamage(clone.getItemMeta()) - durPerItem));
 		}
 		return level;
 	}
@@ -291,9 +291,9 @@ public class ItemUtils {
 		int amount = second.getAmount();
 		if(amount > 4) amount = 4;
 		int durPerItem = first.getType().getMaxDurability() / 4;
-		while(combined.getDurability() > 0 && amount > 0) {
+		while(DamageUtils.getDamage(combined.getItemMeta()) > 0 && amount > 0) {
 			amount--;
-			combined.setDurability((short) (combined.getDurability() - durPerItem));
+			DamageUtils.setDamage(combined, (DamageUtils.getDamage(combined.getItemMeta()) - durPerItem));
 		}
 		return combined;
 	}
@@ -303,7 +303,7 @@ public class ItemUtils {
 		if(first.getType().equals(Material.ENCHANTED_BOOK)) {
 			combined = new ItemStack(Material.BOOK);
 		}
-		combined.setDurability(first.getDurability());
+		DamageUtils.setDamage(combined, DamageUtils.getDamage(first.getItemMeta()));
 		RepairType repairType = RepairType.getRepairType(first, second);
 		if(repairType == null) {
 			return null;
@@ -312,11 +312,8 @@ public class ItemUtils {
 		if(repairType.equals(RepairType.REPAIR)) {
 			combined = repairItem(combined, first, second);
 		}else if(second.getType().equals(first.getType())) {
-			int extraDurability = second.getType().getMaxDurability() - second.getDurability() + (int) (second.getType().getMaxDurability() * .12);
-			combined.setDurability((short)(combined.getDurability() - extraDurability));
-		}
-		if(combined.getDurability() < 0) {
-			combined.setDurability((short) 0);
+			int extraDurability = second.getType().getMaxDurability() - DamageUtils.getDamage(second.getItemMeta()) + (int) (second.getType().getMaxDurability() * .12);
+			DamageUtils.setDamage(combined, DamageUtils.getDamage(combined.getItemMeta()) - extraDurability);
 		}
 		
 		List<EnchantmentLevel> enchantments = Enchantments.combineEnchants(first, second);
@@ -359,7 +356,7 @@ public class ItemUtils {
 		returnItemMeta.setDisplayName(duplicateMeta.getDisplayName());
 		returnItemMeta.setLocalizedName(duplicateMeta.getLocalizedName());
 		returnItem.setItemMeta(returnItemMeta);
-		returnItem.setDurability(duplicate.getDurability());
+		DamageUtils.setDamage(returnItem, DamageUtils.getDamage(duplicateMeta));
 		
 		List<EnchantmentLevel> enchants = null;
 		while(enchants == null) {

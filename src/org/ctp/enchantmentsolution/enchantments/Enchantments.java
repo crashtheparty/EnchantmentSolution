@@ -66,16 +66,16 @@ public class Enchantments {
 				ENCHANTMENTS.remove(enchantment);
 
 				Bukkit.getLogger().warning(
-						"[EnchantmentSolution] Trouble adding the " + enchantment.getDisplayName() + " custom enchantment:");
+						"[EnchantmentSolution] Trouble adding the " + enchantment.getName() + " custom enchantment:");
 			    e.printStackTrace();
 			}
 			if(registered){
 				Bukkit.getLogger().info(
-						"[EnchantmentSolution] Added the " + enchantment.getDisplayName() + " custom enchantment.");
+						"[EnchantmentSolution] Added the " + enchantment.getName() + " custom enchantment.");
 			}
 		}else{
 			Bukkit.getLogger().info(
-					"[EnchantmentSolution] Added the " + enchantment.getDisplayName() + " enchantment.");
+					"[EnchantmentSolution] Added the " + enchantment.getName() + " enchantment.");
 		}
 	}
 

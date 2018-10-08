@@ -9,6 +9,10 @@ import org.ctp.enchantmentsolution.utils.ItemUtils;
 
 public class Sniper extends CustomEnchantment{
 	
+	public Sniper() {
+		setDisplayName("Sniper");
+	}
+	
 	@Override
 	public Enchantment getRelativeEnchantment() {
 		return DefaultEnchantments.SNIPER;
@@ -49,11 +53,6 @@ public class Sniper extends CustomEnchantment{
 	@Override
 	public String getName() {
 		return "sniper";
-	}
-
-	@Override
-	public String getDisplayName() {
-		return "Sniper";
 	}
 
 	@Override

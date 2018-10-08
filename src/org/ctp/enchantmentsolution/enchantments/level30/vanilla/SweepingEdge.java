@@ -26,7 +26,6 @@ public class SweepingEdge extends CustomEnchantment{
 
 	@Override
 	public boolean canAnvilItem(Material item) {
-		// TODO Auto-generated method stub
 		return canEnchantItem(item);
 	}
 

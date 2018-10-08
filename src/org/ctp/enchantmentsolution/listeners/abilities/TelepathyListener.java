@@ -17,6 +17,7 @@ import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
 import org.ctp.enchantmentsolution.listeners.abilities.mcmmo.McMMOHandler;
 import org.ctp.enchantmentsolution.utils.AbilityUtilities;
+import org.ctp.enchantmentsolution.utils.DamageUtils;
 import org.ctp.enchantmentsolution.utils.ItemUtils;
 
 public class TelepathyListener implements Listener {
@@ -57,8 +58,8 @@ public class TelepathyListener implements Listener {
 				double chance = (1.0D) / (unbreaking + 1.0D);
 				double random = Math.random();
 				if(chance > random) {
-					item.setDurability((short) (item.getDurability() + 1));
-					if(item.getDurability() > item.getType().getMaxDurability()) {
+					DamageUtils.setDamage(item, DamageUtils.getDamage(item.getItemMeta()) + 1);
+					if(DamageUtils.getDamage(item.getItemMeta()) > item.getType().getMaxDurability()) {
 						player.getInventory().setItemInMainHand(new ItemStack(Material.AIR));
 						player.getWorld().playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 1, 1);
 					}

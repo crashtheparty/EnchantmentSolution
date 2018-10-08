@@ -126,6 +126,7 @@ public class ConfigFiles {
 		CONFIG.addDefault("max_enchantments", 0, new String[] {"Max enchantments on each item. 0 allows infinite"});
 		CONFIG.addDefault("level_divisor", 4, new String[] {"Greater numbers allow more anvil uses"});
 		CONFIG.addDefault("level_50_enchants", true, new String[] {"Allow enchantments up to level 50"});
+		CONFIG.addDefault("custom_enchant_names", false, new String[] {"Change enchantment names in the", "enchantment config."});
 		CONFIG.addDefault("chest_loot", true, new String[] {"Allow custom and/or high level enchants", "to spawn in chests"});
 		CONFIG.addDefault("mob_loot", true, new String[] {"Allow custom and/or high level enchantments", "to spawn on mobs"});
 		CONFIG.addDefault("fishing_loot", true, new String[] {"Allow custom and/or high level enchantments", "to appear while fishing"});
@@ -146,11 +147,29 @@ public class ConfigFiles {
 			if (enchant.getRelativeEnchantment() instanceof CustomEnchantmentWrapper) {
 				ENCHANTMENT.addDefault("custom_enchantments." + enchant.getName() + ".enabled", true);
 				ENCHANTMENT.addDefault("custom_enchantments." + enchant.getName() + ".treasure", enchant.isTreasure());
+				if(CONFIG.getBoolean("custom_enchant_names")) {
+					ENCHANTMENT.addDefault("custom_enchantments." + enchant.getName() + ".display_name", enchant.getDisplayName());
+				}
 			}
 		}
 		ENCHANTMENT.saveConfig();
 		
 		EnchantmentSolution.PLUGIN.getLogger().info("Enchantment config initialized...");
+	}
+	
+	public static void updateEnchantments() {
+		if(CONFIG.getBoolean("custom_enchant_names")) {
+			for(CustomEnchantment enchant: DefaultEnchantments.getEnchantments()) {
+				if (enchant.getRelativeEnchantment() instanceof CustomEnchantmentWrapper) {
+					enchant.setDisplayName(ENCHANTMENT.getString("custom_enchantments." + enchant.getName() + ".display_name"));
+				}
+			}
+			for(CustomEnchantment enchant: DefaultEnchantments.getAddedEnchantments()) {
+				if (enchant.getRelativeEnchantment() instanceof CustomEnchantmentWrapper) {
+					enchant.setDisplayName(ENCHANTMENT.getString("custom_enchantments." + enchant.getName() + ".display_name"));
+				}
+			}
+		}
 	}
 	
 	private static void magmaWalker() {

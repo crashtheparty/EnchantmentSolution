@@ -9,6 +9,10 @@ import org.ctp.enchantmentsolution.utils.ItemUtils;
 
 public class Telepathy extends CustomEnchantment{
 	
+	public Telepathy() {
+		setDisplayName("Telepathy");
+	}
+	
 	@Override
 	public Enchantment getRelativeEnchantment() {
 		return DefaultEnchantments.TELEPATHY;
@@ -46,11 +50,6 @@ public class Telepathy extends CustomEnchantment{
 	@Override
 	public String getName() {
 		return "telepathy";
-	}
-
-	@Override
-	public String getDisplayName() {
-		return "Telepathy";
 	}
 
 	@Override

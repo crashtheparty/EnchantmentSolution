@@ -7,6 +7,7 @@ public abstract class CustomEnchantment{
 	
 	private boolean enabled = true;
 	private boolean treasure = false;
+	private String displayName = "";
 	
 	public Enchantment getRelativeEnchantment() {
 		return null;
@@ -33,7 +34,7 @@ public abstract class CustomEnchantment{
 	}
 	
 	public String getDisplayName() {
-		return null;
+		return displayName;
 	}
 
 	public int getStartLevel() {
@@ -93,6 +94,10 @@ public abstract class CustomEnchantment{
 	
 	public String[] getPage() {
 		return null;
+	}
+	
+	public void setDisplayName(String name) {
+		displayName = name;
 	}
 
 }

@@ -9,6 +9,10 @@ import org.ctp.enchantmentsolution.utils.ItemUtils;
 
 public class Tank extends CustomEnchantment{
 	
+	public Tank() {
+		setDisplayName("Tank");
+	}
+	
 	@Override
 	public Enchantment getRelativeEnchantment() {
 		return DefaultEnchantments.TANK;
@@ -52,11 +56,6 @@ public class Tank extends CustomEnchantment{
 	@Override
 	public String getName() {
 		return "tank";
-	}
-
-	@Override
-	public String getDisplayName() {
-		return "Tank";
 	}
 
 	@Override

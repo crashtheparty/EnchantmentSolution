@@ -19,6 +19,7 @@ import org.ctp.enchantmentsolution.nms.AnvilNMS;
 import org.ctp.enchantmentsolution.utils.AnvilUtils;
 import org.ctp.enchantmentsolution.utils.AnvilUtils.RepairType;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
+import org.ctp.enchantmentsolution.utils.DamageUtils;
 import org.ctp.enchantmentsolution.utils.ItemUtils;
 
 public class Anvil implements InventoryData{
@@ -199,12 +200,16 @@ public class Anvil implements InventoryData{
 	public int getRepairCost() {
 		int repairCost = 0;
 		RepairType type = AnvilUtils.RepairType.getRepairType(playerItems.get(0), playerItems.get(1));
-		if(!type.equals(RepairType.RENAME) && playerItems.get(0).getDurability() != 0) {
+		if(!type.equals(RepairType.RENAME) && DamageUtils.getDamage(playerItems.get(0).getItemMeta()) != 0) {
 			repairCost += 2;
 		}
 		int repairCostOne = AnvilNMS.getRepairCost(playerItems.get(0));
 		int repairCostTwo = AnvilNMS.getRepairCost(playerItems.get(1));
-		repairCost += repairCostOne + repairCostTwo;
+		if(repairCostOne > repairCostTwo) {
+			repairCost += repairCostOne;
+		}else {
+			repairCost += repairCostTwo;
+		}
 		
 		if(type.equals(RepairType.COMBINE)) {
 			repairCost += Enchantments.combineEnchantmentsLevel(playerItems.get(0), playerItems.get(1));

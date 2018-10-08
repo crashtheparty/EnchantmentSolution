@@ -48,7 +48,6 @@ public class CurseOfVanishing extends CustomEnchantment{
 
 	@Override
 	public String getName() {
-		// TODO Auto-generated method stub
 		return "vanishing_curse";
 	}
 

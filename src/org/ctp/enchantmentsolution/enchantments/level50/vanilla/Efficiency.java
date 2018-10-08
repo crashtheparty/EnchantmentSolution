@@ -58,7 +58,6 @@ public class Efficiency extends CustomEnchantment{
 
 	@Override
 	public int getStartLevel() {
-		// TODO Auto-generated method stub
 		return 1;
 	}
 

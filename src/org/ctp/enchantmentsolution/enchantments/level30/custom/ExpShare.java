@@ -9,6 +9,10 @@ import org.ctp.enchantmentsolution.utils.ItemUtils;
 
 public class ExpShare extends CustomEnchantment{
 	
+	public ExpShare() {
+		setDisplayName("Exp. Share");
+	}
+	
 	@Override
 	public Enchantment getRelativeEnchantment() {
 		return DefaultEnchantments.EXP_SHARE;
@@ -52,11 +56,6 @@ public class ExpShare extends CustomEnchantment{
 	@Override
 	public String getName() {
 		return "exp_share";
-	}
-
-	@Override
-	public String getDisplayName() {
-		return "Exp. Share";
 	}
 
 	@Override

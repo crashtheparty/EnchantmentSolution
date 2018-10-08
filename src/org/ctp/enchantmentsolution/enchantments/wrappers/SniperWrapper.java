@@ -8,52 +8,43 @@ public class SniperWrapper extends CustomEnchantmentWrapper{
 
 	public SniperWrapper() {
 		super("sniper");
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
 	public String getName() {
-		// TODO Auto-generated method stub
 		return "SNIPER";
 	}
 
 	@Override
 	public int getMaxLevel() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
 	public int getStartLevel() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
 	public EnchantmentTarget getItemTarget() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public boolean conflictsWith(Enchantment paramEnchantment) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public boolean canEnchantItem(ItemStack paramItemStack) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	public boolean isCursed() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	public boolean isTreasure() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 

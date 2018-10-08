@@ -9,6 +9,10 @@ import org.ctp.enchantmentsolution.utils.ItemUtils;
 
 public class ShockAspect extends CustomEnchantment{
 	
+	public ShockAspect() {
+		setDisplayName("Shock Aspect");
+	}
+	
 	@Override
 	public Enchantment getRelativeEnchantment() {
 		return DefaultEnchantments.SHOCK_ASPECT;
@@ -46,11 +50,6 @@ public class ShockAspect extends CustomEnchantment{
 	@Override
 	public String getName() {
 		return "shock_aspect";
-	}
-
-	@Override
-	public String getDisplayName() {
-		return "Shock Aspect";
 	}
 
 	@Override

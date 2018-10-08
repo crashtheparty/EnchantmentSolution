@@ -9,6 +9,10 @@ import org.ctp.enchantmentsolution.utils.ItemUtils;
 
 public class Soulbound extends CustomEnchantment{
 	
+	public Soulbound() {
+		setDisplayName("Soulbound");
+	}
+	
 	@Override
 	public Enchantment getRelativeEnchantment() {
 		return DefaultEnchantments.SOULBOUND;
@@ -55,11 +59,6 @@ public class Soulbound extends CustomEnchantment{
 	@Override
 	public String getName() {
 		return "soulbound";
-	}
-
-	@Override
-	public String getDisplayName() {
-		return "Soulbound";
 	}
 
 	@Override

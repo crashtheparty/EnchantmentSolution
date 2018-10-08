@@ -17,41 +17,34 @@ public class BeheadingWrapper extends CustomEnchantmentWrapper{
 
 	@Override
 	public boolean conflictsWith(Enchantment arg0) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public EnchantmentTarget getItemTarget() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public int getMaxLevel() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
 	public String getName() {
-		// TODO Auto-generated method stub
 		return "BEHEADING";
 	}
 
 	@Override
 	public int getStartLevel() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	public boolean isCursed() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	public boolean isTreasure() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 

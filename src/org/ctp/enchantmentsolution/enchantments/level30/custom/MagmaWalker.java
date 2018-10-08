@@ -11,6 +11,7 @@ public class MagmaWalker extends CustomEnchantment{
 	
 	public MagmaWalker() {
 		setTreasure(true);
+		setDisplayName("Magma Walker");
 	}
 	
 	@Override
@@ -56,18 +57,12 @@ public class MagmaWalker extends CustomEnchantment{
 
 	@Override
 	public int getMaxLevel() {
-		// TODO Auto-generated method stub
 		return 2;
 	}
 
 	@Override
 	public String getName() {
 		return "magma_walker";
-	}
-
-	@Override
-	public String getDisplayName() {
-		return "Magma Walker";
 	}
 
 	@Override

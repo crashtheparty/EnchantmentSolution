@@ -9,6 +9,10 @@ import org.ctp.enchantmentsolution.utils.ItemUtils;
 
 public class Angler extends CustomEnchantment{
 	
+	public Angler() {
+		setDisplayName("Angler");
+	}
+	
 	@Override
 	public Enchantment getRelativeEnchantment() {
 		return DefaultEnchantments.ANGLER;
@@ -46,11 +50,6 @@ public class Angler extends CustomEnchantment{
 	@Override
 	public String getName() {
 		return "angler";
-	}
-
-	@Override
-	public String getDisplayName() {
-		return "Angler";
 	}
 
 	@Override

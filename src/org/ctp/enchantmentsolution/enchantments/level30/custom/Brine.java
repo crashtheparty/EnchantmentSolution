@@ -9,6 +9,10 @@ import org.ctp.enchantmentsolution.utils.ItemUtils;
 
 public class Brine extends CustomEnchantment{
 	
+	public Brine() {
+		setDisplayName("Brine");
+	}
+	
 	@Override
 	public boolean canEnchantItem(Material item) {
 		if(item.equals(Material.BOOK)){
@@ -48,14 +52,7 @@ public class Brine extends CustomEnchantment{
 
 	@Override
 	public String getName() {
-		// TODO Auto-generated method stub
 		return "brine";
-	}
-
-	@Override
-	public String getDisplayName() {
-		// TODO Auto-generated method stub
-		return "Brine";
 	}
 
 	@Override
@@ -65,7 +62,6 @@ public class Brine extends CustomEnchantment{
 
 	@Override
 	public int getWeight() {
-		// TODO Auto-generated method stub
 		return 2;
 	}
 

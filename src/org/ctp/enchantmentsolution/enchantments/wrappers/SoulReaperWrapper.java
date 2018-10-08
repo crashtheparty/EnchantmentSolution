@@ -8,7 +8,6 @@ public class SoulReaperWrapper extends CustomEnchantmentWrapper{
 
 	public SoulReaperWrapper() {
 		super("soul_reaper");
-		// TODO Auto-generated constructor stub
 	}
 	
 	@Override
@@ -42,12 +41,10 @@ public class SoulReaperWrapper extends CustomEnchantmentWrapper{
 	}
 
 	public boolean isCursed() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	public boolean isTreasure() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 

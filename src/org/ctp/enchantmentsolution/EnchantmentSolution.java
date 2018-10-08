@@ -128,6 +128,8 @@ public class EnchantmentSolution extends JavaPlugin {
 		getCommand("Info").setTabCompleter(new PlayerChatTabComplete());
 		getCommand("RemoveEnchant").setTabCompleter(new PlayerChatTabComplete());
 		getCommand("EnchantUnsafe").setTabCompleter(new PlayerChatTabComplete());
+		
+		ConfigFiles.updateEnchantments();
 	}
 
 	public void onDisable() {
@@ -135,7 +137,7 @@ public class EnchantmentSolution extends JavaPlugin {
 		
 		for(int i = INVENTORIES.size() - 1; i >= 0; i--) {
 			InventoryData inv = INVENTORIES.get(i);
-			removeInventory(inv);
+			inv.close(true);
 		}
 	}
 	

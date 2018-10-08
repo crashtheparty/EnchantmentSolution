@@ -68,6 +68,7 @@ public class InventoryClick implements Listener {
 				Anvil anvil = (Anvil) invData;
 
 				if (!(inv.getType().equals(InventoryType.CHEST))) {
+					if(inv.getType().equals(InventoryType.ANVIL)) return;
 					int slot = event.getSlot();
 					ItemStack item = event.getClickedInventory().getItem(slot);
 					if(item == null || item.getType().equals(Material.AIR)) {

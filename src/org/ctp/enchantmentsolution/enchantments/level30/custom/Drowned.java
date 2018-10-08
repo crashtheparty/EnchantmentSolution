@@ -9,6 +9,10 @@ import org.ctp.enchantmentsolution.utils.ItemUtils;
 
 public class Drowned extends CustomEnchantment{
 	
+	public Drowned() {
+		setDisplayName("Drowned");
+	}
+	
 	@Override
 	public Enchantment getRelativeEnchantment() {
 		return DefaultEnchantments.DROWNED;
@@ -46,11 +50,6 @@ public class Drowned extends CustomEnchantment{
 	@Override
 	public String getName() {
 		return "drowned";
-	}
-
-	@Override
-	public String getDisplayName() {
-		return "Drowned";
 	}
 
 	@Override

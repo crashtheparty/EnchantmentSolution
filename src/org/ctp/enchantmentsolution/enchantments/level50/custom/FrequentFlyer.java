@@ -9,6 +9,10 @@ import org.ctp.enchantmentsolution.utils.ItemUtils;
 
 public class FrequentFlyer extends CustomEnchantment{
 	
+	public FrequentFlyer() {
+		setDisplayName("Frequent Flyer");
+	}
+	
 	@Override
 	public Enchantment getRelativeEnchantment() {
 		return DefaultEnchantments.FREQUENT_FLYER;
@@ -52,19 +56,12 @@ public class FrequentFlyer extends CustomEnchantment{
 	}
 
 	@Override
-	public String getDisplayName() {
-		return "Frequent Flyer";
-	}
-
-	@Override
 	public int getStartLevel() {
-		// TODO Auto-generated method stub
 		return 30;
 	}
 
 	@Override
 	public int getWeight() {
-		// TODO Auto-generated method stub
 		return 1;
 	}
 
