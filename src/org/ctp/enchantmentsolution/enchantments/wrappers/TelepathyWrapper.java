@@ -6,9 +6,8 @@ import org.bukkit.inventory.ItemStack;
 
 public class TelepathyWrapper extends CustomEnchantmentWrapper{
 
-	public TelepathyWrapper(int id) {
-		super(id);
-		// TODO Auto-generated constructor stub
+	public TelepathyWrapper() {
+		super("telepathy");
 	}
 
 	@Override
@@ -18,41 +17,34 @@ public class TelepathyWrapper extends CustomEnchantmentWrapper{
 
 	@Override
 	public int getMaxLevel() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
 	public int getStartLevel() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
 	public EnchantmentTarget getItemTarget() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public boolean conflictsWith(Enchantment paramEnchantment) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public boolean canEnchantItem(ItemStack paramItemStack) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	public boolean isCursed() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	public boolean isTreasure() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 

@@ -15,18 +15,21 @@ import org.ctp.enchantmentsolution.enchantments.Enchantments;
 
 public class AbilityUtilities {
 
-	@SuppressWarnings("deprecation")
 	private static List<Material> FORTUNE_ITEMS = Arrays.asList(
 			Material.DIAMOND_ORE, Material.EMERALD_ORE,
 			Material.COAL_ORE, Material.NETHER_QUARTZ_ORE, Material.LAPIS_ORE,
-			Material.REDSTONE_ORE, Material.REDSTONE_ORE, Material.LEGACY_CROPS, Material.CARROT,
-			Material.POTATO, Material.GLOWSTONE, Material.SEA_LANTERN,
-			Material.MELON_BLOCK, Material.LEGACY_NETHER_STALK,
-			Material.LEGACY_BEETROOT_BLOCK, Material.LEGACY_LONG_GRASS, Material.GRAVEL, Material.LEGACY_LEAVES, Material.LEGACY_LEAVES_2);
+			Material.REDSTONE_ORE, Material.REDSTONE_ORE, Material.WHEAT, Material.CARROTS,
+			Material.POTATOES, Material.GLOWSTONE, Material.SEA_LANTERN,
+			Material.MELON, Material.NETHER_WART,
+			Material.GRASS, Material.GRAVEL, Material.JUNGLE_LEAVES, Material.OAK_LEAVES,
+			Material.DARK_OAK_LEAVES, Material.ACACIA_LEAVES, Material.BIRCH_LEAVES, Material.SPRUCE_LEAVES);
 
 	public static Collection<ItemStack> getFortuneItems(ItemStack item,
 			Block brokenBlock, Collection<ItemStack> priorItems) {
 		boolean ironGold = false;
+		int level = Enchantments.getLevel(item,
+				Enchantment.LOOT_BONUS_BLOCKS);
+		if(level <= 0) return priorItems;
 		Iterator<ItemStack> iter = priorItems.iterator();
 		List<ItemStack> duplicate = new ArrayList<ItemStack>();
 		while(iter.hasNext()) {
@@ -96,7 +99,7 @@ public class AbilityUtilities {
 			}
 			if(canBreak || ironGold) {
 				ItemStack fortunableItem = duplicate.get(0);
-				int level = Enchantments.getLevel(item,
+				level = Enchantments.getLevel(item,
 						Enchantment.LOOT_BONUS_BLOCKS) + 2;
 				int multiply = (int) (Math.random() * level);
 				if (multiply > 1) {
@@ -116,11 +119,11 @@ public class AbilityUtilities {
 					}
 				}
 			}
-		} else if (Arrays.asList(Material.REDSTONE_ORE, Material.LEGACY_CROPS,
-				Material.LEGACY_BEETROOT_BLOCK, Material.LEGACY_CARROT, Material.LEGACY_POTATO,
-				Material.LEGACY_NETHER_STALK, Material.SEA_LANTERN, Material.MELON_BLOCK, Material.GLOWSTONE, Material.LEGACY_LONG_GRASS).contains(
+		} else if (Arrays.asList(Material.REDSTONE_ORE, Material.WHEAT,
+				Material.BEETROOTS, Material.CARROTS, Material.POTATOES,
+				Material.NETHER_WART, Material.SEA_LANTERN, Material.MELON, Material.GLOWSTONE, Material.GRASS).contains(
 				brokenBlock.getType())) {
-			int level = Enchantments.getLevel(item,
+			level = Enchantments.getLevel(item,
 					Enchantment.LOOT_BONUS_BLOCKS);
 			int min = 0;
 			int max = 0;
@@ -134,7 +137,7 @@ public class AbilityUtilities {
 					breakBlock = Material.REDSTONE;
 				}
 				break;
-			case LEGACY_LONG_GRASS:
+			case GRASS:
 				for(ItemStack priorItem : priorItems) {
 					if(priorItem.getType().equals(Material.WHEAT_SEEDS)){
 						min = 1;
@@ -144,28 +147,28 @@ public class AbilityUtilities {
 				}
 				breakBlock = Material.WHEAT_SEEDS;
 				break;
-			case LEGACY_CROPS:
+			case WHEAT:
 				breakBlock = Material.WHEAT_SEEDS;
 				min = 0;
 				max = 3 + level;
 				break;
-			case LEGACY_BEETROOT_BLOCK:
+			case BEETROOTS:
 				breakBlock = Material.BEETROOT_SEEDS;
 				min = 0;
 				max = 3 + level;
 				break;
-			case LEGACY_CARROT:
-				breakBlock = Material.LEGACY_CARROT_ITEM;
+			case CARROTS:
+				breakBlock = Material.CARROT;
 				min = 1;
 				max = 4 + level;
 				break;
-			case LEGACY_POTATO:
-				breakBlock = Material.LEGACY_POTATO_ITEM;
+			case POTATOES:
+				breakBlock = Material.POTATO;
 				min = 1;
 				max = 4 + level;
 				break;
-			case LEGACY_NETHER_STALK:
-				breakBlock = Material.LEGACY_NETHER_WARTS;
+			case NETHER_WART:
+				breakBlock = Material.NETHER_WART;
 				min = 2;
 				max = 4 + level;
 				break;
@@ -175,8 +178,8 @@ public class AbilityUtilities {
 				max = 3 + level;
 				actualMax = 5;
 				break;
-			case MELON_BLOCK:
-				breakBlock = Material.MELON;
+			case MELON:
+				breakBlock = Material.MELON_SLICE;
 				min = 3;
 				max = 7 + level;
 				actualMax = 9;
@@ -199,9 +202,9 @@ public class AbilityUtilities {
 			fortunableItem.setAmount(finalCount);
 			priorItems.clear();
 			priorItems.add(fortunableItem);
-			if(brokenBlock.getType().equals(Material.LEGACY_BEETROOT_BLOCK)){
+			if(brokenBlock.getType().equals(Material.BEETROOTS)){
 				priorItems.add(new ItemStack(Material.BEETROOT));
-			}else if(brokenBlock.getType().equals(Material.LEGACY_CROPS)){
+			}else if(brokenBlock.getType().equals(Material.WHEAT)){
 				priorItems.add(new ItemStack(Material.WHEAT));
 			}
 		}else if(brokenBlock.getType().equals(Material.GRAVEL)){
@@ -222,57 +225,103 @@ public class AbilityUtilities {
 				priorItems.clear();
 				priorItems.add(new ItemStack(Material.FLINT));
 			}
-		}else if(brokenBlock.getType().equals(Material.LEGACY_LEAVES) || brokenBlock.getType().equals(Material.LEGACY_LEAVES_2)){
-			TreeType type = TreeType.get(brokenBlock);
-			int level = Enchantments.getLevel(item,
+		}else if(brokenBlock.getType() == Material.OAK_LEAVES || brokenBlock.getType() == Material.BIRCH_LEAVES 
+				|| brokenBlock.getType() == Material.SPRUCE_LEAVES || brokenBlock.getType() == Material.JUNGLE_LEAVES
+				|| brokenBlock.getType() == Material.DARK_OAK_LEAVES || brokenBlock.getType() == Material.ACACIA_LEAVES){
+			level = Enchantments.getLevel(item,
 					Enchantment.LOOT_BONUS_BLOCKS);
-			if(type.equals(TreeType.JUNGLE)){
-				double chance = 0;
-				if(4 * (level - 1) * (level - 1) >= 36){
-					chance = .25;
-				}else{
-					chance = 1.0 / (36 - 4 * (level - 1) * (level - 1));
+			double chance = 0;
+			double appleChance = 0;
+			Material sapling = null;
+			switch(brokenBlock.getType()) {
+			case JUNGLE_LEAVES:
+				sapling = Material.JUNGLE_SAPLING;
+				chance = 1.0D / 10.0D;
+				switch(level) {
+				case 1:
+					chance = 1.0D / 36.0D;
+					break;
+				case 2:
+					chance = 1.0D / 32.0D;
+					break;
+				case 3:
+					chance = 1.0D / 24.0D;
+					break;
+				case 4:
+					chance = 1.0D / 16.0D;
+					break;
 				}
-				if(chance > .25) chance = .25;
-				double random = Math.random();
-				if(chance > random){
-					priorItems.add(type.getSapling(1));
+				break;
+			case OAK_LEAVES:
+				if(sapling == null) {
+					sapling = Material.OAK_SAPLING;
 				}
-			}else{
-				double chance = 0;
-				if(4 * (level - 1) * (level - 1) >= 16){
-					chance = .50;
-				}else{
-					chance = 1.0 / (16 - 4 * (level - 1) * (level - 1));
+			case DARK_OAK_LEAVES:
+				if(sapling == null) {
+					sapling = Material.DARK_OAK_SAPLING;
 				}
-				if(chance > .50) chance = .50;
-				double random = Math.random();
-				if(chance > random){
-					priorItems.add(type.getSapling(1));
+				appleChance = 1.0D / 80.0D;
+				switch(level) {
+				case 1:
+					appleChance = 1.0D / 180.0D;
+					break;
+				case 2:
+					appleChance = 1.0D / 160.0D;
+					break;
+				case 3:
+					appleChance = 1.0D / 120.0D;
+					break;
+				case 4:
+					appleChance = 1.0D / 100.0D;
+					break;
 				}
-				if(type.equals(TreeType.DARK_OAK) || type.equals(TreeType.OAK)){
-					chance = 0;
-					if(20 * (level - 1) * (level - 1) >= 16){
-						chance = .50;
-					}else{
-						chance = 1.0 / (180 - 20 * (level - 1) * (level - 1));
-					}
-					if(chance > .50) chance = .50;
-					random = Math.random();
-					if(chance > random){
-						priorItems.add(type.getSapling(1));
-					}
+			case ACACIA_LEAVES:
+				if(sapling == null) {
+					sapling = Material.ACACIA_SAPLING;
 				}
+			case BIRCH_LEAVES:
+				if(sapling == null) {
+					sapling = Material.BIRCH_SAPLING;
+				}
+			case SPRUCE_LEAVES:
+				if(sapling == null) {
+					sapling = Material.SPRUCE_SAPLING;
+				}
+				chance = 1.0D / 5.0D;
+				switch(level) {
+				case 1:
+					chance = 1.0D / 16.0D;
+					break;
+				case 2:
+					chance = 1.0D / 12.0D;
+					break;
+				case 3:
+					chance = 1.0D / 10.0D;
+					break;
+				case 4:
+					chance = 1.0D / 8.0D;
+					break;
+				}
+				break;
+			default:
+				break;
+			
+			}
+			double random = Math.random();
+			if(chance > random){
+				priorItems.add(new ItemStack(sapling, 1));
+			}
+			random = Math.random();
+			if(appleChance > random) {
+				priorItems.add(new ItemStack(Material.APPLE, 1));
 			}
 		}
 
 		return priorItems;
 	}
 	
-	@SuppressWarnings("deprecation")
 	public static ItemStack getSmelteryItem(Block block, ItemStack item) {
 		Material material = null;
-		int data = 0;
 		boolean fortune = false;
 		switch(block.getType()) {
 		case IRON_ORE:
@@ -293,43 +342,38 @@ public class AbilityUtilities {
 		case COBBLESTONE:
 		case STONE:
 			if(Arrays.asList(Material.IRON_PICKAXE, Material.DIAMOND_PICKAXE, Material.GOLDEN_PICKAXE, Material.STONE_PICKAXE, Material.WOODEN_PICKAXE).contains(item.getType())) {
-				if(block.getData() == 0) {
-					material = Material.STONE;
-				}
+				material = Material.STONE;
 			}
 			break;
-		case LEGACY_SMOOTH_BRICK:
+		case STONE_BRICKS:
 			if(Arrays.asList(Material.IRON_PICKAXE, Material.DIAMOND_PICKAXE, Material.GOLDEN_PICKAXE, Material.STONE_PICKAXE, Material.WOODEN_PICKAXE).contains(item.getType())) {
-				if(block.getData() == 0) {
-					material = Material.LEGACY_SMOOTH_BRICK;
-					data = 2;
-				}
+				material = Material.CRACKED_STONE_BRICKS;
 			}
 			break;
 		case NETHERRACK:
 			if(Arrays.asList(Material.IRON_PICKAXE, Material.DIAMOND_PICKAXE, Material.GOLDEN_PICKAXE, Material.STONE_PICKAXE, Material.WOODEN_PICKAXE).contains(item.getType())) {
-				material = Material.LEGACY_NETHER_BRICK_ITEM;
+				material = Material.NETHER_BRICK;
 			}
 			break;
 		case CLAY:
-			material = Material.LEGACY_HARD_CLAY;
+			material = Material.TERRACOTTA;
 			break;
 		case CACTUS:
-			material = Material.LEGACY_INK_SACK;
-			data = 2;
+			material = Material.CACTUS_GREEN;
 			break;
-		case LEGACY_LOG:
-		case LEGACY_LOG_2:
-			material = Material.COAL;
-			data = 1;
+		case OAK_LOG:
+		case BIRCH_LOG:
+		case SPRUCE_LOG:
+		case JUNGLE_LOG:
+		case DARK_OAK_LOG:
+		case ACACIA_LOG:
+			material = Material.CHARCOAL;
 			break;
 		case CHORUS_FRUIT:
-			material = Material.CHORUS_FRUIT_POPPED;
+			material = Material.POPPED_CHORUS_FRUIT;
 			break;
-		case SPONGE:
-			if(block.getData() == 1) {
-				material = Material.SPONGE;
-			}
+		case WET_SPONGE:
+			material = Material.SPONGE;
 			break;
 		default:
 			
@@ -344,12 +388,11 @@ public class AbilityUtilities {
 			}
 		}
 		if(material != null) {
-			return new ItemStack(material, num, (byte) data);
+			return new ItemStack(material, num);
 		}
 		return null;
 	}
 	
-	@SuppressWarnings("deprecation")
 	public static ItemStack getSilkTouchItem(Block block, ItemStack item){
 		switch(block.getType()) {
 		case COAL_ORE:
@@ -359,23 +402,34 @@ public class AbilityUtilities {
 			}
 			break;
 		case STONE:
-			if(block.getData() == 0) {
-				if(Arrays.asList(Material.IRON_PICKAXE, Material.DIAMOND_PICKAXE, Material.STONE_PICKAXE, Material.WOODEN_PICKAXE, Material.GOLDEN_PICKAXE).contains(item.getType())) {
-					return new ItemStack(block.getType());
-				}
+			if(Arrays.asList(Material.IRON_PICKAXE, Material.DIAMOND_PICKAXE, Material.STONE_PICKAXE, Material.WOODEN_PICKAXE, Material.GOLDEN_PICKAXE).contains(item.getType())) {
+				return new ItemStack(block.getType());
 			}
 			break;
-		case LEGACY_MONSTER_EGGS:
+		case INFESTED_STONE:
 			if(Arrays.asList(Material.IRON_PICKAXE, Material.DIAMOND_PICKAXE, Material.STONE_PICKAXE, Material.WOODEN_PICKAXE, Material.GOLDEN_PICKAXE).contains(item.getType())) {
-				if(block.getData() == 0) {
+				return new ItemStack(Material.STONE);
+			}
+			return null;
+		case INFESTED_COBBLESTONE:
+			if(Arrays.asList(Material.IRON_PICKAXE, Material.DIAMOND_PICKAXE, Material.STONE_PICKAXE, Material.WOODEN_PICKAXE, Material.GOLDEN_PICKAXE).contains(item.getType())) {
+				if(Enchantments.hasEnchantment(item, DefaultEnchantments.SMELTERY)) {
 					return new ItemStack(Material.STONE);
 				}
-				if(block.getData() == 1) {
-					return new ItemStack(Material.COBBLESTONE);
+				return new ItemStack(Material.COBBLESTONE);
+			}
+			return null;
+		case INFESTED_STONE_BRICKS:
+			if(Arrays.asList(Material.IRON_PICKAXE, Material.DIAMOND_PICKAXE, Material.STONE_PICKAXE, Material.WOODEN_PICKAXE, Material.GOLDEN_PICKAXE).contains(item.getType())) {
+				if(Enchantments.hasEnchantment(item, DefaultEnchantments.SMELTERY)) {
+					return new ItemStack(Material.CRACKED_STONE_BRICKS);
 				}
-				if(block.getData() >= 2 && block.getData() <= 5) {
-					return new ItemStack(Material.LEGACY_SMOOTH_BRICK, 1, (byte) (block.getData() - 2));
-				}
+				return new ItemStack(Material.STONE_BRICKS);
+			}
+			return null;
+		case INFESTED_CRACKED_STONE_BRICKS:
+			if(Arrays.asList(Material.IRON_PICKAXE, Material.DIAMOND_PICKAXE, Material.STONE_PICKAXE, Material.WOODEN_PICKAXE, Material.GOLDEN_PICKAXE).contains(item.getType())) {
+				return new ItemStack(Material.CRACKED_STONE_BRICKS);
 			}
 			return null;
 		case LAPIS_ORE:
@@ -398,28 +452,78 @@ public class AbilityUtilities {
 		case CLAY:
 		case ENDER_CHEST:
 		case GLASS:
-		case LEGACY_THIN_GLASS:
+		case GLASS_PANE:
 		case GLOWSTONE:
-		case GRASS:
-		case LEGACY_MYCEL:
-		case LEGACY_HUGE_MUSHROOM_1:
-		case LEGACY_HUGE_MUSHROOM_2:
-		case MELON_BLOCK:
+		case GRASS_BLOCK:
+		case MYCELIUM:
+		case BROWN_MUSHROOM_BLOCK:
+		case RED_MUSHROOM_BLOCK:
+		case MUSHROOM_STEM:
+		case MELON:
+		case PODZOL:
 		case SEA_LANTERN:
 		case ICE:
 		case PACKED_ICE:
+		case BLUE_ICE:
 		case SNOW_BLOCK:
+		case BLACK_STAINED_GLASS:
+		case BLUE_STAINED_GLASS:
+		case BROWN_STAINED_GLASS:
+		case CYAN_STAINED_GLASS:
+		case GRAY_STAINED_GLASS:
+		case GREEN_STAINED_GLASS:
+		case LIGHT_BLUE_STAINED_GLASS:
+		case LIGHT_GRAY_STAINED_GLASS:
+		case LIME_STAINED_GLASS:
+		case MAGENTA_STAINED_GLASS:
+		case ORANGE_STAINED_GLASS:
+		case PINK_STAINED_GLASS:
+		case PURPLE_STAINED_GLASS:
+		case RED_STAINED_GLASS:
+		case WHITE_STAINED_GLASS:
+		case YELLOW_STAINED_GLASS:
+		case BLACK_STAINED_GLASS_PANE:
+		case BLUE_STAINED_GLASS_PANE:
+		case BROWN_STAINED_GLASS_PANE:
+		case CYAN_STAINED_GLASS_PANE:
+		case GRAY_STAINED_GLASS_PANE:
+		case GREEN_STAINED_GLASS_PANE:
+		case LIGHT_BLUE_STAINED_GLASS_PANE:
+		case LIGHT_GRAY_STAINED_GLASS_PANE:
+		case LIME_STAINED_GLASS_PANE:
+		case MAGENTA_STAINED_GLASS_PANE:
+		case ORANGE_STAINED_GLASS_PANE:
+		case PINK_STAINED_GLASS_PANE:
+		case PURPLE_STAINED_GLASS_PANE:
+		case RED_STAINED_GLASS_PANE:
+		case WHITE_STAINED_GLASS_PANE:
+		case YELLOW_STAINED_GLASS_PANE:
+		case BRAIN_CORAL:
+		case BRAIN_CORAL_BLOCK:
+		case BRAIN_CORAL_FAN:
+		case BUBBLE_CORAL:
+		case BUBBLE_CORAL_BLOCK:
+		case BUBBLE_CORAL_FAN:
+		case FIRE_CORAL:
+		case FIRE_CORAL_BLOCK:
+		case FIRE_CORAL_FAN:
+		case HORN_CORAL:
+		case HORN_CORAL_BLOCK:
+		case HORN_CORAL_FAN:
+		case TUBE_CORAL:
+		case TUBE_CORAL_BLOCK:
+		case TUBE_CORAL_FAN:
 			return new ItemStack(block.getType());
-		case LEGACY_STAINED_GLASS:
-		case LEGACY_STAINED_GLASS_PANE:
-			return new ItemStack(block.getType(), 1, block.getData());
-		case LEGACY_LEAVES:
-		case LEGACY_LEAVES_2:
-			return new ItemStack(block.getType(), 1, (byte)(block.getData() % 4));
-		case DIRT:
-			if(block.getData() == 2) {
-				return new ItemStack(block.getType(), 1, block.getData());
-			}
+		case BRAIN_CORAL_WALL_FAN:
+			return new ItemStack(Material.BRAIN_CORAL_FAN);
+		case BUBBLE_CORAL_WALL_FAN:
+			return new ItemStack(Material.BUBBLE_CORAL_FAN);
+		case FIRE_CORAL_WALL_FAN:
+			return new ItemStack(Material.FIRE_CORAL_FAN);
+		case HORN_CORAL_WALL_FAN:
+			return new ItemStack(Material.HORN_CORAL_FAN);
+		case TUBE_CORAL_WALL_FAN:
+			return new ItemStack(Material.TUBE_CORAL_FAN);
 		default:
 			break;
 		}

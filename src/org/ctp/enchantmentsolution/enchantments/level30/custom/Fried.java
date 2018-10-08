@@ -9,6 +9,10 @@ import org.ctp.enchantmentsolution.utils.ItemUtils;
 
 public class Fried extends CustomEnchantment{
 	
+	public Fried() {
+		setDisplayName("Fried");
+	}
+	
 	@Override
 	public Enchantment getRelativeEnchantment() {
 		return DefaultEnchantments.FRIED;
@@ -40,20 +44,12 @@ public class Fried extends CustomEnchantment{
 
 	@Override
 	public int getMaxLevel() {
-		// TODO Auto-generated method stub
 		return 1;
 	}
 
 	@Override
 	public String getName() {
-		// TODO Auto-generated method stub
 		return "fried";
-	}
-
-	@Override
-	public String getDisplayName() {
-		// TODO Auto-generated method stub
-		return "Fried";
 	}
 
 	@Override
@@ -63,7 +59,6 @@ public class Fried extends CustomEnchantment{
 
 	@Override
 	public int getWeight() {
-		// TODO Auto-generated method stub
 		return 2;
 	}
 

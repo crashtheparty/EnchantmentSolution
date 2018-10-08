@@ -24,6 +24,9 @@ public class CurseOfBinding extends CustomEnchantment{
 
 	@Override
 	public boolean canAnvilItem(Material item) {
+		if(item.equals(Material.BOOK)){
+			return true;
+		}
 		if(ItemUtils.getItemTypes().get("armor").contains(item)){
 			return true;
 		}
@@ -48,7 +51,6 @@ public class CurseOfBinding extends CustomEnchantment{
 
 	@Override
 	public String getName() {
-		// TODO Auto-generated method stub
 		return "binding_curse";
 	}
 

@@ -29,15 +29,27 @@ public class Enchantments {
 	}
 	
 	public static int getMaxEnchantments() {
-		return ConfigFiles.MAIN_CONFIG.getInt("max_enchantments");
+		return ConfigFiles.getDefaultConfig().getInt("max_enchantments");
 	}
 	
 	public static boolean customEnchantsDisabled() {
-		return !ConfigFiles.MAIN_CONFIG.getBoolean("level_50_enchants");
+		return !ConfigFiles.getDefaultConfig().getBoolean("level_50_enchants");
 	}
 	
 	public static int getLevelDivisor() {
-		return ConfigFiles.MAIN_CONFIG.getInt("level_divisor");
+		return ConfigFiles.getDefaultConfig().getInt("level_divisor");
+	}
+	
+	public static boolean getChestLoot(){
+		return ConfigFiles.getDefaultConfig().getBoolean("chest_loot");
+	}
+	
+	public static boolean getMobLoot(){
+		return ConfigFiles.getDefaultConfig().getBoolean("mob_loot");
+	}
+	
+	public static boolean getFishingLoot(){
+		return ConfigFiles.getDefaultConfig().getBoolean("fishing_loot");
 	}
 
 	public static void addEnchantment(CustomEnchantment enchantment) {
@@ -54,16 +66,16 @@ public class Enchantments {
 				ENCHANTMENTS.remove(enchantment);
 
 				Bukkit.getLogger().warning(
-						"[EnchantmentSolution] Trouble adding the " + enchantment.getDisplayName() + " custom enchantment:");
+						"[EnchantmentSolution] Trouble adding the " + enchantment.getName() + " custom enchantment:");
 			    e.printStackTrace();
 			}
 			if(registered){
 				Bukkit.getLogger().info(
-						"[EnchantmentSolution] Added the " + enchantment.getDisplayName() + " custom enchantment.");
+						"[EnchantmentSolution] Added the " + enchantment.getName() + " custom enchantment.");
 			}
 		}else{
 			Bukkit.getLogger().info(
-					"[EnchantmentSolution] Added the " + enchantment.getDisplayName() + " enchantment.");
+					"[EnchantmentSolution] Added the " + enchantment.getName() + " enchantment.");
 		}
 	}
 
@@ -71,8 +83,9 @@ public class Enchantments {
 		if (item == null) {
 			return false;
 		}
+		ItemMeta meta = item.getItemMeta();
 		for(CustomEnchantment enchant : ENCHANTMENTS){
-			if(item.containsEnchantment(enchant.getRelativeEnchantment())){
+			if(meta.hasEnchant(enchant.getRelativeEnchantment())){
 				return false;
 			}
 		}
@@ -90,7 +103,7 @@ public class Enchantments {
 	}
 
 	public static List<EnchantmentLevel> generateEnchantments(
-			Material material, int level, int lapis) {
+			Material material, int level, int lapis, boolean treasure) {
 		List<EnchantmentLevel> enchants = new ArrayList<EnchantmentLevel>();
 		int enchantability = getEnchantability(material, level, lapis);
 		double multiEnchantDivisor = 75.0D;
@@ -101,9 +114,16 @@ public class Enchantments {
 		int totalWeight = 0;
 		List<CustomEnchantment> customEnchants = new ArrayList<CustomEnchantment>();
 		for(CustomEnchantment enchantment : ENCHANTMENTS){
-			if(enchantment.canEnchant(enchantability, level) && enchantment.canEnchantItem(material) && enchantment.isEnabled() && !enchantment.isTreasure()){
-				totalWeight += enchantment.getWeight();
-				customEnchants.add(enchantment);
+			if (treasure) {
+				if(enchantment.canEnchant(enchantability, level) && enchantment.canEnchantItem(material) && enchantment.isEnabled()){
+					totalWeight += enchantment.getWeight();
+					customEnchants.add(enchantment);
+				}
+			} else {
+				if(enchantment.canEnchant(enchantability, level) && enchantment.canEnchantItem(material) && enchantment.isEnabled() && !enchantment.isTreasure()){
+					totalWeight += enchantment.getWeight();
+					customEnchants.add(enchantment);
+				}
 			}
 		}
 		int getWeight = (int)(Math.random() * totalWeight);

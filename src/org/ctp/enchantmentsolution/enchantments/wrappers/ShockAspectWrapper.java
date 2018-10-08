@@ -6,9 +6,8 @@ import org.bukkit.inventory.ItemStack;
 
 public class ShockAspectWrapper extends CustomEnchantmentWrapper{
 
-	public ShockAspectWrapper(int id) {
-		super(id);
-		// TODO Auto-generated constructor stub
+	public ShockAspectWrapper() {
+		super("shock_aspect");
 	}
 	
 	@Override
@@ -42,12 +41,10 @@ public class ShockAspectWrapper extends CustomEnchantmentWrapper{
 	}
 
 	public boolean isCursed() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	public boolean isTreasure() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 }

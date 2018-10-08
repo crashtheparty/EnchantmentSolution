@@ -30,6 +30,9 @@ public class CurseOfBinding extends CustomEnchantment{
 		if(ItemUtils.getItemTypes().get("elytra").contains(item)){
 			return true;
 		}
+		if(item.equals(Material.BOOK)){
+			return true;
+		}
 		return false;
 	}
 
@@ -48,7 +51,6 @@ public class CurseOfBinding extends CustomEnchantment{
 
 	@Override
 	public String getName() {
-		// TODO Auto-generated method stub
 		return "binding_curse";
 	}
 

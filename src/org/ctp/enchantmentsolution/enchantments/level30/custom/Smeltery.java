@@ -9,6 +9,10 @@ import org.ctp.enchantmentsolution.utils.ItemUtils;
 
 public class Smeltery extends CustomEnchantment{
 	
+	public Smeltery() {
+		setDisplayName("Smeltery");
+	}
+	
 	@Override
 	public Enchantment getRelativeEnchantment() {
 		return DefaultEnchantments.SMELTERY;
@@ -49,11 +53,6 @@ public class Smeltery extends CustomEnchantment{
 	@Override
 	public String getName() {
 		return "smeltery";
-	}
-
-	@Override
-	public String getDisplayName() {
-		return "Smeltery";
 	}
 
 	@Override

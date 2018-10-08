@@ -1,7 +1,9 @@
 package org.ctp.enchantmentsolution.commands;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Level;
 
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.command.Command;
@@ -41,9 +43,13 @@ public class EnchantInfo implements CommandExecutor{
 			}
 			if(enchantment == null) {
 				if(player != null) {
-					ChatUtils.sendMessage(player, "Enchantment with name " + args[0] + " does not exist!");
+					HashMap<String, Object> codes = ChatUtils.getCodes();
+					codes.put("%enchant%", args[0]);
+					ChatUtils.sendMessage(player, ChatUtils.getMessage(codes, "commands.enchant-not-found"));
 				} else {
-					sender.sendMessage("Enchantment with name " + args[0] + " does not exist!");
+					HashMap<String, Object> codes = ChatUtils.getCodes();
+					codes.put("%enchant%", args[0]);
+					ChatUtils.sendToConsole(Level.WARNING, ChatUtils.getMessage(codes, "commands.enchant-not-found"));
 				}
 			} else {
 				String[] pages = enchantment.getPage();

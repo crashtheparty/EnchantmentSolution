@@ -17,6 +17,7 @@ import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
+import org.ctp.enchantmentsolution.utils.DamageUtils;
 
 public class FrequentFlyerListener implements Listener, Runnable{
 	
@@ -130,7 +131,7 @@ public class FrequentFlyerListener implements Listener, Runnable{
 				int level = Enchantments.getLevel(elytra, DefaultEnchantments.FREQUENT_FLYER);
 				underLimit = level * 4;
 				aboveLimit = level;
-				if(elytra.getDurability() < 400) {
+				if(DamageUtils.getDamage(elytra.getItemMeta()) < 400) {
 					fly = true;
 				}
 			}
@@ -167,8 +168,8 @@ public class FrequentFlyerListener implements Listener, Runnable{
 					if(chance < random) {
 						durabilityChange = 0;
 					}
-					elytra.setDurability((short) (elytra.getDurability() + durabilityChange));
-					if(elytra.getDurability() >= 400) {
+					DamageUtils.setDamage(elytra, (DamageUtils.getDamage(elytra.getItemMeta()) + durabilityChange));
+					if(DamageUtils.getDamage(elytra.getItemMeta()) >= 400) {
 						setCanFly(false);
 					}
 					above = aboveLimit;
@@ -183,8 +184,8 @@ public class FrequentFlyerListener implements Listener, Runnable{
 					if(chance < random) {
 						durabilityChange = 0;
 					}
-					elytra.setDurability((short) (elytra.getDurability() + durabilityChange));
-					if(elytra.getDurability() >= 400) {
+					DamageUtils.setDamage(elytra, (DamageUtils.getDamage(elytra.getItemMeta()) + durabilityChange));
+					if(DamageUtils.getDamage(elytra.getItemMeta()) >= 400) {
 						setCanFly(false);
 					}
 					player.getInventory().setChestplate(elytra);

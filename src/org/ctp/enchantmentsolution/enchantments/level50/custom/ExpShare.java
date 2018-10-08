@@ -9,6 +9,10 @@ import org.ctp.enchantmentsolution.utils.ItemUtils;
 
 public class ExpShare extends CustomEnchantment{
 	
+	public ExpShare() {
+		setDisplayName("Exp. Share");
+	}
+	
 	@Override
 	public Enchantment getRelativeEnchantment() {
 		return DefaultEnchantments.EXP_SHARE;
@@ -23,6 +27,9 @@ public class ExpShare extends CustomEnchantment{
 			return true;
 		}
 		if(ItemUtils.getItemTypes().get("tools").contains(item)){
+			return true;
+		}
+		if(ItemUtils.getItemTypes().get("trident").contains(item)){
 			return true;
 		}
 		return false;
@@ -49,11 +56,6 @@ public class ExpShare extends CustomEnchantment{
 	@Override
 	public String getName() {
 		return "exp_share";
-	}
-
-	@Override
-	public String getDisplayName() {
-		return "Exp. Share";
 	}
 
 	@Override
@@ -89,8 +91,8 @@ public class ExpShare extends CustomEnchantment{
 		pageTwo += "Max Level: " + getMaxLevel() + "."+ StringUtils.LF;
 		pageTwo += "Weight: " + getWeight() + "."+ StringUtils.LF;
 		pageTwo += "Start Level: " + getStartLevel() + "."+ StringUtils.LF;
-		pageTwo += "Enchantable Items: Swords, Tools, Books." + StringUtils.LF;
-		pageTwo += "Anvilable Items: Swords, Tools, Books." + StringUtils.LF;
+		pageTwo += "Enchantable Items: Swords, Tridents, Tools, Books." + StringUtils.LF;
+		pageTwo += "Anvilable Items: Swords, Tridents, Tools, Books." + StringUtils.LF;
 		pageTwo += "Treasure Enchantment: " + isTreasure() + ". " + StringUtils.LF;
 		return new String[] {pageOne, pageTwo};
 	}

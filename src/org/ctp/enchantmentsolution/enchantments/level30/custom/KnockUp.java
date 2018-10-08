@@ -9,6 +9,10 @@ import org.ctp.enchantmentsolution.utils.ItemUtils;
 
 public class KnockUp extends CustomEnchantment{
 	
+	public KnockUp() {
+		setDisplayName("Knockup");
+	}
+	
 	@Override
 	public Enchantment getRelativeEnchantment() {
 		return DefaultEnchantments.KNOCKUP;
@@ -49,11 +53,6 @@ public class KnockUp extends CustomEnchantment{
 	@Override
 	public String getName() {
 		return "knockup";
-	}
-
-	@Override
-	public String getDisplayName() {
-		return "Knockup";
 	}
 
 	@Override

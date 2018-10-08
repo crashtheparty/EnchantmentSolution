@@ -38,9 +38,9 @@ public class AnvilUtils {
 		if(items == null) {
 			return false;
 		}
-		if(second.getItemMeta().getEnchants().size() > 0 || first.getDurability() > 0) {
+		if(second.getItemMeta().getEnchants().size() > 0 || DamageUtils.getDamage(first.getItemMeta()) > 0) {
 			if(items.contains(second.getType())) {
-				if((!second.getType().equals(Material.BOOK) && !second.getType().equals(Material.ENCHANTED_BOOK)) || first.getDurability() > 0 || !second.getType().equals(first.getType())) {
+				if((!second.getType().equals(Material.BOOK) && !second.getType().equals(Material.ENCHANTED_BOOK)) || DamageUtils.getDamage(first.getItemMeta()) > 0 || !second.getType().equals(first.getType())) {
 					return true;
 				}
 				if(second.getType().equals(Material.ENCHANTED_BOOK)) {

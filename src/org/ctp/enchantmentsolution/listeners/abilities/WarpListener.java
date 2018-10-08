@@ -55,7 +55,7 @@ public class WarpListener implements Listener{
 					World world = toTeleport.getWorld();
 					world.spawnParticle(Particle.PORTAL, toTeleport, 50, 0.2, 2, 0.2);
 					world.spawnParticle(Particle.PORTAL, attacked.getLocation(), 50, 0.2, 2, 0.2);
-					world.playSound(player.getLocation(), Sound.ENTITY_ENDERMEN_TELEPORT, 10, 1);
+					world.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 10, 1);
 					
 					toTeleport.setYaw(player.getLocation().getYaw());
 					toTeleport.setPitch(player.getLocation().getPitch());

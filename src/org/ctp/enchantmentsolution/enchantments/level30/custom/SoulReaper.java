@@ -9,6 +9,10 @@ import org.ctp.enchantmentsolution.utils.ItemUtils;
 
 public class SoulReaper extends CustomEnchantment{
 	
+	public SoulReaper() {
+		setDisplayName("Soul Reaper");
+	}
+	
 	@Override
 	public Enchantment getRelativeEnchantment() {
 		return DefaultEnchantments.SOUL_REAPER;
@@ -49,11 +53,6 @@ public class SoulReaper extends CustomEnchantment{
 	@Override
 	public String getName() {
 		return "soul_reaper";
-	}
-
-	@Override
-	public String getDisplayName() {
-		return "Soul Reaper";
 	}
 
 	@Override

@@ -9,7 +9,7 @@ import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
 
-import org.bukkit.ChatColor;
+import java.util.HashMap;
 
 public class Enchant implements CommandExecutor {
 
@@ -28,15 +28,23 @@ public class Enchant implements CommandExecutor {
 								try{
 									level = Integer.parseInt(args[1]);
 									if (level < 1) {
-										ChatUtils.sendMessage(player, args[1] + " is not a valid level. Setting level to 1.");
+										HashMap<String, Object> codes = ChatUtils.getCodes();
+										codes.put("%level%", level);
+										ChatUtils.sendMessage(player, ChatUtils.getMessage(codes, "commands.level-too-low"));
 										level = 1;
 									}
 								}catch(NumberFormatException ex){
-									ChatUtils.sendMessage(player, args[1] + " is not a valid level. Setting level to 1.");
+									HashMap<String, Object> codes = ChatUtils.getCodes();
+									codes.put("%level%", args[1]);
+									ChatUtils.sendMessage(player, ChatUtils.getMessage(codes, "commands.invalid-level"));
 								}
 							}
 							if(level > enchant.getMaxLevel()) {
-								ChatUtils.sendMessage(player, level + " is too high of a level. Setting level to " + enchant.getMaxLevel() + ".");
+								HashMap<String, Object> codes = ChatUtils.getCodes();
+								codes.put("%level%", level);
+								codes.put("%maxLevel%", enchant.getMaxLevel());
+								codes.put("%enchant%", enchant.getDisplayName());
+								ChatUtils.sendMessage(player, ChatUtils.getMessage(codes, "commands.level-too-high"));
 								level = enchant.getMaxLevel();
 							}
 							ItemStack itemToEnchant = player.getInventory().getItemInMainHand();
@@ -47,25 +55,34 @@ public class Enchant implements CommandExecutor {
 									if(enchant.canAnvilItem(itemToEnchant.getType()) || enchant.canEnchantItem(itemToEnchant.getType())){
 										itemToEnchant = Enchantments.addEnchantmentToItem(itemToEnchant, enchant, level);
 										player.getInventory().setItemInMainHand(itemToEnchant);
-										ChatUtils.sendMessage(player, "Enchantment with name " + enchant.getDisplayName() + " with level " + level + " has been added to the item.");
+										HashMap<String, Object> codes = ChatUtils.getCodes();
+										codes.put("%level%", level);
+										codes.put("%enchant%", enchant.getDisplayName());
+										ChatUtils.sendMessage(player, ChatUtils.getMessage(codes, "commands.add-enchant"));
 									}else{
-										ChatUtils.sendMessage(player, "Enchantment does not work with this item.");
+										HashMap<String, Object> codes = ChatUtils.getCodes();
+										codes.put("%enchant%", enchant.getDisplayName());
+										ChatUtils.sendMessage(player, ChatUtils.getMessage(codes, "commands.cannot-enchant-item"));
 									}
 								} else {
-									ChatUtils.sendMessage(player, "This item has too many enchantments already.");
+									HashMap<String, Object> codes = ChatUtils.getCodes();
+									codes.put("%maxEnchants%", maxEnchants);
+									ChatUtils.sendMessage(player, ChatUtils.getMessage(codes, "commands.too-many-enchants"));
 								}
 							}else{
-								ChatUtils.sendMessage(player, "You must try to enchant an item.");
+								ChatUtils.sendMessage(player, ChatUtils.getMessage(ChatUtils.getCodes(), "commands.enchant-fail"));
 							}
 							return true;
 						}
 					}
-					ChatUtils.sendMessage(player, "Enchantment with name " + enchantmentName + " not found.");
+					HashMap<String, Object> codes = ChatUtils.getCodes();
+					codes.put("%enchant%", enchantmentName);
+					ChatUtils.sendMessage(player, ChatUtils.getMessage(codes, "commands.enchant-not-found"));
 				}else{
-					ChatUtils.sendMessage(player, "You must specify an enchantment.");
+					ChatUtils.sendMessage(player, ChatUtils.getMessage(ChatUtils.getCodes(), "commands.enchant-not-specified"));
 				}
 			}else {
-				ChatUtils.sendMessage(player, ChatColor.RED + "You do not have permission to use this command!");
+				ChatUtils.sendMessage(player, ChatUtils.getMessage(ChatUtils.getCodes(), "commands.no-permission"));
 			}
 		}
 		return true;

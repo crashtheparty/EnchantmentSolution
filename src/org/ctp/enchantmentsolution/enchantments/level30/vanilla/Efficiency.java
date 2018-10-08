@@ -21,6 +21,9 @@ public class Efficiency extends CustomEnchantment{
 
 	@Override
 	public boolean canAnvilItem(Material item) {
+		if(item.equals(Material.BOOK)){
+			return true;
+		}
 		if(ItemUtils.getItemTypes().get("tools").contains(item)){
 			return true;
 		}
@@ -55,7 +58,6 @@ public class Efficiency extends CustomEnchantment{
 
 	@Override
 	public int getStartLevel() {
-		// TODO Auto-generated method stub
 		return 1;
 	}
 

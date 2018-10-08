@@ -1,6 +1,7 @@
 name: EnchantmentSolution
-version: 1.0.0
+version: 1.1.1
 main: org.ctp.enchantmentsolution.EnchantmentSolution
+api-version: 1.13
 commands:
   enchant:
     aliases: [es,customenchant]
@@ -18,3 +19,6 @@ commands:
     aliases: [esr,eremove]
     description: Remove enchantment from item.
     usage: /removeenchant <enchant_name>
+  esreload:
+    description: Reload config files
+    usage: /esreload

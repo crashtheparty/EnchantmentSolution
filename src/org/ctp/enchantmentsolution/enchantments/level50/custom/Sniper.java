@@ -9,6 +9,10 @@ import org.ctp.enchantmentsolution.utils.ItemUtils;
 
 public class Sniper extends CustomEnchantment{
 	
+	public Sniper() {
+		setDisplayName("Sniper");
+	}
+	
 	@Override
 	public Enchantment getRelativeEnchantment() {
 		return DefaultEnchantments.SNIPER;
@@ -20,6 +24,9 @@ public class Sniper extends CustomEnchantment{
 			return true;
 		}
 		if(ItemUtils.getItemTypes().get("bow").contains(item)){
+			return true;
+		}
+		if(ItemUtils.getItemTypes().get("trident").contains(item)){
 			return true;
 		}
 		return false;
@@ -46,11 +53,6 @@ public class Sniper extends CustomEnchantment{
 	@Override
 	public String getName() {
 		return "sniper";
-	}
-
-	@Override
-	public String getDisplayName() {
-		return "Sniper";
 	}
 
 	@Override
@@ -86,8 +88,8 @@ public class Sniper extends CustomEnchantment{
 		pageTwo += "Max Level: " + getMaxLevel() + "."+ StringUtils.LF;
 		pageTwo += "Weight: " + getWeight() + "."+ StringUtils.LF;
 		pageTwo += "Start Level: " + getStartLevel() + "."+ StringUtils.LF;
-		pageTwo += "Enchantable Items: Bows, Books." + StringUtils.LF;
-		pageTwo += "Anvilable Items: Bows, Books." + StringUtils.LF;
+		pageTwo += "Enchantable Items: Bows, Tridents, Books." + StringUtils.LF;
+		pageTwo += "Anvilable Items: Bows, Tridents, Books." + StringUtils.LF;
 		pageTwo += "Treasure Enchantment: " + isTreasure() + ". " + StringUtils.LF;
 		return new String[] {pageOne, pageTwo};
 	}

@@ -9,6 +9,10 @@ import org.ctp.enchantmentsolution.utils.ItemUtils;
 
 public class Warp extends CustomEnchantment{
 	
+	public Warp() {
+		setDisplayName("Warp");
+	}
+	
 	@Override
 	public Enchantment getRelativeEnchantment() {
 		return DefaultEnchantments.WARP;
@@ -43,11 +47,6 @@ public class Warp extends CustomEnchantment{
 	@Override
 	public String getName() {
 		return "warp";
-	}
-
-	@Override
-	public String getDisplayName() {
-		return "Warp";
 	}
 
 	@Override

@@ -27,6 +27,9 @@ public class Unbreaking extends CustomEnchantment{
 		if(ItemUtils.getItemTypes().get("armor").contains(item)){
 			return true;
 		}
+		if(ItemUtils.getItemTypes().get("trident").contains(item)){
+			return true;
+		}
 		return false;
 	}
 

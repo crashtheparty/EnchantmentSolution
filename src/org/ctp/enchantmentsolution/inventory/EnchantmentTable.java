@@ -2,6 +2,7 @@ package org.ctp.enchantmentsolution.inventory;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 import org.bukkit.Bukkit;
@@ -9,29 +10,32 @@ import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.material.Dye;
+import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.EnchantmentLevel;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
 import org.ctp.enchantmentsolution.enchantments.PlayerLevels;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
+import org.ctp.enchantmentsolution.utils.ItemUtils;
 import org.ctp.enchantmentsolution.utils.RomanNumerals;
 
-public class EnchantmentTable {
+public class EnchantmentTable implements InventoryData {
 
 	private Player player;
 	private Inventory inventory;
 	private List<ItemStack> playerItems;
-	private int books;
+	private Block block;
 	private boolean openingNew;
 
-	public EnchantmentTable(Player player, int books) {
+	public EnchantmentTable(Player player, Block block) {
 		this.setPlayer(player);
 		this.playerItems = new ArrayList<ItemStack>();
-		this.setBooks(books);
+		this.block = block;
 	}
 
 	public void setInventory() {
@@ -40,24 +44,18 @@ public class EnchantmentTable {
 
 	public void setInventory(List<ItemStack> items) {
 		openingNew = true;
-		Inventory inv = Bukkit.createInventory(null, 54, ChatColor.BLUE
-				+ "Enchantment Table");
+		Inventory inv = Bukkit.createInventory(null, 54, ChatUtils.getMessage(getCodes(), "table.name"));
 
 		ItemStack topLeft = new ItemStack(Material.BOOK);
 		ItemMeta topLeftMeta = topLeft.getItemMeta();
-		topLeftMeta.setDisplayName("Enchantment Instructions.");
-		topLeftMeta.setLore(Arrays.asList(
-				"Click items to put them on the left.",
-				"You will see a list of books with the level",
-				" and lapis needed to enchant.", "Select a book to enchant.",
-				"Select the item again to remove.",
-				"You may see up to 4 items at a time."));
+		topLeftMeta.setDisplayName(ChatUtils.getMessage(getCodes(), "table.instructions-title"));
+		topLeftMeta.setLore(ChatUtils.getMessages(getCodes(), "table.instructions"));
 		topLeft.setItemMeta(topLeftMeta);
 		inv.setItem(0, topLeft);
 
 		ItemStack mirror = new ItemStack(Material.BLACK_STAINED_GLASS_PANE);
 		ItemMeta mirrorMeta = mirror.getItemMeta();
-		mirrorMeta.setDisplayName(ChatColor.WHITE + "");
+		mirrorMeta.setDisplayName(ChatUtils.getMessage(getCodes(), "table.black-mirror"));
 		mirror.setItemMeta(mirrorMeta);
 		
 		for(int i = 0; i < 54; i++) {
@@ -66,40 +64,43 @@ public class EnchantmentTable {
 			}
 		}
 
-		ItemStack lapisOne = new ItemStack(Material.LAPIS_LAZULI);
-		ItemMeta lapisOneMeta = lapisOne.getItemMeta();
-
-		List<Integer> levelList = PlayerLevels.getIntList(player, books);
+		List<Integer> levelList = PlayerLevels.getIntList(player, getBooks());
 		if (levelList == null) {
 			new PlayerLevels(getBooks(), getPlayer(), Material.AIR);
-			levelList = PlayerLevels.getIntList(player, books);
+			levelList = PlayerLevels.getIntList(player, getBooks());
 			if (levelList == null) {
-				ChatUtils.sendMessage(player, "There was an error generating enchantments.");
+				ChatUtils.sendMessage(player, ChatUtils.getMessage(getCodes(), "table.generate-enchants-error"));
 				return;
 			}
 		}
 
-		lapisOneMeta.setDisplayName("Level 1 Enchant.");
-		lapisOneMeta.setLore(Arrays.asList(
-				"Lvl Req: " + levelList.get(0) + ".", "Lvl Cost: 1."));
+		ItemStack lapisOne = new ItemStack(Material.LAPIS_LAZULI);
+		ItemMeta lapisOneMeta = lapisOne.getItemMeta();
+		HashMap<String, Object> loreCodes = getCodes();
+		loreCodes.put("%level%", 1);
+		loreCodes.put("%levelReq%", levelList.get(0));
+		lapisOneMeta.setDisplayName(ChatUtils.getMessage(loreCodes, "table.enchant-level"));
+		lapisOneMeta.setLore(ChatUtils.getMessages(loreCodes, "table.enchant-level-lore"));
 		lapisOne.setItemMeta(lapisOneMeta);
 
 		inv.setItem(3, lapisOne);
 
 		ItemStack lapisTwo = new ItemStack(Material.LAPIS_LAZULI, 2);
 		ItemMeta lapisTwoMeta = lapisTwo.getItemMeta();
-		lapisTwoMeta.setDisplayName("Level 2 Enchant.");
-		lapisTwoMeta.setLore(Arrays.asList(
-				"Lvl Req: " + levelList.get(1) + ".", "Lvl Cost: 2."));
+		loreCodes.put("%level%", 2);
+		loreCodes.put("%levelReq%", levelList.get(1));
+		lapisTwoMeta.setDisplayName(ChatUtils.getMessage(loreCodes, "table.enchant-level"));
+		lapisTwoMeta.setLore(ChatUtils.getMessages(loreCodes, "table.enchant-level-lore"));
 		lapisTwo.setItemMeta(lapisTwoMeta);
 
 		inv.setItem(4, lapisTwo);
 
 		ItemStack lapisThree = new ItemStack(Material.LAPIS_LAZULI, 3);
 		ItemMeta lapisThreeMeta = lapisThree.getItemMeta();
-		lapisThreeMeta.setDisplayName("Level 3 Enchant.");
-		lapisThreeMeta.setLore(Arrays.asList("Lvl Req: " + levelList.get(2)
-				+ ".", "Lvl Cost: 3."));
+		loreCodes.put("%level%", 3);
+		loreCodes.put("%levelReq%", levelList.get(2));
+		lapisThreeMeta.setDisplayName(ChatUtils.getMessage(loreCodes, "table.enchant-level"));
+		lapisThreeMeta.setLore(ChatUtils.getMessages(loreCodes, "table.enchant-level-lore"));
 		lapisThree.setItemMeta(lapisThreeMeta);
 
 		inv.setItem(5, lapisThree);
@@ -107,27 +108,30 @@ public class EnchantmentTable {
 		if (levelList.size() < 4 || levelList.get(3) == -1) {
 			String message = "";
 			if (levelList.size() < 4) {
-				message = "Level 50 enchantments disabled.";
+				message = ChatUtils.getMessage(getCodes(), "table.level-fifty-disabled");
 			} else {
-				message = "Requires 15 bookshelves around table.";
+				message = ChatUtils.getMessage(getCodes(), "table.level-fifty-disabled");
 			}
 			ItemStack disable = new ItemStack(Material.BARRIER);
 			ItemMeta disableFour = disable.getItemMeta();
-			disableFour.setDisplayName("Level 4 Enchant.");
+			loreCodes.put("%level%", 4);
+			disableFour.setDisplayName(ChatUtils.getMessage(loreCodes, "table.enchant-level"));
 			disableFour.setLore(Arrays.asList(message));
 			disable.setItemMeta(disableFour);
 
 			inv.setItem(6, disable);
 
 			ItemMeta disableFive = disable.getItemMeta();
-			disableFive.setDisplayName("Level 5 Enchant.");
+			loreCodes.put("%level%", 5);
+			disableFive.setDisplayName(ChatUtils.getMessage(loreCodes, "table.enchant-level"));
 			disableFive.setLore(Arrays.asList(message));
 			disable.setItemMeta(disableFive);
 
 			inv.setItem(7, disable);
 
 			ItemMeta disableSix = disable.getItemMeta();
-			disableSix.setDisplayName("Level 6 Enchant.");
+			loreCodes.put("%level%", 6);
+			disableSix.setDisplayName(ChatUtils.getMessage(loreCodes, "table.enchant-level"));
 			disableSix.setLore(Arrays.asList(message));
 			disable.setItemMeta(disableSix);
 
@@ -135,33 +139,37 @@ public class EnchantmentTable {
 		} else {
 			ItemStack lapisFour = new ItemStack(Material.LAPIS_LAZULI, 4);
 			ItemMeta lapisFourMeta = lapisFour.getItemMeta();
-			lapisFourMeta.setDisplayName("Level 4 Enchant.");
-			lapisFourMeta.setLore(Arrays.asList("Lvl Req: " + levelList.get(3)
-					+ ".", "Lvl Cost: 4."));
+			loreCodes.put("%level%", 4);
+			loreCodes.put("%levelReq%", levelList.get(3));
+			lapisFourMeta.setDisplayName(ChatUtils.getMessage(loreCodes, "table.enchant-level"));
+			lapisFourMeta.setLore(ChatUtils.getMessages(loreCodes, "table.enchant-level-lore"));
 			lapisFour.setItemMeta(lapisFourMeta);
 
 			inv.setItem(6, lapisFour);
 
 			ItemStack lapisFive = new ItemStack(Material.LAPIS_LAZULI, 5);
 			ItemMeta lapisFiveMeta = lapisFive.getItemMeta();
-			lapisFiveMeta.setDisplayName("Level 5 Enchant.");
-			lapisFiveMeta.setLore(Arrays.asList("Lvl Req: " + levelList.get(4)
-					+ ".", "Lvl Cost: 5."));
+			loreCodes.put("%level%", 5);
+			loreCodes.put("%levelReq%", levelList.get(4));
+			lapisFiveMeta.setDisplayName(ChatUtils.getMessage(loreCodes, "table.enchant-level"));
+			lapisFiveMeta.setLore(ChatUtils.getMessages(loreCodes, "table.enchant-level-lore"));
 			lapisFive.setItemMeta(lapisFiveMeta);
 
 			inv.setItem(7, lapisFive);
 
 			ItemStack lapisSix = new ItemStack(Material.LAPIS_LAZULI, 6);
 			ItemMeta lapisSixMeta = lapisSix.getItemMeta();
-			lapisSixMeta.setDisplayName("Level 6 Enchant.");
-			lapisSixMeta.setLore(Arrays.asList(
-					"Lvl Req: " + levelList.get(5) + ".", "Lvl Cost: 6."));
+			loreCodes.put("%level%", 6);
+			loreCodes.put("%levelReq%", levelList.get(5));
+			lapisSixMeta.setDisplayName(ChatUtils.getMessage(loreCodes, "table.enchant-level"));
+			lapisSixMeta.setLore(ChatUtils.getMessages(loreCodes, "table.enchant-level-lore"));
 			lapisSix.setItemMeta(lapisSixMeta);
 
 			inv.setItem(8, lapisSix);
 		}
 		
 		mirror = new ItemStack(Material.RED_STAINED_GLASS_PANE);
+		mirrorMeta.setDisplayName(ChatUtils.getMessage(getCodes(), "table.red-mirror"));
 		mirror.setItemMeta(mirrorMeta);
 
 		int start = 18;
@@ -183,15 +191,18 @@ public class EnchantmentTable {
 						ItemStack book = new ItemStack(Material.ENCHANTED_BOOK);
 						ItemMeta bookMeta = book.getItemMeta();
 						String name = item.getItemMeta().getDisplayName();
-						if (name == null) {
+						if (name == null || name.equals("")) {
 							name = item.getType().name();
 						}
-						bookMeta.setDisplayName(name + " Level " + (extra - 2)
-								+ " Enchants");
-						String lapisString = ChatColor.GREEN + "Lapis Cost: "
-								+ (extra - 2);
-						String levelReq = ChatColor.GREEN + "Level Req: "
-								+ levelList.get(extra - 3);
+						loreCodes = getCodes();
+						loreCodes.put("%level%", extra - 2);
+						loreCodes.put("%name%", name);
+						bookMeta.setDisplayName(ChatUtils.getMessage(loreCodes, "table.item-enchant-name"));
+
+						loreCodes = getCodes();
+						loreCodes.put("%cost%", extra - 2);
+						
+						String lapisString = ChatUtils.getMessage(loreCodes, "table.lapis-cost-okay");
 						int numLapis = 0;
 						for (int j = 1; j <= 64; j++) {
 							ItemStack lapisStack = new ItemStack(Material.LAPIS_LAZULI, j);
@@ -202,22 +213,24 @@ public class EnchantmentTable {
 						if (numLapis < (extra - 2)
 								&& player.getGameMode().equals(
 										GameMode.SURVIVAL)) {
-							lapisString = ChatColor.RED + "Lapis Cost: "
-									+ (extra - 2);
+							lapisString = ChatUtils.getMessage(loreCodes, "table.lapis-cost-lack");
 						}
+						loreCodes.remove("%cost%");
+						loreCodes.put("%levelReq%", levelList.get(extra - 3));
+						String levelReq = ChatUtils.getMessage(loreCodes, "table.level-cost-okay");
 						if (player.getLevel() < levelList.get(extra - 3)
 								&& player.getGameMode().equals(
 										GameMode.SURVIVAL)) {
-							levelReq = ChatColor.RED + "Level Req: "
-									+ levelList.get(extra - 3);
+							levelReq = ChatUtils.getMessage(loreCodes, "table.level-cost-lack");
 						}
+						loreCodes.remove("%levelReq%");
+						loreCodes.put("%enchant%", RomanNumerals.returnEnchantmentName(enchants
+								.get(0).getEnchant(), enchants.get(0)
+								.getLevel()));
 						bookMeta.setLore(Arrays.asList(
 								levelReq,
 								lapisString,
-								RomanNumerals.returnEnchantmentName(enchants
-										.get(0).getEnchant(), enchants.get(0)
-										.getLevel())
-										+ "..."));
+								ChatUtils.getMessage(loreCodes, "table.enchant-name")));
 						book.setItemMeta(bookMeta);
 						inv.setItem(start + extra, book);
 					} else {
@@ -263,14 +276,6 @@ public class EnchantmentTable {
 		return inventory;
 	}
 
-	public int getBooks() {
-		return books;
-	}
-
-	public void setBooks(int books) {
-		this.books = books;
-	}
-
 	public boolean addItem(ItemStack item) {
 		if (playerItems.size() >= 4) {
 			return false;
@@ -310,14 +315,16 @@ public class EnchantmentTable {
 		ItemMeta meta = enchantItem.getItemMeta();
 		for (String string : meta.getLore()) {
 			if (string.contains(ChatColor.RED + "")) {
-				ChatUtils.sendMessage(player, "You do not meet the requirements to enchant this item.");
+				ChatUtils.sendMessage(player, ChatUtils.getMessage(getCodes(), "table.lack-reqs"));
 				return;
 			}
 		}
+				
 		PlayerLevels levels = PlayerLevels.getPlayerLevels(getBooks(), player,
 				enchantableItem.getType());
 		if (levels == null) {
-			ChatUtils.sendMessage(player, "This item does not have enchantments generated.");
+			ChatUtils.sendMessage(player, ChatUtils.getMessage(getCodes(), "table.lack-enchants"));
+			setInventory(playerItems);
 			return;
 		}
 		if (player.getGameMode().equals(GameMode.SURVIVAL)) {
@@ -332,5 +339,31 @@ public class EnchantmentTable {
 		playerItems.set(slot, enchantableItem);
 		PlayerLevels.removePlayerLevels(player);
 		setInventory(playerItems);
+	}
+
+	@Override
+	public Block getBlock() {
+		return block;
+	}
+	
+	public int getBooks() {
+		return Enchantments.getBookshelves(block.getLocation());
+	}
+
+	@Override
+	public void close(boolean external) {
+		for(ItemStack item : getItems()){
+			ItemUtils.giveItemToPlayer(player, item, player.getLocation());
+		}
+		if(!external) {
+			player.closeInventory();
+		}
+		EnchantmentSolution.removeInventory(this);
+	}
+
+	public HashMap<String, Object> getCodes() {
+		HashMap<String, Object> codes = new HashMap<String, Object>();
+		codes.put("%player%", player.getName());
+		return codes;
 	}
 }

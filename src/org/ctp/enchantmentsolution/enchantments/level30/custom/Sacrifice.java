@@ -9,6 +9,10 @@ import org.ctp.enchantmentsolution.utils.ItemUtils;
 
 public class Sacrifice extends CustomEnchantment{
 	
+	public Sacrifice() {
+		setDisplayName("Sacrifice");
+	}
+	
 	@Override
 	public Enchantment getRelativeEnchantment() {
 		return DefaultEnchantments.SACRIFICE;
@@ -46,11 +50,6 @@ public class Sacrifice extends CustomEnchantment{
 	@Override
 	public String getName() {
 		return "sacrifice";
-	}
-
-	@Override
-	public String getDisplayName() {
-		return "Sacrifice";
 	}
 
 	@Override

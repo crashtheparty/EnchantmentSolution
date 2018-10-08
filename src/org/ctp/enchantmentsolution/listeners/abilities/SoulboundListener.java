@@ -47,6 +47,7 @@ public class SoulboundListener implements Listener{
 			for(ItemStack item : playerItems){
 				event.getDrops().add(item);
 			}
+			SOUL_ITEMS.put(player.getUniqueId().toString(), newItems);
 		}
 	}
 	
@@ -75,8 +76,11 @@ public class SoulboundListener implements Listener{
 			}
 		}
 		if(stealItems){
-			ChatUtils.sendMessage(player.getKiller(), "You have stolen the player's soulbound items!");
-			ChatUtils.sendMessage(player, "Your soulbound items have been stolen!");
+			HashMap<String, Object> codes = ChatUtils.getCodes();
+			codes.put("%player%", player.getName());
+			codes.put("%killer%", player.getKiller().getName());
+			ChatUtils.sendMessage(player.getKiller(), ChatUtils.getMessage(codes, "items.stole-soulbound"));
+			ChatUtils.sendMessage(player, ChatUtils.getMessage(codes, "items.soulbound-stolen"));
 		}else{
 			for(ItemStack item : items){
 				if(Enchantments.hasEnchantment(item, DefaultEnchantments.SOULBOUND)){

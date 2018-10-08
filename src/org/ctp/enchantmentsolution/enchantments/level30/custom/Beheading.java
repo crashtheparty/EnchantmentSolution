@@ -9,6 +9,10 @@ import org.ctp.enchantmentsolution.utils.ItemUtils;
 
 public class Beheading extends CustomEnchantment{
 	
+	public Beheading() {
+		setDisplayName("Beheading");
+	}
+	
 	@Override
 	public Enchantment getRelativeEnchantment() {
 		return DefaultEnchantments.BEHEADING;
@@ -58,18 +62,12 @@ public class Beheading extends CustomEnchantment{
 	}
 
 	@Override
-	public String getDisplayName() {
-		return "Beheading";
-	}
-
-	@Override
 	public int getStartLevel() {
 		return 1;
 	}
 
 	@Override
 	public int getWeight() {
-		// TODO Auto-generated method stub
 		return 2;
 	}
 

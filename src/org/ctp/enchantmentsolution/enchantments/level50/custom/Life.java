@@ -9,6 +9,10 @@ import org.ctp.enchantmentsolution.utils.ItemUtils;
 
 public class Life extends CustomEnchantment{
 	
+	public Life() {
+		setDisplayName("Life");
+	}
+	
 	@Override
 	public Enchantment getRelativeEnchantment() {
 		return DefaultEnchantments.LIFE;
@@ -46,13 +50,7 @@ public class Life extends CustomEnchantment{
 	}
 
 	@Override
-	public String getDisplayName() {
-		return "Life";
-	}
-
-	@Override
 	public int getStartLevel() {
-		// TODO Auto-generated method stub
 		return 10;
 	}
 

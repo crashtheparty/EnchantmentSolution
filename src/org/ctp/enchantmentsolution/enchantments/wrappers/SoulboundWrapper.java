@@ -6,9 +6,8 @@ import org.bukkit.inventory.ItemStack;
 
 public class SoulboundWrapper extends CustomEnchantmentWrapper {
 
-	public SoulboundWrapper(int id) {
-		super(id);
-		// TODO Auto-generated constructor stub
+	public SoulboundWrapper() {
+		super("soulbound");
 	}
 
 	@Override
@@ -42,12 +41,10 @@ public class SoulboundWrapper extends CustomEnchantmentWrapper {
 	}
 
 	public boolean isCursed() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	public boolean isTreasure() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 }

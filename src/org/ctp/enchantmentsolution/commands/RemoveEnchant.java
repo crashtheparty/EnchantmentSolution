@@ -9,7 +9,7 @@ import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
 
-import org.bukkit.ChatColor;
+import java.util.HashMap;
 
 public class RemoveEnchant  implements CommandExecutor {
 
@@ -27,19 +27,23 @@ public class RemoveEnchant  implements CommandExecutor {
 							if(itemToEnchant != null){
 								itemToEnchant = Enchantments.removeEnchantmentFromItem(itemToEnchant, enchant);
 								player.getInventory().setItemInMainHand(itemToEnchant);
-								ChatUtils.sendMessage(player, "Enchantment with name " + enchant.getDisplayName() + " has been removed from the item.");
+								HashMap<String, Object> codes = ChatUtils.getCodes();
+								codes.put("%enchant%", enchant.getDisplayName());
+								ChatUtils.sendMessage(player, ChatUtils.getMessage(codes, "commands.enchant-removed"));
 							}else{
-								ChatUtils.sendMessage(player, "You must remove an enchant from an item.");
+								ChatUtils.sendMessage(player, ChatUtils.getMessage(ChatUtils.getCodes(), "commands.enchant-remove-from-item"));
 							}
 							return true;
 						}
 					}
-					ChatUtils.sendMessage(player, "Enchantment with name " + enchantmentName + " not found.");
+					HashMap<String, Object> codes = ChatUtils.getCodes();
+					codes.put("%enchant%", enchantmentName);
+					ChatUtils.sendMessage(player, ChatUtils.getMessage(codes, "commands.enchant-not-found"));
 				}else{
-					ChatUtils.sendMessage(player, "You must specify an enchantment.");
+					ChatUtils.sendMessage(player, ChatUtils.getMessage(ChatUtils.getCodes(), "commands.enchant-not-specified"));
 				}
 			}else {
-				ChatUtils.sendMessage(player, ChatColor.RED + "You do not have permission to use this command!");
+				ChatUtils.sendMessage(player, ChatUtils.getMessage(ChatUtils.getCodes(), "commands.no-permission"));
 			}
 		}
 		return true;
