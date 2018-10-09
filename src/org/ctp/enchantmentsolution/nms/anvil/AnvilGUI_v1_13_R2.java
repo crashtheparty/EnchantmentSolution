@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.craftbukkit.v1_13_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_13_R2.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
@@ -18,14 +18,14 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.inventory.Anvil;
 
-import net.minecraft.server.v1_13_R1.BlockPosition;
-import net.minecraft.server.v1_13_R1.ChatMessage;
-import net.minecraft.server.v1_13_R1.ContainerAnvil;
-import net.minecraft.server.v1_13_R1.EntityHuman;
-import net.minecraft.server.v1_13_R1.EntityPlayer;
-import net.minecraft.server.v1_13_R1.PacketPlayOutOpenWindow;
+import net.minecraft.server.v1_13_R2.BlockPosition;
+import net.minecraft.server.v1_13_R2.ChatMessage;
+import net.minecraft.server.v1_13_R2.ContainerAnvil;
+import net.minecraft.server.v1_13_R2.EntityHuman;
+import net.minecraft.server.v1_13_R2.EntityPlayer;
+import net.minecraft.server.v1_13_R2.PacketPlayOutOpenWindow;
 
-public class AnvilGUI_v1_13_1_R1 {
+public class AnvilGUI_v1_13_R2 {
 	private class AnvilContainer extends ContainerAnvil {
         public AnvilContainer(EntityHuman entity) {
             super(entity.inventory, entity.world,new BlockPosition(0, 0, 0), entity);
@@ -124,7 +124,7 @@ public class AnvilGUI_v1_13_1_R1 {
     
     private Anvil anvil;
 
-    public AnvilGUI_v1_13_1_R1(Player player, final AnvilClickEventHandler handler, Anvil anvil) {
+    public AnvilGUI_v1_13_R2(Player player, final AnvilClickEventHandler handler, Anvil anvil) {
         this.player = player;
         this.setHandler(handler);
         this.setAnvil(anvil);
@@ -173,7 +173,7 @@ public class AnvilGUI_v1_13_1_R1 {
                 if (event.getPlayer() instanceof Player) {
                     Inventory inv = event.getInventory();
 
-                    if (inv.equals(AnvilGUI_v1_13_1_R1.this.inv)) {
+                    if (inv.equals(AnvilGUI_v1_13_R2.this.inv)) {
                         inv.clear();
                         destroy();
                         anvil.setInventory();
@@ -270,7 +270,7 @@ public class AnvilGUI_v1_13_1_R1 {
 				event.getAnvil().setItemName(event.getName());
 			}
 		};
-		AnvilGUI_v1_13_1_R1 gui = new AnvilGUI_v1_13_1_R1(player, handler, anvil);
+		AnvilGUI_v1_13_R2 gui = new AnvilGUI_v1_13_R2(player, handler, anvil);
 		gui.open();
 	}
 
