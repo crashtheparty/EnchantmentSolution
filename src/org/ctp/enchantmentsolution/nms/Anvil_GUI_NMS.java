@@ -13,6 +13,7 @@ public class Anvil_GUI_NMS {
 			AnvilGUI_v1_13_R1.createAnvil(player, anvil);
 			break;
 		case 2:
+		case 3:
 			AnvilGUI_v1_13_R2.createAnvil(player, anvil);
 			break;
 		}
