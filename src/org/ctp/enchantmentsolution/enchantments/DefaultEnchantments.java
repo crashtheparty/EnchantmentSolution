@@ -4,8 +4,59 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.enchantments.Enchantment;
-import org.ctp.enchantmentsolution.enchantments.level30.LevelThirtyEnchants;
-import org.ctp.enchantmentsolution.enchantments.level50.LevelFiftyEnchants;
+import org.ctp.enchantmentsolution.enchantments.custom.Angler;
+import org.ctp.enchantmentsolution.enchantments.custom.Beheading;
+import org.ctp.enchantmentsolution.enchantments.custom.Brine;
+import org.ctp.enchantmentsolution.enchantments.custom.Drowned;
+import org.ctp.enchantmentsolution.enchantments.custom.ExpShare;
+import org.ctp.enchantmentsolution.enchantments.custom.FrequentFlyer;
+import org.ctp.enchantmentsolution.enchantments.custom.Fried;
+import org.ctp.enchantmentsolution.enchantments.custom.KnockUp;
+import org.ctp.enchantmentsolution.enchantments.custom.Life;
+import org.ctp.enchantmentsolution.enchantments.custom.MagmaWalker;
+import org.ctp.enchantmentsolution.enchantments.custom.Sacrifice;
+import org.ctp.enchantmentsolution.enchantments.custom.ShockAspect;
+import org.ctp.enchantmentsolution.enchantments.custom.Smeltery;
+import org.ctp.enchantmentsolution.enchantments.custom.Sniper;
+import org.ctp.enchantmentsolution.enchantments.custom.SoulReaper;
+import org.ctp.enchantmentsolution.enchantments.custom.Soulbound;
+import org.ctp.enchantmentsolution.enchantments.custom.Tank;
+import org.ctp.enchantmentsolution.enchantments.custom.Telepathy;
+import org.ctp.enchantmentsolution.enchantments.custom.Warp;
+import org.ctp.enchantmentsolution.enchantments.vanilla.AquaAffinity;
+import org.ctp.enchantmentsolution.enchantments.vanilla.BaneOfArthropods;
+import org.ctp.enchantmentsolution.enchantments.vanilla.BlastProtection;
+import org.ctp.enchantmentsolution.enchantments.vanilla.Channeling;
+import org.ctp.enchantmentsolution.enchantments.vanilla.CurseOfBinding;
+import org.ctp.enchantmentsolution.enchantments.vanilla.CurseOfVanishing;
+import org.ctp.enchantmentsolution.enchantments.vanilla.DepthStrider;
+import org.ctp.enchantmentsolution.enchantments.vanilla.Efficiency;
+import org.ctp.enchantmentsolution.enchantments.vanilla.FeatherFalling;
+import org.ctp.enchantmentsolution.enchantments.vanilla.FireAspect;
+import org.ctp.enchantmentsolution.enchantments.vanilla.FireProtection;
+import org.ctp.enchantmentsolution.enchantments.vanilla.Flame;
+import org.ctp.enchantmentsolution.enchantments.vanilla.Fortune;
+import org.ctp.enchantmentsolution.enchantments.vanilla.FrostWalker;
+import org.ctp.enchantmentsolution.enchantments.vanilla.Impaling;
+import org.ctp.enchantmentsolution.enchantments.vanilla.Infinity;
+import org.ctp.enchantmentsolution.enchantments.vanilla.Knockback;
+import org.ctp.enchantmentsolution.enchantments.vanilla.Looting;
+import org.ctp.enchantmentsolution.enchantments.vanilla.Loyalty;
+import org.ctp.enchantmentsolution.enchantments.vanilla.LuckOfTheSea;
+import org.ctp.enchantmentsolution.enchantments.vanilla.Lure;
+import org.ctp.enchantmentsolution.enchantments.vanilla.Mending;
+import org.ctp.enchantmentsolution.enchantments.vanilla.Power;
+import org.ctp.enchantmentsolution.enchantments.vanilla.ProjectileProtection;
+import org.ctp.enchantmentsolution.enchantments.vanilla.Protection;
+import org.ctp.enchantmentsolution.enchantments.vanilla.Punch;
+import org.ctp.enchantmentsolution.enchantments.vanilla.Respiration;
+import org.ctp.enchantmentsolution.enchantments.vanilla.Riptide;
+import org.ctp.enchantmentsolution.enchantments.vanilla.Sharpness;
+import org.ctp.enchantmentsolution.enchantments.vanilla.SilkTouch;
+import org.ctp.enchantmentsolution.enchantments.vanilla.Smite;
+import org.ctp.enchantmentsolution.enchantments.vanilla.SweepingEdge;
+import org.ctp.enchantmentsolution.enchantments.vanilla.Thorns;
+import org.ctp.enchantmentsolution.enchantments.vanilla.Unbreaking;
 import org.ctp.enchantmentsolution.enchantments.wrappers.AnglerWrapper;
 import org.ctp.enchantmentsolution.enchantments.wrappers.BeheadingWrapper;
 import org.ctp.enchantmentsolution.enchantments.wrappers.BrineWrapper;
@@ -26,6 +77,7 @@ import org.ctp.enchantmentsolution.enchantments.wrappers.SoulboundWrapper;
 import org.ctp.enchantmentsolution.enchantments.wrappers.TankWrapper;
 import org.ctp.enchantmentsolution.enchantments.wrappers.TelepathyWrapper;
 import org.ctp.enchantmentsolution.enchantments.wrappers.WarpWrapper;
+import org.ctp.enchantmentsolution.utils.config.YamlConfig;
 import org.ctp.enchantmentsolution.utils.save.ConfigFiles;
 
 public class DefaultEnchantments {
@@ -67,22 +119,6 @@ public class DefaultEnchantments {
 		return null;
 	}
 	
-	public static CustomEnchantment getAddedCustomEnchantment(Enchantment enchant) {
-		for(CustomEnchantment enchantment : getAddedEnchantments()) {
-			if(enchant.equals(enchantment.getRelativeEnchantment())) {
-				if(!enchantment.isEnabled()) {
-					return null;
-				}
-				return enchantment;
-			}
-		}
-		return null;
-	}
-	
-	public static List<CustomEnchantment> getAddedEnchantments() {
-		return LevelThirtyEnchants.getDefaultEnchantments();
-	}
-	
 	public static void addDefaultEnchantment(CustomEnchantment enchant) {
 		ENCHANTMENTS.add(enchant);
 	}
@@ -94,27 +130,67 @@ public class DefaultEnchantments {
 		return ConfigFiles.getDefaultConfig().getBoolean("level_50_enchants");
 	}
 	
-	public static void addDefaultEnchantments() {
-		if(isLevelFiftyEnchants()) {
-			LevelFiftyEnchants.addDefaultEnchantments();
-		} else {
-			LevelThirtyEnchants.addDefaultEnchantments();
-		}
-	}
-	
-	public static void setEnchantments() {
+	public static void setEnchantments(boolean startup) {
 		for (int i = 0; i < ENCHANTMENTS.size(); i++) {
-			CustomEnchantment enchantment = ENCHANTMENTS.get(i);
-			if (enchantment.getRelativeEnchantment() instanceof CustomEnchantmentWrapper) {
-				if (ConfigFiles.getEnchantmentConfig().getBoolean("custom_enchantments."+enchantment.getName()+".enabled")) {
-					Enchantments.addEnchantment(enchantment);
-					ENCHANTMENTS.get(i).setEnabled(true);
+			if(ConfigFiles.getDefaultConfig().getBoolean("use_advanced_file")) {
+				CustomEnchantment enchantment = ENCHANTMENTS.get(i);
+				YamlConfig advanced = ConfigFiles.getEnchantmentAdvancedConfig();
+				String namespace = "default_enchantments";
+				if (enchantment.getRelativeEnchantment() instanceof CustomEnchantmentWrapper) {
+					namespace = "custom_enchantments";
+					ENCHANTMENTS.get(i).setDisplayName(advanced.getString(namespace+"."+enchantment.getName()+".display_name"));
+				} else {
+					ENCHANTMENTS.get(i).setDisplayName(ENCHANTMENTS.get(i).getDefaultDisplayName());
 				}
-				if (ConfigFiles.getEnchantmentConfig().getBoolean("custom_enchantments."+enchantment.getName()+".treasure")) {
+				if(Enchantments.addEnchantment(enchantment, startup)) {
+					if (advanced.getBoolean(namespace+"."+enchantment.getName()+".enabled")) {
+						ENCHANTMENTS.get(i).setEnabled(true);
+					} else {
+						ENCHANTMENTS.get(i).setEnabled(false);
+					}
+				} else {
+					ENCHANTMENTS.get(i).setEnabled(false);
+				}
+				if (advanced.getBoolean(namespace+"."+enchantment.getName()+".treasure")) {
 					ENCHANTMENTS.get(i).setTreasure(true);
+				} else {
+					ENCHANTMENTS.get(i).setTreasure(false);
 				}
+				int constant = advanced.getInt(namespace+"."+enchantment.getName()+".enchantability_constant");
+				int modifier = advanced.getInt(namespace+"."+enchantment.getName()+".enchantability_modifier");
+				int maxConstant = advanced.getInt(namespace+"."+enchantment.getName()+".enchantability_max_constant");
+				int startLevel = advanced.getInt(namespace+"."+enchantment.getName()+".enchantability_start_level");
+				int maxLevel = advanced.getInt(namespace+"."+enchantment.getName()+".enchantability_max_level");
+				Weight weight = Weight.getWeight(advanced.getString(namespace+"."+enchantment.getName()+".weight"));
+				ENCHANTMENTS.get(i).setCustom(constant, modifier, maxConstant, startLevel, maxLevel, weight);
 			} else {
-				Enchantments.addEnchantment(enchantment);
+				CustomEnchantment enchantment = ENCHANTMENTS.get(i);
+				if (enchantment.getRelativeEnchantment() instanceof CustomEnchantmentWrapper) {
+					YamlConfig config = ConfigFiles.getEnchantmentConfig();
+					if(Enchantments.addEnchantment(enchantment, startup)) {
+						if (config.getBoolean("custom_enchantments."+enchantment.getName()+".enabled")) {
+							ENCHANTMENTS.get(i).setEnabled(true);
+						} else {
+							ENCHANTMENTS.get(i).setEnabled(false);
+						}
+					} else {
+						ENCHANTMENTS.get(i).setEnabled(false);
+					}
+					if (ConfigFiles.getEnchantmentConfig().getBoolean("custom_enchantments."+enchantment.getName()+".treasure")) {
+						ENCHANTMENTS.get(i).setTreasure(true);
+					}
+				} else {
+					if(Enchantments.addEnchantment(enchantment, startup)) {
+						ENCHANTMENTS.get(i).setEnabled(true);
+					} else {
+						ENCHANTMENTS.get(i).setEnabled(false);
+					}
+				}
+				if(isLevelFiftyEnchants()) {
+					ENCHANTMENTS.get(i).setLevelFifty();
+				} else {
+					ENCHANTMENTS.get(i).setLevelThirty();
+				}
 			}
 		}
 	}
@@ -126,5 +202,63 @@ public class DefaultEnchantments {
 			}
 		}
 		return false;
+	}
+	
+	public static void addDefaultEnchantments() {
+		if(getEnchantments().size() > 0) return;
+		DefaultEnchantments.addDefaultEnchantment(new AquaAffinity());
+		DefaultEnchantments.addDefaultEnchantment(new BaneOfArthropods());
+		DefaultEnchantments.addDefaultEnchantment(new BlastProtection());
+		DefaultEnchantments.addDefaultEnchantment(new Channeling());
+		DefaultEnchantments.addDefaultEnchantment(new CurseOfBinding());
+		DefaultEnchantments.addDefaultEnchantment(new CurseOfVanishing());
+		DefaultEnchantments.addDefaultEnchantment(new DepthStrider());
+		DefaultEnchantments.addDefaultEnchantment(new Efficiency());
+		DefaultEnchantments.addDefaultEnchantment(new FeatherFalling());
+		DefaultEnchantments.addDefaultEnchantment(new FireAspect());
+		DefaultEnchantments.addDefaultEnchantment(new FireProtection());
+		DefaultEnchantments.addDefaultEnchantment(new Flame());
+		DefaultEnchantments.addDefaultEnchantment(new Fortune());
+		DefaultEnchantments.addDefaultEnchantment(new FrostWalker());
+		DefaultEnchantments.addDefaultEnchantment(new Impaling());
+		DefaultEnchantments.addDefaultEnchantment(new Infinity());
+		DefaultEnchantments.addDefaultEnchantment(new Knockback());
+		DefaultEnchantments.addDefaultEnchantment(new Looting());
+		DefaultEnchantments.addDefaultEnchantment(new Loyalty());
+		DefaultEnchantments.addDefaultEnchantment(new LuckOfTheSea());
+		DefaultEnchantments.addDefaultEnchantment(new Lure());
+		DefaultEnchantments.addDefaultEnchantment(new Mending());
+		DefaultEnchantments.addDefaultEnchantment(new Power());
+		DefaultEnchantments.addDefaultEnchantment(new ProjectileProtection());
+		DefaultEnchantments.addDefaultEnchantment(new Protection());
+		DefaultEnchantments.addDefaultEnchantment(new Punch());
+		DefaultEnchantments.addDefaultEnchantment(new Respiration());
+		DefaultEnchantments.addDefaultEnchantment(new Riptide());
+		DefaultEnchantments.addDefaultEnchantment(new Sharpness());
+		DefaultEnchantments.addDefaultEnchantment(new SilkTouch());
+		DefaultEnchantments.addDefaultEnchantment(new Smite());
+		DefaultEnchantments.addDefaultEnchantment(new SweepingEdge());
+		DefaultEnchantments.addDefaultEnchantment(new Thorns());
+		DefaultEnchantments.addDefaultEnchantment(new Unbreaking());
+		
+		DefaultEnchantments.addDefaultEnchantment(new Soulbound());
+		DefaultEnchantments.addDefaultEnchantment(new SoulReaper());
+		DefaultEnchantments.addDefaultEnchantment(new ShockAspect());
+		DefaultEnchantments.addDefaultEnchantment(new Beheading());
+		DefaultEnchantments.addDefaultEnchantment(new KnockUp());
+		DefaultEnchantments.addDefaultEnchantment(new Life());
+		DefaultEnchantments.addDefaultEnchantment(new Warp());
+		DefaultEnchantments.addDefaultEnchantment(new ExpShare());
+		DefaultEnchantments.addDefaultEnchantment(new Sniper());
+		DefaultEnchantments.addDefaultEnchantment(new Telepathy());
+		DefaultEnchantments.addDefaultEnchantment(new Smeltery());
+		DefaultEnchantments.addDefaultEnchantment(new Sacrifice());
+		DefaultEnchantments.addDefaultEnchantment(new Angler());
+		DefaultEnchantments.addDefaultEnchantment(new Fried());
+		DefaultEnchantments.addDefaultEnchantment(new FrequentFlyer());
+		DefaultEnchantments.addDefaultEnchantment(new Tank());
+		DefaultEnchantments.addDefaultEnchantment(new Brine());
+		DefaultEnchantments.addDefaultEnchantment(new MagmaWalker());
+		DefaultEnchantments.addDefaultEnchantment(new Drowned());
 	}
 }

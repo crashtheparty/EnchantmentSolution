@@ -18,7 +18,8 @@ import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.EnchantmentLevel;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
 import org.ctp.enchantmentsolution.enchantments.mcmmo.Fishing;
-import org.ctp.enchantmentsolution.utils.config.SimpleConfig;
+import org.ctp.enchantmentsolution.utils.config.YamlConfig;
+import org.ctp.enchantmentsolution.utils.config.YamlInfo;
 import org.ctp.enchantmentsolution.utils.save.ConfigFiles;
 
 import com.gmail.nossr50.config.experience.ExperienceConfig;
@@ -105,10 +106,12 @@ public class McMMOFishingListener implements Listener {
 
 	private List<EnchantmentLevel> getEnchants(ItemStack treasure, int tier) {
 		HashMap<String, Double> chanceMap = new HashMap<String, Double>();
-		SimpleConfig config = ConfigFiles.getFishingConfig();
+		YamlConfig config = ConfigFiles.getFishingConfig();
 		String location = DefaultEnchantments.isLevelFiftyEnchants() ? "Enchantments_Rarity_50"
 				: "Enchantments_Rarity_30";
-		for(String type: config.getConfigurationSection(location).getKeys(false)) {
+		for (Iterator<java.util.Map.Entry<String, YamlInfo>> it = config.getConfigurationInfo(location).entrySet().iterator(); it.hasNext();) {
+			java.util.Map.Entry<String, YamlInfo> e = it.next();
+			String type = e.getKey();
 			chanceMap.put(type, Fishing.getTierChances(tier, type, DefaultEnchantments.isLevelFiftyEnchants()));
 		}
 

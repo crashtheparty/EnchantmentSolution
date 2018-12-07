@@ -196,6 +196,10 @@ public class PlayerLevels {
 		return null;
 	}
 	
+	public static void resetPlayerLevels() {
+		PLAYER_LEVELS = new HashMap<PlayerLevels, List<Integer>>();
+	}
+	
 	public static void removePlayerLevels(Player player){
 		HashMap<PlayerLevels, List<Integer>> playerLevels = new HashMap<PlayerLevels, List<Integer>>();
 		for (Iterator<java.util.Map.Entry<PlayerLevels, List<Integer>>> it = PLAYER_LEVELS.entrySet().iterator(); it.hasNext();) {

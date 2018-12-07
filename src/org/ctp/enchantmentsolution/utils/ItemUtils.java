@@ -368,7 +368,9 @@ public class ItemUtils {
 					enchants = levels.getEnchants().get(random);
 					break;
 				}
+				i++;
 			}
+			if(i >= 3) break;
 		}
 		
 		returnItem = Enchantments.addEnchantmentsToItem(returnItem, enchants);

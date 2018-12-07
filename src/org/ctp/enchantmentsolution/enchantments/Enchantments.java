@@ -6,8 +6,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -16,6 +16,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.ctp.enchantmentsolution.enchantments.wrappers.CustomEnchantmentWrapper;
+import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.ItemUtils;
 import org.ctp.enchantmentsolution.utils.RomanNumerals;
 import org.ctp.enchantmentsolution.utils.save.ConfigFiles;
@@ -52,30 +53,31 @@ public class Enchantments {
 		return ConfigFiles.getDefaultConfig().getBoolean("fishing_loot");
 	}
 
-	public static void addEnchantment(CustomEnchantment enchantment) {
+	public static boolean addEnchantment(CustomEnchantment enchantment, boolean startup) {
+		if(!startup) {
+			return true;
+		}
 		ENCHANTMENTS.add(enchantment);
-		if(enchantment.getRelativeEnchantment() instanceof CustomEnchantmentWrapper){
-			boolean registered = true;
-			try {
-			    Field f = Enchantment.class.getDeclaredField("acceptingNew");
-			    f.setAccessible(true);
-			    f.set(null, true);
-			    Enchantment.registerEnchantment(enchantment.getRelativeEnchantment());
-			} catch (Exception e) {
-				registered = false;
-				ENCHANTMENTS.remove(enchantment);
+		boolean custom = enchantment.getRelativeEnchantment() instanceof CustomEnchantmentWrapper;
+		String error_message = "Trouble adding the " + enchantment.getName() + (custom ? " custom" : "") + " enchantment: ";
+		String success_message = "Added the " + enchantment.getName() + (custom ? " custom" : "") + " enchantment.";
+		if(!custom) {
+			ChatUtils.sendToConsole(Level.INFO, success_message);
+			return true;
+		}
+		try {
+		    Field f = Enchantment.class.getDeclaredField("acceptingNew");
+		    f.setAccessible(true);
+		    f.set(null, true);
+		    Enchantment.registerEnchantment(enchantment.getRelativeEnchantment());
+		    ChatUtils.sendToConsole(Level.INFO, success_message);
+			return true;
+		} catch (Exception e) {
+			ENCHANTMENTS.remove(enchantment);
 
-				Bukkit.getLogger().warning(
-						"[EnchantmentSolution] Trouble adding the " + enchantment.getName() + " custom enchantment:");
-			    e.printStackTrace();
-			}
-			if(registered){
-				Bukkit.getLogger().info(
-						"[EnchantmentSolution] Added the " + enchantment.getName() + " custom enchantment.");
-			}
-		}else{
-			Bukkit.getLogger().info(
-					"[EnchantmentSolution] Added the " + enchantment.getName() + " enchantment.");
+			ChatUtils.sendToConsole(Level.WARNING, error_message);
+		    e.printStackTrace();
+		    return false;
 		}
 	}
 
@@ -98,10 +100,6 @@ public class Enchantments {
 		return false;
 	}
 
-	public static boolean removeEnchantment(CustomEnchantment enchantment) {
-		return ENCHANTMENTS.remove(enchantment);
-	}
-
 	public static List<EnchantmentLevel> generateEnchantments(
 			Material material, int level, int lapis, boolean treasure) {
 		List<EnchantmentLevel> enchants = new ArrayList<EnchantmentLevel>();
@@ -114,15 +112,17 @@ public class Enchantments {
 		int totalWeight = 0;
 		List<CustomEnchantment> customEnchants = new ArrayList<CustomEnchantment>();
 		for(CustomEnchantment enchantment : ENCHANTMENTS){
-			if (treasure) {
-				if(enchantment.canEnchant(enchantability, level) && enchantment.canEnchantItem(material) && enchantment.isEnabled()){
-					totalWeight += enchantment.getWeight();
-					customEnchants.add(enchantment);
-				}
-			} else {
-				if(enchantment.canEnchant(enchantability, level) && enchantment.canEnchantItem(material) && enchantment.isEnabled() && !enchantment.isTreasure()){
-					totalWeight += enchantment.getWeight();
-					customEnchants.add(enchantment);
+			if(enchantment.isEnabled()) {
+				if (treasure) {
+					if(enchantment.canEnchant(enchantability, level) && enchantment.canEnchantItem(material)){
+						totalWeight += enchantment.getWeight();
+						customEnchants.add(enchantment);
+					}
+				} else {
+					if(enchantment.canEnchant(enchantability, level) && enchantment.canEnchantItem(material) && !enchantment.isTreasure()){
+						totalWeight += enchantment.getWeight();
+						customEnchants.add(enchantment);
+					}
 				}
 			}
 		}
@@ -142,7 +142,7 @@ public class Enchantments {
 				if(enchantment.canEnchant(enchantability, level) && enchantment.canEnchantItem(material)){
 					boolean canEnchant = true;
 					for(EnchantmentLevel enchant : enchants){
-						if(enchantment.conflictsWith(enchant.getEnchant())){
+						if(CustomEnchantment.conflictsWith(enchantment, enchant.getEnchant())){
 							canEnchant = false;
 						}
 					}
@@ -299,6 +299,9 @@ public class Enchantments {
 	}
 	
 	public static ItemStack addEnchantmentsToItem(ItemStack item, List<EnchantmentLevel> levels){
+		if(levels == null) {
+			return item;
+		}
 		ItemMeta meta = item.getItemMeta();
 		List<String> lore = meta.getLore();
 		if(lore == null){
@@ -415,7 +418,7 @@ public class Enchantments {
 			Enchantment enchant = e.getKey();
 			for(CustomEnchantment custom : Enchantments.ENCHANTMENTS) {
 				if(custom.getRelativeEnchantment().equals(enchant)) {
-					if(customEnchant.conflictsWith(custom) && !customEnchant.getName().equals(custom.getName())) {
+					if(CustomEnchantment.conflictsWith(customEnchant, custom) && !customEnchant.getName().equals(custom.getName())) {
 						return false;
 					}
 				}
@@ -441,7 +444,7 @@ public class Enchantments {
 			Enchantment enchant = e.getKey();
 			int level = e.getValue();
 			for(CustomEnchantment customEnchant : Enchantments.ENCHANTMENTS) {
-				if(customEnchant.getRelativeEnchantment().equals(enchant)) {
+				if(isRepairable(customEnchant) && customEnchant.getRelativeEnchantment().equals(enchant)) {
 					secondLevels.add(new EnchantmentLevel(customEnchant, level));
 				}
 			}
@@ -452,7 +455,7 @@ public class Enchantments {
 			Enchantment enchant = e.getKey();
 			int level = e.getValue();
 			for(CustomEnchantment customEnchant : Enchantments.ENCHANTMENTS) {
-				if(customEnchant.getRelativeEnchantment().equals(enchant)) {
+				if(isRepairable(customEnchant) && customEnchant.getRelativeEnchantment().equals(enchant)) {
 					firstLevels.add(new EnchantmentLevel(customEnchant, level));
 				}
 			}
@@ -476,7 +479,7 @@ public class Enchantments {
 					}else {
 						levelCost = enchantOne.getLevel();
 					}
-				}else if(enchantTwo.getEnchant().conflictsWith(enchantOne.getEnchant())) {
+				}else if(CustomEnchantment.conflictsWith(enchantOne.getEnchant(), enchantTwo.getEnchant())) {
 					conflict = true;
 				}
 			}
@@ -493,6 +496,18 @@ public class Enchantments {
 			}
 		}
 		return cost;
+	}
+	
+	private static boolean isRepairable(CustomEnchantment enchant) {
+		if(ConfigFiles.getDefaultConfig().getString("disable_enchant_method").equals("repairable")) {
+			return true;
+		}
+		
+		if(enchant.isEnabled()) {
+			return true;
+		}
+		
+		return false;
 	}
 	
 	public static List<EnchantmentLevel> combineEnchants(ItemStack first, ItemStack second){
@@ -517,7 +532,7 @@ public class Enchantments {
 			Enchantment enchant = e.getKey();
 			int level = e.getValue();
 			for(CustomEnchantment customEnchant : Enchantments.ENCHANTMENTS) {
-				if(customEnchant.getRelativeEnchantment().equals(enchant)) {
+				if(isRepairable(customEnchant) && customEnchant.getRelativeEnchantment().equals(enchant)) {
 					secondLevels.add(new EnchantmentLevel(customEnchant, level));
 				}
 			}
@@ -528,7 +543,7 @@ public class Enchantments {
 			Enchantment enchant = e.getKey();
 			int level = e.getValue();
 			for(CustomEnchantment customEnchant : Enchantments.ENCHANTMENTS) {
-				if(customEnchant.getRelativeEnchantment().equals(enchant)) {
+				if(isRepairable(customEnchant) && customEnchant.getRelativeEnchantment().equals(enchant)) {
 					firstLevels.add(new EnchantmentLevel(customEnchant, level));
 				}
 			}
@@ -552,7 +567,7 @@ public class Enchantments {
 					}else {
 						levelCost = enchantOne.getLevel();
 					}
-				}else if(enchantTwo.getEnchant().conflictsWith(enchantOne.getEnchant())) {
+				}else if(CustomEnchantment.conflictsWith(enchantOne.getEnchant(), enchantTwo.getEnchant())) {
 					conflict = true;
 				}
 			}

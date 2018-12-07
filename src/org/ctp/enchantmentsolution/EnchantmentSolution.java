@@ -1,5 +1,9 @@
 package org.ctp.enchantmentsolution;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -21,6 +25,8 @@ import org.ctp.enchantmentsolution.listeners.InventoryClick;
 import org.ctp.enchantmentsolution.listeners.InventoryClose;
 import org.ctp.enchantmentsolution.listeners.PlayerChatTabComplete;
 import org.ctp.enchantmentsolution.listeners.PlayerInteract;
+import org.ctp.enchantmentsolution.listeners.VanishListener;
+import org.ctp.enchantmentsolution.listeners.VersionUpdater;
 import org.ctp.enchantmentsolution.listeners.abilities.BeheadingListener;
 import org.ctp.enchantmentsolution.listeners.abilities.BrineListener;
 import org.ctp.enchantmentsolution.listeners.abilities.DrownedListener;
@@ -42,8 +48,8 @@ import org.ctp.enchantmentsolution.listeners.chestloot.ChestLootListener;
 import org.ctp.enchantmentsolution.listeners.fishing.EnchantsFishingListener;
 import org.ctp.enchantmentsolution.listeners.fishing.McMMOFishingListener;
 import org.ctp.enchantmentsolution.listeners.mobs.MobSpawning;
-//import org.ctp.enchantmentsolution.listeners.legacy.UpdateEnchantments;
 import org.ctp.enchantmentsolution.nms.Version;
+import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.save.ConfigFiles;
 import org.ctp.enchantmentsolution.utils.save.SaveUtils;
 
@@ -52,6 +58,7 @@ public class EnchantmentSolution extends JavaPlugin {
 	public static EnchantmentSolution PLUGIN;
 	public static List<InventoryData> INVENTORIES = new ArrayList<InventoryData>();
 	public static HashMap<Material, HashMap<List<EnchantmentLevel>, Integer>> DEBUG = new HashMap<Material, HashMap<List<EnchantmentLevel>, Integer>>();
+	public static boolean NEWEST_VERSION = true, DISABLE = false;
 
 	public void onEnable() {
 		PLUGIN = this;
@@ -60,14 +67,19 @@ public class EnchantmentSolution extends JavaPlugin {
 			Bukkit.getPluginManager().disablePlugin(PLUGIN);
 			return;
 		}
+//		player.setStatistic(Statistic.TIME_SINCE_REST, 0);
+		DefaultEnchantments.addDefaultEnchantments();
 		
 		ConfigFiles.createConfigFiles();
-
-		DefaultEnchantments.addDefaultEnchantments();
+		
+		if(DISABLE) {
+			Bukkit.getPluginManager().disablePlugin(PLUGIN);
+			return;
+		}
 
 		SaveUtils.getData();
 		
-		DefaultEnchantments.setEnchantments();
+		DefaultEnchantments.setEnchantments(true);
 
 		getServer().getPluginManager().registerEvents(new PlayerInteract(),
 				this);
@@ -106,6 +118,8 @@ public class EnchantmentSolution extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new DrownedListener(), this);
 		getServer().getPluginManager().registerEvents(new ChestLootListener(), this);
 		getServer().getPluginManager().registerEvents(new MobSpawning(), this);
+		getServer().getPluginManager().registerEvents(new VanishListener(), this);
+		getServer().getPluginManager().registerEvents(new VersionUpdater(), this);
 		if(Bukkit.getPluginManager().isPluginEnabled("mcMMO")) {
 			getServer().getPluginManager().registerEvents(new McMMOFishingListener(), this);
 		} else {
@@ -130,6 +144,8 @@ public class EnchantmentSolution extends JavaPlugin {
 		getCommand("EnchantUnsafe").setTabCompleter(new PlayerChatTabComplete());
 		
 		ConfigFiles.updateEnchantments();
+		
+		checkVersion();
 	}
 
 	public void onDisable() {
@@ -158,4 +174,30 @@ public class EnchantmentSolution extends JavaPlugin {
 	public static void removeInventory(InventoryData inv) {
 		INVENTORIES.remove(inv);
 	}
+	
+	private void checkVersion(){
+		if(ConfigFiles.getDefaultConfig().getBoolean("get_latest_version")) {
+	        String latestversion;
+	        boolean isupdate = false;
+	        try {
+	            URL urlv = new URL("https://raw.githubusercontent.com/crashtheparty/EnchantmentSolution/master/Version");
+	            BufferedReader in = new BufferedReader(new InputStreamReader(urlv.openStream()));
+	            latestversion = in.readLine();
+	            if(latestversion.equalsIgnoreCase(getDescription().getVersion())){
+	                isupdate = true;
+	            }else{
+	                isupdate = false;
+	            }
+	            in.close();
+	        } catch (IOException e) {
+	        	ChatUtils.sendToConsole(Level.WARNING, "Issue with finding newest version.");
+	        }
+	        if(isupdate){
+	        	ChatUtils.sendToConsole(Level.INFO, "Your version is up-to-date.");
+	        }else{
+	        	NEWEST_VERSION = false;
+	        	ChatUtils.sendToConsole(Level.WARNING, "New version of EnchantmentSolution is available! Download it here: https://www.spigotmc.org/resources/enchantment-solution.59556/");
+	        }
+		}
+    }
 }
