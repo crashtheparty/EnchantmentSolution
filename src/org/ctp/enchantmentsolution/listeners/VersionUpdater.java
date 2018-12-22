@@ -1,7 +1,5 @@
 package org.ctp.enchantmentsolution.listeners;
 
-import java.util.logging.Level;
-
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -15,9 +13,7 @@ public class VersionUpdater implements Listener{
 	public void onPlayerJoin(PlayerJoinEvent event) {
 		Player player = event.getPlayer();
 		if(EnchantmentSolution.NEWEST_VERSION == false) {
-			ChatUtils.sendToConsole(Level.INFO, "Not latest version");
 			if(player.hasPermission("enchantmentsolution.version-updater")) {
-				ChatUtils.sendToConsole(Level.INFO, "Player has permission");
 				ChatUtils.sendMessage(player, "New version of EnchantmentSolution is available! Download it here: ", "https://www.spigotmc.org/resources/enchantment-solution.59556/");
 			}
 		}

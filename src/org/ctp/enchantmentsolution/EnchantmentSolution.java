@@ -13,14 +13,18 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.ctp.enchantmentsolution.commands.ConfigEdit;
 import org.ctp.enchantmentsolution.commands.Enchant;
 import org.ctp.enchantmentsolution.commands.EnchantInfo;
 import org.ctp.enchantmentsolution.commands.Reload;
 import org.ctp.enchantmentsolution.commands.RemoveEnchant;
+import org.ctp.enchantmentsolution.commands.Reset;
 import org.ctp.enchantmentsolution.commands.UnsafeEnchant;
+import org.ctp.enchantmentsolution.database.SQLite;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.EnchantmentLevel;
 import org.ctp.enchantmentsolution.inventory.InventoryData;
+import org.ctp.enchantmentsolution.listeners.ChatMessage;
 import org.ctp.enchantmentsolution.listeners.InventoryClick;
 import org.ctp.enchantmentsolution.listeners.InventoryClose;
 import org.ctp.enchantmentsolution.listeners.PlayerChatTabComplete;
@@ -59,6 +63,7 @@ public class EnchantmentSolution extends JavaPlugin {
 	public static List<InventoryData> INVENTORIES = new ArrayList<InventoryData>();
 	public static HashMap<Material, HashMap<List<EnchantmentLevel>, Integer>> DEBUG = new HashMap<Material, HashMap<List<EnchantmentLevel>, Integer>>();
 	public static boolean NEWEST_VERSION = true, DISABLE = false;
+	private static SQLite DB;
 
 	public void onEnable() {
 		PLUGIN = this;
@@ -67,7 +72,10 @@ public class EnchantmentSolution extends JavaPlugin {
 			Bukkit.getPluginManager().disablePlugin(PLUGIN);
 			return;
 		}
-//		player.setStatistic(Statistic.TIME_SINCE_REST, 0);
+		
+		DB = new SQLite(this);
+		DB.load();
+		
 		DefaultEnchantments.addDefaultEnchantments();
 		
 		ConfigFiles.createConfigFiles();
@@ -120,6 +128,7 @@ public class EnchantmentSolution extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new MobSpawning(), this);
 		getServer().getPluginManager().registerEvents(new VanishListener(), this);
 		getServer().getPluginManager().registerEvents(new VersionUpdater(), this);
+		getServer().getPluginManager().registerEvents(new ChatMessage(), this);
 		if(Bukkit.getPluginManager().isPluginEnabled("mcMMO")) {
 			getServer().getPluginManager().registerEvents(new McMMOFishingListener(), this);
 		} else {
@@ -138,6 +147,8 @@ public class EnchantmentSolution extends JavaPlugin {
 		getCommand("RemoveEnchant").setExecutor(new RemoveEnchant());
 		getCommand("EnchantUnsafe").setExecutor(new UnsafeEnchant());
 		getCommand("ESReload").setExecutor(new Reload());
+		getCommand("ESConfig").setExecutor(new ConfigEdit());
+		getCommand("ESReset").setExecutor(new Reset());
 		getCommand("Enchant").setTabCompleter(new PlayerChatTabComplete());
 		getCommand("Info").setTabCompleter(new PlayerChatTabComplete());
 		getCommand("RemoveEnchant").setTabCompleter(new PlayerChatTabComplete());
@@ -151,6 +162,10 @@ public class EnchantmentSolution extends JavaPlugin {
 	public void onDisable() {
 		SaveUtils.setMagmaWalkerData();
 		
+		resetInventories();
+	}
+	
+	public static void resetInventories() {
 		for(int i = INVENTORIES.size() - 1; i >= 0; i--) {
 			InventoryData inv = INVENTORIES.get(i);
 			inv.close(true);
@@ -200,4 +215,8 @@ public class EnchantmentSolution extends JavaPlugin {
 	        }
 		}
     }
+
+	public static SQLite getDb() {
+		return DB;
+	}
 }

@@ -16,46 +16,195 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.MemorySection;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.plugin.java.JavaPlugin;
 
 public class YamlConfig {
 	private File file;
 	private Map<String, YamlInfo> defaults;
 	private Map<String, YamlInfo> info;
+	private Map<String, List<String>> enums;
 	private String[] header;
 	private YamlConfiguration config;
-	private JavaPlugin plugin;
-	private static boolean COMMENTS = true;
+	private boolean comments = true;
 
-	public YamlConfig(File configFile, JavaPlugin plugin, String[] header) {
-		this.plugin = plugin;
+	public YamlConfig(File configFile, String[] header) {
 		this.header = header;
 		file = configFile;
-		config = YamlConfiguration.loadConfiguration(configFile);
+		if(configFile != null) {
+			config = YamlConfiguration.loadConfiguration(configFile);
+		}
 		info = new LinkedHashMap<String, YamlInfo>();
 		defaults = new LinkedHashMap<String, YamlInfo>();
+		enums = new LinkedHashMap<String, List<String>>();
 	}
 	
-	public static void setComments(boolean comments) {
-		COMMENTS = comments;
+	protected File getFile() {
+		return file;
 	}
 	
-	public Map<String, YamlInfo> getConfigurationInfo(String path){
-		if(path == null || path.equals("")) {
-			return info;
-		}
-		Map<String, YamlInfo> info = new LinkedHashMap<String, YamlInfo>();
-		List<String> keys = getEntryKeys(path);
-		for(String key : keys) {
-			if(this.info.containsKey(key)) {
-				info.put(key, this.info.get(key));
-			}
-		}
+	protected void setInfo(String key, YamlInfo info) {
+		this.info.put(key, info);
+	}
+	
+	protected Map<String, YamlInfo> getAllInfo(){
 		return info;
 	}
+	
+	public void addEnum(String path, List<String> values) {
+		enums.put(path, values);
+	}
+	
+	public List<String> getEnums(String path){
+		if(enums.containsKey(path)) {
+			return enums.get(path);
+		}
+		return null;
+	}
+	
+	public void setComments(boolean comments) {
+		this.comments = comments;
+	}
+	
+	public List<String> getConfigurationInfo(String path){
+		if(path == null) {
+			path = "";
+		}
+		List<String> keys = new ArrayList<String>();
+		
+		for (Iterator<java.util.Map.Entry<String, YamlInfo>> it = this.info.entrySet().iterator(); it.hasNext();) {
+			java.util.Map.Entry<String, YamlInfo> e = it.next();
+			List<String> entryKeys = getEntryKeys(e.getKey());
+			for(String key : entryKeys) {
+				if(!keys.contains(key)) {
+					if(key.startsWith(path)) {
+						if(StringUtils.countMatches(path, ".") + 1 == StringUtils.countMatches(key, ".")) {
+							keys.add(key);
+						}
+					}
+				}
+			}
+		}
+		
+		return keys;
+	}
 
-	private YamlInfo getInfo(String path) {
+	protected YamlInfo getInfo(String path) {
 		return info.get(path);
+	}
+	
+	public String getStringValue(String path) {
+		YamlInfo info = getInfo(path);
+		
+		if(info == null) {
+			return "Click for more.";
+		}
+		
+		if(info.getBooleanValue() != null) {
+			return info.getBooleanValue().toString();
+		}
+		
+		if(info.getInteger() != null) {
+			return info.getInteger().toString();
+		}
+		
+		if(info.getDoubleValue() != null) {
+			return info.getDoubleValue().toString();
+		}
+		
+		if(info.getStringList() != null) {
+			return "Click for more.";
+		}
+		
+		if(info.getString() != null) {
+			return info.getString();
+		}
+		
+		return null;
+	}
+	
+	public String getType(String path) {
+		if(getEnums(path) != null) {
+			return "enum";
+		}	
+		YamlInfo info = getInfo(path);
+		
+		if(info == null) {
+			return "nested value";
+		}
+		
+		if(info.getBooleanValue() != null) {
+			return "boolean";
+		}
+		
+		if(info.getInteger() != null) {
+			return "integer";
+		}
+		
+		if(info.getDoubleValue() != null) {
+			return "double";
+		}
+		
+		if(info.getStringList() != null) {
+			return "list";
+		}
+		
+		if(info.getString() != null) {
+			return "string";
+		}
+		
+		return null;
+	}
+	
+	public boolean match(String path, Object value) {
+		YamlInfo info = getInfo(path);
+		if(value == null && info == null) {
+			return true;
+		} else if(value == null && info.getValue() == null) {
+			return true;
+		} else if(value == null) {
+			return false;
+		}
+		
+		switch(getType(path)) {
+		case "boolean":
+			if(value.toString().equals("true") && info.getBoolean()) {
+				return true;
+			}
+			if(value.toString().equals("false") && !info.getBoolean()) {
+				return true;
+			}
+			break;
+		case "integer":
+			if((info.getInt() + "").equals(value.toString())) {
+				return true;
+			}
+			break;
+		case "double":
+			if((info.getDouble() + "").equals(value.toString())) {
+				return true;
+			}
+			break;
+		case "list":
+			LinkedHashMap<String, Boolean> keySame = new LinkedHashMap<String, Boolean>();
+			String[] values = replaceLast((value.toString().replaceFirst("\\[", "")), "]", "").split(", ");
+			for(Object key : values) {
+				keySame.put(key.toString(), false);
+			}
+			for(String key : info.getStringList()) {
+				if(keySame.containsKey(key)) {
+					keySame.put(key, true);
+				} else {
+					keySame.put(key, false);
+				}
+			}
+			return !keySame.containsValue(false);
+		case "enum":
+		case "string":
+			if (info.getString().equals(value.toString())){
+				return true;
+			}
+			break;
+		}
+		return false;
 	}
 	
 	public Object get(String path) {
@@ -142,6 +291,14 @@ public class YamlConfig {
 		}
 		return info.getBoolean();
 	}
+	
+	public Boolean getBooleanValue(String path) {
+		YamlInfo info = getInfo(path);
+		if(info == null) {
+			return null;
+		}
+		return info.getBooleanValue();
+	}
 
 	public boolean getBoolean(String path, boolean def) {
 		YamlInfo info = getInfo(path);
@@ -167,28 +324,12 @@ public class YamlConfig {
 		return info.getDouble();
 	}
 
-	public List<?> getList(String path) {
-		YamlInfo info = getInfo(path);
-		if(info == null) {
-			return null;
-		}
-		return info.getList();
-	}
-
 	public List<String> getStringList(String path) {
 		YamlInfo info = getInfo(path);
 		if(info == null) {
 			return null;
 		}
 		return info.getStringList();
-	}
-
-	public List<?> getList(String path, List<?> def) {
-		YamlInfo info = getInfo(path);
-		if(info == null || info.getList() == null) {
-			return def;
-		}
-		return info.getList();
 	}
 
 	public boolean contains(String path) {
@@ -256,7 +397,7 @@ public class YamlConfig {
 	
 	private String headerString() {
 		StringBuilder config = new StringBuilder("");
-		if(header.length > 0) {
+		if(header != null && header.length > 0) {
 			config.append("# +----------------------------------------------------+ #\n");
 	
 			for (String line : header) {
@@ -285,7 +426,7 @@ public class YamlConfig {
 		return config.toString();
 	}
 
-	private String prepareConfigString() {
+	protected String prepareConfigString() {
 		StringBuilder config = new StringBuilder("");
 		ArrayList<YamlChild> keyList = new ArrayList<YamlChild>();
 		
@@ -318,13 +459,54 @@ public class YamlConfig {
 				}
 			}
 		}
-				
+		
 		for(YamlChild child : keyList) {
 			config.append(getLevel(child));
 		}
 		
 		
 		return config.toString();
+	}
+	
+	public List<String> getLevelEntryKeys(String level){
+		List<String> values = new ArrayList<String>();
+		for (Iterator<java.util.Map.Entry<String, YamlInfo>> it = info.entrySet().iterator(); it.hasNext();) {
+			java.util.Map.Entry<String, YamlInfo> e = it.next();
+			List<String> entryKeys = getEntryKeys(e.getKey());
+			if(level == null || level.equals("")) {
+				for(int i = 0; i < entryKeys.size(); i++) {
+					if(!entryKeys.get(i).contains(".") && !values.contains(entryKeys.get(i))) {
+						values.add(entryKeys.get(i));
+					}
+				}
+			} else {
+				for(int i = 0; i < entryKeys.size(); i++) {
+					if(entryKeys.get(i).startsWith(level)) {
+						if(entryKeys.get(i).length() > level.length() + 1) {
+							String find = entryKeys.get(i).substring(level.length() + 1);
+							if(!find.contains(".") && !values.contains(entryKeys.get(i))) {
+								values.add(entryKeys.get(i));
+							}
+						}
+					}
+				}
+			}
+		}
+		return values;
+	}
+	
+	public List<String> getAllEntryKeys(){
+		List<String> values = new ArrayList<String>();
+		for (Iterator<java.util.Map.Entry<String, YamlInfo>> it = info.entrySet().iterator(); it.hasNext();) {
+			java.util.Map.Entry<String, YamlInfo> e = it.next();
+			List<String> entryKeys = getEntryKeys(e.getKey());
+			for(int i = 0; i < entryKeys.size(); i++) {
+				if(!values.contains(entryKeys.get(i))) {
+					values.add(entryKeys.get(i));
+				}
+			}
+		}
+		return values;
 	}
 	
 	private List<String> getEntryKeys(String keys) {
@@ -349,16 +531,12 @@ public class YamlConfig {
 			e.printStackTrace();
 		}
 	}
-
-	public String getPluginName() {
-		return plugin.getDescription().getName();
-	}
 	
 	private String getLevel(YamlChild child) {
 		StringBuilder config = new StringBuilder("");
 		String key = child.getPath();
 		
-		if(COMMENTS) {
+		if(comments) {
 			if(contains(key)) {
 				YamlInfo info = getInfo(key);
 				if(info.getComments().length > 0) {
@@ -377,22 +555,18 @@ public class YamlConfig {
 		}
 		line.append(key.substring(key.lastIndexOf('.') + 1) + ": ");
 		if(contains(key)) {
-			List<?> objects = getList(key);
+			List<String> objects = getStringList(key);
 			if(objects != null) {
 				if(objects.size() == 0) {
 					line.append("[]\n");
 				} else {
 					line.append("\n");
-					for(Object o : objects) {
+					for(String s : objects) {
 						for(int i = 0; i < deep; i++) {
 							line.append(" ");
 						}
 						line.append("- ");
-						if(o instanceof String) {
-							line.append("'" + ((String) o).replaceAll("'", "''") + "'");
-						} else {
-							line.append(o);
-						}
+						line.append("'" + s.replaceAll("'", "''") + "'");
 						line.append("\n");
 					}
 				}
@@ -413,5 +587,20 @@ public class YamlConfig {
 		}
 		
 		return config.toString();
+	}
+	
+	public String getFileName() {
+		return file.getName();
+	}
+	
+	public String replaceLast(String string, String toReplace, String replacement) {
+	    int pos = string.lastIndexOf(toReplace);
+	    if (pos > -1) {
+	        return string.substring(0, pos)
+	             + replacement
+	             + string.substring(pos + toReplace.length(), string.length());
+	    } else {
+	        return string;
+	    }
 	}
 }

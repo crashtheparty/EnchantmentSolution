@@ -27,9 +27,7 @@ public class Anvil implements InventoryData{
 	private Player player;
 	private Inventory inventory;
 	private List<ItemStack> playerItems;
-	private boolean openingNew;
 	private ItemStack combinedItem;
-	private boolean isRenaming;
 	private Block block;
 
 	public Anvil(Player player, Block block) {
@@ -44,7 +42,6 @@ public class Anvil implements InventoryData{
 
 	public void setInventory(List<ItemStack> items) {
 		try {
-			openingNew = true;
 			Inventory inv = Bukkit.createInventory(null, 27, ChatUtils.getMessage(getCodes(), "anvil.name"));
 	
 			ItemStack mirror = new ItemStack(Material.BLACK_STAINED_GLASS_PANE);
@@ -129,7 +126,7 @@ public class Anvil implements InventoryData{
 			if(playerItems.size() == 2) {
 				ItemStack item = playerItems.get(1);
 				inv.setItem(12, item);
-				combinedItem = ItemUtils.combineItems(playerItems.get(0), playerItems.get(1));
+				combinedItem = ItemUtils.combineItems(player, playerItems.get(0), playerItems.get(1));
 				inv.setItem(16, combinedItem);
 			}else {
 				combinedItem = null;
@@ -185,18 +182,6 @@ public class Anvil implements InventoryData{
 		return playerItems;
 	}
 
-	public boolean openingNew() {
-		if (openingNew) {
-			openingNew = false;
-			return true;
-		}
-		return false;
-	}
-	
-	public void setOpeningNew(boolean opening) {
-		openingNew = opening;
-	}
-	
 	public int getRepairCost() {
 		int repairCost = 0;
 		RepairType type = AnvilUtils.RepairType.getRepairType(playerItems.get(0), playerItems.get(1));
@@ -243,14 +228,6 @@ public class Anvil implements InventoryData{
 		}else {
 			ChatUtils.sendMessage(player, ChatUtils.getMessage(getCodes(), "anvil.message-cannot-combine"));
 		}
-	}
-	
-	public boolean isRenaming() {
-		return isRenaming;
-	}
-	
-	public void setRenaming(boolean renaming) {
-		isRenaming = renaming;
 	}
 
 	public Block getBlock() {

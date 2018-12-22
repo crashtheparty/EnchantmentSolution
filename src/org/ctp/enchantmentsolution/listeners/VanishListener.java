@@ -1,7 +1,5 @@
 package org.ctp.enchantmentsolution.listeners;
 
-import java.util.logging.Level;
-
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -17,7 +15,6 @@ import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
 import org.ctp.enchantmentsolution.inventory.InventoryData;
-import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.save.ConfigFiles;
 
 public class VanishListener implements Listener{
@@ -32,9 +29,6 @@ public class VanishListener implements Listener{
 			for(int i = 0; i < 36; i++) {
 				ItemStack item = inv.getItem(i);
 				inv.setItem(i, removeEnchants(item));
-				if(item != null) {
-					ChatUtils.sendToConsole(Level.INFO, item.toString());
-				}
 			}
 			ItemStack helmet = inv.getHelmet();
 			ItemStack chest = inv.getChestplate();

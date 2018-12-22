@@ -58,11 +58,26 @@ public class YamlInfo {
 		}
 		return 0;
 	}
+	
+	public Integer getInteger() {
+		if(value instanceof Integer) {
+			return ((Integer) value).intValue();
+		}
+		return null;
+	}
+
 	public boolean getBoolean() {
 		if(value instanceof Boolean) {
 			return ((Boolean) value).booleanValue();
 		}
 		return false;
+	}
+	
+	public Boolean getBooleanValue() {
+		if(value instanceof Boolean) {
+			return ((Boolean) value).booleanValue();
+		}
+		return null;
 	}
 	public double getDouble() {
 		if(value instanceof Number) {
@@ -70,9 +85,10 @@ public class YamlInfo {
 		}
 		return 0;
 	}
-	public List<?> getList() {
-		if(value instanceof List<?>) {
-			return ((List<?>) value);
+	
+	public Double getDoubleValue() {
+		if(value instanceof Double) {
+			return ((Double) value).doubleValue();
 		}
 		return null;
 	}

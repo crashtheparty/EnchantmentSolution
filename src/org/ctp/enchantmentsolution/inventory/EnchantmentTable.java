@@ -30,7 +30,6 @@ public class EnchantmentTable implements InventoryData {
 	private Inventory inventory;
 	private List<ItemStack> playerItems;
 	private Block block;
-	private boolean openingNew;
 
 	public EnchantmentTable(Player player, Block block) {
 		this.setPlayer(player);
@@ -43,7 +42,6 @@ public class EnchantmentTable implements InventoryData {
 	}
 
 	public void setInventory(List<ItemStack> items) {
-		openingNew = true;
 		Inventory inv = Bukkit.createInventory(null, 54, ChatUtils.getMessage(getCodes(), "table.name"));
 
 		ItemStack topLeft = new ItemStack(Material.BOOK);
@@ -300,14 +298,6 @@ public class EnchantmentTable implements InventoryData {
 		return playerItems;
 	}
 
-	public boolean openingNew() {
-		if (openingNew) {
-			openingNew = false;
-			return true;
-		}
-		return false;
-	}
-
 	public void enchantItem(int slot, int level) {
 		ItemStack enchantableItem = playerItems.get(slot);
 		int itemSlot = 17 + (9 * slot) + (4 + level);
@@ -365,5 +355,10 @@ public class EnchantmentTable implements InventoryData {
 		HashMap<String, Object> codes = new HashMap<String, Object>();
 		codes.put("%player%", player.getName());
 		return codes;
+	}
+
+	@Override
+	public void setItemName(String name) {
+		return;
 	}
 }

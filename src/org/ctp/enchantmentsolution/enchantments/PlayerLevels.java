@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.ctp.enchantmentsolution.utils.save.ConfigFiles;
 
 public class PlayerLevels {
 	
@@ -24,7 +25,7 @@ public class PlayerLevels {
 		List<Integer> levelList = getIntList(player, books);
 		
 		if(levelList == null){
-			if(DefaultEnchantments.isLevelFiftyEnchants()) {
+			if(ConfigFiles.useLevel50()) {
 				levelList = generateFiftyLevels();
 			} else {
 				levelList = generateThirtyLevels();
@@ -44,7 +45,7 @@ public class PlayerLevels {
 		List<Integer> levelList = getIntList(player, books);
 		
 		if(levelList == null){
-			if(DefaultEnchantments.isLevelFiftyEnchants()) {
+			if(ConfigFiles.useLevel50()) {
 				levelList = generateFiftyLevels();
 			} else {
 				levelList = generateThirtyLevels();
@@ -163,7 +164,7 @@ public class PlayerLevels {
 			if(intList.get(i) == -1){
 				enchants.add(new ArrayList<EnchantmentLevel>());
 			}else{
-				enchants.add(Enchantments.generateEnchantments(getMaterial(), intList.get(i), i + 1, treasure));
+				enchants.add(Enchantments.generateEnchantments(player, getMaterial(), intList.get(i), i + 1, treasure));
 			}
 		}
 	}

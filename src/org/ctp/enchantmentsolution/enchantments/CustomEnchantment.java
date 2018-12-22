@@ -2,6 +2,8 @@ package org.ctp.enchantmentsolution.enchantments;
 
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Player;
+import org.ctp.enchantmentsolution.utils.PermissionUtils;
 import org.ctp.enchantmentsolution.utils.save.ConfigFiles;
 
 public abstract class CustomEnchantment {
@@ -59,25 +61,43 @@ public abstract class CustomEnchantment {
 	public int getWeight() {
 		return weight.getWeight();
 	}
+	
+	public boolean canAnvil(Player player, int level) {
+		if (PermissionUtils.canAnvil(player, this, level)) {
+			return true;
+		}
 
-	public boolean canEnchant(int enchantability, int level) {
+		return false;
+	}
+	
+	public int getAnvilLevel(Player player, int level) {
+		while(level > 0) {
+			if(PermissionUtils.canAnvil(player, this, level)) {
+				return level;
+			}
+			level --;
+		}
+		return 0;
+	}
+
+	public boolean canEnchant(Player player, int enchantability, int level) {
 		if (ConfigFiles.useStartLevel() && level < getStartLevel()) {
 			return false;
 		}
-		int enchantabilityHigh = enchantability(getMaxLevel())[1];
-		int enchantabilityLow = enchantability(1)[0];
-		if (enchantability >= enchantabilityLow && enchantability <= enchantabilityHigh) {
+		if(getEnchantLevel(player, enchantability) > 0) {
 			return true;
 		}
 
 		return false;
 	}
 
-	public int getEnchantLevel(int enchantability) {
+	public int getEnchantLevel(Player player, int enchantability) {
 		for(int i = getMaxLevel(); i > 0; i--) {
 			int[] levels = enchantability(i);
-			if (enchantability >= levels[0] && enchantability <= levels[1]) {
-				return i;
+			if (PermissionUtils.canEnchant(player, this, i)) {
+				if (enchantability >= levels[0] && enchantability <= levels[1]) {
+					return i;
+				}
 			}
 		}
 		return 0;

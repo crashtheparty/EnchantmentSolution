@@ -123,13 +123,6 @@ public class DefaultEnchantments {
 		ENCHANTMENTS.add(enchant);
 	}
 	
-	public static boolean isLevelFiftyEnchants() {
-		if(ConfigFiles.getDefaultConfig() == null) {
-			return true;
-		}
-		return ConfigFiles.getDefaultConfig().getBoolean("level_50_enchants");
-	}
-	
 	public static void setEnchantments(boolean startup) {
 		for (int i = 0; i < ENCHANTMENTS.size(); i++) {
 			if(ConfigFiles.getDefaultConfig().getBoolean("use_advanced_file")) {
@@ -186,7 +179,7 @@ public class DefaultEnchantments {
 						ENCHANTMENTS.get(i).setEnabled(false);
 					}
 				}
-				if(isLevelFiftyEnchants()) {
+				if(ConfigFiles.useLevel50()) {
 					ENCHANTMENTS.get(i).setLevelFifty();
 				} else {
 					ENCHANTMENTS.get(i).setLevelThirty();

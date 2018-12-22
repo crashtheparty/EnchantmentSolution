@@ -18,5 +18,7 @@ public interface InventoryData {
 	public Inventory getInventory();
 
 	public void setInventory(List<ItemStack> items);
+
+	public void setItemName(String name);
 	
 }

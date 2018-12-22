@@ -52,40 +52,10 @@ public class Punch extends CustomEnchantment{
 		}
 		return false;
 	}
-
-	@Override
-	public int getMaxLevel() {
-		return 3;
-	}
-
+	
 	@Override
 	public String getName() {
 		return "punch";
-	}
-
-	@Override
-	public int getStartLevel() {
-		return 1;
-	}
-
-	@Override
-	public int getWeight() {
-		return 2;
-	}
-
-	@Override
-	public int[] enchantability(int level) {
-		int[] levels = new int[2];
-		levels[0] = 20 * level - 8;
-		levels[1] = levels[0] + 25;
-		return levels;
-	}
-	
-	public int multiplier(Material material) {
-		if(!(material.equals(Material.BOOK) || material.equals(Material.ENCHANTED_BOOK))) {
-			return 4;
-		}
-		return 2;
 	}
 	
 	@Override

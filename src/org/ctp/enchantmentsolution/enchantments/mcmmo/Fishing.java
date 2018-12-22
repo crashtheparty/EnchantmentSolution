@@ -4,11 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.EnchantmentLevel;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
+import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.config.YamlConfig;
 import org.ctp.enchantmentsolution.utils.save.ConfigFiles;
 
@@ -426,7 +428,7 @@ public class Fishing {
 		return config.getDouble(location);
 	}
 	
-	public static List<EnchantmentLevel> getEnchantsFromConfig(ItemStack item, String type, boolean fifty){
+	public static List<EnchantmentLevel> getEnchantsFromConfig(Player player, ItemStack item, String type, boolean fifty){
 		YamlConfig config = ConfigFiles.getFishingConfig();
 		
 		String location = "Enchantments_Rarity_";
@@ -443,16 +445,19 @@ public class Fishing {
 		for(String str : configStrings) {
 			fishing.add(new FishingEnchanted(str));
 		}
+		ChatUtils.sendMessage(player, "Fishing Size : " + fishing.size());
 		
 		List<EnchantmentLevel> enchants = new ArrayList<EnchantmentLevel>();
 		List<FishingEnchanted> fishingWeight = new ArrayList<FishingEnchanted>();
 		int totalWeight = 0;
 		for(FishingEnchanted enchantment : fishing){
-			if(enchantment.getEnchant().canEnchantItem(item.getType()) && enchantment.getEnchant().isEnabled()){
+			if(enchantment.getEnchant().canAnvil(player, enchantment.getLevel()) && enchantment.getEnchant().canEnchantItem(item.getType()) && enchantment.getEnchant().isEnabled()){
 				totalWeight += enchantment.getEnchant().getWeight();
 				fishingWeight.add(enchantment);
 			}
 		}
+
+		ChatUtils.sendMessage(player, "Total Weight : " + totalWeight);
 		int getWeight = (int)(Math.random() * totalWeight);
 		for(FishingEnchanted enchantment : fishingWeight){
 			getWeight -= enchantment.getEnchant().getWeight();
@@ -492,6 +497,18 @@ public class Fishing {
 		if(maxEnchants > 0) {
 			for(int i = enchants.size() - 1; i > maxEnchants; i--) {
 				enchants.remove(i);
+			}
+		}
+		
+		for(int i = enchants.size() - 1; i >= 0; i--) {
+			EnchantmentLevel enchant = enchants.get(i);
+			if(!enchant.getEnchant().canAnvil(player, enchant.getLevel())) {
+				int level = enchant.getEnchant().getAnvilLevel(player, enchant.getLevel());
+				if(level > 0) {
+					enchants.get(i).setLevel(level);
+				} else {
+					enchants.remove(i);
+				}
 			}
 		}
 		

@@ -2,12 +2,25 @@ package org.ctp.enchantmentsolution.nms;
 
 import org.bukkit.entity.Player;
 import org.ctp.enchantmentsolution.inventory.Anvil;
+import org.ctp.enchantmentsolution.inventory.ConfigInventory;
 import org.ctp.enchantmentsolution.nms.anvil.AnvilGUI_v1_13_R2;
 import org.ctp.enchantmentsolution.nms.anvil.AnvilGUI_v1_13_R1;
 
 public class Anvil_GUI_NMS {
 
 	public static void createAnvil(Player player, Anvil anvil) {
+		switch(Version.VERSION_NUMBER) {
+		case 1:
+			AnvilGUI_v1_13_R1.createAnvil(player, anvil);
+			break;
+		case 2:
+		case 3:
+			AnvilGUI_v1_13_R2.createAnvil(player, anvil);
+			break;
+		}
+	}
+	
+	public static void createAnvil(Player player, ConfigInventory anvil) {
 		switch(Version.VERSION_NUMBER) {
 		case 1:
 			AnvilGUI_v1_13_R1.createAnvil(player, anvil);

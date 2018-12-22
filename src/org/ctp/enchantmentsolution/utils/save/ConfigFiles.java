@@ -2,6 +2,7 @@ package org.ctp.enchantmentsolution.utils.save;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.List;
 import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
@@ -11,22 +12,26 @@ import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.PlayerLevels;
+import org.ctp.enchantmentsolution.enchantments.Weight;
 import org.ctp.enchantmentsolution.enchantments.mcmmo.Fishing;
 import org.ctp.enchantmentsolution.enchantments.wrappers.CustomEnchantmentWrapper;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.config.YamlConfig;
+import org.ctp.enchantmentsolution.utils.config.YamlConfigBackup;
+import org.ctp.enchantmentsolution.utils.config.YamlInfo;
 
 public class ConfigFiles {
 
 	private static File MAGMA_WALKER_FILE, MAIN_FILE, FISHING_FILE, LANGUAGE_FILE, ENCHANTMENT_FILE, ENCHANTMENT_ADVANCED_FILE;
 	private static File DATA_FOLDER = EnchantmentSolution.PLUGIN.getDataFolder();
-	private static YamlConfig CONFIG, FISHING, MAGMA_WALKER, LANGUAGE, ENCHANTMENT, ENCHANTMENT_ADVANCED;
+	private static YamlConfig MAGMA_WALKER;
+	private static YamlConfigBackup CONFIG, FISHING, LANGUAGE, ENCHANTMENT, ENCHANTMENT_ADVANCED;
 	
-	public static YamlConfig getDefaultConfig() {
+	public static YamlConfigBackup getDefaultConfig() {
 		return CONFIG;
 	}
 	
-	public static YamlConfig getFishingConfig() {
+	public static YamlConfigBackup getFishingConfig() {
 		return FISHING;
 	}
 	
@@ -34,15 +39,15 @@ public class ConfigFiles {
 		return MAGMA_WALKER;
 	}
 	
-	public static YamlConfig getLanguageFile() {
+	public static YamlConfigBackup getLanguageFile() {
 		return LANGUAGE;
 	}
 	
-	public static YamlConfig getEnchantmentConfig() {
+	public static YamlConfigBackup getEnchantmentConfig() {
 		return ENCHANTMENT;
 	}
 	
-	public static YamlConfig getEnchantmentAdvancedConfig() {
+	public static YamlConfigBackup getEnchantmentAdvancedConfig() {
 		return ENCHANTMENT_ADVANCED;
 	}
 
@@ -93,6 +98,41 @@ public class ConfigFiles {
 			e.printStackTrace();
 		}
 		loadLangFile(dataFolder, 0);
+		save();
+	}
+	
+	public static void revert() {
+		ConfigFiles.getDefaultConfig().revert();
+		ConfigFiles.getFishingConfig().revert();
+		ConfigFiles.getLanguageFile().revert();
+		ConfigFiles.getEnchantmentConfig().revert();
+		ConfigFiles.getEnchantmentAdvancedConfig().revert();
+	}
+	
+	public static void revert(YamlConfigBackup config, int backup) {
+		config.revert();
+		List<YamlInfo> info = EnchantmentSolution.getDb().getBackup(config, backup);
+		for(YamlInfo i : info) {
+			if(i.getValue() != null) {
+				config.set(i.getPath(), i.getValue());
+			}
+		}
+
+		save();
+	}
+	
+	public static void save() {
+		getDefaultConfig().setComments(getDefaultConfig().getBoolean("use_comments"));
+		getFishingConfig().setComments(getDefaultConfig().getBoolean("use_comments"));
+		getLanguageFile().setComments(getDefaultConfig().getBoolean("use_comments"));
+		getEnchantmentConfig().setComments(getDefaultConfig().getBoolean("use_comments"));
+		getEnchantmentAdvancedConfig().setComments(getDefaultConfig().getBoolean("use_comments"));
+		
+		getDefaultConfig().saveConfig();
+		getFishingConfig().saveConfig();
+		getLanguageFile().saveConfig();
+		getEnchantmentConfig().saveConfig();
+		getEnchantmentAdvancedConfig().saveConfig();
 	}
 	
 	public static void reload() {
@@ -109,6 +149,8 @@ public class ConfigFiles {
 		PlayerLevels.resetPlayerLevels();
 		
 		loadLangFile(dataFolder, 0);
+
+		save();
 		ConfigFiles.updateEnchantments();
 	}
 	
@@ -137,17 +179,18 @@ public class ConfigFiles {
 	private static void defaultFile() {
 		String[] header = { "Enchantment Solution",
 				"Plugin by", "crashtheparty"};
-		CONFIG = new YamlConfig(MAIN_FILE, EnchantmentSolution.PLUGIN, header);
+		CONFIG = new YamlConfigBackup(MAIN_FILE, header);
 		
 		CONFIG.getFromConfig();
 		
 		CONFIG.addDefault("starter", (ChatColor.DARK_GRAY + "[" + ChatColor.LIGHT_PURPLE + "Enchantment Solution" + ChatColor.DARK_GRAY + "]").replace(ChatColor.COLOR_CHAR, '&'), new String[] {"What to display in front of messages"});
 		CONFIG.addDefault("max_enchantments", 0, new String[] {"Max enchantments on each item. 0 allows infinite"});
 		CONFIG.addDefault("level_divisor", 4, new String[] {"Greater numbers allow more anvil uses"});
-		CONFIG.addDefault("level_50_enchants", true, new String[] {"Allow enchantments up to level 50"});
+		CONFIG.addDefault("level_50_enchants", true, new String[] {"Allow enchantments up to level 50", "- To make this easier, you can try the XpBank plugin: https://www.spigotmc.org/resources/xpbank.59580/"});
 		CONFIG.addDefault("disable_enchant_method", "visible", new String[] {"How disabling an enchantment in enchantments.yml or enchantments_advanced.yml will work.", 
 				"Options:", "vanish - removes enchantment from items", "visible - keeps enchantment on item, but custom effects will not work and anvil will remove enchant", 
 				"repairable - same as above but anvil will not remove enchant"});
+		CONFIG.addEnum("disable_enchant_method", Arrays.asList("vanish", "visible", "repairable"));
 		CONFIG.addDefault("use_advanced_file", false, new String[] {"Use enchantments_advanced.yml as the enchantment config."});
 		CONFIG.addDefault("chest_loot", true, new String[] {"Allow custom and/or high level enchants to spawn in chests"});
 		CONFIG.addDefault("mob_loot", true, new String[] {"Allow custom and/or high level enchantments to spawn on mobs"});
@@ -158,15 +201,13 @@ public class ConfigFiles {
 		
 		CONFIG.saveConfig();
 		
-		YamlConfig.setComments(CONFIG.getBoolean("use_comments"));
-		
 		ChatUtils.sendToConsole(Level.INFO, "Default config initialized...");
 	}
 	
 	private static void enchantmentFile() {
 		String[] header = { "Enchantment Solution",
 				"Plugin by", "crashtheparty"};
-		ENCHANTMENT = new YamlConfig(ENCHANTMENT_FILE, EnchantmentSolution.PLUGIN, header);
+		ENCHANTMENT = new YamlConfigBackup(ENCHANTMENT_FILE, header);
 		
 		ENCHANTMENT.getFromConfig();
 		
@@ -184,17 +225,27 @@ public class ConfigFiles {
 	private static void enchantmentAdvancedFile() {
 		String[] header = { "Enchantment Solution",
 				"Plugin by", "crashtheparty"};
-		ENCHANTMENT_ADVANCED = new YamlConfig(ENCHANTMENT_ADVANCED_FILE, EnchantmentSolution.PLUGIN, header);
+		ENCHANTMENT_ADVANCED = new YamlConfigBackup(ENCHANTMENT_ADVANCED_FILE, header);
 		
 		ENCHANTMENT_ADVANCED.getFromConfig();
 		
 		ENCHANTMENT_ADVANCED.addDefault("use_starting_level", true, new String[] {"Enchantments will not be available unless the enchanting level is the set value or above"});
+		ENCHANTMENT_ADVANCED.addDefault("use_lapis_modifier", true, new String[] {"Enchanting with higher amounts of lapis give higher enchantability"});
+		ENCHANTMENT_ADVANCED.addDefault("lapis_modifiers.constant", -1, new String[] {"Extra enchantability: (lapis + constant) * modifier"});
+		ENCHANTMENT_ADVANCED.addDefault("lapis_modifiers.modifier", 2);
+		ENCHANTMENT_ADVANCED.addDefault("multi_enchant_divisor", 75.0D, new String[] {"Chance of multiple enchantments on one item. Lower value = more enchantments."});
+		ENCHANTMENT_ADVANCED.addDefault("use_permissions", false, new String[] {"Use the permission system per player for all enchantments.", 
+				"Permissions use the system \"enchantmentsolution.<enchant_name>.<type>.level<int>\"", "enchant_name: Enchantment name as used below", 
+				"type: either table (for enchanting items) or anvil (for combining items)", "int: the enchantment level",
+				"Override permission: enchantmentsolution.permissions.ignore"});
 		
 		for(CustomEnchantment enchant: DefaultEnchantments.getEnchantments()) {
 			if (enchant.getRelativeEnchantment() instanceof CustomEnchantmentWrapper) {
 				ENCHANTMENT_ADVANCED.addDefault("custom_enchantments." + enchant.getName() + ".enabled", true);
 				ENCHANTMENT_ADVANCED.addDefault("custom_enchantments." + enchant.getName() + ".treasure", enchant.isTreasure());
 				ENCHANTMENT_ADVANCED.addDefault("custom_enchantments." + enchant.getName() + ".weight", enchant.getDefaultWeightName());
+				ENCHANTMENT_ADVANCED.addEnum("custom_enchantments." + enchant.getName() + ".weight", Arrays.asList(Weight.VERY_RARE.getName(), 
+						Weight.RARE.getName(), Weight.UNCOMMON.getName(), Weight.COMMON.getName(), Weight.NULL.getName()));
 				ENCHANTMENT_ADVANCED.addDefault("custom_enchantments." + enchant.getName() + ".display_name", enchant.getDefaultDisplayName());
 				ENCHANTMENT_ADVANCED.addDefault("custom_enchantments." + enchant.getName() + ".enchantability_constant", enchant.getDefaultFiftyConstant());
 				ENCHANTMENT_ADVANCED.addDefault("custom_enchantments." + enchant.getName() + ".enchantability_modifier", enchant.getDefaultFiftyModifier());
@@ -205,6 +256,8 @@ public class ConfigFiles {
 				ENCHANTMENT_ADVANCED.addDefault("default_enchantments." + enchant.getName() + ".enabled", true);
 				ENCHANTMENT_ADVANCED.addDefault("default_enchantments." + enchant.getName() + ".treasure", enchant.isTreasure());
 				ENCHANTMENT_ADVANCED.addDefault("default_enchantments." + enchant.getName() + ".weight", enchant.getDefaultWeightName());
+				ENCHANTMENT_ADVANCED.addEnum("default_enchantments." + enchant.getName() + ".weight", Arrays.asList(Weight.VERY_RARE.getName(), 
+						Weight.RARE.getName(), Weight.UNCOMMON.getName(), Weight.COMMON.getName(), Weight.NULL.getName()));
 				ENCHANTMENT_ADVANCED.addDefault("default_enchantments." + enchant.getName() + ".enchantability_constant", enchant.getDefaultFiftyConstant());
 				ENCHANTMENT_ADVANCED.addDefault("default_enchantments." + enchant.getName() + ".enchantability_modifier", enchant.getDefaultFiftyModifier());
 				ENCHANTMENT_ADVANCED.addDefault("default_enchantments." + enchant.getName() + ".enchantability_max_constant", enchant.getDefaultFiftyMaxConstant());
@@ -226,10 +279,18 @@ public class ConfigFiles {
 					enchant.setDisplayName(displayName);
 					ENCHANTMENT.removeKey("custom_enchantments." + enchant.getName() + ".display_name");
 				}
+				for(int i = 0; i < enchant.getMaxLevel(); i++) {
+					ENCHANTMENT_ADVANCED.addDefault("custom_enchantments." + enchant.getName() + ".permissions.table.level" + (i + 1), false);
+					ENCHANTMENT_ADVANCED.addDefault("custom_enchantments." + enchant.getName() + ".permissions.anvil.level" + (i + 1), false);
+				}
 			} else {
 				String displayName = ENCHANTMENT_ADVANCED.getString("default_enchantments." + enchant.getName() + ".display_name");
 				if(displayName != null) {
 					ENCHANTMENT_ADVANCED.set("default_enchantments." + enchant.getName() + ".display_name", null);
+				}
+				for(int i = 0; i < enchant.getMaxLevel(); i++) {
+					ENCHANTMENT_ADVANCED.addDefault("default_enchantments." + enchant.getName() + ".permissions.table.level" + (i + 1), false);
+					ENCHANTMENT_ADVANCED.addDefault("default_enchantments." + enchant.getName() + ".permissions.anvil.level" + (i + 1), false);
 				}
 			}
 		}
@@ -238,7 +299,7 @@ public class ConfigFiles {
 	}
 	
 	private static void magmaWalker() {
-		MAGMA_WALKER = new YamlConfig(MAGMA_WALKER_FILE, EnchantmentSolution.PLUGIN, new String[0]);
+		MAGMA_WALKER = new YamlConfig(MAGMA_WALKER_FILE, new String[0]);
 		
 		MAGMA_WALKER.getFromConfig();
 		
@@ -250,7 +311,9 @@ public class ConfigFiles {
 	private static void mcMMOFishing() {
 		String[] header = { "Enchantment Solution",
 				"Plugin by", "crashtheparty"};
-		FISHING = new YamlConfig(FISHING_FILE, EnchantmentSolution.PLUGIN, header);
+		FISHING = new YamlConfigBackup(FISHING_FILE, header);
+		
+		FISHING.getFromConfig();
 		
 		FISHING.addDefault("Enchantments_Rarity_30.COMMON.enchants", Fishing.enchantmentDefaults("COMMON", false));
 		FISHING.addDefault("Enchantments_Rarity_50.COMMON.enchants", Fishing.enchantmentDefaults("COMMON", true));
@@ -371,7 +434,7 @@ public class ConfigFiles {
 	}
 	
 	private static void language(String fileName) {
-		LANGUAGE = new YamlConfig(LANGUAGE_FILE, EnchantmentSolution.PLUGIN, new String[0]);
+		LANGUAGE = new YamlConfigBackup(LANGUAGE_FILE, new String[0]);
 		
 		LANGUAGE.getFromConfig();
 		
@@ -425,6 +488,7 @@ public class ConfigFiles {
 		LANGUAGE.addDefault("commands.enchant-remove-from-item", ("You must specify an enchantment.").replace("§", "&"));
 		LANGUAGE.addDefault("commands.reload", ("Config files have been reloaded. Please note that the enchantments.yml file requires a server restart to take effect.").replace("§", "&"));
 		LANGUAGE.addDefault("commands.enchant-disabled", ("Cannot enchant item with a disabled enchantment.").replace("§", "&"));
+		LANGUAGE.addDefault("commands.reset-inventory", ("Closed all custom inventories.").replace("§", "&"));
 
 		LANGUAGE.addDefault("items.stole-soulbound", ("You have stolen the player's soulbound items!").replace("§", "&"));
 		LANGUAGE.addDefault("items.soulbound-stolen", ("Your soulbound items have been stolen!").replace("§", "&"));
@@ -443,6 +507,27 @@ public class ConfigFiles {
 			return ENCHANTMENT_ADVANCED.getBoolean("use_starting_level");
 		}
 		return CONFIG.getBoolean("level_50_enchants");
+	}
+	
+	public static boolean useLevel50() {
+		if(CONFIG.getBoolean("use_advanced_file")) {
+			return true;
+		}
+		return ConfigFiles.getDefaultConfig().getBoolean("level_50_enchants");
+	}
+
+	public static boolean useThirtyEnchantability() {
+		if(CONFIG.getBoolean("use_advanced_file")){
+			return !ENCHANTMENT_ADVANCED.getBoolean("use_lapis_modifier");
+		}
+		return !CONFIG.getBoolean("level_50_enchants");
+	}
+	
+	public static boolean usePermissions() {
+		if(CONFIG.getBoolean("use_advanced_file")){
+			return ENCHANTMENT_ADVANCED.getBoolean("use_permissions");
+		}
+		return false;
 	}
  
 }
