@@ -141,10 +141,14 @@ public class InventoryClick implements Listener {
 							configInv.listConfigDetails(ConfigFiles.getEnchantmentAdvancedConfig());
 							break;
 						case 21:
-							configInv.saveAll();
+							if(!item.getType().equals(Material.BARRIER)) {
+								configInv.saveAll();
+							}
 							break;
 						case 23:
-							configInv.revert();
+							if(!item.getType().equals(Material.BARRIER)) {
+								configInv.revert();
+							}
 							break;
 						}
 						break;

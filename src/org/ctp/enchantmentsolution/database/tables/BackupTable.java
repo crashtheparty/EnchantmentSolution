@@ -39,6 +39,10 @@ public class BackupTable extends Table{
 			for(String key : config.getAllEntryKeys()) {
 				keySame.put(key, false);
 			}
+		} else {
+			for(String key : config.getConfigInventoryEntryKeys()) {
+				keySame.put(key, false);
+			}
 		}
 		
 		try {

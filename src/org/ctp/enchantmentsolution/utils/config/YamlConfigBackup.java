@@ -3,6 +3,7 @@ package org.ctp.enchantmentsolution.utils.config;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -25,6 +26,20 @@ public class YamlConfigBackup extends YamlConfig {
 		configInventoryData.put(path, new YamlInfo(path, value));
 	}
 	
+	public List<String> getConfigInventoryEntryKeys(){
+		List<String> values = new ArrayList<String>();
+		for (Iterator<java.util.Map.Entry<String, YamlInfo>> it = configInventoryData.entrySet().iterator(); it.hasNext();) {
+			java.util.Map.Entry<String, YamlInfo> e = it.next();
+			List<String> entryKeys = getEntryKeys(e.getKey());
+			for(int i = 0; i < entryKeys.size(); i++) {
+				if(!values.contains(entryKeys.get(i))) {
+					values.add(entryKeys.get(i));
+				}
+			}
+		}
+		return values;
+	}
+	
 	public void getFromBackup(List<YamlInfo> info) {
 		for(YamlInfo i : info) {
 			if(i.getValue() != null) {
@@ -35,12 +50,14 @@ public class YamlConfigBackup extends YamlConfig {
 	
 	public void setFromBackup(List<YamlInfo> backupInfo) {
 		for (YamlInfo info : backupInfo) {
-			if(contains(info.getPath())) {
-				YamlInfo data = getInfo(info.getPath());
-				data.setValue(info.getValue());
-				set(info.getPath(), data);
-			} else {
-				set(info.getPath(), info);
+			if(info.getValue() != null) {
+				if(contains(info.getPath())) {
+					YamlInfo data = getInfo(info.getPath());
+					data.setValue(info.getValue());
+					setInfo(info.getPath(), data);
+				} else {
+					setInfo(info.getPath(), info);
+				}
 			}
 		}
 		
@@ -50,12 +67,14 @@ public class YamlConfigBackup extends YamlConfig {
 	public void setFromBackup(YamlConfig config) {
 		for (Iterator<java.util.Map.Entry<String, YamlInfo>> it = config.getAllInfo().entrySet().iterator(); it.hasNext();) {
 			java.util.Map.Entry<String, YamlInfo> e = it.next();
-			if(contains(e.getKey())) {
-				YamlInfo data = getInfo(e.getKey());
-				data.setValue(e.getValue().getValue());
-				setInfo(e.getKey(), data);
-			} else {
-				setInfo(e.getKey(), e.getValue());
+			if(e.getValue().getValue() != null) {
+				if(contains(e.getKey())) {
+					YamlInfo data = getInfo(e.getKey());
+					data.setValue(e.getValue().getValue());
+					setInfo(e.getKey(), data);
+				} else {
+					setInfo(e.getKey(), e.getValue());
+				}
 			}
 		}
 		
@@ -189,6 +208,7 @@ public class YamlConfigBackup extends YamlConfig {
 
 	public void saveConfig() {
 		update();
+		if(getFile() == null) return;
 		String configuration = prepareConfigString();
 		try {
 			BufferedWriter writer = new BufferedWriter(new java.io.FileWriter(

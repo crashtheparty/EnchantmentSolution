@@ -133,6 +133,11 @@ public class ConfigFiles {
 		getLanguageFile().saveConfig();
 		getEnchantmentConfig().saveConfig();
 		getEnchantmentAdvancedConfig().saveConfig();
+		EnchantmentSolution.getDb().updateConfig(getDefaultConfig());
+		EnchantmentSolution.getDb().updateConfig(getFishingConfig());
+		EnchantmentSolution.getDb().updateConfig(getLanguageFile());
+		EnchantmentSolution.getDb().updateConfig(getEnchantmentConfig());
+		EnchantmentSolution.getDb().updateConfig(getEnchantmentAdvancedConfig());
 	}
 	
 	public static void reload() {
@@ -296,6 +301,9 @@ public class ConfigFiles {
 		}
 		ENCHANTMENT.saveConfig();
 		ENCHANTMENT_ADVANCED.saveConfig();
+		
+		EnchantmentSolution.getDb().updateConfig(getEnchantmentConfig());
+		EnchantmentSolution.getDb().updateConfig(getEnchantmentAdvancedConfig());
 	}
 	
 	private static void magmaWalker() {

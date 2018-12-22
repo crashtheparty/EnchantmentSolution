@@ -509,7 +509,7 @@ public class YamlConfig {
 		return values;
 	}
 	
-	private List<String> getEntryKeys(String keys) {
+	protected List<String> getEntryKeys(String keys) {
 		List<String> values = new ArrayList<String>();
 		values.add(keys);
 		while(keys.indexOf('.') > -1) {
