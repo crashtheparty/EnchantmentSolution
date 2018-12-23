@@ -73,6 +73,10 @@ public class EnchantmentSolution extends JavaPlugin {
 			return;
 		}
 		
+		if (!getDataFolder().exists()) {
+			getDataFolder().mkdirs();
+		}
+		
 		DB = new SQLite(this);
 		DB.load();
 		
