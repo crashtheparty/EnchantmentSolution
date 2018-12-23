@@ -1,5 +1,5 @@
 name: EnchantmentSolution
-version: 1.1.1
+version: 1.3.2
 main: org.ctp.enchantmentsolution.EnchantmentSolution
 api-version: 1.13
 commands:
@@ -22,3 +22,9 @@ commands:
   esreload:
     description: Reload config files
     usage: /esreload
+  esconfig:
+    description: Edit config files
+    usage: /esconfig
+  esreset:
+    description: Reset all custom inventories
+    usage: /esreset

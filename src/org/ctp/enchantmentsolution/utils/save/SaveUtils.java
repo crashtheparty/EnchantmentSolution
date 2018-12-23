@@ -7,7 +7,7 @@ import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.listeners.abilities.MagmaWalkerListener;
-import org.ctp.enchantmentsolution.utils.config.SimpleConfig;
+import org.ctp.enchantmentsolution.utils.config.YamlConfig;
 
 public class SaveUtils {
 
@@ -15,8 +15,8 @@ public class SaveUtils {
 		if(ConfigFiles.getMagmaWalkerConfig() == null) {
 			return;
 		}
-		SimpleConfig config = ConfigFiles.getMagmaWalkerConfig();
-		if (config.getConfigurationSection("blocks") != null) {
+		YamlConfig config = ConfigFiles.getMagmaWalkerConfig();
+		if (config.containsElements("blocks")) {
 			int i = 0;
 			while (config.getString("blocks." + i) != null) {
 				String stringBlock = config.getString("blocks." + i);
@@ -45,7 +45,7 @@ public class SaveUtils {
 			return;
 		}
 		int i = 0;
-		SimpleConfig config = ConfigFiles.getMagmaWalkerConfig();
+		YamlConfig config = ConfigFiles.getMagmaWalkerConfig();
 		for (Block block : MagmaWalkerListener.BLOCKS) {
 			for(MetadataValue value : block.getMetadata("MagmaWalker")){
 				config.set("blocks." + i,

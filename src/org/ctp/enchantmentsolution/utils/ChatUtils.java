@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
@@ -14,6 +15,14 @@ public class ChatUtils {
 
 	public static void sendMessage(Player player, String message) {
 		player.sendMessage(getStarter() + message);
+	}
+	
+	public static void sendMessage(Player player, String message, String url) {
+		Bukkit.getServer().dispatchCommand(
+		        Bukkit.getConsoleSender(),
+		        "tellraw " + player.getName() + 
+		        " [{\"text\":\"" + getStarter() + message + "\"},{\"text\":\"" + url + "\", \"underlined\": true, \"clickEvent\":{\"action\":\"open_url\",\"value\":\"" +
+		        url + "\"}}]");
 	}
 	
 	public static void sendMessage(Player player, String[] messages) {
@@ -31,7 +40,7 @@ public class ChatUtils {
 	}
 	
 	public static void sendToConsole(Level level, String message) {
-		EnchantmentSolution.PLUGIN.getLogger().log(level, ChatColor.stripColor(getStarter()) + message);
+		EnchantmentSolution.PLUGIN.getLogger().log(level, message);
 	}
 	
 	public static String getMessage(HashMap<String, Object> codes, String location) {

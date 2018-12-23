@@ -32,6 +32,9 @@ public class Version {
 		case "1.13.1":
 			VERSION_NUMBER = 2;
 			return true;
+		case "1.13.2":
+			VERSION_NUMBER = 3;
+			return true;
 		}
 		return false;
 	}

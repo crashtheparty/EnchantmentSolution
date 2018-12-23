@@ -14,11 +14,10 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
-import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.EnchantmentLevel;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
 import org.ctp.enchantmentsolution.enchantments.mcmmo.Fishing;
-import org.ctp.enchantmentsolution.utils.config.SimpleConfig;
+import org.ctp.enchantmentsolution.utils.config.YamlConfig;
 import org.ctp.enchantmentsolution.utils.save.ConfigFiles;
 
 import com.gmail.nossr50.config.experience.ExperienceConfig;
@@ -46,7 +45,7 @@ public class McMMOFishingListener implements Listener {
 
 		if (Permissions.secondaryAbilityEnabled(player, SecondaryAbility.MAGIC_HUNTER)
 				&& ItemUtils.isEnchantable(treasure)) {
-			List<EnchantmentLevel> enchantments = getEnchants(treasure, tier);
+			List<EnchantmentLevel> enchantments = getEnchants(player, treasure, tier);
 			event.setCancelled(true);
 			treasure = event.getTreasure();
 			int treasureXp = event.getXp();
@@ -103,13 +102,15 @@ public class McMMOFishingListener implements Listener {
 		}
 	}
 
-	private List<EnchantmentLevel> getEnchants(ItemStack treasure, int tier) {
+	private List<EnchantmentLevel> getEnchants(Player player, ItemStack treasure, int tier) {
 		HashMap<String, Double> chanceMap = new HashMap<String, Double>();
-		SimpleConfig config = ConfigFiles.getFishingConfig();
-		String location = DefaultEnchantments.isLevelFiftyEnchants() ? "Enchantments_Rarity_50"
+		YamlConfig config = ConfigFiles.getFishingConfig();
+		String location = ConfigFiles.useLevel50() ? "Enchantments_Rarity_50"
 				: "Enchantments_Rarity_30";
-		for(String type: config.getConfigurationSection(location).getKeys(false)) {
-			chanceMap.put(type, Fishing.getTierChances(tier, type, DefaultEnchantments.isLevelFiftyEnchants()));
+		
+		for (String s : config.getConfigurationInfo(location)) {
+			String type = s.substring(s.lastIndexOf(".") + 1);
+			chanceMap.put(type, Fishing.getTierChances(tier, type, ConfigFiles.useLevel50()));
 		}
 
 		double random = Math.random() * 100;
@@ -117,7 +118,7 @@ public class McMMOFishingListener implements Listener {
 			java.util.Map.Entry<String, Double> e = it.next();
 			random -= e.getValue();
 			if (random <= 0) {
-				return Fishing.getEnchantsFromConfig(treasure, e.getKey(), DefaultEnchantments.isLevelFiftyEnchants());
+				return Fishing.getEnchantsFromConfig(player, treasure, e.getKey(), ConfigFiles.useLevel50());
 			}
 		}
 		return new ArrayList<EnchantmentLevel>();

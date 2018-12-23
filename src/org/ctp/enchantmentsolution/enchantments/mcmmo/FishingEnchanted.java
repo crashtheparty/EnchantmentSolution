@@ -53,7 +53,7 @@ public class FishingEnchanted {
 			}
 		}
 		if (Enchantment.getByKey(key) != null) {
-			for(CustomEnchantment enchantment : DefaultEnchantments.getAddedEnchantments()) {
+			for(CustomEnchantment enchantment : DefaultEnchantments.getEnchantments()) {
 				if(enchantment.getRelativeEnchantment().equals(Enchantment.getByKey(key))) {
 					return enchantment;
 				}

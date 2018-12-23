@@ -298,7 +298,7 @@ public class ItemUtils {
 		return combined;
 	}
 	
-	public static ItemStack combineItems(ItemStack first, ItemStack second) {
+	public static ItemStack combineItems(Player player, ItemStack first, ItemStack second) {
 		ItemStack combined = new ItemStack(first.getType());
 		if(first.getType().equals(Material.ENCHANTED_BOOK)) {
 			combined = new ItemStack(Material.BOOK);
@@ -316,7 +316,7 @@ public class ItemUtils {
 			DamageUtils.setDamage(combined, DamageUtils.getDamage(combined.getItemMeta()) - extraDurability);
 		}
 		
-		List<EnchantmentLevel> enchantments = Enchantments.combineEnchants(first, second);
+		List<EnchantmentLevel> enchantments = Enchantments.combineEnchants(player, first, second);
 		
 		ItemMeta firstMeta = first.getItemMeta();
 		ItemMeta combinedMeta = combined.getItemMeta();
@@ -368,7 +368,9 @@ public class ItemUtils {
 					enchants = levels.getEnchants().get(random);
 					break;
 				}
+				i++;
 			}
+			if(i >= 3) break;
 		}
 		
 		returnItem = Enchantments.addEnchantmentsToItem(returnItem, enchants);

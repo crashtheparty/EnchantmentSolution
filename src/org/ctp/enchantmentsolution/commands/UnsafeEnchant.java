@@ -23,6 +23,11 @@ public class UnsafeEnchant implements CommandExecutor {
 					String enchantmentName = args[0];
 					for(CustomEnchantment enchant : Enchantments.getEnchantments()){
 						if(enchant.getName().equalsIgnoreCase(enchantmentName)){
+							if(!enchant.isEnabled()) {
+								HashMap<String, Object> codes = ChatUtils.getCodes();
+								ChatUtils.sendMessage(player, ChatUtils.getMessage(codes, "commands.enchant-disabled"));
+								return true;
+							}
 							int level = 1;
 							if(args.length > 1){
 								try{
