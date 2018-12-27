@@ -57,8 +57,8 @@ public class Enchantments {
 		return ConfigFiles.getDefaultConfig().getBoolean("fishing_loot");
 	}
 
-	public static boolean addEnchantment(CustomEnchantment enchantment, boolean startup) {
-		if(!startup) {
+	public static boolean addEnchantment(CustomEnchantment enchantment) {
+		if(ENCHANTMENTS.contains(enchantment)) {
 			return true;
 		}
 		ENCHANTMENTS.add(enchantment);
