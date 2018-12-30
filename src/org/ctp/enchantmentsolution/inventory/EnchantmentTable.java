@@ -7,7 +7,6 @@ import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.DyeColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -15,14 +14,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.material.Dye;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
-import org.ctp.enchantmentsolution.enchantments.EnchantmentLevel;
+import org.ctp.enchantmentsolution.api.EnchantmentLevel;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
 import org.ctp.enchantmentsolution.enchantments.PlayerLevels;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
-import org.ctp.enchantmentsolution.utils.ItemUtils;
 import org.ctp.enchantmentsolution.utils.RomanNumerals;
+import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 
 public class EnchantmentTable implements InventoryData {
 
@@ -202,10 +200,10 @@ public class EnchantmentTable implements InventoryData {
 						
 						String lapisString = ChatUtils.getMessage(loreCodes, "table.lapis-cost-okay");
 						int numLapis = 0;
-						for (int j = 1; j <= 64; j++) {
-							ItemStack lapisStack = new ItemStack(Material.LAPIS_LAZULI, j);
-							if (player.getInventory().contains(lapisStack)) {
-								numLapis += j;
+						for (int j = 0; j < player.getInventory().getSize(); j++) {
+							ItemStack checkLapis = player.getInventory().getItem(j);
+							if(checkLapis != null && checkLapis.getType().equals(Material.LAPIS_LAZULI)){
+								numLapis += checkLapis.getAmount();
 							}
 						}
 						if (numLapis < (extra - 2)
@@ -317,12 +315,22 @@ public class EnchantmentTable implements InventoryData {
 			setInventory(playerItems);
 			return;
 		}
-		if (player.getGameMode().equals(GameMode.SURVIVAL)) {
+		if (player.getGameMode().equals(GameMode.SURVIVAL) || player.getGameMode().equals(GameMode.ADVENTURE)) {
 			player.setLevel(player.getLevel() - level - 1);
-			Dye lapis = new Dye();
-			lapis.setColor(DyeColor.BLUE);
-			ItemStack lapisStack = new ItemStack(Material.LAPIS_LAZULI, level + 1);
-			player.getInventory().removeItem(lapisStack);
+			int remove = level + 1;
+			for(int i = 0; i < player.getInventory().getSize(); i++) {
+				if(remove == 0) break;
+				ItemStack item = player.getInventory().getItem(i);
+				if(item != null && item.getType().equals(Material.LAPIS_LAZULI)) {
+					if(item.getAmount() - remove <= 0) {
+						remove -= item.getAmount();
+						player.getInventory().setItem(i, new ItemStack(Material.AIR));
+					} else {
+						item.setAmount(item.getAmount() - remove);
+						break;
+					}
+				}
+			}
 		}
 		enchantableItem = Enchantments.addEnchantmentsToItem(enchantableItem,
 				levels.getEnchants().get(level));

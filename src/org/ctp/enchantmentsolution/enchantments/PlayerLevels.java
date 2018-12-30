@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.ctp.enchantmentsolution.api.EnchantmentLevel;
 import org.ctp.enchantmentsolution.utils.save.ConfigFiles;
 
 public class PlayerLevels {

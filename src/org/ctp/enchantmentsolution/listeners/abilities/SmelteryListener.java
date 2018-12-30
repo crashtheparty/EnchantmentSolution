@@ -17,7 +17,7 @@ import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
 import org.ctp.enchantmentsolution.listeners.abilities.mcmmo.McMMOHandler;
 import org.ctp.enchantmentsolution.utils.AbilityUtilities;
-import org.ctp.enchantmentsolution.utils.DamageUtils;
+import org.ctp.enchantmentsolution.utils.items.DamageUtils;
 
 public class SmelteryListener implements Listener{
 

@@ -13,6 +13,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.ctp.enchantmentsolution.api.EnchantmentLevel;
 import org.ctp.enchantmentsolution.commands.ConfigEdit;
 import org.ctp.enchantmentsolution.commands.Enchant;
 import org.ctp.enchantmentsolution.commands.EnchantInfo;
@@ -22,8 +23,8 @@ import org.ctp.enchantmentsolution.commands.Reset;
 import org.ctp.enchantmentsolution.commands.UnsafeEnchant;
 import org.ctp.enchantmentsolution.database.SQLite;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
-import org.ctp.enchantmentsolution.enchantments.EnchantmentLevel;
 import org.ctp.enchantmentsolution.inventory.InventoryData;
+import org.ctp.enchantmentsolution.listeners.BlockBreak;
 import org.ctp.enchantmentsolution.listeners.ChatMessage;
 import org.ctp.enchantmentsolution.listeners.InventoryClick;
 import org.ctp.enchantmentsolution.listeners.InventoryClose;
@@ -40,6 +41,7 @@ import org.ctp.enchantmentsolution.listeners.abilities.FrequentFlyerListener;
 import org.ctp.enchantmentsolution.listeners.abilities.KnockUpListener;
 import org.ctp.enchantmentsolution.listeners.abilities.LifeListener;
 import org.ctp.enchantmentsolution.listeners.abilities.MagmaWalkerListener;
+import org.ctp.enchantmentsolution.listeners.abilities.NoRestListener;
 import org.ctp.enchantmentsolution.listeners.abilities.SacrificeListener;
 import org.ctp.enchantmentsolution.listeners.abilities.ShockAspectListener;
 import org.ctp.enchantmentsolution.listeners.abilities.SmelteryListener;
@@ -47,7 +49,10 @@ import org.ctp.enchantmentsolution.listeners.abilities.SniperListener;
 import org.ctp.enchantmentsolution.listeners.abilities.SoulboundListener;
 import org.ctp.enchantmentsolution.listeners.abilities.TankListener;
 import org.ctp.enchantmentsolution.listeners.abilities.TelepathyListener;
+import org.ctp.enchantmentsolution.listeners.abilities.UnrestListener;
+import org.ctp.enchantmentsolution.listeners.abilities.VoidWalkerListener;
 import org.ctp.enchantmentsolution.listeners.abilities.WarpListener;
+import org.ctp.enchantmentsolution.listeners.abilities.WidthHeightListener;
 import org.ctp.enchantmentsolution.listeners.chestloot.ChestLootListener;
 import org.ctp.enchantmentsolution.listeners.fishing.EnchantsFishingListener;
 import org.ctp.enchantmentsolution.listeners.fishing.McMMOFishingListener;
@@ -128,11 +133,16 @@ public class EnchantmentSolution extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new TankListener(), this);
 		getServer().getPluginManager().registerEvents(new BrineListener(), this);
 		getServer().getPluginManager().registerEvents(new DrownedListener(), this);
+		getServer().getPluginManager().registerEvents(new UnrestListener(), this);
+		getServer().getPluginManager().registerEvents(new NoRestListener(), this);
+		getServer().getPluginManager().registerEvents(new WidthHeightListener(), this);
+		getServer().getPluginManager().registerEvents(new VoidWalkerListener(), this);
 		getServer().getPluginManager().registerEvents(new ChestLootListener(), this);
 		getServer().getPluginManager().registerEvents(new MobSpawning(), this);
 		getServer().getPluginManager().registerEvents(new VanishListener(), this);
 		getServer().getPluginManager().registerEvents(new VersionUpdater(), this);
 		getServer().getPluginManager().registerEvents(new ChatMessage(), this);
+		getServer().getPluginManager().registerEvents(new BlockBreak(), this);
 		if(Bukkit.getPluginManager().isPluginEnabled("mcMMO")) {
 			getServer().getPluginManager().registerEvents(new McMMOFishingListener(), this);
 		} else {
@@ -145,6 +155,12 @@ public class EnchantmentSolution extends JavaPlugin {
 				new FrequentFlyerListener(), 20l, 20l);
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN,
 						new DrownedListener(), 1l, 1l);
+		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN,
+				new UnrestListener(), 1l, 1l);
+		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN,
+				new NoRestListener(), 1l, 1l);
+		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN,
+				new VoidWalkerListener(), 1l, 1l);
 
 		getCommand("Enchant").setExecutor(new Enchant());
 		getCommand("Info").setExecutor(new EnchantInfo());
@@ -164,7 +180,7 @@ public class EnchantmentSolution extends JavaPlugin {
 	}
 
 	public void onDisable() {
-		SaveUtils.setMagmaWalkerData();
+		SaveUtils.setWalkerData();
 		
 		resetInventories();
 	}

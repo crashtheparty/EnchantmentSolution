@@ -10,10 +10,10 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
+import org.ctp.enchantmentsolution.api.ItemType;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
-import org.ctp.enchantmentsolution.utils.ItemUtils;
 
 public class SoulboundListener implements Listener{
 	
@@ -69,7 +69,7 @@ public class SoulboundListener implements Listener{
 		List<ItemStack> playerItems = new ArrayList<ItemStack>();
 		
 		boolean stealItems = false;
-		if(ItemUtils.getItemTypes().get("hoes").contains(killItem.getType()) && Enchantments.hasEnchantment(killItem, DefaultEnchantments.SOUL_REAPER)){
+		if(ItemType.HOES.getItemTypes().contains(killItem.getType()) && Enchantments.hasEnchantment(killItem, DefaultEnchantments.SOUL_REAPER)){
 			double chance = Math.random();
 			if(chance > 0.50){
 				stealItems = true;

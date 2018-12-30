@@ -31,6 +31,12 @@ public class ChatUtils {
 		}
 	}
 	
+	public static void sendRawMessage(Player player, String json) {
+		Bukkit.getServer().dispatchCommand(
+		        Bukkit.getConsoleSender(),
+		        "tellraw " + player.getName() + " " + json);
+	}
+	
 	private static String getStarter() {
 		String starter = ChatColor.translateAlternateColorCodes('&', ConfigFiles.getDefaultConfig().getString("starter"));
 		if(starter != null) {

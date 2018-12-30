@@ -1,11 +1,14 @@
 package org.ctp.enchantmentsolution.enchantments.vanilla;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.apache.commons.lang3.StringUtils;
-import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
+import org.ctp.enchantmentsolution.api.ItemType;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
+import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Weight;
-import org.ctp.enchantmentsolution.utils.ItemUtils;
 
 public class BaneOfArthropods extends CustomEnchantment{
 	
@@ -25,45 +28,6 @@ public class BaneOfArthropods extends CustomEnchantment{
 	}
 
 	@Override
-	public boolean canEnchantItem(Material item) {
-		if(item.equals(Material.BOOK)){
-			return true;
-		}
-		if(ItemUtils.getItemTypes().get("swords").contains(item)){
-			return true;
-		}
-		return false;
-	}
-
-	@Override
-	public boolean canAnvilItem(Material item) {
-		if(item.equals(Material.BOOK)){
-			return true;
-		}
-		if(ItemUtils.getItemTypes().get("swords").contains(item)){
-			return true;
-		}
-		if(ItemUtils.getItemTypes().get("axes").contains(item)){
-			return true;
-		}
-		return false;
-	}
-
-	@Override
-	public boolean conflictsWith(CustomEnchantment ench) {
-		if(ench.getName().equalsIgnoreCase(getName())){
-			return true;
-		}
-		if(ench.getName().equalsIgnoreCase("sharpness")){
-			return true;
-		}
-		if(ench.getName().equalsIgnoreCase("smite")){
-			return true;
-		}
-		return false;
-	}
-
-	@Override
 	public String getName() {
 		return "bane_of_arthropods";
 	}
@@ -72,22 +36,30 @@ public class BaneOfArthropods extends CustomEnchantment{
 	public Enchantment getRelativeEnchantment() {
 		return Enchantment.DAMAGE_ARTHROPODS;
 	}
-	
+
 	@Override
-	public String[] getPage() {
-		String pageOne = "Name: " + getDisplayName() + StringUtils.LF + StringUtils.LF;
-		pageOne += "Description: Increases damage to \"arthropod\" mobs (spiders, cave spiders, silverfish and endermites)." + 
+	protected List<ItemType> getEnchantmentItemTypes() {
+		return Arrays.asList(ItemType.SWORDS);
+	}
+
+	@Override
+	protected List<ItemType> getAnvilItemTypes() {
+		return Arrays.asList(ItemType.SWORDS, ItemType.AXES);
+	}
+
+	@Override
+	protected List<CustomEnchantment> getConflictingEnchantments() {
+		return Arrays.asList(this, DefaultEnchantments.getCustomEnchantment(Enchantment.DAMAGE_ALL), 
+				DefaultEnchantments.getCustomEnchantment(Enchantment.DAMAGE_UNDEAD));
+	}
+
+	@Override
+	public String getDescription() {
+		return "Increases damage to \"arthropod\" mobs (spiders, cave spiders, silverfish and endermites)." + 
 				StringUtils.LF + 
-				"Each level separately adds 2.5 (hearts Ã— 1 1â?„4) extra damage to each hit, to \"arthropods\" only." + 
+				"Each level separately adds 2.5 (half heart) extra damage to each hit, to \"arthropods\" only." + 
 				StringUtils.LF + 
-				"The enchantment will also cause \"arthropods\" to have the Slowness IV effect when hit." + StringUtils.LF;
-		String pageTwo = "Max Level: " + getMaxLevel() + "."+ StringUtils.LF;
-		pageTwo += "Weight: " + getWeight() + "."+ StringUtils.LF;
-		pageTwo += "Start Level: " + getStartLevel() + "."+ StringUtils.LF;
-		pageTwo += "Enchantable Items: Swords, Books." + StringUtils.LF;
-		pageTwo += "Anvilable Items: Swords, Axes, Books." + StringUtils.LF;
-		pageTwo += "Treasure Enchantment: " + isTreasure() + ". " + StringUtils.LF;
-		return new String[] {pageOne, pageTwo};
+				"The enchantment will also cause \"arthropods\" to have the Slowness IV effect when hit.";
 	}
 
 }

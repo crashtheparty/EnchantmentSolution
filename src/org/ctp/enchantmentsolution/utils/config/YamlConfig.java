@@ -284,6 +284,14 @@ public class YamlConfig {
 		return info.getInt();
 	}
 	
+	public Integer getInteger(String path) {
+		YamlInfo info = getInfo(path);
+		if(info == null) {
+			return null;
+		}
+		return info.getInteger();
+	}
+	
 	public boolean getBoolean(String path) {
 		YamlInfo info = getInfo(path);
 		if(info == null) {
@@ -322,6 +330,14 @@ public class YamlConfig {
 			return def;
 		}
 		return info.getDouble();
+	}
+	
+	public Double getDoubleValue(String path) {
+		YamlInfo info = getInfo(path);
+		if(info == null) {
+			return null;
+		}
+		return info.getDoubleValue();
 	}
 
 	public List<String> getStringList(String path) {

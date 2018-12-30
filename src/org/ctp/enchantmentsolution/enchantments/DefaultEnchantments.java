@@ -2,8 +2,11 @@ package org.ctp.enchantmentsolution.enchantments;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.plugin.java.JavaPlugin;
+import org.ctp.enchantmentsolution.api.ApiEnchantmentWrapper;
 import org.ctp.enchantmentsolution.enchantments.custom.Angler;
 import org.ctp.enchantmentsolution.enchantments.custom.Beheading;
 import org.ctp.enchantmentsolution.enchantments.custom.Brine;
@@ -11,9 +14,11 @@ import org.ctp.enchantmentsolution.enchantments.custom.Drowned;
 import org.ctp.enchantmentsolution.enchantments.custom.ExpShare;
 import org.ctp.enchantmentsolution.enchantments.custom.FrequentFlyer;
 import org.ctp.enchantmentsolution.enchantments.custom.Fried;
+import org.ctp.enchantmentsolution.enchantments.custom.HeightPlusPlus;
 import org.ctp.enchantmentsolution.enchantments.custom.KnockUp;
 import org.ctp.enchantmentsolution.enchantments.custom.Life;
 import org.ctp.enchantmentsolution.enchantments.custom.MagmaWalker;
+import org.ctp.enchantmentsolution.enchantments.custom.NoRest;
 import org.ctp.enchantmentsolution.enchantments.custom.Sacrifice;
 import org.ctp.enchantmentsolution.enchantments.custom.ShockAspect;
 import org.ctp.enchantmentsolution.enchantments.custom.Smeltery;
@@ -22,7 +27,10 @@ import org.ctp.enchantmentsolution.enchantments.custom.SoulReaper;
 import org.ctp.enchantmentsolution.enchantments.custom.Soulbound;
 import org.ctp.enchantmentsolution.enchantments.custom.Tank;
 import org.ctp.enchantmentsolution.enchantments.custom.Telepathy;
+import org.ctp.enchantmentsolution.enchantments.custom.Unrest;
+import org.ctp.enchantmentsolution.enchantments.custom.VoidWalker;
 import org.ctp.enchantmentsolution.enchantments.custom.Warp;
+import org.ctp.enchantmentsolution.enchantments.custom.WidthPlusPlus;
 import org.ctp.enchantmentsolution.enchantments.vanilla.AquaAffinity;
 import org.ctp.enchantmentsolution.enchantments.vanilla.BaneOfArthropods;
 import org.ctp.enchantmentsolution.enchantments.vanilla.BlastProtection;
@@ -65,9 +73,11 @@ import org.ctp.enchantmentsolution.enchantments.wrappers.DrownedWrapper;
 import org.ctp.enchantmentsolution.enchantments.wrappers.ExpShareWrapper;
 import org.ctp.enchantmentsolution.enchantments.wrappers.FrequentFlyerWrapper;
 import org.ctp.enchantmentsolution.enchantments.wrappers.FriedWrapper;
+import org.ctp.enchantmentsolution.enchantments.wrappers.HeightPlusPlusWrapper;
 import org.ctp.enchantmentsolution.enchantments.wrappers.KnockUpWrapper;
 import org.ctp.enchantmentsolution.enchantments.wrappers.LifeWrapper;
 import org.ctp.enchantmentsolution.enchantments.wrappers.MagmaWalkerWrapper;
+import org.ctp.enchantmentsolution.enchantments.wrappers.NoRestWrapper;
 import org.ctp.enchantmentsolution.enchantments.wrappers.SacrificeWrapper;
 import org.ctp.enchantmentsolution.enchantments.wrappers.ShockAspectWrapper;
 import org.ctp.enchantmentsolution.enchantments.wrappers.SmelteryWrapper;
@@ -76,7 +86,11 @@ import org.ctp.enchantmentsolution.enchantments.wrappers.SoulReaperWrapper;
 import org.ctp.enchantmentsolution.enchantments.wrappers.SoulboundWrapper;
 import org.ctp.enchantmentsolution.enchantments.wrappers.TankWrapper;
 import org.ctp.enchantmentsolution.enchantments.wrappers.TelepathyWrapper;
+import org.ctp.enchantmentsolution.enchantments.wrappers.UnrestWrapper;
+import org.ctp.enchantmentsolution.enchantments.wrappers.VoidWalkerWrapper;
 import org.ctp.enchantmentsolution.enchantments.wrappers.WarpWrapper;
+import org.ctp.enchantmentsolution.enchantments.wrappers.WidthPlusPlusWrapper;
+import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.config.YamlConfig;
 import org.ctp.enchantmentsolution.utils.save.ConfigFiles;
 
@@ -102,6 +116,11 @@ public class DefaultEnchantments {
 	public static Enchantment TANK = new TankWrapper();
 	public static Enchantment BRINE = new BrineWrapper();
 	public static Enchantment DROWNED = new DrownedWrapper();
+	public static Enchantment UNREST = new UnrestWrapper();
+	public static Enchantment NO_REST = new NoRestWrapper();
+	public static Enchantment WIDTH_PLUS_PLUS = new WidthPlusPlusWrapper();
+	public static Enchantment HEIGHT_PLUS_PLUS = new HeightPlusPlusWrapper();
+	public static Enchantment VOID_WALKER = new VoidWalkerWrapper();
 
 	public static List<CustomEnchantment> getEnchantments() {
 		return ENCHANTMENTS;
@@ -129,7 +148,16 @@ public class DefaultEnchantments {
 				CustomEnchantment enchantment = ENCHANTMENTS.get(i);
 				YamlConfig advanced = ConfigFiles.getEnchantmentAdvancedConfig();
 				String namespace = "default_enchantments";
-				if (enchantment.getRelativeEnchantment() instanceof CustomEnchantmentWrapper) {
+				if (enchantment.getRelativeEnchantment() instanceof ApiEnchantmentWrapper) {
+					JavaPlugin plugin = ((ApiEnchantmentWrapper) enchantment.getRelativeEnchantment()).getPlugin();
+					if(plugin == null) {
+						ChatUtils.sendToConsole(Level.WARNING, "Enchantment " + enchantment.getName() + " (Display Name " + enchantment.getDisplayName() + ")"
+								+ " does not have a JavaPlugin set. Refusing to set.");
+						continue;
+					}
+					namespace = plugin.getName();
+					ENCHANTMENTS.get(i).setDisplayName(advanced.getString(namespace+"."+enchantment.getName()+".display_name"));
+				} else if (enchantment.getRelativeEnchantment() instanceof CustomEnchantmentWrapper) {
 					namespace = "custom_enchantments";
 					ENCHANTMENTS.get(i).setDisplayName(advanced.getString(namespace+"."+enchantment.getName()+".display_name"));
 				} else {
@@ -158,7 +186,28 @@ public class DefaultEnchantments {
 				ENCHANTMENTS.get(i).setCustom(constant, modifier, maxConstant, startLevel, maxLevel, weight);
 			} else {
 				CustomEnchantment enchantment = ENCHANTMENTS.get(i);
-				if (enchantment.getRelativeEnchantment() instanceof CustomEnchantmentWrapper) {
+				if (enchantment.getRelativeEnchantment() instanceof ApiEnchantmentWrapper) {
+					YamlConfig config = ConfigFiles.getEnchantmentConfig();
+					JavaPlugin plugin = ((ApiEnchantmentWrapper) enchantment.getRelativeEnchantment()).getPlugin();
+					if(plugin == null) {
+						ChatUtils.sendToConsole(Level.WARNING, "Enchantment " + enchantment.getName() + " (Display Name " + enchantment.getDisplayName() + ")"
+								+ " does not have a JavaPlugin set. Refusing to set.");
+						continue;
+					}
+					String namespace = plugin.getName();
+					if(Enchantments.addEnchantment(enchantment)) {
+						if (config.getBoolean(namespace+"."+enchantment.getName()+".enabled")) {
+							ENCHANTMENTS.get(i).setEnabled(true);
+						} else {
+							ENCHANTMENTS.get(i).setEnabled(false);
+						}
+					} else {
+						ENCHANTMENTS.get(i).setEnabled(false);
+					}
+					if (ConfigFiles.getEnchantmentConfig().getBoolean(namespace+"."+enchantment.getName()+".treasure")) {
+						ENCHANTMENTS.get(i).setTreasure(true);
+					}
+				} else if (enchantment.getRelativeEnchantment() instanceof CustomEnchantmentWrapper) {
 					YamlConfig config = ConfigFiles.getEnchantmentConfig();
 					if(Enchantments.addEnchantment(enchantment)) {
 						if (config.getBoolean("custom_enchantments."+enchantment.getName()+".enabled")) {
@@ -253,5 +302,10 @@ public class DefaultEnchantments {
 		DefaultEnchantments.addDefaultEnchantment(new Brine());
 		DefaultEnchantments.addDefaultEnchantment(new MagmaWalker());
 		DefaultEnchantments.addDefaultEnchantment(new Drowned());
+		DefaultEnchantments.addDefaultEnchantment(new Unrest());
+		DefaultEnchantments.addDefaultEnchantment(new NoRest());
+		DefaultEnchantments.addDefaultEnchantment(new WidthPlusPlus());
+		DefaultEnchantments.addDefaultEnchantment(new HeightPlusPlus());
+		DefaultEnchantments.addDefaultEnchantment(new VoidWalker());
 	}
 }

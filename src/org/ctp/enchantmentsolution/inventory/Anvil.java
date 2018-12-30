@@ -18,10 +18,10 @@ import org.ctp.enchantmentsolution.enchantments.Enchantments;
 import org.ctp.enchantmentsolution.nms.AnvilNMS;
 import org.ctp.enchantmentsolution.utils.AnvilUtils;
 import org.ctp.enchantmentsolution.utils.AnvilUtils.RepairType;
+import org.ctp.enchantmentsolution.utils.items.DamageUtils;
+import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 import org.ctp.enchantmentsolution.utils.save.ConfigFiles;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
-import org.ctp.enchantmentsolution.utils.DamageUtils;
-import org.ctp.enchantmentsolution.utils.ItemUtils;
 
 public class Anvil implements InventoryData{
 

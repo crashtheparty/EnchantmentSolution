@@ -8,7 +8,9 @@ import java.util.logging.Level;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
+import org.ctp.enchantmentsolution.api.ApiEnchantmentWrapper;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.PlayerLevels;
@@ -22,9 +24,9 @@ import org.ctp.enchantmentsolution.utils.config.YamlInfo;
 
 public class ConfigFiles {
 
-	private static File MAGMA_WALKER_FILE, MAIN_FILE, FISHING_FILE, LANGUAGE_FILE, ENCHANTMENT_FILE, ENCHANTMENT_ADVANCED_FILE;
+	private static File WALKER_FILE, MAIN_FILE, FISHING_FILE, LANGUAGE_FILE, ENCHANTMENT_FILE, ENCHANTMENT_ADVANCED_FILE;
 	private static File DATA_FOLDER = EnchantmentSolution.PLUGIN.getDataFolder();
-	private static YamlConfig MAGMA_WALKER;
+	private static YamlConfig WALKER_CONFIG;
 	private static YamlConfigBackup CONFIG, FISHING, LANGUAGE, ENCHANTMENT, ENCHANTMENT_ADVANCED;
 	
 	public static YamlConfigBackup getDefaultConfig() {
@@ -35,8 +37,8 @@ public class ConfigFiles {
 		return FISHING;
 	}
 	
-	public static YamlConfig getMagmaWalkerConfig() {
-		return MAGMA_WALKER;
+	public static YamlConfig getWalkerConfig() {
+		return WALKER_CONFIG;
 	}
 	
 	public static YamlConfigBackup getLanguageFile() {
@@ -61,11 +63,11 @@ public class ConfigFiles {
 			if (!extras.exists()) {
 				extras.mkdirs();
 			}
-			MAGMA_WALKER_FILE = new File(dataFolder + "/extras/magma-walker.yml");
-			if (!MAGMA_WALKER_FILE.exists()) {
-				MAGMA_WALKER_FILE.createNewFile();
+			WALKER_FILE = new File(dataFolder + "/extras/walker-enchantments.yml");
+			if (!WALKER_FILE.exists()) {
+				WALKER_FILE.createNewFile();
 			}
-			YamlConfiguration.loadConfiguration(MAGMA_WALKER_FILE);
+			YamlConfiguration.loadConfiguration(WALKER_FILE);
 			magmaWalker();
 		} catch (final Exception e) {
 			e.printStackTrace();
@@ -219,7 +221,16 @@ public class ConfigFiles {
 		ENCHANTMENT.getFromConfig();
 		
 		for(CustomEnchantment enchant: DefaultEnchantments.getEnchantments()) {
-			if (enchant.getRelativeEnchantment() instanceof CustomEnchantmentWrapper) {
+			if (enchant.getRelativeEnchantment() instanceof ApiEnchantmentWrapper) {
+				JavaPlugin plugin = ((ApiEnchantmentWrapper) enchant.getRelativeEnchantment()).getPlugin();
+				if(plugin == null) {
+					ChatUtils.sendToConsole(Level.WARNING, "Enchantment " + enchant.getName() + " (Display Name " + enchant.getDisplayName() + ")"
+							+ " does not have a JavaPlugin set. Refusing to set config defaults.");
+					continue;
+				}
+				ENCHANTMENT.addDefault(plugin.getName() + "." + enchant.getName() + ".enabled", true);
+				ENCHANTMENT.addDefault(plugin.getName() + "." + enchant.getName() + ".treasure", enchant.isTreasure());
+			} else if (enchant.getRelativeEnchantment() instanceof CustomEnchantmentWrapper) {
 				ENCHANTMENT.addDefault("custom_enchantments." + enchant.getName() + ".enabled", true);
 				ENCHANTMENT.addDefault("custom_enchantments." + enchant.getName() + ".treasure", enchant.isTreasure());
 			}
@@ -247,7 +258,25 @@ public class ConfigFiles {
 				"Override permission: enchantmentsolution.permissions.ignore"});
 		
 		for(CustomEnchantment enchant: DefaultEnchantments.getEnchantments()) {
-			if (enchant.getRelativeEnchantment() instanceof CustomEnchantmentWrapper) {
+			if (enchant.getRelativeEnchantment() instanceof ApiEnchantmentWrapper) {
+				JavaPlugin plugin = ((ApiEnchantmentWrapper) enchant.getRelativeEnchantment()).getPlugin();
+				if(plugin == null) {
+					ChatUtils.sendToConsole(Level.WARNING, "Enchantment " + enchant.getName() + " (Display Name " + enchant.getDisplayName() + ")"
+							+ " does not have a JavaPlugin set. Refusing to set config defaults.");
+					continue;
+				}
+				ENCHANTMENT_ADVANCED.addDefault(plugin.getName() + "." + enchant.getName() + ".enabled", true);
+				ENCHANTMENT_ADVANCED.addDefault(plugin.getName() + "." + enchant.getName() + ".treasure", enchant.isTreasure());
+				ENCHANTMENT_ADVANCED.addDefault(plugin.getName() + "." + enchant.getName() + ".weight", enchant.getDefaultWeightName());
+				ENCHANTMENT_ADVANCED.addEnum(plugin.getName() + "." + enchant.getName() + ".weight", Arrays.asList(Weight.VERY_RARE.getName(), 
+						Weight.RARE.getName(), Weight.UNCOMMON.getName(), Weight.COMMON.getName(), Weight.NULL.getName()));
+				ENCHANTMENT_ADVANCED.addDefault(plugin.getName() + "." + enchant.getName() + ".display_name", enchant.getDefaultDisplayName());
+				ENCHANTMENT_ADVANCED.addDefault(plugin.getName() + "." + enchant.getName() + ".enchantability_constant", enchant.getDefaultFiftyConstant());
+				ENCHANTMENT_ADVANCED.addDefault(plugin.getName() + "." + enchant.getName() + ".enchantability_modifier", enchant.getDefaultFiftyModifier());
+				ENCHANTMENT_ADVANCED.addDefault(plugin.getName() + "." + enchant.getName() + ".enchantability_max_constant", enchant.getDefaultFiftyMaxConstant());
+				ENCHANTMENT_ADVANCED.addDefault(plugin.getName() + "." + enchant.getName() + ".enchantability_start_level", enchant.getDefaultFiftyStartLevel());
+				ENCHANTMENT_ADVANCED.addDefault(plugin.getName() + "." + enchant.getName() + ".enchantability_max_level", enchant.getDefaultFiftyMaxLevel());
+			} else if (enchant.getRelativeEnchantment() instanceof CustomEnchantmentWrapper) {
 				ENCHANTMENT_ADVANCED.addDefault("custom_enchantments." + enchant.getName() + ".enabled", true);
 				ENCHANTMENT_ADVANCED.addDefault("custom_enchantments." + enchant.getName() + ".treasure", enchant.isTreasure());
 				ENCHANTMENT_ADVANCED.addDefault("custom_enchantments." + enchant.getName() + ".weight", enchant.getDefaultWeightName());
@@ -277,9 +306,51 @@ public class ConfigFiles {
 		ChatUtils.sendToConsole(Level.INFO, "Advanced enchantment config initialized...");
 	}
 	
+	public static void updateExternalEnchantments(JavaPlugin plugin) {
+		for(CustomEnchantment enchant: DefaultEnchantments.getEnchantments()) {
+			if (enchant.getRelativeEnchantment() instanceof ApiEnchantmentWrapper) {
+				if(plugin.equals(((ApiEnchantmentWrapper) enchant.getRelativeEnchantment()).getPlugin())) {
+					ENCHANTMENT.addDefault(plugin.getName() + "." + enchant.getName() + ".enabled", true);
+					ENCHANTMENT.addDefault(plugin.getName() + "." + enchant.getName() + ".treasure", enchant.isTreasure());
+					ENCHANTMENT_ADVANCED.addDefault(plugin.getName() + "." + enchant.getName() + ".enabled", true);
+					ENCHANTMENT_ADVANCED.addDefault(plugin.getName() + "." + enchant.getName() + ".treasure", enchant.isTreasure());
+					ENCHANTMENT_ADVANCED.addDefault(plugin.getName() + "." + enchant.getName() + ".weight", enchant.getDefaultWeightName());
+					ENCHANTMENT_ADVANCED.addEnum(plugin.getName() + "." + enchant.getName() + ".weight", Arrays.asList(Weight.VERY_RARE.getName(), 
+							Weight.RARE.getName(), Weight.UNCOMMON.getName(), Weight.COMMON.getName(), Weight.NULL.getName()));
+					ENCHANTMENT_ADVANCED.addDefault(plugin.getName() + "." + enchant.getName() + ".display_name", enchant.getDefaultDisplayName());
+					ENCHANTMENT_ADVANCED.addDefault(plugin.getName() + "." + enchant.getName() + ".enchantability_constant", enchant.getDefaultFiftyConstant());
+					ENCHANTMENT_ADVANCED.addDefault(plugin.getName() + "." + enchant.getName() + ".enchantability_modifier", enchant.getDefaultFiftyModifier());
+					ENCHANTMENT_ADVANCED.addDefault(plugin.getName() + "." + enchant.getName() + ".enchantability_max_constant", enchant.getDefaultFiftyMaxConstant());
+					ENCHANTMENT_ADVANCED.addDefault(plugin.getName() + "." + enchant.getName() + ".enchantability_start_level", enchant.getDefaultFiftyStartLevel());
+					ENCHANTMENT_ADVANCED.addDefault(plugin.getName() + "." + enchant.getName() + ".enchantability_max_level", enchant.getDefaultFiftyMaxLevel());
+				}
+			}
+		}
+		
+		ENCHANTMENT.saveConfig();
+		ENCHANTMENT_ADVANCED.saveConfig();
+	}
+	
 	public static void updateEnchantments() {
 		for(CustomEnchantment enchant: DefaultEnchantments.getEnchantments()) {
-			if (enchant.getRelativeEnchantment() instanceof CustomEnchantmentWrapper) {
+			if (enchant.getRelativeEnchantment() instanceof ApiEnchantmentWrapper) {
+				JavaPlugin plugin = ((ApiEnchantmentWrapper) enchant.getRelativeEnchantment()).getPlugin();
+				if(plugin == null) {
+					ChatUtils.sendToConsole(Level.WARNING, "Enchantment " + enchant.getName() + " (Display Name " + enchant.getDisplayName() + ")"
+							+ " does not have a JavaPlugin set. Refusing to set config defaults.");
+					continue;
+				}
+				String displayName = ENCHANTMENT.getString(plugin.getName() + "." + enchant.getName() + ".display_name");
+				if(displayName != null) {
+					ENCHANTMENT_ADVANCED.set(plugin.getName() + "." + enchant.getName() + ".display_name", displayName);
+					enchant.setDisplayName(displayName);
+					ENCHANTMENT.removeKey(plugin.getName() + "." + enchant.getName() + ".display_name");
+				}
+				for(int i = 0; i < enchant.getMaxLevel(); i++) {
+					ENCHANTMENT_ADVANCED.addDefault(plugin.getName() + "." + enchant.getName() + ".permissions.table.level" + (i + 1), false);
+					ENCHANTMENT_ADVANCED.addDefault(plugin.getName() + "." + enchant.getName() + ".permissions.anvil.level" + (i + 1), false);
+				}
+			} else if (enchant.getRelativeEnchantment() instanceof CustomEnchantmentWrapper) {
 				String displayName = ENCHANTMENT.getString("custom_enchantments." + enchant.getName() + ".display_name");
 				if(displayName != null) {
 					ENCHANTMENT_ADVANCED.set("custom_enchantments." + enchant.getName() + ".display_name", displayName);
@@ -309,13 +380,13 @@ public class ConfigFiles {
 	}
 	
 	private static void magmaWalker() {
-		MAGMA_WALKER = new YamlConfig(MAGMA_WALKER_FILE, new String[0]);
+		WALKER_CONFIG = new YamlConfig(WALKER_FILE, new String[0]);
 		
-		MAGMA_WALKER.getFromConfig();
+		WALKER_CONFIG.getFromConfig();
 		
-		MAGMA_WALKER.saveConfig();
+		WALKER_CONFIG.saveConfig();
 
-		ChatUtils.sendToConsole(Level.INFO, "Magma Walker file initialized...");
+		ChatUtils.sendToConsole(Level.INFO, "Walker enchantment file initialized...");
 	}
 	
 	private static void mcMMOFishing() {
@@ -509,6 +580,17 @@ public class ConfigFiles {
 
 		LANGUAGE.addDefault("items.stole-soulbound", ("You have stolen the player's soulbound items!").replace("§", "&"));
 		LANGUAGE.addDefault("items.soulbound-stolen", ("Your soulbound items have been stolen!").replace("§", "&"));
+		
+		LANGUAGE.addDefault("enchantment.name", (ChatColor.GOLD + "Display Name: " + ChatColor.WHITE).replace("§", "&"));
+		LANGUAGE.addDefault("enchantment.description", (ChatColor.GOLD + "Description: " + ChatColor.WHITE).replace("§", "&"));
+		LANGUAGE.addDefault("enchantment.max-level", (ChatColor.GOLD + "Max Level: " + ChatColor.WHITE).replace("§", "&"));
+		LANGUAGE.addDefault("enchantment.weight", (ChatColor.GOLD + "Weight: " + ChatColor.WHITE).replace("§", "&"));
+		LANGUAGE.addDefault("enchantment.start-level", (ChatColor.GOLD + "Start Level: " + ChatColor.WHITE).replace("§", "&"));
+		LANGUAGE.addDefault("enchantment.enchantable-items", (ChatColor.GOLD + "Enchantable Items: " + ChatColor.WHITE).replace("§", "&"));
+		LANGUAGE.addDefault("enchantment.anvilable-items", (ChatColor.GOLD + "Anvilable Items: " + ChatColor.WHITE).replace("§", "&"));
+		LANGUAGE.addDefault("enchantment.conflicting-enchantments", (ChatColor.GOLD + "Conflicting Enchantments: " + ChatColor.WHITE).replace("§", "&"));
+		LANGUAGE.addDefault("enchantment.enabled", (ChatColor.GOLD + "Enchantment Enabled: " + ChatColor.WHITE).replace("§", "&"));
+		LANGUAGE.addDefault("enchantment.treasure", (ChatColor.GOLD + "Treasure Enchantment: " + ChatColor.WHITE).replace("§", "&"));
 		
 		LANGUAGE.saveConfig();
 		if(LANGUAGE.getString("commands.reload").equals("Config files have been reloaded. Please note that the enchantments.yml file requires a server restart to take effect.")) {

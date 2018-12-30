@@ -2,7 +2,6 @@ package org.ctp.enchantmentsolution.enchantments;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -16,9 +15,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.ctp.enchantmentsolution.api.EnchantmentLevel;
+import org.ctp.enchantmentsolution.api.ItemType;
 import org.ctp.enchantmentsolution.enchantments.wrappers.CustomEnchantmentWrapper;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
-import org.ctp.enchantmentsolution.utils.ItemUtils;
 import org.ctp.enchantmentsolution.utils.RomanNumerals;
 import org.ctp.enchantmentsolution.utils.save.ConfigFiles;
 
@@ -95,7 +95,7 @@ public class Enchantments {
 				return false;
 			}
 		}
-		if (ItemUtils.getItemTypes().get("all").contains(item.getType())) {
+		if (ItemType.ALL.getItemTypes().contains(item.getType())) {
 			return true;
 		}
 		if(item.getType().equals(Material.BOOK)){
@@ -204,35 +204,28 @@ public class Enchantments {
 
 	public static int getEnchantability(Material material, int level, int lapis) {
 		int enchantability = 1;
-		HashMap<String, List<Material>> itemTypes = ItemUtils.getItemTypes();
-		if (itemTypes.get("wood_tools").contains(material)) {
+		if (ItemType.WOODEN_TOOLS.getItemTypes().contains(material)) {
 			enchantability = 15;
-		} else if (itemTypes.get("stone_tools")
+		} else if (ItemType.STONE_TOOLS.getItemTypes()
 				.contains(material)) {
 			enchantability = 5;
-		} else if (itemTypes.get("gold_tools")
+		} else if (ItemType.GOLDEN_TOOLS.getItemTypes()
 				.contains(material)) {
 			enchantability = 22;
-		} else if (itemTypes.get("iron_tools")
+		} else if (ItemType.IRON_TOOLS.getItemTypes()
 				.contains(material)) {
 			enchantability = 14;
-		} else if (itemTypes.get("diamond_tools")
-				.contains(material)) {
+		} else if (ItemType.DIAMOND_TOOLS.getItemTypes().contains(material)) {
 			enchantability = 10;
-		} else if (itemTypes.get("leather_armor")
-				.contains(material)) {
+		} else if (ItemType.LEATHER_ARMOR.getItemTypes().contains(material)) {
 			enchantability = 15;
-		} else if (itemTypes.get("gold_armor")
-				.contains(material)) {
+		} else if (ItemType.GOLDEN_ARMOR.getItemTypes().contains(material)) {
 			enchantability = 25;
-		} else if (itemTypes.get("chain_armor")
-				.contains(material)) {
+		} else if (ItemType.CHAINMAIL_ARMOR.getItemTypes().contains(material)) {
 			enchantability = 12;
-		} else if (itemTypes.get("iron_armor")
-				.contains(material)) {
+		} else if (ItemType.IRON_ARMOR.getItemTypes().contains(material)) {
 			enchantability = 9;
-		} else if (itemTypes.get("diamond_armor")
-				.contains(material)) {
+		} else if (ItemType.DIAMOND_ARMOR.getItemTypes().contains(material)) {
 			enchantability = 10;
 		}
 

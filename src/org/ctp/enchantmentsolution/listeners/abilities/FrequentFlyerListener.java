@@ -17,7 +17,7 @@ import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
-import org.ctp.enchantmentsolution.utils.DamageUtils;
+import org.ctp.enchantmentsolution.utils.items.DamageUtils;
 
 public class FrequentFlyerListener implements Listener, Runnable{
 	
@@ -90,7 +90,6 @@ public class FrequentFlyerListener implements Listener, Runnable{
 			}
 		}
 	}
-	
 	protected class FrequentFlyerPlayer{
 		
 		private Player player;
@@ -115,6 +114,7 @@ public class FrequentFlyerListener implements Listener, Runnable{
 		
 		public void setElytra(ItemStack elytra) {
 			boolean reset = false;
+			
 			if(elytra != null && previousElytra != null && elytra.toString().equalsIgnoreCase(previousElytra.toString())) {
 				reset = true;
 			}
@@ -147,10 +147,13 @@ public class FrequentFlyerListener implements Listener, Runnable{
 		}
 
 		public void setCanFly(boolean canFly) {
-			this.canFly = canFly;
-			player.setAllowFlight(this.canFly || player.getGameMode() == null || player.getGameMode().equals(GameMode.CREATIVE) || player.getGameMode().equals(GameMode.SPECTATOR));
-			if(player.isFlying() && !this.canFly) {
-				player.setFlying(false);
+			this.canFly = canFly || player.getGameMode() == null || player.getGameMode().equals(GameMode.CREATIVE) 
+					|| player.getGameMode().equals(GameMode.SPECTATOR);
+			if(this.canFly || !player.hasPermission("enchantmentsolution.enable-flight")) {
+				player.setAllowFlight(this.canFly);
+				if(player.isFlying() && !this.canFly) {
+					player.setFlying(false);
+				}
 			}
 		}
 

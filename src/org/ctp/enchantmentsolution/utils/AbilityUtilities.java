@@ -12,6 +12,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
+import org.ctp.enchantmentsolution.utils.items.ItemBreakType;
 
 public class AbilityUtilities {
 
@@ -323,15 +324,16 @@ public class AbilityUtilities {
 	public static ItemStack getSmelteryItem(Block block, ItemStack item) {
 		Material material = null;
 		boolean fortune = false;
+		ItemBreakType type = ItemBreakType.getType(item.getType());
 		switch(block.getType()) {
 		case IRON_ORE:
-			if(Arrays.asList(Material.IRON_PICKAXE, Material.DIAMOND_PICKAXE, Material.STONE_PICKAXE).contains(item.getType())) {
+			if(type != null && type.getBreakTypes().contains(block.getType())) {
 				material = Material.IRON_INGOT;
 				fortune = true;
 			}
 			break;
 		case GOLD_ORE:
-			if(Arrays.asList(Material.IRON_PICKAXE, Material.DIAMOND_PICKAXE).contains(item.getType())) {
+			if(type != null && type.getBreakTypes().contains(block.getType())) {
 				material = Material.GOLD_INGOT;
 				fortune = true;
 			}
@@ -341,17 +343,17 @@ public class AbilityUtilities {
 			break;
 		case COBBLESTONE:
 		case STONE:
-			if(Arrays.asList(Material.IRON_PICKAXE, Material.DIAMOND_PICKAXE, Material.GOLDEN_PICKAXE, Material.STONE_PICKAXE, Material.WOODEN_PICKAXE).contains(item.getType())) {
+			if(type != null && type.getBreakTypes().contains(block.getType())) {
 				material = Material.STONE;
 			}
 			break;
 		case STONE_BRICKS:
-			if(Arrays.asList(Material.IRON_PICKAXE, Material.DIAMOND_PICKAXE, Material.GOLDEN_PICKAXE, Material.STONE_PICKAXE, Material.WOODEN_PICKAXE).contains(item.getType())) {
+			if(type != null && type.getBreakTypes().contains(block.getType())) {
 				material = Material.CRACKED_STONE_BRICKS;
 			}
 			break;
 		case NETHERRACK:
-			if(Arrays.asList(Material.IRON_PICKAXE, Material.DIAMOND_PICKAXE, Material.GOLDEN_PICKAXE, Material.STONE_PICKAXE, Material.WOODEN_PICKAXE).contains(item.getType())) {
+			if(type != null && type.getBreakTypes().contains(block.getType())) {
 				material = Material.NETHER_BRICK;
 			}
 			break;
@@ -394,25 +396,26 @@ public class AbilityUtilities {
 	}
 	
 	public static ItemStack getSilkTouchItem(Block block, ItemStack item){
+		ItemBreakType type = ItemBreakType.getType(item.getType());
 		switch(block.getType()) {
 		case COAL_ORE:
 		case NETHER_QUARTZ_ORE:
-			if(Arrays.asList(Material.IRON_PICKAXE, Material.DIAMOND_PICKAXE, Material.STONE_PICKAXE, Material.WOODEN_PICKAXE, Material.GOLDEN_PICKAXE).contains(item.getType())) {
-				return new ItemStack(block.getType());
-			}
-			break;
 		case STONE:
-			if(Arrays.asList(Material.IRON_PICKAXE, Material.DIAMOND_PICKAXE, Material.STONE_PICKAXE, Material.WOODEN_PICKAXE, Material.GOLDEN_PICKAXE).contains(item.getType())) {
+		case LAPIS_ORE:
+		case EMERALD_ORE:
+		case DIAMOND_ORE:
+		case REDSTONE_ORE:
+			if(type != null && type.getBreakTypes().contains(block.getType())) {
 				return new ItemStack(block.getType());
 			}
 			break;
 		case INFESTED_STONE:
-			if(Arrays.asList(Material.IRON_PICKAXE, Material.DIAMOND_PICKAXE, Material.STONE_PICKAXE, Material.WOODEN_PICKAXE, Material.GOLDEN_PICKAXE).contains(item.getType())) {
+			if(type != null && type.getBreakTypes().contains(block.getType())) {
 				return new ItemStack(Material.STONE);
 			}
 			return null;
 		case INFESTED_COBBLESTONE:
-			if(Arrays.asList(Material.IRON_PICKAXE, Material.DIAMOND_PICKAXE, Material.STONE_PICKAXE, Material.WOODEN_PICKAXE, Material.GOLDEN_PICKAXE).contains(item.getType())) {
+			if(type != null && type.getBreakTypes().contains(block.getType())) {
 				if(Enchantments.hasEnchantment(item, DefaultEnchantments.SMELTERY)) {
 					return new ItemStack(Material.STONE);
 				}
@@ -420,7 +423,7 @@ public class AbilityUtilities {
 			}
 			return null;
 		case INFESTED_STONE_BRICKS:
-			if(Arrays.asList(Material.IRON_PICKAXE, Material.DIAMOND_PICKAXE, Material.STONE_PICKAXE, Material.WOODEN_PICKAXE, Material.GOLDEN_PICKAXE).contains(item.getType())) {
+			if(type != null && type.getBreakTypes().contains(block.getType())) {
 				if(Enchantments.hasEnchantment(item, DefaultEnchantments.SMELTERY)) {
 					return new ItemStack(Material.CRACKED_STONE_BRICKS);
 				}
@@ -428,26 +431,10 @@ public class AbilityUtilities {
 			}
 			return null;
 		case INFESTED_CRACKED_STONE_BRICKS:
-			if(Arrays.asList(Material.IRON_PICKAXE, Material.DIAMOND_PICKAXE, Material.STONE_PICKAXE, Material.WOODEN_PICKAXE, Material.GOLDEN_PICKAXE).contains(item.getType())) {
+			if(type != null && type.getBreakTypes().contains(block.getType())) {
 				return new ItemStack(Material.CRACKED_STONE_BRICKS);
 			}
 			return null;
-		case LAPIS_ORE:
-			if(Arrays.asList(Material.IRON_PICKAXE, Material.DIAMOND_PICKAXE, Material.STONE_PICKAXE).contains(item.getType())) {
-				return new ItemStack(block.getType());
-			}
-			break;
-		case EMERALD_ORE:
-		case DIAMOND_ORE:
-			if(Arrays.asList(Material.IRON_PICKAXE, Material.DIAMOND_PICKAXE).contains(item.getType())) {
-				return new ItemStack(block.getType());
-			}
-			break;
-		case REDSTONE_ORE:
-			if(Arrays.asList(Material.IRON_PICKAXE, Material.DIAMOND_PICKAXE).contains(item.getType())) {
-				return new ItemStack(Material.REDSTONE_ORE);
-			}
-			break;
 		case BOOKSHELF:
 		case CLAY:
 		case ENDER_CHEST:
