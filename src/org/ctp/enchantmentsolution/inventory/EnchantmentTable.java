@@ -19,7 +19,9 @@ import org.ctp.enchantmentsolution.api.EnchantmentLevel;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
 import org.ctp.enchantmentsolution.enchantments.PlayerLevels;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
+import org.ctp.enchantmentsolution.utils.ItemSerialization;
 import org.ctp.enchantmentsolution.utils.RomanNumerals;
+import org.ctp.enchantmentsolution.utils.save.ConfigFiles;
 import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 
 public class EnchantmentTable implements InventoryData {
@@ -27,6 +29,7 @@ public class EnchantmentTable implements InventoryData {
 	private Player player;
 	private Inventory inventory;
 	private List<ItemStack> playerItems;
+	private ItemStack lapisStack;
 	private Block block;
 
 	public EnchantmentTable(Player player, Block block) {
@@ -200,10 +203,16 @@ public class EnchantmentTable implements InventoryData {
 						
 						String lapisString = ChatUtils.getMessage(loreCodes, "table.lapis-cost-okay");
 						int numLapis = 0;
-						for (int j = 0; j < player.getInventory().getSize(); j++) {
-							ItemStack checkLapis = player.getInventory().getItem(j);
-							if(checkLapis != null && checkLapis.getType().equals(Material.LAPIS_LAZULI)){
-								numLapis += checkLapis.getAmount();
+						if(ConfigFiles.useLapisInTable()) {
+							if(lapisStack != null) {
+								numLapis = lapisStack.getAmount();
+							}
+						} else {
+							for (int j = 0; j < player.getInventory().getSize(); j++) {
+								ItemStack checkLapis = player.getInventory().getItem(j);
+								if(checkLapis != null && checkLapis.getType().equals(Material.LAPIS_LAZULI)){
+									numLapis += checkLapis.getAmount();
+								}
 							}
 						}
 						if (numLapis < (extra - 2)
@@ -256,6 +265,20 @@ public class EnchantmentTable implements InventoryData {
 				inv.setItem(i, mirror);
 			}
 		}
+		
+		if(ConfigFiles.useLapisInTable()) {
+			if(lapisStack == null) {
+				ItemStack blueMirror = new ItemStack(Material.BLUE_STAINED_GLASS_PANE);
+				ItemMeta blueMirrorMeta = blueMirror.getItemMeta();
+				blueMirrorMeta.setDisplayName(ChatUtils.getMessage(getCodes(), "table.blue-mirror"));
+				blueMirrorMeta.setLore(ChatUtils.getMessages(getCodes(), "table.blue-mirror-lore"));
+				blueMirror.setItemMeta(blueMirrorMeta);
+				inv.setItem(10, blueMirror);
+			} else {
+				inv.setItem(10, lapisStack);
+			}
+		}
+		
 		inventory = inv;
 		player.openInventory(inv);
 	}
@@ -270,6 +293,47 @@ public class EnchantmentTable implements InventoryData {
 
 	public Inventory getInventory() {
 		return inventory;
+	}
+	
+	public ItemStack addToLapisStack(ItemStack item) {
+		if(ConfigFiles.useLapisInTable()) {
+			ItemStack clone = item.clone();
+			if(lapisStack == null) {
+				lapisStack = item;
+				return new ItemStack(Material.AIR);
+			}
+			if(ItemSerialization.itemToData(lapisStack).equals(ItemSerialization.itemToData(clone))) {
+				if(lapisStack.getAmount() < lapisStack.getType().getMaxStackSize()) {
+					if(lapisStack.getAmount() + clone.getAmount() > lapisStack.getType().getMaxStackSize()) {
+						clone.setAmount(lapisStack.getAmount() + clone.getAmount() - lapisStack.getType().getMaxStackSize());
+						lapisStack.setAmount(lapisStack.getType().getMaxStackSize());
+					} else {
+						clone = new ItemStack(Material.AIR);
+						lapisStack.setAmount(lapisStack.getAmount() + clone.getAmount());
+					}
+				}
+			}
+			return clone;
+		}
+		return item;
+	}
+	
+	public ItemStack removeFromLapisStack(int amount) {
+		if(lapisStack == null) return null;
+		ItemStack clone = lapisStack.clone();
+		if(clone.getAmount() > amount) {
+			lapisStack.setAmount(clone.getAmount() - amount);
+		} else {
+			lapisStack = null;
+		}
+		return clone;
+	}
+	
+	public ItemStack removeFromLapisStack() {
+		if(lapisStack == null) return null;
+		ItemStack clone = lapisStack.clone();
+		lapisStack = null;
+		return clone;
 	}
 
 	public boolean addItem(ItemStack item) {
@@ -318,16 +382,20 @@ public class EnchantmentTable implements InventoryData {
 		if (player.getGameMode().equals(GameMode.SURVIVAL) || player.getGameMode().equals(GameMode.ADVENTURE)) {
 			player.setLevel(player.getLevel() - level - 1);
 			int remove = level + 1;
-			for(int i = 0; i < player.getInventory().getSize(); i++) {
-				if(remove == 0) break;
-				ItemStack item = player.getInventory().getItem(i);
-				if(item != null && item.getType().equals(Material.LAPIS_LAZULI)) {
-					if(item.getAmount() - remove <= 0) {
-						remove -= item.getAmount();
-						player.getInventory().setItem(i, new ItemStack(Material.AIR));
-					} else {
-						item.setAmount(item.getAmount() - remove);
-						break;
+			if(ConfigFiles.useLapisInTable()) {
+				removeFromLapisStack(remove);
+			} else {
+				for(int i = 0; i < player.getInventory().getSize(); i++) {
+					if(remove == 0) break;
+					ItemStack item = player.getInventory().getItem(i);
+					if(item != null && item.getType().equals(Material.LAPIS_LAZULI)) {
+						if(item.getAmount() - remove <= 0) {
+							remove -= item.getAmount();
+							player.getInventory().setItem(i, new ItemStack(Material.AIR));
+						} else {
+							item.setAmount(item.getAmount() - remove);
+							break;
+						}
 					}
 				}
 			}
@@ -352,6 +420,9 @@ public class EnchantmentTable implements InventoryData {
 	public void close(boolean external) {
 		for(ItemStack item : getItems()){
 			ItemUtils.giveItemToPlayer(player, item, player.getLocation());
+		}
+		if(lapisStack != null) {
+			ItemUtils.giveItemToPlayer(player, lapisStack, player.getLocation());
 		}
 		if(!external) {
 			player.closeInventory();

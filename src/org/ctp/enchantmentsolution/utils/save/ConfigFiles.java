@@ -192,6 +192,7 @@ public class ConfigFiles {
 		
 		CONFIG.addDefault("starter", (ChatColor.DARK_GRAY + "[" + ChatColor.LIGHT_PURPLE + "Enchantment Solution" + ChatColor.DARK_GRAY + "]").replace(ChatColor.COLOR_CHAR, '&'), new String[] {"What to display in front of messages"});
 		CONFIG.addDefault("max_enchantments", 0, new String[] {"Max enchantments on each item. 0 allows infinite"});
+		CONFIG.addDefault("lapis_in_table", true, new String[] {"Lapis must be placed in the enchantment table before items can be enchanted."});
 		CONFIG.addDefault("level_divisor", 4, new String[] {"Greater numbers allow more anvil uses"});
 		CONFIG.addDefault("level_50_enchants", true, new String[] {"Allow enchantments up to level 50", "- To make this easier, you can try the XpBank plugin: https://www.spigotmc.org/resources/xpbank.59580/"});
 		CONFIG.addDefault("disable_enchant_method", "visible", new String[] {"How disabling an enchantment in enchantments.yml or enchantments_advanced.yml will work.", 
@@ -540,6 +541,9 @@ public class ConfigFiles {
 		LANGUAGE.addDefault("table.name", (ChatColor.BLUE + "Enchantment Table").replace("§", "&"));
 		LANGUAGE.addDefault("table.black-mirror", (ChatColor.WHITE + "").replace("§", "&"));
 		LANGUAGE.addDefault("table.red-mirror", (ChatColor.WHITE + "").replace("§", "&"));
+		LANGUAGE.addDefault("table.blue-mirror", (ChatColor.DARK_BLUE + "Add Lapis").replace("§", "&"));
+		LANGUAGE.addDefault("table.blue-mirror-lore", Arrays.asList(
+				(ChatColor.BLUE + "Select lapis in your inventory to add it to this slot.").replace("§", "&")));
 		LANGUAGE.addDefault("table.instructions-title", ("Enchantment Instructions.").replace("§", "&"));
 		LANGUAGE.addDefault("table.instructions", Arrays.asList(
 				"Click items to put them on the left.",
@@ -631,6 +635,10 @@ public class ConfigFiles {
 	
 	public static boolean useDefaultAnvil() {
 		return CONFIG.getBoolean("default_anvil_use");
+	}
+	
+	public static boolean useLapisInTable() {
+		return CONFIG.getBoolean("lapis_in_table");
 	}
  
 }
