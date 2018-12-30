@@ -66,6 +66,9 @@ public class InventoryClick implements Listener {
 							table.setInventory();
 							player.getInventory().setItem(slot, replace);
 						}
+					} else if(item != null && item.getType().equals(Material.LAPIS_LAZULI)) {
+						player.getInventory().setItem(slot, table.addToLapisStack(item));
+						table.setInventory();
 					}
 				} else {
 					int slot = event.getSlot();
@@ -79,6 +82,12 @@ public class InventoryClick implements Listener {
 						int itemSlot = (slot - 18) / 9;
 						int itemLevel = (slot % 9) - 3;
 						table.enchantItem(itemSlot, itemLevel);
+					} else if (slot == 10) {
+						ItemStack lapisStack = table.removeFromLapisStack();
+						if(lapisStack != null) {
+							ItemUtils.giveItemToPlayer(player, lapisStack, player.getLocation());
+						}
+						table.setInventory();
 					}
 				}
 			} else if(invData instanceof Anvil) {

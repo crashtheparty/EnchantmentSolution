@@ -1,5 +1,5 @@
 name: EnchantmentSolution
-version: 1.3.3
+version: 1.3.4
 main: org.ctp.enchantmentsolution.EnchantmentSolution
 api-version: 1.13
 commands:
@@ -28,3 +28,28 @@ commands:
   esreset:
     description: Reset all custom inventories
     usage: /esreset
+permissions:
+  enchantmentsolution.command.edit: 
+    description: Gives access to the /esconfig command. 
+    default: op
+  enchantmentsolution.command.enchant: 
+    description: Gives access to the /enchant command. 
+    default: op
+  enchantmentsolution.command.reload: 
+    description: Gives access to the /esreload command. 
+    default: op
+  enchantmentsolution.command.enchantremove: 
+    description: Gives access to the /removeenchant command. 
+    default: op
+  enchantmentsolution.command.reset: 
+    description: Gives access to the /esreset command. 
+    default: op
+  enchantmentsolution.command.enchantunsafe: 
+    description: Gives access to the /enchantunsafe command.
+    default: op
+  enchantmentsolution.enable-flight:
+    description: Enables use of external /fly commands without interference from FrequentFlyer
+    default: false
+  enchantmentsolution.permissions.ignore: 
+    description: Gives access to all enchantment permissions.
+    default: false
