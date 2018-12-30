@@ -10,7 +10,6 @@ import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.EnchantmentLevel;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
-import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.config.YamlConfig;
 import org.ctp.enchantmentsolution.utils.save.ConfigFiles;
 
@@ -445,7 +444,6 @@ public class Fishing {
 		for(String str : configStrings) {
 			fishing.add(new FishingEnchanted(str));
 		}
-		ChatUtils.sendMessage(player, "Fishing Size : " + fishing.size());
 		
 		List<EnchantmentLevel> enchants = new ArrayList<EnchantmentLevel>();
 		List<FishingEnchanted> fishingWeight = new ArrayList<FishingEnchanted>();
@@ -457,7 +455,6 @@ public class Fishing {
 			}
 		}
 
-		ChatUtils.sendMessage(player, "Total Weight : " + totalWeight);
 		int getWeight = (int)(Math.random() * totalWeight);
 		for(FishingEnchanted enchantment : fishingWeight){
 			getWeight -= enchantment.getEnchant().getWeight();

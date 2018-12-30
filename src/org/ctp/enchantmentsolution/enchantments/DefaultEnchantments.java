@@ -123,7 +123,7 @@ public class DefaultEnchantments {
 		ENCHANTMENTS.add(enchant);
 	}
 	
-	public static void setEnchantments(boolean startup) {
+	public static void setEnchantments() {
 		for (int i = 0; i < ENCHANTMENTS.size(); i++) {
 			if(ConfigFiles.getDefaultConfig().getBoolean("use_advanced_file")) {
 				CustomEnchantment enchantment = ENCHANTMENTS.get(i);
@@ -135,7 +135,7 @@ public class DefaultEnchantments {
 				} else {
 					ENCHANTMENTS.get(i).setDisplayName(ENCHANTMENTS.get(i).getDefaultDisplayName());
 				}
-				if(Enchantments.addEnchantment(enchantment, startup)) {
+				if(Enchantments.addEnchantment(enchantment)) {
 					if (advanced.getBoolean(namespace+"."+enchantment.getName()+".enabled")) {
 						ENCHANTMENTS.get(i).setEnabled(true);
 					} else {
@@ -160,7 +160,7 @@ public class DefaultEnchantments {
 				CustomEnchantment enchantment = ENCHANTMENTS.get(i);
 				if (enchantment.getRelativeEnchantment() instanceof CustomEnchantmentWrapper) {
 					YamlConfig config = ConfigFiles.getEnchantmentConfig();
-					if(Enchantments.addEnchantment(enchantment, startup)) {
+					if(Enchantments.addEnchantment(enchantment)) {
 						if (config.getBoolean("custom_enchantments."+enchantment.getName()+".enabled")) {
 							ENCHANTMENTS.get(i).setEnabled(true);
 						} else {
@@ -173,7 +173,7 @@ public class DefaultEnchantments {
 						ENCHANTMENTS.get(i).setTreasure(true);
 					}
 				} else {
-					if(Enchantments.addEnchantment(enchantment, startup)) {
+					if(Enchantments.addEnchantment(enchantment)) {
 						ENCHANTMENTS.get(i).setEnabled(true);
 					} else {
 						ENCHANTMENTS.get(i).setEnabled(false);

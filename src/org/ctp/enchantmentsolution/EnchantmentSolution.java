@@ -91,7 +91,7 @@ public class EnchantmentSolution extends JavaPlugin {
 
 		SaveUtils.getData();
 		
-		DefaultEnchantments.setEnchantments(true);
+		DefaultEnchantments.setEnchantments();
 
 		getServer().getPluginManager().registerEvents(new PlayerInteract(),
 				this);

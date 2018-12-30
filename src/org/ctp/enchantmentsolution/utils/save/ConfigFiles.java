@@ -150,7 +150,7 @@ public class ConfigFiles {
 		} catch (final Exception e) {
 			e.printStackTrace();
 		}
-		DefaultEnchantments.setEnchantments(false);
+		DefaultEnchantments.setEnchantments();
 		PlayerLevels.resetPlayerLevels();
 		
 		loadLangFile(dataFolder, 0);
@@ -197,6 +197,8 @@ public class ConfigFiles {
 				"repairable - same as above but anvil will not remove enchant"});
 		CONFIG.addEnum("disable_enchant_method", Arrays.asList("vanish", "visible", "repairable"));
 		CONFIG.addDefault("use_advanced_file", false, new String[] {"Use enchantments_advanced.yml as the enchantment config."});
+		CONFIG.addDefault("default_anvil_use", false, new String[] {"Allow default use of anvil GUI via option at bottom right of custom GUI.", 
+				"Using this feature MAY REMOVE CUSTOM ENCHANTMENTS FROM ITEMS on accident. Should only be true if anvil is used for custom recipes."});
 		CONFIG.addDefault("chest_loot", true, new String[] {"Allow custom and/or high level enchants to spawn in chests"});
 		CONFIG.addDefault("mob_loot", true, new String[] {"Allow custom and/or high level enchantments to spawn on mobs"});
 		CONFIG.addDefault("fishing_loot", true, new String[] {"Allow custom and/or high level enchantments to appear while fishing"});
@@ -456,6 +458,13 @@ public class ConfigFiles {
 		LANGUAGE.addDefault("anvil.cannot-combine", (ChatColor.RED + "Can't Combine Items").replace("§", "&"));
 		LANGUAGE.addDefault("anvil.cannot-rename", (ChatColor.RED + "Can't Rename Items").replace("§", "&"));
 		LANGUAGE.addDefault("anvil.message-cannot-combine", "You may not combine these items!");
+		LANGUAGE.addDefault("anvil.legacy-gui", (ChatColor.WHITE + "Open Minecraft Anvil GUI").replace("§", "&"));
+		LANGUAGE.addDefault("anvil.legacy-gui-warning", (
+				Arrays.asList((ChatColor.RED + "Custom enchantments will not work in this anvil and may be lost.").replace("§", "&"), 
+						(ChatColor.RED + "Other custom features will also not work.").replace("§", "&"),
+						(ChatColor.RED + "This should only be used for custom recipes.").replace("§", "&"))));
+		LANGUAGE.addDefault("anvil.legacy-gui-open", (ChatColor.WHITE + "Minecraft anvil GUI will open on next anvil click.").replace("§", "&"));
+		LANGUAGE.addDefault("anvil.legacy-gui-close", (ChatColor.WHITE + "Minecraft anvil GUI closed.").replace("§", "&"));
 		
 		LANGUAGE.addDefault("table.name", (ChatColor.BLUE + "Enchantment Table").replace("§", "&"));
 		LANGUAGE.addDefault("table.black-mirror", (ChatColor.WHITE + "").replace("§", "&"));
@@ -536,6 +545,10 @@ public class ConfigFiles {
 			return ENCHANTMENT_ADVANCED.getBoolean("use_permissions");
 		}
 		return false;
+	}
+	
+	public static boolean useDefaultAnvil() {
+		return CONFIG.getBoolean("default_anvil_use");
 	}
  
 }

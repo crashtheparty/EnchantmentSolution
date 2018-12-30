@@ -18,7 +18,9 @@ import org.ctp.enchantmentsolution.inventory.ConfigInventory;
 import org.ctp.enchantmentsolution.inventory.ConfigInventory.Screen;
 import org.ctp.enchantmentsolution.inventory.EnchantmentTable;
 import org.ctp.enchantmentsolution.inventory.InventoryData;
+import org.ctp.enchantmentsolution.inventory.LegacyAnvil;
 import org.ctp.enchantmentsolution.nms.Anvil_GUI_NMS;
+import org.ctp.enchantmentsolution.utils.AnvilUtils;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.ItemUtils;
 import org.ctp.enchantmentsolution.utils.config.YamlConfigBackup;
@@ -43,6 +45,9 @@ public class InventoryClick implements Listener {
 		}
 		InventoryData invData = EnchantmentSolution.getInventory(player);
 		if(invData != null) {
+			if(invData instanceof LegacyAnvil) {
+				return;
+			}
 			event.setCancelled(true);
 			if(invData instanceof EnchantmentTable) {
 				EnchantmentTable table = (EnchantmentTable) invData;
@@ -106,6 +111,10 @@ public class InventoryClick implements Listener {
 					}else if(slot == 16) {
 						anvil.combine();
 						anvil.setInventory();
+					}else if (slot == 31 && item.getType().equals(Material.ANVIL)) {
+						anvil.close(false);
+						AnvilUtils.addLegacyAnvil(player);
+						ChatUtils.sendMessage(player, ChatUtils.getMessage(ChatUtils.getCodes(), "anvil.legacy-gui-open"));
 					}else if (anvil.getItems().contains(item)) {
 						if (anvil.removeItem(slot)) {
 							anvil.setInventory();

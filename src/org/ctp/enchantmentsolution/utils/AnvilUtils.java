@@ -1,17 +1,22 @@
 package org.ctp.enchantmentsolution.utils;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
+import org.ctp.enchantmentsolution.inventory.LegacyAnvil;
 
 public class AnvilUtils {
+	
+	private static List<Player> OPEN_LEGACY = new ArrayList<Player>();
 	
 	public enum RepairType{
 		RENAME,
@@ -72,5 +77,22 @@ public class AnvilUtils {
 			}
 		}
 		return false;
+	}
+	
+	public static void addLegacyAnvil(Player player) {
+		OPEN_LEGACY.add(player);
+	}
+	
+	public static boolean hasLegacyAnvil(Player player) {
+		for(Player p : OPEN_LEGACY) {
+			if(p.equals(player)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public static void removeLegacyAnvil(LegacyAnvil anvil) {
+		OPEN_LEGACY.remove(anvil.getPlayer());
 	}
 }
