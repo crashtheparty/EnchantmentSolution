@@ -1,4 +1,4 @@
-package org.ctp.enchantmentsolution.utils;
+package org.ctp.enchantmentsolution.utils.items;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +15,7 @@ import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.plugin.Plugin;
+import org.ctp.enchantmentsolution.utils.ChatUtils;
 
 public class ItemSerialization {
 

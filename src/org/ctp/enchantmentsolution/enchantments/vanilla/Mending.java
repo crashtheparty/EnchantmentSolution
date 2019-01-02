@@ -4,10 +4,9 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.enchantments.Enchantment;
-import org.ctp.enchantmentsolution.api.ItemType;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
-import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Weight;
+import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 
 public class Mending extends CustomEnchantment{
 	
@@ -26,6 +25,7 @@ public class Mending extends CustomEnchantment{
 		setDefaultThirtyMaxLevel(1);
 		setDefaultWeight(Weight.RARE);
 		setMaxLevelOne(true);
+		setDefaultDescription("Repair durability with experience.");
 	}
 
 	@Override
@@ -40,7 +40,7 @@ public class Mending extends CustomEnchantment{
 	
 	@Override
 	protected List<ItemType> getEnchantmentItemTypes() {
-		return Arrays.asList();
+		return Arrays.asList(ItemType.ENCHANTABLE);
 	}
 
 	@Override
@@ -49,13 +49,7 @@ public class Mending extends CustomEnchantment{
 	}
 
 	@Override
-	protected List<CustomEnchantment> getConflictingEnchantments() {
-		return Arrays.asList(this, DefaultEnchantments.getCustomEnchantment(Enchantment.ARROW_INFINITE));
+	protected List<Enchantment> getDefaultConflictingEnchantments() {
+		return Arrays.asList(Enchantment.ARROW_INFINITE);
 	}
-
-	@Override
-	public String getDescription() {
-		return "Repair durability with experience.";
-	}
-
 }

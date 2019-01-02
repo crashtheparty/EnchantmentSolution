@@ -4,10 +4,10 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.enchantments.Enchantment;
-import org.ctp.enchantmentsolution.api.ItemType;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Weight;
+import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 
 public class Smeltery extends CustomEnchantment{
 	
@@ -25,6 +25,7 @@ public class Smeltery extends CustomEnchantment{
 		setDefaultThirtyMaxLevel(1);
 		setDefaultWeight(Weight.RARE);
 		setMaxLevelOne(true);
+		setDefaultDescription("Smelts blocks while mining.");
 	}
 	
 	@Override
@@ -48,13 +49,7 @@ public class Smeltery extends CustomEnchantment{
 	}
 
 	@Override
-	protected List<CustomEnchantment> getConflictingEnchantments() {
-		return Arrays.asList(this, DefaultEnchantments.getCustomEnchantment(Enchantment.SILK_TOUCH));
+	protected List<Enchantment> getDefaultConflictingEnchantments() {
+		return Arrays.asList(Enchantment.SILK_TOUCH);
 	}
-
-	@Override
-	public String getDescription() {
-		return "Smelts blocks while mining.";
-	}
-
 }

@@ -1,12 +1,13 @@
-package org.ctp.enchantmentsolution.utils.items;
+package org.ctp.enchantmentsolution.utils.items.nms.itembreak;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.Material;
+import org.ctp.enchantmentsolution.utils.items.nms.ItemBreakType;
 
-public enum ItemBreakType {
+public enum ItemBreak_v1_13 implements ItemBreakType{
 	DIAMOND_AXE(Material.DIAMOND_AXE), DIAMOND_SHOVEL(Material.DIAMOND_SHOVEL), DIAMOND_PICKAXE(Material.DIAMOND_PICKAXE), 
 	IRON_AXE(Material.IRON_AXE), IRON_SHOVEL(Material.IRON_SHOVEL), IRON_PICKAXE(Material.IRON_PICKAXE), 
 	GOLDEN_AXE(Material.GOLDEN_AXE), GOLDEN_SHOVEL(Material.GOLDEN_SHOVEL), GOLDEN_PICKAXE(Material.GOLDEN_PICKAXE), 
@@ -16,7 +17,7 @@ public enum ItemBreakType {
 	private Material material;
 	private List<Material> breakTypes;
 	
-	ItemBreakType(Material material) {
+	ItemBreak_v1_13(Material material) {
 		this.material = material;
 		this.breakTypes = getItemBreakTypes(material);
 	}
@@ -30,7 +31,7 @@ public enum ItemBreakType {
 	}
 	
 	public static ItemBreakType getType(Material type) {
-		for(ItemBreakType breakType : ItemBreakType.values()) {
+		for(ItemBreak_v1_13 breakType : ItemBreak_v1_13.values()) {
 			if(breakType.getMaterial().equals(type)) {
 				return breakType;
 			}
@@ -40,7 +41,7 @@ public enum ItemBreakType {
 	
 	public static List<Material> allBreakTypes(){
 		List<Material> itemTypes = new ArrayList<Material>();
-		for(ItemBreakType type : ItemBreakType.values()) {
+		for(ItemBreak_v1_13 type : ItemBreak_v1_13.values()) {
 			itemTypes.addAll(type.getBreakTypes());
 		}
 		return itemTypes;
@@ -97,19 +98,20 @@ public enum ItemBreakType {
 					Material.LIME_TERRACOTTA, Material.MAGENTA_TERRACOTTA, Material.ORANGE_TERRACOTTA, Material.PINK_TERRACOTTA, Material.PURPLE_TERRACOTTA, 
 					Material.RED_TERRACOTTA, Material.WHITE_TERRACOTTA, Material.YELLOW_TERRACOTTA, Material.STONE, Material.STONE_BRICKS, Material.MOSSY_STONE_BRICKS,
 					Material.CRACKED_STONE_BRICKS, Material.CHISELED_STONE_BRICKS, Material.INFESTED_CHISELED_STONE_BRICKS, Material.INFESTED_COBBLESTONE,
-					Material.INFESTED_CRACKED_STONE_BRICKS, Material.INFESTED_MOSSY_STONE_BRICKS, Material.INFESTED_STONE, Material.INFESTED_STONE_BRICKS));
+					Material.INFESTED_CRACKED_STONE_BRICKS, Material.INFESTED_MOSSY_STONE_BRICKS, Material.INFESTED_STONE, Material.INFESTED_STONE_BRICKS,
+					Material.BRAIN_CORAL_BLOCK, Material.BUBBLE_CORAL_BLOCK, Material.FIRE_CORAL_BLOCK, Material.HORN_CORAL_BLOCK, Material.TUBE_CORAL_BLOCK));
 			return itemTypes;
 		case DIAMOND_SHOVEL:
 		case IRON_SHOVEL:
 		case GOLDEN_SHOVEL:
 		case STONE_SHOVEL:
 		case WOODEN_SHOVEL:
-			itemTypes.addAll(Arrays.asList(Material.CLAY, Material.COARSE_DIRT, Material.DIRT, Material.FARMLAND, Material.GRASS_BLOCK, Material.GRAVEL, 
-					Material.MYCELIUM, Material.PODZOL, Material.RED_SAND, Material.SAND, Material.SOUL_SAND, Material.BLACK_CONCRETE_POWDER, 
-					Material.BLUE_CONCRETE_POWDER, Material.BROWN_CONCRETE_POWDER, Material.CYAN_CONCRETE_POWDER, Material.GRAY_CONCRETE_POWDER, 
-					Material.GREEN_CONCRETE_POWDER, Material.LIGHT_BLUE_CONCRETE_POWDER, Material.LIGHT_GRAY_CONCRETE_POWDER, Material.LIME_CONCRETE_POWDER, 
-					Material.MAGENTA_CONCRETE_POWDER, Material.ORANGE_CONCRETE_POWDER, Material.PINK_CONCRETE_POWDER, Material.PURPLE_CONCRETE_POWDER, 
-					Material.RED_CONCRETE_POWDER, Material.WHITE_CONCRETE_POWDER, Material.YELLOW_CONCRETE_POWDER));
+			itemTypes.addAll(Arrays.asList(Material.SNOW, Material.SNOW_BLOCK, Material.CLAY, Material.COARSE_DIRT, Material.DIRT, Material.FARMLAND, 
+					Material.GRASS_BLOCK, Material.GRAVEL, Material.MYCELIUM, Material.PODZOL, Material.RED_SAND, Material.SAND, Material.SOUL_SAND, 
+					Material.BLACK_CONCRETE_POWDER, Material.BLUE_CONCRETE_POWDER, Material.BROWN_CONCRETE_POWDER, Material.CYAN_CONCRETE_POWDER, 
+					Material.GRAY_CONCRETE_POWDER, Material.GREEN_CONCRETE_POWDER, Material.LIGHT_BLUE_CONCRETE_POWDER, Material.LIGHT_GRAY_CONCRETE_POWDER, 
+					Material.LIME_CONCRETE_POWDER, Material.MAGENTA_CONCRETE_POWDER, Material.ORANGE_CONCRETE_POWDER, Material.PINK_CONCRETE_POWDER, 
+					Material.PURPLE_CONCRETE_POWDER, Material.RED_CONCRETE_POWDER, Material.WHITE_CONCRETE_POWDER, Material.YELLOW_CONCRETE_POWDER));
 			return itemTypes;
 		default:
 			break;

@@ -4,9 +4,9 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.enchantments.Enchantment;
-import org.ctp.enchantmentsolution.api.ItemType;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.Weight;
+import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 
 public class Punch extends CustomEnchantment{
 	
@@ -23,6 +23,7 @@ public class Punch extends CustomEnchantment{
 		setDefaultFiftyMaxLevel(3);
 		setDefaultThirtyMaxLevel(2);
 		setDefaultWeight(Weight.RARE);
+		setDefaultDescription("Increases knockback on bows.");
 	}
 	
 	@Override
@@ -46,13 +47,7 @@ public class Punch extends CustomEnchantment{
 	}
 
 	@Override
-	protected List<CustomEnchantment> getConflictingEnchantments() {
-		return Arrays.asList(this);
+	protected List<Enchantment> getDefaultConflictingEnchantments() {
+		return Arrays.asList();
 	}
-
-	@Override
-	public String getDescription() {
-		return "Increases knockback on bows.";
-	}
-
 }

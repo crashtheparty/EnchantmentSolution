@@ -4,26 +4,26 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.enchantments.Enchantment;
-import org.ctp.enchantmentsolution.api.ItemType;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
-import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Weight;
+import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 
 public class Loyalty extends CustomEnchantment{
 
 	public Loyalty() {
 		setDefaultDisplayName("Loyalty");
 		setDefaultFiftyConstant(7);
-		setDefaultThirtyConstant(6);
+		setDefaultThirtyConstant(5);
 		setDefaultFiftyModifier(11);
-		setDefaultThirtyModifier(9);
+		setDefaultThirtyModifier(7);
 		setDefaultFiftyMaxConstant(40);
-		setDefaultThirtyMaxConstant(50);
+		setDefaultThirtyMaxConstant(24);
 		setDefaultFiftyStartLevel(1);
 		setDefaultThirtyStartLevel(1);
-		setDefaultFiftyMaxLevel(2);
-		setDefaultThirtyMaxLevel(2);
+		setDefaultFiftyMaxLevel(3);
+		setDefaultThirtyMaxLevel(3);
 		setDefaultWeight(Weight.UNCOMMON);
+		setDefaultDescription("Returns a thrown trident after it hits something.");
 	}
 
 	@Override
@@ -47,12 +47,7 @@ public class Loyalty extends CustomEnchantment{
 	}
 
 	@Override
-	protected List<CustomEnchantment> getConflictingEnchantments() {
-		return Arrays.asList(this, DefaultEnchantments.getCustomEnchantment(Enchantment.RIPTIDE));
-	}
-
-	@Override
-	public String getDescription() {
-		return "Returns a thrown trident after it hits something.";
+	protected List<Enchantment> getDefaultConflictingEnchantments() {
+		return Arrays.asList(Enchantment.RIPTIDE);
 	}
 }

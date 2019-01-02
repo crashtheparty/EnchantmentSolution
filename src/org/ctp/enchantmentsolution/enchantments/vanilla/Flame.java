@@ -5,9 +5,9 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.bukkit.enchantments.Enchantment;
-import org.ctp.enchantmentsolution.api.ItemType;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.Weight;
+import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 
 public class Flame extends CustomEnchantment{
 	
@@ -25,6 +25,9 @@ public class Flame extends CustomEnchantment{
 		setDefaultThirtyMaxLevel(1);
 		setDefaultWeight(Weight.RARE);
 		setMaxLevelOne(true);
+		setDefaultDescription("Flaming arrows." + 
+				StringUtils.LF + 
+				"Arrows are on fire when shot and deal 4 (2 Hearts) fire damage over 5 seconds.");
 	}
 
 	@Override
@@ -48,15 +51,7 @@ public class Flame extends CustomEnchantment{
 	}
 
 	@Override
-	protected List<CustomEnchantment> getConflictingEnchantments() {
-		return Arrays.asList(this);
+	protected List<Enchantment> getDefaultConflictingEnchantments() {
+		return Arrays.asList();
 	}
-
-	@Override
-	public String getDescription() {
-		return "Flaming arrows." + 
-				StringUtils.LF + 
-				"Arrows are on fire when shot and deal 4 (2 Hearts) fire damage over 5 seconds.";
-	}
-
 }

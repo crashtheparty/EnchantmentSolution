@@ -4,10 +4,10 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.enchantments.Enchantment;
-import org.ctp.enchantmentsolution.api.ItemType;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Weight;
+import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 
 public class ExpShare extends CustomEnchantment{
 	
@@ -24,6 +24,7 @@ public class ExpShare extends CustomEnchantment{
 		setDefaultFiftyMaxLevel(3);
 		setDefaultThirtyMaxLevel(3);
 		setDefaultWeight(Weight.UNCOMMON);
+		setDefaultDescription("Increase experience earned from killing mobs and breaking blocks.");
 	}
 	
 	@Override
@@ -47,13 +48,8 @@ public class ExpShare extends CustomEnchantment{
 	}
 
 	@Override
-	protected List<CustomEnchantment> getConflictingEnchantments() {
-		return Arrays.asList(this);
-	}
-
-	@Override
-	public String getDescription() {
-		return "Increase experience earned from killing mobs and breaking blocks.";
+	protected List<Enchantment> getDefaultConflictingEnchantments() {
+		return Arrays.asList();
 	}
 
 }

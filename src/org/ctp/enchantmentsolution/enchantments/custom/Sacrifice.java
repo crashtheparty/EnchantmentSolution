@@ -4,10 +4,10 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.enchantments.Enchantment;
-import org.ctp.enchantmentsolution.api.ItemType;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Weight;
+import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 
 public class Sacrifice extends CustomEnchantment{
 	
@@ -24,6 +24,7 @@ public class Sacrifice extends CustomEnchantment{
 		setDefaultFiftyMaxLevel(2);
 		setDefaultThirtyMaxLevel(2);
 		setDefaultWeight(Weight.VERY_RARE);
+		setDefaultDescription("Damage the mob who killed you based upon your experience level.");
 	}
 	
 	@Override
@@ -47,12 +48,7 @@ public class Sacrifice extends CustomEnchantment{
 	}
 
 	@Override
-	protected List<CustomEnchantment> getConflictingEnchantments() {
-		return Arrays.asList(this);
-	}
-
-	@Override
-	public String getDescription() {
-		return "Damage the mob who killed you based upon your experience level.";
+	protected List<Enchantment> getDefaultConflictingEnchantments() {
+		return Arrays.asList();
 	}
 }

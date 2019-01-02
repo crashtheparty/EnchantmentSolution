@@ -3,6 +3,8 @@ package org.ctp.enchantmentsolution.listeners.abilities;
 import java.util.HashMap;
 
 import org.bukkit.Bukkit;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -65,21 +67,21 @@ public class LifeListener implements Runnable, Listener{
 		equipment.put(player.getName(), equips);
 	}
 
-	@SuppressWarnings("deprecation")
 	private void doEquip(ItemStack item) {
 		if(Enchantments.hasEnchantment(item, DefaultEnchantments.LIFE)){
 			int level = Enchantments.getLevel(item, DefaultEnchantments.LIFE);
-			player.setMaxHealth(20 + 4 * level);
-			double health = player.getHealth() + 4 * level;
-			if (health > player.getMaxHealth()) health = player.getMaxHealth();
-			player.setHealth(health);
+			AttributeInstance a = player.getAttribute(Attribute.GENERIC_MAX_HEALTH);
+			a.setBaseValue(a.getDefaultValue() + 4 * level);
 		}
 	}
 
-	@SuppressWarnings("deprecation")
 	private void doUnequip(ItemStack item) {
 		if(Enchantments.hasEnchantment(item, DefaultEnchantments.LIFE)){
-			player.setMaxHealth(20.0D);
+			AttributeInstance a = player.getAttribute(Attribute.GENERIC_MAX_HEALTH);
+			a.setBaseValue(a.getDefaultValue());
+			if(player.getHealth() > a.getBaseValue()) {
+				player.setHealth(a.getBaseValue());
+			}
 		}
 	}
 

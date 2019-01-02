@@ -122,14 +122,18 @@ public class YamlConfig {
 	}
 	
 	public String getType(String path) {
-		if(getEnums(path) != null) {
-			return "enum";
-		}	
 		YamlInfo info = getInfo(path);
 		
 		if(info == null) {
 			return "nested value";
 		}
+
+		if(getEnums(path) != null) {
+			if(info.getStringList() != null) {
+				return "enum_list";
+			}
+			return "enum";
+		}	
 		
 		if(info.getBooleanValue() != null) {
 			return "boolean";
@@ -183,11 +187,14 @@ public class YamlConfig {
 				return true;
 			}
 			break;
+		case "enum_list":
 		case "list":
 			LinkedHashMap<String, Boolean> keySame = new LinkedHashMap<String, Boolean>();
 			String[] values = replaceLast((value.toString().replaceFirst("\\[", "")), "]", "").split(", ");
 			for(Object key : values) {
-				keySame.put(key.toString(), false);
+				if(!key.toString().trim().equals("")) {
+					keySame.put(key.toString(), false);
+				}
 			}
 			for(String key : info.getStringList()) {
 				if(keySame.containsKey(key)) {
@@ -196,6 +203,7 @@ public class YamlConfig {
 					keySame.put(key, false);
 				}
 			}
+			
 			return !keySame.containsValue(false);
 		case "enum":
 		case "string":
@@ -618,5 +626,13 @@ public class YamlConfig {
 	    } else {
 	        return string;
 	    }
+	}
+
+	public void addMinMax(String path, int i, int j) {
+		if(getInfo(path) == null) {
+			defaults.get(path).setMinMax(i, j);
+		} else {
+			getInfo(path).setMinMax(i, j);
+		}
 	}
 }

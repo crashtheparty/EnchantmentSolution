@@ -3,6 +3,7 @@ package org.ctp.enchantmentsolution.nms;
 import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
+import org.ctp.enchantmentsolution.utils.ChatUtils;
 
 public class Version {
 	
@@ -18,11 +19,10 @@ public class Version {
 	}
 	
 	private static boolean allowedVersion() {
-		
 		VERSION_NUMBER = 0;
 		
 		// Version
-		Bukkit.getLogger().log(Level.INFO, "[EnchantmentSolution] Version:  " + VERSION);
+		ChatUtils.sendToConsole(Level.INFO, "Version:  " + VERSION);
 
 		// Check
 		switch(VERSION) {

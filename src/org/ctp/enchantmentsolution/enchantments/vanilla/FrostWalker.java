@@ -4,10 +4,10 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.enchantments.Enchantment;
-import org.ctp.enchantmentsolution.api.ItemType;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Weight;
+import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 
 public class FrostWalker extends CustomEnchantment{
 	
@@ -25,6 +25,7 @@ public class FrostWalker extends CustomEnchantment{
 		setDefaultFiftyMaxLevel(2);
 		setDefaultThirtyMaxLevel(2);
 		setDefaultWeight(Weight.RARE);
+		setDefaultDescription("Creates frosted ice blocks when walking over water.");
 	}
 
 	@Override
@@ -39,7 +40,7 @@ public class FrostWalker extends CustomEnchantment{
 	
 	@Override
 	protected List<ItemType> getEnchantmentItemTypes() {
-		return Arrays.asList();
+		return Arrays.asList(ItemType.BOOTS);
 	}
 
 	@Override
@@ -48,15 +49,7 @@ public class FrostWalker extends CustomEnchantment{
 	}
 
 	@Override
-	protected List<CustomEnchantment> getConflictingEnchantments() {
-		return Arrays.asList(this, DefaultEnchantments.getCustomEnchantment(Enchantment.DEPTH_STRIDER), 
-				DefaultEnchantments.getCustomEnchantment(DefaultEnchantments.MAGMA_WALKER),
-				DefaultEnchantments.getCustomEnchantment(DefaultEnchantments.VOID_WALKER));
+	protected List<Enchantment> getDefaultConflictingEnchantments() {
+		return Arrays.asList(Enchantment.DEPTH_STRIDER, DefaultEnchantments.MAGMA_WALKER, DefaultEnchantments.VOID_WALKER);
 	}
-
-	@Override
-	public String getDescription() {
-		return "Creates frosted ice blocks when walking over water.";
-	}
-
 }

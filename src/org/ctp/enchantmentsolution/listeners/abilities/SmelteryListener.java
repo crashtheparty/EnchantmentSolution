@@ -16,7 +16,7 @@ import org.bukkit.util.Vector;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
 import org.ctp.enchantmentsolution.listeners.abilities.mcmmo.McMMOHandler;
-import org.ctp.enchantmentsolution.utils.AbilityUtilities;
+import org.ctp.enchantmentsolution.utils.items.nms.AbilityUtils;
 import org.ctp.enchantmentsolution.utils.items.DamageUtils;
 
 public class SmelteryListener implements Listener{
@@ -30,7 +30,7 @@ public class SmelteryListener implements Listener{
 		if(player.getGameMode().equals(GameMode.CREATIVE) || player.getGameMode().equals(GameMode.SPECTATOR)) return;
 		if(item != null) {
 			if(Enchantments.hasEnchantment(item, DefaultEnchantments.SMELTERY)) {
-				ItemStack smelted = AbilityUtilities.getSmelteryItem(blockBroken, item);
+				ItemStack smelted = AbilityUtils.getSmelteryItem(blockBroken, item);
 				if(smelted != null) {
 					if(!DefaultEnchantments.isEnabled(DefaultEnchantments.TELEPATHY) || !Enchantments.hasEnchantment(item, DefaultEnchantments.TELEPATHY)) {
 						if(Bukkit.getPluginManager().isPluginEnabled("mcMMO")) {

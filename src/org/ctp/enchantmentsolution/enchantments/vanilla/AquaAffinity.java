@@ -4,10 +4,10 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.enchantments.Enchantment;
-import org.ctp.enchantmentsolution.api.ItemType;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Weight;
+import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 
 public class AquaAffinity extends CustomEnchantment{
 
@@ -25,6 +25,7 @@ public class AquaAffinity extends CustomEnchantment{
 		setDefaultThirtyMaxLevel(1);
 		setDefaultWeight(Weight.RARE);
 		setMaxLevelOne(true);
+		setDefaultDescription("Increases underwater mining rate.");
 	}
 	
 	@Override
@@ -47,13 +48,7 @@ public class AquaAffinity extends CustomEnchantment{
 	}
 
 	@Override
-	protected List<CustomEnchantment> getConflictingEnchantments() {
-		return Arrays.asList(this, DefaultEnchantments.getCustomEnchantment(DefaultEnchantments.NO_REST),
-				DefaultEnchantments.getCustomEnchantment(DefaultEnchantments.UNREST));
-	}
-
-	@Override
-	public String getDescription() {
-		return "Increases underwater mining rate.";
+	protected List<Enchantment> getDefaultConflictingEnchantments() {
+		return Arrays.asList(DefaultEnchantments.NO_REST, DefaultEnchantments.UNREST);
 	}
 }

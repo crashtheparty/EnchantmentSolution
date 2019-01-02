@@ -4,26 +4,26 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.enchantments.Enchantment;
-import org.ctp.enchantmentsolution.api.ItemType;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
-import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Weight;
+import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 
 public class Riptide extends CustomEnchantment{
 	
 	public Riptide() {
 		setDefaultDisplayName("Riptide");
 		setDefaultFiftyConstant(7);
-		setDefaultThirtyConstant(9);
+		setDefaultThirtyConstant(7);
 		setDefaultFiftyModifier(11);
-		setDefaultThirtyModifier(9);
-		setDefaultFiftyMaxConstant(50);
-		setDefaultThirtyMaxConstant(15);
+		setDefaultThirtyModifier(10);
+		setDefaultFiftyMaxConstant(30);
+		setDefaultThirtyMaxConstant(17);
 		setDefaultFiftyStartLevel(1);
 		setDefaultThirtyStartLevel(1);
 		setDefaultFiftyMaxLevel(5);
 		setDefaultThirtyMaxLevel(3);
 		setDefaultWeight(Weight.RARE);
+		setDefaultDescription("Returns a thrown trident after it hits something.");
 	}
 
 	@Override
@@ -47,14 +47,7 @@ public class Riptide extends CustomEnchantment{
 	}
 
 	@Override
-	protected List<CustomEnchantment> getConflictingEnchantments() {
-		return Arrays.asList(this, 
-				DefaultEnchantments.getCustomEnchantment(Enchantment.CHANNELING), 
-				DefaultEnchantments.getCustomEnchantment(Enchantment.LOYALTY));
-	}
-
-	@Override
-	public String getDescription() {
-		return "Returns a thrown trident after it hits something.";
+	protected List<Enchantment> getDefaultConflictingEnchantments() {
+		return Arrays.asList(Enchantment.CHANNELING, Enchantment.LOYALTY);
 	}
 }

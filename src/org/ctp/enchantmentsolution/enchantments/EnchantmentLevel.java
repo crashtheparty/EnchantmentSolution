@@ -1,6 +1,4 @@
-package org.ctp.enchantmentsolution.api;
-
-import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
+package org.ctp.enchantmentsolution.enchantments;
 
 public class EnchantmentLevel {
 

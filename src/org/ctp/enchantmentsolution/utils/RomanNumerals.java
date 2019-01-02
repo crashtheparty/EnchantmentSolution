@@ -1,9 +1,9 @@
 package org.ctp.enchantmentsolution.utils;
 
 import org.bukkit.inventory.meta.ItemMeta;
-import org.ctp.enchantmentsolution.api.EnchantmentLevel;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
+import org.ctp.enchantmentsolution.enchantments.EnchantmentLevel;
 
 public class RomanNumerals {
 	

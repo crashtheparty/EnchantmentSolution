@@ -7,24 +7,30 @@ import org.apache.commons.lang3.StringUtils;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
-import org.ctp.enchantmentsolution.api.ItemType;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.PermissionUtils;
+import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 import org.ctp.enchantmentsolution.utils.save.ConfigFiles;
 
 public abstract class CustomEnchantment {
 
 	private boolean enabled = true;
 	private boolean treasure = false;
-	private String displayName = "", defaultDisplayName = "";
+	private String displayName = "", defaultDisplayName = "", description = "", defaultDescription = "";
 	private int defaultThirtyConstant = -1, defaultFiftyConstant = -1, constant = -1, defaultThirtyModifier = -1,
 			defaultFiftyModifier = -1, modifier = -1, defaultThirtyMaxConstant = -1, defaultFiftyMaxConstant = -1,
 			maxConstant = -1, defaultThirtyStartLevel = -1, defaultFiftyStartLevel = -1, startLevel = -1,
 			defaultThirtyMaxLevel = -1, defaultFiftyMaxLevel = -1, maxLevel = -1;
 	private Weight defaultWeight = Weight.NULL;
 	private Weight weight = Weight.NULL;
-	private boolean maxLevelOne = false;
+	private boolean maxLevelOne = false, curse = false;
+	private List<Enchantment> conflictingEnchantments = new ArrayList<Enchantment>();
+	private List<Material> disabledItems = new ArrayList<Material>();
 
+	public CustomEnchantment() {
+		setConflictingEnchantments();
+	}
+	
 	public abstract Enchantment getRelativeEnchantment();
 	
 	public static boolean conflictsWith(CustomEnchantment enchOne, CustomEnchantment enchTwo) {
@@ -34,13 +40,44 @@ public abstract class CustomEnchantment {
 		return false;
 	}
 	
-	public abstract String getDescription();
-	
 	protected abstract List<ItemType> getEnchantmentItemTypes();
 	
 	protected abstract List<ItemType> getAnvilItemTypes();
 	
-	protected abstract List<CustomEnchantment> getConflictingEnchantments();
+	protected abstract List<Enchantment> getDefaultConflictingEnchantments();
+	
+	public List<Enchantment> getConflictingEnchantments(){
+		List<Enchantment> conflicting = new ArrayList<Enchantment>();
+		conflicting.add(getRelativeEnchantment());
+		conflicting.addAll(conflictingEnchantments);
+		return conflicting;
+	}
+	
+	public List<String> conflictingDefaultList(){
+		List<String> names = new ArrayList<String>();
+		for(Enchantment enchant : getDefaultConflictingEnchantments()) {
+			CustomEnchantment custom = DefaultEnchantments.getCustomEnchantment(enchant);
+			if(custom != null) {
+				names.add(custom.getName());
+			}
+		}
+		return names;
+	}
+	
+	public void setConflictingEnchantments() {
+		List<Enchantment> enchantments = getDefaultConflictingEnchantments();
+		if(this.getRelativeEnchantment() != null && enchantments.contains(this.getRelativeEnchantment())) {
+			enchantments.remove(this.getRelativeEnchantment());
+		}
+		this.conflictingEnchantments = enchantments;
+	}
+
+	public void setConflictingEnchantments(List<Enchantment> conflictingEnchantments) {
+		if(this.getRelativeEnchantment() != null && conflictingEnchantments.contains(this.getRelativeEnchantment())) {
+			conflictingEnchantments.remove(this.getRelativeEnchantment());
+		}
+		this.conflictingEnchantments = conflictingEnchantments;
+	}
 
 	public String getDetails() {
 		String page = StringUtils.LF + StringUtils.LF + 
@@ -54,10 +91,18 @@ public abstract class CustomEnchantment {
 			if (getEnchantmentItemTypes().get(0).equals(ItemType.ALL)) {
 				page += getEnchantmentItemTypes().get(0).getDisplayName() + "." + StringUtils.LF;
 			} else {
+				boolean includesBooks = false;
 				for(ItemType type : getEnchantmentItemTypes()) {
 					page += type.getDisplayName() + ", ";
+					if(type.getDisplayName().equals("Books")) {
+						includesBooks = true;
+					}
 				}
-				page += "Books." + StringUtils.LF;
+				if(!includesBooks) {
+					page += "Books." + StringUtils.LF;
+				} else {
+					page = page.substring(0, page.lastIndexOf(", ")) + "." + StringUtils.LF;
+				}
 			}
 		} else {
 			page += "None." + StringUtils.LF;
@@ -67,10 +112,34 @@ public abstract class CustomEnchantment {
 			if (getAnvilItemTypes().get(0).equals(ItemType.ALL)) {
 				page += getAnvilItemTypes().get(0).getDisplayName() + "." + StringUtils.LF;
 			} else {
+				boolean includesBooks = false;
 				for(ItemType type : getAnvilItemTypes()) {
 					page += type.getDisplayName() + ", ";
+					if(type.getDisplayName().equals("Books")) {
+						includesBooks = true;
+					}
 				}
-				page += "Books." + StringUtils.LF;
+				if(!includesBooks) {
+					page += "Books." + StringUtils.LF;
+				} else {
+					page = page.substring(0, page.lastIndexOf(", ")) + "." + StringUtils.LF;
+				}
+			}
+		} else {
+			page += "None." + StringUtils.LF;
+		}
+		page +=  ChatUtils.getMessage(ChatUtils.getCodes(), "enchantment.disabled-items");
+		if(getDisabledItems().size() > 0) {
+			List<String> names = new ArrayList<String>();
+			for(int i = 0; i < getDisabledItems().size(); i++) {
+				Material mat = getDisabledItems().get(i);
+				names.add(mat.name());
+			}
+			
+			if(names.isEmpty()) {
+				page += "None" + "." + StringUtils.LF;
+			} else {
+				page += StringUtils.join(names, ",") + "." + StringUtils.LF;
 			}
 		} else {
 			page += "None." + StringUtils.LF;
@@ -79,16 +148,17 @@ public abstract class CustomEnchantment {
 		if(getConflictingEnchantments().size() > 0) {
 			List<String> names = new ArrayList<String>();
 			for(int i = 0; i < getConflictingEnchantments().size(); i++) {
-				CustomEnchantment enchant = getConflictingEnchantments().get(i);
-				if(!enchant.getRelativeEnchantment().equals(this.getRelativeEnchantment())) {
-					names.add(enchant.getDisplayName());
+				Enchantment enchant = getConflictingEnchantments().get(i);
+				CustomEnchantment custom = DefaultEnchantments.getCustomEnchantment(enchant);
+				if(custom != null && !custom.getRelativeEnchantment().equals(this.getRelativeEnchantment())) {
+					names.add(custom.getDisplayName());
 				}
 			}
 			
 			if(names.isEmpty()) {
 				page += "None";
 			} else {
-				page += StringUtils.join(names, ",");
+				page += StringUtils.join(names, ", ");
 			}
 			page += "." + StringUtils.LF;
 		} else {
@@ -100,15 +170,19 @@ public abstract class CustomEnchantment {
 	}
 
 	public boolean canEnchantItem(Material item) {
+		if(disabledItems.contains(item)) return false;
 		for(ItemType type : getEnchantmentItemTypes()) {
-			if(type.getItemTypes().contains(item)) {
-				return true;
+			if(type.getItemTypes() != null) {
+				if(type.getItemTypes().contains(item)) {
+					return true;
+				}
 			}
 		}
 		return false;
 	}
 
 	public boolean canAnvilItem(Material item) {
+		if(disabledItems.contains(item)) return false;
 		for(ItemType type : getAnvilItemTypes()) {
 			if(type.getItemTypes().contains(item)) {
 				return true;
@@ -118,8 +192,8 @@ public abstract class CustomEnchantment {
 	}
 
 	public boolean conflictsWith(CustomEnchantment ench) {
-		for(CustomEnchantment enchantment : getConflictingEnchantments()) {
-			if(enchantment.getRelativeEnchantment().equals(ench.getRelativeEnchantment())) {
+		for(Enchantment enchantment : getConflictingEnchantments()) {
+			if(enchantment.equals(ench.getRelativeEnchantment())) {
 				return true;
 			}
 		}
@@ -390,6 +464,47 @@ public abstract class CustomEnchantment {
 	protected void setDefaultDisplayName(String defaultDisplayName) {
 		this.defaultDisplayName = defaultDisplayName;
 		this.displayName = defaultDisplayName;
+	}
+
+	public List<Material> getDisabledItems() {
+		return disabledItems;
+	}
+
+	public void setDisabledItems(List<Material> disabledItems) {
+		this.disabledItems = disabledItems;
+	}
+	
+	public List<String> getDisabledItemsStrings(){
+		List<String> names = new ArrayList<String>();
+		for(Material item : getDisabledItems()) {
+			names.add(item.name());
+		}
+		return names;
+	}
+
+	public boolean isCurse() {
+		return curse;
+	}
+
+	protected void setCurse(boolean curse) {
+		this.curse = curse;
+	}
+	
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public String getDefaultDescription() {
+		return defaultDescription;
+	}
+
+	protected void setDefaultDescription(String defaultDescription) {
+		this.defaultDescription = defaultDescription;
+		this.description = defaultDescription;
 	}
 
 }

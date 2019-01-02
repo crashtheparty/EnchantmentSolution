@@ -36,12 +36,14 @@ public class LegacyAnvil implements InventoryData{
 
 	@Override
 	public void close(boolean external) {
-		ChatUtils.sendMessage(player, ChatUtils.getMessage(ChatUtils.getCodes(), "anvil.legacy-gui-close"));
-		AnvilUtils.removeLegacyAnvil(this);
-		if(!external) {
-			player.closeInventory();
+		if(EnchantmentSolution.hasInventory(this)) {
+			ChatUtils.sendMessage(player, ChatUtils.getMessage(ChatUtils.getCodes(), "anvil.legacy-gui-close"));
+			AnvilUtils.removeLegacyAnvil(this);
+			EnchantmentSolution.removeInventory(this);
+			if(!external) {
+				player.closeInventory();
+			}
 		}
-		EnchantmentSolution.removeInventory(this);
 	}
 
 	@Override

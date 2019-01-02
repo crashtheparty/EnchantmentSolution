@@ -5,9 +5,9 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.bukkit.enchantments.Enchantment;
-import org.ctp.enchantmentsolution.api.ItemType;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.Weight;
+import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 
 public class Efficiency extends CustomEnchantment{
 	
@@ -24,6 +24,9 @@ public class Efficiency extends CustomEnchantment{
 		setDefaultFiftyMaxLevel(6);
 		setDefaultThirtyMaxLevel(5);
 		setDefaultWeight(Weight.COMMON);
+		setDefaultDescription("Increases mining speed." + 
+				StringUtils.LF + 
+				"One must use the proper tool for a block in order to receive the speed. Does not matter if you mine it with the incorrect tier.");
 	}
 
 	@Override
@@ -52,15 +55,7 @@ public class Efficiency extends CustomEnchantment{
 	}
 
 	@Override
-	protected List<CustomEnchantment> getConflictingEnchantments() {
-		return Arrays.asList(this);
+	protected List<Enchantment> getDefaultConflictingEnchantments() {
+		return Arrays.asList();
 	}
-
-	@Override
-	public String getDescription() {
-		return "Increases mining speed." + 
-				StringUtils.LF + 
-				"One must use the proper tool for a block in order to receive the speed. Does not matter if you mine it with the incorrect tier.";
-	}
-
 }

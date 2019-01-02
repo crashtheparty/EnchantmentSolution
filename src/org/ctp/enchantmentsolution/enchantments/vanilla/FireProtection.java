@@ -4,10 +4,9 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.enchantments.Enchantment;
-import org.ctp.enchantmentsolution.api.ItemType;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
-import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Weight;
+import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 
 public class FireProtection extends CustomEnchantment{
 	
@@ -24,6 +23,7 @@ public class FireProtection extends CustomEnchantment{
 		setDefaultFiftyMaxLevel(4);
 		setDefaultThirtyMaxLevel(4);
 		setDefaultWeight(Weight.UNCOMMON);
+		setDefaultDescription("Reduces fire damage.");
 	}
 
 	@Override
@@ -47,15 +47,7 @@ public class FireProtection extends CustomEnchantment{
 	}
 
 	@Override
-	protected List<CustomEnchantment> getConflictingEnchantments() {
-		return Arrays.asList(this, DefaultEnchantments.getCustomEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL), 
-				DefaultEnchantments.getCustomEnchantment(Enchantment.PROTECTION_EXPLOSIONS), 
-				DefaultEnchantments.getCustomEnchantment(Enchantment.PROTECTION_PROJECTILE));
+	protected List<Enchantment> getDefaultConflictingEnchantments() {
+		return Arrays.asList(Enchantment.PROTECTION_ENVIRONMENTAL, Enchantment.PROTECTION_EXPLOSIONS, Enchantment.PROTECTION_PROJECTILE);
 	}
-
-	@Override
-	public String getDescription() {
-		return "Reduces fire damage.";
-	}
-
 }

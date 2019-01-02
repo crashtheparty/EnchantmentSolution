@@ -4,10 +4,9 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.enchantments.Enchantment;
-import org.ctp.enchantmentsolution.api.ItemType;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
-import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Weight;
+import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 
 public class Protection extends CustomEnchantment{
 	
@@ -24,6 +23,7 @@ public class Protection extends CustomEnchantment{
 		setDefaultFiftyMaxLevel(4);
 		setDefaultThirtyMaxLevel(4);
 		setDefaultWeight(Weight.COMMON);
+		setDefaultDescription("Reduces all damage, except damage from the Void, the /kill command, or hunger damage.");
 	}
 
 	@Override
@@ -47,15 +47,7 @@ public class Protection extends CustomEnchantment{
 	}
 
 	@Override
-	protected List<CustomEnchantment> getConflictingEnchantments() {
-		return Arrays.asList(this, DefaultEnchantments.getCustomEnchantment(Enchantment.PROTECTION_PROJECTILE), 
-				DefaultEnchantments.getCustomEnchantment(Enchantment.PROTECTION_EXPLOSIONS), 
-				DefaultEnchantments.getCustomEnchantment(Enchantment.PROTECTION_FIRE));
+	protected List<Enchantment> getDefaultConflictingEnchantments() {
+		return Arrays.asList(Enchantment.PROTECTION_PROJECTILE, Enchantment.PROTECTION_EXPLOSIONS, Enchantment.PROTECTION_FIRE);
 	}
-
-	@Override
-	public String getDescription() {
-		return "Reduces all damage, except damage from the Void, the /kill command, or hunger damage.";
-	}
-
 }

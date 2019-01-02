@@ -4,10 +4,10 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.enchantments.Enchantment;
-import org.ctp.enchantmentsolution.api.ItemType;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Weight;
+import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 
 public class DepthStrider extends CustomEnchantment{
 	
@@ -24,6 +24,7 @@ public class DepthStrider extends CustomEnchantment{
 		setDefaultFiftyMaxLevel(3);
 		setDefaultThirtyMaxLevel(3);
 		setDefaultWeight(Weight.RARE);
+		setDefaultDescription("Increases underwater movement speed.");
 	}
 
 	@Override
@@ -47,15 +48,7 @@ public class DepthStrider extends CustomEnchantment{
 	}
 
 	@Override
-	protected List<CustomEnchantment> getConflictingEnchantments() {
-		return Arrays.asList(this, DefaultEnchantments.getCustomEnchantment(Enchantment.FROST_WALKER),
-				DefaultEnchantments.getCustomEnchantment(DefaultEnchantments.MAGMA_WALKER),
-				DefaultEnchantments.getCustomEnchantment(DefaultEnchantments.VOID_WALKER));
+	protected List<Enchantment> getDefaultConflictingEnchantments() {
+		return Arrays.asList(Enchantment.FROST_WALKER, DefaultEnchantments.MAGMA_WALKER, DefaultEnchantments.VOID_WALKER);
 	}
-
-	@Override
-	public String getDescription() {
-		return "Increases underwater movement speed.";
-	}
-
 }

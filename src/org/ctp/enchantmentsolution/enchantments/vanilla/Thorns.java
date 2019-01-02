@@ -4,9 +4,9 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.enchantments.Enchantment;
-import org.ctp.enchantmentsolution.api.ItemType;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.Weight;
+import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 
 public class Thorns extends CustomEnchantment{
 	
@@ -23,6 +23,7 @@ public class Thorns extends CustomEnchantment{
 		setDefaultFiftyMaxLevel(3);
 		setDefaultThirtyMaxLevel(3);
 		setDefaultWeight(Weight.VERY_RARE);
+		setDefaultDescription("Attackers are damaged when they attack the wearer. This also does additional durability damage to armor.");
 	}
 	
 	@Override
@@ -46,13 +47,7 @@ public class Thorns extends CustomEnchantment{
 	}
 
 	@Override
-	protected List<CustomEnchantment> getConflictingEnchantments() {
-		return Arrays.asList(this);
+	protected List<Enchantment> getDefaultConflictingEnchantments() {
+		return Arrays.asList();
 	}
-
-	@Override
-	public String getDescription() {
-		return "Attackers are damaged when they attack the wearer. This also does additional durability damage to armor.";
-	}
-
 }

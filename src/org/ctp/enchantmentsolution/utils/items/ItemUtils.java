@@ -1,5 +1,6 @@
 package org.ctp.enchantmentsolution.utils.items;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -12,10 +13,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.Vector;
-import org.ctp.enchantmentsolution.api.EnchantmentLevel;
+import org.ctp.enchantmentsolution.enchantments.EnchantmentLevel;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
 import org.ctp.enchantmentsolution.enchantments.PlayerLevels;
 import org.ctp.enchantmentsolution.utils.AnvilUtils.RepairType;
+import org.ctp.enchantmentsolution.utils.items.nms.ItemRepairType;
+import org.ctp.enchantmentsolution.utils.save.ConfigFiles;
 
 public class ItemUtils {
 	
@@ -25,6 +28,18 @@ public class ItemUtils {
 
 	public static List<Material> getRepairMaterials() {
 		return REPAIR_MATERIALS;
+	}
+	
+	public static List<String> getRepairMaterialsStrings(){
+		List<String> names = new ArrayList<String>();
+		for(ItemRepairType type : ItemRepairType.getValues()) {
+			for(Material m : type.getRepairTypes()) {
+				if(!names.contains(m.name())) {
+					names.add(m.name());
+				}
+			}
+		}
+		return names;
 	}
 	
 	public static int repairItem(ItemStack first, ItemStack second) {
@@ -49,6 +64,10 @@ public class ItemUtils {
 			amount--;
 			DamageUtils.setDamage(combined, (DamageUtils.getDamage(combined.getItemMeta()) - durPerItem));
 		}
+		
+		if(DamageUtils.getDamage(combined.getItemMeta()) < 0) {
+			DamageUtils.setDamage(combined, 0);
+		}
 		return combined;
 	}
 	
@@ -68,6 +87,9 @@ public class ItemUtils {
 		}else if(second.getType().equals(first.getType())) {
 			int extraDurability = second.getType().getMaxDurability() - DamageUtils.getDamage(second.getItemMeta()) + (int) (second.getType().getMaxDurability() * .12);
 			DamageUtils.setDamage(combined, DamageUtils.getDamage(combined.getItemMeta()) - extraDurability);
+			if(DamageUtils.getDamage(combined.getItemMeta()) < 0) {
+				DamageUtils.setDamage(combined, 0);
+			}
 		}
 		
 		List<EnchantmentLevel> enchantments = Enchantments.combineEnchants(player, first, second);
@@ -101,7 +123,7 @@ public class ItemUtils {
 		}
 	}
 	
-	public static ItemStack addNMSEnchantment(ItemStack item) {
+	public static ItemStack addNMSEnchantment(ItemStack item, String type) {
 		ItemStack returnItem = new ItemStack(item.getType());
 		ItemStack duplicate = item.clone();
 		ItemMeta returnItemMeta = returnItem.getItemMeta();
@@ -114,10 +136,11 @@ public class ItemUtils {
 		
 		List<EnchantmentLevel> enchants = null;
 		while(enchants == null) {
-			PlayerLevels levels = PlayerLevels.generateFakePlayerLevels(returnItem.getType());
+			int bookshelves = ConfigFiles.getBookshelvesFromType(type);
+			PlayerLevels levels = PlayerLevels.generateFakePlayerLevels(returnItem.getType(), bookshelves);
 			int i = 0;
 			while(i < 3) {
-				int random = (int)(Math.random() * levels.getEnchants().size() + 2);
+				int random = (int)(Math.random() * levels.getEnchants().size() + ConfigFiles.getLevelFromType(type));
 				if(random > levels.getEnchants().size() - 1) random = levels.getEnchants().size() - 1;
 				if(levels.getEnchants().get(random).size() > 0) {
 					enchants = levels.getEnchants().get(random);

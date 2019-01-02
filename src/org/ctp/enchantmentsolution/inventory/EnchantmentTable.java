@@ -9,19 +9,20 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
-import org.ctp.enchantmentsolution.api.EnchantmentLevel;
+import org.ctp.enchantmentsolution.enchantments.EnchantmentLevel;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
 import org.ctp.enchantmentsolution.enchantments.PlayerLevels;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
-import org.ctp.enchantmentsolution.utils.ItemSerialization;
 import org.ctp.enchantmentsolution.utils.RomanNumerals;
 import org.ctp.enchantmentsolution.utils.save.ConfigFiles;
+import org.ctp.enchantmentsolution.utils.items.ItemSerialization;
 import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 
 public class EnchantmentTable implements InventoryData {
@@ -400,6 +401,7 @@ public class EnchantmentTable implements InventoryData {
 				}
 			}
 		}
+		player.playSound(player.getLocation(), Sound.BLOCK_ENCHANTMENT_TABLE_USE, 1, 1);
 		enchantableItem = Enchantments.addEnchantmentsToItem(enchantableItem,
 				levels.getEnchants().get(level));
 		playerItems.set(slot, enchantableItem);
@@ -418,16 +420,18 @@ public class EnchantmentTable implements InventoryData {
 
 	@Override
 	public void close(boolean external) {
-		for(ItemStack item : getItems()){
-			ItemUtils.giveItemToPlayer(player, item, player.getLocation());
+		if(EnchantmentSolution.hasInventory(this)) {
+			for(ItemStack item : getItems()){
+				ItemUtils.giveItemToPlayer(player, item, player.getLocation());
+			}
+			if(lapisStack != null) {
+				ItemUtils.giveItemToPlayer(player, lapisStack, player.getLocation());
+			}
+			EnchantmentSolution.removeInventory(this);
+			if(!external) {
+				player.closeInventory();
+			}
 		}
-		if(lapisStack != null) {
-			ItemUtils.giveItemToPlayer(player, lapisStack, player.getLocation());
-		}
-		if(!external) {
-			player.closeInventory();
-		}
-		EnchantmentSolution.removeInventory(this);
 	}
 
 	public HashMap<String, Object> getCodes() {

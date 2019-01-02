@@ -80,7 +80,7 @@ public class SaveUtils {
 		}
 		for (Block block : VoidWalkerListener.BLOCKS) {
 			for(MetadataValue value : block.getMetadata("VoidWalker")){
-				config.set("bedrock_blocks." + i,
+				config.set("obsidian_blocks." + i,
 						(block.getWorld().getName() + " " + block.getX() + " "
 								+ block.getY() + " " + block.getZ() + " " + value.asInt()));
 			}
