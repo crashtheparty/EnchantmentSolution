@@ -128,15 +128,16 @@ public class ConfigFiles {
 		getEnchantmentConfig().setComments(getDefaultConfig().getBoolean("use_comments"));
 		getEnchantmentAdvancedConfig().setComments(getDefaultConfig().getBoolean("use_comments"));
 		
-		DefaultEnchantments.setEnchantments();
-		PlayerLevels.resetPlayerLevels();
-		updateEnchantments();
-		
 		getDefaultConfig().saveConfig();
 		getFishingConfig().saveConfig();
 		getLanguageFile().saveConfig();
 		getEnchantmentConfig().saveConfig();
 		getEnchantmentAdvancedConfig().saveConfig();
+		
+		DefaultEnchantments.setEnchantments();
+		PlayerLevels.resetPlayerLevels();
+		updateEnchantments();
+		
 		EnchantmentSolution.getDb().updateConfig(getDefaultConfig());
 		EnchantmentSolution.getDb().updateConfig(getFishingConfig());
 		EnchantmentSolution.getDb().updateConfig(getLanguageFile());
