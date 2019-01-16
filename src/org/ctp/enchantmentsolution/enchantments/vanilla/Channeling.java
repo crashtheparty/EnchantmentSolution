@@ -16,7 +16,7 @@ public class Channeling extends CustomEnchantment{
 		setDefaultFiftyModifier(0);
 		setDefaultThirtyModifier(0);
 		setDefaultFiftyMaxConstant(75);
-		setDefaultThirtyMaxConstant(50);
+		setDefaultThirtyMaxConstant(25);
 		setDefaultFiftyStartLevel(1);
 		setDefaultThirtyStartLevel(1);
 		setDefaultFiftyMaxLevel(1);

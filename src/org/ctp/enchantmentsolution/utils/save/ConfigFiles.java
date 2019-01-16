@@ -128,6 +128,10 @@ public class ConfigFiles {
 		getEnchantmentConfig().setComments(getDefaultConfig().getBoolean("use_comments"));
 		getEnchantmentAdvancedConfig().setComments(getDefaultConfig().getBoolean("use_comments"));
 		
+		DefaultEnchantments.setEnchantments();
+		PlayerLevels.resetPlayerLevels();
+		updateEnchantments();
+		
 		getDefaultConfig().saveConfig();
 		getFishingConfig().saveConfig();
 		getLanguageFile().saveConfig();
@@ -150,13 +154,10 @@ public class ConfigFiles {
 		} catch (final Exception e) {
 			e.printStackTrace();
 		}
-		DefaultEnchantments.setEnchantments();
-		PlayerLevels.resetPlayerLevels();
 		
 		loadLangFile(dataFolder, 0);
 
 		save();
-		ConfigFiles.updateEnchantments();
 	}
 	
 	private static void loadLangFile(File dataFolder, int tries) {

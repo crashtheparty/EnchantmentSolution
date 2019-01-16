@@ -1,9 +1,5 @@
 package org.ctp.enchantmentsolution;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -24,12 +20,14 @@ import org.ctp.enchantmentsolution.database.SQLite;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.EnchantmentLevel;
 import org.ctp.enchantmentsolution.inventory.InventoryData;
+import org.ctp.enchantmentsolution.listeners.BlockBreak;
 import org.ctp.enchantmentsolution.listeners.ChatMessage;
 import org.ctp.enchantmentsolution.listeners.InventoryClick;
 import org.ctp.enchantmentsolution.listeners.InventoryClose;
 import org.ctp.enchantmentsolution.listeners.PlayerChatTabComplete;
 import org.ctp.enchantmentsolution.listeners.PlayerInteract;
 import org.ctp.enchantmentsolution.listeners.VanishListener;
+import org.ctp.enchantmentsolution.listeners.VersionCheck;
 import org.ctp.enchantmentsolution.listeners.VersionUpdater;
 import org.ctp.enchantmentsolution.listeners.abilities.BeheadingListener;
 import org.ctp.enchantmentsolution.listeners.abilities.BrineListener;
@@ -53,7 +51,6 @@ import org.ctp.enchantmentsolution.listeners.fishing.EnchantsFishingListener;
 import org.ctp.enchantmentsolution.listeners.fishing.McMMOFishingListener;
 import org.ctp.enchantmentsolution.listeners.mobs.MobSpawning;
 import org.ctp.enchantmentsolution.nms.Version;
-import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.save.ConfigFiles;
 import org.ctp.enchantmentsolution.utils.save.SaveUtils;
 
@@ -133,6 +130,7 @@ public class EnchantmentSolution extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new VanishListener(), this);
 		getServer().getPluginManager().registerEvents(new VersionUpdater(), this);
 		getServer().getPluginManager().registerEvents(new ChatMessage(), this);
+		getServer().getPluginManager().registerEvents(new BlockBreak(), this);
 		if(Bukkit.getPluginManager().isPluginEnabled("mcMMO")) {
 			getServer().getPluginManager().registerEvents(new McMMOFishingListener(), this);
 		} else {
@@ -195,29 +193,7 @@ public class EnchantmentSolution extends JavaPlugin {
 	}
 	
 	private void checkVersion(){
-		if(ConfigFiles.getDefaultConfig().getBoolean("get_latest_version")) {
-	        String latestversion;
-	        boolean isupdate = false;
-	        try {
-	            URL urlv = new URL("https://raw.githubusercontent.com/crashtheparty/EnchantmentSolution/master/Version");
-	            BufferedReader in = new BufferedReader(new InputStreamReader(urlv.openStream()));
-	            latestversion = in.readLine();
-	            if(latestversion.equalsIgnoreCase(getDescription().getVersion())){
-	                isupdate = true;
-	            }else{
-	                isupdate = false;
-	            }
-	            in.close();
-	        } catch (IOException e) {
-	        	ChatUtils.sendToConsole(Level.WARNING, "Issue with finding newest version.");
-	        }
-	        if(isupdate){
-	        	ChatUtils.sendToConsole(Level.INFO, "Your version is up-to-date.");
-	        }else{
-	        	NEWEST_VERSION = false;
-	        	ChatUtils.sendToConsole(Level.WARNING, "New version of EnchantmentSolution is available! Download it here: https://www.spigotmc.org/resources/enchantment-solution.59556/");
-	        }
-		}
+		Bukkit.getScheduler().runTaskTimerAsynchronously(PLUGIN, new VersionCheck(), 20l, 20 * 60 * 60 * 4l);
     }
 
 	public static SQLite getDb() {

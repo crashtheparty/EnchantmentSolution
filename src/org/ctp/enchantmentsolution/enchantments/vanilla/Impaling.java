@@ -12,9 +12,9 @@ public class Impaling extends CustomEnchantment{
 	public Impaling() {
 		setDefaultDisplayName("Impaling");
 		setDefaultFiftyConstant(-12);
-		setDefaultThirtyConstant(-11);
+		setDefaultThirtyConstant(1);
 		setDefaultFiftyModifier(13);
-		setDefaultThirtyModifier(10);
+		setDefaultThirtyModifier(8);
 		setDefaultFiftyMaxConstant(20);
 		setDefaultThirtyMaxConstant(20);
 		setDefaultFiftyStartLevel(1);
