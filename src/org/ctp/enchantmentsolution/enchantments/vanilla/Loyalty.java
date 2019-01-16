@@ -12,15 +12,15 @@ public class Loyalty extends CustomEnchantment{
 	public Loyalty() {
 		setDefaultDisplayName("Loyalty");
 		setDefaultFiftyConstant(7);
-		setDefaultThirtyConstant(6);
+		setDefaultThirtyConstant(5);
 		setDefaultFiftyModifier(11);
-		setDefaultThirtyModifier(9);
+		setDefaultThirtyModifier(7);
 		setDefaultFiftyMaxConstant(40);
-		setDefaultThirtyMaxConstant(50);
+		setDefaultThirtyMaxConstant(24);
 		setDefaultFiftyStartLevel(1);
 		setDefaultThirtyStartLevel(1);
-		setDefaultFiftyMaxLevel(2);
-		setDefaultThirtyMaxLevel(2);
+		setDefaultFiftyMaxLevel(3);
+		setDefaultThirtyMaxLevel(3);
 		setDefaultWeight(Weight.UNCOMMON);
 	}
 	

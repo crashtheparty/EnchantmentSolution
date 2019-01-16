@@ -1,6 +1,7 @@
 package org.ctp.enchantmentsolution.listeners.mobs;
 
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntitySpawnEvent;
@@ -14,12 +15,13 @@ public class MobSpawning implements Listener{
 	public void onMobSpawn(EntitySpawnEvent event) {
 		if(!Enchantments.getMobLoot()) return;
 		if(event.getEntity() instanceof LivingEntity) {
+			if(event.getEntity() instanceof Player) return;
 			LivingEntity entity = (LivingEntity) event.getEntity();
 			if(entity.getEquipment() != null) {
 				ItemStack[] armor = entity.getEquipment().getArmorContents();
 				ItemStack holding = entity.getEquipment().getItemInMainHand();
-								
-				for(int i = 1; i < armor.length; i++) {
+				
+				for(int i = 0; i < armor.length; i++) {
 					if(armor[i] != null) {
 						if(armor[i].getItemMeta() != null) {
 							if(armor[i].getItemMeta().hasEnchants()) {

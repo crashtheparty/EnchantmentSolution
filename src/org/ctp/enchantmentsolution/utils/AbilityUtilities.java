@@ -6,10 +6,14 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+import org.bukkit.CropState;
 import org.bukkit.Material;
+import org.bukkit.NetherWartsState;
 import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.material.Crops;
+import org.bukkit.material.NetherWarts;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
 
@@ -20,7 +24,7 @@ public class AbilityUtilities {
 			Material.COAL_ORE, Material.NETHER_QUARTZ_ORE, Material.LAPIS_ORE,
 			Material.REDSTONE_ORE, Material.REDSTONE_ORE, Material.WHEAT, Material.CARROTS,
 			Material.POTATOES, Material.GLOWSTONE, Material.SEA_LANTERN,
-			Material.MELON, Material.NETHER_WART,
+			Material.MELON, Material.NETHER_WART, Material.BEETROOTS, 
 			Material.GRASS, Material.GRAVEL, Material.JUNGLE_LEAVES, Material.OAK_LEAVES,
 			Material.DARK_OAK_LEAVES, Material.ACACIA_LEAVES, Material.BIRCH_LEAVES, Material.SPRUCE_LEAVES);
 
@@ -128,6 +132,17 @@ public class AbilityUtilities {
 			int min = 0;
 			int max = 0;
 			int actualMax = 0;
+			if(brokenBlock.getState().getData() instanceof Crops) {
+				Crops c = (Crops) brokenBlock.getState().getData();
+	            if(!c.getState().equals(CropState.RIPE)) {
+	            	return priorItems;
+	            }
+			} else if(brokenBlock.getState().getData() instanceof NetherWarts) {
+				NetherWarts c = (NetherWarts) brokenBlock.getState().getData();
+	            if(!c.getState().equals(NetherWartsState.RIPE)) {
+	            	return priorItems;
+	            }
+			}
 			Material breakBlock = null;
 			switch(brokenBlock.getType()){
 			case REDSTONE_ORE:
