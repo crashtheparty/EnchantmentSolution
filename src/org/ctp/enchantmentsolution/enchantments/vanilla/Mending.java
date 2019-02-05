@@ -28,6 +28,30 @@ public class Mending extends CustomEnchantment{
 
 	@Override
 	public boolean canEnchantItem(Material item) {
+		if(item.equals(Material.BOOK)){
+			return true;
+		}
+		if(ItemUtils.getItemTypes().get("armor").contains(item)){
+			return true;
+		}
+		if(ItemUtils.getItemTypes().get("tools").contains(item)){
+			return true;
+		}
+		if(ItemUtils.getItemTypes().get("weapons").contains(item)){
+			return true;
+		}
+		if(ItemUtils.getItemTypes().get("trident").contains(item)){
+			return true;
+		}
+		if(ItemUtils.getItemTypes().get("bow").contains(item)){
+			return true;
+		}
+		if(ItemUtils.getItemTypes().get("fishing").contains(item)){
+			return true;
+		}
+		if(ItemUtils.getItemTypes().get("elytra").contains(item)){
+			return true;
+		}
 		return false;
 	}
 

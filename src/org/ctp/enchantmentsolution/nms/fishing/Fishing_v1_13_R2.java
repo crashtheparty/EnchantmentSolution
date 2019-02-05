@@ -12,9 +12,9 @@ public class Fishing_v1_13_R2 {
 		ItemStack newItem = CraftItemStack.asNMSCopy(item);
 		CraftItemStack cItem = CraftItemStack.asCraftCopy(item);
 		if((cItem.getType().equals(Material.ENCHANTED_BOOK))) {
-			newItem = CraftItemStack.asNMSCopy(ItemUtils.addNMSEnchantment(new org.bukkit.inventory.ItemStack(Material.BOOK)));
+			newItem = CraftItemStack.asNMSCopy(ItemUtils.addNMSEnchantment(new org.bukkit.inventory.ItemStack(Material.BOOK), "fishing"));
 		} else if (newItem.hasEnchantments()) {
-			newItem = CraftItemStack.asNMSCopy(ItemUtils.addNMSEnchantment(CraftItemStack.asBukkitCopy(newItem)));
+			newItem = CraftItemStack.asNMSCopy(ItemUtils.addNMSEnchantment(CraftItemStack.asBukkitCopy(newItem), "fishing"));
 		}
 		if(newItem != null) {
 			return CraftItemStack.asBukkitCopy(newItem);
