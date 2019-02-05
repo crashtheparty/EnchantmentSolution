@@ -605,4 +605,8 @@ public class YamlConfig {
 	        return string;
 	    }
 	}
+
+	public void addMinMax(String path, int i, int j) {
+		getInfo(path).setMinMax(i, j);
+	}
 }

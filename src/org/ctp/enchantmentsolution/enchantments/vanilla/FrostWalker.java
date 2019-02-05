@@ -27,6 +27,12 @@ public class FrostWalker extends CustomEnchantment{
 	
 	@Override
 	public boolean canEnchantItem(Material item) {
+		if(item.equals(Material.BOOK)){
+			return true;
+		}
+		if(ItemUtils.getItemTypes().get("boots").contains(item)){
+			return true;
+		}
 		return false;
 	}
 

@@ -213,8 +213,11 @@ public class PlayerLevels {
 		PLAYER_LEVELS = playerLevels;
 	}
 	
-	public static PlayerLevels generateFakePlayerLevels(Material material) {
-		int random = (int)(Math.random() * 23) + 1;
+	public static PlayerLevels generateFakePlayerLevels(Material material, int minBookshelves) {
+		int books = 16;
+		if(ConfigFiles.useLevel50()) books = 24;
+		int random = (int)(Math.random() * books) + minBookshelves;
+		if(random >= books) random = books - 1;
 		PlayerLevels levels = new PlayerLevels(random, material);
 		
 		return levels;

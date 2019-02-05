@@ -8,6 +8,7 @@ public class YamlInfo {
 
 	private String path;
 	private Object value;
+	private int min = -1, max = -1;
 	private String[] comments;
 	
 	public YamlInfo(String path, Object value) {
@@ -39,6 +40,11 @@ public class YamlInfo {
 	}
 	public void setValue(Object value) {
 		this.value = value;
+		
+		if(!(min == -1 && max == -1) && getInteger() != null) {
+			if(getInteger() < min) setValue(min);
+			if(getInteger() > max) setValue(max);
+		}
 	}
 	public String[] getComments() {
 		return comments;
@@ -102,6 +108,15 @@ public class YamlInfo {
 			return strings;
 		}
 		return null;
+	}
+
+	public void setMinMax(int i, int j) {
+		min = i;
+		max = j;
+		if(getInteger() != null) {
+			if(getInteger() < min) setValue(min);
+			if(getInteger() > max) setValue(max);
+		}
 	}
 	
 }

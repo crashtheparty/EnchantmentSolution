@@ -112,15 +112,20 @@ public class Anvil implements InventoryData{
 				int playerLevel = player.getLevel();
 				List<String> lore = new ArrayList<String>();
 				if(player.getGameMode().equals(GameMode.CREATIVE) || repairCost <= playerLevel) {
-					combine = new ItemStack(Material.LIME_STAINED_GLASS_PANE);
-					HashMap<String, Object> loreCodes = getCodes();
-					loreCodes.put("%repairCost%", repairCost);
-					lore.add(ChatUtils.getMessage(loreCodes, "anvil.repair-cost"));
+					if (!player.getGameMode().equals(GameMode.CREATIVE) && repairCost > ConfigFiles.getMaxRepairLevel()) {
+						combine = new ItemStack(Material.RED_STAINED_GLASS_PANE);
+						lore.add(ChatUtils.getMessage(getCodes(), "anvil.cannot-repair"));
+					} else {
+						combine = new ItemStack(Material.LIME_STAINED_GLASS_PANE);
+						HashMap<String, Object> loreCodes = getCodes();
+						loreCodes.put("%repairCost%", repairCost);
+						lore.add(ChatUtils.getMessage(loreCodes, "anvil.repair-cost"));
+					}
 				}else {
 					combine = new ItemStack(Material.RED_STAINED_GLASS_PANE);
-					if(!player.getGameMode().equals(GameMode.CREATIVE) && repairCost > 60) {
+					if (!player.getGameMode().equals(GameMode.CREATIVE) && repairCost > ConfigFiles.getMaxRepairLevel()) {
 						lore.add(ChatUtils.getMessage(getCodes(), "anvil.cannot-repair"));
-					}else {
+					} else {
 						HashMap<String, Object> loreCodes = getCodes();
 						loreCodes.put("%repairCost%", repairCost);
 						lore.add(ChatUtils.getMessage(getCodes(), "anvil.repair-cost-high"));
@@ -220,11 +225,7 @@ public class Anvil implements InventoryData{
 		}
 		int repairCostOne = AnvilNMS.getRepairCost(playerItems.get(0));
 		int repairCostTwo = AnvilNMS.getRepairCost(playerItems.get(1));
-		if(repairCostOne > repairCostTwo) {
-			repairCost += repairCostOne;
-		}else {
-			repairCost += repairCostTwo;
-		}
+		repairCost += repairCostOne + repairCostTwo;
 		
 		if(type.equals(RepairType.COMBINE)) {
 			repairCost += Enchantments.combineEnchantmentsLevel(playerItems.get(0), playerItems.get(1));
@@ -310,13 +311,15 @@ public class Anvil implements InventoryData{
 	}
 	
 	public void close(boolean external) {
-		for(ItemStack item : getItems()){
-			ItemUtils.giveItemToPlayer(player, item, player.getLocation());
+		if(EnchantmentSolution.hasInventory(this)) {
+			for(ItemStack item : getItems()){
+				ItemUtils.giveItemToPlayer(player, item, player.getLocation());
+			}
+			EnchantmentSolution.removeInventory(this);
+			if(!external) {
+				player.closeInventory();
+			}
 		}
-		if(!external) {
-			player.closeInventory();
-		}
-		EnchantmentSolution.removeInventory(this);
 	}
 
 	public HashMap<String, Object> getCodes() {

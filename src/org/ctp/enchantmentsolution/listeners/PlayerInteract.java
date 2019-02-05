@@ -54,7 +54,7 @@ public class PlayerInteract implements Listener{
 							if(inv == null) {
 								inv = new LegacyAnvil(player, block, player.getOpenInventory().getTopInventory());
 								EnchantmentSolution.addInventory(inv);
-							} else if (!(inv instanceof Anvil)) {
+							} else if (!(inv instanceof LegacyAnvil)) {
 								inv.close(true);
 								inv = new LegacyAnvil(player, block, player.getOpenInventory().getTopInventory());
 								EnchantmentSolution.addInventory(inv);

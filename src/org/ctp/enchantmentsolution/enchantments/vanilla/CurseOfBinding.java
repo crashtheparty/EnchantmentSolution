@@ -33,6 +33,15 @@ public class CurseOfBinding extends CustomEnchantment{
 
 	@Override
 	public boolean canEnchantItem(Material item) {
+		if(ItemUtils.getItemTypes().get("armor").contains(item)){
+			return true;
+		}
+		if(ItemUtils.getItemTypes().get("elytra").contains(item)){
+			return true;
+		}
+		if(item.equals(Material.BOOK)){
+			return true;
+		}
 		return false;
 	}
 
