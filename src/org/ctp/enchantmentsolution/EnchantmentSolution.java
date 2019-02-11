@@ -47,11 +47,13 @@ import org.ctp.enchantmentsolution.listeners.abilities.TelepathyListener;
 import org.ctp.enchantmentsolution.listeners.abilities.WarpListener;
 import org.ctp.enchantmentsolution.listeners.chestloot.ChestLootListener;
 import org.ctp.enchantmentsolution.listeners.fishing.EnchantsFishingListener;
-import org.ctp.enchantmentsolution.listeners.fishing.McMMOFishingListener;
+import org.ctp.enchantmentsolution.listeners.fishing.McMMOFishingNMS;
 import org.ctp.enchantmentsolution.listeners.mobs.MobSpawning;
 import org.ctp.enchantmentsolution.nms.Version;
+import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.save.ConfigFiles;
 import org.ctp.enchantmentsolution.utils.save.SaveUtils;
+import org.ctp.eswrapper.EsWrapper;
 
 public class EnchantmentSolution extends JavaPlugin {
 
@@ -60,6 +62,7 @@ public class EnchantmentSolution extends JavaPlugin {
 	public static HashMap<Material, HashMap<List<EnchantmentLevel>, Integer>> DEBUG = new HashMap<Material, HashMap<List<EnchantmentLevel>, Integer>>();
 	public static boolean NEWEST_VERSION = true, DISABLE = false;
 	private static SQLite DB;
+	private static String MCMMO_TYPE;
 
 	public void onEnable() {
 		PLUGIN = this;
@@ -131,9 +134,40 @@ public class EnchantmentSolution extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new ChatMessage(), this);
 		getServer().getPluginManager().registerEvents(new BlockBreak(), this);
 		if(Bukkit.getPluginManager().isPluginEnabled("mcMMO")) {
-			getServer().getPluginManager().registerEvents(new McMMOFishingListener(), this);
+			String version = Bukkit.getPluginManager().getPlugin("mcMMO").getDescription().getVersion();
+			ChatUtils.sendToConsole(Level.INFO, "mcMMO Version: " + version);
+			if(version.substring(0, version.indexOf(".")).equals("2")) {
+				ChatUtils.sendToConsole(Level.INFO, "Using the Overhaul Version!");
+				ChatUtils.sendToConsole(Level.INFO, "Checking for compatibility plugin...");
+				try {
+					if(Bukkit.getPluginManager().isPluginEnabled(EsWrapper.getPlugin())) {
+						ChatUtils.sendToConsole(Level.INFO, "Found compatibility plugin!");
+						ChatUtils.sendToConsole(EsWrapper.getLevel(), EsWrapper.getMessage());
+						MCMMO_TYPE = "Overhaul";
+					} else {
+						ChatUtils.sendToConsole(Level.WARNING, "Compatibility plugin not found! Turning off compatibility.");
+						MCMMO_TYPE = "Disabled";
+					}
+				} catch(NoClassDefFoundError ex) {
+					ChatUtils.sendToConsole(Level.WARNING, "Compatibility plugin not found! Turning off compatibility.");
+					MCMMO_TYPE = "Disabled";
+				}
+			} else {
+				ChatUtils.sendToConsole(Level.INFO, "Using the Classic Version! Compatibility should be intact.");
+				MCMMO_TYPE = "Classic";
+			}
 		} else {
+			MCMMO_TYPE = "Disabled";
+		}
+		
+		switch(MCMMO_TYPE) {
+		case "Overhaul":
+		case "Classic":
+			getServer().getPluginManager().registerEvents(new McMMOFishingNMS(), this);
+			break;
+		case "Disabled":
 			getServer().getPluginManager().registerEvents(new EnchantsFishingListener(), this);
+			break;
 		}
 
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN,
@@ -201,5 +235,9 @@ public class EnchantmentSolution extends JavaPlugin {
 
 	public static SQLite getDb() {
 		return DB;
+	}
+
+	public static String getMcMMOType() {
+		return MCMMO_TYPE;
 	}
 }

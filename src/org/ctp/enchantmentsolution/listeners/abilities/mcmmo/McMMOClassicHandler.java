@@ -21,7 +21,7 @@ import com.gmail.nossr50.util.BlockUtils;
 import com.gmail.nossr50.util.ItemUtils;
 import com.gmail.nossr50.util.player.UserManager;
 
-public class McMMOHandler {
+public class McMMOClassicHandler {
 
 	public static void handleMcMMO(BlockBreakEvent event) {
 		BlockState blockState = event.getBlock().getState();
