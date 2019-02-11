@@ -7,10 +7,12 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.bukkit.CropState;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NetherWartsState;
 import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.ExperienceOrb;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Crops;
 import org.bukkit.material.NetherWarts;
@@ -543,5 +545,11 @@ public class AbilityUtilities {
 			break;
 		}
 		return null;
+	}
+
+	public static void dropExperience(Location loc, int amount) {
+		if(amount > 0) {
+			((ExperienceOrb)loc.getWorld().spawn(loc, ExperienceOrb.class)).setExperience(amount);
+		}
 	}
 }

@@ -1,5 +1,5 @@
 name: EnchantmentSolution
-version: 1.3.6
+version: 1.4.0
 main: org.ctp.enchantmentsolution.EnchantmentSolution
 api-version: 1.13
 commands:

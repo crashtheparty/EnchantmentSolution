@@ -607,6 +607,10 @@ public class YamlConfig {
 	}
 
 	public void addMinMax(String path, int i, int j) {
-		getInfo(path).setMinMax(i, j);
+		if(getInfo(path) == null) {
+			defaults.get(path).setMinMax(i, j);
+		} else {
+			getInfo(path).setMinMax(i, j);
+		}
 	}
 }

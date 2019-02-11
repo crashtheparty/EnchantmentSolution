@@ -1,22 +1,18 @@
-package org.ctp.enchantmentsolution.listeners.fishing;
+package org.ctp.enchantmentsolution.listeners.fishing.mcmmo;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.inventory.ItemStack;
-import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.EnchantmentLevel;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
 import org.ctp.enchantmentsolution.enchantments.mcmmo.Fishing;
+import org.ctp.enchantmentsolution.listeners.fishing.McMMOFishingThread;
 import org.ctp.enchantmentsolution.utils.config.YamlConfig;
 import org.ctp.enchantmentsolution.utils.save.ConfigFiles;
 
@@ -31,11 +27,8 @@ import com.gmail.nossr50.util.ItemUtils;
 import com.gmail.nossr50.util.Permissions;
 import com.gmail.nossr50.util.player.UserManager;
 
-public class McMMOFishingListener implements Listener {
-	
-	private static List<McMMOFishingThread> PLAYER_ITEMS = new ArrayList<McMMOFishingThread>();
+public class McMMOClassicFishingListener extends McMMOFishingListener {
 
-	@EventHandler
 	public void onMcMMOPlayerFishingTreasure(McMMOPlayerFishingTreasureEvent event) {
 		if(!Enchantments.getFishingLoot()) return;
 		FishingManager manager = UserManager.getPlayer(event.getPlayer()).getFishingManager();
@@ -61,22 +54,18 @@ public class McMMOFishingListener implements Listener {
 				if (enchanted) {
 					player.sendMessage(LocaleLoader.getString("Fishing.Ability.TH.MagicFound"));
 				}
-				McMMOFishingThread thread = new McMMOFishingThread(player, treasure, treasureXp);
-				int scheduler = Bukkit.getScheduler().scheduleSyncRepeatingTask(EnchantmentSolution.PLUGIN, thread, 20l, 20l);
-				thread.setScheduler(scheduler);
-				PLAYER_ITEMS.add(thread);
+				add(player, treasure, treasureXp);
 			}
 		}
 	}
 
-	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onPlayerFish(PlayerFishEvent event) {
 		switch (event.getState()) {
 		case CAUGHT_FISH:
 			// TODO Update to new API once available! Waiting for case CAUGHT_TREASURE:
 			Item fishingCatch = (Item) event.getCaught();
 			McMMOFishingThread thread = null;
-			for(McMMOFishingThread t : PLAYER_ITEMS) {
+			for(McMMOFishingThread t : getPlayerItems()) {
 				if(t.getPlayer().equals(event.getPlayer())) {
 					int fishXp = ExperienceConfig.getInstance().getXp(SkillType.FISHING, fishingCatch.getItemStack().getType());
 					fishingCatch.setItemStack(t.getItem());
@@ -92,13 +81,6 @@ public class McMMOFishingListener implements Listener {
 			return;
 		default:
 			return;
-		}
-	}
-	
-	public static void remove(McMMOFishingThread thread) {
-		if(PLAYER_ITEMS.contains(thread)) {
-			Bukkit.getScheduler().cancelTask(thread.getScheduler());
-			PLAYER_ITEMS.remove(thread);
 		}
 	}
 
