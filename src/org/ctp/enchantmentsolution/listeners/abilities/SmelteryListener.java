@@ -1,6 +1,5 @@
 package org.ctp.enchantmentsolution.listeners.abilities;
 
-import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -15,7 +14,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
-import org.ctp.enchantmentsolution.listeners.abilities.mcmmo.McMMOHandler;
+import org.ctp.enchantmentsolution.nms.McMMO;
 import org.ctp.enchantmentsolution.utils.items.nms.AbilityUtils;
 import org.ctp.enchantmentsolution.utils.items.DamageUtils;
 
@@ -33,9 +32,7 @@ public class SmelteryListener implements Listener{
 				ItemStack smelted = AbilityUtils.getSmelteryItem(blockBroken, item);
 				if(smelted != null) {
 					if(!DefaultEnchantments.isEnabled(DefaultEnchantments.TELEPATHY) || !Enchantments.hasEnchantment(item, DefaultEnchantments.TELEPATHY)) {
-						if(Bukkit.getPluginManager().isPluginEnabled("mcMMO")) {
-							McMMOHandler.handleMcMMO(event);
-						}
+						McMMO.handleMcMMO(event);
 						int unbreaking = Enchantments.getLevel(item, Enchantment.DURABILITY);
 						double chance = (1.0D) / (unbreaking + 1.0D);
 						double random = Math.random();
@@ -45,6 +42,14 @@ public class SmelteryListener implements Listener{
 								player.getInventory().setItemInMainHand(new ItemStack(Material.AIR));
 								player.getWorld().playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 1, 1);
 							}
+						}
+						switch(event.getBlock().getType()) {
+						case IRON_ORE:
+						case GOLD_ORE:
+							AbilityUtils.dropExperience(blockBroken.getLocation().add(0.5, 0.5, 0.5), (int) (Math.random() * 3) + 1);
+							break;
+						default:
+							break;
 						}
 						event.getBlock().setType(Material.AIR);
 						Item droppedItem = player.getWorld().dropItem(

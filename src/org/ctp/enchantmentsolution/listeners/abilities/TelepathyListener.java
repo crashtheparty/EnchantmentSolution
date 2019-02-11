@@ -3,7 +3,6 @@ package org.ctp.enchantmentsolution.listeners.abilities;
 import java.util.Collection;
 import java.util.Iterator;
 
-import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -21,7 +20,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BlockStateMeta;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
-import org.ctp.enchantmentsolution.listeners.abilities.mcmmo.McMMOHandler;
+import org.ctp.enchantmentsolution.nms.McMMO;
 import org.ctp.enchantmentsolution.utils.items.nms.AbilityUtils;
 import org.ctp.enchantmentsolution.utils.items.DamageUtils;
 import org.ctp.enchantmentsolution.utils.items.ItemUtils;
@@ -122,9 +121,7 @@ public class TelepathyListener implements Listener {
 				player.getWorld().playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 1, 1);
 			}
 		}
-		if (Bukkit.getPluginManager().isPluginEnabled("mcMMO")) {
-			McMMOHandler.handleMcMMO(event);
-		}
+		McMMO.handleMcMMO(event);
 		event.getPlayer().giveExp(event.getExpToDrop());
 		event.getBlock().setType(Material.AIR);
 	}
