@@ -65,10 +65,11 @@ import org.ctp.enchantmentsolution.listeners.fishing.EnchantsFishingListener;
 import org.ctp.enchantmentsolution.listeners.fishing.McMMOFishingNMS;
 import org.ctp.enchantmentsolution.listeners.legacy.UpdateEnchantments;
 import org.ctp.enchantmentsolution.listeners.mobs.MobSpawning;
-import org.ctp.enchantmentsolution.nms.Version;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.save.ConfigFiles;
 import org.ctp.enchantmentsolution.utils.save.SaveUtils;
+import org.ctp.enchantmentsolution.version.BukkitVersion;
+import org.ctp.enchantmentsolution.version.PluginVersion;
 import org.ctp.eswrapper.EsWrapper;
 
 public class EnchantmentSolution extends JavaPlugin {
@@ -79,11 +80,15 @@ public class EnchantmentSolution extends JavaPlugin {
 	public static boolean NEWEST_VERSION = true, DISABLE = false;
 	private static SQLite DB;
 	private static String MCMMO_TYPE;
+	private static BukkitVersion BUKKIT_VERSION;
+	private static PluginVersion PLUGIN_VERSION;
 
 	public void onEnable() {
 		PLUGIN = this;
-		if(!Version.VERSION_ALLOWED) {
-			Bukkit.getLogger().log(Level.WARNING, "Version " + Version.VERSION + " is not compatible with this plugin. Please use a version that is compatible.");
+		BUKKIT_VERSION = new BukkitVersion();
+		PLUGIN_VERSION = new PluginVersion();
+		if(!BUKKIT_VERSION.isVersionAllowed()) {
+			Bukkit.getLogger().log(Level.WARNING, "BukkitVersion " + BUKKIT_VERSION.getVersion() + " is not compatible with this plugin. Please use a version that is compatible.");
 			Bukkit.getPluginManager().disablePlugin(PLUGIN);
 			return;
 		}
@@ -186,7 +191,7 @@ public class EnchantmentSolution extends JavaPlugin {
 					MCMMO_TYPE = "Disabled";
 				}
 			} else {
-				ChatUtils.sendToConsole(Level.INFO, "Using the Classic Version! Compatibility should be intact.");
+				ChatUtils.sendToConsole(Level.INFO, "Using the Classic BukkitVersion! Compatibility should be intact.");
 				MCMMO_TYPE = "Classic";
 			}
 		} else {
@@ -282,5 +287,13 @@ public class EnchantmentSolution extends JavaPlugin {
 
 	public static String getMcMMOType() {
 		return MCMMO_TYPE;
+	}
+
+	public static BukkitVersion getBukkitVersion() {
+		return BUKKIT_VERSION;
+	}
+
+	public static PluginVersion getPluginVersion() {
+		return PLUGIN_VERSION;
 	}
 }

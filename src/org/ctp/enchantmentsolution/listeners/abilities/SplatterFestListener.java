@@ -1,5 +1,6 @@
 package org.ctp.enchantmentsolution.listeners.abilities;
 
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.enchantments.Enchantment;
@@ -24,6 +25,7 @@ public class SplatterFestListener implements Listener{
 			ItemStack item = player.getInventory().getItemInMainHand();
 			if(Enchantments.hasEnchantment(item, DefaultEnchantments.SPLATTER_FEST)) {
 				boolean removed = false;
+				if(player.getGameMode().equals(GameMode.CREATIVE)) removed = true;
 				for(int i = 0; i < player.getInventory().getSize(); i++) {
 					if(removed) break;
 					ItemStack removeItem = player.getInventory().getItem(i);
@@ -51,14 +53,16 @@ public class SplatterFestListener implements Listener{
 				}
 				if(removed) {
 					player.launchProjectile(Egg.class);
-					int unbreaking = Enchantments.getLevel(item, Enchantment.DURABILITY);
-					double chance = (1.0D) / (unbreaking + 1.0D);
-					double random = Math.random();
-					if(chance > random) {
-						DamageUtils.setDamage(item, DamageUtils.getDamage(item.getItemMeta()) + 1);
-						if(DamageUtils.getDamage(item.getItemMeta()) > item.getType().getMaxDurability()) {
-							player.getInventory().setItemInMainHand(new ItemStack(Material.AIR));
-							player.getWorld().playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 1, 1);
+					if(!player.getGameMode().equals(GameMode.CREATIVE)) {
+						int unbreaking = Enchantments.getLevel(item, Enchantment.DURABILITY);
+						double chance = (1.0D) / (unbreaking + 1.0D);
+						double random = Math.random();
+						if(chance > random) {
+							DamageUtils.setDamage(item, DamageUtils.getDamage(item.getItemMeta()) + 1);
+							if(DamageUtils.getDamage(item.getItemMeta()) > item.getType().getMaxDurability()) {
+								player.getInventory().setItemInMainHand(new ItemStack(Material.AIR));
+								player.getWorld().playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 1, 1);
+							}
 						}
 					}
 				}

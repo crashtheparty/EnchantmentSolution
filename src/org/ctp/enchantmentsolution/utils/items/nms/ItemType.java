@@ -2,10 +2,13 @@ package org.ctp.enchantmentsolution.utils.items.nms;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.bukkit.Material;
-import org.ctp.enchantmentsolution.nms.Version;
+import org.ctp.enchantmentsolution.EnchantmentSolution;
+import org.ctp.enchantmentsolution.version.BukkitVersion;
 
 public enum ItemType{
 	HELMETS("helmets"), CHESTPLATES("chestplates"), LEGGINGS("leggings"), BOOTS("boots"), SWORDS("swords"), PICKAXES("pickaxes"), SHOVELS("shovels"), AXES("axes"), 
@@ -38,6 +41,18 @@ public enum ItemType{
 			display = getDisplayType(getType());
 		}
 		return display;
+	}
+	
+	public static String getUnlocalizedName(Material material) {
+		return (material.isBlock() ? "block" : "item" ) + ".minecraft." + material.name().toLowerCase();
+	}
+	
+	public Map<Material, String> getUnlocalizedNames() {
+		Map<Material, String> names = new HashMap<Material, String>();
+		for(Material material : getItemTypes()) {
+			names.put(material, getUnlocalizedName(material));
+		}
+		return names;
 	}
 	
 	public static boolean hasItemType(Material mat) {
@@ -127,7 +142,7 @@ public enum ItemType{
 	}
 	
 	private List<Material> getItemTypes(String type){
-		if(Version.VERSION_NUMBER < 4) {
+		if(EnchantmentSolution.getBukkitVersion().getVersionNumber() < 4) {
 			return ItemType_v1_13.getItemTypes(type);
 		} else {
 			return null;

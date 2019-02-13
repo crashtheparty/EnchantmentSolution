@@ -11,9 +11,9 @@ import org.bukkit.entity.ExperienceOrb;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Crops;
 import org.bukkit.material.NetherWarts;
+import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
-import org.ctp.enchantmentsolution.nms.Version;
 import org.ctp.enchantmentsolution.utils.items.nms.fortune.Fortune_v1_13;
 import org.ctp.enchantmentsolution.utils.items.nms.silktouch.SilkTouch_v1_13;
 import org.ctp.enchantmentsolution.utils.items.nms.smeltery.Smeltery_v1_13;
@@ -21,14 +21,14 @@ import org.ctp.enchantmentsolution.utils.items.nms.smeltery.Smeltery_v1_13;
 public class AbilityUtils {
 	
 	public static ItemStack getSmelteryItem(Block block, ItemStack item) {
-		if(Version.VERSION_NUMBER < 4) {
+		if(EnchantmentSolution.getBukkitVersion().getVersionNumber() < 4) {
 			return Smeltery_v1_13.getSmelteryItem(block, item);
 		}
 		return null;
 	}
 	
 	public static ItemStack getSilkTouchItem(Block block, ItemStack item){
-		if(Version.VERSION_NUMBER < 4) {
+		if(EnchantmentSolution.getBukkitVersion().getVersionNumber() < 4) {
 			return SilkTouch_v1_13.getSilkTouchItem(block, item);
 		}
 		return null;
@@ -36,7 +36,7 @@ public class AbilityUtils {
 
 	public static Collection<ItemStack> getFortuneItems(ItemStack item,
 			Block brokenBlock, Collection<ItemStack> priorItems) {
-		if(Version.VERSION_NUMBER < 4) {
+		if(EnchantmentSolution.getBukkitVersion().getVersionNumber() < 4) {
 			return Fortune_v1_13.getFortuneItems(item, brokenBlock, priorItems);
 		}
 		return null;

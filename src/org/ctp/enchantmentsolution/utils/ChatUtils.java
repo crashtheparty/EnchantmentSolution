@@ -28,7 +28,7 @@ public class ChatUtils {
 		Bukkit.getServer().dispatchCommand(
 		        Bukkit.getConsoleSender(),
 		        "tellraw " + player.getName() + 
-		        " [{\"text\":\"" + getStarter() + message + "\"},{\"text\":\"" + url + "\", \"underlined\": true, \"clickEvent\":{\"action\":\"open_url\",\"value\":\"" +
+		        " [{\"text\":\"" + getStarter() + message + "\"},{\"text\":\"" + url + "\", \"italic\": true, \"color\": \"green\", \"clickEvent\":{\"action\":\"open_url\",\"value\":\"" +
 		        url + "\"}}]");
 	}
 	

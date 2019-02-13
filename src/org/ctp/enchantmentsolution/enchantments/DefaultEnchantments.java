@@ -9,6 +9,7 @@ import org.apache.commons.lang3.StringEscapeUtils;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.api.ApiEnchantmentWrapper;
 import org.ctp.enchantmentsolution.enchantments.custom.Angler;
 import org.ctp.enchantmentsolution.enchantments.custom.Beheading;
@@ -118,7 +119,6 @@ import org.ctp.enchantmentsolution.enchantments.wrappers.UnrestWrapper;
 import org.ctp.enchantmentsolution.enchantments.wrappers.VoidWalkerWrapper;
 import org.ctp.enchantmentsolution.enchantments.wrappers.WarpWrapper;
 import org.ctp.enchantmentsolution.enchantments.wrappers.WidthPlusPlusWrapper;
-import org.ctp.enchantmentsolution.nms.Version;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.config.YamlConfig;
 import org.ctp.enchantmentsolution.utils.save.ConfigFiles;
@@ -351,7 +351,7 @@ public class DefaultEnchantments {
 		DefaultEnchantments.addDefaultEnchantment(new SweepingEdge());
 		DefaultEnchantments.addDefaultEnchantment(new Thorns());
 		DefaultEnchantments.addDefaultEnchantment(new Unbreaking());
-		if(Version.VERSION_NUMBER > 3) {
+		if(EnchantmentSolution.getBukkitVersion().getVersionNumber() > 3) {
 			DefaultEnchantments.addDefaultEnchantment(new Multishot());
 			DefaultEnchantments.addDefaultEnchantment(new Piercing());
 			DefaultEnchantments.addDefaultEnchantment(new QuickCharge());
@@ -390,7 +390,7 @@ public class DefaultEnchantments {
 		DefaultEnchantments.addDefaultEnchantment(new Transmutation());
 		DefaultEnchantments.addDefaultEnchantment(new GoldDigger());
 		DefaultEnchantments.addDefaultEnchantment(new FlowerGift());
-		if(Version.VERSION_NUMBER > 3) {
+		if(EnchantmentSolution.getBukkitVersion().getVersionNumber() > 3) {
 			DefaultEnchantments.addDefaultEnchantment(new StoneThrow());
 			DefaultEnchantments.addDefaultEnchantment(new Pillage());
 		}

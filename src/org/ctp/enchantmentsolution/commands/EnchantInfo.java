@@ -1,6 +1,10 @@
 package org.ctp.enchantmentsolution.commands;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.logging.Level;
 
 import org.apache.commons.lang3.StringUtils;
@@ -110,12 +114,22 @@ public class EnchantInfo implements CommandExecutor{
 			json.add(third);
 			json.add(fourth);
 			json.add(fifth);
+			List<CustomEnchantment> alphabetical = new ArrayList<CustomEnchantment>();
+			for(CustomEnchantment enchantment : Enchantments.getEnchantments()) {
+				alphabetical.add(enchantment);
+			}
+			Collections.sort(alphabetical, new Comparator<CustomEnchantment>(){
+				@Override
+				public int compare(CustomEnchantment o1, CustomEnchantment o2) {
+					return o1.getName().compareTo(o2.getName());
+				}
+			});
 			for(int i = 0; i < 10; i++) {
 				int num = i + (page - 1) * 10;
 				if(num >= Enchantments.getEnchantments().size()) {
 					break;
 				}
-				CustomEnchantment enchant = Enchantments.getEnchantments().get(num);
+				CustomEnchantment enchant = alphabetical.get(num);
 				JSONObject name = new JSONObject();
 				JSONObject desc = new JSONObject();
 				JSONObject action = new JSONObject();

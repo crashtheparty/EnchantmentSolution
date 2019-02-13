@@ -12,16 +12,16 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.loot.LootContext;
 import org.bukkit.loot.Lootable;
+import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.EnchantmentLevel;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
-import org.ctp.enchantmentsolution.nms.Version;
 
 public class PillageListener implements Listener{
 	
 	@EventHandler
 	public void onEntityDeath(EntityDeathEvent event) {
-		if(Version.VERSION_NUMBER > 3) {
+		if(EnchantmentSolution.getBukkitVersion().getVersionNumber() > 3) {
 			if(!DefaultEnchantments.isEnabled(DefaultEnchantments.STONE_THROW)) return;
 			if(event.getEntity().getKiller() != null) {
 				Player player = event.getEntity().getKiller();
