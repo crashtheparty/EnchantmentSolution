@@ -1,6 +1,10 @@
 package org.ctp.enchantmentsolution.utils;
 
+import java.util.logging.Level;
+
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.java.JavaPlugin;
+import org.ctp.enchantmentsolution.api.ApiEnchantmentWrapper;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.wrappers.CustomEnchantmentWrapper;
 import org.ctp.enchantmentsolution.utils.save.ConfigFiles;
@@ -16,7 +20,20 @@ public class PermissionUtils {
 				return true;
 			}
 			for(int i = 0; i < level; i++) {
-				if(enchant.getRelativeEnchantment() instanceof CustomEnchantmentWrapper) {
+				if (enchant.getRelativeEnchantment() instanceof ApiEnchantmentWrapper) {
+					JavaPlugin plugin = ((ApiEnchantmentWrapper) enchant.getRelativeEnchantment()).getPlugin();
+					if(plugin == null) {
+						ChatUtils.sendToConsole(Level.WARNING, "Enchantment " + enchant.getName() + " (Display Name " + enchant.getDisplayName() + ")"
+								+ " does not have a JavaPlugin set. Refusing to check permissions.");
+						return false;
+					}
+					String path = plugin.getName() + "." + enchant.getName() + ".permissions.table.level" + (i + 1);
+					if(ConfigFiles.getEnchantmentAdvancedConfig().getBoolean(path)) {
+						if(!player.hasPermission(plugin.getName() + "." + enchant.getName() + ".table.level" + (i + 1))) {
+							return false;
+						}
+					}
+				} else if (enchant.getRelativeEnchantment() instanceof CustomEnchantmentWrapper) {
 					String path = "custom_enchantments." + enchant.getName() + ".permissions.table.level" + (i + 1);
 					if(ConfigFiles.getEnchantmentAdvancedConfig().getBoolean(path)) {
 						if(!player.hasPermission("enchantmentsolution." + enchant.getName() + ".table.level" + (i + 1))) {
@@ -46,7 +63,20 @@ public class PermissionUtils {
 				return true;
 			}
 			for(int i = 0; i < level; i++) {
-				if(enchant.getRelativeEnchantment() instanceof CustomEnchantmentWrapper) {
+				if (enchant.getRelativeEnchantment() instanceof ApiEnchantmentWrapper) {
+					JavaPlugin plugin = ((ApiEnchantmentWrapper) enchant.getRelativeEnchantment()).getPlugin();
+					if(plugin == null) {
+						ChatUtils.sendToConsole(Level.WARNING, "Enchantment " + enchant.getName() + " (Display Name " + enchant.getDisplayName() + ")"
+								+ " does not have a JavaPlugin set. Refusing to check permissions.");
+						return false;
+					}
+					String path = plugin.getName() + "." + enchant.getName() + ".permissions.anvil.level" + (i + 1);
+					if(ConfigFiles.getEnchantmentAdvancedConfig().getBoolean(path)) {
+						if(!player.hasPermission(plugin.getName() + "." + enchant.getName() + ".anvil.level" + (i + 1))) {
+							return false;
+						}
+					}
+				} else if (enchant.getRelativeEnchantment() instanceof CustomEnchantmentWrapper) {
 					String path = "custom_enchantments." + enchant.getName() + ".permissions.anvil.level" + (i + 1);
 					if(ConfigFiles.getEnchantmentAdvancedConfig().getBoolean(path)) {
 						if(!player.hasPermission("enchantmentsolution." + enchant.getName() + ".anvil.level" + (i + 1))) {

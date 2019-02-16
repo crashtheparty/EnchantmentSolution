@@ -2,7 +2,6 @@ package org.ctp.enchantmentsolution.enchantments;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -18,8 +17,8 @@ import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.ctp.enchantmentsolution.enchantments.wrappers.CustomEnchantmentWrapper;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
-import org.ctp.enchantmentsolution.utils.ItemUtils;
 import org.ctp.enchantmentsolution.utils.RomanNumerals;
+import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 import org.ctp.enchantmentsolution.utils.save.ConfigFiles;
 
 public class Enchantments {
@@ -84,6 +83,17 @@ public class Enchantments {
 		    return false;
 		}
 	}
+	
+	public static List<EnchantmentLevel> getEnchantmentLevels(ItemStack item){
+		List<EnchantmentLevel> levels = new ArrayList<EnchantmentLevel>();
+		if(item.getItemMeta() != null && item.getItemMeta().getEnchants() != null && item.getItemMeta().getEnchants().size() > 0){
+			for (Iterator<java.util.Map.Entry<Enchantment, Integer>> it = item.getItemMeta().getEnchants().entrySet().iterator(); it.hasNext();) {
+				java.util.Map.Entry<Enchantment, Integer> e = it.next();
+				levels.add(new EnchantmentLevel(DefaultEnchantments.getCustomEnchantment(e.getKey()), e.getValue()));
+			}
+		}
+		return levels;
+	}
 
 	public static boolean isEnchantable(ItemStack item) {
 		if (item == null) {
@@ -95,7 +105,7 @@ public class Enchantments {
 				return false;
 			}
 		}
-		if (ItemUtils.getItemTypes().get("all").contains(item.getType())) {
+		if (ItemType.ALL.getItemTypes().contains(item.getType())) {
 			return true;
 		}
 		if(item.getType().equals(Material.BOOK)){
@@ -204,35 +214,28 @@ public class Enchantments {
 
 	public static int getEnchantability(Material material, int level, int lapis) {
 		int enchantability = 1;
-		HashMap<String, List<Material>> itemTypes = ItemUtils.getItemTypes();
-		if (itemTypes.get("wood_tools").contains(material)) {
+		if (ItemType.WOODEN_TOOLS.getItemTypes().contains(material)) {
 			enchantability = 15;
-		} else if (itemTypes.get("stone_tools")
+		} else if (ItemType.STONE_TOOLS.getItemTypes()
 				.contains(material)) {
 			enchantability = 5;
-		} else if (itemTypes.get("gold_tools")
+		} else if (ItemType.GOLDEN_TOOLS.getItemTypes()
 				.contains(material)) {
 			enchantability = 22;
-		} else if (itemTypes.get("iron_tools")
+		} else if (ItemType.IRON_TOOLS.getItemTypes()
 				.contains(material)) {
 			enchantability = 14;
-		} else if (itemTypes.get("diamond_tools")
-				.contains(material)) {
+		} else if (ItemType.DIAMOND_TOOLS.getItemTypes().contains(material)) {
 			enchantability = 10;
-		} else if (itemTypes.get("leather_armor")
-				.contains(material)) {
+		} else if (ItemType.LEATHER_ARMOR.getItemTypes().contains(material)) {
 			enchantability = 15;
-		} else if (itemTypes.get("gold_armor")
-				.contains(material)) {
+		} else if (ItemType.GOLDEN_ARMOR.getItemTypes().contains(material)) {
 			enchantability = 25;
-		} else if (itemTypes.get("chain_armor")
-				.contains(material)) {
+		} else if (ItemType.CHAINMAIL_ARMOR.getItemTypes().contains(material)) {
 			enchantability = 12;
-		} else if (itemTypes.get("iron_armor")
-				.contains(material)) {
+		} else if (ItemType.IRON_ARMOR.getItemTypes().contains(material)) {
 			enchantability = 9;
-		} else if (itemTypes.get("diamond_armor")
-				.contains(material)) {
+		} else if (ItemType.DIAMOND_ARMOR.getItemTypes().contains(material)) {
 			enchantability = 10;
 		}
 
@@ -324,6 +327,26 @@ public class Enchantments {
 			meta.removeEnchant(enchantment.getRelativeEnchantment());
 			while(lore.contains(enchName)) {
 				lore.remove(enchName);
+			}
+		}
+		meta.setLore(lore);
+		item.setItemMeta(meta);
+		return item;
+	}
+	
+	public static ItemStack removeAllEnchantments(ItemStack item) {
+		ItemMeta meta = item.getItemMeta();
+		List<String> lore = meta.getLore();
+		if(lore == null){
+			lore = new ArrayList<String>();
+		}
+		for(CustomEnchantment enchantment : DefaultEnchantments.getEnchantments()) {
+			if(Enchantments.hasEnchantment(item, enchantment.getRelativeEnchantment())){
+				String enchName = ChatColor.RESET + "" + ChatColor.GRAY + RomanNumerals.returnEnchantmentName(enchantment, meta.getEnchantLevel(enchantment.getRelativeEnchantment()));
+				meta.removeEnchant(enchantment.getRelativeEnchantment());
+				while(lore.contains(enchName)) {
+					lore.remove(enchName);
+				}
 			}
 		}
 		meta.setLore(lore);
@@ -455,7 +478,7 @@ public class Enchantments {
 		return cost;
 	}
 	
-	private static boolean isRepairable(CustomEnchantment enchant) {
+	public static boolean isRepairable(CustomEnchantment enchant) {
 		if(ConfigFiles.getDefaultConfig().getString("disable_enchant_method").equals("repairable")) {
 			return true;
 		}

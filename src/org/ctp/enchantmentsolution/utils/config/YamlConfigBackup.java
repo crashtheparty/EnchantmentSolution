@@ -162,6 +162,7 @@ public class YamlConfigBackup extends YamlConfig {
 			}
 			break;
 		case "list":
+		case "enum_list":
 			LinkedHashMap<String, Boolean> keySame = new LinkedHashMap<String, Boolean>();
 			String[] values = replaceLast((value.toString().replaceFirst("\\[", "")), "]", "").split(", ");
 			for(Object key : values) {
@@ -176,6 +177,7 @@ public class YamlConfigBackup extends YamlConfig {
 					keySame.put(key, false);
 				}
 			}
+			
 			return !keySame.containsValue(false);
 		case "enum":
 		case "string":

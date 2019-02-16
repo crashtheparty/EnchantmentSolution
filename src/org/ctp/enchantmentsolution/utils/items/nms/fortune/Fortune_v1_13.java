@@ -1,4 +1,4 @@
-package org.ctp.enchantmentsolution.utils;
+package org.ctp.enchantmentsolution.utils.items.nms.fortune;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -7,20 +7,18 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.bukkit.CropState;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NetherWartsState;
 import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.ExperienceOrb;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Crops;
 import org.bukkit.material.NetherWarts;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
+import org.ctp.enchantmentsolution.utils.items.nms.AbilityUtils;
 
-public class AbilityUtilities {
-
+public class Fortune_v1_13 {
 	private static List<Material> FORTUNE_ITEMS = Arrays.asList(
 			Material.DIAMOND_ORE, Material.EMERALD_ORE,
 			Material.COAL_ORE, Material.NETHER_QUARTZ_ORE, Material.LAPIS_ORE,
@@ -67,7 +65,7 @@ public class AbilityUtilities {
 		} else if (!(FORTUNE_ITEMS.contains(brokenBlock.getType()))) {
 			if(Enchantments.hasEnchantment(item, DefaultEnchantments.SMELTERY)) {
 				if(DefaultEnchantments.isEnabled(DefaultEnchantments.SMELTERY)) {
-					ItemStack smelted = getSmelteryItem(brokenBlock, item);
+					ItemStack smelted = AbilityUtils.getSmelteryItem(brokenBlock, item);
 					if(smelted != null) {
 						priorItems.clear();
 						priorItems.add(smelted);
@@ -214,7 +212,7 @@ public class AbilityUtilities {
 			if(actualMax > 0 && finalCount > actualMax){
 				finalCount = actualMax;
 			}
-			ItemStack fortunableItem = new ItemStack(breakBlock);
+			ItemStack fortunableItem = new ItemStack(breakBlock, finalCount);
 			
 			fortunableItem.setAmount(finalCount);
 			priorItems.clear();
@@ -335,221 +333,5 @@ public class AbilityUtilities {
 		}
 
 		return priorItems;
-	}
-	
-	public static ItemStack getSmelteryItem(Block block, ItemStack item) {
-		Material material = null;
-		boolean fortune = false;
-		switch(block.getType()) {
-		case IRON_ORE:
-			if(Arrays.asList(Material.IRON_PICKAXE, Material.DIAMOND_PICKAXE, Material.STONE_PICKAXE).contains(item.getType())) {
-				material = Material.IRON_INGOT;
-				fortune = true;
-			}
-			break;
-		case GOLD_ORE:
-			if(Arrays.asList(Material.IRON_PICKAXE, Material.DIAMOND_PICKAXE).contains(item.getType())) {
-				material = Material.GOLD_INGOT;
-				fortune = true;
-			}
-			break;
-		case SAND:
-			material = Material.GLASS;
-			break;
-		case COBBLESTONE:
-		case STONE:
-			if(Arrays.asList(Material.IRON_PICKAXE, Material.DIAMOND_PICKAXE, Material.GOLDEN_PICKAXE, Material.STONE_PICKAXE, Material.WOODEN_PICKAXE).contains(item.getType())) {
-				material = Material.STONE;
-			}
-			break;
-		case STONE_BRICKS:
-			if(Arrays.asList(Material.IRON_PICKAXE, Material.DIAMOND_PICKAXE, Material.GOLDEN_PICKAXE, Material.STONE_PICKAXE, Material.WOODEN_PICKAXE).contains(item.getType())) {
-				material = Material.CRACKED_STONE_BRICKS;
-			}
-			break;
-		case NETHERRACK:
-			if(Arrays.asList(Material.IRON_PICKAXE, Material.DIAMOND_PICKAXE, Material.GOLDEN_PICKAXE, Material.STONE_PICKAXE, Material.WOODEN_PICKAXE).contains(item.getType())) {
-				material = Material.NETHER_BRICK;
-			}
-			break;
-		case CLAY:
-			material = Material.TERRACOTTA;
-			break;
-		case CACTUS:
-			material = Material.CACTUS_GREEN;
-			break;
-		case OAK_LOG:
-		case BIRCH_LOG:
-		case SPRUCE_LOG:
-		case JUNGLE_LOG:
-		case DARK_OAK_LOG:
-		case ACACIA_LOG:
-			material = Material.CHARCOAL;
-			break;
-		case CHORUS_FRUIT:
-			material = Material.POPPED_CHORUS_FRUIT;
-			break;
-		case WET_SPONGE:
-			material = Material.SPONGE;
-			break;
-		default:
-			
-		}
-		int num = 1;
-		if(fortune && Enchantments.hasEnchantment(item, Enchantment.LOOT_BONUS_BLOCKS)) {
-			int level = Enchantments.getLevel(item,
-					Enchantment.LOOT_BONUS_BLOCKS) + 2;
-			int multiply = (int) (Math.random() * level);
-			if(multiply > 1) {
-				num *= multiply;
-			}
-		}
-		if(material != null) {
-			return new ItemStack(material, num);
-		}
-		return null;
-	}
-	
-	public static ItemStack getSilkTouchItem(Block block, ItemStack item){
-		switch(block.getType()) {
-		case COAL_ORE:
-		case NETHER_QUARTZ_ORE:
-			if(Arrays.asList(Material.IRON_PICKAXE, Material.DIAMOND_PICKAXE, Material.STONE_PICKAXE, Material.WOODEN_PICKAXE, Material.GOLDEN_PICKAXE).contains(item.getType())) {
-				return new ItemStack(block.getType());
-			}
-			break;
-		case STONE:
-			if(Arrays.asList(Material.IRON_PICKAXE, Material.DIAMOND_PICKAXE, Material.STONE_PICKAXE, Material.WOODEN_PICKAXE, Material.GOLDEN_PICKAXE).contains(item.getType())) {
-				return new ItemStack(block.getType());
-			}
-			break;
-		case INFESTED_STONE:
-			if(Arrays.asList(Material.IRON_PICKAXE, Material.DIAMOND_PICKAXE, Material.STONE_PICKAXE, Material.WOODEN_PICKAXE, Material.GOLDEN_PICKAXE).contains(item.getType())) {
-				return new ItemStack(Material.STONE);
-			}
-			return null;
-		case INFESTED_COBBLESTONE:
-			if(Arrays.asList(Material.IRON_PICKAXE, Material.DIAMOND_PICKAXE, Material.STONE_PICKAXE, Material.WOODEN_PICKAXE, Material.GOLDEN_PICKAXE).contains(item.getType())) {
-				if(Enchantments.hasEnchantment(item, DefaultEnchantments.SMELTERY)) {
-					return new ItemStack(Material.STONE);
-				}
-				return new ItemStack(Material.COBBLESTONE);
-			}
-			return null;
-		case INFESTED_STONE_BRICKS:
-			if(Arrays.asList(Material.IRON_PICKAXE, Material.DIAMOND_PICKAXE, Material.STONE_PICKAXE, Material.WOODEN_PICKAXE, Material.GOLDEN_PICKAXE).contains(item.getType())) {
-				if(Enchantments.hasEnchantment(item, DefaultEnchantments.SMELTERY)) {
-					return new ItemStack(Material.CRACKED_STONE_BRICKS);
-				}
-				return new ItemStack(Material.STONE_BRICKS);
-			}
-			return null;
-		case INFESTED_CRACKED_STONE_BRICKS:
-			if(Arrays.asList(Material.IRON_PICKAXE, Material.DIAMOND_PICKAXE, Material.STONE_PICKAXE, Material.WOODEN_PICKAXE, Material.GOLDEN_PICKAXE).contains(item.getType())) {
-				return new ItemStack(Material.CRACKED_STONE_BRICKS);
-			}
-			return null;
-		case LAPIS_ORE:
-			if(Arrays.asList(Material.IRON_PICKAXE, Material.DIAMOND_PICKAXE, Material.STONE_PICKAXE).contains(item.getType())) {
-				return new ItemStack(block.getType());
-			}
-			break;
-		case EMERALD_ORE:
-		case DIAMOND_ORE:
-			if(Arrays.asList(Material.IRON_PICKAXE, Material.DIAMOND_PICKAXE).contains(item.getType())) {
-				return new ItemStack(block.getType());
-			}
-			break;
-		case REDSTONE_ORE:
-			if(Arrays.asList(Material.IRON_PICKAXE, Material.DIAMOND_PICKAXE).contains(item.getType())) {
-				return new ItemStack(Material.REDSTONE_ORE);
-			}
-			break;
-		case BOOKSHELF:
-		case CLAY:
-		case ENDER_CHEST:
-		case GLASS:
-		case GLASS_PANE:
-		case GLOWSTONE:
-		case GRASS_BLOCK:
-		case MYCELIUM:
-		case BROWN_MUSHROOM_BLOCK:
-		case RED_MUSHROOM_BLOCK:
-		case MUSHROOM_STEM:
-		case MELON:
-		case PODZOL:
-		case SEA_LANTERN:
-		case ICE:
-		case PACKED_ICE:
-		case BLUE_ICE:
-		case SNOW_BLOCK:
-		case BLACK_STAINED_GLASS:
-		case BLUE_STAINED_GLASS:
-		case BROWN_STAINED_GLASS:
-		case CYAN_STAINED_GLASS:
-		case GRAY_STAINED_GLASS:
-		case GREEN_STAINED_GLASS:
-		case LIGHT_BLUE_STAINED_GLASS:
-		case LIGHT_GRAY_STAINED_GLASS:
-		case LIME_STAINED_GLASS:
-		case MAGENTA_STAINED_GLASS:
-		case ORANGE_STAINED_GLASS:
-		case PINK_STAINED_GLASS:
-		case PURPLE_STAINED_GLASS:
-		case RED_STAINED_GLASS:
-		case WHITE_STAINED_GLASS:
-		case YELLOW_STAINED_GLASS:
-		case BLACK_STAINED_GLASS_PANE:
-		case BLUE_STAINED_GLASS_PANE:
-		case BROWN_STAINED_GLASS_PANE:
-		case CYAN_STAINED_GLASS_PANE:
-		case GRAY_STAINED_GLASS_PANE:
-		case GREEN_STAINED_GLASS_PANE:
-		case LIGHT_BLUE_STAINED_GLASS_PANE:
-		case LIGHT_GRAY_STAINED_GLASS_PANE:
-		case LIME_STAINED_GLASS_PANE:
-		case MAGENTA_STAINED_GLASS_PANE:
-		case ORANGE_STAINED_GLASS_PANE:
-		case PINK_STAINED_GLASS_PANE:
-		case PURPLE_STAINED_GLASS_PANE:
-		case RED_STAINED_GLASS_PANE:
-		case WHITE_STAINED_GLASS_PANE:
-		case YELLOW_STAINED_GLASS_PANE:
-		case BRAIN_CORAL:
-		case BRAIN_CORAL_BLOCK:
-		case BRAIN_CORAL_FAN:
-		case BUBBLE_CORAL:
-		case BUBBLE_CORAL_BLOCK:
-		case BUBBLE_CORAL_FAN:
-		case FIRE_CORAL:
-		case FIRE_CORAL_BLOCK:
-		case FIRE_CORAL_FAN:
-		case HORN_CORAL:
-		case HORN_CORAL_BLOCK:
-		case HORN_CORAL_FAN:
-		case TUBE_CORAL:
-		case TUBE_CORAL_BLOCK:
-		case TUBE_CORAL_FAN:
-			return new ItemStack(block.getType());
-		case BRAIN_CORAL_WALL_FAN:
-			return new ItemStack(Material.BRAIN_CORAL_FAN);
-		case BUBBLE_CORAL_WALL_FAN:
-			return new ItemStack(Material.BUBBLE_CORAL_FAN);
-		case FIRE_CORAL_WALL_FAN:
-			return new ItemStack(Material.FIRE_CORAL_FAN);
-		case HORN_CORAL_WALL_FAN:
-			return new ItemStack(Material.HORN_CORAL_FAN);
-		case TUBE_CORAL_WALL_FAN:
-			return new ItemStack(Material.TUBE_CORAL_FAN);
-		default:
-			break;
-		}
-		return null;
-	}
-
-	public static void dropExperience(Location loc, int amount) {
-		if(amount > 0) {
-			((ExperienceOrb)loc.getWorld().spawn(loc, ExperienceOrb.class)).setExperience(amount);
-		}
 	}
 }

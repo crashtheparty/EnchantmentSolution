@@ -17,7 +17,7 @@ import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
-import org.ctp.enchantmentsolution.utils.DamageUtils;
+import org.ctp.enchantmentsolution.utils.items.DamageUtils;
 
 public class FrequentFlyerListener implements Listener, Runnable{
 	

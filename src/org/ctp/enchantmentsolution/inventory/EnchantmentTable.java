@@ -22,8 +22,8 @@ import org.ctp.enchantmentsolution.enchantments.PlayerLevels;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.RomanNumerals;
 import org.ctp.enchantmentsolution.utils.save.ConfigFiles;
-import org.ctp.enchantmentsolution.utils.ItemSerialization;
-import org.ctp.enchantmentsolution.utils.ItemUtils;
+import org.ctp.enchantmentsolution.utils.items.ItemSerialization;
+import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 
 public class EnchantmentTable implements InventoryData {
 
@@ -192,7 +192,7 @@ public class EnchantmentTable implements InventoryData {
 						ItemMeta bookMeta = book.getItemMeta();
 						String name = item.getItemMeta().getDisplayName();
 						if (name == null || name.equals("")) {
-							name = item.getType().name();
+							name = ConfigFiles.getLocalizedName(item.getType());
 						}
 						loreCodes = getCodes();
 						loreCodes.put("%level%", extra - 2);

@@ -1,4 +1,4 @@
-package org.ctp.enchantmentsolution.utils;
+package org.ctp.enchantmentsolution.utils.items;
 
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;

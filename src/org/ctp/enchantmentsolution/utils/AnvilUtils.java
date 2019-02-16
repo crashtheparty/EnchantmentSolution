@@ -13,6 +13,9 @@ import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
 import org.ctp.enchantmentsolution.inventory.LegacyAnvil;
+import org.ctp.enchantmentsolution.utils.items.DamageUtils;
+import org.ctp.enchantmentsolution.utils.items.ItemUtils;
+import org.ctp.enchantmentsolution.utils.items.nms.ItemRepairType;
 
 public class AnvilUtils {
 	
@@ -39,7 +42,8 @@ public class AnvilUtils {
 	}
 
 	public static boolean canCombineItems(ItemStack first, ItemStack second) {
-		List<Material> items = ItemUtils.getRepairTypes().get(first.getType());
+		if(ItemRepairType.getType(first.getType()) == null) return false;
+		List<Material> items = ItemRepairType.getType(first.getType()).getRepairTypes();
 		if(items == null) {
 			return false;
 		}

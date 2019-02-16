@@ -21,9 +21,9 @@ import org.bukkit.inventory.meta.BlockStateMeta;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
 import org.ctp.enchantmentsolution.nms.McMMO;
-import org.ctp.enchantmentsolution.utils.AbilityUtilities;
-import org.ctp.enchantmentsolution.utils.DamageUtils;
-import org.ctp.enchantmentsolution.utils.ItemUtils;
+import org.ctp.enchantmentsolution.utils.items.nms.AbilityUtils;
+import org.ctp.enchantmentsolution.utils.items.DamageUtils;
+import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 
 public class TelepathyListener implements Listener {
 
@@ -93,6 +93,14 @@ public class TelepathyListener implements Listener {
 					return;
 				}
 				giveItems(player, item, event.getBlock(), drops);
+				if (Enchantments.hasEnchantment(item, DefaultEnchantments.GOLD_DIGGER)) {
+					ItemStack goldDigger = AbilityUtils.getGoldDiggerItems(item, event.getBlock());
+					if (goldDigger != null) {
+						event.getPlayer().giveExp(GoldDiggerListener.GoldDiggerCrop.getExp(event.getBlock().getType(),
+								Enchantments.getLevel(item, DefaultEnchantments.GOLD_DIGGER)));
+						ItemUtils.giveItemToPlayer(player, goldDigger, player.getLocation());
+					}
+				}
 				damageItem(event);
 			}
 		}
@@ -120,18 +128,18 @@ public class TelepathyListener implements Listener {
 	
 	private void giveItems(Player player, ItemStack item, Block block, Collection<ItemStack> drops) {
 		if (Enchantments.hasEnchantment(item, Enchantment.LOOT_BONUS_BLOCKS)) {
-			Collection<ItemStack> fortuneItems = AbilityUtilities.getFortuneItems(item, block,
+			Collection<ItemStack> fortuneItems = AbilityUtils.getFortuneItems(item, block,
 					drops);
 			for(ItemStack drop: fortuneItems) {
 				ItemUtils.giveItemToPlayer(player, drop, player.getLocation());
 			}
 		} else if (Enchantments.hasEnchantment(item, Enchantment.SILK_TOUCH)
-				&& AbilityUtilities.getSilkTouchItem(block, item) != null) {
-			ItemUtils.giveItemToPlayer(player, AbilityUtilities.getSilkTouchItem(block, item),
+				&& AbilityUtils.getSilkTouchItem(block, item) != null) {
+			ItemUtils.giveItemToPlayer(player, AbilityUtils.getSilkTouchItem(block, item),
 					player.getLocation());
 		} else {
 			if (Enchantments.hasEnchantment(item, DefaultEnchantments.SMELTERY)) {
-				ItemStack smelted = AbilityUtilities.getSmelteryItem(block, item);
+				ItemStack smelted = AbilityUtils.getSmelteryItem(block, item);
 				if (smelted != null) {
 					ItemUtils.giveItemToPlayer(player, smelted, player.getLocation());
 				} else {

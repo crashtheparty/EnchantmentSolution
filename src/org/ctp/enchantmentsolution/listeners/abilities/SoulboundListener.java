@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.bukkit.Particle;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -12,8 +14,7 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
-import org.ctp.enchantmentsolution.utils.ChatUtils;
-import org.ctp.enchantmentsolution.utils.ItemUtils;
+import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 
 public class SoulboundListener implements Listener{
 	
@@ -69,18 +70,15 @@ public class SoulboundListener implements Listener{
 		List<ItemStack> playerItems = new ArrayList<ItemStack>();
 		
 		boolean stealItems = false;
-		if(ItemUtils.getItemTypes().get("hoes").contains(killItem.getType()) && Enchantments.hasEnchantment(killItem, DefaultEnchantments.SOUL_REAPER)){
+		if(ItemType.HOES.getItemTypes().contains(killItem.getType()) && Enchantments.hasEnchantment(killItem, DefaultEnchantments.SOUL_REAPER)){
 			double chance = Math.random();
 			if(chance > 0.50){
 				stealItems = true;
 			}
 		}
 		if(stealItems){
-			HashMap<String, Object> codes = ChatUtils.getCodes();
-			codes.put("%player%", player.getName());
-			codes.put("%killer%", player.getKiller().getName());
-			ChatUtils.sendMessage(player.getKiller(), ChatUtils.getMessage(codes, "items.stole-soulbound"));
-			ChatUtils.sendMessage(player, ChatUtils.getMessage(codes, "items.soulbound-stolen"));
+			player.getWorld().spawnParticle(Particle.EXPLOSION_HUGE, player.getLocation(), 250, 0.2, 2, 0.2);
+			player.getWorld().playSound(player.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 1, 1);
 		}else{
 			for(ItemStack item : items){
 				if(Enchantments.hasEnchantment(item, DefaultEnchantments.SOULBOUND)){

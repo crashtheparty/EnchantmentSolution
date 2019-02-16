@@ -208,6 +208,7 @@ public class BackupTable extends Table{
 						break;
 					}
 					break;
+				case "enum_list":
 				case "list":
 					String[] values = config.replaceLast((rs.getString("value").replaceFirst("\\[", "")), "]", "").split(", ");
 					obj = Arrays.asList(values);

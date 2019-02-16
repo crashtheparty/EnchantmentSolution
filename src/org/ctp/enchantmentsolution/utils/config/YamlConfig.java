@@ -122,14 +122,18 @@ public class YamlConfig {
 	}
 	
 	public String getType(String path) {
-		if(getEnums(path) != null) {
-			return "enum";
-		}	
 		YamlInfo info = getInfo(path);
 		
 		if(info == null) {
 			return "nested value";
 		}
+
+		if(getEnums(path) != null) {
+			if(info.getStringList() != null) {
+				return "enum_list";
+			}
+			return "enum";
+		}	
 		
 		if(info.getBooleanValue() != null) {
 			return "boolean";
@@ -183,6 +187,7 @@ public class YamlConfig {
 				return true;
 			}
 			break;
+		case "enum_list":
 		case "list":
 			LinkedHashMap<String, Boolean> keySame = new LinkedHashMap<String, Boolean>();
 			String[] values = replaceLast((value.toString().replaceFirst("\\[", "")), "]", "").split(", ");
@@ -198,6 +203,7 @@ public class YamlConfig {
 					keySame.put(key, false);
 				}
 			}
+			
 			return !keySame.containsValue(false);
 		case "enum":
 		case "string":
@@ -286,6 +292,14 @@ public class YamlConfig {
 		return info.getInt();
 	}
 	
+	public Integer getInteger(String path) {
+		YamlInfo info = getInfo(path);
+		if(info == null) {
+			return null;
+		}
+		return info.getInteger();
+	}
+	
 	public boolean getBoolean(String path) {
 		YamlInfo info = getInfo(path);
 		if(info == null) {
@@ -324,6 +338,14 @@ public class YamlConfig {
 			return def;
 		}
 		return info.getDouble();
+	}
+	
+	public Double getDoubleValue(String path) {
+		YamlInfo info = getInfo(path);
+		if(info == null) {
+			return null;
+		}
+		return info.getDoubleValue();
 	}
 
 	public List<String> getStringList(String path) {

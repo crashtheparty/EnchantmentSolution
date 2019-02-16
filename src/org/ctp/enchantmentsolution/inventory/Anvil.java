@@ -18,10 +18,10 @@ import org.ctp.enchantmentsolution.enchantments.Enchantments;
 import org.ctp.enchantmentsolution.nms.AnvilNMS;
 import org.ctp.enchantmentsolution.utils.AnvilUtils;
 import org.ctp.enchantmentsolution.utils.AnvilUtils.RepairType;
+import org.ctp.enchantmentsolution.utils.items.DamageUtils;
+import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 import org.ctp.enchantmentsolution.utils.save.ConfigFiles;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
-import org.ctp.enchantmentsolution.utils.DamageUtils;
-import org.ctp.enchantmentsolution.utils.ItemUtils;
 
 public class Anvil implements InventoryData{
 
@@ -44,7 +44,7 @@ public class Anvil implements InventoryData{
 	public void setInventory(List<ItemStack> items) {
 		try {
 			int size = 27;
-			if(ConfigFiles.useDefaultAnvil()) {
+			if(ConfigFiles.useDefaultAnvil() || ConfigFiles.useLegacyGrindstone()) {
 				size = 45;
 			}
 			Inventory inv = Bukkit.createInventory(null, size, ChatUtils.getMessage(getCodes(), "anvil.name"));
@@ -75,11 +75,12 @@ public class Anvil implements InventoryData{
 			inv.setItem(24, mirror);
 			inv.setItem(25, mirror);
 			inv.setItem(26, mirror);
-			if(ConfigFiles.useDefaultAnvil()) {
+			if(ConfigFiles.useDefaultAnvil() || ConfigFiles.useLegacyGrindstone()) {
 				inv.setItem(27, mirror);
 				inv.setItem(28, mirror);
 				inv.setItem(29, mirror);
 				inv.setItem(30, mirror);
+				inv.setItem(31, mirror);
 				inv.setItem(32, mirror);
 				inv.setItem(33, mirror);
 				inv.setItem(34, mirror);
@@ -93,12 +94,32 @@ public class Anvil implements InventoryData{
 				inv.setItem(42, mirror);
 				inv.setItem(43, mirror);
 				inv.setItem(44, mirror);
-				ItemStack anvil = new ItemStack(Material.ANVIL);
-				ItemMeta anvilMeta = anvil.getItemMeta();
-				anvilMeta.setDisplayName(ChatUtils.getMessage(getCodes(), "anvil.legacy-gui"));
-				anvilMeta.setLore(ChatUtils.getMessages(getCodes(), "anvil.legacy-gui-warning"));
-				anvil.setItemMeta(anvilMeta);
-				inv.setItem(31, anvil);
+				if(ConfigFiles.useDefaultAnvil() && ConfigFiles.useLegacyGrindstone()) {
+					ItemStack anvil = new ItemStack(Material.ANVIL);
+					ItemMeta anvilMeta = anvil.getItemMeta();
+					anvilMeta.setDisplayName(ChatUtils.getMessage(getCodes(), "anvil.legacy-gui"));
+					anvilMeta.setLore(ChatUtils.getMessages(getCodes(), "anvil.legacy-gui-warning"));
+					anvil.setItemMeta(anvilMeta);
+					inv.setItem(30, anvil);
+					ItemStack grindstone = new ItemStack(Material.SMOOTH_STONE);
+					ItemMeta grindstoneMeta = grindstone.getItemMeta();
+					grindstoneMeta.setDisplayName(ChatUtils.getMessage(getCodes(), "grindstone.legacy-open"));
+					grindstone.setItemMeta(grindstoneMeta);
+					inv.setItem(32, grindstone);
+				} else if (ConfigFiles.useDefaultAnvil()) {
+					ItemStack anvil = new ItemStack(Material.ANVIL);
+					ItemMeta anvilMeta = anvil.getItemMeta();
+					anvilMeta.setDisplayName(ChatUtils.getMessage(getCodes(), "anvil.legacy-gui"));
+					anvilMeta.setLore(ChatUtils.getMessages(getCodes(), "anvil.legacy-gui-warning"));
+					anvil.setItemMeta(anvilMeta);
+					inv.setItem(31, anvil);
+				} else {
+					ItemStack grindstone = new ItemStack(Material.SMOOTH_STONE);
+					ItemMeta grindstoneMeta = grindstone.getItemMeta();
+					grindstoneMeta.setDisplayName(ChatUtils.getMessage(getCodes(), "grindstone.legacy-open"));
+					grindstone.setItemMeta(grindstoneMeta);
+					inv.setItem(31, grindstone);
+				}
 			}
 			
 			ItemStack rename = new ItemStack(Material.LIME_STAINED_GLASS_PANE);

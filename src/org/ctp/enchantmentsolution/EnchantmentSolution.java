@@ -33,26 +33,43 @@ import org.ctp.enchantmentsolution.listeners.abilities.BrineListener;
 import org.ctp.enchantmentsolution.listeners.abilities.DrownedListener;
 import org.ctp.enchantmentsolution.listeners.abilities.ExpShareListener;
 import org.ctp.enchantmentsolution.listeners.abilities.FishingListener;
+import org.ctp.enchantmentsolution.listeners.abilities.FlowerGiftListener;
 import org.ctp.enchantmentsolution.listeners.abilities.FrequentFlyerListener;
+import org.ctp.enchantmentsolution.listeners.abilities.GoldDiggerListener;
+import org.ctp.enchantmentsolution.listeners.abilities.HardBounceListener;
+import org.ctp.enchantmentsolution.listeners.abilities.IcarusListener;
+import org.ctp.enchantmentsolution.listeners.abilities.IronDefenseListener;
 import org.ctp.enchantmentsolution.listeners.abilities.KnockUpListener;
 import org.ctp.enchantmentsolution.listeners.abilities.LifeListener;
+import org.ctp.enchantmentsolution.listeners.abilities.MagicGuardListener;
 import org.ctp.enchantmentsolution.listeners.abilities.MagmaWalkerListener;
+import org.ctp.enchantmentsolution.listeners.abilities.NoRestListener;
+import org.ctp.enchantmentsolution.listeners.abilities.PillageListener;
 import org.ctp.enchantmentsolution.listeners.abilities.SacrificeListener;
+import org.ctp.enchantmentsolution.listeners.abilities.SandVeilListener;
 import org.ctp.enchantmentsolution.listeners.abilities.ShockAspectListener;
 import org.ctp.enchantmentsolution.listeners.abilities.SmelteryListener;
 import org.ctp.enchantmentsolution.listeners.abilities.SniperListener;
 import org.ctp.enchantmentsolution.listeners.abilities.SoulboundListener;
+import org.ctp.enchantmentsolution.listeners.abilities.SplatterFestListener;
+import org.ctp.enchantmentsolution.listeners.abilities.StoneThrowListener;
 import org.ctp.enchantmentsolution.listeners.abilities.TankListener;
 import org.ctp.enchantmentsolution.listeners.abilities.TelepathyListener;
+import org.ctp.enchantmentsolution.listeners.abilities.TransmutationListener;
+import org.ctp.enchantmentsolution.listeners.abilities.UnrestListener;
+import org.ctp.enchantmentsolution.listeners.abilities.VoidWalkerListener;
 import org.ctp.enchantmentsolution.listeners.abilities.WarpListener;
+import org.ctp.enchantmentsolution.listeners.abilities.WidthHeightListener;
 import org.ctp.enchantmentsolution.listeners.chestloot.ChestLootListener;
 import org.ctp.enchantmentsolution.listeners.fishing.EnchantsFishingListener;
 import org.ctp.enchantmentsolution.listeners.fishing.McMMOFishingNMS;
+import org.ctp.enchantmentsolution.listeners.legacy.UpdateEnchantments;
 import org.ctp.enchantmentsolution.listeners.mobs.MobSpawning;
-import org.ctp.enchantmentsolution.nms.Version;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.save.ConfigFiles;
 import org.ctp.enchantmentsolution.utils.save.SaveUtils;
+import org.ctp.enchantmentsolution.version.BukkitVersion;
+import org.ctp.enchantmentsolution.version.PluginVersion;
 import org.ctp.eswrapper.EsWrapper;
 
 public class EnchantmentSolution extends JavaPlugin {
@@ -63,11 +80,15 @@ public class EnchantmentSolution extends JavaPlugin {
 	public static boolean NEWEST_VERSION = true, DISABLE = false;
 	private static SQLite DB;
 	private static String MCMMO_TYPE;
+	private static BukkitVersion BUKKIT_VERSION;
+	private static PluginVersion PLUGIN_VERSION;
 
 	public void onEnable() {
 		PLUGIN = this;
-		if(!Version.VERSION_ALLOWED) {
-			Bukkit.getLogger().log(Level.WARNING, "Version " + Version.VERSION + " is not compatible with this plugin. Please use a version that is compatible.");
+		BUKKIT_VERSION = new BukkitVersion();
+		PLUGIN_VERSION = new PluginVersion();
+		if(!BUKKIT_VERSION.isVersionAllowed()) {
+			Bukkit.getLogger().log(Level.WARNING, "BukkitVersion " + BUKKIT_VERSION.getVersion() + " is not compatible with this plugin. Please use a version that is compatible.");
 			Bukkit.getPluginManager().disablePlugin(PLUGIN);
 			return;
 		}
@@ -127,12 +148,29 @@ public class EnchantmentSolution extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new TankListener(), this);
 		getServer().getPluginManager().registerEvents(new BrineListener(), this);
 		getServer().getPluginManager().registerEvents(new DrownedListener(), this);
+		getServer().getPluginManager().registerEvents(new UnrestListener(), this);
+		getServer().getPluginManager().registerEvents(new NoRestListener(), this);
+		getServer().getPluginManager().registerEvents(new WidthHeightListener(), this);
+		getServer().getPluginManager().registerEvents(new VoidWalkerListener(), this);
+		getServer().getPluginManager().registerEvents(new IcarusListener(), this);
+		getServer().getPluginManager().registerEvents(new IronDefenseListener(), this);
+		getServer().getPluginManager().registerEvents(new HardBounceListener(), this);
+		getServer().getPluginManager().registerEvents(new MagicGuardListener(), this);
+		getServer().getPluginManager().registerEvents(new SplatterFestListener(), this);
+		getServer().getPluginManager().registerEvents(new SandVeilListener(), this);
+		getServer().getPluginManager().registerEvents(new TransmutationListener(), this);
+		getServer().getPluginManager().registerEvents(new GoldDiggerListener(), this);
+		getServer().getPluginManager().registerEvents(new FlowerGiftListener(), this);
+		getServer().getPluginManager().registerEvents(new StoneThrowListener(), this);
+		getServer().getPluginManager().registerEvents(new PillageListener(), this);
 		getServer().getPluginManager().registerEvents(new ChestLootListener(), this);
 		getServer().getPluginManager().registerEvents(new MobSpawning(), this);
 		getServer().getPluginManager().registerEvents(new VanishListener(), this);
 		getServer().getPluginManager().registerEvents(new VersionCheck(), this);
 		getServer().getPluginManager().registerEvents(new ChatMessage(), this);
 		getServer().getPluginManager().registerEvents(new BlockBreak(), this);
+		getServer().getPluginManager().registerEvents(new UpdateEnchantments(), this);
+		
 		if(Bukkit.getPluginManager().isPluginEnabled("mcMMO")) {
 			String version = Bukkit.getPluginManager().getPlugin("mcMMO").getDescription().getVersion();
 			ChatUtils.sendToConsole(Level.INFO, "mcMMO Version: " + version);
@@ -153,7 +191,7 @@ public class EnchantmentSolution extends JavaPlugin {
 					MCMMO_TYPE = "Disabled";
 				}
 			} else {
-				ChatUtils.sendToConsole(Level.INFO, "Using the Classic Version! Compatibility should be intact.");
+				ChatUtils.sendToConsole(Level.INFO, "Using the Classic BukkitVersion! Compatibility should be intact.");
 				MCMMO_TYPE = "Classic";
 			}
 		} else {
@@ -176,6 +214,16 @@ public class EnchantmentSolution extends JavaPlugin {
 				new FrequentFlyerListener(), 20l, 20l);
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN,
 						new DrownedListener(), 1l, 1l);
+		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN,
+				new UnrestListener(), 1l, 1l);
+		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN,
+				new NoRestListener(), 1l, 1l);
+		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN,
+				new VoidWalkerListener(), 1l, 1l);
+		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN,
+				new IcarusListener(), 20l, 20l);
+		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN,
+				new MagicGuardListener(), 1l, 1l);
 
 		getCommand("Enchant").setExecutor(new Enchant());
 		getCommand("Info").setExecutor(new EnchantInfo());
@@ -195,7 +243,7 @@ public class EnchantmentSolution extends JavaPlugin {
 	}
 
 	public void onDisable() {
-		SaveUtils.setMagmaWalkerData();
+		SaveUtils.setWalkerData();
 		
 		resetInventories();
 	}
@@ -239,5 +287,13 @@ public class EnchantmentSolution extends JavaPlugin {
 
 	public static String getMcMMOType() {
 		return MCMMO_TYPE;
+	}
+
+	public static BukkitVersion getBukkitVersion() {
+		return BUKKIT_VERSION;
+	}
+
+	public static PluginVersion getPluginVersion() {
+		return PLUGIN_VERSION;
 	}
 }

@@ -1,11 +1,13 @@
 package org.ctp.enchantmentsolution.enchantments.vanilla;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.apache.commons.lang3.StringUtils;
-import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.Weight;
-import org.ctp.enchantmentsolution.utils.ItemUtils;
+import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 
 public class CurseOfVanishing extends CustomEnchantment{
 	
@@ -24,6 +26,10 @@ public class CurseOfVanishing extends CustomEnchantment{
 		setDefaultThirtyMaxLevel(1);
 		setDefaultWeight(Weight.VERY_RARE);
 		setMaxLevelOne(true);
+		setCurse(true);
+		setDefaultDescription("Causes the item to disappear on death." + 
+				StringUtils.LF + 
+				"When the player dies, the item disappears instead of dropping on the ground. The item may still be dropped normally.");
 	}
 
 	@Override
@@ -32,71 +38,22 @@ public class CurseOfVanishing extends CustomEnchantment{
 	}
 
 	@Override
-	public boolean canEnchantItem(Material item) {
-		if(item.equals(Material.BOOK)){
-			return true;
-		}
-		if(ItemUtils.getItemTypes().get("armor").contains(item)){
-			return true;
-		}
-		if(ItemUtils.getItemTypes().get("tools").contains(item)){
-			return true;
-		}
-		if(ItemUtils.getItemTypes().get("weapons").contains(item)){
-			return true;
-		}
-		if(ItemUtils.getItemTypes().get("trident").contains(item)){
-			return true;
-		}
-		if(ItemUtils.getItemTypes().get("bow").contains(item)){
-			return true;
-		}
-		if(ItemUtils.getItemTypes().get("fishing").contains(item)){
-			return true;
-		}
-		if(ItemUtils.getItemTypes().get("elytra").contains(item)){
-			return true;
-		}
-		return false;
-	}
-
-	@Override
-	public boolean canAnvilItem(Material item) {
-		if(item.equals(Material.BOOK)){
-			return true;
-		}
-		if(ItemUtils.getItemTypes().get("all").contains(item)){
-			return true;
-		}
-		return false;
-	}
-
-	@Override
-	public boolean conflictsWith(CustomEnchantment ench) {
-		if(ench.getName().equals(getName())) {
-			return true;
-		}
-		return false;
-	}
-
-	@Override
 	public String getName() {
 		return "vanishing_curse";
 	}
 	
 	@Override
-	public String[] getPage() {
-		String pageOne = "Name: " + getDisplayName() + StringUtils.LF + StringUtils.LF;
-		pageOne += "Description: Causes the item to disappear on death." + 
-				StringUtils.LF + 
-				"When the player dies, the item disappears instead of dropping on the ground. The item may still be dropped normally." + StringUtils.LF;
-		String pageTwo = "Max Level: " + getMaxLevel() + "."+ StringUtils.LF;
-		pageTwo += "Weight: " + getWeight() + "."+ StringUtils.LF;
-		pageTwo += "Start Level: " + getStartLevel() + "."+ StringUtils.LF;
-		pageTwo += "Enchantable Items: None." + StringUtils.LF;
-		pageTwo += "Anvilable Items: All." + StringUtils.LF;
-		pageTwo += "Treasure Enchantment: " + isTreasure() + ". " + StringUtils.LF;
-		return new String[] {pageOne, pageTwo};
+	protected List<ItemType> getEnchantmentItemTypes() {
+		return Arrays.asList(ItemType.ENCHANTABLE);
 	}
 
+	@Override
+	protected List<ItemType> getAnvilItemTypes() {
+		return Arrays.asList(ItemType.ALL);
+	}
+
+	@Override
+	protected List<Enchantment> getDefaultConflictingEnchantments() {
+		return Arrays.asList();
+	}
 }
