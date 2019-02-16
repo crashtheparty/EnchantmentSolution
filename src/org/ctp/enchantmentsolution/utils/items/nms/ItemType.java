@@ -16,7 +16,7 @@ public enum ItemType{
 	CARROT_ON_A_STICK("carrot_on_a_stick"), ELYTRA("elytra"), TRIDENT("trident"), RANGED("ranged"), ARMOR("armor"), TOOLS("tools"), MELEE("melee"), MISC("misc"), 
 	WOODEN_TOOLS("wooden_tools"), STONE_TOOLS("stone_tools"), IRON_TOOLS("iron_tools"), GOLDEN_TOOLS("golden_tools"), DIAMOND_TOOLS("diamond_tools"), 
 	LEATHER_ARMOR("leather_armor"), GOLDEN_ARMOR("golden_armor"), CHAINMAIL_ARMOR("chainmail_armor"), IRON_ARMOR("iron_armor"), DIAMOND_ARMOR("diamond_armor"), 
-	CROSSBOW("crossbow"), BOOK("book"), ALL("all"), ENCHANTABLE("enchantable");
+	CROSSBOW("crossbow"), BOOK("book"), ALL("all"), ENCHANTABLE("enchantable"), TURTLE_HELMET("turtle_helmet");
 	
 	private String type, display;
 	private List<Material> itemTypes;
@@ -135,6 +135,8 @@ public enum ItemType{
 			return "Tools";
 		} else if (TRIDENT.getType().equals(type)) {
 			return "Trident";
+		} else if (TURTLE_HELMET.getType().equals(type)) {
+			return "Turtle Helmet";
 		} else if (WOODEN_TOOLS.getType().equals(type)) {
 			return "Wooden Tools";
 		}
@@ -235,7 +237,7 @@ public enum ItemType{
 			} else if (HELMETS.getType().equals(type)) {
 				itemTypes.addAll(Arrays.asList(Material.DIAMOND_HELMET,
 						Material.CHAINMAIL_HELMET, Material.GOLDEN_HELMET,
-						Material.IRON_HELMET, Material.LEATHER_HELMET));
+						Material.IRON_HELMET, Material.LEATHER_HELMET, Material.TURTLE_HELMET));
 				return itemTypes;
 			} else if (HOES.getType().equals(type)) {
 				itemTypes.addAll(Arrays.asList(Material.DIAMOND_HOE, Material.GOLDEN_HOE,
@@ -311,6 +313,9 @@ public enum ItemType{
 				return itemTypes;
 			} else if (TRIDENT.getType().equals(type)) {
 				itemTypes.add(Material.TRIDENT);
+				return itemTypes;
+			} else if (TURTLE_HELMET.getType().equals(type)) {
+				itemTypes.add(Material.TURTLE_HELMET);
 				return itemTypes;
 			} else if (WOODEN_TOOLS.getType().equals(type)) {
 				itemTypes.addAll(Arrays.asList(Material.WOODEN_AXE, Material.WOODEN_SWORD,
@@ -408,7 +413,7 @@ public enum ItemType{
 			} else if (HELMETS.getType().equals(type)) {
 				itemTypes.addAll(Arrays.asList(Material.DIAMOND_HELMET,
 						Material.CHAINMAIL_HELMET, Material.GOLDEN_HELMET,
-						Material.IRON_HELMET, Material.LEATHER_HELMET));
+						Material.IRON_HELMET, Material.LEATHER_HELMET, Material.TURTLE_HELMET));
 				return itemTypes;
 			} else if (HOES.getType().equals(type)) {
 				itemTypes.addAll(Arrays.asList(Material.DIAMOND_HOE, Material.GOLDEN_HOE,
@@ -484,6 +489,9 @@ public enum ItemType{
 				return itemTypes;
 			} else if (TRIDENT.getType().equals(type)) {
 				itemTypes.add(Material.TRIDENT);
+				return itemTypes;
+			} else if (TURTLE_HELMET.getType().equals(type)) {
+				itemTypes.add(Material.TURTLE_HELMET);
 				return itemTypes;
 			} else if (WOODEN_TOOLS.getType().equals(type)) {
 				itemTypes.addAll(Arrays.asList(Material.WOODEN_AXE, Material.WOODEN_SWORD,
