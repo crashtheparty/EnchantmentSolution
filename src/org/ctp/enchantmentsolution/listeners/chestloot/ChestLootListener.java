@@ -2,8 +2,6 @@ package org.ctp.enchantmentsolution.listeners.chestloot;
 
 import java.util.List;
 
-import javax.xml.bind.PropertyException;
-
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
@@ -37,7 +35,7 @@ public class ChestLootListener implements Listener{
 				for(Block bLoot : blockLoot) {
 					ChestPopulateNMS.populateChest(bLoot);
 				}
-			} catch (PropertyException e) {
+			} catch (ChestLootException e) {
 				e.printStackTrace();
 			}
 		}
