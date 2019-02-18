@@ -3,8 +3,6 @@ package org.ctp.enchantmentsolution.listeners.chestloot;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.xml.bind.PropertyException;
-
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -51,9 +49,9 @@ public class ChestLoot {
 		}
 	}
 	
-	protected List<Block> getLootToCheck() throws PropertyException{
+	protected List<Block> getLootToCheck() throws ChestLootException{
 		if(checkBlocks == false) {
-			throw new PropertyException("Property has yet to be defined.");
+			throw new ChestLootException("Property has yet to be defined.", new Throwable("Property has yet to be defined."));
 		}
 		return lootToCheck;
 	}
