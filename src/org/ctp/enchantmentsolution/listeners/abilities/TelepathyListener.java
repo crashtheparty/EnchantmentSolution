@@ -1,7 +1,9 @@
 package org.ctp.enchantmentsolution.listeners.abilities;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -27,6 +29,11 @@ import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 
 public class TelepathyListener implements Listener {
 
+	private static List<Material> SHULKER_BOXES = Arrays.asList(Material.BLACK_SHULKER_BOX, Material.BLUE_SHULKER_BOX, Material.BROWN_SHULKER_BOX,
+			Material.CYAN_SHULKER_BOX, Material.GRAY_SHULKER_BOX, Material.GREEN_SHULKER_BOX, Material.LIGHT_BLUE_SHULKER_BOX, Material.LIME_SHULKER_BOX,
+			Material.MAGENTA_SHULKER_BOX, Material.ORANGE_SHULKER_BOX, Material.PINK_SHULKER_BOX, Material.PURPLE_SHULKER_BOX, Material.RED_SHULKER_BOX,
+			Material.LIGHT_GRAY_SHULKER_BOX, Material.WHITE_SHULKER_BOX, Material.YELLOW_SHULKER_BOX, Material.SHULKER_BOX);
+	
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onBlockBreak(BlockBreakEvent event) {
 		if (!DefaultEnchantments.isEnabled(DefaultEnchantments.TELEPATHY))
@@ -34,32 +41,35 @@ public class TelepathyListener implements Listener {
 		Player player = event.getPlayer();
 		if (player.getGameMode().equals(GameMode.CREATIVE) || player.getGameMode().equals(GameMode.SPECTATOR))
 			return;
+		Block block = event.getBlock();
 		ItemStack item = player.getInventory().getItemInMainHand();
 		if (item != null) {
 			if (Enchantments.hasEnchantment(item, DefaultEnchantments.TELEPATHY)) {
-				Collection<ItemStack> drops = event.getBlock().getDrops(item);
-				if (event.getBlock().getType() == Material.SHULKER_BOX) {
+				Collection<ItemStack> drops = block.getDrops(item);
+				if (SHULKER_BOXES.contains(block.getType())) {
 					Iterator<ItemStack> i = drops.iterator();
 					while(i.hasNext()) {
 						ItemStack drop = i.next();
-						if(drop.getType() == Material.SHULKER_BOX) {
+						if(SHULKER_BOXES.contains(drop.getType())) {
 							BlockStateMeta im = (BlockStateMeta) drop.getItemMeta();
-							im.setBlockState(event.getBlock().getState());
+							im.setBlockState(block.getState());
+							Container container = (Container) block.getState();
+							im.setDisplayName(container.getSnapshotInventory().getName());
 							drop.setItemMeta(im);
 							ItemUtils.giveItemToPlayer(player, drop, player.getLocation());
 							i.remove();
 						}
 					}
-					giveItems(player, item, event.getBlock(), drops);
+					giveItems(player, item, block, drops);
 					damageItem(event);
 					return;
-				} else if (event.getBlock().getState() instanceof Container) {
+				} else if (block.getState() instanceof Container) {
 					Iterator<ItemStack> i = drops.iterator();
 					while(i.hasNext()) {
 						ItemStack drop = i.next();
 						ItemUtils.giveItemToPlayer(player, drop, player.getLocation());
 					}
-					Container container = (Container) event.getBlock().getState();
+					Container container = (Container) block.getState();
 					if(container.getInventory().getHolder() instanceof DoubleChest) {
 						DoubleChest doubleChest = (DoubleChest) container.getInventory().getHolder();
 						if (doubleChest.getLeftSide().getInventory().getLocation().equals(container.getLocation())) {
@@ -92,11 +102,11 @@ public class TelepathyListener implements Listener {
 					damageItem(event);
 					return;
 				}
-				giveItems(player, item, event.getBlock(), drops);
+				giveItems(player, item, block, drops);
 				if (Enchantments.hasEnchantment(item, DefaultEnchantments.GOLD_DIGGER)) {
-					ItemStack goldDigger = AbilityUtils.getGoldDiggerItems(item, event.getBlock());
+					ItemStack goldDigger = AbilityUtils.getGoldDiggerItems(item, block);
 					if (goldDigger != null) {
-						event.getPlayer().giveExp(GoldDiggerListener.GoldDiggerCrop.getExp(event.getBlock().getType(),
+						event.getPlayer().giveExp(GoldDiggerListener.GoldDiggerCrop.getExp(block.getType(),
 								Enchantments.getLevel(item, DefaultEnchantments.GOLD_DIGGER)));
 						ItemUtils.giveItemToPlayer(player, goldDigger, player.getLocation());
 					}

@@ -56,6 +56,18 @@ public class ChatUtils {
 		EnchantmentSolution.PLUGIN.getLogger().log(level, message);
 	}
 	
+	public static void sendWarning(String message) {
+		sendToConsole(Level.WARNING, message);
+	}
+	
+	public static void sendInfo(String message) {
+		sendToConsole(Level.INFO, message);
+	}
+	
+	public static void sendSevere(String message) {
+		sendToConsole(Level.SEVERE, message);
+	}
+	
 	public static String getMessage(HashMap<String, Object> codes, String location) {
 		String s = "";
 		try {
