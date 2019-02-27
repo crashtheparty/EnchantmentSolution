@@ -1,13 +1,13 @@
 package org.ctp.enchantmentsolution.api;
 
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
-import org.ctp.enchantmentsolution.enchantments.Weight;
+import org.ctp.enchantmentsolution.enchantments.helper.Weight;
 
 public abstract class ApiEnchantment extends CustomEnchantment{
 	
 	/**
 	 * Constructor for ApiEnchantment
-	 * @param displayName - the name that shows on items for the enchantment
+	 * @param englishUSDisplayName - the name that shows on items for the enchantment - default language of Language.US
 	 * @param fiftyConstant - the enchantability constant at level 50
 	 * @param thirtyConstant - the enchantability constant at level 30
 	 * @param fiftyModifier - the enchantability modifier at level 50
@@ -19,14 +19,14 @@ public abstract class ApiEnchantment extends CustomEnchantment{
 	 * @param fiftyMaxLevel - the max level at level 50
 	 * @param thirtyMaxLevel- the max level at level 30
 	 * @param weight - the weight of getting the enchantment
-	 * @param description - the description (in english) of the enchantment
+	 * @param englishUSDescription - the description of the enchantment - default language of Language.US
 	 * 
-	 * Set curses using the setCurse() method, and set if max level is one using the setMaxLevelOne() method
+	 * Set curses using the setCurse() method, and set if max level is 1 using the setMaxLevelOne() method
 	 */
-	public ApiEnchantment(String displayName, int fiftyConstant, int thirtyConstant, int fiftyModifier, int thirtyModifier, 
+	public ApiEnchantment(String englishUSDisplayName, int fiftyConstant, int thirtyConstant, int fiftyModifier, int thirtyModifier, 
 			int fiftyMaxConstant, int thirtyMaxConstant, int fiftyStartLevel, int thirtyStartLevel, int fiftyMaxLevel, int thirtyMaxLevel, 
-			Weight weight, String description) {
-		setDefaultDisplayName(displayName);
+			Weight weight, String englishUSDescription) {
+		addDefaultDisplayName(englishUSDisplayName);
 		setDefaultFiftyConstant(fiftyConstant);
 		setDefaultThirtyConstant(thirtyConstant);
 		setDefaultFiftyModifier(fiftyModifier);
@@ -38,7 +38,7 @@ public abstract class ApiEnchantment extends CustomEnchantment{
 		setDefaultFiftyMaxLevel(fiftyMaxLevel);
 		setDefaultThirtyMaxLevel(thirtyMaxLevel);
 		setDefaultWeight(weight);
-		setDefaultDescription(description);
+		addDefaultDescription(englishUSDescription);
 	}
 	
 }

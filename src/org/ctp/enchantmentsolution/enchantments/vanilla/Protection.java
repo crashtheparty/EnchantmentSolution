@@ -4,14 +4,16 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.enchantments.Enchantment;
+import org.ctp.enchantmentsolution.api.Language;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
-import org.ctp.enchantmentsolution.enchantments.Weight;
+import org.ctp.enchantmentsolution.enchantments.helper.Weight;
 import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 
 public class Protection extends CustomEnchantment{
 	
 	public Protection() {
-		setDefaultDisplayName("Protection");
+		addDefaultDisplayName("Protection");
+		addDefaultDisplayName(Language.GERMAN, "Schutz");
 		setDefaultFiftyConstant(-15);
 		setDefaultThirtyConstant(-10);
 		setDefaultFiftyModifier(16);
@@ -23,7 +25,8 @@ public class Protection extends CustomEnchantment{
 		setDefaultFiftyMaxLevel(4);
 		setDefaultThirtyMaxLevel(4);
 		setDefaultWeight(Weight.COMMON);
-		setDefaultDescription("Reduces all damage, except damage from the Void, the /kill command, or hunger damage.");
+		addDefaultDescription("Reduces all damage, except damage from the Void, the /kill command, or hunger damage.");
+		addDefaultDescription(Language.GERMAN, "Reduziert jeglichen Schaden, mit Ausnahme des Schadens durch die Leere, den Befehl / kill oder den Hunger-Schaden.");
 	}
 
 	@Override

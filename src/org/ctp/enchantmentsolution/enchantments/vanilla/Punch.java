@@ -4,14 +4,16 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.enchantments.Enchantment;
+import org.ctp.enchantmentsolution.api.Language;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
-import org.ctp.enchantmentsolution.enchantments.Weight;
+import org.ctp.enchantmentsolution.enchantments.helper.Weight;
 import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 
 public class Punch extends CustomEnchantment{
 	
 	public Punch() {
-		setDefaultDisplayName("Punch");
+		addDefaultDisplayName("Punch");
+		addDefaultDisplayName(Language.GERMAN, "Schlag");
 		setDefaultFiftyConstant(-8);
 		setDefaultThirtyConstant(-8);
 		setDefaultFiftyModifier(20);
@@ -23,7 +25,8 @@ public class Punch extends CustomEnchantment{
 		setDefaultFiftyMaxLevel(3);
 		setDefaultThirtyMaxLevel(2);
 		setDefaultWeight(Weight.RARE);
-		setDefaultDescription("Increases knockback on bows.");
+		addDefaultDescription("Increases knockback on bows.");
+		addDefaultDescription(Language.GERMAN, "Erhöht den Rückstoß an den Bögen.");
 	}
 	
 	@Override

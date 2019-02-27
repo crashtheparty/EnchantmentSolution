@@ -4,15 +4,17 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.enchantments.Enchantment;
+import org.ctp.enchantmentsolution.api.Language;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
-import org.ctp.enchantmentsolution.enchantments.Weight;
+import org.ctp.enchantmentsolution.enchantments.helper.Weight;
 import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 
 public class AquaAffinity extends CustomEnchantment{
 
 	public AquaAffinity() {
-		setDefaultDisplayName("Aqua Affinity");
+		addDefaultDisplayName("Aqua Affinity");
+		addDefaultDisplayName(Language.GERMAN, "Wasseraffinität");
 		setDefaultFiftyConstant(15);
 		setDefaultThirtyConstant(1);
 		setDefaultFiftyModifier(0);
@@ -25,7 +27,8 @@ public class AquaAffinity extends CustomEnchantment{
 		setDefaultThirtyMaxLevel(1);
 		setDefaultWeight(Weight.RARE);
 		setMaxLevelOne(true);
-		setDefaultDescription("Increases underwater mining rate.");
+		addDefaultDescription("Increases underwater mining rate.");
+		addDefaultDescription(Language.GERMAN, "Erhöht die Unterwasserabbaugeschwindigkeit.");
 	}
 	
 	@Override

@@ -4,15 +4,17 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.enchantments.Enchantment;
+import org.ctp.enchantmentsolution.api.Language;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
-import org.ctp.enchantmentsolution.enchantments.Weight;
+import org.ctp.enchantmentsolution.enchantments.helper.Weight;
 import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 
 public class Sacrifice extends CustomEnchantment{
 	
 	public Sacrifice() {
-		setDefaultDisplayName("Sacrifice");
+		addDefaultDisplayName("Sacrifice");
+		addDefaultDisplayName(Language.GERMAN, "Opferung");
 		setDefaultFiftyConstant(35);
 		setDefaultThirtyConstant(15);
 		setDefaultFiftyModifier(15);
@@ -24,7 +26,8 @@ public class Sacrifice extends CustomEnchantment{
 		setDefaultFiftyMaxLevel(2);
 		setDefaultThirtyMaxLevel(2);
 		setDefaultWeight(Weight.VERY_RARE);
-		setDefaultDescription("Damage the mob who killed you based upon your experience level.");
+		addDefaultDescription("Damage the mob who killed you based upon your experience level.");
+		addDefaultDescription(Language.GERMAN, "Zerstöre den Mob, der dich getötet hat, basierend auf deinem Erfahrungslevel.");
 	}
 	
 	@Override

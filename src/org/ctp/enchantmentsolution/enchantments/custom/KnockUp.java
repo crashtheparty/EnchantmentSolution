@@ -4,15 +4,17 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.enchantments.Enchantment;
+import org.ctp.enchantmentsolution.api.Language;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
-import org.ctp.enchantmentsolution.enchantments.Weight;
+import org.ctp.enchantmentsolution.enchantments.helper.Weight;
 import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 
 public class KnockUp extends CustomEnchantment{
 	
 	public KnockUp() {
-		setDefaultDisplayName("Knockup");
+		addDefaultDisplayName("Knockup");
+		addDefaultDisplayName(Language.GERMAN, "Werfen");
 		setDefaultFiftyConstant(-15);
 		setDefaultThirtyConstant(5);
 		setDefaultFiftyModifier(20);
@@ -24,7 +26,8 @@ public class KnockUp extends CustomEnchantment{
 		setDefaultFiftyMaxLevel(4);
 		setDefaultThirtyMaxLevel(2);
 		setDefaultWeight(Weight.UNCOMMON);
-		setDefaultDescription("Increases knockback upwards.");
+		addDefaultDescription("Increases knockback upwards.");
+		addDefaultDescription(Language.GERMAN, "Erhöht den Rückstoß nach oben.");
 	}
 	
 	@Override

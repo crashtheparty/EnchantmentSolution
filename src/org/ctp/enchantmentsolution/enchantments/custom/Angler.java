@@ -4,15 +4,17 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.enchantments.Enchantment;
+import org.ctp.enchantmentsolution.api.Language;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
-import org.ctp.enchantmentsolution.enchantments.Weight;
+import org.ctp.enchantmentsolution.enchantments.helper.Weight;
 import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 
 public class Angler extends CustomEnchantment{
 	
 	public Angler() {
-		setDefaultDisplayName("Angler");
+		addDefaultDisplayName("Angler");
+		addDefaultDisplayName(Language.GERMAN, "Profiangler");
 		setDefaultFiftyConstant(0);
 		setDefaultThirtyConstant(0);
 		setDefaultFiftyModifier(10);
@@ -24,7 +26,8 @@ public class Angler extends CustomEnchantment{
 		setDefaultFiftyMaxLevel(5);
 		setDefaultThirtyMaxLevel(3);
 		setDefaultWeight(Weight.RARE);
-		setDefaultDescription("Catch one additional fish per level if you caught a fish.");
+		addDefaultDescription("Catch one additional fish per level if you caught a fish.");
+		addDefaultDescription(Language.GERMAN, "Fangen Sie einen zusätzlichen Fisch pro Level, wenn Sie einen Fisch fangen.");
 	}
 	
 	@Override

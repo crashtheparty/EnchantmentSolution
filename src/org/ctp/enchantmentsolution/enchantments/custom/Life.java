@@ -4,15 +4,17 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.enchantments.Enchantment;
+import org.ctp.enchantmentsolution.api.Language;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
-import org.ctp.enchantmentsolution.enchantments.Weight;
+import org.ctp.enchantmentsolution.enchantments.helper.Weight;
 import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 
 public class Life extends CustomEnchantment{
 	
 	public Life() {
-		setDefaultDisplayName("Life");
+		addDefaultDisplayName("Life");
+		addDefaultDisplayName(Language.GERMAN, "Leben");
 		setDefaultFiftyConstant(-5);
 		setDefaultThirtyConstant(-5);
 		setDefaultFiftyModifier(25);
@@ -24,7 +26,8 @@ public class Life extends CustomEnchantment{
 		setDefaultFiftyMaxLevel(3);
 		setDefaultThirtyMaxLevel(3);
 		setDefaultWeight(Weight.RARE);
-		setDefaultDescription("Increases maximum health by 4 (half hearts) per level when worn.");
+		addDefaultDescription("Increases maximum health by 4 (half hearts) per level when worn.");
+		addDefaultDescription(Language.GERMAN, "Erhöht die maximale Gesundheit um 4 (halbe Herzen) pro Level, wenn er getragen wird.");
 	}
 	
 	@Override
@@ -49,7 +52,7 @@ public class Life extends CustomEnchantment{
 
 	@Override
 	protected List<Enchantment> getDefaultConflictingEnchantments() {
-		return Arrays.asList();
+		return Arrays.asList(DefaultEnchantments.GUNG_HO);
 	}
 
 }

@@ -4,14 +4,16 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.enchantments.Enchantment;
+import org.ctp.enchantmentsolution.api.Language;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
-import org.ctp.enchantmentsolution.enchantments.Weight;
+import org.ctp.enchantmentsolution.enchantments.helper.Weight;
 import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 
 public class Fortune extends CustomEnchantment{
 	
 	public Fortune() {
-		setDefaultDisplayName("Fortune");
+		addDefaultDisplayName("Fortune");
+		addDefaultDisplayName(Language.GERMAN, "Glück");
 		setDefaultFiftyConstant(7);
 		setDefaultThirtyConstant(6);
 		setDefaultFiftyModifier(11);
@@ -23,7 +25,8 @@ public class Fortune extends CustomEnchantment{
 		setDefaultFiftyMaxLevel(5);
 		setDefaultThirtyMaxLevel(3);
 		setDefaultWeight(Weight.RARE);
-		setDefaultDescription("Increases block drops.");
+		addDefaultDescription("Increases block drops.");
+		addDefaultDescription(Language.GERMAN, "Erhöht Blocktropfen.");
 	}
 	
 	@Override

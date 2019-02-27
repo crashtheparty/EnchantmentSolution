@@ -20,7 +20,6 @@ import org.ctp.enchantmentsolution.nms.Anvil_GUI_NMS;
 import org.ctp.enchantmentsolution.utils.config.YamlConfigBackup;
 import org.ctp.enchantmentsolution.utils.config.YamlInfo;
 import org.ctp.enchantmentsolution.utils.items.ItemUtils;
-import org.ctp.enchantmentsolution.utils.save.ConfigFiles;
 
 public class InventoryClickUtils {
 
@@ -152,19 +151,19 @@ public class InventoryClickUtils {
 			case LIST_FILES:
 				switch(slot) {
 				case 2:
-					configInv.listConfigDetails(ConfigFiles.getDefaultConfig());
+					configInv.listConfigDetails(EnchantmentSolution.getConfigFiles().getDefaultConfig());
 					break;
 				case 3:
-					configInv.listConfigDetails(ConfigFiles.getFishingConfig());
+					configInv.listConfigDetails(EnchantmentSolution.getConfigFiles().getFishingConfig());
 					break;
 				case 4:
-					configInv.listConfigDetails(ConfigFiles.getLanguageFile());
+					configInv.listConfigDetails(EnchantmentSolution.getConfigFiles().getLanguageFile());
 					break;
 				case 5:
-					configInv.listConfigDetails(ConfigFiles.getEnchantmentConfig());
+					configInv.listConfigDetails(EnchantmentSolution.getConfigFiles().getEnchantmentConfig());
 					break;
 				case 6:
-					configInv.listConfigDetails(ConfigFiles.getEnchantmentAdvancedConfig());
+					configInv.listConfigDetails(EnchantmentSolution.getConfigFiles().getEnchantmentAdvancedConfig());
 					break;
 				case 21:
 					if(!item.getType().equals(Material.BARRIER)) {

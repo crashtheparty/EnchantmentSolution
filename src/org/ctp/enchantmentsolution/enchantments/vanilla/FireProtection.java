@@ -4,14 +4,16 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.enchantments.Enchantment;
+import org.ctp.enchantmentsolution.api.Language;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
-import org.ctp.enchantmentsolution.enchantments.Weight;
+import org.ctp.enchantmentsolution.enchantments.helper.Weight;
 import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 
 public class FireProtection extends CustomEnchantment{
 	
 	public FireProtection() {
-		setDefaultDisplayName("Fire Protection");
+		addDefaultDisplayName("Fire Protection");
+		addDefaultDisplayName(Language.GERMAN, "Feuerschutz");
 		setDefaultFiftyConstant(-8);
 		setDefaultThirtyConstant(2);
 		setDefaultFiftyModifier(15);
@@ -23,7 +25,8 @@ public class FireProtection extends CustomEnchantment{
 		setDefaultFiftyMaxLevel(4);
 		setDefaultThirtyMaxLevel(4);
 		setDefaultWeight(Weight.UNCOMMON);
-		setDefaultDescription("Reduces fire damage.");
+		addDefaultDescription("Reduces fire damage.");
+		addDefaultDescription(Language.GERMAN, "Reduziert Feuerschäden.");
 	}
 
 	@Override

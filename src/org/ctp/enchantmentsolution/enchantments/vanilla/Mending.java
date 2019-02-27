@@ -4,14 +4,16 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.enchantments.Enchantment;
+import org.ctp.enchantmentsolution.api.Language;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
-import org.ctp.enchantmentsolution.enchantments.Weight;
+import org.ctp.enchantmentsolution.enchantments.helper.Weight;
 import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 
 public class Mending extends CustomEnchantment{
 	
 	public Mending() {
-		setDefaultDisplayName("Mending");
+		addDefaultDisplayName("Mending");
+		addDefaultDisplayName(Language.GERMAN, "Reparatur");
 		setTreasure(true);
 		setDefaultFiftyConstant(25);
 		setDefaultThirtyConstant(25);
@@ -25,7 +27,8 @@ public class Mending extends CustomEnchantment{
 		setDefaultThirtyMaxLevel(1);
 		setDefaultWeight(Weight.RARE);
 		setMaxLevelOne(true);
-		setDefaultDescription("Repair durability with experience.");
+		addDefaultDescription("Repair durability with experience.");
+		addDefaultDescription(Language.GERMAN, "Haltbarkeit mit Erfahrung reparieren.");
 	}
 
 	@Override

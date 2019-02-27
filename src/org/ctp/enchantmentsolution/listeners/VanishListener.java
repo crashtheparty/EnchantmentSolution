@@ -15,13 +15,12 @@ import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
 import org.ctp.enchantmentsolution.inventory.InventoryData;
-import org.ctp.enchantmentsolution.utils.save.ConfigFiles;
 
 public class VanishListener implements Listener{
 	
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent event) {
-		if(ConfigFiles.getDefaultConfig().getString("disable_enchant_method").equals("vanish")) {
+		if(EnchantmentSolution.getConfigFiles().getDefaultConfig().getString("disable_enchant_method").equals("vanish")) {
 			Player player = event.getPlayer();
 			
 			PlayerInventory inv = player.getInventory();
@@ -56,7 +55,7 @@ public class VanishListener implements Listener{
 	
 	@EventHandler
 	public void onInventoryOpen(InventoryOpenEvent event) {
-		if(ConfigFiles.getDefaultConfig().getString("disable_enchant_method").equals("vanish")) {
+		if(EnchantmentSolution.getConfigFiles().getDefaultConfig().getString("disable_enchant_method").equals("vanish")) {
 			boolean shouldCheck = true;
 			if(event.getPlayer() instanceof Player) {
 				Player player = (Player) event.getPlayer();
@@ -77,14 +76,14 @@ public class VanishListener implements Listener{
 	
 	@EventHandler
 	public void onEntityPickupItem(EntityPickupItemEvent event) {
-		if(ConfigFiles.getDefaultConfig().getString("disable_enchant_method").equals("vanish")) {
+		if(EnchantmentSolution.getConfigFiles().getDefaultConfig().getString("disable_enchant_method").equals("vanish")) {
 			ItemStack item = event.getItem().getItemStack();
 			event.getItem().setItemStack(removeEnchants(item));
 		}
 	}
 	
 	public static void reload() {
-		if(ConfigFiles.getDefaultConfig().getString("disable_enchant_method").equals("vanish")) {
+		if(EnchantmentSolution.getConfigFiles().getDefaultConfig().getString("disable_enchant_method").equals("vanish")) {
 			for(Player player : Bukkit.getOnlinePlayers()) {
 				Bukkit.getScheduler().scheduleSyncDelayedTask(EnchantmentSolution.PLUGIN, new Runnable(){
 					@Override

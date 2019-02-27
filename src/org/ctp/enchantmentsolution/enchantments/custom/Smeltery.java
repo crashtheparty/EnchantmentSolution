@@ -4,15 +4,17 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.enchantments.Enchantment;
+import org.ctp.enchantmentsolution.api.Language;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
-import org.ctp.enchantmentsolution.enchantments.Weight;
+import org.ctp.enchantmentsolution.enchantments.helper.Weight;
 import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 
 public class Smeltery extends CustomEnchantment{
 	
 	public Smeltery() {
-		setDefaultDisplayName("Smeltery");
+		addDefaultDisplayName("Smeltery");
+		addDefaultDisplayName(Language.GERMAN, "Schmelzen");
 		setDefaultFiftyConstant(40);
 		setDefaultThirtyConstant(20);
 		setDefaultFiftyModifier(0);
@@ -25,7 +27,8 @@ public class Smeltery extends CustomEnchantment{
 		setDefaultThirtyMaxLevel(1);
 		setDefaultWeight(Weight.RARE);
 		setMaxLevelOne(true);
-		setDefaultDescription("Smelts blocks while mining.");
+		addDefaultDescription("Smelts blocks while mining.");
+		addDefaultDescription(Language.GERMAN, "Schmelzen Blöcke während des Bergbaus.");
 	}
 	
 	@Override

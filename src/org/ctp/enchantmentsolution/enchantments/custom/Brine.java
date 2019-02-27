@@ -4,15 +4,17 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.enchantments.Enchantment;
+import org.ctp.enchantmentsolution.api.Language;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
-import org.ctp.enchantmentsolution.enchantments.Weight;
+import org.ctp.enchantmentsolution.enchantments.helper.Weight;
 import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 
 public class Brine extends CustomEnchantment{
 	
 	public Brine() {
-		setDefaultDisplayName("Brine");
+		addDefaultDisplayName("Brine");
+		addDefaultDisplayName(Language.GERMAN, "Salzlake");
 		setDefaultFiftyConstant(30);
 		setDefaultThirtyConstant(25);
 		setDefaultFiftyModifier(0);
@@ -25,7 +27,8 @@ public class Brine extends CustomEnchantment{
 		setDefaultThirtyMaxLevel(1);
 		setDefaultWeight(Weight.RARE);
 		setMaxLevelOne(true);
-		setDefaultDescription("Doubles damage if opposing mob is below 50% health.");
+		addDefaultDescription("Doubles damage if opposing mob is below 50% health.");
+		addDefaultDescription(Language.GERMAN, "Verdoppelt den Schaden, wenn die gegnerische Menge weniger als 50% Gesundheit hat.");
 	}
 
 	@Override

@@ -7,16 +7,22 @@ import org.apache.commons.lang3.StringUtils;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.ctp.enchantmentsolution.EnchantmentSolution;
+import org.ctp.enchantmentsolution.api.Language;
+import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentDescription;
+import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentDisplayName;
+import org.ctp.enchantmentsolution.enchantments.helper.Weight;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.PermissionUtils;
 import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
-import org.ctp.enchantmentsolution.utils.save.ConfigFiles;
 
 public abstract class CustomEnchantment {
 
 	private boolean enabled = true;
 	private boolean treasure = false;
-	private String displayName = "", defaultDisplayName = "", description = "", defaultDescription = "";
+	private String displayName = "", description = "";
+	private List<EnchantmentDisplayName> defaultDisplayNames = new ArrayList<EnchantmentDisplayName>();
+	private List<EnchantmentDescription> defaultDescriptions = new ArrayList<EnchantmentDescription>();
 	private int defaultThirtyConstant = -1, defaultFiftyConstant = -1, constant = -1, defaultThirtyModifier = -1,
 			defaultFiftyModifier = -1, modifier = -1, defaultThirtyMaxConstant = -1, defaultFiftyMaxConstant = -1,
 			maxConstant = -1, defaultThirtyStartLevel = -1, defaultFiftyStartLevel = -1, startLevel = -1,
@@ -241,7 +247,7 @@ public abstract class CustomEnchantment {
 	}
 
 	public boolean canEnchant(Player player, int enchantability, int level) {
-		if (ConfigFiles.useStartLevel() && level < getStartLevel()) {
+		if (EnchantmentSolution.getConfigFiles().useStartLevel() && level < getStartLevel()) {
 			return false;
 		}
 		if(getEnchantLevel(player, enchantability) > 0) {
@@ -295,6 +301,10 @@ public abstract class CustomEnchantment {
 
 	public void setDisplayName(String name) {
 		displayName = name;
+	}
+
+	public void setDisplayName(Language lang) {
+		displayName = getDefaultDisplayName(lang);
 	}
 
 	private int getDefaultThirtyConstant() {
@@ -456,14 +466,30 @@ public abstract class CustomEnchantment {
 			this.weight = this.defaultWeight;
 		}
 	}
-
-	public String getDefaultDisplayName() {
-		return defaultDisplayName;
+	
+	public String getDefaultDisplayName(Language lang) {
+		String english = null;
+		for(EnchantmentDisplayName d : defaultDisplayNames) {
+			if(lang.equals(d.getLanguage())) {
+				return d.getDisplayName();
+			}
+			if(d.getLanguage().equals(Language.US)) {
+				english = d.getDisplayName();
+			}
+		}
+		return english;
 	}
 
-	protected void setDefaultDisplayName(String defaultDisplayName) {
-		this.defaultDisplayName = defaultDisplayName;
-		this.displayName = defaultDisplayName;
+	protected void addDefaultDisplayName(EnchantmentDisplayName defaultDisplayName) {
+		this.defaultDisplayNames.add(defaultDisplayName);
+	}
+
+	protected void addDefaultDisplayName(Language lang, String name) {
+		this.defaultDisplayNames.add(new EnchantmentDisplayName(lang, name));
+	}
+
+	protected void addDefaultDisplayName(String name) {
+		this.defaultDisplayNames.add(new EnchantmentDisplayName(Language.US, name));
 	}
 
 	public List<Material> getDisabledItems() {
@@ -498,13 +524,29 @@ public abstract class CustomEnchantment {
 		this.description = description;
 	}
 
-	public String getDefaultDescription() {
-		return defaultDescription;
+	public String getDefaultDescription(Language lang) {
+		String english = null;
+		for(EnchantmentDescription d : defaultDescriptions) {
+			if(lang.equals(d.getLanguage())) {
+				return d.getDescription();
+			}
+			if(d.getLanguage().equals(Language.US)) {
+				english = d.getDescription();
+			}
+		}
+		return english;
 	}
 
-	protected void setDefaultDescription(String defaultDescription) {
-		this.defaultDescription = defaultDescription;
-		this.description = defaultDescription;
+	protected void addDefaultDescription(Language lang, String desc) {
+		this.defaultDescriptions.add(new EnchantmentDescription(lang, desc));
+	}
+
+	protected void addDefaultDescription(String desc) {
+		this.defaultDescriptions.add(new EnchantmentDescription(Language.US, desc));
+	}
+
+	protected void addDefaultDescription(EnchantmentDescription defaultDescription) {
+		this.defaultDescriptions.add(defaultDescription);
 	}
 
 }

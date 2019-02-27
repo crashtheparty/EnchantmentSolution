@@ -2,6 +2,7 @@ name: EnchantmentSolution
 version: 2.0.0-pre2
 main: org.ctp.enchantmentsolution.EnchantmentSolution
 api-version: 1.13
+softdepend: [mcMMO, Jobs]
 commands:
   enchant:
     aliases: [es,customenchant]

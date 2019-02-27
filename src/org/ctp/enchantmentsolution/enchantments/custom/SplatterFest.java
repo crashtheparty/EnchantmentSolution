@@ -4,15 +4,17 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.enchantments.Enchantment;
+import org.ctp.enchantmentsolution.api.Language;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
-import org.ctp.enchantmentsolution.enchantments.Weight;
+import org.ctp.enchantmentsolution.enchantments.helper.Weight;
 import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 
 public class SplatterFest extends CustomEnchantment{
 	
 	public SplatterFest() {
-		setDefaultDisplayName("Splatter Fest");
+		addDefaultDisplayName("Splatter Fest");
+		addDefaultDisplayName(Language.GERMAN, "Ei Splatter");
 		setDefaultFiftyConstant(25);
 		setDefaultThirtyConstant(25);
 		setDefaultFiftyModifier(0);
@@ -25,7 +27,8 @@ public class SplatterFest extends CustomEnchantment{
 		setDefaultThirtyMaxLevel(1);
 		setDefaultWeight(Weight.RARE);
 		setMaxLevelOne(true);
-		setDefaultDescription("Shoots eggs out of hoe on left click.");
+		addDefaultDescription("Shoots eggs out of hoe on left click.");
+		addDefaultDescription(Language.GERMAN, "Schieﬂt mit dem Linksklick Eier aus der Hacke.");
 	}
 
 	@Override

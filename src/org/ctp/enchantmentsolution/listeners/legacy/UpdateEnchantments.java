@@ -12,11 +12,11 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.ctp.enchantmentsolution.enchantments.EnchantmentLevel;
+import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
+import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
-import org.ctp.enchantmentsolution.utils.RomanNumerals;
-import org.ctp.enchantmentsolution.utils.save.ConfigFiles;
+import org.ctp.enchantmentsolution.utils.StringUtils;
 
 public class UpdateEnchantments implements Listener{
 
@@ -35,7 +35,7 @@ public class UpdateEnchantments implements Listener{
 	}
 	
 	public void updateEnchantments(PlayerInventory inv) {
-		if(ConfigFiles.updateLegacyEnchantments()) {
+		if(EnchantmentSolution.getConfigFiles().updateLegacyEnchantments()) {
 			for(int i = 0; i < 36; i++) {
 				ItemStack item = inv.getItem(i);
 				if(item != null) {
@@ -46,10 +46,10 @@ public class UpdateEnchantments implements Listener{
 							List<EnchantmentLevel> levels = new ArrayList<EnchantmentLevel>();
 							for(String s : lore) {
 								String enchantment = ChatColor.stripColor(s);
-								EnchantmentLevel level = RomanNumerals.returnEnchantmentLevel(enchantment, meta);
+								EnchantmentLevel level = StringUtils.returnEnchantmentLevel(enchantment, meta);
 								if(level != null) {
 									String enchName = ChatUtils.hideText("legacy") + "" + ChatColor.GRAY + 
-											RomanNumerals.returnEnchantmentName(level.getEnchant(), level.getLevel());
+											StringUtils.returnEnchantmentName(level.getEnchant(), level.getLevel());
 									if(s.equals(enchName)) {
 										levels.add(level);
 									}

@@ -16,7 +16,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
-import org.ctp.enchantmentsolution.utils.save.ConfigFiles;
 
 public class ChatUtils {
 
@@ -45,7 +44,7 @@ public class ChatUtils {
 	}
 	
 	private static String getStarter() {
-		String starter = ChatColor.translateAlternateColorCodes('&', ConfigFiles.getDefaultConfig().getString("starter"));
+		String starter = ChatColor.translateAlternateColorCodes('&', EnchantmentSolution.getConfigFiles().getDefaultConfig().getString("starter"));
 		if(starter != null) {
 			return starter + ChatColor.WHITE + " ";
 		}
@@ -56,10 +55,22 @@ public class ChatUtils {
 		EnchantmentSolution.PLUGIN.getLogger().log(level, message);
 	}
 	
+	public static void sendWarning(String message) {
+		sendToConsole(Level.WARNING, message);
+	}
+	
+	public static void sendInfo(String message) {
+		sendToConsole(Level.INFO, message);
+	}
+	
+	public static void sendSevere(String message) {
+		sendToConsole(Level.SEVERE, message);
+	}
+	
 	public static String getMessage(HashMap<String, Object> codes, String location) {
 		String s = "";
 		try {
-			s = translateCodes(codes, ChatColor.translateAlternateColorCodes('&', ConfigFiles.getLanguageFile().getString(location)));
+			s = translateCodes(codes, ChatColor.translateAlternateColorCodes('&', EnchantmentSolution.getConfigFiles().getLanguageFile().getString(location)));
 		} catch (Exception e) {
 			
 		}
@@ -68,7 +79,7 @@ public class ChatUtils {
 	}
 	
 	public static List<String> getMessages(HashMap<String, Object> codes, String location) {
-		List<String> messages = ConfigFiles.getLanguageFile().getStringList(location);
+		List<String> messages = EnchantmentSolution.getConfigFiles().getLanguageFile().getStringList(location);
 		for(int i = 0; i < messages.size(); i++) {
 			messages.set(i, translateCodes(codes, ChatColor.translateAlternateColorCodes('&', messages.get(i))));
 		}

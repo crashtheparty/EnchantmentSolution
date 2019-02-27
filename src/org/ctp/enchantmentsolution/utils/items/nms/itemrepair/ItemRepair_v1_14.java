@@ -22,7 +22,7 @@ public enum ItemRepair_v1_14 implements ItemRepairType{
 	WOODEN_HOE(Material.WOODEN_HOE), LEATHER_HELMET(Material.LEATHER_HELMET), LEATHER_CHESTPLATE(Material.LEATHER_CHESTPLATE), 
 	LEATHER_LEGGINGS(Material.LEATHER_LEGGINGS), LEATHER_BOOTS(Material.LEATHER_BOOTS), ELYTRA(Material.ELYTRA), BOW(Material.BOW), FISHING_ROD(Material.FISHING_ROD), 
 	BOOK(Material.BOOK), ENCHANTED_BOOK(Material.ENCHANTED_BOOK), TRIDENT(Material.TRIDENT), SHEARS(Material.SHEARS), FLINT_AND_STEEL(Material.FLINT_AND_STEEL),
-	CROSSBOW(Material.CROSSBOW), SHIELD(Material.SHIELD), TURTLE_HELMET(Material.TURTLE_HELMET);
+	CROSSBOW(Material.CROSSBOW), SHIELD(Material.SHIELD), TURTLE_HELMET(Material.TURTLE_HELMET), CARROT_ON_A_STICK(Material.CARROT_ON_A_STICK);
 	
 	private Material material;
 	private List<Material> repairTypes;
@@ -57,6 +57,9 @@ public enum ItemRepair_v1_14 implements ItemRepairType{
 			return itemTypes;
 		case BOW:
 			itemTypes.addAll(Arrays.asList(Material.BOW, Material.STRING, Material.BOOK, Material.ENCHANTED_BOOK));
+			return itemTypes;
+		case CARROT_ON_A_STICK:
+			itemTypes.addAll(Arrays.asList(Material.CARROT_ON_A_STICK, Material.BOOK, Material.ENCHANTED_BOOK));
 			return itemTypes;
 		case CHAINMAIL_BOOTS:
 			itemTypes.addAll(Arrays.asList(Material.CHAINMAIL_BOOTS, Material.IRON_INGOT, Material.BOOK, Material.ENCHANTED_BOOK));

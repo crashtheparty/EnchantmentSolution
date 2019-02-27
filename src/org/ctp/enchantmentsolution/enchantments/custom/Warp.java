@@ -4,15 +4,17 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.enchantments.Enchantment;
+import org.ctp.enchantmentsolution.api.Language;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
-import org.ctp.enchantmentsolution.enchantments.Weight;
+import org.ctp.enchantmentsolution.enchantments.helper.Weight;
 import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 
 public class Warp extends CustomEnchantment{
 	
 	public Warp() {
-		setDefaultDisplayName("Warp");
+		addDefaultDisplayName("Warp");
+		addDefaultDisplayName(Language.GERMAN, "Warp");
 		setDefaultFiftyConstant(-5);
 		setDefaultThirtyConstant(-7);
 		setDefaultFiftyModifier(20);
@@ -24,7 +26,8 @@ public class Warp extends CustomEnchantment{
 		setDefaultFiftyMaxLevel(3);
 		setDefaultThirtyMaxLevel(3);
 		setDefaultWeight(Weight.RARE);
-		setDefaultDescription("Gives a chance of teleporting a small distance away on hit.");
+		addDefaultDescription("Gives a chance of teleporting a small distance away on hit.");
+		addDefaultDescription(Language.GERMAN, "Gibt eine Chance, bei einem Treffer eine kleine Entfernung zu teleportieren.");
 	}
 	
 	@Override

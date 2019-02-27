@@ -4,15 +4,17 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.enchantments.Enchantment;
+import org.ctp.enchantmentsolution.api.Language;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
-import org.ctp.enchantmentsolution.enchantments.Weight;
+import org.ctp.enchantmentsolution.enchantments.helper.Weight;
 import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 
 public class Unrest extends CustomEnchantment{
 
 	public Unrest() {
-		setDefaultDisplayName("Unrest");
+		addDefaultDisplayName("Unrest");
+		addDefaultDisplayName(Language.GERMAN, "Unruhe");
 		setDefaultFiftyConstant(15);
 		setDefaultThirtyConstant(1);
 		setDefaultFiftyModifier(0);
@@ -25,7 +27,8 @@ public class Unrest extends CustomEnchantment{
 		setDefaultThirtyMaxLevel(1);
 		setDefaultWeight(Weight.RARE);
 		setMaxLevelOne(true);
-		setDefaultDescription("Night vision at the cost of more phantom spawning.");
+		addDefaultDescription("Night vision at the cost of more phantom spawning.");
+		addDefaultDescription(Language.GERMAN, "Nachtsicht auf Kosten eines Phantomlaichens.");
 	}
 
 	@Override

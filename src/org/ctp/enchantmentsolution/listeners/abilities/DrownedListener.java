@@ -42,7 +42,7 @@ public class DrownedListener implements Listener, Runnable{
 			if(trident.getShooter() instanceof Player){
 				Player player = (Player) trident.getShooter();
 				ItemStack tridentItem = player.getInventory().getItemInMainHand();
-				if(trident != null) {
+				if(tridentItem != null) {
 					ENTITY_IDS.put(trident.getUniqueId(), tridentItem);
 				}
 			}

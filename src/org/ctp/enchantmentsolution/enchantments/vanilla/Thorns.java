@@ -4,14 +4,16 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.enchantments.Enchantment;
+import org.ctp.enchantmentsolution.api.Language;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
-import org.ctp.enchantmentsolution.enchantments.Weight;
+import org.ctp.enchantmentsolution.enchantments.helper.Weight;
 import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 
 public class Thorns extends CustomEnchantment{
 	
 	public Thorns() {
-		setDefaultDisplayName("Thorns");
+		addDefaultDisplayName("Thorns");
+		addDefaultDisplayName(Language.GERMAN, "Dornen");
 		setDefaultFiftyConstant(10);
 		setDefaultThirtyConstant(-10);
 		setDefaultFiftyModifier(20);
@@ -23,7 +25,8 @@ public class Thorns extends CustomEnchantment{
 		setDefaultFiftyMaxLevel(3);
 		setDefaultThirtyMaxLevel(3);
 		setDefaultWeight(Weight.VERY_RARE);
-		setDefaultDescription("Attackers are damaged when they attack the wearer. This also does additional durability damage to armor.");
+		addDefaultDescription("Attackers are damaged when they attack the wearer. This also does additional durability damage to armor.");
+		addDefaultDescription(Language.GERMAN, "Angreifer werden beschädigt, wenn sie den Träger angreifen. Dies führt auch zu einer zusätzlichen Haltbarkeit der Rüstung.");
 	}
 	
 	@Override

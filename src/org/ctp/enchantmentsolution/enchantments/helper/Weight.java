@@ -1,4 +1,4 @@
-package org.ctp.enchantmentsolution.enchantments;
+package org.ctp.enchantmentsolution.enchantments.helper;
 
 public enum Weight {
 	

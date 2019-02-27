@@ -4,15 +4,17 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.enchantments.Enchantment;
+import org.ctp.enchantmentsolution.api.Language;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
-import org.ctp.enchantmentsolution.enchantments.Weight;
+import org.ctp.enchantmentsolution.enchantments.helper.Weight;
 import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 
 public class Fried extends CustomEnchantment{
 	
 	public Fried() {
-		setDefaultDisplayName("Fried");
+		addDefaultDisplayName("Fried");
+		addDefaultDisplayName(Language.GERMAN, "Fritieren");
 		setDefaultFiftyConstant(40);
 		setDefaultThirtyConstant(15);
 		setDefaultFiftyModifier(0);
@@ -25,7 +27,8 @@ public class Fried extends CustomEnchantment{
 		setDefaultThirtyMaxLevel(1);
 		setDefaultWeight(Weight.RARE);
 		setMaxLevelOne(true);
-		setDefaultDescription("Cooks fish upon catching them.");
+		addDefaultDescription("Cooks fish upon catching them.");
+		addDefaultDescription(Language.GERMAN, "Köche Fische, wenn sie gefangen werden.");
 	}
 	
 	@Override

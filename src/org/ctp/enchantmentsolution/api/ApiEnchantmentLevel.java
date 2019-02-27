@@ -1,6 +1,6 @@
 package org.ctp.enchantmentsolution.api;
 
-import org.ctp.enchantmentsolution.enchantments.EnchantmentLevel;
+import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 
 public class ApiEnchantmentLevel extends EnchantmentLevel{
 

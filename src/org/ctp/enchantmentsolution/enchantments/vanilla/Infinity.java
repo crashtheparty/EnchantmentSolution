@@ -4,14 +4,16 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.enchantments.Enchantment;
+import org.ctp.enchantmentsolution.api.Language;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
-import org.ctp.enchantmentsolution.enchantments.Weight;
+import org.ctp.enchantmentsolution.enchantments.helper.Weight;
 import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 
 public class Infinity extends CustomEnchantment{
 	
 	public Infinity() {
-		setDefaultDisplayName("Infinity");
+		addDefaultDisplayName("Infinity");
+		addDefaultDisplayName(Language.GERMAN, "Unendlichkeit");
 		setDefaultFiftyConstant(35);
 		setDefaultThirtyConstant(20);
 		setDefaultFiftyModifier(0);
@@ -24,7 +26,8 @@ public class Infinity extends CustomEnchantment{
 		setDefaultThirtyMaxLevel(1);
 		setDefaultWeight(Weight.RARE);
 		setMaxLevelOne(true);
-		setDefaultDescription("Shooting doesn't consume regular arrows.");
+		addDefaultDescription("Shooting doesn't consume regular arrows.");
+		addDefaultDescription(Language.GERMAN, "Beim Schieﬂen werden keine normalen Pfeile verbraucht.");
 	}
 
 	@Override

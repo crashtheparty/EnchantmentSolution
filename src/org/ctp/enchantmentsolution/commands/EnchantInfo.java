@@ -121,7 +121,7 @@ public class EnchantInfo implements CommandExecutor{
 			Collections.sort(alphabetical, new Comparator<CustomEnchantment>(){
 				@Override
 				public int compare(CustomEnchantment o1, CustomEnchantment o2) {
-					return o1.getName().compareTo(o2.getName());
+					return o1.getDisplayName().compareTo(o2.getDisplayName());
 				}
 			});
 			for(int i = 0; i < 10; i++) {

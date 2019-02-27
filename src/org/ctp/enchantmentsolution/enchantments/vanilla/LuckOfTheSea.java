@@ -4,14 +4,16 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.enchantments.Enchantment;
+import org.ctp.enchantmentsolution.api.Language;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
-import org.ctp.enchantmentsolution.enchantments.Weight;
+import org.ctp.enchantmentsolution.enchantments.helper.Weight;
 import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 
 public class LuckOfTheSea extends CustomEnchantment{
 	
 	public LuckOfTheSea() {
-		setDefaultDisplayName("Luck of the Sea");
+		addDefaultDisplayName("Luck of the Sea");
+		addDefaultDisplayName(Language.GERMAN, "Glück des Meeres");
 		setDefaultFiftyConstant(7);
 		setDefaultThirtyConstant(5);
 		setDefaultFiftyModifier(11);
@@ -23,7 +25,8 @@ public class LuckOfTheSea extends CustomEnchantment{
 		setDefaultFiftyMaxLevel(4);
 		setDefaultThirtyMaxLevel(3);
 		setDefaultWeight(Weight.RARE);
-		setDefaultDescription("Increases luck while fishing.");
+		addDefaultDescription("Increases luck while fishing.");
+		addDefaultDescription(Language.GERMAN, "Erhöht das Glück beim Fischen.");
 	}
 	
 	@Override

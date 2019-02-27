@@ -56,7 +56,7 @@ public class TransmutationListener implements Listener{
 					ItemStack item = event.getDrops().get(i);
 					if(!TransmutationLoot.isTransmutatedLoot(item)) {
 						TransmutationLoot loot = TransmutationLoot.getRandomLoot();
-						ItemStack lootItem = new ItemStack(loot.getMaterial(), loot.canStack() ? item.getAmount() : 1);
+						ItemStack lootItem = new ItemStack(loot.getMaterial(), (int) ((Math.random() * (loot.getMax() - loot.getMin())) + loot.getMin()));
 						if(!loot.canStack()) {
 							int random = (int) (Math.random() * loot.getMaterial().getMaxDurability());
 							lootItem = DamageUtils.setDamage(lootItem, random);
@@ -92,22 +92,26 @@ public class TransmutationListener implements Listener{
 	}
 	
 	private enum TransmutationLoot{
-		RAW_SALMON(Material.SALMON, 100), RAW_COD(Material.COD, 100), TROPICAL_FISH(Material.TROPICAL_FISH, 60), PUFFERFISH(Material.PUFFERFISH, 40),
-		KELP(Material.KELP, 40), TRIDENT(Material.TRIDENT, 1), SCUTE(Material.SCUTE, 40), TURTLE_EGG(Material.TURTLE_EGG, 10), INK_SAC(Material.INK_SAC, 100),
-		PRISMARINE_SHARD(Material.PRISMARINE_SHARD, 90), PRISMARINE_CRYSTALS(Material.PRISMARINE_CRYSTALS, 60), NAUTILUS_SHELL(Material.NAUTILUS_SHELL, 15),
-		HEART_OF_THE_SEA(Material.HEART_OF_THE_SEA, 4), BRAIN_CORAL(Material.BRAIN_CORAL, 20), BUBBLE_CORAL(Material.BUBBLE_CORAL, 20),
-		FIRE_CORAL(Material.FIRE_CORAL, 20), HORN_CORAL(Material.HORN_CORAL, 20), TUBE_CORAL(Material.TUBE_CORAL, 20), BRAIN_CORAL_FAN(Material.BRAIN_CORAL_FAN, 20), 
-		BUBBLE_CORAL_FAN(Material.BUBBLE_CORAL_FAN, 20), FIRE_CORAL_FAN(Material.FIRE_CORAL_FAN, 20), HORN_CORAL_FAN(Material.HORN_CORAL_FAN, 20), 
-		TUBE_CORAL_FAN(Material.TUBE_CORAL_FAN, 20), BRAIN_CORAL_BLOCK(Material.BRAIN_CORAL_BLOCK, 20), BUBBLE_CORAL_BLOCK(Material.BUBBLE_CORAL_BLOCK, 20),
-		FIRE_CORAL_BLOCK(Material.FIRE_CORAL_BLOCK, 20), HORN_CORAL_BLOCK(Material.HORN_CORAL_BLOCK, 20), TUBE_CORAL_BLOCK(Material.TUBE_CORAL_BLOCK, 20),
-		SPONGE(Material.SPONGE, 50);
+		RAW_SALMON(Material.SALMON, 100, 1, 2), RAW_COD(Material.COD, 100, 1, 2), TROPICAL_FISH(Material.TROPICAL_FISH, 50, 1, 1), 
+		PUFFERFISH(Material.PUFFERFISH, 35, 1, 1), KELP(Material.KELP, 40, 1, 4), TRIDENT(Material.TRIDENT, 1, 1, 1), SCUTE(Material.SCUTE, 40, 1, 2), 
+		TURTLE_EGG(Material.TURTLE_EGG, 10, 1, 1), INK_SAC(Material.INK_SAC, 100, 1, 4), PRISMARINE_SHARD(Material.PRISMARINE_SHARD, 80, 1, 3), 
+		PRISMARINE_CRYSTALS(Material.PRISMARINE_CRYSTALS, 50, 1, 3), NAUTILUS_SHELL(Material.NAUTILUS_SHELL, 12, 1, 1), 
+		HEART_OF_THE_SEA(Material.HEART_OF_THE_SEA, 2, 1, 1), BRAIN_CORAL(Material.BRAIN_CORAL, 20, 1, 3), BUBBLE_CORAL(Material.BUBBLE_CORAL, 20, 1, 3),
+		FIRE_CORAL(Material.FIRE_CORAL, 20, 1, 3), HORN_CORAL(Material.HORN_CORAL, 20, 1, 3), TUBE_CORAL(Material.TUBE_CORAL, 20, 1, 3), 
+		BRAIN_CORAL_FAN(Material.BRAIN_CORAL_FAN, 20, 1, 3), BUBBLE_CORAL_FAN(Material.BUBBLE_CORAL_FAN, 20, 1, 3), FIRE_CORAL_FAN(Material.FIRE_CORAL_FAN, 20, 1, 3), 
+		HORN_CORAL_FAN(Material.HORN_CORAL_FAN, 20, 1, 3), TUBE_CORAL_FAN(Material.TUBE_CORAL_FAN, 20, 1, 3), BRAIN_CORAL_BLOCK(Material.BRAIN_CORAL_BLOCK, 20, 1, 2), 
+		BUBBLE_CORAL_BLOCK(Material.BUBBLE_CORAL_BLOCK, 20, 1, 2), FIRE_CORAL_BLOCK(Material.FIRE_CORAL_BLOCK, 20, 1, 2), 
+		HORN_CORAL_BLOCK(Material.HORN_CORAL_BLOCK, 20, 1, 2), TUBE_CORAL_BLOCK(Material.TUBE_CORAL_BLOCK, 20, 1, 2), SPONGE(Material.SPONGE, 50, 1, 1), 
+		SEA_PICKLE(Material.SEA_PICKLE, 40, 1, 4);
 		
 		private Material material;
-		private int chance;
+		private int chance, min, max;
 		
-		TransmutationLoot(Material material, int chance) {
+		TransmutationLoot(Material material, int chance, int min, int max) {
 			setMaterial(material);
 			setChance(chance);
+			setMin(min);
+			setMax(max);
 		}
 
 		public Material getMaterial() {
@@ -155,6 +159,22 @@ public class TransmutationListener implements Listener{
 				}
 			}
 			return null;
+		}
+
+		public int getMin() {
+			return min;
+		}
+
+		public void setMin(int min) {
+			this.min = min;
+		}
+
+		public int getMax() {
+			return max;
+		}
+
+		public void setMax(int max) {
+			this.max = max;
 		}
 	}
 	

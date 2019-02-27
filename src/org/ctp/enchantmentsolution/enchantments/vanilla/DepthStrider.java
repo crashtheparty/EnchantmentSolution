@@ -4,15 +4,17 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.enchantments.Enchantment;
+import org.ctp.enchantmentsolution.api.Language;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
-import org.ctp.enchantmentsolution.enchantments.Weight;
+import org.ctp.enchantmentsolution.enchantments.helper.Weight;
 import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 
 public class DepthStrider extends CustomEnchantment{
 	
 	public DepthStrider() {
-		setDefaultDisplayName("Depth Strider");
+		addDefaultDisplayName("Depth Strider");
+		addDefaultDisplayName(Language.GERMAN, "Wasserläufer");
 		setDefaultFiftyConstant(5);
 		setDefaultThirtyConstant(0);
 		setDefaultFiftyModifier(15);
@@ -24,7 +26,8 @@ public class DepthStrider extends CustomEnchantment{
 		setDefaultFiftyMaxLevel(3);
 		setDefaultThirtyMaxLevel(3);
 		setDefaultWeight(Weight.RARE);
-		setDefaultDescription("Increases underwater movement speed.");
+		addDefaultDescription("Increases underwater movement speed.");
+		addDefaultDescription(Language.GERMAN, "Erhöht die Bewegungsgeschwindigkeit unter Wasser.");
 	}
 
 	@Override

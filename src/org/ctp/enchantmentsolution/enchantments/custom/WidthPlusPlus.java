@@ -4,15 +4,17 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.enchantments.Enchantment;
+import org.ctp.enchantmentsolution.api.Language;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
-import org.ctp.enchantmentsolution.enchantments.Weight;
+import org.ctp.enchantmentsolution.enchantments.helper.Weight;
 import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 
 public class WidthPlusPlus extends CustomEnchantment{
 
 	public WidthPlusPlus() {
-		setDefaultDisplayName("Width++");
+		addDefaultDisplayName("Width++");
+		addDefaultDisplayName(Language.GERMAN, "Breite++");
 		setDefaultFiftyConstant(0);
 		setDefaultThirtyConstant(-10);
 		setDefaultFiftyModifier(20);
@@ -24,7 +26,8 @@ public class WidthPlusPlus extends CustomEnchantment{
 		setDefaultFiftyMaxLevel(3);
 		setDefaultThirtyMaxLevel(2);
 		setDefaultWeight(Weight.RARE);
-		setDefaultDescription("Increase left/right break radius by 1 per level.");
+		addDefaultDescription("Increase left/right break radius by 1 per level.");
+		addDefaultDescription(Language.GERMAN, "Erhöhen Sie den linken / rechten Umbruchradius um 1 pro Ebene.");
 	}
 	
 	@Override

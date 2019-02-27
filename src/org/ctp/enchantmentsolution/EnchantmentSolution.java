@@ -8,6 +8,7 @@ import java.util.logging.Level;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.ctp.enchantmentsolution.commands.ConfigEdit;
 import org.ctp.enchantmentsolution.commands.Enchant;
@@ -18,7 +19,7 @@ import org.ctp.enchantmentsolution.commands.Reset;
 import org.ctp.enchantmentsolution.commands.UnsafeEnchant;
 import org.ctp.enchantmentsolution.database.SQLite;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
-import org.ctp.enchantmentsolution.enchantments.EnchantmentLevel;
+import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.inventory.InventoryData;
 import org.ctp.enchantmentsolution.listeners.BlockBreak;
 import org.ctp.enchantmentsolution.listeners.ChatMessage;
@@ -36,6 +37,7 @@ import org.ctp.enchantmentsolution.listeners.abilities.FishingListener;
 import org.ctp.enchantmentsolution.listeners.abilities.FlowerGiftListener;
 import org.ctp.enchantmentsolution.listeners.abilities.FrequentFlyerListener;
 import org.ctp.enchantmentsolution.listeners.abilities.GoldDiggerListener;
+import org.ctp.enchantmentsolution.listeners.abilities.GungHoListener;
 import org.ctp.enchantmentsolution.listeners.abilities.HardBounceListener;
 import org.ctp.enchantmentsolution.listeners.abilities.IcarusListener;
 import org.ctp.enchantmentsolution.listeners.abilities.IronDefenseListener;
@@ -58,6 +60,7 @@ import org.ctp.enchantmentsolution.listeners.abilities.TelepathyListener;
 import org.ctp.enchantmentsolution.listeners.abilities.TransmutationListener;
 import org.ctp.enchantmentsolution.listeners.abilities.UnrestListener;
 import org.ctp.enchantmentsolution.listeners.abilities.VoidWalkerListener;
+import org.ctp.enchantmentsolution.listeners.abilities.WandListener;
 import org.ctp.enchantmentsolution.listeners.abilities.WarpListener;
 import org.ctp.enchantmentsolution.listeners.abilities.WidthHeightListener;
 import org.ctp.enchantmentsolution.listeners.chestloot.ChestLootListener;
@@ -82,13 +85,15 @@ public class EnchantmentSolution extends JavaPlugin {
 	private static String MCMMO_TYPE;
 	private static BukkitVersion BUKKIT_VERSION;
 	private static PluginVersion PLUGIN_VERSION;
+	private static Plugin JOBS_REBORN;
+	private static ConfigFiles FILES;
 
 	public void onEnable() {
 		PLUGIN = this;
 		BUKKIT_VERSION = new BukkitVersion();
 		PLUGIN_VERSION = new PluginVersion();
 		if(!BUKKIT_VERSION.isVersionAllowed()) {
-			Bukkit.getLogger().log(Level.WARNING, "BukkitVersion " + BUKKIT_VERSION.getVersion() + " is not compatible with this plugin. Please use a version that is compatible.");
+			Bukkit.getLogger().log(Level.WARNING, "Bukkit Version " + BUKKIT_VERSION.getVersion() + " is not compatible with this plugin. Please use a version that is compatible.");
 			Bukkit.getPluginManager().disablePlugin(PLUGIN);
 			return;
 		}
@@ -102,7 +107,8 @@ public class EnchantmentSolution extends JavaPlugin {
 		
 		DefaultEnchantments.addDefaultEnchantments();
 		
-		ConfigFiles.createConfigFiles();
+		FILES = new ConfigFiles(this);
+		FILES.createConfigFiles();
 		
 		if(DISABLE) {
 			Bukkit.getPluginManager().disablePlugin(PLUGIN);
@@ -163,6 +169,8 @@ public class EnchantmentSolution extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new FlowerGiftListener(), this);
 		getServer().getPluginManager().registerEvents(new StoneThrowListener(), this);
 		getServer().getPluginManager().registerEvents(new PillageListener(), this);
+		getServer().getPluginManager().registerEvents(new GungHoListener(), this);
+		getServer().getPluginManager().registerEvents(new WandListener(), this);
 		getServer().getPluginManager().registerEvents(new ChestLootListener(), this);
 		getServer().getPluginManager().registerEvents(new MobSpawning(), this);
 		getServer().getPluginManager().registerEvents(new VanishListener(), this);
@@ -170,6 +178,11 @@ public class EnchantmentSolution extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new ChatMessage(), this);
 		getServer().getPluginManager().registerEvents(new BlockBreak(), this);
 		getServer().getPluginManager().registerEvents(new UpdateEnchantments(), this);
+		
+		if(Bukkit.getPluginManager().isPluginEnabled("Jobs")) {
+			JOBS_REBORN = Bukkit.getPluginManager().getPlugin("Jobs");
+			ChatUtils.sendInfo("Jobs Reborn compatibility enabled!");
+		}
 		
 		if(Bukkit.getPluginManager().isPluginEnabled("mcMMO")) {
 			String version = Bukkit.getPluginManager().getPlugin("mcMMO").getDescription().getVersion();
@@ -237,7 +250,7 @@ public class EnchantmentSolution extends JavaPlugin {
 		getCommand("RemoveEnchant").setTabCompleter(new PlayerChatTabComplete());
 		getCommand("EnchantUnsafe").setTabCompleter(new PlayerChatTabComplete());
 		
-		ConfigFiles.updateEnchantments();
+		FILES.updateEnchantments();
 		
 		checkVersion();
 	}
@@ -295,5 +308,13 @@ public class EnchantmentSolution extends JavaPlugin {
 
 	public static PluginVersion getPluginVersion() {
 		return PLUGIN_VERSION;
+	}
+
+	public static boolean isJobsEnabled() {
+		return JOBS_REBORN != null;
+	}
+
+	public static ConfigFiles getConfigFiles() {
+		return FILES;
 	}
 }

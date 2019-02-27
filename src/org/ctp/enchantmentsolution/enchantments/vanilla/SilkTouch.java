@@ -5,15 +5,17 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.bukkit.enchantments.Enchantment;
+import org.ctp.enchantmentsolution.api.Language;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
-import org.ctp.enchantmentsolution.enchantments.Weight;
+import org.ctp.enchantmentsolution.enchantments.helper.Weight;
 import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 
 public class SilkTouch extends CustomEnchantment{
 	
 	public SilkTouch() {
-		setDefaultDisplayName("Silk Touch");
+		addDefaultDisplayName("Silk Touch");
+		addDefaultDisplayName(Language.GERMAN, "Behutsamkeit");
 		setDefaultFiftyConstant(35);
 		setDefaultThirtyConstant(15);
 		setDefaultFiftyModifier(0);
@@ -26,9 +28,12 @@ public class SilkTouch extends CustomEnchantment{
 		setDefaultThirtyMaxLevel(1);
 		setDefaultWeight(Weight.VERY_RARE);
 		setMaxLevelOne(true);
-		setDefaultDescription("Mined blocks drop themselves instead of the usual items." + 
+		addDefaultDescription("Mined blocks drop themselves instead of the usual items." + 
 				StringUtils.LF + 
 				"Allows collection of blocks that are normally unobtainable.");
+		addDefaultDescription(Language.GERMAN, "Abgebaute Blöcke lassen sich anstelle der üblichen Gegenstände fallen." + 
+				StringUtils.LF + 
+				"Ermöglicht das Sammeln von Blöcken, die normalerweise nicht erreichbar sind.");
 	}
 	
 	@Override
