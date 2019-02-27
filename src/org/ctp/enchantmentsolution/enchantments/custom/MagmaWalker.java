@@ -4,16 +4,18 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.enchantments.Enchantment;
+import org.ctp.enchantmentsolution.api.Language;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
-import org.ctp.enchantmentsolution.enchantments.Weight;
+import org.ctp.enchantmentsolution.enchantments.helper.Weight;
 import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 
 public class MagmaWalker extends CustomEnchantment{
 	
 	public MagmaWalker() {
 		setTreasure(true);
-		setDefaultDisplayName("Magma Walker");
+		addDefaultDisplayName("Magma Walker");
+		addDefaultDisplayName(Language.GERMAN, "Lavaläufer");
 		setDefaultFiftyConstant(5);
 		setDefaultThirtyConstant(5);
 		setDefaultFiftyModifier(15);
@@ -25,7 +27,8 @@ public class MagmaWalker extends CustomEnchantment{
 		setDefaultFiftyMaxLevel(2);
 		setDefaultThirtyMaxLevel(2);
 		setDefaultWeight(Weight.RARE);
-		setDefaultDescription("Allows players to walk on lava, turning it into magma.");
+		addDefaultDescription("Allows players to walk on lava, turning it into magma.");
+		addDefaultDescription(Language.GERMAN, "Erlaubt es den Spielern, auf Lava zu gehen und sie in Magma umzuwandeln.");
 	}
 	
 	@Override

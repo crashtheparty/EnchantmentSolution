@@ -8,11 +8,11 @@ import java.util.Map;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
-import org.ctp.enchantmentsolution.enchantments.EnchantmentLevel;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
-import org.ctp.enchantmentsolution.utils.save.ConfigFiles;
+import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 
 public class ApiEnchantList {
 
@@ -50,11 +50,11 @@ public class ApiEnchantList {
 			DefaultEnchantments.addDefaultEnchantment(enchant);
 		}
 		
-		ConfigFiles.updateExternalEnchantments(plugin);
+		EnchantmentSolution.getConfigFiles().updateExternalEnchantments(plugin);
 		
 		DefaultEnchantments.setEnchantments();
 		
-		ConfigFiles.updateEnchantments();
+		EnchantmentSolution.getConfigFiles().updateEnchantments();
 	}
 	
 	/**

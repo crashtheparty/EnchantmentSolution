@@ -13,10 +13,10 @@ import org.ctp.enchantmentsolution.utils.config.YamlConfig;
 public class SaveUtils {
 
 	public static void getData() {
-		if(ConfigFiles.getWalkerConfig() == null) {
+		if(EnchantmentSolution.getConfigFiles().getWalkerConfig() == null) {
 			return;
 		}
-		YamlConfig config = ConfigFiles.getWalkerConfig();
+		YamlConfig config = EnchantmentSolution.getConfigFiles().getWalkerConfig();
 		if (config.containsElements("magma_blocks")) {
 			int i = 0;
 			while (config.getString("magma_blocks." + i) != null) {
@@ -65,11 +65,11 @@ public class SaveUtils {
 	}
 
 	public static void setWalkerData() {
-		if(ConfigFiles.getWalkerConfig() == null) {
+		if(EnchantmentSolution.getConfigFiles().getWalkerConfig() == null) {
 			return;
 		}
 		int i = 0;
-		YamlConfig config = ConfigFiles.getWalkerConfig();
+		YamlConfig config = EnchantmentSolution.getConfigFiles().getWalkerConfig();
 		for (Block block : MagmaWalkerListener.BLOCKS) {
 			for(MetadataValue value : block.getMetadata("MagmaWalker")){
 				config.set("magma_blocks." + i,

@@ -4,16 +4,18 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.enchantments.Enchantment;
+import org.ctp.enchantmentsolution.api.Language;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
-import org.ctp.enchantmentsolution.enchantments.Weight;
+import org.ctp.enchantmentsolution.enchantments.helper.Weight;
 import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 
 public class VoidWalker extends CustomEnchantment{
 	
 	public VoidWalker() {
 		setTreasure(true);
-		setDefaultDisplayName("Void Walker");
+		addDefaultDisplayName("Void Walker");
+		addDefaultDisplayName(Language.GERMAN, "Ungültiger Läufer");
 		setDefaultFiftyConstant(5);
 		setDefaultThirtyConstant(5);
 		setDefaultFiftyModifier(15);
@@ -25,7 +27,8 @@ public class VoidWalker extends CustomEnchantment{
 		setDefaultFiftyMaxLevel(2);
 		setDefaultThirtyMaxLevel(2);
 		setDefaultWeight(Weight.RARE);
-		setDefaultDescription("Allows players to walk on air, turning it into obsidian.");
+		addDefaultDescription("Allows players to walk on air, turning it into obsidian.");
+		addDefaultDescription(Language.GERMAN, "Erlaubt es den Spielern, in der Luft zu gehen und es in Obsidian umzuwandeln.");
 	}
 	
 	@Override

@@ -42,11 +42,12 @@ public class ConfigInventory implements InventoryData{
 	}
 	
 	public void change() {
-		isChanged.put(ConfigFiles.getDefaultConfig(), EnchantmentSolution.getDb().isConfigDifferent(ConfigFiles.getDefaultConfig()));
-		isChanged.put(ConfigFiles.getFishingConfig(), EnchantmentSolution.getDb().isConfigDifferent(ConfigFiles.getFishingConfig()));
-		isChanged.put(ConfigFiles.getLanguageFile(), EnchantmentSolution.getDb().isConfigDifferent(ConfigFiles.getLanguageFile()));
-		isChanged.put(ConfigFiles.getEnchantmentConfig(), EnchantmentSolution.getDb().isConfigDifferent(ConfigFiles.getEnchantmentConfig()));
-		isChanged.put(ConfigFiles.getEnchantmentAdvancedConfig(), EnchantmentSolution.getDb().isConfigDifferent(ConfigFiles.getEnchantmentAdvancedConfig()));
+		ConfigFiles files = EnchantmentSolution.getConfigFiles();
+		isChanged.put(files.getDefaultConfig(), EnchantmentSolution.getDb().isConfigDifferent(files.getDefaultConfig()));
+		isChanged.put(files.getFishingConfig(), EnchantmentSolution.getDb().isConfigDifferent(files.getFishingConfig()));
+		isChanged.put(files.getLanguageFile(), EnchantmentSolution.getDb().isConfigDifferent(files.getLanguageFile()));
+		isChanged.put(files.getEnchantmentConfig(), EnchantmentSolution.getDb().isConfigDifferent(files.getEnchantmentConfig()));
+		isChanged.put(files.getEnchantmentAdvancedConfig(), EnchantmentSolution.getDb().isConfigDifferent(files.getEnchantmentAdvancedConfig()));
 
 		hasChanged = isChanged.containsValue(true);
 	}
@@ -60,7 +61,7 @@ public class ConfigInventory implements InventoryData{
 	public void revert() {
 		ChatUtils.sendMessage(player, "Reverting changes made in the config UI.");
 		
-		ConfigFiles.revert();
+		EnchantmentSolution.getConfigFiles().revert();
 		
 		change();
 		listFiles();
@@ -69,7 +70,7 @@ public class ConfigInventory implements InventoryData{
 	public void saveAll() {
 		ChatUtils.sendMessage(player, "Saving changes made in the config UI.");
 		
-		ConfigFiles.save();
+		EnchantmentSolution.getConfigFiles().save();
 		
 		change();
 		listFiles();
@@ -95,31 +96,31 @@ public class ConfigInventory implements InventoryData{
 		
 		ItemStack configFile = new ItemStack(Material.COMMAND_BLOCK);
 		ItemMeta configFileMeta = configFile.getItemMeta();
-		configFileMeta.setDisplayName(ChatColor.GOLD + ConfigFiles.getDefaultConfig().getFileName());
+		configFileMeta.setDisplayName(ChatColor.GOLD + EnchantmentSolution.getConfigFiles().getDefaultConfig().getFileName());
 		configFile.setItemMeta(configFileMeta);
 		inv.setItem(2, configFile);
 		
 		ItemStack fishingFile = new ItemStack(Material.FISHING_ROD);
 		ItemMeta fishingFileMeta = fishingFile.getItemMeta();
-		fishingFileMeta.setDisplayName(ChatColor.GOLD + ConfigFiles.getFishingConfig().getFileName());
+		fishingFileMeta.setDisplayName(ChatColor.GOLD + EnchantmentSolution.getConfigFiles().getFishingConfig().getFileName());
 		fishingFile.setItemMeta(fishingFileMeta);
 		inv.setItem(3, fishingFile);
 		
 		ItemStack languageFile = new ItemStack(Material.BOOK);
 		ItemMeta languageFileMeta = languageFile.getItemMeta();
-		languageFileMeta.setDisplayName(ChatColor.GOLD + ConfigFiles.getLanguageFile().getFileName());
+		languageFileMeta.setDisplayName(ChatColor.GOLD + EnchantmentSolution.getConfigFiles().getLanguageFile().getFileName());
 		languageFile.setItemMeta(languageFileMeta);
 		inv.setItem(4, languageFile);
 		
 		ItemStack enchantmentFile = new ItemStack(Material.GOLDEN_APPLE);
 		ItemMeta enchantmentFileMeta = enchantmentFile.getItemMeta();
-		enchantmentFileMeta.setDisplayName(ChatColor.GOLD + ConfigFiles.getEnchantmentConfig().getFileName());
+		enchantmentFileMeta.setDisplayName(ChatColor.GOLD + EnchantmentSolution.getConfigFiles().getEnchantmentConfig().getFileName());
 		enchantmentFile.setItemMeta(enchantmentFileMeta);
 		inv.setItem(5, enchantmentFile);
 		
 		ItemStack enchantmentFileAdvanced = new ItemStack(Material.ENCHANTED_GOLDEN_APPLE);
 		ItemMeta enchantmentFileAdvancedMeta = enchantmentFileAdvanced.getItemMeta();
-		enchantmentFileAdvancedMeta.setDisplayName(ChatColor.GOLD + ConfigFiles.getEnchantmentAdvancedConfig().getFileName());
+		enchantmentFileAdvancedMeta.setDisplayName(ChatColor.GOLD + EnchantmentSolution.getConfigFiles().getEnchantmentAdvancedConfig().getFileName());
 		enchantmentFileAdvanced.setItemMeta(enchantmentFileAdvancedMeta);
 		inv.setItem(6, enchantmentFileAdvanced);
 		

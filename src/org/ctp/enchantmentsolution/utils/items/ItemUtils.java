@@ -13,12 +13,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.Vector;
-import org.ctp.enchantmentsolution.enchantments.EnchantmentLevel;
+import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
-import org.ctp.enchantmentsolution.enchantments.PlayerLevels;
+import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
+import org.ctp.enchantmentsolution.enchantments.helper.PlayerLevels;
 import org.ctp.enchantmentsolution.utils.AnvilUtils.RepairType;
 import org.ctp.enchantmentsolution.utils.items.nms.ItemRepairType;
-import org.ctp.enchantmentsolution.utils.save.ConfigFiles;
 
 public class ItemUtils {
 	
@@ -136,11 +136,12 @@ public class ItemUtils {
 		
 		List<EnchantmentLevel> enchants = null;
 		while(enchants == null) {
-			int bookshelves = ConfigFiles.getBookshelvesFromType(type);
-			PlayerLevels levels = PlayerLevels.generateFakePlayerLevels(returnItem.getType(), bookshelves);
+			int bookshelves = EnchantmentSolution.getConfigFiles().getBookshelvesFromType(type);
+			boolean treasure = EnchantmentSolution.getConfigFiles().includeTreasureFromType(type);
+			PlayerLevels levels = PlayerLevels.generateFakePlayerLevels(returnItem.getType(), bookshelves, treasure);
 			int i = 0;
 			while(i < 3) {
-				int random = (int)(Math.random() * levels.getEnchants().size() + ConfigFiles.getLevelFromType(type));
+				int random = (int)(Math.random() * levels.getEnchants().size() + EnchantmentSolution.getConfigFiles().getLevelFromType(type));
 				if(random > levels.getEnchants().size() - 1) random = levels.getEnchants().size() - 1;
 				if(levels.getEnchants().get(random).size() > 0) {
 					enchants = levels.getEnchants().get(random);

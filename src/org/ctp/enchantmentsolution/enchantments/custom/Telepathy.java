@@ -4,15 +4,17 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.enchantments.Enchantment;
+import org.ctp.enchantmentsolution.api.Language;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
-import org.ctp.enchantmentsolution.enchantments.Weight;
+import org.ctp.enchantmentsolution.enchantments.helper.Weight;
 import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 
 public class Telepathy extends CustomEnchantment{
 	
 	public Telepathy() {
-		setDefaultDisplayName("Telepathy");
+		addDefaultDisplayName("Telepathy");
+		addDefaultDisplayName(Language.GERMAN, "Telepathie");
 		setDefaultFiftyConstant(65);
 		setDefaultThirtyConstant(35);
 		setDefaultFiftyModifier(0);
@@ -25,7 +27,8 @@ public class Telepathy extends CustomEnchantment{
 		setDefaultThirtyMaxLevel(1);
 		setDefaultWeight(Weight.VERY_RARE);
 		setMaxLevelOne(true);
-		setDefaultDescription("Items mined go straight into your inventory.");
+		addDefaultDescription("Items mined go straight into your inventory.");
+		addDefaultDescription(Language.GERMAN, "Abgebaute Gegenstände gelangen direkt in Ihr Inventar.");
 	}
 	
 	@Override

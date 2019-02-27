@@ -29,11 +29,11 @@ public class BeheadingListener implements Listener{
 				double chance = Enchantments.getLevel(killer.getInventory().getItemInMainHand(), DefaultEnchantments.BEHEADING) * .05;
 				double random = Math.random();
 				if(chance > random){
-					if(entity instanceof Skeleton){
-						ItemStack skull = new ItemStack(Material.SKELETON_SKULL);
-						event.getDrops().add(skull);
-					}else if(entity instanceof WitherSkeleton){
+					if(entity instanceof WitherSkeleton){
 						ItemStack skull = new ItemStack(Material.WITHER_SKELETON_SKULL);
+						event.getDrops().add(skull);
+					}else if(entity instanceof Skeleton){
+						ItemStack skull = new ItemStack(Material.SKELETON_SKULL);
 						event.getDrops().add(skull);
 					}else if(entity instanceof Zombie){
 						ItemStack skull = new ItemStack(Material.ZOMBIE_HEAD);

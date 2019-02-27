@@ -4,15 +4,17 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.enchantments.Enchantment;
+import org.ctp.enchantmentsolution.api.Language;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
-import org.ctp.enchantmentsolution.enchantments.Weight;
+import org.ctp.enchantmentsolution.enchantments.helper.Weight;
 import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 
 public class MagicGuard extends CustomEnchantment{
 	
 	public MagicGuard() {
-		setDefaultDisplayName("Magic Guard");
+		addDefaultDisplayName("Magic Guard");
+		addDefaultDisplayName(Language.GERMAN, "Magischer Schutz");
 		setDefaultFiftyConstant(30);
 		setDefaultThirtyConstant(25);
 		setDefaultFiftyModifier(0);
@@ -25,7 +27,8 @@ public class MagicGuard extends CustomEnchantment{
 		setDefaultThirtyMaxLevel(1);
 		setDefaultWeight(Weight.VERY_RARE);
 		setMaxLevelOne(true);
-		setDefaultDescription("Negates bad potion effects.");
+		addDefaultDescription("Negates bad potion effects.");
+		addDefaultDescription(Language.GERMAN, "Negiert schlechte Trankeffekte.");
 	}
 
 	@Override

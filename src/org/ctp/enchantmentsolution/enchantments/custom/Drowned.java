@@ -4,15 +4,17 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.enchantments.Enchantment;
+import org.ctp.enchantmentsolution.api.Language;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
-import org.ctp.enchantmentsolution.enchantments.Weight;
+import org.ctp.enchantmentsolution.enchantments.helper.Weight;
 import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 
 public class Drowned extends CustomEnchantment{
 	
 	public Drowned() {
-		setDefaultDisplayName("Drowned");
+		addDefaultDisplayName("Drowned");
+		addDefaultDisplayName(Language.GERMAN, "Ertrinken");
 		setDefaultFiftyConstant(10);
 		setDefaultThirtyConstant(0);
 		setDefaultFiftyModifier(20);
@@ -24,7 +26,8 @@ public class Drowned extends CustomEnchantment{
 		setDefaultFiftyMaxLevel(3);
 		setDefaultThirtyMaxLevel(3);
 		setDefaultWeight(Weight.RARE);
-		setDefaultDescription("Drown non-water mobs for a short time.");
+		addDefaultDescription("Drown non-water mobs for a short time.");
+		addDefaultDescription(Language.GERMAN, "Ertrinken Sie nicht Wasser-Mobs für kurze Zeit.");
 	}
 	
 	@Override

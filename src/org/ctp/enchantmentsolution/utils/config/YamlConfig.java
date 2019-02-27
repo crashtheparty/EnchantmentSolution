@@ -2,7 +2,10 @@ package org.ctp.enchantmentsolution.utils.config;
 
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -419,6 +422,10 @@ public class YamlConfig {
 		}
 	}
 	
+	public void resetConfig() {
+		info = new LinkedHashMap<String, YamlInfo>();
+	}
+	
 	private String headerString() {
 		StringBuilder config = new StringBuilder("");
 		if(header != null && header.length > 0) {
@@ -546,8 +553,7 @@ public class YamlConfig {
 	public void saveConfig() {
 		String configuration = prepareConfigString();
 		try {
-			BufferedWriter writer = new BufferedWriter(new java.io.FileWriter(
-					file));
+			BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8));
 			writer.write(configuration);
 			writer.flush();
 			writer.close();
@@ -559,6 +565,7 @@ public class YamlConfig {
 	private String getLevel(YamlChild child) {
 		StringBuilder config = new StringBuilder("");
 		String key = child.getPath();
+		int deep = StringUtils.countMatches(key, ".") * 4;
 		
 		if(comments) {
 			if(contains(key)) {
@@ -566,6 +573,9 @@ public class YamlConfig {
 				if(info.getComments().length > 0) {
 					StringBuilder line = new StringBuilder("\n");
 					for(String comment : info.getComments()) {
+						for(int i = 0; i < deep; i++) {
+							line.append(" ");
+						}
 						line.append("# " + comment + "\n");
 					}
 					config.append(line);
@@ -573,7 +583,6 @@ public class YamlConfig {
 			}
 		}
 		StringBuilder line = new StringBuilder("");
-		int deep = StringUtils.countMatches(key, ".") * 4;
 		for(int i = 0; i < deep; i++) {
 			line.append(" ");
 		}
@@ -634,5 +643,9 @@ public class YamlConfig {
 		} else {
 			getInfo(path).setMinMax(i, j);
 		}
+	}
+	
+	public void copyDefaults(YamlConfig config) {
+		this.defaults = config.defaults;
 	}
 }

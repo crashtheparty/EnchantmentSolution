@@ -4,14 +4,16 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.enchantments.Enchantment;
+import org.ctp.enchantmentsolution.api.Language;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
-import org.ctp.enchantmentsolution.enchantments.Weight;
+import org.ctp.enchantmentsolution.enchantments.helper.Weight;
 import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 
 public class Loyalty extends CustomEnchantment{
 
 	public Loyalty() {
-		setDefaultDisplayName("Loyalty");
+		addDefaultDisplayName("Loyalty");
+		addDefaultDisplayName(Language.GERMAN, "Treue");
 		setDefaultFiftyConstant(7);
 		setDefaultThirtyConstant(5);
 		setDefaultFiftyModifier(11);
@@ -23,7 +25,8 @@ public class Loyalty extends CustomEnchantment{
 		setDefaultFiftyMaxLevel(3);
 		setDefaultThirtyMaxLevel(3);
 		setDefaultWeight(Weight.UNCOMMON);
-		setDefaultDescription("Returns a thrown trident after it hits something.");
+		addDefaultDescription("Returns a thrown trident after it hits something.");
+		addDefaultDescription(Language.GERMAN, "Gibt einen geworfenen Dreizack zurück, nachdem er etwas getroffen hat.");
 	}
 
 	@Override

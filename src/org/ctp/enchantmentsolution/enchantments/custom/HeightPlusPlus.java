@@ -4,15 +4,17 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.enchantments.Enchantment;
+import org.ctp.enchantmentsolution.api.Language;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
-import org.ctp.enchantmentsolution.enchantments.Weight;
+import org.ctp.enchantmentsolution.enchantments.helper.Weight;
 import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 
 public class HeightPlusPlus extends CustomEnchantment{
 
 	public HeightPlusPlus() {
-		setDefaultDisplayName("Height++");
+		addDefaultDisplayName("Height++");
+		addDefaultDisplayName(Language.GERMAN, "Höhe++");
 		setDefaultFiftyConstant(0);
 		setDefaultThirtyConstant(-10);
 		setDefaultFiftyModifier(20);
@@ -24,7 +26,8 @@ public class HeightPlusPlus extends CustomEnchantment{
 		setDefaultFiftyMaxLevel(3);
 		setDefaultThirtyMaxLevel(2);
 		setDefaultWeight(Weight.RARE);
-		setDefaultDescription("Increase up/down break radius by 1 per level.");
+		addDefaultDescription("Increase up/down break radius by 1 per level.");
+		addDefaultDescription(Language.GERMAN, "Erhöhen Sie den Aufwärts- / Abwärtsbruch-Radius um 1 pro Ebene.");
 	}
 	
 	@Override

@@ -13,6 +13,7 @@ import java.util.logging.Level;
 
 import org.ctp.enchantmentsolution.database.Errors;
 import org.ctp.enchantmentsolution.database.SQLite;
+import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.config.YamlConfigBackup;
 import org.ctp.enchantmentsolution.utils.config.YamlInfo;
 
@@ -70,6 +71,8 @@ public class BackupTable extends Table{
 				}
 			}
 		} catch (SQLException ex) {
+			ChatUtils.sendSevere("ISSUE in \"SELECT * FROM " + getName()
+					+ " WHERE file_name = '" + config.getFileName() + "' AND backup_num = " + backupNum + " ORDER BY created_at asc;\"");
 			getDb().getPlugin().getLogger().log(Level.SEVERE, Errors.sqlConnectionExecute(),
 					ex);
 		} finally {
@@ -106,6 +109,8 @@ public class BackupTable extends Table{
 				backupNum = rs.getInt("backup_num");
 			}
 		} catch (SQLException ex) {
+			ChatUtils.sendSevere("ISSUE in \"SELECT * FROM " + getName()
+			+ " WHERE file_name = '" + config.getFileName() + "' ORDER BY backup_num desc LIMIT 0,1;\"");
 			getDb().getPlugin().getLogger().log(Level.SEVERE, Errors.sqlConnectionExecute(),
 					ex);
 		} finally {
@@ -152,6 +157,7 @@ public class BackupTable extends Table{
 				ps.executeBatch();
 				conn.commit();
 			} catch (SQLException ex) {
+				ChatUtils.sendSevere("ISSUE on inserting multiple strings into " + config.getFileName());
 				getDb().getPlugin().getLogger().log(Level.SEVERE, Errors.sqlConnectionExecute(),
 						ex);
 			}
@@ -218,6 +224,7 @@ public class BackupTable extends Table{
 				infos.add(info);
 			}
 		} catch (SQLException ex) {
+			ChatUtils.sendSevere("ISSUE in \"SELECT * FROM " + this.getName() + " WHERE backup_num = ? AND file_name = ?\"");
 			getDb().getPlugin().getLogger().log(Level.SEVERE, Errors.sqlConnectionExecute(),
 					ex);
 		}

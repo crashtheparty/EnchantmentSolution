@@ -4,14 +4,16 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.enchantments.Enchantment;
+import org.ctp.enchantmentsolution.api.Language;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
-import org.ctp.enchantmentsolution.enchantments.Weight;
+import org.ctp.enchantmentsolution.enchantments.helper.Weight;
 import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 
 public class Unbreaking extends CustomEnchantment{
 	
 	public Unbreaking() {
-		setDefaultDisplayName("Unbreaking");
+		addDefaultDisplayName("Unbreaking");
+		addDefaultDisplayName(Language.GERMAN, "Haltbarkeit");
 		setDefaultFiftyConstant(-10);
 		setDefaultThirtyConstant(-3);
 		setDefaultFiftyModifier(15);
@@ -23,7 +25,8 @@ public class Unbreaking extends CustomEnchantment{
 		setDefaultFiftyMaxLevel(5);
 		setDefaultThirtyMaxLevel(3);
 		setDefaultWeight(Weight.UNCOMMON);
-		setDefaultDescription("Increases effective durability.");
+		addDefaultDescription("Increases effective durability.");
+		addDefaultDescription(Language.GERMAN, "Erhöht die effektive Haltbarkeit.");
 	}
 	
 	@Override

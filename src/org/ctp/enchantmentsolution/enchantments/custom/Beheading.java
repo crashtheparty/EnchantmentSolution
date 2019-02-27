@@ -4,15 +4,17 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.enchantments.Enchantment;
+import org.ctp.enchantmentsolution.api.Language;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
-import org.ctp.enchantmentsolution.enchantments.Weight;
+import org.ctp.enchantmentsolution.enchantments.helper.Weight;
 import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 
 public class Beheading extends CustomEnchantment{
 	
 	public Beheading() {
-		setDefaultDisplayName("Beheading");
+		addDefaultDisplayName("Beheading");
+		addDefaultDisplayName(Language.GERMAN, "Beheading");
 		setDefaultFiftyConstant(10);
 		setDefaultThirtyConstant(5);
 		setDefaultFiftyModifier(20);
@@ -24,7 +26,8 @@ public class Beheading extends CustomEnchantment{
 		setDefaultFiftyMaxLevel(3);
 		setDefaultThirtyMaxLevel(3);
 		setDefaultWeight(Weight.RARE);
-		setDefaultDescription("Adds a chance to drop mob heads on death.");
+		addDefaultDescription("Adds a chance to drop mob heads on death.");
+		addDefaultDescription(Language.GERMAN, "Fügt dem Tod die Chance hinzu, Mobköpfe abzulegen.");
 	}
 	
 	@Override

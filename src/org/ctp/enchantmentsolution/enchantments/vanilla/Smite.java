@@ -5,14 +5,16 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.bukkit.enchantments.Enchantment;
+import org.ctp.enchantmentsolution.api.Language;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
-import org.ctp.enchantmentsolution.enchantments.Weight;
+import org.ctp.enchantmentsolution.enchantments.helper.Weight;
 import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 
 public class Smite extends CustomEnchantment{
 	
 	public Smite() {
-		setDefaultDisplayName("Smite");
+		addDefaultDisplayName("Smite");
+		addDefaultDisplayName(Language.GERMAN, "Bann");
 		setDefaultFiftyConstant(-4);
 		setDefaultThirtyConstant(-3);
 		setDefaultFiftyModifier(9);
@@ -24,9 +26,13 @@ public class Smite extends CustomEnchantment{
 		setDefaultFiftyMaxLevel(6);
 		setDefaultThirtyMaxLevel(5);
 		setDefaultWeight(Weight.UNCOMMON);
-		setDefaultDescription("Increases damage to \"undead\" mobs (skeletons, zombies, withers, wither skeletons, zombie pigmen, skeleton horses and zombie horses)" + 
+		addDefaultDescription("Increases damage to \"undead\" mobs (skeletons, zombies, withers, wither skeletons, zombie pigmen, skeleton horses and zombie horses)" + 
 				StringUtils.LF + 
 				"Each level separately adds 2.5 (half heart) extra damage to each hit, to \"undead\" mobs only.");
+		addDefaultDescription(Language.GERMAN, "Erhöht den Schaden \"untoter\" Mobs " + 
+				"(Skelette, Zombies, Widerrist, Widerrist-Skelette, Zombie-Schweiner, Skelettpferde und Zombie-Pferde). " + 
+				StringUtils.LF + 
+				"Jeder Level fügt jedem Treffer separat 2,5 (halbes Herz) zusätzlichen Schaden hinzu, nur \"Untoten\" -Mobs.");
 	}
 	
 	@Override

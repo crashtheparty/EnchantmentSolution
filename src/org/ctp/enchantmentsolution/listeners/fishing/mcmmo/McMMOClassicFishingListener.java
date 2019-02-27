@@ -9,12 +9,12 @@ import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.inventory.ItemStack;
-import org.ctp.enchantmentsolution.enchantments.EnchantmentLevel;
+import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
+import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.enchantments.mcmmo.Fishing;
 import org.ctp.enchantmentsolution.listeners.fishing.McMMOFishingThread;
 import org.ctp.enchantmentsolution.utils.config.YamlConfig;
-import org.ctp.enchantmentsolution.utils.save.ConfigFiles;
 
 import com.gmail.nossr50.config.experience.ExperienceConfig;
 import com.gmail.nossr50.datatypes.skills.SecondaryAbility;
@@ -86,13 +86,13 @@ public class McMMOClassicFishingListener extends McMMOFishingListener {
 
 	private List<EnchantmentLevel> getEnchants(Player player, ItemStack treasure, int tier) {
 		HashMap<String, Double> chanceMap = new HashMap<String, Double>();
-		YamlConfig config = ConfigFiles.getFishingConfig();
-		String location = ConfigFiles.useLevel50() ? "Enchantments_Rarity_50"
+		YamlConfig config = EnchantmentSolution.getConfigFiles().getFishingConfig();
+		String location = EnchantmentSolution.getConfigFiles().useLevel50() ? "Enchantments_Rarity_50"
 				: "Enchantments_Rarity_30";
 		
 		for (String s : config.getConfigurationInfo(location)) {
 			String type = s.substring(s.lastIndexOf(".") + 1);
-			chanceMap.put(type, Fishing.getTierChances(tier, type, ConfigFiles.useLevel50()));
+			chanceMap.put(type, Fishing.getTierChances(tier, type, EnchantmentSolution.getConfigFiles().useLevel50()));
 		}
 
 		double random = Math.random() * 100;
@@ -100,7 +100,7 @@ public class McMMOClassicFishingListener extends McMMOFishingListener {
 			java.util.Map.Entry<String, Double> e = it.next();
 			random -= e.getValue();
 			if (random <= 0) {
-				return Fishing.getEnchantsFromConfig(player, treasure, e.getKey(), ConfigFiles.useLevel50());
+				return Fishing.getEnchantsFromConfig(player, treasure, e.getKey(), EnchantmentSolution.getConfigFiles().useLevel50());
 			}
 		}
 		return new ArrayList<EnchantmentLevel>();

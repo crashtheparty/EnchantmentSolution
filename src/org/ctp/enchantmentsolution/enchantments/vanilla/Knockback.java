@@ -4,15 +4,17 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.enchantments.Enchantment;
+import org.ctp.enchantmentsolution.api.Language;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
-import org.ctp.enchantmentsolution.enchantments.Weight;
+import org.ctp.enchantmentsolution.enchantments.helper.Weight;
 import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 
 public class Knockback extends CustomEnchantment{
 	
 	public Knockback() {
-		setDefaultDisplayName("Knockback");
+		addDefaultDisplayName("Knockback");
+		addDefaultDisplayName(Language.GERMAN, "Rückstoß");
 		setDefaultFiftyConstant(-15);
 		setDefaultThirtyConstant(-15);
 		setDefaultFiftyModifier(20);
@@ -24,7 +26,8 @@ public class Knockback extends CustomEnchantment{
 		setDefaultFiftyMaxLevel(4);
 		setDefaultThirtyMaxLevel(2);
 		setDefaultWeight(Weight.UNCOMMON);
-		setDefaultDescription("Increases knockback.");
+		addDefaultDescription("Increases knockback.");
+		addDefaultDescription(Language.GERMAN, "Erhöht den Rückstoß.");
 	}
 
 	@Override

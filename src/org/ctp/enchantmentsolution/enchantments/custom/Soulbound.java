@@ -4,15 +4,17 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.enchantments.Enchantment;
+import org.ctp.enchantmentsolution.api.Language;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
-import org.ctp.enchantmentsolution.enchantments.Weight;
+import org.ctp.enchantmentsolution.enchantments.helper.Weight;
 import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 
 public class Soulbound extends CustomEnchantment{
 	
 	public Soulbound() {
-		setDefaultDisplayName("Soulbound");
+		addDefaultDisplayName("Soulbound");
+		addDefaultDisplayName(Language.GERMAN, "Seelengebunden");
 		setDefaultFiftyConstant(40);
 		setDefaultThirtyConstant(30);
 		setDefaultFiftyModifier(0);
@@ -25,7 +27,8 @@ public class Soulbound extends CustomEnchantment{
 		setDefaultThirtyMaxLevel(1);
 		setDefaultWeight(Weight.RARE);
 		setMaxLevelOne(true);
-		setDefaultDescription("Keep item on death.");
+		addDefaultDescription("Keep item on death.");
+		addDefaultDescription(Language.GERMAN, "Behalte den Gegenstand auf dem Tod.");
 	}
 	
 	@Override

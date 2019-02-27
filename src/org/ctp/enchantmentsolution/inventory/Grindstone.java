@@ -17,7 +17,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 import org.ctp.enchantmentsolution.utils.items.nms.AbilityUtils;
-import org.ctp.enchantmentsolution.utils.save.ConfigFiles;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.GrindstoneUtils;
 
@@ -42,7 +41,7 @@ public class Grindstone implements InventoryData{
 	public void setInventory(List<ItemStack> items) {
 		try {
 			int size = 27;
-			if(ConfigFiles.useLegacyGrindstone()) {
+			if(EnchantmentSolution.getConfigFiles().useLegacyGrindstone()) {
 				size = 36;
 			}
 			Inventory inv = Bukkit.createInventory(null, size, ChatUtils.getMessage(getCodes(), "grindstone.name"));
@@ -123,7 +122,7 @@ public class Grindstone implements InventoryData{
 			inventory = inv;
 			player.openInventory(inv);
 			
-			if(ConfigFiles.useLegacyGrindstone()) {
+			if(EnchantmentSolution.getConfigFiles().useLegacyGrindstone()) {
 				inv.setItem(27, mirror);
 				inv.setItem(28, mirror);
 				inv.setItem(29, mirror);

@@ -1,4 +1,4 @@
-package org.ctp.enchantmentsolution.enchantments;
+package org.ctp.enchantmentsolution.enchantments.helper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -7,7 +7,8 @@ import java.util.List;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.ctp.enchantmentsolution.utils.save.ConfigFiles;
+import org.ctp.enchantmentsolution.EnchantmentSolution;
+import org.ctp.enchantmentsolution.enchantments.Enchantments;
 
 public class PlayerLevels {
 	
@@ -25,7 +26,7 @@ public class PlayerLevels {
 		List<Integer> levelList = getIntList(player, books);
 		
 		if(levelList == null){
-			if(ConfigFiles.useLevel50()) {
+			if(EnchantmentSolution.getConfigFiles().useLevel50()) {
 				levelList = generateFiftyLevels();
 			} else {
 				levelList = generateThirtyLevels();
@@ -37,7 +38,7 @@ public class PlayerLevels {
 		PLAYER_LEVELS.put(this, levelList);
 	}
 	
-	private PlayerLevels(int books, Material material) {
+	private PlayerLevels(int books, Material material, boolean treasure) {
 		this.books = books;
 		this.player = null;
 		this.material = material;
@@ -45,14 +46,14 @@ public class PlayerLevels {
 		List<Integer> levelList = getIntList(player, books);
 		
 		if(levelList == null){
-			if(ConfigFiles.useLevel50()) {
+			if(EnchantmentSolution.getConfigFiles().useLevel50()) {
 				levelList = generateFiftyLevels();
 			} else {
 				levelList = generateThirtyLevels();
 			}
 		}
 		
-		generateEnchants(levelList, true);
+		generateEnchants(levelList, treasure);
 	}
 	
 	
@@ -213,12 +214,12 @@ public class PlayerLevels {
 		PLAYER_LEVELS = playerLevels;
 	}
 	
-	public static PlayerLevels generateFakePlayerLevels(Material material, int minBookshelves) {
+	public static PlayerLevels generateFakePlayerLevels(Material material, int minBookshelves, boolean treasure) {
 		int books = 16;
-		if(ConfigFiles.useLevel50()) books = 24;
+		if(EnchantmentSolution.getConfigFiles().useLevel50()) books = 24;
 		int random = (int)(Math.random() * books) + minBookshelves;
 		if(random >= books) random = books - 1;
-		PlayerLevels levels = new PlayerLevels(random, material);
+		PlayerLevels levels = new PlayerLevels(random, material, treasure);
 		
 		return levels;
 	}

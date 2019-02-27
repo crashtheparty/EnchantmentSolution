@@ -4,15 +4,17 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.enchantments.Enchantment;
+import org.ctp.enchantmentsolution.api.Language;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
-import org.ctp.enchantmentsolution.enchantments.Weight;
+import org.ctp.enchantmentsolution.enchantments.helper.Weight;
 import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 
 public class NoRest extends CustomEnchantment{
 
 	public NoRest() {
-		setDefaultDisplayName("No Rest");
+		addDefaultDisplayName("No Rest");
+		addDefaultDisplayName(Language.GERMAN, "Keine Pause");
 		setDefaultFiftyConstant(15);
 		setDefaultThirtyConstant(1);
 		setDefaultFiftyModifier(0);
@@ -25,7 +27,8 @@ public class NoRest extends CustomEnchantment{
 		setDefaultThirtyMaxLevel(1);
 		setDefaultWeight(Weight.RARE);
 		setMaxLevelOne(true);
-		setDefaultDescription("No phantoms will spawn around you.");
+		addDefaultDescription("No phantoms will spawn around you.");
+		addDefaultDescription(Language.GERMAN, "Es werden keine Phantome um Sie herum erscheinen.");
 	}
 
 	@Override

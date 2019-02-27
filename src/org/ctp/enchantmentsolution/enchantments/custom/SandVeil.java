@@ -4,15 +4,17 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.enchantments.Enchantment;
+import org.ctp.enchantmentsolution.api.Language;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
-import org.ctp.enchantmentsolution.enchantments.Weight;
+import org.ctp.enchantmentsolution.enchantments.helper.Weight;
 import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 
 public class SandVeil extends CustomEnchantment{
 	
 	public SandVeil() {
-		setDefaultDisplayName("Sand Veil");
+		addDefaultDisplayName("Sand Veil");
+		addDefaultDisplayName(Language.GERMAN, "Sandschleier");
 		setDefaultFiftyConstant(-12);
 		setDefaultThirtyConstant(-10);
 		setDefaultFiftyModifier(13);
@@ -24,7 +26,8 @@ public class SandVeil extends CustomEnchantment{
 		setDefaultFiftyMaxLevel(6);
 		setDefaultThirtyMaxLevel(5);
 		setDefaultWeight(Weight.COMMON);
-		setDefaultDescription("Lowers accuracy of entity's attacks.");
+		addDefaultDescription("Lowers accuracy of entity's attacks.");
+		addDefaultDescription(Language.GERMAN, "Verringert die Genauigkeit der Angriffe der Entität.");
 	}
 	
 	@Override

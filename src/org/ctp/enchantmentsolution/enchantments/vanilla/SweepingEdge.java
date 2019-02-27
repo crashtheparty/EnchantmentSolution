@@ -4,14 +4,16 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.enchantments.Enchantment;
+import org.ctp.enchantmentsolution.api.Language;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
-import org.ctp.enchantmentsolution.enchantments.Weight;
+import org.ctp.enchantmentsolution.enchantments.helper.Weight;
 import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 
 public class SweepingEdge extends CustomEnchantment{
 	
 	public SweepingEdge() {
-		setDefaultDisplayName("Sweeping Edge");
+		addDefaultDisplayName("Sweeping Edge");
+		addDefaultDisplayName(Language.GERMAN, "Schwungkraft");
 		setDefaultFiftyConstant(-7);
 		setDefaultThirtyConstant(-4);
 		setDefaultFiftyModifier(12);
@@ -23,7 +25,8 @@ public class SweepingEdge extends CustomEnchantment{
 		setDefaultFiftyMaxLevel(3);
 		setDefaultThirtyMaxLevel(3);
 		setDefaultWeight(Weight.RARE);
-		setDefaultDescription("Increases sweeping attack damage.");
+		addDefaultDescription("Increases sweeping attack damage.");
+		addDefaultDescription(Language.GERMAN, "Erhöht den Angriffsschaden.");
 	}
 	
 	@Override

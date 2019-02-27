@@ -5,14 +5,16 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.bukkit.enchantments.Enchantment;
+import org.ctp.enchantmentsolution.api.Language;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
-import org.ctp.enchantmentsolution.enchantments.Weight;
+import org.ctp.enchantmentsolution.enchantments.helper.Weight;
 import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 
 public class CurseOfBinding extends CustomEnchantment{
 	
 	public CurseOfBinding() {
-		setDefaultDisplayName("Curse of Binding");
+		addDefaultDisplayName("Curse of Binding");
+		addDefaultDisplayName(Language.GERMAN, "Fluch der Bindung");
 		setTreasure(true);
 		setDefaultFiftyConstant(25);
 		setDefaultThirtyConstant(25);
@@ -27,9 +29,13 @@ public class CurseOfBinding extends CustomEnchantment{
 		setDefaultWeight(Weight.VERY_RARE);
 		setMaxLevelOne(true);
 		setCurse(true);
-		setDefaultDescription("Prevents removal of the cursed item." + 
+		addDefaultDescription("Prevents removal of the cursed item." + 
 				StringUtils.LF + 
 				"The cursed item cannot be removed from any armor slot (outside of Creative mode) unless the player dies or the item breaks.");
+		addDefaultDescription(Language.GERMAN, "Verhindert das Entfernen des verfluchten Gegenstands." + 
+				StringUtils.LF + 
+				"Der verfluchte Gegenstand kann nicht aus einem Rüstungsplatz (außerhalb des Kreativmodus) " + 
+				"entfernt werden, es sei denn, der Spieler stirbt oder der Gegenstand zerbricht.");
 	}
 	
 	@Override

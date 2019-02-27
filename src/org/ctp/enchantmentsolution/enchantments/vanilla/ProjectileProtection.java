@@ -4,14 +4,16 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.enchantments.Enchantment;
+import org.ctp.enchantmentsolution.api.Language;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
-import org.ctp.enchantmentsolution.enchantments.Weight;
+import org.ctp.enchantmentsolution.enchantments.helper.Weight;
 import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 
 public class ProjectileProtection extends CustomEnchantment{
 	
 	public ProjectileProtection() {
-		setDefaultDisplayName("Projectile Protection");
+		addDefaultDisplayName("Projectile Protection");
+		addDefaultDisplayName(Language.GERMAN, "Schusssicher");
 		setDefaultFiftyConstant(-9);
 		setDefaultThirtyConstant(-3);
 		setDefaultFiftyModifier(13);
@@ -23,7 +25,8 @@ public class ProjectileProtection extends CustomEnchantment{
 		setDefaultFiftyMaxLevel(4);
 		setDefaultThirtyMaxLevel(4);
 		setDefaultWeight(Weight.UNCOMMON);
-		setDefaultDescription("Reduces projectile damage (arrows, ghast/blaze fire charges, etc.).");
+		addDefaultDescription("Reduces projectile damage (arrows, ghast/blaze fire charges, etc.).");
+		addDefaultDescription(Language.GERMAN, "Reduziert Projektilbeschädigungen (Pfeile, Feuerschläge usw.).");
 	}
 	
 	@Override

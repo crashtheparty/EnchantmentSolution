@@ -4,15 +4,17 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.enchantments.Enchantment;
+import org.ctp.enchantmentsolution.api.Language;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
-import org.ctp.enchantmentsolution.enchantments.Weight;
+import org.ctp.enchantmentsolution.enchantments.helper.Weight;
 import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 
 public class ExpShare extends CustomEnchantment{
 	
 	public ExpShare() {
-		setDefaultDisplayName("Exp. Share");
+		addDefaultDisplayName("Exp. Share");
+		addDefaultDisplayName(Language.GERMAN, "Erfahrung");
 		setDefaultFiftyConstant(0);
 		setDefaultThirtyConstant(-2);
 		setDefaultFiftyModifier(20);
@@ -24,7 +26,8 @@ public class ExpShare extends CustomEnchantment{
 		setDefaultFiftyMaxLevel(3);
 		setDefaultThirtyMaxLevel(3);
 		setDefaultWeight(Weight.UNCOMMON);
-		setDefaultDescription("Increase experience earned from killing mobs and breaking blocks.");
+		addDefaultDescription("Increase experience earned from killing mobs and breaking blocks.");
+		addDefaultDescription(Language.GERMAN, "Erhöhen Sie die Erfahrung durch das Töten von Mobs und Blockaden.");
 	}
 	
 	@Override

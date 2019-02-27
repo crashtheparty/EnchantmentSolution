@@ -14,7 +14,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
-import org.ctp.enchantmentsolution.utils.save.ConfigFiles;
 import org.ctp.enchantmentsolution.version.PluginVersion;
 import org.ctp.enchantmentsolution.version.Version;
 import org.ctp.enchantmentsolution.version.Version.VersionType;
@@ -23,7 +22,7 @@ public class VersionCheck implements Listener, Runnable {
 
 	@Override
 	public void run() {
-		if (ConfigFiles.getDefaultConfig().getBoolean("get_latest_version")) {
+		if (EnchantmentSolution.getConfigFiles().getDefaultConfig().getBoolean("get_latest_version")) {
 			List<Version> versionHistory = new ArrayList<Version>();
 			try {
 				URL urlv = new URL(

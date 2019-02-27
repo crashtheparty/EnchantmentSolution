@@ -4,14 +4,16 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.enchantments.Enchantment;
+import org.ctp.enchantmentsolution.api.Language;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
-import org.ctp.enchantmentsolution.enchantments.Weight;
+import org.ctp.enchantmentsolution.enchantments.helper.Weight;
 import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 
 public class FeatherFalling extends CustomEnchantment{
 	
 	public FeatherFalling() {
-		setDefaultDisplayName("Feather Falling");
+		addDefaultDisplayName("Feather Falling");
+		addDefaultDisplayName(Language.GERMAN, "Federfall");
 		setDefaultFiftyConstant(-7);
 		setDefaultThirtyConstant(-1);
 		setDefaultFiftyModifier(12);
@@ -23,7 +25,8 @@ public class FeatherFalling extends CustomEnchantment{
 		setDefaultFiftyMaxLevel(4);
 		setDefaultThirtyMaxLevel(4);
 		setDefaultWeight(Weight.UNCOMMON);
-		setDefaultDescription("Reduces fall damage.");
+		addDefaultDescription("Reduces fall damage.");
+		addDefaultDescription(Language.GERMAN, "Reduziert Sturzschäden.");
 	}
 
 	@Override

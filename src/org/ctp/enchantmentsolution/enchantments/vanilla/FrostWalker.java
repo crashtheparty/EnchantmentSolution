@@ -4,15 +4,17 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.enchantments.Enchantment;
+import org.ctp.enchantmentsolution.api.Language;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
-import org.ctp.enchantmentsolution.enchantments.Weight;
+import org.ctp.enchantmentsolution.enchantments.helper.Weight;
 import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 
 public class FrostWalker extends CustomEnchantment{
 	
 	public FrostWalker() {
-		setDefaultDisplayName("Frost Walker");
+		addDefaultDisplayName("Frost Walker");
+		addDefaultDisplayName(Language.GERMAN, "Eisläufer");
 		setTreasure(true);
 		setDefaultFiftyConstant(5);
 		setDefaultThirtyConstant(5);
@@ -25,7 +27,8 @@ public class FrostWalker extends CustomEnchantment{
 		setDefaultFiftyMaxLevel(2);
 		setDefaultThirtyMaxLevel(2);
 		setDefaultWeight(Weight.RARE);
-		setDefaultDescription("Creates frosted ice blocks when walking over water.");
+		addDefaultDescription("Creates frosted ice blocks when walking over water.");
+		addDefaultDescription(Language.GERMAN, "Erzeugt beim Gehen über Wasser gefrorene Eisblöcke.");
 	}
 
 	@Override

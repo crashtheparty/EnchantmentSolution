@@ -14,8 +14,8 @@ import org.bukkit.loot.LootContext;
 import org.bukkit.loot.Lootable;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
-import org.ctp.enchantmentsolution.enchantments.EnchantmentLevel;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
+import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 
 public class PillageListener implements Listener{
 	

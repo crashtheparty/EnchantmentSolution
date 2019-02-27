@@ -91,33 +91,35 @@ public class WidthHeightListener implements Listener{
 							if(ItemBreakType.getType(item.getType()).getBreakTypes().contains(block.getType())) {
 								IGNORE_BLOCKS.add(block);
 								BlockBreakEvent newEvent = new BlockBreakEvent(block, player);
+								int exp = 0;
+								if(!Enchantments.hasEnchantment(item, Enchantment.SILK_TOUCH)) {
+									switch(newEvent.getBlock().getType()) {
+									case COAL_ORE:
+										exp = (int) (Math.random() * 3);
+										break;
+									case DIAMOND_ORE:
+									case EMERALD_ORE:
+										exp = (int) (Math.random() * 5) + 3;
+										break;
+									case LAPIS_ORE:
+									case NETHER_QUARTZ_ORE:
+										exp = (int) (Math.random() * 4) + 2;
+										break;
+									case REDSTONE_ORE:
+										exp = (int) (Math.random() * 5) + 1;
+										break;
+									case SPAWNER:
+										exp = (int) (Math.random() * 29) + 15;
+										break;
+									default:
+										break;
+									}
+								}
+								newEvent.setExpToDrop(exp);
 								Bukkit.getServer().getPluginManager().callEvent(newEvent);
 								if(item != null && newEvent.getBlock().getType() != Material.AIR) {
-									if(!Enchantments.hasEnchantment(item, Enchantment.SILK_TOUCH)) {
-										switch(newEvent.getBlock().getType()) {
-										case COAL_ORE:
-											AbilityUtils.dropExperience(newEvent.getBlock().getLocation().add(0.5, 0.5, 0.5), (int) (Math.random() * 3));
-											break;
-										case DIAMOND_ORE:
-										case EMERALD_ORE:
-											AbilityUtils.dropExperience(newEvent.getBlock().getLocation().add(0.5, 0.5, 0.5), (int) (Math.random() * 5) + 3);
-											break;
-										case LAPIS_ORE:
-										case NETHER_QUARTZ_ORE:
-											AbilityUtils.dropExperience(newEvent.getBlock().getLocation().add(0.5, 0.5, 0.5), (int) (Math.random() * 4) + 2);
-											break;
-										case REDSTONE_ORE:
-											AbilityUtils.dropExperience(newEvent.getBlock().getLocation().add(0.5, 0.5, 0.5), (int) (Math.random() * 5) + 1);
-											break;
-										case SPAWNER:
-											AbilityUtils.dropExperience(newEvent.getBlock().getLocation().add(0.5, 0.5, 0.5), (int) (Math.random() * 29) + 15);
-											break;
-										default:
-											break;
-										}
-									}
-									//McMMO.handleMcMMO(newEvent);
 									newEvent.getBlock().breakNaturally(item);
+									AbilityUtils.dropExperience(newEvent.getBlock().getLocation().add(0.5, 0.5, 0.5), newEvent.getExpToDrop());
 									int unbreaking = Enchantments.getLevel(item, Enchantment.DURABILITY);
 									double chance = (1.0D) / (unbreaking + 1.0D);
 									double random = Math.random();
