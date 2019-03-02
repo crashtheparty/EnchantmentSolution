@@ -3,7 +3,7 @@ package org.ctp.enchantmentsolution.listeners.abilities;
 import java.util.Arrays;
 import java.util.List;
 
-import org.bukkit.Bukkit;
+//import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
@@ -22,7 +22,7 @@ import org.bukkit.ChatColor;
 @SuppressWarnings("deprecation")
 public class FishingListener implements Listener{
 	
-	@EventHandler(priority = EventPriority.HIGH)
+	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerFish(PlayerFishEvent event) {
 		if(event.getState().equals(PlayerFishEvent.State.CAUGHT_FISH)) {
 			Item item = (Item)event.getCaught();
@@ -31,18 +31,10 @@ public class FishingListener implements Listener{
 			ItemStack rod = player.getInventory().getItemInMainHand();
 			if(Enchantments.hasEnchantment(rod, DefaultEnchantments.FRIED)) {
 				if(DefaultEnchantments.isEnabled(DefaultEnchantments.FRIED)) {
-					if(Bukkit.getPluginManager().isPluginEnabled("mcMMO")) {
-						if(caught.getType().equals(Material.COD) || caught.getType().equals(Material.SALMON)) {
-							ItemMeta caughtMeta = caught.getItemMeta();
-							caughtMeta.setDisplayName(ChatColor.RED + "CookedFish");
-							caught.setItemMeta(caughtMeta);
-						}
-					} else {
-						if(caught.getType().equals(Material.COD)) {
-							caught.setType(Material.COOKED_COD);
-						}else if(caught.getType().equals(Material.SALMON)) {
-							caught.setType(Material.COOKED_SALMON);
-						}
+					if(caught.getType().equals(Material.COD)) {
+						caught.setType(Material.COOKED_COD);
+					}else if(caught.getType().equals(Material.SALMON)) {
+						caught.setType(Material.COOKED_SALMON);
 					}
 				}
 			}

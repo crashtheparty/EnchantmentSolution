@@ -62,8 +62,8 @@ public class LanguageFiles {
 				main.set("reset_language", false);
 				main.saveConfig();
 			}
-			language.copyDefaults(getLanguageFile());
 		}
+		language.copyDefaults(getLanguageFile());
 		
 		language.saveConfig();
 	}
@@ -114,7 +114,8 @@ public class LanguageFiles {
 	}
 	
 	private void defaultenglishUSFile() {
-		englishUS = new YamlConfigBackup(englishUSFile, new String[0]);
+		if(englishUS == null)
+			englishUS = new YamlConfigBackup(englishUSFile, new String[0]);
 		
 		englishUS.getFromConfig();
 		
@@ -234,7 +235,8 @@ public class LanguageFiles {
 	}
 
 	private void defaultGermanFile() {
-		german = new YamlConfigBackup(germanFile, new String[0]);
+		if(german == null)
+			german = new YamlConfigBackup(germanFile, new String[0]);
 		
 		german.getFromConfig();
 		

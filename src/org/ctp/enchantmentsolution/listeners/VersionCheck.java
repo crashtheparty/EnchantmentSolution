@@ -52,15 +52,16 @@ public class VersionCheck implements Listener, Runnable {
 			} catch (IOException e) {
 				ChatUtils.sendToConsole(Level.WARNING, "Issue with finding newest version.");
 			}
-			EnchantmentSolution.getPluginVersion().setPluginVersions(versionHistory);
-			if (!EnchantmentSolution.getPluginVersion().isOfficialVersion()) {
+			PluginVersion version = EnchantmentSolution.getPluginVersion();
+			version.setPluginVersions(versionHistory);
+			if (!version.isOfficialVersion()) {
 				ChatUtils.sendToConsole(Level.WARNING,
 						"Uh oh! Plugin author forgot to update version history. Go tell them: https://www.spigotmc.org/resources/enchantment-solution.59556/");
-			} else if (!EnchantmentSolution.getPluginVersion().hasNewerVersion()) {
+			} else if (!version.hasNewerVersion()) {
 				ChatUtils.sendToConsole(Level.INFO, "Your version is up-to-date.");
 			} else {
-				String version = EnchantmentSolution.getPluginVersion().getNewestVersion();
-				ChatUtils.sendToConsole(Level.WARNING, (version == null ? "New Version" : "Version " + version)
+				String versionString = EnchantmentSolution.getPluginVersion().getNewestVersion();
+				ChatUtils.sendToConsole(Level.WARNING, (version == null ? "New Version" : "Version " + versionString)
 						+ " of EnchantmentSolution is available! Download it here: https://www.spigotmc.org/resources/enchantment-solution.59556/");
 			}
 		}
@@ -71,7 +72,7 @@ public class VersionCheck implements Listener, Runnable {
 		Player player = event.getPlayer();
 		if (player.hasPermission("enchantmentsolution.version-updater")) {
 			PluginVersion version = EnchantmentSolution.getPluginVersion();
-			if (!EnchantmentSolution.getPluginVersion().isOfficialVersion()) {
+			if (!version.isOfficialVersion()) {
 				ChatUtils.sendMessage(player, "Uh oh! Plugin author forgot to update version history. Go tell them: ",
 						"https://www.spigotmc.org/resources/enchantment-solution.59556/");
 			} else if (version.hasNewerVersion()) {

@@ -70,7 +70,7 @@ public class UnrestListener implements Listener, Runnable {
 					if(player.getStatistic(Statistic.TIME_SINCE_REST) < 96000) {
 						player.setStatistic(Statistic.TIME_SINCE_REST, 96000);
 					}
-					player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 245, 0, false, false), true);
+					player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 305, 0, false, false), true);
 				}
 			}else {
 				HAS_UNREST.remove(unrestPlayer);

@@ -221,6 +221,12 @@ public class PlayerLevels {
 		if(random >= books) random = books - 1;
 		PlayerLevels levels = new PlayerLevels(random, material, treasure);
 		
+		if(EnchantmentSolution.getConfigFiles().useLevel50() && random < 15) {
+			while(levels.enchants.size() > 3) {
+				levels.enchants.remove(3);
+			}
+		}
+		
 		return levels;
 	}
 

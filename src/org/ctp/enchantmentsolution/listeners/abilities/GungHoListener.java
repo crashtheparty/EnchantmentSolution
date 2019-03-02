@@ -73,7 +73,7 @@ public class GungHoListener implements Listener{
 			if(damager instanceof Player) {
 				Player player = (Player) damager;
 				ItemStack item = player.getInventory().getChestplate();
-				if(Enchantments.hasEnchantment(item, DefaultEnchantments.GUNG_HO)) {
+				if(item != null && Enchantments.hasEnchantment(item, DefaultEnchantments.GUNG_HO)) {
 					Entity damaged = event.getEntity();
 					if(damaged instanceof LivingEntity) {
 						event.setDamage(event.getDamage() * 3);

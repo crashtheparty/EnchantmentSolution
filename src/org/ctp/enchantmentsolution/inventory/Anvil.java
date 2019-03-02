@@ -135,7 +135,9 @@ public class Anvil implements InventoryData{
 				if(player.getGameMode().equals(GameMode.CREATIVE) || repairCost <= playerLevel) {
 					if (!player.getGameMode().equals(GameMode.CREATIVE) && repairCost > EnchantmentSolution.getConfigFiles().getMaxRepairLevel()) {
 						combine = new ItemStack(Material.RED_STAINED_GLASS_PANE);
-						lore.add(ChatUtils.getMessage(getCodes(), "anvil.cannot-repair"));
+						HashMap<String, Object> loreCodes = getCodes();
+						loreCodes.put("%repairCost%", repairCost);
+						lore.add(ChatUtils.getMessage(loreCodes, "anvil.cannot-repair"));
 					} else {
 						combine = new ItemStack(Material.LIME_STAINED_GLASS_PANE);
 						HashMap<String, Object> loreCodes = getCodes();
