@@ -1,9 +1,7 @@
 package org.ctp.enchantmentsolution.listeners.abilities;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.List;
 
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -28,11 +26,6 @@ import org.ctp.enchantmentsolution.utils.items.DamageUtils;
 import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 
 public class TelepathyListener implements Listener {
-
-	private static List<Material> SHULKER_BOXES = Arrays.asList(Material.BLACK_SHULKER_BOX, Material.BLUE_SHULKER_BOX, Material.BROWN_SHULKER_BOX,
-			Material.CYAN_SHULKER_BOX, Material.GRAY_SHULKER_BOX, Material.GREEN_SHULKER_BOX, Material.LIGHT_BLUE_SHULKER_BOX, Material.LIME_SHULKER_BOX,
-			Material.MAGENTA_SHULKER_BOX, Material.ORANGE_SHULKER_BOX, Material.PINK_SHULKER_BOX, Material.PURPLE_SHULKER_BOX, Material.RED_SHULKER_BOX,
-			Material.LIGHT_GRAY_SHULKER_BOX, Material.WHITE_SHULKER_BOX, Material.YELLOW_SHULKER_BOX, Material.SHULKER_BOX);
 	
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onBlockBreak(BlockBreakEvent event) {
@@ -46,15 +39,17 @@ public class TelepathyListener implements Listener {
 		if (item != null) {
 			if (Enchantments.hasEnchantment(item, DefaultEnchantments.TELEPATHY)) {
 				Collection<ItemStack> drops = block.getDrops(item);
-				if (SHULKER_BOXES.contains(block.getType())) {
+				if (ItemUtils.getShulkerBoxes().contains(block.getType())) {
 					Iterator<ItemStack> i = drops.iterator();
 					while(i.hasNext()) {
 						ItemStack drop = i.next();
-						if(SHULKER_BOXES.contains(drop.getType())) {
+						if(ItemUtils.getShulkerBoxes().contains(drop.getType())) {
 							BlockStateMeta im = (BlockStateMeta) drop.getItemMeta();
-							im.setBlockState(block.getState());
 							Container container = (Container) block.getState();
-							im.setDisplayName(container.getSnapshotInventory().getName());
+							im.setBlockState(container);
+							if(!container.getSnapshotInventory().getTitle().equals("Shulker Box")) {
+								im.setDisplayName(container.getSnapshotInventory().getName());
+							}
 							drop.setItemMeta(im);
 							ItemUtils.giveItemToPlayer(player, drop, player.getLocation());
 							i.remove();
