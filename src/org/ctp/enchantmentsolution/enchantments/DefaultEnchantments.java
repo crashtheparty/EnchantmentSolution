@@ -393,9 +393,9 @@ public class DefaultEnchantments {
 		DefaultEnchantments.addDefaultEnchantment(new MagicGuard());
 		DefaultEnchantments.addDefaultEnchantment(new MagmaWalker());
 		DefaultEnchantments.addDefaultEnchantment(new NoRest());
-		if(EnchantmentSolution.getBukkitVersion().getVersionNumber() > 3) {
+//		if(EnchantmentSolution.getBukkitVersion().getVersionNumber() > 3) {
 			DefaultEnchantments.addDefaultEnchantment(new Pillage());
-		}
+//		}
 		DefaultEnchantments.addDefaultEnchantment(new Sacrifice());
 		DefaultEnchantments.addDefaultEnchantment(new SandVeil());
 		DefaultEnchantments.addDefaultEnchantment(new ShockAspect());
@@ -404,9 +404,9 @@ public class DefaultEnchantments {
 		DefaultEnchantments.addDefaultEnchantment(new Soulbound());
 		DefaultEnchantments.addDefaultEnchantment(new SoulReaper());
 		DefaultEnchantments.addDefaultEnchantment(new SplatterFest());
-		if(EnchantmentSolution.getBukkitVersion().getVersionNumber() > 3) {
+//		if(EnchantmentSolution.getBukkitVersion().getVersionNumber() > 3) {
 			DefaultEnchantments.addDefaultEnchantment(new StoneThrow());
-		}
+//		}
 		DefaultEnchantments.addDefaultEnchantment(new Tank());
 		DefaultEnchantments.addDefaultEnchantment(new Telepathy());
 		DefaultEnchantments.addDefaultEnchantment(new Transmutation());

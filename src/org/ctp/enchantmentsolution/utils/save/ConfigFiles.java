@@ -205,7 +205,7 @@ public class ConfigFiles {
 		config.addDefault("default_anvil_use", false, new String[] {"Allow default use of anvil GUI via option at bottom right of custom GUI.", 
 				"Using this feature MAY REMOVE CUSTOM ENCHANTMENTS FROM ITEMS on accident. Should only be true if anvil is used for custom recipes."});
 		if(EnchantmentSolution.getBukkitVersion().getVersionNumber() < 4) {
-			// CONFIG.addDefault("use_grindstone", false, new String[] {"Use the grindstone from within the anvil in version < 1.14"});
+			config.addDefault("use_grindstone", false, new String[] {"Use the grindstone from within the anvil in version < 1.14"});
 		}
 		config.addDefault("update_legacy_enchantments", false, new String[] {"Update any enchantments generated in EnchantmentSolutionLegacy"});
 		config.addDefault("chest_loot", true, new String[] {"Allow custom and/or high level enchants to spawn in chests"});
@@ -602,9 +602,9 @@ public class ConfigFiles {
 	}
 	
 	public boolean useLegacyGrindstone() {
-//		if(EnchantmentSolution.getBukkitVersion().getVersionNumber() < 4) {
-//			return config.getBoolean("use_grindstone");
-//		}
+		if(EnchantmentSolution.getBukkitVersion().getVersionNumber() < 4) {
+			return config.getBoolean("use_grindstone");
+		}
 		return false;
 	}
 	
