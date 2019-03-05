@@ -25,8 +25,8 @@ public class Riptide extends CustomEnchantment{
 		setDefaultFiftyMaxLevel(5);
 		setDefaultThirtyMaxLevel(3);
 		setDefaultWeight(Weight.RARE);
-		addDefaultDescription("Returns a thrown trident after it hits something.");
-		addDefaultDescription(Language.GERMAN, "Gibt einen geworfenen Dreizack zurück, nachdem er etwas getroffen hat.");
+		addDefaultDescription("Allows the trident to be used as a means of fast transportation.");
+		addDefaultDescription(Language.GERMAN, "Ermöglicht die Verwendung des Dreizackes als schnelles Transportmittel.");
 	}
 
 	@Override

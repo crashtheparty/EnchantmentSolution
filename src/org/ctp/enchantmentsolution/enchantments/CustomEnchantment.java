@@ -213,6 +213,8 @@ public abstract class CustomEnchantment {
 	public abstract String getName();
 
 	public String getDisplayName() {
+		if(displayName == null)
+			return getDefaultDisplayName(EnchantmentSolution.getConfigFiles().getLanguage());
 		return displayName;
 	}
 
@@ -481,15 +483,21 @@ public abstract class CustomEnchantment {
 	}
 
 	protected void addDefaultDisplayName(EnchantmentDisplayName defaultDisplayName) {
+		for(EnchantmentDisplayName displayName : defaultDisplayNames) {
+			if(displayName.getLanguage().equals(defaultDisplayName.getLanguage())) {
+				displayName.setDescription(defaultDisplayName.getDisplayName());
+				return;
+			}
+		}
 		this.defaultDisplayNames.add(defaultDisplayName);
 	}
 
 	protected void addDefaultDisplayName(Language lang, String name) {
-		this.defaultDisplayNames.add(new EnchantmentDisplayName(lang, name));
+		addDefaultDisplayName(new EnchantmentDisplayName(lang, name));
 	}
 
 	protected void addDefaultDisplayName(String name) {
-		this.defaultDisplayNames.add(new EnchantmentDisplayName(Language.US, name));
+		addDefaultDisplayName(new EnchantmentDisplayName(Language.US, name));
 	}
 
 	public List<Material> getDisabledItems() {
@@ -517,6 +525,8 @@ public abstract class CustomEnchantment {
 	}
 	
 	public String getDescription() {
+		if(description == null)
+			return getDefaultDescription(EnchantmentSolution.getConfigFiles().getLanguage());
 		return description;
 	}
 
@@ -538,14 +548,20 @@ public abstract class CustomEnchantment {
 	}
 
 	protected void addDefaultDescription(Language lang, String desc) {
-		this.defaultDescriptions.add(new EnchantmentDescription(lang, desc));
+		addDefaultDescription(new EnchantmentDescription(lang, desc));
 	}
 
 	protected void addDefaultDescription(String desc) {
-		this.defaultDescriptions.add(new EnchantmentDescription(Language.US, desc));
+		addDefaultDescription(new EnchantmentDescription(Language.US, desc));
 	}
 
 	protected void addDefaultDescription(EnchantmentDescription defaultDescription) {
+		for(EnchantmentDescription description : defaultDescriptions) {
+			if(description.getLanguage().equals(defaultDescription.getLanguage())) {
+				description.setDescription(defaultDescription.getDescription());
+				return;
+			}
+		}
 		this.defaultDescriptions.add(defaultDescription);
 	}
 

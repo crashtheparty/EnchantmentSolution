@@ -3,6 +3,7 @@ package org.ctp.enchantmentsolution.nms.anvil;
 import java.util.HashMap;
 
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_13_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
@@ -336,6 +337,9 @@ public class AnvilGUI_v1_13_R1 {
 					}
 				}
 				event.getData().setItemName(event.getName());
+				if(player.getGameMode() != GameMode.CREATIVE) {
+					player.setLevel(player.getLevel() - 1);
+				}
 			}
 		};
 		AnvilGUI_v1_13_R1 gui = new AnvilGUI_v1_13_R1(player, handler, data);
