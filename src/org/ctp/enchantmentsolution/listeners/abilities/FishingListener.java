@@ -11,15 +11,10 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerFishEvent;
-import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
 
-import org.bukkit.ChatColor;
-
-@SuppressWarnings("deprecation")
 public class FishingListener implements Listener{
 	
 	@EventHandler(priority = EventPriority.MONITOR)
@@ -47,23 +42,6 @@ public class FishingListener implements Listener{
 				}
 			}
 			((Item) event.getCaught()).setItemStack(caught);
-		}
-	}
-	
-	@EventHandler
-	public void onPlayerPickupItem(PlayerPickupItemEvent event) {
-		if(!DefaultEnchantments.isEnabled(DefaultEnchantments.FRIED)) return;
-		Item item = event.getItem();
-		ItemStack items = item.getItemStack();
-		ItemMeta meta = items.getItemMeta();
-		if((items.getType().equals(Material.COD) || items.getType().equals(Material.SALMON)) && meta.getDisplayName() != null && meta.getDisplayName().equals(ChatColor.RED + "CookedFish")) {
-			meta.setDisplayName("");
-			items.setItemMeta(meta);
-			if (items.getType().equals(Material.COD)) {
-				items.setType(Material.COOKED_COD);
-			} else if (items.getType().equals(Material.SALMON)) {
-				items.setType(Material.COOKED_SALMON);
-			}
 		}
 	}
 }
