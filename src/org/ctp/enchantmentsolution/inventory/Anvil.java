@@ -22,6 +22,7 @@ import org.ctp.enchantmentsolution.utils.save.ConfigFiles;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.DamageUtils;
 import org.ctp.enchantmentsolution.utils.ItemUtils;
+import org.ctp.enchantmentsolution.utils.JobsUtils;
 
 public class Anvil implements InventoryData{
 
@@ -114,7 +115,9 @@ public class Anvil implements InventoryData{
 				if(player.getGameMode().equals(GameMode.CREATIVE) || repairCost <= playerLevel) {
 					if (!player.getGameMode().equals(GameMode.CREATIVE) && repairCost > ConfigFiles.getMaxRepairLevel()) {
 						combine = new ItemStack(Material.RED_STAINED_GLASS_PANE);
-						lore.add(ChatUtils.getMessage(getCodes(), "anvil.cannot-repair"));
+						HashMap<String, Object> loreCodes = getCodes();
+						loreCodes.put("%repairCost%", repairCost);
+						lore.add(ChatUtils.getMessage(loreCodes, "anvil.cannot-repair"));
 					} else {
 						combine = new ItemStack(Material.LIME_STAINED_GLASS_PANE);
 						HashMap<String, Object> loreCodes = getCodes();
@@ -253,8 +256,12 @@ public class Anvil implements InventoryData{
 				repairItem.setAmount(repairItem.getAmount() - ItemUtils.repairItem(playerItems.get(0), repairItem));
 				ItemUtils.giveItemToPlayer(player, repairItem, player.getLocation());
 			}
+			if(EnchantmentSolution.isJobsEnabled()) {
+				JobsUtils.sendAnvilAction(player, playerItems.get(1), combinedItem);
+			}
 			combinedItem = null;
 			playerItems.clear();
+
 			checkAnvilBreak();
 		}else {
 			ChatUtils.sendMessage(player, ChatUtils.getMessage(getCodes(), "anvil.message-cannot-combine"));

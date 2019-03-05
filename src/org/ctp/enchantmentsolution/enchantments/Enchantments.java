@@ -558,7 +558,7 @@ public class Enchantments {
 			}
 		}
 		
-		for(int i = enchantments.size() - 1; i > maxEnchants; i--) {
+		for(int i = enchantments.size() - 1; i >= 0; i--) {
 			EnchantmentLevel enchant = enchantments.get(i);
 			if(!enchant.getEnchant().canAnvil(player, enchant.getLevel())) {
 				int level = enchant.getEnchant().getAnvilLevel(player, enchant.getLevel());

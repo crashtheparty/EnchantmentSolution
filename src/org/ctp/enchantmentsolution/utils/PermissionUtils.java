@@ -16,17 +16,17 @@ public class PermissionUtils {
 				return true;
 			}
 			for(int i = 0; i < level; i++) {
-				if(enchant.getRelativeEnchantment() instanceof CustomEnchantmentWrapper) {
+				if (enchant.getRelativeEnchantment() instanceof CustomEnchantmentWrapper) {
 					String path = "custom_enchantments." + enchant.getName() + ".permissions.table.level" + (i + 1);
 					if(ConfigFiles.getEnchantmentAdvancedConfig().getBoolean(path)) {
-						if(!player.hasPermission("enchantmentsolution." + enchant.getName() + ".table.level" + (i + 1))) {
+						if(!player.hasPermission("enchantmentsolution." + enchant.getName().toLowerCase() + ".table.level" + (i + 1))) {
 							return false;
 						}
 					}
 				} else {
 					String path = "default_enchantments." + enchant.getName() + ".permissions.table.level" + (i + 1);
 					if(ConfigFiles.getEnchantmentAdvancedConfig().getBoolean(path)) {
-						if(!player.hasPermission("enchantmentsolution." + enchant.getName() + ".table.level" + (i + 1))) {
+						if(!player.hasPermission("enchantmentsolution." + enchant.getName().toLowerCase() + ".table.level" + (i + 1))) {
 							return false;
 						}
 					}
@@ -46,17 +46,17 @@ public class PermissionUtils {
 				return true;
 			}
 			for(int i = 0; i < level; i++) {
-				if(enchant.getRelativeEnchantment() instanceof CustomEnchantmentWrapper) {
+				if (enchant.getRelativeEnchantment() instanceof CustomEnchantmentWrapper) {
 					String path = "custom_enchantments." + enchant.getName() + ".permissions.anvil.level" + (i + 1);
 					if(ConfigFiles.getEnchantmentAdvancedConfig().getBoolean(path)) {
-						if(!player.hasPermission("enchantmentsolution." + enchant.getName() + ".anvil.level" + (i + 1))) {
+						if(!player.hasPermission("enchantmentsolution." + enchant.getName().toLowerCase() + ".anvil.level" + (i + 1))) {
 							return false;
 						}
 					}
 				} else {
 					String path = "default_enchantments." + enchant.getName() + ".permissions.anvil.level" + (i + 1);
 					if(ConfigFiles.getEnchantmentAdvancedConfig().getBoolean(path)) {
-						if(!player.hasPermission("enchantmentsolution." + enchant.getName() + ".anvil.level" + (i + 1))) {
+						if(!player.hasPermission("enchantmentsolution." + enchant.getName().toLowerCase() + ".anvil.level" + (i + 1))) {
 							return false;
 						}
 					}

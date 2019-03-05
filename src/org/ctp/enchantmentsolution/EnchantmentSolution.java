@@ -8,6 +8,7 @@ import java.util.logging.Level;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.ctp.enchantmentsolution.commands.ConfigEdit;
 import org.ctp.enchantmentsolution.commands.Enchant;
@@ -63,6 +64,8 @@ public class EnchantmentSolution extends JavaPlugin {
 	public static boolean NEWEST_VERSION = true, DISABLE = false;
 	private static SQLite DB;
 	private static String MCMMO_TYPE;
+	private static Plugin JOBS_REBORN;
+	private static ConfigFiles FILES;
 
 	public void onEnable() {
 		PLUGIN = this;
@@ -133,6 +136,12 @@ public class EnchantmentSolution extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new VersionCheck(), this);
 		getServer().getPluginManager().registerEvents(new ChatMessage(), this);
 		getServer().getPluginManager().registerEvents(new BlockBreak(), this);
+		
+		if(Bukkit.getPluginManager().isPluginEnabled("Jobs")) {
+			JOBS_REBORN = Bukkit.getPluginManager().getPlugin("Jobs");
+			ChatUtils.sendToConsole(Level.INFO, "Jobs Reborn compatibility enabled!");
+		}
+		
 		if(Bukkit.getPluginManager().isPluginEnabled("mcMMO")) {
 			String version = Bukkit.getPluginManager().getPlugin("mcMMO").getDescription().getVersion();
 			ChatUtils.sendToConsole(Level.INFO, "mcMMO Version: " + version);
@@ -239,5 +248,13 @@ public class EnchantmentSolution extends JavaPlugin {
 
 	public static String getMcMMOType() {
 		return MCMMO_TYPE;
+	}
+
+	public static boolean isJobsEnabled() {
+		return JOBS_REBORN != null;
+	}
+
+	public static ConfigFiles getConfigFiles() {
+		return FILES;
 	}
 }

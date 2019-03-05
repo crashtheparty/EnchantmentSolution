@@ -6,6 +6,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerFishEvent;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.listeners.fishing.mcmmo.McMMOClassicFishingListener;
+import org.ctp.eswrapper.McMMOOverhaulFishingListener;
+
 import com.gmail.nossr50.events.skills.fishing.McMMOPlayerFishingTreasureEvent;
 
 public class McMMOFishingNMS implements Listener{
@@ -14,7 +16,7 @@ public class McMMOFishingNMS implements Listener{
 	public void onMcMMOPlayerFishingTreasure(McMMOPlayerFishingTreasureEvent event) {
 		switch(EnchantmentSolution.getMcMMOType()) {
 		case "Overhaul":
-			McMMOClassicFishingListener overhaul = new McMMOClassicFishingListener();
+			McMMOOverhaulFishingListener overhaul = new McMMOOverhaulFishingListener();
 			overhaul.onMcMMOPlayerFishingTreasure(event);
 			break;
 		case "Classic":
@@ -30,7 +32,7 @@ public class McMMOFishingNMS implements Listener{
 	public void onPlayerFish(PlayerFishEvent event) {
 		switch(EnchantmentSolution.getMcMMOType()) {
 		case "Overhaul":
-			McMMOClassicFishingListener overhaul = new McMMOClassicFishingListener();
+			McMMOOverhaulFishingListener overhaul = new McMMOOverhaulFishingListener();
 			overhaul.onPlayerFish(event);
 			break;
 		case "Classic":

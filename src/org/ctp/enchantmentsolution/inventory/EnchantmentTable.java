@@ -9,7 +9,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.Sound;
+import org.bukkit.Statistic;
+import org.bukkit.advancement.Advancement;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -24,6 +27,7 @@ import org.ctp.enchantmentsolution.utils.RomanNumerals;
 import org.ctp.enchantmentsolution.utils.save.ConfigFiles;
 import org.ctp.enchantmentsolution.utils.ItemSerialization;
 import org.ctp.enchantmentsolution.utils.ItemUtils;
+import org.ctp.enchantmentsolution.utils.JobsUtils;
 
 public class EnchantmentTable implements InventoryData {
 
@@ -361,6 +365,7 @@ public class EnchantmentTable implements InventoryData {
 		return playerItems;
 	}
 
+	@SuppressWarnings("deprecation")
 	public void enchantItem(int slot, int level) {
 		ItemStack enchantableItem = playerItems.get(slot);
 		int itemSlot = 17 + (9 * slot) + (4 + level);
@@ -401,12 +406,20 @@ public class EnchantmentTable implements InventoryData {
 				}
 			}
 		}
+		List<EnchantmentLevel> enchLevels = levels.getEnchants().get(level);
 		player.playSound(player.getLocation(), Sound.BLOCK_ENCHANTMENT_TABLE_USE, 1, 1);
 		enchantableItem = Enchantments.addEnchantmentsToItem(enchantableItem,
-				levels.getEnchants().get(level));
+				enchLevels);
 		playerItems.set(slot, enchantableItem);
+		
 		PlayerLevels.removePlayerLevels(player);
 		setInventory(playerItems);
+		player.setStatistic(Statistic.ITEM_ENCHANTED, player.getStatistic(Statistic.ITEM_ENCHANTED) + 1);
+		Advancement enchanted = Bukkit.getAdvancement(new NamespacedKey("minecraft", "story/enchant_item"));
+		player.getAdvancementProgress(enchanted).awardCriteria("enchanted_item");
+		if(EnchantmentSolution.isJobsEnabled()) {
+			JobsUtils.sendEnchantAction(player, enchantItem, enchantableItem, enchLevels);
+		}
 	}
 
 	@Override

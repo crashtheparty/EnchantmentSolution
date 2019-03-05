@@ -25,6 +25,11 @@ public class ItemUtils {
 	private static HashMap<Material, List<Material>> REPAIR_TYPES = setRepairTypes();
 	private static List<Material> REPAIR_MATERIALS = Arrays.asList(Material.DIAMOND, Material.IRON_INGOT, Material.GOLD_INGOT, Material.COBBLESTONE, Material.ACACIA_PLANKS, Material.BIRCH_PLANKS, Material.DARK_OAK_PLANKS, Material.JUNGLE_PLANKS, Material.OAK_PLANKS, Material.DARK_OAK_PLANKS, Material.LEATHER, Material.PHANTOM_MEMBRANE, Material.STRING);
 
+	private static List<Material> SHULKER_BOXES = Arrays.asList(Material.BLACK_SHULKER_BOX, Material.BLUE_SHULKER_BOX, Material.BROWN_SHULKER_BOX,
+			Material.CYAN_SHULKER_BOX, Material.GRAY_SHULKER_BOX, Material.GREEN_SHULKER_BOX, Material.LIGHT_BLUE_SHULKER_BOX, Material.LIME_SHULKER_BOX,
+			Material.MAGENTA_SHULKER_BOX, Material.ORANGE_SHULKER_BOX, Material.PINK_SHULKER_BOX, Material.PURPLE_SHULKER_BOX, Material.RED_SHULKER_BOX,
+			Material.LIGHT_GRAY_SHULKER_BOX, Material.WHITE_SHULKER_BOX, Material.YELLOW_SHULKER_BOX, Material.SHULKER_BOX);
+
 	private static HashMap<String, List<Material>> setItemTypes() {
 		HashMap<String, List<Material>> itemTypes = new HashMap<String, List<Material>>();
 		List<Material> helmets = new ArrayList<Material>();
@@ -362,7 +367,6 @@ public class ItemUtils {
 		ItemMeta duplicateMeta = duplicate.getItemMeta();
 		
 		returnItemMeta.setDisplayName(duplicateMeta.getDisplayName());
-		returnItemMeta.setLocalizedName(duplicateMeta.getLocalizedName());
 		returnItem.setItemMeta(returnItemMeta);
 		DamageUtils.setDamage(returnItem, DamageUtils.getDamage(duplicateMeta));
 		
@@ -386,5 +390,9 @@ public class ItemUtils {
 		returnItem = Enchantments.addEnchantmentsToItem(returnItem, enchants);
 		
 		return returnItem;
+	}
+
+	public static List<Material> getShulkerBoxes() {
+		return SHULKER_BOXES;
 	}
 }

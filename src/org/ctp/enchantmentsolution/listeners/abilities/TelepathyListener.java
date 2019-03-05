@@ -26,7 +26,7 @@ import org.ctp.enchantmentsolution.utils.DamageUtils;
 import org.ctp.enchantmentsolution.utils.ItemUtils;
 
 public class TelepathyListener implements Listener {
-
+	
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onBlockBreak(BlockBreakEvent event) {
 		if (!DefaultEnchantments.isEnabled(DefaultEnchantments.TELEPATHY))
@@ -34,17 +34,22 @@ public class TelepathyListener implements Listener {
 		Player player = event.getPlayer();
 		if (player.getGameMode().equals(GameMode.CREATIVE) || player.getGameMode().equals(GameMode.SPECTATOR))
 			return;
+		Block block = event.getBlock();
 		ItemStack item = player.getInventory().getItemInMainHand();
 		if (item != null) {
 			if (Enchantments.hasEnchantment(item, DefaultEnchantments.TELEPATHY)) {
-				Collection<ItemStack> drops = event.getBlock().getDrops(item);
-				if (event.getBlock().getType() == Material.SHULKER_BOX) {
+				Collection<ItemStack> drops = block.getDrops(item);
+				if (ItemUtils.getShulkerBoxes().contains(block.getType())) {
 					Iterator<ItemStack> i = drops.iterator();
 					while(i.hasNext()) {
 						ItemStack drop = i.next();
-						if(drop.getType() == Material.SHULKER_BOX) {
+						if(ItemUtils.getShulkerBoxes().contains(drop.getType())) {
 							BlockStateMeta im = (BlockStateMeta) drop.getItemMeta();
-							im.setBlockState(event.getBlock().getState());
+							Container container = (Container) block.getState();
+							im.setBlockState(container);
+							if(!container.getSnapshotInventory().getTitle().equals("Shulker Box")) {
+								im.setDisplayName(container.getSnapshotInventory().getName());
+							}
 							drop.setItemMeta(im);
 							ItemUtils.giveItemToPlayer(player, drop, player.getLocation());
 							i.remove();

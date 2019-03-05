@@ -1,5 +1,7 @@
 package org.ctp.enchantmentsolution.listeners.abilities;
 
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -23,8 +25,8 @@ public class BrineListener implements Listener{
 				Entity damaged = event.getEntity();
 				if(damaged instanceof LivingEntity) {
 					LivingEntity living = (LivingEntity) damaged;
-					@SuppressWarnings("deprecation")
-					double maxHealth = living.getMaxHealth();
+					AttributeInstance a = living.getAttribute(Attribute.GENERIC_MAX_HEALTH);
+					double maxHealth = a.getValue();
 					double health = living.getHealth();
 					if(health <= maxHealth / 2) {
 						event.setDamage(event.getDamage() * 2);
