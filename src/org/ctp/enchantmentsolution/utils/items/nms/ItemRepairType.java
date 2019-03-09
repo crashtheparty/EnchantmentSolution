@@ -12,18 +12,18 @@ public interface ItemRepairType {
 	public List<Material> getRepairTypes();
 	
 	public static ItemRepairType getType(Material type) {
-		if(EnchantmentSolution.getBukkitVersion().getVersionNumber() < 4) {
+		if(EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber() < 4) {
 			return ItemRepair_v1_13.getType(type);
-		} else if (EnchantmentSolution.getBukkitVersion().getVersionNumber() >= 4) {
+		} else if (EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber() >= 4) {
 			
 		}
 		return null;
 	}
 	
 	public static ItemRepairType[] getValues(){
-		if(EnchantmentSolution.getBukkitVersion().getVersionNumber() < 4) {
+		if(EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber() < 4) {
 			return ItemRepair_v1_13.values();
-		} else if (EnchantmentSolution.getBukkitVersion().getVersionNumber() >= 4) {
+		} else if (EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber() >= 4) {
 			
 		}
 		return null;

@@ -8,7 +8,7 @@ import org.ctp.enchantmentsolution.nms.chest.ChestPopulate_v1_13_R1;
 
 public class ChestPopulateNMS {
 	public static void populateChest(Block block) {
-		switch(EnchantmentSolution.getBukkitVersion().getVersionNumber()) {
+		switch(EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber()) {
 		case 1:
 			ChestPopulate_v1_13_R1.populateChest(block);
 			break;
@@ -20,7 +20,7 @@ public class ChestPopulateNMS {
 	}
 	
 	public static boolean isLootChest(Block block) {
-		switch(EnchantmentSolution.getBukkitVersion().getVersionNumber()) {
+		switch(EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber()) {
 		case 1:
 			return ChestPopulate_v1_13_R1.isLootChest(block);
 		case 2:
@@ -31,7 +31,7 @@ public class ChestPopulateNMS {
 	}
 	
 	public static void populateCart(Entity e) {
-		switch(EnchantmentSolution.getBukkitVersion().getVersionNumber()) {
+		switch(EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber()) {
 		case 1:
 			ChestPopulate_v1_13_R1.populateCart(e);
 			break;
@@ -43,7 +43,7 @@ public class ChestPopulateNMS {
 	}
 	
 	public static boolean isLootCart(Entity e) {
-		switch(EnchantmentSolution.getBukkitVersion().getVersionNumber()) {
+		switch(EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber()) {
 		case 1:
 			return ChestPopulate_v1_13_R1.isLootCart(e);
 		case 2:

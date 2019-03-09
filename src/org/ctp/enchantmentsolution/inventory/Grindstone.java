@@ -41,7 +41,7 @@ public class Grindstone implements InventoryData{
 	public void setInventory(List<ItemStack> items) {
 		try {
 			int size = 27;
-			if(EnchantmentSolution.getConfigFiles().useLegacyGrindstone()) {
+			if(EnchantmentSolution.getPlugin().getConfigFiles().useLegacyGrindstone()) {
 				size = 36;
 			}
 			Inventory inv = Bukkit.createInventory(null, size, ChatUtils.getMessage(getCodes(), "grindstone.name"));
@@ -122,7 +122,7 @@ public class Grindstone implements InventoryData{
 			inventory = inv;
 			player.openInventory(inv);
 			
-			if(EnchantmentSolution.getConfigFiles().useLegacyGrindstone()) {
+			if(EnchantmentSolution.getPlugin().getConfigFiles().useLegacyGrindstone()) {
 				inv.setItem(27, mirror);
 				inv.setItem(28, mirror);
 				inv.setItem(29, mirror);
@@ -220,11 +220,11 @@ public class Grindstone implements InventoryData{
 	}
 	
 	public void close(boolean external) {  
-		if(EnchantmentSolution.hasInventory(this)) {
+		if(EnchantmentSolution.getPlugin().hasInventory(this)) {
 			for(ItemStack item : getItems()){
 				ItemUtils.giveItemToPlayer(player, item, player.getLocation());
 			}
-			EnchantmentSolution.removeInventory(this);
+			EnchantmentSolution.getPlugin().removeInventory(this);
 			if(!external) {
 				player.closeInventory();
 			}

@@ -11,7 +11,7 @@ public class AnvilNMS {
 		if(item == null) {
 			return 0;
 		}
-		switch(EnchantmentSolution.getBukkitVersion().getVersionNumber()) {
+		switch(EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber()) {
 		case 1:
 			return Anvil_v1_13_R1.getRepairCost(item);
 		case 2:
@@ -22,7 +22,7 @@ public class AnvilNMS {
 	}
 	
 	public static ItemStack setRepairCost(ItemStack item, int repairCost) {
-		switch(EnchantmentSolution.getBukkitVersion().getVersionNumber()) {
+		switch(EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber()) {
 		case 1:
 			return Anvil_v1_13_R1.setRepairCost(item, repairCost);
 		case 2:

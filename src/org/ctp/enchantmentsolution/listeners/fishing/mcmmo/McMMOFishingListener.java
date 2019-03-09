@@ -15,7 +15,7 @@ public class McMMOFishingListener {
 	
 	public void add(Player player, ItemStack treasure, int treasureXp) {
 		McMMOFishingThread thread = new McMMOFishingThread(player, treasure, treasureXp, this);
-		int scheduler = Bukkit.getScheduler().scheduleSyncRepeatingTask(EnchantmentSolution.PLUGIN, thread, 20l, 20l);
+		int scheduler = Bukkit.getScheduler().scheduleSyncRepeatingTask(EnchantmentSolution.getPlugin(), thread, 20l, 20l);
 		thread.setScheduler(scheduler);
 		PLAYER_ITEMS.add(thread);
 	}

@@ -34,27 +34,27 @@ public class Enchantments {
 	}
 	
 	public static int getMaxEnchantments() {
-		return EnchantmentSolution.getConfigFiles().getDefaultConfig().getInt("max_enchantments");
+		return EnchantmentSolution.getPlugin().getConfigFiles().getDefaultConfig().getInt("max_enchantments");
 	}
 	
 	public static boolean customEnchantsDisabled() {
-		return !EnchantmentSolution.getConfigFiles().getDefaultConfig().getBoolean("level_50_enchants");
+		return !EnchantmentSolution.getPlugin().getConfigFiles().getDefaultConfig().getBoolean("level_50_enchants");
 	}
 	
 	public static int getLevelDivisor() {
-		return EnchantmentSolution.getConfigFiles().getDefaultConfig().getInt("level_divisor");
+		return EnchantmentSolution.getPlugin().getConfigFiles().getDefaultConfig().getInt("level_divisor");
 	}
 	
 	public static boolean getChestLoot(){
-		return EnchantmentSolution.getConfigFiles().getDefaultConfig().getBoolean("chest_loot");
+		return EnchantmentSolution.getPlugin().getConfigFiles().getDefaultConfig().getBoolean("chest_loot");
 	}
 	
 	public static boolean getMobLoot(){
-		return EnchantmentSolution.getConfigFiles().getDefaultConfig().getBoolean("mob_loot");
+		return EnchantmentSolution.getPlugin().getConfigFiles().getDefaultConfig().getBoolean("mob_loot");
 	}
 	
 	public static boolean getFishingLoot(){
-		return EnchantmentSolution.getConfigFiles().getDefaultConfig().getBoolean("fishing_loot");
+		return EnchantmentSolution.getPlugin().getConfigFiles().getDefaultConfig().getBoolean("fishing_loot");
 	}
 
 	public static boolean addEnchantment(CustomEnchantment enchantment) {
@@ -203,7 +203,7 @@ public class Enchantments {
 				}
 			}
 		}
-		if (EnchantmentSolution.getConfigFiles().useLevel50()) {
+		if (EnchantmentSolution.getPlugin().getConfigFiles().useLevel50()) {
 			if (bookshelves > 23)
 				bookshelves = 23;
 		} else {
@@ -480,7 +480,7 @@ public class Enchantments {
 	}
 	
 	public static boolean isRepairable(CustomEnchantment enchant) {
-		if(EnchantmentSolution.getConfigFiles().getDefaultConfig().getString("disable_enchant_method").equals("repairable")) {
+		if(EnchantmentSolution.getPlugin().getConfigFiles().getDefaultConfig().getString("disable_enchant_method").equals("repairable")) {
 			return true;
 		}
 		
@@ -598,30 +598,30 @@ public class Enchantments {
 	}
 	
 	public static int getLapisConstant() {
-		if(EnchantmentSolution.getConfigFiles().getDefaultConfig().getBoolean("use_advanced_file")) {
-			return EnchantmentSolution.getConfigFiles().getEnchantmentAdvancedConfig().getInt("lapis_modifiers.constant");
+		if(EnchantmentSolution.getPlugin().getConfigFiles().getDefaultConfig().getBoolean("use_advanced_file")) {
+			return EnchantmentSolution.getPlugin().getConfigFiles().getEnchantmentAdvancedConfig().getInt("lapis_modifiers.constant");
 		}
-		if(!EnchantmentSolution.getConfigFiles().getDefaultConfig().getBoolean("level_50_enchants")) {
+		if(!EnchantmentSolution.getPlugin().getConfigFiles().getDefaultConfig().getBoolean("level_50_enchants")) {
 			return 0;
 		}
 		return LAPIS_CONSTANT;
 	}
 	
 	public static int getLapisModifier() {
-		if(EnchantmentSolution.getConfigFiles().getDefaultConfig().getBoolean("use_advanced_file")) {
-			return EnchantmentSolution.getConfigFiles().getEnchantmentAdvancedConfig().getInt("lapis_modifiers.modifier");
+		if(EnchantmentSolution.getPlugin().getConfigFiles().getDefaultConfig().getBoolean("use_advanced_file")) {
+			return EnchantmentSolution.getPlugin().getConfigFiles().getEnchantmentAdvancedConfig().getInt("lapis_modifiers.modifier");
 		}
-		if(!EnchantmentSolution.getConfigFiles().getDefaultConfig().getBoolean("level_50_enchants")) {
+		if(!EnchantmentSolution.getPlugin().getConfigFiles().getDefaultConfig().getBoolean("level_50_enchants")) {
 			return 0;
 		}
 		return LAPIS_MODIFIER;
 	}
 	
 	public static double getMultiEnchantDivisor() {
-		if(EnchantmentSolution.getConfigFiles().getDefaultConfig().getBoolean("use_advanced_file")) {
-			return EnchantmentSolution.getConfigFiles().getEnchantmentAdvancedConfig().getDouble("multi_enchant_divisor");
+		if(EnchantmentSolution.getPlugin().getConfigFiles().getDefaultConfig().getBoolean("use_advanced_file")) {
+			return EnchantmentSolution.getPlugin().getConfigFiles().getEnchantmentAdvancedConfig().getDouble("multi_enchant_divisor");
 		}
-		if(!EnchantmentSolution.getConfigFiles().getDefaultConfig().getBoolean("level_50_enchants")) {
+		if(!EnchantmentSolution.getPlugin().getConfigFiles().getDefaultConfig().getBoolean("level_50_enchants")) {
 			return 50.0D;
 		}
 		return MULTI_ENCHANT_DIVISOR;

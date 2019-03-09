@@ -20,6 +20,7 @@ import org.ctp.enchantmentsolution.nms.Anvil_GUI_NMS;
 import org.ctp.enchantmentsolution.utils.config.YamlConfigBackup;
 import org.ctp.enchantmentsolution.utils.config.YamlInfo;
 import org.ctp.enchantmentsolution.utils.items.ItemUtils;
+import org.ctp.enchantmentsolution.utils.save.ConfigFiles;
 
 public class InventoryClickUtils {
 
@@ -95,7 +96,7 @@ public class InventoryClickUtils {
 			} else if ((slot == 31 || slot == 32) && item.getType().equals(Material.SMOOTH_STONE)) {
 				anvil.close(false);
 				Grindstone stone = new Grindstone(player, anvil.getBlock());
-				EnchantmentSolution.addInventory(stone);
+				EnchantmentSolution.getPlugin().addInventory(stone);
 				stone.setInventory();
 			} else if (anvil.getItems().contains(item)) {
 				if (anvil.removeItem(slot)) {
@@ -130,7 +131,7 @@ public class InventoryClickUtils {
 			} else if (slot == 31 && item.getType().equals(Material.ANVIL)) {
 				stone.close(false);
 				Anvil anvil = new Anvil(player, stone.getBlock());
-				EnchantmentSolution.addInventory(anvil);
+				EnchantmentSolution.getPlugin().addInventory(anvil);
 				anvil.setInventory();
 			} else if (stone.getItems().contains(item)) {
 				if (stone.removeItem(slot)) {
@@ -147,23 +148,24 @@ public class InventoryClickUtils {
 		} else {
 			ItemStack item = clickedInv.getItem(slot);
 			if(item == null) return;
+			ConfigFiles files = EnchantmentSolution.getPlugin().getConfigFiles();
 			switch(configInv.getScreen()) {
 			case LIST_FILES:
 				switch(slot) {
 				case 2:
-					configInv.listConfigDetails(EnchantmentSolution.getConfigFiles().getDefaultConfig());
+					configInv.listConfigDetails(files.getDefaultConfig());
 					break;
 				case 3:
-					configInv.listConfigDetails(EnchantmentSolution.getConfigFiles().getFishingConfig());
+					configInv.listConfigDetails(files.getFishingConfig());
 					break;
 				case 4:
-					configInv.listConfigDetails(EnchantmentSolution.getConfigFiles().getLanguageFile());
+					configInv.listConfigDetails(files.getLanguageFile());
 					break;
 				case 5:
-					configInv.listConfigDetails(EnchantmentSolution.getConfigFiles().getEnchantmentConfig());
+					configInv.listConfigDetails(files.getEnchantmentConfig());
 					break;
 				case 6:
-					configInv.listConfigDetails(EnchantmentSolution.getConfigFiles().getEnchantmentAdvancedConfig());
+					configInv.listConfigDetails(files.getEnchantmentAdvancedConfig());
 					break;
 				case 21:
 					if(!item.getType().equals(Material.BARRIER)) {
@@ -483,7 +485,7 @@ public class InventoryClickUtils {
 							}
 							if(num != null) {
 								YamlConfigBackup backup = new YamlConfigBackup(null, null);
-								List<YamlInfo> backupInfo = EnchantmentSolution.getDb().getBackup(configInv.getConfig(), Integer.parseInt(num));
+								List<YamlInfo> backupInfo = EnchantmentSolution.getPlugin().getDb().getBackup(configInv.getConfig(), Integer.parseInt(num));
 								backup.setFromBackup(backupInfo);
 								configInv.listBackupConfigDetails(configInv.getConfig(), backup, configInv.getLevel(), 1);
 							}

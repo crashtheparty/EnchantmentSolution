@@ -50,7 +50,7 @@ public class MagmaWalkerListener implements Listener, Runnable{
 								continue;
 							}
 							if((lava.getType().equals(Material.LEGACY_STATIONARY_LAVA) || lava.getType().equals(Material.LAVA)) && lava.getData() == 0){
-								lava.setMetadata("MagmaWalker", new FixedMetadataValue(EnchantmentSolution.PLUGIN, new Integer(4)));
+								lava.setMetadata("MagmaWalker", new FixedMetadataValue(EnchantmentSolution.getPlugin(), new Integer(4)));
 								lava.setType(Material.LEGACY_MAGMA);
 								MagmaWalkerListener.BLOCKS.add(lava);
 							}else if(lava.getType().equals(Material.LEGACY_MAGMA)){
@@ -58,7 +58,7 @@ public class MagmaWalkerListener implements Listener, Runnable{
 								if(values != null){
 									for(MetadataValue value : values){
 										if(value.asInt() > 0){
-											lava.setMetadata("MagmaWalker", new FixedMetadataValue(EnchantmentSolution.PLUGIN, new Integer(4)));
+											lava.setMetadata("MagmaWalker", new FixedMetadataValue(EnchantmentSolution.getPlugin(), new Integer(4)));
 										}
 									}
 								}
@@ -114,10 +114,10 @@ public class MagmaWalkerListener implements Listener, Runnable{
 							}
 						}
 						if(update){
-							block.setMetadata("MagmaWalker", new FixedMetadataValue(EnchantmentSolution.PLUGIN, new Integer(value.asInt() - 1)));
+							block.setMetadata("MagmaWalker", new FixedMetadataValue(EnchantmentSolution.getPlugin(), new Integer(value.asInt() - 1)));
 						}
 					}else{
-						block.removeMetadata("MagmaWalker", EnchantmentSolution.PLUGIN);
+						block.removeMetadata("MagmaWalker", EnchantmentSolution.getPlugin());
 						block.setType(Material.LAVA);
 						BLOCKS.remove(i);
 					}
@@ -154,10 +154,10 @@ public class MagmaWalkerListener implements Listener, Runnable{
 							}
 						}
 						if(update){
-							block.setMetadata("VoidWalker", new FixedMetadataValue(EnchantmentSolution.PLUGIN, new Integer(value.asInt() - 1)));
+							block.setMetadata("VoidWalker", new FixedMetadataValue(EnchantmentSolution.getPlugin(), new Integer(value.asInt() - 1)));
 						}
 					}else{
-						block.removeMetadata("VoidWalker", EnchantmentSolution.PLUGIN);
+						block.removeMetadata("VoidWalker", EnchantmentSolution.getPlugin());
 						block.setType(Material.AIR);
 						VoidWalkerListener.BLOCKS.remove(i);
 					}

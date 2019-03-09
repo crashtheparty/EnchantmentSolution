@@ -6,62 +6,30 @@ import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.Statistic;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerLoginEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
 
-public class UnrestListener implements Listener, Runnable {
+public class UnrestListener implements Runnable {
 
 	private static List<UnrestPlayer> HAS_UNREST = new ArrayList<UnrestPlayer>();
 	
-	@EventHandler(priority = EventPriority.LOWEST)
-	public void onPlayerLogin(PlayerLoginEvent event) {
-		if(!DefaultEnchantments.isEnabled(DefaultEnchantments.UNREST)) return;
-		Bukkit.getScheduler().runTaskLater(EnchantmentSolution.PLUGIN, new Runnable(){
-			
-			@Override
-			public void run() {
-				Player player = event.getPlayer();
-				ItemStack helmet = player.getInventory().getHelmet();
-				if(helmet != null) {
-					helmet = null;
-				}
-				UnrestPlayer unrestPlayer = new UnrestPlayer(player, helmet);
-				
-				HAS_UNREST.add(unrestPlayer);
-			}
-		}, 0l);
-		
-	}
-	
-	@EventHandler
-	public void onPlayerLogout(PlayerQuitEvent event) {
-		if(!DefaultEnchantments.isEnabled(DefaultEnchantments.UNREST)) return;
-		UnrestPlayer remove = null;
-		for(UnrestPlayer unrestPlayer : HAS_UNREST) {
-			if(unrestPlayer.getPlayer().getUniqueId().toString().equals(event.getPlayer().getUniqueId().toString())) {
-				unrestPlayer.setHelmet(null);
-				remove = unrestPlayer;
-				break;
-			}
-		}
-		if(remove != null) {
-			HAS_UNREST.remove(remove);
-		}
-	}
-
 	@Override
 	public void run() {
-		if(!DefaultEnchantments.isEnabled(DefaultEnchantments.UNREST)) return;
-		for(UnrestPlayer unrestPlayer : HAS_UNREST) {
+		if(!DefaultEnchantments.isEnabled(DefaultEnchantments.NO_REST)) return;
+		for(Player player : Bukkit.getOnlinePlayers()) {
+			if(!contains(player)) {
+				try {
+					ItemStack helmet = player.getInventory().getHelmet();
+					UnrestPlayer unrestPlayer = new UnrestPlayer(player, helmet);
+					HAS_UNREST.add(unrestPlayer);
+				} catch(Exception ex) { }
+			}
+		}
+		for(int i = HAS_UNREST.size() - 1; i >= 0; i--) {
+			UnrestPlayer unrestPlayer = HAS_UNREST.get(i);
 			Player player = unrestPlayer.getPlayer();
 			if(player != null && Bukkit.getOnlinePlayers().contains(player)) {
 				ItemStack helmet = player.getInventory().getHelmet();
@@ -76,6 +44,15 @@ public class UnrestListener implements Listener, Runnable {
 				HAS_UNREST.remove(unrestPlayer);
 			}
 		}
+	}
+	
+	private boolean contains(Player player) {
+		for(UnrestPlayer unrestPlayer : HAS_UNREST) {
+			if(unrestPlayer.getPlayer().getUniqueId().equals(player.getUniqueId())) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	protected class UnrestPlayer{

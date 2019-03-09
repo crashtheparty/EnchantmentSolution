@@ -15,41 +15,44 @@ import org.bukkit.entity.Snowball;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.player.PlayerLoginEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
-import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
 
-public class GungHoListener implements Listener{
+public class GungHoListener implements Listener, Runnable{
 
 	private static List<GungHoPlayer> PLAYERS = new ArrayList<GungHoPlayer>();
 	
-	@EventHandler
-	public static void onPlayerLogin(PlayerLoginEvent event){
+	public void run() {
 		if(!DefaultEnchantments.isEnabled(DefaultEnchantments.GUNG_HO)) return;
-		for(GungHoPlayer player : PLAYERS) {
-			if(player.getPlayer().getUniqueId().equals(event.getPlayer().getUniqueId())) {
-				return;
+		for(Player player : Bukkit.getOnlinePlayers()) {
+			if(!contains(player)) {
+				try {
+					ItemStack chestplate = player.getInventory().getChestplate();
+					GungHoPlayer gungHoPlayer = new GungHoPlayer(player, chestplate);
+					PLAYERS.add(gungHoPlayer);
+				} catch(Exception ex) { }
 			}
 		}
-		PLAYERS.add(new GungHoPlayer(event.getPlayer(), event.getPlayer().getInventory().getChestplate()));
+		for(int i = PLAYERS.size() - 1; i >= 0; i--) {
+			GungHoPlayer player = PLAYERS.get(i);
+			Player p = player.getPlayer();
+			if(p != null && Bukkit.getOnlinePlayers().contains(p)) {
+				ItemStack equips = p.getInventory().getChestplate();
+				player.setChestplate(equips);
+			} else {
+				PLAYERS.remove(player);
+			}
+		}
 	}
 	
-	@EventHandler
-	public static void onPlayerQuit(PlayerQuitEvent event){
-		if(!DefaultEnchantments.isEnabled(DefaultEnchantments.GUNG_HO)) return;
-		GungHoPlayer remove = null;
-		for(GungHoPlayer player : PLAYERS) {
-			if(player.getPlayer().getUniqueId().equals(event.getPlayer().getUniqueId())) {
-				remove = player;
-				break;
+	private boolean contains(Player player) {
+		for(GungHoPlayer gungHo : PLAYERS) {
+			if(gungHo.getPlayer().getUniqueId().equals(player.getUniqueId())) {
+				return true;
 			}
 		}
-		if(remove != null) {
-			PLAYERS.remove(remove);
-		}
+		return false;
 	}
 	
 	@EventHandler
@@ -83,18 +86,14 @@ public class GungHoListener implements Listener{
 		}
 	}
 	
-	protected static class GungHoPlayer implements Runnable{
+	protected static class GungHoPlayer{
 		
 		private Player player;
 		private ItemStack chestplate, previousChestplate;
-		private int scheduler;
 		
 		public GungHoPlayer(Player player, ItemStack chestplate) {
 			this.player = player;
 			this.chestplate = chestplate;
-			
-			int scheduler = Bukkit.getScheduler().scheduleSyncRepeatingTask(EnchantmentSolution.PLUGIN, this, 20l, 20l);
-			setScheduler(scheduler);
 		}
 
 		public Player getPlayer() {
@@ -120,16 +119,14 @@ public class GungHoListener implements Listener{
 			}
 			this.chestplate = chestplate;
 		}
-		
-		public void removeListener() {
-			Bukkit.getScheduler().cancelTask(getScheduler());
-			PLAYERS.remove(this);
-		}
 
 		private void doEquip(ItemStack item) {
 			if(Enchantments.hasEnchantment(item, DefaultEnchantments.GUNG_HO)){
 				AttributeInstance a = player.getAttribute(Attribute.GENERIC_MAX_HEALTH);
 				a.setBaseValue(a.getDefaultValue() / 2);
+				if(player.getHealth() > a.getBaseValue()) {
+					player.setHealth(a.getBaseValue());
+				}
 			}
 		}
 
@@ -137,23 +134,7 @@ public class GungHoListener implements Listener{
 			if(Enchantments.hasEnchantment(item, DefaultEnchantments.GUNG_HO)){
 				AttributeInstance a = player.getAttribute(Attribute.GENERIC_MAX_HEALTH);
 				a.setBaseValue(a.getDefaultValue());
-				if(player.getHealth() > a.getBaseValue()) {
-					player.setHealth(a.getBaseValue());
-				}
 			}
-		}
-		
-		public void run() {
-			ItemStack equips = player.getInventory().getChestplate();
-			setChestplate(equips);
-		}
-
-		public int getScheduler() {
-			return scheduler;
-		}
-
-		public void setScheduler(int scheduler) {
-			this.scheduler = scheduler;
 		}
 	}
 	

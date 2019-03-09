@@ -8,7 +8,7 @@ import org.ctp.enchantmentsolution.EnchantmentSolution;
 public abstract class CustomEnchantmentWrapper extends Enchantment{
 
 	public CustomEnchantmentWrapper(String namespace) {
-		super(new NamespacedKey(EnchantmentSolution.PLUGIN, namespace));
+		super(new NamespacedKey(EnchantmentSolution.getPlugin(), namespace));
 	}
 	
 	public CustomEnchantmentWrapper(JavaPlugin plugin, String namespace) {

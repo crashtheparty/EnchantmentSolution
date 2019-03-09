@@ -44,7 +44,7 @@ public class ChatUtils {
 	}
 	
 	private static String getStarter() {
-		String starter = ChatColor.translateAlternateColorCodes('&', EnchantmentSolution.getConfigFiles().getDefaultConfig().getString("starter"));
+		String starter = ChatColor.translateAlternateColorCodes('&', EnchantmentSolution.getPlugin().getConfigFiles().getDefaultConfig().getString("starter"));
 		if(starter != null) {
 			return starter + ChatColor.WHITE + " ";
 		}
@@ -52,7 +52,7 @@ public class ChatUtils {
 	}
 	
 	public static void sendToConsole(Level level, String message) {
-		EnchantmentSolution.PLUGIN.getLogger().log(level, message);
+		EnchantmentSolution.getPlugin().getLogger().log(level, message);
 	}
 	
 	public static void sendWarning(String message) {
@@ -70,7 +70,7 @@ public class ChatUtils {
 	public static String getMessage(HashMap<String, Object> codes, String location) {
 		String s = "";
 		try {
-			s = translateCodes(codes, ChatColor.translateAlternateColorCodes('&', EnchantmentSolution.getConfigFiles().getLanguageFile().getString(location)));
+			s = translateCodes(codes, ChatColor.translateAlternateColorCodes('&', EnchantmentSolution.getPlugin().getConfigFiles().getLanguageFile().getString(location)));
 		} catch (Exception e) {
 			
 		}
@@ -79,7 +79,7 @@ public class ChatUtils {
 	}
 	
 	public static List<String> getMessages(HashMap<String, Object> codes, String location) {
-		List<String> messages = EnchantmentSolution.getConfigFiles().getLanguageFile().getStringList(location);
+		List<String> messages = EnchantmentSolution.getPlugin().getConfigFiles().getLanguageFile().getStringList(location);
 		for(int i = 0; i < messages.size(); i++) {
 			messages.set(i, translateCodes(codes, ChatColor.translateAlternateColorCodes('&', messages.get(i))));
 		}

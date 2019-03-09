@@ -8,7 +8,7 @@ import org.ctp.eswrapper.McMMOOverhaulHandler;
 public class McMMO {
 	
 	public static void handleMcMMO(BlockBreakEvent event) {
-		switch(EnchantmentSolution.getMcMMOType()) {
+		switch(EnchantmentSolution.getPlugin().getMcMMOType()) {
 		case "Overhaul":
 			McMMOOverhaulHandler.handleMcMMO(event);
 			break;

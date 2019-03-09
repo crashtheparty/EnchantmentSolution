@@ -126,6 +126,7 @@ import org.ctp.enchantmentsolution.enchantments.wrappers.WidthPlusPlusWrapper;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.StringUtils;
 import org.ctp.enchantmentsolution.utils.config.YamlConfig;
+import org.ctp.enchantmentsolution.utils.save.ConfigFiles;
 
 public class DefaultEnchantments {
 
@@ -190,11 +191,12 @@ public class DefaultEnchantments {
 	}
 	
 	public static void setEnchantments() {
+		ConfigFiles files = EnchantmentSolution.getPlugin().getConfigFiles();
 		for (int i = 0; i < ENCHANTMENTS.size(); i++) {
-			if(EnchantmentSolution.getConfigFiles().getDefaultConfig().getBoolean("use_advanced_file")) {
+			if(files.getDefaultConfig().getBoolean("use_advanced_file")) {
 				CustomEnchantment enchantment = ENCHANTMENTS.get(i);
-				YamlConfig advanced = EnchantmentSolution.getConfigFiles().getEnchantmentAdvancedConfig();
-				YamlConfig language = EnchantmentSolution.getConfigFiles().getLanguageFile();
+				YamlConfig advanced = files.getEnchantmentAdvancedConfig();
+				YamlConfig language = files.getLanguageFile();
 				String namespace = "default_enchantments";
 				if (enchantment.getRelativeEnchantment() instanceof ApiEnchantmentWrapper) {
 					JavaPlugin plugin = ((ApiEnchantmentWrapper) enchantment.getRelativeEnchantment()).getPlugin();
@@ -251,13 +253,13 @@ public class DefaultEnchantments {
 				if(!namespace.equals("default_enchantments")) {
 					ENCHANTMENTS.get(i).setDisplayName(displayName);
 				} else {
-					ENCHANTMENTS.get(i).setDisplayName(EnchantmentSolution.getConfigFiles().getLanguage());
+					ENCHANTMENTS.get(i).setDisplayName(files.getLanguage());
 				}
 				ENCHANTMENTS.get(i).setDescription(description);
 			} else {
 				CustomEnchantment enchantment = ENCHANTMENTS.get(i);
-				YamlConfig config = EnchantmentSolution.getConfigFiles().getEnchantmentConfig();
-				YamlConfig language = EnchantmentSolution.getConfigFiles().getLanguageFile();
+				YamlConfig config = files.getEnchantmentConfig();
+				YamlConfig language = files.getLanguageFile();
 				String description = "", displayName = null;
 				if (enchantment.getRelativeEnchantment() instanceof ApiEnchantmentWrapper) {
 					JavaPlugin plugin = ((ApiEnchantmentWrapper) enchantment.getRelativeEnchantment()).getPlugin();
@@ -276,7 +278,7 @@ public class DefaultEnchantments {
 					} else {
 						ENCHANTMENTS.get(i).setEnabled(false);
 					}
-					if (EnchantmentSolution.getConfigFiles().getEnchantmentConfig().getBoolean(namespace+"."+enchantment.getName()+".treasure")) {
+					if (files.getEnchantmentConfig().getBoolean(namespace+"."+enchantment.getName()+".treasure")) {
 						ENCHANTMENTS.get(i).setTreasure(true);
 					}
 					displayName = StringUtils.decodeString(language.getString("enchantment.display_names."+namespace+"."+enchantment.getName()));
@@ -291,7 +293,7 @@ public class DefaultEnchantments {
 					} else {
 						ENCHANTMENTS.get(i).setEnabled(false);
 					}
-					if (EnchantmentSolution.getConfigFiles().getEnchantmentConfig().getBoolean("custom_enchantments."+enchantment.getName()+".treasure")) {
+					if (files.getEnchantmentConfig().getBoolean("custom_enchantments."+enchantment.getName()+".treasure")) {
 						ENCHANTMENTS.get(i).setTreasure(true);
 					}
 					displayName = StringUtils.decodeString(language.getString("enchantment.display_names.custom_enchantments."+enchantment.getName()));
@@ -304,7 +306,7 @@ public class DefaultEnchantments {
 					}
 					description = StringUtils.decodeString(language.getString("enchantment.descriptions.default_enchantments."+enchantment.getName()));
 				}
-				if(EnchantmentSolution.getConfigFiles().useLevel50()) {
+				if(files.useLevel50()) {
 					ENCHANTMENTS.get(i).setLevelFifty();
 				} else {
 					ENCHANTMENTS.get(i).setLevelThirty();
@@ -314,7 +316,7 @@ public class DefaultEnchantments {
 				if(displayName != null) {
 					ENCHANTMENTS.get(i).setDisplayName(displayName);
 				} else {
-					ENCHANTMENTS.get(i).setDisplayName(EnchantmentSolution.getConfigFiles().getLanguage());
+					ENCHANTMENTS.get(i).setDisplayName(files.getLanguage());
 				}
 				ENCHANTMENTS.get(i).setDescription(description);
 			}
@@ -354,7 +356,7 @@ public class DefaultEnchantments {
 		DefaultEnchantments.addDefaultEnchantment(new LuckOfTheSea());
 		DefaultEnchantments.addDefaultEnchantment(new Lure());
 		DefaultEnchantments.addDefaultEnchantment(new Mending());
-		if(EnchantmentSolution.getBukkitVersion().getVersionNumber() > 3) {
+		if(EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber() > 3) {
 			DefaultEnchantments.addDefaultEnchantment(new Multishot());
 			DefaultEnchantments.addDefaultEnchantment(new Piercing());
 		}
@@ -362,7 +364,7 @@ public class DefaultEnchantments {
 		DefaultEnchantments.addDefaultEnchantment(new ProjectileProtection());
 		DefaultEnchantments.addDefaultEnchantment(new Protection());
 		DefaultEnchantments.addDefaultEnchantment(new Punch());
-		if(EnchantmentSolution.getBukkitVersion().getVersionNumber() > 3) {
+		if(EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber() > 3) {
 			DefaultEnchantments.addDefaultEnchantment(new QuickCharge());
 		}
 		DefaultEnchantments.addDefaultEnchantment(new Respiration());
@@ -393,9 +395,9 @@ public class DefaultEnchantments {
 		DefaultEnchantments.addDefaultEnchantment(new MagicGuard());
 		DefaultEnchantments.addDefaultEnchantment(new MagmaWalker());
 		DefaultEnchantments.addDefaultEnchantment(new NoRest());
-		if(EnchantmentSolution.getBukkitVersion().getVersionNumber() > 3) {
+//		if(EnchantmentSolution.getBukkitVersion().getVersionNumber() > 3) {
 			DefaultEnchantments.addDefaultEnchantment(new Pillage());
-		}
+//		}
 		DefaultEnchantments.addDefaultEnchantment(new Sacrifice());
 		DefaultEnchantments.addDefaultEnchantment(new SandVeil());
 		DefaultEnchantments.addDefaultEnchantment(new ShockAspect());
@@ -404,9 +406,9 @@ public class DefaultEnchantments {
 		DefaultEnchantments.addDefaultEnchantment(new Soulbound());
 		DefaultEnchantments.addDefaultEnchantment(new SoulReaper());
 		DefaultEnchantments.addDefaultEnchantment(new SplatterFest());
-		if(EnchantmentSolution.getBukkitVersion().getVersionNumber() > 3) {
+//		if(EnchantmentSolution.getBukkitVersion().getVersionNumber() > 3) {
 			DefaultEnchantments.addDefaultEnchantment(new StoneThrow());
-		}
+//		}
 		DefaultEnchantments.addDefaultEnchantment(new Tank());
 		DefaultEnchantments.addDefaultEnchantment(new Telepathy());
 		DefaultEnchantments.addDefaultEnchantment(new Transmutation());

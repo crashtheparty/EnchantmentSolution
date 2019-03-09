@@ -56,7 +56,7 @@ public class LanguageFiles {
 			language = new YamlConfigBackup(languageFile, null);
 			
 			language.getFromConfig();
-			YamlConfig main = EnchantmentSolution.getConfigFiles().getDefaultConfig();
+			YamlConfig main = EnchantmentSolution.getPlugin().getConfigFiles().getDefaultConfig();
 			if(main.getBoolean("reset_language")) {
 				language.resetConfig();
 				main.set("reset_language", false);
@@ -94,7 +94,7 @@ public class LanguageFiles {
 	}
 	
 	private void createDefaultFiles() {
-		File dataFolder = EnchantmentSolution.PLUGIN.getDataFolder();
+		File dataFolder = EnchantmentSolution.getPlugin().getDataFolder();
 		
 		try {
 			File langs = new File(dataFolder + "/languages/");

@@ -21,7 +21,7 @@ public class PillageListener implements Listener{
 	
 	@EventHandler
 	public void onEntityDeath(EntityDeathEvent event) {
-		if(EnchantmentSolution.getBukkitVersion().getVersionNumber() > 3) {
+		if(EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber() > 3) {
 			if(!DefaultEnchantments.isEnabled(DefaultEnchantments.STONE_THROW)) return;
 			if(event.getEntity().getKiller() != null) {
 				Player player = event.getEntity().getKiller();

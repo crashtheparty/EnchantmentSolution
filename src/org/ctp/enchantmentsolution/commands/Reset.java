@@ -17,13 +17,13 @@ public class Reset implements CommandExecutor{
 		if(sender instanceof Player) {
 			player = (Player) sender;
 			if(player.hasPermission("enchantmentsolution.command.reset")) {
-				EnchantmentSolution.resetInventories();
+				EnchantmentSolution.getPlugin().resetInventories();
 				ChatUtils.sendMessage(player, ChatUtils.getMessage(ChatUtils.getCodes(), "commands.reset-inventory"));
 			} else {
 				ChatUtils.sendMessage(player, ChatUtils.getMessage(ChatUtils.getCodes(), "commands.no-permission"));
 			}
 		} else {
-			EnchantmentSolution.resetInventories();
+			EnchantmentSolution.getPlugin().resetInventories();
 			ChatUtils.sendToConsole(Level.INFO, ChatUtils.getMessage(ChatUtils.getCodes(), "commands.reset-inventory"));
 		}
 		return true;

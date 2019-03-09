@@ -14,6 +14,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
+import org.ctp.enchantmentsolution.database.SQLite;
 import org.ctp.enchantmentsolution.nms.Anvil_GUI_NMS;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.config.YamlChild;
@@ -42,18 +43,19 @@ public class ConfigInventory implements InventoryData{
 	}
 	
 	public void change() {
-		ConfigFiles files = EnchantmentSolution.getConfigFiles();
-		isChanged.put(files.getDefaultConfig(), EnchantmentSolution.getDb().isConfigDifferent(files.getDefaultConfig()));
-		isChanged.put(files.getFishingConfig(), EnchantmentSolution.getDb().isConfigDifferent(files.getFishingConfig()));
-		isChanged.put(files.getLanguageFile(), EnchantmentSolution.getDb().isConfigDifferent(files.getLanguageFile()));
-		isChanged.put(files.getEnchantmentConfig(), EnchantmentSolution.getDb().isConfigDifferent(files.getEnchantmentConfig()));
-		isChanged.put(files.getEnchantmentAdvancedConfig(), EnchantmentSolution.getDb().isConfigDifferent(files.getEnchantmentAdvancedConfig()));
+		ConfigFiles files = EnchantmentSolution.getPlugin().getConfigFiles();
+		SQLite db = EnchantmentSolution.getPlugin().getDb();
+		isChanged.put(files.getDefaultConfig(), db.isConfigDifferent(files.getDefaultConfig()));
+		isChanged.put(files.getFishingConfig(), db.isConfigDifferent(files.getFishingConfig()));
+		isChanged.put(files.getLanguageFile(), db.isConfigDifferent(files.getLanguageFile()));
+		isChanged.put(files.getEnchantmentConfig(), db.isConfigDifferent(files.getEnchantmentConfig()));
+		isChanged.put(files.getEnchantmentAdvancedConfig(), db.isConfigDifferent(files.getEnchantmentAdvancedConfig()));
 
 		hasChanged = isChanged.containsValue(true);
 	}
 	
 	public void change(YamlConfigBackup config) {
-		isChanged.put(config, EnchantmentSolution.getDb().isConfigDifferent(config));
+		isChanged.put(config, EnchantmentSolution.getPlugin().getDb().isConfigDifferent(config));
 		
 		hasChanged = isChanged.containsValue(true);
 	}
@@ -61,7 +63,7 @@ public class ConfigInventory implements InventoryData{
 	public void revert() {
 		ChatUtils.sendMessage(player, "Reverting changes made in the config UI.");
 		
-		EnchantmentSolution.getConfigFiles().revert();
+		EnchantmentSolution.getPlugin().getConfigFiles().revert();
 		
 		change();
 		listFiles();
@@ -70,7 +72,7 @@ public class ConfigInventory implements InventoryData{
 	public void saveAll() {
 		ChatUtils.sendMessage(player, "Saving changes made in the config UI.");
 		
-		EnchantmentSolution.getConfigFiles().save();
+		EnchantmentSolution.getPlugin().getConfigFiles().save();
 		
 		change();
 		listFiles();
@@ -92,35 +94,37 @@ public class ConfigInventory implements InventoryData{
 	public void listFiles() {
 		screen = Screen.LIST_FILES;
 		
+		ConfigFiles files = EnchantmentSolution.getPlugin().getConfigFiles();
+		
 		Inventory inv = Bukkit.createInventory(null, 27, "List Files");
 		
 		ItemStack configFile = new ItemStack(Material.COMMAND_BLOCK);
 		ItemMeta configFileMeta = configFile.getItemMeta();
-		configFileMeta.setDisplayName(ChatColor.GOLD + EnchantmentSolution.getConfigFiles().getDefaultConfig().getFileName());
+		configFileMeta.setDisplayName(ChatColor.GOLD + files.getDefaultConfig().getFileName());
 		configFile.setItemMeta(configFileMeta);
 		inv.setItem(2, configFile);
 		
 		ItemStack fishingFile = new ItemStack(Material.FISHING_ROD);
 		ItemMeta fishingFileMeta = fishingFile.getItemMeta();
-		fishingFileMeta.setDisplayName(ChatColor.GOLD + EnchantmentSolution.getConfigFiles().getFishingConfig().getFileName());
+		fishingFileMeta.setDisplayName(ChatColor.GOLD + files.getFishingConfig().getFileName());
 		fishingFile.setItemMeta(fishingFileMeta);
 		inv.setItem(3, fishingFile);
 		
 		ItemStack languageFile = new ItemStack(Material.BOOK);
 		ItemMeta languageFileMeta = languageFile.getItemMeta();
-		languageFileMeta.setDisplayName(ChatColor.GOLD + EnchantmentSolution.getConfigFiles().getLanguageFile().getFileName());
+		languageFileMeta.setDisplayName(ChatColor.GOLD + files.getLanguageFile().getFileName());
 		languageFile.setItemMeta(languageFileMeta);
 		inv.setItem(4, languageFile);
 		
 		ItemStack enchantmentFile = new ItemStack(Material.GOLDEN_APPLE);
 		ItemMeta enchantmentFileMeta = enchantmentFile.getItemMeta();
-		enchantmentFileMeta.setDisplayName(ChatColor.GOLD + EnchantmentSolution.getConfigFiles().getEnchantmentConfig().getFileName());
+		enchantmentFileMeta.setDisplayName(ChatColor.GOLD + files.getEnchantmentConfig().getFileName());
 		enchantmentFile.setItemMeta(enchantmentFileMeta);
 		inv.setItem(5, enchantmentFile);
 		
 		ItemStack enchantmentFileAdvanced = new ItemStack(Material.ENCHANTED_GOLDEN_APPLE);
 		ItemMeta enchantmentFileAdvancedMeta = enchantmentFileAdvanced.getItemMeta();
-		enchantmentFileAdvancedMeta.setDisplayName(ChatColor.GOLD + EnchantmentSolution.getConfigFiles().getEnchantmentAdvancedConfig().getFileName());
+		enchantmentFileAdvancedMeta.setDisplayName(ChatColor.GOLD + files.getEnchantmentAdvancedConfig().getFileName());
 		enchantmentFileAdvanced.setItemMeta(enchantmentFileAdvancedMeta);
 		inv.setItem(6, enchantmentFileAdvanced);
 		
@@ -501,7 +505,7 @@ public class ConfigInventory implements InventoryData{
 		this.backup = null;
 		this.level = null;
 		
-		List<Integer> backups = EnchantmentSolution.getDb().getBackups(config);
+		List<Integer> backups = EnchantmentSolution.getPlugin().getDb().getBackups(config);
 		if(backups == null) {
 			return;
 		}
@@ -734,7 +738,7 @@ public class ConfigInventory implements InventoryData{
 		if(!external) {
 			player.closeInventory();
 		}
-		EnchantmentSolution.removeInventory(this);
+		EnchantmentSolution.getPlugin().removeInventory(this);
 	}
 
 	@Override

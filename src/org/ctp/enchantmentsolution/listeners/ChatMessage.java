@@ -13,7 +13,7 @@ public class ChatMessage implements Listener{
 	@EventHandler
 	public void onPlayerChat(AsyncPlayerChatEvent event) {
 		Player player = event.getPlayer();
-		InventoryData inv = EnchantmentSolution.getInventory(player);
+		InventoryData inv = EnchantmentSolution.getPlugin().getInventory(player);
 		if(inv != null && inv instanceof ConfigInventory) {
 			ConfigInventory configInv = (ConfigInventory) inv;
 			if(configInv.isChat()) {
@@ -27,7 +27,7 @@ public class ChatMessage implements Listener{
 					configInv.listConfigDetails(configInv.getConfig(), configInv.getLevel(), configInv.getPage());
 				}
 			} else {
-				EnchantmentSolution.removeInventory(configInv);
+				EnchantmentSolution.getPlugin().removeInventory(configInv);
 			}
 		}
 	}

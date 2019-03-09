@@ -12,18 +12,18 @@ public interface ItemBreakType {
 	public List<Material> getBreakTypes();
 	
 	public static ItemBreakType getType(Material type) {
-		if(EnchantmentSolution.getBukkitVersion().getVersionNumber() < 4) {
+		if(EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber() < 4) {
 			return ItemBreak_v1_13.getType(type);
-		} else if (EnchantmentSolution.getBukkitVersion().getVersionNumber() >= 4) {
+		} else if (EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber() >= 4) {
 			
 		}
 		return null;
 	}
 	
 	public static List<Material> allBreakTypes(){
-		if(EnchantmentSolution.getBukkitVersion().getVersionNumber() < 4) {
+		if(EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber() < 4) {
 			return ItemBreak_v1_13.allBreakTypes();
-		} else if (EnchantmentSolution.getBukkitVersion().getVersionNumber() >= 4) {
+		} else if (EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber() >= 4) {
 			
 		}
 		return null;
