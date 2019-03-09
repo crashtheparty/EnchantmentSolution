@@ -144,7 +144,7 @@ public enum ItemType{
 	}
 	
 	private List<Material> getItemTypes(String type){
-		if(EnchantmentSolution.getBukkitVersion().getVersionNumber() < 4) {
+		if(EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber() < 4) {
 			return ItemType_v1_13.getItemTypes(type);
 		} else {
 			return null;

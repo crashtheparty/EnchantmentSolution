@@ -12,11 +12,8 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
@@ -49,7 +46,7 @@ public class VoidWalkerListener implements Listener, Runnable{
 							Location airLoc = new Location(loc.getWorld(), loc.getBlockX() + x, loc.getBlockY() - 1, loc.getBlockZ() + z);
 							Block air = airLoc.getBlock();
 							if((air.getType().equals(Material.AIR))){
-								air.setMetadata("VoidWalker", new FixedMetadataValue(EnchantmentSolution.PLUGIN, new Integer(4)));
+								air.setMetadata("VoidWalker", new FixedMetadataValue(EnchantmentSolution.getPlugin(), new Integer(4)));
 								air.setType(Material.OBSIDIAN);
 								BLOCKS.add(air);
 							}else if(air.getType().equals(Material.OBSIDIAN)){
@@ -57,7 +54,7 @@ public class VoidWalkerListener implements Listener, Runnable{
 								if(values != null){
 									for(MetadataValue value : values){
 										if(value.asInt() > 0){
-											air.setMetadata("VoidWalker", new FixedMetadataValue(EnchantmentSolution.PLUGIN, new Integer(4)));
+											air.setMetadata("VoidWalker", new FixedMetadataValue(EnchantmentSolution.getPlugin(), new Integer(4)));
 										}
 									}
 								}
@@ -76,7 +73,7 @@ public class VoidWalkerListener implements Listener, Runnable{
 							Location airLoc = new Location(loc.getWorld(), loc.getBlockX() + x, event.getTo().getBlockY() - 1, loc.getBlockZ() + z);
 							Block air = airLoc.getBlock();
 							if((air.getType().equals(Material.AIR))){
-								air.setMetadata("VoidWalker", new FixedMetadataValue(EnchantmentSolution.PLUGIN, new Integer(4)));
+								air.setMetadata("VoidWalker", new FixedMetadataValue(EnchantmentSolution.getPlugin(), new Integer(4)));
 								air.setType(Material.OBSIDIAN);
 								BLOCKS.add(air);
 							}else if(air.getType().equals(Material.OBSIDIAN)){
@@ -84,7 +81,7 @@ public class VoidWalkerListener implements Listener, Runnable{
 								if(values != null){
 									for(MetadataValue value : values){
 										if(value.asInt() > 0){
-											air.setMetadata("VoidWalker", new FixedMetadataValue(EnchantmentSolution.PLUGIN, new Integer(4)));
+											air.setMetadata("VoidWalker", new FixedMetadataValue(EnchantmentSolution.getPlugin(), new Integer(4)));
 										}
 									}
 								}
@@ -95,47 +92,21 @@ public class VoidWalkerListener implements Listener, Runnable{
 			}
 		}
 	}
-	
-	@EventHandler(priority = EventPriority.LOWEST)
-	public void onPlayerLogin(PlayerLoginEvent event) {
-		if(!DefaultEnchantments.isEnabled(DefaultEnchantments.VOID_WALKER)) return;
-		Bukkit.getScheduler().runTaskLater(EnchantmentSolution.PLUGIN, new Runnable(){
-			
-			@Override
-			public void run() {
-				Player player = event.getPlayer();
-				ItemStack boots = player.getInventory().getBoots();
-				if(boots != null) {
-					boots = null;
-				}
-				VoidWalkerPlayer voidWalkerPlayer = new VoidWalkerPlayer(player, boots);
-				
-				HAS_VOID_WALKER.add(voidWalkerPlayer);
-			}
-		}, 0l);
-		
-	}
-	
-	@EventHandler
-	public void onPlayerLogout(PlayerQuitEvent event) {
-		if(!DefaultEnchantments.isEnabled(DefaultEnchantments.VOID_WALKER)) return;
-		VoidWalkerPlayer remove = null;
-		for(VoidWalkerPlayer voidWalkerPlayer : HAS_VOID_WALKER) {
-			if(voidWalkerPlayer.getPlayer().getUniqueId().toString().equals(event.getPlayer().getUniqueId().toString())) {
-				voidWalkerPlayer.setBoots(null);
-				remove = voidWalkerPlayer;
-				break;
-			}
-		}
-		if(remove != null) {
-			HAS_VOID_WALKER.remove(remove);
-		}
-	}
 
 	@Override
 	public void run() {
 		if(!DefaultEnchantments.isEnabled(DefaultEnchantments.VOID_WALKER)) return;
-		for(VoidWalkerPlayer voidWalkerPlayer : HAS_VOID_WALKER) {
+		for(Player player : Bukkit.getOnlinePlayers()) {
+			if(!contains(player)) {
+				try {
+					ItemStack helmet = player.getInventory().getHelmet();
+					VoidWalkerPlayer voidWalkerPlayer = new VoidWalkerPlayer(player, helmet);
+					HAS_VOID_WALKER.add(voidWalkerPlayer);
+				} catch(Exception ex) { }
+			}
+		}
+		for(int v = HAS_VOID_WALKER.size() - 1; v >= 0; v--) {
+			VoidWalkerPlayer voidWalkerPlayer = HAS_VOID_WALKER.get(v);
 			Player player = voidWalkerPlayer.getPlayer();
 			if(player != null && Bukkit.getOnlinePlayers().contains(player)) {
 				ItemStack boots = player.getInventory().getBoots();
@@ -167,7 +138,7 @@ public class VoidWalkerListener implements Listener, Runnable{
 										BLOCKS.remove(i);
 										Block lower = block.getRelative(BlockFace.DOWN);
 										if((lower.getType().equals(Material.AIR))){
-											lower.setMetadata("VoidWalker", new FixedMetadataValue(EnchantmentSolution.PLUGIN, new Integer(4)));
+											lower.setMetadata("VoidWalker", new FixedMetadataValue(EnchantmentSolution.getPlugin(), new Integer(4)));
 											lower.setType(Material.OBSIDIAN);
 											BLOCKS.add(lower);
 										}
@@ -181,6 +152,15 @@ public class VoidWalkerListener implements Listener, Runnable{
 				HAS_VOID_WALKER.remove(voidWalkerPlayer);
 			}
 		}
+	}
+	
+	private boolean contains(Player player) {
+		for(VoidWalkerPlayer voidWalker : HAS_VOID_WALKER) {
+			if(voidWalker.getPlayer().getUniqueId().equals(player.getUniqueId())) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	protected class VoidWalkerPlayer{

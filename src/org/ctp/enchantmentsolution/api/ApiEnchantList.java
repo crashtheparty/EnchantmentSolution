@@ -50,11 +50,11 @@ public class ApiEnchantList {
 			DefaultEnchantments.addDefaultEnchantment(enchant);
 		}
 		
-		EnchantmentSolution.getConfigFiles().updateExternalEnchantments(plugin);
+		EnchantmentSolution.getPlugin().getConfigFiles().updateExternalEnchantments(plugin);
 		
 		DefaultEnchantments.setEnchantments();
 		
-		EnchantmentSolution.getConfigFiles().updateEnchantments();
+		EnchantmentSolution.getPlugin().getConfigFiles().updateEnchantments();
 	}
 	
 	/**

@@ -214,7 +214,7 @@ public abstract class CustomEnchantment {
 
 	public String getDisplayName() {
 		if(displayName == null)
-			return getDefaultDisplayName(EnchantmentSolution.getConfigFiles().getLanguage());
+			return getDefaultDisplayName(EnchantmentSolution.getPlugin().getConfigFiles().getLanguage());
 		return displayName;
 	}
 
@@ -249,7 +249,7 @@ public abstract class CustomEnchantment {
 	}
 
 	public boolean canEnchant(Player player, int enchantability, int level) {
-		if (EnchantmentSolution.getConfigFiles().useStartLevel() && level < getStartLevel()) {
+		if (EnchantmentSolution.getPlugin().getConfigFiles().useStartLevel() && level < getStartLevel()) {
 			return false;
 		}
 		if(getEnchantLevel(player, enchantability) > 0) {
@@ -526,7 +526,7 @@ public abstract class CustomEnchantment {
 	
 	public String getDescription() {
 		if(description == null)
-			return getDefaultDescription(EnchantmentSolution.getConfigFiles().getLanguage());
+			return getDefaultDescription(EnchantmentSolution.getPlugin().getConfigFiles().getLanguage());
 		return description;
 	}
 

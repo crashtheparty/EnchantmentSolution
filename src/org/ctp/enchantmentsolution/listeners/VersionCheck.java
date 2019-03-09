@@ -12,7 +12,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.version.PluginVersion;
 import org.ctp.enchantmentsolution.version.Version;
@@ -20,13 +19,24 @@ import org.ctp.enchantmentsolution.version.Version.VersionType;
 
 public class VersionCheck implements Listener, Runnable {
 
+	private PluginVersion version;
+	private String history, spigot, github;
+	private boolean latestVersion;
+	
+	public VersionCheck(PluginVersion version, String historyURL, String spigotURL, String githubURL, boolean getLatestVersion) {
+		setPluginVersion(version);
+		setHistory(historyURL);
+		setSpigot(spigotURL);
+		setGithub(githubURL);
+		setLatestVersion(getLatestVersion);
+	}
+	
 	@Override
 	public void run() {
-		if (EnchantmentSolution.getConfigFiles().getDefaultConfig().getBoolean("get_latest_version")) {
+		if (latestVersion) {
 			List<Version> versionHistory = new ArrayList<Version>();
 			try {
-				URL urlv = new URL(
-						"https://raw.githubusercontent.com/crashtheparty/EnchantmentSolution/master/VersionHistory");
+				URL urlv = new URL(history);
 				BufferedReader in = new BufferedReader(new InputStreamReader(urlv.openStream()));
 				String line = in.readLine();
 				while (line != null) {
@@ -52,17 +62,16 @@ public class VersionCheck implements Listener, Runnable {
 			} catch (IOException e) {
 				ChatUtils.sendToConsole(Level.WARNING, "Issue with finding newest version.");
 			}
-			PluginVersion version = EnchantmentSolution.getPluginVersion();
 			version.setPluginVersions(versionHistory);
 			if (!version.isOfficialVersion()) {
 				ChatUtils.sendToConsole(Level.WARNING,
-						"Uh oh! Plugin author forgot to update version history. Go tell them: https://www.spigotmc.org/resources/enchantment-solution.59556/");
+						"Uh oh! Plugin author forgot to update version history. Go tell them: " + spigot);
 			} else if (!version.hasNewerVersion()) {
 				ChatUtils.sendToConsole(Level.INFO, "Your version is up-to-date.");
 			} else {
-				String versionString = EnchantmentSolution.getPluginVersion().getNewestVersion();
+				String versionString = version.getNewestVersion();
 				ChatUtils.sendToConsole(Level.WARNING, (version == null ? "New Version" : "Version " + versionString)
-						+ " of EnchantmentSolution is available! Download it here: https://www.spigotmc.org/resources/enchantment-solution.59556/");
+						+ " of EnchantmentSolution is available! Download it here: " + spigot);
 			}
 		}
 	}
@@ -71,28 +80,67 @@ public class VersionCheck implements Listener, Runnable {
 	public void onPlayerJoin(PlayerJoinEvent event) {
 		Player player = event.getPlayer();
 		if (player.hasPermission("enchantmentsolution.version-updater")) {
-			PluginVersion version = EnchantmentSolution.getPluginVersion();
 			if (!version.isOfficialVersion()) {
 				ChatUtils.sendMessage(player, "Uh oh! Plugin author forgot to update version history. Go tell them: ",
-						"https://www.spigotmc.org/resources/enchantment-solution.59556/");
+						github);
 			} else if (version.hasNewerVersion()) {
 				String newest = version.getNewestVersion();
 				ChatUtils.sendMessage(player,
 						"Version " + newest + " of EnchantmentSolution is available! Download it here: ",
-						"https://www.spigotmc.org/resources/enchantment-solution.59556/");
+						spigot);
 
 			} else if (version.isExperimentalVersion()) {
 				ChatUtils.sendMessage(player,
 						"Thank you for using an experimental version of EnchantmentSolution! Please report any bugs you find to github.");
-				ChatUtils.sendMessage(player, "Link: ", "https://github.com/crashtheparty/EnchantmentSolution");
+				ChatUtils.sendMessage(player, "Link: ", github);
 				ChatUtils.sendMessage(player, "Version: " + version.getCurrent());
 			} else if (version.isUpcomingVersion()) {
 				ChatUtils.sendMessage(player,
 						"Thank you for using an upcoming version of EnchantmentSolution! Please report any bugs you find to github.");
-				ChatUtils.sendMessage(player, "Link: ", "https://github.com/crashtheparty/EnchantmentSolution");
+				ChatUtils.sendMessage(player, "Link: ", github);
 				ChatUtils.sendMessage(player, "Version: " + version.getCurrent());
 			}
 		}
+	}
+
+	public PluginVersion getPluginVersion() {
+		return version;
+	}
+
+	public void setPluginVersion(PluginVersion version) {
+		this.version = version;
+	}
+
+	public String getHistory() {
+		return history;
+	}
+
+	public void setHistory(String history) {
+		this.history = history;
+	}
+
+	public String getSpigot() {
+		return spigot;
+	}
+
+	public void setSpigot(String spigot) {
+		this.spigot = spigot;
+	}
+
+	public String getGithub() {
+		return github;
+	}
+
+	public void setGithub(String github) {
+		this.github = github;
+	}
+
+	public boolean isLatestVersion() {
+		return latestVersion;
+	}
+
+	public void setLatestVersion(boolean latestVersion) {
+		this.latestVersion = latestVersion;
 	}
 
 }

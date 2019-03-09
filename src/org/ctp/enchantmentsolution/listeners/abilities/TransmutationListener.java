@@ -77,7 +77,7 @@ public class TransmutationListener implements Listener{
 				ItemStack tridentItem = ENTITY_IDS.get(trident.getUniqueId());
 				if(tridentItem != null) {
 					HIT_ENTITY.put((LivingEntity) event.getHitEntity(), tridentItem);
-					Bukkit.getScheduler().runTaskLater(EnchantmentSolution.PLUGIN, new Runnable() {
+					Bukkit.getScheduler().runTaskLater(EnchantmentSolution.getPlugin(), new Runnable() {
 
 						@Override
 						public void run() {

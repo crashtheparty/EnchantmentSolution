@@ -120,7 +120,7 @@ public class ConfigFiles {
 	
 	public void revert(YamlConfigBackup config, int backup) {
 		config.revert();
-		List<YamlInfo> info = EnchantmentSolution.getDb().getBackup(config, backup);
+		List<YamlInfo> info = EnchantmentSolution.getPlugin().getDb().getBackup(config, backup);
 		for(YamlInfo i : info) {
 			if(i.getValue() != null) {
 				config.set(i.getPath(), i.getValue());
@@ -147,11 +147,11 @@ public class ConfigFiles {
 		PlayerLevels.resetPlayerLevels();
 		updateEnchantments();
 		
-		EnchantmentSolution.getDb().updateConfig(getDefaultConfig());
-		EnchantmentSolution.getDb().updateConfig(getFishingConfig());
-		EnchantmentSolution.getDb().updateConfig(getLanguageFile());
-		EnchantmentSolution.getDb().updateConfig(getEnchantmentConfig());
-		EnchantmentSolution.getDb().updateConfig(getEnchantmentAdvancedConfig());
+		EnchantmentSolution.getPlugin().getDb().updateConfig(getDefaultConfig());
+		EnchantmentSolution.getPlugin().getDb().updateConfig(getFishingConfig());
+		EnchantmentSolution.getPlugin().getDb().updateConfig(getLanguageFile());
+		EnchantmentSolution.getPlugin().getDb().updateConfig(getEnchantmentConfig());
+		EnchantmentSolution.getPlugin().getDb().updateConfig(getEnchantmentAdvancedConfig());
 	}
 	
 	public void reload() {
@@ -204,7 +204,7 @@ public class ConfigFiles {
 		config.addDefault("use_advanced_file", false, new String[] {"Use enchantments_advanced.yml as the enchantment config."});
 		config.addDefault("default_anvil_use", false, new String[] {"Allow default use of anvil GUI via option at bottom right of custom GUI.", 
 				"Using this feature MAY REMOVE CUSTOM ENCHANTMENTS FROM ITEMS on accident. Should only be true if anvil is used for custom recipes."});
-		if(EnchantmentSolution.getBukkitVersion().getVersionNumber() < 4) {
+		if(EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber() < 4) {
 			config.addDefault("use_grindstone", false, new String[] {"Use the grindstone from within the anvil in version < 1.14"});
 		}
 		config.addDefault("update_legacy_enchantments", false, new String[] {"Update any enchantments generated in EnchantmentSolutionLegacy"});
@@ -235,7 +235,7 @@ public class ConfigFiles {
 		config.addDefault("loots.underwater_ruin_small.bookshelves", 0);
 		config.addDefault("loots.underwater_ruin_small.levels", 0);
 		config.addDefault("loots.underwater_ruin_small.treasure", true);
-		if(EnchantmentSolution.getBukkitVersion().getVersionNumber() > 3) {
+		if(EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber() > 3) {
 			config.addDefault("loots.pillager_outpost.bookshelves", 10);
 			config.addDefault("loots.pillager_outpost.levels", 1);
 			config.addDefault("loots.pillager_outpost.treasure", true);
@@ -423,8 +423,8 @@ public class ConfigFiles {
 		enchantmentAdvanced.saveConfig();
 		loadLangFile(dataFolder);
 		
-		EnchantmentSolution.getDb().updateConfig(getEnchantmentConfig());
-		EnchantmentSolution.getDb().updateConfig(getEnchantmentAdvancedConfig());
+		EnchantmentSolution.getPlugin().getDb().updateConfig(getEnchantmentConfig());
+		EnchantmentSolution.getPlugin().getDb().updateConfig(getEnchantmentAdvancedConfig());
 	}
 	
 	private void walkerConfig() {
@@ -602,7 +602,7 @@ public class ConfigFiles {
 	}
 	
 	public boolean useLegacyGrindstone() {
-		if(EnchantmentSolution.getBukkitVersion().getVersionNumber() < 4) {
+		if(EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber() < 4) {
 			return config.getBoolean("use_grindstone");
 		}
 		return false;

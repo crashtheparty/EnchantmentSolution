@@ -15,7 +15,7 @@ public class StoneThrowListener implements Listener{
 	
 	@EventHandler
 	public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
-		if(EnchantmentSolution.getBukkitVersion().getVersionNumber() > 3) {
+		if(EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber() > 3) {
 			if(!DefaultEnchantments.isEnabled(DefaultEnchantments.STONE_THROW)) return;
 			switch(event.getEntity().getType()) {
 			case BAT:

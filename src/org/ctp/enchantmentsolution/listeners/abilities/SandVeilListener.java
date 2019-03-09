@@ -59,7 +59,7 @@ public class SandVeilListener implements Listener{
 					}
 					if(ea == null) {
 						ea = new EntityAccuracy(entity, accuracy);
-						int scheduler = Bukkit.getScheduler().scheduleSyncRepeatingTask(EnchantmentSolution.PLUGIN, ea, 1l, 1l);
+						int scheduler = Bukkit.getScheduler().scheduleSyncRepeatingTask(EnchantmentSolution.getPlugin(), ea, 1l, 1l);
 						ea.setScheduler(scheduler);
 						ENTITIES.add(ea);
 					} else {

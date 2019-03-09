@@ -127,7 +127,7 @@ public class TelepathyListener implements Listener {
 			}
 		}
 		McMMO.handleMcMMO(event);
-		event.getPlayer().giveExp(event.getExpToDrop());
+		AbilityUtils.giveExperience(player, event.getExpToDrop());
 		event.getBlock().setType(Material.AIR);
 	}
 	

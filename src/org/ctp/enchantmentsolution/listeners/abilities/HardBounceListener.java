@@ -29,7 +29,7 @@ public class HardBounceListener implements Listener{
 				}
 				if(shield != null && Enchantments.hasEnchantment(shield, DefaultEnchantments.HARD_BOUNCE)) {
 					int level = Enchantments.getLevel(shield, DefaultEnchantments.HARD_BOUNCE);
-					Bukkit.getScheduler().runTaskLater(EnchantmentSolution.PLUGIN, new Runnable() {
+					Bukkit.getScheduler().runTaskLater(EnchantmentSolution.getPlugin(), new Runnable() {
 						@Override
 						public void run() {
 							Vector v = p.getVelocity().clone();

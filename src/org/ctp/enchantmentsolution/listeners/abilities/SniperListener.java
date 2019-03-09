@@ -26,7 +26,7 @@ public class SniperListener implements Listener{
 				if(bow != null && Enchantments.hasEnchantment(bow, DefaultEnchantments.SNIPER)){
 					int level = Enchantments.getLevel(bow, DefaultEnchantments.SNIPER);
 					double speed = 1 + (0.1 * level * level);
-					Bukkit.getScheduler().runTaskLater(EnchantmentSolution.PLUGIN, new Runnable(){
+					Bukkit.getScheduler().runTaskLater(EnchantmentSolution.getPlugin(), new Runnable(){
 						@Override
 						public void run() {
 							arrow.setVelocity(arrow.getVelocity().multiply(speed));

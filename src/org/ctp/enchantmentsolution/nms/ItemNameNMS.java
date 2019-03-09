@@ -13,7 +13,7 @@ public class ItemNameNMS {
 	public static String returnLocalizedItemName(Language language, ItemStack item) {
 		switch(language) {
 		case GERMAN:
-			switch(EnchantmentSolution.getBukkitVersion().getVersionNumber()) {
+			switch(EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber()) {
 			case 1:
 			case 2:
 			case 3:
@@ -21,7 +21,7 @@ public class ItemNameNMS {
 			}
 			break;
 		case US:
-			switch(EnchantmentSolution.getBukkitVersion().getVersionNumber()) {
+			switch(EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber()) {
 			case 1:
 				return ItemName_v1_13_R1.returnLocalizedItemName(item);
 			case 2:

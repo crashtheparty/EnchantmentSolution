@@ -141,12 +141,12 @@ public class ItemUtils {
 		
 		List<EnchantmentLevel> enchants = null;
 		while(enchants == null) {
-			int bookshelves = EnchantmentSolution.getConfigFiles().getBookshelvesFromType(type);
-			boolean treasure = EnchantmentSolution.getConfigFiles().includeTreasureFromType(type);
+			int bookshelves = EnchantmentSolution.getPlugin().getConfigFiles().getBookshelvesFromType(type);
+			boolean treasure = EnchantmentSolution.getPlugin().getConfigFiles().includeTreasureFromType(type);
 			PlayerLevels levels = PlayerLevels.generateFakePlayerLevels(returnItem.getType(), bookshelves, treasure);
 			int i = 0;
 			while(i < 3) {
-				int random = (int)(Math.random() * levels.getEnchants().size() + EnchantmentSolution.getConfigFiles().getLevelFromType(type));
+				int random = (int)(Math.random() * levels.getEnchants().size() + EnchantmentSolution.getPlugin().getConfigFiles().getLevelFromType(type));
 				if(random > levels.getEnchants().size() - 1) random = levels.getEnchants().size() - 1;
 				if(levels.getEnchants().get(random).size() > 0) {
 					enchants = levels.getEnchants().get(random);

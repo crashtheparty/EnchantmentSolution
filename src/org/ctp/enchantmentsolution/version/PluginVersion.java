@@ -3,14 +3,17 @@ package org.ctp.enchantmentsolution.version;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.version.Version.VersionType;
 
 public class PluginVersion {
 	
 	private List<Version> pluginVersions = new ArrayList<Version>();
-	private String current = EnchantmentSolution.PLUGIN.getDescription().getVersion();
+	private String current;
 
+	public PluginVersion(String version) {
+		current = version;
+	}
+	
 	public String getCurrent() {
 		return current;
 	}

@@ -8,7 +8,7 @@ import org.ctp.enchantmentsolution.nms.damage.DamageEvent_v1_13_R1;
 public class DamageEvent {
 	
 	public static void damageEntity(LivingEntity entity, String cause, float damage) {
-		switch(EnchantmentSolution.getBukkitVersion().getVersionNumber()) {
+		switch(EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber()) {
 		case 1:
 			DamageEvent_v1_13_R1.damageEntity(entity, cause, damage);
 			break;
