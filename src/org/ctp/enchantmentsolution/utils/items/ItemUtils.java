@@ -12,6 +12,7 @@ import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.util.Vector;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
@@ -101,6 +102,10 @@ public class ItemUtils {
 		
 		ItemMeta firstMeta = first.getItemMeta();
 		ItemMeta combinedMeta = combined.getItemMeta();
+		
+		if(firstMeta instanceof LeatherArmorMeta && combinedMeta instanceof LeatherArmorMeta) {
+			((LeatherArmorMeta) combinedMeta).setColor(((LeatherArmorMeta) firstMeta).getColor());
+		}
 		
 		combinedMeta.setDisplayName(firstMeta.getDisplayName());
 		combinedMeta.setLocalizedName(firstMeta.getLocalizedName());

@@ -11,17 +11,18 @@ import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
 
-public class WarpListener implements Listener{
+public class WarpListener extends EnchantmentListener{
 	
-	@EventHandler
+	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onEntityDamageByEntityEvent(EntityDamageByEntityEvent event){
-		if(!DefaultEnchantments.isEnabled(DefaultEnchantments.WARP)) return;
+		if(!canRun(DefaultEnchantments.WARP, event)) return;
+		if(event.getDamage() == 0) return;
 		Entity attacked = event.getEntity();
 		if(attacked instanceof LivingEntity){
 			LivingEntity player = (LivingEntity) attacked;

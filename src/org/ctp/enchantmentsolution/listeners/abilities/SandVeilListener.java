@@ -10,20 +10,19 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
 
-public class SandVeilListener implements Listener{
+public class SandVeilListener extends EnchantmentListener{
 	
 	private static List<EntityAccuracy> ENTITIES = new ArrayList<EntityAccuracy>();
 	
 	@EventHandler
 	public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
-		if(!DefaultEnchantments.isEnabled(DefaultEnchantments.SAND_VEIL)) return;
+		if(!canRun(DefaultEnchantments.SAND_VEIL, event)) return;
 		Entity damager = event.getDamager();
 		if(damager instanceof Projectile) {
 			damager = (Entity) ((Projectile) damager).getShooter();

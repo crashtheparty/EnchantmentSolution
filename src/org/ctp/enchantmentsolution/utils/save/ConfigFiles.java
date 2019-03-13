@@ -1,7 +1,10 @@
 package org.ctp.enchantmentsolution.utils.save;
 
 import java.io.File;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 
@@ -27,9 +30,9 @@ import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 
 public class ConfigFiles {
 
-	private File walkerFile, mainFile, fishingFile, enchantmentFile, enchantmentAdvancedFile;
+	private File abilityFile, mainFile, fishingFile, enchantmentFile, enchantmentAdvancedFile;
 	private File dataFolder;
-	private YamlConfig walkerConfig;
+	private YamlConfig abilityConfig;
 	private YamlConfigBackup config, fishing, enchantment, enchantmentAdvanced;
 	private LanguageFiles languageFiles;
 	
@@ -45,8 +48,8 @@ public class ConfigFiles {
 		return fishing;
 	}
 	
-	public YamlConfig getWalkerConfig() {
-		return walkerConfig;
+	public YamlConfig getAbilityConfig() {
+		return abilityConfig;
 	}
 	
 	public YamlConfigBackup getLanguageFile() {
@@ -70,12 +73,12 @@ public class ConfigFiles {
 			if (!extras.exists()) {
 				extras.mkdirs();
 			}
-			walkerFile = new File(dataFolder + "/extras/walker-enchantments.yml");
-			if (!walkerFile.exists()) {
-				walkerFile.createNewFile();
+			abilityFile = new File(dataFolder + "/extras/ability-enchantments.yml");
+			if (!abilityFile.exists()) {
+				abilityFile.createNewFile();
 			}
-			YamlConfiguration.loadConfiguration(walkerFile);
-			walkerConfig();
+			YamlConfiguration.loadConfiguration(abilityFile);
+			abilityConfig();
 		} catch (final Exception e) {
 			e.printStackTrace();
 		}
@@ -242,6 +245,19 @@ public class ConfigFiles {
 		}
 		config.addDefault("use_comments", true, new String[] {"Show helpful comments in the config files"});
 		config.addDefault("get_latest_version", true, new String[] {"Check github for updates to the plugin"});
+		
+		DateFormat month = new SimpleDateFormat("M");
+		DateFormat day = new SimpleDateFormat("dd");
+		Date date = new Date();
+		try {
+			Integer monthInt = Integer.parseInt(month.format(date));
+			Integer dayInt = Integer.parseInt(day.format(date));
+			if(monthInt == 4 && dayInt == 1) {
+				config.addDefault("april_fools_day", true, new String[] {"Enable the April Fools Day gag"});
+			} else {
+				config.removeKey("april_fools_day");
+			}
+		} catch (Exception ex) {}
 		
 		config.saveConfig();
 
@@ -427,15 +443,15 @@ public class ConfigFiles {
 		EnchantmentSolution.getPlugin().getDb().updateConfig(getEnchantmentAdvancedConfig());
 	}
 	
-	private void walkerConfig() {
-		ChatUtils.sendInfo("Loading walker enchantment file...");
-		walkerConfig = new YamlConfig(walkerFile, new String[0]);
+	private void abilityConfig() {
+		ChatUtils.sendInfo("Loading ability enchantment file...");
+		abilityConfig = new YamlConfig(abilityFile, new String[0]);
 		
-		walkerConfig.getFromConfig();
+		abilityConfig.getFromConfig();
 		
-		walkerConfig.saveConfig();
+		abilityConfig.saveConfig();
 
-		ChatUtils.sendInfo("Walker enchantment file initialized!");
+		ChatUtils.sendInfo("Ability enchantment file initialized!");
 	}
 	
 	private void mcMMOFishing() {
@@ -634,6 +650,23 @@ public class ConfigFiles {
 	
 	public Language getLanguage() {
 		return Language.getLanguage(config.getString("language"));
+	}
+	
+	public boolean getAprilFools() {
+		DateFormat month = new SimpleDateFormat("M");
+		DateFormat day = new SimpleDateFormat("dd");
+		Date date = new Date();
+		
+		try {
+			Integer monthInt = Integer.parseInt(month.format(date));
+			Integer dayInt = Integer.parseInt(day.format(date));
+			if(monthInt == 4 && dayInt == 1) {
+				return config.getBoolean("april_fools_day");
+			} else {
+				return false;
+			}
+		} catch (Exception ex) {}
+		return false;
 	}
  
 }

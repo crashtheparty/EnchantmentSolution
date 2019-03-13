@@ -10,7 +10,6 @@ import org.bukkit.Sound;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
@@ -18,13 +17,13 @@ import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
 import org.ctp.enchantmentsolution.utils.items.DamageUtils;
 
-public class IcarusListener implements Listener, Runnable{
+public class IcarusListener extends EnchantmentListener implements Runnable{
 
 	public static List<IcarusDelay> ICARUS_DELAY = new ArrayList<IcarusDelay>();
 	
 	@EventHandler
 	public void onPlayerMoveEvent(PlayerMoveEvent event) {
-		if(!DefaultEnchantments.isEnabled(DefaultEnchantments.ICARUS)) return;
+		if(!canRun(DefaultEnchantments.ICARUS, event)) return;
 		Player player = event.getPlayer();
 		ItemStack chestplate = player.getInventory().getChestplate();
 		if(chestplate != null && chestplate.getType().equals(Material.ELYTRA) && player.isGliding() && 

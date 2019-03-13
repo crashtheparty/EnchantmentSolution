@@ -1,17 +1,16 @@
 package org.ctp.enchantmentsolution.listeners.abilities;
 
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerItemDamageEvent;
 import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
 
-public class TankListener implements Listener{
+public class TankListener extends EnchantmentListener{
 
 	@EventHandler
 	public void onItemDamage(PlayerItemDamageEvent event) {
-		if(!DefaultEnchantments.isEnabled(DefaultEnchantments.TANK)) return;
+		if(!canRun(DefaultEnchantments.TANK, event)) return;
 		ItemStack item = event.getItem();
 		if(Enchantments.hasEnchantment(item, DefaultEnchantments.TANK)) {
 			int level = Enchantments.getLevel(item, DefaultEnchantments.TANK);

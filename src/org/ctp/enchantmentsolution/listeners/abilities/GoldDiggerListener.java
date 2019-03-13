@@ -1,27 +1,23 @@
 package org.ctp.enchantmentsolution.listeners.abilities;
 
-import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.Sound;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
 import org.ctp.enchantmentsolution.utils.items.nms.AbilityUtils;
-import org.ctp.enchantmentsolution.utils.items.DamageUtils;
 
-public class GoldDiggerListener implements Listener {
+public class GoldDiggerListener extends EnchantmentListener {
 
 	@EventHandler
 	public void onBlockBreak(BlockBreakEvent event) {
-		if(!DefaultEnchantments.isEnabled(DefaultEnchantments.GOLD_DIGGER)) return;
+		if(!canRun(DefaultEnchantments.GOLD_DIGGER, event)) return;
+		if(event.isCancelled()) return;
 		Player player = event.getPlayer();
 		ItemStack item = player.getInventory().getItemInMainHand();
 		if (item != null) {
@@ -37,17 +33,7 @@ public class GoldDiggerListener implements Listener {
 								loc,
 								goldDigger);
 						droppedItem.setVelocity(new Vector(0,0,0));
-						if(player.getGameMode().equals(GameMode.CREATIVE)) return;
-						int unbreaking = Enchantments.getLevel(item, Enchantment.DURABILITY);
-						double chance = (1.0D) / (unbreaking + 1.0D);
-						double random = Math.random();
-						if(chance > random) {
-							DamageUtils.setDamage(item, DamageUtils.getDamage(item.getItemMeta()) + 1);
-							if(DamageUtils.getDamage(item.getItemMeta()) > item.getType().getMaxDurability()) {
-								player.getInventory().setItemInMainHand(new ItemStack(Material.AIR));
-								player.getWorld().playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 1, 1);
-							}
-						}
+						super.damageItem(player, item);
 					}
 				}
 			}

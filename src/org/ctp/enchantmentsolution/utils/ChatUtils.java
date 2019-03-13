@@ -20,7 +20,9 @@ import org.ctp.enchantmentsolution.EnchantmentSolution;
 public class ChatUtils {
 
 	public static void sendMessage(Player player, String message) {
-		player.sendMessage(getStarter() + message);
+		if(message != null && !message.trim().equals("")) {
+			player.sendMessage(getStarter() + message);
+		}
 	}
 	
 	public static void sendMessage(Player player, String message, String url) {

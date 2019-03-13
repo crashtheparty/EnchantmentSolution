@@ -10,18 +10,17 @@ import org.bukkit.entity.Skeleton;
 import org.bukkit.entity.WitherSkeleton;
 import org.bukkit.entity.Zombie;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
 
-public class BeheadingListener implements Listener{
+public class BeheadingListener extends EnchantmentListener{
 
 	@EventHandler
 	public void onEntityDeath(EntityDeathEvent event){
-		if(!DefaultEnchantments.isEnabled(DefaultEnchantments.BEHEADING)) return;
+		if(!canRun(DefaultEnchantments.BEHEADING, event)) return;
 		Entity entity = event.getEntity();
 		Player killer = event.getEntity().getKiller();
 		if(killer != null){

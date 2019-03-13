@@ -5,18 +5,17 @@ import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
 
-public class SniperListener implements Listener{
+public class SniperListener extends EnchantmentListener{
 	
 	@EventHandler
 	public void onProjectileLaunch(ProjectileLaunchEvent event){
-		if(!DefaultEnchantments.isEnabled(DefaultEnchantments.SNIPER)) return;
+		if(!canRun(DefaultEnchantments.SNIPER, event)) return;
 		Projectile proj = event.getEntity();
 		if(proj instanceof Arrow){
 			Arrow arrow = (Arrow) proj;
