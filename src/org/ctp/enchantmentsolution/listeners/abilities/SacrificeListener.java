@@ -5,18 +5,17 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
 
-public class SacrificeListener implements Listener{
+public class SacrificeListener extends EnchantmentListener{
 
 	@EventHandler
 	public void onDeath(PlayerDeathEvent event) {
-		if(!DefaultEnchantments.isEnabled(DefaultEnchantments.SACRIFICE)) return;
+		if(!canRun(DefaultEnchantments.SACRIFICE, event)) return;
 		Player player = event.getEntity();
 		ItemStack chest = player.getInventory().getChestplate();
 		if(chest != null) {

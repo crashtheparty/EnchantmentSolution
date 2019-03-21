@@ -23,7 +23,7 @@ import org.ctp.enchantmentsolution.enchantments.EnchantmentLevel;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
 import org.ctp.enchantmentsolution.enchantments.PlayerLevels;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
-import org.ctp.enchantmentsolution.utils.RomanNumerals;
+import org.ctp.enchantmentsolution.utils.StringUtils;
 import org.ctp.enchantmentsolution.utils.save.ConfigFiles;
 import org.ctp.enchantmentsolution.utils.ItemSerialization;
 import org.ctp.enchantmentsolution.utils.ItemUtils;
@@ -234,7 +234,7 @@ public class EnchantmentTable implements InventoryData {
 							levelReq = ChatUtils.getMessage(loreCodes, "table.level-cost-lack");
 						}
 						loreCodes.remove("%levelReq%");
-						loreCodes.put("%enchant%", RomanNumerals.returnEnchantmentName(enchants
+						loreCodes.put("%enchant%", StringUtils.returnEnchantmentName(enchants
 								.get(0).getEnchant(), enchants.get(0)
 								.getLevel()));
 						bookMeta.setLore(Arrays.asList(

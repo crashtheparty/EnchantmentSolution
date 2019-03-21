@@ -1,12 +1,10 @@
 package org.ctp.enchantmentsolution;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -19,33 +17,9 @@ import org.ctp.enchantmentsolution.commands.Reset;
 import org.ctp.enchantmentsolution.commands.UnsafeEnchant;
 import org.ctp.enchantmentsolution.database.SQLite;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
-import org.ctp.enchantmentsolution.enchantments.EnchantmentLevel;
 import org.ctp.enchantmentsolution.inventory.InventoryData;
-import org.ctp.enchantmentsolution.listeners.BlockBreak;
-import org.ctp.enchantmentsolution.listeners.ChatMessage;
-import org.ctp.enchantmentsolution.listeners.InventoryClick;
-import org.ctp.enchantmentsolution.listeners.InventoryClose;
-import org.ctp.enchantmentsolution.listeners.PlayerChatTabComplete;
-import org.ctp.enchantmentsolution.listeners.PlayerInteract;
-import org.ctp.enchantmentsolution.listeners.VanishListener;
-import org.ctp.enchantmentsolution.listeners.VersionCheck;
-import org.ctp.enchantmentsolution.listeners.abilities.BeheadingListener;
-import org.ctp.enchantmentsolution.listeners.abilities.BrineListener;
-import org.ctp.enchantmentsolution.listeners.abilities.DrownedListener;
-import org.ctp.enchantmentsolution.listeners.abilities.ExpShareListener;
-import org.ctp.enchantmentsolution.listeners.abilities.FishingListener;
-import org.ctp.enchantmentsolution.listeners.abilities.FrequentFlyerListener;
-import org.ctp.enchantmentsolution.listeners.abilities.KnockUpListener;
-import org.ctp.enchantmentsolution.listeners.abilities.LifeListener;
-import org.ctp.enchantmentsolution.listeners.abilities.MagmaWalkerListener;
-import org.ctp.enchantmentsolution.listeners.abilities.SacrificeListener;
-import org.ctp.enchantmentsolution.listeners.abilities.ShockAspectListener;
-import org.ctp.enchantmentsolution.listeners.abilities.SmelteryListener;
-import org.ctp.enchantmentsolution.listeners.abilities.SniperListener;
-import org.ctp.enchantmentsolution.listeners.abilities.SoulboundListener;
-import org.ctp.enchantmentsolution.listeners.abilities.TankListener;
-import org.ctp.enchantmentsolution.listeners.abilities.TelepathyListener;
-import org.ctp.enchantmentsolution.listeners.abilities.WarpListener;
+import org.ctp.enchantmentsolution.listeners.*;
+import org.ctp.enchantmentsolution.listeners.abilities.*;
 import org.ctp.enchantmentsolution.listeners.chestloot.ChestLootListener;
 import org.ctp.enchantmentsolution.listeners.fishing.EnchantsFishingListener;
 import org.ctp.enchantmentsolution.listeners.fishing.McMMOFishingNMS;
@@ -60,7 +34,6 @@ public class EnchantmentSolution extends JavaPlugin {
 
 	public static EnchantmentSolution PLUGIN;
 	public static List<InventoryData> INVENTORIES = new ArrayList<InventoryData>();
-	public static HashMap<Material, HashMap<List<EnchantmentLevel>, Integer>> DEBUG = new HashMap<Material, HashMap<List<EnchantmentLevel>, Integer>>();
 	public static boolean NEWEST_VERSION = true, DISABLE = false;
 	private static SQLite DB;
 	private static String MCMMO_TYPE;
@@ -110,8 +83,6 @@ public class EnchantmentSolution extends JavaPlugin {
 				this);
 		getServer().getPluginManager().registerEvents(new BeheadingListener(),
 				this);
-		getServer().getPluginManager().registerEvents(new LifeListener(null),
-				this);
 		getServer().getPluginManager().registerEvents(new WarpListener(), this);
 		getServer().getPluginManager().registerEvents(new ExpShareListener(),
 				this);
@@ -126,10 +97,10 @@ public class EnchantmentSolution extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new SacrificeListener(),
 				this);
 		getServer().getPluginManager().registerEvents(new FishingListener(), this);
-		getServer().getPluginManager().registerEvents(new FrequentFlyerListener(), this);
 		getServer().getPluginManager().registerEvents(new TankListener(), this);
 		getServer().getPluginManager().registerEvents(new BrineListener(), this);
 		getServer().getPluginManager().registerEvents(new DrownedListener(), this);
+		getServer().getPluginManager().registerEvents(new CurseOfLagListener(), this);
 		getServer().getPluginManager().registerEvents(new ChestLootListener(), this);
 		getServer().getPluginManager().registerEvents(new MobSpawning(), this);
 		getServer().getPluginManager().registerEvents(new VanishListener(), this);
@@ -182,9 +153,11 @@ public class EnchantmentSolution extends JavaPlugin {
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN,
 				new MagmaWalkerListener(), 20l, 20l);
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN,
-				new FrequentFlyerListener(), 20l, 20l);
+				new FrequentFlyerListener(), 1l, 1l);
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN,
 						new DrownedListener(), 1l, 1l);
+		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN,
+				new LifeListener(), 1l, 1l);
 
 		getCommand("Enchant").setExecutor(new Enchant());
 		getCommand("Info").setExecutor(new EnchantInfo());

@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
@@ -15,13 +14,13 @@ import org.ctp.enchantmentsolution.enchantments.Enchantments;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.ItemUtils;
 
-public class SoulboundListener implements Listener{
+public class SoulboundListener extends EnchantmentListener{
 	
 	public static HashMap<String, List<ItemStack>> SOUL_ITEMS = new HashMap<>();
 	
 	@EventHandler
 	public void onPlayerDeath(PlayerDeathEvent event){
-		if(!DefaultEnchantments.isEnabled(DefaultEnchantments.SOULBOUND)) return;
+		if(!canRun(DefaultEnchantments.SOULBOUND, event)) return;
 		List<ItemStack> items = event.getDrops();
 		List<ItemStack> newItems = new ArrayList<ItemStack>();
 		List<ItemStack> playerItems = new ArrayList<ItemStack>();
@@ -53,6 +52,7 @@ public class SoulboundListener implements Listener{
 	
 	@EventHandler
 	public void onPlayerRespawn(PlayerRespawnEvent event){
+		if(!canRun(DefaultEnchantments.SOULBOUND, event)) return;
 		Player player = event.getPlayer();
 		
 		if(SOUL_ITEMS.get(player.getUniqueId().toString()) != null){

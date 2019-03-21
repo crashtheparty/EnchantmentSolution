@@ -12,6 +12,7 @@ import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.util.Vector;
 import org.ctp.enchantmentsolution.enchantments.EnchantmentLevel;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
@@ -20,16 +21,17 @@ import org.ctp.enchantmentsolution.utils.AnvilUtils.RepairType;
 import org.ctp.enchantmentsolution.utils.save.ConfigFiles;
 
 public class ItemUtils {
-	
+
 	private static HashMap<String, List<Material>> ITEM_TYPES = setItemTypes();
 	private static HashMap<Material, List<Material>> REPAIR_TYPES = setRepairTypes();
-	private static List<Material> REPAIR_MATERIALS = Arrays.asList(Material.DIAMOND, Material.IRON_INGOT, Material.GOLD_INGOT, Material.COBBLESTONE, Material.ACACIA_PLANKS, Material.BIRCH_PLANKS, Material.DARK_OAK_PLANKS, Material.JUNGLE_PLANKS, Material.OAK_PLANKS, Material.DARK_OAK_PLANKS, Material.LEATHER, Material.PHANTOM_MEMBRANE, Material.STRING);
-
+	private static List<Material> REPAIR_MATERIALS = Arrays.asList(Material.DIAMOND, Material.IRON_INGOT, Material.GOLD_INGOT, Material.COBBLESTONE, 
+			Material.ACACIA_PLANKS, Material.BIRCH_PLANKS, Material.DARK_OAK_PLANKS, Material.JUNGLE_PLANKS, Material.OAK_PLANKS, Material.DARK_OAK_PLANKS, 
+			Material.LEATHER, Material.PHANTOM_MEMBRANE, Material.STRING);
 	private static List<Material> SHULKER_BOXES = Arrays.asList(Material.BLACK_SHULKER_BOX, Material.BLUE_SHULKER_BOX, Material.BROWN_SHULKER_BOX,
 			Material.CYAN_SHULKER_BOX, Material.GRAY_SHULKER_BOX, Material.GREEN_SHULKER_BOX, Material.LIGHT_BLUE_SHULKER_BOX, Material.LIME_SHULKER_BOX,
 			Material.MAGENTA_SHULKER_BOX, Material.ORANGE_SHULKER_BOX, Material.PINK_SHULKER_BOX, Material.PURPLE_SHULKER_BOX, Material.RED_SHULKER_BOX,
 			Material.LIGHT_GRAY_SHULKER_BOX, Material.WHITE_SHULKER_BOX, Material.YELLOW_SHULKER_BOX, Material.SHULKER_BOX);
-
+	
 	private static HashMap<String, List<Material>> setItemTypes() {
 		HashMap<String, List<Material>> itemTypes = new HashMap<String, List<Material>>();
 		List<Material> helmets = new ArrayList<Material>();
@@ -334,6 +336,10 @@ public class ItemUtils {
 		ItemMeta firstMeta = first.getItemMeta();
 		ItemMeta combinedMeta = combined.getItemMeta();
 		
+		if(firstMeta instanceof LeatherArmorMeta && combinedMeta instanceof LeatherArmorMeta) {
+			((LeatherArmorMeta) combinedMeta).setColor(((LeatherArmorMeta) firstMeta).getColor());
+		}
+		
 		combinedMeta.setDisplayName(firstMeta.getDisplayName());
 		combinedMeta.setLocalizedName(firstMeta.getLocalizedName());
 		
@@ -373,7 +379,8 @@ public class ItemUtils {
 		List<EnchantmentLevel> enchants = null;
 		while(enchants == null) {
 			int bookshelves = ConfigFiles.getBookshelvesFromType(type);
-			PlayerLevels levels = PlayerLevels.generateFakePlayerLevels(returnItem.getType(), bookshelves);
+			boolean treasure = ConfigFiles.includeTreasureFromType(type);
+			PlayerLevels levels = PlayerLevels.generateFakePlayerLevels(returnItem.getType(), bookshelves, treasure);
 			int i = 0;
 			while(i < 3) {
 				int random = (int)(Math.random() * levels.getEnchants().size() + ConfigFiles.getLevelFromType(type));

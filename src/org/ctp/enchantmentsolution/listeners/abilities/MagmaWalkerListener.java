@@ -11,7 +11,6 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -23,14 +22,14 @@ import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
 import org.ctp.enchantmentsolution.utils.LocationUtils;
 
-public class MagmaWalkerListener implements Listener, Runnable{
+public class MagmaWalkerListener extends EnchantmentListener implements Runnable{
 	
 	public static List<Block> BLOCKS = new ArrayList<Block>();
 
 	@SuppressWarnings("deprecation")
 	@EventHandler
 	public void onPlayerMove(PlayerMoveEvent event){
-		if(!DefaultEnchantments.isEnabled(DefaultEnchantments.MAGMA_WALKER)) return;
+		if(!canRun(DefaultEnchantments.MAGMA_WALKER, event)) return;
 		Player player = event.getPlayer();
 		Location loc = player.getLocation();
 		if(player.isFlying() || player.isGliding() || player.isInsideVehicle() || !(player.isOnGround())){
@@ -40,7 +39,7 @@ public class MagmaWalkerListener implements Listener, Runnable{
 		if(event.getTo().getX() != loc.getX() && event.getTo().getZ() != loc.getZ()){
 			if(boots != null){
 				if(Enchantments.hasEnchantment(boots, DefaultEnchantments.MAGMA_WALKER)){
-					int radius = 2 + Enchantments.getLevel(boots, DefaultEnchantments.MAGMA_WALKER);
+					int radius = 1 + Enchantments.getLevel(boots, DefaultEnchantments.MAGMA_WALKER);
 					for(int x = -radius; x <= radius; x++){
 						for(int z = -radius; z <= radius; z++){
 							Location lavaLoc = new Location(loc.getWorld(), loc.getBlockX() + x, loc.getBlockY() - 1, loc.getBlockZ() + z);
@@ -72,7 +71,7 @@ public class MagmaWalkerListener implements Listener, Runnable{
 	
 	@EventHandler
 	public void onEntityDamage(EntityDamageEvent event) {
-		if(!DefaultEnchantments.isEnabled(DefaultEnchantments.MAGMA_WALKER)) return;
+		if(!canRun(DefaultEnchantments.MAGMA_WALKER, event)) return;
 		if(event.getCause().equals(DamageCause.HOT_FLOOR)) {
 			Entity entity = event.getEntity();
 			if(entity instanceof LivingEntity) {
@@ -85,7 +84,6 @@ public class MagmaWalkerListener implements Listener, Runnable{
 		}
 	}
 
-	@Override
 	public void run() {
 		for(int i = BLOCKS.size() - 1; i >= 0; i--){
 			Block block = BLOCKS.get(i);

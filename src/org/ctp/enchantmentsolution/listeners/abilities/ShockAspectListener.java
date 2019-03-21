@@ -5,17 +5,18 @@ import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
 
-public class ShockAspectListener implements Listener{
+public class ShockAspectListener extends EnchantmentListener{
 
-	@EventHandler
+	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onEntityDamageByEntityEvent(EntityDamageByEntityEvent event){
-		if(!DefaultEnchantments.isEnabled(DefaultEnchantments.SHOCK_ASPECT)) return;
+		if(!canRun(DefaultEnchantments.SHOCK_ASPECT, event)) return;
+		if(event.getDamage() == 0) return;
 		Entity entity = event.getDamager();
 		if(entity instanceof Player){
 			Player player = (Player) entity;

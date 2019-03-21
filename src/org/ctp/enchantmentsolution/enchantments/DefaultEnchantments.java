@@ -4,104 +4,36 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.enchantments.Enchantment;
-import org.ctp.enchantmentsolution.enchantments.custom.Angler;
-import org.ctp.enchantmentsolution.enchantments.custom.Beheading;
-import org.ctp.enchantmentsolution.enchantments.custom.Brine;
-import org.ctp.enchantmentsolution.enchantments.custom.Drowned;
-import org.ctp.enchantmentsolution.enchantments.custom.ExpShare;
-import org.ctp.enchantmentsolution.enchantments.custom.FrequentFlyer;
-import org.ctp.enchantmentsolution.enchantments.custom.Fried;
-import org.ctp.enchantmentsolution.enchantments.custom.KnockUp;
-import org.ctp.enchantmentsolution.enchantments.custom.Life;
-import org.ctp.enchantmentsolution.enchantments.custom.MagmaWalker;
-import org.ctp.enchantmentsolution.enchantments.custom.Sacrifice;
-import org.ctp.enchantmentsolution.enchantments.custom.ShockAspect;
-import org.ctp.enchantmentsolution.enchantments.custom.Smeltery;
-import org.ctp.enchantmentsolution.enchantments.custom.Sniper;
-import org.ctp.enchantmentsolution.enchantments.custom.SoulReaper;
-import org.ctp.enchantmentsolution.enchantments.custom.Soulbound;
-import org.ctp.enchantmentsolution.enchantments.custom.Tank;
-import org.ctp.enchantmentsolution.enchantments.custom.Telepathy;
-import org.ctp.enchantmentsolution.enchantments.custom.Warp;
-import org.ctp.enchantmentsolution.enchantments.vanilla.AquaAffinity;
-import org.ctp.enchantmentsolution.enchantments.vanilla.BaneOfArthropods;
-import org.ctp.enchantmentsolution.enchantments.vanilla.BlastProtection;
-import org.ctp.enchantmentsolution.enchantments.vanilla.Channeling;
-import org.ctp.enchantmentsolution.enchantments.vanilla.CurseOfBinding;
-import org.ctp.enchantmentsolution.enchantments.vanilla.CurseOfVanishing;
-import org.ctp.enchantmentsolution.enchantments.vanilla.DepthStrider;
-import org.ctp.enchantmentsolution.enchantments.vanilla.Efficiency;
-import org.ctp.enchantmentsolution.enchantments.vanilla.FeatherFalling;
-import org.ctp.enchantmentsolution.enchantments.vanilla.FireAspect;
-import org.ctp.enchantmentsolution.enchantments.vanilla.FireProtection;
-import org.ctp.enchantmentsolution.enchantments.vanilla.Flame;
-import org.ctp.enchantmentsolution.enchantments.vanilla.Fortune;
-import org.ctp.enchantmentsolution.enchantments.vanilla.FrostWalker;
-import org.ctp.enchantmentsolution.enchantments.vanilla.Impaling;
-import org.ctp.enchantmentsolution.enchantments.vanilla.Infinity;
-import org.ctp.enchantmentsolution.enchantments.vanilla.Knockback;
-import org.ctp.enchantmentsolution.enchantments.vanilla.Looting;
-import org.ctp.enchantmentsolution.enchantments.vanilla.Loyalty;
-import org.ctp.enchantmentsolution.enchantments.vanilla.LuckOfTheSea;
-import org.ctp.enchantmentsolution.enchantments.vanilla.Lure;
-import org.ctp.enchantmentsolution.enchantments.vanilla.Mending;
-import org.ctp.enchantmentsolution.enchantments.vanilla.Power;
-import org.ctp.enchantmentsolution.enchantments.vanilla.ProjectileProtection;
-import org.ctp.enchantmentsolution.enchantments.vanilla.Protection;
-import org.ctp.enchantmentsolution.enchantments.vanilla.Punch;
-import org.ctp.enchantmentsolution.enchantments.vanilla.Respiration;
-import org.ctp.enchantmentsolution.enchantments.vanilla.Riptide;
-import org.ctp.enchantmentsolution.enchantments.vanilla.Sharpness;
-import org.ctp.enchantmentsolution.enchantments.vanilla.SilkTouch;
-import org.ctp.enchantmentsolution.enchantments.vanilla.Smite;
-import org.ctp.enchantmentsolution.enchantments.vanilla.SweepingEdge;
-import org.ctp.enchantmentsolution.enchantments.vanilla.Thorns;
-import org.ctp.enchantmentsolution.enchantments.vanilla.Unbreaking;
-import org.ctp.enchantmentsolution.enchantments.wrappers.AnglerWrapper;
-import org.ctp.enchantmentsolution.enchantments.wrappers.BeheadingWrapper;
-import org.ctp.enchantmentsolution.enchantments.wrappers.BrineWrapper;
-import org.ctp.enchantmentsolution.enchantments.wrappers.CustomEnchantmentWrapper;
-import org.ctp.enchantmentsolution.enchantments.wrappers.DrownedWrapper;
-import org.ctp.enchantmentsolution.enchantments.wrappers.ExpShareWrapper;
-import org.ctp.enchantmentsolution.enchantments.wrappers.FrequentFlyerWrapper;
-import org.ctp.enchantmentsolution.enchantments.wrappers.FriedWrapper;
-import org.ctp.enchantmentsolution.enchantments.wrappers.KnockUpWrapper;
-import org.ctp.enchantmentsolution.enchantments.wrappers.LifeWrapper;
-import org.ctp.enchantmentsolution.enchantments.wrappers.MagmaWalkerWrapper;
-import org.ctp.enchantmentsolution.enchantments.wrappers.SacrificeWrapper;
-import org.ctp.enchantmentsolution.enchantments.wrappers.ShockAspectWrapper;
-import org.ctp.enchantmentsolution.enchantments.wrappers.SmelteryWrapper;
-import org.ctp.enchantmentsolution.enchantments.wrappers.SniperWrapper;
-import org.ctp.enchantmentsolution.enchantments.wrappers.SoulReaperWrapper;
-import org.ctp.enchantmentsolution.enchantments.wrappers.SoulboundWrapper;
-import org.ctp.enchantmentsolution.enchantments.wrappers.TankWrapper;
-import org.ctp.enchantmentsolution.enchantments.wrappers.TelepathyWrapper;
-import org.ctp.enchantmentsolution.enchantments.wrappers.WarpWrapper;
+import org.ctp.enchantmentsolution.enchantments.custom.*;
+import org.ctp.enchantmentsolution.enchantments.vanilla.*;
+import org.ctp.enchantmentsolution.enchantments.wrappers.*;
 import org.ctp.enchantmentsolution.utils.config.YamlConfig;
 import org.ctp.enchantmentsolution.utils.save.ConfigFiles;
 
 public class DefaultEnchantments {
+
 	private static List<CustomEnchantment> ENCHANTMENTS = new ArrayList<CustomEnchantment>();
 	
-	public static Enchantment SOULBOUND = new SoulboundWrapper();
-	public static Enchantment SOUL_REAPER = new SoulReaperWrapper();
-	public static Enchantment SHOCK_ASPECT = new ShockAspectWrapper();
-	public static Enchantment LIFE = new LifeWrapper();
-	public static Enchantment BEHEADING = new BeheadingWrapper();
-	public static Enchantment KNOCKUP = new KnockUpWrapper();
-	public static Enchantment WARP = new WarpWrapper();
-	public static Enchantment EXP_SHARE = new ExpShareWrapper();
-	public static Enchantment MAGMA_WALKER = new MagmaWalkerWrapper();
-	public static Enchantment SNIPER = new SniperWrapper();
-	public static Enchantment TELEPATHY = new TelepathyWrapper();
-	public static Enchantment SMELTERY = new SmelteryWrapper();
-	public static Enchantment SACRIFICE = new SacrificeWrapper();
-	public static Enchantment ANGLER = new AnglerWrapper();
-	public static Enchantment FRIED = new FriedWrapper();
-	public static Enchantment FREQUENT_FLYER = new FrequentFlyerWrapper();
-	public static Enchantment TANK = new TankWrapper();
-	public static Enchantment BRINE = new BrineWrapper();
-	public static Enchantment DROWNED = new DrownedWrapper();
+	public static final Enchantment SOULBOUND = new SoulboundWrapper();
+	public static final Enchantment SOUL_REAPER = new SoulReaperWrapper();
+	public static final Enchantment SHOCK_ASPECT = new ShockAspectWrapper();
+	public static final Enchantment LIFE = new LifeWrapper();
+	public static final Enchantment BEHEADING = new BeheadingWrapper();
+	public static final Enchantment KNOCKUP = new KnockUpWrapper();
+	public static final Enchantment WARP = new WarpWrapper();
+	public static final Enchantment EXP_SHARE = new ExpShareWrapper();
+	public static final Enchantment MAGMA_WALKER = new MagmaWalkerWrapper();
+	public static final Enchantment SNIPER = new SniperWrapper();
+	public static final Enchantment TELEPATHY = new TelepathyWrapper();
+	public static final Enchantment SMELTERY = new SmelteryWrapper();
+	public static final Enchantment SACRIFICE = new SacrificeWrapper();
+	public static final Enchantment ANGLER = new AnglerWrapper();
+	public static final Enchantment FRIED = new FriedWrapper();
+	public static final Enchantment FREQUENT_FLYER = new FrequentFlyerWrapper();
+	public static final Enchantment TANK = new TankWrapper();
+	public static final Enchantment BRINE = new BrineWrapper();
+	public static final Enchantment DROWNED = new DrownedWrapper();
+	public static final Enchantment CURSE_OF_LAG = new CurseOfLagWrapper();
 
 	public static List<CustomEnchantment> getEnchantments() {
 		return ENCHANTMENTS;
@@ -233,25 +165,42 @@ public class DefaultEnchantments {
 		DefaultEnchantments.addDefaultEnchantment(new SweepingEdge());
 		DefaultEnchantments.addDefaultEnchantment(new Thorns());
 		DefaultEnchantments.addDefaultEnchantment(new Unbreaking());
-		
-		DefaultEnchantments.addDefaultEnchantment(new Soulbound());
-		DefaultEnchantments.addDefaultEnchantment(new SoulReaper());
-		DefaultEnchantments.addDefaultEnchantment(new ShockAspect());
+
+		DefaultEnchantments.addDefaultEnchantment(new Angler());
 		DefaultEnchantments.addDefaultEnchantment(new Beheading());
+		DefaultEnchantments.addDefaultEnchantment(new Brine());
+		DefaultEnchantments.addDefaultEnchantment(new Drowned());
+		DefaultEnchantments.addDefaultEnchantment(new ExpShare());
+		DefaultEnchantments.addDefaultEnchantment(new FrequentFlyer());
+		DefaultEnchantments.addDefaultEnchantment(new Fried());
 		DefaultEnchantments.addDefaultEnchantment(new KnockUp());
 		DefaultEnchantments.addDefaultEnchantment(new Life());
-		DefaultEnchantments.addDefaultEnchantment(new Warp());
-		DefaultEnchantments.addDefaultEnchantment(new ExpShare());
-		DefaultEnchantments.addDefaultEnchantment(new Sniper());
-		DefaultEnchantments.addDefaultEnchantment(new Telepathy());
-		DefaultEnchantments.addDefaultEnchantment(new Smeltery());
-		DefaultEnchantments.addDefaultEnchantment(new Sacrifice());
-		DefaultEnchantments.addDefaultEnchantment(new Angler());
-		DefaultEnchantments.addDefaultEnchantment(new Fried());
-		DefaultEnchantments.addDefaultEnchantment(new FrequentFlyer());
-		DefaultEnchantments.addDefaultEnchantment(new Tank());
-		DefaultEnchantments.addDefaultEnchantment(new Brine());
 		DefaultEnchantments.addDefaultEnchantment(new MagmaWalker());
-		DefaultEnchantments.addDefaultEnchantment(new Drowned());
+		DefaultEnchantments.addDefaultEnchantment(new Sacrifice());
+		DefaultEnchantments.addDefaultEnchantment(new ShockAspect());
+		DefaultEnchantments.addDefaultEnchantment(new Smeltery());
+		DefaultEnchantments.addDefaultEnchantment(new Sniper());
+		DefaultEnchantments.addDefaultEnchantment(new Soulbound());
+		DefaultEnchantments.addDefaultEnchantment(new SoulReaper());
+		DefaultEnchantments.addDefaultEnchantment(new Tank());
+		DefaultEnchantments.addDefaultEnchantment(new Telepathy());
+		DefaultEnchantments.addDefaultEnchantment(new Warp());
+	}
+	
+	public static List<String> getEnchantmentNames(){
+		List<String> names = new ArrayList<String>();
+		for(CustomEnchantment enchant : getEnchantments()) {
+			names.add(enchant.getName());
+		}
+		return names;
+	}
+	
+	public static CustomEnchantment getByName(String name) {
+		for(CustomEnchantment enchant : getEnchantments()) {
+			if(enchant.getName().equalsIgnoreCase(name)) {
+				return enchant;
+			}
+		}
+		return null;
 	}
 }

@@ -17,7 +17,6 @@ import org.bukkit.entity.Projectile;
 import org.bukkit.entity.Trident;
 import org.bukkit.entity.WaterMob;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
@@ -27,7 +26,7 @@ import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
 import org.ctp.enchantmentsolution.nms.DamageEvent;
 
-public class DrownedListener implements Listener, Runnable{
+public class DrownedListener extends EnchantmentListener implements Runnable{
 	
 	private static List<DrownedEntity> ENTITIES = new ArrayList<DrownedEntity>();
 	
@@ -35,14 +34,14 @@ public class DrownedListener implements Listener, Runnable{
 	
 	@EventHandler
 	public void onProjectileLaunch(ProjectileLaunchEvent event){
-		if(!DefaultEnchantments.isEnabled(DefaultEnchantments.DROWNED)) return;
+		if(!canRun(DefaultEnchantments.DROWNED, event)) return;
 		Projectile proj = event.getEntity();
 		if(proj instanceof Trident){
 			Trident trident = (Trident) proj;
 			if(trident.getShooter() instanceof Player){
 				Player player = (Player) trident.getShooter();
 				ItemStack tridentItem = player.getInventory().getItemInMainHand();
-				if(trident != null) {
+				if(tridentItem != null) {
 					ENTITY_IDS.put(trident.getUniqueId(), tridentItem);
 				}
 			}
@@ -51,7 +50,7 @@ public class DrownedListener implements Listener, Runnable{
 	
 	@EventHandler
 	public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
-		if(!DefaultEnchantments.isEnabled(DefaultEnchantments.DROWNED)) return;
+		if(!canRun(DefaultEnchantments.DROWNED, event)) return;
 		if(event.getDamager() instanceof Trident) {
 			Trident trident = (Trident) event.getDamager();
 			if(ENTITY_IDS.containsKey(trident.getUniqueId())) {
@@ -87,7 +86,7 @@ public class DrownedListener implements Listener, Runnable{
 	
 	@EventHandler
 	public void onProjectileHit(ProjectileHitEvent event) {
-		if(!DefaultEnchantments.isEnabled(DefaultEnchantments.DROWNED)) return;
+		if(!canRun(DefaultEnchantments.DROWNED, event)) return;
 		if(event.getHitEntity() != null) return;
 		if(ENTITY_IDS.containsKey(event.getEntity().getUniqueId())) {
 			ENTITY_IDS.remove(event.getEntity().getUniqueId());
@@ -96,7 +95,7 @@ public class DrownedListener implements Listener, Runnable{
 	
 	@EventHandler
 	public void onEntityDeath(EntityDeathEvent event) {
-		if(!DefaultEnchantments.isEnabled(DefaultEnchantments.DROWNED)) return;
+		if(!canRun(DefaultEnchantments.DROWNED, event)) return;
 		for(int i = ENTITIES.size() - 1; i >= 0; i--) {
 			DrownedEntity entity = ENTITIES.get(i);
 			if(entity.getEntity().equals(event.getEntity())) {

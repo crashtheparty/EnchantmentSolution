@@ -4,7 +4,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
@@ -12,11 +11,11 @@ import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
 
-public class KnockUpListener implements Listener{
+public class KnockUpListener extends EnchantmentListener{
 
 	@EventHandler
 	public void onEntityDamageByEntity(EntityDamageByEntityEvent event){
-		if(!DefaultEnchantments.isEnabled(DefaultEnchantments.KNOCKUP)) return;
+		if(!canRun(DefaultEnchantments.KNOCKUP, event)) return;
 		Entity attacker = event.getDamager();
 		Entity attacked = event.getEntity();
 		if(attacker instanceof Player){

@@ -14,7 +14,7 @@ import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.ctp.enchantmentsolution.enchantments.EnchantmentLevel;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
-import org.ctp.enchantmentsolution.utils.RomanNumerals;
+import org.ctp.enchantmentsolution.utils.StringUtils;
 
 public class UpdateEnchantments implements Listener{
 
@@ -43,7 +43,7 @@ public class UpdateEnchantments implements Listener{
 						List<EnchantmentLevel> levels = new ArrayList<EnchantmentLevel>();
 						for(String s : lore) {
 							String enchantment = ChatColor.stripColor(s);
-							EnchantmentLevel level = RomanNumerals.returnEnchantmentLevel(enchantment, meta);
+							EnchantmentLevel level = StringUtils.returnEnchantmentLevel(enchantment, meta);
 							if(level != null) {
 								levels.add(level);
 							}

@@ -37,7 +37,7 @@ public class PlayerLevels {
 		PLAYER_LEVELS.put(this, levelList);
 	}
 	
-	private PlayerLevels(int books, Material material) {
+	private PlayerLevels(int books, Material material, boolean treasure) {
 		this.books = books;
 		this.player = null;
 		this.material = material;
@@ -52,7 +52,7 @@ public class PlayerLevels {
 			}
 		}
 		
-		generateEnchants(levelList, true);
+		generateEnchants(levelList, treasure);
 	}
 	
 	
@@ -213,12 +213,12 @@ public class PlayerLevels {
 		PLAYER_LEVELS = playerLevels;
 	}
 	
-	public static PlayerLevels generateFakePlayerLevels(Material material, int minBookshelves) {
+	public static PlayerLevels generateFakePlayerLevels(Material material, int minBookshelves, boolean treasure) {
 		int books = 16;
 		if(ConfigFiles.useLevel50()) books = 24;
 		int random = (int)(Math.random() * books) + minBookshelves;
 		if(random >= books) random = books - 1;
-		PlayerLevels levels = new PlayerLevels(random, material);
+		PlayerLevels levels = new PlayerLevels(random, material, treasure);
 		
 		if(ConfigFiles.useLevel50() && random < 15) {
 			while(levels.enchants.size() > 3) {

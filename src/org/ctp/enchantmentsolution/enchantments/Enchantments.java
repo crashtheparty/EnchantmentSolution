@@ -19,7 +19,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.ctp.enchantmentsolution.enchantments.wrappers.CustomEnchantmentWrapper;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.ItemUtils;
-import org.ctp.enchantmentsolution.utils.RomanNumerals;
+import org.ctp.enchantmentsolution.utils.StringUtils;
 import org.ctp.enchantmentsolution.utils.save.ConfigFiles;
 
 public class Enchantments {
@@ -261,6 +261,7 @@ public class Enchantments {
 		}
 		ItemMeta meta = item.getItemMeta();
 		List<String> lore = meta.getLore();
+		List<String> previousLore = meta.getLore();
 		if(lore == null){
 			lore = new ArrayList<String>();
 		}
@@ -274,8 +275,15 @@ public class Enchantments {
 				}
 			}
 			if(enchant != null && enchant.getRelativeEnchantment() instanceof CustomEnchantmentWrapper){
-				String enchName = RomanNumerals.returnEnchantmentName(enchant, level.getLevel());
-				lore.add(ChatColor.RESET + "" + ChatColor.GRAY + enchName);
+				String enchName = StringUtils.returnEnchantmentName(enchant, level.getLevel());
+				lore.add(ChatUtils.hideText("solution") + "" + ChatColor.GRAY + enchName);
+			}
+		}
+		if(previousLore != null) {
+			for(String l : previousLore) {
+				if(!StringUtils.isEnchantment(l)) {
+					lore.add(l);
+				}
 			}
 		}
 		meta.setLore(lore);
@@ -289,12 +297,15 @@ public class Enchantments {
 		if(lore == null){
 			lore = new ArrayList<String>();
 		}
-		if(Enchantments.hasEnchantment(item, enchantment.getRelativeEnchantment())){
-			String enchName = ChatColor.RESET + "" + ChatColor.GRAY + RomanNumerals.returnEnchantmentName(enchantment, meta.getEnchantLevel(enchantment.getRelativeEnchantment()));
-			meta.removeEnchant(enchantment.getRelativeEnchantment());
-			while(lore.contains(enchName)) {
-				lore.remove(enchName);
+		List<String> previousLore = new ArrayList<String>();
+		for(String l : lore) {
+			if(!StringUtils.isEnchantment(l)) {
+				previousLore.add(l);
 			}
+		}
+		if(Enchantments.hasEnchantment(item, enchantment.getRelativeEnchantment())){
+			StringUtils.removeEnchantment(enchantment, meta.getEnchantLevel(enchantment.getRelativeEnchantment()), lore);
+			meta.removeEnchant(enchantment.getRelativeEnchantment());
 		}
 		meta.addEnchant(enchantment.getRelativeEnchantment(), level, true);
 		CustomEnchantment enchant = null;
@@ -305,9 +316,10 @@ public class Enchantments {
 			}
 		}
 		if(enchant != null && enchant.getRelativeEnchantment() instanceof CustomEnchantmentWrapper){
-			String enchName = RomanNumerals.returnEnchantmentName(enchant, level);
-			lore.add(ChatColor.RESET + "" + ChatColor.GRAY + enchName);
+			String enchName = StringUtils.returnEnchantmentName(enchant, level);
+			lore.add(ChatUtils.hideText("solution") + "" + ChatColor.GRAY + enchName);
 		}
+		lore.addAll(previousLore);
 		meta.setLore(lore);
 		item.setItemMeta(meta);
 		return item;
@@ -320,10 +332,24 @@ public class Enchantments {
 			lore = new ArrayList<String>();
 		}
 		if(Enchantments.hasEnchantment(item, enchantment.getRelativeEnchantment())){
-			String enchName = ChatColor.RESET + "" + ChatColor.GRAY + RomanNumerals.returnEnchantmentName(enchantment, meta.getEnchantLevel(enchantment.getRelativeEnchantment()));
+			StringUtils.removeEnchantment(enchantment, meta.getEnchantLevel(enchantment.getRelativeEnchantment()), lore);
 			meta.removeEnchant(enchantment.getRelativeEnchantment());
-			while(lore.contains(enchName)) {
-				lore.remove(enchName);
+		}
+		meta.setLore(lore);
+		item.setItemMeta(meta);
+		return item;
+	}
+	
+	public static ItemStack removeAllEnchantments(ItemStack item) {
+		ItemMeta meta = item.getItemMeta();
+		List<String> lore = meta.getLore();
+		if(lore == null){
+			lore = new ArrayList<String>();
+		}
+		for(CustomEnchantment enchantment : DefaultEnchantments.getEnchantments()) {
+			if(Enchantments.hasEnchantment(item, enchantment.getRelativeEnchantment())){
+				StringUtils.removeEnchantment(enchantment, meta.getEnchantLevel(enchantment.getRelativeEnchantment()), lore);
+				meta.removeEnchant(enchantment.getRelativeEnchantment());
 			}
 		}
 		meta.setLore(lore);
@@ -455,7 +481,7 @@ public class Enchantments {
 		return cost;
 	}
 	
-	private static boolean isRepairable(CustomEnchantment enchant) {
+	public static boolean isRepairable(CustomEnchantment enchant) {
 		if(ConfigFiles.getDefaultConfig().getString("disable_enchant_method").equals("repairable")) {
 			return true;
 		}
