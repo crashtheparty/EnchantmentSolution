@@ -90,7 +90,7 @@ public class FrequentFlyerListener implements Runnable{
 		public void setElytra(ItemStack elytra) {
 			boolean reset = false;
 			
-			if(elytra != null && previousElytra != null && elytra.toString().equalsIgnoreCase(previousElytra.toString())) {
+			if(elytra != null && previousElytra != null && !elytra.toString().equalsIgnoreCase(previousElytra.toString())) {
 				reset = true;
 			}
 			setElytra(elytra, reset);
