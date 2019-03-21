@@ -12,7 +12,6 @@ import org.bukkit.Material;
 import org.bukkit.entity.AreaEffectCloud;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
@@ -28,7 +27,7 @@ import org.bukkit.potion.PotionType;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
 
-public class MagicGuardListener implements Listener, Runnable{
+public class MagicGuardListener extends EnchantmentListener implements Runnable{
 	
 	private static List<PotionEffectType> BAD_POTIONS = Arrays.asList(PotionEffectType.BLINDNESS, PotionEffectType.CONFUSION, PotionEffectType.HARM,
 			PotionEffectType.HUNGER, PotionEffectType.POISON, PotionEffectType.SLOW, PotionEffectType.SLOW_DIGGING, PotionEffectType.UNLUCK,
@@ -36,7 +35,7 @@ public class MagicGuardListener implements Listener, Runnable{
 	
 	@EventHandler
 	public void onPotionSplash(PotionSplashEvent event) {
-		if(!DefaultEnchantments.isEnabled(DefaultEnchantments.MAGIC_GUARD)) return;
+		if(!canRun(DefaultEnchantments.MAGIC_GUARD, event)) return;
 		try {
 			Field eventField = PotionSplashEvent.class.getDeclaredField("affectedEntities");
 			eventField.setAccessible(true);
@@ -67,7 +66,7 @@ public class MagicGuardListener implements Listener, Runnable{
 	
 	@EventHandler
 	public void onEntityDamage(EntityDamageEvent event) {
-		if(!DefaultEnchantments.isEnabled(DefaultEnchantments.MAGIC_GUARD)) return;
+		if(!canRun(DefaultEnchantments.MAGIC_GUARD, event)) return;
 		if(event.getCause().equals(DamageCause.MAGIC) || event.getCause().equals(DamageCause.POISON)) {
 			if(event.getEntity() instanceof Player) {
 				Player player = (Player) event.getEntity();
@@ -83,7 +82,7 @@ public class MagicGuardListener implements Listener, Runnable{
 	
 	@EventHandler
 	public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
-		if(!DefaultEnchantments.isEnabled(DefaultEnchantments.MAGIC_GUARD)) return;
+		if(!canRun(DefaultEnchantments.MAGIC_GUARD, event)) return;
 		if(event.getDamager() instanceof AreaEffectCloud) {
 			if(event.getEntity() instanceof Player) {
 				Player player = (Player) event.getEntity();
@@ -99,6 +98,7 @@ public class MagicGuardListener implements Listener, Runnable{
 	
 	@EventHandler
 	public void onPlayerItemConsume(PlayerItemConsumeEvent event) {
+		if(!canRun(DefaultEnchantments.MAGIC_GUARD, event)) return;
 		ItemStack item = event.getItem();
 		ItemMeta meta = item.getItemMeta();
 		if(meta instanceof PotionMeta) {

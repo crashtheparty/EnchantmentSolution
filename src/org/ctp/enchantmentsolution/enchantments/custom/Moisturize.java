@@ -10,49 +10,50 @@ import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.Weight;
 import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 
-public class Soulbound extends CustomEnchantment{
-	
-	public Soulbound() {
-		addDefaultDisplayName("Soulbound");
-		addDefaultDisplayName(Language.GERMAN, "Seelengebunden");
-		setDefaultFiftyConstant(40);
-		setDefaultThirtyConstant(30);
+public class Moisturize extends CustomEnchantment{
+
+	public Moisturize() {
+		addDefaultDisplayName("Moisturize");
+		addDefaultDisplayName(Language.GERMAN, "Befeuchten");
+		setDefaultFiftyConstant(50);
+		setDefaultThirtyConstant(35);
 		setDefaultFiftyModifier(0);
 		setDefaultThirtyModifier(0);
-		setDefaultFiftyMaxConstant(50);
-		setDefaultThirtyMaxConstant(50);
-		setDefaultFiftyStartLevel(30);
+		setDefaultFiftyMaxConstant(25);
+		setDefaultThirtyMaxConstant(20);
+		setDefaultFiftyStartLevel(20);
 		setDefaultThirtyStartLevel(1);
 		setDefaultFiftyMaxLevel(1);
 		setDefaultThirtyMaxLevel(1);
-		setDefaultWeight(Weight.RARE);
 		setMaxLevelOne(true);
-		addDefaultDescription("Keep item on death.");
-		addDefaultDescription(Language.GERMAN, "Behalte den Gegenstand auf dem Tod.");
+		setDefaultWeight(Weight.VERY_RARE);
+		addDefaultDescription("Waters blocks by right-clicking them.");
+		addDefaultDescription(Language.GERMAN, "Befeuchtet Blöcke durch Rechtsklick.");
 	}
 	
 	@Override
 	public Enchantment getRelativeEnchantment() {
-		return DefaultEnchantments.SOULBOUND;
+		return DefaultEnchantments.MOISTURIZE;
 	}
-	
-	@Override
-	public String getName() {
-		return "soulbound";
-	}
-	
+
 	@Override
 	protected List<ItemType> getEnchantmentItemTypes() {
-		return Arrays.asList(ItemType.TOOLS, ItemType.MELEE, ItemType.RANGED, ItemType.ARMOR);
+		return Arrays.asList(ItemType.BOOK);
 	}
 
 	@Override
 	protected List<ItemType> getAnvilItemTypes() {
-		return Arrays.asList(ItemType.ALL);
+		return Arrays.asList(ItemType.SHEARS);
 	}
 
 	@Override
 	protected List<Enchantment> getDefaultConflictingEnchantments() {
-		return Arrays.asList(Enchantment.VANISHING_CURSE);
+		return Arrays.asList();
 	}
+
+	@Override
+	public String getName() {
+		return "moisturize";
+	}
+
 }

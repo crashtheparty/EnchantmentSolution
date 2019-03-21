@@ -8,15 +8,17 @@ import org.bukkit.metadata.MetadataValue;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.listeners.abilities.MagmaWalkerListener;
 import org.ctp.enchantmentsolution.listeners.abilities.VoidWalkerListener;
+import org.ctp.enchantmentsolution.nms.AnimalMobNMS;
+import org.ctp.enchantmentsolution.nms.animalmob.AnimalMob;
 import org.ctp.enchantmentsolution.utils.config.YamlConfig;
 
 public class SaveUtils {
 
 	public static void getData() {
-		if(EnchantmentSolution.getPlugin().getConfigFiles().getWalkerConfig() == null) {
+		if(EnchantmentSolution.getPlugin().getConfigFiles().getAbilityConfig() == null) {
 			return;
 		}
-		YamlConfig config = EnchantmentSolution.getPlugin().getConfigFiles().getWalkerConfig();
+		YamlConfig config = EnchantmentSolution.getPlugin().getConfigFiles().getAbilityConfig();
 		if (config.containsElements("magma_blocks")) {
 			int i = 0;
 			while (config.getString("magma_blocks." + i) != null) {
@@ -61,15 +63,22 @@ public class SaveUtils {
 			}
 			config.removeKey("obsidian_blocks");
 		}
+		if(config.containsElements("animals")) {
+			int i = 0;
+			while (config.getString("animals." + i + ".entity_type") != null) {
+				AnimalMobNMS.getFromConfig(config, i);
+				i++;
+			}
+		}
 		config.saveConfig();
 	}
 
-	public static void setWalkerData() {
-		if(EnchantmentSolution.getPlugin().getConfigFiles().getWalkerConfig() == null) {
+	public static void setAbilityData() {
+		if(EnchantmentSolution.getPlugin().getConfigFiles().getAbilityConfig() == null) {
 			return;
 		}
 		int i = 0;
-		YamlConfig config = EnchantmentSolution.getPlugin().getConfigFiles().getWalkerConfig();
+		YamlConfig config = EnchantmentSolution.getPlugin().getConfigFiles().getAbilityConfig();
 		for (Block block : MagmaWalkerListener.BLOCKS) {
 			for(MetadataValue value : block.getMetadata("MagmaWalker")){
 				config.set("magma_blocks." + i,
@@ -78,11 +87,21 @@ public class SaveUtils {
 			}
 			i++;
 		}
+		i = 0;
 		for (Block block : VoidWalkerListener.BLOCKS) {
 			for(MetadataValue value : block.getMetadata("VoidWalker")){
 				config.set("obsidian_blocks." + i,
 						(block.getWorld().getName() + " " + block.getX() + " "
 								+ block.getY() + " " + block.getZ() + " " + value.asInt()));
+			}
+			i++;
+		}
+		i = 0;
+		for (AnimalMob animal : AnimalMob.ANIMALS) {
+			try {
+				animal.setConfig(config, i);
+			} catch (Exception ex) {
+				ex.printStackTrace();
 			}
 			i++;
 		}

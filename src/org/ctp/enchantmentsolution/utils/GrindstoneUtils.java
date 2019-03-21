@@ -51,12 +51,12 @@ public class GrindstoneUtils {
 		ItemMeta firstMeta = first.getItemMeta();
 		ItemMeta combinedMeta = combined.getItemMeta();
 		
-		Enchantments.addEnchantmentsToItem(combined, combineEnchants(player, first, second));
-		
 		combinedMeta.setDisplayName(firstMeta.getDisplayName());
 		combinedMeta.setLocalizedName(firstMeta.getLocalizedName());
 		
 		combined.setItemMeta(combinedMeta);
+		
+		Enchantments.addEnchantmentsToItem(combined, combineEnchants(player, first, second));
 		
 		return combined;
 	}
@@ -73,8 +73,6 @@ public class GrindstoneUtils {
 		
 		DamageUtils.setDamage(combined, DamageUtils.getDamage(first.getItemMeta()));
 		
-		Enchantments.addEnchantmentsToItem(combined, combineEnchants(player, first, null));
-		
 		ItemMeta firstMeta = first.getItemMeta();
 		ItemMeta combinedMeta = combined.getItemMeta();
 		
@@ -82,6 +80,8 @@ public class GrindstoneUtils {
 		combinedMeta.setLocalizedName(firstMeta.getLocalizedName());
 		
 		combined.setItemMeta(combinedMeta);
+		
+		Enchantments.addEnchantmentsToItem(combined, combineEnchants(player, first, null));
 		
 		return combined;
 	}

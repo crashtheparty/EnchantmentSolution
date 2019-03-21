@@ -6,29 +6,26 @@ import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
-//import org.ctp.enchantmentsolution.nms.McMMO;
-import org.ctp.enchantmentsolution.utils.items.DamageUtils;
 import org.ctp.enchantmentsolution.utils.items.nms.AbilityUtils;
 import org.ctp.enchantmentsolution.utils.items.nms.ItemBreakType;
-import org.bukkit.event.Listener;
 
-public class WidthHeightListener implements Listener{
+public class WidthHeightListener extends EnchantmentListener{
 	
 	private static List<Block> IGNORE_BLOCKS = new ArrayList<Block>();
 
-	@EventHandler
+	@EventHandler(priority = EventPriority.HIGH)
 	public void onBlockBreak(BlockBreakEvent event) {
 		Player player = event.getPlayer();
-		if(!(DefaultEnchantments.isEnabled(DefaultEnchantments.WIDTH_PLUS_PLUS) && DefaultEnchantments.isEnabled(DefaultEnchantments.HEIGHT_PLUS_PLUS))) return;
+		if(!canRun(event, false, DefaultEnchantments.WIDTH_PLUS_PLUS, DefaultEnchantments.HEIGHT_PLUS_PLUS)) return;
 		if(IGNORE_BLOCKS.contains(event.getBlock())) {
 			IGNORE_BLOCKS.remove(event.getBlock());
 			return;
@@ -117,19 +114,10 @@ public class WidthHeightListener implements Listener{
 								}
 								newEvent.setExpToDrop(exp);
 								Bukkit.getServer().getPluginManager().callEvent(newEvent);
-								if(item != null && newEvent.getBlock().getType() != Material.AIR) {
+								if(item != null && newEvent.getBlock().getType() != Material.AIR && !newEvent.isCancelled()) {
 									newEvent.getBlock().breakNaturally(item);
 									AbilityUtils.dropExperience(newEvent.getBlock().getLocation().add(0.5, 0.5, 0.5), newEvent.getExpToDrop());
-									int unbreaking = Enchantments.getLevel(item, Enchantment.DURABILITY);
-									double chance = (1.0D) / (unbreaking + 1.0D);
-									double random = Math.random();
-									if(chance > random) {
-										DamageUtils.setDamage(item, DamageUtils.getDamage(item.getItemMeta()) + 1);
-										if(DamageUtils.getDamage(item.getItemMeta()) > item.getType().getMaxDurability()) {
-											player.getInventory().setItemInMainHand(new ItemStack(Material.AIR));
-											player.getWorld().playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 1, 1);
-										}
-									}
+									super.damageItem(player, item);
 								}
 							}
 						}

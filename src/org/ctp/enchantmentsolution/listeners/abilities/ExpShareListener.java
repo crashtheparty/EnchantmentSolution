@@ -3,18 +3,17 @@ package org.ctp.enchantmentsolution.listeners.abilities;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
 
-public class ExpShareListener implements Listener{
+public class ExpShareListener extends EnchantmentListener{
 
 	@EventHandler
 	public void onEntityDeath(EntityDeathEvent event){
-		if(!DefaultEnchantments.isEnabled(DefaultEnchantments.EXP_SHARE)) return;
+		if(!canRun(DefaultEnchantments.EXP_SHARE, event)) return;
 		if(event.getEntity() instanceof Player){
 			return;
 		}
@@ -42,7 +41,7 @@ public class ExpShareListener implements Listener{
 	
 	@EventHandler
 	public void onBlockBreak(BlockBreakEvent event){
-		if(!DefaultEnchantments.isEnabled(DefaultEnchantments.EXP_SHARE)) return;
+		if(!canRun(DefaultEnchantments.EXP_SHARE, event)) return;
 		Player player = event.getPlayer();
 		ItemStack killItem = player.getInventory().getItemInMainHand();
 		if(killItem != null && Enchantments.hasEnchantment(killItem, DefaultEnchantments.EXP_SHARE)){

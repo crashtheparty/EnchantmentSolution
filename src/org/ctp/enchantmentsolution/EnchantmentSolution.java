@@ -18,48 +18,8 @@ import org.ctp.enchantmentsolution.commands.UnsafeEnchant;
 import org.ctp.enchantmentsolution.database.SQLite;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.inventory.InventoryData;
-import org.ctp.enchantmentsolution.listeners.BlockBreak;
-import org.ctp.enchantmentsolution.listeners.ChatMessage;
-import org.ctp.enchantmentsolution.listeners.InventoryClick;
-import org.ctp.enchantmentsolution.listeners.InventoryClose;
-import org.ctp.enchantmentsolution.listeners.PlayerChatTabComplete;
-import org.ctp.enchantmentsolution.listeners.PlayerInteract;
-import org.ctp.enchantmentsolution.listeners.VanishListener;
-import org.ctp.enchantmentsolution.listeners.VersionCheck;
-import org.ctp.enchantmentsolution.listeners.abilities.BeheadingListener;
-import org.ctp.enchantmentsolution.listeners.abilities.BrineListener;
-import org.ctp.enchantmentsolution.listeners.abilities.DrownedListener;
-import org.ctp.enchantmentsolution.listeners.abilities.ExpShareListener;
-import org.ctp.enchantmentsolution.listeners.abilities.FishingListener;
-import org.ctp.enchantmentsolution.listeners.abilities.FlowerGiftListener;
-import org.ctp.enchantmentsolution.listeners.abilities.FrequentFlyerListener;
-import org.ctp.enchantmentsolution.listeners.abilities.GoldDiggerListener;
-import org.ctp.enchantmentsolution.listeners.abilities.GungHoListener;
-import org.ctp.enchantmentsolution.listeners.abilities.HardBounceListener;
-import org.ctp.enchantmentsolution.listeners.abilities.IcarusListener;
-import org.ctp.enchantmentsolution.listeners.abilities.IronDefenseListener;
-import org.ctp.enchantmentsolution.listeners.abilities.KnockUpListener;
-import org.ctp.enchantmentsolution.listeners.abilities.LifeListener;
-import org.ctp.enchantmentsolution.listeners.abilities.MagicGuardListener;
-import org.ctp.enchantmentsolution.listeners.abilities.MagmaWalkerListener;
-import org.ctp.enchantmentsolution.listeners.abilities.NoRestListener;
-import org.ctp.enchantmentsolution.listeners.abilities.PillageListener;
-import org.ctp.enchantmentsolution.listeners.abilities.SacrificeListener;
-import org.ctp.enchantmentsolution.listeners.abilities.SandVeilListener;
-import org.ctp.enchantmentsolution.listeners.abilities.ShockAspectListener;
-import org.ctp.enchantmentsolution.listeners.abilities.SmelteryListener;
-import org.ctp.enchantmentsolution.listeners.abilities.SniperListener;
-import org.ctp.enchantmentsolution.listeners.abilities.SoulboundListener;
-import org.ctp.enchantmentsolution.listeners.abilities.SplatterFestListener;
-import org.ctp.enchantmentsolution.listeners.abilities.StoneThrowListener;
-import org.ctp.enchantmentsolution.listeners.abilities.TankListener;
-import org.ctp.enchantmentsolution.listeners.abilities.TelepathyListener;
-import org.ctp.enchantmentsolution.listeners.abilities.TransmutationListener;
-import org.ctp.enchantmentsolution.listeners.abilities.UnrestListener;
-import org.ctp.enchantmentsolution.listeners.abilities.VoidWalkerListener;
-import org.ctp.enchantmentsolution.listeners.abilities.WandListener;
-import org.ctp.enchantmentsolution.listeners.abilities.WarpListener;
-import org.ctp.enchantmentsolution.listeners.abilities.WidthHeightListener;
+import org.ctp.enchantmentsolution.listeners.*;
+import org.ctp.enchantmentsolution.listeners.abilities.*;
 import org.ctp.enchantmentsolution.listeners.chestloot.ChestLootListener;
 import org.ctp.enchantmentsolution.listeners.fishing.EnchantsFishingListener;
 import org.ctp.enchantmentsolution.listeners.fishing.McMMOFishingNMS;
@@ -88,7 +48,7 @@ public class EnchantmentSolution extends JavaPlugin {
 	public void onEnable() {
 		PLUGIN = this;
 		bukkitVersion = new BukkitVersion();
-		pluginVersion = new PluginVersion(getDescription().getVersion());
+		pluginVersion = new PluginVersion(this, getDescription().getVersion());
 		if(!bukkitVersion.isVersionAllowed()) {
 			Bukkit.getLogger().log(Level.WARNING, "Bukkit Version " + bukkitVersion.getVersion() + " is not compatible with this plugin. Please use a version that is compatible.");
 			Bukkit.getPluginManager().disablePlugin(PLUGIN);
@@ -163,6 +123,9 @@ public class EnchantmentSolution extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new PillageListener(), this);
 		getServer().getPluginManager().registerEvents(new GungHoListener(), this);
 		getServer().getPluginManager().registerEvents(new WandListener(), this);
+		getServer().getPluginManager().registerEvents(new MoisturizeListener(), this);
+		getServer().getPluginManager().registerEvents(new NetListener(), this);
+		getServer().getPluginManager().registerEvents(new CurseOfLagListener(), this);
 		getServer().getPluginManager().registerEvents(new ChestLootListener(), this);
 		getServer().getPluginManager().registerEvents(new MobSpawning(), this);
 		getServer().getPluginManager().registerEvents(new VanishListener(), this);
@@ -255,7 +218,7 @@ public class EnchantmentSolution extends JavaPlugin {
 	}
 
 	public void onDisable() {
-		SaveUtils.setWalkerData();
+		SaveUtils.setAbilityData();
 		
 		resetInventories();
 	}

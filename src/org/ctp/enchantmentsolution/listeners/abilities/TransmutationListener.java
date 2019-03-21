@@ -11,7 +11,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.entity.Trident;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
@@ -21,14 +20,14 @@ import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
 import org.ctp.enchantmentsolution.utils.items.DamageUtils;
 
-public class TransmutationListener implements Listener{
+public class TransmutationListener extends EnchantmentListener{
 	
 	private static Map<LivingEntity, ItemStack> HIT_ENTITY = new HashMap<LivingEntity, ItemStack>();
 	private static Map<UUID, ItemStack> ENTITY_IDS = new HashMap<UUID, ItemStack>();
 	
 	@EventHandler
 	public void onProjectileLaunch(ProjectileLaunchEvent event){
-		if(!DefaultEnchantments.isEnabled(DefaultEnchantments.DROWNED)) return;
+		if(!canRun(DefaultEnchantments.TRANSMUTATION, event)) return;
 		Projectile proj = event.getEntity();
 		if(proj instanceof Trident){
 			Trident trident = (Trident) proj;
@@ -92,17 +91,17 @@ public class TransmutationListener implements Listener{
 	}
 	
 	private enum TransmutationLoot{
-		RAW_SALMON(Material.SALMON, 100, 1, 2), RAW_COD(Material.COD, 100, 1, 2), TROPICAL_FISH(Material.TROPICAL_FISH, 50, 1, 1), 
-		PUFFERFISH(Material.PUFFERFISH, 35, 1, 1), KELP(Material.KELP, 40, 1, 4), TRIDENT(Material.TRIDENT, 1, 1, 1), SCUTE(Material.SCUTE, 40, 1, 2), 
-		TURTLE_EGG(Material.TURTLE_EGG, 10, 1, 1), INK_SAC(Material.INK_SAC, 100, 1, 4), PRISMARINE_SHARD(Material.PRISMARINE_SHARD, 80, 1, 3), 
-		PRISMARINE_CRYSTALS(Material.PRISMARINE_CRYSTALS, 50, 1, 3), NAUTILUS_SHELL(Material.NAUTILUS_SHELL, 12, 1, 1), 
-		HEART_OF_THE_SEA(Material.HEART_OF_THE_SEA, 2, 1, 1), BRAIN_CORAL(Material.BRAIN_CORAL, 20, 1, 3), BUBBLE_CORAL(Material.BUBBLE_CORAL, 20, 1, 3),
-		FIRE_CORAL(Material.FIRE_CORAL, 20, 1, 3), HORN_CORAL(Material.HORN_CORAL, 20, 1, 3), TUBE_CORAL(Material.TUBE_CORAL, 20, 1, 3), 
-		BRAIN_CORAL_FAN(Material.BRAIN_CORAL_FAN, 20, 1, 3), BUBBLE_CORAL_FAN(Material.BUBBLE_CORAL_FAN, 20, 1, 3), FIRE_CORAL_FAN(Material.FIRE_CORAL_FAN, 20, 1, 3), 
-		HORN_CORAL_FAN(Material.HORN_CORAL_FAN, 20, 1, 3), TUBE_CORAL_FAN(Material.TUBE_CORAL_FAN, 20, 1, 3), BRAIN_CORAL_BLOCK(Material.BRAIN_CORAL_BLOCK, 20, 1, 2), 
-		BUBBLE_CORAL_BLOCK(Material.BUBBLE_CORAL_BLOCK, 20, 1, 2), FIRE_CORAL_BLOCK(Material.FIRE_CORAL_BLOCK, 20, 1, 2), 
-		HORN_CORAL_BLOCK(Material.HORN_CORAL_BLOCK, 20, 1, 2), TUBE_CORAL_BLOCK(Material.TUBE_CORAL_BLOCK, 20, 1, 2), SPONGE(Material.SPONGE, 50, 1, 1), 
-		SEA_PICKLE(Material.SEA_PICKLE, 40, 1, 4);
+		RAW_SALMON(Material.SALMON, 1200, 1, 2), RAW_COD(Material.COD, 1200, 1, 2), TROPICAL_FISH(Material.TROPICAL_FISH, 750, 1, 1), 
+		PUFFERFISH(Material.PUFFERFISH, 400, 1, 1), KELP(Material.KELP, 400, 1, 4), TRIDENT(Material.TRIDENT, 8, 1, 1), SCUTE(Material.SCUTE, 300, 1, 2), 
+		TURTLE_EGG(Material.TURTLE_EGG, 50, 1, 1), INK_SAC(Material.INK_SAC, 1000, 1, 4), PRISMARINE_SHARD(Material.PRISMARINE_SHARD, 750, 1, 3), 
+		PRISMARINE_CRYSTALS(Material.PRISMARINE_CRYSTALS, 500, 1, 3), NAUTILUS_SHELL(Material.NAUTILUS_SHELL, 140, 1, 1), 
+		HEART_OF_THE_SEA(Material.HEART_OF_THE_SEA, 2, 1, 1), BRAIN_CORAL(Material.BRAIN_CORAL, 100, 1, 4), BUBBLE_CORAL(Material.BUBBLE_CORAL, 100, 1, 4),
+		FIRE_CORAL(Material.FIRE_CORAL, 100, 1, 4), HORN_CORAL(Material.HORN_CORAL, 100, 1, 4), TUBE_CORAL(Material.TUBE_CORAL, 100, 1, 4), 
+		BRAIN_CORAL_FAN(Material.BRAIN_CORAL_FAN, 100, 1, 4), BUBBLE_CORAL_FAN(Material.BUBBLE_CORAL_FAN, 100, 1, 4), FIRE_CORAL_FAN(Material.FIRE_CORAL_FAN, 100, 1, 4), 
+		HORN_CORAL_FAN(Material.HORN_CORAL_FAN, 100, 1, 4), TUBE_CORAL_FAN(Material.TUBE_CORAL_FAN, 100, 1, 4), BRAIN_CORAL_BLOCK(Material.BRAIN_CORAL_BLOCK, 300, 1, 1), 
+		BUBBLE_CORAL_BLOCK(Material.BUBBLE_CORAL_BLOCK, 300, 1, 1), FIRE_CORAL_BLOCK(Material.FIRE_CORAL_BLOCK, 300, 1, 1), 
+		HORN_CORAL_BLOCK(Material.HORN_CORAL_BLOCK, 300, 1, 1), TUBE_CORAL_BLOCK(Material.TUBE_CORAL_BLOCK, 300, 1, 1), SPONGE(Material.SPONGE, 400, 1, 1), 
+		SEA_PICKLE(Material.SEA_PICKLE, 400, 1, 4);
 		
 		private Material material;
 		private int chance, min, max;

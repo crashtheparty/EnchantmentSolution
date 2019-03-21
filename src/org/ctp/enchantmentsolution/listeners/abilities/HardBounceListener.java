@@ -6,7 +6,6 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
@@ -14,10 +13,11 @@ import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
 
-public class HardBounceListener implements Listener{
+public class HardBounceListener extends EnchantmentListener{
 	
 	@EventHandler
 	public void onProjectileHit(ProjectileHitEvent event) {
+		if(!canRun(DefaultEnchantments.HARD_BOUNCE, event)) return;
 		Entity e = event.getHitEntity();
 		Projectile p = event.getEntity();
 		if(e != null && e instanceof Player) {
