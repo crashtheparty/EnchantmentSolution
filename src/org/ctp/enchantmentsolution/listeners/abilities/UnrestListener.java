@@ -18,7 +18,7 @@ public class UnrestListener implements Runnable {
 	
 	@Override
 	public void run() {
-		if(!DefaultEnchantments.isEnabled(DefaultEnchantments.NO_REST)) return;
+		if(!DefaultEnchantments.isEnabled(DefaultEnchantments.UNREST)) return;
 		for(Player player : Bukkit.getOnlinePlayers()) {
 			if(!contains(player)) {
 				try {

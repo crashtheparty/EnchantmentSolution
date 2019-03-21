@@ -1,5 +1,10 @@
 package org.ctp.enchantmentsolution.utils;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.bukkit.ChatColor;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
@@ -10,14 +15,18 @@ public class StringUtils {
 	private static final String[] NUMERALS = { "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X" };
 
 	public static String returnEnchantmentName(CustomEnchantment ench, int enchLevel){
+		String displayName = ench.getDisplayName();
+		if(ench.isCurse()) {
+			displayName = ChatColor.RED + displayName;
+		}
 	    if(enchLevel == 1 && ench.getMaxLevel() == 1){
-	        return ench.getDisplayName();
+	        return displayName;
 	    }
 	    if(enchLevel > 10 || enchLevel <= 0){
-	        return ench.getDisplayName() + " enchantment.level." + enchLevel;
+	        return displayName + " enchantment.level." + enchLevel;
 	    }
 	 
-	    return ench.getDisplayName() + " " + NUMERALS[enchLevel- 1];
+	    return displayName + " " + NUMERALS[enchLevel- 1];
 	}
 	
 	public static EnchantmentLevel returnEnchantmentLevel(String s, ItemMeta meta) {
@@ -63,6 +72,94 @@ public class StringUtils {
 		}
 		
 		return new EnchantmentLevel(match, level);
+	}
+	
+	public static boolean isEnchantment(String s) {
+		if(s.startsWith(ChatUtils.hideText("solution") + "" + ChatColor.GRAY)) return true;
+		String[] pieces = s.split(" ");
+		int level = 0;
+		int repair = 0;
+		if (pieces[pieces.length - 1].contains("enchantment.level")) {
+			String[] enchLevel = pieces[pieces.length - 1].split(".");
+			level = Integer.parseInt(enchLevel[enchLevel.length - 1]);
+			repair = pieces.length - 1;
+		} else {
+			for(int i = 0; i < NUMERALS.length; i++) {
+				if(pieces[pieces.length - 1].equals(NUMERALS[i])) {
+					level = i + 1;
+					break;
+				}
+			}
+			if(level == 0) {
+				level = 1;
+				repair = pieces.length;
+			}else {
+				repair = pieces.length - 1;
+			}
+		}
+		String repaired = pieces[0];
+		for(int i = 1; i < repair; i++) {
+			repaired += " " + pieces[i];
+		}
+		for(CustomEnchantment ench : DefaultEnchantments.getEnchantments()) {
+			if(ench.getDisplayName().equals(repaired)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public static void addAnimal(ItemStack item, int entityID) {
+		ItemMeta meta = item.getItemMeta();
+		List<String> lore = meta.getLore();
+		if(lore == null) {
+			lore = new ArrayList<String>();
+		}
+		lore.add(ChatUtils.hideText("solution") + "" + ChatColor.GRAY + "" + ChatColor.BLUE + "Entity ID: " + entityID);
+		meta.setLore(lore);
+		item.setItemMeta(meta);
+	}
+
+	public static List<Integer> getAnimalIDsFromItem(ItemStack item) {
+		ItemMeta meta = item.getItemMeta();
+		List<String> lore = meta.getLore();
+		List<Integer> ids = new ArrayList<Integer>();
+		if(lore == null) {
+			lore = new ArrayList<String>();
+		}
+		for(String l : lore) {
+			if(l.startsWith(ChatUtils.hideText("solution") + "" + ChatColor.GRAY + "" + ChatColor.BLUE)) {
+				try {
+					ids.add(Integer.parseInt(l.substring(l.indexOf("Entity ID: ") + "Entity ID: ".length())));
+				} catch (Exception ex) {}
+			}
+		}
+		return ids;
+	}
+	
+	public static void removeAnimal(ItemStack item, int entityID) {
+		ItemMeta meta = item.getItemMeta();
+		List<String> lore = meta.getLore();
+		if(lore == null) {
+			lore = new ArrayList<String>();
+		}
+		while(lore.contains(ChatUtils.hideText("solution") + "" + ChatColor.GRAY + "" + ChatColor.BLUE + "Entity ID: " + entityID)) {
+			lore.remove(ChatUtils.hideText("solution") + "" + ChatColor.GRAY + "" + ChatColor.BLUE + "Entity ID: " + entityID);
+		}
+		meta.setLore(lore);
+		item.setItemMeta(meta);
+	}
+	
+	public static List<String> removeEnchantment(CustomEnchantment enchantment, int level, List<String> lore){
+		String legacyEnchName = ChatColor.RESET + "" + ChatColor.GRAY + returnEnchantmentName(enchantment, level);
+		String enchName = ChatUtils.hideText("solution") + "" + ChatColor.GRAY + returnEnchantmentName(enchantment, level);
+		while(lore.contains(legacyEnchName)) {
+			lore.remove(legacyEnchName);
+		}
+		while(lore.contains(enchName)) {
+			lore.remove(enchName);
+		}
+		return lore;
 	}
 	
 	public static String encodeString(String st) {

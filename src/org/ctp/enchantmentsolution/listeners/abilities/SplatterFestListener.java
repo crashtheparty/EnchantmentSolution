@@ -2,24 +2,20 @@ package org.ctp.enchantmentsolution.listeners.abilities;
 
 import org.bukkit.GameMode;
 import org.bukkit.Material;
-import org.bukkit.Sound;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Egg;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
-import org.ctp.enchantmentsolution.utils.items.DamageUtils;
 
-public class SplatterFestListener implements Listener{
+public class SplatterFestListener extends EnchantmentListener{
 
 	@EventHandler
 	public void onPlayerInteract(PlayerInteractEvent event) {
-		if(!DefaultEnchantments.isEnabled(DefaultEnchantments.SPLATTER_FEST)) return;
+		if(!canRun(DefaultEnchantments.SPLATTER_FEST, event)) return;
 		if(event.getAction().equals(Action.LEFT_CLICK_AIR)) {
 			Player player = event.getPlayer();
 			ItemStack item = player.getInventory().getItemInMainHand();
@@ -53,18 +49,7 @@ public class SplatterFestListener implements Listener{
 				}
 				if(removed) {
 					player.launchProjectile(Egg.class);
-					if(!player.getGameMode().equals(GameMode.CREATIVE)) {
-						int unbreaking = Enchantments.getLevel(item, Enchantment.DURABILITY);
-						double chance = (1.0D) / (unbreaking + 1.0D);
-						double random = Math.random();
-						if(chance > random) {
-							DamageUtils.setDamage(item, DamageUtils.getDamage(item.getItemMeta()) + 1);
-							if(DamageUtils.getDamage(item.getItemMeta()) > item.getType().getMaxDurability()) {
-								player.getInventory().setItemInMainHand(new ItemStack(Material.AIR));
-								player.getWorld().playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 1, 1);
-							}
-						}
-					}
+					super.damageItem(player, item);
 				}
 			}
 		}

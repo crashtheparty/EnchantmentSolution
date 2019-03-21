@@ -13,13 +13,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.entity.Snowball;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
 
-public class GungHoListener implements Listener, Runnable{
+public class GungHoListener extends EnchantmentListener implements Runnable{
 
 	private static List<GungHoPlayer> PLAYERS = new ArrayList<GungHoPlayer>();
 	
@@ -57,7 +56,7 @@ public class GungHoListener implements Listener, Runnable{
 	
 	@EventHandler
 	public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
-		if(!DefaultEnchantments.isEnabled(DefaultEnchantments.GUNG_HO)) return;
+		if(!canRun(DefaultEnchantments.GUNG_HO, event)) return;
 		Entity damager = event.getDamager();
 		if(damager instanceof Projectile) {
 			Projectile projectile = (Projectile) event.getDamager();

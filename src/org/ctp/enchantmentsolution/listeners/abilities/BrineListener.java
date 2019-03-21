@@ -6,17 +6,16 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
 
-public class BrineListener implements Listener{
+public class BrineListener extends EnchantmentListener{
 
 	@EventHandler
 	public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
-		if(!DefaultEnchantments.isEnabled(DefaultEnchantments.BRINE)) return;
+		if(!canRun(DefaultEnchantments.BRINE, event)) return;
 		Entity entity = event.getDamager();
 		if(entity instanceof Player) {
 			Player player = (Player) entity;
