@@ -61,7 +61,7 @@ public class DefaultEnchantments {
 	public static final Enchantment GUNG_HO = new GungHoWrapper();
 	public static final Enchantment WAND = new WandWrapper();
 	public static final Enchantment MOISTURIZE = new MoisturizeWrapper();
-	public static final Enchantment NET = new NetWrapper();
+	public static final Enchantment IRENES_LASSO = new IrenesLassoWrapper();
 	public static final Enchantment CURSE_OF_LAG = new CurseOfLagWrapper();
 
 	public static List<CustomEnchantment> getEnchantments() {
@@ -284,13 +284,13 @@ public class DefaultEnchantments {
 		DefaultEnchantments.addDefaultEnchantment(new HardBounce());
 		DefaultEnchantments.addDefaultEnchantment(new HeightPlusPlus());
 		DefaultEnchantments.addDefaultEnchantment(new Icarus());
+		DefaultEnchantments.addDefaultEnchantment(new IrenesLasso());
 		DefaultEnchantments.addDefaultEnchantment(new IronDefense());
 		DefaultEnchantments.addDefaultEnchantment(new KnockUp());
 		DefaultEnchantments.addDefaultEnchantment(new Life());
 		DefaultEnchantments.addDefaultEnchantment(new MagicGuard());
 		DefaultEnchantments.addDefaultEnchantment(new MagmaWalker());
 		DefaultEnchantments.addDefaultEnchantment(new Moisturize());
-		DefaultEnchantments.addDefaultEnchantment(new Net());
 		DefaultEnchantments.addDefaultEnchantment(new NoRest());
 //		if(EnchantmentSolution.getBukkitVersion().getVersionNumber() > 3) {
 			DefaultEnchantments.addDefaultEnchantment(new Pillage());

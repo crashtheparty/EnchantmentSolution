@@ -27,6 +27,49 @@ public class GrindstoneUtils {
 		return false;
 	}
 	
+	public static boolean canTakeEnchantments(ItemStack first, ItemStack second) {
+		if(first.getType() != Material.BOOK && first.getType() != Material.ENCHANTED_BOOK && first.hasItemMeta() && first.getItemMeta().hasEnchants()) {
+			if(second.getType() == Material.BOOK && (second.hasItemMeta() && !second.getItemMeta().hasEnchants()) || !second.hasItemMeta()) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public static ItemStack takeEnchantments(Player player, ItemStack first, ItemStack second) {
+		ItemStack take = new ItemStack(second.getType());
+		
+		List<EnchantmentLevel> enchantments = new ArrayList<EnchantmentLevel>();
+		for (Iterator<java.util.Map.Entry<Enchantment, Integer>> it = first.getEnchantments().entrySet().iterator(); it.hasNext();) {
+			java.util.Map.Entry<Enchantment, Integer> e = it.next();
+			for(CustomEnchantment ench : Enchantments.getEnchantments()) {
+				if(ench.getRelativeEnchantment().equals(e.getKey())) {
+					enchantments.add(new EnchantmentLevel(ench, e.getValue()));
+				}
+			}
+		}
+		
+		take = Enchantments.addEnchantmentsToItem(take, enchantments);
+		return take;
+	}
+	
+	public static int getEnchantmentCost(ItemStack item) {
+		int cost = 0;
+		ItemMeta itemMeta = item.clone().getItemMeta();
+		Map<Enchantment, Integer> enchants = itemMeta.getEnchants();
+		for (Iterator<java.util.Map.Entry<Enchantment, Integer>> it = enchants.entrySet().iterator(); it.hasNext();) {
+			java.util.Map.Entry<Enchantment, Integer> e = it.next();
+			Enchantment enchant = e.getKey();
+			int level = e.getValue();
+			for(CustomEnchantment customEnchant : Enchantments.getEnchantments()) {
+				if(Enchantments.isRepairable(customEnchant) && customEnchant.getRelativeEnchantment().equals(enchant)) {
+					cost += level * customEnchant.multiplier(item.getType());
+				}
+			}
+		}
+		return Math.max(cost / Enchantments.getLevelDivisor(), 1);
+	}
+	
 	public static ItemStack combineItems(Player player, ItemStack first, ItemStack second) {
 		ItemStack combined = new ItemStack(first.getType());
 		if(first.getType().equals(Material.ENCHANTED_BOOK)) {
@@ -52,7 +95,6 @@ public class GrindstoneUtils {
 		ItemMeta combinedMeta = combined.getItemMeta();
 		
 		combinedMeta.setDisplayName(firstMeta.getDisplayName());
-		combinedMeta.setLocalizedName(firstMeta.getLocalizedName());
 		
 		combined.setItemMeta(combinedMeta);
 		
@@ -77,7 +119,6 @@ public class GrindstoneUtils {
 		ItemMeta combinedMeta = combined.getItemMeta();
 		
 		combinedMeta.setDisplayName(firstMeta.getDisplayName());
-		combinedMeta.setLocalizedName(firstMeta.getLocalizedName());
 		
 		combined.setItemMeta(combinedMeta);
 		

@@ -52,16 +52,16 @@ public class LanguageFiles {
 	}
 	
 	private void save(boolean reload) {
+		YamlConfig main = EnchantmentSolution.getPlugin().getConfigFiles().getDefaultConfig();
 		if(reload) {
 			language = new YamlConfigBackup(languageFile, null);
 			
 			language.getFromConfig();
-			YamlConfig main = EnchantmentSolution.getPlugin().getConfigFiles().getDefaultConfig();
-			if(main.getBoolean("reset_language")) {
-				language.resetConfig();
-				main.set("reset_language", false);
-				main.saveConfig();
-			}
+		}
+		if(main.getBoolean("reset_language")) {
+			language.resetConfig();
+			main.set("reset_language", false);
+			main.saveConfig();
 		}
 		language.copyDefaults(getLanguageFile());
 		
@@ -189,10 +189,15 @@ public class LanguageFiles {
 		englishUS.addDefault("grindstone.cannot-combine", (ChatColor.RED + "Cannot Combine").replace("§", "&"));
 		englishUS.addDefault("grindstone.remove-enchants", (ChatColor.GREEN + "Remove Enchantments").replace("§", "&"));
 		englishUS.addDefault("grindstone.no-items", (ChatColor.WHITE + "No Items").replace("§", "&"));
-		englishUS.addDefault("grindstone.no-items-lore", (ChatColor.WHITE + "Add items by selecting them from your inventory").replace("§", "&"));
+		englishUS.addDefault("grindstone.no-items-lore", Arrays.asList((ChatColor.WHITE + "Add items by selecting them from your inventory").replace("§", "&")));
 		englishUS.addDefault("grindstone.anvil", (ChatColor.GREEN + "Open the Anvil").replace("§", "&"));
 		englishUS.addDefault("grindstone.switch-to-anvil", (ChatColor.WHITE + "Go back to the Anvil inventory").replace("§", "&"));
 		englishUS.addDefault("grindstone.message-cannot-combine", (ChatColor.RED + "Cannot combine these items.").replace("§", "&"));
+		englishUS.addDefault("grindstone.cannot-take-enchantments", (ChatColor.RED + "Level Cost: " + ChatColor.BLUE + "%levelCost%").replace("§", "&"));
+		englishUS.addDefault("grindstone.message-cannot-take-enchantments", (ChatColor.RED + "Cannot take the enchantments off this item").replace("§", "&"));
+		englishUS.addDefault("grindstone.take-enchantments", (ChatColor.GREEN + "Level Cost: " + ChatColor.BLUE + "%levelCost%").replace("§", "&"));
+		englishUS.addDefault("grindstone.take-enchantments-lore", Arrays.asList(
+				(ChatColor.WHITE + "All enchantments from the item will go into the book").replace("§", "&")));
 		
 		englishUS.addDefault("enchantment.name", (ChatColor.GOLD + "Display Name: " + ChatColor.WHITE).replace("§", "&"));
 		englishUS.addDefault("enchantment.description", (ChatColor.GOLD + "Description: " + ChatColor.WHITE).replace("§", "&"));
@@ -314,6 +319,11 @@ public class LanguageFiles {
 		german.addDefault("grindstone.anvil", (ChatColor.GREEN + "Öffne den Amboss").replace("§", "&"));
 		german.addDefault("grindstone.switch-to-anvil", (ChatColor.WHITE + "Gehe zurück zum Amboss-Inventar").replace("§", "&"));
 		german.addDefault("grindstone.message-cannot-combine", (ChatColor.RED + "Nicht kombinierbar.").replace("§", "&"));
+		german.addDefault("grindstone.cannot-take-enchantments", (ChatColor.RED + "Kosten: " + ChatColor.BLUE + "%levelCost%").replace("§", "&"));
+		german.addDefault("grindstone.message-cannot-take-enchantments", (ChatColor.RED + "Die Verzauberungen können nicht von diesem Gegenstand entfernt werden").replace("§", "&"));
+		german.addDefault("grindstone.take-enchantments", (ChatColor.GREEN + "Kosten: " + ChatColor.BLUE + "%levelCost%").replace("§", "&"));
+		german.addDefault("grindstone.take-enchantments-lore", Arrays.asList(
+				(ChatColor.WHITE + "Alle Verzauberungen aus dem Gegenstand werden in das Buch aufgenommen").replace("§", "&")));
 		
 		german.addDefault("enchantment.name", (ChatColor.GOLD + "Anzeigename: " + ChatColor.WHITE).replace("§", "&"));
 		german.addDefault("enchantment.description", (ChatColor.GOLD + "Beschreibung: " + ChatColor.WHITE).replace("§", "&"));

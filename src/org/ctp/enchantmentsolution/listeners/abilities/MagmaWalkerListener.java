@@ -86,8 +86,8 @@ public class MagmaWalkerListener extends EnchantmentListener implements Runnable
 
 	@Override
 	public void run() {
-		if(!DefaultEnchantments.isEnabled(DefaultEnchantments.MAGMA_WALKER)) return;
 		for(int i = BLOCKS.size() - 1; i >= 0; i--){
+			if(!DefaultEnchantments.isEnabled(DefaultEnchantments.MAGMA_WALKER)) break;
 			Block block = BLOCKS.get(i);
 			List<MetadataValue> values = block.getMetadata("MagmaWalker");
 			if(values != null){
@@ -127,7 +127,7 @@ public class MagmaWalkerListener extends EnchantmentListener implements Runnable
 			}
 		}
 		for(int i = VoidWalkerListener.BLOCKS.size() - 1; i >= 0; i--){
-			if(!DefaultEnchantments.isEnabled(DefaultEnchantments.VOID_WALKER)) continue;
+			if(!DefaultEnchantments.isEnabled(DefaultEnchantments.VOID_WALKER)) break;
 			Block block = VoidWalkerListener.BLOCKS.get(i);
 			List<MetadataValue> values = block.getMetadata("VoidWalker");
 			if(values != null){

@@ -25,6 +25,7 @@ import org.ctp.enchantmentsolution.listeners.fishing.EnchantsFishingListener;
 import org.ctp.enchantmentsolution.listeners.fishing.McMMOFishingNMS;
 import org.ctp.enchantmentsolution.listeners.legacy.UpdateEnchantments;
 import org.ctp.enchantmentsolution.listeners.mobs.MobSpawning;
+import org.ctp.enchantmentsolution.nms.McMMO;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.save.ConfigFiles;
 import org.ctp.enchantmentsolution.utils.save.SaveUtils;
@@ -124,7 +125,7 @@ public class EnchantmentSolution extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new GungHoListener(), this);
 		getServer().getPluginManager().registerEvents(new WandListener(), this);
 		getServer().getPluginManager().registerEvents(new MoisturizeListener(), this);
-		getServer().getPluginManager().registerEvents(new NetListener(), this);
+		getServer().getPluginManager().registerEvents(new IrenesLassoListener(), this);
 		getServer().getPluginManager().registerEvents(new CurseOfLagListener(), this);
 		getServer().getPluginManager().registerEvents(new ChestLootListener(), this);
 		getServer().getPluginManager().registerEvents(new MobSpawning(), this);
@@ -158,7 +159,7 @@ public class EnchantmentSolution extends JavaPlugin {
 					mcmmoType = "Disabled";
 				}
 			} else {
-				ChatUtils.sendToConsole(Level.INFO, "Using the Classic BukkitVersion! Compatibility should be intact.");
+				ChatUtils.sendToConsole(Level.INFO, "Using the Classic Version! Compatibility should be intact.");
 				mcmmoType = "Classic";
 			}
 		} else {
@@ -174,6 +175,7 @@ public class EnchantmentSolution extends JavaPlugin {
 			getServer().getPluginManager().registerEvents(new EnchantsFishingListener(), this);
 			break;
 		}
+		getServer().getPluginManager().registerEvents(McMMO.getAbilities(), this);
 
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN,
 				new MagmaWalkerListener(), 20l, 20l);

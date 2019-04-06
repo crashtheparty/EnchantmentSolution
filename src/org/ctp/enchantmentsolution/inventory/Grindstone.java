@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -15,6 +16,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
+import org.ctp.enchantmentsolution.enchantments.Enchantments;
 import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 import org.ctp.enchantmentsolution.utils.items.nms.AbilityUtils;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
@@ -27,6 +29,7 @@ public class Grindstone implements InventoryData{
 	private List<ItemStack> playerItems;
 	private ItemStack combinedItem;
 	private Block block;
+	private boolean takeEnchantments = false;
 
 	public Grindstone(Player player, Block block) {
 		this.setPlayer(player);
@@ -40,11 +43,19 @@ public class Grindstone implements InventoryData{
 
 	public void setInventory(List<ItemStack> items) {
 		try {
+			takeEnchantments = false;
 			int size = 27;
 			if(EnchantmentSolution.getPlugin().getConfigFiles().useLegacyGrindstone()) {
 				size = 36;
 			}
 			Inventory inv = Bukkit.createInventory(null, size, ChatUtils.getMessage(getCodes(), "grindstone.name"));
+			if(inventory == null) {
+				inventory = inv;
+				player.openInventory(inv);
+			} else {
+				inv = player.getOpenInventory().getTopInventory();
+				inventory = inv;
+			}
 	
 			ItemStack mirror = new ItemStack(Material.BLACK_STAINED_GLASS_PANE);
 			ItemMeta mirrorMeta = mirror.getItemMeta();
@@ -52,17 +63,24 @@ public class Grindstone implements InventoryData{
 			mirror.setItemMeta(mirrorMeta);
 			inv.setItem(0, mirror);
 			inv.setItem(1, mirror);
+			inv.setItem(2, new ItemStack(Material.AIR));
 			inv.setItem(3, mirror);
 			inv.setItem(4, mirror);
 			inv.setItem(6, mirror);
+			inv.setItem(7, new ItemStack(Material.AIR));
 			inv.setItem(8, mirror);
 			inv.setItem(9, mirror);
 			inv.setItem(10, mirror);
+			inv.setItem(11, new ItemStack(Material.AIR));
 			inv.setItem(12, mirror);
 			inv.setItem(13, mirror);
 			inv.setItem(14, mirror);
 			inv.setItem(15, mirror);
-			inv.setItem(16, mirror);
+			if (EnchantmentSolution.getPlugin().getConfigFiles().grindstoneTakeEnchantments()) {
+				inv.setItem(16, new ItemStack(Material.AIR));
+			} else {
+				inv.setItem(16, mirror);
+			}
 			inv.setItem(17, mirror);
 			inv.setItem(18, mirror);
 			inv.setItem(19, mirror);
@@ -84,6 +102,29 @@ public class Grindstone implements InventoryData{
 				combineMeta.setDisplayName(ChatUtils.getMessage(getCodes(), "grindstone.combine"));
 				combineMeta.setLore(lore);
 				combine.setItemMeta(combineMeta);
+			} else if(EnchantmentSolution.getPlugin().getConfigFiles().grindstoneTakeEnchantments() 
+					&& playerItems.size() == 2 && GrindstoneUtils.canTakeEnchantments(playerItems.get(0), playerItems.get(1))) {
+				combinedItem = GrindstoneUtils.takeEnchantments(getPlayer(), playerItems.get(0), playerItems.get(1));
+				int levelCost = GrindstoneUtils.getEnchantmentCost(playerItems.get(0));
+				takeEnchantments = true;
+				if(levelCost > player.getLevel()) {
+					combine = new ItemStack(Material.RED_STAINED_GLASS_PANE);
+					ItemMeta combineMeta = combine.getItemMeta();
+					HashMap<String, Object> codes = getCodes();
+					codes.put("%levelCost%", levelCost);
+					combineMeta.setDisplayName(ChatUtils.getMessage(codes, "grindstone.cannot-take-enchantments"));
+					combine.setItemMeta(combineMeta);
+				} else {
+					combine = new ItemStack(Material.LIME_STAINED_GLASS_PANE);
+					List<String> lore = new ArrayList<String>();
+					lore.addAll(ChatUtils.getMessages(getCodes(), "grindstone.take-enchantments-lore"));
+					ItemMeta combineMeta = combine.getItemMeta();
+					HashMap<String, Object> codes = getCodes();
+					codes.put("%levelCost%", levelCost);
+					combineMeta.setDisplayName(ChatUtils.getMessage(codes, "grindstone.take-enchantments"));
+					combineMeta.setLore(lore);
+					combine.setItemMeta(combineMeta);
+				}
 			} else if (playerItems.size() == 2){
 				combinedItem = null;
 				combine = new ItemStack(Material.RED_STAINED_GLASS_PANE);
@@ -101,7 +142,7 @@ public class Grindstone implements InventoryData{
 				combine = new ItemStack(Material.WHITE_STAINED_GLASS_PANE);
 				ItemMeta combineMeta = combine.getItemMeta();
 				List<String> lore = new ArrayList<String>();
-				lore.add(ChatUtils.getMessage(getCodes(), "grindstone.no-items-lore"));
+				lore.addAll(ChatUtils.getMessages(getCodes(), "grindstone.no-items-lore"));
 				combineMeta.setDisplayName(ChatUtils.getMessage(getCodes(), "grindstone.no-items"));
 				combineMeta.setLore(lore);
 				combine.setItemMeta(combineMeta);
@@ -119,8 +160,6 @@ public class Grindstone implements InventoryData{
 				inv.setItem(7, combinedItem);
 			}
 			inv.setItem(5, combine);
-			inventory = inv;
-			player.openInventory(inv);
 			
 			if(EnchantmentSolution.getPlugin().getConfigFiles().useLegacyGrindstone()) {
 				inv.setItem(27, mirror);
@@ -143,7 +182,7 @@ public class Grindstone implements InventoryData{
 			if(playerItems.size() - 1 >= 0) {
 				ItemStack item = playerItems.get(playerItems.size() - 1);
 				if(removeItem(playerItems.size() - 1)) {
-					ItemUtils.giveItemToPlayer(player, item, player.getLocation());
+					ItemUtils.giveItemToPlayer(player, item, player.getLocation(), false);
 				}
 			}
 		}
@@ -163,19 +202,28 @@ public class Grindstone implements InventoryData{
 	
 	public void combine() {
 		if(inventory.getItem(5).getType().equals(Material.LIME_STAINED_GLASS_PANE)) {
-//			int itemOneRepair = AnvilNMS.getRepairCost(playerItems.get(0));
-//			int itemTwoRepair = AnvilNMS.getRepairCost(playerItems.get(1));
-//			if(itemOneRepair > itemTwoRepair) {
-//				combinedItem = AnvilNMS.setRepairCost(combinedItem, itemOneRepair * 2 + 1);
-//			}else {
-//				combinedItem = AnvilNMS.setRepairCost(combinedItem, itemTwoRepair * 2 + 1);
-//			}
-			ItemUtils.giveItemToPlayer(player, combinedItem, player.getLocation());
-			AbilityUtils.dropExperience(block.getLocation().clone().add(new Location(block.getLocation().getWorld(), 0.5, 0.5, 0.5)), 10);
-			combinedItem = null;
-			playerItems.clear();
+			if(takeEnchantments) {
+				ItemUtils.giveItemToPlayer(player, combinedItem, player.getLocation(), false);
+				int levelCost = GrindstoneUtils.getEnchantmentCost(playerItems.get(0));
+				if(player.getGameMode() != GameMode.CREATIVE){
+					player.setLevel(player.getLevel() - levelCost);
+				}
+				combinedItem = null;
+				playerItems.remove(1);
+				playerItems.set(0, Enchantments.removeAllEnchantments(playerItems.get(0)));
+			} else {
+				ItemUtils.giveItemToPlayer(player, combinedItem, player.getLocation(), false);
+				AbilityUtils.dropExperience(block.getLocation().clone().add(new Location(block.getLocation().getWorld(), 0.5, 0.5, 0.5)), 
+						GrindstoneUtils.getEnchantmentCost(playerItems.get(0)));
+				combinedItem = null;
+				playerItems.clear();
+			}
 		} else {
-			ChatUtils.sendMessage(player, ChatUtils.getMessage(getCodes(), "grindstone.message-cannot-combine"));
+			if(takeEnchantments) {
+				ChatUtils.sendMessage(player, ChatUtils.getMessage(getCodes(), "grindstone.message-cannot-take-enchantments"));
+			} else {
+				ChatUtils.sendMessage(player, ChatUtils.getMessage(getCodes(), "grindstone.message-cannot-combine"));
+			}
 		}
 	}
 
@@ -222,7 +270,7 @@ public class Grindstone implements InventoryData{
 	public void close(boolean external) {  
 		if(EnchantmentSolution.getPlugin().hasInventory(this)) {
 			for(ItemStack item : getItems()){
-				ItemUtils.giveItemToPlayer(player, item, player.getLocation());
+				ItemUtils.giveItemToPlayer(player, item, player.getLocation(), false);
 			}
 			EnchantmentSolution.getPlugin().removeInventory(this);
 			if(!external) {

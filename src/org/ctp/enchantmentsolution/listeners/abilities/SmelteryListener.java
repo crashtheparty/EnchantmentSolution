@@ -2,6 +2,7 @@ package org.ctp.enchantmentsolution.listeners.abilities;
 
 import org.bukkit.GameMode;
 import org.bukkit.Material;
+import org.bukkit.Statistic;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
@@ -29,8 +30,6 @@ public class SmelteryListener extends EnchantmentListener{
 				ItemStack smelted = AbilityUtils.getSmelteryItem(blockBroken, item);
 				if(smelted != null) {
 					if(!DefaultEnchantments.isEnabled(DefaultEnchantments.TELEPATHY) || !Enchantments.hasEnchantment(item, DefaultEnchantments.TELEPATHY)) {
-						McMMO.handleMcMMO(event);
-						super.damageItem(player, item);
 						switch(event.getBlock().getType()) {
 						case IRON_ORE:
 						case GOLD_ORE:
@@ -39,6 +38,10 @@ public class SmelteryListener extends EnchantmentListener{
 						default:
 							break;
 						}
+						player.incrementStatistic(Statistic.MINE_BLOCK, event.getBlock().getType());
+						player.incrementStatistic(Statistic.USE_ITEM, item.getType());
+						McMMO.handleMcMMO(event);
+						super.damageItem(player, item);
 						event.getBlock().setType(Material.AIR);
 						Item droppedItem = player.getWorld().dropItem(
 								blockBroken.getLocation().add(0.5, 0.5, 0.5),

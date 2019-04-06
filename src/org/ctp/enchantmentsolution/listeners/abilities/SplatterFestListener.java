@@ -2,6 +2,7 @@ package org.ctp.enchantmentsolution.listeners.abilities;
 
 import org.bukkit.GameMode;
 import org.bukkit.Material;
+import org.bukkit.Statistic;
 import org.bukkit.entity.Egg;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -48,6 +49,8 @@ public class SplatterFestListener extends EnchantmentListener{
 					}
 				}
 				if(removed) {
+					player.incrementStatistic(Statistic.USE_ITEM, item.getType());
+					player.incrementStatistic(Statistic.USE_ITEM, Material.EGG);
 					player.launchProjectile(Egg.class);
 					super.damageItem(player, item);
 				}

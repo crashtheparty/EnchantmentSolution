@@ -3,9 +3,11 @@ package org.ctp.enchantmentsolution.listeners.abilities;
 import java.util.Arrays;
 import java.util.List;
 
+import org.bukkit.Statistic;
 import org.bukkit.entity.AreaEffectCloud;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.HumanEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
@@ -38,6 +40,9 @@ public class IronDefenseListener extends EnchantmentListener{
 				int shieldDamage = (int) damage;
 				if(shieldDamage < damage) shieldDamage += 1;
 				super.damageItem(player, shield, shieldDamage);
+				if(player instanceof Player) {
+					((Player) player).incrementStatistic(Statistic.DAMAGE_BLOCKED_BY_SHIELD, (int) (damage * 10));
+				}
 			}
 		}
 	}

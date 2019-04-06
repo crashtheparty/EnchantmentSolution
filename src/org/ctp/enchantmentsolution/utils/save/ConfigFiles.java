@@ -210,6 +210,7 @@ public class ConfigFiles {
 		if(EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber() < 4) {
 			config.addDefault("use_grindstone", false, new String[] {"Use the grindstone from within the anvil in version < 1.14"});
 		}
+		config.addDefault("grindstone_take_enchantments", false, new String[] {"Use the grindstone to add enchantments from items to books"});
 		config.addDefault("update_legacy_enchantments", false, new String[] {"Update any enchantments generated in EnchantmentSolutionLegacy"});
 		config.addDefault("chest_loot", true, new String[] {"Allow custom and/or high level enchants to spawn in chests"});
 		config.addDefault("mob_loot", true, new String[] {"Allow custom and/or high level enchantments to spawn on mobs"});
@@ -650,6 +651,10 @@ public class ConfigFiles {
 	
 	public Language getLanguage() {
 		return Language.getLanguage(config.getString("language"));
+	}
+	
+	public boolean grindstoneTakeEnchantments() {
+		return config.getBoolean("grindstone_take_enchantments");
 	}
 	
 	public boolean getAprilFools() {

@@ -2,7 +2,7 @@ package org.ctp.enchantmentsolution.enchantments.helper;
 
 public enum Weight {
 	
-	COMMON(10), UNCOMMON(5), RARE(2), VERY_RARE(1), NULL(0);
+	COMMON(50), UNCOMMON(25), RARE(10), VERY_RARE(5), EPIC(2), LEGENDARY(1), NULL(0);
 	
 	private int weight, book, item;
 	private String name;
@@ -11,25 +11,35 @@ public enum Weight {
 		this.weight = weight;
 		
 		switch(weight) {
-		case 10:
+		case 50:
 			book = 1;
 			item = 1;
 			name = "common";
 			break;
-		case 5:
+		case 25:
 			book = 2;
 			item = 1;
 			name = "uncommon";
 			break;
-		case 2:
+		case 10:
 			book = 4;
 			item = 2;
 			name = "rare";
 			break;
-		case 1:
+		case 5:
+			book = 6;
+			item = 3;
+			name = "very_rare";
+			break;
+		case 2:
 			book = 8;
 			item = 4;
-			name = "very_rare";
+			name = "epic";
+			break;
+		case 1:
+			book = 12;
+			item = 6;
+			name = "legendary";
 			break;
 		case 0:
 			book = 0;

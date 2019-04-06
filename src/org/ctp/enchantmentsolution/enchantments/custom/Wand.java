@@ -53,6 +53,6 @@ public class Wand extends CustomEnchantment{
 
 	@Override
 	protected List<Enchantment> getDefaultConflictingEnchantments() {
-		return Arrays.asList(DefaultEnchantments.NET);
+		return Arrays.asList(DefaultEnchantments.IRENES_LASSO);
 	}
 }

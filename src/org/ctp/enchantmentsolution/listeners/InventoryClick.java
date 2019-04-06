@@ -15,7 +15,7 @@ import org.ctp.enchantmentsolution.inventory.LegacyAnvil;
 import org.ctp.enchantmentsolution.utils.InventoryClickUtils;
 
 public class InventoryClick implements Listener {
-
+	
 	@EventHandler
 	public void onInventoryClick(InventoryClickEvent event) {
 		Inventory inv = event.getClickedInventory();

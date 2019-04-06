@@ -271,15 +271,8 @@ public class Enchantments {
 		}
 		for(EnchantmentLevel level : levels){
 			meta.addEnchant(level.getEnchant().getRelativeEnchantment(), level.getLevel(), true);
-			CustomEnchantment enchant = null;
-			for(CustomEnchantment ench : Enchantments.getEnchantments()){
-				if(ench.getName().equalsIgnoreCase(level.getEnchant().getName())){
-					enchant = ench;
-					break;
-				}
-			}
-			if(enchant != null && enchant.getRelativeEnchantment() instanceof CustomEnchantmentWrapper){
-				String enchName = StringUtils.returnEnchantmentName(enchant, level.getLevel());
+			if(level.getEnchant().getRelativeEnchantment() instanceof CustomEnchantmentWrapper) {
+				String enchName = StringUtils.returnEnchantmentName(level.getEnchant(), level.getLevel());
 				lore.add(ChatUtils.hideText("solution") + "" + ChatColor.GRAY + enchName);
 			}
 		}
@@ -308,19 +301,12 @@ public class Enchantments {
 			}
 		}
 		if(Enchantments.hasEnchantment(item, enchantment.getRelativeEnchantment())){
-			StringUtils.removeEnchantment(enchantment, meta.getEnchantLevel(enchantment.getRelativeEnchantment()), lore);
+			lore = StringUtils.removeEnchantment(enchantment, meta.getEnchantLevel(enchantment.getRelativeEnchantment()), lore);
 			meta.removeEnchant(enchantment.getRelativeEnchantment());
 		}
 		meta.addEnchant(enchantment.getRelativeEnchantment(), level, true);
-		CustomEnchantment enchant = null;
-		for(CustomEnchantment ench : Enchantments.getEnchantments()){
-			if(ench.getName().equalsIgnoreCase(enchantment.getName())){
-				enchant = ench;
-				break;
-			}
-		}
-		if(enchant != null && enchant.getRelativeEnchantment() instanceof CustomEnchantmentWrapper){
-			String enchName = StringUtils.returnEnchantmentName(enchant, level);
+		if(enchantment.getRelativeEnchantment() instanceof CustomEnchantmentWrapper) {
+			String enchName = StringUtils.returnEnchantmentName(enchantment, level);
 			lore.add(ChatUtils.hideText("solution") + "" + ChatColor.GRAY + enchName);
 		}
 		lore.addAll(previousLore);
@@ -336,7 +322,9 @@ public class Enchantments {
 			lore = new ArrayList<String>();
 		}
 		if(Enchantments.hasEnchantment(item, enchantment.getRelativeEnchantment())){
-			StringUtils.removeEnchantment(enchantment, meta.getEnchantLevel(enchantment.getRelativeEnchantment()), lore);
+			if(enchantment.getRelativeEnchantment() instanceof CustomEnchantmentWrapper) {
+				lore = StringUtils.removeEnchantment(enchantment, meta.getEnchantLevel(enchantment.getRelativeEnchantment()), lore);
+			}
 			meta.removeEnchant(enchantment.getRelativeEnchantment());
 		}
 		meta.setLore(lore);
@@ -352,7 +340,9 @@ public class Enchantments {
 		}
 		for(CustomEnchantment enchantment : DefaultEnchantments.getEnchantments()) {
 			if(Enchantments.hasEnchantment(item, enchantment.getRelativeEnchantment())){
-				StringUtils.removeEnchantment(enchantment, meta.getEnchantLevel(enchantment.getRelativeEnchantment()), lore);
+				if(enchantment.getRelativeEnchantment() instanceof CustomEnchantmentWrapper) {
+					lore = StringUtils.removeEnchantment(enchantment, meta.getEnchantLevel(enchantment.getRelativeEnchantment()), lore);
+				}
 				meta.removeEnchant(enchantment.getRelativeEnchantment());
 			}
 		}

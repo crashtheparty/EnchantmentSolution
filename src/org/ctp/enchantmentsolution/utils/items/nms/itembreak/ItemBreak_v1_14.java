@@ -70,14 +70,16 @@ public enum ItemBreak_v1_14 implements ItemBreakType{
 		case GOLDEN_AXE:
 		case IRON_AXE:
 		case STONE_AXE:
-		case WOODEN_AXE:
 			itemTypes.addAll(Arrays.asList(Material.COCOA, Material.JACK_O_LANTERN, Material.PUMPKIN, Material.MELON, Material.BOOKSHELF, 
 					Material.ACACIA_FENCE, Material.ACACIA_FENCE_GATE, Material.BIRCH_FENCE, Material.BIRCH_FENCE_GATE, Material.DARK_OAK_FENCE, 
 					Material.DARK_OAK_FENCE_GATE, Material.JUNGLE_FENCE, Material.JUNGLE_FENCE_GATE, Material.OAK_FENCE, Material.OAK_FENCE_GATE, 
 					Material.SPRUCE_FENCE, Material.SPRUCE_FENCE_GATE, Material.ACACIA_LOG, Material.ACACIA_PLANKS, Material.BIRCH_LOG, Material.BIRCH_PLANKS, 
 					Material.DARK_OAK_LOG, Material.DARK_OAK_PLANKS, Material.JUNGLE_LOG, Material.JUNGLE_PLANKS, Material.OAK_LOG, Material.OAK_PLANKS, 
 					Material.SPRUCE_LOG, Material.SPRUCE_PLANKS, Material.ACACIA_WOOD, Material.BIRCH_WOOD, Material.DARK_OAK_WOOD, Material.JUNGLE_WOOD, 
-					Material.OAK_WOOD, Material.SPRUCE_WOOD, Material.BROWN_MUSHROOM_BLOCK, Material.RED_MUSHROOM_BLOCK, Material.LADDER));
+					Material.OAK_WOOD, Material.SPRUCE_WOOD, Material.STRIPPED_ACACIA_LOG, Material.STRIPPED_BIRCH_LOG, Material.STRIPPED_DARK_OAK_LOG, 
+					Material.STRIPPED_JUNGLE_LOG, Material.STRIPPED_OAK_LOG, Material.STRIPPED_SPRUCE_LOG, Material.STRIPPED_ACACIA_WOOD, Material.STRIPPED_BIRCH_WOOD, 
+					Material.STRIPPED_DARK_OAK_WOOD, Material.STRIPPED_JUNGLE_WOOD, Material.STRIPPED_OAK_WOOD, Material.STRIPPED_SPRUCE_WOOD, 
+					Material.BROWN_MUSHROOM_BLOCK, Material.RED_MUSHROOM_BLOCK, Material.LADDER));
 			return itemTypes;
 		case WOODEN_PICKAXE:
 			itemTypes.addAll(Arrays.asList(Material.ICE, Material.PACKED_ICE, Material.FROSTED_ICE, Material.BLUE_ICE, Material.REDSTONE_BLOCK, Material.IRON_BARS, 
