@@ -29,7 +29,7 @@ public class SmelteryListener extends EnchantmentListener{
 				ItemStack smelted = AbilityUtils.getSmelteryItem(blockBroken, item);
 				if(smelted != null) {
 					if(!DefaultEnchantments.isEnabled(DefaultEnchantments.TELEPATHY) || !Enchantments.hasEnchantment(item, DefaultEnchantments.TELEPATHY)) {
-						McMMO.handleMcMMO(event);
+						McMMO.handleMcMMO(event, item);
 						super.damageItem(player, item);
 						switch(event.getBlock().getType()) {
 						case IRON_ORE:

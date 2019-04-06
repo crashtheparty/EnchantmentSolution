@@ -8,6 +8,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Container;
 import org.bukkit.block.DoubleChest;
+import org.bukkit.block.data.type.Snow;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -20,6 +21,7 @@ import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
 import org.ctp.enchantmentsolution.nms.McMMO;
 import org.ctp.enchantmentsolution.utils.items.nms.AbilityUtils;
+import org.ctp.enchantmentsolution.utils.items.nms.ItemBreakType;
 import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 
 public class TelepathyListener extends EnchantmentListener {
@@ -93,6 +95,10 @@ public class TelepathyListener extends EnchantmentListener {
 					damageItem(event);
 					return;
 				}
+				if(block.getType().equals(Material.SNOW) && ItemBreakType.getType(item.getType()).getBreakTypes().contains(Material.SNOW)) {
+					int num = ((Snow) block.getBlockData()).getLayers();
+					drops.add(new ItemStack(Material.SNOWBALL, num));
+				}
 				giveItems(player, item, block, drops);
 				if (Enchantments.hasEnchantment(item, DefaultEnchantments.GOLD_DIGGER)) {
 					ItemStack goldDigger = AbilityUtils.getGoldDiggerItems(item, block);
@@ -110,9 +116,19 @@ public class TelepathyListener extends EnchantmentListener {
 	private void damageItem(BlockBreakEvent event) {
 		Player player = event.getPlayer();
 		ItemStack item = player.getInventory().getItemInMainHand();
-		super.damageItem(player, item);
-		McMMO.handleMcMMO(event);
+		if(Enchantments.hasEnchantment(item, DefaultEnchantments.SMELTERY)) {
+			switch(event.getBlock().getType()) {
+			case IRON_ORE:
+			case GOLD_ORE:
+				event.setExpToDrop((int) (Math.random() * 3) + 1);
+				break;
+			default:
+				break;
+			}
+		}
 		AbilityUtils.giveExperience(player, event.getExpToDrop());
+		super.damageItem(player, item);
+		McMMO.handleMcMMO(event, item);
 		event.getBlock().setType(Material.AIR);
 	}
 	

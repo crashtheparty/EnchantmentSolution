@@ -29,7 +29,8 @@ public class InventoryClickUtils {
 			ItemStack item = clickedInv.getItem(slot);
 			if (Enchantments.isEnchantable(item)) {
 				ItemStack replace = new ItemStack(Material.AIR);
-				if(item.getAmount() > 1){
+				int original_amount = item.getAmount();
+				if(original_amount > 1){
 					replace = item.clone();
 					replace.setAmount(replace.getAmount() - 1);
 					item.setAmount(1);
@@ -37,6 +38,8 @@ public class InventoryClickUtils {
 				if (table.addItem(item)) {
 					table.setInventory();
 					player.getInventory().setItem(slot, replace);
+				} else if (original_amount > 1){
+					item.setAmount(original_amount);
 				}
 			} else if(item != null && item.getType().equals(Material.LAPIS_LAZULI)) {
 				player.getInventory().setItem(slot, table.addToLapisStack(item));
@@ -71,7 +74,8 @@ public class InventoryClickUtils {
 				return;
 			}
 			ItemStack replace = new ItemStack(Material.AIR);
-			if(item.getAmount() > 1 && item.getType() == Material.BOOK){
+			int original_amount = item.getAmount();
+			if(original_amount > 1 && (item.getType() == Material.BOOK && item.hasItemMeta() && item.getItemMeta().hasEnchants())){
 				replace = item.clone();
 				replace.setAmount(replace.getAmount() - 1);
 				item.setAmount(1);
@@ -79,6 +83,8 @@ public class InventoryClickUtils {
 			if (anvil.addItem(item)) {
 				anvil.setInventory();
 				player.getInventory().setItem(slot, replace);
+			} else if (original_amount > 1){
+				item.setAmount(original_amount);
 			}
 		} else {
 			ItemStack item = clickedInv.getItem(slot);
@@ -114,7 +120,8 @@ public class InventoryClickUtils {
 				return;
 			}
 			ItemStack replace = new ItemStack(Material.AIR);
-			if(item.getAmount() > 1){
+			int original_amount = item.getAmount();
+			if(original_amount > 1){
 				replace = item.clone();
 				replace.setAmount(replace.getAmount() - 1);
 				item.setAmount(1);
@@ -122,6 +129,8 @@ public class InventoryClickUtils {
 			if (stone.addItem(item)) {
 				stone.setInventory();
 				player.getInventory().setItem(slot, replace);
+			} else if (original_amount > 1){
+				item.setAmount(original_amount);
 			}
 		} else {
 			ItemStack item = clickedInv.getItem(slot);
