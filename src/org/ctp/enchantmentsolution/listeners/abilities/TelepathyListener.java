@@ -1,5 +1,6 @@
 package org.ctp.enchantmentsolution.listeners.abilities;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 
@@ -8,6 +9,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Container;
 import org.bukkit.block.DoubleChest;
+import org.bukkit.block.data.type.Snow;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -51,16 +53,16 @@ public class TelepathyListener extends EnchantmentListener {
 							i.remove();
 						}
 					}
-					giveItems(player, item, event.getBlock(), drops);
+					giveItems(player, item, block, drops);
 					damageItem(event);
 					return;
-				} else if (event.getBlock().getState() instanceof Container) {
+				} else if (block.getState() instanceof Container) {
 					Iterator<ItemStack> i = drops.iterator();
 					while(i.hasNext()) {
 						ItemStack drop = i.next();
 						ItemUtils.giveItemToPlayer(player, drop, player.getLocation());
 					}
-					Container container = (Container) event.getBlock().getState();
+					Container container = (Container) block.getState();
 					if(container.getInventory().getHolder() instanceof DoubleChest) {
 						DoubleChest doubleChest = (DoubleChest) container.getInventory().getHolder();
 						if (doubleChest.getLeftSide().getInventory().getLocation().equals(container.getLocation())) {
@@ -93,6 +95,13 @@ public class TelepathyListener extends EnchantmentListener {
 					damageItem(event);
 					return;
 				}
+					
+				if(block.getType().equals(Material.SNOW) && 
+						Arrays.asList(Material.IRON_SHOVEL, Material.DIAMOND_SHOVEL, Material.GOLDEN_SHOVEL, Material.STONE_SHOVEL, Material.WOODEN_SHOVEL)
+						.contains(item.getType())) {
+					int num = ((Snow) block.getBlockData()).getLayers();
+					drops.add(new ItemStack(Material.SNOWBALL, num));
+				}
 				giveItems(player, item, block, drops);
 				damageItem(event);
 			}
@@ -102,9 +111,19 @@ public class TelepathyListener extends EnchantmentListener {
 	private void damageItem(BlockBreakEvent event) {
 		Player player = event.getPlayer();
 		ItemStack item = player.getInventory().getItemInMainHand();
-		super.damageItem(player, item);
-		McMMO.handleMcMMO(event);
+		if(Enchantments.hasEnchantment(item, DefaultEnchantments.SMELTERY)) {
+			switch(event.getBlock().getType()) {
+			case IRON_ORE:
+			case GOLD_ORE:
+				event.setExpToDrop((int) (Math.random() * 3) + 1);
+				break;
+			default:
+				break;
+			}
+		}
 		AbilityUtilities.giveExperience(player, event.getExpToDrop());
+		super.damageItem(player, item);
+		McMMO.handleMcMMO(event, item);
 		event.getBlock().setType(Material.AIR);
 	}
 	

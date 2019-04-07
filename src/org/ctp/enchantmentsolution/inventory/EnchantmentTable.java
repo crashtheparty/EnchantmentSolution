@@ -49,6 +49,14 @@ public class EnchantmentTable implements InventoryData {
 
 	public void setInventory(List<ItemStack> items) {
 		Inventory inv = Bukkit.createInventory(null, 54, ChatUtils.getMessage(getCodes(), "table.name"));
+		
+		if(inventory == null) {
+			inventory = inv;
+			player.openInventory(inv);
+		} else {
+			inv = player.getOpenInventory().getTopInventory();
+			inventory = inv;
+		}
 
 		ItemStack topLeft = new ItemStack(Material.BOOK);
 		ItemMeta topLeftMeta = topLeft.getItemMeta();
@@ -175,8 +183,15 @@ public class EnchantmentTable implements InventoryData {
 		mirror = new ItemStack(Material.RED_STAINED_GLASS_PANE);
 		mirrorMeta.setDisplayName(ChatUtils.getMessage(getCodes(), "table.red-mirror"));
 		mirror.setItemMeta(mirrorMeta);
-
+		
 		int start = 18;
+		
+		for(int i = start; i < 54; i++) {
+			if(i % 9 != 1 && i % 9 != 2) {
+				inv.setItem(i, mirror);
+			}
+		}
+
 		for (int i = 0; i < playerItems.size(); i++) {
 			ItemStack item = playerItems.get(i);
 			inv.setItem(start, item);
@@ -265,11 +280,11 @@ public class EnchantmentTable implements InventoryData {
 			start += 9;
 		}
 		
-		for(int i = start; i < 54; i++) {
-			if(i % 9 != 1 && i % 9 != 2) {
-				inv.setItem(i, mirror);
-			}
-		}
+//		for(int i = start; i < 54; i++) {
+//			if(i % 9 != 1 && i % 9 != 2) {
+//				inv.setItem(i, mirror);
+//			}
+//		}
 		
 		if(ConfigFiles.useLapisInTable()) {
 			if(lapisStack == null) {
@@ -283,9 +298,6 @@ public class EnchantmentTable implements InventoryData {
 				inv.setItem(10, lapisStack);
 			}
 		}
-		
-		inventory = inv;
-		player.openInventory(inv);
 	}
 
 	public Player getPlayer() {

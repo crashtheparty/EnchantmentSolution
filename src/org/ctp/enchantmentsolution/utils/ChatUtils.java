@@ -1,6 +1,7 @@
 package org.ctp.enchantmentsolution.utils;
 
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -83,10 +84,14 @@ public class ChatUtils {
 	
 	public static List<String> getMessages(HashMap<String, Object> codes, String location) {
 		List<String> messages = ConfigFiles.getLanguageFile().getStringList(location);
+		if(messages == null) {
+			messages = new ArrayList<String>();
+			messages.add(ConfigFiles.getLanguageFile().getString(location));
+		}
 		for(int i = 0; i < messages.size(); i++) {
 			messages.set(i, translateCodes(codes, ChatColor.translateAlternateColorCodes('&', messages.get(i))));
 		}
-		if(messages.size() == 0) messages.add(location + " must be a list.");
+		if(messages.size() == 0) messages.add(location + " must be a list or a string.");
 		return messages;
 	}
 	

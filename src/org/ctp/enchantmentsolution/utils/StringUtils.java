@@ -76,6 +76,7 @@ public class StringUtils {
 	
 	public static boolean isEnchantment(String s) {
 		if(s.startsWith(ChatUtils.hideText("solution") + "" + ChatColor.GRAY)) return true;
+		s = ChatColor.stripColor(s);
 		String[] pieces = s.split(" ");
 		int level = 0;
 		int repair = 0;
