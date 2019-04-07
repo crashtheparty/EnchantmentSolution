@@ -9,6 +9,9 @@ import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
+import org.bukkit.block.data.BlockData;
+import org.bukkit.block.data.Directional;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -18,11 +21,11 @@ import org.ctp.enchantmentsolution.enchantments.Enchantments;
 import org.ctp.enchantmentsolution.nms.AnvilNMS;
 import org.ctp.enchantmentsolution.utils.AnvilUtils;
 import org.ctp.enchantmentsolution.utils.AnvilUtils.RepairType;
-import org.ctp.enchantmentsolution.utils.items.DamageUtils;
-import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 import org.ctp.enchantmentsolution.utils.save.ConfigFiles;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.JobsUtils;
+import org.ctp.enchantmentsolution.utils.items.DamageUtils;
+import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 
 public class Anvil implements InventoryData{
 
@@ -43,6 +46,7 @@ public class Anvil implements InventoryData{
 	}
 
 	public void setInventory(List<ItemStack> items) {
+		if(block.getType() == Material.AIR) return;
 		ConfigFiles files = EnchantmentSolution.getPlugin().getConfigFiles();
 		try {
 			int size = 27;
@@ -161,7 +165,7 @@ public class Anvil implements InventoryData{
 					} else {
 						HashMap<String, Object> loreCodes = getCodes();
 						loreCodes.put("%repairCost%", repairCost);
-						lore.add(ChatUtils.getMessage(getCodes(), "anvil.repair-cost-high"));
+						lore.add(ChatUtils.getMessage(loreCodes, "anvil.repair-cost-high"));
 					}
 				}
 				ItemMeta combineMeta = combine.getItemMeta();
@@ -342,11 +346,16 @@ public class Anvil implements InventoryData{
 			if(material == Material.AIR) {
 				block.getWorld().playSound(block.getLocation(), Sound.BLOCK_ANVIL_DESTROY, 1, 1);
 				close(false);
+				block.setType(material);
 			} else {
 				block.getWorld().playSound(block.getLocation(), Sound.BLOCK_ANVIL_BREAK, 1, 1);
 				block.getWorld().playSound(block.getLocation(), Sound.BLOCK_ANVIL_USE, 1, 1);
+				BlockFace facing = ((Directional) block.getBlockData()).getFacing();
+				block.setType(material);
+				Directional d = (Directional) block.getBlockData();
+				d.setFacing(facing);
+				block.setBlockData((BlockData) d);
 			}
-			block.setType(material);
 		} else {
 			block.getWorld().playSound(block.getLocation(), Sound.BLOCK_ANVIL_USE, 1, 1);
 		}
