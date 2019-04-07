@@ -131,7 +131,7 @@ public class TelepathyListener extends EnchantmentListener {
 		player.incrementStatistic(Statistic.MINE_BLOCK, event.getBlock().getType());
 		player.incrementStatistic(Statistic.USE_ITEM, item.getType());
 		super.damageItem(player, item);
-		McMMO.handleMcMMO(event);
+		McMMO.handleMcMMO(event, item);
 		event.getBlock().setType(Material.AIR);
 	}
 	

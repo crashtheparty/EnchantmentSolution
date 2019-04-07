@@ -40,7 +40,7 @@ public class SmelteryListener extends EnchantmentListener{
 						}
 						player.incrementStatistic(Statistic.MINE_BLOCK, event.getBlock().getType());
 						player.incrementStatistic(Statistic.USE_ITEM, item.getType());
-						McMMO.handleMcMMO(event);
+						McMMO.handleMcMMO(event, item);
 						super.damageItem(player, item);
 						event.getBlock().setType(Material.AIR);
 						Item droppedItem = player.getWorld().dropItem(
