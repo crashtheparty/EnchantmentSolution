@@ -109,6 +109,8 @@ public class ItemUtils {
 		}
 		
 		combinedMeta.setDisplayName(firstMeta.getDisplayName());
+		combinedMeta.setLore(firstMeta.getLore());
+		combinedMeta.setAttributeModifiers(firstMeta.getAttributeModifiers());
 		
 		combined.setItemMeta(combinedMeta);
 		
