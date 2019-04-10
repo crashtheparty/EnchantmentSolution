@@ -260,14 +260,20 @@ public class Enchantments {
 	}
 	
 	public static ItemStack addEnchantmentsToItem(ItemStack item, List<EnchantmentLevel> levels){
-		if(levels == null) {
-			return item;
-		}
 		ItemMeta meta = item.getItemMeta();
-		List<String> lore = meta.getLore();
+		List<String> lore = new ArrayList<String>();
 		List<String> previousLore = meta.getLore();
-		if(lore == null){
-			lore = new ArrayList<String>();
+		if(levels == null) {
+			if(previousLore != null) {
+				for(String l : previousLore) {
+					if(!StringUtils.isEnchantment(l)) {
+						lore.add(l);
+					}
+				}
+			}
+			meta.setLore(lore);
+			item.setItemMeta(meta);
+			return item;
 		}
 		for(EnchantmentLevel level : levels){
 			meta.addEnchant(level.getEnchant().getRelativeEnchantment(), level.getLevel(), true);

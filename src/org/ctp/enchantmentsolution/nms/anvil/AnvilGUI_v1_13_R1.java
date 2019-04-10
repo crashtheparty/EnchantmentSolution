@@ -341,6 +341,9 @@ public class AnvilGUI_v1_13_R1 {
 				}
 			}
 		};
+		if(data instanceof Anvil) {
+			((Anvil) data).setInLegacy(true);
+		}
 		AnvilGUI_v1_13_R1 gui = new AnvilGUI_v1_13_R1(player, handler, data);
 		gui.open();
 	}
