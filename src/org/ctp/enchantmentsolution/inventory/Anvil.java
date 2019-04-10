@@ -34,6 +34,7 @@ public class Anvil implements InventoryData{
 	private List<ItemStack> playerItems;
 	private ItemStack combinedItem;
 	private Block block;
+	private boolean inLegacy;
 
 	public Anvil(Player player, Block block) {
 		this.setPlayer(player);
@@ -53,8 +54,8 @@ public class Anvil implements InventoryData{
 				size = 45;
 			}
 			Inventory inv = Bukkit.createInventory(null, size, ChatUtils.getMessage(getCodes(), "anvil.name"));
-			
-			if(inventory == null) {
+			if(inventory == null || isInLegacy()) {
+				inLegacy = false;
 				inventory = inv;
 				player.openInventory(inv);
 			} else {
@@ -355,5 +356,13 @@ public class Anvil implements InventoryData{
 		HashMap<String, Object> codes = new HashMap<String, Object>();
 		codes.put("%player%", player.getName());
 		return codes;
+	}
+
+	public boolean isInLegacy() {
+		return inLegacy;
+	}
+
+	public void setInLegacy(boolean inLegacy) {
+		this.inLegacy = inLegacy;
 	}
 }
