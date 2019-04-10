@@ -311,9 +311,9 @@ public class DefaultEnchantments {
 		DefaultEnchantments.addDefaultEnchantment(new Transmutation());
 		DefaultEnchantments.addDefaultEnchantment(new Unrest());
 		DefaultEnchantments.addDefaultEnchantment(new VoidWalker());
+		DefaultEnchantments.addDefaultEnchantment(new Wand());
 		DefaultEnchantments.addDefaultEnchantment(new Warp());
 		DefaultEnchantments.addDefaultEnchantment(new WidthPlusPlus());
-		DefaultEnchantments.addDefaultEnchantment(new Wand());
 	}
 	
 	public static List<String> getEnchantmentNames(){

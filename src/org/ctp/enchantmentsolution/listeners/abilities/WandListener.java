@@ -1,6 +1,7 @@
 package org.ctp.enchantmentsolution.listeners.abilities;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.bukkit.Bukkit;
@@ -9,6 +10,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Statistic;
 import org.bukkit.block.Block;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Directional;
 import org.bukkit.block.data.Orientable;
 import org.bukkit.block.data.Rotatable;
@@ -99,15 +101,24 @@ public class WandListener extends EnchantmentListener{
 									Block block = clickedBlock.getRelative(x, y, z);
 									if(!block.getType().isSolid()) {
 										IGNORE_BLOCKS.add(block);
+										Collection<ItemStack> drops = block.getDrops();
+										BlockData oldData = block.getBlockData();
+										Material oldType = block.getType();
 										block.setType(item.getType());
 										if(block.getBlockData() instanceof Directional) {
-											((Directional) block).setFacing(((Directional) clickedBlock).getFacing());
+											Directional directional = (Directional) block.getBlockData();
+											directional.setFacing(((Directional) clickedBlock).getFacing());
+											block.setBlockData((BlockData) directional);
 										}
 										if(block.getBlockData() instanceof Orientable) {
-											((Orientable) block).setAxis(((Orientable) clickedBlock).getAxis());
+											Orientable orientable = (Orientable) block.getBlockData();
+											orientable.setAxis(((Orientable) clickedBlock).getAxis());
+											block.setBlockData((BlockData) orientable);
 										}
 										if(block.getBlockData() instanceof Rotatable) {
-											((Rotatable) block).setRotation(((Rotatable) clickedBlock).getRotation());
+											Rotatable rotatable = (Rotatable) block.getBlockData();
+											rotatable.setRotation(((Rotatable) clickedBlock).getRotation());
+											block.setBlockData((BlockData) rotatable);
 										}
 										BlockPlaceEvent newEvent = new BlockPlaceEvent(block, block.getState(), clickedBlock, item, player, true, EquipmentSlot.OFF_HAND);
 										Bukkit.getServer().getPluginManager().callEvent(newEvent);
@@ -115,6 +126,13 @@ public class WandListener extends EnchantmentListener{
 											player.incrementStatistic(Statistic.USE_ITEM, item.getType());
 											block.setBlockData(newEvent.getBlockReplacedState().getBlockData());
 											removed = remove(player, item, 1);
+											for(ItemStack drop : drops) {
+												block.getWorld().dropItem(newEvent.getBlock().getLocation(), drop);
+											}
+										} else {
+											IGNORE_BLOCKS.remove(block);
+											block.setType(oldType);
+											block.setBlockData(oldData);
 										}
 									}
 								}

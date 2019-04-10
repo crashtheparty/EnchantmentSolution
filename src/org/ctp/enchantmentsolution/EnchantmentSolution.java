@@ -8,13 +8,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.ctp.enchantmentsolution.commands.ConfigEdit;
-import org.ctp.enchantmentsolution.commands.Enchant;
-import org.ctp.enchantmentsolution.commands.EnchantInfo;
-import org.ctp.enchantmentsolution.commands.Reload;
-import org.ctp.enchantmentsolution.commands.RemoveEnchant;
-import org.ctp.enchantmentsolution.commands.Reset;
-import org.ctp.enchantmentsolution.commands.UnsafeEnchant;
+import org.ctp.enchantmentsolution.commands.*;
 import org.ctp.enchantmentsolution.database.SQLite;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.inventory.InventoryData;
@@ -175,7 +169,9 @@ public class EnchantmentSolution extends JavaPlugin {
 			getServer().getPluginManager().registerEvents(new EnchantsFishingListener(), this);
 			break;
 		}
-		getServer().getPluginManager().registerEvents(McMMO.getAbilities(), this);
+		if(McMMO.getAbilities() != null) {
+			getServer().getPluginManager().registerEvents(McMMO.getAbilities(), this);
+		}
 
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN,
 				new MagmaWalkerListener(), 20l, 20l);
