@@ -17,6 +17,7 @@ import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
+import org.ctp.enchantmentsolution.nms.AnvilNMS;
 import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 import org.ctp.enchantmentsolution.utils.items.nms.AbilityUtils;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
@@ -158,6 +159,7 @@ public class Grindstone implements InventoryData{
 			
 			if(combinedItem != null) {
 				inv.setItem(7, combinedItem);
+				AnvilNMS.setRepairCost(combinedItem, 0);
 			}
 			inv.setItem(5, combine);
 			

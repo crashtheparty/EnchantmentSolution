@@ -8,6 +8,7 @@ import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
@@ -19,13 +20,14 @@ public class SoulboundListener extends EnchantmentListener{
 	
 	public static HashMap<String, List<ItemStack>> SOUL_ITEMS = new HashMap<>();
 	
-	@EventHandler
+	@EventHandler(priority=EventPriority.HIGHEST)
 	public void onPlayerDeath(PlayerDeathEvent event){
 		if(!canRun(DefaultEnchantments.SOULBOUND, event)) return;
 		List<ItemStack> items = event.getDrops();
 		List<ItemStack> newItems = new ArrayList<ItemStack>();
 		List<ItemStack> playerItems = new ArrayList<ItemStack>();
 		Player player = event.getEntity();
+		if(event.getKeepInventory()) return;
 		
 		ItemStack killItem = null;
 		if(player.getKiller() != null){

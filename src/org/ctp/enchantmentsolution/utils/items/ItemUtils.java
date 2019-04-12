@@ -5,10 +5,13 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Statistic;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -110,7 +113,18 @@ public class ItemUtils {
 		
 		combinedMeta.setDisplayName(firstMeta.getDisplayName());
 		combinedMeta.setLore(firstMeta.getLore());
-		combinedMeta.setAttributeModifiers(firstMeta.getAttributeModifiers());
+		if(firstMeta.getAttributeModifiers() != null && !firstMeta.getAttributeModifiers().isEmpty()) {
+			Iterator<Map.Entry<Attribute, AttributeModifier>> iterator = firstMeta.getAttributeModifiers().entries().iterator();
+			while(iterator.hasNext()) {
+				Map.Entry<Attribute, AttributeModifier> next = iterator.next();
+				
+				if (next.getKey() == null || next.getValue() == null) {
+				    iterator.remove();
+				    continue;
+				}
+				combinedMeta.addAttributeModifier(next.getKey(), next.getValue());
+			}
+		}
 		
 		combined.setItemMeta(combinedMeta);
 		

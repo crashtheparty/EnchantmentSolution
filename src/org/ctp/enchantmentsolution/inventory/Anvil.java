@@ -55,7 +55,6 @@ public class Anvil implements InventoryData{
 				size = 45;
 			}
 			Inventory inv = Bukkit.createInventory(null, size, ChatUtils.getMessage(getCodes(), "anvil.name"));
-			ChatUtils.sendInfo("Is In Legacy: " + inLegacy);
 			if(inventory == null || isInLegacy()) {
 				inLegacy = false;
 				inventory = inv;
@@ -269,7 +268,7 @@ public class Anvil implements InventoryData{
 		repairCost += repairCostOne + repairCostTwo;
 		
 		if(type.equals(RepairType.COMBINE)) {
-			repairCost += Enchantments.combineEnchantmentsLevel(playerItems.get(0), playerItems.get(1));
+			repairCost += Enchantments.combineEnchantmentsLevel(player, playerItems.get(0), playerItems.get(1));
 		}else if(type.equals(RepairType.REPAIR)) {
 			repairCost += ItemUtils.repairItem(playerItems.get(0), playerItems.get(1));
 		}
