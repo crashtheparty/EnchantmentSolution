@@ -54,3 +54,6 @@ permissions:
   enchantmentsolution.permissions.ignore: 
     description: Gives access to all enchantment permissions.
     default: false
+  enchantmentsolution.god-anvil:
+    description: Allows players to combine items higher than their max levels
+    default: false

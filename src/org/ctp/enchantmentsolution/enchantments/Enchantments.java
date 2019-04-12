@@ -307,12 +307,6 @@ public class Enchantments {
 		if(lore == null){
 			lore = new ArrayList<String>();
 		}
-		List<String> previousLore = new ArrayList<String>();
-		for(String l : lore) {
-			if(!StringUtils.isEnchantment(l)) {
-				previousLore.add(l);
-			}
-		}
 		if(Enchantments.hasEnchantment(item, enchantment.getRelativeEnchantment())){
 			StringUtils.removeEnchantment(enchantment, meta.getEnchantLevel(enchantment.getRelativeEnchantment()), lore);
 			meta.removeEnchant(enchantment.getRelativeEnchantment());
@@ -329,7 +323,6 @@ public class Enchantments {
 			String enchName = StringUtils.returnEnchantmentName(enchant, level);
 			lore.add(ChatUtils.hideText("solution") + "" + ChatColor.GRAY + enchName);
 		}
-		lore.addAll(previousLore);
 		meta.setLore(lore);
 		item.setItemMeta(meta);
 		return item;
@@ -420,7 +413,7 @@ public class Enchantments {
 		return true;
 	}
 	
-	public static int combineEnchantmentsLevel(ItemStack first, ItemStack second) {
+	public static int combineEnchantmentsLevel(Player player, ItemStack first, ItemStack second) {
 		int cost = 0;
 		ItemMeta firstMeta = first.clone().getItemMeta();
 		Map<Enchantment, Integer> firstEnchants = firstMeta.getEnchants();
@@ -461,16 +454,36 @@ public class Enchantments {
 			for(EnchantmentLevel enchantOne : firstLevels) {
 				if(enchantTwo.getEnchant().getRelativeEnchantment().equals(enchantOne.getEnchant().getRelativeEnchantment())) {
 					same = true;
-					if(enchantTwo.getLevel() == enchantOne.getLevel()) {
-						if(enchantTwo.getLevel() == enchantTwo.getEnchant().getMaxLevel()) {
+					if(player.hasPermission("enchantmentsolution.god-anvil")) {
+						if(enchantTwo.getLevel() == enchantOne.getLevel()) {
+							if (enchantTwo.getLevel() >= enchantTwo.getEnchant().getMaxLevel()) {
+								levelCost = enchantTwo.getLevel();
+							} else {
+								levelCost = enchantTwo.getLevel() + 1;
+							}
+						} else if (enchantTwo.getLevel() > enchantOne.getLevel()) {
 							levelCost = enchantTwo.getLevel();
-						}else {
-							levelCost = enchantTwo.getLevel() + 1;
+						} else {
+							levelCost = enchantOne.getLevel();
 						}
-					}else if(enchantTwo.getLevel() > enchantOne.getLevel()) {
-						levelCost = enchantTwo.getLevel();
-					}else {
-						levelCost = enchantOne.getLevel();
+					} else {
+						if(enchantOne.getLevel() > enchantOne.getEnchant().getMaxLevel()) {
+							enchantOne.setLevel(enchantOne.getEnchant().getMaxLevel());
+						}
+						if(enchantTwo.getLevel() > enchantTwo.getEnchant().getMaxLevel()) {
+							enchantTwo.setLevel(enchantTwo.getEnchant().getMaxLevel());
+						}
+						if(enchantTwo.getLevel() == enchantOne.getLevel()) {
+							if (enchantTwo.getLevel() >= enchantTwo.getEnchant().getMaxLevel()) {
+								levelCost = enchantTwo.getLevel();
+							} else {
+								levelCost = enchantTwo.getLevel() + 1;
+							}
+						} else if (enchantTwo.getLevel() > enchantOne.getLevel()) {
+							levelCost = enchantTwo.getLevel();
+						} else {
+							levelCost = enchantOne.getLevel();
+						}
 					}
 				}else if(CustomEnchantment.conflictsWith(enchantOne.getEnchant(), enchantTwo.getEnchant())) {
 					conflict = true;
