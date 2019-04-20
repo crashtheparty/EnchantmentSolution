@@ -30,7 +30,7 @@ public class Flame extends CustomEnchantment{
 		addDefaultDescription("Flaming arrows." + 
 				StringUtils.LF + 
 				"Arrows are on fire when shot and deal 4 (2 Hearts) fire damage over 5 seconds.");
-		addDefaultDescription("Brennende Pfeile." + 
+		addDefaultDescription(Language.GERMAN, "Brennende Pfeile." + 
 				StringUtils.LF + 
 				"Pfeile brennen beim Schieﬂen und verursachen 5 Sekunden lang 4 Feuerschaden");
 	}

@@ -99,7 +99,7 @@ public class DefaultEnchantments {
 								+ " does not have a JavaPlugin set. Refusing to set.");
 						continue;
 					}
-					namespace = plugin.getName();
+					namespace = plugin.getName().toLowerCase();
 				} else if (enchantment.getRelativeEnchantment() instanceof CustomEnchantmentWrapper) {
 					namespace = "custom_enchantments";
 				}
@@ -162,7 +162,7 @@ public class DefaultEnchantments {
 								+ " does not have a JavaPlugin set. Refusing to set.");
 						continue;
 					}
-					String namespace = plugin.getName();
+					String namespace = plugin.getName().toLowerCase();
 					if(Enchantments.addEnchantment(enchantment)) {
 						if (config.getBoolean(namespace+"."+enchantment.getName()+".enabled")) {
 							ENCHANTMENTS.get(i).setEnabled(true);

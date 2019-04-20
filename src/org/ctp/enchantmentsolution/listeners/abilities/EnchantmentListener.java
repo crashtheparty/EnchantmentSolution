@@ -11,7 +11,6 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
-import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
 import org.ctp.enchantmentsolution.utils.items.DamageUtils;
@@ -19,9 +18,7 @@ import org.ctp.enchantmentsolution.utils.items.DamageUtils;
 public class EnchantmentListener implements Listener{
 
 	protected boolean canRun(Enchantment enchantment, Event event) {
-		if(enchantment == DefaultEnchantments.CURSE_OF_LAG && EnchantmentSolution.getPlugin().getConfigFiles().getAprilFools()) {
-			
-		}else if(!DefaultEnchantments.isEnabled(enchantment)) return false;
+		if(!DefaultEnchantments.isEnabled(enchantment)) return false;
 		if(event instanceof Cancellable) {
 			if(((Cancellable) event).isCancelled()) return false;
 		}

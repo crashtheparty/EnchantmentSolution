@@ -28,7 +28,7 @@ public class YamlConfig {
 	private String[] header;
 	private YamlConfiguration config;
 	private boolean comments = true;
-
+	
 	public YamlConfig(File configFile, String[] header) {
 		this.header = header;
 		file = configFile;
@@ -420,10 +420,6 @@ public class YamlConfig {
 				this.info.put(key, info);
 			}
 		}
-	}
-	
-	public void resetConfig() {
-		info = new LinkedHashMap<String, YamlInfo>();
 	}
 	
 	private String headerString() {

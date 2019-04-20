@@ -29,7 +29,7 @@ public class Impaling extends CustomEnchantment{
 		addDefaultDescription("Increases melee damage against aquatic mobs." + 
 				StringUtils.LF + 
 				"Adds 2.5 (half heart) extra damage for each additional level.");
-		addDefaultDescription("Erhöht Nahkampfschaden gegen Wassermobs." + 
+		addDefaultDescription(Language.GERMAN, "Erhöht Nahkampfschaden gegen Wassermobs." + 
 				StringUtils.LF + 
 				"Fügt für jede zusätzliche Stufe 2,5 (halbes Herz) zusätzlichen Schaden hinzu.");
 	}

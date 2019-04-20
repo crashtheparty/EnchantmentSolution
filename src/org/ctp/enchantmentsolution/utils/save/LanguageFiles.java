@@ -35,7 +35,15 @@ public class LanguageFiles {
 		
 		createDefaultFiles();
 		
-		save(true);
+		YamlConfig main = EnchantmentSolution.getPlugin().getConfigFiles().getDefaultConfig();
+		boolean getFromConfig = true;
+		if(main.getBoolean("reset_language")) {
+			getFromConfig = false;
+			main.set("reset_language", false);
+			main.saveConfig();
+		}
+		
+		save(getFromConfig);
 	}
 	
 	public void addDefault(String path, CustomEnchantment enchantment, String type) {
@@ -51,21 +59,16 @@ public class LanguageFiles {
 		}
 	}
 	
-	private void save(boolean reload) {
-		YamlConfig main = EnchantmentSolution.getPlugin().getConfigFiles().getDefaultConfig();
-		if(reload) {
-			language = new YamlConfigBackup(languageFile, null);
-			
+	private void save(boolean getFromConfig) {
+		ChatUtils.sendInfo("Loading language file...");
+		language = new YamlConfigBackup(languageFile, null);
+		if(getFromConfig) {
 			language.getFromConfig();
-		}
-		if(main.getBoolean("reset_language")) {
-			language.resetConfig();
-			main.set("reset_language", false);
-			main.saveConfig();
 		}
 		language.copyDefaults(getLanguageFile());
 		
 		language.saveConfig();
+		ChatUtils.sendInfo("Language file initialized!");
 	}
 
 	public YamlConfigBackup getLanguageConfig() {
@@ -78,9 +81,16 @@ public class LanguageFiles {
 	
 	public void setLanguage(File langFile, Language lang) {
 		languageFile = langFile;
-		createDefaultFiles();
-		save(lang != defaultLanguage);
 		defaultLanguage = lang;
+		createDefaultFiles();
+		YamlConfig main = EnchantmentSolution.getPlugin().getConfigFiles().getDefaultConfig();
+		boolean getFromConfig = true;
+		if(main.getBoolean("reset_language")) {
+			getFromConfig = false;
+			main.set("reset_language", false);
+			main.saveConfig();
+		}
+		save(getFromConfig);
 	}
 	
 	private YamlConfig getLanguageFile() {
@@ -116,9 +126,7 @@ public class LanguageFiles {
 	private void defaultenglishUSFile() {
 		if(englishUS == null)
 			englishUS = new YamlConfigBackup(englishUSFile, new String[0]);
-		
-		englishUS.getFromConfig();
-		
+				
 		englishUS.addDefault("anvil.name", (ChatColor.BLUE + "Anvil").replace("§", "&"));
 		englishUS.addDefault("anvil.mirror", (ChatColor.WHITE + "").replace("§", "&"));
 		englishUS.addDefault("anvil.rename", (ChatColor.GREEN + "Rename Items").replace("§", "&"));
@@ -223,7 +231,7 @@ public class LanguageFiles {
 							+ " does not have a JavaPlugin set. Refusing to set language defaults.");
 					continue;
 				}
-				englishUS.addDefault("enchantment.descriptions." + plugin.getName() + "." + enchant.getName(), StringUtils.encodeString(enchantmentDescription));
+				englishUS.addDefault("enchantment.descriptions." + plugin.getName().toLowerCase() + "." + enchant.getName(), StringUtils.encodeString(enchantmentDescription));
 			} else if (enchant.getRelativeEnchantment() instanceof CustomEnchantmentWrapper) {
 				englishUS.addDefault("enchantment.descriptions." + "custom_enchantments." + enchant.getName(), StringUtils.encodeString(enchantmentDescription));
 			} else {
@@ -242,9 +250,7 @@ public class LanguageFiles {
 	private void defaultGermanFile() {
 		if(german == null)
 			german = new YamlConfigBackup(germanFile, new String[0]);
-		
-		german.getFromConfig();
-		
+				
 		german.addDefault("anvil.name", (ChatColor.BLUE + "Amboss").replace("§", "&"));
 		german.addDefault("anvil.mirror", (ChatColor.WHITE + "").replace("§", "&"));
 		german.addDefault("anvil.rename", (ChatColor.GREEN + "Items benennen").replace("§", "&"));
@@ -349,7 +355,7 @@ public class LanguageFiles {
 							+ " does not have a JavaPlugin set. Refusing to set language defaults.");
 					continue;
 				}
-				german.addDefault("enchantment.descriptions." + plugin.getName() + "." + enchant.getName(), StringUtils.encodeString(enchantmentDescription));
+				german.addDefault("enchantment.descriptions." + plugin.getName().toLowerCase() + "." + enchant.getName(), StringUtils.encodeString(enchantmentDescription));
 			} else if (enchant.getRelativeEnchantment() instanceof CustomEnchantmentWrapper) {
 				german.addDefault("enchantment.descriptions." + "custom_enchantments." + enchant.getName(), StringUtils.encodeString(enchantmentDescription));
 			} else {
