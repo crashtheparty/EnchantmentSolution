@@ -18,6 +18,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BlockStateMeta;
+import org.bukkit.metadata.MetadataValue;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
 import org.ctp.enchantmentsolution.nms.McMMO;
@@ -46,8 +47,10 @@ public class TelepathyListener extends EnchantmentListener {
 							BlockStateMeta im = (BlockStateMeta) drop.getItemMeta();
 							Container container = (Container) block.getState();
 							im.setBlockState(container);
-							if(!container.getSnapshotInventory().getTitle().equals("Shulker Box")) {
-								im.setDisplayName(container.getSnapshotInventory().getName());
+							if(block.getMetadata("shulker_name") != null) {
+								for(MetadataValue value : block.getMetadata("shulker_name")) {
+									im.setDisplayName(value.asString());
+								}
 							}
 							drop.setItemMeta(im);
 							ItemUtils.giveItemToPlayer(player, drop, player.getLocation(), true);

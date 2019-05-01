@@ -3,7 +3,6 @@ package org.ctp.enchantmentsolution.enchantments.vanilla;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
 import org.bukkit.enchantments.Enchantment;
 import org.ctp.enchantmentsolution.api.Language;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
@@ -19,8 +18,6 @@ public class Flame extends CustomEnchantment{
 		setDefaultThirtyConstant(20);
 		setDefaultFiftyModifier(0);
 		setDefaultThirtyModifier(0);
-		setDefaultFiftyMaxConstant(40);
-		setDefaultThirtyMaxConstant(30);
 		setDefaultFiftyStartLevel(20);
 		setDefaultThirtyStartLevel(1);
 		setDefaultFiftyMaxLevel(1);
@@ -28,10 +25,10 @@ public class Flame extends CustomEnchantment{
 		setDefaultWeight(Weight.RARE);
 		setMaxLevelOne(true);
 		addDefaultDescription("Flaming arrows." + 
-				StringUtils.LF + 
+				"\n" + 
 				"Arrows are on fire when shot and deal 4 (2 Hearts) fire damage over 5 seconds.");
 		addDefaultDescription(Language.GERMAN, "Brennende Pfeile." + 
-				StringUtils.LF + 
+				"\n" + 
 				"Pfeile brennen beim Schieﬂen und verursachen 5 Sekunden lang 4 Feuerschaden");
 	}
 

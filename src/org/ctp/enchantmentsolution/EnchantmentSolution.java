@@ -56,7 +56,6 @@ public class EnchantmentSolution extends JavaPlugin {
 		
 		db = new SQLite(this);
 		db.load();
-		
 		DefaultEnchantments.addDefaultEnchantments();
 		
 		files = new ConfigFiles(this);
@@ -125,7 +124,7 @@ public class EnchantmentSolution extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new MobSpawning(), this);
 		getServer().getPluginManager().registerEvents(new VanishListener(), this);
 		getServer().getPluginManager().registerEvents(new ChatMessage(), this);
-		getServer().getPluginManager().registerEvents(new BlockBreak(), this);
+		getServer().getPluginManager().registerEvents(new BlockListener(), this);
 		getServer().getPluginManager().registerEvents(new UpdateEnchantments(), this);
 		
 		if(Bukkit.getPluginManager().isPluginEnabled("Jobs")) {
@@ -216,9 +215,11 @@ public class EnchantmentSolution extends JavaPlugin {
 	}
 
 	public void onDisable() {
-		SaveUtils.setAbilityData();
+		if(bukkitVersion.isVersionAllowed() && !disable) {
+			SaveUtils.setAbilityData();
 		
-		resetInventories();
+			resetInventories();
+		}
 	}
 	
 	public void resetInventories() {

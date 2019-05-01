@@ -119,7 +119,6 @@ public class DefaultEnchantments {
 				}
 				int constant = advanced.getInt(namespace+"."+enchantment.getName()+".enchantability_constant");
 				int modifier = advanced.getInt(namespace+"."+enchantment.getName()+".enchantability_modifier");
-				int maxConstant = advanced.getInt(namespace+"."+enchantment.getName()+".enchantability_max_constant");
 				int startLevel = advanced.getInt(namespace+"."+enchantment.getName()+".enchantability_start_level");
 				int maxLevel = advanced.getInt(namespace+"."+enchantment.getName()+".enchantability_max_level");
 				String displayName = StringUtils.decodeString(language.getString("enchantment.display_names."+namespace+"."+enchantment.getName()));
@@ -141,7 +140,7 @@ public class DefaultEnchantments {
 						disabledItems.add(mat);
 					}
 				}
-				ENCHANTMENTS.get(i).setCustom(constant, modifier, maxConstant, startLevel, maxLevel, weight);
+				ENCHANTMENTS.get(i).setCustom(constant, modifier, startLevel, maxLevel, weight);
 				ENCHANTMENTS.get(i).setConflictingEnchantments(conflictingEnchantments);
 				ENCHANTMENTS.get(i).setDisabledItems(disabledItems);
 				if(!namespace.equals("default_enchantments")) {
@@ -292,9 +291,9 @@ public class DefaultEnchantments {
 		DefaultEnchantments.addDefaultEnchantment(new MagmaWalker());
 		DefaultEnchantments.addDefaultEnchantment(new Moisturize());
 		DefaultEnchantments.addDefaultEnchantment(new NoRest());
-//		if(EnchantmentSolution.getBukkitVersion().getVersionNumber() > 3) {
+		if(EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber() > 3) {
 			DefaultEnchantments.addDefaultEnchantment(new Pillage());
-//		}
+		}
 		DefaultEnchantments.addDefaultEnchantment(new Sacrifice());
 		DefaultEnchantments.addDefaultEnchantment(new SandVeil());
 		DefaultEnchantments.addDefaultEnchantment(new ShockAspect());
@@ -303,9 +302,9 @@ public class DefaultEnchantments {
 		DefaultEnchantments.addDefaultEnchantment(new Soulbound());
 		DefaultEnchantments.addDefaultEnchantment(new SoulReaper());
 		DefaultEnchantments.addDefaultEnchantment(new SplatterFest());
-//		if(EnchantmentSolution.getBukkitVersion().getVersionNumber() > 3) {
+		if(EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber() > 3) {
 			DefaultEnchantments.addDefaultEnchantment(new StoneThrow());
-//		}
+		}
 		DefaultEnchantments.addDefaultEnchantment(new Tank());
 		DefaultEnchantments.addDefaultEnchantment(new Telepathy());
 		DefaultEnchantments.addDefaultEnchantment(new Transmutation());

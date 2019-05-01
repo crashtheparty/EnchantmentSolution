@@ -94,6 +94,7 @@ public class Grindstone implements InventoryData{
 			inv.setItem(26, mirror);
 			
 			ItemStack combine;
+			
 			if(playerItems.size() == 2 && GrindstoneUtils.canCombineItems(playerItems.get(0), playerItems.get(1))) {
 				combinedItem = GrindstoneUtils.combineItems(getPlayer(), playerItems.get(0), playerItems.get(1));
 				combine = new ItemStack(Material.LIME_STAINED_GLASS_PANE);
@@ -133,11 +134,22 @@ public class Grindstone implements InventoryData{
 				combineMeta.setDisplayName(ChatUtils.getMessage(getCodes(), "grindstone.cannot-combine"));
 				combine.setItemMeta(combineMeta);
 			} else if (playerItems.size() == 1) {
-				combinedItem = GrindstoneUtils.combineItems(getPlayer(), playerItems.get(0));
-				combine = new ItemStack(Material.LIME_STAINED_GLASS_PANE);
-				ItemMeta combineMeta = combine.getItemMeta();
-				combineMeta.setDisplayName(ChatUtils.getMessage(getCodes(), "grindstone.remove-enchants"));
-				combine.setItemMeta(combineMeta);
+				if(playerItems.get(0).getItemMeta().hasEnchants() || (playerItems.get(0).getType() == Material.ENCHANTED_BOOK)) {
+					combinedItem = GrindstoneUtils.combineItems(getPlayer(), playerItems.get(0));
+					combine = new ItemStack(Material.LIME_STAINED_GLASS_PANE);
+					ItemMeta combineMeta = combine.getItemMeta();
+					combineMeta.setDisplayName(ChatUtils.getMessage(getCodes(), "grindstone.remove-enchants"));
+					combine.setItemMeta(combineMeta);
+				} else {
+					combinedItem = null;
+					combine = new ItemStack(Material.WHITE_STAINED_GLASS_PANE);
+					ItemMeta combineMeta = combine.getItemMeta();
+					List<String> lore = new ArrayList<String>();
+					lore.addAll(ChatUtils.getMessages(getCodes(), "grindstone.no-enchants-lore"));
+					combineMeta.setDisplayName(ChatUtils.getMessage(getCodes(), "grindstone.no-enchants"));
+					combineMeta.setLore(lore);
+					combine.setItemMeta(combineMeta);
+				}
 			} else {
 				combinedItem = null;
 				combine = new ItemStack(Material.WHITE_STAINED_GLASS_PANE);
@@ -158,8 +170,16 @@ public class Grindstone implements InventoryData{
 			}
 			
 			if(combinedItem != null) {
+				if (!takeEnchantments) {
+					combinedItem = AnvilNMS.setRepairCost(combinedItem, 0);
+				} else {
+					if(EnchantmentSolution.getPlugin().getConfigFiles().grindstoneTakeRepairCost()) {
+						combinedItem = AnvilNMS.setRepairCost(combinedItem, AnvilNMS.getRepairCost(playerItems.get(0)));
+					} else {
+						combinedItem = AnvilNMS.setRepairCost(combinedItem, 0);
+					}
+				}
 				inv.setItem(7, combinedItem);
-				AnvilNMS.setRepairCost(combinedItem, 0);
 			}
 			inv.setItem(5, combine);
 			
@@ -212,11 +232,23 @@ public class Grindstone implements InventoryData{
 				}
 				combinedItem = null;
 				playerItems.remove(1);
-				playerItems.set(0, Enchantments.removeAllEnchantments(playerItems.get(0)));
+				if(EnchantmentSolution.getPlugin().getConfigFiles().grindstoneDestroyItem()) {
+					playerItems.remove(0);
+				} else {
+					playerItems.set(0, Enchantments.removeAllEnchantments(playerItems.get(0)));
+				}
 			} else {
+				ItemStack one = null;
+				ItemStack two = null;
+				if(playerItems.size() > 0) {
+					if(playerItems.size() > 1) {
+						two = playerItems.get(1);
+					}
+					one = playerItems.get(0);
+				}
 				ItemUtils.giveItemToPlayer(player, combinedItem, player.getLocation(), false);
 				AbilityUtils.dropExperience(block.getLocation().clone().add(new Location(block.getLocation().getWorld(), 0.5, 0.5, 0.5)), 
-						GrindstoneUtils.getEnchantmentCost(playerItems.get(0)));
+						GrindstoneUtils.getExperience(one, two));
 				combinedItem = null;
 				playerItems.clear();
 			}

@@ -18,8 +18,6 @@ public class Power extends CustomEnchantment{
 		setDefaultThirtyConstant(-9);
 		setDefaultFiftyModifier(11);
 		setDefaultThirtyModifier(10);
-		setDefaultFiftyMaxConstant(25);
-		setDefaultThirtyMaxConstant(15);
 		setDefaultFiftyStartLevel(1);
 		setDefaultThirtyStartLevel(1);
 		setDefaultFiftyMaxLevel(6);

@@ -5,8 +5,10 @@ import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.api.Language;
 import org.ctp.enchantmentsolution.nms.itemname.GermanNames_v1_13;
+import org.ctp.enchantmentsolution.nms.itemname.GermanNames_v1_14;
 import org.ctp.enchantmentsolution.nms.itemname.ItemName_v1_13_R1;
 import org.ctp.enchantmentsolution.nms.itemname.ItemName_v1_13_R2;
+import org.ctp.enchantmentsolution.nms.itemname.ItemName_v1_14_R1;
 
 public class ItemNameNMS {
 	
@@ -18,6 +20,8 @@ public class ItemNameNMS {
 			case 2:
 			case 3:
 				return GermanNames_v1_13.getName(item.getType());
+			case 4:
+				return GermanNames_v1_14.getName(item.getType());
 			}
 			break;
 		case US:
@@ -27,6 +31,8 @@ public class ItemNameNMS {
 			case 2:
 			case 3:
 				return ItemName_v1_13_R2.returnLocalizedItemName(item);
+			case 4:
+				return ItemName_v1_14_R1.returnLocalizedItemName(item);
 			}
 			break;
 		default:

@@ -19,8 +19,6 @@ public class IrenesLasso extends CustomEnchantment{
 		setDefaultThirtyConstant(15);
 		setDefaultFiftyModifier(30);
 		setDefaultThirtyModifier(0);
-		setDefaultFiftyMaxConstant(40);
-		setDefaultThirtyMaxConstant(45);
 		setDefaultFiftyStartLevel(30);
 		setDefaultThirtyStartLevel(1);
 		setDefaultFiftyMaxLevel(2);

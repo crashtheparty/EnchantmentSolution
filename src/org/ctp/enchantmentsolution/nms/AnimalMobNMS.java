@@ -6,6 +6,7 @@ import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.nms.animalmob.AnimalMob;
 import org.ctp.enchantmentsolution.nms.animalmob.AnimalMob_v1_13_R1;
 import org.ctp.enchantmentsolution.nms.animalmob.AnimalMob_v1_13_R2;
+import org.ctp.enchantmentsolution.nms.animalmob.AnimalMob_v1_14_R1;
 import org.ctp.enchantmentsolution.utils.config.YamlConfig;
 
 public class AnimalMobNMS {
@@ -17,6 +18,8 @@ public class AnimalMobNMS {
 		case 2:
 		case 3:
 			return new AnimalMob_v1_13_R2(animal, item);
+		case 4:
+			return new AnimalMob_v1_14_R1(animal, item);
 		}
 		return null;
 	}
@@ -28,6 +31,8 @@ public class AnimalMobNMS {
 		case 2:
 		case 3:
 			return AnimalMob_v1_13_R2.createFromConfig(config, i);
+		case 4:
+			return AnimalMob_v1_14_R1.createFromConfig(config, i);
 		}
 		return null;
 	}

@@ -3,7 +3,6 @@ package org.ctp.enchantmentsolution.enchantments.vanilla;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
 import org.bukkit.enchantments.Enchantment;
 import org.ctp.enchantmentsolution.api.Language;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
@@ -19,18 +18,16 @@ public class Impaling extends CustomEnchantment{
 		setDefaultThirtyConstant(1);
 		setDefaultFiftyModifier(13);
 		setDefaultThirtyModifier(8);
-		setDefaultFiftyMaxConstant(20);
-		setDefaultThirtyMaxConstant(20);
 		setDefaultFiftyStartLevel(1);
 		setDefaultThirtyStartLevel(1);
 		setDefaultFiftyMaxLevel(6);
 		setDefaultThirtyMaxLevel(5);
 		setDefaultWeight(Weight.RARE);
 		addDefaultDescription("Increases melee damage against aquatic mobs." + 
-				StringUtils.LF + 
+				"\n" + 
 				"Adds 2.5 (half heart) extra damage for each additional level.");
 		addDefaultDescription(Language.GERMAN, "Erhöht Nahkampfschaden gegen Wassermobs." + 
-				StringUtils.LF + 
+				"\n" + 
 				"Fügt für jede zusätzliche Stufe 2,5 (halbes Herz) zusätzlichen Schaden hinzu.");
 	}
 

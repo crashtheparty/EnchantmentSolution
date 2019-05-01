@@ -19,8 +19,6 @@ public class Fried extends CustomEnchantment{
 		setDefaultThirtyConstant(15);
 		setDefaultFiftyModifier(0);
 		setDefaultThirtyModifier(0);
-		setDefaultFiftyMaxConstant(40);
-		setDefaultThirtyMaxConstant(50);
 		setDefaultFiftyStartLevel(30);
 		setDefaultThirtyStartLevel(1);
 		setDefaultFiftyMaxLevel(1);

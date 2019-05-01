@@ -19,8 +19,6 @@ public class MagicGuard extends CustomEnchantment{
 		setDefaultThirtyConstant(25);
 		setDefaultFiftyModifier(0);
 		setDefaultThirtyModifier(0);
-		setDefaultFiftyMaxConstant(70);
-		setDefaultThirtyMaxConstant(50);
 		setDefaultFiftyStartLevel(25);
 		setDefaultThirtyStartLevel(1);
 		setDefaultFiftyMaxLevel(20);

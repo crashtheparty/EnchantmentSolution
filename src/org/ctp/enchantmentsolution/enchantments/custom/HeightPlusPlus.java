@@ -19,8 +19,6 @@ public class HeightPlusPlus extends CustomEnchantment{
 		setDefaultThirtyConstant(-10);
 		setDefaultFiftyModifier(20);
 		setDefaultThirtyModifier(20);
-		setDefaultFiftyMaxConstant(40);
-		setDefaultThirtyMaxConstant(35);
 		setDefaultFiftyStartLevel(15);
 		setDefaultThirtyStartLevel(1);
 		setDefaultFiftyMaxLevel(3);

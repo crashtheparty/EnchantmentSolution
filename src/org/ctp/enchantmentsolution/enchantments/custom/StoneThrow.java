@@ -3,7 +3,6 @@ package org.ctp.enchantmentsolution.enchantments.custom;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
 import org.bukkit.enchantments.Enchantment;
 import org.ctp.enchantmentsolution.api.Language;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
@@ -20,18 +19,16 @@ public class StoneThrow extends CustomEnchantment{
 		setDefaultThirtyConstant(-10);
 		setDefaultFiftyModifier(13);
 		setDefaultThirtyModifier(11);
-		setDefaultFiftyMaxConstant(20);
-		setDefaultThirtyMaxConstant(20);
 		setDefaultFiftyStartLevel(1);
 		setDefaultThirtyStartLevel(1);
 		setDefaultFiftyMaxLevel(6);
 		setDefaultThirtyMaxLevel(5);
 		setDefaultWeight(Weight.COMMON);
 		addDefaultDescription("Increases ranged damage against flying mobs." + 
-				StringUtils.LF + 
+				"\n" + 
 				"Adds 40% * level + 20% damage against flying mobs.");
 		addDefaultDescription(Language.GERMAN, "Erhöht den Distanzschaden gegen fliegende Mobs." + 
-				StringUtils.LF + 
+				"\n" + 
 				"Fügt 40% * Level + 20% Schaden gegen fliegende Mobs hinzu.");
 	}
 	

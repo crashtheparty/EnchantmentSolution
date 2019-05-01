@@ -13,27 +13,24 @@ public class QuickCharge extends CustomEnchantment{
 	
 	public QuickCharge() {
 		addDefaultDisplayName("Quick Charge");
-		addDefaultDisplayName(Language.GERMAN, "Stärke");
+		addDefaultDisplayName(Language.GERMAN, "Schnellladen");
 		setTreasure(true);
-		setDefaultFiftyConstant(25);
-		setDefaultThirtyConstant(25);
-		setDefaultFiftyModifier(0);
-		setDefaultThirtyModifier(0);
-		setDefaultFiftyMaxConstant(75);
-		setDefaultThirtyMaxConstant(50);
-		setDefaultFiftyStartLevel(20);
+		setDefaultFiftyConstant(-15);
+		setDefaultThirtyConstant(-8);
+		setDefaultFiftyModifier(20);
+		setDefaultThirtyModifier(20);
+		setDefaultFiftyStartLevel(1);
 		setDefaultThirtyStartLevel(1);
-		setDefaultFiftyMaxLevel(1);
-		setDefaultThirtyMaxLevel(1);
-		setDefaultWeight(Weight.RARE);
-		setMaxLevelOne(true);
-		addDefaultDescription("Repair durability with experience.");
-		addDefaultDescription(Language.GERMAN, "Repair durability with experience.");
+		setDefaultFiftyMaxLevel(4);
+		setDefaultThirtyMaxLevel(3);
+		setDefaultWeight(Weight.UNCOMMON);
+		addDefaultDescription("Place arrows in the crossbow faster.");
+		addDefaultDescription(Language.GERMAN, "Setzen Sie die Pfeile schneller in die Armbrust.");
 	}
 	
 	@Override
 	public Enchantment getRelativeEnchantment() {
-		return null;
+		return Enchantment.QUICK_CHARGE;
 	}
 
 	@Override
@@ -48,7 +45,7 @@ public class QuickCharge extends CustomEnchantment{
 
 	@Override
 	protected List<Enchantment> getDefaultConflictingEnchantments() {
-		return null;
+		return Arrays.asList();
 	}
 
 	@Override

@@ -19,8 +19,6 @@ public class SandVeil extends CustomEnchantment{
 		setDefaultThirtyConstant(-10);
 		setDefaultFiftyModifier(13);
 		setDefaultThirtyModifier(11);
-		setDefaultFiftyMaxConstant(20);
-		setDefaultThirtyMaxConstant(20);
 		setDefaultFiftyStartLevel(1);
 		setDefaultThirtyStartLevel(1);
 		setDefaultFiftyMaxLevel(6);

@@ -122,7 +122,7 @@ public class GungHoListener extends EnchantmentListener implements Runnable{
 		private void doEquip(ItemStack item) {
 			if(Enchantments.hasEnchantment(item, DefaultEnchantments.GUNG_HO)){
 				AttributeInstance a = player.getAttribute(Attribute.GENERIC_MAX_HEALTH);
-				a.setBaseValue(a.getDefaultValue() / 2);
+				a.setBaseValue(a.getBaseValue() / 2);
 				if(player.getHealth() > a.getBaseValue()) {
 					player.setHealth(a.getBaseValue());
 				}
@@ -132,7 +132,7 @@ public class GungHoListener extends EnchantmentListener implements Runnable{
 		private void doUnequip(ItemStack item) {
 			if(Enchantments.hasEnchantment(item, DefaultEnchantments.GUNG_HO)){
 				AttributeInstance a = player.getAttribute(Attribute.GENERIC_MAX_HEALTH);
-				a.setBaseValue(a.getDefaultValue());
+				a.setBaseValue(a.getBaseValue() * 2);
 			}
 		}
 	}

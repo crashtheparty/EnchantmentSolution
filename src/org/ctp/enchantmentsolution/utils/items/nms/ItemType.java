@@ -8,7 +8,6 @@ import java.util.Map;
 
 import org.bukkit.Material;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
-import org.ctp.enchantmentsolution.version.BukkitVersion;
 
 public enum ItemType{
 	HELMETS("helmets"), CHESTPLATES("chestplates"), LEGGINGS("leggings"), BOOTS("boots"), SWORDS("swords"), PICKAXES("pickaxes"), SHOVELS("shovels"), AXES("axes"), 
@@ -144,11 +143,15 @@ public enum ItemType{
 	}
 	
 	private List<Material> getItemTypes(String type){
-		if(EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber() < 4) {
+		switch(EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber()) {
+		case 1:
+		case 2:
+		case 3:
 			return ItemType_v1_13.getItemTypes(type);
-		} else {
-			return null;
+		case 4:
+			return ItemType_v1_14.getItemTypes(type);
 		}
+		return null;
 	}
 	
 	private static class ItemType_v1_13{

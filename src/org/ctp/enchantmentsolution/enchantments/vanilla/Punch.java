@@ -18,8 +18,6 @@ public class Punch extends CustomEnchantment{
 		setDefaultThirtyConstant(-8);
 		setDefaultFiftyModifier(20);
 		setDefaultThirtyModifier(20);
-		setDefaultFiftyMaxConstant(25);
-		setDefaultThirtyMaxConstant(25);
 		setDefaultFiftyStartLevel(1);
 		setDefaultThirtyStartLevel(1);
 		setDefaultFiftyMaxLevel(3);

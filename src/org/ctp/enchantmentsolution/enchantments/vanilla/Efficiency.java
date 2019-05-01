@@ -3,7 +3,6 @@ package org.ctp.enchantmentsolution.enchantments.vanilla;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
 import org.bukkit.enchantments.Enchantment;
 import org.ctp.enchantmentsolution.api.Language;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
@@ -19,18 +18,16 @@ public class Efficiency extends CustomEnchantment{
 		setDefaultThirtyConstant(-9);
 		setDefaultFiftyModifier(12);
 		setDefaultThirtyModifier(10);
-		setDefaultFiftyMaxConstant(45);
-		setDefaultThirtyMaxConstant(50);
 		setDefaultFiftyStartLevel(1);
 		setDefaultThirtyStartLevel(1);
 		setDefaultFiftyMaxLevel(6);
 		setDefaultThirtyMaxLevel(5);
 		setDefaultWeight(Weight.COMMON);
 		addDefaultDescription("Increases mining speed." + 
-				StringUtils.LF + 
+				"\n" + 
 				"One must use the proper tool for a block in order to receive the speed. Does not matter if you mine it with the incorrect tier.");
 		addDefaultDescription(Language.GERMAN, "Erhöht die Mining-Geschwindigkeit." + 
-				StringUtils.LF + 
+				"\n" + 
 				"Man muss das richtige Werkzeug für einen Block verwenden, um die Geschwindigkeit zu erhalten. " + 
 				"Es spielt keine Rolle, wenn Sie es mit der falschen Stufe abbauen.");
 	}

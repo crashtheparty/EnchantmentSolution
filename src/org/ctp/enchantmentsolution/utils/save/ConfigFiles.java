@@ -210,11 +210,15 @@ public class ConfigFiles {
 				"Allow default use of anvil GUI via option at bottom right of custom GUI.",
 				"Using this feature MAY REMOVE CUSTOM ENCHANTMENTS FROM ITEMS on accident. Should only be true if anvil is used for custom recipes." });
 		if (EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber() < 4) {
-			config.addDefault("use_grindstone", false,
+			config.addDefault("grindstone.use_legacy", false,
 					new String[] { "Use the grindstone from within the anvil in version < 1.14" });
 		}
-		config.addDefault("grindstone_take_enchantments", false,
+		config.addDefault("grindstone.take_enchantments", false,
 				new String[] { "Use the grindstone to add enchantments from items to books" });
+		config.addDefault("grindstone.set_repair_cost", true,
+				new String[] { "When grindstone takes enchantments, set repair cost of the generated book to the item used's repair cost" });
+		config.addDefault("grindstone.destroy_take_item", true,
+				new String[] { "When grindstone takes enchantments, destroy the item used" });
 		config.addDefault("update_legacy_enchantments", false,
 				new String[] { "Update any enchantments generated in EnchantmentSolutionLegacy" });
 		config.addDefault("chest_loot", true,
@@ -340,9 +344,6 @@ public class ConfigFiles {
 						namespace + "." + enchant.getName() + ".enchantability_modifier",
 						enchant.getDefaultFiftyModifier());
 				enchantmentAdvanced.addDefault(
-						namespace + "." + enchant.getName() + ".enchantability_max_constant",
-						enchant.getDefaultFiftyMaxConstant());
-				enchantmentAdvanced.addDefault(
 						namespace + "." + enchant.getName() + ".enchantability_start_level",
 						enchant.getDefaultFiftyStartLevel());
 				enchantmentAdvanced.addDefault(
@@ -374,9 +375,6 @@ public class ConfigFiles {
 				enchantmentAdvanced.addDefault("custom_enchantments." + enchant.getName() + ".enchantability_modifier",
 						enchant.getDefaultFiftyModifier());
 				enchantmentAdvanced.addDefault(
-						"custom_enchantments." + enchant.getName() + ".enchantability_max_constant",
-						enchant.getDefaultFiftyMaxConstant());
-				enchantmentAdvanced.addDefault(
 						"custom_enchantments." + enchant.getName() + ".enchantability_start_level",
 						enchant.getDefaultFiftyStartLevel());
 				enchantmentAdvanced.addDefault("custom_enchantments." + enchant.getName() + ".enchantability_max_level",
@@ -402,9 +400,6 @@ public class ConfigFiles {
 						enchant.getDefaultFiftyConstant());
 				enchantmentAdvanced.addDefault("default_enchantments." + enchant.getName() + ".enchantability_modifier",
 						enchant.getDefaultFiftyModifier());
-				enchantmentAdvanced.addDefault(
-						"default_enchantments." + enchant.getName() + ".enchantability_max_constant",
-						enchant.getDefaultFiftyMaxConstant());
 				enchantmentAdvanced.addDefault(
 						"default_enchantments." + enchant.getName() + ".enchantability_start_level",
 						enchant.getDefaultFiftyStartLevel());
@@ -448,9 +443,6 @@ public class ConfigFiles {
 					enchantmentAdvanced.addDefault(
 							namespace + "." + enchant.getName() + ".enchantability_modifier",
 							enchant.getDefaultFiftyModifier());
-					enchantmentAdvanced.addDefault(
-							namespace + "." + enchant.getName() + ".enchantability_max_constant",
-							enchant.getDefaultFiftyMaxConstant());
 					enchantmentAdvanced.addDefault(
 							namespace + "." + enchant.getName() + ".enchantability_start_level",
 							enchant.getDefaultFiftyStartLevel());
@@ -706,7 +698,7 @@ public class ConfigFiles {
 
 	public boolean useLegacyGrindstone() {
 		if (EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber() < 4) {
-			return config.getBoolean("use_grindstone");
+			return config.getBoolean("grindstone.use_legacy");
 		}
 		return false;
 	}
@@ -740,7 +732,14 @@ public class ConfigFiles {
 	}
 
 	public boolean grindstoneTakeEnchantments() {
-		return config.getBoolean("grindstone_take_enchantments");
+		return config.getBoolean("grindstone.take_enchantments");
 	}
 
+	public boolean grindstoneTakeRepairCost() {
+		return config.getBoolean("grindstone.set_repair_cost");
+	}
+	
+	public boolean grindstoneDestroyItem() {
+		return config.getBoolean("grindstone.destroy_take_item");
+	}
 }

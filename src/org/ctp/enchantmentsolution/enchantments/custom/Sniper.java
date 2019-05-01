@@ -19,8 +19,6 @@ public class Sniper extends CustomEnchantment{
 		setDefaultThirtyConstant(5);
 		setDefaultFiftyModifier(18);
 		setDefaultThirtyModifier(10);
-		setDefaultFiftyMaxConstant(40);
-		setDefaultThirtyMaxConstant(40);
 		setDefaultFiftyStartLevel(25);
 		setDefaultThirtyStartLevel(1);
 		setDefaultFiftyMaxLevel(3);

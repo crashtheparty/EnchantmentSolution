@@ -6,7 +6,9 @@ import java.util.Map;
 
 import org.bukkit.DyeColor;
 import org.bukkit.entity.Animals;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Ocelot;
 import org.bukkit.entity.Horse.Color;
 import org.bukkit.entity.Horse.Style;
 import org.bukkit.entity.Ocelot.Type;
@@ -15,10 +17,43 @@ import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.utils.config.YamlConfig;
 import org.ctp.enchantmentsolution.utils.items.ItemSerialization;
 
+@SuppressWarnings("deprecation")
 public class AnimalMob_v1_13_R2 extends AnimalMob{
 
+	private Type ocelotType;
+	
 	public AnimalMob_v1_13_R2(Animals mob, ItemStack item) {
 		super(mob, item);
+		if(mob instanceof Ocelot) {
+			Ocelot ocelot = (Ocelot) mob;
+			setOcelotType(ocelot.getCatType());
+		}
+	}
+
+	public Type getOcelotType() {
+		return ocelotType;
+	}
+
+	public void setOcelotType(Type ocelotType) {
+		this.ocelotType = ocelotType;
+	}
+	
+	public void editProperties(Entity e) {
+		super.editProperties(e);
+		try {
+			if(e instanceof Ocelot) {
+				Ocelot ocelot = (Ocelot) e;
+				ocelot.setCatType(getOcelotType());
+			}
+		} catch(Exception ex) {
+			ex.printStackTrace();
+		}
+	}
+	
+	public void setConfig(YamlConfig config, int i) {
+		super.setConfig(config, i);
+
+		config.set("animals." + i + ".ocelot_type", getOcelotType() != null ? getOcelotType().name() : null);
 	}
 	
 	public static AnimalMob createFromConfig(YamlConfig config, int i) {
@@ -61,7 +96,7 @@ public class AnimalMob_v1_13_R2 extends AnimalMob{
 			mob.setParrotVariant(Variant.valueOf(config.getString("animals." + i + ".parrot_variant")));
 		} catch(Exception ex) {}
 		try {
-			mob.setOcelotType(Type.valueOf(config.getString("animals." + i + ".ocelot_type")));
+			((AnimalMob_v1_13_R2) mob).setOcelotType(Type.valueOf(config.getString("animals." + i + ".ocelot_type")));
 		} catch(Exception ex) {}
 		try {
 			mob.setRabbitType(org.bukkit.entity.Rabbit.Type.valueOf(config.getString("animals." + i + ".rabbit_type")));

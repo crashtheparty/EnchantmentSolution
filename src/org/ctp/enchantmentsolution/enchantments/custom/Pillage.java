@@ -19,8 +19,6 @@ public class Pillage extends CustomEnchantment{
 		setDefaultThirtyConstant(6);
 		setDefaultFiftyModifier(11);
 		setDefaultThirtyModifier(9);
-		setDefaultFiftyMaxConstant(40);
-		setDefaultThirtyMaxConstant(50);
 		setDefaultFiftyStartLevel(1);
 		setDefaultThirtyStartLevel(1);
 		setDefaultFiftyMaxLevel(5);

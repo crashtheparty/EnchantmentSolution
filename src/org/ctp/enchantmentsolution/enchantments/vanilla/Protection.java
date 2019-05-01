@@ -18,8 +18,6 @@ public class Protection extends CustomEnchantment{
 		setDefaultThirtyConstant(-10);
 		setDefaultFiftyModifier(16);
 		setDefaultThirtyModifier(11);
-		setDefaultFiftyMaxConstant(35);
-		setDefaultThirtyMaxConstant(20);
 		setDefaultFiftyStartLevel(1);
 		setDefaultThirtyStartLevel(1);
 		setDefaultFiftyMaxLevel(4);

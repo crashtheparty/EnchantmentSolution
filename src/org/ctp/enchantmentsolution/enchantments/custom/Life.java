@@ -19,8 +19,6 @@ public class Life extends CustomEnchantment{
 		setDefaultThirtyConstant(-5);
 		setDefaultFiftyModifier(25);
 		setDefaultThirtyModifier(15);
-		setDefaultFiftyMaxConstant(30);
-		setDefaultThirtyMaxConstant(40);
 		setDefaultFiftyStartLevel(10);
 		setDefaultThirtyStartLevel(1);
 		setDefaultFiftyMaxLevel(3);

@@ -508,7 +508,7 @@ public class YamlConfig {
 				}
 			} else {
 				for(int i = 0; i < entryKeys.size(); i++) {
-					if(entryKeys.get(i).startsWith(level)) {
+					if(entryKeys.get(i).startsWith(level + ".")) {
 						if(entryKeys.get(i).length() > level.length() + 1) {
 							String find = entryKeys.get(i).substring(level.length() + 1);
 							if(!find.contains(".") && !values.contains(entryKeys.get(i))) {
