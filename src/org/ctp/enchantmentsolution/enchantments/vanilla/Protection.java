@@ -6,6 +6,7 @@ import java.util.List;
 import org.bukkit.enchantments.Enchantment;
 import org.ctp.enchantmentsolution.api.Language;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
+import org.ctp.enchantmentsolution.enchantments.Enchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.Weight;
 import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 
@@ -18,8 +19,6 @@ public class Protection extends CustomEnchantment{
 		setDefaultThirtyConstant(-10);
 		setDefaultFiftyModifier(16);
 		setDefaultThirtyModifier(11);
-		setDefaultFiftyMaxConstant(35);
-		setDefaultThirtyMaxConstant(20);
 		setDefaultFiftyStartLevel(1);
 		setDefaultThirtyStartLevel(1);
 		setDefaultFiftyMaxLevel(4);
@@ -51,6 +50,7 @@ public class Protection extends CustomEnchantment{
 
 	@Override
 	protected List<Enchantment> getDefaultConflictingEnchantments() {
+		if(!Enchantments.getProtectionConflicts()) return Arrays.asList();
 		return Arrays.asList(Enchantment.PROTECTION_PROJECTILE, Enchantment.PROTECTION_EXPLOSIONS, Enchantment.PROTECTION_FIRE);
 	}
 }

@@ -18,8 +18,6 @@ public class Respiration extends CustomEnchantment{
 		setDefaultThirtyConstant(0);
 		setDefaultFiftyModifier(15);
 		setDefaultThirtyModifier(10);
-		setDefaultFiftyMaxConstant(30);
-		setDefaultThirtyMaxConstant(30);
 		setDefaultFiftyStartLevel(1);
 		setDefaultThirtyStartLevel(1);
 		setDefaultFiftyMaxLevel(3);

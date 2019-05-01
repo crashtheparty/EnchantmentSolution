@@ -2,6 +2,7 @@ package org.ctp.enchantmentsolution.nms;
 
 import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.nms.fishing.Fishing_v1_13_R2;
+import org.ctp.enchantmentsolution.nms.fishing.Fishing_v1_14_R1;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.nms.fishing.Fishing_v1_13_R1;
 
@@ -13,6 +14,8 @@ public class FishingNMS {
 		case 2:
 		case 3:
 			return Fishing_v1_13_R2.enchantItem(i);
+		case 4:
+			return Fishing_v1_14_R1.enchantItem(i);
 		}
 		return i;
 	}

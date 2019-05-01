@@ -14,6 +14,7 @@ import org.ctp.enchantmentsolution.inventory.Anvil;
 import org.ctp.enchantmentsolution.inventory.EnchantmentTable;
 import org.ctp.enchantmentsolution.inventory.InventoryData;
 import org.ctp.enchantmentsolution.inventory.LegacyAnvil;
+import org.ctp.enchantmentsolution.nms.playerinteract.PlayerInteract_v1_14;
 import org.ctp.enchantmentsolution.utils.AnvilUtils;
 
 public class PlayerInteract implements Listener{
@@ -82,6 +83,9 @@ public class PlayerInteract implements Listener{
 					}
 					
 				}, 1l);
+			}
+			if(EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber() > 3) {
+				PlayerInteract_v1_14.onPlayerInteract(event);
 			}
 		}
 	}

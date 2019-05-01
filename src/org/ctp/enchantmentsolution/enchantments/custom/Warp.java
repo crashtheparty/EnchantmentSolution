@@ -19,8 +19,6 @@ public class Warp extends CustomEnchantment{
 		setDefaultThirtyConstant(-7);
 		setDefaultFiftyModifier(20);
 		setDefaultThirtyModifier(14);
-		setDefaultFiftyMaxConstant(30);
-		setDefaultThirtyMaxConstant(30);
 		setDefaultFiftyStartLevel(10);
 		setDefaultThirtyStartLevel(1);
 		setDefaultFiftyMaxLevel(3);

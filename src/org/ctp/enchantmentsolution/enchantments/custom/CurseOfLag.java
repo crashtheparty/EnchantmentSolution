@@ -20,8 +20,6 @@ public class CurseOfLag extends CustomEnchantment{
 		setDefaultThirtyConstant(25);
 		setDefaultFiftyModifier(0);
 		setDefaultThirtyModifier(0);
-		setDefaultFiftyMaxConstant(50);
-		setDefaultThirtyMaxConstant(25);
 		setDefaultFiftyStartLevel(1);
 		setDefaultThirtyStartLevel(1);
 		setDefaultFiftyMaxLevel(1);

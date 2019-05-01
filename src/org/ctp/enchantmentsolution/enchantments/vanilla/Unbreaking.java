@@ -18,8 +18,6 @@ public class Unbreaking extends CustomEnchantment{
 		setDefaultThirtyConstant(-3);
 		setDefaultFiftyModifier(15);
 		setDefaultThirtyModifier(8);
-		setDefaultFiftyMaxConstant(40);
-		setDefaultThirtyMaxConstant(50);
 		setDefaultFiftyStartLevel(1);
 		setDefaultThirtyStartLevel(1);
 		setDefaultFiftyMaxLevel(5);

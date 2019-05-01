@@ -19,8 +19,6 @@ public class Angler extends CustomEnchantment{
 		setDefaultThirtyConstant(0);
 		setDefaultFiftyModifier(10);
 		setDefaultThirtyModifier(8);
-		setDefaultFiftyMaxConstant(30);
-		setDefaultThirtyMaxConstant(25);
 		setDefaultFiftyStartLevel(1);
 		setDefaultThirtyStartLevel(1);
 		setDefaultFiftyMaxLevel(5);

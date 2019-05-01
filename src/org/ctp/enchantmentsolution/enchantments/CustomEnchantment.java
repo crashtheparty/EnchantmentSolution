@@ -3,7 +3,6 @@ package org.ctp.enchantmentsolution.enchantments;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -14,6 +13,7 @@ import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentDisplayName;
 import org.ctp.enchantmentsolution.enchantments.helper.Weight;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.PermissionUtils;
+import org.ctp.enchantmentsolution.utils.StringUtils;
 import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 
 public abstract class CustomEnchantment {
@@ -24,18 +24,13 @@ public abstract class CustomEnchantment {
 	private List<EnchantmentDisplayName> defaultDisplayNames = new ArrayList<EnchantmentDisplayName>();
 	private List<EnchantmentDescription> defaultDescriptions = new ArrayList<EnchantmentDescription>();
 	private int defaultThirtyConstant = -1, defaultFiftyConstant = -1, constant = -1, defaultThirtyModifier = -1,
-			defaultFiftyModifier = -1, modifier = -1, defaultThirtyMaxConstant = -1, defaultFiftyMaxConstant = -1,
-			maxConstant = -1, defaultThirtyStartLevel = -1, defaultFiftyStartLevel = -1, startLevel = -1,
+			defaultFiftyModifier = -1, modifier = -1, defaultThirtyStartLevel = -1, defaultFiftyStartLevel = -1, startLevel = -1,
 			defaultThirtyMaxLevel = -1, defaultFiftyMaxLevel = -1, maxLevel = -1;
 	private Weight defaultWeight = Weight.NULL;
 	private Weight weight = Weight.NULL;
 	private boolean maxLevelOne = false, curse = false;
-	private List<Enchantment> conflictingEnchantments = new ArrayList<Enchantment>();
+	private List<Enchantment> conflictingEnchantments = null;
 	private List<Material> disabledItems = new ArrayList<Material>();
-
-	public CustomEnchantment() {
-		setConflictingEnchantments();
-	}
 	
 	public abstract Enchantment getRelativeEnchantment();
 	
@@ -53,6 +48,9 @@ public abstract class CustomEnchantment {
 	protected abstract List<Enchantment> getDefaultConflictingEnchantments();
 	
 	public List<Enchantment> getConflictingEnchantments(){
+		if(conflictingEnchantments == null) {
+			 setConflictingEnchantments();
+		}
 		List<Enchantment> conflicting = new ArrayList<Enchantment>();
 		conflicting.add(getRelativeEnchantment());
 		conflicting.addAll(conflictingEnchantments);
@@ -61,6 +59,7 @@ public abstract class CustomEnchantment {
 	
 	public List<String> conflictingDefaultList(){
 		List<String> names = new ArrayList<String>();
+		if(getDefaultConflictingEnchantments() == null) return names;
 		for(Enchantment enchant : getDefaultConflictingEnchantments()) {
 			CustomEnchantment custom = DefaultEnchantments.getCustomEnchantment(enchant);
 			if(custom != null) {
@@ -71,7 +70,8 @@ public abstract class CustomEnchantment {
 	}
 	
 	public void setConflictingEnchantments() {
-		List<Enchantment> enchantments = getDefaultConflictingEnchantments();
+		List<Enchantment> enchantments = new ArrayList<Enchantment>();
+		enchantments.addAll(getDefaultConflictingEnchantments());
 		if(this.getRelativeEnchantment() != null && enchantments.contains(this.getRelativeEnchantment())) {
 			enchantments.remove(this.getRelativeEnchantment());
 		}
@@ -79,23 +79,25 @@ public abstract class CustomEnchantment {
 	}
 
 	public void setConflictingEnchantments(List<Enchantment> conflictingEnchantments) {
-		if(this.getRelativeEnchantment() != null && conflictingEnchantments.contains(this.getRelativeEnchantment())) {
-			conflictingEnchantments.remove(this.getRelativeEnchantment());
+		List<Enchantment> enchantments = new ArrayList<Enchantment>();
+		enchantments.addAll(conflictingEnchantments);
+		if(this.getRelativeEnchantment() != null && enchantments.contains(this.getRelativeEnchantment())) {
+			enchantments.remove(this.getRelativeEnchantment());
 		}
 		this.conflictingEnchantments = conflictingEnchantments;
 	}
 
 	public String getDetails() {
-		String page = StringUtils.LF + StringUtils.LF + 
-				ChatUtils.getMessage(ChatUtils.getCodes(), "enchantment.name") + getDisplayName() + StringUtils.LF + StringUtils.LF;
-		page += ChatUtils.getMessage(ChatUtils.getCodes(), "enchantment.description") + getDescription() + StringUtils.LF;
-		page += ChatUtils.getMessage(ChatUtils.getCodes(), "enchantment.max-level") + getMaxLevel() + "."+ StringUtils.LF;
-		page += ChatUtils.getMessage(ChatUtils.getCodes(), "enchantment.weight") + getWeightName() + "."+ StringUtils.LF;
-		page += ChatUtils.getMessage(ChatUtils.getCodes(), "enchantment.start-level") + getStartLevel() + "."+ StringUtils.LF;
+		String page = "\n" + "\n" + 
+				ChatUtils.getMessage(ChatUtils.getCodes(), "enchantment.name") + getDisplayName() + "\n" + "\n";
+		page += ChatUtils.getMessage(ChatUtils.getCodes(), "enchantment.description") + getDescription() + "\n";
+		page += ChatUtils.getMessage(ChatUtils.getCodes(), "enchantment.max-level") + getMaxLevel() + "."+ "\n";
+		page += ChatUtils.getMessage(ChatUtils.getCodes(), "enchantment.weight") + getWeightName() + "."+ "\n";
+		page += ChatUtils.getMessage(ChatUtils.getCodes(), "enchantment.start-level") + getStartLevel() + "."+ "\n";
 		page +=  ChatUtils.getMessage(ChatUtils.getCodes(), "enchantment.enchantable-items");
 		if(getEnchantmentItemTypes().size() > 0) {
 			if (getEnchantmentItemTypes().get(0).equals(ItemType.ALL)) {
-				page += getEnchantmentItemTypes().get(0).getDisplayName() + "." + StringUtils.LF;
+				page += getEnchantmentItemTypes().get(0).getDisplayName() + "." + "\n";
 			} else {
 				boolean includesBooks = false;
 				for(ItemType type : getEnchantmentItemTypes()) {
@@ -105,18 +107,18 @@ public abstract class CustomEnchantment {
 					}
 				}
 				if(!includesBooks) {
-					page += "Books." + StringUtils.LF;
+					page += "Books." + "\n";
 				} else {
-					page = page.substring(0, page.lastIndexOf(", ")) + "." + StringUtils.LF;
+					page = page.substring(0, page.lastIndexOf(", ")) + "." + "\n";
 				}
 			}
 		} else {
-			page += "None." + StringUtils.LF;
+			page += "None." + "\n";
 		}
 		page +=  ChatUtils.getMessage(ChatUtils.getCodes(), "enchantment.anvilable-items");
 		if(getAnvilItemTypes().size() > 0) {
 			if (getAnvilItemTypes().get(0).equals(ItemType.ALL)) {
-				page += getAnvilItemTypes().get(0).getDisplayName() + "." + StringUtils.LF;
+				page += getAnvilItemTypes().get(0).getDisplayName() + "." + "\n";
 			} else {
 				boolean includesBooks = false;
 				for(ItemType type : getAnvilItemTypes()) {
@@ -126,13 +128,13 @@ public abstract class CustomEnchantment {
 					}
 				}
 				if(!includesBooks) {
-					page += "Books." + StringUtils.LF;
+					page += "Books." + "\n";
 				} else {
-					page = page.substring(0, page.lastIndexOf(", ")) + "." + StringUtils.LF;
+					page = page.substring(0, page.lastIndexOf(", ")) + "." + "\n";
 				}
 			}
 		} else {
-			page += "None." + StringUtils.LF;
+			page += "None." + "\n";
 		}
 		page +=  ChatUtils.getMessage(ChatUtils.getCodes(), "enchantment.disabled-items");
 		if(getDisabledItems().size() > 0) {
@@ -143,12 +145,12 @@ public abstract class CustomEnchantment {
 			}
 			
 			if(names.isEmpty()) {
-				page += "None" + "." + StringUtils.LF;
+				page += "None" + "." + "\n";
 			} else {
-				page += StringUtils.join(names, ",") + "." + StringUtils.LF;
+				page += StringUtils.join(names, ",") + "." + "\n";
 			}
 		} else {
-			page += "None." + StringUtils.LF;
+			page += "None." + "\n";
 		}
 		page +=  ChatUtils.getMessage(ChatUtils.getCodes(), "enchantment.conflicting-enchantments");
 		if(getConflictingEnchantments().size() > 0) {
@@ -166,12 +168,12 @@ public abstract class CustomEnchantment {
 			} else {
 				page += StringUtils.join(names, ", ");
 			}
-			page += "." + StringUtils.LF;
+			page += "." + "\n";
 		} else {
-			page += "None." + StringUtils.LF;
+			page += "None." + "\n";
 		}
-		page += ChatUtils.getMessage(ChatUtils.getCodes(), "enchantment.enabled") + isEnabled() + ". " + StringUtils.LF;
-		page += ChatUtils.getMessage(ChatUtils.getCodes(), "enchantment.treasure") + isTreasure() + ". " + StringUtils.LF;
+		page += ChatUtils.getMessage(ChatUtils.getCodes(), "enchantment.enabled") + isEnabled() + ". " + "\n";
+		page += ChatUtils.getMessage(ChatUtils.getCodes(), "enchantment.treasure") + isTreasure() + ". " + "\n";
 		return page;
 	}
 
@@ -261,9 +263,9 @@ public abstract class CustomEnchantment {
 
 	public int getEnchantLevel(Player player, int enchantability) {
 		for(int i = getMaxLevel(); i > 0; i--) {
-			int[] levels = enchantability(i);
+			int level = enchantability(i);
 			if (PermissionUtils.canEnchant(player, this, i)) {
-				if (enchantability >= levels[0] && enchantability <= levels[1]) {
+				if (enchantability >= level) {
 					return i;
 				}
 			}
@@ -271,11 +273,8 @@ public abstract class CustomEnchantment {
 		return 0;
 	}
 
-	public int[] enchantability(int level) {
-		int[] levels = new int[2];
-		levels[0] = modifier * level + constant;
-		levels[1] = levels[0] + maxConstant;
-		return levels;
+	public int enchantability(int level) {
+		return modifier * level + constant;
 	}
 
 	public int multiplier(Material material) {
@@ -349,26 +348,6 @@ public abstract class CustomEnchantment {
 		this.modifier = modifier;
 	}
 
-	private int getDefaultThirtyMaxConstant() {
-		return defaultThirtyMaxConstant;
-	}
-
-	protected void setDefaultThirtyMaxConstant(int constant) {
-		defaultThirtyMaxConstant = constant;
-	}
-
-	public int getDefaultFiftyMaxConstant() {
-		return defaultFiftyMaxConstant;
-	}
-
-	protected void setDefaultFiftyMaxConstant(int constant) {
-		defaultFiftyMaxConstant = constant;
-	}
-
-	private void setMaxConstant(int maxConstant) {
-		this.maxConstant = maxConstant;
-	}
-
 	private int getDefaultThirtyStartLevel() {
 		return defaultThirtyStartLevel;
 	}
@@ -416,7 +395,6 @@ public abstract class CustomEnchantment {
 	public void setLevelFifty() {
 		setConstant(getDefaultFiftyConstant());
 		setModifier(getDefaultFiftyModifier());
-		setMaxConstant(getDefaultFiftyMaxConstant());
 		setStartLevel(getDefaultFiftyStartLevel());
 		setMaxLevel(getDefaultFiftyMaxLevel());
 		setWeight(null);
@@ -425,16 +403,14 @@ public abstract class CustomEnchantment {
 	public void setLevelThirty() {
 		setConstant(getDefaultThirtyConstant());
 		setModifier(getDefaultThirtyModifier());
-		setMaxConstant(getDefaultThirtyMaxConstant());
 		setStartLevel(getDefaultThirtyStartLevel());
 		setMaxLevel(getDefaultThirtyMaxLevel());
 		setWeight(null);
 	}
 
-	public void setCustom(int constant, int modifier, int maxConstant, int startLevel, int maxLevel, Weight weight) {
+	public void setCustom(int constant, int modifier, int startLevel, int maxLevel, Weight weight) {
 		setConstant(constant);
 		setModifier(modifier);
-		setMaxConstant(maxConstant);
 		setStartLevel(startLevel);
 		setMaxLevel(maxLevel);
 		setWeight(weight);

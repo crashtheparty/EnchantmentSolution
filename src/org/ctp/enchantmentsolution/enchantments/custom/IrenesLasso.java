@@ -10,29 +10,27 @@ import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.Weight;
 import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 
-public class Net extends CustomEnchantment{
+public class IrenesLasso extends CustomEnchantment{
 
-	public Net() {
-		addDefaultDisplayName("Net");
-		addDefaultDisplayName(Language.GERMAN, "Netzgewebe");
+	public IrenesLasso() {
+		addDefaultDisplayName("Irene's Lasso");
+		addDefaultDisplayName(Language.GERMAN, "Lasso von Irene");
 		setDefaultFiftyConstant(0);
 		setDefaultThirtyConstant(15);
 		setDefaultFiftyModifier(30);
 		setDefaultThirtyModifier(0);
-		setDefaultFiftyMaxConstant(40);
-		setDefaultThirtyMaxConstant(45);
 		setDefaultFiftyStartLevel(30);
 		setDefaultThirtyStartLevel(1);
 		setDefaultFiftyMaxLevel(2);
 		setDefaultThirtyMaxLevel(1);
 		setDefaultWeight(Weight.VERY_RARE);
-		addDefaultDescription("Grabs animals to place later.");
-		addDefaultDescription(Language.GERMAN, "Packt Tiere, um sie später zu platzieren.");
+		addDefaultDescription("Grabs animals to carry around with you and place later.");
+		addDefaultDescription(Language.GERMAN, "Greift Tiere zum Mitnehmen und Platzieren später.");
 	}
 	
 	@Override
 	public Enchantment getRelativeEnchantment() {
-		return DefaultEnchantments.NET;
+		return DefaultEnchantments.IRENES_LASSO;
 	}
 
 	@Override
@@ -52,7 +50,7 @@ public class Net extends CustomEnchantment{
 
 	@Override
 	public String getName() {
-		return "net";
+		return "lasso_of_irene";
 	}
 
 }

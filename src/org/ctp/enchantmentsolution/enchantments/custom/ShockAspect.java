@@ -19,8 +19,6 @@ public class ShockAspect extends CustomEnchantment{
 		setDefaultThirtyConstant(-10);
 		setDefaultFiftyModifier(20);
 		setDefaultThirtyModifier(20);
-		setDefaultFiftyMaxConstant(50);
-		setDefaultThirtyMaxConstant(50);
 		setDefaultFiftyStartLevel(5);
 		setDefaultThirtyStartLevel(1);
 		setDefaultFiftyMaxLevel(3);

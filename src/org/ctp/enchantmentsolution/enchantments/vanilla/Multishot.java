@@ -13,27 +13,25 @@ public class Multishot extends CustomEnchantment{
 	
 	public Multishot() {
 		addDefaultDisplayName("Multishot");
-		addDefaultDisplayName(Language.GERMAN, "Köder");
+		addDefaultDisplayName(Language.GERMAN, "Mehrfachschuss");
 		setTreasure(true);
-		setDefaultFiftyConstant(25);
-		setDefaultThirtyConstant(25);
+		setDefaultFiftyConstant(35);
+		setDefaultThirtyConstant(20);
 		setDefaultFiftyModifier(0);
 		setDefaultThirtyModifier(0);
-		setDefaultFiftyMaxConstant(75);
-		setDefaultThirtyMaxConstant(50);
 		setDefaultFiftyStartLevel(20);
 		setDefaultThirtyStartLevel(1);
 		setDefaultFiftyMaxLevel(1);
 		setDefaultThirtyMaxLevel(1);
 		setDefaultWeight(Weight.RARE);
 		setMaxLevelOne(true);
-		addDefaultDescription("Repair durability with experience.");
-		addDefaultDescription(Language.GERMAN, "Haltbarkeit mit Erfahrung reparieren.");
+		addDefaultDescription("Shoot multiple arrows at once.");
+		addDefaultDescription(Language.GERMAN, "Schießen Sie mehrere Pfeile gleichzeitig.");
 	}
 	
 	@Override
 	public Enchantment getRelativeEnchantment() {
-		return null;
+		return Enchantment.MULTISHOT;
 	}
 
 	@Override
@@ -48,7 +46,7 @@ public class Multishot extends CustomEnchantment{
 
 	@Override
 	protected List<Enchantment> getDefaultConflictingEnchantments() {
-		return null;
+		return Arrays.asList(Enchantment.PIERCING);
 	}
 
 	@Override

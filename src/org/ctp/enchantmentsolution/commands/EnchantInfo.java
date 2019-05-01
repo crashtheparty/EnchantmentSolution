@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 
-import org.apache.commons.lang3.StringUtils;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -84,7 +83,7 @@ public class EnchantInfo implements CommandExecutor{
 		if(player != null) {
 			JSONArray json = new JSONArray();
 			JSONObject first = new JSONObject();
-			first.put("text", StringUtils.LF + ChatColor.DARK_BLUE + "******");
+			first.put("text", "\n" + ChatColor.DARK_BLUE + "******");
 			JSONObject second = new JSONObject();
 			if(page > 1) {
 				second.put("text", ChatColor.GREEN + "<<<");
@@ -108,7 +107,7 @@ public class EnchantInfo implements CommandExecutor{
 				fourth.put("text", ChatColor.DARK_BLUE + "***");
 			}
 			JSONObject fifth = new JSONObject();
-			fifth.put("text", ChatColor.DARK_BLUE + "******" + StringUtils.LF);
+			fifth.put("text", ChatColor.DARK_BLUE + "******" + "\n");
 			json.add(first);
 			json.add(second);
 			json.add(third);
@@ -138,8 +137,8 @@ public class EnchantInfo implements CommandExecutor{
 				name.put("text", shrink(ChatColor.GOLD + enchant.getDisplayName()));
 				name.put("clickEvent", action);
 				json.add(name);
-				desc.put("text", shrink(ChatColor.GOLD + enchant.getDisplayName() + ChatColor.WHITE + ": " + ChatColor.WHITE + enchant.getDescription())
-						.substring((ChatColor.GOLD + enchant.getDisplayName()).length()) + StringUtils.LF);
+				desc.put("text", shrink(ChatColor.GOLD + enchant.getDisplayName() + ChatColor.WHITE + ": " + ChatColor.WHITE + 
+						enchant.getDescription()).substring((ChatColor.GOLD + enchant.getDisplayName()).length()) + "\n");
 				json.add(desc);
 			}
 			json.add(first);
@@ -149,20 +148,20 @@ public class EnchantInfo implements CommandExecutor{
 			json.add(fifth);
 			ChatUtils.sendRawMessage(player, json.toJSONString());
 		} else {
-			String message = StringUtils.LF + ChatColor.DARK_BLUE + "******" + (page > 1 ? "<<<" : "***") + "******"
+			String message = "\n" + ChatColor.DARK_BLUE + "******" + (page > 1 ? "<<<" : "***") + "******"
 					+ ChatColor.AQUA + " Enchantments Page " + page + ChatColor.DARK_BLUE + " ******" 
-					+ (Enchantments.getEnchantments().size() < ((page - 1) * 10) ? ">>>" : "***") + "******" + StringUtils.LF;
+					+ (Enchantments.getEnchantments().size() < ((page - 1) * 10) ? ">>>" : "***") + "******" + "\n";
 			for(int i = 0; i < 10; i++) {
 				int num = i + (page - 1) * 10;
 				if(num >= Enchantments.getEnchantments().size()) {
 					break;
 				}
 				CustomEnchantment enchant = Enchantments.getEnchantments().get(num);
-				message += shrink(ChatColor.GOLD + enchant.getDisplayName() + ": " + ChatColor.WHITE + enchant.getDescription()) + StringUtils.LF;
+				message += shrink(ChatColor.GOLD + enchant.getDisplayName() + ": " + ChatColor.WHITE + enchant.getDescription()) + "\n";
 			}
-			message += StringUtils.LF + ChatColor.DARK_BLUE + "******" + (page > 1 ? "<<<" : "***") + "******"
+			message += "\n" + ChatColor.DARK_BLUE + "******" + (page > 1 ? "<<<" : "***") + "******"
 					+ ChatColor.AQUA + " Enchantments Page " + page + ChatColor.DARK_BLUE + " ******" 
-					+ (Enchantments.getEnchantments().size() < ((page - 1) * 10) ? ">>>" : "***") + "******" + StringUtils.LF;
+					+ (Enchantments.getEnchantments().size() < ((page - 1) * 10) ? ">>>" : "***") + "******" + "\n";
 			ChatUtils.sendToConsole(Level.INFO, message);
 		}
 	}

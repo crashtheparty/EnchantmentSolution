@@ -19,8 +19,6 @@ public class Soulbound extends CustomEnchantment{
 		setDefaultThirtyConstant(30);
 		setDefaultFiftyModifier(0);
 		setDefaultThirtyModifier(0);
-		setDefaultFiftyMaxConstant(50);
-		setDefaultThirtyMaxConstant(50);
 		setDefaultFiftyStartLevel(30);
 		setDefaultThirtyStartLevel(1);
 		setDefaultFiftyMaxLevel(1);

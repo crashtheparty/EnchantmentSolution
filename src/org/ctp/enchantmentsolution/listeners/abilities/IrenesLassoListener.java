@@ -3,6 +3,7 @@ package org.ctp.enchantmentsolution.listeners.abilities;
 import java.util.List;
 
 import org.bukkit.Location;
+import org.bukkit.Statistic;
 import org.bukkit.entity.Animals;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -21,19 +22,19 @@ import org.ctp.enchantmentsolution.nms.animalmob.AnimalMob;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.StringUtils;
 
-public class NetListener extends EnchantmentListener{
+public class IrenesLassoListener extends EnchantmentListener{
 
 	@EventHandler(priority=EventPriority.HIGHEST)
 	public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
-		if(!canRun(DefaultEnchantments.NET, event)) return;
+		if(!canRun(DefaultEnchantments.IRENES_LASSO, event)) return;
 		Entity attacker = event.getDamager();
 		Entity attacked = event.getEntity();
 		if(attacker instanceof Player && attacked instanceof Animals){
 			Player player = (Player) attacker;
 			ItemStack attackItem = player.getInventory().getItemInMainHand();
-			if(attackItem != null && Enchantments.hasEnchantment(attackItem, DefaultEnchantments.NET)){
+			if(attackItem != null && Enchantments.hasEnchantment(attackItem, DefaultEnchantments.IRENES_LASSO)){
 				event.setCancelled(true);
-				int max = Enchantments.getLevel(attackItem, DefaultEnchantments.NET);
+				int max = Enchantments.getLevel(attackItem, DefaultEnchantments.IRENES_LASSO);
 				int current = 0;
 				for(AnimalMob animal : AnimalMob.ANIMALS) {
 					if((animal.getItem() != null && animal.getItem().equals(attackItem)) || StringUtils.getAnimalIDsFromItem(attackItem).contains(animal.getEntityID())) {
@@ -56,14 +57,14 @@ public class NetListener extends EnchantmentListener{
 	
 	@EventHandler
 	public void onPlayerInteract(PlayerInteractEvent event) {
-		if(!canRun(DefaultEnchantments.NET, event)) return;
+		if(!canRun(DefaultEnchantments.IRENES_LASSO, event)) return;
 		if(event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
 			if (event.getHand() == EquipmentSlot.OFF_HAND) {
 		        return; // off hand packet, ignore.
 		    }
 			Player player = event.getPlayer();
 			ItemStack item = player.getInventory().getItemInMainHand();
-			if(item != null && Enchantments.hasEnchantment(item, DefaultEnchantments.NET)){
+			if(item != null && Enchantments.hasEnchantment(item, DefaultEnchantments.IRENES_LASSO)){
 				AnimalMob remove = null;
 				List<Integer> entityIDs = StringUtils.getAnimalIDsFromItem(item);
 				if(entityIDs.size() == 0) return;
@@ -75,6 +76,7 @@ public class NetListener extends EnchantmentListener{
 						Entity e = loc.getWorld().spawnEntity(loc, animal.getMob());
 						animal.editProperties(e);
 						damageItem(player, item, 1, 2);
+						player.incrementStatistic(Statistic.USE_ITEM, item.getType());
 						StringUtils.removeAnimal(item, entityID);
 						break;
 					}

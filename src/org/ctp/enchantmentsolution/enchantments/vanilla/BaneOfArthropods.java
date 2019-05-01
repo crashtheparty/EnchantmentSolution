@@ -3,7 +3,6 @@ package org.ctp.enchantmentsolution.enchantments.vanilla;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
 import org.bukkit.enchantments.Enchantment;
 import org.ctp.enchantmentsolution.api.Language;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
@@ -19,22 +18,20 @@ public class BaneOfArthropods extends CustomEnchantment{
 		setDefaultThirtyConstant(-3);
 		setDefaultFiftyModifier(9);
 		setDefaultThirtyModifier(8);
-		setDefaultFiftyMaxConstant(18);
-		setDefaultThirtyMaxConstant(20);
 		setDefaultFiftyStartLevel(1);
 		setDefaultThirtyStartLevel(1);
 		setDefaultFiftyMaxLevel(6);
 		setDefaultThirtyMaxLevel(5);
 		setDefaultWeight(Weight.UNCOMMON);
 		addDefaultDescription("Increases damage to \"arthropod\" mobs (spiders, cave spiders, silverfish and endermites)." + 
-				StringUtils.LF + 
+				"\n" + 
 				"Each level separately adds 2.5 (half heart) extra damage to each hit, to \"arthropods\" only." + 
-				StringUtils.LF + 
+				"\n" + 
 				"The enchantment will also cause \"arthropods\" to have the Slowness IV effect when hit.");
 		addDefaultDescription(Language.GERMAN, "Erhöht den Schaden an \"Arthropoden\" -Mobs (Spinnen, Höhlenspinnen, Silberfischen und Endermiten)." + 
-				StringUtils.LF + 
+				"\n" + 
 				"Jedes Level fügt jedem Treffer separat 2,5 (halbes Herz) Schaden hinzu, nur für \"Arthropoden\"." + 
-				StringUtils.LF + 
+				"\n" + 
 				"Die Verzauberung bewirkt auch, dass \"Arthropoden\" den Effekt von Slowness IV haben, wenn sie getroffen werden");
 	}
 

@@ -19,8 +19,6 @@ public class NoRest extends CustomEnchantment{
 		setDefaultThirtyConstant(1);
 		setDefaultFiftyModifier(0);
 		setDefaultThirtyModifier(0);
-		setDefaultFiftyMaxConstant(60);
-		setDefaultThirtyMaxConstant(40);
 		setDefaultFiftyStartLevel(15);
 		setDefaultThirtyStartLevel(1);
 		setDefaultFiftyMaxLevel(1);

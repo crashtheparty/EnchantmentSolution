@@ -3,7 +3,6 @@ package org.ctp.enchantmentsolution.enchantments.vanilla;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
 import org.bukkit.enchantments.Enchantment;
 import org.ctp.enchantmentsolution.api.Language;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
@@ -21,8 +20,6 @@ public class CurseOfVanishing extends CustomEnchantment{
 		setDefaultThirtyConstant(25);
 		setDefaultFiftyModifier(0);
 		setDefaultThirtyModifier(0);
-		setDefaultFiftyMaxConstant(50);
-		setDefaultThirtyMaxConstant(25);
 		setDefaultFiftyStartLevel(1);
 		setDefaultThirtyStartLevel(1);
 		setDefaultFiftyMaxLevel(1);
@@ -31,10 +28,10 @@ public class CurseOfVanishing extends CustomEnchantment{
 		setMaxLevelOne(true);
 		setCurse(true);
 		addDefaultDescription("Causes the item to disappear on death." + 
-				StringUtils.LF + 
+				"\n" + 
 				"When the player dies, the item disappears instead of dropping on the ground. The item may still be dropped normally.");
 		addDefaultDescription(Language.GERMAN, "Bewirkt, dass der Gegenstand beim Tod verschwindet." + 
-				StringUtils.LF + 
+				"\n" + 
 				"Wenn der Spieler stirbt, verschwindet der Gegenstand, anstatt auf den Boden zu fallen. Der Artikel kann noch normal abgeworfen werden.");
 	}
 

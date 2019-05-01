@@ -19,8 +19,6 @@ public class Wand extends CustomEnchantment{
 		setDefaultThirtyConstant(10);
 		setDefaultFiftyModifier(15);
 		setDefaultThirtyModifier(10);
-		setDefaultFiftyMaxConstant(40);
-		setDefaultThirtyMaxConstant(35);
 		setDefaultFiftyStartLevel(30);
 		setDefaultThirtyStartLevel(1);
 		setDefaultFiftyMaxLevel(3);
@@ -53,6 +51,6 @@ public class Wand extends CustomEnchantment{
 
 	@Override
 	protected List<Enchantment> getDefaultConflictingEnchantments() {
-		return Arrays.asList(DefaultEnchantments.NET);
+		return Arrays.asList(DefaultEnchantments.IRENES_LASSO);
 	}
 }

@@ -19,8 +19,6 @@ public class Beheading extends CustomEnchantment{
 		setDefaultThirtyConstant(5);
 		setDefaultFiftyModifier(20);
 		setDefaultThirtyModifier(12);
-		setDefaultFiftyMaxConstant(40);
-		setDefaultThirtyMaxConstant(40);
 		setDefaultFiftyStartLevel(20);
 		setDefaultThirtyStartLevel(1);
 		setDefaultFiftyMaxLevel(3);

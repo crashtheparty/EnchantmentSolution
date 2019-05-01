@@ -19,8 +19,6 @@ public class Moisturize extends CustomEnchantment{
 		setDefaultThirtyConstant(35);
 		setDefaultFiftyModifier(0);
 		setDefaultThirtyModifier(0);
-		setDefaultFiftyMaxConstant(25);
-		setDefaultThirtyMaxConstant(20);
 		setDefaultFiftyStartLevel(20);
 		setDefaultThirtyStartLevel(1);
 		setDefaultFiftyMaxLevel(1);

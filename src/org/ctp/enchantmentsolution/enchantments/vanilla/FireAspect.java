@@ -3,7 +3,6 @@ package org.ctp.enchantmentsolution.enchantments.vanilla;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
 import org.bukkit.enchantments.Enchantment;
 import org.ctp.enchantmentsolution.api.Language;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
@@ -19,18 +18,16 @@ public class FireAspect extends CustomEnchantment{
 		setDefaultThirtyConstant(-10);
 		setDefaultFiftyModifier(30);
 		setDefaultThirtyModifier(20);
-		setDefaultFiftyMaxConstant(50);
-		setDefaultThirtyMaxConstant(50);
 		setDefaultFiftyStartLevel(5);
 		setDefaultThirtyStartLevel(1);
 		setDefaultFiftyMaxLevel(3);
 		setDefaultThirtyMaxLevel(2);
 		setDefaultWeight(Weight.RARE);
 		addDefaultDescription("Sets the target on fire." + 
-				StringUtils.LF + 
+				"\n" + 
 				"Fire Aspect adds 80 fire ticks (4 seconds of burning) per level to the target.");
 		addDefaultDescription(Language.GERMAN, "Setzt das Ziel in Brand." + 
-				StringUtils.LF + 
+				"\n" + 
 				"Feueraspekt fügt dem Ziel 80 Feuerzecken (4 Sekunden Brennen) pro Stufe hinzu.");
 	}
 

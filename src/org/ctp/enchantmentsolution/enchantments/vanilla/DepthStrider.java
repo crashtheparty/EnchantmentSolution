@@ -19,8 +19,6 @@ public class DepthStrider extends CustomEnchantment{
 		setDefaultThirtyConstant(0);
 		setDefaultFiftyModifier(15);
 		setDefaultThirtyModifier(10);
-		setDefaultFiftyMaxConstant(25);
-		setDefaultThirtyMaxConstant(15);
 		setDefaultFiftyStartLevel(10);
 		setDefaultThirtyStartLevel(1);
 		setDefaultFiftyMaxLevel(3);

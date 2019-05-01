@@ -3,7 +3,6 @@ package org.ctp.enchantmentsolution.enchantments.vanilla;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
 import org.bukkit.enchantments.Enchantment;
 import org.ctp.enchantmentsolution.api.Language;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
@@ -19,18 +18,16 @@ public class Sharpness extends CustomEnchantment{
 		setDefaultThirtyConstant(-10);
 		setDefaultFiftyModifier(13);
 		setDefaultThirtyModifier(11);
-		setDefaultFiftyMaxConstant(20);
-		setDefaultThirtyMaxConstant(20);
 		setDefaultFiftyStartLevel(1);
 		setDefaultThirtyStartLevel(1);
 		setDefaultFiftyMaxLevel(6);
 		setDefaultThirtyMaxLevel(5);
 		setDefaultWeight(Weight.COMMON);
 		addDefaultDescription("Increases melee damage." + 
-				StringUtils.LF + 
+				"\n" + 
 				"Adds 1 (half heart) extra damage for the first level, and 0.5 (half heart) for each additional level.");
 		addDefaultDescription(Language.GERMAN, "Erhöht Nahkampfschaden." + 
-				StringUtils.LF + 
+				"\n" + 
 				"Fügt 1 (halbes Herz) zusätzlichen Schaden für die erste Stufe und 0,5 (halbes Herz) für jede zusätzliche Stufe hinzu.");
 	}
 	

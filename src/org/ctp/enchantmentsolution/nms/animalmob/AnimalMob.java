@@ -17,7 +17,6 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Horse;
 import org.bukkit.entity.Llama;
-import org.bukkit.entity.Ocelot;
 import org.bukkit.entity.Parrot;
 import org.bukkit.entity.Pig;
 import org.bukkit.entity.Rabbit;
@@ -26,7 +25,6 @@ import org.bukkit.entity.Tameable;
 import org.bukkit.entity.Wolf;
 import org.bukkit.entity.Horse.Color;
 import org.bukkit.entity.Horse.Style;
-import org.bukkit.entity.Ocelot.Type;
 import org.bukkit.entity.Parrot.Variant;
 import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.utils.StringUtils;
@@ -50,7 +48,6 @@ public class AnimalMob {
 	private org.bukkit.entity.Llama.Color llamaColor;
 	private Style horseStyle;
 	private Variant parrotVariant;
-	private Type ocelotType;
 	private org.bukkit.entity.Rabbit.Type rabbitType;
 	
 	public AnimalMob(Animals mob, ItemStack item) {
@@ -82,10 +79,6 @@ public class AnimalMob {
 			Wolf wolf = (Wolf) mob;
 			setWolfCollar(wolf.getCollarColor());
 			setAngry(wolf.isAngry());
-		}
-		if(mob instanceof Ocelot) {
-			Ocelot ocelot = (Ocelot) mob;
-			setOcelotType(ocelot.getCatType());
 		}
 		if(mob instanceof Rabbit) {
 			Rabbit rabbit = (Rabbit) mob;
@@ -148,7 +141,6 @@ public class AnimalMob {
 		config.set("animals." + i + ".horse_style", getHorseStyle() != null ? getHorseStyle().name() : null);
 		config.set("animals." + i + ".horse_color", getHorseColor() != null ? getHorseColor().name() : null);
 		config.set("animals." + i + ".llama_color", getLlamaColor() != null ? getLlamaColor().name() : null);
-		config.set("animals." + i + ".ocelot_type", getOcelotType() != null ? getOcelotType().name() : null);
 		config.set("animals." + i + ".rabbit_type", getRabbitType() != null ? getRabbitType().name() : null);
 		config.set("animals." + i + ".parrot_variant", getParrotVariant() != null ? getParrotVariant().name() : null);
 		config.set("animals." + i + ".saddle", getSaddle() != null ? ItemSerialization.itemToString(getSaddle()) : null);
@@ -192,10 +184,6 @@ public class AnimalMob {
 					Wolf wolf = (Wolf) animal;
 					wolf.setCollarColor(getWolfCollar());
 					wolf.setAngry(isAngry());
-				}
-				if(animal instanceof Ocelot) {
-					Ocelot ocelot = (Ocelot) animal;
-					ocelot.setCatType(getOcelotType());
 				}
 				if(animal instanceof Rabbit) {
 					Rabbit rabbit = (Rabbit) animal;
@@ -462,14 +450,6 @@ public class AnimalMob {
 
 	public void setSheared(boolean sheared) {
 		this.sheared = sheared;
-	}
-
-	public Type getOcelotType() {
-		return ocelotType;
-	}
-
-	public void setOcelotType(Type ocelotType) {
-		this.ocelotType = ocelotType;
 	}
 
 	public org.bukkit.entity.Rabbit.Type getRabbitType() {

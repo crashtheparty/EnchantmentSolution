@@ -2,6 +2,7 @@ package org.ctp.enchantmentsolution.nms;
 
 import org.bukkit.entity.LivingEntity;
 import org.ctp.enchantmentsolution.nms.damage.DamageEvent_v1_13_R2;
+import org.ctp.enchantmentsolution.nms.damage.DamageEvent_v1_14_R1;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.nms.damage.DamageEvent_v1_13_R1;
 
@@ -15,6 +16,9 @@ public class DamageEvent {
 		case 2:
 		case 3:
 			DamageEvent_v1_13_R2.damageEntity(entity, cause, damage);
+			break;
+		case 4:
+			DamageEvent_v1_14_R1.damageEntity(entity, cause, damage);
 			break;
 		}
 	}

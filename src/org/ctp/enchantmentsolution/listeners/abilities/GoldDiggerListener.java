@@ -2,6 +2,7 @@ package org.ctp.enchantmentsolution.listeners.abilities;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Statistic;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -33,6 +34,7 @@ public class GoldDiggerListener extends EnchantmentListener {
 								loc,
 								goldDigger);
 						droppedItem.setVelocity(new Vector(0,0,0));
+						player.incrementStatistic(Statistic.USE_ITEM, item.getType());
 						super.damageItem(player, item);
 					}
 				}

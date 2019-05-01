@@ -19,8 +19,6 @@ public class FrequentFlyer extends CustomEnchantment{
 		setDefaultThirtyConstant(5);
 		setDefaultFiftyModifier(15);
 		setDefaultThirtyModifier(10);
-		setDefaultFiftyMaxConstant(40);
-		setDefaultThirtyMaxConstant(40);
 		setDefaultFiftyStartLevel(30);
 		setDefaultThirtyStartLevel(1);
 		setDefaultFiftyMaxLevel(3);

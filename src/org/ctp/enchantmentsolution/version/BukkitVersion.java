@@ -22,7 +22,7 @@ public class BukkitVersion {
 		versionNumber = 0;
 		
 		// BukkitVersion
-		ChatUtils.sendToConsole(Level.INFO, "Bukkit Version:  " + version);
+		ChatUtils.sendToConsole(Level.INFO, "Bukkit Version: " + version);
 
 		// Check
 		switch(version) {
@@ -34,6 +34,9 @@ public class BukkitVersion {
 			return true;
 		case "1.13.2":
 			versionNumber = 3;
+			return true;
+		case "1.14":
+			versionNumber = 4;
 			return true;
 		}
 		return false;

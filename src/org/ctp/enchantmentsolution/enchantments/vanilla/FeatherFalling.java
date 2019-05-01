@@ -18,8 +18,6 @@ public class FeatherFalling extends CustomEnchantment{
 		setDefaultThirtyConstant(-1);
 		setDefaultFiftyModifier(12);
 		setDefaultThirtyModifier(6);
-		setDefaultFiftyMaxConstant(18);
-		setDefaultThirtyMaxConstant(10);
 		setDefaultFiftyStartLevel(1);
 		setDefaultThirtyStartLevel(1);
 		setDefaultFiftyMaxLevel(4);

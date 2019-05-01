@@ -4,10 +4,10 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.enchantments.EnchantmentTarget;
 import org.bukkit.inventory.ItemStack;
 
-public class NetWrapper extends CustomEnchantmentWrapper {
+public class IrenesLassoWrapper extends CustomEnchantmentWrapper {
 	
-	public NetWrapper() {
-		super("net");
+	public IrenesLassoWrapper() {
+		super("irenes_lasso");
 	}
 
 	@Override
@@ -37,7 +37,7 @@ public class NetWrapper extends CustomEnchantmentWrapper {
 	@Override
 	public String getName() {
 		// TODO Auto-generated method stub
-		return "NET";
+		return "LASSO_OF_IRENE";
 	}
 
 	@Override

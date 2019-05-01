@@ -19,8 +19,6 @@ public class GoldDigger extends CustomEnchantment{
 		setDefaultThirtyConstant(-10);
 		setDefaultFiftyModifier(12);
 		setDefaultThirtyModifier(11);
-		setDefaultFiftyMaxConstant(19);
-		setDefaultThirtyMaxConstant(20);
 		setDefaultFiftyStartLevel(10);
 		setDefaultThirtyStartLevel(1);
 		setDefaultFiftyMaxLevel(6);

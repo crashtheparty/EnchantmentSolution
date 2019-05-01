@@ -9,6 +9,7 @@ import java.util.Map;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Statistic;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.entity.Item;
@@ -112,15 +113,17 @@ public class ItemUtils {
 		
 		combinedMeta.setDisplayName(firstMeta.getDisplayName());
 		combinedMeta.setLore(firstMeta.getLore());
-		Iterator<Map.Entry<Attribute, AttributeModifier>> iterator = firstMeta.getAttributeModifiers().entries().iterator();
-		while(iterator.hasNext()) {
-			Map.Entry<Attribute, AttributeModifier> next = iterator.next();
-			
-			if (next.getKey() == null || next.getValue() == null) {
-			    iterator.remove();
-			    continue;
+		if(firstMeta.getAttributeModifiers() != null && !firstMeta.getAttributeModifiers().isEmpty()) {
+			Iterator<Map.Entry<Attribute, AttributeModifier>> iterator = firstMeta.getAttributeModifiers().entries().iterator();
+			while(iterator.hasNext()) {
+				Map.Entry<Attribute, AttributeModifier> next = iterator.next();
+				
+				if (next.getKey() == null || next.getValue() == null) {
+				    iterator.remove();
+				    continue;
+				}
+				combinedMeta.addAttributeModifier(next.getKey(), next.getValue());
 			}
-			combinedMeta.addAttributeModifier(next.getKey(), next.getValue());
 		}
 		
 		combined.setItemMeta(combinedMeta);
@@ -130,12 +133,14 @@ public class ItemUtils {
 		return combined;
 	}
 	
-	public static void giveItemToPlayer(Player player, ItemStack item, Location fallback) {
+	public static void giveItemToPlayer(Player player, ItemStack item, Location fallback, boolean statistic) {
 		HashMap<Integer, ItemStack> leftOver = new HashMap<Integer, ItemStack>();
+		int amount = item.getAmount();
 		leftOver.putAll((player.getInventory().addItem(item)));
 		if (!leftOver.isEmpty()) {
 			for (Iterator<java.util.Map.Entry<Integer, ItemStack>> it = leftOver.entrySet().iterator(); it.hasNext();) {
 				java.util.Map.Entry<Integer, ItemStack> e = it.next();
+				amount -= e.getValue().getAmount();
 				fallback.add(0.5, 0.5, 0.5);
 				Item droppedItem = player.getWorld().dropItem(
 						fallback,
@@ -143,6 +148,9 @@ public class ItemUtils {
 				droppedItem.setVelocity(new Vector(0,0,0));
 				droppedItem.teleport(fallback);
 			}
+		}
+		if(amount > 0 && statistic) {
+			player.incrementStatistic(Statistic.PICKUP, item.getType(), amount);
 		}
 	}
 	
@@ -153,7 +161,6 @@ public class ItemUtils {
 		ItemMeta duplicateMeta = duplicate.getItemMeta();
 		
 		returnItemMeta.setDisplayName(duplicateMeta.getDisplayName());
-		returnItemMeta.setLocalizedName(duplicateMeta.getLocalizedName());
 		returnItem.setItemMeta(returnItemMeta);
 		DamageUtils.setDamage(returnItem, DamageUtils.getDamage(duplicateMeta));
 		

@@ -85,14 +85,15 @@ public class LifeListener implements Runnable{
 			if(!Enchantments.hasEnchantment(item, DefaultEnchantments.GUNG_HO) && Enchantments.hasEnchantment(item, DefaultEnchantments.LIFE)){
 				int level = Enchantments.getLevel(item, DefaultEnchantments.LIFE);
 				AttributeInstance a = player.getAttribute(Attribute.GENERIC_MAX_HEALTH);
-				a.setBaseValue(a.getDefaultValue() + 4 * level);
+				a.setBaseValue(a.getBaseValue() + 4 * level);
 			}
 		}
 
 		private void doUnequip(ItemStack item) {
 			if(!Enchantments.hasEnchantment(item, DefaultEnchantments.GUNG_HO) && Enchantments.hasEnchantment(item, DefaultEnchantments.LIFE)){
+				int level = Enchantments.getLevel(item, DefaultEnchantments.LIFE);
 				AttributeInstance a = player.getAttribute(Attribute.GENERIC_MAX_HEALTH);
-				a.setBaseValue(a.getDefaultValue());
+				a.setBaseValue(a.getBaseValue() - 4 * level);
 				if(player.getHealth() > a.getBaseValue()) {
 					player.setHealth(a.getBaseValue());
 				}

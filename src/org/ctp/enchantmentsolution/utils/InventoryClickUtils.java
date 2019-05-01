@@ -50,7 +50,7 @@ public class InventoryClickUtils {
 			if (table.getItems().contains(item)) {
 				if (table.removeItem(item, slot)) {
 					table.setInventory();
-					ItemUtils.giveItemToPlayer(player, item, player.getLocation());
+					ItemUtils.giveItemToPlayer(player, item, player.getLocation(), false);
 				}
 			}else if(slot > 17 && slot % 9 >= 3 && slot % 9 <= 8 && item != null && item.getType() != Material.RED_STAINED_GLASS_PANE && item.getType() != Material.BLACK_STAINED_GLASS_PANE){
 				int itemSlot = (slot - 18) / 9;
@@ -59,7 +59,7 @@ public class InventoryClickUtils {
 			} else if (slot == 10) {
 				ItemStack lapisStack = table.removeFromLapisStack();
 				if(lapisStack != null) {
-					ItemUtils.giveItemToPlayer(player, lapisStack, player.getLocation());
+					ItemUtils.giveItemToPlayer(player, lapisStack, player.getLocation(), false);
 				}
 				table.setInventory();
 			}
@@ -107,7 +107,7 @@ public class InventoryClickUtils {
 			} else if (anvil.getItems().contains(item)) {
 				if (anvil.removeItem(slot)) {
 					anvil.setInventory();
-					ItemUtils.giveItemToPlayer(player, item, player.getLocation());
+					ItemUtils.giveItemToPlayer(player, item, player.getLocation(), false);
 				}
 			}
 		}
@@ -145,7 +145,7 @@ public class InventoryClickUtils {
 			} else if (stone.getItems().contains(item)) {
 				if (stone.removeItem(slot)) {
 					stone.setInventory();
-					ItemUtils.giveItemToPlayer(player, item, player.getLocation());
+					ItemUtils.giveItemToPlayer(player, item, player.getLocation(), false);
 				}
 			}
 		}
