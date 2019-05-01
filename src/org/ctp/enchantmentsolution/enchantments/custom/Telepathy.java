@@ -19,8 +19,6 @@ public class Telepathy extends CustomEnchantment{
 		setDefaultThirtyConstant(35);
 		setDefaultFiftyModifier(0);
 		setDefaultThirtyModifier(0);
-		setDefaultFiftyMaxConstant(35);
-		setDefaultThirtyMaxConstant(50);
 		setDefaultFiftyStartLevel(40);
 		setDefaultThirtyStartLevel(1);
 		setDefaultFiftyMaxLevel(1);

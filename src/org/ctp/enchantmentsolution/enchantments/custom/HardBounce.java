@@ -19,8 +19,6 @@ public class HardBounce extends CustomEnchantment{
 		setDefaultThirtyConstant(-4);
 		setDefaultFiftyModifier(14);
 		setDefaultThirtyModifier(12);
-		setDefaultFiftyMaxConstant(30);
-		setDefaultThirtyMaxConstant(25);
 		setDefaultFiftyStartLevel(1);
 		setDefaultThirtyStartLevel(1);
 		setDefaultFiftyMaxLevel(5);

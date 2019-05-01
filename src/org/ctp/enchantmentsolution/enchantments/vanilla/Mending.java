@@ -19,8 +19,6 @@ public class Mending extends CustomEnchantment{
 		setDefaultThirtyConstant(25);
 		setDefaultFiftyModifier(0);
 		setDefaultThirtyModifier(0);
-		setDefaultFiftyMaxConstant(75);
-		setDefaultThirtyMaxConstant(50);
 		setDefaultFiftyStartLevel(20);
 		setDefaultThirtyStartLevel(1);
 		setDefaultFiftyMaxLevel(1);

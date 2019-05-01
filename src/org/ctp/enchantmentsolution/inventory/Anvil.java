@@ -214,7 +214,7 @@ public class Anvil implements InventoryData{
 			if(playerItems.size() - 1 >= 0) {
 				ItemStack item = playerItems.get(playerItems.size() - 1);
 				if(removeItem(playerItems.size() - 1)) {
-					ItemUtils.giveItemToPlayer(player, item, player.getLocation());
+					ItemUtils.giveItemToPlayer(player, item, player.getLocation(), false);
 				}
 			}
 		}
@@ -289,11 +289,11 @@ public class Anvil implements InventoryData{
 			}else {
 				combinedItem = AnvilNMS.setRepairCost(combinedItem, itemTwoRepair * 2 + 1);
 			}
-			ItemUtils.giveItemToPlayer(player, combinedItem, player.getLocation());
+			ItemUtils.giveItemToPlayer(player, combinedItem, player.getLocation(), false);
 			if(type.equals(RepairType.REPAIR)) {
 				ItemStack repairItem = playerItems.get(1).clone();
 				repairItem.setAmount(repairItem.getAmount() - ItemUtils.repairItem(playerItems.get(0), repairItem));
-				ItemUtils.giveItemToPlayer(player, repairItem, player.getLocation());
+				ItemUtils.giveItemToPlayer(player, repairItem, player.getLocation(), false);
 			}
 			if(EnchantmentSolution.getPlugin().isJobsEnabled()) {
 				JobsUtils.sendAnvilAction(player, playerItems.get(1), combinedItem);
@@ -321,7 +321,7 @@ public class Anvil implements InventoryData{
 			ItemMeta meta = item.getItemMeta();
 			meta.setDisplayName(name);
 			item.setItemMeta(meta);
-			ItemUtils.giveItemToPlayer(player, item, player.getLocation());
+			ItemUtils.giveItemToPlayer(player, item, player.getLocation(), false);
 		}
 	}
 	
@@ -365,7 +365,7 @@ public class Anvil implements InventoryData{
 	public void close(boolean external) {
 		if(EnchantmentSolution.getPlugin().hasInventory(this)) {
 			for(ItemStack item : getItems()){
-				ItemUtils.giveItemToPlayer(player, item, player.getLocation());
+				ItemUtils.giveItemToPlayer(player, item, player.getLocation(), false);
 			}
 			EnchantmentSolution.getPlugin().removeInventory(this);
 			if(!external) {

@@ -13,26 +13,24 @@ public class Piercing extends CustomEnchantment{
 	
 	public Piercing() {
 		addDefaultDisplayName("Piercing");
-		addDefaultDisplayName(Language.GERMAN, "Köder");
+		addDefaultDisplayName(Language.GERMAN, "Durchschuss");
 		setTreasure(true);
-		setDefaultFiftyConstant(25);
-		setDefaultThirtyConstant(25);
-		setDefaultFiftyModifier(0);
-		setDefaultThirtyModifier(0);
-		setDefaultFiftyMaxConstant(75);
-		setDefaultThirtyMaxConstant(50);
-		setDefaultFiftyStartLevel(20);
+		setDefaultFiftyConstant(-14);
+		setDefaultThirtyConstant(-9);
+		setDefaultFiftyModifier(15);
+		setDefaultThirtyModifier(10);
+		setDefaultFiftyStartLevel(1);
 		setDefaultThirtyStartLevel(1);
-		setDefaultFiftyMaxLevel(1);
-		setDefaultThirtyMaxLevel(1);
-		setDefaultWeight(Weight.RARE);
-		setMaxLevelOne(true);
-		addDefaultDescription("Repair durability with experience.");
+		setDefaultFiftyMaxLevel(5);
+		setDefaultThirtyMaxLevel(4);
+		setDefaultWeight(Weight.COMMON);
+		addDefaultDescription("Arrows go through and attack multiple mobs.");
+		addDefaultDescription(Language.GERMAN, "Pfeile gehen durch und greifen mehrere Mobs an.");
 	}
 	
 	@Override
 	public Enchantment getRelativeEnchantment() {
-		return null;
+		return Enchantment.PIERCING;
 	}
 
 	@Override
@@ -47,7 +45,7 @@ public class Piercing extends CustomEnchantment{
 
 	@Override
 	protected List<Enchantment> getDefaultConflictingEnchantments() {
-		return null;
+		return Arrays.asList(Enchantment.MULTISHOT);
 	}
 
 	@Override

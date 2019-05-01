@@ -28,7 +28,7 @@ public class YamlConfig {
 	private String[] header;
 	private YamlConfiguration config;
 	private boolean comments = true;
-
+	
 	public YamlConfig(File configFile, String[] header) {
 		this.header = header;
 		file = configFile;
@@ -422,10 +422,6 @@ public class YamlConfig {
 		}
 	}
 	
-	public void resetConfig() {
-		info = new LinkedHashMap<String, YamlInfo>();
-	}
-	
 	private String headerString() {
 		StringBuilder config = new StringBuilder("");
 		if(header != null && header.length > 0) {
@@ -512,7 +508,7 @@ public class YamlConfig {
 				}
 			} else {
 				for(int i = 0; i < entryKeys.size(); i++) {
-					if(entryKeys.get(i).startsWith(level)) {
+					if(entryKeys.get(i).startsWith(level + ".")) {
 						if(entryKeys.get(i).length() > level.length() + 1) {
 							String find = entryKeys.get(i).substring(level.length() + 1);
 							if(!find.contains(".") && !values.contains(entryKeys.get(i))) {

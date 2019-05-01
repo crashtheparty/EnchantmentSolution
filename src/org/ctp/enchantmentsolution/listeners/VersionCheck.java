@@ -73,13 +73,13 @@ public class VersionCheck implements Listener, Runnable {
 			} else {
 				String versionString = version.getNewestVersion();
 				ChatUtils.sendToConsole(Level.WARNING, (version == null ? "New Version" : "Version " + versionString)
-						+ " of EnchantmentSolution is available! Download it here: " + spigot);
+						+ " of " + version.getPlugin().getName() + " is available! Download it here: " + spigot);
 			}
 			if(!checked) {
 				Bukkit.getScheduler().runTaskLater(version.getPlugin(), new Runnable() {
 					public void run() {
 						for(Player player : Bukkit.getOnlinePlayers()) {
-							if (latestVersion && player.hasPermission("enchantmentsolution.version-updater")) {
+							if (latestVersion && player.hasPermission(version.getPlugin().getName().toLowerCase() + ".version-updater")) {
 								sendPlayerMessage(player);
 							}
 						}
@@ -93,7 +93,7 @@ public class VersionCheck implements Listener, Runnable {
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent event) {
 		Player player = event.getPlayer();
-		if (latestVersion && player.hasPermission("enchantmentsolution.version-updater") && checked) {
+		if (latestVersion && player.hasPermission(version.getPlugin().getName().toLowerCase() + ".version-updater") && checked) {
 			sendPlayerMessage(player);
 		}
 	}
@@ -105,17 +105,17 @@ public class VersionCheck implements Listener, Runnable {
 		} else if (version.hasNewerVersion()) {
 			String newest = version.getNewestVersion();
 			ChatUtils.sendMessage(player,
-					"Version " + newest + " of EnchantmentSolution is available! Download it here: ",
+					"Version " + newest + " of " + version.getPlugin().getName() + " is available! Download it here: ",
 					spigot);
 
 		} else if (version.isExperimentalVersion()) {
 			ChatUtils.sendMessage(player,
-					"Thank you for using an experimental version of EnchantmentSolution! Please report any bugs you find to github.");
+					"Thank you for using an experimental version of " + version.getPlugin().getName() + "! Please report any bugs you find to github.");
 			ChatUtils.sendMessage(player, "Link: ", github);
 			ChatUtils.sendMessage(player, "Version: " + version.getCurrent());
 		} else if (version.isUpcomingVersion()) {
 			ChatUtils.sendMessage(player,
-					"Thank you for using an upcoming version of EnchantmentSolution! Please report any bugs you find to github.");
+					"Thank you for using an upcoming version of " + version.getPlugin().getName() + "! Please report any bugs you find to github.");
 			ChatUtils.sendMessage(player, "Link: ", github);
 			ChatUtils.sendMessage(player, "Version: " + version.getCurrent());
 		}

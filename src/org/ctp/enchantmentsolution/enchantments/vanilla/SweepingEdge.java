@@ -18,8 +18,6 @@ public class SweepingEdge extends CustomEnchantment{
 		setDefaultThirtyConstant(-4);
 		setDefaultFiftyModifier(12);
 		setDefaultThirtyModifier(9);
-		setDefaultFiftyMaxConstant(26);
-		setDefaultThirtyMaxConstant(15);
 		setDefaultFiftyStartLevel(1);
 		setDefaultThirtyStartLevel(1);
 		setDefaultFiftyMaxLevel(3);

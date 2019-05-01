@@ -18,8 +18,6 @@ public class Lure extends CustomEnchantment{
 		setDefaultThirtyConstant(5);
 		setDefaultFiftyModifier(11);
 		setDefaultThirtyModifier(10);
-		setDefaultFiftyMaxConstant(40);
-		setDefaultThirtyMaxConstant(15);
 		setDefaultFiftyStartLevel(1);
 		setDefaultThirtyStartLevel(1);
 		setDefaultFiftyMaxLevel(4);

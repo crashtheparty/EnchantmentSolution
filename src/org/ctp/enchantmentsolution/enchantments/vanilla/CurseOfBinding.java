@@ -3,7 +3,6 @@ package org.ctp.enchantmentsolution.enchantments.vanilla;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
 import org.bukkit.enchantments.Enchantment;
 import org.ctp.enchantmentsolution.api.Language;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
@@ -20,8 +19,6 @@ public class CurseOfBinding extends CustomEnchantment{
 		setDefaultThirtyConstant(25);
 		setDefaultFiftyModifier(0);
 		setDefaultThirtyModifier(0);
-		setDefaultFiftyMaxConstant(50);
-		setDefaultThirtyMaxConstant(25);
 		setDefaultFiftyStartLevel(1);
 		setDefaultThirtyStartLevel(1);
 		setDefaultFiftyMaxLevel(1);
@@ -30,10 +27,10 @@ public class CurseOfBinding extends CustomEnchantment{
 		setMaxLevelOne(true);
 		setCurse(true);
 		addDefaultDescription("Prevents removal of the cursed item." + 
-				StringUtils.LF + 
+				"\n" + 
 				"The cursed item cannot be removed from any armor slot (outside of Creative mode) unless the player dies or the item breaks.");
 		addDefaultDescription(Language.GERMAN, "Verhindert das Entfernen des verfluchten Gegenstands." + 
-				StringUtils.LF + 
+				"\n" + 
 				"Der verfluchte Gegenstand kann nicht aus einem Rüstungsplatz (außerhalb des Kreativmodus) " + 
 				"entfernt werden, es sei denn, der Spieler stirbt oder der Gegenstand zerbricht.");
 	}

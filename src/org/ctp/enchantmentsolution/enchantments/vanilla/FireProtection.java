@@ -18,8 +18,6 @@ public class FireProtection extends CustomEnchantment{
 		setDefaultThirtyConstant(2);
 		setDefaultFiftyModifier(15);
 		setDefaultThirtyModifier(8);
-		setDefaultFiftyMaxConstant(21);
-		setDefaultThirtyMaxConstant(12);
 		setDefaultFiftyStartLevel(1);
 		setDefaultThirtyStartLevel(1);
 		setDefaultFiftyMaxLevel(4);

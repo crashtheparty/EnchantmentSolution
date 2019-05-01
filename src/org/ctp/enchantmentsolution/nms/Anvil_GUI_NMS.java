@@ -5,6 +5,7 @@ import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.inventory.Anvil;
 import org.ctp.enchantmentsolution.inventory.ConfigInventory;
 import org.ctp.enchantmentsolution.nms.anvil.AnvilGUI_v1_13_R2;
+import org.ctp.enchantmentsolution.nms.anvil.AnvilGUI_v1_14_R1;
 import org.ctp.enchantmentsolution.nms.anvil.AnvilGUI_v1_13_R1;
 
 public class Anvil_GUI_NMS {
@@ -18,6 +19,9 @@ public class Anvil_GUI_NMS {
 		case 3:
 			AnvilGUI_v1_13_R2.createAnvil(player, anvil);
 			break;
+		case 4:
+			AnvilGUI_v1_14_R1.createAnvil(player, anvil);
+			break;
 		}
 	}
 	
@@ -29,6 +33,9 @@ public class Anvil_GUI_NMS {
 		case 2:
 		case 3:
 			AnvilGUI_v1_13_R2.createAnvil(player, anvil);
+			break;
+		case 4:
+			AnvilGUI_v1_14_R1.createAnvil(player, anvil);
 			break;
 		}
 	}

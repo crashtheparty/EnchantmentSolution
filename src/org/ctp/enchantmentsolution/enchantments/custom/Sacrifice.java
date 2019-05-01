@@ -19,8 +19,6 @@ public class Sacrifice extends CustomEnchantment{
 		setDefaultThirtyConstant(15);
 		setDefaultFiftyModifier(15);
 		setDefaultThirtyModifier(15);
-		setDefaultFiftyMaxConstant(40);
-		setDefaultThirtyMaxConstant(40);
 		setDefaultFiftyStartLevel(30);
 		setDefaultThirtyStartLevel(1);
 		setDefaultFiftyMaxLevel(2);

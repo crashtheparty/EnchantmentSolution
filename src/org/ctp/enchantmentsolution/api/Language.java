@@ -1,5 +1,8 @@
 package org.ctp.enchantmentsolution.api;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public enum Language{
 	US("en_us"), GERMAN("de_de");
 	
@@ -20,5 +23,13 @@ public enum Language{
 			}
 		}
 		return US;
+	}
+
+	public static List<String> getValues() {
+		List<String> langs = new ArrayList<String>();
+		for(Language lang : values()) {
+			langs.add(lang.getLocale());
+		}
+		return langs;
 	}
 }

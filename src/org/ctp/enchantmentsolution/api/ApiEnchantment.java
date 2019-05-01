@@ -12,8 +12,6 @@ public abstract class ApiEnchantment extends CustomEnchantment{
 	 * @param thirtyConstant - the enchantability constant at level 30
 	 * @param fiftyModifier - the enchantability modifier at level 50
 	 * @param thirtyModifier - the enchantability modifier at level 30
-	 * @param fiftyMaxConstant - the enchantability increase from min to max at level 50
-	 * @param thirtyMaxConstant - the enchantability increase from min to max at level 50
 	 * @param fiftyStartLevel - the start level at level 50
 	 * @param thirtyStartLevel - the start level at level 30
 	 * @param fiftyMaxLevel - the max level at level 50
@@ -24,15 +22,13 @@ public abstract class ApiEnchantment extends CustomEnchantment{
 	 * Set curses using the setCurse() method, and set if max level is 1 using the setMaxLevelOne() method
 	 */
 	public ApiEnchantment(String englishUSDisplayName, int fiftyConstant, int thirtyConstant, int fiftyModifier, int thirtyModifier, 
-			int fiftyMaxConstant, int thirtyMaxConstant, int fiftyStartLevel, int thirtyStartLevel, int fiftyMaxLevel, int thirtyMaxLevel, 
+			int fiftyStartLevel, int thirtyStartLevel, int fiftyMaxLevel, int thirtyMaxLevel, 
 			Weight weight, String englishUSDescription) {
 		addDefaultDisplayName(englishUSDisplayName);
 		setDefaultFiftyConstant(fiftyConstant);
 		setDefaultThirtyConstant(thirtyConstant);
 		setDefaultFiftyModifier(fiftyModifier);
 		setDefaultThirtyModifier(thirtyModifier);
-		setDefaultFiftyMaxConstant(fiftyMaxConstant);
-		setDefaultThirtyMaxConstant(thirtyMaxConstant);
 		setDefaultFiftyStartLevel(fiftyStartLevel);
 		setDefaultThirtyStartLevel(thirtyStartLevel);
 		setDefaultFiftyMaxLevel(fiftyMaxLevel);

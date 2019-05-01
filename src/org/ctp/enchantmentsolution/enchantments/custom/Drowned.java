@@ -19,8 +19,6 @@ public class Drowned extends CustomEnchantment{
 		setDefaultThirtyConstant(0);
 		setDefaultFiftyModifier(20);
 		setDefaultThirtyModifier(12);
-		setDefaultFiftyMaxConstant(30);
-		setDefaultThirtyMaxConstant(30);
 		setDefaultFiftyStartLevel(20);
 		setDefaultThirtyStartLevel(1);
 		setDefaultFiftyMaxLevel(3);

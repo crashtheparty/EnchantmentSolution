@@ -8,13 +8,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.ctp.enchantmentsolution.commands.ConfigEdit;
-import org.ctp.enchantmentsolution.commands.Enchant;
-import org.ctp.enchantmentsolution.commands.EnchantInfo;
-import org.ctp.enchantmentsolution.commands.Reload;
-import org.ctp.enchantmentsolution.commands.RemoveEnchant;
-import org.ctp.enchantmentsolution.commands.Reset;
-import org.ctp.enchantmentsolution.commands.UnsafeEnchant;
+import org.ctp.enchantmentsolution.commands.*;
 import org.ctp.enchantmentsolution.database.SQLite;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.inventory.InventoryData;
@@ -25,6 +19,7 @@ import org.ctp.enchantmentsolution.listeners.fishing.EnchantsFishingListener;
 import org.ctp.enchantmentsolution.listeners.fishing.McMMOFishingNMS;
 import org.ctp.enchantmentsolution.listeners.legacy.UpdateEnchantments;
 import org.ctp.enchantmentsolution.listeners.mobs.MobSpawning;
+import org.ctp.enchantmentsolution.nms.McMMO;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.save.ConfigFiles;
 import org.ctp.enchantmentsolution.utils.save.SaveUtils;
@@ -61,7 +56,6 @@ public class EnchantmentSolution extends JavaPlugin {
 		
 		db = new SQLite(this);
 		db.load();
-		
 		DefaultEnchantments.addDefaultEnchantments();
 		
 		files = new ConfigFiles(this);
@@ -124,13 +118,13 @@ public class EnchantmentSolution extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new GungHoListener(), this);
 		getServer().getPluginManager().registerEvents(new WandListener(), this);
 		getServer().getPluginManager().registerEvents(new MoisturizeListener(), this);
-		getServer().getPluginManager().registerEvents(new NetListener(), this);
+		getServer().getPluginManager().registerEvents(new IrenesLassoListener(), this);
 		getServer().getPluginManager().registerEvents(new CurseOfLagListener(), this);
 		getServer().getPluginManager().registerEvents(new ChestLootListener(), this);
 		getServer().getPluginManager().registerEvents(new MobSpawning(), this);
 		getServer().getPluginManager().registerEvents(new VanishListener(), this);
 		getServer().getPluginManager().registerEvents(new ChatMessage(), this);
-		getServer().getPluginManager().registerEvents(new BlockBreak(), this);
+		getServer().getPluginManager().registerEvents(new BlockListener(), this);
 		getServer().getPluginManager().registerEvents(new UpdateEnchantments(), this);
 		
 		if(Bukkit.getPluginManager().isPluginEnabled("Jobs")) {
@@ -158,7 +152,7 @@ public class EnchantmentSolution extends JavaPlugin {
 					mcmmoType = "Disabled";
 				}
 			} else {
-				ChatUtils.sendToConsole(Level.INFO, "Using the Classic BukkitVersion! Compatibility should be intact.");
+				ChatUtils.sendToConsole(Level.INFO, "Using the Classic Version! Compatibility should be intact.");
 				mcmmoType = "Classic";
 			}
 		} else {
@@ -173,6 +167,9 @@ public class EnchantmentSolution extends JavaPlugin {
 		case "Disabled":
 			getServer().getPluginManager().registerEvents(new EnchantsFishingListener(), this);
 			break;
+		}
+		if(McMMO.getAbilities() != null) {
+			getServer().getPluginManager().registerEvents(McMMO.getAbilities(), this);
 		}
 
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN,
@@ -218,9 +215,11 @@ public class EnchantmentSolution extends JavaPlugin {
 	}
 
 	public void onDisable() {
-		SaveUtils.setAbilityData();
+		if(bukkitVersion.isVersionAllowed() && !disable) {
+			SaveUtils.setAbilityData();
 		
-		resetInventories();
+			resetInventories();
+		}
 	}
 	
 	public void resetInventories() {

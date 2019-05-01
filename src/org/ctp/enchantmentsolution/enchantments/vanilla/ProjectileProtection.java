@@ -18,8 +18,6 @@ public class ProjectileProtection extends CustomEnchantment{
 		setDefaultThirtyConstant(-3);
 		setDefaultFiftyModifier(13);
 		setDefaultThirtyModifier(6);
-		setDefaultFiftyMaxConstant(19);
-		setDefaultThirtyMaxConstant(15);
 		setDefaultFiftyStartLevel(1);
 		setDefaultThirtyStartLevel(1);
 		setDefaultFiftyMaxLevel(4);

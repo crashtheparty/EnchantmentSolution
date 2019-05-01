@@ -61,7 +61,7 @@ public class DefaultEnchantments {
 	public static final Enchantment GUNG_HO = new GungHoWrapper();
 	public static final Enchantment WAND = new WandWrapper();
 	public static final Enchantment MOISTURIZE = new MoisturizeWrapper();
-	public static final Enchantment NET = new NetWrapper();
+	public static final Enchantment IRENES_LASSO = new IrenesLassoWrapper();
 	public static final Enchantment CURSE_OF_LAG = new CurseOfLagWrapper();
 
 	public static List<CustomEnchantment> getEnchantments() {
@@ -99,7 +99,7 @@ public class DefaultEnchantments {
 								+ " does not have a JavaPlugin set. Refusing to set.");
 						continue;
 					}
-					namespace = plugin.getName();
+					namespace = plugin.getName().toLowerCase();
 				} else if (enchantment.getRelativeEnchantment() instanceof CustomEnchantmentWrapper) {
 					namespace = "custom_enchantments";
 				}
@@ -119,7 +119,6 @@ public class DefaultEnchantments {
 				}
 				int constant = advanced.getInt(namespace+"."+enchantment.getName()+".enchantability_constant");
 				int modifier = advanced.getInt(namespace+"."+enchantment.getName()+".enchantability_modifier");
-				int maxConstant = advanced.getInt(namespace+"."+enchantment.getName()+".enchantability_max_constant");
 				int startLevel = advanced.getInt(namespace+"."+enchantment.getName()+".enchantability_start_level");
 				int maxLevel = advanced.getInt(namespace+"."+enchantment.getName()+".enchantability_max_level");
 				String displayName = StringUtils.decodeString(language.getString("enchantment.display_names."+namespace+"."+enchantment.getName()));
@@ -141,7 +140,7 @@ public class DefaultEnchantments {
 						disabledItems.add(mat);
 					}
 				}
-				ENCHANTMENTS.get(i).setCustom(constant, modifier, maxConstant, startLevel, maxLevel, weight);
+				ENCHANTMENTS.get(i).setCustom(constant, modifier, startLevel, maxLevel, weight);
 				ENCHANTMENTS.get(i).setConflictingEnchantments(conflictingEnchantments);
 				ENCHANTMENTS.get(i).setDisabledItems(disabledItems);
 				if(!namespace.equals("default_enchantments")) {
@@ -162,7 +161,7 @@ public class DefaultEnchantments {
 								+ " does not have a JavaPlugin set. Refusing to set.");
 						continue;
 					}
-					String namespace = plugin.getName();
+					String namespace = plugin.getName().toLowerCase();
 					if(Enchantments.addEnchantment(enchantment)) {
 						if (config.getBoolean(namespace+"."+enchantment.getName()+".enabled")) {
 							ENCHANTMENTS.get(i).setEnabled(true);
@@ -284,17 +283,17 @@ public class DefaultEnchantments {
 		DefaultEnchantments.addDefaultEnchantment(new HardBounce());
 		DefaultEnchantments.addDefaultEnchantment(new HeightPlusPlus());
 		DefaultEnchantments.addDefaultEnchantment(new Icarus());
+		DefaultEnchantments.addDefaultEnchantment(new IrenesLasso());
 		DefaultEnchantments.addDefaultEnchantment(new IronDefense());
 		DefaultEnchantments.addDefaultEnchantment(new KnockUp());
 		DefaultEnchantments.addDefaultEnchantment(new Life());
 		DefaultEnchantments.addDefaultEnchantment(new MagicGuard());
 		DefaultEnchantments.addDefaultEnchantment(new MagmaWalker());
 		DefaultEnchantments.addDefaultEnchantment(new Moisturize());
-		DefaultEnchantments.addDefaultEnchantment(new Net());
 		DefaultEnchantments.addDefaultEnchantment(new NoRest());
-//		if(EnchantmentSolution.getBukkitVersion().getVersionNumber() > 3) {
+		if(EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber() > 3) {
 			DefaultEnchantments.addDefaultEnchantment(new Pillage());
-//		}
+		}
 		DefaultEnchantments.addDefaultEnchantment(new Sacrifice());
 		DefaultEnchantments.addDefaultEnchantment(new SandVeil());
 		DefaultEnchantments.addDefaultEnchantment(new ShockAspect());
@@ -303,17 +302,17 @@ public class DefaultEnchantments {
 		DefaultEnchantments.addDefaultEnchantment(new Soulbound());
 		DefaultEnchantments.addDefaultEnchantment(new SoulReaper());
 		DefaultEnchantments.addDefaultEnchantment(new SplatterFest());
-//		if(EnchantmentSolution.getBukkitVersion().getVersionNumber() > 3) {
+		if(EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber() > 3) {
 			DefaultEnchantments.addDefaultEnchantment(new StoneThrow());
-//		}
+		}
 		DefaultEnchantments.addDefaultEnchantment(new Tank());
 		DefaultEnchantments.addDefaultEnchantment(new Telepathy());
 		DefaultEnchantments.addDefaultEnchantment(new Transmutation());
 		DefaultEnchantments.addDefaultEnchantment(new Unrest());
 		DefaultEnchantments.addDefaultEnchantment(new VoidWalker());
+		DefaultEnchantments.addDefaultEnchantment(new Wand());
 		DefaultEnchantments.addDefaultEnchantment(new Warp());
 		DefaultEnchantments.addDefaultEnchantment(new WidthPlusPlus());
-		DefaultEnchantments.addDefaultEnchantment(new Wand());
 	}
 	
 	public static List<String> getEnchantmentNames(){

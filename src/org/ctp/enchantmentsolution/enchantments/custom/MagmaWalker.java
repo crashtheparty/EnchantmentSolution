@@ -20,8 +20,6 @@ public class MagmaWalker extends CustomEnchantment{
 		setDefaultThirtyConstant(5);
 		setDefaultFiftyModifier(15);
 		setDefaultThirtyModifier(10);
-		setDefaultFiftyMaxConstant(20);
-		setDefaultThirtyMaxConstant(15);
 		setDefaultFiftyStartLevel(10);
 		setDefaultThirtyStartLevel(1);
 		setDefaultFiftyMaxLevel(2);

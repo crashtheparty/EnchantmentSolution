@@ -53,7 +53,7 @@ public class Smeltery_v1_14 {
 			material = Material.TERRACOTTA;
 			break;
 		case CACTUS:
-			material = Material.CACTUS_GREEN;
+			material = Material.GREEN_DYE;
 			break;
 		case SEA_PICKLE:
 			material = Material.LIME_DYE;

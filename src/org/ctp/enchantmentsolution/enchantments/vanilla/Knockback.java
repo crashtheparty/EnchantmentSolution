@@ -19,8 +19,6 @@ public class Knockback extends CustomEnchantment{
 		setDefaultThirtyConstant(-15);
 		setDefaultFiftyModifier(20);
 		setDefaultThirtyModifier(20);
-		setDefaultFiftyMaxConstant(50);
-		setDefaultThirtyMaxConstant(50);
 		setDefaultFiftyStartLevel(1);
 		setDefaultThirtyStartLevel(1);
 		setDefaultFiftyMaxLevel(4);

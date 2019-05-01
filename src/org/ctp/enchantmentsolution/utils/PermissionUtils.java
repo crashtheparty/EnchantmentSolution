@@ -29,7 +29,7 @@ public class PermissionUtils {
 								+ " does not have a JavaPlugin set. Refusing to check permissions.");
 						return false;
 					}
-					String path = plugin.getName() + "." + enchant.getName() + ".permissions.table.level" + (i + 1);
+					String path = plugin.getName().toLowerCase() + "." + enchant.getName() + ".permissions.table.level" + (i + 1);
 					if(files.getEnchantmentAdvancedConfig().getBoolean(path)) {
 						if(!player.hasPermission(plugin.getName().toLowerCase() + "." + enchant.getName().toLowerCase() + ".table.level" + (i + 1))) {
 							return false;
@@ -73,7 +73,7 @@ public class PermissionUtils {
 								+ " does not have a JavaPlugin set. Refusing to check permissions.");
 						return false;
 					}
-					String path = plugin.getName() + "." + enchant.getName() + ".permissions.anvil.level" + (i + 1);
+					String path = plugin.getName().toLowerCase() + "." + enchant.getName() + ".permissions.anvil.level" + (i + 1);
 					if(files.getEnchantmentAdvancedConfig().getBoolean(path)) {
 						if(!player.hasPermission(plugin.getName().toLowerCase() + "." + enchant.getName().toLowerCase() + ".anvil.level" + (i + 1))) {
 							return false;

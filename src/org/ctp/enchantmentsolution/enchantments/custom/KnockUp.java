@@ -19,8 +19,6 @@ public class KnockUp extends CustomEnchantment{
 		setDefaultThirtyConstant(5);
 		setDefaultFiftyModifier(20);
 		setDefaultThirtyModifier(10);
-		setDefaultFiftyMaxConstant(50);
-		setDefaultThirtyMaxConstant(40);
 		setDefaultFiftyStartLevel(1);
 		setDefaultThirtyStartLevel(1);
 		setDefaultFiftyMaxLevel(4);

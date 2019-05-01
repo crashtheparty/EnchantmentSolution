@@ -18,8 +18,6 @@ public class Loyalty extends CustomEnchantment{
 		setDefaultThirtyConstant(5);
 		setDefaultFiftyModifier(11);
 		setDefaultThirtyModifier(7);
-		setDefaultFiftyMaxConstant(40);
-		setDefaultThirtyMaxConstant(24);
 		setDefaultFiftyStartLevel(1);
 		setDefaultThirtyStartLevel(1);
 		setDefaultFiftyMaxLevel(3);

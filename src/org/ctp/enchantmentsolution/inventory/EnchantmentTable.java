@@ -446,10 +446,10 @@ public class EnchantmentTable implements InventoryData {
 	public void close(boolean external) {
 		if(EnchantmentSolution.getPlugin().hasInventory(this)) {
 			for(ItemStack item : getItems()){
-				ItemUtils.giveItemToPlayer(player, item, player.getLocation());
+				ItemUtils.giveItemToPlayer(player, item, player.getLocation(), false);
 			}
 			if(lapisStack != null) {
-				ItemUtils.giveItemToPlayer(player, lapisStack, player.getLocation());
+				ItemUtils.giveItemToPlayer(player, lapisStack, player.getLocation(), false);
 			}
 			EnchantmentSolution.getPlugin().removeInventory(this);
 			if(!external) {

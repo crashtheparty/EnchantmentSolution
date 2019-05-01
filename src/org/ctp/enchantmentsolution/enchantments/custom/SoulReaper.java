@@ -19,8 +19,6 @@ public class SoulReaper extends CustomEnchantment{
 		setDefaultThirtyConstant(20);
 		setDefaultFiftyModifier(0);
 		setDefaultThirtyModifier(0);
-		setDefaultFiftyMaxConstant(50);
-		setDefaultThirtyMaxConstant(50);
 		setDefaultFiftyStartLevel(25);
 		setDefaultThirtyStartLevel(1);
 		setDefaultFiftyMaxLevel(1);

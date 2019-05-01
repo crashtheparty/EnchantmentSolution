@@ -18,8 +18,6 @@ public class Riptide extends CustomEnchantment{
 		setDefaultThirtyConstant(7);
 		setDefaultFiftyModifier(11);
 		setDefaultThirtyModifier(10);
-		setDefaultFiftyMaxConstant(30);
-		setDefaultThirtyMaxConstant(17);
 		setDefaultFiftyStartLevel(1);
 		setDefaultThirtyStartLevel(1);
 		setDefaultFiftyMaxLevel(5);

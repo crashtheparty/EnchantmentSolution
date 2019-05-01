@@ -19,8 +19,6 @@ public class GungHo extends CustomEnchantment{
 		setDefaultThirtyConstant(20);
 		setDefaultFiftyModifier(0);
 		setDefaultThirtyModifier(0);
-		setDefaultFiftyMaxConstant(60);
-		setDefaultThirtyMaxConstant(40);
 		setDefaultFiftyStartLevel(30);
 		setDefaultThirtyStartLevel(1);
 		setDefaultFiftyMaxLevel(1);
