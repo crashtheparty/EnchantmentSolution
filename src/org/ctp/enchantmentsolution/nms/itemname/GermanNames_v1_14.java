@@ -24,7 +24,7 @@ public enum GermanNames_v1_14 {
 	STONE_SHOVEL(Material.STONE_SHOVEL, "Steinschaufel"), STONE_SWORD(Material.STONE_SWORD, "Steinschwert"), TRIDENT(Material.TRIDENT, "Dreizack"), 
 	TURTLE_HELMET(Material.TURTLE_HELMET, "Schildkrötenpanzer"), WOODEN_AXE(Material.WOODEN_AXE, "Holzaxt"), WOODEN_HOE(Material.WOODEN_HOE, "Holzhacke"), 
 	WOODEN_PICKAXE(Material.WOODEN_PICKAXE, "Holzspitzhacke"), WOODEN_SHOVEL(Material.WOODEN_SHOVEL, "Holzschaufel"), WOODEN_SWORD(Material.WOODEN_SWORD, "Holzschwert"),
-	CROSSBOW(Material.CROSSBOW, "Crossbow");
+	CROSSBOW(Material.CROSSBOW, "Armbrust");
 	
 	private Material material;
 	private String name;

@@ -283,4 +283,5 @@ public class EnchantmentSolution extends JavaPlugin {
 	public boolean isInitializing() {
 		return initialization;
 	}
+
 }
