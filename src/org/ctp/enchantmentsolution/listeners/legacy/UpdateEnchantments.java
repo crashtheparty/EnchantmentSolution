@@ -12,8 +12,10 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.ctp.enchantmentsolution.enchantments.EnchantmentLevel;
+import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
+import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
+import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.StringUtils;
 
 public class UpdateEnchantments implements Listener{
@@ -33,25 +35,31 @@ public class UpdateEnchantments implements Listener{
 	}
 	
 	public void updateEnchantments(PlayerInventory inv) {
-		for(int i = 0; i < 36; i++) {
-			ItemStack item = inv.getItem(i);
-			if(item != null) {
-				if(item.getItemMeta() != null) {
-					ItemMeta meta = item.getItemMeta();
-					List<String> lore = meta.getLore();
-					if(lore != null) {
-						List<EnchantmentLevel> levels = new ArrayList<EnchantmentLevel>();
-						for(String s : lore) {
-							String enchantment = ChatColor.stripColor(s);
-							EnchantmentLevel level = StringUtils.returnEnchantmentLevel(enchantment, meta);
-							if(level != null) {
-								levels.add(level);
+		if(EnchantmentSolution.getPlugin().getConfigFiles().updateLegacyEnchantments()) {
+			for(int i = 0; i < 36; i++) {
+				ItemStack item = inv.getItem(i);
+				if(item != null) {
+					if(item.getItemMeta() != null) {
+						ItemMeta meta = item.getItemMeta();
+						List<String> lore = meta.getLore();
+						if(lore != null) {
+							List<EnchantmentLevel> levels = new ArrayList<EnchantmentLevel>();
+							for(String s : lore) {
+								String enchantment = ChatColor.stripColor(s);
+								EnchantmentLevel level = StringUtils.returnEnchantmentLevel(enchantment, meta);
+								if(level != null) {
+									String enchName = ChatUtils.hideText("legacy") + "" + ChatColor.GRAY + 
+											StringUtils.returnEnchantmentName(level.getEnchant(), level.getLevel());
+									if(s.equals(enchName)) {
+										levels.add(level);
+									}
+								}
 							}
-						}
-						if(levels.size() > 0) {
-							meta.setLore(null);
-							item.setItemMeta(meta);
-							Enchantments.addEnchantmentsToItem(item, levels);
+							if(levels.size() > 0) {
+								meta.setLore(null);
+								item.setItemMeta(meta);
+								Enchantments.addEnchantmentsToItem(item, levels);
+							}
 						}
 					}
 				}

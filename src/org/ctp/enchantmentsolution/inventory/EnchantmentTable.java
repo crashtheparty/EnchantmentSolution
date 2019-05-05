@@ -19,15 +19,14 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
-import org.ctp.enchantmentsolution.enchantments.EnchantmentLevel;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
-import org.ctp.enchantmentsolution.enchantments.PlayerLevels;
+import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
+import org.ctp.enchantmentsolution.enchantments.helper.PlayerLevels;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
-import org.ctp.enchantmentsolution.utils.StringUtils;
-import org.ctp.enchantmentsolution.utils.save.ConfigFiles;
-import org.ctp.enchantmentsolution.utils.ItemSerialization;
-import org.ctp.enchantmentsolution.utils.ItemUtils;
 import org.ctp.enchantmentsolution.utils.JobsUtils;
+import org.ctp.enchantmentsolution.utils.StringUtils;
+import org.ctp.enchantmentsolution.utils.items.ItemSerialization;
+import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 
 public class EnchantmentTable implements InventoryData {
 
@@ -211,7 +210,7 @@ public class EnchantmentTable implements InventoryData {
 						ItemMeta bookMeta = book.getItemMeta();
 						String name = item.getItemMeta().getDisplayName();
 						if (name == null || name.equals("")) {
-							name = item.getType().name();
+							name = EnchantmentSolution.getPlugin().getConfigFiles().getLocalizedName(item.getType());
 						}
 						loreCodes = getCodes();
 						loreCodes.put("%level%", extra - 2);
@@ -223,7 +222,7 @@ public class EnchantmentTable implements InventoryData {
 						
 						String lapisString = ChatUtils.getMessage(loreCodes, "table.lapis-cost-okay");
 						int numLapis = 0;
-						if(ConfigFiles.useLapisInTable()) {
+						if(EnchantmentSolution.getPlugin().getConfigFiles().useLapisInTable()) {
 							if(lapisStack != null) {
 								numLapis = lapisStack.getAmount();
 							}
@@ -286,7 +285,7 @@ public class EnchantmentTable implements InventoryData {
 //			}
 //		}
 		
-		if(ConfigFiles.useLapisInTable()) {
+		if(EnchantmentSolution.getPlugin().getConfigFiles().useLapisInTable()) {
 			if(lapisStack == null) {
 				ItemStack blueMirror = new ItemStack(Material.BLUE_STAINED_GLASS_PANE);
 				ItemMeta blueMirrorMeta = blueMirror.getItemMeta();
@@ -313,7 +312,7 @@ public class EnchantmentTable implements InventoryData {
 	}
 	
 	public ItemStack addToLapisStack(ItemStack item) {
-		if(ConfigFiles.useLapisInTable()) {
+		if(EnchantmentSolution.getPlugin().getConfigFiles().useLapisInTable()) {
 			ItemStack clone = item.clone();
 			if(lapisStack == null) {
 				lapisStack = item;
@@ -400,7 +399,7 @@ public class EnchantmentTable implements InventoryData {
 		if (player.getGameMode().equals(GameMode.SURVIVAL) || player.getGameMode().equals(GameMode.ADVENTURE)) {
 			player.setLevel(player.getLevel() - level - 1);
 			int remove = level + 1;
-			if(ConfigFiles.useLapisInTable()) {
+			if(EnchantmentSolution.getPlugin().getConfigFiles().useLapisInTable()) {
 				removeFromLapisStack(remove);
 			} else {
 				for(int i = 0; i < player.getInventory().getSize(); i++) {
@@ -429,7 +428,7 @@ public class EnchantmentTable implements InventoryData {
 		player.setStatistic(Statistic.ITEM_ENCHANTED, player.getStatistic(Statistic.ITEM_ENCHANTED) + 1);
 		Advancement enchanted = Bukkit.getAdvancement(new NamespacedKey("minecraft", "story/enchant_item"));
 		player.getAdvancementProgress(enchanted).awardCriteria("enchanted_item");
-		if(EnchantmentSolution.isJobsEnabled()) {
+		if(EnchantmentSolution.getPlugin().isJobsEnabled()) {
 			JobsUtils.sendEnchantAction(player, enchantItem, enchantableItem, enchLevels);
 		}
 	}
@@ -445,14 +444,14 @@ public class EnchantmentTable implements InventoryData {
 
 	@Override
 	public void close(boolean external) {
-		if(EnchantmentSolution.hasInventory(this)) {
+		if(EnchantmentSolution.getPlugin().hasInventory(this)) {
 			for(ItemStack item : getItems()){
-				ItemUtils.giveItemToPlayer(player, item, player.getLocation());
+				ItemUtils.giveItemToPlayer(player, item, player.getLocation(), false);
 			}
 			if(lapisStack != null) {
-				ItemUtils.giveItemToPlayer(player, lapisStack, player.getLocation());
+				ItemUtils.giveItemToPlayer(player, lapisStack, player.getLocation(), false);
 			}
-			EnchantmentSolution.removeInventory(this);
+			EnchantmentSolution.getPlugin().removeInventory(this);
 			if(!external) {
 				player.closeInventory();
 			}

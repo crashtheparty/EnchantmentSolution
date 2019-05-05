@@ -2,7 +2,6 @@ package org.ctp.enchantmentsolution.enchantments;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -16,11 +15,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.ctp.enchantmentsolution.EnchantmentSolution;
+import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.enchantments.wrappers.CustomEnchantmentWrapper;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
-import org.ctp.enchantmentsolution.utils.ItemUtils;
 import org.ctp.enchantmentsolution.utils.StringUtils;
-import org.ctp.enchantmentsolution.utils.save.ConfigFiles;
+import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 
 public class Enchantments {
 
@@ -34,27 +34,38 @@ public class Enchantments {
 	}
 	
 	public static int getMaxEnchantments() {
-		return ConfigFiles.getDefaultConfig().getInt("max_enchantments");
+		return EnchantmentSolution.getPlugin().getConfigFiles().getDefaultConfig().getInt("max_enchantments");
 	}
 	
 	public static boolean customEnchantsDisabled() {
-		return !ConfigFiles.getDefaultConfig().getBoolean("level_50_enchants");
+		return !EnchantmentSolution.getPlugin().getConfigFiles().getDefaultConfig().getBoolean("level_50_enchants");
 	}
 	
 	public static int getLevelDivisor() {
-		return ConfigFiles.getDefaultConfig().getInt("level_divisor");
+		return EnchantmentSolution.getPlugin().getConfigFiles().getDefaultConfig().getInt("level_divisor");
 	}
 	
 	public static boolean getChestLoot(){
-		return ConfigFiles.getDefaultConfig().getBoolean("chest_loot");
+		return EnchantmentSolution.getPlugin().getConfigFiles().getDefaultConfig().getBoolean("chest_loot");
 	}
 	
 	public static boolean getMobLoot(){
-		return ConfigFiles.getDefaultConfig().getBoolean("mob_loot");
+		return EnchantmentSolution.getPlugin().getConfigFiles().getDefaultConfig().getBoolean("mob_loot");
 	}
 	
 	public static boolean getFishingLoot(){
-		return ConfigFiles.getDefaultConfig().getBoolean("fishing_loot");
+		return EnchantmentSolution.getPlugin().getConfigFiles().getDefaultConfig().getBoolean("fishing_loot");
+	}
+	
+	public static boolean getEnchantabilityDecay(){
+		return EnchantmentSolution.getPlugin().getConfigFiles().getDefaultConfig().getBoolean("enchantability_decay");
+	}
+	
+	public static boolean getProtectionConflicts(){
+		if(EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber() > 4) {
+			return false;
+		}
+		return EnchantmentSolution.getPlugin().getConfigFiles().getDefaultConfig().getBoolean("protection_conflicts");
 	}
 
 	public static boolean addEnchantment(CustomEnchantment enchantment) {
@@ -84,6 +95,17 @@ public class Enchantments {
 		    return false;
 		}
 	}
+	
+	public static List<EnchantmentLevel> getEnchantmentLevels(ItemStack item){
+		List<EnchantmentLevel> levels = new ArrayList<EnchantmentLevel>();
+		if(item.getItemMeta() != null && item.getItemMeta().getEnchants() != null && item.getItemMeta().getEnchants().size() > 0){
+			for (Iterator<java.util.Map.Entry<Enchantment, Integer>> it = item.getItemMeta().getEnchants().entrySet().iterator(); it.hasNext();) {
+				java.util.Map.Entry<Enchantment, Integer> e = it.next();
+				levels.add(new EnchantmentLevel(DefaultEnchantments.getCustomEnchantment(e.getKey()), e.getValue()));
+			}
+		}
+		return levels;
+	}
 
 	public static boolean isEnchantable(ItemStack item) {
 		if (item == null) {
@@ -95,7 +117,7 @@ public class Enchantments {
 				return false;
 			}
 		}
-		if (ItemUtils.getItemTypes().get("all").contains(item.getType())) {
+		if (ItemType.ALL.getItemTypes().contains(item.getType())) {
 			return true;
 		}
 		if(item.getType().equals(Material.BOOK)){
@@ -159,7 +181,11 @@ public class Enchantments {
 			for(CustomEnchantment customEnchant : customEnchants){
 				getWeight -= customEnchant.getWeight();
 				if(getWeight <= 0){
-					enchants.add(new EnchantmentLevel(customEnchant, customEnchant.getEnchantLevel(player, enchantability)));
+					if(getEnchantabilityDecay()) {
+						enchants.add(new EnchantmentLevel(customEnchant, customEnchant.getEnchantLevel(player, finalEnchantability)));
+					} else {
+						enchants.add(new EnchantmentLevel(customEnchant, customEnchant.getEnchantLevel(player, enchantability)));
+					}
 					break;
 				}
 			}
@@ -192,7 +218,7 @@ public class Enchantments {
 				}
 			}
 		}
-		if (ConfigFiles.useLevel50()) {
+		if (EnchantmentSolution.getPlugin().getConfigFiles().useLevel50()) {
 			if (bookshelves > 23)
 				bookshelves = 23;
 		} else {
@@ -204,35 +230,28 @@ public class Enchantments {
 
 	public static int getEnchantability(Material material, int level, int lapis) {
 		int enchantability = 1;
-		HashMap<String, List<Material>> itemTypes = ItemUtils.getItemTypes();
-		if (itemTypes.get("wood_tools").contains(material)) {
+		if (ItemType.WOODEN_TOOLS.getItemTypes().contains(material)) {
 			enchantability = 15;
-		} else if (itemTypes.get("stone_tools")
+		} else if (ItemType.STONE_TOOLS.getItemTypes()
 				.contains(material)) {
 			enchantability = 5;
-		} else if (itemTypes.get("gold_tools")
+		} else if (ItemType.GOLDEN_TOOLS.getItemTypes()
 				.contains(material)) {
 			enchantability = 22;
-		} else if (itemTypes.get("iron_tools")
+		} else if (ItemType.IRON_TOOLS.getItemTypes()
 				.contains(material)) {
 			enchantability = 14;
-		} else if (itemTypes.get("diamond_tools")
-				.contains(material)) {
+		} else if (ItemType.DIAMOND_TOOLS.getItemTypes().contains(material)) {
 			enchantability = 10;
-		} else if (itemTypes.get("leather_armor")
-				.contains(material)) {
+		} else if (ItemType.LEATHER_ARMOR.getItemTypes().contains(material)) {
 			enchantability = 15;
-		} else if (itemTypes.get("gold_armor")
-				.contains(material)) {
+		} else if (ItemType.GOLDEN_ARMOR.getItemTypes().contains(material)) {
 			enchantability = 25;
-		} else if (itemTypes.get("chain_armor")
-				.contains(material)) {
+		} else if (ItemType.CHAINMAIL_ARMOR.getItemTypes().contains(material)) {
 			enchantability = 12;
-		} else if (itemTypes.get("iron_armor")
-				.contains(material)) {
+		} else if (ItemType.IRON_ARMOR.getItemTypes().contains(material)) {
 			enchantability = 9;
-		} else if (itemTypes.get("diamond_armor")
-				.contains(material)) {
+		} else if (ItemType.DIAMOND_ARMOR.getItemTypes().contains(material)) {
 			enchantability = 10;
 		}
 
@@ -273,15 +292,8 @@ public class Enchantments {
 		}
 		for(EnchantmentLevel level : levels){
 			meta.addEnchant(level.getEnchant().getRelativeEnchantment(), level.getLevel(), true);
-			CustomEnchantment enchant = null;
-			for(CustomEnchantment ench : Enchantments.getEnchantments()){
-				if(ench.getName().equalsIgnoreCase(level.getEnchant().getName())){
-					enchant = ench;
-					break;
-				}
-			}
-			if(enchant != null && enchant.getRelativeEnchantment() instanceof CustomEnchantmentWrapper){
-				String enchName = StringUtils.returnEnchantmentName(enchant, level.getLevel());
+			if(level.getEnchant().getRelativeEnchantment() instanceof CustomEnchantmentWrapper) {
+				String enchName = StringUtils.returnEnchantmentName(level.getEnchant(), level.getLevel());
 				lore.add(ChatUtils.hideText("solution") + "" + ChatColor.GRAY + enchName);
 			}
 		}
@@ -303,29 +315,15 @@ public class Enchantments {
 		if(lore == null){
 			lore = new ArrayList<String>();
 		}
-		List<String> previousLore = new ArrayList<String>();
-		for(String l : lore) {
-			if(!StringUtils.isEnchantment(l)) {
-				previousLore.add(l);
-			}
-		}
 		if(Enchantments.hasEnchantment(item, enchantment.getRelativeEnchantment())){
-			StringUtils.removeEnchantment(enchantment, meta.getEnchantLevel(enchantment.getRelativeEnchantment()), lore);
+			lore = StringUtils.removeEnchantment(enchantment, meta.getEnchantLevel(enchantment.getRelativeEnchantment()), lore);
 			meta.removeEnchant(enchantment.getRelativeEnchantment());
 		}
 		meta.addEnchant(enchantment.getRelativeEnchantment(), level, true);
-		CustomEnchantment enchant = null;
-		for(CustomEnchantment ench : Enchantments.getEnchantments()){
-			if(ench.getName().equalsIgnoreCase(enchantment.getName())){
-				enchant = ench;
-				break;
-			}
-		}
-		if(enchant != null && enchant.getRelativeEnchantment() instanceof CustomEnchantmentWrapper){
-			String enchName = StringUtils.returnEnchantmentName(enchant, level);
+		if(enchantment.getRelativeEnchantment() instanceof CustomEnchantmentWrapper) {
+			String enchName = StringUtils.returnEnchantmentName(enchantment, level);
 			lore.add(ChatUtils.hideText("solution") + "" + ChatColor.GRAY + enchName);
 		}
-		lore.addAll(previousLore);
 		meta.setLore(lore);
 		item.setItemMeta(meta);
 		return item;
@@ -338,7 +336,9 @@ public class Enchantments {
 			lore = new ArrayList<String>();
 		}
 		if(Enchantments.hasEnchantment(item, enchantment.getRelativeEnchantment())){
-			StringUtils.removeEnchantment(enchantment, meta.getEnchantLevel(enchantment.getRelativeEnchantment()), lore);
+			if(enchantment.getRelativeEnchantment() instanceof CustomEnchantmentWrapper) {
+				lore = StringUtils.removeEnchantment(enchantment, meta.getEnchantLevel(enchantment.getRelativeEnchantment()), lore);
+			}
 			meta.removeEnchant(enchantment.getRelativeEnchantment());
 		}
 		meta.setLore(lore);
@@ -354,7 +354,9 @@ public class Enchantments {
 		}
 		for(CustomEnchantment enchantment : DefaultEnchantments.getEnchantments()) {
 			if(Enchantments.hasEnchantment(item, enchantment.getRelativeEnchantment())){
-				StringUtils.removeEnchantment(enchantment, meta.getEnchantLevel(enchantment.getRelativeEnchantment()), lore);
+				if(enchantment.getRelativeEnchantment() instanceof CustomEnchantmentWrapper) {
+					lore = StringUtils.removeEnchantment(enchantment, meta.getEnchantLevel(enchantment.getRelativeEnchantment()), lore);
+				}
 				meta.removeEnchant(enchantment.getRelativeEnchantment());
 			}
 		}
@@ -416,7 +418,7 @@ public class Enchantments {
 		return true;
 	}
 	
-	public static int combineEnchantmentsLevel(ItemStack first, ItemStack second) {
+	public static int combineEnchantmentsLevel(Player player, ItemStack first, ItemStack second) {
 		int cost = 0;
 		ItemMeta firstMeta = first.clone().getItemMeta();
 		Map<Enchantment, Integer> firstEnchants = firstMeta.getEnchants();
@@ -450,45 +452,47 @@ public class Enchantments {
 			}
 		}
 		
+		boolean permission = player.hasPermission("enchantmentsolution.god-anvil");
+		
 		for(EnchantmentLevel enchantTwo : secondLevels) {
 			boolean conflict = false;
-			boolean same = false;
-			int levelCost = 0;
+			int levelCost = enchantTwo.getLevel();
 			for(EnchantmentLevel enchantOne : firstLevels) {
 				if(enchantTwo.getEnchant().getRelativeEnchantment().equals(enchantOne.getEnchant().getRelativeEnchantment())) {
-					same = true;
+					if(!permission) {
+						if(enchantOne.getLevel() > enchantOne.getEnchant().getMaxLevel()) {
+							enchantOne.setLevel(enchantOne.getEnchant().getMaxLevel());
+						}
+						if(enchantTwo.getLevel() > enchantTwo.getEnchant().getMaxLevel()) {
+							enchantTwo.setLevel(enchantTwo.getEnchant().getMaxLevel());
+						}
+					}
 					if(enchantTwo.getLevel() == enchantOne.getLevel()) {
-						if(enchantTwo.getLevel() == enchantTwo.getEnchant().getMaxLevel()) {
+						if (enchantTwo.getLevel() >= enchantTwo.getEnchant().getMaxLevel()) {
 							levelCost = enchantTwo.getLevel();
-						}else {
+						} else {
 							levelCost = enchantTwo.getLevel() + 1;
 						}
-					}else if(enchantTwo.getLevel() > enchantOne.getLevel()) {
+					} else if (enchantTwo.getLevel() > enchantOne.getLevel()) {
 						levelCost = enchantTwo.getLevel();
-					}else {
+					} else {
 						levelCost = enchantOne.getLevel();
 					}
 				}else if(CustomEnchantment.conflictsWith(enchantOne.getEnchant(), enchantTwo.getEnchant())) {
 					conflict = true;
 				}
 			}
-			if(conflict) {
+			if(conflict && !permission) {
 				cost += 1;
-			}else if(same) {
-				if(first.getType() == Material.ENCHANTED_BOOK || enchantTwo.getEnchant().canAnvilItem(first.getType())) {
-					cost += levelCost * enchantTwo.getEnchant().multiplier(second.getType());
-				}
-			}else {
-				if(first.getType() == Material.ENCHANTED_BOOK || enchantTwo.getEnchant().canAnvilItem(first.getType())) {
-					cost += enchantTwo.getLevel() * enchantTwo.getEnchant().multiplier(second.getType());
-				}
+			}else if(first.getType() == Material.ENCHANTED_BOOK || enchantTwo.getEnchant().canAnvilItem(first.getType()) || permission) {
+				cost += levelCost * enchantTwo.getEnchant().multiplier(second.getType());
 			}
 		}
 		return cost;
 	}
 	
 	public static boolean isRepairable(CustomEnchantment enchant) {
-		if(ConfigFiles.getDefaultConfig().getString("disable_enchant_method").equals("repairable")) {
+		if(EnchantmentSolution.getPlugin().getConfigFiles().getDefaultConfig().getString("disable_enchant_method").equals("repairable")) {
 			return true;
 		}
 		
@@ -538,36 +542,45 @@ public class Enchantments {
 			}
 		}
 		
+		boolean permission = player.hasPermission("enchantmentsolution.god-anvil");
+		
 		for(EnchantmentLevel enchantTwo : secondLevels) {
 			boolean conflict = false;
 			boolean same = false;
-			int levelCost = 0;
+			int levelCost = enchantTwo.getLevel();
 			for(EnchantmentLevel enchantOne : firstLevels) {
 				if(enchantTwo.getEnchant().getRelativeEnchantment().equals(enchantOne.getEnchant().getRelativeEnchantment())) {
 					same = true;
+					if(!permission) {
+						if(enchantOne.getLevel() > enchantOne.getEnchant().getMaxLevel()) {
+							enchantOne.setLevel(enchantOne.getEnchant().getMaxLevel());
+						}
+						if(enchantTwo.getLevel() > enchantTwo.getEnchant().getMaxLevel()) {
+							enchantTwo.setLevel(enchantTwo.getEnchant().getMaxLevel());
+						}
+					}
 					if(enchantTwo.getLevel() == enchantOne.getLevel()) {
-						if(enchantTwo.getLevel() == enchantTwo.getEnchant().getMaxLevel()) {
+						if (enchantTwo.getLevel() >= enchantTwo.getEnchant().getMaxLevel()) {
 							levelCost = enchantTwo.getLevel();
-						}else {
+						} else {
 							levelCost = enchantTwo.getLevel() + 1;
 						}
-					}else if(enchantTwo.getLevel() > enchantOne.getLevel()) {
+					} else if (enchantTwo.getLevel() > enchantOne.getLevel()) {
 						levelCost = enchantTwo.getLevel();
-					}else {
+					} else {
 						levelCost = enchantOne.getLevel();
 					}
 				}else if(CustomEnchantment.conflictsWith(enchantOne.getEnchant(), enchantTwo.getEnchant())) {
 					conflict = true;
 				}
 			}
-			if(same) {
-				if(first.getType() == Material.ENCHANTED_BOOK || enchantTwo.getEnchant().canAnvilItem(first.getType())) {
+			
+			if (same || !conflict) {
+				if (first.getType() == Material.ENCHANTED_BOOK || enchantTwo.getEnchant().canAnvilItem(first.getType()) || permission) {
 					enchantments.add(new EnchantmentLevel(enchantTwo.getEnchant(), levelCost));
 				}
-			}else if(!conflict){
-				if(first.getType() == Material.ENCHANTED_BOOK || enchantTwo.getEnchant().canAnvilItem(first.getType())) {
-					enchantments.add(new EnchantmentLevel(enchantTwo.getEnchant(), enchantTwo.getLevel()));
-				}
+			} else if (permission) {
+				enchantments.add(new EnchantmentLevel(enchantTwo.getEnchant(), levelCost));
 			}
 		}
 		
@@ -579,7 +592,7 @@ public class Enchantments {
 					break;
 				}
 			}
-			if(!added) {
+			if(!added && (first.getType() == Material.ENCHANTED_BOOK || enchantOne.getEnchant().canAnvilItem(first.getType()) || permission) ) {
 				enchantments.add(enchantOne);
 			}
 		}
@@ -592,7 +605,7 @@ public class Enchantments {
 		
 		for(int i = enchantments.size() - 1; i >= 0; i--) {
 			EnchantmentLevel enchant = enchantments.get(i);
-			if(!enchant.getEnchant().canAnvil(player, enchant.getLevel())) {
+			if(!permission && !enchant.getEnchant().canAnvil(player, enchant.getLevel())) {
 				int level = enchant.getEnchant().getAnvilLevel(player, enchant.getLevel());
 				if(level > 0) {
 					enchantments.get(i).setLevel(level);
@@ -606,30 +619,30 @@ public class Enchantments {
 	}
 	
 	public static int getLapisConstant() {
-		if(ConfigFiles.getDefaultConfig().getBoolean("use_advanced_file")) {
-			return ConfigFiles.getEnchantmentAdvancedConfig().getInt("lapis_modifiers.constant");
+		if(EnchantmentSolution.getPlugin().getConfigFiles().getDefaultConfig().getBoolean("use_advanced_file")) {
+			return EnchantmentSolution.getPlugin().getConfigFiles().getEnchantmentAdvancedConfig().getInt("lapis_modifiers.constant");
 		}
-		if(!ConfigFiles.getDefaultConfig().getBoolean("level_50_enchants")) {
+		if(!EnchantmentSolution.getPlugin().getConfigFiles().getDefaultConfig().getBoolean("level_50_enchants")) {
 			return 0;
 		}
 		return LAPIS_CONSTANT;
 	}
 	
 	public static int getLapisModifier() {
-		if(ConfigFiles.getDefaultConfig().getBoolean("use_advanced_file")) {
-			return ConfigFiles.getEnchantmentAdvancedConfig().getInt("lapis_modifiers.modifier");
+		if(EnchantmentSolution.getPlugin().getConfigFiles().getDefaultConfig().getBoolean("use_advanced_file")) {
+			return EnchantmentSolution.getPlugin().getConfigFiles().getEnchantmentAdvancedConfig().getInt("lapis_modifiers.modifier");
 		}
-		if(!ConfigFiles.getDefaultConfig().getBoolean("level_50_enchants")) {
+		if(!EnchantmentSolution.getPlugin().getConfigFiles().getDefaultConfig().getBoolean("level_50_enchants")) {
 			return 0;
 		}
 		return LAPIS_MODIFIER;
 	}
 	
 	public static double getMultiEnchantDivisor() {
-		if(ConfigFiles.getDefaultConfig().getBoolean("use_advanced_file")) {
-			return ConfigFiles.getEnchantmentAdvancedConfig().getDouble("multi_enchant_divisor");
+		if(EnchantmentSolution.getPlugin().getConfigFiles().getDefaultConfig().getBoolean("use_advanced_file")) {
+			return EnchantmentSolution.getPlugin().getConfigFiles().getEnchantmentAdvancedConfig().getDouble("multi_enchant_divisor");
 		}
-		if(!ConfigFiles.getDefaultConfig().getBoolean("level_50_enchants")) {
+		if(!EnchantmentSolution.getPlugin().getConfigFiles().getDefaultConfig().getBoolean("level_50_enchants")) {
 			return 50.0D;
 		}
 		return MULTI_ENCHANT_DIVISOR;

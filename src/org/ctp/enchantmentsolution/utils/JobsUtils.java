@@ -9,7 +9,8 @@ import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.ctp.enchantmentsolution.enchantments.EnchantmentLevel;
+import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
+import org.ctp.enchantmentsolution.utils.items.DamageUtils;
 
 import com.gamingmesh.jobs.Jobs;
 import com.gamingmesh.jobs.actions.EnchantActionInfo;

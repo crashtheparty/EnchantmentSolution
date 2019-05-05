@@ -2,7 +2,10 @@ package org.ctp.enchantmentsolution.utils.config;
 
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -162,6 +165,7 @@ public class YamlConfigBackup extends YamlConfig {
 			}
 			break;
 		case "list":
+		case "enum_list":
 			LinkedHashMap<String, Boolean> keySame = new LinkedHashMap<String, Boolean>();
 			String[] values = replaceLast((value.toString().replaceFirst("\\[", "")), "]", "").split(", ");
 			for(Object key : values) {
@@ -176,6 +180,7 @@ public class YamlConfigBackup extends YamlConfig {
 					keySame.put(key, false);
 				}
 			}
+			
 			return !keySame.containsValue(false);
 		case "enum":
 		case "string":
@@ -213,8 +218,7 @@ public class YamlConfigBackup extends YamlConfig {
 		if(getFile() == null) return;
 		String configuration = prepareConfigString();
 		try {
-			BufferedWriter writer = new BufferedWriter(new java.io.FileWriter(
-					getFile()));
+			BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(getFile()), StandardCharsets.UTF_8));
 			writer.write(configuration);
 			writer.flush();
 			writer.close();

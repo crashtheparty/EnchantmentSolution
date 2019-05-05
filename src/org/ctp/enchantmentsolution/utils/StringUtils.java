@@ -8,7 +8,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
-import org.ctp.enchantmentsolution.enchantments.EnchantmentLevel;
+import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 
 public class StringUtils {
 	
@@ -16,9 +16,9 @@ public class StringUtils {
 
 	public static String returnEnchantmentName(CustomEnchantment ench, int enchLevel){
 		String displayName = ench.getDisplayName();
-//		if(ench.isCurse()) {
-//			displayName = ChatColor.RED + displayName;
-//		}
+		if(ench.isCurse()) {
+			displayName = ChatColor.RED + displayName;
+		}
 	    if(enchLevel == 1 && ench.getMaxLevel() == 1){
 	        return displayName;
 	    }
@@ -226,5 +226,18 @@ public class StringUtils {
 	        sb.append(ch);
 	    }
 	    return sb.toString();
+	}
+	
+	public static String join(List<String> strings, String divider) {
+		StringBuilder sb = new StringBuilder();
+		
+		for(int i = 0; i < strings.size(); i++) {
+			sb.append(strings.get(i));
+			if(i < strings.size() - 1) {
+				sb.append(divider);
+			}
+		}
+		
+		return sb.toString();
 	}
 }

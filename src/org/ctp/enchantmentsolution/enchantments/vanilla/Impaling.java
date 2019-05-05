@@ -1,51 +1,34 @@
 package org.ctp.enchantmentsolution.enchantments.vanilla;
 
-import org.apache.commons.lang3.StringUtils;
-import org.bukkit.Material;
+import java.util.Arrays;
+import java.util.List;
+
 import org.bukkit.enchantments.Enchantment;
+import org.ctp.enchantmentsolution.api.Language;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
-import org.ctp.enchantmentsolution.enchantments.Weight;
-import org.ctp.enchantmentsolution.utils.ItemUtils;
+import org.ctp.enchantmentsolution.enchantments.helper.Weight;
+import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 
 public class Impaling extends CustomEnchantment{
 	
 	public Impaling() {
-		setDefaultDisplayName("Impaling");
+		addDefaultDisplayName("Impaling");
+		addDefaultDisplayName(Language.GERMAN, "Harpune");
 		setDefaultFiftyConstant(-12);
 		setDefaultThirtyConstant(1);
 		setDefaultFiftyModifier(13);
 		setDefaultThirtyModifier(8);
-		setDefaultFiftyMaxConstant(20);
-		setDefaultThirtyMaxConstant(20);
 		setDefaultFiftyStartLevel(1);
 		setDefaultThirtyStartLevel(1);
 		setDefaultFiftyMaxLevel(6);
 		setDefaultThirtyMaxLevel(5);
 		setDefaultWeight(Weight.RARE);
-	}
-
-	@Override
-	public boolean canEnchantItem(Material item) {
-		if(item.equals(Material.BOOK)){
-			return true;
-		}
-		if(ItemUtils.getItemTypes().get("trident").contains(item)){
-			return true;
-		}
-		return false;
-	}
-
-	@Override
-	public boolean canAnvilItem(Material item) {
-		return canEnchantItem(item);
-	}
-
-	@Override
-	public boolean conflictsWith(CustomEnchantment ench) {
-		if(ench.getName().equalsIgnoreCase(getName())){
-			return true;
-		}
-		return false;
+		addDefaultDescription("Increases melee damage against aquatic mobs." + 
+				"\n" + 
+				"Adds 2.5 (half heart) extra damage for each additional level.");
+		addDefaultDescription(Language.GERMAN, "Erhöht Nahkampfschaden gegen Wassermobs." + 
+				"\n" + 
+				"Fügt für jede zusätzliche Stufe 2,5 (halbes Herz) zusätzlichen Schaden hinzu.");
 	}
 
 	@Override
@@ -59,17 +42,17 @@ public class Impaling extends CustomEnchantment{
 	}
 	
 	@Override
-	public String[] getPage() {
-		String pageOne = "Name: " + getDisplayName() + StringUtils.LF + StringUtils.LF;
-		pageOne += "Description: Increases melee damage against aquatic mob." + 
-								StringUtils.LF + 
-								"Adds 2.5 (Half Heart) extra damage for each additional level." + StringUtils.LF;
-		String pageTwo = "Max Level: " + getMaxLevel() + "."+ StringUtils.LF;
-		pageTwo += "Weight: " + getWeight() + "."+ StringUtils.LF;
-		pageTwo += "Start Level: " + getStartLevel() + "."+ StringUtils.LF;
-		pageTwo += "Enchantable Items: Helmets, Books." + StringUtils.LF;
-		pageTwo += "Anvilable Items: Helmets, Books." + StringUtils.LF;
-		pageTwo += "Treasure Enchantment: " + isTreasure() + ". " + StringUtils.LF;
-		return new String[] {pageOne, pageTwo};
+	protected List<ItemType> getEnchantmentItemTypes() {
+		return Arrays.asList(ItemType.TRIDENT);
+	}
+
+	@Override
+	protected List<ItemType> getAnvilItemTypes() {
+		return Arrays.asList(ItemType.TRIDENT);
+	}
+
+	@Override
+	protected List<Enchantment> getDefaultConflictingEnchantments() {
+		return Arrays.asList();
 	}
 }

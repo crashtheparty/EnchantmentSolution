@@ -24,22 +24,20 @@ public class LegacyAnvil implements InventoryData{
 
 	@Override
 	public Player getPlayer() {
-		// TODO Auto-generated method stub
 		return player;
 	}
 
 	@Override
 	public Block getBlock() {
-		// TODO Auto-generated method stub
 		return block;
 	}
 
 	@Override
 	public void close(boolean external) {
-		if(EnchantmentSolution.hasInventory(this)) {
+		if(EnchantmentSolution.getPlugin().hasInventory(this)) {
 			ChatUtils.sendMessage(player, ChatUtils.getMessage(ChatUtils.getCodes(), "anvil.legacy-gui-close"));
 			AnvilUtils.removeLegacyAnvil(this);
-			EnchantmentSolution.removeInventory(this);
+			EnchantmentSolution.getPlugin().removeInventory(this);
 			if(!external) {
 				player.closeInventory();
 			}
@@ -48,14 +46,11 @@ public class LegacyAnvil implements InventoryData{
 
 	@Override
 	public Inventory getInventory() {
-		// TODO Auto-generated method stub
 		return inventory;
 	}
 
 	@Override
 	public void setInventory(List<ItemStack> items) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override

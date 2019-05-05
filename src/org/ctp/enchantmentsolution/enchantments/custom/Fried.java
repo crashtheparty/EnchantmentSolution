@@ -1,58 +1,37 @@
 package org.ctp.enchantmentsolution.enchantments.custom;
 
-import org.apache.commons.lang3.StringUtils;
-import org.bukkit.Material;
+import java.util.Arrays;
+import java.util.List;
+
 import org.bukkit.enchantments.Enchantment;
+import org.ctp.enchantmentsolution.api.Language;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
-import org.ctp.enchantmentsolution.enchantments.Weight;
-import org.ctp.enchantmentsolution.utils.ItemUtils;
+import org.ctp.enchantmentsolution.enchantments.helper.Weight;
+import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 
 public class Fried extends CustomEnchantment{
 	
 	public Fried() {
-		setDefaultDisplayName("Fried");
+		addDefaultDisplayName("Fried");
+		addDefaultDisplayName(Language.GERMAN, "Fritieren");
 		setDefaultFiftyConstant(40);
 		setDefaultThirtyConstant(15);
 		setDefaultFiftyModifier(0);
 		setDefaultThirtyModifier(0);
-		setDefaultFiftyMaxConstant(40);
-		setDefaultThirtyMaxConstant(50);
 		setDefaultFiftyStartLevel(30);
 		setDefaultThirtyStartLevel(1);
 		setDefaultFiftyMaxLevel(1);
 		setDefaultThirtyMaxLevel(1);
 		setDefaultWeight(Weight.RARE);
 		setMaxLevelOne(true);
+		addDefaultDescription("Cooks fish upon catching them.");
+		addDefaultDescription(Language.GERMAN, "Köche Fische, wenn sie gefangen werden.");
 	}
 	
 	@Override
 	public Enchantment getRelativeEnchantment() {
 		return DefaultEnchantments.FRIED;
-	}
-
-	@Override
-	public boolean canEnchantItem(Material item) {
-		if(item.equals(Material.BOOK)){
-			return true;
-		}
-		if(ItemUtils.getItemTypes().get("fishing").contains(item)){
-			return true;
-		}
-		return false;
-	}
-
-	@Override
-	public boolean canAnvilItem(Material item) {
-		return canEnchantItem(item);
-	}
-
-	@Override
-	public boolean conflictsWith(CustomEnchantment ench) {
-		if(ench.getName().equals(getName())) {
-			return true;
-		}
-		return false;
 	}
 	
 	@Override
@@ -61,17 +40,18 @@ public class Fried extends CustomEnchantment{
 	}
 	
 	@Override
-	public String[] getPage() {
-		String pageOne = "Name: " + getDisplayName() + StringUtils.LF + StringUtils.LF;
-		pageOne += "Description: Cooks fish upon catching them." + StringUtils.LF;
-		String pageTwo = "Enabled: " + isEnabled() + ". " + StringUtils.LF;
-		pageTwo += "Max Level: " + getMaxLevel() + "."+ StringUtils.LF;
-		pageTwo += "Weight: " + getWeight() + "."+ StringUtils.LF;
-		pageTwo += "Start Level: " + getStartLevel() + "."+ StringUtils.LF;
-		pageTwo += "Enchantable Items: Fishing Rod, Books." + StringUtils.LF;
-		pageTwo += "Anvilable Items: Fishing Rod, Books." + StringUtils.LF;
-		pageTwo += "Treasure Enchantment: " + isTreasure() + ". " + StringUtils.LF;
-		return new String[] {pageOne, pageTwo};
+	protected List<ItemType> getEnchantmentItemTypes() {
+		return Arrays.asList(ItemType.FISHING_ROD);
+	}
+
+	@Override
+	protected List<ItemType> getAnvilItemTypes() {
+		return Arrays.asList(ItemType.FISHING_ROD);
+	}
+
+	@Override
+	protected List<Enchantment> getDefaultConflictingEnchantments() {
+		return Arrays.asList();
 	}
 
 }

@@ -2,7 +2,10 @@ package org.ctp.enchantmentsolution.utils.config;
 
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -25,7 +28,7 @@ public class YamlConfig {
 	private String[] header;
 	private YamlConfiguration config;
 	private boolean comments = true;
-
+	
 	public YamlConfig(File configFile, String[] header) {
 		this.header = header;
 		file = configFile;
@@ -122,14 +125,18 @@ public class YamlConfig {
 	}
 	
 	public String getType(String path) {
-		if(getEnums(path) != null) {
-			return "enum";
-		}	
 		YamlInfo info = getInfo(path);
 		
 		if(info == null) {
 			return "nested value";
 		}
+
+		if(getEnums(path) != null) {
+			if(info.getStringList() != null) {
+				return "enum_list";
+			}
+			return "enum";
+		}	
 		
 		if(info.getBooleanValue() != null) {
 			return "boolean";
@@ -183,6 +190,7 @@ public class YamlConfig {
 				return true;
 			}
 			break;
+		case "enum_list":
 		case "list":
 			LinkedHashMap<String, Boolean> keySame = new LinkedHashMap<String, Boolean>();
 			String[] values = replaceLast((value.toString().replaceFirst("\\[", "")), "]", "").split(", ");
@@ -198,6 +206,7 @@ public class YamlConfig {
 					keySame.put(key, false);
 				}
 			}
+			
 			return !keySame.containsValue(false);
 		case "enum":
 		case "string":
@@ -286,6 +295,14 @@ public class YamlConfig {
 		return info.getInt();
 	}
 	
+	public Integer getInteger(String path) {
+		YamlInfo info = getInfo(path);
+		if(info == null) {
+			return null;
+		}
+		return info.getInteger();
+	}
+	
 	public boolean getBoolean(String path) {
 		YamlInfo info = getInfo(path);
 		if(info == null) {
@@ -324,6 +341,14 @@ public class YamlConfig {
 			return def;
 		}
 		return info.getDouble();
+	}
+	
+	public Double getDoubleValue(String path) {
+		YamlInfo info = getInfo(path);
+		if(info == null) {
+			return null;
+		}
+		return info.getDoubleValue();
 	}
 
 	public List<String> getStringList(String path) {
@@ -483,7 +508,7 @@ public class YamlConfig {
 				}
 			} else {
 				for(int i = 0; i < entryKeys.size(); i++) {
-					if(entryKeys.get(i).startsWith(level)) {
+					if(entryKeys.get(i).startsWith(level + ".")) {
 						if(entryKeys.get(i).length() > level.length() + 1) {
 							String find = entryKeys.get(i).substring(level.length() + 1);
 							if(!find.contains(".") && !values.contains(entryKeys.get(i))) {
@@ -524,8 +549,7 @@ public class YamlConfig {
 	public void saveConfig() {
 		String configuration = prepareConfigString();
 		try {
-			BufferedWriter writer = new BufferedWriter(new java.io.FileWriter(
-					file));
+			BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8));
 			writer.write(configuration);
 			writer.flush();
 			writer.close();
@@ -537,6 +561,7 @@ public class YamlConfig {
 	private String getLevel(YamlChild child) {
 		StringBuilder config = new StringBuilder("");
 		String key = child.getPath();
+		int deep = StringUtils.countMatches(key, ".") * 4;
 		
 		if(comments) {
 			if(contains(key)) {
@@ -544,6 +569,9 @@ public class YamlConfig {
 				if(info.getComments().length > 0) {
 					StringBuilder line = new StringBuilder("\n");
 					for(String comment : info.getComments()) {
+						for(int i = 0; i < deep; i++) {
+							line.append(" ");
+						}
 						line.append("# " + comment + "\n");
 					}
 					config.append(line);
@@ -551,7 +579,6 @@ public class YamlConfig {
 			}
 		}
 		StringBuilder line = new StringBuilder("");
-		int deep = StringUtils.countMatches(key, ".") * 4;
 		for(int i = 0; i < deep; i++) {
 			line.append(" ");
 		}
@@ -612,5 +639,9 @@ public class YamlConfig {
 		} else {
 			getInfo(path).setMinMax(i, j);
 		}
+	}
+	
+	public void copyDefaults(YamlConfig config) {
+		this.defaults = config.defaults;
 	}
 }

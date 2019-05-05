@@ -14,7 +14,7 @@ public class McMMOFishingNMS implements Listener{
 
 	@EventHandler
 	public void onMcMMOPlayerFishingTreasure(McMMOPlayerFishingTreasureEvent event) {
-		switch(EnchantmentSolution.getMcMMOType()) {
+		switch(EnchantmentSolution.getPlugin().getMcMMOType()) {
 		case "Overhaul":
 			McMMOOverhaulFishingListener overhaul = new McMMOOverhaulFishingListener();
 			overhaul.onMcMMOPlayerFishingTreasure(event);
@@ -30,7 +30,7 @@ public class McMMOFishingNMS implements Listener{
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onPlayerFish(PlayerFishEvent event) {
-		switch(EnchantmentSolution.getMcMMOType()) {
+		switch(EnchantmentSolution.getPlugin().getMcMMOType()) {
 		case "Overhaul":
 			McMMOOverhaulFishingListener overhaul = new McMMOOverhaulFishingListener();
 			overhaul.onPlayerFish(event);

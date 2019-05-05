@@ -14,6 +14,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
+import org.ctp.enchantmentsolution.database.SQLite;
 import org.ctp.enchantmentsolution.nms.Anvil_GUI_NMS;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.config.YamlChild;
@@ -42,17 +43,19 @@ public class ConfigInventory implements InventoryData{
 	}
 	
 	public void change() {
-		isChanged.put(ConfigFiles.getDefaultConfig(), EnchantmentSolution.getDb().isConfigDifferent(ConfigFiles.getDefaultConfig()));
-		isChanged.put(ConfigFiles.getFishingConfig(), EnchantmentSolution.getDb().isConfigDifferent(ConfigFiles.getFishingConfig()));
-		isChanged.put(ConfigFiles.getLanguageFile(), EnchantmentSolution.getDb().isConfigDifferent(ConfigFiles.getLanguageFile()));
-		isChanged.put(ConfigFiles.getEnchantmentConfig(), EnchantmentSolution.getDb().isConfigDifferent(ConfigFiles.getEnchantmentConfig()));
-		isChanged.put(ConfigFiles.getEnchantmentAdvancedConfig(), EnchantmentSolution.getDb().isConfigDifferent(ConfigFiles.getEnchantmentAdvancedConfig()));
+		ConfigFiles files = EnchantmentSolution.getPlugin().getConfigFiles();
+		SQLite db = EnchantmentSolution.getPlugin().getDb();
+		isChanged.put(files.getDefaultConfig(), db.isConfigDifferent(files.getDefaultConfig()));
+		isChanged.put(files.getFishingConfig(), db.isConfigDifferent(files.getFishingConfig()));
+		isChanged.put(files.getLanguageFile(), db.isConfigDifferent(files.getLanguageFile()));
+		isChanged.put(files.getEnchantmentConfig(), db.isConfigDifferent(files.getEnchantmentConfig()));
+		isChanged.put(files.getEnchantmentAdvancedConfig(), db.isConfigDifferent(files.getEnchantmentAdvancedConfig()));
 
 		hasChanged = isChanged.containsValue(true);
 	}
 	
 	public void change(YamlConfigBackup config) {
-		isChanged.put(config, EnchantmentSolution.getDb().isConfigDifferent(config));
+		isChanged.put(config, EnchantmentSolution.getPlugin().getDb().isConfigDifferent(config));
 		
 		hasChanged = isChanged.containsValue(true);
 	}
@@ -60,7 +63,7 @@ public class ConfigInventory implements InventoryData{
 	public void revert() {
 		ChatUtils.sendMessage(player, "Reverting changes made in the config UI.");
 		
-		ConfigFiles.revert();
+		EnchantmentSolution.getPlugin().getConfigFiles().revert();
 		
 		change();
 		listFiles();
@@ -69,7 +72,7 @@ public class ConfigInventory implements InventoryData{
 	public void saveAll() {
 		ChatUtils.sendMessage(player, "Saving changes made in the config UI.");
 		
-		ConfigFiles.save();
+		EnchantmentSolution.getPlugin().getConfigFiles().save();
 		
 		change();
 		listFiles();
@@ -91,35 +94,37 @@ public class ConfigInventory implements InventoryData{
 	public void listFiles() {
 		screen = Screen.LIST_FILES;
 		
+		ConfigFiles files = EnchantmentSolution.getPlugin().getConfigFiles();
+		
 		Inventory inv = Bukkit.createInventory(null, 27, "List Files");
 		
 		ItemStack configFile = new ItemStack(Material.COMMAND_BLOCK);
 		ItemMeta configFileMeta = configFile.getItemMeta();
-		configFileMeta.setDisplayName(ChatColor.GOLD + ConfigFiles.getDefaultConfig().getFileName());
+		configFileMeta.setDisplayName(ChatColor.GOLD + files.getDefaultConfig().getFileName());
 		configFile.setItemMeta(configFileMeta);
 		inv.setItem(2, configFile);
 		
 		ItemStack fishingFile = new ItemStack(Material.FISHING_ROD);
 		ItemMeta fishingFileMeta = fishingFile.getItemMeta();
-		fishingFileMeta.setDisplayName(ChatColor.GOLD + ConfigFiles.getFishingConfig().getFileName());
+		fishingFileMeta.setDisplayName(ChatColor.GOLD + files.getFishingConfig().getFileName());
 		fishingFile.setItemMeta(fishingFileMeta);
 		inv.setItem(3, fishingFile);
 		
 		ItemStack languageFile = new ItemStack(Material.BOOK);
 		ItemMeta languageFileMeta = languageFile.getItemMeta();
-		languageFileMeta.setDisplayName(ChatColor.GOLD + ConfigFiles.getLanguageFile().getFileName());
+		languageFileMeta.setDisplayName(ChatColor.GOLD + files.getLanguageFile().getFileName());
 		languageFile.setItemMeta(languageFileMeta);
 		inv.setItem(4, languageFile);
 		
 		ItemStack enchantmentFile = new ItemStack(Material.GOLDEN_APPLE);
 		ItemMeta enchantmentFileMeta = enchantmentFile.getItemMeta();
-		enchantmentFileMeta.setDisplayName(ChatColor.GOLD + ConfigFiles.getEnchantmentConfig().getFileName());
+		enchantmentFileMeta.setDisplayName(ChatColor.GOLD + files.getEnchantmentConfig().getFileName());
 		enchantmentFile.setItemMeta(enchantmentFileMeta);
 		inv.setItem(5, enchantmentFile);
 		
 		ItemStack enchantmentFileAdvanced = new ItemStack(Material.ENCHANTED_GOLDEN_APPLE);
 		ItemMeta enchantmentFileAdvancedMeta = enchantmentFileAdvanced.getItemMeta();
-		enchantmentFileAdvancedMeta.setDisplayName(ChatColor.GOLD + ConfigFiles.getEnchantmentAdvancedConfig().getFileName());
+		enchantmentFileAdvancedMeta.setDisplayName(ChatColor.GOLD + files.getEnchantmentAdvancedConfig().getFileName());
 		enchantmentFileAdvanced.setItemMeta(enchantmentFileAdvancedMeta);
 		inv.setItem(6, enchantmentFileAdvanced);
 		
@@ -363,6 +368,136 @@ public class ConfigInventory implements InventoryData{
 		player.openInventory(inv);
 	}
 	
+	public void listEnumListShow(YamlConfigBackup config, String level, String type, int page) {
+		this.setPage(page);
+		screen = Screen.LIST_ENUM_LIST_SHOW;
+		this.config = config;
+		this.setLevel(level);
+		this.type = type;
+		
+		List<String> enums = config.getStringListCombined(level);
+		if(enums == null) {
+			return;
+		}
+		
+		if(PAGING * (page - 1) >= enums.size() && page != 1) {
+			listEnumListShow(config, level, type, page - 1);
+			return;
+		}
+		
+		Inventory inv = Bukkit.createInventory(null, 54, "Config Enum List Details");
+		
+		for(int i = 0; i < PAGING; i++) {
+			int index = i + PAGING * (page - 1);
+			if(enums.size() <= index) break;
+			String key = enums.get(index);
+			
+			ItemStack keyItem = new ItemStack(Material.PAPER);
+			List<String> lore = new ArrayList<String>();
+			lore.add(ChatColor.GRAY + "Value: " + ChatColor.WHITE + key);
+			lore.add(ChatColor.WHITE + "Left Click to Remove from List");
+			ItemMeta keyItemMeta = keyItem.getItemMeta();
+			keyItemMeta.setDisplayName(ChatColor.GOLD + "Enum Value");
+			keyItemMeta.setLore(lore);
+			keyItem.setItemMeta(keyItemMeta);
+			inv.setItem(i, keyItem);
+		}
+		
+		ItemStack goBack = new ItemStack(Material.ARROW);
+		ItemMeta goBackMeta = goBack.getItemMeta();
+		goBackMeta.setDisplayName(ChatColor.GOLD + "Go Back");
+		goBack.setItemMeta(goBackMeta);
+		inv.setItem(48, goBack);
+		
+		if(enums.size() > PAGING * page) {
+			ItemStack nextPage = new ItemStack(Material.ARROW);
+			ItemMeta nextPageMeta = nextPage.getItemMeta();
+			nextPageMeta.setDisplayName(ChatColor.BLUE + "Next Page");
+			nextPage.setItemMeta(nextPageMeta);
+			inv.setItem(53, nextPage);
+		}
+		if(page != 1) {
+			ItemStack prevPage = new ItemStack(Material.ARROW);
+			ItemMeta prevPageMeta = prevPage.getItemMeta();
+			prevPageMeta.setDisplayName(ChatColor.BLUE + "Previous Page");
+			prevPage.setItemMeta(prevPageMeta);
+			inv.setItem(45, prevPage);
+		}
+		
+		ItemStack add = new ItemStack(Material.NAME_TAG);
+		ItemMeta addMeta = add.getItemMeta();
+		addMeta.setDisplayName(ChatColor.GOLD + "Add New Enum Value");
+		add.setItemMeta(addMeta);
+		inv.setItem(50, add);
+		
+		inventory = inv;
+		player.openInventory(inv);
+	}
+	
+	public void listEnumListEdit(YamlConfigBackup config, String level, String type, int page) {
+		this.setPage(page);
+		screen = Screen.LIST_ENUM_LIST_EDIT;
+		this.config = config;
+		this.setLevel(level);
+		this.type = type;
+		
+		List<String> enums = config.getEnums(level);
+		if(enums == null) {
+			return;
+		}
+		
+		for(String s : config.getStringListCombined(level)) {
+			enums.remove(s);
+		}
+		
+		if(PAGING * (page - 1) >= enums.size() && page != 1) {
+			listEnumListEdit(config, level, type, page - 1);
+			return;
+		}
+		
+		Inventory inv = Bukkit.createInventory(null, 54, "Config Enum List Details");
+		
+		for(int i = 0; i < PAGING; i++) {
+			int index = i + PAGING * (page - 1);
+			if(enums.size() <= index) break;
+			String key = enums.get(index);
+			
+			ItemStack keyItem = new ItemStack(Material.GOLDEN_APPLE);
+			List<String> lore = new ArrayList<String>();
+			lore.add(ChatColor.GRAY + "Value: " + ChatColor.WHITE + key);
+			lore.add(ChatColor.WHITE + "Left Click to Add to List");
+			ItemMeta keyItemMeta = keyItem.getItemMeta();
+			keyItemMeta.setDisplayName(ChatColor.GOLD + "Enum Value");
+			keyItemMeta.setLore(lore);
+			keyItem.setItemMeta(keyItemMeta);
+			inv.setItem(i, keyItem);
+		}
+		
+		ItemStack goBack = new ItemStack(Material.ARROW);
+		ItemMeta goBackMeta = goBack.getItemMeta();
+		goBackMeta.setDisplayName(ChatColor.GOLD + "Go Back");
+		goBack.setItemMeta(goBackMeta);
+		inv.setItem(49, goBack);
+		
+		if(enums.size() > PAGING * page) {
+			ItemStack nextPage = new ItemStack(Material.ARROW);
+			ItemMeta nextPageMeta = nextPage.getItemMeta();
+			nextPageMeta.setDisplayName(ChatColor.BLUE + "Next Page");
+			nextPage.setItemMeta(nextPageMeta);
+			inv.setItem(53, nextPage);
+		}
+		if(page != 1) {
+			ItemStack prevPage = new ItemStack(Material.ARROW);
+			ItemMeta prevPageMeta = prevPage.getItemMeta();
+			prevPageMeta.setDisplayName(ChatColor.BLUE + "Previous Page");
+			prevPage.setItemMeta(prevPageMeta);
+			inv.setItem(45, prevPage);
+		}
+		
+		inventory = inv;
+		player.openInventory(inv);
+	}
+	
 	public void listBackup(YamlConfigBackup config, int page) {
 		this.setPage(page);
 		screen = Screen.LIST_BACKUP;
@@ -370,7 +505,7 @@ public class ConfigInventory implements InventoryData{
 		this.backup = null;
 		this.level = null;
 		
-		List<Integer> backups = EnchantmentSolution.getDb().getBackups(config);
+		List<Integer> backups = EnchantmentSolution.getPlugin().getDb().getBackups(config);
 		if(backups == null) {
 			return;
 		}
@@ -603,7 +738,7 @@ public class ConfigInventory implements InventoryData{
 		if(!external) {
 			player.closeInventory();
 		}
-		EnchantmentSolution.removeInventory(this);
+		EnchantmentSolution.getPlugin().removeInventory(this);
 	}
 
 	@Override
@@ -678,7 +813,7 @@ public class ConfigInventory implements InventoryData{
 	}
 
 	public enum Screen{
-		LIST_FILES(), LIST_DETAILS(), LIST_EDIT(), LIST_ENUM(), LIST_BACKUP(), LIST_BACKUP_DETAILS(), LIST_BACKUP_LIST();
+		LIST_FILES(), LIST_DETAILS(), LIST_EDIT(), LIST_ENUM(), LIST_BACKUP(), LIST_BACKUP_DETAILS(), LIST_BACKUP_LIST(), LIST_ENUM_LIST_SHOW(), LIST_ENUM_LIST_EDIT();
 	}
 
 	@Override
@@ -710,6 +845,7 @@ public class ConfigInventory implements InventoryData{
 			setPath(level, name);
 			break;
 		case "list":
+		case "enum_list":
 			ChatUtils.sendMessage(player, "Added " + name + " to path " + level + ".");
 			addToList(name);
 			break;

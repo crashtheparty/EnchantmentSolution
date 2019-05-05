@@ -23,7 +23,7 @@ public class KnockUpListener extends EnchantmentListener{
 			ItemStack attackItem = player.getInventory().getItemInMainHand();
 			if(Enchantments.hasEnchantment(attackItem, DefaultEnchantments.KNOCKUP)){
 				int level = Enchantments.getLevel(attackItem, DefaultEnchantments.KNOCKUP);
-				Bukkit.getScheduler().runTaskLater(EnchantmentSolution.PLUGIN, new Runnable(){
+				Bukkit.getScheduler().runTaskLater(EnchantmentSolution.getPlugin(), new Runnable(){
 
 					@Override
 					public void run() {

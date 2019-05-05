@@ -9,6 +9,7 @@ import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.inventory.Anvil;
 import org.ctp.enchantmentsolution.inventory.ConfigInventory;
 import org.ctp.enchantmentsolution.inventory.EnchantmentTable;
+import org.ctp.enchantmentsolution.inventory.Grindstone;
 import org.ctp.enchantmentsolution.inventory.InventoryData;
 import org.ctp.enchantmentsolution.inventory.LegacyAnvil;
 import org.ctp.enchantmentsolution.utils.InventoryClickUtils;
@@ -27,7 +28,7 @@ public class InventoryClick implements Listener {
 		if (inv == null) {
 			return;
 		}
-		InventoryData invData = EnchantmentSolution.getInventory(player);
+		InventoryData invData = EnchantmentSolution.getPlugin().getInventory(player);
 		if(invData != null) {
 			if(invData instanceof LegacyAnvil) {
 				return;
@@ -41,6 +42,10 @@ public class InventoryClick implements Listener {
 				Anvil anvil = (Anvil) invData;
 				
 				InventoryClickUtils.setAnvilDetails(anvil, player, inv, event.getClickedInventory(), event.getSlot());
+			} else if (invData instanceof Grindstone) {
+				Grindstone stone = (Grindstone) invData;
+				
+				InventoryClickUtils.setGrindstoneDetails(stone, player, inv, event.getClickedInventory(), event.getSlot());
 			} else if (invData instanceof ConfigInventory) {
 				ConfigInventory configInv = (ConfigInventory) invData;
 

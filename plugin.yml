@@ -1,7 +1,8 @@
 name: EnchantmentSolution
-version: 1.4.5
+version: 2.0.0
 main: org.ctp.enchantmentsolution.EnchantmentSolution
 api-version: 1.13
+softdepend: [mcMMO, Jobs]
 commands:
   enchant:
     aliases: [es,customenchant]
@@ -52,4 +53,7 @@ permissions:
     default: false
   enchantmentsolution.permissions.ignore: 
     description: Gives access to all enchantment permissions.
+    default: false
+  enchantmentsolution.god-anvil:
+    description: Allows players to combine items higher than their max levels
     default: false

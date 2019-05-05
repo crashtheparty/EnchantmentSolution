@@ -2,6 +2,7 @@ package org.ctp.enchantmentsolution.listeners.abilities;
 
 import org.bukkit.GameMode;
 import org.bukkit.Material;
+import org.bukkit.Statistic;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
@@ -13,7 +14,7 @@ import org.bukkit.util.Vector;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
 import org.ctp.enchantmentsolution.nms.McMMO;
-import org.ctp.enchantmentsolution.utils.AbilityUtilities;
+import org.ctp.enchantmentsolution.utils.items.nms.AbilityUtils;
 
 public class SmelteryListener extends EnchantmentListener{
 
@@ -26,19 +27,21 @@ public class SmelteryListener extends EnchantmentListener{
 		if(player.getGameMode().equals(GameMode.CREATIVE) || player.getGameMode().equals(GameMode.SPECTATOR)) return;
 		if(item != null) {
 			if(Enchantments.hasEnchantment(item, DefaultEnchantments.SMELTERY)) {
-				ItemStack smelted = AbilityUtilities.getSmelteryItem(blockBroken, item);
+				ItemStack smelted = AbilityUtils.getSmelteryItem(blockBroken, item);
 				if(smelted != null) {
 					if(!DefaultEnchantments.isEnabled(DefaultEnchantments.TELEPATHY) || !Enchantments.hasEnchantment(item, DefaultEnchantments.TELEPATHY)) {
-						McMMO.handleMcMMO(event, item);
-						super.damageItem(player, item);
 						switch(event.getBlock().getType()) {
 						case IRON_ORE:
 						case GOLD_ORE:
-							AbilityUtilities.dropExperience(blockBroken.getLocation().add(0.5, 0.5, 0.5), (int) (Math.random() * 3) + 1);
+							AbilityUtils.dropExperience(blockBroken.getLocation().add(0.5, 0.5, 0.5), (int) (Math.random() * 3) + 1);
 							break;
 						default:
 							break;
 						}
+						player.incrementStatistic(Statistic.MINE_BLOCK, event.getBlock().getType());
+						player.incrementStatistic(Statistic.USE_ITEM, item.getType());
+						McMMO.handleMcMMO(event, item);
+						super.damageItem(player, item);
 						event.getBlock().setType(Material.AIR);
 						Item droppedItem = player.getWorld().dropItem(
 								blockBroken.getLocation().add(0.5, 0.5, 0.5),

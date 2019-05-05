@@ -13,7 +13,7 @@ public class InventoryClose implements Listener{
 	@EventHandler
 	public void onInventoryClose(InventoryCloseEvent event){
 		Player player = (Player) event.getPlayer();
-		InventoryData inv = EnchantmentSolution.getInventory(player);
+		InventoryData inv = EnchantmentSolution.getPlugin().getInventory(player);
 		if(inv != null) {
 			if(inv instanceof ConfigInventory) {
 				if(!((ConfigInventory)inv).isChat() && inv.getInventory().equals(event.getInventory())){

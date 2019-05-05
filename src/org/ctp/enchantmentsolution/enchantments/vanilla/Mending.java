@@ -1,80 +1,32 @@
 package org.ctp.enchantmentsolution.enchantments.vanilla;
 
-import org.apache.commons.lang3.StringUtils;
-import org.bukkit.Material;
+import java.util.Arrays;
+import java.util.List;
+
 import org.bukkit.enchantments.Enchantment;
+import org.ctp.enchantmentsolution.api.Language;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
-import org.ctp.enchantmentsolution.enchantments.Weight;
-import org.ctp.enchantmentsolution.utils.ItemUtils;
+import org.ctp.enchantmentsolution.enchantments.helper.Weight;
+import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 
 public class Mending extends CustomEnchantment{
 	
 	public Mending() {
-		setDefaultDisplayName("Mending");
+		addDefaultDisplayName("Mending");
+		addDefaultDisplayName(Language.GERMAN, "Reparatur");
 		setTreasure(true);
 		setDefaultFiftyConstant(25);
 		setDefaultThirtyConstant(25);
 		setDefaultFiftyModifier(0);
 		setDefaultThirtyModifier(0);
-		setDefaultFiftyMaxConstant(75);
-		setDefaultThirtyMaxConstant(50);
 		setDefaultFiftyStartLevel(20);
 		setDefaultThirtyStartLevel(1);
 		setDefaultFiftyMaxLevel(1);
 		setDefaultThirtyMaxLevel(1);
 		setDefaultWeight(Weight.RARE);
 		setMaxLevelOne(true);
-	}
-
-	@Override
-	public boolean canEnchantItem(Material item) {
-		if(item.equals(Material.BOOK)){
-			return true;
-		}
-		if(ItemUtils.getItemTypes().get("armor").contains(item)){
-			return true;
-		}
-		if(ItemUtils.getItemTypes().get("tools").contains(item)){
-			return true;
-		}
-		if(ItemUtils.getItemTypes().get("weapons").contains(item)){
-			return true;
-		}
-		if(ItemUtils.getItemTypes().get("trident").contains(item)){
-			return true;
-		}
-		if(ItemUtils.getItemTypes().get("bow").contains(item)){
-			return true;
-		}
-		if(ItemUtils.getItemTypes().get("fishing").contains(item)){
-			return true;
-		}
-		if(ItemUtils.getItemTypes().get("elytra").contains(item)){
-			return true;
-		}
-		return false;
-	}
-
-	@Override
-	public boolean canAnvilItem(Material item) {
-		if(item.equals(Material.BOOK)){
-			return true;
-		}
-		if(ItemUtils.getItemTypes().get("all").contains(item)){
-			return true;
-		}
-		return false;
-	}
-
-	@Override
-	public boolean conflictsWith(CustomEnchantment ench) {
-		if(ench.getName().equalsIgnoreCase("infinity")){
-			return true;
-		}
-		if(ench.getName().equalsIgnoreCase(getName())){
-			return true;
-		}
-		return false;
+		addDefaultDescription("Repair durability with experience.");
+		addDefaultDescription(Language.GERMAN, "Haltbarkeit mit Erfahrung reparieren.");
 	}
 
 	@Override
@@ -88,16 +40,17 @@ public class Mending extends CustomEnchantment{
 	}
 	
 	@Override
-	public String[] getPage() {
-		String pageOne = "Name: " + getDisplayName() + StringUtils.LF + StringUtils.LF;
-		pageOne += "Description: Repair durability with experience." + StringUtils.LF;
-		String pageTwo = "Max Level: " + getMaxLevel() + "."+ StringUtils.LF;
-		pageTwo += "Weight: " + getWeight() + "."+ StringUtils.LF;
-		pageTwo += "Start Level: " + getStartLevel() + "."+ StringUtils.LF;
-		pageTwo += "Enchantable Items: None." + StringUtils.LF;
-		pageTwo += "Anvilable Items: All." + StringUtils.LF;
-		pageTwo += "Treasure Enchantment: " + isTreasure() + ". " + StringUtils.LF;
-		return new String[] {pageOne, pageTwo};
+	protected List<ItemType> getEnchantmentItemTypes() {
+		return Arrays.asList(ItemType.ENCHANTABLE);
 	}
 
+	@Override
+	protected List<ItemType> getAnvilItemTypes() {
+		return Arrays.asList(ItemType.ALL);
+	}
+
+	@Override
+	protected List<Enchantment> getDefaultConflictingEnchantments() {
+		return Arrays.asList(Enchantment.ARROW_INFINITE);
+	}
 }

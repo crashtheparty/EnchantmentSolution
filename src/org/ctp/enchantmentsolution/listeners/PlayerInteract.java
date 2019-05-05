@@ -14,6 +14,7 @@ import org.ctp.enchantmentsolution.inventory.Anvil;
 import org.ctp.enchantmentsolution.inventory.EnchantmentTable;
 import org.ctp.enchantmentsolution.inventory.InventoryData;
 import org.ctp.enchantmentsolution.inventory.LegacyAnvil;
+import org.ctp.enchantmentsolution.nms.playerinteract.PlayerInteract_v1_14;
 import org.ctp.enchantmentsolution.utils.AnvilUtils;
 
 public class PlayerInteract implements Listener{
@@ -26,18 +27,18 @@ public class PlayerInteract implements Listener{
 		    }
 			Block block = event.getClickedBlock();
 			if(block.getType().equals(Material.ENCHANTING_TABLE)){
-				Bukkit.getScheduler().scheduleSyncDelayedTask(EnchantmentSolution.PLUGIN, new Runnable() {
+				Bukkit.getScheduler().scheduleSyncDelayedTask(EnchantmentSolution.getPlugin(), new Runnable() {
 					public void run() {
 						if(event.isCancelled()) return;
 						Player player = event.getPlayer();
-						InventoryData inv = EnchantmentSolution.getInventory(player);
+						InventoryData inv = EnchantmentSolution.getPlugin().getInventory(player);
 						if(inv == null) {
 							inv = new EnchantmentTable(player, block);
-							EnchantmentSolution.addInventory(inv);
+							EnchantmentSolution.getPlugin().addInventory(inv);
 						} else if (!(inv instanceof EnchantmentTable)) {
 							inv.close(true);
 							inv = new EnchantmentTable(player, block);
-							EnchantmentSolution.addInventory(inv);
+							EnchantmentSolution.getPlugin().addInventory(inv);
 						}
 						inv.setInventory(null);
 					}
@@ -46,18 +47,18 @@ public class PlayerInteract implements Listener{
 			}
 			if(block.getType().equals(Material.ANVIL) || block.getType().equals(Material.CHIPPED_ANVIL) || block.getType().equals(Material.DAMAGED_ANVIL)){
 				if(AnvilUtils.hasLegacyAnvil(event.getPlayer())) {
-					Bukkit.getScheduler().scheduleSyncDelayedTask(EnchantmentSolution.PLUGIN, new Runnable() {
+					Bukkit.getScheduler().scheduleSyncDelayedTask(EnchantmentSolution.getPlugin(), new Runnable() {
 						public void run() {
 							if(event.isCancelled()) return;
 							Player player = event.getPlayer();
-							InventoryData inv = EnchantmentSolution.getInventory(player);
+							InventoryData inv = EnchantmentSolution.getPlugin().getInventory(player);
 							if(inv == null) {
 								inv = new LegacyAnvil(player, block, player.getOpenInventory().getTopInventory());
-								EnchantmentSolution.addInventory(inv);
+								EnchantmentSolution.getPlugin().addInventory(inv);
 							} else if (!(inv instanceof LegacyAnvil)) {
 								inv.close(true);
 								inv = new LegacyAnvil(player, block, player.getOpenInventory().getTopInventory());
-								EnchantmentSolution.addInventory(inv);
+								EnchantmentSolution.getPlugin().addInventory(inv);
 							}
 							inv.setInventory(null);
 						}
@@ -65,23 +66,26 @@ public class PlayerInteract implements Listener{
 					}, 1l);
 					return;
 				}
-				Bukkit.getScheduler().scheduleSyncDelayedTask(EnchantmentSolution.PLUGIN, new Runnable() {
+				Bukkit.getScheduler().scheduleSyncDelayedTask(EnchantmentSolution.getPlugin(), new Runnable() {
 					public void run() {
 						if(event.isCancelled()) return;
 						Player player = event.getPlayer();
-						InventoryData inv = EnchantmentSolution.getInventory(player);
+						InventoryData inv = EnchantmentSolution.getPlugin().getInventory(player);
 						if(inv == null) {
 							inv = new Anvil(player, block);
-							EnchantmentSolution.addInventory(inv);
+							EnchantmentSolution.getPlugin().addInventory(inv);
 						} else if (!(inv instanceof Anvil)) {
 							inv.close(true);
 							inv = new Anvil(player, block);
-							EnchantmentSolution.addInventory(inv);
+							EnchantmentSolution.getPlugin().addInventory(inv);
 						}
 						inv.setInventory(null);
 					}
 					
 				}, 1l);
+			}
+			if(EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber() > 3) {
+				PlayerInteract_v1_14.onPlayerInteract(event);
 			}
 		}
 	}

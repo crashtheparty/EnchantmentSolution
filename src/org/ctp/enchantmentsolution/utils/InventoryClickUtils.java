@@ -14,10 +14,12 @@ import org.ctp.enchantmentsolution.enchantments.Enchantments;
 import org.ctp.enchantmentsolution.inventory.Anvil;
 import org.ctp.enchantmentsolution.inventory.ConfigInventory;
 import org.ctp.enchantmentsolution.inventory.EnchantmentTable;
+import org.ctp.enchantmentsolution.inventory.Grindstone;
 import org.ctp.enchantmentsolution.inventory.ConfigInventory.Screen;
 import org.ctp.enchantmentsolution.nms.Anvil_GUI_NMS;
 import org.ctp.enchantmentsolution.utils.config.YamlConfigBackup;
 import org.ctp.enchantmentsolution.utils.config.YamlInfo;
+import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 import org.ctp.enchantmentsolution.utils.save.ConfigFiles;
 
 public class InventoryClickUtils {
@@ -48,7 +50,7 @@ public class InventoryClickUtils {
 			if (table.getItems().contains(item)) {
 				if (table.removeItem(item, slot)) {
 					table.setInventory();
-					ItemUtils.giveItemToPlayer(player, item, player.getLocation());
+					ItemUtils.giveItemToPlayer(player, item, player.getLocation(), false);
 				}
 			}else if(slot > 17 && slot % 9 >= 3 && slot % 9 <= 8 && item != null && item.getType() != Material.RED_STAINED_GLASS_PANE && item.getType() != Material.BLACK_STAINED_GLASS_PANE){
 				int itemSlot = (slot - 18) / 9;
@@ -57,7 +59,7 @@ public class InventoryClickUtils {
 			} else if (slot == 10) {
 				ItemStack lapisStack = table.removeFromLapisStack();
 				if(lapisStack != null) {
-					ItemUtils.giveItemToPlayer(player, lapisStack, player.getLocation());
+					ItemUtils.giveItemToPlayer(player, lapisStack, player.getLocation(), false);
 				}
 				table.setInventory();
 			}
@@ -97,10 +99,53 @@ public class InventoryClickUtils {
 				anvil.close(false);
 				AnvilUtils.addLegacyAnvil(player);
 				ChatUtils.sendMessage(player, ChatUtils.getMessage(ChatUtils.getCodes(), "anvil.legacy-gui-open"));
+			} else if ((slot == 31 || slot == 32) && item.getType().equals(Material.SMOOTH_STONE)) {
+				anvil.close(false);
+				Grindstone stone = new Grindstone(player, anvil.getBlock());
+				EnchantmentSolution.getPlugin().addInventory(stone);
+				stone.setInventory();
 			} else if (anvil.getItems().contains(item)) {
 				if (anvil.removeItem(slot)) {
 					anvil.setInventory();
-					ItemUtils.giveItemToPlayer(player, item, player.getLocation());
+					ItemUtils.giveItemToPlayer(player, item, player.getLocation(), false);
+				}
+			}
+		}
+	}
+	
+	public static void setGrindstoneDetails(Grindstone stone, Player player, Inventory inv, Inventory clickedInv, int slot) {
+		if (!(inv.getType().equals(InventoryType.CHEST))) {
+			ItemStack item = clickedInv.getItem(slot);
+			if(item == null || item.getType().equals(Material.AIR)) {
+				return;
+			}
+			ItemStack replace = new ItemStack(Material.AIR);
+			int original_amount = item.getAmount();
+			if(original_amount > 1){
+				replace = item.clone();
+				replace.setAmount(replace.getAmount() - 1);
+				item.setAmount(1);
+			}
+			if (stone.addItem(item)) {
+				stone.setInventory();
+				player.getInventory().setItem(slot, replace);
+			} else if (original_amount > 1){
+				item.setAmount(original_amount);
+			}
+		} else {
+			ItemStack item = clickedInv.getItem(slot);
+			if (slot == 7) {
+				stone.combine();
+				stone.setInventory();
+			} else if (slot == 31 && item.getType().equals(Material.ANVIL)) {
+				stone.close(false);
+				Anvil anvil = new Anvil(player, stone.getBlock());
+				EnchantmentSolution.getPlugin().addInventory(anvil);
+				anvil.setInventory();
+			} else if (stone.getItems().contains(item)) {
+				if (stone.removeItem(slot)) {
+					stone.setInventory();
+					ItemUtils.giveItemToPlayer(player, item, player.getLocation(), false);
 				}
 			}
 		}
@@ -112,23 +157,24 @@ public class InventoryClickUtils {
 		} else {
 			ItemStack item = clickedInv.getItem(slot);
 			if(item == null) return;
+			ConfigFiles files = EnchantmentSolution.getPlugin().getConfigFiles();
 			switch(configInv.getScreen()) {
 			case LIST_FILES:
 				switch(slot) {
 				case 2:
-					configInv.listConfigDetails(ConfigFiles.getDefaultConfig());
+					configInv.listConfigDetails(files.getDefaultConfig());
 					break;
 				case 3:
-					configInv.listConfigDetails(ConfigFiles.getFishingConfig());
+					configInv.listConfigDetails(files.getFishingConfig());
 					break;
 				case 4:
-					configInv.listConfigDetails(ConfigFiles.getLanguageFile());
+					configInv.listConfigDetails(files.getLanguageFile());
 					break;
 				case 5:
-					configInv.listConfigDetails(ConfigFiles.getEnchantmentConfig());
+					configInv.listConfigDetails(files.getEnchantmentConfig());
 					break;
 				case 6:
-					configInv.listConfigDetails(ConfigFiles.getEnchantmentAdvancedConfig());
+					configInv.listConfigDetails(files.getEnchantmentAdvancedConfig());
 					break;
 				case 21:
 					if(!item.getType().equals(Material.BARRIER)) {
@@ -228,6 +274,54 @@ public class InventoryClickUtils {
 						} else {
 							configInv.listConfigDetails(configInv.getConfig(), null);
 						}
+					}
+					break;
+				}
+				break;
+			case LIST_ENUM_LIST_SHOW:
+				switch(slot) {
+				case 53:
+					if(item.getType().equals(Material.ARROW)) {
+						configInv.listEnumListShow(configInv.getConfig(), configInv.getLevel(), configInv.getType(), configInv.getPage() + 1);
+					}
+					break;
+				case 45:
+					if(item.getType().equals(Material.ARROW)) {
+						configInv.listEnumListShow(configInv.getConfig(), configInv.getLevel(), configInv.getType(), configInv.getPage() - 1);
+					}
+					break;
+				case 48:
+					if(item.getType().equals(Material.ARROW)) {
+						String level = configInv.getLevel();
+						if(level.indexOf(".") > -1) {
+							configInv.listConfigDetails(configInv.getConfig(), level.substring(0, level.lastIndexOf(".")));
+						} else {
+							configInv.listConfigDetails(configInv.getConfig(), null);
+						}
+					}
+					break;
+				case 50:
+					if(item.getType().equals(Material.NAME_TAG)) {
+						configInv.listEnumListEdit(configInv.getConfig(), configInv.getLevel(), configInv.getType(), 1);
+					}
+					break;
+				}
+				break;
+			case LIST_ENUM_LIST_EDIT:
+				switch(slot) {
+				case 53:
+					if(item.getType().equals(Material.ARROW)) {
+						configInv.listEnumListEdit(configInv.getConfig(), configInv.getLevel(), configInv.getType(), configInv.getPage() + 1);
+					}
+					break;
+				case 45:
+					if(item.getType().equals(Material.ARROW)) {
+						configInv.listEnumListEdit(configInv.getConfig(), configInv.getLevel(), configInv.getType(), configInv.getPage() - 1);
+					}
+					break;
+				case 49:
+					if(item.getType().equals(Material.ARROW)) {
+						configInv.listEnumListShow(configInv.getConfig(), configInv.getLevel(), configInv.getType(), 1);
 					}
 					break;
 				}
@@ -338,6 +432,8 @@ public class InventoryClickUtils {
 									configInv.listConfigDetails(configInv.getConfig(), path, 1);
 								} else if (type.equals("list")) {
 									configInv.listDetails(configInv.getConfig(), path, type, 1);
+								} else if (type.equals("enum_list")) {
+									configInv.listEnumListShow(configInv.getConfig(), path, type, 1);
 								} else if (type.equals("boolean")) {
 									if(value != null && value.equals("true")) {
 										ChatUtils.sendMessage(player, "Set " + path + " to false.");
@@ -398,7 +494,7 @@ public class InventoryClickUtils {
 							}
 							if(num != null) {
 								YamlConfigBackup backup = new YamlConfigBackup(null, null);
-								List<YamlInfo> backupInfo = EnchantmentSolution.getDb().getBackup(configInv.getConfig(), Integer.parseInt(num));
+								List<YamlInfo> backupInfo = EnchantmentSolution.getPlugin().getDb().getBackup(configInv.getConfig(), Integer.parseInt(num));
 								backup.setFromBackup(backupInfo);
 								configInv.listBackupConfigDetails(configInv.getConfig(), backup, configInv.getLevel(), 1);
 							}
@@ -426,6 +522,31 @@ public class InventoryClickUtils {
 								} else if (type.equals("list") || type.equals("enum_list")) {
 									configInv.listBackupDetails(configInv.getConfig(), configInv.getBackup(), path, type, 1);
 								}
+							}
+						}
+					}
+				}
+			} else if (configInv.getScreen().equals(Screen.LIST_ENUM_LIST_SHOW)) {
+				if(slot < 36) {
+					if(item.hasItemMeta()) {
+						configInv.removeFromList(slot);
+						configInv.listEnumListShow(configInv.getConfig(), configInv.getLevel(), configInv.getType(), configInv.getPage());
+					}
+				}
+			} else if (configInv.getScreen().equals(Screen.LIST_ENUM_LIST_EDIT)) {
+				if(slot < 36) {
+					if(item.hasItemMeta()) {
+						List<String> lore = item.getItemMeta().getLore();
+						if(lore != null) {
+							String value = null;
+							for(String s : lore) {
+								if(s.startsWith(ChatColor.GRAY + "Value: " + ChatColor.WHITE)) {
+									value = s.replace(ChatColor.GRAY + "Value: " + ChatColor.WHITE, "");
+								}
+							}
+							if(value != null) {
+								configInv.setItemName(value);
+								configInv.listEnumListEdit(configInv.getConfig(), configInv.getLevel(), configInv.getType(), configInv.getPage());
 							}
 						}
 					}

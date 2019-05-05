@@ -1,54 +1,31 @@
 package org.ctp.enchantmentsolution.enchantments.vanilla;
 
-import org.apache.commons.lang3.StringUtils;
-import org.bukkit.Material;
+import java.util.Arrays;
+import java.util.List;
+
 import org.bukkit.enchantments.Enchantment;
+import org.ctp.enchantmentsolution.api.Language;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
-import org.ctp.enchantmentsolution.enchantments.Weight;
-import org.ctp.enchantmentsolution.utils.ItemUtils;
+import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
+import org.ctp.enchantmentsolution.enchantments.helper.Weight;
+import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 
 public class Knockback extends CustomEnchantment{
 	
 	public Knockback() {
-		setDefaultDisplayName("Knockback");
+		addDefaultDisplayName("Knockback");
+		addDefaultDisplayName(Language.GERMAN, "Rückstoß");
 		setDefaultFiftyConstant(-15);
 		setDefaultThirtyConstant(-15);
 		setDefaultFiftyModifier(20);
 		setDefaultThirtyModifier(20);
-		setDefaultFiftyMaxConstant(50);
-		setDefaultThirtyMaxConstant(50);
 		setDefaultFiftyStartLevel(1);
 		setDefaultThirtyStartLevel(1);
 		setDefaultFiftyMaxLevel(4);
 		setDefaultThirtyMaxLevel(2);
 		setDefaultWeight(Weight.UNCOMMON);
-	}
-	
-	@Override
-	public boolean canEnchantItem(Material item) {
-		if(item.equals(Material.BOOK)){
-			return true;
-		}
-		if(ItemUtils.getItemTypes().get("swords").contains(item)){
-			return true;
-		}
-		return false;
-	}
-
-	@Override
-	public boolean canAnvilItem(Material item) {
-		return canEnchantItem(item);
-	}
-
-	@Override
-	public boolean conflictsWith(CustomEnchantment ench) {
-		if(ench.getName().equals(getName())){
-			return true;
-		}
-		if(ench.getName().equals("knockup")){
-			return true;
-		}
-		return false;
+		addDefaultDescription("Increases knockback.");
+		addDefaultDescription(Language.GERMAN, "Erhöht den Rückstoß.");
 	}
 
 	@Override
@@ -62,16 +39,17 @@ public class Knockback extends CustomEnchantment{
 	}
 	
 	@Override
-	public String[] getPage() {
-		String pageOne = "Name: " + getDisplayName() + StringUtils.LF + StringUtils.LF;
-		pageOne += "Description: Increases knockback." + StringUtils.LF;
-		String pageTwo = "Max Level: " + getMaxLevel() + "."+ StringUtils.LF;
-		pageTwo += "Weight: " + getWeight() + "."+ StringUtils.LF;
-		pageTwo += "Start Level: " + getStartLevel() + "."+ StringUtils.LF;
-		pageTwo += "Enchantable Items: Swords, Books." + StringUtils.LF;
-		pageTwo += "Anvilable Items: Swords, Books." + StringUtils.LF;
-		pageTwo += "Treasure Enchantment: " + isTreasure() + ". " + StringUtils.LF;
-		return new String[] {pageOne, pageTwo};
+	protected List<ItemType> getEnchantmentItemTypes() {
+		return Arrays.asList(ItemType.SWORDS);
 	}
 
+	@Override
+	protected List<ItemType> getAnvilItemTypes() {
+		return Arrays.asList(ItemType.SWORDS);
+	}
+
+	@Override
+	protected List<Enchantment> getDefaultConflictingEnchantments() {
+		return Arrays.asList(DefaultEnchantments.KNOCKUP);
+	}
 }
