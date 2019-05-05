@@ -29,12 +29,8 @@ public abstract class CustomEnchantment {
 	private Weight defaultWeight = Weight.NULL;
 	private Weight weight = Weight.NULL;
 	private boolean maxLevelOne = false, curse = false;
-	private List<Enchantment> conflictingEnchantments = new ArrayList<Enchantment>();
+	private List<Enchantment> conflictingEnchantments = null;
 	private List<Material> disabledItems = new ArrayList<Material>();
-
-	public CustomEnchantment() {
-		setConflictingEnchantments();
-	}
 	
 	public abstract Enchantment getRelativeEnchantment();
 	
@@ -52,6 +48,9 @@ public abstract class CustomEnchantment {
 	protected abstract List<Enchantment> getDefaultConflictingEnchantments();
 	
 	public List<Enchantment> getConflictingEnchantments(){
+		if(conflictingEnchantments == null) {
+			 setConflictingEnchantments();
+		}
 		List<Enchantment> conflicting = new ArrayList<Enchantment>();
 		conflicting.add(getRelativeEnchantment());
 		conflicting.addAll(conflictingEnchantments);

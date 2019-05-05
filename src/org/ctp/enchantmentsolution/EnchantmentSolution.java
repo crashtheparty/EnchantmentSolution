@@ -31,7 +31,7 @@ public class EnchantmentSolution extends JavaPlugin {
 
 	private static EnchantmentSolution PLUGIN;
 	private List<InventoryData> inventories = new ArrayList<InventoryData>();
-	private boolean disable = false;
+	private boolean disable = false, initialization = true;
 	private SQLite db;
 	private String mcmmoType;
 	private BukkitVersion bukkitVersion;
@@ -68,8 +68,6 @@ public class EnchantmentSolution extends JavaPlugin {
 
 		SaveUtils.getData();
 		
-		DefaultEnchantments.setEnchantments();
-
 		getServer().getPluginManager().registerEvents(new PlayerInteract(),
 				this);
 		getServer().getPluginManager().registerEvents(new InventoryClick(),
@@ -204,14 +202,13 @@ public class EnchantmentSolution extends JavaPlugin {
 		getCommand("Info").setTabCompleter(new PlayerChatTabComplete());
 		getCommand("RemoveEnchant").setTabCompleter(new PlayerChatTabComplete());
 		getCommand("EnchantUnsafe").setTabCompleter(new PlayerChatTabComplete());
-		
-		files.updateEnchantments();
-		
+				
 		check = new VersionCheck(pluginVersion, "https://raw.githubusercontent.com/crashtheparty/EnchantmentSolution/master/VersionHistory", 
 				"https://www.spigotmc.org/resources/enchantment-solution.59556/", "https://github.com/crashtheparty/EnchantmentSolution", 
 				getConfigFiles().getDefaultConfig().getBoolean("get_latest_version"));
 		getServer().getPluginManager().registerEvents(check, this);
 		checkVersion();
+		initialization = false;
 	}
 
 	public void onDisable() {
@@ -282,4 +279,9 @@ public class EnchantmentSolution extends JavaPlugin {
 	public static EnchantmentSolution getPlugin() {
 		return PLUGIN;
 	}
+
+	public boolean isInitializing() {
+		return initialization;
+	}
+
 }

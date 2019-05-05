@@ -132,15 +132,16 @@ public class ConfigFiles {
 		getLanguageFile().setComments(getDefaultConfig().getBoolean("use_comments"));
 		getEnchantmentConfig().setComments(getDefaultConfig().getBoolean("use_comments"));
 		getEnchantmentAdvancedConfig().setComments(getDefaultConfig().getBoolean("use_comments"));
+
+		DefaultEnchantments.setEnchantments();
+		updateEnchantments();
 		
 		getDefaultConfig().saveConfig();
 		getFishingConfig().saveConfig();
 		getEnchantmentConfig().saveConfig();
 		getEnchantmentAdvancedConfig().saveConfig();
 		
-		DefaultEnchantments.setEnchantments();
 		PlayerLevels.resetPlayerLevels();
-		updateEnchantments();
 		loadLangFile(dataFolder);
 
 		EnchantmentSolution.getPlugin().getDb().updateConfig(getDefaultConfig());
@@ -173,7 +174,9 @@ public class ConfigFiles {
 	}
 
 	private void defaultFile() {
-		ChatUtils.sendInfo("Loading default config...");
+		if(EnchantmentSolution.getPlugin().isInitializing()) {
+			ChatUtils.sendInfo("Loading default config...");
+		}
 
 		String[] header = { "Enchantment Solution", "Plugin by", "crashtheparty" };
 		config = new YamlConfigBackup(mainFile, header);
@@ -209,7 +212,11 @@ public class ConfigFiles {
 		config.addDefault("default_anvil_use", false, new String[] {
 				"Allow default use of anvil GUI via option at bottom right of custom GUI.",
 				"Using this feature MAY REMOVE CUSTOM ENCHANTMENTS FROM ITEMS on accident. Should only be true if anvil is used for custom recipes." });
+		config.addDefault("enchantability_decay", false,
+				new String[] { "Multiple enchantments generated on items will have lower levels" });
 		if (EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber() < 4) {
+			config.addDefault("protection_conflicts", true,
+					new String[] { "All protection types conflict with each other" });
 			config.addDefault("grindstone.use_legacy", false,
 					new String[] { "Use the grindstone from within the anvil in version < 1.14" });
 		}
@@ -262,11 +269,15 @@ public class ConfigFiles {
 		config.addDefault("use_comments", true, new String[] { "Show helpful comments in the config files" });
 		config.addDefault("get_latest_version", true, new String[] { "Check github for updates to the plugin" });
 
-		ChatUtils.sendInfo("Default config initialized!");
+		if(EnchantmentSolution.getPlugin().isInitializing()) {
+			ChatUtils.sendInfo("Default config initialized!");
+		}
 	}
 
 	private void enchantmentFile() {
-		ChatUtils.sendInfo("Loading enchantment config...");
+		if(EnchantmentSolution.getPlugin().isInitializing()) {
+			ChatUtils.sendInfo("Loading enchantment config...");
+		}
 
 		String[] header = { "Enchantment Solution", "Plugin by", "crashtheparty" };
 		enchantment = new YamlConfigBackup(enchantmentFile, header);
@@ -290,12 +301,15 @@ public class ConfigFiles {
 				enchantment.addDefault("custom_enchantments." + enchant.getName() + ".treasure", enchant.isTreasure());
 			}
 		}
-
-		ChatUtils.sendInfo("Enchantment config initialized!");
+		if(EnchantmentSolution.getPlugin().isInitializing()) {
+			ChatUtils.sendInfo("Enchantment config initialized!");
+		}
 	}
 
 	private void enchantmentAdvancedFile() {
-		ChatUtils.sendInfo("Loading advanced enchantment config...");
+		if(EnchantmentSolution.getPlugin().isInitializing()) {
+			ChatUtils.sendInfo("Loading advanced enchantment config...");
+		}
 
 		String[] header = { "Enchantment Solution", "Plugin by", "crashtheparty" };
 		enchantmentAdvanced = new YamlConfigBackup(enchantmentAdvancedFile, header);
@@ -417,8 +431,10 @@ public class ConfigFiles {
 						ItemUtils.getRepairMaterialsStrings());
 			}
 		}
-
-		ChatUtils.sendInfo("Advanced enchantment config initialized!");
+		
+		if(EnchantmentSolution.getPlugin().isInitializing()) {
+			ChatUtils.sendInfo("Advanced enchantment config initialized!");
+		}
 	}
 
 	public void updateExternalEnchantments(JavaPlugin plugin) {
@@ -523,18 +539,25 @@ public class ConfigFiles {
 	}
 
 	private void abilityConfig() {
-		ChatUtils.sendInfo("Loading ability enchantment file...");
+		if(EnchantmentSolution.getPlugin().isInitializing()) {
+			ChatUtils.sendInfo("Loading ability enchantment file...");
+		}
+		
 		abilityConfig = new YamlConfig(abilityFile, new String[0]);
 
 		abilityConfig.getFromConfig();
 
 		abilityConfig.saveConfig();
-
-		ChatUtils.sendInfo("Ability enchantment file initialized!");
+		
+		if(EnchantmentSolution.getPlugin().isInitializing()) {
+			ChatUtils.sendInfo("Ability enchantment file initialized!");
+		}
 	}
 
 	private void mcMMOFishing() {
-		ChatUtils.sendInfo("Loading fishing config...");
+		if(EnchantmentSolution.getPlugin().isInitializing()) {
+			ChatUtils.sendInfo("Loading fishing config...");
+		}
 
 		String[] header = { "Enchantment Solution", "Plugin by", "crashtheparty" };
 		fishing = new YamlConfigBackup(fishingFile, header);
@@ -657,7 +680,9 @@ public class ConfigFiles {
 
 		fishing.saveConfig();
 
-		ChatUtils.sendInfo("Fishing config initialized!");
+		if(EnchantmentSolution.getPlugin().isInitializing()) {
+			ChatUtils.sendInfo("Fishing config initialized!");
+		}
 	}
 
 	public boolean useStartLevel() {

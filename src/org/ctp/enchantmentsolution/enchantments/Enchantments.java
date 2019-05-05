@@ -56,6 +56,17 @@ public class Enchantments {
 	public static boolean getFishingLoot(){
 		return EnchantmentSolution.getPlugin().getConfigFiles().getDefaultConfig().getBoolean("fishing_loot");
 	}
+	
+	public static boolean getEnchantabilityDecay(){
+		return EnchantmentSolution.getPlugin().getConfigFiles().getDefaultConfig().getBoolean("enchantability_decay");
+	}
+	
+	public static boolean getProtectionConflicts(){
+		if(EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber() > 4) {
+			return false;
+		}
+		return EnchantmentSolution.getPlugin().getConfigFiles().getDefaultConfig().getBoolean("protection_conflicts");
+	}
 
 	public static boolean addEnchantment(CustomEnchantment enchantment) {
 		if(ENCHANTMENTS.contains(enchantment)) {
@@ -170,7 +181,11 @@ public class Enchantments {
 			for(CustomEnchantment customEnchant : customEnchants){
 				getWeight -= customEnchant.getWeight();
 				if(getWeight <= 0){
-					enchants.add(new EnchantmentLevel(customEnchant, customEnchant.getEnchantLevel(player, enchantability)));
+					if(getEnchantabilityDecay()) {
+						enchants.add(new EnchantmentLevel(customEnchant, customEnchant.getEnchantLevel(player, finalEnchantability)));
+					} else {
+						enchants.add(new EnchantmentLevel(customEnchant, customEnchant.getEnchantLevel(player, enchantability)));
+					}
 					break;
 				}
 			}

@@ -84,7 +84,6 @@ public class MagmaWalkerListener extends EnchantmentListener implements Runnable
 		}
 	}
 
-	@Override
 	public void run() {
 		for(int i = BLOCKS.size() - 1; i >= 0; i--){
 			if(!DefaultEnchantments.isEnabled(DefaultEnchantments.MAGMA_WALKER)) break;

@@ -60,7 +60,9 @@ public class LanguageFiles {
 	}
 	
 	private void save(boolean getFromConfig) {
-		ChatUtils.sendInfo("Loading language file...");
+		if(EnchantmentSolution.getPlugin().isInitializing()) {
+			ChatUtils.sendInfo("Loading language file...");
+		}
 		language = new YamlConfigBackup(languageFile, null);
 		if(getFromConfig) {
 			language.getFromConfig();
@@ -68,7 +70,9 @@ public class LanguageFiles {
 		language.copyDefaults(getLanguageFile());
 		
 		language.saveConfig();
-		ChatUtils.sendInfo("Language file initialized!");
+		if(EnchantmentSolution.getPlugin().isInitializing()) {
+			ChatUtils.sendInfo("Language file initialized!");
+		}
 	}
 
 	public YamlConfigBackup getLanguageConfig() {
