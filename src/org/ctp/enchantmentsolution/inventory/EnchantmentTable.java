@@ -119,7 +119,7 @@ public class EnchantmentTable implements InventoryData {
 		if (levelList.size() < 4 || levelList.get(3) == -1) {
 			String message = "";
 			if (levelList.size() < 4) {
-				message = ChatUtils.getMessage(getCodes(), "table.level-fifty-disabled");
+				message = ChatUtils.getMessage(getCodes(), "table.level-fifty-lack");
 			} else {
 				message = ChatUtils.getMessage(getCodes(), "table.level-fifty-disabled");
 			}
