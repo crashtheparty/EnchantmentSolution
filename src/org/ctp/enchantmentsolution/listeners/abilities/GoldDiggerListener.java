@@ -6,6 +6,7 @@ import org.bukkit.Statistic;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
@@ -15,7 +16,7 @@ import org.ctp.enchantmentsolution.utils.items.nms.AbilityUtils;
 
 public class GoldDiggerListener extends EnchantmentListener {
 
-	@EventHandler
+	@EventHandler(priority=EventPriority.HIGHEST)
 	public void onBlockBreak(BlockBreakEvent event) {
 		if(!canRun(DefaultEnchantments.GOLD_DIGGER, event)) return;
 		if(event.isCancelled()) return;

@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.UUID;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -22,8 +24,11 @@ import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.enchantments.helper.PlayerLevels;
+import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.AnvilUtils.RepairType;
 import org.ctp.enchantmentsolution.utils.items.nms.ItemRepairType;
+
+import com.google.common.collect.Multimap;
 
 public class ItemUtils {
 	
@@ -116,13 +121,27 @@ public class ItemUtils {
 		if(firstMeta.getAttributeModifiers() != null && !firstMeta.getAttributeModifiers().isEmpty()) {
 			Iterator<Map.Entry<Attribute, AttributeModifier>> iterator = firstMeta.getAttributeModifiers().entries().iterator();
 			while(iterator.hasNext()) {
-				Map.Entry<Attribute, AttributeModifier> next = iterator.next();
+				Entry<Attribute, AttributeModifier> next = iterator.next();
 				
 				if (next.getKey() == null || next.getValue() == null) {
 				    iterator.remove();
 				    continue;
 				}
-				combinedMeta.addAttributeModifier(next.getKey(), next.getValue());
+				Attribute attribute = Attribute.valueOf(next.getKey().name());
+				AttributeModifier modifier = new AttributeModifier(UUID.randomUUID(), 
+						next.getValue().getName(), next.getValue().getAmount(), next.getValue().getOperation(), next.getValue().getSlot());
+				try {
+					combinedMeta.addAttributeModifier(attribute, modifier);
+				} catch (IllegalArgumentException ex) {
+					ChatUtils.sendWarning("Illegal Argument Exception when processing Attributes: ");
+					ChatUtils.sendWarning("Issue with adding " + next.getKey().name() + " with modifier " + next.getValue().toString() + " to item.");
+					Multimap<Attribute, AttributeModifier> modifiers = combinedMeta.getAttributeModifiers();
+					Iterator<Entry<Attribute, AttributeModifier>> i = modifiers.entries().iterator();
+					while(i.hasNext()) {
+						Entry<Attribute, AttributeModifier> entry = i.next();
+						ChatUtils.sendWarning("Possible conflict: " + entry.getKey().name() + " with modifier " + entry.getValue().toString() + ".");
+					}
+				}
 			}
 		}
 		
