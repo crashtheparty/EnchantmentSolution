@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.UUID;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -130,8 +131,11 @@ public class ItemUtils {
 				    iterator.remove();
 				    continue;
 				}
+				Attribute attribute = Attribute.valueOf(next.getKey().name());
+				AttributeModifier modifier = new AttributeModifier(UUID.randomUUID(), 
+						next.getValue().getName(), next.getValue().getAmount(), next.getValue().getOperation(), next.getValue().getSlot());
 				try {
-					combinedMeta.addAttributeModifier(next.getKey(), next.getValue());
+					combinedMeta.addAttributeModifier(attribute, modifier);
 				} catch (IllegalArgumentException ex) {
 					ChatUtils.sendWarning("Illegal Argument Exception when processing Attributes: ");
 					ChatUtils.sendWarning("Issue with adding " + next.getKey().name() + " with modifier " + next.getValue().toString() + " to item.");
