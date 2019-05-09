@@ -7,14 +7,14 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
 import org.bukkit.inventory.ItemStack;
-import org.ctp.enchantmentsolution.enchantments.Enchantments;
+import org.ctp.enchantmentsolution.utils.ConfigUtils;
 import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 
 public class MobSpawning implements Listener{
 
 	@EventHandler
 	public void onMobSpawn(CreatureSpawnEvent event) {
-		if(!Enchantments.getMobLoot()) return;
+		if(!ConfigUtils.getMobLoot()) return;
 		if(event.getEntity() instanceof LivingEntity) {
 			// dont do it for players or for entities spawned with commands
 			if(event.getEntity() instanceof Player || event.getSpawnReason() == SpawnReason.DEFAULT) return;

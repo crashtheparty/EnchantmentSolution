@@ -6,12 +6,12 @@ import java.util.List;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
-import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.api.Language;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentDescription;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentDisplayName;
 import org.ctp.enchantmentsolution.enchantments.helper.Weight;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
+import org.ctp.enchantmentsolution.utils.ConfigUtils;
 import org.ctp.enchantmentsolution.utils.PermissionUtils;
 import org.ctp.enchantmentsolution.utils.StringUtils;
 import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
@@ -216,7 +216,7 @@ public abstract class CustomEnchantment {
 
 	public String getDisplayName() {
 		if(displayName == null)
-			return getDefaultDisplayName(EnchantmentSolution.getPlugin().getConfigFiles().getLanguage());
+			return getDefaultDisplayName(ConfigUtils.getLanguage());
 		return displayName;
 	}
 
@@ -251,7 +251,7 @@ public abstract class CustomEnchantment {
 	}
 
 	public boolean canEnchant(Player player, int enchantability, int level) {
-		if (EnchantmentSolution.getPlugin().getConfigFiles().useStartLevel() && level < getStartLevel()) {
+		if (ConfigUtils.useStartLevel() && level < getStartLevel()) {
 			return false;
 		}
 		if(getEnchantLevel(player, enchantability) > 0) {
@@ -502,7 +502,7 @@ public abstract class CustomEnchantment {
 	
 	public String getDescription() {
 		if(description == null)
-			return getDefaultDescription(EnchantmentSolution.getPlugin().getConfigFiles().getLanguage());
+			return getDefaultDescription(ConfigUtils.getLanguage());
 		return description;
 	}
 

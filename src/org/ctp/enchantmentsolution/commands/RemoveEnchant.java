@@ -1,13 +1,16 @@
 package org.ctp.enchantmentsolution.commands;
 
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
+import org.ctp.enchantmentsolution.utils.ConfigUtils;
 
 import java.util.HashMap;
 
@@ -25,7 +28,15 @@ public class RemoveEnchant  implements CommandExecutor {
 						if(enchant.getName().equalsIgnoreCase(enchantmentName)){
 							ItemStack itemToEnchant = player.getInventory().getItemInMainHand();
 							if(itemToEnchant != null){
+								if(itemToEnchant.getType() == Material.BOOK && ConfigUtils.getEnchantedBook()) {
+									itemToEnchant = Enchantments.convertToEnchantedBook(itemToEnchant);
+								} else if (itemToEnchant.getType() == Material.ENCHANTED_BOOK && !ConfigUtils.getEnchantedBook()) {
+									itemToEnchant = Enchantments.convertToRegularBook(itemToEnchant);
+								}
 								itemToEnchant = Enchantments.removeEnchantmentFromItem(itemToEnchant, enchant);
+								if(itemToEnchant.getType() == Material.ENCHANTED_BOOK && !((EnchantmentStorageMeta) itemToEnchant.getItemMeta()).hasStoredEnchants()) {
+									itemToEnchant.setType(Material.BOOK);
+								}
 								player.getInventory().setItemInMainHand(itemToEnchant);
 								HashMap<String, Object> codes = ChatUtils.getCodes();
 								codes.put("%enchant%", enchant.getDisplayName());

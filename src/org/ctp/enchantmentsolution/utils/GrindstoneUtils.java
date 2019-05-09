@@ -64,12 +64,12 @@ public class GrindstoneUtils {
 			Enchantment enchant = e.getKey();
 			int level = e.getValue();
 			for(CustomEnchantment customEnchant : Enchantments.getEnchantments()) {
-				if(Enchantments.isRepairable(customEnchant) && customEnchant.getRelativeEnchantment().equals(enchant)) {
+				if(ConfigUtils.isRepairable(customEnchant) && customEnchant.getRelativeEnchantment().equals(enchant)) {
 					cost += level * customEnchant.multiplier(item.getType());
 				}
 			}
 		}
-		return Math.max(cost / Enchantments.getLevelDivisor(), 1);
+		return Math.max(cost / ConfigUtils.getLevelDivisor(), 1);
 	}
 	
 	public static int getExperience(ItemStack itemOne, ItemStack itemTwo) {
@@ -187,7 +187,7 @@ public class GrindstoneUtils {
 				int level = e.getValue();
 				for(CustomEnchantment customEnchant : Enchantments.getEnchantments()) {
 					boolean added = false;
-					if(Enchantments.isRepairable(customEnchant) && customEnchant.getRelativeEnchantment().equals(enchant) && customEnchant.isCurse()) {
+					if(ConfigUtils.isRepairable(customEnchant) && customEnchant.getRelativeEnchantment().equals(enchant) && customEnchant.isCurse()) {
 						for(EnchantmentLevel enchantment : enchantments) {
 							if(customEnchant.getRelativeEnchantment().equals(enchantment.getEnchant().getRelativeEnchantment())) {
 								added = true; 
@@ -209,7 +209,7 @@ public class GrindstoneUtils {
 			int level = e.getValue();
 			for(CustomEnchantment customEnchant : Enchantments.getEnchantments()) {
 				boolean added = false;
-				if(Enchantments.isRepairable(customEnchant) && customEnchant.getRelativeEnchantment().equals(enchant) && customEnchant.isCurse()) {
+				if(ConfigUtils.isRepairable(customEnchant) && customEnchant.getRelativeEnchantment().equals(enchant) && customEnchant.isCurse()) {
 					for(EnchantmentLevel enchantment : enchantments) {
 						if(customEnchant.getRelativeEnchantment().equals(enchantment.getEnchant().getRelativeEnchantment())) {
 							added = true; 

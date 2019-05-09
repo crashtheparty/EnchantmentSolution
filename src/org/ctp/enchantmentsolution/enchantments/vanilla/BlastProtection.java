@@ -6,8 +6,8 @@ import java.util.List;
 import org.bukkit.enchantments.Enchantment;
 import org.ctp.enchantmentsolution.api.Language;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
-import org.ctp.enchantmentsolution.enchantments.Enchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.Weight;
+import org.ctp.enchantmentsolution.utils.ConfigUtils;
 import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 
 public class BlastProtection extends CustomEnchantment{
@@ -55,7 +55,7 @@ public class BlastProtection extends CustomEnchantment{
 
 	@Override
 	protected List<Enchantment> getDefaultConflictingEnchantments() {
-		if(!Enchantments.getProtectionConflicts()) return Arrays.asList();
+		if(!ConfigUtils.getProtectionConflicts()) return Arrays.asList();
 		return Arrays.asList(Enchantment.PROTECTION_ENVIRONMENTAL, Enchantment.PROTECTION_FIRE, Enchantment.PROTECTION_PROJECTILE);
 	}
 }

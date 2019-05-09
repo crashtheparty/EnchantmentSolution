@@ -17,7 +17,7 @@ public class PermissionUtils {
 			return true;
 		}
 		ConfigFiles files = EnchantmentSolution.getPlugin().getConfigFiles();
-		if(files.usePermissions()) {
+		if(ConfigUtils.usePermissions()) {
 			if(player.hasPermission("enchantmentsolution.permissions.ignore")) {
 				return true;
 			}
@@ -61,7 +61,7 @@ public class PermissionUtils {
 			return true;
 		}
 		ConfigFiles files = EnchantmentSolution.getPlugin().getConfigFiles();
-		if(files.usePermissions()) {
+		if(ConfigUtils.usePermissions()) {
 			if(player.hasPermission("enchantmentsolution.permissions.ignore")) {
 				return true;
 			}

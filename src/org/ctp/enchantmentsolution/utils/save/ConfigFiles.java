@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.logging.Level;
 
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
@@ -23,7 +22,6 @@ import org.ctp.enchantmentsolution.utils.config.YamlConfig;
 import org.ctp.enchantmentsolution.utils.config.YamlConfigBackup;
 import org.ctp.enchantmentsolution.utils.config.YamlInfo;
 import org.ctp.enchantmentsolution.utils.items.ItemUtils;
-import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 
 public class ConfigFiles {
 
@@ -167,9 +165,11 @@ public class ConfigFiles {
 	private void loadLangFile(File dataFolder) {
 		String langFile = config.getString("language_file");
 		if (languageFiles == null) {
-			languageFiles = new LanguageFiles(new File(dataFolder + "/" + langFile), getLanguage());
+			languageFiles = new LanguageFiles(new File(dataFolder + "/" + langFile), 
+					Language.getLanguage(EnchantmentSolution.getPlugin().getConfigFiles().getDefaultConfig().getString("language")));
 		} else {
-			languageFiles.setLanguage(new File(dataFolder + "/" + langFile), getLanguage());
+			languageFiles.setLanguage(new File(dataFolder + "/" + langFile), 
+					Language.getLanguage(EnchantmentSolution.getPlugin().getConfigFiles().getDefaultConfig().getString("language")));
 		}
 	}
 
@@ -214,6 +214,7 @@ public class ConfigFiles {
 				"Using this feature MAY REMOVE CUSTOM ENCHANTMENTS FROM ITEMS on accident. Should only be true if anvil is used for custom recipes." });
 		config.addDefault("enchantability_decay", false,
 				new String[] { "Multiple enchantments generated on items will have lower levels" });
+		config.addDefault("use_enchanted_books", false, new String[] { "Regular books turn into enchanted books." });
 		if (EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber() < 4) {
 			config.addDefault("protection_conflicts", true,
 					new String[] { "All protection types conflict with each other" });
@@ -683,88 +684,5 @@ public class ConfigFiles {
 		if(EnchantmentSolution.getPlugin().isInitializing()) {
 			ChatUtils.sendInfo("Fishing config initialized!");
 		}
-	}
-
-	public boolean useStartLevel() {
-		if (config.getBoolean("use_advanced_file")) {
-			return enchantmentAdvanced.getBoolean("use_starting_level");
-		}
-		return config.getBoolean("level_50_enchants");
-	}
-
-	public boolean useLevel50() {
-		if (config.getBoolean("use_advanced_file")) {
-			return true;
-		}
-		return config.getBoolean("level_50_enchants");
-	}
-
-	public boolean useThirtyEnchantability() {
-		if (config.getBoolean("use_advanced_file")) {
-			return !enchantmentAdvanced.getBoolean("use_lapis_modifier");
-		}
-		return !config.getBoolean("level_50_enchants");
-	}
-
-	public boolean usePermissions() {
-		if (config.getBoolean("use_advanced_file")) {
-			return enchantmentAdvanced.getBoolean("use_permissions");
-		}
-		return false;
-	}
-
-	public boolean useDefaultAnvil() {
-		return config.getBoolean("default_anvil_use");
-	}
-
-	public boolean useLapisInTable() {
-		return config.getBoolean("lapis_in_table");
-	}
-
-	public boolean useLegacyGrindstone() {
-		if (EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber() < 4) {
-			return config.getBoolean("grindstone.use_legacy");
-		}
-		return false;
-	}
-
-	public int getMaxRepairLevel() {
-		return config.getInt("max_repair_level");
-	}
-
-	public boolean updateLegacyEnchantments() {
-		return config.getBoolean("update_legacy_enchantments");
-	}
-
-	public int getLevelFromType(String type) {
-		return config.getInt("loots." + type + ".levels");
-	}
-
-	public int getBookshelvesFromType(String type) {
-		return config.getInt("loots." + type + ".bookshelves");
-	}
-
-	public boolean includeTreasureFromType(String type) {
-		return config.getBoolean("loots." + type + ".treasure");
-	}
-
-	public String getLocalizedName(Material material) {
-		return getLanguageFile().getString("vanilla." + ItemType.getUnlocalizedName(material));
-	}
-
-	public Language getLanguage() {
-		return Language.getLanguage(config.getString("language"));
-	}
-
-	public boolean grindstoneTakeEnchantments() {
-		return config.getBoolean("grindstone.take_enchantments");
-	}
-
-	public boolean grindstoneTakeRepairCost() {
-		return config.getBoolean("grindstone.set_repair_cost");
-	}
-	
-	public boolean grindstoneDestroyItem() {
-		return config.getBoolean("grindstone.destroy_take_item");
 	}
 }
