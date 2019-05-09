@@ -1,5 +1,6 @@
 package org.ctp.enchantmentsolution.commands;
 
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -8,6 +9,7 @@ import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
+import org.ctp.enchantmentsolution.utils.ConfigUtils;
 
 import java.util.HashMap;
 
@@ -54,10 +56,15 @@ public class Enchant implements CommandExecutor {
 							}
 							ItemStack itemToEnchant = player.getInventory().getItemInMainHand();
 							if(itemToEnchant != null){
-								int maxEnchants = Enchantments.getMaxEnchantments();
+								int maxEnchants = ConfigUtils.getMaxEnchantments();
 								int itemEnchants = Enchantments.getTotalEnchantments(itemToEnchant);
 								if(maxEnchants <= 0 || (itemEnchants < maxEnchants && maxEnchants > 0)) {
 									if(enchant.canAnvilItem(itemToEnchant.getType()) || enchant.canEnchantItem(itemToEnchant.getType())){
+										if(itemToEnchant.getType() == Material.BOOK && ConfigUtils.getEnchantedBook()) {
+											itemToEnchant = Enchantments.convertToEnchantedBook(itemToEnchant);
+										} else if (itemToEnchant.getType() == Material.ENCHANTED_BOOK && !ConfigUtils.getEnchantedBook()) {
+											itemToEnchant = Enchantments.convertToRegularBook(itemToEnchant);
+										}
 										itemToEnchant = Enchantments.addEnchantmentToItem(itemToEnchant, enchant, level);
 										player.getInventory().setItemInMainHand(itemToEnchant);
 										HashMap<String, Object> codes = ChatUtils.getCodes();

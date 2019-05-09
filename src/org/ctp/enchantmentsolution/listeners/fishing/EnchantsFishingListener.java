@@ -6,14 +6,14 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.inventory.ItemStack;
-import org.ctp.enchantmentsolution.enchantments.Enchantments;
 import org.ctp.enchantmentsolution.nms.FishingNMS;
+import org.ctp.enchantmentsolution.utils.ConfigUtils;
 
 public class EnchantsFishingListener implements Listener{
 	
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerFishMonitor(PlayerFishEvent event) {
-		if(!Enchantments.getFishingLoot()) return;
+		if(!ConfigUtils.getFishingLoot()) return;
         switch (event.getState()) {
             case CAUGHT_FISH:
                 handleFishing((Item) event.getCaught());

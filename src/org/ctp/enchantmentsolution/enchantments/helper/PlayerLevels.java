@@ -7,8 +7,8 @@ import java.util.List;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
+import org.ctp.enchantmentsolution.utils.ConfigUtils;
 
 public class PlayerLevels {
 	
@@ -26,7 +26,7 @@ public class PlayerLevels {
 		List<Integer> levelList = getIntList(player, books);
 		
 		if(levelList == null){
-			if(EnchantmentSolution.getPlugin().getConfigFiles().useLevel50()) {
+			if(ConfigUtils.useLevel50()) {
 				levelList = generateFiftyLevels();
 			} else {
 				levelList = generateThirtyLevels();
@@ -46,7 +46,7 @@ public class PlayerLevels {
 		List<Integer> levelList = getIntList(player, books);
 		
 		if(levelList == null){
-			if(EnchantmentSolution.getPlugin().getConfigFiles().useLevel50()) {
+			if(ConfigUtils.useLevel50()) {
 				levelList = generateFiftyLevels();
 			} else {
 				levelList = generateThirtyLevels();
@@ -216,12 +216,12 @@ public class PlayerLevels {
 	
 	public static PlayerLevels generateFakePlayerLevels(Material material, int minBookshelves, boolean treasure) {
 		int books = 16;
-		if(EnchantmentSolution.getPlugin().getConfigFiles().useLevel50()) books = 24;
+		if(ConfigUtils.useLevel50()) books = 24;
 		int random = (int)(Math.random() * books) + minBookshelves;
 		if(random >= books) random = books - 1;
 		PlayerLevels levels = new PlayerLevels(random, material, treasure);
 		
-		if(EnchantmentSolution.getPlugin().getConfigFiles().useLevel50() && random < 15) {
+		if(ConfigUtils.useLevel50() && random < 15) {
 			while(levels.enchants.size() > 3) {
 				levels.enchants.remove(3);
 			}

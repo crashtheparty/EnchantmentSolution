@@ -1,5 +1,7 @@
 package org.ctp.enchantmentsolution.utils.items.nms.smeltery;
 
+import java.lang.reflect.Field;
+
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
@@ -53,7 +55,15 @@ public class Smeltery_v1_13 {
 			material = Material.TERRACOTTA;
 			break;
 		case CACTUS:
-			material = Material.CACTUS_GREEN;
+			Field f;
+			try {
+				f = Material.CACTUS.getClass().getDeclaredField("CACTUS_GREEN");
+				f.setAccessible(true);
+				material = (Material) f.get(material);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			break;
 		case SEA_PICKLE:
 			material = Material.LIME_DYE;
