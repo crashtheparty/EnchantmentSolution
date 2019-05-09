@@ -165,13 +165,15 @@ public class LanguageFiles {
 		englishUS.addDefault("table.generate-enchants-error", ("There was an error generating enchantments.").replace("§", "&"));
 		englishUS.addDefault("table.enchant-level", ("Level %level% Enchant.").replace("§", "&"));
 		englishUS.addDefault("table.enchant-level-lore", Arrays.asList(
-				"Lvl Req: %levelReq%.", "Lvl Cost: %level%."));
+				"Lvl Req: %levelReq%.", "Lvl Cost: %level%.", "Lvls Taken: %levelsTaken%."));
 		englishUS.addDefault("table.level-fifty-disabled", ("Level 50 enchantments disabled.").replace("§", "&"));
 		englishUS.addDefault("table.level-fifty-lack", ("Requires 15 bookshelves around table.").replace("§", "&"));
 		englishUS.addDefault("table.lapis-cost-okay", (ChatColor.GREEN + "Lapis Cost: %cost%").replace("§", "&"));
 		englishUS.addDefault("table.lapis-cost-lack", (ChatColor.RED + "Lapis Cost: %cost%").replace("§", "&"));
 		englishUS.addDefault("table.level-cost-okay", (ChatColor.GREEN + "Level Req: %levelReq%").replace("§", "&"));
 		englishUS.addDefault("table.level-cost-lack", (ChatColor.RED + "Level Req: %levelReq%").replace("§", "&"));
+		englishUS.addDefault("table.level-taken-okay", (ChatColor.GREEN + "Levels Taken: %levelsTaken%").replace("§", "&"));
+		englishUS.addDefault("table.level-taken-lack", (ChatColor.RED + "Level Taken: %levelsTaken%").replace("§", "&"));
 		englishUS.addDefault("table.item-enchant-name", ("%name% Level %level% Enchants").replace("§", "&"));
 		englishUS.addDefault("table.enchant-name", ("%enchant%...").replace("§", "&"));
 		englishUS.addDefault("table.lack-reqs", ("You do not meet the requirements to enchant this item.").replace("§", "&"));
@@ -291,13 +293,15 @@ public class LanguageFiles {
 		german.addDefault("table.generate-enchants-error", ("Beim generieren der Verzauberungen ist ein Fehler aufgetreten.").replace("§", "&"));
 		german.addDefault("table.enchant-level", ("Level %level% Verzauberung.").replace("§", "&"));
 		german.addDefault("table.enchant-level-lore", Arrays.asList(
-				"Lvl benötigt: %levelReq%.", "Lvl Kosten: %level%."));
+				"Lvl benötigt: %levelReq%.", "Lvl Kosten: %level%.", "Lvls genommen: %levelsTaken%."));
 		german.addDefault("table.level-fifty-disabled", ("Level 50 Verzauberungen sind ausgeschaltet.").replace("§", "&"));
 		german.addDefault("table.level-fifty-lack", ("Benötigt 15 Bücherregale um den Tisch herum.").replace("§", "&"));
 		german.addDefault("table.lapis-cost-okay", (ChatColor.GREEN + "Lapiskosten: %cost%").replace("§", "&"));
 		german.addDefault("table.lapis-cost-lack", (ChatColor.RED + "Lapiskosten: %cost%").replace("§", "&"));
 		german.addDefault("table.level-cost-okay", (ChatColor.GREEN + "Levelanforderung: %levelReq%").replace("§", "&"));
 		german.addDefault("table.level-cost-lack", (ChatColor.RED + "Levelanforderung: %levelReq%").replace("§", "&"));
+		german.addDefault("table.level-taken-okay", (ChatColor.GREEN + "Verzauberungsstufen genommen: %levelsTaken%").replace("§", "&"));
+		german.addDefault("table.level-taken-lack", (ChatColor.RED + "Verzauberungsstufen genommen: %levelsTaken%").replace("§", "&"));
 		german.addDefault("table.item-enchant-name", ("%name% Level %level% Verzauberung").replace("§", "&"));
 		german.addDefault("table.enchant-name", ("%enchant%...").replace("§", "&"));
 		german.addDefault("table.lack-reqs", ("Du erfüllst nicht alle Anforderungen um dieses Item zu verzaubern.").replace("§", "&"));

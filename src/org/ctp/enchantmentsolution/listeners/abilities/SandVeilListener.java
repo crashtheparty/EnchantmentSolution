@@ -25,7 +25,11 @@ public class SandVeilListener extends EnchantmentListener{
 		if(!canRun(DefaultEnchantments.SAND_VEIL, event)) return;
 		Entity damager = event.getDamager();
 		if(damager instanceof Projectile) {
-			damager = (Entity) ((Projectile) damager).getShooter();
+			if(((Projectile) damager).getShooter() instanceof Entity) {
+				damager = (Entity) ((Projectile) damager).getShooter();
+			} else {
+				return;
+			}
 		}
 		EntityAccuracy ea = null;
 		for(EntityAccuracy entity : ENTITIES) {

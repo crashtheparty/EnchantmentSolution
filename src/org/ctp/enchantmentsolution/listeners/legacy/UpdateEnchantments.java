@@ -12,10 +12,10 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
+import org.ctp.enchantmentsolution.utils.ConfigUtils;
 import org.ctp.enchantmentsolution.utils.StringUtils;
 
 public class UpdateEnchantments implements Listener{
@@ -35,7 +35,7 @@ public class UpdateEnchantments implements Listener{
 	}
 	
 	public void updateEnchantments(PlayerInventory inv) {
-		if(EnchantmentSolution.getPlugin().getConfigFiles().updateLegacyEnchantments()) {
+		if(ConfigUtils.updateLegacyEnchantments()) {
 			for(int i = 0; i < 36; i++) {
 				ItemStack item = inv.getItem(i);
 				if(item != null) {

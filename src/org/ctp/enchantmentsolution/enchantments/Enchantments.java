@@ -15,57 +15,19 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.enchantments.wrappers.CustomEnchantmentWrapper;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
+import org.ctp.enchantmentsolution.utils.ConfigUtils;
 import org.ctp.enchantmentsolution.utils.StringUtils;
 import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 
 public class Enchantments {
 
 	private static List<CustomEnchantment> ENCHANTMENTS = new ArrayList<CustomEnchantment>();
-	private static int LAPIS_CONSTANT = -1;
-	private static int LAPIS_MODIFIER = 2;
-	private static double MULTI_ENCHANT_DIVISOR = 75.0D;
 
 	public static List<CustomEnchantment> getEnchantments() {
 		return ENCHANTMENTS;
-	}
-	
-	public static int getMaxEnchantments() {
-		return EnchantmentSolution.getPlugin().getConfigFiles().getDefaultConfig().getInt("max_enchantments");
-	}
-	
-	public static boolean customEnchantsDisabled() {
-		return !EnchantmentSolution.getPlugin().getConfigFiles().getDefaultConfig().getBoolean("level_50_enchants");
-	}
-	
-	public static int getLevelDivisor() {
-		return EnchantmentSolution.getPlugin().getConfigFiles().getDefaultConfig().getInt("level_divisor");
-	}
-	
-	public static boolean getChestLoot(){
-		return EnchantmentSolution.getPlugin().getConfigFiles().getDefaultConfig().getBoolean("chest_loot");
-	}
-	
-	public static boolean getMobLoot(){
-		return EnchantmentSolution.getPlugin().getConfigFiles().getDefaultConfig().getBoolean("mob_loot");
-	}
-	
-	public static boolean getFishingLoot(){
-		return EnchantmentSolution.getPlugin().getConfigFiles().getDefaultConfig().getBoolean("fishing_loot");
-	}
-	
-	public static boolean getEnchantabilityDecay(){
-		return EnchantmentSolution.getPlugin().getConfigFiles().getDefaultConfig().getBoolean("enchantability_decay");
-	}
-	
-	public static boolean getProtectionConflicts(){
-		if(EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber() > 4) {
-			return false;
-		}
-		return EnchantmentSolution.getPlugin().getConfigFiles().getDefaultConfig().getBoolean("protection_conflicts");
 	}
 
 	public static boolean addEnchantment(CustomEnchantment enchantment) {
@@ -96,10 +58,66 @@ public class Enchantments {
 		}
 	}
 	
+	public static ItemStack convertToEnchantedBook(ItemStack item) {
+		ItemStack newItem = new ItemStack(Material.ENCHANTED_BOOK, item.getAmount());
+		EnchantmentStorageMeta enchantmentStorage = (EnchantmentStorageMeta) newItem.getItemMeta();
+		
+		ItemMeta meta = item.getItemMeta();
+		
+		if(meta != null && meta.getEnchants().size() > 0) {
+			List<String> lore = new ArrayList<String>();
+			for (Iterator<java.util.Map.Entry<Enchantment, Integer>> it = meta.getEnchants().entrySet().iterator(); it.hasNext();) {
+				java.util.Map.Entry<Enchantment, Integer> e = it.next();
+				Enchantment enchant = e.getKey();
+				int level = e.getValue();
+				enchantmentStorage.addStoredEnchant(enchant, level, true);
+				if(enchant instanceof CustomEnchantmentWrapper) {
+					String enchName = StringUtils.returnEnchantmentName(DefaultEnchantments.getCustomEnchantment(enchant), level);
+					lore.add(ChatUtils.hideText("solution") + "" + ChatColor.GRAY + enchName);
+				}
+				meta.removeEnchant(enchant);
+			}
+			meta = (ItemMeta) enchantmentStorage;
+			meta.setLore(lore);
+			newItem.setItemMeta(meta);
+		}
+		return newItem;
+	}
+	
+	public static ItemStack convertToRegularBook(ItemStack item) {
+		ItemStack newItem = new ItemStack(Material.BOOK, item.getAmount());
+		EnchantmentStorageMeta enchantmentStorage = (EnchantmentStorageMeta) item.getItemMeta();
+		
+		ItemMeta meta = newItem.getItemMeta();
+		
+		if(enchantmentStorage != null && enchantmentStorage.getStoredEnchants().size() > 0) {
+			List<String> lore = new ArrayList<String>();
+			for (Iterator<java.util.Map.Entry<Enchantment, Integer>> it = enchantmentStorage.getStoredEnchants().entrySet().iterator(); it.hasNext();) {
+				java.util.Map.Entry<Enchantment, Integer> e = it.next();
+				Enchantment enchant = e.getKey();
+				int level = e.getValue();
+				meta.addEnchant(enchant, level, true);
+				if(enchant instanceof CustomEnchantmentWrapper) {
+					String enchName = StringUtils.returnEnchantmentName(DefaultEnchantments.getCustomEnchantment(enchant), level);
+					lore.add(ChatUtils.hideText("solution") + "" + ChatColor.GRAY + enchName);
+				}
+				enchantmentStorage.removeStoredEnchant(enchant);
+			}
+			meta.setLore(lore);
+			newItem.setItemMeta(meta);
+		}
+		return newItem;
+	}
+	
 	public static List<EnchantmentLevel> getEnchantmentLevels(ItemStack item){
 		List<EnchantmentLevel> levels = new ArrayList<EnchantmentLevel>();
-		if(item.getItemMeta() != null && item.getItemMeta().getEnchants() != null && item.getItemMeta().getEnchants().size() > 0){
-			for (Iterator<java.util.Map.Entry<Enchantment, Integer>> it = item.getItemMeta().getEnchants().entrySet().iterator(); it.hasNext();) {
+		if(item.getItemMeta() != null) {
+			ItemMeta meta = item.getItemMeta();
+			Map<Enchantment, Integer> enchantments = meta.getEnchants();
+			if(item.getType() == Material.ENCHANTED_BOOK) {
+				enchantments = ((EnchantmentStorageMeta) meta).getStoredEnchants();
+			}
+			for (Iterator<java.util.Map.Entry<Enchantment, Integer>> it = enchantments.entrySet().iterator(); it.hasNext();) {
 				java.util.Map.Entry<Enchantment, Integer> e = it.next();
 				levels.add(new EnchantmentLevel(DefaultEnchantments.getCustomEnchantment(e.getKey()), e.getValue()));
 			}
@@ -112,9 +130,17 @@ public class Enchantments {
 			return false;
 		}
 		ItemMeta meta = item.getItemMeta();
-		for(CustomEnchantment enchant : ENCHANTMENTS){
-			if(meta.hasEnchant(enchant.getRelativeEnchantment())){
-				return false;
+		if(item.getType() == Material.ENCHANTED_BOOK) {
+			for(CustomEnchantment enchant : ENCHANTMENTS){
+				if(((EnchantmentStorageMeta) meta).hasStoredEnchant(enchant.getRelativeEnchantment())){
+					return false;
+				}
+			}
+		} else {
+			for(CustomEnchantment enchant : ENCHANTMENTS){
+				if(meta.hasEnchant(enchant.getRelativeEnchantment())){
+					return false;
+				}
 			}
 		}
 		if (ItemType.ALL.getItemTypes().contains(item.getType())) {
@@ -130,7 +156,7 @@ public class Enchantments {
 			Material material, int level, int lapis, boolean treasure) {
 		List<EnchantmentLevel> enchants = new ArrayList<EnchantmentLevel>();
 		int enchantability = getEnchantability(material, level, lapis);
-		double multiEnchantDivisor = getMultiEnchantDivisor();
+		double multiEnchantDivisor = ConfigUtils.getMultiEnchantDivisor();
 		int totalWeight = 0;
 		List<CustomEnchantment> customEnchants = new ArrayList<CustomEnchantment>();
 		for(CustomEnchantment enchantment : ENCHANTMENTS){
@@ -181,7 +207,7 @@ public class Enchantments {
 			for(CustomEnchantment customEnchant : customEnchants){
 				getWeight -= customEnchant.getWeight();
 				if(getWeight <= 0){
-					if(getEnchantabilityDecay()) {
+					if(ConfigUtils.getEnchantabilityDecay()) {
 						enchants.add(new EnchantmentLevel(customEnchant, customEnchant.getEnchantLevel(player, finalEnchantability)));
 					} else {
 						enchants.add(new EnchantmentLevel(customEnchant, customEnchant.getEnchantLevel(player, enchantability)));
@@ -191,7 +217,7 @@ public class Enchantments {
 			}
 			finalEnchantability = finalEnchantability / 2;
 		}
-		int maxEnchants = getMaxEnchantments();
+		int maxEnchants = ConfigUtils.getMaxEnchantments();
 		if(maxEnchants > 0) {
 			for(int i = enchants.size() - 1; i > maxEnchants; i--) {
 				enchants.remove(i);
@@ -218,7 +244,7 @@ public class Enchantments {
 				}
 			}
 		}
-		if (EnchantmentSolution.getPlugin().getConfigFiles().useLevel50()) {
+		if (ConfigUtils.useLevel50()) {
 			if (bookshelves > 23)
 				bookshelves = 23;
 		} else {
@@ -259,7 +285,7 @@ public class Enchantments {
 		int rand_enchantability = 1 + randomInt(enchantability_2 / 2 + 1)
 				+ randomInt(enchantability_2 / 2 + 1);
 
-		int k = level + rand_enchantability + (lapis - getLapisConstant()) * getLapisModifier();
+		int k = level + rand_enchantability + (lapis - ConfigUtils.getLapisConstant()) * ConfigUtils.getLapisModifier();
 		float rand_bonus_percent = (float) (1 + (randomFloat() + randomFloat() - 1) * .15);
 		return (int) (k * rand_bonus_percent + 0.5);
 	}
@@ -290,11 +316,23 @@ public class Enchantments {
 			item.setItemMeta(meta);
 			return item;
 		}
-		for(EnchantmentLevel level : levels){
-			meta.addEnchant(level.getEnchant().getRelativeEnchantment(), level.getLevel(), true);
-			if(level.getEnchant().getRelativeEnchantment() instanceof CustomEnchantmentWrapper) {
-				String enchName = StringUtils.returnEnchantmentName(level.getEnchant(), level.getLevel());
-				lore.add(ChatUtils.hideText("solution") + "" + ChatColor.GRAY + enchName);
+		if(item.getType() == Material.ENCHANTED_BOOK) {
+			EnchantmentStorageMeta enchantmentStorage = (EnchantmentStorageMeta) meta;
+			for(EnchantmentLevel level : levels){
+				enchantmentStorage.addStoredEnchant(level.getEnchant().getRelativeEnchantment(), level.getLevel(), true);
+				if(level.getEnchant().getRelativeEnchantment() instanceof CustomEnchantmentWrapper) {
+					String enchName = StringUtils.returnEnchantmentName(level.getEnchant(), level.getLevel());
+					lore.add(ChatUtils.hideText("solution") + "" + ChatColor.GRAY + enchName);
+				}
+			}
+			meta = (ItemMeta) enchantmentStorage;
+		} else {
+			for(EnchantmentLevel level : levels){
+				meta.addEnchant(level.getEnchant().getRelativeEnchantment(), level.getLevel(), true);
+				if(level.getEnchant().getRelativeEnchantment() instanceof CustomEnchantmentWrapper) {
+					String enchName = StringUtils.returnEnchantmentName(level.getEnchant(), level.getLevel());
+					lore.add(ChatUtils.hideText("solution") + "" + ChatColor.GRAY + enchName);
+				}
 			}
 		}
 		if(previousLore != null) {
@@ -315,15 +353,30 @@ public class Enchantments {
 		if(lore == null){
 			lore = new ArrayList<String>();
 		}
-		if(Enchantments.hasEnchantment(item, enchantment.getRelativeEnchantment())){
-			lore = StringUtils.removeEnchantment(enchantment, meta.getEnchantLevel(enchantment.getRelativeEnchantment()), lore);
-			meta.removeEnchant(enchantment.getRelativeEnchantment());
+		if(item.getType() == Material.ENCHANTED_BOOK) {
+			EnchantmentStorageMeta enchantmentStorage = (EnchantmentStorageMeta) meta;
+			if(Enchantments.hasEnchantment(item, enchantment.getRelativeEnchantment())){
+				lore = StringUtils.removeEnchantment(enchantment, meta.getEnchantLevel(enchantment.getRelativeEnchantment()), lore);
+				enchantmentStorage.removeStoredEnchant(enchantment.getRelativeEnchantment());
+			}
+			enchantmentStorage.addStoredEnchant(enchantment.getRelativeEnchantment(), level, true);
+			if(enchantment.getRelativeEnchantment() instanceof CustomEnchantmentWrapper) {
+				String enchName = StringUtils.returnEnchantmentName(enchantment, level);
+				lore.add(ChatUtils.hideText("solution") + "" + ChatColor.GRAY + enchName);
+			}
+			meta = (ItemMeta) enchantmentStorage;
+		} else {
+			if(Enchantments.hasEnchantment(item, enchantment.getRelativeEnchantment())){
+				lore = StringUtils.removeEnchantment(enchantment, meta.getEnchantLevel(enchantment.getRelativeEnchantment()), lore);
+				meta.removeEnchant(enchantment.getRelativeEnchantment());
+			}
+			meta.addEnchant(enchantment.getRelativeEnchantment(), level, true);
+			if(enchantment.getRelativeEnchantment() instanceof CustomEnchantmentWrapper) {
+				String enchName = StringUtils.returnEnchantmentName(enchantment, level);
+				lore.add(ChatUtils.hideText("solution") + "" + ChatColor.GRAY + enchName);
+			}
 		}
-		meta.addEnchant(enchantment.getRelativeEnchantment(), level, true);
-		if(enchantment.getRelativeEnchantment() instanceof CustomEnchantmentWrapper) {
-			String enchName = StringUtils.returnEnchantmentName(enchantment, level);
-			lore.add(ChatUtils.hideText("solution") + "" + ChatColor.GRAY + enchName);
-		}
+		
 		meta.setLore(lore);
 		item.setItemMeta(meta);
 		return item;
@@ -339,7 +392,11 @@ public class Enchantments {
 			if(enchantment.getRelativeEnchantment() instanceof CustomEnchantmentWrapper) {
 				lore = StringUtils.removeEnchantment(enchantment, meta.getEnchantLevel(enchantment.getRelativeEnchantment()), lore);
 			}
-			meta.removeEnchant(enchantment.getRelativeEnchantment());
+			if(meta instanceof EnchantmentStorageMeta) {
+				((EnchantmentStorageMeta) meta).removeStoredEnchant(enchantment.getRelativeEnchantment());
+			} else {
+				meta.removeEnchant(enchantment.getRelativeEnchantment());
+			}
 		}
 		meta.setLore(lore);
 		item.setItemMeta(meta);
@@ -357,7 +414,11 @@ public class Enchantments {
 				if(enchantment.getRelativeEnchantment() instanceof CustomEnchantmentWrapper) {
 					lore = StringUtils.removeEnchantment(enchantment, meta.getEnchantLevel(enchantment.getRelativeEnchantment()), lore);
 				}
-				meta.removeEnchant(enchantment.getRelativeEnchantment());
+				if(meta instanceof EnchantmentStorageMeta) {
+					((EnchantmentStorageMeta) meta).removeStoredEnchant(enchantment.getRelativeEnchantment());
+				} else {
+					meta.removeEnchant(enchantment.getRelativeEnchantment());
+				}
 			}
 		}
 		meta.setLore(lore);
@@ -366,8 +427,12 @@ public class Enchantments {
 	}
 	
 	public static boolean hasEnchantment(ItemStack item, Enchantment enchant){
-		if(item.getItemMeta() != null && item.getItemMeta().getEnchants() != null && item.getItemMeta().getEnchants().size() > 0){
-			for (Iterator<java.util.Map.Entry<Enchantment, Integer>> it = item.getItemMeta().getEnchants().entrySet().iterator(); it.hasNext();) {
+		if(item.getItemMeta() != null) {
+			Map<Enchantment, Integer> enchantments = item.getItemMeta().getEnchants();
+			if(item.getType() == Material.ENCHANTED_BOOK) {
+				enchantments = ((EnchantmentStorageMeta) item.getItemMeta()).getStoredEnchants();
+			}
+			for (Iterator<java.util.Map.Entry<Enchantment, Integer>> it = enchantments.entrySet().iterator(); it.hasNext();) {
 				java.util.Map.Entry<Enchantment, Integer> e = it.next();
 				if(e.getKey().equals(enchant)){
 					return true;
@@ -378,15 +443,26 @@ public class Enchantments {
 	}
 	
 	public static int getTotalEnchantments(ItemStack item) {
-		if(item.getItemMeta() != null && item.getItemMeta().getEnchants() != null && item.getItemMeta().getEnchants().size() > 0){
-			return item.getItemMeta().getEnchants().size();
+		if(item.getItemMeta() != null) {
+			ItemMeta meta = item.getItemMeta();
+			Map<Enchantment, Integer> enchantments = meta.getEnchants();
+			if(item.getType() == Material.ENCHANTED_BOOK) {
+				enchantments = ((EnchantmentStorageMeta) meta).getStoredEnchants();
+			}
+			if(enchantments == null) return 0;
+			return enchantments.size();
 		}
 		return 0;
 	}
 	
 	public static int getLevel(ItemStack item, Enchantment enchant){
-		if(item.getItemMeta() != null && item.getItemMeta().getEnchants() != null && item.getItemMeta().getEnchants().size() > 0){
-			for (Iterator<java.util.Map.Entry<Enchantment, Integer>> it = item.getItemMeta().getEnchants().entrySet().iterator(); it.hasNext();) {
+		if(item.getItemMeta() != null) {
+			ItemMeta meta = item.getItemMeta();
+			Map<Enchantment, Integer> enchantments = meta.getEnchants();
+			if(item.getType() == Material.ENCHANTED_BOOK) {
+				enchantments = ((EnchantmentStorageMeta) meta).getStoredEnchants();
+			}
+			for (Iterator<java.util.Map.Entry<Enchantment, Integer>> it = enchantments.entrySet().iterator(); it.hasNext();) {
 				java.util.Map.Entry<Enchantment, Integer> e = it.next();
 				if(e.getKey().equals(enchant)){
 					return e.getValue();
@@ -400,7 +476,7 @@ public class Enchantments {
 		ItemMeta meta = item.clone().getItemMeta();
 		Map<Enchantment, Integer> enchants = meta.getEnchants();
 		if(item.getType().equals(Material.ENCHANTED_BOOK)) {
-			
+			enchants = ((EnchantmentStorageMeta) meta).getStoredEnchants();
 		}else if(!customEnchant.canAnvilItem(item.getType())) {
 			return false;
 		}
@@ -424,6 +500,10 @@ public class Enchantments {
 		Map<Enchantment, Integer> firstEnchants = firstMeta.getEnchants();
 		ItemMeta secondMeta = second.clone().getItemMeta();
 		Map<Enchantment, Integer> secondEnchants = secondMeta.getEnchants();
+		if(first.getType().equals(Material.ENCHANTED_BOOK)) {
+			EnchantmentStorageMeta meta = (EnchantmentStorageMeta) firstMeta;
+			firstEnchants = meta.getStoredEnchants();
+		}
 		if(second.getType().equals(Material.ENCHANTED_BOOK)) {
 			EnchantmentStorageMeta meta = (EnchantmentStorageMeta) secondMeta;
 			secondEnchants = meta.getStoredEnchants();
@@ -435,7 +515,7 @@ public class Enchantments {
 			Enchantment enchant = e.getKey();
 			int level = e.getValue();
 			for(CustomEnchantment customEnchant : Enchantments.ENCHANTMENTS) {
-				if(isRepairable(customEnchant) && customEnchant.getRelativeEnchantment().equals(enchant)) {
+				if(ConfigUtils.isRepairable(customEnchant) && customEnchant.getRelativeEnchantment().equals(enchant)) {
 					secondLevels.add(new EnchantmentLevel(customEnchant, level));
 				}
 			}
@@ -446,7 +526,7 @@ public class Enchantments {
 			Enchantment enchant = e.getKey();
 			int level = e.getValue();
 			for(CustomEnchantment customEnchant : Enchantments.ENCHANTMENTS) {
-				if(isRepairable(customEnchant) && customEnchant.getRelativeEnchantment().equals(enchant)) {
+				if(ConfigUtils.isRepairable(customEnchant) && customEnchant.getRelativeEnchantment().equals(enchant)) {
 					firstLevels.add(new EnchantmentLevel(customEnchant, level));
 				}
 			}
@@ -491,18 +571,6 @@ public class Enchantments {
 		return cost;
 	}
 	
-	public static boolean isRepairable(CustomEnchantment enchant) {
-		if(EnchantmentSolution.getPlugin().getConfigFiles().getDefaultConfig().getString("disable_enchant_method").equals("repairable")) {
-			return true;
-		}
-		
-		if(enchant.isEnabled()) {
-			return true;
-		}
-		
-		return false;
-	}
-	
 	public static List<EnchantmentLevel> combineEnchants(Player player, ItemStack first, ItemStack second){
 		ItemMeta firstMeta = first.clone().getItemMeta();
 		Map<Enchantment, Integer> firstEnchants = firstMeta.getEnchants();
@@ -525,7 +593,7 @@ public class Enchantments {
 			Enchantment enchant = e.getKey();
 			int level = e.getValue();
 			for(CustomEnchantment customEnchant : Enchantments.ENCHANTMENTS) {
-				if(isRepairable(customEnchant) && customEnchant.getRelativeEnchantment().equals(enchant)) {
+				if(ConfigUtils.isRepairable(customEnchant) && customEnchant.getRelativeEnchantment().equals(enchant)) {
 					secondLevels.add(new EnchantmentLevel(customEnchant, level));
 				}
 			}
@@ -536,7 +604,7 @@ public class Enchantments {
 			Enchantment enchant = e.getKey();
 			int level = e.getValue();
 			for(CustomEnchantment customEnchant : Enchantments.ENCHANTMENTS) {
-				if(isRepairable(customEnchant) && customEnchant.getRelativeEnchantment().equals(enchant)) {
+				if(ConfigUtils.isRepairable(customEnchant) && customEnchant.getRelativeEnchantment().equals(enchant)) {
 					firstLevels.add(new EnchantmentLevel(customEnchant, level));
 				}
 			}
@@ -596,7 +664,7 @@ public class Enchantments {
 				enchantments.add(enchantOne);
 			}
 		}
-		int maxEnchants = getMaxEnchantments();
+		int maxEnchants = ConfigUtils.getMaxEnchantments();
 		if(maxEnchants > 0) {
 			for(int i = enchantments.size() - 1; i > maxEnchants; i--) {
 				enchantments.remove(i);
@@ -616,36 +684,6 @@ public class Enchantments {
 		}
 		
 		return enchantments;
-	}
-	
-	public static int getLapisConstant() {
-		if(EnchantmentSolution.getPlugin().getConfigFiles().getDefaultConfig().getBoolean("use_advanced_file")) {
-			return EnchantmentSolution.getPlugin().getConfigFiles().getEnchantmentAdvancedConfig().getInt("lapis_modifiers.constant");
-		}
-		if(!EnchantmentSolution.getPlugin().getConfigFiles().getDefaultConfig().getBoolean("level_50_enchants")) {
-			return 0;
-		}
-		return LAPIS_CONSTANT;
-	}
-	
-	public static int getLapisModifier() {
-		if(EnchantmentSolution.getPlugin().getConfigFiles().getDefaultConfig().getBoolean("use_advanced_file")) {
-			return EnchantmentSolution.getPlugin().getConfigFiles().getEnchantmentAdvancedConfig().getInt("lapis_modifiers.modifier");
-		}
-		if(!EnchantmentSolution.getPlugin().getConfigFiles().getDefaultConfig().getBoolean("level_50_enchants")) {
-			return 0;
-		}
-		return LAPIS_MODIFIER;
-	}
-	
-	public static double getMultiEnchantDivisor() {
-		if(EnchantmentSolution.getPlugin().getConfigFiles().getDefaultConfig().getBoolean("use_advanced_file")) {
-			return EnchantmentSolution.getPlugin().getConfigFiles().getEnchantmentAdvancedConfig().getDouble("multi_enchant_divisor");
-		}
-		if(!EnchantmentSolution.getPlugin().getConfigFiles().getDefaultConfig().getBoolean("level_50_enchants")) {
-			return 50.0D;
-		}
-		return MULTI_ENCHANT_DIVISOR;
 	}
 
 }

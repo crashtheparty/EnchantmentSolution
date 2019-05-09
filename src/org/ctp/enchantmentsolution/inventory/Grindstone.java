@@ -21,6 +21,7 @@ import org.ctp.enchantmentsolution.nms.AnvilNMS;
 import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 import org.ctp.enchantmentsolution.utils.items.nms.AbilityUtils;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
+import org.ctp.enchantmentsolution.utils.ConfigUtils;
 import org.ctp.enchantmentsolution.utils.GrindstoneUtils;
 
 public class Grindstone implements InventoryData{
@@ -46,7 +47,7 @@ public class Grindstone implements InventoryData{
 		try {
 			takeEnchantments = false;
 			int size = 27;
-			if(EnchantmentSolution.getPlugin().getConfigFiles().useLegacyGrindstone()) {
+			if(ConfigUtils.useLegacyGrindstone()) {
 				size = 36;
 			}
 			Inventory inv = Bukkit.createInventory(null, size, ChatUtils.getMessage(getCodes(), "grindstone.name"));
@@ -77,7 +78,7 @@ public class Grindstone implements InventoryData{
 			inv.setItem(13, mirror);
 			inv.setItem(14, mirror);
 			inv.setItem(15, mirror);
-			if (EnchantmentSolution.getPlugin().getConfigFiles().grindstoneTakeEnchantments()) {
+			if (ConfigUtils.grindstoneTakeEnchantments()) {
 				inv.setItem(16, new ItemStack(Material.AIR));
 			} else {
 				inv.setItem(16, mirror);
@@ -104,7 +105,7 @@ public class Grindstone implements InventoryData{
 				combineMeta.setDisplayName(ChatUtils.getMessage(getCodes(), "grindstone.combine"));
 				combineMeta.setLore(lore);
 				combine.setItemMeta(combineMeta);
-			} else if(EnchantmentSolution.getPlugin().getConfigFiles().grindstoneTakeEnchantments() 
+			} else if(ConfigUtils.grindstoneTakeEnchantments() 
 					&& playerItems.size() == 2 && GrindstoneUtils.canTakeEnchantments(playerItems.get(0), playerItems.get(1))) {
 				combinedItem = GrindstoneUtils.takeEnchantments(getPlayer(), playerItems.get(0), playerItems.get(1));
 				int levelCost = GrindstoneUtils.getEnchantmentCost(playerItems.get(0));
@@ -173,7 +174,7 @@ public class Grindstone implements InventoryData{
 				if (!takeEnchantments) {
 					combinedItem = AnvilNMS.setRepairCost(combinedItem, 0);
 				} else {
-					if(EnchantmentSolution.getPlugin().getConfigFiles().grindstoneTakeRepairCost()) {
+					if(ConfigUtils.grindstoneTakeRepairCost()) {
 						combinedItem = AnvilNMS.setRepairCost(combinedItem, AnvilNMS.getRepairCost(playerItems.get(0)));
 					} else {
 						combinedItem = AnvilNMS.setRepairCost(combinedItem, 0);
@@ -183,7 +184,7 @@ public class Grindstone implements InventoryData{
 			}
 			inv.setItem(5, combine);
 			
-			if(EnchantmentSolution.getPlugin().getConfigFiles().useLegacyGrindstone()) {
+			if(ConfigUtils.useLegacyGrindstone()) {
 				inv.setItem(27, mirror);
 				inv.setItem(28, mirror);
 				inv.setItem(29, mirror);
@@ -232,7 +233,7 @@ public class Grindstone implements InventoryData{
 				}
 				combinedItem = null;
 				playerItems.remove(1);
-				if(EnchantmentSolution.getPlugin().getConfigFiles().grindstoneDestroyItem()) {
+				if(ConfigUtils.grindstoneDestroyItem()) {
 					playerItems.remove(0);
 				} else {
 					playerItems.set(0, Enchantments.removeAllEnchantments(playerItems.get(0)));

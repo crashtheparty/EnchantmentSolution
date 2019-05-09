@@ -20,11 +20,11 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.util.Vector;
-import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.enchantments.helper.PlayerLevels;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
+import org.ctp.enchantmentsolution.utils.ConfigUtils;
 import org.ctp.enchantmentsolution.utils.AnvilUtils.RepairType;
 import org.ctp.enchantmentsolution.utils.items.nms.ItemRepairType;
 
@@ -88,8 +88,12 @@ public class ItemUtils {
 	
 	public static ItemStack combineItems(Player player, ItemStack first, ItemStack second) {
 		ItemStack combined = new ItemStack(first.getType());
-		if(first.getType().equals(Material.ENCHANTED_BOOK)) {
-			combined = new ItemStack(Material.BOOK);
+		if(first.getType() == Material.BOOK || first.getType() == Material.ENCHANTED_BOOK) {
+			if(ConfigUtils.getEnchantedBook()) {
+				combined = new ItemStack(Material.ENCHANTED_BOOK);
+			} else {
+				combined = new ItemStack(Material.BOOK);
+			}
 		}
 		DamageUtils.setDamage(combined, DamageUtils.getDamage(first.getItemMeta()));
 		RepairType repairType = RepairType.getRepairType(first, second);
@@ -185,12 +189,12 @@ public class ItemUtils {
 		
 		List<EnchantmentLevel> enchants = null;
 		while(enchants == null) {
-			int bookshelves = EnchantmentSolution.getPlugin().getConfigFiles().getBookshelvesFromType(type);
-			boolean treasure = EnchantmentSolution.getPlugin().getConfigFiles().includeTreasureFromType(type);
+			int bookshelves = ConfigUtils.getBookshelvesFromType(type);
+			boolean treasure = ConfigUtils.includeTreasureFromType(type);
 			PlayerLevels levels = PlayerLevels.generateFakePlayerLevels(returnItem.getType(), bookshelves, treasure);
 			int i = 0;
 			while(i < 3) {
-				int random = (int)(Math.random() * levels.getEnchants().size() + EnchantmentSolution.getPlugin().getConfigFiles().getLevelFromType(type));
+				int random = (int)(Math.random() * levels.getEnchants().size() + ConfigUtils.getLevelFromType(type));
 				if(random > levels.getEnchants().size() - 1) random = levels.getEnchants().size() - 1;
 				if(levels.getEnchants().get(random).size() > 0) {
 					enchants = levels.getEnchants().get(random);
