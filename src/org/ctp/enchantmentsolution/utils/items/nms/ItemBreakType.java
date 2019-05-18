@@ -19,12 +19,8 @@ public interface ItemBreakType {
 		case 3:
 			return ItemBreak_v1_13.getType(type);
 		case 4:
+		case 5:
 			return ItemBreak_v1_14.getType(type);
-		}
-		if(EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber() < 4) {
-			return ItemBreak_v1_13.getType(type);
-		} else if (EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber() >= 4) {
-			
 		}
 		return null;
 	}
@@ -36,6 +32,7 @@ public interface ItemBreakType {
 		case 3:
 			return ItemBreak_v1_13.allBreakTypes();
 		case 4:
+		case 5:
 			return ItemBreak_v1_14.allBreakTypes();
 		}
 		return null;

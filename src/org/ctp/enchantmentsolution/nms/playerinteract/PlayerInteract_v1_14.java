@@ -11,6 +11,7 @@ import org.ctp.enchantmentsolution.inventory.InventoryData;
 
 public class PlayerInteract_v1_14 {
 
+	@SuppressWarnings("deprecation")
 	public static void onPlayerInteract(PlayerInteractEvent event){
 		Block block = event.getClickedBlock();
 		if(block.getType().equals(Material.GRINDSTONE)){

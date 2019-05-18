@@ -18,6 +18,7 @@ public class DamageEvent {
 			DamageEvent_v1_13_R2.damageEntity(entity, cause, damage);
 			break;
 		case 4:
+		case 5:
 			DamageEvent_v1_14_R1.damageEntity(entity, cause, damage);
 			break;
 		}
