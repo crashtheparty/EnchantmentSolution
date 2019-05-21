@@ -39,7 +39,7 @@ public class Unbreaking extends CustomEnchantment{
 	
 	@Override
 	protected List<ItemType> getEnchantmentItemTypes() {
-		return Arrays.asList(ItemType.TOOLS, ItemType.SWORDS, ItemType.ARMOR, ItemType.RANGED, ItemType.SHIELD);
+		return Arrays.asList(ItemType.ENCHANTABLE);
 	}
 
 	@Override

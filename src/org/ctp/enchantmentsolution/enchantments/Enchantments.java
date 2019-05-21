@@ -187,16 +187,17 @@ public class Enchantments {
 			totalWeight = 0;
 			customEnchants = new ArrayList<CustomEnchantment>();
 			for(CustomEnchantment enchantment : ENCHANTMENTS){
-				if(enchantment.canEnchant(player, enchantability, level) && enchantment.canEnchantItem(material)){
-					boolean canEnchant = true;
-					for(EnchantmentLevel enchant : enchants){
-						if(CustomEnchantment.conflictsWith(enchantment, enchant.getEnchant())){
-							canEnchant = false;
+				if(enchantment.isEnabled()) {
+					if (treasure) {
+						if(enchantment.canEnchant(player, enchantability, level) && enchantment.canEnchantItem(material)){
+							totalWeight += enchantment.getWeight();
+							customEnchants.add(enchantment);
 						}
-					}
-					if(canEnchant){
-						totalWeight += enchantment.getWeight();
-						customEnchants.add(enchantment);
+					} else {
+						if(enchantment.canEnchant(player, enchantability, level) && enchantment.canEnchantItem(material) && !enchantment.isTreasure()){
+							totalWeight += enchantment.getWeight();
+							customEnchants.add(enchantment);
+						}
 					}
 				}
 			}

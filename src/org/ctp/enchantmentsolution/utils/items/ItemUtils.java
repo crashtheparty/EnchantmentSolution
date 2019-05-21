@@ -132,18 +132,31 @@ public class ItemUtils {
 				    continue;
 				}
 				Attribute attribute = Attribute.valueOf(next.getKey().name());
-				AttributeModifier modifier = new AttributeModifier(UUID.randomUUID(), 
+				UUID uuid = UUID.randomUUID();
+				int tries = 0;
+				ChatUtils.sendInfo("Checking uuid - " + uuid.toString());
+				while(containsAttribute(uuid, combinedMeta.getAttributeModifiers()) && tries <= 100) {
+					ChatUtils.sendInfo(uuid + " was bad - Try next uuid");
+					uuid = UUID.randomUUID();
+					ChatUtils.sendInfo("Checking uuid - " + uuid.toString());
+					tries++;
+				}
+				ChatUtils.sendInfo("Found good uuid that should be unique - " + uuid.toString());
+				AttributeModifier modifier = new AttributeModifier(uuid, 
 						next.getValue().getName(), next.getValue().getAmount(), next.getValue().getOperation(), next.getValue().getSlot());
 				try {
 					combinedMeta.addAttributeModifier(attribute, modifier);
 				} catch (IllegalArgumentException ex) {
-					ChatUtils.sendWarning("Illegal Argument Exception when processing Attributes: ");
-					ChatUtils.sendWarning("Issue with adding " + next.getKey().name() + " with modifier " + next.getValue().toString() + " to item.");
-					Multimap<Attribute, AttributeModifier> modifiers = combinedMeta.getAttributeModifiers();
-					Iterator<Entry<Attribute, AttributeModifier>> i = modifiers.entries().iterator();
-					while(i.hasNext()) {
-						Entry<Attribute, AttributeModifier> entry = i.next();
-						ChatUtils.sendWarning("Possible conflict: " + entry.getKey().name() + " with modifier " + entry.getValue().toString() + ".");
+					if(tries <= 100) {
+						ChatUtils.sendWarning("This shouldn't happen - It found a unique ID??");
+						ChatUtils.sendWarning("Illegal Argument Exception when processing Attributes: ");
+						ChatUtils.sendWarning("Issue with adding " + next.getKey().name() + " with modifier " + next.getValue().toString() + " to item.");
+						Multimap<Attribute, AttributeModifier> modifiers = combinedMeta.getAttributeModifiers();
+						Iterator<Entry<Attribute, AttributeModifier>> i = modifiers.entries().iterator();
+						while(i.hasNext()) {
+							Entry<Attribute, AttributeModifier> entry = i.next();
+							ChatUtils.sendWarning("Possible conflict: " + entry.getKey().name() + " with modifier " + entry.getValue().toString() + ".");
+						}
 					}
 				}
 			}
@@ -154,6 +167,20 @@ public class ItemUtils {
 		combined = Enchantments.addEnchantmentsToItem(combined, enchantments);
 		
 		return combined;
+	}
+	
+	private static boolean containsAttribute(UUID uuid, Multimap<Attribute, AttributeModifier> modifiers) {
+		if(modifiers == null || modifiers.size() == 0 || modifiers.entries() == null) return false;
+		Iterator<Entry<Attribute, AttributeModifier>> iterator = modifiers.entries().iterator();
+		
+		while(iterator.hasNext()) {
+			Entry<Attribute, AttributeModifier> next = iterator.next();
+			if(next.getValue().getUniqueId().equals(uuid)) {
+				return true;
+			}
+		}
+		
+		return false;
 	}
 	
 	public static void giveItemToPlayer(Player player, ItemStack item, Location fallback, boolean statistic) {
