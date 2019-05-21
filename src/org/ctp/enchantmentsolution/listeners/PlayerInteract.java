@@ -18,7 +18,8 @@ import org.ctp.enchantmentsolution.nms.playerinteract.PlayerInteract_v1_14;
 import org.ctp.enchantmentsolution.utils.AnvilUtils;
 
 public class PlayerInteract implements Listener{
-	
+
+	@SuppressWarnings("deprecation")
 	@EventHandler
 	public void onPlayerInteract(PlayerInteractEvent event){
 		if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {

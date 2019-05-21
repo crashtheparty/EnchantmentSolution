@@ -22,29 +22,50 @@ import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
 import org.ctp.enchantmentsolution.utils.items.DamageUtils;
 import org.ctp.enchantmentsolution.utils.items.nms.fortune.Fortune_v1_13;
+import org.ctp.enchantmentsolution.utils.items.nms.fortune.Fortune_v1_14;
 import org.ctp.enchantmentsolution.utils.items.nms.silktouch.SilkTouch_v1_13;
+import org.ctp.enchantmentsolution.utils.items.nms.silktouch.SilkTouch_v1_14;
 import org.ctp.enchantmentsolution.utils.items.nms.smeltery.Smeltery_v1_13;
+import org.ctp.enchantmentsolution.utils.items.nms.smeltery.Smeltery_v1_14;
 
 public class AbilityUtils {
 	
 	public static ItemStack getSmelteryItem(Block block, ItemStack item) {
-		if(EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber() < 4) {
+		switch(EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber()) {
+		case 1:
+		case 2:
+		case 3:
 			return Smeltery_v1_13.getSmelteryItem(block, item);
+		case 4:
+		case 5:
+			return Smeltery_v1_14.getSmelteryItem(block, item);
 		}
 		return null;
 	}
 	
 	public static ItemStack getSilkTouchItem(Block block, ItemStack item){
-		if(EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber() < 4) {
+		switch(EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber()) {
+		case 1:
+		case 2:
+		case 3:
 			return SilkTouch_v1_13.getSilkTouchItem(block, item);
+		case 4:
+		case 5:
+			return SilkTouch_v1_14.getSilkTouchItem(block, item);
 		}
 		return null;
 	}
 
 	public static Collection<ItemStack> getFortuneItems(ItemStack item,
 			Block brokenBlock, Collection<ItemStack> priorItems) {
-		if(EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber() < 4) {
+		switch(EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber()) {
+		case 1:
+		case 2:
+		case 3:
 			return Fortune_v1_13.getFortuneItems(item, brokenBlock, priorItems);
+		case 4:
+		case 5:
+			return Fortune_v1_14.getFortuneItems(item, brokenBlock, priorItems);
 		}
 		return null;
 	}

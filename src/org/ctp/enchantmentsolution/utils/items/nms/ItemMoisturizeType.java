@@ -15,6 +15,7 @@ public interface ItemMoisturizeType {
 		case 3:
 			return Moisturize_v1_13.getMoisturizeType(type);
 		case 4:
+		case 5:
 			return Moisturize_v1_14.getMoisturizeType(type);
 		}
 		return null;
@@ -27,6 +28,7 @@ public interface ItemMoisturizeType {
 		case 3:
 			return Moisturize_v1_13.getUnsmelt(type);
 		case 4:
+		case 5:
 			return Moisturize_v1_14.getUnsmelt(type);
 		}
 		return null;
@@ -39,6 +41,7 @@ public interface ItemMoisturizeType {
 		case 3:
 			return Moisturize_v1_13.getWet(type);
 		case 4:
+		case 5:
 			return Moisturize_v1_14.getWet(type);
 		}
 		return null;

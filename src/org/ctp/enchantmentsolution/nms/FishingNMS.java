@@ -15,6 +15,7 @@ public class FishingNMS {
 		case 3:
 			return Fishing_v1_13_R2.enchantItem(i);
 		case 4:
+		case 5:
 			return Fishing_v1_14_R1.enchantItem(i);
 		}
 		return i;

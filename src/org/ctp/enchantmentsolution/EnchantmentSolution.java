@@ -213,9 +213,16 @@ public class EnchantmentSolution extends JavaPlugin {
 
 	public void onDisable() {
 		if(bukkitVersion.isVersionAllowed() && !disable) {
-			SaveUtils.setAbilityData();
-		
-			resetInventories();
+			try {
+				resetInventories();
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+			try {
+				SaveUtils.setAbilityData();
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
 		}
 	}
 	

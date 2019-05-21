@@ -23,7 +23,7 @@ public class GoldDigger extends CustomEnchantment{
 		setDefaultThirtyStartLevel(1);
 		setDefaultFiftyMaxLevel(6);
 		setDefaultThirtyMaxLevel(5);
-		setDefaultWeight(Weight.COMMON);
+		setDefaultWeight(Weight.UNCOMMON);
 		addDefaultDescription("Earn experience and gold nuggets for breaking crops.");
 		addDefaultDescription(Language.GERMAN, "Sammeln Sie Erfahrung und Gold-Nuggets für das Ernten.");
 	}
@@ -40,7 +40,7 @@ public class GoldDigger extends CustomEnchantment{
 	
 	@Override
 	protected List<ItemType> getEnchantmentItemTypes() {
-		return Arrays.asList(ItemType.BOOK);
+		return Arrays.asList(ItemType.HOES);
 	}
 
 	@Override
