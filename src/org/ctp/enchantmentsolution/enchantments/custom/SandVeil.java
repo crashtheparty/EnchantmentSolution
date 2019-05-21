@@ -40,7 +40,7 @@ public class SandVeil extends CustomEnchantment{
 	
 	@Override
 	protected List<ItemType> getEnchantmentItemTypes() {
-		return Arrays.asList(ItemType.BOOK);
+		return Arrays.asList(ItemType.HOES);
 	}
 
 	@Override

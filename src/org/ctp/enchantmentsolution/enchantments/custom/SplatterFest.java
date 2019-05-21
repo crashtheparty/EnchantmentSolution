@@ -41,7 +41,7 @@ public class SplatterFest extends CustomEnchantment{
 	
 	@Override
 	protected List<ItemType> getEnchantmentItemTypes() {
-		return Arrays.asList(ItemType.BOOK);
+		return Arrays.asList(ItemType.HOES);
 	}
 
 	@Override
