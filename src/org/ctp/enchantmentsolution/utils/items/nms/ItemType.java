@@ -150,6 +150,7 @@ public enum ItemType{
 			return ItemType_v1_13.getItemTypes(type);
 		case 4:
 		case 5:
+		case 6:
 			return ItemType_v1_14.getItemTypes(type);
 		}
 		return null;

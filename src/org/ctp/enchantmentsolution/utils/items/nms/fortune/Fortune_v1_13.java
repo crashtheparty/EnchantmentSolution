@@ -6,14 +6,11 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-import org.bukkit.CropState;
 import org.bukkit.Material;
-import org.bukkit.NetherWartsState;
 import org.bukkit.block.Block;
+import org.bukkit.block.data.Ageable;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.material.Crops;
-import org.bukkit.material.NetherWarts;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
 import org.ctp.enchantmentsolution.utils.items.nms.AbilityUtils;
@@ -27,6 +24,8 @@ public class Fortune_v1_13 {
 			Material.MELON, Material.NETHER_WART, Material.BEETROOTS, 
 			Material.GRASS, Material.GRAVEL, Material.JUNGLE_LEAVES, Material.OAK_LEAVES,
 			Material.DARK_OAK_LEAVES, Material.ACACIA_LEAVES, Material.BIRCH_LEAVES, Material.SPRUCE_LEAVES);
+	private static List<Material> CROPS = Arrays.asList(Material.WHEAT, Material.CARROTS, Material.POTATOES, Material.NETHER_WART, 
+			Material.BEETROOTS, Material.COCOA_BEANS);
 
 	public static Collection<ItemStack> getFortuneItems(ItemStack item,
 			Block brokenBlock, Collection<ItemStack> priorItems) {
@@ -123,7 +122,7 @@ public class Fortune_v1_13 {
 					}
 				}
 			}
-		} else if (Arrays.asList(Material.REDSTONE_ORE, Material.WHEAT,
+		} else if (Arrays.asList(Material.REDSTONE_ORE, Material.WHEAT, Material.COCOA_BEANS,
 				Material.BEETROOTS, Material.CARROTS, Material.POTATOES,
 				Material.NETHER_WART, Material.SEA_LANTERN, Material.MELON, Material.GLOWSTONE, Material.GRASS).contains(
 				brokenBlock.getType())) {
@@ -132,16 +131,13 @@ public class Fortune_v1_13 {
 			int min = 0;
 			int max = 0;
 			int actualMax = 0;
-			if(brokenBlock.getState().getData() instanceof Crops) {
-				Crops c = (Crops) brokenBlock.getState().getData();
-	            if(!c.getState().equals(CropState.RIPE)) {
-	            	return priorItems;
-	            }
-			} else if(brokenBlock.getState().getData() instanceof NetherWarts) {
-				NetherWarts c = (NetherWarts) brokenBlock.getState().getData();
-	            if(!c.getState().equals(NetherWartsState.RIPE)) {
-	            	return priorItems;
-	            }
+			if(brokenBlock.getBlockData() instanceof Ageable) {
+				Ageable age = (Ageable) brokenBlock.getBlockData();
+				if(CROPS.contains(brokenBlock.getType())) {
+					if(age.getAge() != age.getMaximumAge()) {
+						return priorItems;
+					}
+				}
 			}
 			Material breakBlock = null;
 			switch(brokenBlock.getType()){

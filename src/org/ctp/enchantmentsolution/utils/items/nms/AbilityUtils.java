@@ -1,22 +1,20 @@
 package org.ctp.enchantmentsolution.utils.items.nms;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import org.bukkit.CropState;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.NetherWartsState;
 import org.bukkit.block.Block;
+import org.bukkit.block.data.Ageable;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.ExperienceOrb;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
-import org.bukkit.material.Crops;
-import org.bukkit.material.NetherWarts;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
@@ -30,6 +28,9 @@ import org.ctp.enchantmentsolution.utils.items.nms.smeltery.Smeltery_v1_14;
 
 public class AbilityUtils {
 	
+	private static List<Material> CROPS = Arrays.asList(Material.WHEAT, Material.CARROTS, Material.POTATOES, Material.NETHER_WART, 
+			Material.BEETROOTS, Material.COCOA_BEANS);
+	
 	public static ItemStack getSmelteryItem(Block block, ItemStack item) {
 		switch(EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber()) {
 		case 1:
@@ -38,6 +39,7 @@ public class AbilityUtils {
 			return Smeltery_v1_13.getSmelteryItem(block, item);
 		case 4:
 		case 5:
+		case 6:
 			return Smeltery_v1_14.getSmelteryItem(block, item);
 		}
 		return null;
@@ -51,6 +53,7 @@ public class AbilityUtils {
 			return SilkTouch_v1_13.getSilkTouchItem(block, item);
 		case 4:
 		case 5:
+		case 6:
 			return SilkTouch_v1_14.getSilkTouchItem(block, item);
 		}
 		return null;
@@ -65,6 +68,7 @@ public class AbilityUtils {
 			return Fortune_v1_13.getFortuneItems(item, brokenBlock, priorItems);
 		case 4:
 		case 5:
+		case 6:
 			return Fortune_v1_14.getFortuneItems(item, brokenBlock, priorItems);
 		}
 		return null;
@@ -72,17 +76,16 @@ public class AbilityUtils {
 	
 	public static ItemStack getGoldDiggerItems(ItemStack item,
 			Block brokenBlock) {
-		
-		if(brokenBlock.getState().getData() instanceof Crops) {
-			Crops c = (Crops) brokenBlock.getState().getData();
-            if(!c.getState().equals(CropState.RIPE)) {
-            	return null;
-            }
-		} else if(brokenBlock.getState().getData() instanceof NetherWarts) {
-			NetherWarts c = (NetherWarts) brokenBlock.getState().getData();
-            if(!c.getState().equals(NetherWartsState.RIPE)) {
-            	return null;
-            }
+
+		if(brokenBlock.getBlockData() instanceof Ageable) {
+			Ageable age = (Ageable) brokenBlock.getBlockData();
+			if(CROPS.contains(brokenBlock.getType())) {
+				if(age.getAge() != age.getMaximumAge()) {
+					return null;
+				}
+			} else {
+				return null;
+			}
 		} else {
 			return null;
 		}
