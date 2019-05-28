@@ -20,6 +20,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.util.Vector;
+import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.enchantments.helper.PlayerLevels;
@@ -122,40 +123,38 @@ public class ItemUtils {
 		
 		combinedMeta.setDisplayName(firstMeta.getDisplayName());
 		combinedMeta.setLore(firstMeta.getLore());
-		if(firstMeta.getAttributeModifiers() != null && !firstMeta.getAttributeModifiers().isEmpty()) {
-			Iterator<Map.Entry<Attribute, AttributeModifier>> iterator = firstMeta.getAttributeModifiers().entries().iterator();
-			while(iterator.hasNext()) {
-				Entry<Attribute, AttributeModifier> next = iterator.next();
-				
-				if (next.getKey() == null || next.getValue() == null) {
-				    iterator.remove();
-				    continue;
-				}
-				Attribute attribute = Attribute.valueOf(next.getKey().name());
-				UUID uuid = UUID.randomUUID();
-				int tries = 0;
-				ChatUtils.sendInfo("Checking uuid - " + uuid.toString());
-				while(containsAttribute(uuid, combinedMeta.getAttributeModifiers()) && tries <= 100) {
-					ChatUtils.sendInfo(uuid + " was bad - Try next uuid");
-					uuid = UUID.randomUUID();
-					ChatUtils.sendInfo("Checking uuid - " + uuid.toString());
-					tries++;
-				}
-				ChatUtils.sendInfo("Found good uuid that should be unique - " + uuid.toString());
-				AttributeModifier modifier = new AttributeModifier(uuid, 
-						next.getValue().getName(), next.getValue().getAmount(), next.getValue().getOperation(), next.getValue().getSlot());
-				try {
-					combinedMeta.addAttributeModifier(attribute, modifier);
-				} catch (IllegalArgumentException ex) {
-					if(tries <= 100) {
-						ChatUtils.sendWarning("This shouldn't happen - It found a unique ID??");
-						ChatUtils.sendWarning("Illegal Argument Exception when processing Attributes: ");
-						ChatUtils.sendWarning("Issue with adding " + next.getKey().name() + " with modifier " + next.getValue().toString() + " to item.");
-						Multimap<Attribute, AttributeModifier> modifiers = combinedMeta.getAttributeModifiers();
-						Iterator<Entry<Attribute, AttributeModifier>> i = modifiers.entries().iterator();
-						while(i.hasNext()) {
-							Entry<Attribute, AttributeModifier> entry = i.next();
-							ChatUtils.sendWarning("Possible conflict: " + entry.getKey().name() + " with modifier " + entry.getValue().toString() + ".");
+		if(EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber() > 1) {
+			if(firstMeta.getAttributeModifiers() != null && !firstMeta.getAttributeModifiers().isEmpty()) {
+				Iterator<Map.Entry<Attribute, AttributeModifier>> iterator = firstMeta.getAttributeModifiers().entries().iterator();
+				while(iterator.hasNext()) {
+					Entry<Attribute, AttributeModifier> next = iterator.next();
+					
+					if (next.getKey() == null || next.getValue() == null) {
+					    iterator.remove();
+					    continue;
+					}
+					Attribute attribute = Attribute.valueOf(next.getKey().name());
+					UUID uuid = UUID.randomUUID();
+					int tries = 0;
+					while(containsAttribute(uuid, combinedMeta.getAttributeModifiers()) && tries <= 100) {
+						uuid = UUID.randomUUID();
+						tries++;
+					}
+					AttributeModifier modifier = new AttributeModifier(uuid, 
+							next.getValue().getName(), next.getValue().getAmount(), next.getValue().getOperation(), next.getValue().getSlot());
+					try {
+						combinedMeta.addAttributeModifier(attribute, modifier);
+					} catch (IllegalArgumentException ex) {
+						if(tries <= 100) {
+							ChatUtils.sendWarning("This shouldn't happen - It found a unique ID??");
+							ChatUtils.sendWarning("Illegal Argument Exception when processing Attributes: ");
+							ChatUtils.sendWarning("Issue with adding " + next.getKey().name() + " with modifier " + next.getValue().toString() + " to item.");
+							Multimap<Attribute, AttributeModifier> modifiers = combinedMeta.getAttributeModifiers();
+							Iterator<Entry<Attribute, AttributeModifier>> i = modifiers.entries().iterator();
+							while(i.hasNext()) {
+								Entry<Attribute, AttributeModifier> entry = i.next();
+								ChatUtils.sendWarning("Possible conflict: " + entry.getKey().name() + " with modifier " + entry.getValue().toString() + ".");
+							}
 						}
 					}
 				}

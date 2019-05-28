@@ -16,6 +16,7 @@ public class FlowerGiftNMS {
 			return FlowerGiftChance_v1_13.isItem(material);
 		case 4:
 		case 5:
+		case 6:
 			return FlowerGiftChance_v1_14.isItem(material);
 		}
 		return false;
@@ -29,6 +30,7 @@ public class FlowerGiftNMS {
 			return FlowerGiftChance_v1_13.getItem(material);
 		case 4:
 		case 5:
+		case 6:
 			return FlowerGiftChance_v1_14.getItem(material);
 		}
 		return null;
