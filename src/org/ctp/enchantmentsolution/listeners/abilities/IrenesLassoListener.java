@@ -2,8 +2,10 @@ package org.ctp.enchantmentsolution.listeners.abilities;
 
 import java.util.List;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Statistic;
+import org.bukkit.advancement.AdvancementProgress;
 import org.bukkit.entity.Animals;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -15,6 +17,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
 import org.ctp.enchantmentsolution.nms.McMMO;
@@ -43,9 +46,23 @@ public class IrenesLassoListener extends EnchantmentListener{
 				}
 				if(current >= max) return;
 				if(attacked instanceof Tameable) {
-					if(!((Tameable) attacked).getOwner().getUniqueId().equals(player.getUniqueId())) {
+					if(((Tameable) attacked).getOwner() != null && !((Tameable) attacked).getOwner().getUniqueId().equals(player.getUniqueId())) {
 						ChatUtils.sendMessage(player, "This animal does not belong to you!");
 						return;
+					}
+					String type = attacked.getType().name().toLowerCase();
+					AdvancementProgress progress = player.getAdvancementProgress(
+							Bukkit.getAdvancement(ESAdvancement.THORGY.getNamespace()));
+					if(progress.getRemainingCriteria().contains(type)) {
+						progress.awardCriteria(type);
+					}
+					AdvancementProgress progress2 = player.getAdvancementProgress(
+							Bukkit.getAdvancement(ESAdvancement.FREE_PETS.getNamespace()));
+					for(String criteria : progress2.getRemainingCriteria()) {
+						ChatUtils.sendMessage(player, type + " " + criteria);
+					}
+					if(progress2.getRemainingCriteria().contains(type)) {
+						progress2.awardCriteria(type);
 					}
 				}
 				McMMO.customName(attacked);

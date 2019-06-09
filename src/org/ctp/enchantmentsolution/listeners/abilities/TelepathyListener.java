@@ -1,5 +1,6 @@
 package org.ctp.enchantmentsolution.listeners.abilities;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 
@@ -21,6 +22,7 @@ import org.bukkit.inventory.meta.BlockStateMeta;
 import org.bukkit.metadata.MetadataValue;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
+import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.nms.McMMO;
 import org.ctp.enchantmentsolution.utils.items.nms.AbilityUtils;
 import org.ctp.enchantmentsolution.utils.items.nms.ItemBreakType;
@@ -53,6 +55,10 @@ public class TelepathyListener extends EnchantmentListener {
 								}
 							}
 							drop.setItemMeta(im);
+							if(block.getMetadata("soulbound").size() > 0) {
+								drop = Enchantments.addEnchantmentsToItem(drop, Arrays.asList(
+										new EnchantmentLevel(DefaultEnchantments.getCustomEnchantment(DefaultEnchantments.SOULBOUND), 1)));
+							}
 							ItemUtils.giveItemToPlayer(player, drop, player.getLocation(), true);
 							i.remove();
 						}
@@ -70,7 +76,7 @@ public class TelepathyListener extends EnchantmentListener {
 					if(container.getInventory().getHolder() instanceof DoubleChest) {
 						DoubleChest doubleChest = (DoubleChest) container.getInventory().getHolder();
 						if (doubleChest.getLeftSide().getInventory().getLocation().equals(container.getLocation())) {
-							Inventory inv = doubleChest.getRightSide().getInventory();
+							Inventory inv = doubleChest.getLeftSide().getInventory();
 							for(int j = 0; j < 27; j++) {
 								ItemStack drop = inv.getItem(j);
 								if(drop != null) {

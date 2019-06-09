@@ -147,7 +147,7 @@ public class AnimalMob {
 		config.set("animals." + i + ".armor", getArmor() != null ? ItemSerialization.itemToString(getArmor()) : null);
 		
 		for(int k = 2; k < 17; k++) {
-			if(inventoryItems.get(k) != null) {
+			if(inventoryItems != null && inventoryItems.get(k) != null) {
 				config.set("animals." + i + ".inventory_items." + k, ItemSerialization.itemToString(inventoryItems.get(k)));
 			}
 		}

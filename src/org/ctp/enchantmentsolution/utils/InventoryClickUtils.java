@@ -2,12 +2,18 @@ package org.ctp.enchantmentsolution.utils;
 
 import java.util.List;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
+import org.bukkit.event.inventory.InventoryAction;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.event.inventory.InventoryType.SlotType;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
@@ -17,6 +23,7 @@ import org.ctp.enchantmentsolution.inventory.EnchantmentTable;
 import org.ctp.enchantmentsolution.inventory.Grindstone;
 import org.ctp.enchantmentsolution.inventory.ConfigInventory.Screen;
 import org.ctp.enchantmentsolution.nms.Anvil_GUI_NMS;
+import org.ctp.enchantmentsolution.nms.anvil.InventoryAnvil;
 import org.ctp.enchantmentsolution.utils.config.YamlConfigBackup;
 import org.ctp.enchantmentsolution.utils.config.YamlInfo;
 import org.ctp.enchantmentsolution.utils.items.ItemUtils;
@@ -79,6 +86,13 @@ public class InventoryClickUtils {
 				replace = item.clone();
 				replace.setAmount(replace.getAmount() - 1);
 				item.setAmount(1);
+			}
+			if(slot == -200) {
+				InventoryAnvil eventAnvil = new InventoryAnvil(player, anvil.getBlock());
+				eventAnvil.setContents(anvil.getItems().toArray(new ItemStack[2]));
+				InventoryClickEvent event = new InventoryClickEvent(setView(player, eventAnvil), SlotType.CONTAINER, slot, ClickType.LEFT, 
+						InventoryAction.MOVE_TO_OTHER_INVENTORY);
+				Bukkit.getServer().getPluginManager().callEvent(event);
 			}
 			if (anvil.addItem(item)) {
 				anvil.setInventory();
@@ -553,5 +567,34 @@ public class InventoryClickUtils {
 				}
 			}
 		}
+	}
+	
+	private static InventoryView setView(Player player, Inventory inventory) {
+		return new InventoryView() {
+	        @Override
+	        public Inventory getTopInventory() {
+	            return inventory;
+	        }
+	
+	        @Override
+	        public Inventory getBottomInventory() {
+	            return player.getInventory();
+	        }
+	
+	        @Override
+	        public HumanEntity getPlayer() {
+	            return player;
+	        }
+	
+	        @Override
+	        public InventoryType getType() {
+	            return inventory.getType();
+	        }
+
+			@Override
+			public String getTitle() {
+				return ChatUtils.getMessage(ChatUtils.getCodes(), "anvil.name");
+			}
+	    };
 	}
 }

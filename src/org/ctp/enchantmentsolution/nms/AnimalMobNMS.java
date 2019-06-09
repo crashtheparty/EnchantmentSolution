@@ -40,5 +40,4 @@ public class AnimalMobNMS {
 		}
 		return null;
 	}
-	
 }

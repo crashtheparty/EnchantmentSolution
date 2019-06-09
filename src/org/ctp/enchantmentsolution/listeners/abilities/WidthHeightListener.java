@@ -1,12 +1,15 @@
 package org.ctp.enchantmentsolution.listeners.abilities;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.Statistic;
+import org.bukkit.advancement.AdvancementProgress;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.type.Snow;
 import org.bukkit.enchantments.Enchantment;
@@ -17,6 +20,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
+import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
 import org.ctp.enchantmentsolution.nms.McMMO;
@@ -82,6 +86,7 @@ public class WidthHeightListener extends EnchantmentListener{
 			if(hasWidthHeight && ItemBreakType.getType(item.getType()) != null && ItemBreakType.getType(item.getType()).getBreakTypes() != null 
 					&& ItemBreakType.getType(item.getType()).getBreakTypes().contains(original)) {
 				int start = 1;
+				int blocksBroken = 0;
 				while(start <= xt || start <= yt || start <= zt) {
 					int xBegin = start;
 					int yBegin = start;
@@ -147,6 +152,7 @@ public class WidthHeightListener extends EnchantmentListener{
 														new ItemStack(Material.SNOWBALL, num));
 												droppedItem.setVelocity(new Vector(0,0,0));
 											}
+											blocksBroken ++;
 											player.incrementStatistic(Statistic.MINE_BLOCK, event.getBlock().getType());
 											player.incrementStatistic(Statistic.USE_ITEM, item.getType());
 											newEvent.getBlock().breakNaturally(item);
@@ -160,6 +166,23 @@ public class WidthHeightListener extends EnchantmentListener{
 					}
 					start ++;
 				}
+				final int broken = blocksBroken;
+				Bukkit.getScheduler().runTaskLater(EnchantmentSolution.getPlugin(), new Runnable() {
+					@Override
+					public void run() {
+						int blocksBroken = broken;
+						AdvancementProgress progress = player.getAdvancementProgress(Bukkit.getAdvancement(new NamespacedKey(EnchantmentSolution.getPlugin(), "enchantments/over_9000")));
+						if(progress.getRemainingCriteria().size() > 0) {
+							Iterator<String> iterator = progress.getRemainingCriteria().iterator();
+							while(iterator.hasNext() && blocksBroken > 0) {
+								String s = iterator.next();
+								progress.awardCriteria(s);
+								blocksBroken --;
+							}
+						}
+					}
+					
+				}, 1l);
 			}
 		}
 	}

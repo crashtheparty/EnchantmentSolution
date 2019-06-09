@@ -176,4 +176,16 @@ public class ConfigUtils {
 		return false;
 	}
 
+	public static boolean isAdvancementActive(String string) {
+		return EnchantmentSolution.getPlugin().getConfigFiles().getDefaultConfig().getBoolean("advancements." + string);
+	}
+
+	public static String getAdvancementName(String string) {
+		return EnchantmentSolution.getPlugin().getConfigFiles().getLanguageFile().getString("advancements." + string + ".name");
+	}
+
+	public static String getAdvancementDescription(String string) {
+		return EnchantmentSolution.getPlugin().getConfigFiles().getLanguageFile().getString("advancements." + string + ".description");
+	}
+
 }

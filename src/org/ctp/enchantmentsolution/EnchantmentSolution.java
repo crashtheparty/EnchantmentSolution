@@ -14,12 +14,15 @@ import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.inventory.InventoryData;
 import org.ctp.enchantmentsolution.listeners.*;
 import org.ctp.enchantmentsolution.listeners.abilities.*;
+import org.ctp.enchantmentsolution.listeners.advancements.AdvancementEntityDeath;
+import org.ctp.enchantmentsolution.listeners.advancements.AdvancementThread;
 import org.ctp.enchantmentsolution.listeners.chestloot.ChestLootListener;
 import org.ctp.enchantmentsolution.listeners.fishing.EnchantsFishingListener;
 import org.ctp.enchantmentsolution.listeners.fishing.McMMOFishingNMS;
 import org.ctp.enchantmentsolution.listeners.legacy.UpdateEnchantments;
 import org.ctp.enchantmentsolution.listeners.mobs.MobSpawning;
 import org.ctp.enchantmentsolution.nms.McMMO;
+import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.save.ConfigFiles;
 import org.ctp.enchantmentsolution.utils.save.SaveUtils;
@@ -39,6 +42,8 @@ public class EnchantmentSolution extends JavaPlugin {
 	private Plugin jobsReborn;
 	private ConfigFiles files;
 	private VersionCheck check;
+	@SuppressWarnings("unused")
+	private AdvancementUtils advancementUtils;
 
 	public void onEnable() {
 		PLUGIN = this;
@@ -124,6 +129,7 @@ public class EnchantmentSolution extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new ChatMessage(), this);
 		getServer().getPluginManager().registerEvents(new BlockListener(), this);
 		getServer().getPluginManager().registerEvents(new UpdateEnchantments(), this);
+		getServer().getPluginManager().registerEvents(new AdvancementEntityDeath(), this);
 		
 		if(Bukkit.getPluginManager().isPluginEnabled("Jobs")) {
 			jobsReborn = Bukkit.getPluginManager().getPlugin("Jobs");
@@ -190,6 +196,8 @@ public class EnchantmentSolution extends JavaPlugin {
 				new GungHoListener(), 1l, 1l);
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN,
 				new LifeListener(), 1l, 1l);
+		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN,
+				new AdvancementThread(), 1l, 1l);
 
 		getCommand("Enchant").setExecutor(new Enchant());
 		getCommand("Info").setExecutor(new EnchantInfo());
@@ -209,6 +217,9 @@ public class EnchantmentSolution extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(check, this);
 		checkVersion();
 		initialization = false;
+		
+		advancementUtils = new AdvancementUtils();
+		
 	}
 
 	public void onDisable() {
