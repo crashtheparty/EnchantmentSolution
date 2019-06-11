@@ -41,7 +41,7 @@ public class ItemUtils {
 			Material.CYAN_SHULKER_BOX, Material.GRAY_SHULKER_BOX, Material.GREEN_SHULKER_BOX, Material.LIGHT_BLUE_SHULKER_BOX, Material.LIME_SHULKER_BOX,
 			Material.MAGENTA_SHULKER_BOX, Material.ORANGE_SHULKER_BOX, Material.PINK_SHULKER_BOX, Material.PURPLE_SHULKER_BOX, Material.RED_SHULKER_BOX,
 			Material.LIGHT_GRAY_SHULKER_BOX, Material.WHITE_SHULKER_BOX, Material.YELLOW_SHULKER_BOX, Material.SHULKER_BOX);
-
+	
 	public static List<Material> getRepairMaterials() {
 		return REPAIR_MATERIALS;
 	}
@@ -201,6 +201,15 @@ public class ItemUtils {
 		if(amount > 0 && statistic) {
 			player.incrementStatistic(Statistic.PICKUP, item.getType(), amount);
 		}
+	}
+	
+	public static void dropItem(ItemStack item, Location loc) {
+		Location location = loc.clone();
+		Item droppedItem = location.getWorld().dropItem(
+				location,
+				item);
+		droppedItem.setVelocity(new Vector(0,0,0));
+		droppedItem.teleport(location);
 	}
 	
 	public static ItemStack addNMSEnchantment(ItemStack item, String type) {

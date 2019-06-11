@@ -16,6 +16,8 @@ import org.bukkit.entity.Panda.Gene;
 import org.bukkit.entity.Cat.Type;
 import org.bukkit.entity.Parrot.Variant;
 import org.bukkit.inventory.ItemStack;
+import org.ctp.enchantmentsolution.EnchantmentSolution;
+import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.config.YamlConfig;
 import org.ctp.enchantmentsolution.utils.items.ItemSerialization;
 
@@ -23,12 +25,14 @@ public class AnimalMob_v1_14_R1 extends AnimalMob{
 	
 	private Type catType;
 	private Gene pandaHiddenGene, pandaMainGene;
+	private DyeColor collarColor;
 	
 	public AnimalMob_v1_14_R1(Animals mob, ItemStack item) {
 		super(mob, item);
 		if(mob instanceof Cat) {
 			Cat cat = (Cat) mob;
 			setCatType(cat.getCatType());
+			setCollarColor(cat.getCollarColor());
 		}
 		if(mob instanceof Panda) {
 			Panda panda = (Panda) mob;
@@ -66,7 +70,9 @@ public class AnimalMob_v1_14_R1 extends AnimalMob{
 		try {
 			if(e instanceof Cat) {
 				Cat cat = (Cat) e;
+				ChatUtils.sendInfo("Edit Type: " + getCatType());
 				cat.setCatType(getCatType());
+				cat.setCollarColor(getCollarColor());
 			}
 			if(e instanceof Panda) {
 				Panda panda = (Panda) e;
@@ -82,6 +88,7 @@ public class AnimalMob_v1_14_R1 extends AnimalMob{
 		super.setConfig(config, i);
 
 		config.set("animals." + i + ".cat_type", getCatType() != null ? getCatType().name() : null);
+		config.set("animals." + i + ".collar_color", getCatType() != null ? getCollarColor().name() : null);
 		config.set("animals." + i + ".panda_main_gene", getPandaMainGene() != null ? getPandaMainGene().name() : null);
 		config.set("animals." + i + ".panda_hidden_gene", getPandaHiddenGene() != null ? getPandaHiddenGene().name() : null);
 	}
@@ -135,6 +142,9 @@ public class AnimalMob_v1_14_R1 extends AnimalMob{
 			((AnimalMob_v1_14_R1) mob).setPandaHiddenGene(Gene.valueOf(config.getString("animals." + i + ".panda_hidden_gene")));
 		} catch(Exception ex) {}
 		try {
+			((AnimalMob_v1_14_R1) mob).setCollarColor(DyeColor.valueOf(config.getString("animals." + i + ".collar_color")));
+		} catch(Exception ex) {}
+		try {
 			mob.setRabbitType(org.bukkit.entity.Rabbit.Type.valueOf(config.getString("animals." + i + ".rabbit_type")));
 		} catch(Exception ex) {}
 		try {
@@ -159,7 +169,15 @@ public class AnimalMob_v1_14_R1 extends AnimalMob{
 		for(String key : config.getConfigurationInfo("animals." + i)) {
 			config.removeKey(key);
 		}
-		ANIMALS.add(mob);
+		EnchantmentSolution.addAnimals(mob);
 		return mob;
+	}
+
+	public DyeColor getCollarColor() {
+		return collarColor;
+	}
+
+	public void setCollarColor(DyeColor collarColor) {
+		this.collarColor = collarColor;
 	}
 }

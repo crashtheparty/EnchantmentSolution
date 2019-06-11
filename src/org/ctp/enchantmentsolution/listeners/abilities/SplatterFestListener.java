@@ -16,11 +16,12 @@ public class SplatterFestListener extends EnchantmentListener{
 
 	@EventHandler
 	public void onPlayerInteract(PlayerInteractEvent event) {
-		if(!canRun(DefaultEnchantments.SPLATTER_FEST, event)) return;
 		if(event.getAction().equals(Action.LEFT_CLICK_AIR)) {
 			Player player = event.getPlayer();
 			ItemStack item = player.getInventory().getItemInMainHand();
 			if(Enchantments.hasEnchantment(item, DefaultEnchantments.SPLATTER_FEST)) {
+				event.setCancelled(false);
+				if(!canRun(DefaultEnchantments.SPLATTER_FEST, event)) return;
 				boolean removed = false;
 				if(player.getGameMode().equals(GameMode.CREATIVE)) removed = true;
 				for(int i = 0; i < player.getInventory().getSize(); i++) {

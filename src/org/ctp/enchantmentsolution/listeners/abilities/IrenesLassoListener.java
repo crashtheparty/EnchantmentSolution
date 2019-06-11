@@ -15,8 +15,10 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
+import org.ctp.enchantmentsolution.nms.AnimalMobNMS;
 import org.ctp.enchantmentsolution.nms.McMMO;
 import org.ctp.enchantmentsolution.nms.animalmob.AnimalMob;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
@@ -36,20 +38,20 @@ public class IrenesLassoListener extends EnchantmentListener{
 				event.setCancelled(true);
 				int max = Enchantments.getLevel(attackItem, DefaultEnchantments.IRENES_LASSO);
 				int current = 0;
-				for(AnimalMob animal : AnimalMob.ANIMALS) {
+				for(AnimalMob animal : EnchantmentSolution.getAnimals()) {
 					if((animal.getItem() != null && animal.getItem().equals(attackItem)) || StringUtils.getAnimalIDsFromItem(attackItem).contains(animal.getEntityID())) {
 						current ++;
 					}
 				}
 				if(current >= max) return;
 				if(attacked instanceof Tameable) {
-					if(!((Tameable) attacked).getOwner().getUniqueId().equals(player.getUniqueId())) {
+					if(((Tameable) attacked).getOwner() != null && !((Tameable) attacked).getOwner().getUniqueId().equals(player.getUniqueId())) {
 						ChatUtils.sendMessage(player, "This animal does not belong to you!");
 						return;
 					}
 				}
 				McMMO.customName(attacked);
-				AnimalMob.ANIMALS.add(new AnimalMob((Animals) attacked, attackItem));
+				EnchantmentSolution.addAnimals(AnimalMobNMS.getMob((Animals) attacked, attackItem));
 				attacked.remove();
 			}
 		}
@@ -69,7 +71,7 @@ public class IrenesLassoListener extends EnchantmentListener{
 				List<Integer> entityIDs = StringUtils.getAnimalIDsFromItem(item);
 				if(entityIDs.size() == 0) return;
 				int entityID = entityIDs.get(0);
-				for(AnimalMob animal : AnimalMob.ANIMALS) {
+				for(AnimalMob animal : EnchantmentSolution.getAnimals()) {
 					if((animal.getItem() != null && item.equals(animal.getItem())) || (entityIDs.size() > 0 && entityID == animal.getEntityID())) {
 						remove = animal;
 						Location loc = event.getClickedBlock().getRelative(event.getBlockFace()).getLocation().add(0.5, 0, 0.5);
@@ -82,7 +84,7 @@ public class IrenesLassoListener extends EnchantmentListener{
 					}
 				}
 				if(remove != null) {
-					AnimalMob.ANIMALS.remove(remove);
+					EnchantmentSolution.removeAnimals(remove);
 				}
 			}
 		}

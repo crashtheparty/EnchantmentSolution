@@ -1,8 +1,6 @@
 package org.ctp.enchantmentsolution.nms.animalmob;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -27,13 +25,13 @@ import org.bukkit.entity.Horse.Color;
 import org.bukkit.entity.Horse.Style;
 import org.bukkit.entity.Parrot.Variant;
 import org.bukkit.inventory.ItemStack;
+import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.utils.StringUtils;
 import org.ctp.enchantmentsolution.utils.config.YamlConfig;
 import org.ctp.enchantmentsolution.utils.items.ItemSerialization;
 
 public class AnimalMob {
 	
-	public static List<AnimalMob> ANIMALS = new ArrayList<AnimalMob>();
 	private EntityType mob;
 	private String name, owner;
 	private double health, jumpStrength, movementSpeed, maxHealth;
@@ -147,7 +145,7 @@ public class AnimalMob {
 		config.set("animals." + i + ".armor", getArmor() != null ? ItemSerialization.itemToString(getArmor()) : null);
 		
 		for(int k = 2; k < 17; k++) {
-			if(inventoryItems.get(k) != null) {
+			if(inventoryItems != null && inventoryItems.get(k) != null) {
 				config.set("animals." + i + ".inventory_items." + k, ItemSerialization.itemToString(inventoryItems.get(k)));
 			}
 		}
@@ -226,7 +224,7 @@ public class AnimalMob {
 	
 	private void generateID() {
 		int base = 100;
-		for(AnimalMob animal : ANIMALS) {
+		for(AnimalMob animal : EnchantmentSolution.getAnimals()) {
 			if(animal.getEntityID() > base) base = animal.getEntityID();
 		}
 		setEntityID(base + 1, true);

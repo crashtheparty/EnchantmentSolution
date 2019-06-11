@@ -14,6 +14,7 @@ import org.bukkit.entity.Horse.Style;
 import org.bukkit.entity.Ocelot.Type;
 import org.bukkit.entity.Parrot.Variant;
 import org.bukkit.inventory.ItemStack;
+import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.utils.config.YamlConfig;
 import org.ctp.enchantmentsolution.utils.items.ItemSerialization;
 
@@ -123,7 +124,7 @@ public class AnimalMob_v1_13_R2 extends AnimalMob{
 		for(String key : config.getConfigurationInfo("animals." + i)) {
 			config.removeKey(key);
 		}
-		ANIMALS.add(mob);
+		EnchantmentSolution.addAnimals(mob);
 		return mob;
 	}
 

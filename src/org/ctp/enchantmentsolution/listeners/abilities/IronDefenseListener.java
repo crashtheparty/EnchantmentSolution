@@ -35,13 +35,16 @@ public class IronDefenseListener extends EnchantmentListener{
 			if(Enchantments.hasEnchantment(shield, DefaultEnchantments.IRON_DEFENSE)){
 				int level = Enchantments.getLevel(shield, DefaultEnchantments.IRON_DEFENSE);
 				double percentage = .1 + .05 * level;
-				double damage = event.getDamage() * percentage;
-				event.setDamage(event.getDamage() - damage);
+				double originalDamage = event.getDamage();
+				double damage = originalDamage * percentage;
+				event.setDamage(originalDamage - damage);
 				int shieldDamage = (int) damage;
 				if(shieldDamage < damage) shieldDamage += 1;
 				super.damageItem(player, shield, shieldDamage);
 				if(player instanceof Player) {
-					((Player) player).incrementStatistic(Statistic.DAMAGE_BLOCKED_BY_SHIELD, (int) (damage * 10));
+					if((int) (damage * 10) > 0) {
+						((Player) player).incrementStatistic(Statistic.DAMAGE_BLOCKED_BY_SHIELD, (int) (damage * 10));
+					}
 				}
 			}
 		}

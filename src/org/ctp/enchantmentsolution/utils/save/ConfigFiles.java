@@ -131,7 +131,6 @@ public class ConfigFiles {
 		getEnchantmentConfig().setComments(getDefaultConfig().getBoolean("use_comments"));
 		getEnchantmentAdvancedConfig().setComments(getDefaultConfig().getBoolean("use_comments"));
 
-		DefaultEnchantments.setEnchantments();
 		updateEnchantments();
 		
 		getDefaultConfig().saveConfig();
@@ -140,6 +139,7 @@ public class ConfigFiles {
 		getEnchantmentAdvancedConfig().saveConfig();
 		
 		PlayerLevels.resetPlayerLevels();
+		DefaultEnchantments.setEnchantments();
 		loadLangFile(dataFolder);
 
 		EnchantmentSolution.getPlugin().getDb().updateConfig(getDefaultConfig());
@@ -256,6 +256,15 @@ public class ConfigFiles {
 		config.addDefault("loots.woodland_mansion.bookshelves", 10);
 		config.addDefault("loots.woodland_mansion.levels", 1);
 		config.addDefault("loots.woodland_mansion.treasure", true);
+		config.addDefault("loots.stronghold_library.bookshelves", 10);
+		config.addDefault("loots.stronghold_library.levels", 1);
+		config.addDefault("loots.stronghold_library.treasure", true);
+		config.addDefault("loots.stronghold_crossing.bookshelves", 10);
+		config.addDefault("loots.stronghold_crossing.levels", 1);
+		config.addDefault("loots.stronghold_crossing.treasure", true);
+		config.addDefault("loots.stronghold_corridor.bookshelves", 10);
+		config.addDefault("loots.stronghold_corridor.levels", 1);
+		config.addDefault("loots.stronghold_corridor.treasure", true);
 		config.addDefault("loots.underwater_ruin_big.bookshelves", 0);
 		config.addDefault("loots.underwater_ruin_big.levels", 0);
 		config.addDefault("loots.underwater_ruin_big.treasure", true);
@@ -269,7 +278,7 @@ public class ConfigFiles {
 		}
 		config.addDefault("use_comments", true, new String[] { "Show helpful comments in the config files" });
 		config.addDefault("get_latest_version", true, new String[] { "Check github for updates to the plugin" });
-
+		
 		if(EnchantmentSolution.getPlugin().isInitializing()) {
 			ChatUtils.sendInfo("Default config initialized!");
 		}
