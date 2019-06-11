@@ -19,11 +19,16 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
+import org.bukkit.inventory.meta.PotionMeta;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
+import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.enchantments.helper.PlayerLevels;
+import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.ConfigUtils;
 import org.ctp.enchantmentsolution.utils.AnvilUtils.RepairType;
@@ -42,8 +47,16 @@ public class ItemUtils {
 			Material.MAGENTA_SHULKER_BOX, Material.ORANGE_SHULKER_BOX, Material.PINK_SHULKER_BOX, Material.PURPLE_SHULKER_BOX, Material.RED_SHULKER_BOX,
 			Material.LIGHT_GRAY_SHULKER_BOX, Material.WHITE_SHULKER_BOX, Material.YELLOW_SHULKER_BOX, Material.SHULKER_BOX);
 
+	private static List<PotionEffectType> BAD_POTIONS = Arrays.asList(PotionEffectType.BLINDNESS, PotionEffectType.CONFUSION, PotionEffectType.HARM,
+			PotionEffectType.HUNGER, PotionEffectType.POISON, PotionEffectType.SLOW, PotionEffectType.SLOW_DIGGING, PotionEffectType.UNLUCK,
+			PotionEffectType.WEAKNESS, PotionEffectType.WITHER);
+	
 	public static List<Material> getRepairMaterials() {
 		return REPAIR_MATERIALS;
+	}
+	
+	public static List<PotionEffectType> getBadPotions(){
+		return BAD_POTIONS;
 	}
 	
 	public static List<String> getRepairMaterialsStrings(){
@@ -56,6 +69,22 @@ public class ItemUtils {
 			}
 		}
 		return names;
+	}
+	
+	public static void getSuspiciousStew(Player player, ItemStack item, PotionMeta meta) {
+		if(EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber() > 3) {
+			if(item.getType().equals(Material.SUSPICIOUS_STEW)) {
+				if(meta.hasCustomEffects()) {
+					for(PotionEffect effect : meta.getCustomEffects()) {
+						if(getBadPotions().contains(effect.getType())) {
+							AdvancementUtils.awardCriteria(player, ESAdvancement.THAT_FOOD_IS_FINE, "food");
+							break;
+						}
+					}
+				}
+			}
+		}
+		return;
 	}
 	
 	public static int repairItem(ItemStack first, ItemStack second) {
@@ -201,6 +230,15 @@ public class ItemUtils {
 		if(amount > 0 && statistic) {
 			player.incrementStatistic(Statistic.PICKUP, item.getType(), amount);
 		}
+	}
+	
+	public static void dropItem(ItemStack item, Location loc) {
+		Location location = loc.clone();
+		Item droppedItem = location.getWorld().dropItem(
+				location,
+				item);
+		droppedItem.setVelocity(new Vector(0,0,0));
+		droppedItem.teleport(location);
 	}
 	
 	public static ItemStack addNMSEnchantment(ItemStack item, String type) {

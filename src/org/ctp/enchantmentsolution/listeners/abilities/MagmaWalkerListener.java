@@ -6,6 +6,7 @@ import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World.Environment;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -18,8 +19,10 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
+import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
+import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 
 public class MagmaWalkerListener extends EnchantmentListener implements Runnable{
 	
@@ -50,9 +53,12 @@ public class MagmaWalkerListener extends EnchantmentListener implements Runnable
 							}
 							if((lava.getType().equals(Material.LEGACY_STATIONARY_LAVA) || lava.getType().equals(Material.LAVA)) && lava.getData() == 0){
 								lava.setMetadata("MagmaWalker", new FixedMetadataValue(EnchantmentSolution.getPlugin(), new Integer(4)));
-								lava.setType(Material.LEGACY_MAGMA);
+								lava.setType(Material.MAGMA_BLOCK);
 								MagmaWalkerListener.BLOCKS.add(lava);
-							}else if(lava.getType().equals(Material.LEGACY_MAGMA)){
+								if(lava.getWorld().getEnvironment() == Environment.THE_END) {
+									AdvancementUtils.awardCriteria(player, ESAdvancement.FLAME_KEEPER, "boots");
+								}
+							}else if(lava.getType().equals(Material.MAGMA_BLOCK)){
 								List<MetadataValue> values = lava.getMetadata("MagmaWalker");
 								if(values != null){
 									for(MetadataValue value : values){

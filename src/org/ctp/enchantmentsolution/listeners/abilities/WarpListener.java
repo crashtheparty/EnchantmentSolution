@@ -8,14 +8,18 @@ import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.World;
+import org.bukkit.entity.Enderman;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
+import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
+import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 
 public class WarpListener extends EnchantmentListener{
 	
@@ -61,6 +65,9 @@ public class WarpListener extends EnchantmentListener{
 					toTeleport.setYaw(player.getLocation().getYaw());
 					toTeleport.setPitch(player.getLocation().getPitch());
 					player.teleport(toTeleport);
+					if(player instanceof Player && event.getDamager() instanceof Enderman) {
+						AdvancementUtils.awardCriteria((Player) player, ESAdvancement.IM_YOU_BUT_SHORTER, "enderpearl"); 
+					}
 				}
 			}
 		}

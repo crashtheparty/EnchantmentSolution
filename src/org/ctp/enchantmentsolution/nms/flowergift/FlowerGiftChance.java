@@ -7,5 +7,5 @@ public interface FlowerGiftChance {
 	public Material getMaterial();
 
 	public double getChance();
-	
+		
 }

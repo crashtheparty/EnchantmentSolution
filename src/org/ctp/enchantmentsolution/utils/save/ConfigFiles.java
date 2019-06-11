@@ -9,6 +9,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
+import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.api.ApiEnchantmentWrapper;
 import org.ctp.enchantmentsolution.api.Language;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
@@ -17,6 +18,7 @@ import org.ctp.enchantmentsolution.enchantments.helper.PlayerLevels;
 import org.ctp.enchantmentsolution.enchantments.helper.Weight;
 import org.ctp.enchantmentsolution.enchantments.mcmmo.Fishing;
 import org.ctp.enchantmentsolution.enchantments.wrappers.CustomEnchantmentWrapper;
+import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.config.YamlConfig;
 import org.ctp.enchantmentsolution.utils.config.YamlConfigBackup;
@@ -160,6 +162,7 @@ public class ConfigFiles {
 		}
 
 		save();
+		AdvancementUtils.createAdvancements();
 	}
 
 	private void loadLangFile(File dataFolder) {
@@ -279,6 +282,14 @@ public class ConfigFiles {
 		config.addDefault("use_comments", true, new String[] { "Show helpful comments in the config files" });
 		config.addDefault("get_latest_version", true, new String[] { "Check github for updates to the plugin" });
 
+		for(ESAdvancement advancement : ESAdvancement.values()) {
+			if(advancement == ESAdvancement.ENCHANTMENT_SOLUTION) {
+				config.addDefault("enable_advancements." + advancement.getNamespace().getKey(), false);
+			} else if(advancement.getActivatedVersion() < EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber()) {
+				config.addDefault("enable_advancements." + advancement.getNamespace().getKey(), true);
+			}
+		}
+		
 		if(EnchantmentSolution.getPlugin().isInitializing()) {
 			ChatUtils.sendInfo("Default config initialized!");
 		}

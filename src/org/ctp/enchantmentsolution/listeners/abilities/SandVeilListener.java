@@ -13,8 +13,10 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
+import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
+import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 
 public class SandVeilListener extends EnchantmentListener{
 	
@@ -43,7 +45,8 @@ public class SandVeilListener extends EnchantmentListener{
 			double random = Math.random();
 			if(accuracy <= random) {
 				event.setCancelled(true);
-				event.getEntity().getWorld().spawnParticle(Particle.BLOCK_DUST, event.getEntity().getLocation(), 50, 0.2, 2, 0.2);
+				AdvancementUtils.awardCriteria(ea.getAttacker(), ESAdvancement.MISSED, "sand", 1);
+				event.getEntity().getWorld().spawnParticle(Particle.CLOUD, event.getEntity().getLocation(), 200, 0.2, 0.2, 0.2);
 			}
 		}
 		if(!event.isCancelled()) {
@@ -61,7 +64,7 @@ public class SandVeilListener extends EnchantmentListener{
 						}
 					}
 					if(ea == null) {
-						ea = new EntityAccuracy(entity, accuracy);
+						ea = new EntityAccuracy(player, entity, accuracy);
 						int scheduler = Bukkit.getScheduler().scheduleSyncRepeatingTask(EnchantmentSolution.getPlugin(), ea, 1l, 1l);
 						ea.setScheduler(scheduler);
 						ENTITIES.add(ea);
@@ -76,11 +79,13 @@ public class SandVeilListener extends EnchantmentListener{
 	
 	public class EntityAccuracy implements Runnable{
 		
+		private Player attacker;
 		private LivingEntity entity;
 		private double accuracy;
 		private int run, scheduler;
 		
-		public EntityAccuracy(LivingEntity entity, double accuracy) {
+		public EntityAccuracy(Player attacker, LivingEntity entity, double accuracy) {
+			this.setAttacker(attacker);
 			this.setEntity(entity);
 			this.setAccuracy(accuracy);
 			resetRun();
@@ -121,6 +126,14 @@ public class SandVeilListener extends EnchantmentListener{
 
 		public void setScheduler(int scheduler) {
 			this.scheduler = scheduler;
+		}
+
+		public Player getAttacker() {
+			return attacker;
+		}
+
+		public void setAttacker(Player attacker) {
+			this.attacker = attacker;
 		}
 	}
 

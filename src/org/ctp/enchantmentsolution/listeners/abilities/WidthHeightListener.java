@@ -1,15 +1,12 @@
 package org.ctp.enchantmentsolution.listeners.abilities;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
 import org.bukkit.Statistic;
-import org.bukkit.advancement.AdvancementProgress;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.type.Snow;
 import org.bukkit.enchantments.Enchantment;
@@ -20,10 +17,11 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
-import org.ctp.enchantmentsolution.EnchantmentSolution;
+import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
 import org.ctp.enchantmentsolution.nms.McMMO;
+import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.items.nms.AbilityUtils;
 import org.ctp.enchantmentsolution.utils.items.nms.ItemBreakType;
 
@@ -85,6 +83,7 @@ public class WidthHeightListener extends EnchantmentListener{
 			Material original = event.getBlock().getType();
 			if(hasWidthHeight && ItemBreakType.getType(item.getType()) != null && ItemBreakType.getType(item.getType()).getBreakTypes() != null 
 					&& ItemBreakType.getType(item.getType()).getBreakTypes().contains(original)) {
+				AdvancementUtils.awardCriteria(player, ESAdvancement.FAST_AND_FURIOUS, "diamond_pickaxe"); 
 				int start = 1;
 				int blocksBroken = 0;
 				while(start <= xt || start <= yt || start <= zt) {
@@ -166,23 +165,8 @@ public class WidthHeightListener extends EnchantmentListener{
 					}
 					start ++;
 				}
-				final int broken = blocksBroken;
-				Bukkit.getScheduler().runTaskLater(EnchantmentSolution.getPlugin(), new Runnable() {
-					@Override
-					public void run() {
-						int blocksBroken = broken;
-						AdvancementProgress progress = player.getAdvancementProgress(Bukkit.getAdvancement(new NamespacedKey(EnchantmentSolution.getPlugin(), "enchantments/over_9000")));
-						if(progress.getRemainingCriteria().size() > 0) {
-							Iterator<String> iterator = progress.getRemainingCriteria().iterator();
-							while(iterator.hasNext() && blocksBroken > 0) {
-								String s = iterator.next();
-								progress.awardCriteria(s);
-								blocksBroken --;
-							}
-						}
-					}
-					
-				}, 1l);
+
+				AdvancementUtils.awardCriteria(player, ESAdvancement.OVER_9000, "stone", blocksBroken); 
 			}
 		}
 	}

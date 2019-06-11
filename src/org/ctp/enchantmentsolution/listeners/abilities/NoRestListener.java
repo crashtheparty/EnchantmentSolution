@@ -7,8 +7,11 @@ import org.bukkit.Bukkit;
 import org.bukkit.Statistic;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
+import org.ctp.enchantmentsolution.utils.AdvancementUtils;
+import org.ctp.enchantmentsolution.utils.LocationUtils;
 
 public class NoRestListener implements Runnable {
 
@@ -33,6 +36,10 @@ public class NoRestListener implements Runnable {
 				ItemStack helmet = player.getInventory().getHelmet();
 				noRestPlayer.setHelmet(helmet);
 				if(noRestPlayer.hasNoRest()) {
+					if(noRestPlayer.isNewHelmet() && !LocationUtils.hasBlockAbove(player) && player.getStatistic(Statistic.TIME_SINCE_REST) > 72000
+							&& player.getWorld().getTime() > 12540 && player.getWorld().getTime() < 23459) {
+						AdvancementUtils.awardCriteria(player, ESAdvancement.COFFEE_BREAK, "coffee");
+					}
 					player.setStatistic(Statistic.TIME_SINCE_REST, 0);
 				}
 			}else {
@@ -54,6 +61,7 @@ public class NoRestListener implements Runnable {
 		
 		private Player player;
 		private ItemStack helmet;
+		private boolean newHelmet;
 		
 		public NoRestPlayer(Player player, ItemStack helmet) {
 			this.player = player;
@@ -69,6 +77,12 @@ public class NoRestListener implements Runnable {
 		}
 		
 		public void setHelmet(ItemStack helmet) {
+			if((helmet == null && this.helmet != null) || (this.helmet == null && helmet != null)
+					|| (this.helmet != null && helmet != null && !this.helmet.equals(helmet))) {
+				setNewHelmet(true);
+			} else {
+				setNewHelmet(false);
+			}
 			this.helmet = helmet;
 		}
 		
@@ -77,6 +91,14 @@ public class NoRestListener implements Runnable {
 				return false;
 			}
 			return Enchantments.hasEnchantment(helmet, DefaultEnchantments.NO_REST);
+		}
+
+		public boolean isNewHelmet() {
+			return newHelmet;
+		}
+
+		public void setNewHelmet(boolean newHelmet) {
+			this.newHelmet = newHelmet;
 		}
 		
 	}

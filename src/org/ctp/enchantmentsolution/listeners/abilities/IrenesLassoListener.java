@@ -2,10 +2,8 @@ package org.ctp.enchantmentsolution.listeners.abilities;
 
 import java.util.List;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Statistic;
-import org.bukkit.advancement.AdvancementProgress;
 import org.bukkit.entity.Animals;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -17,11 +15,14 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
+import org.ctp.enchantmentsolution.nms.AnimalMobNMS;
 import org.ctp.enchantmentsolution.nms.McMMO;
 import org.ctp.enchantmentsolution.nms.animalmob.AnimalMob;
+import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.StringUtils;
 
@@ -39,7 +40,7 @@ public class IrenesLassoListener extends EnchantmentListener{
 				event.setCancelled(true);
 				int max = Enchantments.getLevel(attackItem, DefaultEnchantments.IRENES_LASSO);
 				int current = 0;
-				for(AnimalMob animal : AnimalMob.ANIMALS) {
+				for(AnimalMob animal : EnchantmentSolution.getAnimals()) {
 					if((animal.getItem() != null && animal.getItem().equals(attackItem)) || StringUtils.getAnimalIDsFromItem(attackItem).contains(animal.getEntityID())) {
 						current ++;
 					}
@@ -51,22 +52,11 @@ public class IrenesLassoListener extends EnchantmentListener{
 						return;
 					}
 					String type = attacked.getType().name().toLowerCase();
-					AdvancementProgress progress = player.getAdvancementProgress(
-							Bukkit.getAdvancement(ESAdvancement.THORGY.getNamespace()));
-					if(progress.getRemainingCriteria().contains(type)) {
-						progress.awardCriteria(type);
-					}
-					AdvancementProgress progress2 = player.getAdvancementProgress(
-							Bukkit.getAdvancement(ESAdvancement.FREE_PETS.getNamespace()));
-					for(String criteria : progress2.getRemainingCriteria()) {
-						ChatUtils.sendMessage(player, type + " " + criteria);
-					}
-					if(progress2.getRemainingCriteria().contains(type)) {
-						progress2.awardCriteria(type);
-					}
+					AdvancementUtils.awardCriteria(player, ESAdvancement.THORGY, type);
+					AdvancementUtils.awardCriteria(player, ESAdvancement.FREE_PETS, type);
 				}
 				McMMO.customName(attacked);
-				AnimalMob.ANIMALS.add(new AnimalMob((Animals) attacked, attackItem));
+				EnchantmentSolution.addAnimals(AnimalMobNMS.getMob((Animals) attacked, attackItem));
 				attacked.remove();
 			}
 		}
@@ -86,7 +76,7 @@ public class IrenesLassoListener extends EnchantmentListener{
 				List<Integer> entityIDs = StringUtils.getAnimalIDsFromItem(item);
 				if(entityIDs.size() == 0) return;
 				int entityID = entityIDs.get(0);
-				for(AnimalMob animal : AnimalMob.ANIMALS) {
+				for(AnimalMob animal : EnchantmentSolution.getAnimals()) {
 					if((animal.getItem() != null && item.equals(animal.getItem())) || (entityIDs.size() > 0 && entityID == animal.getEntityID())) {
 						remove = animal;
 						Location loc = event.getClickedBlock().getRelative(event.getBlockFace()).getLocation().add(0.5, 0, 0.5);
@@ -99,7 +89,7 @@ public class IrenesLassoListener extends EnchantmentListener{
 					}
 				}
 				if(remove != null) {
-					AnimalMob.ANIMALS.remove(remove);
+					EnchantmentSolution.removeAnimals(remove);
 				}
 			}
 		}

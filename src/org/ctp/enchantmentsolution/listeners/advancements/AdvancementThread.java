@@ -1,12 +1,14 @@
 package org.ctp.enchantmentsolution.listeners.advancements;
 
 import org.bukkit.Bukkit;
-import org.bukkit.advancement.AdvancementProgress;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
+import org.ctp.enchantmentsolution.listeners.abilities.MagmaWalkerListener;
+import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 
 public class AdvancementThread implements Runnable{
 
@@ -21,9 +23,14 @@ public class AdvancementThread implements Runnable{
 				}
 			}
 			if(hasTank) {
-				AdvancementProgress progress = player.getAdvancementProgress(Bukkit.getAdvancement(ESAdvancement.PANZER_SOLDIER.getNamespace()));
-				if(!progress.isDone()) {
-					progress.awardCriteria("tank");
+				AdvancementUtils.awardCriteria(player, ESAdvancement.PANZER_SOLDIER, "tank");
+			}
+			if(player.getFireTicks() != 0 && player.getInventory().getBoots() != null) {
+				ItemStack boots = player.getInventory().getBoots();
+				if(Enchantments.hasEnchantment(boots, DefaultEnchantments.MAGMA_WALKER)) {
+					if(MagmaWalkerListener.BLOCKS.contains(player.getLocation().getBlock().getRelative(BlockFace.DOWN))) {
+						AdvancementUtils.awardCriteria(player, ESAdvancement.THIS_GIRL_IS_ON_FIRE, "lava");
+					}
 				}
 			}
 		}

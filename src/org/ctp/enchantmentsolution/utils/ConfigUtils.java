@@ -177,7 +177,7 @@ public class ConfigUtils {
 	}
 
 	public static boolean isAdvancementActive(String string) {
-		return EnchantmentSolution.getPlugin().getConfigFiles().getDefaultConfig().getBoolean("advancements." + string);
+		return EnchantmentSolution.getPlugin().getConfigFiles().getDefaultConfig().getBoolean("enable_advancements." + string);
 	}
 
 	public static String getAdvancementName(String string) {

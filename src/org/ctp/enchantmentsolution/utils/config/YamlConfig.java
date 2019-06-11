@@ -380,6 +380,14 @@ public class YamlConfig {
 		info.remove(path);
 	}
 
+	public void removeKeys(String path) {
+		List<String> strings = getLevelEntryKeys(path);
+		for(String string : strings) {
+			removeKeys(string);
+		}
+		info.remove(path);
+	}
+
 	public void set(String path, Object value) {
 		info.put(path, new YamlInfo(path, value));
 	}

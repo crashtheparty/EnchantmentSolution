@@ -2,10 +2,13 @@ package org.ctp.enchantmentsolution.listeners.abilities;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
+import org.bukkit.attribute.AttributeModifier;
+import org.bukkit.attribute.AttributeModifier.Operation;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
@@ -85,7 +88,11 @@ public class LifeListener implements Runnable{
 			if(!Enchantments.hasEnchantment(item, DefaultEnchantments.GUNG_HO) && Enchantments.hasEnchantment(item, DefaultEnchantments.LIFE)){
 				int level = Enchantments.getLevel(item, DefaultEnchantments.LIFE);
 				AttributeInstance a = player.getAttribute(Attribute.GENERIC_MAX_HEALTH);
-				a.setBaseValue(a.getBaseValue() + 4 * level);
+				AttributeModifier modifier = new AttributeModifier(UUID.fromString("eeeeeeee-fefe-fefe-fefe-000000000000"), "generic.maxHealth", 
+						4 * level, Operation.ADD_NUMBER);
+				if(!a.getModifiers().contains(modifier)) {
+					a.addModifier(modifier);
+				}
 			}
 		}
 
@@ -93,7 +100,11 @@ public class LifeListener implements Runnable{
 			if(!Enchantments.hasEnchantment(item, DefaultEnchantments.GUNG_HO) && Enchantments.hasEnchantment(item, DefaultEnchantments.LIFE)){
 				int level = Enchantments.getLevel(item, DefaultEnchantments.LIFE);
 				AttributeInstance a = player.getAttribute(Attribute.GENERIC_MAX_HEALTH);
-				a.setBaseValue(a.getBaseValue() - 4 * level);
+				AttributeModifier modifier = new AttributeModifier(UUID.fromString("eeeeeeee-fefe-fefe-fefe-000000000000"), "generic.maxHealth", 
+						4 * level, Operation.ADD_NUMBER);
+				if(a.getModifiers().contains(modifier)) {
+					a.removeModifier(modifier);
+				}
 				if(player.getHealth() > a.getBaseValue()) {
 					player.setHealth(a.getBaseValue());
 				}

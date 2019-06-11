@@ -1,11 +1,15 @@
 package org.ctp.enchantmentsolution.utils.save;
 
+import java.util.UUID;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
+import org.ctp.enchantmentsolution.advancements.ESAdvancement;
+import org.ctp.enchantmentsolution.advancements.ESAdvancementProgress;
 import org.ctp.enchantmentsolution.listeners.abilities.MagmaWalkerListener;
 import org.ctp.enchantmentsolution.listeners.abilities.VoidWalkerListener;
 import org.ctp.enchantmentsolution.nms.AnimalMobNMS;
@@ -19,6 +23,23 @@ public class SaveUtils {
 			return;
 		}
 		YamlConfig config = EnchantmentSolution.getPlugin().getConfigFiles().getAbilityConfig();
+		if(config.containsElements("advancement_progress")) {
+			int i = 0;
+			while (config.containsElements("advancement_progress." + i)) {
+				try {
+					ESAdvancementProgress progress = EnchantmentSolution.getAdvancementProgress(
+							Bukkit.getOfflinePlayer(UUID.fromString(config.getString("advancement_progress." + i + ".player"))), 
+							ESAdvancement.valueOf(config.getString("advancement_progress." + i + ".advancement")), 
+							config.getString("advancement_progress." + i + ".criteria"));
+					progress.setCurrentAmount(config.getInt("advancement_progress." + i + ".current_amount"));
+					config.removeKey("advancement_progress." + i);
+				} catch(Exception ex) {
+					ex.printStackTrace();
+				}
+				i++;
+			}
+			config.removeKeys("advancement_progress");
+		}
 		if (config.containsElements("magma_blocks")) {
 			int i = 0;
 			while (config.getString("magma_blocks." + i) != null) {
@@ -36,10 +57,9 @@ public class SaveUtils {
 							"Block at position " + i
 									+ " was invalid, skipping.");
 				}
-				config.removeKey("magma_blocks." + i);
 				i++;
 			}
-			config.removeKey("magma_blocks");
+			config.removeKeys("magma_blocks");
 		}
 		if(config.containsElements("obsidian_blocks")) {
 			int i = 0;
@@ -58,10 +78,9 @@ public class SaveUtils {
 							"Block at position " + i
 									+ " was invalid, skipping.");
 				}
-				config.removeKey("obsidian_blocks." + i);
 				i++;
 			}
-			config.removeKey("obsidian_blocks");
+			config.removeKeys("obsidian_blocks");
 		}
 		if(config.containsElements("animals")) {
 			int i = 0;
@@ -69,6 +88,7 @@ public class SaveUtils {
 				AnimalMobNMS.getFromConfig(config, i);
 				i++;
 			}
+			config.removeKeys("animals");
 		}
 		config.saveConfig();
 	}
@@ -79,6 +99,14 @@ public class SaveUtils {
 		}
 		int i = 0;
 		YamlConfig config = EnchantmentSolution.getPlugin().getConfigFiles().getAbilityConfig();
+		for(ESAdvancementProgress progress : EnchantmentSolution.getAdvancementProgress()) {
+			config.set("advancement_progress." + i + ".advancement", progress.getAdvancement().name());
+			config.set("advancement_progress." + i + ".player", progress.getPlayer().getUniqueId());
+			config.set("advancement_progress." + i + ".criteria", progress.getCriteria());
+			config.set("advancement_progress." + i + ".current_amount", progress.getCurrentAmount());
+			i++;
+		}
+		i = 0;
 		for (Block block : MagmaWalkerListener.BLOCKS) {
 			for(MetadataValue value : block.getMetadata("MagmaWalker")){
 				config.set("magma_blocks." + i,
@@ -97,13 +125,13 @@ public class SaveUtils {
 			i++;
 		}
 		i = 0;
-		for (AnimalMob animal : AnimalMob.ANIMALS) {
-			try {
+		try {
+			for (AnimalMob animal : EnchantmentSolution.getAnimals()) {
 				animal.setConfig(config, i);
-			} catch (Exception ex) {
-				ex.printStackTrace();
+				i++;
 			}
-			i++;
+		} catch (NoClassDefFoundError ex) {
+			ex.printStackTrace();
 		}
 		config.saveConfig();
 	}

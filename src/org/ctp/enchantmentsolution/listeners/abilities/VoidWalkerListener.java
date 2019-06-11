@@ -17,8 +17,11 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
+import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
+import org.ctp.enchantmentsolution.utils.AdvancementUtils;
+import org.ctp.enchantmentsolution.utils.LocationUtils;
 
 public class VoidWalkerListener extends EnchantmentListener implements Runnable{
 	
@@ -44,10 +47,13 @@ public class VoidWalkerListener extends EnchantmentListener implements Runnable{
 							if(Math.abs(x) + Math.abs(z) > radius + 1) continue;
 							Location airLoc = new Location(loc.getWorld(), loc.getBlockX() + x, loc.getBlockY() - 1, loc.getBlockZ() + z);
 							Block air = airLoc.getBlock();
-							if((air.getType().equals(Material.AIR))){
+							if((air.getType() == Material.AIR || air.getType() == Material.CAVE_AIR || air.getType() == Material.VOID_AIR)){
 								air.setMetadata("VoidWalker", new FixedMetadataValue(EnchantmentSolution.getPlugin(), new Integer(4)));
 								air.setType(Material.OBSIDIAN);
 								BLOCKS.add(air);
+								if(!LocationUtils.hasBlockBelow(air.getLocation())) {
+									AdvancementUtils.awardCriteria(player, ESAdvancement.BOOTS_WERE_MADE_FOR_WALKING, "boots");
+								}
 							}else if(air.getType().equals(Material.OBSIDIAN)){
 								List<MetadataValue> values = air.getMetadata("VoidWalker");
 								if(values != null){

@@ -11,9 +11,11 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
+import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
 import org.ctp.enchantmentsolution.nms.McMMO;
+import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.items.nms.AbilityUtils;
 
 public class SmelteryListener extends EnchantmentListener{
@@ -29,6 +31,9 @@ public class SmelteryListener extends EnchantmentListener{
 			if(Enchantments.hasEnchantment(item, DefaultEnchantments.SMELTERY)) {
 				ItemStack smelted = AbilityUtils.getSmelteryItem(blockBroken, item);
 				if(smelted != null) {
+					if(smelted.getAmount() > 1 && smelted.getType() == Material.IRON_INGOT) {
+						AdvancementUtils.awardCriteria(player, ESAdvancement.IRONT_YOU_GLAD, "iron"); 
+					}
 					if(!DefaultEnchantments.isEnabled(DefaultEnchantments.TELEPATHY) || !Enchantments.hasEnchantment(item, DefaultEnchantments.TELEPATHY)) {
 						switch(event.getBlock().getType()) {
 						case IRON_ORE:

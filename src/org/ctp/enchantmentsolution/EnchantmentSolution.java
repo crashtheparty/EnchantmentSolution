@@ -5,16 +5,20 @@ import java.util.List;
 import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
+import org.ctp.enchantmentsolution.inventory.InventoryData;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.ctp.enchantmentsolution.advancements.ESAdvancement;
+import org.ctp.enchantmentsolution.advancements.ESAdvancementProgress;
 import org.ctp.enchantmentsolution.commands.*;
 import org.ctp.enchantmentsolution.database.SQLite;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
-import org.ctp.enchantmentsolution.inventory.InventoryData;
 import org.ctp.enchantmentsolution.listeners.*;
 import org.ctp.enchantmentsolution.listeners.abilities.*;
 import org.ctp.enchantmentsolution.listeners.advancements.AdvancementEntityDeath;
+import org.ctp.enchantmentsolution.listeners.advancements.AdvancementPlayerEvent;
 import org.ctp.enchantmentsolution.listeners.advancements.AdvancementThread;
 import org.ctp.enchantmentsolution.listeners.chestloot.ChestLootListener;
 import org.ctp.enchantmentsolution.listeners.fishing.EnchantsFishingListener;
@@ -22,6 +26,7 @@ import org.ctp.enchantmentsolution.listeners.fishing.McMMOFishingNMS;
 import org.ctp.enchantmentsolution.listeners.legacy.UpdateEnchantments;
 import org.ctp.enchantmentsolution.listeners.mobs.MobSpawning;
 import org.ctp.enchantmentsolution.nms.McMMO;
+import org.ctp.enchantmentsolution.nms.animalmob.AnimalMob;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.save.ConfigFiles;
@@ -34,6 +39,8 @@ public class EnchantmentSolution extends JavaPlugin {
 
 	private static EnchantmentSolution PLUGIN;
 	private List<InventoryData> inventories = new ArrayList<InventoryData>();
+	private static List<ESAdvancementProgress> PROGRESS = new ArrayList<ESAdvancementProgress>();
+	private static List<AnimalMob> ANIMALS = new ArrayList<AnimalMob>();
 	private boolean disable = false, initialization = true;
 	private SQLite db;
 	private String mcmmoType;
@@ -42,8 +49,6 @@ public class EnchantmentSolution extends JavaPlugin {
 	private Plugin jobsReborn;
 	private ConfigFiles files;
 	private VersionCheck check;
-	@SuppressWarnings("unused")
-	private AdvancementUtils advancementUtils;
 
 	public void onEnable() {
 		PLUGIN = this;
@@ -123,6 +128,7 @@ public class EnchantmentSolution extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new MoisturizeListener(), this);
 		getServer().getPluginManager().registerEvents(new IrenesLassoListener(), this);
 		getServer().getPluginManager().registerEvents(new CurseOfLagListener(), this);
+		getServer().getPluginManager().registerEvents(new UnrestListener(), this);
 		getServer().getPluginManager().registerEvents(new ChestLootListener(), this);
 		getServer().getPluginManager().registerEvents(new MobSpawning(), this);
 		getServer().getPluginManager().registerEvents(new VanishListener(), this);
@@ -130,6 +136,7 @@ public class EnchantmentSolution extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new BlockListener(), this);
 		getServer().getPluginManager().registerEvents(new UpdateEnchantments(), this);
 		getServer().getPluginManager().registerEvents(new AdvancementEntityDeath(), this);
+		getServer().getPluginManager().registerEvents(new AdvancementPlayerEvent(), this);
 		
 		if(Bukkit.getPluginManager().isPluginEnabled("Jobs")) {
 			jobsReborn = Bukkit.getPluginManager().getPlugin("Jobs");
@@ -218,8 +225,7 @@ public class EnchantmentSolution extends JavaPlugin {
 		checkVersion();
 		initialization = false;
 		
-		advancementUtils = new AdvancementUtils();
-		
+		AdvancementUtils.createAdvancements();
 	}
 
 	public void onDisable() {
@@ -231,7 +237,8 @@ public class EnchantmentSolution extends JavaPlugin {
 			}
 			try {
 				SaveUtils.setAbilityData();
-			} catch (Exception ex) {
+			} catch (NoClassDefFoundError ex) {
+				ChatUtils.sendInfo("Found a no class def found error");
 				ex.printStackTrace();
 			}
 		}
@@ -300,6 +307,62 @@ public class EnchantmentSolution extends JavaPlugin {
 
 	public boolean isInitializing() {
 		return initialization;
+	}
+
+	public static List<ESAdvancementProgress> getProgress() {
+		return PROGRESS;
+	}
+	
+	public static void addProgress(ESAdvancementProgress progress) {
+		PROGRESS.add(progress);
+	}
+	
+	public static ESAdvancementProgress getAdvancementProgress(OfflinePlayer player, ESAdvancement advancement, String criteria) {
+		for(ESAdvancementProgress progress : EnchantmentSolution.getProgress()) {
+			if(progress.getPlayer().equals(player) && progress.getAdvancement() == advancement && progress.getCriteria().equals(criteria)) {
+				return progress;
+			}
+		}
+		ESAdvancementProgress progress = new ESAdvancementProgress(advancement, criteria, 0, player);
+		EnchantmentSolution.addProgress(progress);
+		return progress;
+	}
+	
+	public static List<ESAdvancementProgress> getAdvancementProgress(){
+		List<ESAdvancementProgress> progress = new ArrayList<ESAdvancementProgress>();
+		for(ESAdvancementProgress pr : PROGRESS) {
+			progress.add(pr);
+		}
+		return progress;
+	}
+
+	public static void completed(ESAdvancementProgress esProgress) {
+		PROGRESS.remove(esProgress);
+	}
+
+	public static boolean exists(Player player, ESAdvancement advancement, String criteria) {
+		for(ESAdvancementProgress progress : PROGRESS) {
+			if(progress.getPlayer().equals(player) && progress.getAdvancement() == advancement && progress.getCriteria().equals(criteria)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public static List<AnimalMob> getAnimals() {
+		return ANIMALS;
+	}
+
+	public static void setAnimals(List<AnimalMob> animals) {
+		ANIMALS = animals;
+	}
+
+	public static void addAnimals(AnimalMob mob) {
+		ANIMALS.add(mob);
+	}
+
+	public static void removeAnimals(AnimalMob remove) {
+		ANIMALS.remove(remove);
 	}
 
 }

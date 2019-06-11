@@ -1,6 +1,6 @@
 package org.ctp.enchantmentsolution.advancements;
 
-import org.ctp.enchantmentsolution.external_api.hu.trigary.advancementcreator.trigger.Trigger;
+import org.ctp.enchantmentsolution.api.trigger.Trigger;
 
 public class ESTrigger {
 

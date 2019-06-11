@@ -26,6 +26,22 @@ public enum FlowerGiftChance_v1_14 implements FlowerGiftChance{
 		return chance;
 	}
 	
+	public static boolean isDoubleFlower(Material material) {
+		switch(material) {
+		case SUNFLOWER:
+		case PEONY:
+		case ROSE_BUSH:
+		case LILAC:
+			return true;
+		default: 
+			return false;
+		}
+	}
+
+	public static boolean isWitherRose(Material material) {
+		return material == Material.WITHER_ROSE;
+	}
+	
 	public static boolean isItem(Material material) {
 		for(FlowerGiftChance value : values()) {
 			if(value.getMaterial() == material) {

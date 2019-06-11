@@ -8,6 +8,7 @@ import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.util.Vector;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
@@ -29,6 +30,7 @@ public class HardBounceListener extends EnchantmentListener{
 				}
 				if(shield != null && Enchantments.hasEnchantment(shield, DefaultEnchantments.HARD_BOUNCE)) {
 					int level = Enchantments.getLevel(shield, DefaultEnchantments.HARD_BOUNCE);
+					p.setMetadata("deflection", new FixedMetadataValue(EnchantmentSolution.getPlugin(), player.getUniqueId().toString()));
 					Bukkit.getScheduler().runTaskLater(EnchantmentSolution.getPlugin(), new Runnable() {
 						@Override
 						public void run() {

@@ -4,9 +4,10 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.inventory.ItemStack;
+import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
-
+import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
@@ -24,14 +25,7 @@ public class CurseOfLagListener extends EnchantmentListener{
 		if(player != null) {
 			ItemStack item = player.getInventory().getItemInMainHand();
 			if(item != null && Enchantments.hasEnchantment(item, DefaultEnchantments.CURSE_OF_LAG)) {
-				int random = (int) ((Math.random() * 5) + 2);
-				int numParticles = (int) ((Math.random() * 400) + 11);
-				
-				for(int i = 0; i < random; i++) {
-					Particle particle = generateParticle();
-					player.getWorld().spawnParticle(particle, player.getLocation(), numParticles, 0.5, 2, 0.5);
-				}
-				player.getWorld().playSound(player.getLocation(), Sound.ENTITY_ELDER_GUARDIAN_CURSE, 1, 1);
+				createEffects(player);
 			}
 		}
 	}
@@ -44,14 +38,7 @@ public class CurseOfLagListener extends EnchantmentListener{
 			Player player = (Player) entity;
 			ItemStack item = player.getInventory().getItemInMainHand();
 			if(item != null && Enchantments.hasEnchantment(item, DefaultEnchantments.CURSE_OF_LAG)) {
-				int random = (int) ((Math.random() * 5) + 2);
-				int numParticles = (int) ((Math.random() * 400) + 11);
-				
-				for(int i = 0; i < random; i++) {
-					Particle particle = generateParticle();
-					player.getWorld().spawnParticle(particle, player.getLocation(), numParticles, 0.5, 2, 0.5);
-				}
-				player.getWorld().playSound(player.getLocation(), Sound.ENTITY_ELDER_GUARDIAN_CURSE, 1, 1);
+				createEffects(player);
 			}
 		}
 	}
@@ -64,16 +51,21 @@ public class CurseOfLagListener extends EnchantmentListener{
 			Player player = (Player) proj.getShooter();
 			ItemStack item = player.getInventory().getItemInMainHand();
 			if(item != null && Enchantments.hasEnchantment(item, DefaultEnchantments.CURSE_OF_LAG)) {
-				int random = (int) ((Math.random() * 5) + 2);
-				int numParticles = (int) ((Math.random() * 400) + 11);
-				
-				for(int i = 0; i < random; i++) {
-					Particle particle = generateParticle();
-					player.getWorld().spawnParticle(particle, player.getLocation(), numParticles, 0.5, 2, 0.5);
-				}
-				player.getWorld().playSound(player.getLocation(), Sound.ENTITY_ELDER_GUARDIAN_CURSE, 1, 1);
+				createEffects(player);
 			}
 		}
+	}
+	
+	private void createEffects(Player player) {
+		int random = (int) ((Math.random() * 5) + 2);
+		int numParticles = (int) ((Math.random() * 400) + 11);
+		
+		for(int i = 0; i < random; i++) {
+			Particle particle = generateParticle();
+			player.getWorld().spawnParticle(particle, player.getLocation(), numParticles, 0.5, 2, 0.5);
+		}
+		player.getWorld().playSound(player.getLocation(), Sound.ENTITY_ELDER_GUARDIAN_CURSE, 1, 1);
+		AdvancementUtils.awardCriteria(player, ESAdvancement.LAAAGGGGGG, "lag");
 	}
 	
 	private Particle generateParticle() {
