@@ -11,10 +11,12 @@ import org.bukkit.entity.WitherSkeleton;
 import org.bukkit.entity.Zombie;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
+import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 
 public class BeheadingListener extends EnchantmentListener{
 
@@ -46,7 +48,11 @@ public class BeheadingListener extends EnchantmentListener{
 						skullMeta.setOwningPlayer(((Player) entity));
 						skullMeta.setDisplayName(ChatColor.DARK_RED + ((Player) entity).getName() + "'s Skull");
 						skull.setItemMeta(skullMeta);
-						event.getDrops().add(skull);
+						if(((PlayerDeathEvent) event).getKeepInventory() == true) {
+							ItemUtils.dropItem(skull, entity.getLocation());
+						} else {
+							event.getDrops().add(skull);
+						}
 					}else if(entity instanceof EnderDragon){
 						ItemStack skull = new ItemStack(Material.DRAGON_HEAD);
 						event.getDrops().add(skull);

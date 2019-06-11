@@ -44,7 +44,7 @@ public class VoidWalkerListener extends EnchantmentListener implements Runnable{
 							if(Math.abs(x) + Math.abs(z) > radius + 1) continue;
 							Location airLoc = new Location(loc.getWorld(), loc.getBlockX() + x, loc.getBlockY() - 1, loc.getBlockZ() + z);
 							Block air = airLoc.getBlock();
-							if((air.getType().equals(Material.AIR))){
+							if((air.getType() == Material.AIR || air.getType() == Material.CAVE_AIR || air.getType() == Material.VOID_AIR)){
 								air.setMetadata("VoidWalker", new FixedMetadataValue(EnchantmentSolution.getPlugin(), new Integer(4)));
 								air.setType(Material.OBSIDIAN);
 								BLOCKS.add(air);

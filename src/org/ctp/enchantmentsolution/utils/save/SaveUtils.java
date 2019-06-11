@@ -36,10 +36,9 @@ public class SaveUtils {
 							"Block at position " + i
 									+ " was invalid, skipping.");
 				}
-				config.removeKey("magma_blocks." + i);
 				i++;
 			}
-			config.removeKey("magma_blocks");
+			config.removeKeys("magma_blocks");
 		}
 		if(config.containsElements("obsidian_blocks")) {
 			int i = 0;
@@ -58,10 +57,9 @@ public class SaveUtils {
 							"Block at position " + i
 									+ " was invalid, skipping.");
 				}
-				config.removeKey("obsidian_blocks." + i);
 				i++;
 			}
-			config.removeKey("obsidian_blocks");
+			config.removeKeys("obsidian_blocks");
 		}
 		if(config.containsElements("animals")) {
 			int i = 0;
@@ -69,6 +67,7 @@ public class SaveUtils {
 				AnimalMobNMS.getFromConfig(config, i);
 				i++;
 			}
+			config.removeKeys("animals");
 		}
 		config.saveConfig();
 	}
@@ -97,13 +96,13 @@ public class SaveUtils {
 			i++;
 		}
 		i = 0;
-		for (AnimalMob animal : AnimalMob.ANIMALS) {
-			try {
+		try {
+			for (AnimalMob animal : EnchantmentSolution.getAnimals()) {
 				animal.setConfig(config, i);
-			} catch (Exception ex) {
-				ex.printStackTrace();
+				i++;
 			}
-			i++;
+		} catch (NoClassDefFoundError ex) {
+			ex.printStackTrace();
 		}
 		config.saveConfig();
 	}

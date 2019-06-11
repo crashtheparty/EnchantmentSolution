@@ -2,10 +2,13 @@ package org.ctp.enchantmentsolution.listeners.abilities;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
+import org.bukkit.attribute.AttributeModifier;
+import org.bukkit.attribute.AttributeModifier.Operation;
 import org.bukkit.entity.Egg;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -122,9 +125,13 @@ public class GungHoListener extends EnchantmentListener implements Runnable{
 		private void doEquip(ItemStack item) {
 			if(Enchantments.hasEnchantment(item, DefaultEnchantments.GUNG_HO)){
 				AttributeInstance a = player.getAttribute(Attribute.GENERIC_MAX_HEALTH);
-				a.setBaseValue(a.getBaseValue() / 2);
-				if(player.getHealth() > a.getBaseValue()) {
-					player.setHealth(a.getBaseValue());
+				AttributeModifier modifier = new AttributeModifier(UUID.fromString("eeeeeeee-ffff-ffff-ffff-000000000000"), "generic.maxHealth", 
+						-1 * a.getDefaultValue() / 2, Operation.ADD_NUMBER);
+				if(!a.getModifiers().contains(modifier)) {
+					a.addModifier(modifier);
+					if(player.getHealth() > a.getBaseValue()) {
+						player.setHealth(a.getBaseValue());
+					}
 				}
 			}
 		}
@@ -132,7 +139,11 @@ public class GungHoListener extends EnchantmentListener implements Runnable{
 		private void doUnequip(ItemStack item) {
 			if(Enchantments.hasEnchantment(item, DefaultEnchantments.GUNG_HO)){
 				AttributeInstance a = player.getAttribute(Attribute.GENERIC_MAX_HEALTH);
-				a.setBaseValue(a.getBaseValue() * 2);
+				AttributeModifier modifier = new AttributeModifier(UUID.fromString("eeeeeeee-ffff-ffff-ffff-000000000000"), "generic.maxHealth", 
+						-1 * a.getDefaultValue() / 2, Operation.ADD_NUMBER);
+				if(a.getModifiers().contains(modifier)) {
+					a.removeModifier(modifier);
+				}
 			}
 		}
 	}

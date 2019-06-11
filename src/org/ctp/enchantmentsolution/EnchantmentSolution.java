@@ -5,13 +5,13 @@ import java.util.List;
 import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
+import org.ctp.enchantmentsolution.inventory.InventoryData;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.ctp.enchantmentsolution.commands.*;
 import org.ctp.enchantmentsolution.database.SQLite;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
-import org.ctp.enchantmentsolution.inventory.InventoryData;
 import org.ctp.enchantmentsolution.listeners.*;
 import org.ctp.enchantmentsolution.listeners.abilities.*;
 import org.ctp.enchantmentsolution.listeners.chestloot.ChestLootListener;
@@ -20,6 +20,7 @@ import org.ctp.enchantmentsolution.listeners.fishing.McMMOFishingNMS;
 import org.ctp.enchantmentsolution.listeners.legacy.UpdateEnchantments;
 import org.ctp.enchantmentsolution.listeners.mobs.MobSpawning;
 import org.ctp.enchantmentsolution.nms.McMMO;
+import org.ctp.enchantmentsolution.nms.animalmob.AnimalMob;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.save.ConfigFiles;
 import org.ctp.enchantmentsolution.utils.save.SaveUtils;
@@ -31,6 +32,7 @@ public class EnchantmentSolution extends JavaPlugin {
 
 	private static EnchantmentSolution PLUGIN;
 	private List<InventoryData> inventories = new ArrayList<InventoryData>();
+	private static List<AnimalMob> ANIMALS = new ArrayList<AnimalMob>();
 	private boolean disable = false, initialization = true;
 	private SQLite db;
 	private String mcmmoType;
@@ -220,7 +222,8 @@ public class EnchantmentSolution extends JavaPlugin {
 			}
 			try {
 				SaveUtils.setAbilityData();
-			} catch (Exception ex) {
+			} catch (NoClassDefFoundError ex) {
+				ChatUtils.sendInfo("Found a no class def found error");
 				ex.printStackTrace();
 			}
 		}
@@ -289,6 +292,22 @@ public class EnchantmentSolution extends JavaPlugin {
 
 	public boolean isInitializing() {
 		return initialization;
+	}
+
+	public static List<AnimalMob> getAnimals() {
+		return ANIMALS;
+	}
+
+	public static void setAnimals(List<AnimalMob> animals) {
+		ANIMALS = animals;
+	}
+
+	public static void addAnimals(AnimalMob mob) {
+		ANIMALS.add(mob);
+	}
+
+	public static void removeAnimals(AnimalMob remove) {
+		ANIMALS.remove(remove);
 	}
 
 }
