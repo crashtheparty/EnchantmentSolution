@@ -46,7 +46,7 @@ public class Soulbound extends CustomEnchantment{
 
 	@Override
 	protected List<ItemType> getAnvilItemTypes() {
-		return Arrays.asList(ItemType.ALL);
+		return Arrays.asList(ItemType.ALL, ItemType.SHULKER_BOXES);
 	}
 
 	@Override

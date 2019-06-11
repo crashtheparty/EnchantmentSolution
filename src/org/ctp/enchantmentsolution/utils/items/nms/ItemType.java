@@ -8,6 +8,7 @@ import java.util.Map;
 
 import org.bukkit.Material;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
+import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 
 public enum ItemType{
 	HELMETS("helmets"), CHESTPLATES("chestplates"), LEGGINGS("leggings"), BOOTS("boots"), SWORDS("swords"), PICKAXES("pickaxes"), SHOVELS("shovels"), AXES("axes"), 
@@ -15,7 +16,7 @@ public enum ItemType{
 	CARROT_ON_A_STICK("carrot_on_a_stick"), ELYTRA("elytra"), TRIDENT("trident"), RANGED("ranged"), ARMOR("armor"), TOOLS("tools"), MELEE("melee"), MISC("misc"), 
 	WOODEN_TOOLS("wooden_tools"), STONE_TOOLS("stone_tools"), IRON_TOOLS("iron_tools"), GOLDEN_TOOLS("golden_tools"), DIAMOND_TOOLS("diamond_tools"), 
 	LEATHER_ARMOR("leather_armor"), GOLDEN_ARMOR("golden_armor"), CHAINMAIL_ARMOR("chainmail_armor"), IRON_ARMOR("iron_armor"), DIAMOND_ARMOR("diamond_armor"), 
-	CROSSBOW("crossbow"), BOOK("book"), ALL("all"), ENCHANTABLE("enchantable"), TURTLE_HELMET("turtle_helmet");
+	CROSSBOW("crossbow"), BOOK("book"), ALL("all"), ENCHANTABLE("enchantable"), TURTLE_HELMET("turtle_helmet"), SHULKER_BOXES("shulker_boxes");
 	
 	private String type, display;
 	private List<Material> itemTypes;
@@ -65,7 +66,7 @@ public enum ItemType{
 	
 	private String getDisplayType(String type) {
 		if (ALL.getType().equals(type)) {
-			return "All";
+			return "All Normal Items";
 		} else if (ARMOR.getType().equals(type)) {
 			return "Armor";
 		} else if (AXES.getType().equals(type)) {
@@ -126,6 +127,8 @@ public enum ItemType{
 			return "Shield";
 		} else if (SHOVELS.getType().equals(type)) {
 			return "Shovels";
+		} else if (SHULKER_BOXES.getType().equals(type)) {
+			return "Shulker Boxes";
 		} else if (STONE_TOOLS.getType().equals(type)) {
 			return "Stone Tools";
 		} else if (SWORDS.getType().equals(type)) {
@@ -478,6 +481,9 @@ public enum ItemType{
 				itemTypes.addAll(Arrays.asList(Material.DIAMOND_SHOVEL,
 						Material.GOLDEN_SHOVEL, Material.IRON_SHOVEL, Material.STONE_SHOVEL,
 						Material.WOODEN_SHOVEL));
+				return itemTypes;
+			} else if (SHULKER_BOXES.getType().equals(type)) {
+				itemTypes.addAll(ItemUtils.getShulkerBoxes());
 				return itemTypes;
 			} else if (STONE_TOOLS.getType().equals(type)) {
 				itemTypes.addAll(Arrays.asList(Material.STONE_AXE,
