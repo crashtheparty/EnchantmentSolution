@@ -133,6 +133,10 @@ public class ConfigFiles {
 				config.set("enchanting_table.max_repair_level", config.getInt("max_repair_level"));
 				config.removeKey("max_repair_level");
 			}
+			if(config.getBooleanValue("get_latest_version") != null) {
+				config.set("version.get_latest", config.getBoolean("get_latest_version"));
+				config.removeKey("get_latest_version");
+			}
 			String setType = config.getString("enchanting_table.enchanting_type");
 			if(!enchantingTypes.contains(setType)) {
 				config.set("enchanting_table.enchanting_type", "enhanced_50");
@@ -201,6 +205,7 @@ public class ConfigFiles {
 				config.set("enchanting_table.enchanting_type", "enhanced_50");
 			}
 			config.saveConfig();
+			EnchantmentSolution.getPlugin().setVersionCheck(config.getBoolean("version.get_latest"), config.getBoolean("version.get_experimental"));
 		} catch (final Exception e) {
 			e.printStackTrace();
 		}
@@ -240,6 +245,9 @@ public class ConfigFiles {
 		config.addEnum("language", Language.getValues());
 		config.addDefault("reset_language", false, new String[] { "Reload the entire language file" });
 		config.addDefault("max_enchantments", 0, new String[] { "Max enchantments on each item. 0 allows infinite" });
+		config.addDefault("use_comments", true, new String[] { "Show helpful comments in the config files" });
+		config.addDefault("version.get_latest", true, new String[] { "Check github for plugin releases (available on github and spigot)" });
+		config.addDefault("version.get_experimental", false, new String[] { "Check github for plugin experimental versions (available only on github)" });
 		config.addDefault("disable_enchant_method", "visible", new String[] {
 				"How disabling an enchantment in enchantments.yml or enchantments_advanced.yml will work.", "Options:",
 				"vanish - removes enchantment from items",
@@ -334,8 +342,6 @@ public class ConfigFiles {
 			config.addDefault("loots.pillager_outpost.levels", 1);
 			config.addDefault("loots.pillager_outpost.treasure", true);
 		}
-		config.addDefault("use_comments", true, new String[] { "Show helpful comments in the config files" });
-		config.addDefault("get_latest_version", true, new String[] { "Check github for updates to the plugin" });
 
 		for(ESAdvancement advancement : ESAdvancement.values()) {
 			if(advancement == ESAdvancement.ENCHANTMENT_SOLUTION) {

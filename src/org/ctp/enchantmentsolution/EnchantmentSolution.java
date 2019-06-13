@@ -2,6 +2,7 @@ package org.ctp.enchantmentsolution;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
 import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
@@ -31,6 +32,8 @@ import org.ctp.enchantmentsolution.nms.McMMO;
 import org.ctp.enchantmentsolution.nms.animalmob.AnimalMob;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
+import org.ctp.enchantmentsolution.utils.ConfigUtils;
+import org.ctp.enchantmentsolution.utils.Metrics;
 import org.ctp.enchantmentsolution.utils.save.ConfigFiles;
 import org.ctp.enchantmentsolution.utils.save.SaveUtils;
 import org.ctp.enchantmentsolution.version.BukkitVersion;
@@ -224,12 +227,74 @@ public class EnchantmentSolution extends JavaPlugin {
 				
 		check = new VersionCheck(pluginVersion, "https://raw.githubusercontent.com/crashtheparty/EnchantmentSolution/master/VersionHistory", 
 				"https://www.spigotmc.org/resources/enchantment-solution.59556/", "https://github.com/crashtheparty/EnchantmentSolution", 
-				getConfigFiles().getDefaultConfig().getBoolean("get_latest_version"));
+				getConfigFiles().getDefaultConfig().getBoolean("version.get_latest"), getConfigFiles().getDefaultConfig().getBoolean("version.get_experimental"));
 		getServer().getPluginManager().registerEvents(check, this);
 		checkVersion();
 		initialization = false;
 		
 		AdvancementUtils.createAdvancements();
+		
+		Metrics metrics = new Metrics(this);
+		
+		metrics.addCustomChart(new Metrics.SingleLineChart("level_fifty", new Callable<Integer>() {
+	        @Override
+	        public Integer call() throws Exception {
+	            if(ConfigUtils.isLevel50()) {
+	            	return 1;
+	            }
+	            return 0;
+	        }
+	    }));
+		
+		metrics.addCustomChart(new Metrics.SingleLineChart("level_thirty", new Callable<Integer>() {
+	        @Override
+	        public Integer call() throws Exception {
+	            if(!ConfigUtils.isLevel50()) {
+	            	return 1;
+	            }
+	            return 0;
+	        }
+	    }));
+		
+		metrics.addCustomChart(new Metrics.SingleLineChart("advanced_file", new Callable<Integer>() {
+	        @Override
+	        public Integer call() throws Exception {
+	            if(ConfigUtils.useAdvancedFile()) {
+	            	return 1;
+	            }
+	            return 0;
+	        }
+	    }));
+		
+		metrics.addCustomChart(new Metrics.SingleLineChart("basic_file", new Callable<Integer>() {
+	        @Override
+	        public Integer call() throws Exception {
+	            if(!ConfigUtils.useAdvancedFile()) {
+	            	return 1;
+	            }
+	            return 0;
+	        }
+	    }));
+		
+		metrics.addCustomChart(new Metrics.SingleLineChart("enhanced_gui", new Callable<Integer>() {
+	        @Override
+	        public Integer call() throws Exception {
+	            if(ConfigUtils.useESGUI()) {
+	            	return 1;
+	            }
+	            return 0;
+	        }
+	    }));
+		
+		metrics.addCustomChart(new Metrics.SingleLineChart("vanilla_gui", new Callable<Integer>() {
+	        @Override
+	        public Integer call() throws Exception {
+	            if(!ConfigUtils.useESGUI()) {
+	            	return 1;
+	            }
+	            return 0;
+	        }
+	    }));
 	}
 
 	public void onDisable() {
@@ -367,6 +432,11 @@ public class EnchantmentSolution extends JavaPlugin {
 
 	public static void removeAnimals(AnimalMob remove) {
 		ANIMALS.remove(remove);
+	}
+	
+	public void setVersionCheck(boolean getRelease, boolean getExperimental) {
+		check.setLatestVersion(getRelease);
+		check.setExperimentalVersion(getExperimental);
 	}
 
 }
