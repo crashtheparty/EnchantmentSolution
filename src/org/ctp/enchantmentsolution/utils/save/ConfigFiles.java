@@ -32,6 +32,8 @@ public class ConfigFiles {
 	private YamlConfig abilityConfig;
 	private YamlConfigBackup config, fishing, enchantment, enchantmentAdvanced;
 	private LanguageFiles languageFiles;
+	private List<String> enchantingTypes = 
+			Arrays.asList("vanilla_30", "vanilla_30_custom", "enhanced_30", "enhanced_30_custom", "enhanced_50", "enhanced_50_custom");
 
 	public ConfigFiles(EnchantmentSolution plugin) {
 		dataFolder = plugin.getDataFolder();
@@ -95,8 +97,45 @@ public class ConfigFiles {
 			mcMMOFishing();
 			enchantmentFile();
 			enchantmentAdvancedFile();
-			if (config.getInt("level_divisor") <= 0) {
-				config.set("level_divisor", 4);
+			if (config.getInt("anvil.level_divisor") <= 0) {
+				config.set("anvil.level_divisor", 4);
+			}
+			if(config.getBoolean("level_50_enchants")) {
+				if(config.getBoolean("use_advanced_file")) {
+					config.set("enchanting_table.enchanting_type", "enhanced_50_custom");
+				} else {
+					config.set("enchanting_table.enchanting_type", "enhanced_50");
+				}
+				config.removeKey("level_50_enchants");
+				config.removeKey("use_advanced_file");
+			} else if (config.getBooleanValue("level_50_enchants") != null){
+				if(config.getBoolean("use_advanced_file")) {
+					config.set("enchanting_table.enchanting_type", "enhanced_30_custom");
+				} else {
+					config.set("enchanting_table.enchanting_type", "enhanced_30");
+				}
+				config.removeKey("level_50_enchants");
+				config.removeKey("use_advanced_file");
+			}
+			if(config.getBooleanValue("lapis_in_table") != null) {
+				config.set("enchanting_table.lapis_in_table", config.getBoolean("lapis_in_table"));
+				config.removeKey("lapis_in_table");
+			}
+			if(config.getBooleanValue("use_enchanted_books") != null) {
+				config.set("enchanting_table.use_enchanted_books", config.getBoolean("use_enchanted_books"));
+				config.removeKey("use_enchanted_books");
+			}
+			if(config.getBooleanValue("enchantability_decay") != null) {
+				config.set("enchanting_table.decay", config.getBoolean("enchantability_decay"));
+				config.removeKey("enchantability_decay");
+			}
+			if(config.getInteger("max_repair_level") != null) {
+				config.set("enchanting_table.max_repair_level", config.getInt("max_repair_level"));
+				config.removeKey("max_repair_level");
+			}
+			String setType = config.getString("enchanting_table.enchanting_type");
+			if(!enchantingTypes.contains(setType)) {
+				config.set("enchanting_table.enchanting_type", "enhanced_50");
 			}
 			config.saveConfig();
 		} catch (final Exception e) {
@@ -157,6 +196,11 @@ public class ConfigFiles {
 			mcMMOFishing();
 			enchantmentFile();
 			enchantmentAdvancedFile();
+			String setType = config.getString("enchanting_table.enchanting_type");
+			if(!enchantingTypes.contains(setType)) {
+				config.set("enchanting_table.enchanting_type", "enhanced_50");
+			}
+			config.saveConfig();
 		} catch (final Exception e) {
 			e.printStackTrace();
 		}
@@ -196,31 +240,42 @@ public class ConfigFiles {
 		config.addEnum("language", Language.getValues());
 		config.addDefault("reset_language", false, new String[] { "Reload the entire language file" });
 		config.addDefault("max_enchantments", 0, new String[] { "Max enchantments on each item. 0 allows infinite" });
-		config.addDefault("lapis_in_table", true,
-				new String[] { "Lapis must be placed in the enchantment table before items can be enchanted." });
-		config.addDefault("level_divisor", 4, new String[] { "Greater numbers allow more anvil uses" });
-		config.addDefault("level_50_enchants", true, new String[] { "Allow enchantments up to level 50",
-				"- To make this easier, you can try the XpBank plugin: https://www.spigotmc.org/resources/xpbank.59580/" });
-		config.addDefault("max_repair_level", 60,
-				new String[] { "The highest repair level that will be allowed in the anvil." });
-		config.addMinMax("max_repair_level", 40, 1000000);
 		config.addDefault("disable_enchant_method", "visible", new String[] {
 				"How disabling an enchantment in enchantments.yml or enchantments_advanced.yml will work.", "Options:",
 				"vanish - removes enchantment from items",
 				"visible - keeps enchantment on item, but custom effects will not work and anvil will remove enchant",
 				"repairable - same as above but anvil will not remove enchant" });
 		config.addEnum("disable_enchant_method", Arrays.asList("vanish", "visible", "repairable"));
-		config.addDefault("use_advanced_file", false,
-				new String[] { "Use enchantments_advanced.yml as the enchantment config." });
-		config.addDefault("default_anvil_use", false, new String[] {
-				"Allow default use of anvil GUI via option at bottom right of custom GUI.",
-				"Using this feature MAY REMOVE CUSTOM ENCHANTMENTS FROM ITEMS on accident. Should only be true if anvil is used for custom recipes." });
-		config.addDefault("enchantability_decay", false,
+		
+		config.addDefault("enchanting_table.enchanting_type", "enhanced_50", new String[] {
+				"How enchanting works with the plugin", "Options:",
+				"vanilla_30 - level 30 max, no higher level enchantments, use vanilla GUI, uses enchantments.yml",
+				"vanilla_30_custom - level 30 max, no higher level enchantments, use vanilla GUI, uses enchantments_advanced.yml",
+				"enhanced_30 - level 30 max, no higher level enchantments, use Enchantment Solution GUI, uses enchantments.yml",
+				"enhanced_30_custom - level 30 max, no higher level enchantments, use Enchantment Solution GUI, uses enchantments_advanced.yml",
+				"enhanced_50 - level 50 max, higher level enchantments, use Enchantment Solution GUI, uses enchantments.yml",
+				"enhanced_50_custom - level 50 max, higher level enchantments, use Enchantment Solution GUI, uses enchantments_advanced.yml"
+		});
+		config.addEnum("enchanting_table.enchanting_type", enchantingTypes);
+		config.addDefault("enchanting_table.lapis_in_table", true, new String[]{ 
+				"Lapis must be placed in the enchantment table before items can be enchanted.", "Only used when enchanting type is enhanced."
+		});
+		config.addDefault("enchanting_table.reset_enchantments_advanced", false, new String[] { "Resets the enchantments_advanced.yml file." });
+		config.addDefault("enchanting_table.use_enchanted_books", false, new String[] { 
+				"Uses the vanilla Enchanted Books rather than Books to store enchantments." 
+		});
+		config.addDefault("enchanting_table.decay", false,
 				new String[] { "Multiple enchantments generated on items will have lower levels" });
-		config.addDefault("use_enchanted_books", false, new String[] { "Regular books turn into enchanted books." });
+		config.addDefault("anvil.level_divisor", 4, new String[] { "Greater numbers allow more anvil uses." });
+		config.addDefault("anvil.max_repair_level", 60, new String[] { "The highest repair level that will be allowed in the anvil", 
+				"Only used when enchanting type is enhanced. "});
+		config.addMinMax("anvil.max_repair_level", 40, 1000000);
+		config.addDefault("anvil.default_use", false, new String[] {
+				"Allow default use of anvil GUI via option at bottom right of custom GUI.", "Only used when enchanting type is enhanced.", 
+				"Should only be true if anvil is used for custom recipes." });
+		config.addDefault("protection_conflicts", true,
+				new String[] { "All protection types conflict with each other" });
 		if (EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber() < 4) {
-			config.addDefault("protection_conflicts", true,
-					new String[] { "All protection types conflict with each other" });
 			config.addDefault("grindstone.use_legacy", false,
 					new String[] { "Use the grindstone from within the anvil in version < 1.14" });
 		}
@@ -284,9 +339,13 @@ public class ConfigFiles {
 
 		for(ESAdvancement advancement : ESAdvancement.values()) {
 			if(advancement == ESAdvancement.ENCHANTMENT_SOLUTION) {
-				config.addDefault("enable_advancements." + advancement.getNamespace().getKey(), false);
+				config.addDefault("advancements." + advancement.getNamespace().getKey() + ".enable", false);
+				config.addDefault("advancements." + advancement.getNamespace().getKey() + ".toast", false);
+				config.addDefault("advancements." + advancement.getNamespace().getKey() + ".announce", false);
 			} else if(advancement.getActivatedVersion() < EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber()) {
-				config.addDefault("enable_advancements." + advancement.getNamespace().getKey(), true);
+				config.addDefault("advancements." + advancement.getNamespace().getKey() + ".enable", true);
+				config.addDefault("advancements." + advancement.getNamespace().getKey() + ".toast", true);
+				config.addDefault("advancements." + advancement.getNamespace().getKey() + ".announce", true);
 			}
 		}
 		
@@ -335,7 +394,9 @@ public class ConfigFiles {
 		String[] header = { "Enchantment Solution", "Plugin by", "crashtheparty" };
 		enchantmentAdvanced = new YamlConfigBackup(enchantmentAdvancedFile, header);
 
-		enchantmentAdvanced.getFromConfig();
+		if (!config.getBoolean("enchanting_table.reset_enchantments_advanced")) {
+			enchantmentAdvanced.getFromConfig();
+		}
 
 		enchantmentAdvanced.addDefault("use_starting_level", true, new String[] {
 				"Enchantments will not be available unless the enchanting level is the set value or above" });
@@ -374,16 +435,16 @@ public class ConfigFiles {
 								Weight.COMMON.getName(), Weight.NULL.getName()));
 				enchantmentAdvanced.addDefault(
 						namespace + "." + enchant.getName() + ".enchantability_constant",
-						enchant.getDefaultFiftyConstant());
+						enchant.getDefaultConstant());
 				enchantmentAdvanced.addDefault(
 						namespace + "." + enchant.getName() + ".enchantability_modifier",
-						enchant.getDefaultFiftyModifier());
+						enchant.getDefaultModifier());
 				enchantmentAdvanced.addDefault(
 						namespace + "." + enchant.getName() + ".enchantability_start_level",
-						enchant.getDefaultFiftyStartLevel());
+						enchant.getDefaultStartLevel());
 				enchantmentAdvanced.addDefault(
 						namespace + "." + enchant.getName() + ".enchantability_max_level",
-						enchant.getDefaultFiftyMaxLevel());
+						enchant.getDefaultMaxLevel());
 				enchantmentAdvanced.addDefault(
 						namespace + "." + enchant.getName() + ".conflicting_enchantments",
 						enchant.conflictingDefaultList());
@@ -406,14 +467,14 @@ public class ConfigFiles {
 						Arrays.asList(Weight.VERY_RARE.getName(), Weight.RARE.getName(), Weight.UNCOMMON.getName(),
 								Weight.COMMON.getName(), Weight.NULL.getName()));
 				enchantmentAdvanced.addDefault("custom_enchantments." + enchant.getName() + ".enchantability_constant",
-						enchant.getDefaultFiftyConstant());
+						enchant.getDefaultConstant());
 				enchantmentAdvanced.addDefault("custom_enchantments." + enchant.getName() + ".enchantability_modifier",
-						enchant.getDefaultFiftyModifier());
+						enchant.getDefaultModifier());
 				enchantmentAdvanced.addDefault(
 						"custom_enchantments." + enchant.getName() + ".enchantability_start_level",
-						enchant.getDefaultFiftyStartLevel());
+						enchant.getDefaultStartLevel());
 				enchantmentAdvanced.addDefault("custom_enchantments." + enchant.getName() + ".enchantability_max_level",
-						enchant.getDefaultFiftyMaxLevel());
+						enchant.getDefaultMaxLevel());
 				enchantmentAdvanced.addDefault("custom_enchantments." + enchant.getName() + ".conflicting_enchantments",
 						enchant.conflictingDefaultList());
 				enchantmentAdvanced.addEnum("custom_enchantments." + enchant.getName() + ".conflicting_enchantments",
@@ -432,15 +493,15 @@ public class ConfigFiles {
 						Arrays.asList(Weight.VERY_RARE.getName(), Weight.RARE.getName(), Weight.UNCOMMON.getName(),
 								Weight.COMMON.getName(), Weight.NULL.getName()));
 				enchantmentAdvanced.addDefault("default_enchantments." + enchant.getName() + ".enchantability_constant",
-						enchant.getDefaultFiftyConstant());
+						enchant.getDefaultConstant());
 				enchantmentAdvanced.addDefault("default_enchantments." + enchant.getName() + ".enchantability_modifier",
-						enchant.getDefaultFiftyModifier());
+						enchant.getDefaultModifier());
 				enchantmentAdvanced.addDefault(
 						"default_enchantments." + enchant.getName() + ".enchantability_start_level",
-						enchant.getDefaultFiftyStartLevel());
+						enchant.getDefaultStartLevel());
 				enchantmentAdvanced.addDefault(
 						"default_enchantments." + enchant.getName() + ".enchantability_max_level",
-						enchant.getDefaultFiftyMaxLevel());
+						enchant.getDefaultMaxLevel());
 				enchantmentAdvanced.addDefault(
 						"default_enchantments." + enchant.getName() + ".conflicting_enchantments",
 						enchant.conflictingDefaultList());
@@ -476,16 +537,16 @@ public class ConfigFiles {
 									Weight.COMMON.getName(), Weight.NULL.getName()));
 					enchantmentAdvanced.addDefault(
 							namespace + "." + enchant.getName() + ".enchantability_constant",
-							enchant.getDefaultFiftyConstant());
+							enchant.getDefaultConstant());
 					enchantmentAdvanced.addDefault(
 							namespace + "." + enchant.getName() + ".enchantability_modifier",
-							enchant.getDefaultFiftyModifier());
+							enchant.getDefaultModifier());
 					enchantmentAdvanced.addDefault(
 							namespace + "." + enchant.getName() + ".enchantability_start_level",
-							enchant.getDefaultFiftyStartLevel());
+							enchant.getDefaultStartLevel());
 					enchantmentAdvanced.addDefault(
 							namespace + "." + enchant.getName() + ".enchantability_max_level",
-							enchant.getDefaultFiftyMaxLevel());
+							enchant.getDefaultMaxLevel());
 					enchantmentAdvanced.addDefault(
 							namespace + "." + enchant.getName() + ".conflicting_enchantments",
 							enchant.conflictingDefaultList());

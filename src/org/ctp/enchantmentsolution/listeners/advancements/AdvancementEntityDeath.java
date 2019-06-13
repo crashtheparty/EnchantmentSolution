@@ -56,7 +56,7 @@ public class AdvancementEntityDeath implements Listener{
 					}
 				}
 				ItemStack chestplate = killer.getInventory().getChestplate();
-				if(Enchantments.hasEnchantment(chestplate, DefaultEnchantments.GUNG_HO) && killed.getType() == EntityType.WITHER) {
+				if(chestplate != null && Enchantments.hasEnchantment(chestplate, DefaultEnchantments.GUNG_HO) && killed.getType() == EntityType.WITHER) {
 					AdvancementUtils.awardCriteria(killer, ESAdvancement.DANGER_DEFEATED, "wither"); 
 				}
 			}

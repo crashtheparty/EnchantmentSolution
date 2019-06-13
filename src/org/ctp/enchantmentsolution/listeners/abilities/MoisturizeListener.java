@@ -41,6 +41,7 @@ public class MoisturizeListener extends EnchantmentListener{
 							Campfire fire = (Campfire) block.getBlockData();
 							if(fire.isLit()) {
 								fire.setLit(false);
+								block.setBlockData(fire);
 								super.damageItem(event.getPlayer(), item);
 								event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.BLOCK_WATER_AMBIENT, 1, 1);
 								event.getPlayer().incrementStatistic(Statistic.USE_ITEM, item.getType());

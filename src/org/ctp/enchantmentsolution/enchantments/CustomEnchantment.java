@@ -316,12 +316,19 @@ public abstract class CustomEnchantment {
 		defaultThirtyConstant = constant;
 	}
 
-	public int getDefaultFiftyConstant() {
+	private int getDefaultFiftyConstant() {
 		return defaultFiftyConstant;
 	}
 
 	protected void setDefaultFiftyConstant(int constant) {
 		defaultFiftyConstant = constant;
+	}
+	
+	public int getDefaultConstant() {
+		if(ConfigUtils.isLevel50()) {
+			return defaultFiftyConstant;
+		}
+		return defaultThirtyConstant;
 	}
 
 	private void setConstant(int constant) {
@@ -336,12 +343,19 @@ public abstract class CustomEnchantment {
 		defaultThirtyModifier = modifier;
 	}
 
-	public int getDefaultFiftyModifier() {
+	private int getDefaultFiftyModifier() {
 		return defaultFiftyModifier;
 	}
 
 	protected void setDefaultFiftyModifier(int modifier) {
 		defaultFiftyModifier = modifier;
+	}
+	
+	public int getDefaultModifier() {
+		if(ConfigUtils.isLevel50()) {
+			return defaultFiftyModifier;
+		}
+		return defaultThirtyModifier;
 	}
 
 	private void setModifier(int modifier) {
@@ -356,12 +370,19 @@ public abstract class CustomEnchantment {
 		defaultThirtyStartLevel = startLevel;
 	}
 
-	public int getDefaultFiftyStartLevel() {
+	private int getDefaultFiftyStartLevel() {
 		return defaultFiftyStartLevel;
 	}
 
 	protected void setDefaultFiftyStartLevel(int startLevel) {
 		defaultFiftyStartLevel = startLevel;
+	}
+	
+	public int getDefaultStartLevel() {
+		if(ConfigUtils.isLevel50()) {
+			return defaultFiftyStartLevel;
+		}
+		return defaultThirtyStartLevel;
 	}
 
 	private void setStartLevel(int startLevel) {
@@ -376,12 +397,19 @@ public abstract class CustomEnchantment {
 		defaultThirtyMaxLevel = maxLevel;
 	}
 
-	public int getDefaultFiftyMaxLevel() {
+	private int getDefaultFiftyMaxLevel() {
 		return defaultFiftyMaxLevel;
 	}
 
 	protected void setDefaultFiftyMaxLevel(int maxLevel) {
 		defaultFiftyMaxLevel = maxLevel;
+	}
+	
+	public int getDefaultMaxLevel() {
+		if(ConfigUtils.isLevel50()) {
+			return defaultFiftyMaxLevel;
+		}
+		return defaultThirtyMaxLevel;
 	}
 
 	private void setMaxLevel(int maxLevel) {

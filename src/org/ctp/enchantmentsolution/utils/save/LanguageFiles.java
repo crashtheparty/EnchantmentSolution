@@ -144,6 +144,7 @@ public class LanguageFiles {
 		englishUS.addDefault("anvil.cannot-combine", (ChatColor.RED + "Can't Combine Items").replace("§", "&"));
 		englishUS.addDefault("anvil.cannot-rename", (ChatColor.RED + "Can't Rename Items").replace("§", "&"));
 		englishUS.addDefault("anvil.message-cannot-combine", "You may not combine these items!");
+		englishUS.addDefault("anvil.message-cannot-combine-cost", "You may not combine these items! Level cost is %level%!");
 		englishUS.addDefault("anvil.legacy-gui", (ChatColor.WHITE + "Open Minecraft Anvil GUI").replace("§", "&"));
 		englishUS.addDefault("anvil.legacy-gui-warning", (
 				Arrays.asList((ChatColor.RED + "Custom enchantments will not work in this anvil and may be lost.").replace("§", "&"), 
@@ -286,6 +287,7 @@ public class LanguageFiles {
 		german.addDefault("anvil.cannot-combine", (ChatColor.RED + "Nicht kombinierbar").replace("§", "&"));
 		german.addDefault("anvil.cannot-rename", (ChatColor.RED + "Kann nicht benannt werden").replace("§", "&"));
 		german.addDefault("anvil.message-cannot-combine", "Diese Items können nicht kombiniert werden!");
+		englishUS.addDefault("anvil.message-cannot-combine-cost", "Diese Items können nicht kombiniert werden! Die Levelkosten betragen %level%!");
 		german.addDefault("anvil.legacy-gui", (ChatColor.WHITE + "Öffne den Vanilla-Amboss").replace("§", "&"));
 		german.addDefault("anvil.legacy-gui-warning", (
 				Arrays.asList((ChatColor.RED + "Manche Verzauberungen gehen in diesem Amboss verloren!").replace("§", "&"), 

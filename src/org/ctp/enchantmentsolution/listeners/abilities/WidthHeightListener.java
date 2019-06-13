@@ -83,7 +83,6 @@ public class WidthHeightListener extends EnchantmentListener{
 			Material original = event.getBlock().getType();
 			if(hasWidthHeight && ItemBreakType.getType(item.getType()) != null && ItemBreakType.getType(item.getType()).getBreakTypes() != null 
 					&& ItemBreakType.getType(item.getType()).getBreakTypes().contains(original)) {
-				AdvancementUtils.awardCriteria(player, ESAdvancement.FAST_AND_FURIOUS, "diamond_pickaxe"); 
 				int start = 1;
 				int blocksBroken = 0;
 				while(start <= xt || start <= yt || start <= zt) {
@@ -144,6 +143,7 @@ public class WidthHeightListener extends EnchantmentListener{
 										newEvent.setExpToDrop(exp);
 										Bukkit.getServer().getPluginManager().callEvent(newEvent);
 										if(item != null && newEvent.getBlock().getType() != Material.AIR && !newEvent.isCancelled()) {
+											AdvancementUtils.awardCriteria(player, ESAdvancement.FAST_AND_FURIOUS, "diamond_pickaxe"); 
 											if(newEvent.getBlock().getType().equals(Material.SNOW) && ItemBreakType.getType(item.getType()).getBreakTypes().contains(Material.SNOW)) {
 												int num = ((Snow) newEvent.getBlock().getBlockData()).getLayers();
 												Item droppedItem = player.getWorld().dropItem(

@@ -45,8 +45,8 @@ public class SandVeilListener extends EnchantmentListener{
 			double random = Math.random();
 			if(accuracy <= random) {
 				event.setCancelled(true);
-				AdvancementUtils.awardCriteria(ea.getAttacker(), ESAdvancement.MISSED, "sand", 1);
 				event.getEntity().getWorld().spawnParticle(Particle.CLOUD, event.getEntity().getLocation(), 200, 0.2, 0.2, 0.2);
+				AdvancementUtils.awardCriteria(ea.getAttacker(), ESAdvancement.MISSED, "sand", 1);
 			}
 		}
 		if(!event.isCancelled()) {

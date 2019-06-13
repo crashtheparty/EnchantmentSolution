@@ -25,6 +25,8 @@ import org.ctp.enchantmentsolution.listeners.fishing.EnchantsFishingListener;
 import org.ctp.enchantmentsolution.listeners.fishing.McMMOFishingNMS;
 import org.ctp.enchantmentsolution.listeners.legacy.UpdateEnchantments;
 import org.ctp.enchantmentsolution.listeners.mobs.MobSpawning;
+import org.ctp.enchantmentsolution.listeners.vanilla.AnvilListener;
+import org.ctp.enchantmentsolution.listeners.vanilla.EnchantmentListener;
 import org.ctp.enchantmentsolution.nms.McMMO;
 import org.ctp.enchantmentsolution.nms.animalmob.AnimalMob;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
@@ -137,6 +139,8 @@ public class EnchantmentSolution extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new UpdateEnchantments(), this);
 		getServer().getPluginManager().registerEvents(new AdvancementEntityDeath(), this);
 		getServer().getPluginManager().registerEvents(new AdvancementPlayerEvent(), this);
+		getServer().getPluginManager().registerEvents(new EnchantmentListener(), this);
+		getServer().getPluginManager().registerEvents(new AnvilListener(), this);
 		
 		if(Bukkit.getPluginManager().isPluginEnabled("Jobs")) {
 			jobsReborn = Bukkit.getPluginManager().getPlugin("Jobs");

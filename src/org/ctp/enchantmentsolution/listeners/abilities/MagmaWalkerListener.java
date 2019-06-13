@@ -56,7 +56,7 @@ public class MagmaWalkerListener extends EnchantmentListener implements Runnable
 								lava.setType(Material.MAGMA_BLOCK);
 								MagmaWalkerListener.BLOCKS.add(lava);
 								if(lava.getWorld().getEnvironment() == Environment.THE_END) {
-									AdvancementUtils.awardCriteria(player, ESAdvancement.FLAME_KEEPER, "boots");
+									AdvancementUtils.awardCriteria(player, ESAdvancement.FLAME_KEEPER, "flame");
 								}
 							}else if(lava.getType().equals(Material.MAGMA_BLOCK)){
 								List<MetadataValue> values = lava.getMetadata("MagmaWalker");

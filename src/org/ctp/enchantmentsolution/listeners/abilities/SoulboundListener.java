@@ -98,12 +98,12 @@ public class SoulboundListener extends EnchantmentListener{
 			}
 		}
 		if(stealItems){
-			AdvancementUtils.awardCriteria(player, ESAdvancement.FEAR_THE_REAPER, "reaper");
+			AdvancementUtils.awardCriteria(player.getKiller(), ESAdvancement.FEAR_THE_REAPER, "reaper");
 			player.getWorld().spawnParticle(Particle.EXPLOSION_HUGE, player.getLocation(), 250, 0.2, 2, 0.2);
 			player.getWorld().playSound(player.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 1, 1);
 			for(ItemStack item : items){
 				if(Enchantments.hasEnchantment(item, DefaultEnchantments.SOUL_REAPER)){
-					AdvancementUtils.awardCriteria(player, ESAdvancement.REAPED_THE_REAPER, "reaper");
+					AdvancementUtils.awardCriteria(player.getKiller(), ESAdvancement.REAPED_THE_REAPER, "reaper");
 				}
 			}
 		}else{

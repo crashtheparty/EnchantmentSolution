@@ -7,24 +7,18 @@ import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
-import org.bukkit.block.data.BlockData;
-import org.bukkit.block.data.Directional;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
-import org.ctp.enchantmentsolution.enchantments.Enchantments;
 import org.ctp.enchantmentsolution.nms.AnvilNMS;
 import org.ctp.enchantmentsolution.utils.AnvilUtils;
 import org.ctp.enchantmentsolution.utils.AnvilUtils.RepairType;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.ConfigUtils;
 import org.ctp.enchantmentsolution.utils.JobsUtils;
-import org.ctp.enchantmentsolution.utils.items.DamageUtils;
 import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 
 public class Anvil implements InventoryData{
@@ -50,7 +44,7 @@ public class Anvil implements InventoryData{
 		if(block.getType() == Material.AIR) return;
 		try {
 			int size = 27;
-			if(ConfigUtils.useDefaultAnvil() || ConfigUtils.useLegacyGrindstone()) {
+			if(ConfigUtils.useAnvilInGui() || ConfigUtils.useLegacyGrindstone()) {
 				size = 45;
 			}
 			Inventory inv = Bukkit.createInventory(null, size, ChatUtils.getMessage(getCodes(), "anvil.name"));
@@ -89,7 +83,7 @@ public class Anvil implements InventoryData{
 			inv.setItem(24, mirror);
 			inv.setItem(25, mirror);
 			inv.setItem(26, mirror);
-			if(ConfigUtils.useDefaultAnvil() || ConfigUtils.useLegacyGrindstone()) {
+			if(ConfigUtils.useAnvilInGui() || ConfigUtils.useLegacyGrindstone()) {
 				inv.setItem(27, mirror);
 				inv.setItem(28, mirror);
 				inv.setItem(29, mirror);
@@ -108,7 +102,7 @@ public class Anvil implements InventoryData{
 				inv.setItem(42, mirror);
 				inv.setItem(43, mirror);
 				inv.setItem(44, mirror);
-				if(ConfigUtils.useDefaultAnvil() && ConfigUtils.useLegacyGrindstone()) {
+				if(ConfigUtils.useAnvilInGui() && ConfigUtils.useLegacyGrindstone()) {
 					ItemStack anvil = new ItemStack(Material.ANVIL);
 					ItemMeta anvilMeta = anvil.getItemMeta();
 					anvilMeta.setDisplayName(ChatUtils.getMessage(getCodes(), "anvil.legacy-gui"));
@@ -120,7 +114,7 @@ public class Anvil implements InventoryData{
 					grindstoneMeta.setDisplayName(ChatUtils.getMessage(getCodes(), "grindstone.legacy-open"));
 					grindstone.setItemMeta(grindstoneMeta);
 					inv.setItem(32, grindstone);
-				} else if (ConfigUtils.useDefaultAnvil()) {
+				} else if (ConfigUtils.useAnvilInGui()) {
 					ItemStack anvil = new ItemStack(Material.ANVIL);
 					ItemMeta anvilMeta = anvil.getItemMeta();
 					anvilMeta.setDisplayName(ChatUtils.getMessage(getCodes(), "anvil.legacy-gui"));
@@ -143,7 +137,7 @@ public class Anvil implements InventoryData{
 			
 			ItemStack combine = null;
 			if(playerItems.size() == 2 && AnvilUtils.canCombineItems(playerItems.get(0), playerItems.get(1))) {
-				int repairCost = getRepairCost();
+				int repairCost = AnvilUtils.getRepairCost(player, playerItems.get(0), playerItems.get(1));
 				int playerLevel = player.getLevel();
 				List<String> lore = new ArrayList<String>();
 				if(player.getGameMode().equals(GameMode.CREATIVE) || repairCost <= playerLevel) {
@@ -255,31 +249,12 @@ public class Anvil implements InventoryData{
 	public List<ItemStack> getItems() {
 		return playerItems;
 	}
-
-	public int getRepairCost() {
-		int repairCost = 0;
-		RepairType type = AnvilUtils.RepairType.getRepairType(playerItems.get(0), playerItems.get(1));
-		if(!type.equals(RepairType.RENAME) && DamageUtils.getDamage(playerItems.get(0).getItemMeta()) != 0) {
-			repairCost += 2;
-		}
-		int repairCostOne = AnvilNMS.getRepairCost(playerItems.get(0));
-		int repairCostTwo = AnvilNMS.getRepairCost(playerItems.get(1));
-		repairCost += repairCostOne + repairCostTwo;
-		
-		if(type.equals(RepairType.COMBINE)) {
-			repairCost += Enchantments.combineEnchantmentsLevel(player, playerItems.get(0), playerItems.get(1));
-		}else if(type.equals(RepairType.REPAIR)) {
-			repairCost += ItemUtils.repairItem(playerItems.get(0), playerItems.get(1));
-		}
-		
-		return Math.max(repairCost / ConfigUtils.getLevelDivisor(), 1);
-	}
 	
 	public void combine() {
 		if(inventory.getItem(14).getType().equals(Material.LIME_STAINED_GLASS_PANE)) {
 			RepairType type = AnvilUtils.RepairType.getRepairType(playerItems.get(0), playerItems.get(1));
 			if(player.getGameMode() != GameMode.CREATIVE){
-				player.setLevel(player.getLevel() - getRepairCost());
+				player.setLevel(player.getLevel() - AnvilUtils.getRepairCost(player, playerItems.get(0), playerItems.get(1)));
 			}
 			int itemOneRepair = AnvilNMS.getRepairCost(playerItems.get(0));
 			int itemTwoRepair = AnvilNMS.getRepairCost(playerItems.get(1));
@@ -300,7 +275,7 @@ public class Anvil implements InventoryData{
 			combinedItem = null;
 			playerItems.clear();
 
-			checkAnvilBreak();
+			AnvilUtils.checkAnvilBreak(player, block, this);
 		}else {
 			ChatUtils.sendMessage(player, ChatUtils.getMessage(getCodes(), "anvil.message-cannot-combine"));
 		}
@@ -321,43 +296,6 @@ public class Anvil implements InventoryData{
 			meta.setDisplayName(name);
 			item.setItemMeta(meta);
 			ItemUtils.giveItemToPlayer(player, item, player.getLocation(), false);
-		}
-	}
-	
-	public void checkAnvilBreak() {
-		if(player.getGameMode().equals(GameMode.CREATIVE)) {
-			block.getWorld().playSound(block.getLocation(), Sound.BLOCK_ANVIL_USE, 1, 1);
-			return;
-		}
-		double chance = .12;
-		double roll = Math.random();
-		if(chance > roll) {
-			Material material = Material.AIR;
-			switch(block.getType()) {
-			case ANVIL:
-				material = Material.CHIPPED_ANVIL;
-				break;
-			case CHIPPED_ANVIL:
-				material = Material.DAMAGED_ANVIL;
-				break;
-			default:
-				
-			}
-			if(material == Material.AIR) {
-				block.getWorld().playSound(block.getLocation(), Sound.BLOCK_ANVIL_DESTROY, 1, 1);
-				close(false);
-				block.setType(material);
-			} else {
-				block.getWorld().playSound(block.getLocation(), Sound.BLOCK_ANVIL_BREAK, 1, 1);
-				block.getWorld().playSound(block.getLocation(), Sound.BLOCK_ANVIL_USE, 1, 1);
-				BlockFace facing = ((Directional) block.getBlockData()).getFacing();
-				block.setType(material);
-				Directional d = (Directional) block.getBlockData();
-				d.setFacing(facing);
-				block.setBlockData((BlockData) d);
-			}
-		} else {
-			block.getWorld().playSound(block.getLocation(), Sound.BLOCK_ANVIL_USE, 1, 1);
 		}
 	}
 	

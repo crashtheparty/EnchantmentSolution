@@ -36,6 +36,9 @@ public class SacrificeListener extends EnchantmentListener{
 				if(killer != null) {
 					if(killer instanceof Damageable) {
 						((Damageable) killer).damage(damage);
+						if(((Damageable) killer).getHealth() <= 0) {
+							SACRIFICE_ADVANCEMENT.add(player.getUniqueId());
+						}
 					}
 				}else{
 					if(event.getEntity().getLastDamageCause() instanceof EntityDamageByEntityEvent) {
@@ -45,14 +48,14 @@ public class SacrificeListener extends EnchantmentListener{
 							 Projectile proj = (Projectile) nEvent.getDamager();
 							 if (proj.getShooter() instanceof Damageable) {
 								((Damageable) proj.getShooter()).damage(damage);
-								if(((Damageable) proj.getShooter()).getHealth() < 0) {
+								if(((Damageable) proj.getShooter()).getHealth() <= 0) {
 									SACRIFICE_ADVANCEMENT.add(player.getUniqueId());
 								}
 			                }
 						 }else{
 							 if (nEvent.getDamager() instanceof Damageable) {
 								((Damageable) nEvent.getDamager()).damage(damage);
-								if(((Damageable) nEvent.getDamager()).getHealth() < 0) {
+								if(((Damageable) nEvent.getDamager()).getHealth() <= 0) {
 									SACRIFICE_ADVANCEMENT.add(player.getUniqueId());
 								}
 			                }
@@ -67,6 +70,7 @@ public class SacrificeListener extends EnchantmentListener{
 	public void onPlayerRespawn(PlayerRespawnEvent event) {
 		if(SACRIFICE_ADVANCEMENT.contains(event.getPlayer().getUniqueId())) {
 			AdvancementUtils.awardCriteria(event.getPlayer(), ESAdvancement.DIVINE_RETRIBUTION, "retribution");
+			SACRIFICE_ADVANCEMENT.remove(event.getPlayer().getUniqueId());
 		}
 	}
 }
