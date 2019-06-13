@@ -21,10 +21,12 @@ public class PluginVersion {
 		return current;
 	}
 	
-	public String getNewestVersion() {
+	public Version getNewestVersion(boolean experimental) {
 		for(int i = pluginVersions.size() - 1; i >= 0; i--) {
-			if(pluginVersions.get(i).getType().equals(VersionType.LIVE)) {
-				return pluginVersions.get(i).getVersionName();
+			if(pluginVersions.get(i).getType() == VersionType.LIVE) {
+				return pluginVersions.get(i);
+			} else if (pluginVersions.get(i).getType() == VersionType.EXPERIMENTAL) {
+				return pluginVersions.get(i);
 			}
 		}
 		return null;
@@ -39,13 +41,16 @@ public class PluginVersion {
 		return false;
 	}
 	
-	public boolean hasNewerVersion() {
+	public boolean hasNewerVersion(boolean experimental) {
 		for(int i = pluginVersions.size() - 1; i >= 0; i--) {
 			Version v = pluginVersions.get(i);
 			if(v.getVersionName().equalsIgnoreCase(current)) {
 				return false;
 			}
-			if(v.getType().equals(VersionType.LIVE)) {
+			if(v.getType() == VersionType.LIVE) {
+				return true;
+			}
+			if(experimental && v.getType() == VersionType.EXPERIMENTAL) {
 				return true;
 			}
 		}

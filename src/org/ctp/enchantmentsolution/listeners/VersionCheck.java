@@ -22,14 +22,15 @@ public class VersionCheck implements Listener, Runnable {
 
 	private PluginVersion version;
 	private String history, spigot, github;
-	private boolean latestVersion, checked;
+	private boolean latestVersion, experimentalVersion, checked;
 	
-	public VersionCheck(PluginVersion version, String historyURL, String spigotURL, String githubURL, boolean getLatestVersion) {
+	public VersionCheck(PluginVersion version, String historyURL, String spigotURL, String githubURL, boolean getLatestVersion, boolean getExperimentalVersions) {
 		setPluginVersion(version);
 		setHistory(historyURL);
 		setSpigot(spigotURL);
 		setGithub(githubURL);
 		setLatestVersion(getLatestVersion);
+		setExperimentalVersion(getExperimentalVersions);
 	}
 	
 	@Override
@@ -68,12 +69,18 @@ public class VersionCheck implements Listener, Runnable {
 			if (!version.isOfficialVersion()) {
 				ChatUtils.sendToConsole(Level.WARNING,
 						"Uh oh! Plugin author forgot to update version history. Go tell them: " + spigot);
-			} else if (!version.hasNewerVersion()) {
+			} else if (!version.hasNewerVersion(experimentalVersion)) {
 				ChatUtils.sendToConsole(Level.INFO, "Your version is up-to-date.");
 			} else {
-				String versionString = version.getNewestVersion();
-				ChatUtils.sendToConsole(Level.WARNING, (version == null ? "New Version" : "Version " + versionString)
-						+ " of " + version.getPlugin().getName() + " is available! Download it here: " + spigot);
+				Version pluginVersion = version.getNewestVersion(experimentalVersion);
+				String versionString = pluginVersion.getVersionName();
+				if(pluginVersion.getType() == VersionType.EXPERIMENTAL) {
+					ChatUtils.sendToConsole(Level.WARNING, "Experimental Version " + versionString
+							+ " of " + version.getPlugin().getName() + " is ready for testing! Download it here: " + github);
+				} else {
+					ChatUtils.sendToConsole(Level.WARNING, "Version " + versionString
+							+ " of " + version.getPlugin().getName() + " is available! Download it here: " + spigot);
+				}
 			}
 			if(!checked) {
 				Bukkit.getScheduler().runTaskLater(version.getPlugin(), new Runnable() {
@@ -102,12 +109,22 @@ public class VersionCheck implements Listener, Runnable {
 		if (!version.isOfficialVersion()) {
 			ChatUtils.sendMessage(player, "Uh oh! Plugin author forgot to update version history. Go tell them: ",
 					github);
-		} else if (version.hasNewerVersion()) {
-			String newest = version.getNewestVersion();
-			ChatUtils.sendMessage(player,
-					"Version " + newest + " of " + version.getPlugin().getName() + " is available! Download it here: ",
-					spigot);
-
+		} else if (version.hasNewerVersion(experimentalVersion)) {
+			Version pluginVersion = version.getNewestVersion(experimentalVersion);
+			String versionString = pluginVersion.getVersionName();
+			if(pluginVersion.getType() == VersionType.EXPERIMENTAL) {
+				ChatUtils.sendToConsole(Level.WARNING, "Experimental Version " + versionString
+						+ " of " + version.getPlugin().getName() + " is ready for testing! Download it here: " + github);
+			} else {
+				ChatUtils.sendToConsole(Level.WARNING, "Version " + versionString
+						+ " of " + version.getPlugin().getName() + " is available! Download it here: " + spigot);
+			}
+			if (version.isExperimentalVersion()) {
+				ChatUtils.sendMessage(player,
+						"Thank you for using an experimental version of " + version.getPlugin().getName() + "! Please report any bugs you find to github.");
+				ChatUtils.sendMessage(player, "Link: ", github);
+				ChatUtils.sendMessage(player, "Version: " + version.getCurrent());
+			}
 		} else if (version.isExperimentalVersion()) {
 			ChatUtils.sendMessage(player,
 					"Thank you for using an experimental version of " + version.getPlugin().getName() + "! Please report any bugs you find to github.");
@@ -159,6 +176,14 @@ public class VersionCheck implements Listener, Runnable {
 
 	public void setLatestVersion(boolean latestVersion) {
 		this.latestVersion = latestVersion;
+	}
+
+	public boolean isExperimentalVersion() {
+		return experimentalVersion;
+	}
+
+	public void setExperimentalVersion(boolean experimentalVersion) {
+		this.experimentalVersion = experimentalVersion;
 	}
 
 }

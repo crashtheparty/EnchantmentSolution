@@ -96,6 +96,10 @@ public class ConfigFiles {
 			if (config.getInt("level_divisor") <= 0) {
 				config.set("level_divisor", 4);
 			}
+			if(config.getBooleanValue("get_latest_version") != null) {
+				config.set("version.get_latest", config.getBoolean("get_latest_version"));
+				config.removeKey("get_latest_version");
+			}
 			config.saveConfig();
 		} catch (final Exception e) {
 			e.printStackTrace();
@@ -155,6 +159,7 @@ public class ConfigFiles {
 			mcMMOFishing();
 			enchantmentFile();
 			enchantmentAdvancedFile();
+			EnchantmentSolution.getPlugin().setVersionCheck(config.getBoolean("version.get_latest"), config.getBoolean("version.get_experimental"));
 		} catch (final Exception e) {
 			e.printStackTrace();
 		}
@@ -192,6 +197,9 @@ public class ConfigFiles {
 				new String[] { "The default language of the language file" });
 		config.addEnum("language", Language.getValues());
 		config.addDefault("reset_language", false, new String[] { "Reload the entire language file" });
+		config.addDefault("use_comments", true, new String[] { "Show helpful comments in the config files" });
+		config.addDefault("version.get_latest", true, new String[] { "Check github for plugin releases (available on github and spigot)" });
+		config.addDefault("version.get_experimental", false, new String[] { "Check github for plugin experimental versions (available only on github)" });
 		config.addDefault("max_enchantments", 0, new String[] { "Max enchantments on each item. 0 allows infinite" });
 		config.addDefault("lapis_in_table", true,
 				new String[] { "Lapis must be placed in the enchantment table before items can be enchanted." });
@@ -276,8 +284,6 @@ public class ConfigFiles {
 			config.addDefault("loots.pillager_outpost.levels", 1);
 			config.addDefault("loots.pillager_outpost.treasure", true);
 		}
-		config.addDefault("use_comments", true, new String[] { "Show helpful comments in the config files" });
-		config.addDefault("get_latest_version", true, new String[] { "Check github for updates to the plugin" });
 		
 		if(EnchantmentSolution.getPlugin().isInitializing()) {
 			ChatUtils.sendInfo("Default config initialized!");
