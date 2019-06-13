@@ -14,8 +14,10 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
+import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 
 public class BeheadingListener extends EnchantmentListener{
@@ -32,6 +34,12 @@ public class BeheadingListener extends EnchantmentListener{
 				if(chance > random){
 					if(entity instanceof WitherSkeleton){
 						ItemStack skull = new ItemStack(Material.WITHER_SKELETON_SKULL);
+						for(ItemStack drop : event.getDrops()) {
+							if(drop.getType().equals(Material.WITHER_SKELETON_SKULL)) {
+								AdvancementUtils.awardCriteria(killer, ESAdvancement.DOUBLE_HEADER, "wither_skull");
+								break;
+							}
+						}
 						event.getDrops().add(skull);
 					}else if(entity instanceof Skeleton){
 						ItemStack skull = new ItemStack(Material.SKELETON_SKULL);
@@ -53,6 +61,7 @@ public class BeheadingListener extends EnchantmentListener{
 						} else {
 							event.getDrops().add(skull);
 						}
+						AdvancementUtils.awardCriteria(killer, ESAdvancement.HEADHUNTER, "player_head");
 					}else if(entity instanceof EnderDragon){
 						ItemStack skull = new ItemStack(Material.DRAGON_HEAD);
 						event.getDrops().add(skull);

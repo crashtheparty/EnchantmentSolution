@@ -9,8 +9,10 @@ import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
+import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.items.DamageUtils;
 
 public class FrequentFlyerListener implements Runnable{
@@ -137,6 +139,9 @@ public class FrequentFlyerListener implements Runnable{
 		}
 		
 		public void minus() {
+			if(player.getLocation().getY() >= 12000) {
+				AdvancementUtils.awardCriteria(player, ESAdvancement.CRUISING_ALTITUDE, "elytra"); 
+			}
 			if(player.getLocation().getY() > 255) {
 				above = above - 1;
 				if(above <= 0) {

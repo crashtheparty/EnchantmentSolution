@@ -26,7 +26,7 @@ public class PlayerLevels {
 		List<Integer> levelList = getIntList(player, books);
 		
 		if(levelList == null){
-			if(ConfigUtils.useLevel50()) {
+			if(ConfigUtils.isLevel50()) {
 				levelList = generateFiftyLevels();
 			} else {
 				levelList = generateThirtyLevels();
@@ -46,7 +46,7 @@ public class PlayerLevels {
 		List<Integer> levelList = getIntList(player, books);
 		
 		if(levelList == null){
-			if(ConfigUtils.useLevel50()) {
+			if(ConfigUtils.isLevel50()) {
 				levelList = generateFiftyLevels();
 			} else {
 				levelList = generateThirtyLevels();
@@ -216,12 +216,12 @@ public class PlayerLevels {
 	
 	public static PlayerLevels generateFakePlayerLevels(Material material, int minBookshelves, boolean treasure) {
 		int books = 16;
-		if(ConfigUtils.useLevel50()) books = 24;
+		if(ConfigUtils.isLevel50()) books = 24;
 		int random = (int)(Math.random() * books) + minBookshelves;
 		if(random >= books) random = books - 1;
 		PlayerLevels levels = new PlayerLevels(random, material, treasure);
 		
-		if(ConfigUtils.useLevel50() && random < 15) {
+		if(ConfigUtils.isLevel50() && random < 15) {
 			while(levels.enchants.size() > 3) {
 				levels.enchants.remove(3);
 			}

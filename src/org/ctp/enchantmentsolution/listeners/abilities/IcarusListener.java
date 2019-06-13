@@ -13,8 +13,10 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
+import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
+import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.items.DamageUtils;
 
 public class IcarusListener extends EnchantmentListener implements Runnable{
@@ -50,6 +52,8 @@ public class IcarusListener extends EnchantmentListener implements Runnable{
 				}
 				if(num_breaks > 0) {
 					if(DamageUtils.getDamage(chestplate.getItemMeta()) + num_breaks > chestplate.getType().getMaxDurability()) {
+						AdvancementUtils.awardCriteria(player, ESAdvancement.TOO_CLOSE, "failure"); 
+						player.getWorld().spawnParticle(Particle.EXPLOSION_NORMAL, player.getLocation(), 5, 2, 2, 2);
 						return;
 					}
 					DamageUtils.setDamage(chestplate, DamageUtils.getDamage(chestplate.getItemMeta()) + num_breaks);

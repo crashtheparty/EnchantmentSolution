@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Random;
 
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDeathEvent;
@@ -12,9 +13,11 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.loot.LootContext;
 import org.bukkit.loot.Lootable;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
+import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
+import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 
 public class PillageListener extends EnchantmentListener{
 	
@@ -43,6 +46,9 @@ public class PillageListener extends EnchantmentListener{
 					event.getDrops().addAll(items);
 					Enchantments.removeAllEnchantments(item);
 					Enchantments.addEnchantmentsToItem(item, levels);
+					if(event.getEntity().getType() == EntityType.PILLAGER) {
+						AdvancementUtils.awardCriteria(player, ESAdvancement.LOOK_WHAT_YOU_MADE_ME_DO, "pillage");
+					}
 				}
 			}
 		}

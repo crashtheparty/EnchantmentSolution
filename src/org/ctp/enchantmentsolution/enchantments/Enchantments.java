@@ -245,7 +245,7 @@ public class Enchantments {
 				}
 			}
 		}
-		if (ConfigUtils.useLevel50()) {
+		if (ConfigUtils.isLevel50()) {
 			if (bookshelves > 23)
 				bookshelves = 23;
 		} else {

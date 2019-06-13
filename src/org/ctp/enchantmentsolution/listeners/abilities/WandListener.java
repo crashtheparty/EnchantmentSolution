@@ -20,9 +20,12 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
+import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.LocationUtils;
+import org.ctp.enchantmentsolution.utils.items.DamageUtils;
 import org.ctp.enchantmentsolution.utils.items.ItemSerialization;
 import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 import org.ctp.enchantmentsolution.utils.items.nms.ItemPlaceType;
@@ -101,6 +104,9 @@ public class WandListener extends EnchantmentListener{
 									Block block = clickedBlock.getRelative(x, y, z);
 									if(!block.getType().isSolid()) {
 										IGNORE_BLOCKS.add(block);
+										if(block.getType() == Material.TORCH) {
+											AdvancementUtils.awardCriteria(player, ESAdvancement.BREAKER_BREAKER, "torch");
+										}
 										Collection<ItemStack> drops = block.getDrops();
 										BlockData oldData = block.getBlockData();
 										Material oldType = block.getType();
@@ -191,6 +197,9 @@ public class WandListener extends EnchantmentListener{
 		if (player.getGameMode().equals(GameMode.CREATIVE) || player.getGameMode().equals(GameMode.SPECTATOR))
 			return;
 		ItemStack item = player.getInventory().getItemInMainHand();
-		super.damageItem(player, item, 1, 2);
+		ItemStack deadItem = super.damageItem(player, item, 1, 2);
+		if(DamageUtils.getDamage(deadItem.getItemMeta()) > deadItem.getType().getMaxDurability()) {
+			AdvancementUtils.awardCriteria(player, ESAdvancement.DID_YOU_REALLY_WAND_TO_DO_THAT, "break");
+		}
 	}
 }

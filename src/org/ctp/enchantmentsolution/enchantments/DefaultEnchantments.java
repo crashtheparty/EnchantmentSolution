@@ -204,7 +204,7 @@ public class DefaultEnchantments {
 					}
 					description = StringUtils.decodeString(language.getString("enchantment.descriptions.default_enchantments."+enchantment.getName()));
 				}
-				if(ConfigUtils.useLevel50()) {
+				if(ConfigUtils.isLevel50()) {
 					ENCHANTMENTS.get(i).setLevelFifty();
 				} else {
 					ENCHANTMENTS.get(i).setLevelThirty();

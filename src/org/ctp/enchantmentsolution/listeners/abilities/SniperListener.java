@@ -7,9 +7,11 @@ import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
+import org.ctp.enchantmentsolution.utils.LocationUtils;
 
 public class SniperListener extends EnchantmentListener{
 	
@@ -24,6 +26,8 @@ public class SniperListener extends EnchantmentListener{
 				ItemStack bow = player.getInventory().getItemInMainHand();
 				if(bow != null && Enchantments.hasEnchantment(bow, DefaultEnchantments.SNIPER)){
 					int level = Enchantments.getLevel(bow, DefaultEnchantments.SNIPER);
+					arrow.setMetadata("sniper", new FixedMetadataValue(EnchantmentSolution.getPlugin(), 
+							LocationUtils.locationToString(player.getLocation())));
 					double speed = 1 + (0.1 * level * level);
 					Bukkit.getScheduler().runTaskLater(EnchantmentSolution.getPlugin(), new Runnable(){
 						@Override

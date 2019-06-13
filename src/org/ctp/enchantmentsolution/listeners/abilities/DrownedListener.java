@@ -22,9 +22,11 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.inventory.ItemStack;
+import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
 import org.ctp.enchantmentsolution.nms.DamageEvent;
+import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 
 public class DrownedListener extends EnchantmentListener implements Runnable{
 	
@@ -53,6 +55,7 @@ public class DrownedListener extends EnchantmentListener implements Runnable{
 		if(!canRun(DefaultEnchantments.DROWNED, event)) return;
 		if(event.getDamager() instanceof Trident) {
 			Trident trident = (Trident) event.getDamager();
+			HumanEntity human = (HumanEntity) trident.getShooter();
 			if(ENTITY_IDS.containsKey(trident.getUniqueId())) {
 				ItemStack item = ENTITY_IDS.get(trident.getUniqueId());
 				if(Enchantments.hasEnchantment(item, DefaultEnchantments.DROWNED)) {
@@ -61,7 +64,7 @@ public class DrownedListener extends EnchantmentListener implements Runnable{
 					if(event.getEntity() instanceof LivingEntity) {
 						LivingEntity entity = (LivingEntity) event.getEntity();
 						if(!(entity instanceof WaterMob) && !(entity instanceof Drowned) && !(entity instanceof Guardian)) {
-							addNewDrowned(entity, ticks);
+							addNewDrowned(entity, human, ticks);
 						}
 					}
 				}
@@ -76,7 +79,7 @@ public class DrownedListener extends EnchantmentListener implements Runnable{
 					if(event.getEntity() instanceof LivingEntity) {
 						LivingEntity entity = (LivingEntity) event.getEntity();
 						if(!(entity instanceof WaterMob) && !(entity instanceof Drowned) && !(entity instanceof Guardian)) {
-							addNewDrowned(entity, ticks);
+							addNewDrowned(entity, human, ticks);
 						}
 					}
 				}
@@ -98,34 +101,44 @@ public class DrownedListener extends EnchantmentListener implements Runnable{
 		if(!canRun(DefaultEnchantments.DROWNED, event)) return;
 		for(int i = ENTITIES.size() - 1; i >= 0; i--) {
 			DrownedEntity entity = ENTITIES.get(i);
-			if(entity.getEntity().equals(event.getEntity())) {
+			if(entity.getHurtEntity().equals(event.getEntity())) {
 				ENTITIES.remove(entity);
 				break;
 			}
 		}
 	}
 	
-	private void addNewDrowned(LivingEntity entity, int ticks) {
+	private void addNewDrowned(LivingEntity hurtEntity, LivingEntity attackerEntity, int ticks) {
 		for(int i = ENTITIES.size() - 1; i >= 0; i--) {
 			DrownedEntity drowned = ENTITIES.get(i);
-			if(drowned.getEntity().getUniqueId().equals(entity.getUniqueId())) {
+			if(drowned.getHurtEntity().getUniqueId().equals(hurtEntity.getUniqueId())) {
 				if(drowned.getDamageTime() < ticks) {
 					drowned.setDamageTime(ticks);
 				}
 				return;
 			}
 		}
-		ENTITIES.add(new DrownedEntity(entity, ticks));
+		ENTITIES.add(new DrownedEntity(hurtEntity, attackerEntity, ticks));
 	}
 
 	@Override
 	public void run() {
 		if(!DefaultEnchantments.isEnabled(DefaultEnchantments.DROWNED)) return;
+		Map<UUID, Integer> attackers = new HashMap<UUID, Integer>();
 		for(int i = ENTITIES.size() - 1; i >= 0; i--) {
 			DrownedEntity entity = ENTITIES.get(i);
 			entity.inflictDamage();
 			if(entity.getDamageTime() <= 0) {
 				ENTITIES.remove(entity);
+			} else {
+				if(attackers.containsKey(entity.getAttackerEntity().getUniqueId())) {
+					attackers.put(entity.getAttackerEntity().getUniqueId(), attackers.get(entity.getAttackerEntity().getUniqueId()) + 1);
+					if(attackers.get(entity.getAttackerEntity().getUniqueId()) >= 3 && entity.getAttackerEntity() instanceof Player) {
+						AdvancementUtils.awardCriteria(((Player) entity.getAttackerEntity()), ESAdvancement.SEVEN_POINT_EIGHT, "drowning");
+					}
+				} else {
+					attackers.put(entity.getAttackerEntity().getUniqueId(), 1);
+				}
 			}
 		}
 	}
@@ -133,26 +146,31 @@ public class DrownedListener extends EnchantmentListener implements Runnable{
 	protected class DrownedEntity {
 		
 		private int damageTime;
-		private UUID entity;
+		private UUID hurtEntity, attackerEntity;
 		private int ticksLastDamage = 1;
 		
-		public DrownedEntity(LivingEntity entity, int ticks) {
-			this.entity = entity.getUniqueId();
+		public DrownedEntity(LivingEntity hurtEntity, LivingEntity attackerEntity, int ticks) {
+			this.hurtEntity = hurtEntity.getUniqueId();
+			this.attackerEntity = attackerEntity.getUniqueId();
 			this.damageTime = ticks;
 		}
 		
-		public LivingEntity getEntity() {
-			return (LivingEntity) Bukkit.getEntity(this.entity);
+		public LivingEntity getHurtEntity() {
+			return (LivingEntity) Bukkit.getEntity(this.hurtEntity);
+		}
+		
+		public LivingEntity getAttackerEntity() {
+			return (LivingEntity) Bukkit.getEntity(this.attackerEntity);
 		}
 		
 		public void inflictDamage() {
-			LivingEntity entity = getEntity();
-			if(entity == null) return;
-			entity.setRemainingAir(0);
+			LivingEntity hurtEntity = getHurtEntity();
+			if(hurtEntity == null) return;
+			hurtEntity.setRemainingAir(0);
 			if(ticksLastDamage >= 20) {
 				int level = 0;
-				if(entity instanceof HumanEntity) {
-					HumanEntity hEntity = (HumanEntity) entity;
+				if(hurtEntity instanceof HumanEntity) {
+					HumanEntity hEntity = (HumanEntity) hurtEntity;
 					ItemStack helmet = hEntity.getInventory().getHelmet();
 					
 					if(helmet != null) {
@@ -162,7 +180,10 @@ public class DrownedListener extends EnchantmentListener implements Runnable{
 				double chance = (double) level / ((double) level + 1);
 				double random = Math.random();
 				if(chance <= random) {
-					DamageEvent.damageEntity(entity, "drown", 2);
+					DamageEvent.damageEntity(hurtEntity, "drown", 2);
+				}
+				if(hurtEntity.isDead() && hurtEntity instanceof Player && getAttackerEntity() instanceof Player) {
+					AdvancementUtils.awardCriteria(((Player) getAttackerEntity()), ESAdvancement.HEX_BAG, "player");
 				}
 				ticksLastDamage = 1;
 			}else {

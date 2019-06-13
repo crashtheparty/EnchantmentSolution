@@ -6,22 +6,31 @@ import java.util.concurrent.Callable;
 import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.ctp.enchantmentsolution.inventory.InventoryData;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.ctp.enchantmentsolution.advancements.ESAdvancement;
+import org.ctp.enchantmentsolution.advancements.ESAdvancementProgress;
 import org.ctp.enchantmentsolution.commands.*;
 import org.ctp.enchantmentsolution.database.SQLite;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.listeners.*;
 import org.ctp.enchantmentsolution.listeners.abilities.*;
+import org.ctp.enchantmentsolution.listeners.advancements.AdvancementEntityDeath;
+import org.ctp.enchantmentsolution.listeners.advancements.AdvancementPlayerEvent;
+import org.ctp.enchantmentsolution.listeners.advancements.AdvancementThread;
 import org.ctp.enchantmentsolution.listeners.chestloot.ChestLootListener;
 import org.ctp.enchantmentsolution.listeners.fishing.EnchantsFishingListener;
 import org.ctp.enchantmentsolution.listeners.fishing.McMMOFishingNMS;
 import org.ctp.enchantmentsolution.listeners.legacy.UpdateEnchantments;
 import org.ctp.enchantmentsolution.listeners.mobs.MobSpawning;
+import org.ctp.enchantmentsolution.listeners.vanilla.AnvilListener;
+import org.ctp.enchantmentsolution.listeners.vanilla.EnchantmentListener;
 import org.ctp.enchantmentsolution.nms.McMMO;
 import org.ctp.enchantmentsolution.nms.animalmob.AnimalMob;
+import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.ConfigUtils;
 import org.ctp.enchantmentsolution.utils.Metrics;
@@ -35,6 +44,7 @@ public class EnchantmentSolution extends JavaPlugin {
 
 	private static EnchantmentSolution PLUGIN;
 	private List<InventoryData> inventories = new ArrayList<InventoryData>();
+	private static List<ESAdvancementProgress> PROGRESS = new ArrayList<ESAdvancementProgress>();
 	private static List<AnimalMob> ANIMALS = new ArrayList<AnimalMob>();
 	private boolean disable = false, initialization = true;
 	private SQLite db;
@@ -123,12 +133,17 @@ public class EnchantmentSolution extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new MoisturizeListener(), this);
 		getServer().getPluginManager().registerEvents(new IrenesLassoListener(), this);
 		getServer().getPluginManager().registerEvents(new CurseOfLagListener(), this);
+		getServer().getPluginManager().registerEvents(new UnrestListener(), this);
 		getServer().getPluginManager().registerEvents(new ChestLootListener(), this);
 		getServer().getPluginManager().registerEvents(new MobSpawning(), this);
 		getServer().getPluginManager().registerEvents(new VanishListener(), this);
 		getServer().getPluginManager().registerEvents(new ChatMessage(), this);
 		getServer().getPluginManager().registerEvents(new BlockListener(), this);
 		getServer().getPluginManager().registerEvents(new UpdateEnchantments(), this);
+		getServer().getPluginManager().registerEvents(new AdvancementEntityDeath(), this);
+		getServer().getPluginManager().registerEvents(new AdvancementPlayerEvent(), this);
+		getServer().getPluginManager().registerEvents(new EnchantmentListener(), this);
+		getServer().getPluginManager().registerEvents(new AnvilListener(), this);
 		
 		if(Bukkit.getPluginManager().isPluginEnabled("Jobs")) {
 			jobsReborn = Bukkit.getPluginManager().getPlugin("Jobs");
@@ -195,6 +210,8 @@ public class EnchantmentSolution extends JavaPlugin {
 				new GungHoListener(), 1l, 1l);
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN,
 				new LifeListener(), 1l, 1l);
+		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN,
+				new AdvancementThread(), 1l, 1l);
 
 		getCommand("Enchant").setExecutor(new Enchant());
 		getCommand("Info").setExecutor(new EnchantInfo());
@@ -214,13 +231,15 @@ public class EnchantmentSolution extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(check, this);
 		checkVersion();
 		initialization = false;
-				
+		
+		AdvancementUtils.createAdvancements();
+		
 		Metrics metrics = new Metrics(this);
 		
 		metrics.addCustomChart(new Metrics.SingleLineChart("level_fifty", new Callable<Integer>() {
 	        @Override
 	        public Integer call() throws Exception {
-	            if(ConfigUtils.useLevel50()) {
+	            if(ConfigUtils.isLevel50()) {
 	            	return 1;
 	            }
 	            return 0;
@@ -230,7 +249,7 @@ public class EnchantmentSolution extends JavaPlugin {
 		metrics.addCustomChart(new Metrics.SingleLineChart("level_thirty", new Callable<Integer>() {
 	        @Override
 	        public Integer call() throws Exception {
-	            if(!ConfigUtils.useLevel50()) {
+	            if(!ConfigUtils.isLevel50()) {
 	            	return 1;
 	            }
 	            return 0;
@@ -240,7 +259,7 @@ public class EnchantmentSolution extends JavaPlugin {
 		metrics.addCustomChart(new Metrics.SingleLineChart("advanced_file", new Callable<Integer>() {
 	        @Override
 	        public Integer call() throws Exception {
-	            if(getConfigFiles().getDefaultConfig().getBoolean("use_advanced_file")) {
+	            if(ConfigUtils.useAdvancedFile()) {
 	            	return 1;
 	            }
 	            return 0;
@@ -250,7 +269,7 @@ public class EnchantmentSolution extends JavaPlugin {
 		metrics.addCustomChart(new Metrics.SingleLineChart("basic_file", new Callable<Integer>() {
 	        @Override
 	        public Integer call() throws Exception {
-	            if(!getConfigFiles().getDefaultConfig().getBoolean("use_advanced_file")) {
+	            if(!ConfigUtils.useAdvancedFile()) {
 	            	return 1;
 	            }
 	            return 0;
@@ -260,13 +279,19 @@ public class EnchantmentSolution extends JavaPlugin {
 		metrics.addCustomChart(new Metrics.SingleLineChart("enhanced_gui", new Callable<Integer>() {
 	        @Override
 	        public Integer call() throws Exception {
-	            return 1;
+	            if(ConfigUtils.useESGUI()) {
+	            	return 1;
+	            }
+	            return 0;
 	        }
 	    }));
 		
 		metrics.addCustomChart(new Metrics.SingleLineChart("vanilla_gui", new Callable<Integer>() {
 	        @Override
 	        public Integer call() throws Exception {
+	            if(!ConfigUtils.useESGUI()) {
+	            	return 1;
+	            }
 	            return 0;
 	        }
 	    }));
@@ -351,6 +376,46 @@ public class EnchantmentSolution extends JavaPlugin {
 
 	public boolean isInitializing() {
 		return initialization;
+	}
+
+	public static List<ESAdvancementProgress> getProgress() {
+		return PROGRESS;
+	}
+	
+	public static void addProgress(ESAdvancementProgress progress) {
+		PROGRESS.add(progress);
+	}
+	
+	public static ESAdvancementProgress getAdvancementProgress(OfflinePlayer player, ESAdvancement advancement, String criteria) {
+		for(ESAdvancementProgress progress : EnchantmentSolution.getProgress()) {
+			if(progress.getPlayer().equals(player) && progress.getAdvancement() == advancement && progress.getCriteria().equals(criteria)) {
+				return progress;
+			}
+		}
+		ESAdvancementProgress progress = new ESAdvancementProgress(advancement, criteria, 0, player);
+		EnchantmentSolution.addProgress(progress);
+		return progress;
+	}
+	
+	public static List<ESAdvancementProgress> getAdvancementProgress(){
+		List<ESAdvancementProgress> progress = new ArrayList<ESAdvancementProgress>();
+		for(ESAdvancementProgress pr : PROGRESS) {
+			progress.add(pr);
+		}
+		return progress;
+	}
+
+	public static void completed(ESAdvancementProgress esProgress) {
+		PROGRESS.remove(esProgress);
+	}
+
+	public static boolean exists(Player player, ESAdvancement advancement, String criteria) {
+		for(ESAdvancementProgress progress : PROGRESS) {
+			if(progress.getPlayer().equals(player) && progress.getAdvancement() == advancement && progress.getCriteria().equals(criteria)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public static List<AnimalMob> getAnimals() {

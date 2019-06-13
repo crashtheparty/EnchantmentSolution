@@ -6,13 +6,17 @@ import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.Statistic;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.player.PlayerBedLeaveEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
+import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 
-public class UnrestListener implements Runnable {
+public class UnrestListener extends EnchantmentListener implements Runnable {
 
 	private static List<UnrestPlayer> HAS_UNREST = new ArrayList<UnrestPlayer>();
 	
@@ -42,6 +46,22 @@ public class UnrestListener implements Runnable {
 				}
 			}else {
 				HAS_UNREST.remove(unrestPlayer);
+			}
+		}
+	}
+	
+	@EventHandler
+	public void onPlayerBedLeave(PlayerBedLeaveEvent event) {
+		if(!canRun(DefaultEnchantments.UNREST, event)) return;
+		Player player = event.getPlayer();
+		if(player.getWorld().getTime() <= 12540 || player.getWorld().getTime() >= 23459) {
+			for(UnrestPlayer unrest : HAS_UNREST) {
+				if(unrest.getPlayer().equals(player)) {
+					if(unrest.hasUnrest()) {
+						AdvancementUtils.awardCriteria(player, ESAdvancement.I_AINT_AFRAID_OF_NO_GHOSTS, "unrest", 1);
+					}
+					break;
+				}
 			}
 		}
 	}

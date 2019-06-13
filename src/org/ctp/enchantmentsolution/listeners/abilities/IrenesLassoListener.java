@@ -16,11 +16,13 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
+import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
 import org.ctp.enchantmentsolution.nms.AnimalMobNMS;
 import org.ctp.enchantmentsolution.nms.McMMO;
 import org.ctp.enchantmentsolution.nms.animalmob.AnimalMob;
+import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.StringUtils;
 
@@ -49,6 +51,9 @@ public class IrenesLassoListener extends EnchantmentListener{
 						ChatUtils.sendMessage(player, "This animal does not belong to you!");
 						return;
 					}
+					String type = attacked.getType().name().toLowerCase();
+					AdvancementUtils.awardCriteria(player, ESAdvancement.THORGY, type);
+					AdvancementUtils.awardCriteria(player, ESAdvancement.FREE_PETS, type);
 				}
 				McMMO.customName(attacked);
 				EnchantmentSolution.addAnimals(AnimalMobNMS.getMob((Animals) attacked, attackItem));
