@@ -187,7 +187,13 @@ public class Enchantments {
 			totalWeight = 0;
 			customEnchants = new ArrayList<CustomEnchantment>();
 			for(CustomEnchantment enchantment : ENCHANTMENTS){
-				if(enchantment.isEnabled()) {
+				boolean conflicts = false;
+				for(EnchantmentLevel enchant : enchants) {
+					if(CustomEnchantment.conflictsWith(enchant.getEnchant(), enchantment)) {
+						conflicts = true;
+					}
+				}
+				if(enchantment.isEnabled() && !conflicts) {
 					if (treasure) {
 						if(enchantment.canEnchant(player, enchantability, level) && enchantment.canEnchantItem(material)){
 							totalWeight += enchantment.getWeight();
