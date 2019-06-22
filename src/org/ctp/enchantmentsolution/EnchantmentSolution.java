@@ -28,6 +28,7 @@ import org.ctp.enchantmentsolution.listeners.legacy.UpdateEnchantments;
 import org.ctp.enchantmentsolution.listeners.mobs.MobSpawning;
 import org.ctp.enchantmentsolution.listeners.vanilla.AnvilListener;
 import org.ctp.enchantmentsolution.listeners.vanilla.EnchantmentListener;
+import org.ctp.enchantmentsolution.listeners.vanilla.GrindstoneListener;
 import org.ctp.enchantmentsolution.nms.McMMO;
 import org.ctp.enchantmentsolution.nms.animalmob.AnimalMob;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
@@ -144,6 +145,9 @@ public class EnchantmentSolution extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new AdvancementPlayerEvent(), this);
 		getServer().getPluginManager().registerEvents(new EnchantmentListener(), this);
 		getServer().getPluginManager().registerEvents(new AnvilListener(), this);
+		if(bukkitVersion.getVersionNumber() > 3) {
+			getServer().getPluginManager().registerEvents(new GrindstoneListener(), this);
+		}
 		
 		if(Bukkit.getPluginManager().isPluginEnabled("Jobs")) {
 			jobsReborn = Bukkit.getPluginManager().getPlugin("Jobs");
@@ -212,6 +216,14 @@ public class EnchantmentSolution extends JavaPlugin {
 				new LifeListener(), 1l, 1l);
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN,
 				new AdvancementThread(), 1l, 1l);
+		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN, 
+				new CurseOfExhaustionListener(), 1l, 1l);
+		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN, 
+				new ArmoredListener(), 1l, 1l);
+		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN, 
+				new QuickStrikeListener(), 1l, 1l);
+		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN, 
+				new ToughnessListener(), 1l, 1l);
 
 		getCommand("Enchant").setExecutor(new Enchant());
 		getCommand("Info").setExecutor(new EnchantInfo());

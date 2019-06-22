@@ -26,7 +26,6 @@ import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
-import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 
 public class MagicGuardListener extends EnchantmentListener implements Runnable{
@@ -114,9 +113,7 @@ public class MagicGuardListener extends EnchantmentListener implements Runnable{
 				default:
 					break;
 				}
-				ChatUtils.sendInfo("Checking for potion meta");
 				if(meta instanceof PotionMeta) {
-					ChatUtils.sendInfo("Has potion meta");
 					PotionMeta potionMeta = (PotionMeta) meta;
 					ItemUtils.getSuspiciousStew(player, item, potionMeta);
 					potionMeta.removeCustomEffect(PotionEffectType.HARM);

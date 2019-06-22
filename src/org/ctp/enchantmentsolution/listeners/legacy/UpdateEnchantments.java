@@ -56,8 +56,7 @@ public class UpdateEnchantments implements Listener{
 								}
 							}
 							if(levels.size() > 0) {
-								meta.setLore(null);
-								item.setItemMeta(meta);
+								item = Enchantments.removeAllEnchantments(item);
 								Enchantments.addEnchantmentsToItem(item, levels);
 							}
 						}

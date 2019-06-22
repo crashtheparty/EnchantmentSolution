@@ -64,6 +64,10 @@ public class DefaultEnchantments {
 	public static final Enchantment MOISTURIZE = new MoisturizeWrapper();
 	public static final Enchantment IRENES_LASSO = new IrenesLassoWrapper();
 	public static final Enchantment CURSE_OF_LAG = new CurseOfLagWrapper();
+	public static final Enchantment CURSE_OF_EXHAUSTION = new CurseOfExhaustionWrapper();
+	public static final Enchantment QUICK_STRIKE = new QuickStrikeWrapper();
+	public static final Enchantment TOUGHNESS = new ToughnessWrapper();
+	public static final Enchantment ARMORED = new ArmoredWrapper();
 
 	public static List<CustomEnchantment> getEnchantments() {
 		return ENCHANTMENTS;
@@ -275,8 +279,10 @@ public class DefaultEnchantments {
 		DefaultEnchantments.addDefaultEnchantment(new Unbreaking());
 
 		DefaultEnchantments.addDefaultEnchantment(new Angler());
+		DefaultEnchantments.addDefaultEnchantment(new Armored());
 		DefaultEnchantments.addDefaultEnchantment(new Beheading());
 		DefaultEnchantments.addDefaultEnchantment(new Brine());
+		DefaultEnchantments.addDefaultEnchantment(new CurseOfExhaustion());
 		DefaultEnchantments.addDefaultEnchantment(new CurseOfLag());
 		DefaultEnchantments.addDefaultEnchantment(new Drowned());
 		DefaultEnchantments.addDefaultEnchantment(new ExpShare());
@@ -299,6 +305,7 @@ public class DefaultEnchantments {
 		if(EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber() > 3) {
 			DefaultEnchantments.addDefaultEnchantment(new Pillage());
 		}
+		DefaultEnchantments.addDefaultEnchantment(new QuickStrike());
 		DefaultEnchantments.addDefaultEnchantment(new Sacrifice());
 		DefaultEnchantments.addDefaultEnchantment(new SandVeil());
 		DefaultEnchantments.addDefaultEnchantment(new ShockAspect());
@@ -312,6 +319,7 @@ public class DefaultEnchantments {
 		}
 		DefaultEnchantments.addDefaultEnchantment(new Tank());
 		DefaultEnchantments.addDefaultEnchantment(new Telepathy());
+		DefaultEnchantments.addDefaultEnchantment(new Toughness());
 		DefaultEnchantments.addDefaultEnchantment(new Transmutation());
 		DefaultEnchantments.addDefaultEnchantment(new Unrest());
 		DefaultEnchantments.addDefaultEnchantment(new VoidWalker());

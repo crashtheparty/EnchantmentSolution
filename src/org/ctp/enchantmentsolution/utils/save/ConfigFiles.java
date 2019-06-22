@@ -130,7 +130,7 @@ public class ConfigFiles {
 				config.removeKey("enchantability_decay");
 			}
 			if(config.getInteger("max_repair_level") != null) {
-				config.set("enchanting_table.max_repair_level", config.getInt("max_repair_level"));
+				config.set("anvil.max_repair_level", config.getInt("max_repair_level"));
 				config.removeKey("max_repair_level");
 			}
 			if(config.getBooleanValue("get_latest_version") != null) {
@@ -192,6 +192,11 @@ public class ConfigFiles {
 		EnchantmentSolution.getPlugin().getDb().updateConfig(getLanguageFile());
 		EnchantmentSolution.getPlugin().getDb().updateConfig(getEnchantmentConfig());
 		EnchantmentSolution.getPlugin().getDb().updateConfig(getEnchantmentAdvancedConfig());
+		
+		if(!EnchantmentSolution.getPlugin().isInitializing()) {
+			EnchantmentSolution.getPlugin().setVersionCheck(config.getBoolean("version.get_latest"), config.getBoolean("version.get_experimental"));
+			AdvancementUtils.createAdvancements();
+		}
 	}
 
 	public void reload() {
@@ -205,13 +210,11 @@ public class ConfigFiles {
 				config.set("enchanting_table.enchanting_type", "enhanced_50");
 			}
 			config.saveConfig();
-			EnchantmentSolution.getPlugin().setVersionCheck(config.getBoolean("version.get_latest"), config.getBoolean("version.get_experimental"));
 		} catch (final Exception e) {
 			e.printStackTrace();
 		}
 
 		save();
-		AdvancementUtils.createAdvancements();
 	}
 
 	private void loadLangFile(File dataFolder) {
@@ -288,7 +291,7 @@ public class ConfigFiles {
 					new String[] { "Use the grindstone from within the anvil in version < 1.14" });
 		}
 		config.addDefault("grindstone.take_enchantments", false,
-				new String[] { "Use the grindstone to add enchantments from items to books" });
+				new String[] { "Use the grindstone to add enchantments from items to books.", "Only used when enchanting type is enhanced." });
 		config.addDefault("grindstone.set_repair_cost", true,
 				new String[] { "When grindstone takes enchantments, set repair cost of the generated book to the item used's repair cost" });
 		config.addDefault("grindstone.destroy_take_item", true,

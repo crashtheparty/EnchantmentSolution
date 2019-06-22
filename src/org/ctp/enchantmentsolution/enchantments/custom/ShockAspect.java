@@ -50,6 +50,6 @@ public class ShockAspect extends CustomEnchantment{
 
 	@Override
 	protected List<Enchantment> getDefaultConflictingEnchantments() {
-		return Arrays.asList();
+		return Arrays.asList(DefaultEnchantments.QUICK_STRIKE);
 	}
 }
