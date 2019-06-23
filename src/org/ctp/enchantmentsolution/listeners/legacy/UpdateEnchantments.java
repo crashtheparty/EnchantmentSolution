@@ -14,7 +14,6 @@ import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
-import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.ConfigUtils;
 import org.ctp.enchantmentsolution.utils.StringUtils;
 
@@ -45,12 +44,10 @@ public class UpdateEnchantments implements Listener{
 						if(lore != null) {
 							List<EnchantmentLevel> levels = new ArrayList<EnchantmentLevel>();
 							for(String s : lore) {
-								String enchantment = ChatColor.stripColor(s);
-								EnchantmentLevel level = StringUtils.returnEnchantmentLevel(enchantment, meta);
-								if(level != null) {
-									String enchName = ChatUtils.hideText("legacy") + "" + ChatColor.GRAY + 
-											StringUtils.returnEnchantmentName(level.getEnchant(), level.getLevel());
-									if(s.equals(enchName)) {
+								if(StringUtils.isLegacyEnchantment(s)) {
+									String enchantment = ChatColor.stripColor(s);
+									EnchantmentLevel level = StringUtils.returnEnchantmentLevel(enchantment, meta);
+									if(level != null) {
 										levels.add(level);
 									}
 								}

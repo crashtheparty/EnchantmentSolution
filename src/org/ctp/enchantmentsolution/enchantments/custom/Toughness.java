@@ -23,7 +23,7 @@ public class Toughness extends CustomEnchantment{
 		setDefaultThirtyStartLevel(1);
 		setDefaultFiftyMaxLevel(4);
 		setDefaultThirtyMaxLevel(4);
-		setDefaultWeight(Weight.COMMON);
+		setDefaultWeight(Weight.UNCOMMON);
 		addDefaultDescription("Increases armor toughness.");
 		addDefaultDescription(Language.GERMAN, "Erhöht die Rüstungsstärke.");
 	}

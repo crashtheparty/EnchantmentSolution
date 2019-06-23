@@ -14,7 +14,6 @@ public class Multishot extends CustomEnchantment{
 	public Multishot() {
 		addDefaultDisplayName("Multishot");
 		addDefaultDisplayName(Language.GERMAN, "Mehrfachschuss");
-		setTreasure(true);
 		setDefaultFiftyConstant(35);
 		setDefaultThirtyConstant(20);
 		setDefaultFiftyModifier(0);

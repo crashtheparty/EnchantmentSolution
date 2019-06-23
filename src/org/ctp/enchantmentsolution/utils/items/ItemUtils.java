@@ -47,6 +47,11 @@ public class ItemUtils {
 	}
 	
 	public static List<PotionEffectType> getBadPotions(){
+		if(EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber() > 3) {
+			PotionEffectType[] types = BAD_POTIONS.toArray(new PotionEffectType[BAD_POTIONS.size() + 1]);
+			types[types.length - 1] = PotionEffectType.BAD_OMEN;
+			return Arrays.asList(types);
+		}
 		return BAD_POTIONS;
 	}
 	

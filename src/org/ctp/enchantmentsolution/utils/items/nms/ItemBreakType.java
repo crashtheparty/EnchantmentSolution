@@ -21,6 +21,7 @@ public interface ItemBreakType {
 		case 4:
 		case 5:
 		case 6:
+		case 7:
 			return ItemBreak_v1_14.getType(type);
 		}
 		return null;
@@ -35,6 +36,7 @@ public interface ItemBreakType {
 		case 4:
 		case 5:
 		case 6:
+		case 7:
 			return ItemBreak_v1_14.allBreakTypes();
 		}
 		return null;

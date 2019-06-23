@@ -92,7 +92,7 @@ public class DefaultEnchantments {
 	public static void setEnchantments() {
 		ConfigFiles files = EnchantmentSolution.getPlugin().getConfigFiles();
 		for (int i = 0; i < ENCHANTMENTS.size(); i++) {
-			if(files.getDefaultConfig().getBoolean("use_advanced_file")) {
+			if(ConfigUtils.useAdvancedFile()) {
 				CustomEnchantment enchantment = ENCHANTMENTS.get(i);
 				YamlConfig advanced = files.getEnchantmentAdvancedConfig();
 				YamlConfig language = files.getLanguageFile();

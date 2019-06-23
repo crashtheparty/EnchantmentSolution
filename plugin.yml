@@ -1,5 +1,5 @@
 name: EnchantmentSolution
-version: 2.0.8
+version: 2.1.0
 main: org.ctp.enchantmentsolution.EnchantmentSolution
 api-version: 1.13
 softdepend: [mcMMO, Jobs]
@@ -29,6 +29,9 @@ commands:
   esreset:
     description: Reset all custom inventories
     usage: /esreset
+  esdebug:
+    description: Generates a debug file for debugging and testing
+    usage: /esdebug
 permissions:
   enchantmentsolution.command.edit: 
     description: Gives access to the /esconfig command. 
@@ -57,3 +60,6 @@ permissions:
   enchantmentsolution.god-anvil:
     description: Allows players to combine items higher than their max levels
     default: false
+  enchantmentsolution.debug:
+    description: Allows players to use the /esdebug command
+    default: op

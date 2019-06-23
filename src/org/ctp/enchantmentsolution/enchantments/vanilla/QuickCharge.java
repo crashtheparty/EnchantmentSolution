@@ -14,7 +14,6 @@ public class QuickCharge extends CustomEnchantment{
 	public QuickCharge() {
 		addDefaultDisplayName("Quick Charge");
 		addDefaultDisplayName(Language.GERMAN, "Schnellladen");
-		setTreasure(true);
 		setDefaultFiftyConstant(-15);
 		setDefaultThirtyConstant(-8);
 		setDefaultFiftyModifier(20);

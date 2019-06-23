@@ -198,6 +198,7 @@ public class LanguageFiles {
 		englishUS.addDefault("commands.reload", ("Config files have been reloaded.").replace("§", "&"));
 		englishUS.addDefault("commands.enchant-disabled", ("Cannot enchant item with a disabled enchantment.").replace("§", "&"));
 		englishUS.addDefault("commands.reset-inventory", ("Closed all custom inventories.").replace("§", "&"));
+		englishUS.addDefault("commands.debug", "Debug information stored in debug.yml");
 		
 		englishUS.addDefault("grindstone.legacy-open", (ChatColor.GREEN + "Open the Grindstone").replace("§", "&"));
 		englishUS.addDefault("grindstone.name", (ChatColor.BLUE + "Grindstone").replace("§", "&"));
@@ -341,6 +342,7 @@ public class LanguageFiles {
 		german.addDefault("commands.reload", ("Konfigurationsdateien wurden neu geladen.").replace("§", "&"));
 		german.addDefault("commands.enchant-disabled", ("Diese Verzauberung wurde abgeschaltet.").replace("§", "&"));
 		german.addDefault("commands.reset-inventory", ("Alle Spezialinventare geschlossen.").replace("§", "&"));
+		german.addDefault("commands.debug", "In debug.yml gespeicherte Debug-Informationen");
 		
 		german.addDefault("grindstone.legacy-open", (ChatColor.GREEN + "Öffne den Schleifstein").replace("§", "&"));
 		german.addDefault("grindstone.name", (ChatColor.BLUE + "Schleifstein").replace("§", "&"));
