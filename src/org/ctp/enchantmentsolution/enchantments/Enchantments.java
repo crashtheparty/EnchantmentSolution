@@ -78,7 +78,7 @@ public class Enchantments {
 				meta.removeEnchant(enchant);
 			}
 			meta = (ItemMeta) enchantmentStorage;
-			meta.setLore(lore);
+			meta = Enchantments.setLore(meta, lore);
 			newItem.setItemMeta(meta);
 		}
 		return newItem;
@@ -103,7 +103,7 @@ public class Enchantments {
 				}
 				enchantmentStorage.removeStoredEnchant(enchant);
 			}
-			meta.setLore(lore);
+			meta = Enchantments.setLore(meta, lore);
 			newItem.setItemMeta(meta);
 		}
 		return newItem;
@@ -187,7 +187,13 @@ public class Enchantments {
 			totalWeight = 0;
 			customEnchants = new ArrayList<CustomEnchantment>();
 			for(CustomEnchantment enchantment : ENCHANTMENTS){
-				if(enchantment.isEnabled()) {
+				boolean conflicts = false;
+				for(EnchantmentLevel enchant : enchants) {
+					if(CustomEnchantment.conflictsWith(enchant.getEnchant(), enchantment)) {
+						conflicts = true;
+					}
+				}
+				if(enchantment.isEnabled() && !conflicts) {
 					if (treasure) {
 						if(enchantment.canEnchant(player, enchantability, level) && enchantment.canEnchantItem(material)){
 							totalWeight += enchantment.getWeight();
@@ -245,7 +251,7 @@ public class Enchantments {
 				}
 			}
 		}
-		if (ConfigUtils.useLevel50()) {
+		if (ConfigUtils.isLevel50()) {
 			if (bookshelves > 23)
 				bookshelves = 23;
 		} else {
@@ -313,7 +319,7 @@ public class Enchantments {
 					}
 				}
 			}
-			meta.setLore(lore);
+			meta = Enchantments.setLore(meta, lore);
 			item.setItemMeta(meta);
 			return item;
 		}
@@ -343,11 +349,11 @@ public class Enchantments {
 				}
 			}
 		}
-		meta.setLore(lore);
+		meta = Enchantments.setLore(meta, lore);
 		item.setItemMeta(meta);
 		return item;
 	}
-	
+
 	public static ItemStack addEnchantmentToItem(ItemStack item, CustomEnchantment enchantment, int level){
 		ItemMeta meta = item.getItemMeta();
 		List<String> lore = meta.getLore();
@@ -377,8 +383,8 @@ public class Enchantments {
 				lore.add(ChatUtils.hideText("solution") + "" + ChatColor.GRAY + enchName);
 			}
 		}
-		
-		meta.setLore(lore);
+
+		meta = Enchantments.setLore(meta, lore);
 		item.setItemMeta(meta);
 		return item;
 	}
@@ -399,7 +405,7 @@ public class Enchantments {
 				meta.removeEnchant(enchantment.getRelativeEnchantment());
 			}
 		}
-		meta.setLore(lore);
+		meta = Enchantments.setLore(meta, lore);
 		item.setItemMeta(meta);
 		return item;
 	}
@@ -422,7 +428,7 @@ public class Enchantments {
 				}
 			}
 		}
-		meta.setLore(lore);
+		meta = Enchantments.setLore(meta, lore);
 		item.setItemMeta(meta);
 		return item;
 	}
@@ -686,5 +692,24 @@ public class Enchantments {
 		
 		return enchantments;
 	}
-
+	
+	public static ItemMeta setLore(ItemMeta meta, List<String> lore) {
+		if(lore == null) {
+			meta.setLore(new ArrayList<String>());
+			return meta;
+		}
+		List<String> enchantmentsFirst = new ArrayList<String>();
+		for(String l : lore) {
+			if(StringUtils.isEnchantment(l)) {
+				enchantmentsFirst.add(l);
+			}
+		}
+		for(String l : lore) {
+			if(!StringUtils.isEnchantment(l)) {
+				enchantmentsFirst.add(l);
+			}
+		}
+		meta.setLore(enchantmentsFirst);
+		return meta;
+	}
 }

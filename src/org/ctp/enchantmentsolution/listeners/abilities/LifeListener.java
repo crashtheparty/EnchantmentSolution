@@ -88,8 +88,13 @@ public class LifeListener implements Runnable{
 			if(!Enchantments.hasEnchantment(item, DefaultEnchantments.GUNG_HO) && Enchantments.hasEnchantment(item, DefaultEnchantments.LIFE)){
 				int level = Enchantments.getLevel(item, DefaultEnchantments.LIFE);
 				AttributeInstance a = player.getAttribute(Attribute.GENERIC_MAX_HEALTH);
-				AttributeModifier modifier = new AttributeModifier(UUID.fromString("eeeeeeee-fefe-fefe-fefe-000000000000"), "generic.maxHealth", 
+				AttributeModifier modifier = new AttributeModifier(UUID.fromString("eeeeeeee-fefe-fefe-fefe-000000000000"), "life_health", 
 						4 * level, Operation.ADD_NUMBER);
+				AttributeModifier legacyModifier = new AttributeModifier(UUID.fromString("eeeeeeee-fefe-fefe-fefe-000000000000"), "generic.maxHealth", 
+						4 * level, Operation.ADD_NUMBER);
+				if(a.getModifiers().contains(legacyModifier)) {
+					a.removeModifier(legacyModifier);
+				}
 				if(!a.getModifiers().contains(modifier)) {
 					a.addModifier(modifier);
 				}
@@ -100,10 +105,15 @@ public class LifeListener implements Runnable{
 			if(!Enchantments.hasEnchantment(item, DefaultEnchantments.GUNG_HO) && Enchantments.hasEnchantment(item, DefaultEnchantments.LIFE)){
 				int level = Enchantments.getLevel(item, DefaultEnchantments.LIFE);
 				AttributeInstance a = player.getAttribute(Attribute.GENERIC_MAX_HEALTH);
-				AttributeModifier modifier = new AttributeModifier(UUID.fromString("eeeeeeee-fefe-fefe-fefe-000000000000"), "generic.maxHealth", 
+				AttributeModifier modifier = new AttributeModifier(UUID.fromString("eeeeeeee-fefe-fefe-fefe-000000000000"), "life_health", 
+						4 * level, Operation.ADD_NUMBER);
+				AttributeModifier legacyModifier = new AttributeModifier(UUID.fromString("eeeeeeee-fefe-fefe-fefe-000000000000"), "generic.maxHealth", 
 						4 * level, Operation.ADD_NUMBER);
 				if(a.getModifiers().contains(modifier)) {
 					a.removeModifier(modifier);
+				}
+				if(a.getModifiers().contains(legacyModifier)) {
+					a.removeModifier(legacyModifier);
 				}
 				if(player.getHealth() > a.getBaseValue()) {
 					player.setHealth(a.getBaseValue());

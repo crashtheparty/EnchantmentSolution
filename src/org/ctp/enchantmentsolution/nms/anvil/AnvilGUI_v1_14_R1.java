@@ -22,6 +22,7 @@ import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.inventory.Anvil;
 import org.ctp.enchantmentsolution.inventory.ConfigInventory;
 import org.ctp.enchantmentsolution.inventory.InventoryData;
+import org.ctp.enchantmentsolution.utils.AnvilUtils;
 
 import net.minecraft.server.v1_14_R1.BlockPosition;
 import net.minecraft.server.v1_14_R1.ChatMessage;
@@ -167,7 +168,7 @@ public class AnvilGUI_v1_14_R1 {
 							}
 
 							if (clickEvent.getWillDestroy()) {
-								anvil.checkAnvilBreak();
+								AnvilUtils.checkAnvilBreak(player, anvil.getBlock(), anvil);
 								destroy();
 							}
 						} else if (data instanceof ConfigInventory) {

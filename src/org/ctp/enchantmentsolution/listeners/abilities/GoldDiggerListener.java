@@ -10,8 +10,10 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
+import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
+import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.items.nms.AbilityUtils;
 
 public class GoldDiggerListener extends EnchantmentListener {
@@ -35,6 +37,7 @@ public class GoldDiggerListener extends EnchantmentListener {
 								loc,
 								goldDigger);
 						droppedItem.setVelocity(new Vector(0,0,0));
+						AdvancementUtils.awardCriteria(player, ESAdvancement.FOURTY_NINERS, "goldblock", goldDigger.getAmount());
 						player.incrementStatistic(Statistic.USE_ITEM, item.getType());
 						super.damageItem(player, item);
 					}

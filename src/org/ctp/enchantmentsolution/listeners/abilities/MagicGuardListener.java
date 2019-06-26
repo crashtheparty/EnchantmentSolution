@@ -1,9 +1,7 @@
 package org.ctp.enchantmentsolution.listeners.abilities;
 
 import java.lang.reflect.Field;
-import java.util.Arrays;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -24,14 +22,13 @@ import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
+import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
+import org.ctp.enchantmentsolution.utils.AdvancementUtils;
+import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 
 public class MagicGuardListener extends EnchantmentListener implements Runnable{
-	
-	private static List<PotionEffectType> BAD_POTIONS = Arrays.asList(PotionEffectType.BLINDNESS, PotionEffectType.CONFUSION, PotionEffectType.HARM,
-			PotionEffectType.HUNGER, PotionEffectType.POISON, PotionEffectType.SLOW, PotionEffectType.SLOW_DIGGING, PotionEffectType.UNLUCK,
-			PotionEffectType.WEAKNESS, PotionEffectType.WITHER);
 	
 	@EventHandler
 	public void onPotionSplash(PotionSplashEvent event) {
@@ -50,7 +47,7 @@ public class MagicGuardListener extends EnchantmentListener implements Runnable{
 						if(Enchantments.hasEnchantment(shield, DefaultEnchantments.MAGIC_GUARD)) {
 							iterator.remove();
 							for(PotionEffect effect : event.getPotion().getEffects()) {
-								if(!BAD_POTIONS.contains(effect.getType())) {
+								if(!ItemUtils.getBadPotions().contains(effect.getType())) {
 									player.addPotionEffect(effect);
 								}
 							}
@@ -101,20 +98,32 @@ public class MagicGuardListener extends EnchantmentListener implements Runnable{
 		if(!canRun(DefaultEnchantments.MAGIC_GUARD, event)) return;
 		ItemStack item = event.getItem();
 		ItemMeta meta = item.getItemMeta();
-		if(meta instanceof PotionMeta) {
-			PotionMeta potionMeta = (PotionMeta) meta;
-			Player player = event.getPlayer();
-			ItemStack shield = player.getInventory().getItemInOffHand();
-			if(shield.getType().equals(Material.SHIELD)) {
-				if(Enchantments.hasEnchantment(shield, DefaultEnchantments.MAGIC_GUARD)) {
+		Player player = event.getPlayer();
+		ItemStack shield = player.getInventory().getItemInOffHand();
+		if(shield.getType().equals(Material.SHIELD)) {
+			if(Enchantments.hasEnchantment(shield, DefaultEnchantments.MAGIC_GUARD)) {
+				switch(item.getType()) {
+				case POISONOUS_POTATO:
+				case PUFFERFISH:
+				case CHICKEN:
+				case ROTTEN_FLESH:
+				case SPIDER_EYE:
+					AdvancementUtils.awardCriteria(event.getPlayer(), ESAdvancement.THAT_FOOD_IS_FINE, "food");
+					break;
+				default:
+					break;
+				}
+				if(meta instanceof PotionMeta) {
+					PotionMeta potionMeta = (PotionMeta) meta;
+					ItemUtils.getSuspiciousStew(player, item, potionMeta);
 					potionMeta.removeCustomEffect(PotionEffectType.HARM);
 					if(potionMeta.getBasePotionData().getType().equals(PotionType.INSTANT_DAMAGE)){
 						potionMeta.setBasePotionData(new PotionData(PotionType.UNCRAFTABLE));
 					}
+					item.setItemMeta(potionMeta);
+					event.setItem(item);
 				}
 			}
-			item.setItemMeta(potionMeta);
-			event.setItem(item);
 		}
 	}
 	
@@ -126,7 +135,7 @@ public class MagicGuardListener extends EnchantmentListener implements Runnable{
 			if(shield.getType().equals(Material.SHIELD)) {
 				if(Enchantments.hasEnchantment(shield, DefaultEnchantments.MAGIC_GUARD)) {
 					for(PotionEffect effect : player.getActivePotionEffects()) {
-						if(BAD_POTIONS.contains(effect.getType())) {
+						if(ItemUtils.getBadPotions().contains(effect.getType())) {
 							player.removePotionEffect(effect.getType());
 						}
 					}

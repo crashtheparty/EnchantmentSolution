@@ -13,9 +13,11 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
+import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
 import org.ctp.enchantmentsolution.nms.FlowerGiftNMS;
+import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 
 public class FlowerGiftListener extends EnchantmentListener{
 	
@@ -41,6 +43,11 @@ public class FlowerGiftListener extends EnchantmentListener{
 									flowerGift);
 							droppedItem.setVelocity(new Vector(0,0,0));
 							player.getWorld().spawnParticle(Particle.VILLAGER_HAPPY, loc, 30, 0.2, 0.5, 0.2);
+							if(FlowerGiftNMS.isDoubleFlower(flowerGift.getType())) {
+								AdvancementUtils.awardCriteria(player, ESAdvancement.BONEMEAL_PLUS, "bonemeal");
+							} else if (FlowerGiftNMS.isWitherRose(flowerGift.getType())) {
+								AdvancementUtils.awardCriteria(player, ESAdvancement.JUST_AS_SWEET, "wither_rose");
+							}
 						} else {
 							player.getWorld().spawnParticle(Particle.VILLAGER_ANGRY, loc, 30, 0.2, 0.5, 0.2);
 						}

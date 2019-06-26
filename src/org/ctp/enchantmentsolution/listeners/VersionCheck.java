@@ -113,10 +113,10 @@ public class VersionCheck implements Listener, Runnable {
 			Version pluginVersion = version.getNewestVersion(experimentalVersion);
 			String versionString = pluginVersion.getVersionName();
 			if(pluginVersion.getType() == VersionType.EXPERIMENTAL) {
-				ChatUtils.sendToConsole(Level.WARNING, "Experimental Version " + versionString
+				ChatUtils.sendMessage(player, "Experimental Version " + versionString
 						+ " of " + version.getPlugin().getName() + " is ready for testing! Download it here: " + github);
 			} else {
-				ChatUtils.sendToConsole(Level.WARNING, "Version " + versionString
+				ChatUtils.sendMessage(player, "Version " + versionString
 						+ " of " + version.getPlugin().getName() + " is available! Download it here: " + spigot);
 			}
 			if (version.isExperimentalVersion()) {

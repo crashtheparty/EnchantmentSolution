@@ -5,14 +5,22 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.bukkit.GameMode;
 import org.bukkit.Material;
+import org.bukkit.Sound;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
+import org.bukkit.block.data.BlockData;
+import org.bukkit.block.data.Directional;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
+import org.ctp.enchantmentsolution.inventory.Anvil;
 import org.ctp.enchantmentsolution.inventory.LegacyAnvil;
+import org.ctp.enchantmentsolution.nms.AnvilNMS;
 import org.ctp.enchantmentsolution.utils.items.DamageUtils;
 import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 import org.ctp.enchantmentsolution.utils.items.nms.ItemRepairType;
@@ -39,6 +47,25 @@ public class AnvilUtils {
 			}
 			return null;
 		}
+	}
+	
+	public static int getRepairCost(Player player, ItemStack first, ItemStack second) {
+		int repairCost = 0;
+		RepairType type = AnvilUtils.RepairType.getRepairType(first, second);
+		if(!type.equals(RepairType.RENAME) && DamageUtils.getDamage(first.getItemMeta()) != 0) {
+			repairCost += 2;
+		}
+		int repairCostOne = AnvilNMS.getRepairCost(first);
+		int repairCostTwo = AnvilNMS.getRepairCost(second);
+		repairCost += repairCostOne + repairCostTwo;
+		
+		if(type.equals(RepairType.COMBINE)) {
+			repairCost += Enchantments.combineEnchantmentsLevel(player, first, second);
+		}else if(type.equals(RepairType.REPAIR)) {
+			repairCost += ItemUtils.repairItem(first, second);
+		}
+		
+		return Math.max(repairCost / ConfigUtils.getLevelDivisor(), 1);
 	}
 
 	public static boolean canCombineItems(ItemStack first, ItemStack second) {
@@ -98,5 +125,44 @@ public class AnvilUtils {
 	
 	public static void removeLegacyAnvil(LegacyAnvil anvil) {
 		OPEN_LEGACY.remove(anvil.getPlayer());
+	}
+	
+	public static void checkAnvilBreak(Player player, Block block, Anvil anvil) {
+		if(player.getGameMode().equals(GameMode.CREATIVE)) {
+			block.getWorld().playSound(block.getLocation(), Sound.BLOCK_ANVIL_USE, 1, 1);
+			return;
+		}
+		double chance = .12;
+		double roll = Math.random();
+		if(chance > roll) {
+			Material material = Material.AIR;
+			switch(block.getType()) {
+			case ANVIL:
+				material = Material.CHIPPED_ANVIL;
+				break;
+			case CHIPPED_ANVIL:
+				material = Material.DAMAGED_ANVIL;
+				break;
+			default:
+				
+			}
+			if(material == Material.AIR) {
+				block.getWorld().playSound(block.getLocation(), Sound.BLOCK_ANVIL_DESTROY, 1, 1);
+				if(anvil != null) {
+					anvil.close(false);
+				}
+				block.setType(material);
+			} else {
+				block.getWorld().playSound(block.getLocation(), Sound.BLOCK_ANVIL_BREAK, 1, 1);
+				block.getWorld().playSound(block.getLocation(), Sound.BLOCK_ANVIL_USE, 1, 1);
+				BlockFace facing = ((Directional) block.getBlockData()).getFacing();
+				block.setType(material);
+				Directional d = (Directional) block.getBlockData();
+				d.setFacing(facing);
+				block.setBlockData((BlockData) d);
+			}
+		} else {
+			block.getWorld().playSound(block.getLocation(), Sound.BLOCK_ANVIL_USE, 1, 1);
+		}
 	}
 }

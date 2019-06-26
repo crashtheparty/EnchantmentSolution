@@ -5,31 +5,27 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.UUID;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Statistic;
-import org.bukkit.attribute.Attribute;
-import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.LeatherArmorMeta;
+import org.bukkit.inventory.meta.PotionMeta;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
+import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.enchantments.helper.PlayerLevels;
-import org.ctp.enchantmentsolution.utils.ChatUtils;
+import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.ConfigUtils;
 import org.ctp.enchantmentsolution.utils.AnvilUtils.RepairType;
 import org.ctp.enchantmentsolution.utils.items.nms.ItemRepairType;
-
-import com.google.common.collect.Multimap;
 
 public class ItemUtils {
 	
@@ -41,9 +37,22 @@ public class ItemUtils {
 			Material.CYAN_SHULKER_BOX, Material.GRAY_SHULKER_BOX, Material.GREEN_SHULKER_BOX, Material.LIGHT_BLUE_SHULKER_BOX, Material.LIME_SHULKER_BOX,
 			Material.MAGENTA_SHULKER_BOX, Material.ORANGE_SHULKER_BOX, Material.PINK_SHULKER_BOX, Material.PURPLE_SHULKER_BOX, Material.RED_SHULKER_BOX,
 			Material.LIGHT_GRAY_SHULKER_BOX, Material.WHITE_SHULKER_BOX, Material.YELLOW_SHULKER_BOX, Material.SHULKER_BOX);
+
+	private static List<PotionEffectType> BAD_POTIONS = Arrays.asList(PotionEffectType.BLINDNESS, PotionEffectType.CONFUSION, PotionEffectType.HARM,
+			PotionEffectType.HUNGER, PotionEffectType.POISON, PotionEffectType.SLOW, PotionEffectType.SLOW_DIGGING, PotionEffectType.UNLUCK,
+			PotionEffectType.WEAKNESS, PotionEffectType.WITHER);
 	
 	public static List<Material> getRepairMaterials() {
 		return REPAIR_MATERIALS;
+	}
+	
+	public static List<PotionEffectType> getBadPotions(){
+		if(EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber() > 3) {
+			PotionEffectType[] types = BAD_POTIONS.toArray(new PotionEffectType[BAD_POTIONS.size() + 1]);
+			types[types.length - 1] = PotionEffectType.BAD_OMEN;
+			return Arrays.asList(types);
+		}
+		return BAD_POTIONS;
 	}
 	
 	public static List<String> getRepairMaterialsStrings(){
@@ -56,6 +65,22 @@ public class ItemUtils {
 			}
 		}
 		return names;
+	}
+	
+	public static void getSuspiciousStew(Player player, ItemStack item, PotionMeta meta) {
+		if(EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber() > 3) {
+			if(item.getType().equals(Material.SUSPICIOUS_STEW)) {
+				if(meta.hasCustomEffects()) {
+					for(PotionEffect effect : meta.getCustomEffects()) {
+						if(getBadPotions().contains(effect.getType())) {
+							AdvancementUtils.awardCriteria(player, ESAdvancement.THAT_FOOD_IS_FINE, "food");
+							break;
+						}
+					}
+				}
+			}
+		}
+		return;
 	}
 	
 	public static int repairItem(ItemStack first, ItemStack second) {
@@ -88,7 +113,8 @@ public class ItemUtils {
 	}
 	
 	public static ItemStack combineItems(Player player, ItemStack first, ItemStack second) {
-		ItemStack combined = new ItemStack(first.getType());
+		ItemStack combined = first.clone();
+		combined = Enchantments.removeAllEnchantments(combined);
 		if(first.getType() == Material.BOOK || first.getType() == Material.ENCHANTED_BOOK) {
 			if(ConfigUtils.getEnchantedBook()) {
 				combined = new ItemStack(Material.ENCHANTED_BOOK);
@@ -113,73 +139,10 @@ public class ItemUtils {
 		}
 		
 		List<EnchantmentLevel> enchantments = Enchantments.combineEnchants(player, first, second);
-		
-		ItemMeta firstMeta = first.getItemMeta();
-		ItemMeta combinedMeta = combined.getItemMeta();
-		
-		if(firstMeta instanceof LeatherArmorMeta && combinedMeta instanceof LeatherArmorMeta) {
-			((LeatherArmorMeta) combinedMeta).setColor(((LeatherArmorMeta) firstMeta).getColor());
-		}
-		
-		combinedMeta.setDisplayName(firstMeta.getDisplayName());
-		combinedMeta.setLore(firstMeta.getLore());
-		if(EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber() > 1) {
-			if(firstMeta.getAttributeModifiers() != null && !firstMeta.getAttributeModifiers().isEmpty()) {
-				Iterator<Map.Entry<Attribute, AttributeModifier>> iterator = firstMeta.getAttributeModifiers().entries().iterator();
-				while(iterator.hasNext()) {
-					Entry<Attribute, AttributeModifier> next = iterator.next();
-					
-					if (next.getKey() == null || next.getValue() == null) {
-					    iterator.remove();
-					    continue;
-					}
-					Attribute attribute = Attribute.valueOf(next.getKey().name());
-					UUID uuid = UUID.randomUUID();
-					int tries = 0;
-					while(containsAttribute(uuid, combinedMeta.getAttributeModifiers()) && tries <= 100) {
-						uuid = UUID.randomUUID();
-						tries++;
-					}
-					AttributeModifier modifier = new AttributeModifier(uuid, 
-							next.getValue().getName(), next.getValue().getAmount(), next.getValue().getOperation(), next.getValue().getSlot());
-					try {
-						combinedMeta.addAttributeModifier(attribute, modifier);
-					} catch (IllegalArgumentException ex) {
-						if(tries <= 100) {
-							ChatUtils.sendWarning("This shouldn't happen - It found a unique ID??");
-							ChatUtils.sendWarning("Illegal Argument Exception when processing Attributes: ");
-							ChatUtils.sendWarning("Issue with adding " + next.getKey().name() + " with modifier " + next.getValue().toString() + " to item.");
-							Multimap<Attribute, AttributeModifier> modifiers = combinedMeta.getAttributeModifiers();
-							Iterator<Entry<Attribute, AttributeModifier>> i = modifiers.entries().iterator();
-							while(i.hasNext()) {
-								Entry<Attribute, AttributeModifier> entry = i.next();
-								ChatUtils.sendWarning("Possible conflict: " + entry.getKey().name() + " with modifier " + entry.getValue().toString() + ".");
-							}
-						}
-					}
-				}
-			}
-		}
-		
-		combined.setItemMeta(combinedMeta);
-		
+				
 		combined = Enchantments.addEnchantmentsToItem(combined, enchantments);
 		
 		return combined;
-	}
-	
-	private static boolean containsAttribute(UUID uuid, Multimap<Attribute, AttributeModifier> modifiers) {
-		if(modifiers == null || modifiers.size() == 0 || modifiers.entries() == null) return false;
-		Iterator<Entry<Attribute, AttributeModifier>> iterator = modifiers.entries().iterator();
-		
-		while(iterator.hasNext()) {
-			Entry<Attribute, AttributeModifier> next = iterator.next();
-			if(next.getValue().getUniqueId().equals(uuid)) {
-				return true;
-			}
-		}
-		
-		return false;
 	}
 	
 	public static void giveItemToPlayer(Player player, ItemStack item, Location fallback, boolean statistic) {

@@ -2,6 +2,7 @@ package org.ctp.enchantmentsolution.utils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
@@ -34,7 +35,7 @@ public class StringUtils {
 		int level = 0;
 		int repair = 0;
 		if (pieces[pieces.length - 1].contains("enchantment.level")) {
-			String[] enchLevel = pieces[pieces.length - 1].split(".");
+			String[] enchLevel = pieces[pieces.length - 1].split(Pattern.quote("."));
 			level = Integer.parseInt(enchLevel[enchLevel.length - 1]);
 			repair = pieces.length - 1;
 		} else {
@@ -74,14 +75,21 @@ public class StringUtils {
 		return new EnchantmentLevel(match, level);
 	}
 	
+	public static boolean isLegacyEnchantment(String s) {
+		if(s.startsWith(ChatUtils.hideText("legacy") + "" + ChatColor.GRAY + "" + ChatColor.BLUE)) return false;
+		if(s.startsWith(ChatUtils.hideText("legacy") + "" + ChatColor.GRAY)) return true;
+		return false;
+	}
+	
 	public static boolean isEnchantment(String s) {
+		if(s.startsWith(ChatUtils.hideText("solution") + "" + ChatColor.GRAY + "" + ChatColor.BLUE)) return false;
 		if(s.startsWith(ChatUtils.hideText("solution") + "" + ChatColor.GRAY)) return true;
 		s = ChatColor.stripColor(s);
 		String[] pieces = s.split(" ");
 		int level = 0;
 		int repair = 0;
 		if (pieces[pieces.length - 1].contains("enchantment.level")) {
-			String[] enchLevel = pieces[pieces.length - 1].split(".");
+			String[] enchLevel = pieces[pieces.length - 1].split(Pattern.quote("."));
 			level = Integer.parseInt(enchLevel[enchLevel.length - 1]);
 			repair = pieces.length - 1;
 		} else {
@@ -152,8 +160,12 @@ public class StringUtils {
 	}
 	
 	public static List<String> removeEnchantment(CustomEnchantment enchantment, int level, List<String> lore){
-		String legacyEnchName = ChatColor.RESET + "" + ChatColor.GRAY + returnEnchantmentName(enchantment, level);
+		String versionOneEnchName = ChatColor.RESET + "" + ChatColor.GRAY + returnEnchantmentName(enchantment, level);
+		String legacyEnchName = ChatUtils.hideText("legacy") + "" + ChatColor.GRAY + returnEnchantmentName(enchantment, level);
 		String enchName = ChatUtils.hideText("solution") + "" + ChatColor.GRAY + returnEnchantmentName(enchantment, level);
+		while(lore.contains(versionOneEnchName)) {
+			lore.remove(versionOneEnchName);
+		}
 		while(lore.contains(legacyEnchName)) {
 			lore.remove(legacyEnchName);
 		}

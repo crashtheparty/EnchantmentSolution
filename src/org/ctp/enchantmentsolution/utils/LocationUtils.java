@@ -1,8 +1,33 @@
 package org.ctp.enchantmentsolution.utils;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.World;
+import org.bukkit.entity.Player;
 
 public class LocationUtils {
+	
+	public static boolean hasBlockAbove(Player player) {
+		for(int y = player.getLocation().getBlockY(); y < player.getWorld().getMaxHeight(); y++) {
+			Location loc = player.getLocation().clone().add(0, y, 0);
+			if(loc.getBlock().getType() != Material.AIR && loc.getBlock().getType() != Material.VOID_AIR && loc.getBlock().getType() != Material.CAVE_AIR) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public static boolean hasBlockBelow(Location location) {
+		for(int y = location.getBlockY(); y >= 0; y--) {
+			Location loc = location.clone();
+			loc.setY(y);
+			if(loc.getBlock().getType() != Material.AIR && loc.getBlock().getType() != Material.VOID_AIR && loc.getBlock().getType() != Material.CAVE_AIR) {
+				return true;
+			}
+		}
+		return false;
+	}
 	
 	public static boolean getIntersecting(Location loc1a, Location loc1b,
 			Location loc2a, Location loc2b) {
@@ -48,6 +73,31 @@ public class LocationUtils {
 	private static boolean intersectsDimension(int aMin, int aMax, int bMin,
 			int bMax) {
 		return aMin <= bMax && aMax >= bMin;
+	}
+	
+	public static Location stringToLocation(String string) {
+		Location loc = null;
+		try {
+			int x = 0, y = 0, z = 0;
+			World world = null;
+			String[] values = string.split(" @ ");
+			if(values.length == 4) {
+				x = Integer.parseInt(values[0]);
+				y = Integer.parseInt(values[1]);
+				z = Integer.parseInt(values[2]);
+				world = Bukkit.getWorld(values[3]);
+				
+				loc = new Location(world, x, y, z);
+			}
+		} catch (Exception ex) {
+			
+		}
+		return loc;
+	}
+	
+	public static String locationToString(Location loc) {
+		if(loc == null) return "";
+		return loc.getBlockX() + " @ " + loc.getBlockY() + " @ " + loc.getBlockZ() + " @ " + loc.getWorld().getName();
 	}
 
 }

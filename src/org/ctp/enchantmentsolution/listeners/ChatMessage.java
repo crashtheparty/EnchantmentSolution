@@ -1,5 +1,6 @@
 package org.ctp.enchantmentsolution.listeners;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -19,13 +20,19 @@ public class ChatMessage implements Listener{
 			if(configInv.isChat()) {
 				event.setCancelled(true);
 				String chat = event.getMessage();
-				configInv.addToList(chat);
-				configInv.setChat(false);
 				if(configInv.getType().equals("list")) {
-					configInv.listDetails(configInv.getConfig(), configInv.getLevel(), configInv.getType(), configInv.getPage());
+					configInv.addToList(chat);
 				} else {
-					configInv.listConfigDetails(configInv.getConfig(), configInv.getLevel(), configInv.getPage());
+					configInv.setPath(configInv.getLevel(), chat);
 				}
+				configInv.setChat(false);
+				Bukkit.getScheduler().runTask(EnchantmentSolution.getPlugin(), new Runnable() {
+					@Override
+					public void run() {
+						configInv.reopenFromAnvil(true);
+					}
+					
+				});
 			} else {
 				EnchantmentSolution.getPlugin().removeInventory(configInv);
 			}

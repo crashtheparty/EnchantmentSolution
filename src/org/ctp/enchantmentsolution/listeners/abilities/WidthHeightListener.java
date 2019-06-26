@@ -17,9 +17,11 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
+import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
 import org.ctp.enchantmentsolution.nms.McMMO;
+import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.items.nms.AbilityUtils;
 import org.ctp.enchantmentsolution.utils.items.nms.ItemBreakType;
 
@@ -82,6 +84,7 @@ public class WidthHeightListener extends EnchantmentListener{
 			if(hasWidthHeight && ItemBreakType.getType(item.getType()) != null && ItemBreakType.getType(item.getType()).getBreakTypes() != null 
 					&& ItemBreakType.getType(item.getType()).getBreakTypes().contains(original)) {
 				int start = 1;
+				int blocksBroken = 0;
 				while(start <= xt || start <= yt || start <= zt) {
 					int xBegin = start;
 					int yBegin = start;
@@ -140,6 +143,7 @@ public class WidthHeightListener extends EnchantmentListener{
 										newEvent.setExpToDrop(exp);
 										Bukkit.getServer().getPluginManager().callEvent(newEvent);
 										if(item != null && newEvent.getBlock().getType() != Material.AIR && !newEvent.isCancelled()) {
+											AdvancementUtils.awardCriteria(player, ESAdvancement.FAST_AND_FURIOUS, "diamond_pickaxe"); 
 											if(newEvent.getBlock().getType().equals(Material.SNOW) && ItemBreakType.getType(item.getType()).getBreakTypes().contains(Material.SNOW)) {
 												int num = ((Snow) newEvent.getBlock().getBlockData()).getLayers();
 												Item droppedItem = player.getWorld().dropItem(
@@ -147,6 +151,7 @@ public class WidthHeightListener extends EnchantmentListener{
 														new ItemStack(Material.SNOWBALL, num));
 												droppedItem.setVelocity(new Vector(0,0,0));
 											}
+											blocksBroken ++;
 											player.incrementStatistic(Statistic.MINE_BLOCK, event.getBlock().getType());
 											player.incrementStatistic(Statistic.USE_ITEM, item.getType());
 											newEvent.getBlock().breakNaturally(item);
@@ -160,6 +165,8 @@ public class WidthHeightListener extends EnchantmentListener{
 					}
 					start ++;
 				}
+
+				AdvancementUtils.awardCriteria(player, ESAdvancement.OVER_9000, "stone", blocksBroken); 
 			}
 		}
 	}

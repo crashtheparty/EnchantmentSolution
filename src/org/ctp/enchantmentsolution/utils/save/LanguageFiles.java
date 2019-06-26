@@ -3,6 +3,7 @@ package org.ctp.enchantmentsolution.utils.save;
 import java.io.File;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
 import java.util.logging.Level;
 
 import org.bukkit.ChatColor;
@@ -10,6 +11,8 @@ import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
+import org.ctp.enchantmentsolution.advancements.ESAdvancement;
+import org.ctp.enchantmentsolution.advancements.ESLocalization;
 import org.ctp.enchantmentsolution.api.ApiEnchantmentWrapper;
 import org.ctp.enchantmentsolution.api.Language;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
@@ -141,6 +144,7 @@ public class LanguageFiles {
 		englishUS.addDefault("anvil.cannot-combine", (ChatColor.RED + "Can't Combine Items").replace("§", "&"));
 		englishUS.addDefault("anvil.cannot-rename", (ChatColor.RED + "Can't Rename Items").replace("§", "&"));
 		englishUS.addDefault("anvil.message-cannot-combine", "You may not combine these items!");
+		englishUS.addDefault("anvil.message-cannot-combine-cost", "You may not combine these items! Level cost is %level%!");
 		englishUS.addDefault("anvil.legacy-gui", (ChatColor.WHITE + "Open Minecraft Anvil GUI").replace("§", "&"));
 		englishUS.addDefault("anvil.legacy-gui-warning", (
 				Arrays.asList((ChatColor.RED + "Custom enchantments will not work in this anvil and may be lost.").replace("§", "&"), 
@@ -194,6 +198,7 @@ public class LanguageFiles {
 		englishUS.addDefault("commands.reload", ("Config files have been reloaded.").replace("§", "&"));
 		englishUS.addDefault("commands.enchant-disabled", ("Cannot enchant item with a disabled enchantment.").replace("§", "&"));
 		englishUS.addDefault("commands.reset-inventory", ("Closed all custom inventories.").replace("§", "&"));
+		englishUS.addDefault("commands.debug", "Debug information stored in debug.yml");
 		
 		englishUS.addDefault("grindstone.legacy-open", (ChatColor.GREEN + "Open the Grindstone").replace("§", "&"));
 		englishUS.addDefault("grindstone.name", (ChatColor.BLUE + "Grindstone").replace("§", "&"));
@@ -252,6 +257,20 @@ public class LanguageFiles {
 			englishUS.addDefault("vanilla." + e.getValue(), ItemNameNMS.returnLocalizedItemName(Language.US, e.getKey()));
 		}
 		
+		for(ESAdvancement advancement : ESAdvancement.values()) {
+			List<ESLocalization> localizations = advancement.getLocalizations();
+			String localeName = "No name specified";
+			String localeDescription = "No description specified";
+			for(ESLocalization locale : localizations) {
+				if(locale.getLanguage() == Language.US) {
+					localeName = locale.getName();
+					localeDescription = locale.getDescription();
+				}
+			}
+			englishUS.addDefault("advancements." + advancement.getNamespace().getKey() + ".name", localeName);
+			englishUS.addDefault("advancements." + advancement.getNamespace().getKey() + ".description", localeDescription);
+		}
+		
 		englishUS.saveConfig();
 	}
 
@@ -269,6 +288,7 @@ public class LanguageFiles {
 		german.addDefault("anvil.cannot-combine", (ChatColor.RED + "Nicht kombinierbar").replace("§", "&"));
 		german.addDefault("anvil.cannot-rename", (ChatColor.RED + "Kann nicht benannt werden").replace("§", "&"));
 		german.addDefault("anvil.message-cannot-combine", "Diese Items können nicht kombiniert werden!");
+		englishUS.addDefault("anvil.message-cannot-combine-cost", "Diese Items können nicht kombiniert werden! Die Levelkosten betragen %level%!");
 		german.addDefault("anvil.legacy-gui", (ChatColor.WHITE + "Öffne den Vanilla-Amboss").replace("§", "&"));
 		german.addDefault("anvil.legacy-gui-warning", (
 				Arrays.asList((ChatColor.RED + "Manche Verzauberungen gehen in diesem Amboss verloren!").replace("§", "&"), 
@@ -322,6 +342,7 @@ public class LanguageFiles {
 		german.addDefault("commands.reload", ("Konfigurationsdateien wurden neu geladen.").replace("§", "&"));
 		german.addDefault("commands.enchant-disabled", ("Diese Verzauberung wurde abgeschaltet.").replace("§", "&"));
 		german.addDefault("commands.reset-inventory", ("Alle Spezialinventare geschlossen.").replace("§", "&"));
+		german.addDefault("commands.debug", "In debug.yml gespeicherte Debug-Informationen");
 		
 		german.addDefault("grindstone.legacy-open", (ChatColor.GREEN + "Öffne den Schleifstein").replace("§", "&"));
 		german.addDefault("grindstone.name", (ChatColor.BLUE + "Schleifstein").replace("§", "&"));

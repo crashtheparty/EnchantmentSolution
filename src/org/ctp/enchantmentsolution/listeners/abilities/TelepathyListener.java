@@ -8,6 +8,7 @@ import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.Statistic;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.block.Container;
 import org.bukkit.block.DoubleChest;
 import org.bukkit.block.data.type.Snow;
@@ -20,12 +21,14 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BlockStateMeta;
 import org.bukkit.metadata.MetadataValue;
+import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.nms.McMMO;
 import org.ctp.enchantmentsolution.utils.items.nms.AbilityUtils;
 import org.ctp.enchantmentsolution.utils.items.nms.ItemBreakType;
+import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 
 public class TelepathyListener extends EnchantmentListener {
@@ -40,6 +43,9 @@ public class TelepathyListener extends EnchantmentListener {
 		ItemStack item = player.getInventory().getItemInMainHand();
 		if (item != null) {
 			if (Enchantments.hasEnchantment(item, DefaultEnchantments.TELEPATHY)) {
+				if(block.getRelative(BlockFace.DOWN).getType() == Material.LAVA) {
+					AdvancementUtils.awardCriteria(player, ESAdvancement.NO_PANIC, "lava");
+				}
 				Collection<ItemStack> drops = block.getDrops(item);
 				if (ItemUtils.getShulkerBoxes().contains(block.getType())) {
 					Iterator<ItemStack> i = drops.iterator();
@@ -61,6 +67,7 @@ public class TelepathyListener extends EnchantmentListener {
 							}
 							ItemUtils.giveItemToPlayer(player, drop, player.getLocation(), true);
 							i.remove();
+							AdvancementUtils.awardCriteria(player, ESAdvancement.HEY_IT_WORKS, "shulker_box");
 						}
 					}
 					giveItems(player, item, block, drops);

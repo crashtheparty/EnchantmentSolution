@@ -10,14 +10,17 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.entity.Trident;
+import org.bukkit.entity.Wither;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
+import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
+import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.items.DamageUtils;
 
 public class TransmutationListener extends EnchantmentListener{
@@ -51,17 +54,61 @@ public class TransmutationListener extends EnchantmentListener{
 				killItem = HIT_ENTITY.get(event.getEntity());
 			}
 			if(Enchantments.hasEnchantment(killItem, DefaultEnchantments.TRANSMUTATION)) {
-				for(int i = 0; i < event.getDrops().size(); i++) {
-					ItemStack item = event.getDrops().get(i);
-					if(!TransmutationLoot.isTransmutatedLoot(item)) {
+				if(event.getEntity() instanceof Wither) {
+					AdvancementUtils.awardCriteria(event.getEntity().getKiller(), ESAdvancement.CERBERUS, "obsidian");
+					for(int i = 0; i < 64; i++) {
 						TransmutationLoot loot = TransmutationLoot.getRandomLoot();
 						ItemStack lootItem = new ItemStack(loot.getMaterial(), (int) ((Math.random() * (loot.getMax() - loot.getMin())) + loot.getMin()));
 						if(!loot.canStack()) {
 							int random = (int) (Math.random() * loot.getMaterial().getMaxDurability());
 							lootItem = DamageUtils.setDamage(lootItem, random);
 						}
+						switch(lootItem.getType()) {
+						case COD:
+						case SALMON:
+						case PUFFERFISH:
+						case TROPICAL_FISH:
+							AdvancementUtils.awardCriteria(event.getEntity().getKiller(), ESAdvancement.FISHIER_BUSINESS, lootItem.getType().name().toLowerCase());
+							break;
+						case TRIDENT:
+							AdvancementUtils.awardCriteria(event.getEntity().getKiller(), ESAdvancement.POSEIDON_REBORN, "trident");
+							break;
+						default:
+							break;
+						}
+						event.getDrops().add(lootItem);
+					}
+					return;
+				}
+				boolean changedLoot = false;
+				for(int i = 0; i < event.getDrops().size(); i++) {
+					ItemStack item = event.getDrops().get(i);
+					if(!TransmutationLoot.isTransmutatedLoot(item)) {
+						changedLoot = true;
+						TransmutationLoot loot = TransmutationLoot.getRandomLoot();
+						ItemStack lootItem = new ItemStack(loot.getMaterial(), (int) ((Math.random() * (loot.getMax() - loot.getMin())) + loot.getMin()));
+						if(!loot.canStack()) {
+							int random = (int) (Math.random() * loot.getMaterial().getMaxDurability());
+							lootItem = DamageUtils.setDamage(lootItem, random);
+						}
+						switch(lootItem.getType()) {
+						case COD:
+						case SALMON:
+						case PUFFERFISH:
+						case TROPICAL_FISH:
+							AdvancementUtils.awardCriteria(event.getEntity().getKiller(), ESAdvancement.FISHIER_BUSINESS, lootItem.getType().name().toLowerCase());
+							break;
+						case TRIDENT:
+							AdvancementUtils.awardCriteria(event.getEntity().getKiller(), ESAdvancement.POSEIDON_REBORN, "trident");
+							break;
+						default:
+							break;
+						}
 						event.getDrops().set(i, lootItem);
 					}
+				}
+				if(!changedLoot) {
+					AdvancementUtils.awardCriteria(event.getEntity().getKiller(), ESAdvancement.POSEIDONS_DAY_OFF, "day_off");
 				}
 			}
 		}

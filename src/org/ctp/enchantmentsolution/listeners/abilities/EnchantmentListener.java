@@ -47,17 +47,17 @@ public class EnchantmentListener implements Listener{
 		return true;
 	}
 	
-	protected void damageItem(HumanEntity player, ItemStack item) {
-		damageItem(player, item, 1.0D, 1.0D);
+	protected ItemStack damageItem(HumanEntity player, ItemStack item) {
+		return damageItem(player, item, 1.0D, 1.0D);
 	}
 	
-	protected void damageItem(HumanEntity player, ItemStack item, double damage) {
-		damageItem(player, item, damage, 1.0D);
+	protected ItemStack damageItem(HumanEntity player, ItemStack item, double damage) {
+		return damageItem(player, item, damage, 1.0D);
 	}
 	
-	protected void damageItem(HumanEntity player, ItemStack item, double damage, double extraChance) {
+	protected ItemStack damageItem(HumanEntity player, ItemStack item, double damage, double extraChance) {
 		if (player.getGameMode().equals(GameMode.CREATIVE) || player.getGameMode().equals(GameMode.SPECTATOR))
-			return;
+			return null;
 		int numBreaks = 0;
 		int unbreaking = Enchantments.getLevel(item, Enchantment.DURABILITY);
 		for(int i = 0; i < damage; i++) {
@@ -70,14 +70,17 @@ public class EnchantmentListener implements Listener{
 		if (numBreaks > 0) {
 			DamageUtils.setDamage(item, DamageUtils.getDamage(item.getItemMeta()) + numBreaks);
 			if (DamageUtils.getDamage(item.getItemMeta()) > item.getType().getMaxDurability()) {
+				ItemStack deadItem = item.clone();
 				player.getInventory().setItemInMainHand(new ItemStack(Material.AIR));
 				player.getWorld().playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 1, 1);
 				if(player instanceof Player) {
 					Player p = (Player) player;
 					p.incrementStatistic(Statistic.BREAK_ITEM, item.getType());
 				}
+				return deadItem;
 			}
 		}
+		return item;
 	}
 	
 }
