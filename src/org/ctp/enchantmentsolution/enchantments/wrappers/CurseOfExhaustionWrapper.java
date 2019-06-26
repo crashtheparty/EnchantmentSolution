@@ -4,15 +4,15 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.enchantments.EnchantmentTarget;
 import org.bukkit.inventory.ItemStack;
 
-public class CurseOfLagWrapper extends CustomEnchantmentWrapper{
+public class CurseOfExhaustionWrapper extends CustomEnchantmentWrapper{
 
-	public CurseOfLagWrapper() {
-		super("lagging_curse");
+	public CurseOfExhaustionWrapper() {
+		super("exhaustion_curse");
 	}
 
 	@Override
 	public String getName() {
-		return "LAGGING_CURSE";
+		return "EXHAUSTION_CURSE";
 	}
 
 	@Override

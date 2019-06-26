@@ -26,8 +26,10 @@ import org.ctp.enchantmentsolution.listeners.fishing.EnchantsFishingListener;
 import org.ctp.enchantmentsolution.listeners.fishing.McMMOFishingNMS;
 import org.ctp.enchantmentsolution.listeners.legacy.UpdateEnchantments;
 import org.ctp.enchantmentsolution.listeners.mobs.MobSpawning;
+import org.ctp.enchantmentsolution.listeners.mobs.Villagers;
 import org.ctp.enchantmentsolution.listeners.vanilla.AnvilListener;
 import org.ctp.enchantmentsolution.listeners.vanilla.EnchantmentListener;
+import org.ctp.enchantmentsolution.listeners.vanilla.GrindstoneListener;
 import org.ctp.enchantmentsolution.nms.McMMO;
 import org.ctp.enchantmentsolution.nms.animalmob.AnimalMob;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
@@ -54,6 +56,7 @@ public class EnchantmentSolution extends JavaPlugin {
 	private Plugin jobsReborn;
 	private ConfigFiles files;
 	private VersionCheck check;
+	private String mcmmoVersion;
 
 	public void onEnable() {
 		PLUGIN = this;
@@ -144,6 +147,10 @@ public class EnchantmentSolution extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new AdvancementPlayerEvent(), this);
 		getServer().getPluginManager().registerEvents(new EnchantmentListener(), this);
 		getServer().getPluginManager().registerEvents(new AnvilListener(), this);
+		if(bukkitVersion.getVersionNumber() > 3) {
+			getServer().getPluginManager().registerEvents(new GrindstoneListener(), this);
+		}
+		getServer().getPluginManager().registerEvents(new Villagers(), this);
 		
 		if(Bukkit.getPluginManager().isPluginEnabled("Jobs")) {
 			jobsReborn = Bukkit.getPluginManager().getPlugin("Jobs");
@@ -151,9 +158,9 @@ public class EnchantmentSolution extends JavaPlugin {
 		}
 		
 		if(Bukkit.getPluginManager().isPluginEnabled("mcMMO")) {
-			String version = Bukkit.getPluginManager().getPlugin("mcMMO").getDescription().getVersion();
-			ChatUtils.sendToConsole(Level.INFO, "mcMMO Version: " + version);
-			if(version.substring(0, version.indexOf(".")).equals("2")) {
+			mcmmoVersion = Bukkit.getPluginManager().getPlugin("mcMMO").getDescription().getVersion();
+			ChatUtils.sendToConsole(Level.INFO, "mcMMO Version: " + mcmmoVersion);
+			if(mcmmoVersion.substring(0, mcmmoVersion.indexOf(".")).equals("2")) {
 				ChatUtils.sendToConsole(Level.INFO, "Using the Overhaul Version!");
 				ChatUtils.sendToConsole(Level.INFO, "Checking for compatibility plugin...");
 				try {
@@ -212,6 +219,14 @@ public class EnchantmentSolution extends JavaPlugin {
 				new LifeListener(), 1l, 1l);
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN,
 				new AdvancementThread(), 1l, 1l);
+		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN, 
+				new CurseOfExhaustionListener(), 1l, 1l);
+		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN, 
+				new ArmoredListener(), 1l, 1l);
+		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN, 
+				new QuickStrikeListener(), 1l, 1l);
+		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN, 
+				new ToughnessListener(), 1l, 1l);
 
 		getCommand("Enchant").setExecutor(new Enchant());
 		getCommand("Info").setExecutor(new EnchantInfo());
@@ -220,6 +235,7 @@ public class EnchantmentSolution extends JavaPlugin {
 		getCommand("ESReload").setExecutor(new Reload());
 		getCommand("ESConfig").setExecutor(new ConfigEdit());
 		getCommand("ESReset").setExecutor(new Reset());
+		getCommand("ESDebug").setExecutor(new Debug());
 		getCommand("Enchant").setTabCompleter(new PlayerChatTabComplete());
 		getCommand("Info").setTabCompleter(new PlayerChatTabComplete());
 		getCommand("RemoveEnchant").setTabCompleter(new PlayerChatTabComplete());
@@ -438,6 +454,10 @@ public class EnchantmentSolution extends JavaPlugin {
 		check.setLatestVersion(getRelease);
 		check.setExperimentalVersion(getExperimental);
 		check.run();
+	}
+
+	public String getMcMMOVersion() {
+		return mcmmoVersion;
 	}
 
 }

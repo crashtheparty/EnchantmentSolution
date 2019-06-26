@@ -12,6 +12,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.inventory.ItemStack;
+import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
@@ -44,7 +45,7 @@ public class IronDefenseListener extends EnchantmentListener{
 				if(shieldDamage < damage) shieldDamage += 1;
 				super.damageItem(player, shield, shieldDamage);
 				if(player instanceof Player) {
-					if((int) (damage * 10) > 0) {
+					if((int) (damage * 10) > 0 && EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber() > 1) {
 						((Player) player).incrementStatistic(Statistic.DAMAGE_BLOCKED_BY_SHIELD, (int) (damage * 10));
 					}
 					if(player.getHealth() <= originalDamage && player.getHealth() > originalDamage - damage) {

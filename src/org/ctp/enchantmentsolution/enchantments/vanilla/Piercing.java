@@ -14,7 +14,6 @@ public class Piercing extends CustomEnchantment{
 	public Piercing() {
 		addDefaultDisplayName("Piercing");
 		addDefaultDisplayName(Language.GERMAN, "Durchschuss");
-		setTreasure(true);
 		setDefaultFiftyConstant(-14);
 		setDefaultThirtyConstant(-9);
 		setDefaultFiftyModifier(15);

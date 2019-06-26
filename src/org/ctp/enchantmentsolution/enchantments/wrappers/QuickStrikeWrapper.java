@@ -4,30 +4,15 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.enchantments.EnchantmentTarget;
 import org.bukkit.inventory.ItemStack;
 
-public class CurseOfLagWrapper extends CustomEnchantmentWrapper{
+public class QuickStrikeWrapper extends CustomEnchantmentWrapper{
 
-	public CurseOfLagWrapper() {
-		super("lagging_curse");
+	public QuickStrikeWrapper() {
+		super("quick_strike");
 	}
 
 	@Override
 	public String getName() {
-		return "LAGGING_CURSE";
-	}
-
-	@Override
-	public boolean canEnchantItem(ItemStack arg0) {
-		return false;
-	}
-
-	@Override
-	public boolean conflictsWith(Enchantment arg0) {
-		return false;
-	}
-
-	@Override
-	public EnchantmentTarget getItemTarget() {
-		return null;
+		return "QUICK_STRIKE";
 	}
 
 	@Override
@@ -41,11 +26,24 @@ public class CurseOfLagWrapper extends CustomEnchantmentWrapper{
 	}
 
 	@Override
-	public boolean isCursed() {
-		return true;
+	public EnchantmentTarget getItemTarget() {
+		return null;
 	}
 
 	@Override
+	public boolean conflictsWith(Enchantment paramEnchantment) {
+		return false;
+	}
+
+	@Override
+	public boolean canEnchantItem(ItemStack paramItemStack) {
+		return false;
+	}
+
+	public boolean isCursed() {
+		return false;
+	}
+
 	public boolean isTreasure() {
 		return false;
 	}

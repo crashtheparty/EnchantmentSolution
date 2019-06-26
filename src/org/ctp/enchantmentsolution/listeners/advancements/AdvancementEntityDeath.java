@@ -20,6 +20,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.MetadataValue;
+import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
@@ -39,11 +40,19 @@ public class AdvancementEntityDeath implements Listener{
 				if(Enchantments.hasEnchantment(mainHand, DefaultEnchantments.KNOCKUP)) {
 					AdvancementUtils.awardCriteria(killer, ESAdvancement.NOT_THAT_KIND, killed.getType().name().toLowerCase());
 				}
+				if(killed instanceof Player && Enchantments.hasEnchantment(mainHand, DefaultEnchantments.QUICK_STRIKE)) {
+					AdvancementUtils.awardCriteria(killer, ESAdvancement.PRE_COMBAT_UPDATE, "combat_update");
+				}
 				if(Enchantments.hasEnchantment(mainHand, DefaultEnchantments.BRINE)) {
 					if(killed.getType() == EntityType.DROWNED) {
 						AdvancementUtils.awardCriteria(killer, ESAdvancement.NOT_VERY_EFFECTIVE, killed.getType().name().toLowerCase());
-					} else if(killed.getType() == EntityType.ENDER_DRAGON || killed.getType() == EntityType.WITHER) {
+					} else if(killed.getType() == EntityType.ENDER_DRAGON || killed.getType() == EntityType.WITHER 
+							|| killed.getType() == EntityType.ELDER_GUARDIAN) {
 						AdvancementUtils.awardCriteria(killer, ESAdvancement.SUPER_EFFECTIVE, "boss");
+					} else if (EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber() > 3) {
+						if(killed.getType() == EntityType.RAVAGER) {
+							AdvancementUtils.awardCriteria(killer, ESAdvancement.SUPER_EFFECTIVE, "boss");
+						}
 					}
 				}
 				if(Enchantments.hasEnchantment(mainHand, DefaultEnchantments.EXP_SHARE)) {

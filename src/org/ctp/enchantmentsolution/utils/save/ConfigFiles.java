@@ -1,8 +1,12 @@
 package org.ctp.enchantmentsolution.utils.save;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.logging.Level;
 
 import org.bukkit.ChatColor;
@@ -14,6 +18,7 @@ import org.ctp.enchantmentsolution.api.ApiEnchantmentWrapper;
 import org.ctp.enchantmentsolution.api.Language;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
+import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.enchantments.helper.PlayerLevels;
 import org.ctp.enchantmentsolution.enchantments.helper.Weight;
 import org.ctp.enchantmentsolution.enchantments.mcmmo.Fishing;
@@ -97,55 +102,6 @@ public class ConfigFiles {
 			mcMMOFishing();
 			enchantmentFile();
 			enchantmentAdvancedFile();
-			if (config.getInt("anvil.level_divisor") <= 0) {
-				config.set("anvil.level_divisor", 4);
-			}
-			if(config.getBoolean("level_50_enchants")) {
-				if(config.getBoolean("use_advanced_file")) {
-					config.set("enchanting_table.enchanting_type", "enhanced_50_custom");
-				} else {
-					config.set("enchanting_table.enchanting_type", "enhanced_50");
-				}
-				config.removeKey("level_50_enchants");
-				config.removeKey("use_advanced_file");
-			} else if (config.getBooleanValue("level_50_enchants") != null){
-				if(config.getBoolean("use_advanced_file")) {
-					config.set("enchanting_table.enchanting_type", "enhanced_30_custom");
-				} else {
-					config.set("enchanting_table.enchanting_type", "enhanced_30");
-				}
-				config.removeKey("level_50_enchants");
-				config.removeKey("use_advanced_file");
-			}
-			if(config.getBooleanValue("lapis_in_table") != null) {
-				config.set("enchanting_table.lapis_in_table", config.getBoolean("lapis_in_table"));
-				config.removeKey("lapis_in_table");
-			}
-			if(config.getBooleanValue("use_enchanted_books") != null) {
-				config.set("enchanting_table.use_enchanted_books", config.getBoolean("use_enchanted_books"));
-				config.removeKey("use_enchanted_books");
-			}
-			if(config.getBooleanValue("enchantability_decay") != null) {
-				config.set("enchanting_table.decay", config.getBoolean("enchantability_decay"));
-				config.removeKey("enchantability_decay");
-			}
-			if(config.getInteger("max_repair_level") != null) {
-				config.set("enchanting_table.max_repair_level", config.getInt("max_repair_level"));
-				config.removeKey("max_repair_level");
-			}
-			if(config.getBooleanValue("get_latest_version") != null) {
-				config.set("version.get_latest", config.getBoolean("get_latest_version"));
-				config.removeKey("get_latest_version");
-			}
-			String setType = config.getString("enchanting_table.enchanting_type");
-			if(!enchantingTypes.contains(setType)) {
-				config.set("enchanting_table.enchanting_type", "enhanced_50");
-			}
-			if(config.getBooleanValue("get_latest_version") != null) {
-				config.set("version.get_latest", config.getBoolean("get_latest_version"));
-				config.removeKey("get_latest_version");
-			}
-			config.saveConfig();
 		} catch (final Exception e) {
 			e.printStackTrace();
 		}
@@ -196,6 +152,11 @@ public class ConfigFiles {
 		EnchantmentSolution.getPlugin().getDb().updateConfig(getLanguageFile());
 		EnchantmentSolution.getPlugin().getDb().updateConfig(getEnchantmentConfig());
 		EnchantmentSolution.getPlugin().getDb().updateConfig(getEnchantmentAdvancedConfig());
+		
+		if(!EnchantmentSolution.getPlugin().isInitializing()) {
+			EnchantmentSolution.getPlugin().setVersionCheck(config.getBoolean("version.get_latest"), config.getBoolean("version.get_experimental"));
+			AdvancementUtils.createAdvancements();
+		}
 	}
 
 	public void reload() {
@@ -209,13 +170,11 @@ public class ConfigFiles {
 				config.set("enchanting_table.enchanting_type", "enhanced_50");
 			}
 			config.saveConfig();
-			EnchantmentSolution.getPlugin().setVersionCheck(config.getBoolean("version.get_latest"), config.getBoolean("version.get_experimental"));
 		} catch (final Exception e) {
 			e.printStackTrace();
 		}
 
 		save();
-		AdvancementUtils.createAdvancements();
 	}
 
 	private void loadLangFile(File dataFolder) {
@@ -295,7 +254,7 @@ public class ConfigFiles {
 					new String[] { "Use the grindstone from within the anvil in version < 1.14" });
 		}
 		config.addDefault("grindstone.take_enchantments", false,
-				new String[] { "Use the grindstone to add enchantments from items to books" });
+				new String[] { "Use the grindstone to add enchantments from items to books.", "Only used when enchanting type is enhanced." });
 		config.addDefault("grindstone.set_repair_cost", true,
 				new String[] { "When grindstone takes enchantments, set repair cost of the generated book to the item used's repair cost" });
 		config.addDefault("grindstone.destroy_take_item", true,
@@ -308,6 +267,8 @@ public class ConfigFiles {
 				new String[] { "Allow custom and/or high level enchantments to spawn on mobs" });
 		config.addDefault("fishing_loot", true,
 				new String[] { "Allow custom and/or high level enchantments to appear while fishing" });
+		config.addDefault("villager_trades", false,
+				new String[] { "Allow custom and/or high level enchants to appear in villager trades" });
 		config.addDefault("loots.mobs.bookshelves", 0,
 				new String[] { "Modify types of enchantments generated by setting the minimum amount of bookshelves" });
 		config.addDefault("loots.mobs.levels", 0,
@@ -361,6 +322,8 @@ public class ConfigFiles {
 				config.addDefault("advancements." + advancement.getNamespace().getKey() + ".announce", true);
 			}
 		}
+		
+		migrateDefaultFile();
 		
 		if(EnchantmentSolution.getPlugin().isInitializing()) {
 			ChatUtils.sendInfo("Default config initialized!");
@@ -778,5 +741,114 @@ public class ConfigFiles {
 		if(EnchantmentSolution.getPlugin().isInitializing()) {
 			ChatUtils.sendInfo("Fishing config initialized!");
 		}
+	}
+	
+	public void generateDebug() {
+		String[] header = { "Enchantment Solution", "Plugin by", "crashtheparty" };
+		YamlConfig backup = new YamlConfig(new File(dataFolder + "/debug.yml"), header);
+
+		SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss z Z");
+		backup.set("time", format.format(new Date()));
+		backup.set("version.bukkit", EnchantmentSolution.getPlugin().getBukkitVersion().getVersion());
+		backup.set("version.bukkit_num", EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber());
+		backup.set("version.plugin", EnchantmentSolution.getPlugin().getPluginVersion().getCurrent());
+		backup.set("plugins.jobs_reborn", EnchantmentSolution.getPlugin().isJobsEnabled());
+		backup.set("plugins.mcmmo", EnchantmentSolution.getPlugin().getMcMMOType());
+		backup.set("plugins.mcmmo_version", EnchantmentSolution.getPlugin().getMcMMOVersion());
+		
+		Iterator<Entry<PlayerLevels, List<Integer>>> iterator = PlayerLevels.PLAYER_LEVELS.entrySet().iterator();
+		
+		while(iterator.hasNext()) {
+			Entry<PlayerLevels, List<Integer>> entry = iterator.next();
+			List<List<EnchantmentLevel>> enchantmentLevels = entry.getKey().getEnchants();
+			for(int i = 0; i < enchantmentLevels.size(); i++) {
+				List<EnchantmentLevel> enchantments = enchantmentLevels.get(i);
+				for(int j = 0; j < enchantments.size(); j++) {
+					EnchantmentLevel enchantment = enchantments.get(j);
+					backup.set("players.levels." + entry.getKey().getPlayer().getName() + ".item." + entry.getKey().getMaterial().name().toLowerCase()
+							+ ".books." + entry.getKey().getBooks() + "." + i + "." + j, enchantment.getEnchant().getName() + " " + enchantment.getLevel());
+				}
+			}
+		}
+		
+		for(String s : config.getAllEntryKeys()) {
+			if(config.contains(s)) {
+				backup.set("config." + s, config.get(s));
+			}
+		}
+		
+		for(String s : enchantment.getAllEntryKeys()) {
+			if(enchantment.contains(s)) {
+				backup.set("enchantment." + s, enchantment.get(s));
+			}
+		}
+		
+		for(String s : enchantmentAdvanced.getAllEntryKeys()) {
+			if(enchantmentAdvanced.contains(s)) {
+				backup.set("enchantmentAdvanced." + s, enchantmentAdvanced.get(s));
+			}
+		}
+		
+		for(String s : languageFiles.getLanguageConfig().getAllEntryKeys()) {
+			if(languageFiles.getLanguageConfig().contains(s)) {
+				backup.set("language." + s, languageFiles.getLanguageConfig().get(s));
+			}
+		}
+		
+		for(String s : fishing.getAllEntryKeys()) {
+			if(fishing.contains(s)) {
+				backup.set("fishing." + s, fishing.get(s));
+			}
+		}
+		
+		backup.saveConfig();
+	}
+	
+	private void migrateDefaultFile() {
+		if (config.getInt("anvil.level_divisor") <= 0) {
+			config.set("anvil.level_divisor", 4);
+		}
+		if(config.getBoolean("level_50_enchants")) {
+			if(config.getBoolean("use_advanced_file")) {
+				config.set("enchanting_table.enchanting_type", "enhanced_50_custom");
+			} else {
+				config.set("enchanting_table.enchanting_type", "enhanced_50");
+			}
+			config.removeKey("level_50_enchants");
+			config.removeKey("use_advanced_file");
+		} else if (config.getBooleanValue("level_50_enchants") != null){
+			if(config.getBoolean("use_advanced_file")) {
+				config.set("enchanting_table.enchanting_type", "enhanced_30_custom");
+			} else {
+				config.set("enchanting_table.enchanting_type", "enhanced_30");
+			}
+			config.removeKey("level_50_enchants");
+			config.removeKey("use_advanced_file");
+		}
+		if(config.getBooleanValue("lapis_in_table") != null) {
+			config.set("enchanting_table.lapis_in_table", config.getBoolean("lapis_in_table"));
+			config.removeKey("lapis_in_table");
+		}
+		if(config.getBooleanValue("use_enchanted_books") != null) {
+			config.set("enchanting_table.use_enchanted_books", config.getBoolean("use_enchanted_books"));
+			config.removeKey("use_enchanted_books");
+		}
+		if(config.getBooleanValue("enchantability_decay") != null) {
+			config.set("enchanting_table.decay", config.getBoolean("enchantability_decay"));
+			config.removeKey("enchantability_decay");
+		}
+		if(config.getInteger("max_repair_level") != null) {
+			config.set("anvil.max_repair_level", config.getInt("max_repair_level"));
+			config.removeKey("max_repair_level");
+		}
+		if(config.getBooleanValue("get_latest_version") != null) {
+			config.set("version.get_latest", config.getBoolean("get_latest_version"));
+			config.removeKey("get_latest_version");
+		}
+		String setType = config.getString("enchanting_table.enchanting_type");
+		if(!enchantingTypes.contains(setType)) {
+			config.set("enchanting_table.enchanting_type", "enhanced_50");
+		}
+		config.saveConfig();
 	}
 }

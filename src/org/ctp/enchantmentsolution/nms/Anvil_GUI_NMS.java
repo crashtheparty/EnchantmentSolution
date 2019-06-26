@@ -22,6 +22,7 @@ public class Anvil_GUI_NMS {
 		case 4:
 		case 5:
 		case 6:
+		case 7:
 			AnvilGUI_v1_14_R1.createAnvil(player, anvil);
 			break;
 		}
@@ -39,6 +40,7 @@ public class Anvil_GUI_NMS {
 		case 4:
 		case 5:
 		case 6:
+		case 7:
 			AnvilGUI_v1_14_R1.createAnvil(player, anvil);
 			break;
 		}
