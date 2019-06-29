@@ -31,7 +31,7 @@ public enum ItemBreak_v1_14 implements ItemBreakType{
 	}
 	
 	public static ItemBreakType getType(Material type) {
-		for(ItemBreak_v1_13 breakType : ItemBreak_v1_13.values()) {
+		for(ItemBreak_v1_14 breakType : ItemBreak_v1_14.values()) {
 			if(breakType.getMaterial().equals(type)) {
 				return breakType;
 			}
@@ -41,7 +41,7 @@ public enum ItemBreak_v1_14 implements ItemBreakType{
 	
 	public static List<Material> allBreakTypes(){
 		List<Material> itemTypes = new ArrayList<Material>();
-		for(ItemBreak_v1_13 type : ItemBreak_v1_13.values()) {
+		for(ItemBreak_v1_14 type : ItemBreak_v1_14.values()) {
 			itemTypes.addAll(type.getBreakTypes());
 		}
 		return itemTypes;
