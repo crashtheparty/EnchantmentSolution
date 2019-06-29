@@ -47,7 +47,7 @@ public enum ItemRepair_v1_14 implements ItemRepairType{
 	}
 	
 	public static ItemRepairType getType(Material type) {
-		for(ItemRepairType repairType : ItemRepair_v1_13.values()) {
+		for(ItemRepairType repairType : ItemRepair_v1_14.values()) {
 			if(repairType.getMaterial().equals(type)) {
 				return repairType;
 			}
