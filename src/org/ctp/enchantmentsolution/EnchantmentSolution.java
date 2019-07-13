@@ -227,6 +227,8 @@ public class EnchantmentSolution extends JavaPlugin {
 				new QuickStrikeListener(), 1l, 1l);
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN, 
 				new ToughnessListener(), 1l, 1l);
+		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN, 
+				new CurseOfContagionListener(), 1l, 1l);
 
 		getCommand("Enchant").setExecutor(new Enchant());
 		getCommand("Info").setExecutor(new EnchantInfo());

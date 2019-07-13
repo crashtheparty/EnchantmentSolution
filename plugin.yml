@@ -1,5 +1,5 @@
 name: EnchantmentSolution
-version: 2.1.1
+version: 2.1.2
 main: org.ctp.enchantmentsolution.EnchantmentSolution
 api-version: 1.13
 softdepend: [mcMMO, Jobs]
@@ -56,6 +56,9 @@ permissions:
     default: false
   enchantmentsolution.permissions.ignore: 
     description: Gives access to all enchantment permissions.
+    default: false
+  enchantmentsolution.demigod-anvil:
+    description: Allows players to repair items with enchantments they cannot combine
     default: false
   enchantmentsolution.god-anvil:
     description: Allows players to combine items higher than their max levels
