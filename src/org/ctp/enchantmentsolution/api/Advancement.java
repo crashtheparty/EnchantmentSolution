@@ -3,13 +3,17 @@ package org.ctp.enchantmentsolution.api;
 import com.google.common.base.Charsets;
 import com.google.common.io.Files;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 
 import org.ctp.enchantmentsolution.api.shared.ItemObject;
 import org.ctp.enchantmentsolution.api.trigger.LocationTrigger;
 import org.ctp.enchantmentsolution.api.trigger.Trigger;
+import org.ctp.enchantmentsolution.api.util.AdvancementModificationResult;
 import org.ctp.enchantmentsolution.api.util.JsonBuilder;
 import org.ctp.enchantmentsolution.api.util.Validator;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 
 import net.md_5.bungee.api.chat.TextComponent;
 import org.apache.commons.lang.Validate;
@@ -18,6 +22,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.craftbukkit.libs.jline.internal.Nullable;
 
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
 import java.util.logging.Level;
@@ -299,30 +304,47 @@ public class Advancement {
 	 * @see #activate(boolean)
 	 */
 	@SuppressWarnings("deprecation")
-	public static boolean activate(boolean reload, NamespacedKey id, String json) {
+	public static AdvancementModificationResult activate(boolean reload, NamespacedKey id, String json, JsonObject jsonObject) {
 		File file = new File(Bukkit.getWorlds().get(0).getWorldFolder(),
 				String.join(File.separator, "datapacks", "bukkit", "data", id.getNamespace(), "advancements", id.getKey()) + ".json");
 		if (!file.exists()) {
 			try {
 				//noinspection deprecation
-				return Bukkit.getUnsafe().loadAdvancement(id, json) != null;
+				return new AdvancementModificationResult(Bukkit.getUnsafe().loadAdvancement(id, json) != null, true, "Loaded successfully.");
 			} catch (Exception e) {
 				Bukkit.getLogger().log(Level.SEVERE, "Error creating advancement file: " + id, e);
-				return false;
+				return new AdvancementModificationResult(false, false, "Error creating advancement file: " + id);
 			}
 		}
 		
 		try {
+			boolean changed = !getCurrentJSON(file).equals(jsonObject);
 			Files.write(json, file, Charsets.UTF_8);
+			
 			if (reload) {
 				Bukkit.reloadData();
-				return Bukkit.getAdvancement(id) != null;
+				return new AdvancementModificationResult(Bukkit.getAdvancement(id) != null, changed, "Loaded successfully.");
 			}
-			return true;
+			return new AdvancementModificationResult(true, changed, "Loaded successfully.");
 		} catch (IOException e) {
 			Bukkit.getLogger().log(Level.SEVERE, "Error writing advancement file: " + id, e);
-			return false;
+			return new AdvancementModificationResult(false, false, "Error writing advancement file: " + id);
 		}
+	}
+	
+	private static JsonObject getCurrentJSON(File file) {
+		JSONParser parser = new JSONParser();
+		 
+        try {
+ 
+            Object obj = parser.parse(new FileReader(file.getAbsolutePath()));
+ 
+            JsonObject gson = new JsonParser().parse(((JSONObject) obj).toJSONString()).getAsJsonObject();
+            return gson;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new JsonObject();
 	}
 	
 	/**
@@ -330,26 +352,27 @@ public class Advancement {
 	 * Calling that method only after all advancements have been activated is advised
 	 * @return whether the activation was successful
 	 */
-	public boolean activate(boolean reload) {
-		return activate(reload, id, toJson());
+	public AdvancementModificationResult activate(boolean reload) {
+		return activate(reload, id, toJson(), toJsonObject());
 	}
 	
 	/**
 	 * 
 	 */
-	public static boolean deactivate(boolean reload, NamespacedKey id) {
+	public static AdvancementModificationResult deactivate(boolean reload, NamespacedKey id) {
 		File file = new File(Bukkit.getWorlds().get(0).getWorldFolder(),
 				String.join(File.separator, "datapacks", "bukkit", "data", id.getNamespace(), "advancements", id.getKey()) + ".json");
 		if (file.exists()) {
 			if(file.delete()) {
 				if (reload) {
 					Bukkit.reloadData();
-					return Bukkit.getAdvancement(id) == null;
+					return new AdvancementModificationResult(Bukkit.getAdvancement(id) == null, true, "Unloaded successfully.");
 				}
+				return new AdvancementModificationResult(true, true, "Unloaded successfully.");
 			}
-			return false;
+			return new AdvancementModificationResult(true, false, "Could not delete file.");
 		}
-		return true;
+		return new AdvancementModificationResult(true, false, "Unloaded successfully.");
 	}
 	
 	/**
@@ -357,7 +380,7 @@ public class Advancement {
 	 * The icon, the triggers and the requirements are validated when this is called.
 	 * @return the JSON representation of the current advancement
 	 */
-	public String toJson() {
+	public JsonObject toJsonObject() {
 		JsonObject json = new JsonObject();
 		if (parent != null) {
 			json.addProperty("parent", parent.toString());
@@ -394,7 +417,16 @@ public class Advancement {
 		if (rewards != null) {
 			json.add("rewards", rewards.toJson());
 		}
-		return JsonBuilder.GSON.toJson(json);
+		return json;
+	}
+	
+	/**
+	 * Creates a JSON representation of the current advancement. This method is only useful when {@link #activate(boolean)} is not appropriate.
+	 * The icon, the triggers and the requirements are validated when this is called.
+	 * @return the JSON representation of the current advancement
+	 */
+	public String toJson() {
+		return JsonBuilder.GSON.toJson(toJsonObject());
 	}
 	
 	@Override

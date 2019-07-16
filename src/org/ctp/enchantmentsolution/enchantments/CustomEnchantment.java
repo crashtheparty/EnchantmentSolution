@@ -191,6 +191,7 @@ public abstract class CustomEnchantment {
 
 	public boolean canAnvilItem(Material item) {
 		if(disabledItems.contains(item)) return false;
+		if(item == Material.ENCHANTED_BOOK) return true;
 		for(ItemType type : getAnvilItemTypes()) {
 			if(type.getItemTypes().contains(item)) {
 				return true;

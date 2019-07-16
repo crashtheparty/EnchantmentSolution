@@ -18,6 +18,7 @@ public class FishingNMS {
 		case 5:
 		case 6:
 		case 7:
+		case 8:
 			return Fishing_v1_14_R1.enchantItem(i);
 		}
 		return i;

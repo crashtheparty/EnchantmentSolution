@@ -22,6 +22,7 @@ public class AnvilNMS {
 		case 5:
 		case 6:
 		case 7:
+		case 8:
 			return Anvil_v1_14_R1.getRepairCost(item);
 		}
 		return 0;
@@ -38,6 +39,7 @@ public class AnvilNMS {
 		case 5:
 		case 6:
 		case 7:
+		case 8:
 			return Anvil_v1_14_R1.setRepairCost(item, repairCost);
 		}
 		return item;

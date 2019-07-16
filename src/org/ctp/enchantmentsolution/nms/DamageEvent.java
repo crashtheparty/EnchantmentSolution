@@ -21,6 +21,7 @@ public class DamageEvent {
 		case 5:
 		case 6:
 		case 7:
+		case 8:
 			DamageEvent_v1_14_R1.damageEntity(entity, cause, damage);
 			break;
 		}
