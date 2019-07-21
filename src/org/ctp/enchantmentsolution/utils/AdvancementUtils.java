@@ -17,6 +17,7 @@ public class AdvancementUtils {
 		AdvancementFactory factory = new AdvancementFactory(EnchantmentSolution.getPlugin(), false, false);
 		Advancement root = null;
 		Advancement last = null;
+		boolean reload = false;
 		for(ESAdvancement advancement : ESAdvancement.values()) {
 			if(advancement.getParent() == null) {
 				if(ConfigUtils.isAdvancementActive(advancement.getNamespace().getKey())) {
@@ -24,11 +25,15 @@ public class AdvancementUtils {
 							ConfigUtils.getAdvancementDescription(advancement.getNamespace().getKey()), advancement.getIcon(), "block/bookshelf");
 					root.setAnnounce(ConfigUtils.announceAdvancement(advancement.getNamespace().getKey()));
 					root.setToast(ConfigUtils.toastAdvancement(advancement.getNamespace().getKey()));
-					root.activate(false);
+					if(root.activate(false).isChanged()) {
+						reload = true;
+					}
 				} else {
 					root = null;
 					advancement.setEnabled(false);
-					Advancement.deactivate(false, advancement.getNamespace());
+					if(Advancement.deactivate(false, advancement.getNamespace()).isChanged()) {
+						reload = true;
+					}
 				}
 			} else {
 				if(root != null && ConfigUtils.isAdvancementActive(advancement.getNamespace().getKey()) && advancement.getActivatedVersion() < version) {
@@ -48,18 +53,25 @@ public class AdvancementUtils {
 					root.setToast(ConfigUtils.toastAdvancement(advancement.getNamespace().getKey()));
 					last.setFrame(advancement.getFrame());
 					last.setRewards(advancement.getRewards());
-					last.activate(false);
+					if(last.activate(false).isChanged()) {
+						reload = true;
+					}
 					
 					advancement.setEnabled(true);
 				} else {
 					advancement.setEnabled(false);
 					
-					Advancement.deactivate(false, advancement.getNamespace());
+					if(Advancement.deactivate(false, advancement.getNamespace()).isChanged()) {
+						reload = true;
+					}
 				}
 			}
 		}
-		
-		Bukkit.reloadData();
+		if(reload) {
+			ChatUtils.sendInfo("Reloading recipes and advancements...");
+			Bukkit.reloadData();
+			ChatUtils.sendInfo("Reloaded!");
+		}
 	}
 	
 	public static boolean awardCriteria(Player player, ESAdvancement advancement, String criteria) {

@@ -24,6 +24,7 @@ public class ItemNameNMS {
 			case 5:
 			case 6:
 			case 7:
+			case 8:
 				return GermanNames_v1_14.getName(item.getType());
 			}
 			break;
@@ -38,6 +39,7 @@ public class ItemNameNMS {
 			case 5:
 			case 6:
 			case 7:
+			case 8:
 				return ItemName_v1_14_R1.returnLocalizedItemName(item);
 			}
 			break;
