@@ -31,7 +31,7 @@ public class Grindstone implements InventoryData{
 	private List<ItemStack> playerItems;
 	private ItemStack combinedItem;
 	private Block block;
-	private boolean takeEnchantments = false;
+	private boolean takeEnchantments = false, opening;
 
 	public Grindstone(Player player, Block block) {
 		this.setPlayer(player);
@@ -51,13 +51,7 @@ public class Grindstone implements InventoryData{
 				size = 36;
 			}
 			Inventory inv = Bukkit.createInventory(null, size, ChatUtils.getMessage(getCodes(), "grindstone.name"));
-			if(inventory == null) {
-				inventory = inv;
-				player.openInventory(inv);
-			} else {
-				inv = player.getOpenInventory().getTopInventory();
-				inventory = inv;
-			}
+			inv = open(inv);
 	
 			ItemStack mirror = new ItemStack(Material.BLACK_STAINED_GLASS_PANE);
 			ItemMeta mirrorMeta = mirror.getItemMeta();
@@ -318,5 +312,29 @@ public class Grindstone implements InventoryData{
 		HashMap<String, Object> codes = new HashMap<String, Object>();
 		codes.put("%player%", player.getName());
 		return codes;
+	}
+
+	@Override
+	public Inventory open(Inventory inv) {
+		opening = true;
+		if(inventory == null) {
+			inventory = inv;
+			player.openInventory(inv);
+		} else {
+			if(inv.getSize() == inventory.getSize()) {
+				inv = player.getOpenInventory().getTopInventory();
+				inventory = inv;
+			} else {
+				inventory = inv;
+				player.openInventory(inv);
+			}
+		}
+		for(int i = 0; i < inventory.getSize(); i++) {
+			inventory.setItem(i, new ItemStack(Material.AIR));
+		}
+		if(opening) {
+			opening = false;
+		}
+		return inv;
 	}
 }

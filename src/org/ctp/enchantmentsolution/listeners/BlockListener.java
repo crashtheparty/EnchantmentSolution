@@ -33,7 +33,6 @@ import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.listeners.abilities.MagmaWalkerListener;
 import org.ctp.enchantmentsolution.listeners.abilities.VoidWalkerListener;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
-import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.items.DamageUtils;
 import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 import org.ctp.enchantmentsolution.utils.items.nms.AbilityUtils;
@@ -49,8 +48,6 @@ public class BlockListener implements Listener{
 		if(MagmaWalkerListener.BLOCKS.contains(event.getBlock())) {
 			event.setCancelled(true);
 		}
-		
-		ChatUtils.sendInfo(event.getBlock().getBiome().name() + " " + event.getBlock().getHumidity() + " " + event.getBlock().getTemperature());
 		
 		if(ItemUtils.getShulkerBoxes().contains(event.getBlock().getType())) {
 			if(!Enchantments.hasEnchantment(event.getPlayer().getInventory().getItemInMainHand(), DefaultEnchantments.TELEPATHY)) {
