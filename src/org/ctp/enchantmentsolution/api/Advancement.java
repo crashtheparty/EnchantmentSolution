@@ -336,10 +336,13 @@ public class Advancement {
 		JSONParser parser = new JSONParser();
 		 
         try {
+        	FileReader reader = new FileReader(file.getAbsolutePath());
  
-            Object obj = parser.parse(new FileReader(file.getAbsolutePath()));
+            Object obj = parser.parse(reader);
+        	reader.close();
  
             JsonObject gson = new JsonParser().parse(((JSONObject) obj).toJSONString()).getAsJsonObject();
+
             return gson;
         } catch (Exception e) {
             e.printStackTrace();

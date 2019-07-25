@@ -100,6 +100,8 @@ public class Table {
 			try {
 				if (ps != null)
 					ps.close();
+				if (rs != null)
+					rs.close();
 				if (conn != null)
 					conn.close();
 			} catch (SQLException ex) {
@@ -131,6 +133,8 @@ public class Table {
 			try {
 				if (ps != null)
 					ps.close();
+				if (rs != null)
+					rs.close();
 				if (conn != null)
 					conn.close();
 			} catch (SQLException ex) {
@@ -161,7 +165,6 @@ public class Table {
 				ps.setString(1, player);
 			}
 			ps.executeUpdate();
-			return;
 		} catch (SQLException ex) {
 			getDb().getPlugin().getLogger().log(Level.SEVERE, Errors.sqlConnectionExecute(),
 					ex);
@@ -200,6 +203,8 @@ public class Table {
 			try {
 				if (ps != null)
 					ps.close();
+				if (rs != null)
+					rs.close();
 				if (conn != null)
 					conn.close();
 			} catch (SQLException ex) {
@@ -230,7 +235,6 @@ public class Table {
 				ps.setString(1, player);
 			}
 			ps.executeUpdate();
-			return;
 		} catch (SQLException ex) {
 			getDb().getPlugin().getLogger().log(Level.SEVERE, Errors.sqlConnectionExecute(),
 					ex);
@@ -249,22 +253,35 @@ public class Table {
 	}
 	
 	public boolean tableExists(Connection connection) {
+		ResultSet rs = null;
+		boolean exists = false;
 		try {
 			DatabaseMetaData md = connection.getMetaData();
-			ResultSet rs = md.getTables(null, null, name, null);
+			rs = md.getTables(null, null, name, null);
 			if (rs.next()) {
-				return true;
+				if (rs != null)
+					rs.close();
+				exists = true;
 			}
 		} catch (SQLException ex) {
-
+			
+		} finally {
+			try {
+				if (rs != null)
+					rs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
-		return false;
+		return exists;
 	}
 	
 	public void createTable(Connection connection){
+		PreparedStatement ps = null;
+		ResultSet rs = null;
 		try{
-			PreparedStatement s = connection.prepareStatement("PRAGMA table_info(" + name + ")");
-			ResultSet rs = s.executeQuery();
+			ps = connection.prepareStatement("PRAGMA table_info(" + name + ")");
+			rs = ps.executeQuery();
 			ArrayList<String> columnsInTable = new ArrayList<String>();
 			boolean has_table = tableExists(connection);
 			while(rs.next()){
@@ -353,6 +370,16 @@ public class Table {
 			}else{
 				ex.printStackTrace();
 			}
+		} finally {
+			try {
+				if (ps != null)
+					ps.close();
+				if (rs != null)
+					rs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			
 		}
 	}
 

@@ -18,6 +18,7 @@ import org.ctp.enchantmentsolution.database.SQLite;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.listeners.*;
 import org.ctp.enchantmentsolution.listeners.abilities.*;
+import org.ctp.enchantmentsolution.listeners.abilities.support.VeinMinerListener;
 import org.ctp.enchantmentsolution.listeners.advancements.AdvancementEntityDeath;
 import org.ctp.enchantmentsolution.listeners.advancements.AdvancementPlayerEvent;
 import org.ctp.enchantmentsolution.listeners.advancements.AdvancementThread;
@@ -57,6 +58,7 @@ public class EnchantmentSolution extends JavaPlugin {
 	private ConfigFiles files;
 	private VersionCheck check;
 	private String mcmmoVersion;
+	private Plugin veinMiner;
 
 	public void onEnable() {
 		PLUGIN = this;
@@ -155,6 +157,12 @@ public class EnchantmentSolution extends JavaPlugin {
 		if(Bukkit.getPluginManager().isPluginEnabled("Jobs")) {
 			jobsReborn = Bukkit.getPluginManager().getPlugin("Jobs");
 			ChatUtils.sendInfo("Jobs Reborn compatibility enabled!");
+		}
+		
+		if(Bukkit.getPluginManager().isPluginEnabled("VeinMiner")) {
+			veinMiner = Bukkit.getPluginManager().getPlugin("VeinMiner");
+			ChatUtils.sendInfo("Vein Miner compatibility enabled!");
+			getServer().getPluginManager().registerEvents(new VeinMinerListener(), this);
 		}
 		
 		if(Bukkit.getPluginManager().isPluginEnabled("mcMMO")) {
@@ -459,6 +467,10 @@ public class EnchantmentSolution extends JavaPlugin {
 
 	public String getMcMMOVersion() {
 		return mcmmoVersion;
+	}
+
+	public Plugin getVeinMiner() {
+		return veinMiner;
 	}
 
 }

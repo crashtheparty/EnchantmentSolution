@@ -29,7 +29,8 @@ public abstract class Database {
 			PreparedStatement ps = connection.prepareStatement("SELECT * FROM "
 					+ table);
 			ResultSet rs = ps.executeQuery();
-			close(ps, rs);
+			ps.close();
+			rs.close();
 
 		} catch (SQLException ex) {
 			plugin.getLogger().log(Level.SEVERE,
@@ -58,6 +59,8 @@ public abstract class Database {
 			try {
 				if (ps != null)
 					ps.close();
+				if (rs != null)
+					rs.close();
 				if (conn != null)
 					conn.close();
 			} catch (SQLException ex) {
@@ -93,6 +96,8 @@ public abstract class Database {
 			try {
 				if (ps != null)
 					ps.close();
+				if (rs != null)
+					rs.close();
 				if (conn != null)
 					conn.close();
 			} catch (SQLException ex) {
@@ -123,7 +128,6 @@ public abstract class Database {
 				ps.setString(1, key);
 			}
 			ps.executeUpdate();
-			return;
 		} catch (SQLException ex) {
 			plugin.getLogger().log(Level.SEVERE, Errors.sqlConnectionExecute(),
 					ex);

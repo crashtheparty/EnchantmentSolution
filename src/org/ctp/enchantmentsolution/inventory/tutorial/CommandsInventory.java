@@ -30,83 +30,91 @@ public class CommandsInventory implements InventoryData{
 		
 		int i = 0;
 		
-		ItemStack enchantments = new ItemStack(Material.ENCHANTED_BOOK);
-		ItemMeta enchantmentsMeta = enchantments.getItemMeta();
-		enchantmentsMeta.setDisplayName(ChatUtils.getMessage(getCodes(), "tutorial.enchantments.name"));
-		enchantmentsMeta.setLore(ChatUtils.getMessages(getCodes(), "tutorial.enchantments.lore"));
-		enchantments.setItemMeta(enchantmentsMeta);
-		inv.setItem(i, enchantments);
-		i++;
-		
-		if(player.hasPermission("enchantmentsolution.commands.enchantinfo.commands")) {
-			ItemStack config = new ItemStack(Material.PAPER);
-			ItemMeta configMeta = config.getItemMeta();
-			configMeta.setDisplayName(ChatUtils.getMessage(getCodes(), "tutorial.commands.name"));
-			configMeta.setLore(ChatUtils.getMessages(getCodes(), "tutorial.commands.lore"));
-			config.setItemMeta(configMeta);
-			inv.setItem(i, config);
+		if(player.hasPermission("enchantmentsolution.command.enchant")) {
+			ItemStack command = new ItemStack(Material.PAPER);
+			ItemMeta commandMeta = command.getItemMeta();
+			commandMeta.setDisplayName(ChatUtils.getMessage(getCodes(), "tutorial.commands_inventory.enchant.name"));
+			commandMeta.setLore(ChatUtils.getMessages(getCodes(), "tutorial.commands_inventory.enchant.lore"));
+			command.setItemMeta(commandMeta);
+			inv.setItem(i, command);
 			i++;
 		}
 		
-		if(player.hasPermission("enchantmentsolution.commands.enchantinfo.config_yml")) {
-			ItemStack config = new ItemStack(Material.PAPER);
-			ItemMeta configMeta = config.getItemMeta();
-			configMeta.setDisplayName(ChatUtils.getMessage(getCodes(), "tutorial.config_yml.name"));
-			configMeta.setLore(ChatUtils.getMessages(getCodes(), "tutorial.config_yml.lore"));
-			config.setItemMeta(configMeta);
-			inv.setItem(i, config);
+		if(player.hasPermission("enchantmentsolution.command.enchantunsafe")) {
+			ItemStack command = new ItemStack(Material.PAPER);
+			ItemMeta commandMeta = command.getItemMeta();
+			commandMeta.setDisplayName(ChatUtils.getMessage(getCodes(), "tutorial.commands_inventory.enchantunsafe.name"));
+			commandMeta.setLore(ChatUtils.getMessages(getCodes(), "tutorial.commands_inventory.enchantunsafe.lore"));
+			command.setItemMeta(commandMeta);
+			inv.setItem(i, command);
 			i++;
 		}
 		
-		if(player.hasPermission("enchantmentsolution.commands.enchantinfo.enchantments_yml")) {
-			ItemStack config = new ItemStack(Material.PAPER);
-			ItemMeta configMeta = config.getItemMeta();
-			configMeta.setDisplayName(ChatUtils.getMessage(getCodes(), "tutorial.enchantments_yml.name"));
-			configMeta.setLore(ChatUtils.getMessages(getCodes(), "tutorial.enchantments_yml.lore"));
-			config.setItemMeta(configMeta);
-			inv.setItem(i, config);
+		if(true) {
+			ItemStack command = new ItemStack(Material.PAPER);
+			ItemMeta commandMeta = command.getItemMeta();
+			commandMeta.setDisplayName(ChatUtils.getMessage(getCodes(), "tutorial.commands_inventory.info.name"));
+			commandMeta.setLore(ChatUtils.getMessages(getCodes(), "tutorial.commands_inventory.info.lore"));
+			command.setItemMeta(commandMeta);
+			inv.setItem(i, command);
 			i++;
 		}
 		
-		if(player.hasPermission("enchantmentsolution.commands.enchantinfo.enchantments_advanced_yml")) {
-			ItemStack config = new ItemStack(Material.PAPER);
-			ItemMeta configMeta = config.getItemMeta();
-			configMeta.setDisplayName(ChatUtils.getMessage(getCodes(), "tutorial.enchantments_advanced_yml.name"));
-			configMeta.setLore(ChatUtils.getMessages(getCodes(), "tutorial.enchantments_advanced_yml.lore"));
-			config.setItemMeta(configMeta);
-			inv.setItem(i, config);
+		if(player.hasPermission("enchantmentsolution.command.removeenchant")) {
+			ItemStack command = new ItemStack(Material.PAPER);
+			ItemMeta commandMeta = command.getItemMeta();
+			commandMeta.setDisplayName(ChatUtils.getMessage(getCodes(), "tutorial.commands_inventory.removeenchant.name"));
+			commandMeta.setLore(ChatUtils.getMessages(getCodes(), "tutorial.commands_inventory.removeenchant.lore"));
+			command.setItemMeta(commandMeta);
+			inv.setItem(i, command);
 			i++;
 		}
 		
-		if(player.hasPermission("enchantmentsolution.commands.enchantinfo.fishing_yml")) {
-			ItemStack config = new ItemStack(Material.PAPER);
-			ItemMeta configMeta = config.getItemMeta();
-			configMeta.setDisplayName(ChatUtils.getMessage(getCodes(), "tutorial.fishing_yml.name"));
-			configMeta.setLore(ChatUtils.getMessages(getCodes(), "tutorial.fishing_yml.lore"));
-			config.setItemMeta(configMeta);
-			inv.setItem(i, config);
+		if(player.hasPermission("enchantmentsolution.command.reload")) {
+			ItemStack command = new ItemStack(Material.PAPER);
+			ItemMeta commandMeta = command.getItemMeta();
+			commandMeta.setDisplayName(ChatUtils.getMessage(getCodes(), "tutorial.commands_inventory.reload.name"));
+			commandMeta.setLore(ChatUtils.getMessages(getCodes(), "tutorial.commands_inventory.reload.lore"));
+			command.setItemMeta(commandMeta);
+			inv.setItem(i, command);
 			i++;
 		}
 		
-		if(player.hasPermission("enchantmentsolution.commands.enchantinfo.language_yml")) {
-			ItemStack config = new ItemStack(Material.PAPER);
-			ItemMeta configMeta = config.getItemMeta();
-			configMeta.setDisplayName(ChatUtils.getMessage(getCodes(), "tutorial.language_yml.name"));
-			configMeta.setLore(ChatUtils.getMessages(getCodes(), "tutorial.language_yml.lore"));
-			config.setItemMeta(configMeta);
-			inv.setItem(i, config);
+		if(player.hasPermission("enchantmentsolution.command.edit")) {
+			ItemStack command = new ItemStack(Material.PAPER);
+			ItemMeta commandMeta = command.getItemMeta();
+			commandMeta.setDisplayName(ChatUtils.getMessage(getCodes(), "tutorial.commands_inventory.esconfig.name"));
+			commandMeta.setLore(ChatUtils.getMessages(getCodes(), "tutorial.commands_inventory.esconfig.lore"));
+			command.setItemMeta(commandMeta);
+			inv.setItem(i, command);
 			i++;
 		}
 		
-		if(player.hasPermission("enchantmentsolution.commands.enchantinfo.other")) {
-			ItemStack config = new ItemStack(Material.PAPER);
-			ItemMeta configMeta = config.getItemMeta();
-			configMeta.setDisplayName(ChatUtils.getMessage(getCodes(), "tutorial.other.name"));
-			configMeta.setLore(ChatUtils.getMessages(getCodes(), "tutorial.other.lore"));
-			config.setItemMeta(configMeta);
-			inv.setItem(i, config);
+		if(player.hasPermission("enchantmentsolution.command.reset")) {
+			ItemStack command = new ItemStack(Material.PAPER);
+			ItemMeta commandMeta = command.getItemMeta();
+			commandMeta.setDisplayName(ChatUtils.getMessage(getCodes(), "tutorial.commands_inventory.esreset.name"));
+			commandMeta.setLore(ChatUtils.getMessages(getCodes(), "tutorial.commands_inventory.esreset.lore"));
+			command.setItemMeta(commandMeta);
+			inv.setItem(i, command);
 			i++;
 		}
+		
+		if(player.hasPermission("enchantmentsolution.command.debug")) {
+			ItemStack command = new ItemStack(Material.PAPER);
+			ItemMeta commandMeta = command.getItemMeta();
+			commandMeta.setDisplayName(ChatUtils.getMessage(getCodes(), "tutorial.commands_inventory.esdebug.name"));
+			commandMeta.setLore(ChatUtils.getMessages(getCodes(), "tutorial.commands_inventory.esdebug.lore"));
+			command.setItemMeta(commandMeta);
+			inv.setItem(i, command);
+			i++;
+		}
+		
+		ItemStack goBack = new ItemStack(Material.ARROW);
+		ItemMeta goBackMeta = goBack.getItemMeta();
+		goBackMeta.setDisplayName(ChatUtils.getMessage(ChatUtils.getCodes(), "tutorial.pagination.go_back"));
+		goBack.setItemMeta(goBackMeta);
+		inv.setItem(18, goBack);
 	}
 	
 	@Override
@@ -174,13 +182,5 @@ public class CommandsInventory implements InventoryData{
 			opening = false;
 		}
 		return inv;
-	}
-
-	public void openEnchantmentList() {
-		this.close(false);
-		
-		EnchantmentListInventory inv = new EnchantmentListInventory(player);
-		EnchantmentSolution.getPlugin().addInventory(inv);
-		inv.setInventory();
 	}
 }
