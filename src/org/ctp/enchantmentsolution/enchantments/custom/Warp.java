@@ -13,18 +13,8 @@ import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 public class Warp extends CustomEnchantment{
 	
 	public Warp() {
-		addDefaultDisplayName("Warp");
+		super("Warp", -5, -7, 20, 14, 10, 1, 3, 3, Weight.RARE, "Gives a chance of teleporting a small distance away on hit.");
 		addDefaultDisplayName(Language.GERMAN, "Warp");
-		setDefaultFiftyConstant(-5);
-		setDefaultThirtyConstant(-7);
-		setDefaultFiftyModifier(20);
-		setDefaultThirtyModifier(14);
-		setDefaultFiftyStartLevel(10);
-		setDefaultThirtyStartLevel(1);
-		setDefaultFiftyMaxLevel(3);
-		setDefaultThirtyMaxLevel(3);
-		setDefaultWeight(Weight.RARE);
-		addDefaultDescription("Gives a chance of teleporting a small distance away on hit.");
 		addDefaultDescription(Language.GERMAN, "Gibt eine Chance, bei einem Treffer eine kleine Entfernung zu teleportieren.");
 	}
 	

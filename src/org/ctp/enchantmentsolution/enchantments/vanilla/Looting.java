@@ -12,18 +12,8 @@ import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 public class Looting extends CustomEnchantment{
 	
 	public Looting() {
-		addDefaultDisplayName("Looting");
+		super("Looting", 7, 6, 11, 9, 1, 1, 5, 3, Weight.RARE, "Mobs can drop more loot.");
 		addDefaultDisplayName(Language.GERMAN, "Plünderung");
-		setDefaultFiftyConstant(7);
-		setDefaultThirtyConstant(6);
-		setDefaultFiftyModifier(11);
-		setDefaultThirtyModifier(9);
-		setDefaultFiftyStartLevel(1);
-		setDefaultThirtyStartLevel(1);
-		setDefaultFiftyMaxLevel(5);
-		setDefaultThirtyMaxLevel(3);
-		setDefaultWeight(Weight.RARE);
-		addDefaultDescription("Mobs can drop more loot.");
 		addDefaultDescription(Language.GERMAN, "Mobs können mehr Beute fallen lassen.");
 	}
 	

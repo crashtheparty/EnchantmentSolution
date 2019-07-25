@@ -13,18 +13,8 @@ import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 public class Protection extends CustomEnchantment{
 	
 	public Protection() {
-		addDefaultDisplayName("Protection");
+		super("Protection", -15, -10, 16, 11, 1, 1, 4, 4, Weight.COMMON, "Reduces all damage, except damage from the Void, the /kill command, or hunger damage.");
 		addDefaultDisplayName(Language.GERMAN, "Schutz");
-		setDefaultFiftyConstant(-15);
-		setDefaultThirtyConstant(-10);
-		setDefaultFiftyModifier(16);
-		setDefaultThirtyModifier(11);
-		setDefaultFiftyStartLevel(1);
-		setDefaultThirtyStartLevel(1);
-		setDefaultFiftyMaxLevel(4);
-		setDefaultThirtyMaxLevel(4);
-		setDefaultWeight(Weight.COMMON);
-		addDefaultDescription("Reduces all damage, except damage from the Void, the /kill command, or hunger damage.");
 		addDefaultDescription(Language.GERMAN, "Reduziert jeglichen Schaden, mit Ausnahme des Schadens durch die Leere, den Befehl / kill oder den Hunger-Schaden.");
 	}
 

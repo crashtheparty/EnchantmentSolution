@@ -12,18 +12,8 @@ import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 public class SweepingEdge extends CustomEnchantment{
 	
 	public SweepingEdge() {
-		addDefaultDisplayName("Sweeping Edge");
+		super("Sweeping Edge", -7, -4, 12, 9, 1, 1, 3, 3, Weight.RARE, "Increases sweeping attack damage.");
 		addDefaultDisplayName(Language.GERMAN, "Schwungkraft");
-		setDefaultFiftyConstant(-7);
-		setDefaultThirtyConstant(-4);
-		setDefaultFiftyModifier(12);
-		setDefaultThirtyModifier(9);
-		setDefaultFiftyStartLevel(1);
-		setDefaultThirtyStartLevel(1);
-		setDefaultFiftyMaxLevel(3);
-		setDefaultThirtyMaxLevel(3);
-		setDefaultWeight(Weight.RARE);
-		addDefaultDescription("Increases sweeping attack damage.");
 		addDefaultDescription(Language.GERMAN, "Erhöht den Angriffsschaden.");
 	}
 	

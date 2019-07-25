@@ -11,6 +11,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityPickupItemEvent;
+import org.bukkit.event.player.PlayerBedLeaveEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.ItemStack;
@@ -24,6 +25,16 @@ import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 
 public class AdvancementPlayerEvent implements Listener{
 	
+	@EventHandler(priority=EventPriority.MONITOR)
+	public void onPlayerBedLeave(PlayerBedLeaveEvent event) {
+		Player player = event.getPlayer();
+		if(player.getWorld().getTime() <= 12540 || player.getWorld().getTime() >= 23459) {
+			ItemStack helmet = player.getInventory().getHelmet();
+			if(helmet != null && Enchantments.hasEnchantment(helmet, DefaultEnchantments.UNREST)) {
+				AdvancementUtils.awardCriteria(player, ESAdvancement.I_AINT_AFRAID_OF_NO_GHOSTS, "unrest", 1);
+			}
+		}
+	}
 	@EventHandler(priority=EventPriority.MONITOR)
 	public void onPlayerDropItem(PlayerDropItemEvent event) {
 		Player player = event.getPlayer();

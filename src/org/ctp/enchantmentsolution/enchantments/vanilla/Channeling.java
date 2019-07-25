@@ -12,19 +12,9 @@ import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 public class Channeling extends CustomEnchantment{
 	
 	public Channeling() {
-		addDefaultDisplayName("Channeling");
+		super("Channeling", 25, 25, 0, 0, 1, 1, 1, 1, Weight.VERY_RARE, "Summons a lightning bolt when a mob is hit by a thrown trident.");
 		addDefaultDisplayName(Language.GERMAN, "Entladung");
-		setDefaultFiftyConstant(25);
-		setDefaultThirtyConstant(25);
-		setDefaultFiftyModifier(0);
-		setDefaultThirtyModifier(0);
-		setDefaultFiftyStartLevel(1);
-		setDefaultThirtyStartLevel(1);
-		setDefaultFiftyMaxLevel(1);
-		setDefaultThirtyMaxLevel(1);
-		setDefaultWeight(Weight.VERY_RARE);
 		setMaxLevelOne(true);
-		addDefaultDescription("Summons a lightning bolt when a mob is hit by a thrown trident.");
 		addDefaultDescription(Language.GERMAN, "Beschwört einen Blitz, wenn ein Mob von einem geworfenen Dreizack getroffen wird.");
 	}
 

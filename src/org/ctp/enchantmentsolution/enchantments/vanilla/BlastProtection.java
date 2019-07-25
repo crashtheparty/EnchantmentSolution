@@ -13,20 +13,9 @@ import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 public class BlastProtection extends CustomEnchantment{
 	
 	public BlastProtection() {
-		addDefaultDisplayName("Blast Protection");
-		addDefaultDisplayName(Language.GERMAN, "Explosionsshutz");
-		setDefaultFiftyConstant(-8);
-		setDefaultThirtyConstant(-3);
-		setDefaultFiftyModifier(14);
-		setDefaultThirtyModifier(8);
-		setDefaultFiftyStartLevel(1);
-		setDefaultThirtyStartLevel(1);
-		setDefaultFiftyMaxLevel(4);
-		setDefaultThirtyMaxLevel(4);
-		setDefaultWeight(Weight.RARE);
-		addDefaultDescription("Reduces explosion damage." + 
-				"\n" + 
+		super("Blast Protection", -8, -3, 14, 8, 1, 1, 4, 4, Weight.RARE, "Reduces explosion damage.\n" + 
 				"Also reduces explosion knockback by (15 × level)%. If multiple pieces have the enchantment, only the highest level's reduction is used.");
+		addDefaultDisplayName(Language.GERMAN, "Explosionsshutz");
 		addDefaultDescription(Language.GERMAN, "Reduziert Explosionsschäden. " + 
 				"\n" + 
 				"Verringert außerdem den Explosionsrückschlag um (15 × Level)%. Wenn mehrere Teile die Verzauberung besitzen, " + 

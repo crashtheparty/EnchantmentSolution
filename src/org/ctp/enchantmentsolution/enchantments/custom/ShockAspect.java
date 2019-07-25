@@ -13,18 +13,8 @@ import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 public class ShockAspect extends CustomEnchantment{
 	
 	public ShockAspect() {
-		addDefaultDisplayName("Shock Aspect");
+		super("Shock Aspect", -15, -10, 20, 20, 5, 1, 3, 2, Weight.RARE, "Has a chance to strike lightning on attacked mobs.");
 		addDefaultDisplayName(Language.GERMAN, "Schock");
-		setDefaultFiftyConstant(-15);
-		setDefaultThirtyConstant(-10);
-		setDefaultFiftyModifier(20);
-		setDefaultThirtyModifier(20);
-		setDefaultFiftyStartLevel(5);
-		setDefaultThirtyStartLevel(1);
-		setDefaultFiftyMaxLevel(3);
-		setDefaultThirtyMaxLevel(2);
-		setDefaultWeight(Weight.RARE);
-		addDefaultDescription("Has a chance to strike lightning on attacked mobs.");
 		addDefaultDescription(Language.GERMAN, "Hat eine Chance, angegriffene Mobs mit Blitzen zu treffen.");
 	}
 	

@@ -13,19 +13,9 @@ import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 public class SoulReaper extends CustomEnchantment{
 	
 	public SoulReaper() {
-		addDefaultDisplayName("Soul Reaper");
+		super("Soul Reaper", 30, 20, 0, 0, 25, 1, 1, 1, Weight.VERY_RARE, "Has a chance of stealing soulbounded items from the killed player.");
 		addDefaultDisplayName(Language.GERMAN, "Seelendieb");
-		setDefaultFiftyConstant(30);
-		setDefaultThirtyConstant(20);
-		setDefaultFiftyModifier(0);
-		setDefaultThirtyModifier(0);
-		setDefaultFiftyStartLevel(25);
-		setDefaultThirtyStartLevel(1);
-		setDefaultFiftyMaxLevel(1);
-		setDefaultThirtyMaxLevel(1);
-		setDefaultWeight(Weight.VERY_RARE);
 		setMaxLevelOne(true);
-		addDefaultDescription("Has a chance of stealing soulbounded items from the killed player.");
 		addDefaultDescription(Language.GERMAN, "Hat eine Chance, vom getöteten Spieler seelengebundene Gegenstände zu stehlen.");
 	}
 	

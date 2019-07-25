@@ -13,18 +13,8 @@ import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 public class QuickStrike extends CustomEnchantment{
 	
 	public QuickStrike() {
-		addDefaultDisplayName("Quick Strike");
+		super("Quick Strike", 7, 6, 11, 9, 1, 1, 5, 3, Weight.RARE, "Increases attack speed.");
 		addDefaultDisplayName(Language.GERMAN, "Schneller Schlag");
-		setDefaultFiftyConstant(7);
-		setDefaultThirtyConstant(6);
-		setDefaultFiftyModifier(11);
-		setDefaultThirtyModifier(9);
-		setDefaultFiftyStartLevel(1);
-		setDefaultThirtyStartLevel(1);
-		setDefaultFiftyMaxLevel(5);
-		setDefaultThirtyMaxLevel(3);
-		setDefaultWeight(Weight.RARE);
-		addDefaultDescription("Increases attack speed.");
 		addDefaultDescription(Language.GERMAN, "Erhöht die Angriffsgeschwindigkeit");
 	}
 	

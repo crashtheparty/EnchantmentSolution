@@ -12,18 +12,8 @@ import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 public class Lure extends CustomEnchantment{
 	
 	public Lure() {
-		addDefaultDisplayName("Lure");
+		super("Lure", 7, 5, 11, 10, 1, 1, 4, 3, Weight.RARE, "Increases rate of fish biting your hook while fishing.");
 		addDefaultDisplayName(Language.GERMAN, "Köder");
-		setDefaultFiftyConstant(7);
-		setDefaultThirtyConstant(5);
-		setDefaultFiftyModifier(11);
-		setDefaultThirtyModifier(10);
-		setDefaultFiftyStartLevel(1);
-		setDefaultThirtyStartLevel(1);
-		setDefaultFiftyMaxLevel(4);
-		setDefaultThirtyMaxLevel(3);
-		setDefaultWeight(Weight.RARE);
-		addDefaultDescription("Increases rate of fish biting your hook while fishing.");
 		addDefaultDescription(Language.GERMAN, "Erhöht die Rate der Fische, die sich beim Angeln an den Haken beißen.");
 	}
 	

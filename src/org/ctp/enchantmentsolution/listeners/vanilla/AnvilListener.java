@@ -13,11 +13,11 @@ import org.bukkit.event.inventory.PrepareAnvilEvent;
 import org.bukkit.inventory.AnvilInventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.ctp.enchantmentsolution.nms.AnvilNMS;
+import org.ctp.enchantmentsolution.enchantments.helper.UpdateItem;
 import org.ctp.enchantmentsolution.utils.AnvilUtils;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.ConfigUtils;
-import org.ctp.enchantmentsolution.utils.items.ItemUtils;
+import org.ctp.enchantmentsolution.utils.AnvilUtils.RepairType;
 
 public class AnvilListener implements Listener{
 
@@ -28,7 +28,8 @@ public class AnvilListener implements Listener{
 		if(first != null && second != null) {
 			if(AnvilUtils.canCombineItems(first, second)) {
 				if (event.getViewers().get(0) instanceof Player) {
-					event.setResult(ItemUtils.combineItems((Player) event.getViewers().get(0), first, second));
+					UpdateItem items = new UpdateItem((Player) event.getViewers().get(0), first, second);
+					event.setResult(items.getCombinedItem());
 				}
 			}
 		}
@@ -56,38 +57,37 @@ public class AnvilListener implements Listener{
 					if(AnvilUtils.canCombineItems(first, second) && event.getSlot() == 2 && (event.getCursor() == null 
 							|| event.getCursor().getType() == Material.AIR)) {
 						event.setCancelled(true);
-						int cost = AnvilUtils.getRepairCost(player, first, second);
+						UpdateItem combinedItem = new UpdateItem((Player) event.getViewers().get(0), first, second);
+						int cost = combinedItem.getRepairCost();
 						if(cost > ConfigUtils.getMaxRepairLevel()) {
 							HashMap<String, Object> loreCodes = ChatUtils.getCodes();
 							loreCodes.put("%repairCost%", cost);
 							ChatUtils.sendMessage(player, ChatUtils.getMessage(loreCodes, "anvil.cannot-repair"));
 							return;
 						}
-						ItemStack combinedItem = ItemUtils.combineItems(player, first, second);
-						int itemOneRepair = AnvilNMS.getRepairCost(first);
-						int itemTwoRepair = AnvilNMS.getRepairCost(second);
-						if(itemOneRepair > itemTwoRepair) {
-							combinedItem = AnvilNMS.setRepairCost(combinedItem, itemOneRepair * 2 + 1);
-						}else {
-							combinedItem = AnvilNMS.setRepairCost(combinedItem, itemTwoRepair * 2 + 1);
-						}
 						if(player.getLevel() >= cost) {
 							switch(event.getClick()) {
 							case LEFT:
 							case RIGHT:
 							case SHIFT_RIGHT:
-								player.setItemOnCursor(combinedItem);
+								player.setItemOnCursor(combinedItem.getCombinedItem());
 								player.setLevel(player.getLevel() - cost);
 								inv.setContents(new ItemStack[3]);
 								AnvilUtils.checkAnvilBreak(player, inv.getLocation().getBlock(), null);
+								if(combinedItem.getRepairType().equals(RepairType.REPAIR)) {
+									inv.setItem(1, combinedItem.getItemTwoLeftover());
+								}
 								break;
 							case SHIFT_LEFT:
-								HashMap<Integer, ItemStack> items = player.getInventory().addItem(combinedItem);
+								HashMap<Integer, ItemStack> items = player.getInventory().addItem(combinedItem.getCombinedItem());
 								if(!items.isEmpty()) {
 									return;
 								}
 								player.setLevel(player.getLevel() - cost);
 								inv.setContents(new ItemStack[3]);
+								if(combinedItem.getRepairType().equals(RepairType.REPAIR)) {
+									inv.setItem(1, combinedItem.getItemTwoLeftover());
+								}
 								AnvilUtils.checkAnvilBreak(player, inv.getLocation().getBlock(), null);
 								break;
 							default:
@@ -122,7 +122,7 @@ public class AnvilListener implements Listener{
 								AnvilUtils.checkAnvilBreak(player, inv.getLocation().getBlock(), null);
 								break;
 							case SHIFT_LEFT:
-								HashMap<Integer, ItemStack> items = player.getInventory().addItem(ItemUtils.combineItems(player, first, second));
+								HashMap<Integer, ItemStack> items = player.getInventory().addItem(first);
 								if(!items.isEmpty()) {
 									return;
 								}

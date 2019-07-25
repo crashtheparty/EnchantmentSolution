@@ -13,6 +13,7 @@ import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 public class FrequentFlyer extends CustomEnchantment{
 	
 	public FrequentFlyer() {
+		super("Angler", 0, 0, 10, 8, 1, 1, 5, 3, Weight.RARE, "Catch one additional fish per level if you caught a fish.");
 		addDefaultDisplayName("Frequent Flyer");
 		addDefaultDisplayName(Language.GERMAN, "Vielflieger");
 		setDefaultFiftyConstant(20);

@@ -13,18 +13,8 @@ import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 public class GoldDigger extends CustomEnchantment{
 	
 	public GoldDigger() {
-		addDefaultDisplayName("Gold Digger");
+		super("Gold Digger", -2, -10, 12, 11, 10, 1, 6, 5, Weight.UNCOMMON, "Earn experience and gold nuggets for breaking crops.");
 		addDefaultDisplayName(Language.GERMAN, "Goldgräber");
-		setDefaultFiftyConstant(-2);
-		setDefaultThirtyConstant(-10);
-		setDefaultFiftyModifier(12);
-		setDefaultThirtyModifier(11);
-		setDefaultFiftyStartLevel(10);
-		setDefaultThirtyStartLevel(1);
-		setDefaultFiftyMaxLevel(6);
-		setDefaultThirtyMaxLevel(5);
-		setDefaultWeight(Weight.UNCOMMON);
-		addDefaultDescription("Earn experience and gold nuggets for breaking crops.");
 		addDefaultDescription(Language.GERMAN, "Sammeln Sie Erfahrung und Gold-Nuggets für das Ernten.");
 	}
 	

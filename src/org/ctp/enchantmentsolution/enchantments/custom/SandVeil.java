@@ -13,18 +13,8 @@ import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 public class SandVeil extends CustomEnchantment{
 	
 	public SandVeil() {
-		addDefaultDisplayName("Sand Veil");
+		super("Sand Veil", -12, -10, 13, 11, 1, 1, 6, 5, Weight.COMMON, "Lowers accuracy of entity's attacks.");
 		addDefaultDisplayName(Language.GERMAN, "Sandschleier");
-		setDefaultFiftyConstant(-12);
-		setDefaultThirtyConstant(-10);
-		setDefaultFiftyModifier(13);
-		setDefaultThirtyModifier(11);
-		setDefaultFiftyStartLevel(1);
-		setDefaultThirtyStartLevel(1);
-		setDefaultFiftyMaxLevel(6);
-		setDefaultThirtyMaxLevel(5);
-		setDefaultWeight(Weight.COMMON);
-		addDefaultDescription("Lowers accuracy of entity's attacks.");
 		addDefaultDescription(Language.GERMAN, "Verringert die Genauigkeit der Angriffe der Entität.");
 	}
 	

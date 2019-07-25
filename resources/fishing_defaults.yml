@@ -1,0 +1,685 @@
+Enchantments_Rarity_30: 
+    COMMON: 
+        enchants: 
+        - 'enchantmentsolution+angler 1'
+        - 'minecraft+bane_of_arthropods 1'
+        - 'minecraft+blast_protection 1'
+        - 'minecraft+binding_curse 1'
+        - 'minecraft+vanishing_curse 1'
+        - 'minecraft+depth_strider 1'
+        - 'minecraft+efficiency 1'
+        - 'minecraft+feather_falling 1'
+        - 'minecraft+fire_protection 1'
+        - 'minecraft+fortune 1'
+        - 'enchantmentsolution+gold_digger 1'
+        - 'minecraft+impaling 1'
+        - 'minecraft+loyalty 1'
+        - 'minecraft+luck_of_the_sea 1'
+        - 'minecraft+piercing 1'
+        - 'minecraft+power 1'
+        - 'minecraft+projectile_protection 1'
+        - 'minecraft+protection 1'
+        - 'enchantmentsolution+sand_veil 1'
+        - 'minecraft+sharpness 1'
+        - 'minecraft+smite 1'
+        - 'enchantmentsolution+stone_throw 1'
+        - 'minecraft+sweeping 1'
+        - 'minecraft+unbreaking 1'
+
+        multiple_enchants_chance: 0.1
+    UNCOMMON: 
+        enchants: 
+        - 'enchantmentsolution+angler 2'
+        - 'minecraft+bane_of_arthropods 2'
+        - 'minecraft+blast_protection 2'
+        - 'minecraft+binding_curse 1'
+        - 'minecraft+vanishing_curse 1'
+        - 'enchantmentsolution+drowned 1'
+        - 'minecraft+efficiency 2'
+        - 'enchantmentsolution+exp_share 1'
+        - 'minecraft+feather_falling 2'
+        - 'minecraft+fire_aspect 1'
+        - 'enchantmentsolution+gold_digger 2'
+        - 'enchantmentsolution+hard_bounce 1'
+        - 'minecraft+impaling 2'
+        - 'enchantmentsolution+iron_defense 1'
+        - 'minecraft+knockback 1'
+        - 'enchantmentsolution+knock_ip 1'
+        - 'minecraft+looting 1'
+        - 'minecraft+lure 1'
+        - 'enchantmentsolution+pillage 1'
+        - 'minecraft+power 2'
+        - 'minecraft+projectile_protection 2'
+        - 'minecraft+protection 2'
+        - 'minecraft+punch 1'
+        - 'minecraft+quick_charge 1'
+        - 'minecraft+respiration 1'
+        - 'enchantmentsolution+sand_veil 2'
+        - 'minecraft+sharpness 2'
+        - 'enchantmentsolution+shock_aspect 1'
+        - 'minecraft+smite 2'
+        - 'enchantmentsolution+sniper 1'
+        - 'enchantmentsolution+stone_throw 2'
+        - 'minecraft+thorns 1'
+        - 'enchantmentsolution+warp 1'
+
+        multiple_enchants_chance: 0.2
+    RARE: 
+        enchants: 
+        - 'minecraft+aqua_affinity 1'
+        - 'minecraft+bane_of_arthropods 3'
+        - 'enchantmentsolution+beheading 1'
+        - 'enchantmentsolution+brine 1'
+        - 'minecraft+binding_curse 1'
+        - 'minecraft+vanishing_curse 1'
+        - 'minecraft+depth_strider 2'
+        - 'minecraft+efficiency 3'
+        - 'enchantmentsolution+exp_share 2'
+        - 'minecraft+feather_falling 3'
+        - 'minecraft+fire_protection 2'
+        - 'enchantmentsolution+flower_gift 1'
+        - 'minecraft+fortune 2'
+        - 'enchantmentsolution+frequent_flyer 1'
+        - 'minecraft+frost_walker 1'
+        - 'enchantmentsolution+fried 1'
+        - 'enchantmentsolution+gold_digger 3'
+        - 'enchantmentsolution+height_plus_plus 1'
+        - 'enchantmentsolution+icarus 1'
+        - 'minecraft+impaling 3'
+        - 'enchantmentsolution+life 1'
+        - 'minecraft+loyalty 2'
+        - 'minecraft+luck_of_the_sea 2'
+        - 'enchantmentsolution+magma_walker 1'
+        - 'enchantmentsolution+no_rest 1'
+        - 'minecraft+piercing 2'
+        - 'minecraft+power 3'
+        - 'minecraft+projectile_protection 3'
+        - 'minecraft+respiration 2'
+        - 'minecraft+riptide 1'
+        - 'enchantmentsolution+sand_veil 3'
+        - 'minecraft+sharpness 3'
+        - 'minecraft+smite 3'
+        - 'enchantmentsolution+stone_throw 3'
+        - 'minecraft+sweeping 2'
+        - 'enchantmentsolution+tank 1'
+        - 'minecraft+unbreaking 2'
+        - 'enchantmentsolution+unrest 1'
+        - 'enchantmentsolution+void_walker 1'
+        - 'enchantmentsolution+warp 2'
+        - 'enchantmentsolution+width_plus_plus 1'
+
+        multiple_enchants_chance: 0.33
+    EPIC: 
+        enchants: 
+        - 'enchantmentsolution+angler 3'
+        - 'minecraft+bane_of_arthropods 4'
+        - 'enchantmentsolution+beheading 2'
+        - 'minecraft+blast_protection 3'
+        - 'minecraft+channeling 1'
+        - 'minecraft+binding_curse 1'
+        - 'minecraft+vanishing_curse 1'
+        - 'enchantmentsolution+drowned 2'
+        - 'minecraft+efficiency 4'
+        - 'minecraft+fire_protection 3'
+        - 'minecraft+flame 1'
+        - 'enchantmentsolution+frequent_flyer 2'
+        - 'enchantmentsolution+gold_digger 4'
+        - 'enchantmentsolution+gung_ho 1'
+        - 'enchantmentsolution+hard_bounce 2'
+        - 'enchantmentsolution+icarus 2'
+        - 'minecraft+impaling 4'
+        - 'enchantmentsolution+iron_defense 2'
+        - 'minecraft+knockback 2'
+        - 'enchantmentsolution+knock_ip 2'
+        - 'enchantmentsolution+life 2'
+        - 'minecraft+looting 2'
+        - 'minecraft+lure 2'
+        - 'minecraft+multishot 1'
+        - 'enchantmentsolution+pillage 2'
+        - 'minecraft+power 4'
+        - 'minecraft+protection 3'
+        - 'minecraft+quick_charge 2'
+        - 'minecraft+riptide 2'
+        - 'enchantmentsolution+sacrifice 1'
+        - 'enchantmentsolution+sand_veil 4'
+        - 'minecraft+sharpness 4'
+        - 'minecraft+silk_touch 1'
+        - 'enchantmentsolution+smeltery 1'
+        - 'minecraft+smite 4'
+        - 'enchantmentsolution+sniper 2'
+        - 'enchantmentsolution+soulbound 1'
+        - 'enchantmentsolution+soul_reaper 1'
+        - 'enchantmentsolution+splatter_fest 1'
+        - 'enchantmentsolution+stone_throw 4'
+        - 'enchantmentsolution+tank 2'
+        - 'minecraft+thorns 2'
+        - 'enchantmentsolution+wand 1'
+
+        multiple_enchants_chance: 0.5
+    LEGENDARY: 
+        enchants: 
+        - 'minecraft+bane_of_arthropods 5'
+        - 'enchantmentsolution+beheading 3'
+        - 'minecraft+blast_protection 4'
+        - 'minecraft+binding_curse 1'
+        - 'minecraft+vanishing_curse 1'
+        - 'minecraft+depth_strider 3'
+        - 'enchantmentsolution+drowned 3'
+        - 'minecraft+efficiency 5'
+        - 'enchantmentsolution+exp_share 3'
+        - 'minecraft+feather_falling 4'
+        - 'minecraft+fire_aspect 2'
+        - 'minecraft+fire_protection 4'
+        - 'minecraft+fortune 3'
+        - 'enchantmentsolution+frequent_flyer 3'
+        - 'minecraft+frost_walker 2'
+        - 'enchantmentsolution+gold_digger 5'
+        - 'enchantmentsolution+hard_bounce 3'
+        - 'enchantmentsolution+height_plus_plus 2'
+        - 'enchantmentsolution+icarus 3'
+        - 'minecraft+impaling 5'
+        - 'minecraft+infinity 1'
+        - 'enchantmentsolution+irenes_lasso 1'
+        - 'enchantmentsolution+iron_defense 3'
+        - 'enchantmentsolution+life 3'
+        - 'minecraft+looting 3'
+        - 'minecraft+loyalty 3'
+        - 'minecraft+luck_of_the_sea 3'
+        - 'minecraft+lure 3'
+        - 'enchantmentsolution+magic_guard 1'
+        - 'enchantmentsolution+magma_walker 2'
+        - 'minecraft+mending 1'
+        - 'enchantmentsolution+moisturize 1'
+        - 'minecraft+piercing 3'
+        - 'enchantmentsolution+pillage 3'
+        - 'minecraft+power 5'
+        - 'minecraft+projectile_protection 4'
+        - 'minecraft+protection 4'
+        - 'minecraft+punch 2'
+        - 'minecraft+quick_charge 3'
+        - 'minecraft+respiration 3'
+        - 'minecraft+riptide 3'
+        - 'enchantmentsolution+sacrifice 2'
+        - 'enchantmentsolution+sand_veil 5'
+        - 'minecraft+sharpness 5'
+        - 'enchantmentsolution+shock_aspect 2'
+        - 'minecraft+smite 5'
+        - 'enchantmentsolution+sniper 3'
+        - 'enchantmentsolution+stone_throw 5'
+        - 'minecraft+sweeping 3'
+        - 'enchantmentsolution+tank 3'
+        - 'enchantmentsolution+telepathy 1'
+        - 'minecraft+thorns 3'
+        - 'enchantmentsolution+transmutation 1'
+        - 'minecraft+unbreaking 3'
+        - 'enchantmentsolution+void_walker 2'
+        - 'enchantmentsolution+wand 2'
+        - 'enchantmentsolution+warp 3'
+        - 'enchantmentsolution+width_plus_plus 2'
+
+        multiple_enchants_chance: 0.75
+Enchantments_Rarity_50: 
+    COMMON: 
+        enchants: 
+        - 'enchantmentsolution+angler 1'
+        - 'minecraft+bane_of_arthropods 1'
+        - 'minecraft+blast_protection 1'
+        - 'minecraft+binding_curse 1'
+        - 'minecraft+vanishing_curse 1'
+        - 'minecraft+depth_strider 1'
+        - 'minecraft+efficiency 1'
+        - 'minecraft+feather_falling 1'
+        - 'minecraft+fire_protection 1'
+        - 'minecraft+fortune 1'
+        - 'enchantmentsolution+gold_digger 1'
+        - 'minecraft+impaling 1'
+        - 'minecraft+looting 1'
+        - 'minecraft+loyalty 1'
+        - 'minecraft+luck_of_the_sea 1'
+        - 'minecraft+lure 1'
+        - 'minecraft+piercing 1'
+        - 'enchantmentsolution+pillage 1'
+        - 'minecraft+power 1'
+        - 'minecraft+projectile_protection 1'
+        - 'minecraft+protection 1'
+        - 'minecraft+quick_charge 1'
+        - 'minecraft+respiration 1'
+        - 'minecraft+riptide 1'
+        - 'enchantmentsolution+sand_veil 1'
+        - 'minecraft+sharpness 1'
+        - 'minecraft+smite 1'
+        - 'enchantmentsolution+stone_throw 1'
+        - 'minecraft+sweeping 1'
+        - 'minecraft+unbreaking 1'
+
+        multiple_enchants_chance: 0.1
+    UNCOMMON: 
+        enchants: 
+        - 'enchantmentsolution+angler 2'
+        - 'minecraft+bane_of_arthropods 2'
+        - 'minecraft+blast_protection 1'
+        - 'minecraft+binding_curse 1'
+        - 'minecraft+vanishing_curse 1'
+        - 'minecraft+depth_strider 1'
+        - 'minecraft+efficiency 2'
+        - 'enchantmentsolution+exp_share 1'
+        - 'minecraft+feather_falling 1'
+        - 'minecraft+fire_protection 1'
+        - 'minecraft+fortune 1'
+        - 'enchantmentsolution+gold_digger 2'
+        - 'enchantmentsolution+hard_bounce 1'
+        - 'enchantmentsolution+icarus 1'
+        - 'minecraft+impaling 2'
+        - 'enchantmentsolution+iron_defense 1'
+        - 'minecraft+knockback 1'
+        - 'enchantmentsolution+knock_ip 1'
+        - 'minecraft+looting 1'
+        - 'minecraft+loyalty 1'
+        - 'minecraft+luck_of_the_sea 1'
+        - 'minecraft+lure 1'
+        - 'minecraft+piercing 1'
+        - 'enchantmentsolution+pillage 1'
+        - 'minecraft+power 2'
+        - 'minecraft+projectile_protection 1'
+        - 'minecraft+protection 1'
+        - 'minecraft+quick_charge 1'
+        - 'minecraft+respiration 1'
+        - 'minecraft+riptide 1'
+        - 'enchantmentsolution+sand_veil 2'
+        - 'minecraft+sharpness 2'
+        - 'minecraft+smite 2'
+        - 'enchantmentsolution+sniper 1'
+        - 'enchantmentsolution+stone_throw 2'
+        - 'minecraft+sweeping 1'
+        - 'minecraft+unbreaking 2'
+
+        multiple_enchants_chance: 0.18
+    RARE: 
+        enchants: 
+        - 'enchantmentsolution+angler 3'
+        - 'minecraft+aqua_affinity 1'
+        - 'minecraft+bane_of_arthropods 3'
+        - 'minecraft+blast_protection 2'
+        - 'minecraft+binding_curse 1'
+        - 'minecraft+vanishing_curse 1'
+        - 'minecraft+depth_strider 2'
+        - 'enchantmentsolution+drowned 1'
+        - 'minecraft+efficiency 3'
+        - 'enchantmentsolution+exp_share 2'
+        - 'minecraft+feather_falling 2'
+        - 'minecraft+fire_aspect 1'
+        - 'minecraft+fire_protection 2'
+        - 'minecraft+fortune 2'
+        - 'enchantmentsolution+fried 1'
+        - 'enchantmentsolution+gold_digger 3'
+        - 'enchantmentsolution+hard_bounce 2'
+        - 'enchantmentsolution+height_plus_plus 1'
+        - 'enchantmentsolution+icarus 2'
+        - 'minecraft+impaling 3'
+        - 'enchantmentsolution+iron_defense 2'
+        - 'minecraft+knockback 2'
+        - 'enchantmentsolution+knock_ip 2'
+        - 'enchantmentsolution+life 1'
+        - 'minecraft+looting 2'
+        - 'minecraft+loyalty 2'
+        - 'minecraft+luck_of_the_sea 2'
+        - 'minecraft+lure 2'
+        - 'enchantmentsolution+no_rest 1'
+        - 'minecraft+piercing 2'
+        - 'enchantmentsolution+pillage 2'
+        - 'minecraft+power 3'
+        - 'minecraft+projectile_protection 2'
+        - 'minecraft+protection 2'
+        - 'minecraft+punch 1'
+        - 'minecraft+quick_charge 2'
+        - 'minecraft+respiration 2'
+        - 'minecraft+riptide 2'
+        - 'enchantmentsolution+sand_veil 3'
+        - 'minecraft+sharpness 3'
+        - 'enchantmentsolution+shock_aspect 1'
+        - 'minecraft+smite 3'
+        - 'enchantmentsolution+sniper 1'
+        - 'enchantmentsolution+stone_throw 3'
+        - 'minecraft+sweeping 2'
+        - 'minecraft+thorns 1'
+        - 'minecraft+unbreaking 3'
+        - 'enchantmentsolution+unrest 1'
+        - 'enchantmentsolution+warp 1'
+        - 'enchantmentsolution+width_plus_plus 1'
+
+        multiple_enchants_chance: 0.28
+    EPIC: 
+        enchants: 
+        - 'enchantmentsolution+angler 4'
+        - 'minecraft+aqua_affinity 1'
+        - 'minecraft+bane_of_arthropods 4'
+        - 'enchantmentsolution+beheading 1'
+        - 'minecraft+blast_protection 3'
+        - 'enchantmentsolution+brine 1'
+        - 'minecraft+binding_curse 1'
+        - 'minecraft+vanishing_curse 1'
+        - 'minecraft+depth_strider 3'
+        - 'enchantmentsolution+drowned 2'
+        - 'minecraft+efficiency 4'
+        - 'enchantmentsolution+exp_share 2'
+        - 'minecraft+feather_falling 3'
+        - 'minecraft+fire_aspect 2'
+        - 'minecraft+fire_protection 3'
+        - 'minecraft+flame 1'
+        - 'minecraft+fortune 3'
+        - 'enchantmentsolution+frequent_flyer 1'
+        - 'enchantmentsolution+fried 1'
+        - 'minecraft+frost_walker 1'
+        - 'enchantmentsolution+gold_digger 4'
+        - 'enchantmentsolution+gung_ho 1'
+        - 'enchantmentsolution+hard_bounce 3'
+        - 'enchantmentsolution+height_plus_plus 2'
+        - 'enchantmentsolution+icarus 3'
+        - 'minecraft+impaling 4'
+        - 'minecraft+infinity 1'
+        - 'enchantmentsolution+iron_defense 3'
+        - 'minecraft+knockback 3'
+        - 'enchantmentsolution+knock_ip 3'
+        - 'enchantmentsolution+life 1'
+        - 'minecraft+looting 3'
+        - 'minecraft+loyalty 2'
+        - 'minecraft+luck_of_the_sea 3'
+        - 'minecraft+lure 3'
+        - 'enchantmentsolution+magma_walker 1'
+        - 'minecraft+multishot 1'
+        - 'enchantmentsolution+no_rest 1'
+        - 'minecraft+piercing 3'
+        - 'enchantmentsolution+pillage 3'
+        - 'minecraft+power 4'
+        - 'minecraft+projectile_protection 3'
+        - 'minecraft+protection 3'
+        - 'minecraft+punch 2'
+        - 'minecraft+quick_charge 2'
+        - 'minecraft+respiration 3'
+        - 'minecraft+riptide 3'
+        - 'enchantmentsolution+sand_veil 4'
+        - 'minecraft+sharpness 4'
+        - 'enchantmentsolution+shock_aspect 2'
+        - 'minecraft+silk_touch 1'
+        - 'enchantmentsolution+smeltery 1'
+        - 'minecraft+smite 4'
+        - 'enchantmentsolution+sniper 2'
+        - 'enchantmentsolution+soulbound 1'
+        - 'enchantmentsolution+soul_reaper 1'
+        - 'enchantmentsolution+splatter_fest 1'
+        - 'enchantmentsolution+stone_throw 4'
+        - 'minecraft+sweeping 3'
+        - 'enchantmentsolution+tank 1'
+        - 'minecraft+thorns 1'
+        - 'minecraft+unbreaking 4'
+        - 'enchantmentsolution+unrest 1'
+        - 'enchantmentsolution+void_walker 1'
+        - 'enchantmentsolution+wand 1'
+        - 'enchantmentsolution+warp 1'
+        - 'enchantmentsolution+width_plus_plus 2'
+
+        multiple_enchants_chance: 0.42
+    LEGENDARY: 
+        enchants: 
+        - 'enchantmentsolution+angler 5'
+        - 'minecraft+aqua_affinity 1'
+        - 'minecraft+bane_of_arthropods 5'
+        - 'enchantmentsolution+beheading 2'
+        - 'minecraft+blast_protection 4'
+        - 'enchantmentsolution+brine 1'
+        - 'minecraft+channeling 1'
+        - 'minecraft+binding_curse 1'
+        - 'minecraft+vanishing_curse 1'
+        - 'minecraft+depth_strider 3'
+        - 'enchantmentsolution+drowned 3'
+        - 'minecraft+efficiency 5'
+        - 'enchantmentsolution+exp_share 3'
+        - 'minecraft+feather_falling 4'
+        - 'minecraft+fire_aspect 2'
+        - 'minecraft+fire_protection 4'
+        - 'minecraft+flame 1'
+        - 'enchantmentsolution+flower_gift 1'
+        - 'minecraft+fortune 4'
+        - 'enchantmentsolution+frequent_flyer 2'
+        - 'enchantmentsolution+fried 1'
+        - 'minecraft+frost_walker 1'
+        - 'enchantmentsolution+gold_digger 5'
+        - 'enchantmentsolution+gung_ho 1'
+        - 'enchantmentsolution+hard_bounce 4'
+        - 'enchantmentsolution+height_plus_plus 2'
+        - 'enchantmentsolution+icarus 4'
+        - 'minecraft+impaling 5'
+        - 'minecraft+infinity 1'
+        - 'enchantmentsolution+irenes_lasso 1'
+        - 'enchantmentsolution+iron_defense 4'
+        - 'minecraft+knockback 4'
+        - 'enchantmentsolution+knock_ip 4'
+        - 'enchantmentsolution+life 2'
+        - 'minecraft+looting 4'
+        - 'minecraft+loyalty 3'
+        - 'minecraft+luck_of_the_sea 4'
+        - 'minecraft+lure 4'
+        - 'enchantmentsolution+magic_guard 1'
+        - 'enchantmentsolution+magma_walker 1'
+        - 'minecraft+mending 1'
+        - 'enchantmentsolution+moisturize 1'
+        - 'minecraft+multishot 1'
+        - 'enchantmentsolution+no_rest 1'
+        - 'minecraft+piercing 4'
+        - 'enchantmentsolution+pillage 4'
+        - 'minecraft+power 5'
+        - 'minecraft+projectile_protection 4'
+        - 'minecraft+protection 4'
+        - 'minecraft+punch 3'
+        - 'minecraft+quick_charge 3'
+        - 'minecraft+respiration 3'
+        - 'minecraft+riptide 4'
+        - 'enchantmentsolution+sacrifice 1'
+        - 'enchantmentsolution+sand_veil 5'
+        - 'minecraft+sharpness 5'
+        - 'enchantmentsolution+shock_aspect 2'
+        - 'minecraft+silk_touch 1'
+        - 'enchantmentsolution+smeltery 1'
+        - 'minecraft+smite 5'
+        - 'enchantmentsolution+sniper 3'
+        - 'enchantmentsolution+soulbound 1'
+        - 'enchantmentsolution+soul_reaper 1'
+        - 'enchantmentsolution+splatter_fest 1'
+        - 'enchantmentsolution+stone_throw 5'
+        - 'minecraft+sweeping 3'
+        - 'enchantmentsolution+tank 2'
+        - 'minecraft+thorns 2'
+        - 'minecraft+unbreaking 4'
+        - 'enchantmentsolution+unrest 1'
+        - 'enchantmentsolution+void_walker 1'
+        - 'enchantmentsolution+wand 2'
+        - 'enchantmentsolution+warp 2'
+        - 'enchantmentsolution+width_plus_plus 2'
+
+        multiple_enchants_chance: 0.6
+    ANCIENT: 
+        enchants: 
+        - 'enchantmentsolution+angler 5'
+        - 'minecraft+aqua_affinity 1'
+        - 'minecraft+bane_of_arthropods 6'
+        - 'enchantmentsolution+beheading 3'
+        - 'minecraft+blast_protection 4'
+        - 'enchantmentsolution+brine 1'
+        - 'minecraft+channeling 1'
+        - 'minecraft+binding_curse 1'
+        - 'minecraft+vanishing_curse 1'
+        - 'minecraft+depth_strider 3'
+        - 'enchantmentsolution+drowned 3'
+        - 'minecraft+efficiency 6'
+        - 'enchantmentsolution+exp_share 3'
+        - 'minecraft+feather_falling 4'
+        - 'minecraft+fire_aspect 3'
+        - 'minecraft+fire_protection 4'
+        - 'minecraft+flame 1'
+        - 'enchantmentsolution+flower_gift 1'
+        - 'minecraft+fortune 5'
+        - 'enchantmentsolution+frequent_flyer 3'
+        - 'enchantmentsolution+fried 1'
+        - 'minecraft+frost_walker 2'
+        - 'enchantmentsolution+gold_digger 6'
+        - 'enchantmentsolution+gung_ho 1'
+        - 'enchantmentsolution+hard_bounce 5'
+        - 'enchantmentsolution+height_plus_plus 3'
+        - 'enchantmentsolution+icarus 5'
+        - 'minecraft+impaling 6'
+        - 'minecraft+infinity 1'
+        - 'enchantmentsolution+irenes_lasso 2'
+        - 'enchantmentsolution+iron_defense 5'
+        - 'minecraft+knockback 4'
+        - 'enchantmentsolution+knock_ip 4'
+        - 'enchantmentsolution+life 3'
+        - 'minecraft+looting 5'
+        - 'minecraft+loyalty 3'
+        - 'minecraft+luck_of_the_sea 4'
+        - 'minecraft+lure 4'
+        - 'enchantmentsolution+magic_guard 1'
+        - 'enchantmentsolution+magma_walker 2'
+        - 'minecraft+mending 1'
+        - 'enchantmentsolution+moisturize 1'
+        - 'minecraft+multishot 1'
+        - 'enchantmentsolution+no_rest 1'
+        - 'minecraft+piercing 5'
+        - 'enchantmentsolution+pillage 5'
+        - 'minecraft+power 6'
+        - 'minecraft+projectile_protection 4'
+        - 'minecraft+protection 4'
+        - 'minecraft+punch 3'
+        - 'minecraft+quick_charge 4'
+        - 'minecraft+respiration 3'
+        - 'minecraft+riptide 5'
+        - 'enchantmentsolution+sacrifice 2'
+        - 'enchantmentsolution+sand_veil 6'
+        - 'minecraft+sharpness 6'
+        - 'enchantmentsolution+shock_aspect 3'
+        - 'minecraft+silk_touch 1'
+        - 'enchantmentsolution+smeltery 1'
+        - 'minecraft+smite 6'
+        - 'enchantmentsolution+sniper 3'
+        - 'enchantmentsolution+soulbound 1'
+        - 'enchantmentsolution+soul_reaper 1'
+        - 'enchantmentsolution+splatter_fest 1'
+        - 'enchantmentsolution+stone_throw 6'
+        - 'minecraft+sweeping 3'
+        - 'enchantmentsolution+tank 3'
+        - 'enchantmentsolution+telepathy 1'
+        - 'minecraft+thorns 3'
+        - 'enchantmentsolution+transmutation 1'
+        - 'minecraft+unbreaking 5'
+        - 'enchantmentsolution+unrest 1'
+        - 'enchantmentsolution+void_walker 2'
+        - 'enchantmentsolution+wand 3'
+        - 'enchantmentsolution+warp 3'
+        - 'enchantmentsolution+width_plus_plus 3'
+
+        multiple_enchants_chance: 0.85
+Enchantment_Drop_Rates_30: 
+    Tier_1: 
+        COMMON: 5.0
+        UNCOMMON: 1.0
+        RARE: 0.1
+        EPIC: 0.01
+        LEGENDARY: 0.01
+    Tier_2: 
+        COMMON: 7.5
+        UNCOMMON: 1.0
+        RARE: 0.1
+        EPIC: 0.01
+        LEGENDARY: 0.01
+    Tier_3: 
+        COMMON: 7.5
+        UNCOMMON: 2.5
+        RARE: 0.25
+        EPIC: 0.1
+        LEGENDARY: 0.01
+    Tier_4: 
+        COMMON: 10.0
+        UNCOMMON: 2.75
+        RARE: 0.5
+        EPIC: 0.1
+        LEGENDARY: 0.05
+    Tier_5: 
+        COMMON: 10.0
+        UNCOMMON: 4.0
+        RARE: 0.75
+        EPIC: 0.25
+        LEGENDARY: 0.1
+    Tier_6: 
+        COMMON: 9.5
+        UNCOMMON: 5.5
+        RARE: 1.75
+        EPIC: 0.5
+        LEGENDARY: 0.25
+    Tier_7: 
+        COMMON: 8.5
+        UNCOMMON: 7.5
+        RARE: 2.75
+        EPIC: 0.75
+        LEGENDARY: 0.5
+    Tier_8: 
+        COMMON: 7.5
+        UNCOMMON: 10.0
+        RARE: 5.25
+        EPIC: 1.5
+        LEGENDARY: 0.75
+Enchantment_Drop_Rates_50: 
+    Tier_1: 
+        COMMON: 5.5
+        UNCOMMON: 1.0
+        RARE: 0.25
+        EPIC: 0.1
+        LEGENDARY: 0.01
+        ANCIENT: 0.01
+    Tier_2: 
+        COMMON: 8.0
+        UNCOMMON: 1.5
+        RARE: 0.25
+        EPIC: 0.1
+        LEGENDARY: 0.02
+        ANCIENT: 0.01
+    Tier_3: 
+        COMMON: 10.0
+        UNCOMMON: 2.25
+        RARE: 0.75
+        EPIC: 0.25
+        LEGENDARY: 0.1
+        ANCIENT: 0.05
+    Tier_4: 
+        COMMON: 10.0
+        UNCOMMON: 3.25
+        RARE: 1.5
+        EPIC: 0.5
+        LEGENDARY: 0.15
+        ANCIENT: 0.05
+    Tier_5: 
+        COMMON: 9.0
+        UNCOMMON: 5.0
+        RARE: 2.25
+        EPIC: 0.75
+        LEGENDARY: 0.25
+        ANCIENT: 0.1
+    Tier_6: 
+        COMMON: 6.5
+        UNCOMMON: 8.5
+        RARE: 3.75
+        EPIC: 1.75
+        LEGENDARY: 0.5
+        ANCIENT: 0.15
+    Tier_7: 
+        COMMON: 5.25
+        UNCOMMON: 10.0
+        RARE: 4.75
+        EPIC: 2.0
+        LEGENDARY: 1.0
+        ANCIENT: 0.25
+    Tier_8: 
+        COMMON: 4.0
+        UNCOMMON: 8.0
+        RARE: 8.0
+        EPIC: 3.5
+        LEGENDARY: 1.5
+        ANCIENT: 0.5

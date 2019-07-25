@@ -12,18 +12,8 @@ import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 public class FeatherFalling extends CustomEnchantment{
 	
 	public FeatherFalling() {
-		addDefaultDisplayName("Feather Falling");
+		super("Feather Falling", -7, -1, 12, 6, 1, 1, 4, 4, Weight.UNCOMMON, "Reduces fall damage.");
 		addDefaultDisplayName(Language.GERMAN, "Federfall");
-		setDefaultFiftyConstant(-7);
-		setDefaultThirtyConstant(-1);
-		setDefaultFiftyModifier(12);
-		setDefaultThirtyModifier(6);
-		setDefaultFiftyStartLevel(1);
-		setDefaultThirtyStartLevel(1);
-		setDefaultFiftyMaxLevel(4);
-		setDefaultThirtyMaxLevel(4);
-		setDefaultWeight(Weight.UNCOMMON);
-		addDefaultDescription("Reduces fall damage.");
 		addDefaultDescription(Language.GERMAN, "Reduziert Sturzschäden.");
 	}
 

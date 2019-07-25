@@ -12,18 +12,8 @@ import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 public class LuckOfTheSea extends CustomEnchantment{
 	
 	public LuckOfTheSea() {
-		addDefaultDisplayName("Luck of the Sea");
+		super("Luck of the Sea", 7, 5, 11, 10, 1, 1, 4, 3, Weight.RARE, "Increases luck while fishing.");
 		addDefaultDisplayName(Language.GERMAN, "Glück des Meeres");
-		setDefaultFiftyConstant(7);
-		setDefaultThirtyConstant(5);
-		setDefaultFiftyModifier(11);
-		setDefaultThirtyModifier(10);
-		setDefaultFiftyStartLevel(1);
-		setDefaultThirtyStartLevel(1);
-		setDefaultFiftyMaxLevel(4);
-		setDefaultThirtyMaxLevel(3);
-		setDefaultWeight(Weight.RARE);
-		addDefaultDescription("Increases luck while fishing.");
 		addDefaultDescription(Language.GERMAN, "Erhöht das Glück beim Fischen.");
 	}
 	

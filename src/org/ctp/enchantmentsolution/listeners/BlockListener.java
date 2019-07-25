@@ -30,8 +30,7 @@ import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
-import org.ctp.enchantmentsolution.listeners.abilities.MagmaWalkerListener;
-import org.ctp.enchantmentsolution.listeners.abilities.VoidWalkerListener;
+import org.ctp.enchantmentsolution.listeners.abilities.WalkerListener;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.items.DamageUtils;
 import org.ctp.enchantmentsolution.utils.items.ItemUtils;
@@ -41,11 +40,11 @@ public class BlockListener implements Listener{
 
 	@EventHandler(priority=EventPriority.HIGHEST)
 	public void onBlockBreak(BlockBreakEvent event) {
-		if(VoidWalkerListener.BLOCKS.contains(event.getBlock())) {
+		if(WalkerListener.BLOCKS.get(DefaultEnchantments.VOID_WALKER).contains(event.getBlock())) {
 			event.setCancelled(true);
 			AdvancementUtils.awardCriteria(event.getPlayer(), ESAdvancement.DETERMINED_CHEATER, "cheater");
 		}
-		if(MagmaWalkerListener.BLOCKS.contains(event.getBlock())) {
+		if(WalkerListener.BLOCKS.get(DefaultEnchantments.MAGMA_WALKER).contains(event.getBlock())) {
 			event.setCancelled(true);
 		}
 		if(ItemUtils.getShulkerBoxes().contains(event.getBlock().getType())) {
@@ -123,10 +122,7 @@ public class BlockListener implements Listener{
 			if (DamageUtils.getDamage(item.getItemMeta()) > item.getType().getMaxDurability()) {
 				player.getInventory().setItemInMainHand(new ItemStack(Material.AIR));
 				player.getWorld().playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 1, 1);
-				if(player instanceof Player) {
-					Player p = (Player) player;
-					p.incrementStatistic(Statistic.BREAK_ITEM, item.getType());
-				}
+				player.incrementStatistic(Statistic.BREAK_ITEM, item.getType());
 			}
 		}
 	}

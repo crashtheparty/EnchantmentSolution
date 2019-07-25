@@ -12,19 +12,9 @@ import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 public class Multishot extends CustomEnchantment{
 	
 	public Multishot() {
-		addDefaultDisplayName("Multishot");
+		super("Multishot", 35, 20, 0, 0, 20, 1, 1, 1, Weight.RARE, "Shoot multiple arrows at once.");
 		addDefaultDisplayName(Language.GERMAN, "Mehrfachschuss");
-		setDefaultFiftyConstant(35);
-		setDefaultThirtyConstant(20);
-		setDefaultFiftyModifier(0);
-		setDefaultThirtyModifier(0);
-		setDefaultFiftyStartLevel(20);
-		setDefaultThirtyStartLevel(1);
-		setDefaultFiftyMaxLevel(1);
-		setDefaultThirtyMaxLevel(1);
-		setDefaultWeight(Weight.RARE);
 		setMaxLevelOne(true);
-		addDefaultDescription("Shoot multiple arrows at once.");
 		addDefaultDescription(Language.GERMAN, "Schieﬂen Sie mehrere Pfeile gleichzeitig.");
 	}
 	

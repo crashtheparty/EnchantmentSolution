@@ -13,20 +13,9 @@ import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 public class StoneThrow extends CustomEnchantment{
 	
 	public StoneThrow() {
-		addDefaultDisplayName("Stone Throw");
+		super("Stone Throw", -12, -10, 13, 11, 1, 1, 6, 5, Weight.COMMON, "Increases ranged damage against flying mobs.\n"
+				+ "Adds 40% * level + 20% damage against flying mobs.");
 		addDefaultDisplayName(Language.GERMAN, "Steinwurf");
-		setDefaultFiftyConstant(-12);
-		setDefaultThirtyConstant(-10);
-		setDefaultFiftyModifier(13);
-		setDefaultThirtyModifier(11);
-		setDefaultFiftyStartLevel(1);
-		setDefaultThirtyStartLevel(1);
-		setDefaultFiftyMaxLevel(6);
-		setDefaultThirtyMaxLevel(5);
-		setDefaultWeight(Weight.COMMON);
-		addDefaultDescription("Increases ranged damage against flying mobs." + 
-				"\n" + 
-				"Adds 40% * level + 20% damage against flying mobs.");
 		addDefaultDescription(Language.GERMAN, "Erhöht den Distanzschaden gegen fliegende Mobs." + 
 				"\n" + 
 				"Fügt 40% * Level + 20% Schaden gegen fliegende Mobs hinzu.");

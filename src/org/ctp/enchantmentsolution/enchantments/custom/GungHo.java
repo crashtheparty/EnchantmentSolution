@@ -13,20 +13,10 @@ import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 public class GungHo extends CustomEnchantment{
 	
 	public GungHo() {
-		addDefaultDisplayName("Gung-Ho");
+		super("Gung-Ho", 40, 20, 0, 0, 30, 1, 1, 1, Weight.RARE, "Decreases health by half. All attacks do 3 times the damage.");
 		addDefaultDisplayName(Language.GERMAN, "Gung-Ho");
-		setDefaultFiftyConstant(40);
-		setDefaultThirtyConstant(20);
-		setDefaultFiftyModifier(0);
-		setDefaultThirtyModifier(0);
-		setDefaultFiftyStartLevel(30);
-		setDefaultThirtyStartLevel(1);
-		setDefaultFiftyMaxLevel(1);
-		setDefaultThirtyMaxLevel(1);
-		setDefaultWeight(Weight.RARE);
 		setMaxLevelOne(true);
-		addDefaultDescription("Decreases health to 5 (hearts). All attacks do 3 times the damage.");
-		addDefaultDescription(Language.GERMAN, "Verringert die Gesundheit auf 5 (Herz). Alle Angriffe verursachen den dreifachen Schaden.");
+		addDefaultDescription(Language.GERMAN, "Verringert die Gesundheit um die Hälfte. Alle Angriffe verursachen das Dreifache des Schadens.");
 	}
 	
 	@Override

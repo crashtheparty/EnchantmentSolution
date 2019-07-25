@@ -1,6 +1,11 @@
 package org.ctp.enchantmentsolution.utils.save;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
@@ -9,7 +14,6 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.logging.Level;
 
-import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
@@ -17,12 +21,11 @@ import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.api.ApiEnchantmentWrapper;
 import org.ctp.enchantmentsolution.api.Language;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
+import org.ctp.enchantmentsolution.enchantments.CustomEnchantmentWrapper;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.enchantments.helper.PlayerLevels;
 import org.ctp.enchantmentsolution.enchantments.helper.Weight;
-import org.ctp.enchantmentsolution.enchantments.mcmmo.Fishing;
-import org.ctp.enchantmentsolution.enchantments.wrappers.CustomEnchantmentWrapper;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.config.YamlConfig;
@@ -180,7 +183,7 @@ public class ConfigFiles {
 	private void loadLangFile(File dataFolder) {
 		String langFile = config.getString("language_file");
 		if (languageFiles == null) {
-			languageFiles = new LanguageFiles(new File(dataFolder + "/" + langFile), 
+			languageFiles = new LanguageFiles(this, new File(dataFolder + "/" + langFile), 
 					Language.getLanguage(EnchantmentSolution.getPlugin().getConfigFiles().getDefaultConfig().getString("language")));
 		} else {
 			languageFiles.setLanguage(new File(dataFolder + "/" + langFile), 
@@ -195,116 +198,25 @@ public class ConfigFiles {
 
 		String[] header = { "Enchantment Solution", "Plugin by", "crashtheparty" };
 		config = new YamlConfigBackup(mainFile, header);
-
 		config.getFromConfig();
-
-		config.addDefault("starter",
-				(ChatColor.DARK_GRAY + "[" + ChatColor.LIGHT_PURPLE + "Enchantment Solution" + ChatColor.DARK_GRAY
-						+ "]").replace(ChatColor.COLOR_CHAR, '&'),
-				new String[] { "What to display in front of messages" });
-		config.addDefault("language_file", "language.yml", new String[] { "The yml language file" });
-		config.addDefault("language", Language.US.getLocale(),
-				new String[] { "The default language of the language file" });
-		config.addEnum("language", Language.getValues());
-		config.addDefault("reset_language", false, new String[] { "Reload the entire language file" });
-		config.addDefault("use_comments", true, new String[] { "Show helpful comments in the config files" });
-		config.addDefault("version.get_latest", true, new String[] { "Check github for plugin releases (available on github and spigot)" });
-		config.addDefault("version.get_experimental", false, new String[] { "Check github for plugin experimental versions (available only on github)" });
-		config.addDefault("max_enchantments", 0, new String[] { "Max enchantments on each item. 0 allows infinite" });
-		config.addDefault("use_comments", true, new String[] { "Show helpful comments in the config files" });
-		config.addDefault("version.get_latest", true, new String[] { "Check github for plugin releases (available on github and spigot)" });
-		config.addDefault("version.get_experimental", false, new String[] { "Check github for plugin experimental versions (available only on github)" });
-		config.addDefault("disable_enchant_method", "visible", new String[] {
-				"How disabling an enchantment in enchantments.yml or enchantments_advanced.yml will work.", "Options:",
-				"vanish - removes enchantment from items",
-				"visible - keeps enchantment on item, but custom effects will not work and anvil will remove enchant",
-				"repairable - same as above but anvil will not remove enchant" });
-		config.addEnum("disable_enchant_method", Arrays.asList("vanish", "visible", "repairable"));
 		
-		config.addDefault("enchanting_table.enchanting_type", "enhanced_50", new String[] {
-				"How enchanting works with the plugin", "Options:",
-				"vanilla_30 - level 30 max, no higher level enchantments, use vanilla GUI, uses enchantments.yml",
-				"vanilla_30_custom - level 30 max, no higher level enchantments, use vanilla GUI, uses enchantments_advanced.yml",
-				"enhanced_30 - level 30 max, no higher level enchantments, use Enchantment Solution GUI, uses enchantments.yml",
-				"enhanced_30_custom - level 30 max, no higher level enchantments, use Enchantment Solution GUI, uses enchantments_advanced.yml",
-				"enhanced_50 - level 50 max, higher level enchantments, use Enchantment Solution GUI, uses enchantments.yml",
-				"enhanced_50_custom - level 50 max, higher level enchantments, use Enchantment Solution GUI, uses enchantments_advanced.yml"
-		});
-		config.addEnum("enchanting_table.enchanting_type", enchantingTypes);
-		config.addDefault("enchanting_table.lapis_in_table", true, new String[]{ 
-				"Lapis must be placed in the enchantment table before items can be enchanted.", "Only used when enchanting type is enhanced."
-		});
-		config.addDefault("enchanting_table.reset_enchantments_advanced", false, new String[] { "Resets the enchantments_advanced.yml file." });
-		config.addDefault("enchanting_table.use_enchanted_books", false, new String[] { 
-				"Uses the vanilla Enchanted Books rather than Books to store enchantments." 
-		});
-		config.addDefault("enchanting_table.decay", false,
-				new String[] { "Multiple enchantments generated on items will have lower levels" });
-		config.addDefault("anvil.level_divisor", 4, new String[] { "Greater numbers allow more anvil uses." });
-		config.addDefault("anvil.max_repair_level", 60, new String[] { "The highest repair level that will be allowed in the anvil", 
-				"Only used when enchanting type is enhanced. "});
-		config.addMinMax("anvil.max_repair_level", 40, 1000000);
-		config.addDefault("anvil.default_use", false, new String[] {
-				"Allow default use of anvil GUI via option at bottom right of custom GUI.", "Only used when enchanting type is enhanced.", 
-				"Should only be true if anvil is used for custom recipes." });
-		config.addDefault("protection_conflicts", true,
-				new String[] { "All protection types conflict with each other" });
-		if (EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber() < 4) {
-			config.addDefault("grindstone.use_legacy", false,
-					new String[] { "Use the grindstone from within the anvil in version < 1.14" });
+		File file = getTempFile("/resources/config_defaults.yml");
+
+	    YamlConfig defaultConfig = new YamlConfig(file, new String[] {});
+	    defaultConfig.getFromConfig();
+		for(String str : defaultConfig.getAllEntryKeys()) {
+			if(defaultConfig.get(str) != null) {
+				if(str.startsWith("config_comments.")) {
+					config.addComments(str, defaultConfig.getStringList(str).toArray(new String[] {}));
+				} else {
+					config.addDefault(str, defaultConfig.get(str));
+				}
+			}
 		}
-		config.addDefault("grindstone.take_enchantments", false,
-				new String[] { "Use the grindstone to add enchantments from items to books.", "Only used when enchanting type is enhanced." });
-		config.addDefault("grindstone.set_repair_cost", true,
-				new String[] { "When grindstone takes enchantments, set repair cost of the generated book to the item used's repair cost" });
-		config.addDefault("grindstone.destroy_take_item", true,
-				new String[] { "When grindstone takes enchantments, destroy the item used" });
-		config.addDefault("update_legacy_enchantments", false,
-				new String[] { "Update any enchantments generated in EnchantmentSolutionLegacy" });
-		config.addDefault("chest_loot", true,
-				new String[] { "Allow custom and/or high level enchants to spawn in chests" });
-		config.addDefault("mob_loot", true,
-				new String[] { "Allow custom and/or high level enchantments to spawn on mobs" });
-		config.addDefault("fishing_loot", true,
-				new String[] { "Allow custom and/or high level enchantments to appear while fishing" });
-		config.addDefault("villager_trades", false,
-				new String[] { "Allow custom and/or high level enchants to appear in villager trades" });
-		config.addDefault("loots.mobs.bookshelves", 0,
-				new String[] { "Modify types of enchantments generated by setting the minimum amount of bookshelves" });
-		config.addDefault("loots.mobs.levels", 0,
-				new String[] { "Modify types of enchantments generated by setting the minimum lapis level" });
-		config.addDefault("loots.mobs.treasure", false, new String[] {
-				"Whether the enchantments generated from this format should contain treasure enchantments" });
-		config.addDefault("loots.fishing.bookshelves", 0);
-		config.addDefault("loots.fishing.levels", 0);
-		config.addDefault("loots.fishing.treasure", true);
-		config.addDefault("loots.end_city_treasure.bookshelves", 15);
-		config.addDefault("loots.end_city_treasure.levels", 3);
-		config.addDefault("loots.end_city_treasure.treasure", true);
-		config.addDefault("loots.simple_dungeon.bookshelves", 0);
-		config.addDefault("loots.simple_dungeon.levels", 0);
-		config.addDefault("loots.simple_dungeon.treasure", true);
-		config.addDefault("loots.shipwreck_supply.bookshelves", 0);
-		config.addDefault("loots.shipwreck_supply.levels", 0);
-		config.addDefault("loots.shipwreck_supply.treasure", true);
-		config.addDefault("loots.woodland_mansion.bookshelves", 10);
-		config.addDefault("loots.woodland_mansion.levels", 1);
-		config.addDefault("loots.woodland_mansion.treasure", true);
-		config.addDefault("loots.stronghold_library.bookshelves", 10);
-		config.addDefault("loots.stronghold_library.levels", 1);
-		config.addDefault("loots.stronghold_library.treasure", true);
-		config.addDefault("loots.stronghold_crossing.bookshelves", 10);
-		config.addDefault("loots.stronghold_crossing.levels", 1);
-		config.addDefault("loots.stronghold_crossing.treasure", true);
-		config.addDefault("loots.stronghold_corridor.bookshelves", 10);
-		config.addDefault("loots.stronghold_corridor.levels", 1);
-		config.addDefault("loots.stronghold_corridor.treasure", true);
-		config.addDefault("loots.underwater_ruin_big.bookshelves", 0);
-		config.addDefault("loots.underwater_ruin_big.levels", 0);
-		config.addDefault("loots.underwater_ruin_big.treasure", true);
-		config.addDefault("loots.underwater_ruin_small.bookshelves", 0);
-		config.addDefault("loots.underwater_ruin_small.levels", 0);
-		config.addDefault("loots.underwater_ruin_small.treasure", true);
+		config.addEnum("language", Language.getValues());
+		config.addEnum("disable_enchant_method", Arrays.asList("vanish", "visible", "repairable"));
+		config.addEnum("enchanting_table.enchanting_type", enchantingTypes);
+		config.addMinMax("anvil.max_repair_level", 40, 1000000);
 		if (EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber() > 3) {
 			config.addDefault("loots.pillager_outpost.bookshelves", 10);
 			config.addDefault("loots.pillager_outpost.levels", 1);
@@ -322,6 +234,9 @@ public class ConfigFiles {
 				config.addDefault("advancements." + advancement.getNamespace().getKey() + ".announce", true);
 			}
 		}
+
+		config.saveConfig();
+		file.delete();
 		
 		migrateDefaultFile();
 		
@@ -621,126 +536,27 @@ public class ConfigFiles {
 		fishing = new YamlConfigBackup(fishingFile, header);
 
 		fishing.getFromConfig();
-
-		fishing.addDefault("Enchantments_Rarity_30.COMMON.enchants", Fishing.enchantmentDefaults("COMMON", false));
-		fishing.addDefault("Enchantments_Rarity_50.COMMON.enchants", Fishing.enchantmentDefaults("COMMON", true));
-		fishing.addDefault("Enchantments_Rarity_30.COMMON.multiple_enchants_chance", .10);
-		fishing.addDefault("Enchantments_Rarity_50.COMMON.multiple_enchants_chance", .10);
-		fishing.addDefault("Enchantments_Rarity_30.UNCOMMON.enchants", Fishing.enchantmentDefaults("UNCOMMON", false));
-		fishing.addDefault("Enchantments_Rarity_50.UNCOMMON.enchants", Fishing.enchantmentDefaults("UNCOMMON", true));
-		fishing.addDefault("Enchantments_Rarity_30.UNCOMMON.multiple_enchants_chance", .20);
-		fishing.addDefault("Enchantments_Rarity_50.UNCOMMON.multiple_enchants_chance", .18);
-		fishing.addDefault("Enchantments_Rarity_30.RARE.enchants", Fishing.enchantmentDefaults("RARE", false));
-		fishing.addDefault("Enchantments_Rarity_50.RARE.enchants", Fishing.enchantmentDefaults("RARE", true));
-		fishing.addDefault("Enchantments_Rarity_30.RARE.multiple_enchants_chance", .33);
-		fishing.addDefault("Enchantments_Rarity_50.RARE.multiple_enchants_chance", .28);
-		fishing.addDefault("Enchantments_Rarity_30.EPIC.enchants", Fishing.enchantmentDefaults("EPIC", false));
-		fishing.addDefault("Enchantments_Rarity_50.EPIC.enchants", Fishing.enchantmentDefaults("EPIC", true));
-		fishing.addDefault("Enchantments_Rarity_30.EPIC.multiple_enchants_chance", .50);
-		fishing.addDefault("Enchantments_Rarity_50.EPIC.multiple_enchants_chance", .42);
-		fishing.addDefault("Enchantments_Rarity_30.LEGENDARY.enchants",
-				Fishing.enchantmentDefaults("LEGENDARY", false));
-		fishing.addDefault("Enchantments_Rarity_50.LEGENDARY.enchants", Fishing.enchantmentDefaults("LEGENDARY", true));
-		fishing.addDefault("Enchantments_Rarity_30.LEGENDARY.multiple_enchants_chance", .75);
-		fishing.addDefault("Enchantments_Rarity_50.LEGENDARY.multiple_enchants_chance", .60);
-		fishing.addDefault("Enchantments_Rarity_50.ANCIENT.enchants", Fishing.enchantmentDefaults("ANCIENT", true));
-		fishing.addDefault("Enchantments_Rarity_50.ANCIENT.multiple_enchants_chance", .85);
-
-		fishing.addDefault("Enchantment_Drop_Rates_30.Tier_1.COMMON", 5.00);
-		fishing.addDefault("Enchantment_Drop_Rates_30.Tier_1.UNCOMMON", 1.00);
-		fishing.addDefault("Enchantment_Drop_Rates_30.Tier_1.RARE", 0.10);
-		fishing.addDefault("Enchantment_Drop_Rates_30.Tier_1.EPIC", 0.01);
-		fishing.addDefault("Enchantment_Drop_Rates_30.Tier_1.LEGENDARY", 0.01);
-		fishing.addDefault("Enchantment_Drop_Rates_30.Tier_2.COMMON", 7.50);
-		fishing.addDefault("Enchantment_Drop_Rates_30.Tier_2.UNCOMMON", 1.00);
-		fishing.addDefault("Enchantment_Drop_Rates_30.Tier_2.RARE", 0.10);
-		fishing.addDefault("Enchantment_Drop_Rates_30.Tier_2.EPIC", 0.01);
-		fishing.addDefault("Enchantment_Drop_Rates_30.Tier_2.LEGENDARY", 0.01);
-		fishing.addDefault("Enchantment_Drop_Rates_30.Tier_3.COMMON", 7.50);
-		fishing.addDefault("Enchantment_Drop_Rates_30.Tier_3.UNCOMMON", 2.50);
-		fishing.addDefault("Enchantment_Drop_Rates_30.Tier_3.RARE", 0.25);
-		fishing.addDefault("Enchantment_Drop_Rates_30.Tier_3.EPIC", 0.10);
-		fishing.addDefault("Enchantment_Drop_Rates_30.Tier_3.LEGENDARY", 0.01);
-		fishing.addDefault("Enchantment_Drop_Rates_30.Tier_4.COMMON", 10.0);
-		fishing.addDefault("Enchantment_Drop_Rates_30.Tier_4.UNCOMMON", 2.75);
-		fishing.addDefault("Enchantment_Drop_Rates_30.Tier_4.RARE", 0.50);
-		fishing.addDefault("Enchantment_Drop_Rates_30.Tier_4.EPIC", 0.10);
-		fishing.addDefault("Enchantment_Drop_Rates_30.Tier_4.LEGENDARY", 0.05);
-		fishing.addDefault("Enchantment_Drop_Rates_30.Tier_5.COMMON", 10.0);
-		fishing.addDefault("Enchantment_Drop_Rates_30.Tier_5.UNCOMMON", 4.00);
-		fishing.addDefault("Enchantment_Drop_Rates_30.Tier_5.RARE", 0.75);
-		fishing.addDefault("Enchantment_Drop_Rates_30.Tier_5.EPIC", 0.25);
-		fishing.addDefault("Enchantment_Drop_Rates_30.Tier_5.LEGENDARY", 0.10);
-		fishing.addDefault("Enchantment_Drop_Rates_30.Tier_6.COMMON", 9.50);
-		fishing.addDefault("Enchantment_Drop_Rates_30.Tier_6.UNCOMMON", 5.50);
-		fishing.addDefault("Enchantment_Drop_Rates_30.Tier_6.RARE", 1.75);
-		fishing.addDefault("Enchantment_Drop_Rates_30.Tier_6.EPIC", 0.50);
-		fishing.addDefault("Enchantment_Drop_Rates_30.Tier_6.LEGENDARY", 0.25);
-		fishing.addDefault("Enchantment_Drop_Rates_30.Tier_7.COMMON", 8.50);
-		fishing.addDefault("Enchantment_Drop_Rates_30.Tier_7.UNCOMMON", 7.50);
-		fishing.addDefault("Enchantment_Drop_Rates_30.Tier_7.RARE", 2.75);
-		fishing.addDefault("Enchantment_Drop_Rates_30.Tier_7.EPIC", 0.75);
-		fishing.addDefault("Enchantment_Drop_Rates_30.Tier_7.LEGENDARY", 0.50);
-		fishing.addDefault("Enchantment_Drop_Rates_30.Tier_8.COMMON", 7.50);
-		fishing.addDefault("Enchantment_Drop_Rates_30.Tier_8.UNCOMMON", 10.0);
-		fishing.addDefault("Enchantment_Drop_Rates_30.Tier_8.RARE", 5.25);
-		fishing.addDefault("Enchantment_Drop_Rates_30.Tier_8.EPIC", 1.50);
-		fishing.addDefault("Enchantment_Drop_Rates_30.Tier_8.LEGENDARY", 0.75);
-
-		fishing.addDefault("Enchantment_Drop_Rates_50.Tier_1.COMMON", 5.50);
-		fishing.addDefault("Enchantment_Drop_Rates_50.Tier_1.UNCOMMON", 1.00);
-		fishing.addDefault("Enchantment_Drop_Rates_50.Tier_1.RARE", 0.25);
-		fishing.addDefault("Enchantment_Drop_Rates_50.Tier_1.EPIC", 0.10);
-		fishing.addDefault("Enchantment_Drop_Rates_50.Tier_1.LEGENDARY", 0.01);
-		fishing.addDefault("Enchantment_Drop_Rates_50.Tier_1.ANCIENT", 0.01);
-		fishing.addDefault("Enchantment_Drop_Rates_50.Tier_2.COMMON", 8.00);
-		fishing.addDefault("Enchantment_Drop_Rates_50.Tier_2.UNCOMMON", 1.50);
-		fishing.addDefault("Enchantment_Drop_Rates_50.Tier_2.RARE", 0.25);
-		fishing.addDefault("Enchantment_Drop_Rates_50.Tier_2.EPIC", 0.10);
-		fishing.addDefault("Enchantment_Drop_Rates_50.Tier_2.LEGENDARY", 0.02);
-		fishing.addDefault("Enchantment_Drop_Rates_50.Tier_2.ANCIENT", 0.01);
-		fishing.addDefault("Enchantment_Drop_Rates_50.Tier_3.COMMON", 10.0);
-		fishing.addDefault("Enchantment_Drop_Rates_50.Tier_3.UNCOMMON", 2.25);
-		fishing.addDefault("Enchantment_Drop_Rates_50.Tier_3.RARE", 0.75);
-		fishing.addDefault("Enchantment_Drop_Rates_50.Tier_3.EPIC", 0.25);
-		fishing.addDefault("Enchantment_Drop_Rates_50.Tier_3.LEGENDARY", 0.10);
-		fishing.addDefault("Enchantment_Drop_Rates_50.Tier_3.ANCIENT", 0.05);
-		fishing.addDefault("Enchantment_Drop_Rates_50.Tier_4.COMMON", 10.0);
-		fishing.addDefault("Enchantment_Drop_Rates_50.Tier_4.UNCOMMON", 3.25);
-		fishing.addDefault("Enchantment_Drop_Rates_50.Tier_4.RARE", 1.50);
-		fishing.addDefault("Enchantment_Drop_Rates_50.Tier_4.EPIC", 0.50);
-		fishing.addDefault("Enchantment_Drop_Rates_50.Tier_4.LEGENDARY", 0.15);
-		fishing.addDefault("Enchantment_Drop_Rates_50.Tier_4.ANCIENT", 0.05);
-		fishing.addDefault("Enchantment_Drop_Rates_50.Tier_5.COMMON", 9.00);
-		fishing.addDefault("Enchantment_Drop_Rates_50.Tier_5.UNCOMMON", 5.00);
-		fishing.addDefault("Enchantment_Drop_Rates_50.Tier_5.RARE", 2.25);
-		fishing.addDefault("Enchantment_Drop_Rates_50.Tier_5.EPIC", 0.75);
-		fishing.addDefault("Enchantment_Drop_Rates_50.Tier_5.LEGENDARY", 0.25);
-		fishing.addDefault("Enchantment_Drop_Rates_50.Tier_5.ANCIENT", 0.10);
-		fishing.addDefault("Enchantment_Drop_Rates_50.Tier_6.COMMON", 6.50);
-		fishing.addDefault("Enchantment_Drop_Rates_50.Tier_6.UNCOMMON", 8.50);
-		fishing.addDefault("Enchantment_Drop_Rates_50.Tier_6.RARE", 3.75);
-		fishing.addDefault("Enchantment_Drop_Rates_50.Tier_6.EPIC", 1.75);
-		fishing.addDefault("Enchantment_Drop_Rates_50.Tier_6.LEGENDARY", 0.50);
-		fishing.addDefault("Enchantment_Drop_Rates_50.Tier_6.ANCIENT", 0.15);
-		fishing.addDefault("Enchantment_Drop_Rates_50.Tier_7.COMMON", 5.25);
-		fishing.addDefault("Enchantment_Drop_Rates_50.Tier_7.UNCOMMON", 10.0);
-		fishing.addDefault("Enchantment_Drop_Rates_50.Tier_7.RARE", 4.75);
-		fishing.addDefault("Enchantment_Drop_Rates_50.Tier_7.EPIC", 2.00);
-		fishing.addDefault("Enchantment_Drop_Rates_50.Tier_7.LEGENDARY", 1.00);
-		fishing.addDefault("Enchantment_Drop_Rates_50.Tier_7.ANCIENT", 0.25);
-		fishing.addDefault("Enchantment_Drop_Rates_50.Tier_8.COMMON", 4.00);
-		fishing.addDefault("Enchantment_Drop_Rates_50.Tier_8.UNCOMMON", 8.00);
-		fishing.addDefault("Enchantment_Drop_Rates_50.Tier_8.RARE", 8.00);
-		fishing.addDefault("Enchantment_Drop_Rates_50.Tier_8.EPIC", 3.50);
-		fishing.addDefault("Enchantment_Drop_Rates_50.Tier_8.LEGENDARY", 1.50);
-		fishing.addDefault("Enchantment_Drop_Rates_50.Tier_8.ANCIENT", 0.50);
+		
+		File file = getTempFile("/resources/fishing_defaults.yml");
+	    
+	    YamlConfig defaultFishingConfig = new YamlConfig(file, new String[] {});
+	    defaultFishingConfig.getFromConfig();
+		for(String str : defaultFishingConfig.getAllEntryKeys()) {
+			if(defaultFishingConfig.get(str) != null) {
+				if(str.startsWith("config_comments.")) {
+					fishing.addComments(str, defaultFishingConfig.getStringList(str).toArray(new String[] {}));
+				} else {
+					fishing.addDefault(str, defaultFishingConfig.get(str));
+				}
+			}
+		}
 
 		fishing.saveConfig();
 
 		if(EnchantmentSolution.getPlugin().isInitializing()) {
 			ChatUtils.sendInfo("Fishing config initialized!");
 		}
+		file.delete();
 	}
 	
 	public void generateDebug() {
@@ -850,5 +666,47 @@ public class ConfigFiles {
 			config.set("enchanting_table.enchanting_type", "enhanced_50");
 		}
 		config.saveConfig();
+	}
+	
+	public File getTempFile(String resource) {
+		File file = null;
+	    URL res = getClass().getResource(resource);
+	    if (res.getProtocol().equals("jar")) {
+	    	InputStream input = null;
+	    	OutputStream out = null;
+	        try {
+	            input = getClass().getResourceAsStream(resource);
+	            file = File.createTempFile("/tempfile", ".tmp");
+	            out = new FileOutputStream(file);
+	            int read;
+	            byte[] bytes = new byte[1024];
+
+	            while ((read = input.read(bytes)) != -1) {
+	                out.write(bytes, 0, read);
+	            }
+	        } catch (IOException ex) {
+	            ex.printStackTrace();
+	        } finally {
+	        	try {
+		        	input.close();
+	        	} catch (IOException ex) {
+	        		ex.printStackTrace();
+	        	}
+	        	try {
+		            out.close();
+	        	} catch (IOException ex) {
+	        		ex.printStackTrace();
+	        	}
+	        }
+	    } else {
+	        //this will probably work in your IDE, but not from a JAR
+	        file = new File(res.getFile());
+	    }
+
+	    if (file != null && !file.exists()) {
+	        throw new RuntimeException("Error: File " + file + " not found!");
+	    }
+	    file.deleteOnExit();
+	    return file;
 	}
 }

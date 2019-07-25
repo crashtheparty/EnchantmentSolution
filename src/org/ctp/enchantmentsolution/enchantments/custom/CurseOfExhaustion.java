@@ -13,21 +13,11 @@ import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 public class CurseOfExhaustion extends CustomEnchantment{
 	
 	public CurseOfExhaustion() {
-		addDefaultDisplayName("Curse of Exhaustion");
+		super("Curse of Exhaustion", 25, 25, 0, 0, 1, 1, 1, 1, Weight.VERY_RARE, "Increases exhaustion when equipped.");
 		addDefaultDisplayName(Language.GERMAN, "Fluch der Erschöpfung");
 		setTreasure(true);
-		setDefaultFiftyConstant(25);
-		setDefaultThirtyConstant(25);
-		setDefaultFiftyModifier(0);
-		setDefaultThirtyModifier(0);
-		setDefaultFiftyStartLevel(1);
-		setDefaultThirtyStartLevel(1);
-		setDefaultFiftyMaxLevel(1);
-		setDefaultThirtyMaxLevel(1);
-		setDefaultWeight(Weight.VERY_RARE);
 		setMaxLevelOne(true);
 		setCurse(true);
-		addDefaultDescription("Increases exhaustion when equipped.");
 		addDefaultDescription(Language.GERMAN, "Erhöht die Erschöpfung, wenn ausgerüstet.");
 	}
 	

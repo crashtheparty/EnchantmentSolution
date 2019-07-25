@@ -12,19 +12,11 @@ import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 public class Thorns extends CustomEnchantment{
 	
 	public Thorns() {
-		addDefaultDisplayName("Thorns");
+		super("Thorns", 10, -10, 20, 20, 20, 1, 3, 3, Weight.VERY_RARE, "Attackers are damaged when they attack the wearer. " + 
+				"This does additional durability damage to armor.");
 		addDefaultDisplayName(Language.GERMAN, "Dornen");
-		setDefaultFiftyConstant(10);
-		setDefaultThirtyConstant(-10);
-		setDefaultFiftyModifier(20);
-		setDefaultThirtyModifier(20);
-		setDefaultFiftyStartLevel(20);
-		setDefaultThirtyStartLevel(1);
-		setDefaultFiftyMaxLevel(3);
-		setDefaultThirtyMaxLevel(3);
-		setDefaultWeight(Weight.VERY_RARE);
-		addDefaultDescription("Attackers are damaged when they attack the wearer. This also does additional durability damage to armor.");
-		addDefaultDescription(Language.GERMAN, "Angreifer werden beschädigt, wenn sie den Träger angreifen. Dies führt auch zu einer zusätzlichen Haltbarkeit der Rüstung.");
+		addDefaultDescription(Language.GERMAN, "Angreifer werden beschädigt, wenn sie den Träger angreifen. " + 
+				"Dies führt auch zu einer zusätzlichen Haltbarkeit der Rüstung.");
 	}
 	
 	@Override

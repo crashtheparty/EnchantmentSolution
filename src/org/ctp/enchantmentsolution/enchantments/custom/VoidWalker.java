@@ -13,19 +13,9 @@ import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 public class VoidWalker extends CustomEnchantment{
 	
 	public VoidWalker() {
+		super("Void Walker", 5, 5, 15, 10, 10, 1, 2, 2, Weight.RARE, "Allows players to walk on air, turning it into obsidian.");
 		setTreasure(true);
-		addDefaultDisplayName("Void Walker");
 		addDefaultDisplayName(Language.GERMAN, "Ungültiger Läufer");
-		setDefaultFiftyConstant(5);
-		setDefaultThirtyConstant(5);
-		setDefaultFiftyModifier(15);
-		setDefaultThirtyModifier(10);
-		setDefaultFiftyStartLevel(10);
-		setDefaultThirtyStartLevel(1);
-		setDefaultFiftyMaxLevel(2);
-		setDefaultThirtyMaxLevel(2);
-		setDefaultWeight(Weight.RARE);
-		addDefaultDescription("Allows players to walk on air, turning it into obsidian.");
 		addDefaultDescription(Language.GERMAN, "Erlaubt es den Spielern, in der Luft zu gehen und es in Obsidian umzuwandeln.");
 	}
 	

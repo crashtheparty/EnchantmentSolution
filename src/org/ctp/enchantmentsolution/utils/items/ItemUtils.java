@@ -13,18 +13,13 @@ import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.PotionMeta;
-import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
-import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.enchantments.helper.PlayerLevels;
-import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.ConfigUtils;
-import org.ctp.enchantmentsolution.utils.AnvilUtils.RepairType;
 import org.ctp.enchantmentsolution.utils.items.nms.ItemRepairType;
 
 public class ItemUtils {
@@ -67,84 +62,6 @@ public class ItemUtils {
 		return names;
 	}
 	
-	public static void getSuspiciousStew(Player player, ItemStack item, PotionMeta meta) {
-		if(EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber() > 3) {
-			if(item.getType().equals(Material.SUSPICIOUS_STEW)) {
-				if(meta.hasCustomEffects()) {
-					for(PotionEffect effect : meta.getCustomEffects()) {
-						if(getBadPotions().contains(effect.getType())) {
-							AdvancementUtils.awardCriteria(player, ESAdvancement.THAT_FOOD_IS_FINE, "food");
-							break;
-						}
-					}
-				}
-			}
-		}
-		return;
-	}
-	
-	public static int repairItem(ItemStack first, ItemStack second) {
-		int amount = second.getAmount();
-		if(amount > 4) amount = 4;
-		int durPerItem = first.getType().getMaxDurability() / 4;
-		ItemStack clone = first.clone();
-		DamageUtils.setDamage(clone, DamageUtils.getDamage(first.getItemMeta()));
-		int level = 0;
-		while(DamageUtils.getDamage(clone.getItemMeta()) > 0) {
-			level++;
-			DamageUtils.setDamage(clone, (DamageUtils.getDamage(clone.getItemMeta()) - durPerItem));
-		}
-		return level;
-	}
-	
-	public static ItemStack repairItem(ItemStack combined, ItemStack first, ItemStack second) {
-		int amount = second.getAmount();
-		if(amount > 4) amount = 4;
-		int durPerItem = first.getType().getMaxDurability() / 4;
-		while(DamageUtils.getDamage(combined.getItemMeta()) > 0 && amount > 0) {
-			amount--;
-			DamageUtils.setDamage(combined, (DamageUtils.getDamage(combined.getItemMeta()) - durPerItem));
-		}
-		
-		if(DamageUtils.getDamage(combined.getItemMeta()) < 0) {
-			DamageUtils.setDamage(combined, 0);
-		}
-		return combined;
-	}
-	
-	public static ItemStack combineItems(Player player, ItemStack first, ItemStack second) {
-		ItemStack combined = first.clone();
-		combined = Enchantments.removeAllEnchantments(combined);
-		if(first.getType() == Material.BOOK || first.getType() == Material.ENCHANTED_BOOK) {
-			if(ConfigUtils.getEnchantedBook()) {
-				combined = new ItemStack(Material.ENCHANTED_BOOK);
-			} else {
-				combined = new ItemStack(Material.BOOK);
-			}
-		}
-		DamageUtils.setDamage(combined, DamageUtils.getDamage(first.getItemMeta()));
-		RepairType repairType = RepairType.getRepairType(first, second);
-		if(repairType == null) {
-			return null;
-		}
-				
-		if(repairType.equals(RepairType.REPAIR)) {
-			combined = repairItem(combined, first, second);
-		}else if(second.getType().equals(first.getType())) {
-			int extraDurability = second.getType().getMaxDurability() - DamageUtils.getDamage(second.getItemMeta()) + (int) (second.getType().getMaxDurability() * .12);
-			DamageUtils.setDamage(combined, DamageUtils.getDamage(combined.getItemMeta()) - extraDurability);
-			if(DamageUtils.getDamage(combined.getItemMeta()) < 0) {
-				DamageUtils.setDamage(combined, 0);
-			}
-		}
-		
-		List<EnchantmentLevel> enchantments = Enchantments.combineEnchants(player, first, second);
-				
-		combined = Enchantments.addEnchantmentsToItem(combined, enchantments);
-		
-		return combined;
-	}
-	
 	public static void giveItemToPlayer(Player player, ItemStack item, Location fallback, boolean statistic) {
 		HashMap<Integer, ItemStack> leftOver = new HashMap<Integer, ItemStack>();
 		int amount = item.getAmount();
@@ -176,24 +93,22 @@ public class ItemUtils {
 	}
 	
 	public static ItemStack addNMSEnchantment(ItemStack item, String type) {
-		ItemStack returnItem = new ItemStack(item.getType());
 		ItemStack duplicate = item.clone();
-		ItemMeta returnItemMeta = returnItem.getItemMeta();
 		ItemMeta duplicateMeta = duplicate.getItemMeta();
 		
-		returnItemMeta.setDisplayName(duplicateMeta.getDisplayName());
-		returnItem.setItemMeta(returnItemMeta);
-		DamageUtils.setDamage(returnItem, DamageUtils.getDamage(duplicateMeta));
+		duplicateMeta.setDisplayName(duplicateMeta.getDisplayName());
+		duplicate.setItemMeta(duplicateMeta);
+		DamageUtils.setDamage(duplicate, DamageUtils.getDamage(duplicateMeta));
 		
 		List<EnchantmentLevel> enchants = null;
 		while(enchants == null) {
-			int bookshelves = ConfigUtils.getBookshelvesFromType(type);
-			boolean treasure = ConfigUtils.includeTreasureFromType(type);
-			PlayerLevels levels = PlayerLevels.generateFakePlayerLevels(returnItem.getType(), bookshelves, treasure);
+			PlayerLevels levels = PlayerLevels.generateFakePlayerLevels(duplicate.getType(), 
+					ConfigUtils.getBookshelvesFromType(type), ConfigUtils.includeTreasureFromType(type));
 			int i = 0;
 			while(i < 3) {
-				int random = (int)(Math.random() * levels.getEnchants().size() + ConfigUtils.getLevelFromType(type));
-				if(random > levels.getEnchants().size() - 1) random = levels.getEnchants().size() - 1;
+				int size = levels.getEnchants().size();
+				int random = (int)(Math.random() * size + ConfigUtils.getLevelFromType(type));
+				if(random > size - 1) random = size - 1;
 				if(levels.getEnchants().get(random).size() > 0) {
 					enchants = levels.getEnchants().get(random);
 					break;
@@ -203,9 +118,9 @@ public class ItemUtils {
 			if(i >= 3) break;
 		}
 		
-		returnItem = Enchantments.addEnchantmentsToItem(returnItem, enchants);
+		duplicate = Enchantments.addEnchantmentsToItem(duplicate, enchants);
 		
-		return returnItem;
+		return duplicate;
 	}
 
 	public static List<Material> getShulkerBoxes() {

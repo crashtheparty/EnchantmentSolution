@@ -12,18 +12,8 @@ import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 public class Loyalty extends CustomEnchantment{
 
 	public Loyalty() {
-		addDefaultDisplayName("Loyalty");
+		super("Loyalty", 7, 5, 11, 7, 1, 1, 3, 3, Weight.UNCOMMON, "Returns a thrown trident after it hits something.");
 		addDefaultDisplayName(Language.GERMAN, "Treue");
-		setDefaultFiftyConstant(7);
-		setDefaultThirtyConstant(5);
-		setDefaultFiftyModifier(11);
-		setDefaultThirtyModifier(7);
-		setDefaultFiftyStartLevel(1);
-		setDefaultThirtyStartLevel(1);
-		setDefaultFiftyMaxLevel(3);
-		setDefaultThirtyMaxLevel(3);
-		setDefaultWeight(Weight.UNCOMMON);
-		addDefaultDescription("Returns a thrown trident after it hits something.");
 		addDefaultDescription(Language.GERMAN, "Gibt einen geworfenen Dreizack zurück, nachdem er etwas getroffen hat.");
 	}
 

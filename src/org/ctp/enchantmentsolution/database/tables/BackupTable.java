@@ -79,6 +79,8 @@ public class BackupTable extends Table{
 			try {
 				if (ps != null)
 					ps.close();
+				if (rs != null)
+					rs.close();
 				if (conn != null)
 					conn.close();
 			} catch (SQLException ex) {
@@ -117,6 +119,8 @@ public class BackupTable extends Table{
 			try {
 				if (ps != null)
 					ps.close();
+				if (rs != null)
+					rs.close();
 				if (conn != null)
 					conn.close();
 			} catch (SQLException ex) {
@@ -160,15 +164,15 @@ public class BackupTable extends Table{
 				ChatUtils.sendSevere("ISSUE on inserting multiple strings into " + config.getFileName());
 				getDb().getPlugin().getLogger().log(Level.SEVERE, Errors.sqlConnectionExecute(),
 						ex);
-			}
-			try {
-				if (ps != null)
-					ps.close();
-				if (conn != null)
-					conn.close();
-			} catch (SQLException ex) {
-				getDb().getPlugin().getLogger().log(Level.SEVERE,
-						Errors.sqlConnectionClose(), ex);
+			} finally {
+				try {
+					if (ps != null)
+						ps.close();
+					if (conn != null)
+						conn.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 		return;
@@ -227,15 +231,18 @@ public class BackupTable extends Table{
 			ChatUtils.sendSevere("ISSUE in \"SELECT * FROM " + this.getName() + " WHERE backup_num = ? AND file_name = ?\"");
 			getDb().getPlugin().getLogger().log(Level.SEVERE, Errors.sqlConnectionExecute(),
 					ex);
-		}
-		try {
-			if (ps != null)
-				ps.close();
-			if (conn != null)
-				conn.close();
-		} catch (SQLException ex) {
-			getDb().getPlugin().getLogger().log(Level.SEVERE,
-					Errors.sqlConnectionClose(), ex);
+		} finally {
+			try {
+				if (ps != null)
+					ps.close();
+				if (rs != null)
+					rs.close();
+				if (conn != null)
+					conn.close();
+			} catch (SQLException ex) {
+				getDb().getPlugin().getLogger().log(Level.SEVERE,
+						Errors.sqlConnectionClose(), ex);
+			}
 		}
 		return infos;
 	}

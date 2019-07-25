@@ -13,18 +13,8 @@ import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 public class WidthPlusPlus extends CustomEnchantment{
 
 	public WidthPlusPlus() {
-		addDefaultDisplayName("Width++");
+		super("Width++", 0, -10, 20, 20, 15, 1, 3, 2, Weight.RARE, "Increase left/right break radius by 1 per level.");
 		addDefaultDisplayName(Language.GERMAN, "Breite++");
-		setDefaultFiftyConstant(0);
-		setDefaultThirtyConstant(-10);
-		setDefaultFiftyModifier(20);
-		setDefaultThirtyModifier(20);
-		setDefaultFiftyStartLevel(15);
-		setDefaultThirtyStartLevel(1);
-		setDefaultFiftyMaxLevel(3);
-		setDefaultThirtyMaxLevel(2);
-		setDefaultWeight(Weight.RARE);
-		addDefaultDescription("Increase left/right break radius by 1 per level.");
 		addDefaultDescription(Language.GERMAN, "Erhöhen Sie den linken / rechten Umbruchradius um 1 pro Ebene.");
 	}
 	

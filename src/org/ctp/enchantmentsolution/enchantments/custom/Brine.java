@@ -13,19 +13,9 @@ import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 public class Brine extends CustomEnchantment{
 	
 	public Brine() {
-		addDefaultDisplayName("Brine");
+		super("Brine", 30, 25, 0, 0, 25, 1, 1, 1, Weight.RARE, "Doubles damage if opposting mob is below 50% health.");
 		addDefaultDisplayName(Language.GERMAN, "Salzlake");
-		setDefaultFiftyConstant(30);
-		setDefaultThirtyConstant(25);
-		setDefaultFiftyModifier(0);
-		setDefaultThirtyModifier(0);
-		setDefaultFiftyStartLevel(25);
-		setDefaultThirtyStartLevel(1);
-		setDefaultFiftyMaxLevel(1);
-		setDefaultThirtyMaxLevel(1);
-		setDefaultWeight(Weight.RARE);
 		setMaxLevelOne(true);
-		addDefaultDescription("Doubles damage if opposing mob is below 50% health.");
 		addDefaultDescription(Language.GERMAN, "Verdoppelt den Schaden, wenn die gegnerische Menge weniger als 50% Gesundheit hat.");
 	}
 

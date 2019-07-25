@@ -13,18 +13,8 @@ import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 public class IrenesLasso extends CustomEnchantment{
 
 	public IrenesLasso() {
-		addDefaultDisplayName("Irene's Lasso");
+		super("Irene's Lasso", 0, 15, 30, 0, 30, 1, 2, 1, Weight.VERY_RARE, "Grabs animals to carry around with you and place later.");
 		addDefaultDisplayName(Language.GERMAN, "Lasso von Irene");
-		setDefaultFiftyConstant(0);
-		setDefaultThirtyConstant(15);
-		setDefaultFiftyModifier(30);
-		setDefaultThirtyModifier(0);
-		setDefaultFiftyStartLevel(30);
-		setDefaultThirtyStartLevel(1);
-		setDefaultFiftyMaxLevel(2);
-		setDefaultThirtyMaxLevel(1);
-		setDefaultWeight(Weight.VERY_RARE);
-		addDefaultDescription("Grabs animals to carry around with you and place later.");
 		addDefaultDescription(Language.GERMAN, "Greift Tiere zum Mitnehmen und Platzieren später.");
 	}
 	

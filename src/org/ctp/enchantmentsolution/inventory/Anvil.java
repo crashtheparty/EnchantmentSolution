@@ -13,7 +13,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
-import org.ctp.enchantmentsolution.nms.AnvilNMS;
+import org.ctp.enchantmentsolution.enchantments.helper.UpdateItem;
 import org.ctp.enchantmentsolution.utils.AnvilUtils;
 import org.ctp.enchantmentsolution.utils.AnvilUtils.RepairType;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
@@ -26,7 +26,7 @@ public class Anvil implements InventoryData{
 	private Player player;
 	private Inventory inventory;
 	private List<ItemStack> playerItems;
-	private ItemStack combinedItem;
+	private UpdateItem combinedItem;
 	private Block block;
 	private boolean inLegacy;
 
@@ -137,7 +137,8 @@ public class Anvil implements InventoryData{
 			
 			ItemStack combine = null;
 			if(playerItems.size() == 2 && AnvilUtils.canCombineItems(playerItems.get(0), playerItems.get(1))) {
-				int repairCost = AnvilUtils.getRepairCost(player, playerItems.get(0), playerItems.get(1));
+				combinedItem = new UpdateItem(player, playerItems.get(0), playerItems.get(1));
+				int repairCost = combinedItem.getRepairCost();
 				int playerLevel = player.getLevel();
 				List<String> lore = new ArrayList<String>();
 				if(player.getGameMode().equals(GameMode.CREATIVE) || repairCost <= playerLevel) {
@@ -196,8 +197,7 @@ public class Anvil implements InventoryData{
 			if(playerItems.size() == 2) {
 				ItemStack item = playerItems.get(1);
 				inv.setItem(12, item);
-				combinedItem = ItemUtils.combineItems(player, playerItems.get(0), playerItems.get(1));
-				inv.setItem(16, combinedItem);
+				inv.setItem(16, combinedItem.getCombinedItem());
 			}else {
 				combinedItem = null;
 			}
@@ -252,25 +252,20 @@ public class Anvil implements InventoryData{
 	
 	public void combine() {
 		if(inventory.getItem(14).getType().equals(Material.LIME_STAINED_GLASS_PANE)) {
-			RepairType type = AnvilUtils.RepairType.getRepairType(playerItems.get(0), playerItems.get(1));
-			if(player.getGameMode() != GameMode.CREATIVE){
-				player.setLevel(player.getLevel() - AnvilUtils.getRepairCost(player, playerItems.get(0), playerItems.get(1)));
+			combinedItem.update();
+			if(player.getGameMode() != GameMode.CREATIVE) {
+				if (combinedItem.getRepairCost() > player.getLevel()) {
+					ChatUtils.sendMessage(player, ChatUtils.getMessage(getCodes(), "anvil.message-cannot-combine"));
+					return;
+				}
+				player.setLevel(player.getLevel() - combinedItem.getRepairCost());
 			}
-			int itemOneRepair = AnvilNMS.getRepairCost(playerItems.get(0));
-			int itemTwoRepair = AnvilNMS.getRepairCost(playerItems.get(1));
-			if(itemOneRepair > itemTwoRepair) {
-				combinedItem = AnvilNMS.setRepairCost(combinedItem, itemOneRepair * 2 + 1);
-			}else {
-				combinedItem = AnvilNMS.setRepairCost(combinedItem, itemTwoRepair * 2 + 1);
-			}
-			ItemUtils.giveItemToPlayer(player, combinedItem, player.getLocation(), false);
-			if(type.equals(RepairType.REPAIR)) {
-				ItemStack repairItem = playerItems.get(1).clone();
-				repairItem.setAmount(repairItem.getAmount() - ItemUtils.repairItem(playerItems.get(0), repairItem));
-				ItemUtils.giveItemToPlayer(player, repairItem, player.getLocation(), false);
+			ItemUtils.giveItemToPlayer(player, combinedItem.getCombinedItem(), player.getLocation(), false);
+			if(combinedItem.getRepairType().equals(RepairType.REPAIR)) {
+				ItemUtils.giveItemToPlayer(player, combinedItem.getItemTwoLeftover(), player.getLocation(), false);
 			}
 			if(EnchantmentSolution.getPlugin().isJobsEnabled()) {
-				JobsUtils.sendAnvilAction(player, playerItems.get(1), combinedItem);
+				JobsUtils.sendAnvilAction(player, playerItems.get(1), combinedItem.getCombinedItem());
 			}
 			combinedItem = null;
 			playerItems.clear();

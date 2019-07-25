@@ -46,14 +46,6 @@ public class Advancement {
 	private boolean announce = true;
 	private boolean hidden = false;
 	
-	/**
-	 * Creates a new configurable advancement.
-	 * @param id the id of the advancement, this determines the file location and the in-game id
-	 * @param icon the item to display on the advancement screen. The root advancement's icon is the icon of the tab.
-	 * The item property must be set before calling {@link #toJson()}, the data property is optional
-	 * @param title the title of the advancement
-	 * @param description the description of the advancement
-	 */
 	public Advancement(NamespacedKey id, ItemObject icon, TextComponent title, TextComponent description) {
 		Validate.notNull(id);
 		Validate.notNull(icon);
@@ -65,107 +57,58 @@ public class Advancement {
 		this.description = description;
 	}
 	
-	
-	
-	/**
-	 * @return the id
-	 */
 	public NamespacedKey getId() {
 		return id;
 	}
 	
-	/**
-	 * @return the (mutable) icon
-	 */
 	public ItemObject getIcon() {
 		return icon;
 	}
 	
-	/**
-	 * @return the (mutable) title
-	 */
 	public TextComponent getTitle() {
 		return title;
 	}
 	
-	/**
-	 * @return the (mutable) description
-	 */
 	public TextComponent getDescription() {
 		return description;
 	}
 	
-	/**
-	 * @return an unmodifiable view of the triggers
-	 */
 	public Set<Map.Entry<String, Trigger>> getTriggers() {
 		return Collections.unmodifiableSet(triggers.entrySet());
 	}
 	
-	/**
-	 * @return an unmodifiable view of the requirements, which are in conjunctive normal form
-	 * (the arrays' elements are separated by logical ORs and the arrays are separated by logical ANDs)
-	 */
 	public Set<String[]> getRequirements() {
 		return requirements == null ? Collections.emptySet() : Collections.unmodifiableSet(requirements);
 	}
 	
-	/**
-	 * @return the parent advancement's id or null, if this advancement is a root advancement
-	 */
 	public @Nullable NamespacedKey getParent() {
 		return parent;
 	}
 	
-	/**
-	 * @return the background of this root advancement or null, if this advancement is not a root or has no background set
-	 */
 	public @Nullable String getBackground() {
 		return background;
 	}
 	
-	/**
-	 * @return the (mutable) rewards given upon completing this advancement or null, if none has been specified
-	 */
 	public @Nullable Rewards getRewards() {
 		return rewards;
 	}
 	
-	/**
-	 * @return the frame style. {@link Frame#TASK} by default
-	 */
 	public Frame getFrame() {
 		return frame;
 	}
 	
-	/**
-	 * @return whether the advancement should show a popup notification upon completion. True by default
-	 */
 	public boolean isToast() {
 		return toast;
 	}
 	
-	/**
-	 * @return whether the completion of this advancement should be announced in the chat. True by default
-	 */
 	public boolean isAnnounce() {
 		return announce;
 	}
-	
-	/**
-	 * @return whether child advancement should be hidden until this advancement is completed. False by default
-	 */
+
 	public boolean isHidden() {
 		return hidden;
 	}
-	
-	
-	
-	/**
-	 * @param id the id of the trigger, all ids must be unique for a single advancement
-	 * @param trigger any extension of {@link Trigger}
-	 * @return the current advancement for chaining
-	 */
+
 	public Advancement addTrigger(String id, Trigger trigger) {
 		Validate.notNull(id);
 		Validate.notNull(trigger);
@@ -173,21 +116,12 @@ public class Advancement {
 		return this;
 	}
 	
-	/**
-	 * @param id the id of the trigger which should be removed
-	 * @return the current advancement for chaining
-	 */
 	public Advancement removeTrigger(String id) {
 		Validate.notNull(id);
 		triggers.remove(id);
 		return this;
 	}
 	
-	/**
-	 * @param requirement requirements which are separated by logical ORs (while separate calls to this method are separated by logical ANDs).
-	 * The vararg array is not cloned, allowing mutability
-	 * @return the current advancement for chaining
-	 */
 	public Advancement addRequirement(String... requirement) {
 		Validate.notNull(requirement);
 		if (requirements == null) {
@@ -197,10 +131,6 @@ public class Advancement {
 		return this;
 	}
 	
-	/**
-	 * @param requirement the array of requirements to remove. Only the contents of the arrays have to be equal
-	 * @return the current advancement for chaining
-	 */
 	public Advancement removeRequirement(String... requirement) {
 		Validate.notNull(requirement);
 		if (requirements == null) {
@@ -215,60 +145,32 @@ public class Advancement {
 		return this;
 	}
 	
-	/**
-	 * @param rewards the rewards which should be given upon completion of this advancement or null, if it should be cleared
-	 * @return the current advancement for chaining
-	 */
 	public Advancement setRewards(@Nullable Rewards rewards) {
 		this.rewards = rewards;
 		return this;
 	}
 	
-	/**
-	 * @param frame the new frame style. {@link Frame#TASK} by default
-	 * @return the current advancement for chaining
-	 */
 	public Advancement setFrame(Frame frame) {
 		Validate.notNull(frame);
 		this.frame = frame;
 		return this;
 	}
 	
-	/**
-	 * @param toast whether the advancement should show a popup notification upon completion. True by default
-	 * @return the current advancement for chaining
-	 */
 	public Advancement setToast(boolean toast) {
 		this.toast = toast;
 		return this;
 	}
 	
-	/**
-	 * @param announce whether the completion of this advancement should be announced in the chat. True by default
-	 * @return the current advancement for chaining
-	 */
 	public Advancement setAnnounce(boolean announce) {
 		this.announce = announce;
 		return this;
 	}
 	
-	/**
-	 * @param hidden whether child advancement should be hidden until this advancement is completed. False by default
-	 * @return the current advancement for chaining
-	 */
 	public Advancement setHidden(boolean hidden) {
 		this.hidden = hidden;
 		return this;
 	}
 	
-	
-	
-	/**
-	 * @param background the texture to set as the tab's background. Example value: {@code blocks/gravel}
-	 * @param autoUnlock whether the advancement should be unlocked by default.
-	 * When true, a {@link LocationTrigger} is added and the {@code announce} and {@code toast} properties are set to false
-	 * @return the current advancement for chaining
-	 */
 	public Advancement makeRoot(String background, boolean autoUnlock) {
 		Validator.texture(background);
 		parent = null;
@@ -281,10 +183,6 @@ public class Advancement {
 		return this;
 	}
 	
-	/**
-	 * @param parent the advancement's id this parent should be a child of
-	 * @return the current advancement for chaining
-	 */
 	public Advancement makeChild(NamespacedKey parent) {
 		Validate.notNull(parent);
 		this.parent = parent;
@@ -292,17 +190,6 @@ public class Advancement {
 		return this;
 	}
 	
-	
-	
-	/**
-	 * Static method, useful when trying to activate a pre-generated (already JSON) advancement.
-	 * @param reload whether {@link Bukkit#reloadData()} should be called immediately after a file has been created.
-	 * Calling that method only after all advancements have been activated is advised
-	 * @param id the id of the advancement
-	 * @param json the advancement in JSON format
-	 * @return whether the activation was successful
-	 * @see #activate(boolean)
-	 */
 	@SuppressWarnings("deprecation")
 	public static AdvancementModificationResult activate(boolean reload, NamespacedKey id, String json, JsonObject jsonObject) {
 		File file = new File(Bukkit.getWorlds().get(0).getWorldFolder(),
@@ -336,10 +223,13 @@ public class Advancement {
 		JSONParser parser = new JSONParser();
 		 
         try {
+        	FileReader reader = new FileReader(file.getAbsolutePath());
  
-            Object obj = parser.parse(new FileReader(file.getAbsolutePath()));
+            Object obj = parser.parse(reader);
+        	reader.close();
  
             JsonObject gson = new JsonParser().parse(((JSONObject) obj).toJSONString()).getAsJsonObject();
+
             return gson;
         } catch (Exception e) {
             e.printStackTrace();
@@ -347,18 +237,10 @@ public class Advancement {
         return new JsonObject();
 	}
 	
-	/**
-	 * @param reload whether {@link Bukkit#reloadData()} should be called immediately after a file has been created.
-	 * Calling that method only after all advancements have been activated is advised
-	 * @return whether the activation was successful
-	 */
 	public AdvancementModificationResult activate(boolean reload) {
 		return activate(reload, id, toJson(), toJsonObject());
 	}
 	
-	/**
-	 * 
-	 */
 	public static AdvancementModificationResult deactivate(boolean reload, NamespacedKey id) {
 		File file = new File(Bukkit.getWorlds().get(0).getWorldFolder(),
 				String.join(File.separator, "datapacks", "bukkit", "data", id.getNamespace(), "advancements", id.getKey()) + ".json");
@@ -375,11 +257,6 @@ public class Advancement {
 		return new AdvancementModificationResult(true, false, "Unloaded successfully.");
 	}
 	
-	/**
-	 * Creates a JSON representation of the current advancement. This method is only useful when {@link #activate(boolean)} is not appropriate.
-	 * The icon, the triggers and the requirements are validated when this is called.
-	 * @return the JSON representation of the current advancement
-	 */
 	public JsonObject toJsonObject() {
 		JsonObject json = new JsonObject();
 		if (parent != null) {
@@ -420,11 +297,6 @@ public class Advancement {
 		return json;
 	}
 	
-	/**
-	 * Creates a JSON representation of the current advancement. This method is only useful when {@link #activate(boolean)} is not appropriate.
-	 * The icon, the triggers and the requirements are validated when this is called.
-	 * @return the JSON representation of the current advancement
-	 */
 	public String toJson() {
 		return JsonBuilder.GSON.toJson(toJsonObject());
 	}
@@ -434,20 +306,11 @@ public class Advancement {
 		return "Advancement@" + id;
 	}
 	
-	
-	
-	/**
-	 * @return the hash code of this advancement
-	 */
 	@Override
 	public int hashCode() {
 		return Objects.hash(id, icon, title, description, triggers, requirements, parent, background, rewards, frame, toast, announce, hidden);
 	}
 	
-	/**
-	 * @param object the reference object with which to compare
-	 * @return whether this object has the same content as the passed parameter
-	 */
 	@Override
 	public boolean equals(Object object) {
 		if (!(object instanceof Advancement)) {
@@ -488,20 +351,11 @@ public class Advancement {
 		return true;
 	}
 	
-	
-	
-	/**
-	 * Frame styles, displayed on the advancement screen around advancements.
-	 * The default style is {@link Frame#TASK}
-	 */
 	public enum Frame {
 		TASK,
 		CHALLENGE,
 		GOAL;
 		
-		/**
-		 * @return a {@link String} representation of the enum value, which can be used in JSON objects
-		 */
 		public String getValue() {
 			return name().toLowerCase();
 		}

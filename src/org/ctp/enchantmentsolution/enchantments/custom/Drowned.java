@@ -13,18 +13,8 @@ import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 public class Drowned extends CustomEnchantment{
 	
 	public Drowned() {
-		addDefaultDisplayName("Drowned");
+		super("Drowned", 10, 0, 20, 12, 20, 1, 3, 3, Weight.RARE, "Drown non-water mobs for a short time.");
 		addDefaultDisplayName(Language.GERMAN, "Ertrinken");
-		setDefaultFiftyConstant(10);
-		setDefaultThirtyConstant(0);
-		setDefaultFiftyModifier(20);
-		setDefaultThirtyModifier(12);
-		setDefaultFiftyStartLevel(20);
-		setDefaultThirtyStartLevel(1);
-		setDefaultFiftyMaxLevel(3);
-		setDefaultThirtyMaxLevel(3);
-		setDefaultWeight(Weight.RARE);
-		addDefaultDescription("Drown non-water mobs for a short time.");
 		addDefaultDescription(Language.GERMAN, "Ertrinken Sie nicht Wasser-Mobs für kurze Zeit.");
 	}
 	

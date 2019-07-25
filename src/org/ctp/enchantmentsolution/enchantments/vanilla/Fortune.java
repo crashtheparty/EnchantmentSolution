@@ -12,18 +12,8 @@ import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 public class Fortune extends CustomEnchantment{
 	
 	public Fortune() {
-		addDefaultDisplayName("Fortune");
+		super("Fortune", 7, 6, 11, 9, 1, 1, 5, 3, Weight.RARE, "Increases block drops.");
 		addDefaultDisplayName(Language.GERMAN, "Glück");
-		setDefaultFiftyConstant(7);
-		setDefaultThirtyConstant(6);
-		setDefaultFiftyModifier(11);
-		setDefaultThirtyModifier(9);
-		setDefaultFiftyStartLevel(1);
-		setDefaultThirtyStartLevel(1);
-		setDefaultFiftyMaxLevel(5);
-		setDefaultThirtyMaxLevel(3);
-		setDefaultWeight(Weight.RARE);
-		addDefaultDescription("Increases block drops.");
 		addDefaultDescription(Language.GERMAN, "Erhöht Blocktropfen.");
 	}
 	

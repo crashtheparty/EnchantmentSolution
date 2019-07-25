@@ -1,5 +1,7 @@
 package org.ctp.enchantmentsolution.nms.chest;
 
+import java.io.IOException;
+
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.v1_14_R1.CraftWorld;
@@ -41,12 +43,24 @@ public class ChestPopulate_v1_14_R1 {
             	}
             }
         }
+		try {
+			nmsWorld.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public static boolean isLootChest(Block block) {
 		World nmsWorld = ((CraftWorld) block.getWorld()).getHandle();
         TileEntityLootable te = (TileEntityLootable) nmsWorld.getTileEntity(new BlockPosition(block.getX(), block.getY(), block.getZ()));
-        return te.lootTable != null;
+        boolean isLootChest = te.lootTable != null;
+
+		try {
+			nmsWorld.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+        return isLootChest;
 	}
 	
 	public static void populateCart(Entity e) {

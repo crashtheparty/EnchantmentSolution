@@ -12,20 +12,9 @@ import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 public class Efficiency extends CustomEnchantment{
 	
 	public Efficiency() {
-		addDefaultDisplayName("Efficiency");
-		addDefaultDisplayName(Language.GERMAN, "Effizienz");
-		setDefaultFiftyConstant(-11);
-		setDefaultThirtyConstant(-9);
-		setDefaultFiftyModifier(12);
-		setDefaultThirtyModifier(10);
-		setDefaultFiftyStartLevel(1);
-		setDefaultThirtyStartLevel(1);
-		setDefaultFiftyMaxLevel(6);
-		setDefaultThirtyMaxLevel(5);
-		setDefaultWeight(Weight.COMMON);
-		addDefaultDescription("Increases mining speed." + 
-				"\n" + 
+		super("Efficiency", -11, -9, 12, 10, 1, 1, 6, 5, Weight.COMMON, "Increases mining speed.\n" + 
 				"One must use the proper tool for a block in order to receive the speed. Does not matter if you mine it with the incorrect tier.");
+		addDefaultDisplayName(Language.GERMAN, "Effizienz");
 		addDefaultDescription(Language.GERMAN, "Erhöht die Mining-Geschwindigkeit." + 
 				"\n" + 
 				"Man muss das richtige Werkzeug für einen Block verwenden, um die Geschwindigkeit zu erhalten. " + 

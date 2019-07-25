@@ -13,18 +13,8 @@ import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 public class Angler extends CustomEnchantment{
 	
 	public Angler() {
-		addDefaultDisplayName("Angler");
+		super("Angler", 0, 0, 10, 8, 1, 1, 5, 3, Weight.RARE, "Catch one additional fish per level if you caught a fish.");
 		addDefaultDisplayName(Language.GERMAN, "Profiangler");
-		setDefaultFiftyConstant(0);
-		setDefaultThirtyConstant(0);
-		setDefaultFiftyModifier(10);
-		setDefaultThirtyModifier(8);
-		setDefaultFiftyStartLevel(1);
-		setDefaultThirtyStartLevel(1);
-		setDefaultFiftyMaxLevel(5);
-		setDefaultThirtyMaxLevel(3);
-		setDefaultWeight(Weight.RARE);
-		addDefaultDescription("Catch one additional fish per level if you caught a fish.");
 		addDefaultDescription(Language.GERMAN, "Fangen Sie einen zusätzlichen Fisch pro Level, wenn Sie einen Fisch fangen.");
 	}
 	

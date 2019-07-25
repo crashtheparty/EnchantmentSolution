@@ -13,18 +13,8 @@ import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 public class Knockback extends CustomEnchantment{
 	
 	public Knockback() {
-		addDefaultDisplayName("Knockback");
+		super("Knockback", -15, -15, 20, 20, 1, 1, 4, 2, Weight.UNCOMMON, "Increases knockback.");
 		addDefaultDisplayName(Language.GERMAN, "Rückstoß");
-		setDefaultFiftyConstant(-15);
-		setDefaultThirtyConstant(-15);
-		setDefaultFiftyModifier(20);
-		setDefaultThirtyModifier(20);
-		setDefaultFiftyStartLevel(1);
-		setDefaultThirtyStartLevel(1);
-		setDefaultFiftyMaxLevel(4);
-		setDefaultThirtyMaxLevel(2);
-		setDefaultWeight(Weight.UNCOMMON);
-		addDefaultDescription("Increases knockback.");
 		addDefaultDescription(Language.GERMAN, "Erhöht den Rückstoß.");
 	}
 

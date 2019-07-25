@@ -13,19 +13,9 @@ import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 public class Smeltery extends CustomEnchantment{
 	
 	public Smeltery() {
-		addDefaultDisplayName("Smeltery");
+		super("Smeltery", 40, 20, 0, 0, 30, 1, 1, 1, Weight.RARE, "Smelts blocks while mining.");
 		addDefaultDisplayName(Language.GERMAN, "Schmelzen");
-		setDefaultFiftyConstant(40);
-		setDefaultThirtyConstant(20);
-		setDefaultFiftyModifier(0);
-		setDefaultThirtyModifier(0);
-		setDefaultFiftyStartLevel(30);
-		setDefaultThirtyStartLevel(1);
-		setDefaultFiftyMaxLevel(1);
-		setDefaultThirtyMaxLevel(1);
-		setDefaultWeight(Weight.RARE);
 		setMaxLevelOne(true);
-		addDefaultDescription("Smelts blocks while mining.");
 		addDefaultDescription(Language.GERMAN, "Schmelzen Blöcke während des Bergbaus.");
 	}
 	

@@ -85,105 +85,30 @@ public class EnchantmentTable implements InventoryData {
 				return;
 			}
 		}
-
-		ItemStack lapisOne = new ItemStack(Material.LAPIS_LAZULI);
-		ItemMeta lapisOneMeta = lapisOne.getItemMeta();
-		HashMap<String, Object> loreCodes = getCodes();
-		loreCodes.put("%level%", 1);
-		loreCodes.put("%levelsTaken%", 1);
-		loreCodes.put("%levelReq%", levelList.get(0));
-		lapisOneMeta.setDisplayName(ChatUtils.getMessage(loreCodes, "table.enchant-level"));
-		lapisOneMeta.setLore(ChatUtils.getMessages(loreCodes, "table.enchant-level-lore"));
-		lapisOne.setItemMeta(lapisOneMeta);
-
-		inv.setItem(3, lapisOne);
-
-		ItemStack lapisTwo = new ItemStack(Material.LAPIS_LAZULI, 2);
-		ItemMeta lapisTwoMeta = lapisTwo.getItemMeta();
-		loreCodes.put("%level%", 2);
-		loreCodes.put("%levelsTaken%", 2);
-		loreCodes.put("%levelReq%", levelList.get(1));
-		lapisTwoMeta.setDisplayName(ChatUtils.getMessage(loreCodes, "table.enchant-level"));
-		lapisTwoMeta.setLore(ChatUtils.getMessages(loreCodes, "table.enchant-level-lore"));
-		lapisTwo.setItemMeta(lapisTwoMeta);
-
-		inv.setItem(4, lapisTwo);
-
-		ItemStack lapisThree = new ItemStack(Material.LAPIS_LAZULI, 3);
-		ItemMeta lapisThreeMeta = lapisThree.getItemMeta();
-		loreCodes.put("%level%", 3);
-		loreCodes.put("%levelsTaken%", 3);
-		loreCodes.put("%levelReq%", levelList.get(2));
-		lapisThreeMeta.setDisplayName(ChatUtils.getMessage(loreCodes, "table.enchant-level"));
-		lapisThreeMeta.setLore(ChatUtils.getMessages(loreCodes, "table.enchant-level-lore"));
-		lapisThree.setItemMeta(lapisThreeMeta);
-
-		inv.setItem(5, lapisThree);
-
-		if (levelList.size() < 4 || levelList.get(3) == -1) {
-			String message = "";
-			if (levelList.get(3) == -1) {
-				message = ChatUtils.getMessage(getCodes(), "table.level-fifty-lack");
+		
+		for(int i = 1; i <= 6; i++) {
+			ItemStack lapis = new ItemStack(Material.LAPIS_LAZULI, i);
+			ItemMeta lapisMeta = lapis.getItemMeta();
+			HashMap<String, Object> loreCodes = getCodes();
+			loreCodes.put("%level%", i);
+			List<String> messages = new ArrayList<String>();
+			if(i > 3 && (levelList.get(3) == -1 || levelList.size() < 4)) {
+				lapisMeta.setDisplayName(ChatUtils.getMessage(loreCodes, "table.enchant-level"));
+				if (levelList.get(3) == -1) {
+					messages = Arrays.asList(ChatUtils.getMessage(getCodes(), "table.level-fifty-lack"));
+				} else {
+					messages = Arrays.asList(ChatUtils.getMessage(getCodes(), "table.level-fifty-disabled"));
+				}
+				lapisMeta.setLore(messages);
 			} else {
-				message = ChatUtils.getMessage(getCodes(), "table.level-fifty-disabled");
+				loreCodes.put("%levelsTaken%", i);
+				loreCodes.put("%levelReq%", levelList.get(i - 1));
+				lapisMeta.setDisplayName(ChatUtils.getMessage(loreCodes, "table.enchant-level"));
+				lapisMeta.setLore(ChatUtils.getMessages(loreCodes, "table.enchant-level-lore"));
 			}
-			ItemStack disable = new ItemStack(Material.BARRIER);
-			ItemMeta disableFour = disable.getItemMeta();
-			loreCodes.put("%level%", 4);
-			disableFour.setDisplayName(ChatUtils.getMessage(loreCodes, "table.enchant-level"));
-			disableFour.setLore(Arrays.asList(message));
-			disable.setItemMeta(disableFour);
+			lapis.setItemMeta(lapisMeta);
 
-			inv.setItem(6, disable);
-
-			ItemMeta disableFive = disable.getItemMeta();
-			loreCodes.put("%level%", 5);
-			disableFive.setDisplayName(ChatUtils.getMessage(loreCodes, "table.enchant-level"));
-			disableFive.setLore(Arrays.asList(message));
-			disable.setItemMeta(disableFive);
-
-			inv.setItem(7, disable);
-
-			ItemMeta disableSix = disable.getItemMeta();
-			loreCodes.put("%level%", 6);
-			disableSix.setDisplayName(ChatUtils.getMessage(loreCodes, "table.enchant-level"));
-			disableSix.setLore(Arrays.asList(message));
-			disable.setItemMeta(disableSix);
-
-			inv.setItem(8, disable);
-		} else {
-			ItemStack lapisFour = new ItemStack(Material.LAPIS_LAZULI, 4);
-			ItemMeta lapisFourMeta = lapisFour.getItemMeta();
-			loreCodes.put("%level%", 4);
-			loreCodes.put("%levelsTaken%", 4);
-			loreCodes.put("%levelReq%", levelList.get(3));
-			lapisFourMeta.setDisplayName(ChatUtils.getMessage(loreCodes, "table.enchant-level"));
-			lapisFourMeta.setLore(ChatUtils.getMessages(loreCodes, "table.enchant-level-lore"));
-			lapisFour.setItemMeta(lapisFourMeta);
-
-			inv.setItem(6, lapisFour);
-
-			ItemStack lapisFive = new ItemStack(Material.LAPIS_LAZULI, 5);
-			ItemMeta lapisFiveMeta = lapisFive.getItemMeta();
-			loreCodes.put("%level%", 5);
-			loreCodes.put("%levelsTaken%", 5);
-			loreCodes.put("%levelReq%", levelList.get(4));
-			lapisFiveMeta.setDisplayName(ChatUtils.getMessage(loreCodes, "table.enchant-level"));
-			lapisFiveMeta.setLore(ChatUtils.getMessages(loreCodes, "table.enchant-level-lore"));
-			lapisFive.setItemMeta(lapisFiveMeta);
-
-			inv.setItem(7, lapisFive);
-
-			ItemStack lapisSix = new ItemStack(Material.LAPIS_LAZULI, 6);
-			ItemMeta lapisSixMeta = lapisSix.getItemMeta();
-			loreCodes.put("%level%", 6);
-			loreCodes.put("%levelsTaken%", 6);
-			loreCodes.put("%levelReq%", levelList.get(5));
-			lapisSixMeta.setDisplayName(ChatUtils.getMessage(loreCodes, "table.enchant-level"));
-			lapisSixMeta.setLore(ChatUtils.getMessages(loreCodes, "table.enchant-level-lore"));
-			lapisSix.setItemMeta(lapisSixMeta);
-
-			inv.setItem(8, lapisSix);
+			inv.setItem(i + 2, lapis);
 		}
 		
 		mirror = new ItemStack(Material.RED_STAINED_GLASS_PANE);
@@ -219,7 +144,7 @@ public class EnchantmentTable implements InventoryData {
 						if (name == null || name.equals("")) {
 							name = ConfigUtils.getLocalizedName(item.getType());
 						}
-						loreCodes = getCodes();
+						HashMap<String, Object> loreCodes = getCodes();
 						loreCodes.put("%level%", extra - 2);
 						loreCodes.put("%name%", name);
 						bookMeta.setDisplayName(ChatUtils.getMessage(loreCodes, "table.item-enchant-name"));
@@ -397,7 +322,7 @@ public class EnchantmentTable implements InventoryData {
 				return;
 			}
 		}
-				
+		
 		PlayerLevels levels = PlayerLevels.getPlayerLevels(getBooks(), player,
 				enchantableItem.getType());
 		if (levels == null) {
