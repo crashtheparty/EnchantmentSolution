@@ -85,6 +85,7 @@ public class UpdateItem {
 		}else {
 			combinedItem = AnvilNMS.setRepairCost(combinedItem, itemTwoRepair * 2 + 1);
 		}
+		combinedItem = Enchantments.addEnchantmentsToItem(combinedItem, enchantments.getEnchantments());
 		repairCost += itemOneRepair + itemTwoRepair;
 		
 		repairCost = Math.max(repairCost / ConfigUtils.getLevelDivisor(), 1);

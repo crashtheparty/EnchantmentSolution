@@ -2,6 +2,8 @@ package org.ctp.enchantmentsolution.enchantments;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +30,20 @@ public class Enchantments {
 
 	public static List<CustomEnchantment> getEnchantments() {
 		return ENCHANTMENTS;
+	}
+	
+	public static List<CustomEnchantment> getEnchantmentsAlphabetical(){
+		List<CustomEnchantment> alphabetical = new ArrayList<CustomEnchantment>();
+		for(CustomEnchantment enchantment : ENCHANTMENTS) {
+			alphabetical.add(enchantment);
+		}
+		Collections.sort(alphabetical, new Comparator<CustomEnchantment>(){
+			@Override
+			public int compare(CustomEnchantment o1, CustomEnchantment o2) {
+				return o1.getDisplayName().compareTo(o2.getDisplayName());
+			}
+		});
+		return alphabetical;
 	}
 
 	public static boolean addEnchantment(CustomEnchantment enchantment) {

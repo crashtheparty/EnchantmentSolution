@@ -47,6 +47,7 @@ public class BlockListener implements Listener{
 		if(WalkerListener.BLOCKS.get(DefaultEnchantments.MAGMA_WALKER).contains(event.getBlock())) {
 			event.setCancelled(true);
 		}
+		
 		if(ItemUtils.getShulkerBoxes().contains(event.getBlock().getType())) {
 			if(!Enchantments.hasEnchantment(event.getPlayer().getInventory().getItemInMainHand(), DefaultEnchantments.TELEPATHY)) {
 				Player player = event.getPlayer();

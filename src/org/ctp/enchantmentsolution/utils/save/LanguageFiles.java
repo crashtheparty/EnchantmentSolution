@@ -24,7 +24,7 @@ import org.ctp.enchantmentsolution.utils.config.YamlConfigBackup;
 import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 
 public class LanguageFiles {
-	
+
 	private File languageFile, englishUSFile, germanFile;
 	private YamlConfig englishUS, german;
 	private Language defaultLanguage;
@@ -35,22 +35,22 @@ public class LanguageFiles {
 		this.files = files;
 		languageFile = langFile;
 		defaultLanguage = lang;
-		
+
 		createDefaultFiles();
 		
 		YamlConfig main = files.getDefaultConfig();
 		boolean getFromConfig = true;
-		if(main.getBoolean("reset_language")) {
+		if (main.getBoolean("reset_language")) {
 			getFromConfig = false;
 			main.set("reset_language", false);
 			main.saveConfig();
 		}
-		
+
 		save(getFromConfig);
 	}
-	
+
 	public void addDefault(String path, CustomEnchantment enchantment, String type) {
-		switch(type) {
+		switch (type) {
 		case "display_name":
 			englishUS.addDefault(path, StringUtils.encodeString(enchantment.getDefaultDisplayName(Language.US)));
 			german.addDefault(path, StringUtils.encodeString(enchantment.getDefaultDisplayName(Language.GERMAN)));
@@ -61,19 +61,19 @@ public class LanguageFiles {
 			break;
 		}
 	}
-	
+
 	private void save(boolean getFromConfig) {
-		if(EnchantmentSolution.getPlugin().isInitializing()) {
+		if (EnchantmentSolution.getPlugin().isInitializing()) {
 			ChatUtils.sendInfo("Loading language file...");
 		}
 		language = new YamlConfigBackup(languageFile, null);
-		if(getFromConfig) {
+		if (getFromConfig) {
 			language.getFromConfig();
 		}
 		language.copyDefaults(getLanguageFile());
-		
+
 		language.saveConfig();
-		if(EnchantmentSolution.getPlugin().isInitializing()) {
+		if (EnchantmentSolution.getPlugin().isInitializing()) {
 			ChatUtils.sendInfo("Language file initialized!");
 		}
 	}
@@ -85,23 +85,23 @@ public class LanguageFiles {
 	public void setLanguageConfig(YamlConfigBackup language) {
 		this.language = language;
 	}
-	
+
 	public void setLanguage(File langFile, Language lang) {
 		languageFile = langFile;
 		defaultLanguage = lang;
 		createDefaultFiles();
 		YamlConfig main = EnchantmentSolution.getPlugin().getConfigFiles().getDefaultConfig();
 		boolean getFromConfig = true;
-		if(main.getBoolean("reset_language")) {
+		if (main.getBoolean("reset_language")) {
 			getFromConfig = false;
 			main.set("reset_language", false);
 			main.saveConfig();
 		}
 		save(getFromConfig);
 	}
-	
+
 	private YamlConfig getLanguageFile() {
-		switch(defaultLanguage) {
+		switch (defaultLanguage) {
 		case US:
 			return englishUS;
 		case GERMAN:
@@ -109,10 +109,10 @@ public class LanguageFiles {
 		}
 		return englishUS;
 	}
-	
+
 	private void createDefaultFiles() {
 		File dataFolder = EnchantmentSolution.getPlugin().getDataFolder();
-		
+
 		try {
 			File langs = new File(dataFolder + "/languages/");
 			if (!langs.exists()) {
@@ -129,9 +129,9 @@ public class LanguageFiles {
 		defaultenglishUSFile();
 		defaultGermanFile();
 	}
-	
+
 	private void defaultenglishUSFile() {
-		if(englishUS == null)
+		if (englishUS == null)
 			englishUS = new YamlConfigBackup(englishUSFile, new String[0]);
 				
 		File file = files.getTempFile("/resources/en_us.yml");
@@ -147,24 +147,52 @@ public class LanguageFiles {
 				}
 			}
 		}
-		
-		for (Iterator<java.util.Map.Entry<Material, String>> it = ItemType.ALL.getUnlocalizedNames().entrySet().iterator(); it.hasNext();) {
-			java.util.Map.Entry<Material, String> e = it.next();
-			englishUS.addDefault("vanilla." + e.getValue(), ItemNameNMS.returnLocalizedItemName(Language.US, e.getKey()));
+
+		for(CustomEnchantment enchant: DefaultEnchantments.getEnchantments()) {
+			String enchantmentDescription = enchant.getDefaultDescription(Language.US);
+			if (enchantmentDescription == null) {
+				enchantmentDescription = "No description specified";
+			}
+			if (enchant.getRelativeEnchantment() instanceof ApiEnchantmentWrapper) {
+				JavaPlugin plugin = ((ApiEnchantmentWrapper) enchant.getRelativeEnchantment()).getPlugin();
+				if (plugin == null) {
+					ChatUtils.sendToConsole(Level.WARNING,
+							"Enchantment " + enchant.getName() + " (Display Name " + enchant.getDisplayName() + ")"
+									+ " does not have a JavaPlugin set. Refusing to set language defaults.");
+					continue;
+				}
+				englishUS.addDefault(
+						"enchantment.descriptions." + plugin.getName().toLowerCase() + "." + enchant.getName(),
+						StringUtils.encodeString(enchantmentDescription));
+			} else if (enchant.getRelativeEnchantment() instanceof CustomEnchantmentWrapper) {
+				englishUS.addDefault("enchantment.descriptions." + "custom_enchantments." + enchant.getName(),
+						StringUtils.encodeString(enchantmentDescription));
+			} else {
+				englishUS.addDefault("enchantment.descriptions." + "default_enchantments." + enchant.getName(),
+						StringUtils.encodeString(enchantmentDescription));
+			}
 		}
 		
-		for(ESAdvancement advancement : ESAdvancement.values()) {
+		for(Iterator<java.util.Map.Entry<Material, String>> it = ItemType.ALL.getUnlocalizedNames().entrySet()
+				.iterator(); it.hasNext();) {
+			java.util.Map.Entry<Material, String> e = it.next();
+			englishUS.addDefault("vanilla." + e.getValue(),
+					ItemNameNMS.returnLocalizedItemName(Language.US, e.getKey()));
+		}
+
+		for(ESAdvancement advancement: ESAdvancement.values()) {
 			List<ESLocalization> localizations = advancement.getLocalizations();
 			String localeName = "No name specified";
 			String localeDescription = "No description specified";
-			for(ESLocalization locale : localizations) {
-				if(locale.getLanguage() == Language.US) {
+			for(ESLocalization locale: localizations) {
+				if (locale.getLanguage() == Language.US) {
 					localeName = locale.getName();
 					localeDescription = locale.getDescription();
 				}
 			}
 			englishUS.addDefault("advancements." + advancement.getNamespace().getKey() + ".name", localeName);
-			englishUS.addDefault("advancements." + advancement.getNamespace().getKey() + ".description", localeDescription);
+			englishUS.addDefault("advancements." + advancement.getNamespace().getKey() + ".description",
+					localeDescription);
 		}
 		
 		englishUS.saveConfig();
@@ -172,7 +200,7 @@ public class LanguageFiles {
 	}
 
 	private void defaultGermanFile() {
-		if(german == null)
+		if (german == null)
 			german = new YamlConfigBackup(germanFile, new String[0]);
 				
 		File file = files.getTempFile("/resources/de_de.yml");
@@ -191,29 +219,36 @@ public class LanguageFiles {
 		
 		for(CustomEnchantment enchant: DefaultEnchantments.getEnchantments()) {
 			String enchantmentDescription = enchant.getDefaultDescription(Language.GERMAN);
-			if(enchantmentDescription == null) {
+			if (enchantmentDescription == null) {
 				enchantmentDescription = "Keine Beschreibung angegeben";
 			}
 			if (enchant.getRelativeEnchantment() instanceof ApiEnchantmentWrapper) {
 				JavaPlugin plugin = ((ApiEnchantmentWrapper) enchant.getRelativeEnchantment()).getPlugin();
-				if(plugin == null) {
-					ChatUtils.sendToConsole(Level.WARNING, "Enchantment " + enchant.getName() + " (Display Name " + enchant.getDisplayName() + ")"
-							+ " does not have a JavaPlugin set. Refusing to set language defaults.");
+				if (plugin == null) {
+					ChatUtils.sendToConsole(Level.WARNING,
+							"Enchantment " + enchant.getName() + " (Display Name " + enchant.getDisplayName() + ")"
+									+ " does not have a JavaPlugin set. Refusing to set language defaults.");
 					continue;
 				}
-				german.addDefault("enchantment.descriptions." + plugin.getName().toLowerCase() + "." + enchant.getName(), StringUtils.encodeString(enchantmentDescription));
+				german.addDefault(
+						"enchantment.descriptions." + plugin.getName().toLowerCase() + "." + enchant.getName(),
+						StringUtils.encodeString(enchantmentDescription));
 			} else if (enchant.getRelativeEnchantment() instanceof CustomEnchantmentWrapper) {
-				german.addDefault("enchantment.descriptions." + "custom_enchantments." + enchant.getName(), StringUtils.encodeString(enchantmentDescription));
+				german.addDefault("enchantment.descriptions." + "custom_enchantments." + enchant.getName(),
+						StringUtils.encodeString(enchantmentDescription));
 			} else {
-				german.addDefault("enchantment.descriptions." + "default_enchantments." + enchant.getName(), StringUtils.encodeString(enchantmentDescription));
+				german.addDefault("enchantment.descriptions." + "default_enchantments." + enchant.getName(),
+						StringUtils.encodeString(enchantmentDescription));
 			}
 		}
-		
-		for (Iterator<java.util.Map.Entry<Material, String>> it = ItemType.ALL.getUnlocalizedNames().entrySet().iterator(); it.hasNext();) {
+
+		for(Iterator<java.util.Map.Entry<Material, String>> it = ItemType.ALL.getUnlocalizedNames().entrySet()
+				.iterator(); it.hasNext();) {
 			java.util.Map.Entry<Material, String> e = it.next();
-			german.addDefault("vanilla." + e.getValue(), ItemNameNMS.returnLocalizedItemName(Language.GERMAN, e.getKey()));
+			german.addDefault("vanilla." + e.getValue(),
+					ItemNameNMS.returnLocalizedItemName(Language.GERMAN, e.getKey()));
 		}
-		
+
 		german.saveConfig();
 		file.delete();
 	}

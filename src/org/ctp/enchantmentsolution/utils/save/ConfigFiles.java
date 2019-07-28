@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Iterator;
@@ -250,8 +251,12 @@ public class ConfigFiles {
 			ChatUtils.sendInfo("Loading enchantment config...");
 		}
 
-		String[] header = { "Enchantment Solution", "Plugin by", "crashtheparty" };
-		enchantment = new YamlConfigBackup(enchantmentFile, header);
+		List<String> header = new ArrayList<String>();
+		header.addAll(Arrays.asList("Enchantment Solution", "Plugin by", "crashtheparty" ));
+		if(config.getString("enchanting_table.enchanting_type", "enhanced_50").contains("custom")) {
+			header.add("THIS FILE IS NOT BEING USED. PLEASE USE enchantments-advanced.yml!");
+		}
+		enchantment = new YamlConfigBackup(enchantmentFile, header.toArray(new String[] {}));
 
 		enchantment.getFromConfig();
 
@@ -282,8 +287,12 @@ public class ConfigFiles {
 			ChatUtils.sendInfo("Loading advanced enchantment config...");
 		}
 
-		String[] header = { "Enchantment Solution", "Plugin by", "crashtheparty" };
-		enchantmentAdvanced = new YamlConfigBackup(enchantmentAdvancedFile, header);
+		List<String> header = new ArrayList<String>();
+		header.addAll(Arrays.asList("Enchantment Solution", "Plugin by", "crashtheparty" ));
+		if(!config.getString("enchanting_table.enchanting_type", "enhanced_50").contains("custom")) {
+			header.add("THIS FILE IS NOT BEING USED. PLEASE USE enchantments.yml!");
+		}
+		enchantmentAdvanced = new YamlConfigBackup(enchantmentAdvancedFile, header.toArray(new String[] {}));
 
 		if (!config.getBoolean("enchanting_table.reset_enchantments_advanced")) {
 			enchantmentAdvanced.getFromConfig();
