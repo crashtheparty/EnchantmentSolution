@@ -29,6 +29,7 @@ public class Anvil implements InventoryData{
 	private UpdateItem combinedItem;
 	private Block block;
 	private boolean inLegacy;
+	private boolean opening;
 
 	public Anvil(Player player, Block block) {
 		this.setPlayer(player);
@@ -48,14 +49,7 @@ public class Anvil implements InventoryData{
 				size = 45;
 			}
 			Inventory inv = Bukkit.createInventory(null, size, ChatUtils.getMessage(getCodes(), "anvil.name"));
-			if(inventory == null || isInLegacy()) {
-				inLegacy = false;
-				inventory = inv;
-				player.openInventory(inv);
-			} else {
-				inv = player.getOpenInventory().getTopInventory();
-				inventory = inv;
-			}
+			inv = open(inv);
 	
 			ItemStack mirror = new ItemStack(Material.BLACK_STAINED_GLASS_PANE);
 			ItemMeta mirrorMeta = mirror.getItemMeta();
@@ -318,5 +312,30 @@ public class Anvil implements InventoryData{
 
 	public void setInLegacy(boolean inLegacy) {
 		this.inLegacy = inLegacy;
+	}
+
+	@Override
+	public Inventory open(Inventory inv) {
+		opening = true;
+		if(inventory == null || isInLegacy()) {
+			inLegacy = false;
+			inventory = inv;
+			player.openInventory(inv);
+		} else {
+			if(inv.getSize() == inventory.getSize()) {
+				inv = player.getOpenInventory().getTopInventory();
+				inventory = inv;
+			} else {
+				inventory = inv;
+				player.openInventory(inv);
+			}
+		}
+		for(int i = 0; i < inventory.getSize(); i++) {
+			inventory.setItem(i, new ItemStack(Material.AIR));
+		}
+		if(opening) {
+			opening = false;
+		}
+		return inv;
 	}
 }
