@@ -3,7 +3,6 @@ package org.ctp.enchantmentsolution.enchantments;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -62,75 +61,7 @@ public abstract class CustomEnchantment {
 	
 	protected abstract List<ItemType> getAnvilItemTypes();
 	
-	public List<String> getEnchantmentItemTypesLore(){
-		List<String> lore = new ArrayList<String>();
-		if(getEnchantmentItemTypes().size() > 0) {
-			if (getEnchantmentItemTypes().get(0).equals(ItemType.ALL)) {
-				lore.add(ChatColor.GRAY + getEnchantmentItemTypes().get(0).getDisplayName());
-			} else {
-				boolean includesBooks = false;
-				for(ItemType type : getEnchantmentItemTypes()) {
-					lore.add(ChatColor.GRAY + type.getDisplayName());
-					if(type.getDisplayName().equals("Books")) {
-						includesBooks = true;
-					}
-				}
-				if(!includesBooks) {
-					lore.add(ChatColor.GRAY + "Books");
-				}
-			}
-		} else {
-			lore.add(ChatColor.GRAY + "None");
-		}
-		return lore;
-	}
-	
-	public List<String> getAnvilItemTypesLore(){
-		List<String> lore = new ArrayList<String>();
-		if(getAnvilItemTypes().size() > 0) {
-			if (getAnvilItemTypes().get(0).equals(ItemType.ALL)) {
-				lore.add(ChatColor.GRAY + getAnvilItemTypes().get(0).getDisplayName());
-			} else {
-				boolean includesBooks = false;
-				for(ItemType type : getAnvilItemTypes()) {
-					lore.add(ChatColor.GRAY + type.getDisplayName());
-					if(type.getDisplayName().equals("Books")) {
-						includesBooks = true;
-					}
-				}
-				if(!includesBooks) {
-					lore.add(ChatColor.GRAY + "Books");
-				}
-			}
-		} else {
-			lore.add(ChatColor.GRAY + "None");
-		}
-		return lore;
-	}
-	
 	protected abstract List<Enchantment> getDefaultConflictingEnchantments();
-
-	public List<String> getConflictingEnchantmentsLore() {
-		List<String> lore = new ArrayList<String>();
-		if(getConflictingEnchantments().size() > 0) {
-			for(Enchantment ench : getConflictingEnchantments()) {
-				if(DefaultEnchantments.getCustomEnchantment(ench) != null) {
-					lore.add(ChatColor.GRAY + DefaultEnchantments.getCustomEnchantment(ench).getDisplayName());
-				}
-			}
-		}
-		return lore;
-	}
-
-	public List<String> getDisabledItemsLore() {
-		List<String> lore = new ArrayList<String>();
-		if(getDisabledItems().size() > 0) {
-			for(Material material : getDisabledItems()) {
-				lore.add(ChatColor.GRAY + material.name());
-			}
-		}
-		return lore;
-	}
 	
 	public List<Enchantment> getConflictingEnchantments(){
 		if(conflictingEnchantments == null) {
@@ -171,106 +102,8 @@ public abstract class CustomEnchantment {
 		}
 		this.conflictingEnchantments = conflictingEnchantments;
 	}
-	
-	public List<String> getDetailsArray(){
-		List<String> pages = new ArrayList<String>();
-		
-		pages.add(ChatUtils.getMessage(ChatUtils.getCodes(), "enchantment.name") + getDisplayName());
-		pages.add(ChatUtils.getMessage(ChatUtils.getCodes(), "enchantment.description") + getDescription());
-		pages.add(ChatUtils.getMessage(ChatUtils.getCodes(), "enchantment.max-level") + getMaxLevel() + ".");
-		pages.add(ChatUtils.getMessage(ChatUtils.getCodes(), "enchantment.weight") + getWeightName() + ".");
-		pages.add(ChatUtils.getMessage(ChatUtils.getCodes(), "enchantment.start-level") + getStartLevel() + ".");
-		pages.add(ChatUtils.getMessage(ChatUtils.getCodes(), "enchantment.enchantable-items"));
-		
-		if(getEnchantmentItemTypes().size() > 0) {
-			if (getEnchantmentItemTypes().get(0).equals(ItemType.ALL)) {
-				pages.add(getEnchantmentItemTypes().get(0).getDisplayName() + ".");
-			} else {
-				String page = "";
-				boolean includesBooks = false;
-				for(ItemType type : getEnchantmentItemTypes()) {
-					page += type.getDisplayName() + ", ";
-					if(type.getDisplayName().equals("Books")) {
-						includesBooks = true;
-					}
-				}
-				if(!includesBooks) {
-					pages.add("Books.");
-				} else {
-					pages.add(page.substring(0, page.lastIndexOf(", ")) + ".");
-				}
-			}
-		} else {
-			pages.add("None.");
-		}
-		
-		if(getAnvilItemTypes().size() > 0) {
-			if (getAnvilItemTypes().get(0).equals(ItemType.ALL)) {
-				pages.add(getAnvilItemTypes().get(0).getDisplayName() + ".");
-			} else {
-				boolean includesBooks = false;
-				String page = "";
-				for(ItemType type : getAnvilItemTypes()) {
-					page += type.getDisplayName() + ", ";
-					if(type.getDisplayName().equals("Books")) {
-						includesBooks = true;
-					}
-				}
-				if(!includesBooks) {
-					pages.add("Books.");
-				} else {
-					pages.add(page.substring(0, page.lastIndexOf(", ")) + ".");
-				}
-			}
-		} else {
-			pages.add("None.");
-		}
-		
-		pages.add(ChatUtils.getMessage(ChatUtils.getCodes(), "enchantment.disabled-items"));
-		if(getDisabledItems().size() > 0) {
-			List<String> names = new ArrayList<String>();
-			for(int i = 0; i < getDisabledItems().size(); i++) {
-				Material mat = getDisabledItems().get(i);
-				names.add(mat.name());
-			}
-			
-			if(names.isEmpty()) {
-				pages.add("None.");
-			} else {
-				pages.add(StringUtils.join(names, ",") + ".");
-			}
-		} else {
-			pages.add("None.");
-		}
-
-		pages.add(ChatUtils.getMessage(ChatUtils.getCodes(), "enchantment.conflicting-enchantments"));
-		if(getConflictingEnchantments().size() > 0) {
-			List<String> names = new ArrayList<String>();
-			for(int i = 0; i < getConflictingEnchantments().size(); i++) {
-				Enchantment enchant = getConflictingEnchantments().get(i);
-				CustomEnchantment custom = DefaultEnchantments.getCustomEnchantment(enchant);
-				if(custom != null && !custom.getRelativeEnchantment().equals(this.getRelativeEnchantment())) {
-					names.add(custom.getDisplayName());
-				}
-			}
-			
-			if(names.isEmpty()) {
-				pages.add("None.");
-			} else {
-				pages.add(StringUtils.join(names, ",") + ".");
-			}
-		} else {
-			pages.add("None.");
-		}
-		
-		pages.add(ChatUtils.getMessage(ChatUtils.getCodes(), "enchantment.enabled") + isEnabled() + ".");
-		pages.add(ChatUtils.getMessage(ChatUtils.getCodes(), "enchantment.treasure") + isTreasure() + ".");
-		
-		return pages;
-	}
 
 	public String getDetails() {
-		
 		String page = "\n" + "\n" + 
 				ChatUtils.getMessage(ChatUtils.getCodes(), "enchantment.name") + getDisplayName() + "\n" + "\n";
 		page += ChatUtils.getMessage(ChatUtils.getCodes(), "enchantment.description") + getDescription() + "\n";

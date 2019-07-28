@@ -1,33 +1,44 @@
 package org.ctp.enchantmentsolution.nms;
 
-import java.util.Random;
-
-import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
-import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
-import org.bukkit.entity.Player;
-
-import net.minecraft.server.v1_14_R1.BlockPosition;
-import net.minecraft.server.v1_14_R1.PacketPlayOutBlockBreakAnimation;
+import org.ctp.enchantmentsolution.EnchantmentSolution;
+import org.ctp.enchantmentsolution.nms.packet.Packet_v1_13_R1;
+import org.ctp.enchantmentsolution.nms.packet.Packet_v1_13_R2;
+import org.ctp.enchantmentsolution.nms.packet.Packet_v1_14_R1;
 
 public class PacketNMS {
 
 	public static int addParticle(Block block, int stage) {
-		int rand = Math.abs(new Random().nextInt());
-		PacketPlayOutBlockBreakAnimation packet = new PacketPlayOutBlockBreakAnimation(rand, 
-				new BlockPosition(block.getX(), block.getY(), block.getZ()), stage);
-		for(Player player : Bukkit.getOnlinePlayers()) {
-			((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
+		switch(EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber()) {
+		case 1:
+			return Packet_v1_13_R1.addParticle(block, stage);
+		case 2:
+		case 3:
+			return Packet_v1_13_R2.addParticle(block, stage);
+		case 4:
+		case 5:
+		case 6:
+		case 7:
+		case 8:
+			return Packet_v1_14_R1.addParticle(block, stage);
 		}
-		return rand;
+		return 0;
 	}
 	
 	public static int updateParticle(Block block, int stage, int id) {
-		PacketPlayOutBlockBreakAnimation packet = new PacketPlayOutBlockBreakAnimation(id, 
-				new BlockPosition(block.getX(), block.getY(), block.getZ()), stage);
-		for(Player player : Bukkit.getOnlinePlayers()) {
-			((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
+		switch(EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber()) {
+		case 1:
+			return Packet_v1_13_R1.updateParticle(block, stage, id);
+		case 2:
+		case 3:
+			return Packet_v1_13_R2.updateParticle(block, stage, id);
+		case 4:
+		case 5:
+		case 6:
+		case 7:
+		case 8:
+			return Packet_v1_14_R1.updateParticle(block, stage, id);
 		}
-		return id;
+		return 0;
 	}
 }

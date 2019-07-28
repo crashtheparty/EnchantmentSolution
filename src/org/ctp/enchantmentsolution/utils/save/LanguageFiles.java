@@ -148,6 +148,31 @@ public class LanguageFiles {
 			}
 		}
 
+		for(CustomEnchantment enchant: DefaultEnchantments.getEnchantments()) {
+			String enchantmentDescription = enchant.getDefaultDescription(Language.US);
+			if (enchantmentDescription == null) {
+				enchantmentDescription = "No description specified";
+			}
+			if (enchant.getRelativeEnchantment() instanceof ApiEnchantmentWrapper) {
+				JavaPlugin plugin = ((ApiEnchantmentWrapper) enchant.getRelativeEnchantment()).getPlugin();
+				if (plugin == null) {
+					ChatUtils.sendToConsole(Level.WARNING,
+							"Enchantment " + enchant.getName() + " (Display Name " + enchant.getDisplayName() + ")"
+									+ " does not have a JavaPlugin set. Refusing to set language defaults.");
+					continue;
+				}
+				englishUS.addDefault(
+						"enchantment.descriptions." + plugin.getName().toLowerCase() + "." + enchant.getName(),
+						StringUtils.encodeString(enchantmentDescription));
+			} else if (enchant.getRelativeEnchantment() instanceof CustomEnchantmentWrapper) {
+				englishUS.addDefault("enchantment.descriptions." + "custom_enchantments." + enchant.getName(),
+						StringUtils.encodeString(enchantmentDescription));
+			} else {
+				englishUS.addDefault("enchantment.descriptions." + "default_enchantments." + enchant.getName(),
+						StringUtils.encodeString(enchantmentDescription));
+			}
+		}
+		
 		for(Iterator<java.util.Map.Entry<Material, String>> it = ItemType.ALL.getUnlocalizedNames().entrySet()
 				.iterator(); it.hasNext();) {
 			java.util.Map.Entry<Material, String> e = it.next();
