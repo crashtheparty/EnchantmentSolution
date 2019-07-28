@@ -178,28 +178,4 @@ public class ChatUtils {
 		}
 		return output.toString();
 	}
-
-	public static List<String> splitForLore(String description) {
-		List<String> lore = new ArrayList<String>();
-		String[] desc = description.split("\n");
-		for(String d : desc) {
-			String[] words = d.split(" ");
-			String str = "";
-			for(String word : words) {
-				if(!str.equals("") && (str + " " + word).length() > 40) {
-					lore.add(ChatColor.GRAY + str.trim());
-					str = word;
-				} else if (word.length() > 40) {
-					lore.add(ChatColor.GRAY + word.trim());
-					str = "";
-				} else {
-					str += " " + word;
-				}
-			}
-			if(!str.equals("")) {
-				lore.add(ChatColor.GRAY + str.trim());
-			}
-		}
-		return lore;
-	}
 }
