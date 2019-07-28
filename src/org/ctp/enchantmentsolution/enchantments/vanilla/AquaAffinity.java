@@ -13,19 +13,9 @@ import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 public class AquaAffinity extends CustomEnchantment{
 
 	public AquaAffinity() {
-		addDefaultDisplayName("Aqua Affinity");
+		super("Aqua Affinity", 15, 1, 0, 0, 15, 1, 1, 1, Weight.RARE, "Increases underwater mining rate.");
 		addDefaultDisplayName(Language.GERMAN, "Wasseraffinität");
-		setDefaultFiftyConstant(15);
-		setDefaultThirtyConstant(1);
-		setDefaultFiftyModifier(0);
-		setDefaultThirtyModifier(0);
-		setDefaultFiftyStartLevel(15);
-		setDefaultThirtyStartLevel(1);
-		setDefaultFiftyMaxLevel(1);
-		setDefaultThirtyMaxLevel(1);
-		setDefaultWeight(Weight.RARE);
 		setMaxLevelOne(true);
-		addDefaultDescription("Increases underwater mining rate.");
 		addDefaultDescription(Language.GERMAN, "Erhöht die Unterwasserabbaugeschwindigkeit.");
 	}
 	

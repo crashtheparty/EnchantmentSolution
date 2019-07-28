@@ -13,18 +13,8 @@ import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 public class HardBounce extends CustomEnchantment{
 
 	public HardBounce() {
-		addDefaultDisplayName("Hard Bounce");
+		super("Hard Bounce", -4, -4, 14, 12, 1, 1, 5, 3, Weight.RARE, "Projectiles bounce back from the shield.");
 		addDefaultDisplayName(Language.GERMAN, "Harter Aufprall");
-		setDefaultFiftyConstant(-4);
-		setDefaultThirtyConstant(-4);
-		setDefaultFiftyModifier(14);
-		setDefaultThirtyModifier(12);
-		setDefaultFiftyStartLevel(1);
-		setDefaultThirtyStartLevel(1);
-		setDefaultFiftyMaxLevel(5);
-		setDefaultThirtyMaxLevel(3);
-		setDefaultWeight(Weight.UNCOMMON);
-		addDefaultDescription("Projectiles bounce back from the shield.");
 		addDefaultDescription(Language.GERMAN, "Projektile springen vom Schild zurück.");
 	}
 	

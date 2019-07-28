@@ -13,18 +13,8 @@ import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 public class Icarus extends CustomEnchantment{
 
 	public Icarus() {
-		addDefaultDisplayName("Icarus");
+		super("Icarus", 8, 5, 12, 10, 20, 1, 5, 3, Weight.VERY_RARE, "Flying upwards will occassionally increase velocity.");
 		addDefaultDisplayName(Language.GERMAN, "Ikarus");
-		setDefaultFiftyConstant(8);
-		setDefaultThirtyConstant(5);
-		setDefaultFiftyModifier(12);
-		setDefaultThirtyModifier(10);
-		setDefaultFiftyStartLevel(20);
-		setDefaultThirtyStartLevel(1);
-		setDefaultFiftyMaxLevel(5);
-		setDefaultThirtyMaxLevel(3);
-		setDefaultWeight(Weight.VERY_RARE);
-		addDefaultDescription("Flying upwards will occasionally increase velocity.");
 		addDefaultDescription(Language.GERMAN, "Aufwärtsfliegen erhöht gelegentlich die Geschwindigkeit.");
 	}
 	

@@ -13,18 +13,8 @@ import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 public class ExpShare extends CustomEnchantment{
 	
 	public ExpShare() {
-		addDefaultDisplayName("Exp. Share");
+		super("Exp. Share", 0, -2, 20, 12, 1, 1, 3, 3, Weight.UNCOMMON, "Increase experience earned from killing mobs and breaking blocks.");
 		addDefaultDisplayName(Language.GERMAN, "Erfahrung");
-		setDefaultFiftyConstant(0);
-		setDefaultThirtyConstant(-2);
-		setDefaultFiftyModifier(20);
-		setDefaultThirtyModifier(12);
-		setDefaultFiftyStartLevel(1);
-		setDefaultThirtyStartLevel(1);
-		setDefaultFiftyMaxLevel(3);
-		setDefaultThirtyMaxLevel(3);
-		setDefaultWeight(Weight.UNCOMMON);
-		addDefaultDescription("Increase experience earned from killing mobs and breaking blocks.");
 		addDefaultDescription(Language.GERMAN, "Erhöhen Sie die Erfahrung durch das Töten von Mobs und Blockaden.");
 	}
 	

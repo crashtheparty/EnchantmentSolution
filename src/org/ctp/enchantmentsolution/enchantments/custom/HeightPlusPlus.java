@@ -13,18 +13,8 @@ import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 public class HeightPlusPlus extends CustomEnchantment{
 
 	public HeightPlusPlus() {
-		addDefaultDisplayName("Height++");
+		super("Height++", 0, -10, 20, 20, 15, 1, 3, 2, Weight.RARE, "Increase up/down break radius by 1 per level.");
 		addDefaultDisplayName(Language.GERMAN, "Höhe++");
-		setDefaultFiftyConstant(0);
-		setDefaultThirtyConstant(-10);
-		setDefaultFiftyModifier(20);
-		setDefaultThirtyModifier(20);
-		setDefaultFiftyStartLevel(15);
-		setDefaultThirtyStartLevel(1);
-		setDefaultFiftyMaxLevel(3);
-		setDefaultThirtyMaxLevel(2);
-		setDefaultWeight(Weight.RARE);
-		addDefaultDescription("Increase up/down break radius by 1 per level.");
 		addDefaultDescription(Language.GERMAN, "Erhöhen Sie den Aufwärts- / Abwärtsbruch-Radius um 1 pro Ebene.");
 	}
 	

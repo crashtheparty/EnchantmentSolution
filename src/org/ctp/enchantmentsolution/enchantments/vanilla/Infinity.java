@@ -12,6 +12,7 @@ import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 public class Infinity extends CustomEnchantment{
 	
 	public Infinity() {
+		super("Angler", 0, 0, 10, 8, 1, 1, 5, 3, Weight.RARE, "Catch one additional fish per level if you caught a fish.");
 		addDefaultDisplayName("Infinity");
 		addDefaultDisplayName(Language.GERMAN, "Unendlichkeit");
 		setDefaultFiftyConstant(35);

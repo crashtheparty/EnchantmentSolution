@@ -1,5 +1,7 @@
 package org.ctp.enchantmentsolution.listeners.advancements;
 
+import java.util.List;
+
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -8,8 +10,7 @@ import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
-import org.ctp.enchantmentsolution.listeners.abilities.MagmaWalkerListener;
-import org.ctp.enchantmentsolution.listeners.abilities.VoidWalkerListener;
+import org.ctp.enchantmentsolution.listeners.abilities.WalkerListener;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.LocationUtils;
 
@@ -31,14 +32,16 @@ public class AdvancementThread implements Runnable{
 			if(player.getFireTicks() != 0 && player.getInventory().getBoots() != null) {
 				ItemStack boots = player.getInventory().getBoots();
 				if(Enchantments.hasEnchantment(boots, DefaultEnchantments.MAGMA_WALKER)) {
-					if(MagmaWalkerListener.BLOCKS.contains(player.getLocation().getBlock().getRelative(BlockFace.DOWN)) && player.getFireTicks() > 0) {
+					List<Block> blocks = WalkerListener.BLOCKS.get(DefaultEnchantments.MAGMA_WALKER);
+					if(blocks != null && blocks.contains(player.getLocation().getBlock().getRelative(BlockFace.DOWN)) && player.getFireTicks() > 0) {
 						AdvancementUtils.awardCriteria(player, ESAdvancement.THIS_GIRL_IS_ON_FIRE, "lava");
 					}
 				}
 
 				if(Enchantments.hasEnchantment(boots, DefaultEnchantments.VOID_WALKER)) {
 					Block block = player.getLocation().getBlock().getRelative(BlockFace.DOWN);
-					if(VoidWalkerListener.BLOCKS.contains(block)) {
+					List<Block> blocks = WalkerListener.BLOCKS.get(DefaultEnchantments.VOID_WALKER);
+					if(blocks != null && blocks.contains(block)) {
 						if(!LocationUtils.hasBlockBelow(block.getRelative(BlockFace.DOWN).getLocation())) {
 							AdvancementUtils.awardCriteria(player, ESAdvancement.MADE_FOR_WALKING, "boots");
 						}

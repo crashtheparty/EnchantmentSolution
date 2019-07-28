@@ -13,18 +13,8 @@ import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 public class FireProtection extends CustomEnchantment{
 	
 	public FireProtection() {
-		addDefaultDisplayName("Fire Protection");
+		super("Fire Protection", -8, 2, 15, 8, 1, 1, 4, 4, Weight.UNCOMMON, "Reduces fire damage.");
 		addDefaultDisplayName(Language.GERMAN, "Feuerschutz");
-		setDefaultFiftyConstant(-8);
-		setDefaultThirtyConstant(2);
-		setDefaultFiftyModifier(15);
-		setDefaultThirtyModifier(8);
-		setDefaultFiftyStartLevel(1);
-		setDefaultThirtyStartLevel(1);
-		setDefaultFiftyMaxLevel(4);
-		setDefaultThirtyMaxLevel(4);
-		setDefaultWeight(Weight.UNCOMMON);
-		addDefaultDescription("Reduces fire damage.");
 		addDefaultDescription(Language.GERMAN, "Reduziert Feuerschäden.");
 	}
 

@@ -13,18 +13,8 @@ import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 public class ProjectileProtection extends CustomEnchantment{
 	
 	public ProjectileProtection() {
-		addDefaultDisplayName("Projectile Protection");
+		super("Projectile Protection", -9, -3, 13, 6, 1, 1, 4, 4, Weight.UNCOMMON, "Reduces projectile damage (arrows, ghast/blaze fire charges, etc.).");
 		addDefaultDisplayName(Language.GERMAN, "Schusssicher");
-		setDefaultFiftyConstant(-9);
-		setDefaultThirtyConstant(-3);
-		setDefaultFiftyModifier(13);
-		setDefaultThirtyModifier(6);
-		setDefaultFiftyStartLevel(1);
-		setDefaultThirtyStartLevel(1);
-		setDefaultFiftyMaxLevel(4);
-		setDefaultThirtyMaxLevel(4);
-		setDefaultWeight(Weight.UNCOMMON);
-		addDefaultDescription("Reduces projectile damage (arrows, ghast/blaze fire charges, etc.).");
 		addDefaultDescription(Language.GERMAN, "Reduziert Projektilbeschädigungen (Pfeile, Feuerschläge usw.).");
 	}
 	

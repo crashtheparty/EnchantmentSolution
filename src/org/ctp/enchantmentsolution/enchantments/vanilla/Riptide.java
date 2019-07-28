@@ -12,18 +12,8 @@ import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 public class Riptide extends CustomEnchantment{
 	
 	public Riptide() {
-		addDefaultDisplayName("Riptide");
+		super("Riptide", 7, 7, 11, 19, 1, 1, 5, 3, Weight.RARE, "Allows the trident to be used as a means of fast transportation.");
 		addDefaultDisplayName(Language.GERMAN, "Sog");
-		setDefaultFiftyConstant(7);
-		setDefaultThirtyConstant(7);
-		setDefaultFiftyModifier(11);
-		setDefaultThirtyModifier(10);
-		setDefaultFiftyStartLevel(1);
-		setDefaultThirtyStartLevel(1);
-		setDefaultFiftyMaxLevel(5);
-		setDefaultThirtyMaxLevel(3);
-		setDefaultWeight(Weight.RARE);
-		addDefaultDescription("Allows the trident to be used as a means of fast transportation.");
 		addDefaultDescription(Language.GERMAN, "Ermöglicht die Verwendung des Dreizackes als schnelles Transportmittel.");
 	}
 

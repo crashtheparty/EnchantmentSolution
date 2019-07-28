@@ -17,8 +17,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.ctp.enchantmentsolution.enchantments.helper.CombineEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
-import org.ctp.enchantmentsolution.enchantments.wrappers.CustomEnchantmentWrapper;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.ConfigUtils;
 import org.ctp.enchantmentsolution.utils.StringUtils;
@@ -93,7 +93,7 @@ public class Enchantments {
 				}
 				meta.removeEnchant(enchant);
 			}
-			meta = (ItemMeta) enchantmentStorage;
+			meta = enchantmentStorage;
 			meta = Enchantments.setLore(meta, lore);
 			newItem.setItemMeta(meta);
 		}
@@ -348,7 +348,7 @@ public class Enchantments {
 					lore.add(ChatUtils.hideText("solution") + "" + ChatColor.GRAY + enchName);
 				}
 			}
-			meta = (ItemMeta) enchantmentStorage;
+			meta = enchantmentStorage;
 		} else {
 			for(EnchantmentLevel level : levels){
 				meta.addEnchant(level.getEnchant().getRelativeEnchantment(), level.getLevel(), true);
@@ -387,7 +387,7 @@ public class Enchantments {
 				String enchName = StringUtils.returnEnchantmentName(enchantment, level);
 				lore.add(ChatUtils.hideText("solution") + "" + ChatColor.GRAY + enchName);
 			}
-			meta = (ItemMeta) enchantmentStorage;
+			meta = enchantmentStorage;
 		} else {
 			if(Enchantments.hasEnchantment(item, enchantment.getRelativeEnchantment())){
 				lore = StringUtils.removeEnchantment(enchantment, meta.getEnchantLevel(enchantment.getRelativeEnchantment()), lore);
@@ -520,84 +520,8 @@ public class Enchantments {
 		return true;
 	}
 	
-	public static int combineEnchantmentsLevel(Player player, ItemStack first, ItemStack second) {
+	public static CombineEnchantments combineEnchantments(Player player, ItemStack first, ItemStack second){
 		int cost = 0;
-		ItemMeta firstMeta = first.clone().getItemMeta();
-		Map<Enchantment, Integer> firstEnchants = firstMeta.getEnchants();
-		ItemMeta secondMeta = second.clone().getItemMeta();
-		Map<Enchantment, Integer> secondEnchants = secondMeta.getEnchants();
-		if(first.getType().equals(Material.ENCHANTED_BOOK)) {
-			EnchantmentStorageMeta meta = (EnchantmentStorageMeta) firstMeta;
-			firstEnchants = meta.getStoredEnchants();
-		}
-		if(second.getType().equals(Material.ENCHANTED_BOOK)) {
-			EnchantmentStorageMeta meta = (EnchantmentStorageMeta) secondMeta;
-			secondEnchants = meta.getStoredEnchants();
-		}
-		List<EnchantmentLevel> secondLevels = new ArrayList<EnchantmentLevel>();
-		List<EnchantmentLevel> firstLevels = new ArrayList<EnchantmentLevel>();
-		for (Iterator<java.util.Map.Entry<Enchantment, Integer>> it = secondEnchants.entrySet().iterator(); it.hasNext();) {
-			java.util.Map.Entry<Enchantment, Integer> e = it.next();
-			Enchantment enchant = e.getKey();
-			int level = e.getValue();
-			for(CustomEnchantment customEnchant : Enchantments.ENCHANTMENTS) {
-				if(ConfigUtils.isRepairable(customEnchant) && customEnchant.getRelativeEnchantment().equals(enchant)) {
-					secondLevels.add(new EnchantmentLevel(customEnchant, level));
-				}
-			}
-		}
-		
-		for (Iterator<java.util.Map.Entry<Enchantment, Integer>> it = firstEnchants.entrySet().iterator(); it.hasNext();) {
-			java.util.Map.Entry<Enchantment, Integer> e = it.next();
-			Enchantment enchant = e.getKey();
-			int level = e.getValue();
-			for(CustomEnchantment customEnchant : Enchantments.ENCHANTMENTS) {
-				if(ConfigUtils.isRepairable(customEnchant) && customEnchant.getRelativeEnchantment().equals(enchant)) {
-					firstLevels.add(new EnchantmentLevel(customEnchant, level));
-				}
-			}
-		}
-		
-		boolean godAnvil = player.hasPermission("enchantmentsolution.god-anvil");
-		
-		for(EnchantmentLevel enchantTwo : secondLevels) {
-			boolean conflict = false;
-			int levelCost = enchantTwo.getLevel();
-			for(EnchantmentLevel enchantOne : firstLevels) {
-				if(enchantTwo.getEnchant().getRelativeEnchantment().equals(enchantOne.getEnchant().getRelativeEnchantment())) {
-					if (!godAnvil) {
-						if(enchantOne.getLevel() > enchantOne.getEnchant().getMaxLevel()) {
-							enchantOne.setLevel(enchantOne.getEnchant().getMaxLevel());
-						}
-						if(enchantTwo.getLevel() > enchantTwo.getEnchant().getMaxLevel()) {
-							enchantTwo.setLevel(enchantTwo.getEnchant().getMaxLevel());
-						}
-					}
-					if(enchantTwo.getLevel() == enchantOne.getLevel()) {
-						if (enchantTwo.getLevel() >= enchantTwo.getEnchant().getMaxLevel()) {
-							levelCost = enchantTwo.getLevel();
-						} else {
-							levelCost = enchantTwo.getLevel() + 1;
-						}
-					} else if (enchantTwo.getLevel() > enchantOne.getLevel()) {
-						levelCost = enchantTwo.getLevel();
-					} else {
-						levelCost = enchantOne.getLevel();
-					}
-				}else if(CustomEnchantment.conflictsWith(enchantOne.getEnchant(), enchantTwo.getEnchant())) {
-					conflict = true;
-				}
-			}
-			if(conflict && !godAnvil) {
-				cost += 1;
-			}else if(first.getType() == Material.ENCHANTED_BOOK || enchantTwo.getEnchant().canAnvilItem(first.getType()) || godAnvil) {
-				cost += levelCost * enchantTwo.getEnchant().multiplier(second.getType());
-			}
-		}
-		return cost;
-	}
-	
-	public static List<EnchantmentLevel> combineEnchants(Player player, ItemStack first, ItemStack second){
 		ItemMeta firstMeta = first.clone().getItemMeta();
 		Map<Enchantment, Integer> firstEnchants = firstMeta.getEnchants();
 		if(first.getType().equals(Material.ENCHANTED_BOOK)) {
@@ -702,9 +626,15 @@ public class Enchantments {
 			if (canAdd && (same || !conflict)) {
 				if (enchantTwo.getEnchant().canAnvilItem(first.getType()) || godAnvil) {
 					enchantments.add(new EnchantmentLevel(enchantTwo.getEnchant(), levelCost));
+					cost += levelCost * enchantTwo.getEnchant().multiplier(second.getType());
+				} else {
+					cost += 1;
 				}
 			} else if (godAnvil) {
 				enchantments.add(new EnchantmentLevel(enchantTwo.getEnchant(), levelCost));
+				cost += levelCost * enchantTwo.getEnchant().multiplier(second.getType());
+			} else {
+				cost += 1;
 			}
 		}
 		
@@ -741,7 +671,7 @@ public class Enchantments {
 			}
 		}
 		
-		return enchantments;
+		return new CombineEnchantments(cost, enchantments);
 	}
 	
 	public static ItemMeta setLore(ItemMeta meta, List<String> lore) {

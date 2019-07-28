@@ -12,18 +12,8 @@ import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 public class Punch extends CustomEnchantment{
 	
 	public Punch() {
-		addDefaultDisplayName("Punch");
+		super("Punch", -8, -8, 20, 20, 1, 1, 3, 2, Weight.RARE, "Increases knockback on bows.");
 		addDefaultDisplayName(Language.GERMAN, "Schlag");
-		setDefaultFiftyConstant(-8);
-		setDefaultThirtyConstant(-8);
-		setDefaultFiftyModifier(20);
-		setDefaultThirtyModifier(20);
-		setDefaultFiftyStartLevel(1);
-		setDefaultThirtyStartLevel(1);
-		setDefaultFiftyMaxLevel(3);
-		setDefaultThirtyMaxLevel(2);
-		setDefaultWeight(Weight.RARE);
-		addDefaultDescription("Increases knockback on bows.");
 		addDefaultDescription(Language.GERMAN, "Erhöht den Rückstoß an den Bögen.");
 	}
 	

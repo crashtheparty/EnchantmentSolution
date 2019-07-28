@@ -8,16 +8,21 @@ import java.util.List;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Particle;
+import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.Ageable;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.ExperienceOrb;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
+import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
+import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.items.DamageUtils;
 import org.ctp.enchantmentsolution.utils.items.nms.fortune.Fortune_v1_13;
 import org.ctp.enchantmentsolution.utils.items.nms.fortune.Fortune_v1_14;
@@ -27,7 +32,9 @@ import org.ctp.enchantmentsolution.utils.items.nms.smeltery.Smeltery_v1_13;
 import org.ctp.enchantmentsolution.utils.items.nms.smeltery.Smeltery_v1_14;
 
 public class AbilityUtils {
-	
+
+	private static List<Block> WAND_BLOCKS = new ArrayList<Block>();
+	private static List<Block> HEIGHT_WIDTH_BLOCKS = new ArrayList<Block>();
 	private static List<Material> CROPS = Arrays.asList(Material.WHEAT, Material.CARROTS, Material.POTATOES, Material.NETHER_WART, 
 			Material.BEETROOTS, Material.COCOA_BEANS);
 	
@@ -115,7 +122,7 @@ public class AbilityUtils {
 	
 	public static void dropExperience(Location loc, int amount) {
 		if(amount > 0) {
-			((ExperienceOrb)loc.getWorld().spawn(loc, ExperienceOrb.class)).setExperience(amount);
+			loc.getWorld().spawn(loc, ExperienceOrb.class).setExperience(amount);
 		}
 	}
 	
@@ -150,5 +157,96 @@ public class AbilityUtils {
 		} else {
 			player.giveExp(amount);
 		}
+	}
+	
+	public static int setExp(int exp, int level) {
+		int totalExp = exp;
+		if(exp > 0){
+			for(int i = 0; i < exp * level; i++){
+				double chance = .50;
+				double random = Math.random();
+				if(chance > random){
+					totalExp++;
+				}
+			}
+		}
+		return totalExp;
+	}
+	
+	public static void createEffects(Player player) {
+		int random = (int) ((Math.random() * 5) + 2);
+		int numParticles = (int) ((Math.random() * 400) + 11);
+		
+		for(int i = 0; i < random; i++) {
+			Particle particle = generateParticle();
+			player.getWorld().spawnParticle(particle, player.getLocation(), numParticles, 0.5, 2, 0.5);
+		}
+		player.getWorld().playSound(player.getLocation(), Sound.ENTITY_ELDER_GUARDIAN_CURSE, 1, 1);
+		AdvancementUtils.awardCriteria(player, ESAdvancement.LAAAGGGGGG, "lag");
+	}
+	
+	private static Particle generateParticle() {
+		Particle particle = null;
+		int tries = 0;
+		while(particle == null && tries < 10) {
+			int particleType = (int) (Math.random() * Particle.values().length);
+			particle = Particle.values()[particleType];
+			if(!particle.getDataType().isAssignableFrom(Void.class)) {
+				particle = null;
+			}
+			
+		}
+		return particle;
+	}
+	
+	public static List<DamageCause> getContactCauses() {
+		return Arrays.asList(DamageCause.BLOCK_EXPLOSION, DamageCause.CONTACT, DamageCause.CUSTOM, DamageCause.ENTITY_ATTACK,
+				DamageCause.ENTITY_EXPLOSION, DamageCause.ENTITY_SWEEP_ATTACK, DamageCause.LIGHTNING, DamageCause.PROJECTILE, DamageCause.THORNS);
+	}
+	
+	public static int getExhaustionCurse(Player player) {
+		int exhaustionCurse = 0;
+		for(ItemStack item : player.getInventory().getArmorContents()) {
+			if(item != null && Enchantments.hasEnchantment(item, DefaultEnchantments.CURSE_OF_EXHAUSTION)){
+				exhaustionCurse += Enchantments.getLevel(item, DefaultEnchantments.CURSE_OF_EXHAUSTION);
+			}
+		}
+		ItemStack mainHand = player.getInventory().getItemInMainHand();
+		if(mainHand != null && Enchantments.hasEnchantment(mainHand, DefaultEnchantments.CURSE_OF_EXHAUSTION)){
+			exhaustionCurse += Enchantments.getLevel(mainHand, DefaultEnchantments.CURSE_OF_EXHAUSTION);
+		}
+		ItemStack offHand = player.getInventory().getItemInOffHand();
+		if(offHand != null && Enchantments.hasEnchantment(offHand, DefaultEnchantments.CURSE_OF_EXHAUSTION)){
+			exhaustionCurse += Enchantments.getLevel(offHand, DefaultEnchantments.CURSE_OF_EXHAUSTION);
+		}
+		return exhaustionCurse;
+	}
+	
+	public static float getExhaustion(Player player) {
+		return player.getFoodLevel() * 4 + player.getSaturation() * 4 - player.getExhaustion();
+	}
+
+	public static List<Block> getWandBlocks() {
+		return WAND_BLOCKS;
+	}
+	
+	public static void addWandBlock(Block block) {
+		WAND_BLOCKS.add(block);
+	}
+
+	public static void removeWandBlock(Block block) {
+		WAND_BLOCKS.remove(block);
+	}
+
+	public static List<Block> getHeightWidthBlocks() {
+		return HEIGHT_WIDTH_BLOCKS;
+	}
+	
+	public static void addHeightWidthBlock(Block block) {
+		HEIGHT_WIDTH_BLOCKS.add(block);
+	}
+
+	public static void removeHeightWidthBlock(Block block) {
+		HEIGHT_WIDTH_BLOCKS.remove(block);
 	}
 }

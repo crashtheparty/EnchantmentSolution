@@ -61,7 +61,6 @@ public class Smeltery_v1_13 {
 				f.setAccessible(true);
 				material = (Material) f.get(material);
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			break;

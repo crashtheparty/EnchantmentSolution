@@ -24,17 +24,9 @@ public abstract class ApiEnchantment extends CustomEnchantment{
 	public ApiEnchantment(String englishUSDisplayName, int fiftyConstant, int thirtyConstant, int fiftyModifier, int thirtyModifier, 
 			int fiftyStartLevel, int thirtyStartLevel, int fiftyMaxLevel, int thirtyMaxLevel, 
 			Weight weight, String englishUSDescription) {
-		addDefaultDisplayName(englishUSDisplayName);
-		setDefaultFiftyConstant(fiftyConstant);
-		setDefaultThirtyConstant(thirtyConstant);
-		setDefaultFiftyModifier(fiftyModifier);
-		setDefaultThirtyModifier(thirtyModifier);
-		setDefaultFiftyStartLevel(fiftyStartLevel);
-		setDefaultThirtyStartLevel(thirtyStartLevel);
-		setDefaultFiftyMaxLevel(fiftyMaxLevel);
-		setDefaultThirtyMaxLevel(thirtyMaxLevel);
-		setDefaultWeight(weight);
-		addDefaultDescription(englishUSDescription);
+		super(englishUSDisplayName, fiftyConstant, thirtyConstant, fiftyModifier, thirtyModifier, 
+				fiftyStartLevel, thirtyStartLevel, fiftyMaxLevel, thirtyMaxLevel, 
+				weight, englishUSDescription);
 	}
 	
 }

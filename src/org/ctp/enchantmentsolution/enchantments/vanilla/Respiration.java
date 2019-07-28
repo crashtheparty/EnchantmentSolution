@@ -12,18 +12,8 @@ import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 public class Respiration extends CustomEnchantment{
 	
 	public Respiration() {
-		addDefaultDisplayName("Respiration");
+		super("Respiration", -5, 0, 15, 10, 1, 1, 3, 3, Weight.RARE, "Extends underwater breathing time.");
 		addDefaultDisplayName(Language.GERMAN, "Atmung");
-		setDefaultFiftyConstant(-5);
-		setDefaultThirtyConstant(0);
-		setDefaultFiftyModifier(15);
-		setDefaultThirtyModifier(10);
-		setDefaultFiftyStartLevel(1);
-		setDefaultThirtyStartLevel(1);
-		setDefaultFiftyMaxLevel(3);
-		setDefaultThirtyMaxLevel(3);
-		setDefaultWeight(Weight.RARE);
-		addDefaultDescription("Extends underwater breathing time.");
 		addDefaultDescription(Language.GERMAN, "Verlängert die Atmungszeit unter Wasser.");
 	}
 	

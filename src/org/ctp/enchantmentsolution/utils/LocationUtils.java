@@ -8,6 +8,10 @@ import org.bukkit.entity.Player;
 
 public class LocationUtils {
 	
+	public static boolean isLocationDifferent(Location locOne, Location locTwo, boolean includeY) {
+		return locOne.getX() != locTwo.getX() || locTwo.getZ() != locTwo.getZ() || (includeY && locTwo.getY() != locOne.getY());
+	}
+	
 	public static boolean hasBlockAbove(Player player) {
 		for(int y = player.getLocation().getBlockY(); y < player.getWorld().getMaxHeight(); y++) {
 			Location loc = player.getLocation().clone().add(0, y, 0);

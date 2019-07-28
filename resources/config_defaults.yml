@@ -1,0 +1,259 @@
+anvil: 
+    level_divisor: 4
+    max_repair_level: 60
+    default_use: false
+enchanting_table: 
+    enchanting_type: 'enhanced_50'
+    lapis_in_table: true
+    reset_enchantments_advanced: false
+    use_enchanted_books: false
+    decay: false
+
+starter: '&8[&dEnchantment Solution&8]'
+language_file: 'language.yml'
+language: 'en_us'
+reset_language: false
+use_comments: true
+version: 
+    get_latest: true
+    get_experimental: false
+max_enchantments: 0
+disable_enchant_method: 'visible'
+protection_conflicts: true
+grindstone: 
+    take_enchantments: false
+    set_repair_cost: true
+    destroy_take_item: true
+update_legacy_enchantments: false
+chest_loot: true
+mob_loot: true
+fishing_loot: true
+villager_trades: false
+loots: 
+    mobs: 
+        bookshelves: 0
+        levels: 0
+        treasure: false
+    fishing: 
+        bookshelves: 0
+        levels: 0
+        treasure: true
+    end_city_treasure: 
+        bookshelves: 15
+        levels: 3
+        treasure: true
+    simple_dungeon: 
+        bookshelves: 0
+        levels: 0
+        treasure: true
+    shipwreck_supply: 
+        bookshelves: 0
+        levels: 0
+        treasure: true
+    woodland_mansion: 
+        bookshelves: 10
+        levels: 1
+        treasure: true
+    stronghold_library: 
+        bookshelves: 10
+        levels: 1
+        treasure: true
+    stronghold_crossing: 
+        bookshelves: 10
+        levels: 1
+        treasure: true
+    stronghold_corridor: 
+        bookshelves: 10
+        levels: 1
+        treasure: true
+    underwater_ruin_big: 
+        bookshelves: 0
+        levels: 0
+        treasure: true
+    underwater_ruin_small: 
+        bookshelves: 0
+        levels: 0
+        treasure: true
+    pillager_outpost: 
+        bookshelves: 10
+        levels: 1
+        treasure: true
+config_comments: 
+    anvil: 
+        level_divisor: 
+        - 'Greater numbers allow more anvil uses.'
+
+        max_repair_level: 
+        - 'The highest repair level that will be allowed in the anvil'
+        - 'Only used when enchanting type is enhanced. '
+
+        default_use: 
+        - 'Allow default use of anvil GUI via option at bottom right of custom GUI.'
+        - 'Only used when enchanting type is enhanced.'
+        - 'Should only be true if anvil is used for custom recipes.'
+
+    enchanting_table: 
+        enchanting_type: 
+        - 'How enchanting works with the plugin'
+        - 'Options:'
+        - 'vanilla_30 - level 30 max, no higher level enchantments, use vanilla GUI, uses enchantments.yml'
+        - 'vanilla_30_custom - level 30 max, no higher level enchantments, use vanilla GUI, uses enchantments_advanced.yml'
+        - 'enhanced_30 - level 30 max, no higher level enchantments, use Enchantment Solution GUI, uses enchantments.yml'
+        - 'enhanced_30_custom - level 30 max, no higher level enchantments, use Enchantment Solution GUI, uses enchantments_advanced.yml'
+        - 'enhanced_50 - level 50 max, higher level enchantments, use Enchantment Solution GUI, uses enchantments.yml'
+        - 'enhanced_50_custom - level 50 max, higher level enchantments, use Enchantment Solution GUI, uses enchantments_advanced.yml'
+
+        lapis_in_table: 
+        - 'Lapis must be placed in the enchantment table before items can be enchanted.'
+        - 'Only used when enchanting type is enhanced.'
+
+        reset_enchantments_advanced: 
+        - 'Resets the enchantments_advanced.yml file.'
+
+        use_enchanted_books: 
+        - 'Uses the vanilla Enchanted Books rather than Books to store enchantments.'
+
+        decay: 
+        - 'Multiple enchantments generated on items will have lower levels'
+
+    starter: 
+    - 'What to display in front of messages'
+
+    language_file: 
+    - 'The yml language file'
+
+    language: 
+    - 'The default language of the language file'
+
+    reset_language: 
+    - 'Reload the entire language file'
+
+    use_comments: 
+    - 'Show helpful comments in the config files'
+
+    version: 
+        get_latest: 
+        - 'Check github for plugin releases (available on github and spigot)'
+
+        get_experimental: 
+        - 'Check github for plugin experimental versions (available only on github)'
+
+    max_enchantments: 
+    - 'Max enchantments on each item. 0 allows infinite'
+
+    disable_enchant_method: 
+    - 'How disabling an enchantment in enchantments.yml or enchantments_advanced.yml will work.'
+    - 'Options:'
+    - 'vanish - removes enchantment from items'
+    - 'visible - keeps enchantment on item, but custom effects will not work and anvil will remove enchant'
+    - 'repairable - same as above but anvil will not remove enchant'
+
+    protection_conflicts: 
+    - 'All protection types conflict with each other'
+
+    grindstone: 
+        take_enchantments: 
+        - 'Use the grindstone to add enchantments from items to books.'
+        - 'Only used when enchanting type is enhanced.'
+
+        set_repair_cost: 
+        - 'When grindstone takes enchantments, set repair cost of the generated book to the item used''s repair cost'
+
+        destroy_take_item: 
+        - 'When grindstone takes enchantments, destroy the item used'
+
+    update_legacy_enchantments: 
+    - 'Update any enchantments generated in EnchantmentSolutionLegacy'
+
+    chest_loot: 
+    - 'Allow custom and/or high level enchants to spawn in chests'
+
+    mob_loot: 
+    - 'Allow custom and/or high level enchantments to spawn on mobs'
+
+    fishing_loot: 
+    - 'Allow custom and/or high level enchantments to appear while fishing'
+
+    villager_trades: 
+    - 'Allow custom and/or high level enchants to appear in villager trades'
+
+    loots: 
+        mobs: 
+            bookshelves: 
+            - 'Modify types of enchantments generated by setting the minimum amount of bookshelves'
+
+            levels: 
+            - 'Modify types of enchantments generated by setting the minimum lapis level'
+
+            treasure: 
+            - 'Whether the enchantments generated from this format should contain treasure enchantments'
+
+        fishing: 
+            bookshelves: []
+
+            levels: []
+
+            treasure: []
+
+        end_city_treasure: 
+            bookshelves: []
+
+            levels: []
+
+            treasure: []
+
+        simple_dungeon: 
+            bookshelves: []
+
+            levels: []
+
+            treasure: []
+
+        shipwreck_supply: 
+            bookshelves: []
+
+            levels: []
+
+            treasure: []
+
+        woodland_mansion: 
+            bookshelves: []
+
+            levels: []
+
+            treasure: []
+
+        stronghold_library: 
+            bookshelves: []
+
+            levels: []
+
+            treasure: []
+
+        stronghold_crossing: 
+            bookshelves: []
+
+            levels: []
+
+            treasure: []
+
+        stronghold_corridor: 
+            bookshelves: []
+
+            levels: []
+
+            treasure: []
+
+        underwater_ruin_big: 
+            bookshelves: []
+
+            levels: []
+
+            treasure: []
+
+        underwater_ruin_small: 
+            bookshelves: []
+
+            levels: []
+
+            treasure: []

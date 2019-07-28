@@ -13,19 +13,9 @@ import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 public class Soulbound extends CustomEnchantment{
 	
 	public Soulbound() {
-		addDefaultDisplayName("Soulbound");
+		super("Soulbound", 40, 30, 0, 0, 30, 1, 1, 1, Weight.RARE, "Keep items on death.");
 		addDefaultDisplayName(Language.GERMAN, "Seelengebunden");
-		setDefaultFiftyConstant(40);
-		setDefaultThirtyConstant(30);
-		setDefaultFiftyModifier(0);
-		setDefaultThirtyModifier(0);
-		setDefaultFiftyStartLevel(30);
-		setDefaultThirtyStartLevel(1);
-		setDefaultFiftyMaxLevel(1);
-		setDefaultThirtyMaxLevel(1);
-		setDefaultWeight(Weight.RARE);
 		setMaxLevelOne(true);
-		addDefaultDescription("Keep item on death.");
 		addDefaultDescription(Language.GERMAN, "Behalte den Gegenstand auf dem Tod.");
 	}
 	

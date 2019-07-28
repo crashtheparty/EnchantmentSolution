@@ -21,7 +21,7 @@ public abstract class CustomEnchantment {
 
 	private boolean enabled = true;
 	private boolean treasure = false;
-	private String displayName = "", description = "";
+	private String displayName = null, description = "";
 	private List<EnchantmentDisplayName> defaultDisplayNames = new ArrayList<EnchantmentDisplayName>();
 	private List<EnchantmentDescription> defaultDescriptions = new ArrayList<EnchantmentDescription>();
 	private int defaultThirtyConstant = -1, defaultFiftyConstant = -1, constant = -1, defaultThirtyModifier = -1,
@@ -32,6 +32,22 @@ public abstract class CustomEnchantment {
 	private boolean maxLevelOne = false, curse = false;
 	private List<Enchantment> conflictingEnchantments = null;
 	private List<Material> disabledItems = new ArrayList<Material>();
+	
+	public CustomEnchantment(String englishUSDisplayName, int fiftyConstant, int thirtyConstant, int fiftyModifier, int thirtyModifier, 
+			int fiftyStartLevel, int thirtyStartLevel, int fiftyMaxLevel, int thirtyMaxLevel, 
+			Weight weight, String englishUSDescription) {
+		addDefaultDisplayName(englishUSDisplayName);
+		setDefaultFiftyConstant(fiftyConstant);
+		setDefaultThirtyConstant(thirtyConstant);
+		setDefaultFiftyModifier(fiftyModifier);
+		setDefaultThirtyModifier(thirtyModifier);
+		setDefaultFiftyStartLevel(fiftyStartLevel);
+		setDefaultThirtyStartLevel(thirtyStartLevel);
+		setDefaultFiftyMaxLevel(fiftyMaxLevel);
+		setDefaultThirtyMaxLevel(thirtyMaxLevel);
+		setDefaultWeight(weight);
+		addDefaultDescription(englishUSDescription);
+	}
 	
 	public abstract Enchantment getRelativeEnchantment();
 	

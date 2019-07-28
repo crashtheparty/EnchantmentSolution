@@ -13,18 +13,8 @@ import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 public class DepthStrider extends CustomEnchantment{
 	
 	public DepthStrider() {
-		addDefaultDisplayName("Depth Strider");
+		super("Depth Strider", 5, 0, 15, 10, 10, 1, 3, 3, Weight.RARE, "Increases underwater movement speed.");
 		addDefaultDisplayName(Language.GERMAN, "Wasserläufer");
-		setDefaultFiftyConstant(5);
-		setDefaultThirtyConstant(0);
-		setDefaultFiftyModifier(15);
-		setDefaultThirtyModifier(10);
-		setDefaultFiftyStartLevel(10);
-		setDefaultThirtyStartLevel(1);
-		setDefaultFiftyMaxLevel(3);
-		setDefaultThirtyMaxLevel(3);
-		setDefaultWeight(Weight.RARE);
-		addDefaultDescription("Increases underwater movement speed.");
 		addDefaultDescription(Language.GERMAN, "Erhöht die Bewegungsgeschwindigkeit unter Wasser.");
 	}
 

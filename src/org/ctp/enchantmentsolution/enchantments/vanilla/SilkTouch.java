@@ -13,23 +13,11 @@ import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 public class SilkTouch extends CustomEnchantment{
 	
 	public SilkTouch() {
-		addDefaultDisplayName("Silk Touch");
-		addDefaultDisplayName(Language.GERMAN, "Behutsamkeit");
-		setDefaultFiftyConstant(35);
-		setDefaultThirtyConstant(15);
-		setDefaultFiftyModifier(0);
-		setDefaultThirtyModifier(0);
-		setDefaultFiftyStartLevel(20);
-		setDefaultThirtyStartLevel(1);
-		setDefaultFiftyMaxLevel(1);
-		setDefaultThirtyMaxLevel(1);
-		setDefaultWeight(Weight.VERY_RARE);
-		setMaxLevelOne(true);
-		addDefaultDescription("Mined blocks drop themselves instead of the usual items." + 
-				"\n" + 
+		super("Silk Touch", 35, 15, 0, 0, 20, 1, 1, 1, Weight.VERY_RARE, "Mined blocks drop themselves instead of the usual items.\n" + 
 				"Allows collection of blocks that are normally unobtainable.");
-		addDefaultDescription(Language.GERMAN, "Abgebaute Blöcke lassen sich anstelle der üblichen Gegenstände fallen." + 
-				"\n" + 
+		addDefaultDisplayName(Language.GERMAN, "Behutsamkeit");
+		setMaxLevelOne(true);
+		addDefaultDescription(Language.GERMAN, "Abgebaute Blöcke lassen sich anstelle der üblichen Gegenstände fallen.\n" + 
 				"Ermöglicht das Sammeln von Blöcken, die normalerweise nicht erreichbar sind.");
 	}
 	

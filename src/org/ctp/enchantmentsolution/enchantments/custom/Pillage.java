@@ -13,18 +13,8 @@ import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 public class Pillage extends CustomEnchantment{
 	
 	public Pillage() {
-		addDefaultDisplayName("Pillage");
+		super("Pillage", 7, 6, 11, 9, 1, 1, 5, 3, Weight.RARE, "Increases mob drops.");
 		addDefaultDisplayName(Language.GERMAN, "Plündern");
-		setDefaultFiftyConstant(7);
-		setDefaultThirtyConstant(6);
-		setDefaultFiftyModifier(11);
-		setDefaultThirtyModifier(9);
-		setDefaultFiftyStartLevel(1);
-		setDefaultThirtyStartLevel(1);
-		setDefaultFiftyMaxLevel(5);
-		setDefaultThirtyMaxLevel(3);
-		setDefaultWeight(Weight.RARE);
-		addDefaultDescription("Increases mob drops.");
 		addDefaultDescription(Language.GERMAN, "Erhöht Mob-Tropfen.");
 	}
 	

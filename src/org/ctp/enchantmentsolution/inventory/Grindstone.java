@@ -57,36 +57,25 @@ public class Grindstone implements InventoryData{
 			ItemMeta mirrorMeta = mirror.getItemMeta();
 			mirrorMeta.setDisplayName(ChatUtils.getMessage(getCodes(), "grindstone.mirror"));
 			mirror.setItemMeta(mirrorMeta);
-			inv.setItem(0, mirror);
-			inv.setItem(1, mirror);
-			inv.setItem(2, new ItemStack(Material.AIR));
-			inv.setItem(3, mirror);
-			inv.setItem(4, mirror);
-			inv.setItem(6, mirror);
-			inv.setItem(7, new ItemStack(Material.AIR));
-			inv.setItem(8, mirror);
-			inv.setItem(9, mirror);
-			inv.setItem(10, mirror);
-			inv.setItem(11, new ItemStack(Material.AIR));
-			inv.setItem(12, mirror);
-			inv.setItem(13, mirror);
-			inv.setItem(14, mirror);
-			inv.setItem(15, mirror);
-			if (ConfigUtils.grindstoneTakeEnchantments()) {
-				inv.setItem(16, new ItemStack(Material.AIR));
-			} else {
-				inv.setItem(16, mirror);
+			for(int i = 0; i < 27; i++) {
+				switch(i) {
+				case 2:
+				case 7:
+				case 11:
+					inv.setItem(i, new ItemStack(Material.AIR));
+					break;
+				case 16:
+					if (ConfigUtils.grindstoneTakeEnchantments()) {
+						inv.setItem(i, new ItemStack(Material.AIR));
+					} else {
+						inv.setItem(i, mirror);
+					}
+					break;
+				default:
+					inv.setItem(i, mirror);
+					break;
+				}
 			}
-			inv.setItem(17, mirror);
-			inv.setItem(18, mirror);
-			inv.setItem(19, mirror);
-			inv.setItem(20, mirror);
-			inv.setItem(21, mirror);
-			inv.setItem(22, mirror);
-			inv.setItem(23, mirror);
-			inv.setItem(24, mirror);
-			inv.setItem(25, mirror);
-			inv.setItem(26, mirror);
 			
 			ItemStack combine;
 			
@@ -179,14 +168,9 @@ public class Grindstone implements InventoryData{
 			inv.setItem(5, combine);
 			
 			if(ConfigUtils.useLegacyGrindstone()) {
-				inv.setItem(27, mirror);
-				inv.setItem(28, mirror);
-				inv.setItem(29, mirror);
-				inv.setItem(30, mirror);
-				inv.setItem(32, mirror);
-				inv.setItem(33, mirror);
-				inv.setItem(34, mirror);
-				inv.setItem(35, mirror);
+				for(int i = 27; i < 36; i++) {
+					inv.setItem(i, mirror);
+				}
 				ItemStack anvil = new ItemStack(Material.ANVIL);
 				ItemMeta anvilMeta = anvil.getItemMeta();
 				anvilMeta.setDisplayName(ChatUtils.getMessage(getCodes(), "grindstone.anvil"));

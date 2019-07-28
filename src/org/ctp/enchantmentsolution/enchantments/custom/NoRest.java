@@ -13,19 +13,9 @@ import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 public class NoRest extends CustomEnchantment{
 
 	public NoRest() {
-		addDefaultDisplayName("No Rest");
+		super("No Rest", 15, 1, 0, 0, 15, 1, 1, 1, Weight.RARE, "No phantoms will spawn around you.");
 		addDefaultDisplayName(Language.GERMAN, "Keine Pause");
-		setDefaultFiftyConstant(15);
-		setDefaultThirtyConstant(1);
-		setDefaultFiftyModifier(0);
-		setDefaultThirtyModifier(0);
-		setDefaultFiftyStartLevel(15);
-		setDefaultThirtyStartLevel(1);
-		setDefaultFiftyMaxLevel(1);
-		setDefaultThirtyMaxLevel(1);
-		setDefaultWeight(Weight.RARE);
 		setMaxLevelOne(true);
-		addDefaultDescription("No phantoms will spawn around you.");
 		addDefaultDescription(Language.GERMAN, "Es werden keine Phantome um Sie herum erscheinen.");
 	}
 

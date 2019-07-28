@@ -12,18 +12,8 @@ import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 public class Unbreaking extends CustomEnchantment{
 	
 	public Unbreaking() {
-		addDefaultDisplayName("Unbreaking");
+		super("Unbreaking", -10, -3, 15, 8, 1, 1, 5, 3, Weight.UNCOMMON, "Increases effective durability.");
 		addDefaultDisplayName(Language.GERMAN, "Haltbarkeit");
-		setDefaultFiftyConstant(-10);
-		setDefaultThirtyConstant(-3);
-		setDefaultFiftyModifier(15);
-		setDefaultThirtyModifier(8);
-		setDefaultFiftyStartLevel(1);
-		setDefaultThirtyStartLevel(1);
-		setDefaultFiftyMaxLevel(5);
-		setDefaultThirtyMaxLevel(3);
-		setDefaultWeight(Weight.UNCOMMON);
-		addDefaultDescription("Increases effective durability.");
 		addDefaultDescription(Language.GERMAN, "Erhöht die effektive Haltbarkeit.");
 	}
 	

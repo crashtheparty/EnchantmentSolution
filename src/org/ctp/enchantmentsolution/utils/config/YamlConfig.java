@@ -67,6 +67,13 @@ public class YamlConfig {
 		this.comments = comments;
 	}
 	
+	public void addComments(String path, String[] values) {
+		if(path.startsWith("config_comments.")) {
+			path = path.substring("config_comments.".length());
+		}
+		defaults.get(path).setComments(values);
+	}
+	
 	public List<String> getConfigurationInfo(String path){
 		if(path == null) {
 			path = "";
@@ -499,7 +506,6 @@ public class YamlConfig {
 			config.append(getLevel(child));
 		}
 		
-		
 		return config.toString();
 	}
 	
@@ -570,7 +576,6 @@ public class YamlConfig {
 		StringBuilder config = new StringBuilder("");
 		String key = child.getPath();
 		int deep = StringUtils.countMatches(key, ".") * 4;
-		
 		if(comments) {
 			if(contains(key)) {
 				YamlInfo info = getInfo(key);
