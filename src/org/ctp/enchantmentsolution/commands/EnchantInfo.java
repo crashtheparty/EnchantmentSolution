@@ -11,10 +11,8 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
-import org.ctp.enchantmentsolution.inventory.tutorial.TutorialInventory;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -31,10 +29,7 @@ public class EnchantInfo implements CommandExecutor{
 			player = (Player) sender;
 		}
 		if(args.length == 0) {
-			TutorialInventory inv = new TutorialInventory(player);
-			EnchantmentSolution.getPlugin().addInventory(inv);
-			inv.setInventory();
-//			sendEnchantInfo(sender, 1);
+			sendEnchantInfo(sender, 1);
 		}else if(args.length == 1) {
 			try {
 				int page = Integer.parseInt(args[0]);

@@ -12,11 +12,7 @@ import org.ctp.enchantmentsolution.inventory.EnchantmentTable;
 import org.ctp.enchantmentsolution.inventory.Grindstone;
 import org.ctp.enchantmentsolution.inventory.InventoryData;
 import org.ctp.enchantmentsolution.inventory.LegacyAnvil;
-import org.ctp.enchantmentsolution.inventory.tutorial.EnchantmentInventory;
-import org.ctp.enchantmentsolution.inventory.tutorial.EnchantmentListInventory;
-import org.ctp.enchantmentsolution.inventory.tutorial.TutorialInventory;
 import org.ctp.enchantmentsolution.utils.InventoryClickUtils;
-import org.ctp.enchantmentsolution.utils.TutorialClickUtils;
 
 public class InventoryClick implements Listener {
 	
@@ -54,18 +50,6 @@ public class InventoryClick implements Listener {
 				ConfigInventory configInv = (ConfigInventory) invData;
 
 				InventoryClickUtils.setConfigInventoryDetails(configInv, player, inv, event.getClickedInventory(), event.getSlot(), event.getClick());
-			} else if (invData instanceof TutorialInventory) {
-				TutorialInventory tutorialInv = (TutorialInventory) invData;
-
-				TutorialClickUtils.setTutorialDetails(tutorialInv, player, inv, event.getClickedInventory(), event.getSlot());
-			} else if (invData instanceof EnchantmentListInventory) {
-				EnchantmentListInventory enchantmentListInventory = (EnchantmentListInventory) invData;
-
-				TutorialClickUtils.setEnchantmentListDetails(enchantmentListInventory, player, inv, event.getClickedInventory(), event.getSlot());
-			} else if (invData instanceof EnchantmentInventory) {
-				EnchantmentInventory enchantmentInventory = (EnchantmentInventory) invData;
-
-				TutorialClickUtils.setEnchantmentDetails(enchantmentInventory, player, inv, event.getClickedInventory(), event.getSlot());
 			}
 		}
 	}
