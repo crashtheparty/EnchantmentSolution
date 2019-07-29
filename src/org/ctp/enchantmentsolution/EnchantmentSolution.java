@@ -43,7 +43,6 @@ import org.ctp.enchantmentsolution.utils.save.ConfigFiles;
 import org.ctp.enchantmentsolution.utils.save.SaveUtils;
 import org.ctp.enchantmentsolution.version.BukkitVersion;
 import org.ctp.enchantmentsolution.version.PluginVersion;
-import org.ctp.eswrapper.EsWrapper;
 
 public class EnchantmentSolution extends JavaPlugin {
 
@@ -132,20 +131,28 @@ public class EnchantmentSolution extends JavaPlugin {
 			ChatUtils.sendToConsole(Level.INFO, "mcMMO Version: " + mcmmoVersion);
 			if(mcmmoVersion.substring(0, mcmmoVersion.indexOf(".")).equals("2")) {
 				ChatUtils.sendToConsole(Level.INFO, "Using the Overhaul Version!");
-				ChatUtils.sendToConsole(Level.INFO, "Checking for compatibility plugin...");
-				try {
-					if(Bukkit.getPluginManager().isPluginEnabled(EsWrapper.getPlugin())) {
-						ChatUtils.sendToConsole(Level.INFO, "Found compatibility plugin!");
-						ChatUtils.sendToConsole(EsWrapper.getLevel(), EsWrapper.getMessage());
-						mcmmoType = "Overhaul";
-					} else {
-						ChatUtils.sendToConsole(Level.WARNING, "Compatibility plugin not found! Turning off compatibility.");
-						mcmmoType = "Disabled";
+				String[] mcVersion = mcmmoVersion.split("\\.");
+				boolean warning = false;
+				for(int i = 0; i < mcVersion.length; i++) {
+					try {
+						int num = Integer.parseInt(mcVersion[i]);
+						if(i == 0 && num > 2) {
+							warning = true;
+						} else if (i == 1 && num > 1) {
+							warning = true;
+						} else if (i == 2 && num > 99) {
+							warning = true;
+						}
+					} catch (NumberFormatException ex) {
+						ex.printStackTrace();
 					}
-				} catch(NoClassDefFoundError ex) {
-					ChatUtils.sendToConsole(Level.WARNING, "Compatibility plugin not found! Turning off compatibility.");
-					mcmmoType = "Disabled";
 				}
+				if(warning) {
+					ChatUtils.sendToConsole(Level.WARNING, "McMMO Overhaul updates sporidically. Compatibility may break between versions.");
+					ChatUtils.sendToConsole(Level.WARNING, "If there are any compatibility issues, please notify the plugin author immediately.");
+					ChatUtils.sendToConsole(Level.WARNING, "Current Working Version: 2.1.99");
+				}
+				mcmmoType = "Overhaul";
 			} else {
 				ChatUtils.sendToConsole(Level.INFO, "Using the Classic Version! Compatibility should be intact.");
 				mcmmoType = "Classic";

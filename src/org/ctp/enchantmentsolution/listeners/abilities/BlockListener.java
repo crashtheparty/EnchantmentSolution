@@ -47,11 +47,11 @@ public class BlockListener extends EnchantmentListener{
 	
 	@EventHandler(priority=EventPriority.HIGHEST)
 	public void onBlockBreakHighest(BlockBreakEvent event) {
+		heightWidth(event);
 		curseOfLag(event);
 		goldDigger(event);
 		smeltery(event);
 		telepathy(event);
-		heightWidth(event);
 	}
 	
 	@EventHandler(priority=EventPriority.HIGHEST)
