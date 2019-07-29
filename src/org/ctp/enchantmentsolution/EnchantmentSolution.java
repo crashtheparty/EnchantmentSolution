@@ -9,6 +9,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.ctp.enchantmentsolution.inventory.InventoryData;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
@@ -18,6 +19,8 @@ import org.ctp.enchantmentsolution.database.SQLite;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.listeners.*;
 import org.ctp.enchantmentsolution.listeners.abilities.*;
+import org.ctp.enchantmentsolution.listeners.abilities.BlockListener;
+import org.ctp.enchantmentsolution.listeners.abilities.support.VeinMinerListener;
 import org.ctp.enchantmentsolution.listeners.advancements.AdvancementEntityDeath;
 import org.ctp.enchantmentsolution.listeners.advancements.AdvancementPlayerEvent;
 import org.ctp.enchantmentsolution.listeners.advancements.AdvancementThread;
@@ -40,7 +43,6 @@ import org.ctp.enchantmentsolution.utils.save.ConfigFiles;
 import org.ctp.enchantmentsolution.utils.save.SaveUtils;
 import org.ctp.enchantmentsolution.version.BukkitVersion;
 import org.ctp.enchantmentsolution.version.PluginVersion;
-import org.ctp.eswrapper.EsWrapper;
 
 public class EnchantmentSolution extends JavaPlugin {
 
@@ -57,6 +59,7 @@ public class EnchantmentSolution extends JavaPlugin {
 	private ConfigFiles files;
 	private VersionCheck check;
 	private String mcmmoVersion;
+	private Plugin veinMiner;
 
 	public void onEnable() {
 		PLUGIN = this;
@@ -86,75 +89,41 @@ public class EnchantmentSolution extends JavaPlugin {
 
 		SaveUtils.getData();
 		
-		getServer().getPluginManager().registerEvents(new PlayerInteract(),
-				this);
-		getServer().getPluginManager().registerEvents(new InventoryClick(),
-				this);
-		getServer().getPluginManager().registerEvents(new InventoryClose(),
-				this);
-		getServer().getPluginManager().registerEvents(new SoulboundListener(),
-				this);
-		getServer().getPluginManager().registerEvents(
-				new ShockAspectListener(), this);
-		getServer().getPluginManager().registerEvents(new WarpListener(), this);
-		getServer().getPluginManager().registerEvents(new KnockUpListener(),
-				this);
-		getServer().getPluginManager().registerEvents(new BeheadingListener(),
-				this);
-		getServer().getPluginManager().registerEvents(new WarpListener(), this);
-		getServer().getPluginManager().registerEvents(new ExpShareListener(),
-				this);
-		getServer().getPluginManager().registerEvents(
-				new MagmaWalkerListener(), this);
-		getServer().getPluginManager().registerEvents(new SniperListener(),
-				this);
-		getServer().getPluginManager().registerEvents(new TelepathyListener(),
-				this);
-		getServer().getPluginManager().registerEvents(new SmelteryListener(),
-				this);
-		getServer().getPluginManager().registerEvents(new SacrificeListener(),
-				this);
-		getServer().getPluginManager().registerEvents(new FishingListener(), this);
-		getServer().getPluginManager().registerEvents(new TankListener(), this);
-		getServer().getPluginManager().registerEvents(new BrineListener(), this);
-		getServer().getPluginManager().registerEvents(new DrownedListener(), this);
-		getServer().getPluginManager().registerEvents(new WidthHeightListener(), this);
-		getServer().getPluginManager().registerEvents(new VoidWalkerListener(), this);
-		getServer().getPluginManager().registerEvents(new IcarusListener(), this);
-		getServer().getPluginManager().registerEvents(new IronDefenseListener(), this);
-		getServer().getPluginManager().registerEvents(new HardBounceListener(), this);
-		getServer().getPluginManager().registerEvents(new MagicGuardListener(), this);
-		getServer().getPluginManager().registerEvents(new SplatterFestListener(), this);
-		getServer().getPluginManager().registerEvents(new SandVeilListener(), this);
-		getServer().getPluginManager().registerEvents(new TransmutationListener(), this);
-		getServer().getPluginManager().registerEvents(new GoldDiggerListener(), this);
-		getServer().getPluginManager().registerEvents(new FlowerGiftListener(), this);
-		getServer().getPluginManager().registerEvents(new StoneThrowListener(), this);
-		getServer().getPluginManager().registerEvents(new PillageListener(), this);
-		getServer().getPluginManager().registerEvents(new GungHoListener(), this);
-		getServer().getPluginManager().registerEvents(new WandListener(), this);
-		getServer().getPluginManager().registerEvents(new MoisturizeListener(), this);
-		getServer().getPluginManager().registerEvents(new IrenesLassoListener(), this);
-		getServer().getPluginManager().registerEvents(new CurseOfLagListener(), this);
-		getServer().getPluginManager().registerEvents(new UnrestListener(), this);
-		getServer().getPluginManager().registerEvents(new ChestLootListener(), this);
-		getServer().getPluginManager().registerEvents(new MobSpawning(), this);
-		getServer().getPluginManager().registerEvents(new VanishListener(), this);
-		getServer().getPluginManager().registerEvents(new ChatMessage(), this);
-		getServer().getPluginManager().registerEvents(new BlockListener(), this);
-		getServer().getPluginManager().registerEvents(new UpdateEnchantments(), this);
-		getServer().getPluginManager().registerEvents(new AdvancementEntityDeath(), this);
-		getServer().getPluginManager().registerEvents(new AdvancementPlayerEvent(), this);
-		getServer().getPluginManager().registerEvents(new EnchantmentListener(), this);
-		getServer().getPluginManager().registerEvents(new AnvilListener(), this);
+		registerEvent(new BlockListener());
+		registerEvent(new DamageListener());
+		registerEvent(new DeathListener());
+		registerEvent(new FishingListener());
+		registerEvent(new MiscListener());
+		registerEvent(new PlayerListener());
+		registerEvent(new ProjectileListener());
+		registerEvent(new WalkerListener());
+		registerEvent(new AdvancementEntityDeath());
+		registerEvent(new AdvancementPlayerEvent());
+		registerEvent(new org.ctp.enchantmentsolution.listeners.BlockListener());
+		registerEvent(new ChatMessage());
+		registerEvent(new ChestLootListener());
+		registerEvent(new InventoryClick());
+		registerEvent(new InventoryClose());
+		registerEvent(new MobSpawning());
+		registerEvent(new PlayerInteract());
+		registerEvent(new UpdateEnchantments());
+		registerEvent(new VanishListener());
+		registerEvent(new Villagers());
+		registerEvent(new AnvilListener());
+		registerEvent(new EnchantmentListener());
 		if(bukkitVersion.getVersionNumber() > 3) {
-			getServer().getPluginManager().registerEvents(new GrindstoneListener(), this);
+			registerEvent(new GrindstoneListener());
 		}
-		getServer().getPluginManager().registerEvents(new Villagers(), this);
 		
 		if(Bukkit.getPluginManager().isPluginEnabled("Jobs")) {
 			jobsReborn = Bukkit.getPluginManager().getPlugin("Jobs");
 			ChatUtils.sendInfo("Jobs Reborn compatibility enabled!");
+		}
+		
+		if(Bukkit.getPluginManager().isPluginEnabled("VeinMiner")) {
+			veinMiner = Bukkit.getPluginManager().getPlugin("VeinMiner");
+			ChatUtils.sendInfo("Vein Miner compatibility enabled!");
+			registerEvent(new VeinMinerListener());
 		}
 		
 		if(Bukkit.getPluginManager().isPluginEnabled("mcMMO")) {
@@ -162,20 +131,28 @@ public class EnchantmentSolution extends JavaPlugin {
 			ChatUtils.sendToConsole(Level.INFO, "mcMMO Version: " + mcmmoVersion);
 			if(mcmmoVersion.substring(0, mcmmoVersion.indexOf(".")).equals("2")) {
 				ChatUtils.sendToConsole(Level.INFO, "Using the Overhaul Version!");
-				ChatUtils.sendToConsole(Level.INFO, "Checking for compatibility plugin...");
-				try {
-					if(Bukkit.getPluginManager().isPluginEnabled(EsWrapper.getPlugin())) {
-						ChatUtils.sendToConsole(Level.INFO, "Found compatibility plugin!");
-						ChatUtils.sendToConsole(EsWrapper.getLevel(), EsWrapper.getMessage());
-						mcmmoType = "Overhaul";
-					} else {
-						ChatUtils.sendToConsole(Level.WARNING, "Compatibility plugin not found! Turning off compatibility.");
-						mcmmoType = "Disabled";
+				String[] mcVersion = mcmmoVersion.split("\\.");
+				boolean warning = false;
+				for(int i = 0; i < mcVersion.length; i++) {
+					try {
+						int num = Integer.parseInt(mcVersion[i]);
+						if(i == 0 && num > 2) {
+							warning = true;
+						} else if (i == 1 && num > 1) {
+							warning = true;
+						} else if (i == 2 && num > 99) {
+							warning = true;
+						}
+					} catch (NumberFormatException ex) {
+						ex.printStackTrace();
 					}
-				} catch(NoClassDefFoundError ex) {
-					ChatUtils.sendToConsole(Level.WARNING, "Compatibility plugin not found! Turning off compatibility.");
-					mcmmoType = "Disabled";
 				}
+				if(warning) {
+					ChatUtils.sendToConsole(Level.WARNING, "McMMO Overhaul updates sporidically. Compatibility may break between versions.");
+					ChatUtils.sendToConsole(Level.WARNING, "If there are any compatibility issues, please notify the plugin author immediately.");
+					ChatUtils.sendToConsole(Level.WARNING, "Current Working Version: 2.1.99");
+				}
+				mcmmoType = "Overhaul";
 			} else {
 				ChatUtils.sendToConsole(Level.INFO, "Using the Classic Version! Compatibility should be intact.");
 				mcmmoType = "Classic";
@@ -187,46 +164,24 @@ public class EnchantmentSolution extends JavaPlugin {
 		switch(mcmmoType) {
 		case "Overhaul":
 		case "Classic":
-			getServer().getPluginManager().registerEvents(new McMMOFishingNMS(), this);
+			registerEvent(new McMMOFishingNMS());
 			break;
 		case "Disabled":
-			getServer().getPluginManager().registerEvents(new EnchantsFishingListener(), this);
+			registerEvent(new EnchantsFishingListener());
 			break;
 		}
 		if(McMMO.getAbilities() != null) {
-			getServer().getPluginManager().registerEvents(McMMO.getAbilities(), this);
+			registerEvent(McMMO.getAbilities());
 		}
 
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN,
-				new MagmaWalkerListener(), 20l, 20l);
-		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN,
-				new FrequentFlyerListener(), 1l, 1l);
-		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN,
-						new DrownedListener(), 1l, 1l);
-		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN,
-				new UnrestListener(), 1l, 1l);
-		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN,
-				new NoRestListener(), 1l, 1l);
-		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN,
-				new VoidWalkerListener(), 1l, 1l);
-		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN,
-				new IcarusListener(), 20l, 20l);
-		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN,
-				new MagicGuardListener(), 1l, 1l);
-		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN,
-				new GungHoListener(), 1l, 1l);
-		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN,
-				new LifeListener(), 1l, 1l);
+				new AbilityPlayerRunnable(), 1l, 1l);
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN,
 				new AdvancementThread(), 1l, 1l);
-		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN, 
-				new CurseOfExhaustionListener(), 1l, 1l);
-		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN, 
-				new ArmoredListener(), 1l, 1l);
-		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN, 
-				new QuickStrikeListener(), 1l, 1l);
-		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN, 
-				new ToughnessListener(), 1l, 1l);
+		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN,
+						new MiscRunnable(), 1l, 1l);
+		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN,
+				new WalkerListener(), 1l, 1l);
 
 		getCommand("Enchant").setExecutor(new Enchant());
 		getCommand("Info").setExecutor(new EnchantInfo());
@@ -244,7 +199,7 @@ public class EnchantmentSolution extends JavaPlugin {
 		check = new VersionCheck(pluginVersion, "https://raw.githubusercontent.com/crashtheparty/EnchantmentSolution/master/VersionHistory", 
 				"https://www.spigotmc.org/resources/enchantment-solution.59556/", "https://github.com/crashtheparty/EnchantmentSolution", 
 				getConfigFiles().getDefaultConfig().getBoolean("version.get_latest"), getConfigFiles().getDefaultConfig().getBoolean("version.get_experimental"));
-		getServer().getPluginManager().registerEvents(check, this);
+		registerEvent(check);
 		checkVersion();
 		initialization = false;
 		
@@ -311,6 +266,10 @@ public class EnchantmentSolution extends JavaPlugin {
 	            return 0;
 	        }
 	    }));
+	}
+	
+	private void registerEvent(Listener l) {
+		getServer().getPluginManager().registerEvents(l, this);
 	}
 
 	public void onDisable() {
@@ -458,6 +417,10 @@ public class EnchantmentSolution extends JavaPlugin {
 
 	public String getMcMMOVersion() {
 		return mcmmoVersion;
+	}
+
+	public Plugin getVeinMiner() {
+		return veinMiner;
 	}
 
 }

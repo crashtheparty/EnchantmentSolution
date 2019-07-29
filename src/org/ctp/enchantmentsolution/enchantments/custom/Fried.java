@@ -13,19 +13,9 @@ import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 public class Fried extends CustomEnchantment{
 	
 	public Fried() {
-		addDefaultDisplayName("Fried");
+		super("Fried", 40, 15, 0, 0, 30, 1, 1, 1, Weight.RARE, "Cooks fish upon catching them.");
 		addDefaultDisplayName(Language.GERMAN, "Fritieren");
-		setDefaultFiftyConstant(40);
-		setDefaultThirtyConstant(15);
-		setDefaultFiftyModifier(0);
-		setDefaultThirtyModifier(0);
-		setDefaultFiftyStartLevel(30);
-		setDefaultThirtyStartLevel(1);
-		setDefaultFiftyMaxLevel(1);
-		setDefaultThirtyMaxLevel(1);
-		setDefaultWeight(Weight.RARE);
 		setMaxLevelOne(true);
-		addDefaultDescription("Cooks fish upon catching them.");
 		addDefaultDescription(Language.GERMAN, "Köche Fische, wenn sie gefangen werden.");
 	}
 	

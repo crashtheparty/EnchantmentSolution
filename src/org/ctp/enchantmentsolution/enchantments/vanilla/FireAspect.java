@@ -13,22 +13,10 @@ import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 public class FireAspect extends CustomEnchantment{
 	
 	public FireAspect() {
-		addDefaultDisplayName("Fire Aspect");
-		addDefaultDisplayName(Language.GERMAN, "Verbrennung");
-		setDefaultFiftyConstant(-25);
-		setDefaultThirtyConstant(-10);
-		setDefaultFiftyModifier(30);
-		setDefaultThirtyModifier(20);
-		setDefaultFiftyStartLevel(5);
-		setDefaultThirtyStartLevel(1);
-		setDefaultFiftyMaxLevel(3);
-		setDefaultThirtyMaxLevel(2);
-		setDefaultWeight(Weight.RARE);
-		addDefaultDescription("Sets the target on fire." + 
-				"\n" + 
+		super("Fire Aspect", -25, -10, 30, 20, 5, 1, 3, 2, Weight.RARE, "Sets the target on fire.\n" + 
 				"Fire Aspect adds 80 fire ticks (4 seconds of burning) per level to the target.");
-		addDefaultDescription(Language.GERMAN, "Setzt das Ziel in Brand." + 
-				"\n" + 
+		addDefaultDisplayName(Language.GERMAN, "Verbrennung");
+		addDefaultDescription(Language.GERMAN, "Setzt das Ziel in Brand.\n" + 
 				"Feueraspekt fügt dem Ziel 80 Feuerzecken (4 Sekunden Brennen) pro Stufe hinzu.");
 	}
 

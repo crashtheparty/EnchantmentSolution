@@ -10,7 +10,6 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Directional;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -20,7 +19,6 @@ import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
 import org.ctp.enchantmentsolution.inventory.Anvil;
 import org.ctp.enchantmentsolution.inventory.LegacyAnvil;
-import org.ctp.enchantmentsolution.nms.AnvilNMS;
 import org.ctp.enchantmentsolution.utils.items.DamageUtils;
 import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 import org.ctp.enchantmentsolution.utils.items.nms.ItemRepairType;
@@ -47,25 +45,6 @@ public class AnvilUtils {
 			}
 			return null;
 		}
-	}
-	
-	public static int getRepairCost(Player player, ItemStack first, ItemStack second) {
-		int repairCost = 0;
-		RepairType type = AnvilUtils.RepairType.getRepairType(first, second);
-		if(!type.equals(RepairType.RENAME) && DamageUtils.getDamage(first.getItemMeta()) != 0) {
-			repairCost += 2;
-		}
-		int repairCostOne = AnvilNMS.getRepairCost(first);
-		int repairCostTwo = AnvilNMS.getRepairCost(second);
-		repairCost += repairCostOne + repairCostTwo;
-		
-		if(type.equals(RepairType.COMBINE)) {
-			repairCost += Enchantments.combineEnchantmentsLevel(player, first, second);
-		}else if(type.equals(RepairType.REPAIR)) {
-			repairCost += ItemUtils.repairItem(first, second);
-		}
-		
-		return Math.max(repairCost / ConfigUtils.getLevelDivisor(), 1);
 	}
 
 	public static boolean canCombineItems(ItemStack first, ItemStack second) {
@@ -159,7 +138,7 @@ public class AnvilUtils {
 				block.setType(material);
 				Directional d = (Directional) block.getBlockData();
 				d.setFacing(facing);
-				block.setBlockData((BlockData) d);
+				block.setBlockData(d);
 			}
 		} else {
 			block.getWorld().playSound(block.getLocation(), Sound.BLOCK_ANVIL_USE, 1, 1);

@@ -13,18 +13,8 @@ import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 public class Sniper extends CustomEnchantment{
 	
 	public Sniper() {
-		addDefaultDisplayName("Sniper");
+		super("Sniper", 12, 5, 18, 10, 25, 1, 3, 3, Weight.RARE, "Increases speed of projectiles.");
 		addDefaultDisplayName(Language.GERMAN, "Sniper");
-		setDefaultFiftyConstant(12);
-		setDefaultThirtyConstant(5);
-		setDefaultFiftyModifier(18);
-		setDefaultThirtyModifier(10);
-		setDefaultFiftyStartLevel(25);
-		setDefaultThirtyStartLevel(1);
-		setDefaultFiftyMaxLevel(3);
-		setDefaultThirtyMaxLevel(3);
-		setDefaultWeight(Weight.RARE);
-		addDefaultDescription("Increases speed of projectiles.");
 		addDefaultDescription(Language.GERMAN, "Erhöht die Geschwindigkeit von Geschossen.");
 	}
 	

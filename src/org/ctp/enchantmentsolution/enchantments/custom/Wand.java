@@ -13,19 +13,9 @@ import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 public class Wand extends CustomEnchantment{
 	
 	public Wand() {
-		addDefaultDisplayName("Wand");
+		super("Wand", 20, 10, 15, 10, 30, 1, 3, 2, Weight.VERY_RARE, "Places blocks from the offhand.");
 		addDefaultDisplayName(Language.GERMAN, "Zauberstab");
-		setDefaultFiftyConstant(20);
-		setDefaultThirtyConstant(10);
-		setDefaultFiftyModifier(15);
-		setDefaultThirtyModifier(10);
-		setDefaultFiftyStartLevel(30);
-		setDefaultThirtyStartLevel(1);
-		setDefaultFiftyMaxLevel(3);
-		setDefaultThirtyMaxLevel(2);
-		setDefaultWeight(Weight.VERY_RARE);
 		setTreasure(true);
-		addDefaultDescription("Places blocks from the offhand.");
 		addDefaultDescription(Language.GERMAN, "Platziert Blöcke von der Nebenhand.");
 	}
 	

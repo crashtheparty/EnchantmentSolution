@@ -13,18 +13,8 @@ import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 public class Sacrifice extends CustomEnchantment{
 	
 	public Sacrifice() {
-		addDefaultDisplayName("Sacrifice");
+		super("Sacrifice", 35, 15, 15, 15, 30, 1, 2, 2, Weight.VERY_RARE, "Damage the mob who killed you based upon your experience level.");
 		addDefaultDisplayName(Language.GERMAN, "Opferung");
-		setDefaultFiftyConstant(35);
-		setDefaultThirtyConstant(15);
-		setDefaultFiftyModifier(15);
-		setDefaultThirtyModifier(15);
-		setDefaultFiftyStartLevel(30);
-		setDefaultThirtyStartLevel(1);
-		setDefaultFiftyMaxLevel(2);
-		setDefaultThirtyMaxLevel(2);
-		setDefaultWeight(Weight.VERY_RARE);
-		addDefaultDescription("Damage the mob who killed you based upon your experience level.");
 		addDefaultDescription(Language.GERMAN, "Zerstöre den Mob, der dich getötet hat, basierend auf deinem Erfahrungslevel.");
 	}
 	

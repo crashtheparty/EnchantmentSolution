@@ -34,6 +34,7 @@ public class ConfigInventory implements InventoryData{
 	private int page = 0;
 	private String level = null, type = null;
 	private boolean chat = false;
+	private boolean opening;
 	
 	public ConfigInventory(Player player) {
 		this.player = player;
@@ -97,6 +98,7 @@ public class ConfigInventory implements InventoryData{
 		ConfigFiles files = EnchantmentSolution.getPlugin().getConfigFiles();
 		
 		Inventory inv = Bukkit.createInventory(null, 27, "List Files");
+		inv = open(inv);
 		
 		ItemStack configFile = new ItemStack(Material.COMMAND_BLOCK);
 		ItemMeta configFileMeta = configFile.getItemMeta();
@@ -148,9 +150,6 @@ public class ConfigInventory implements InventoryData{
 		revertMeta.setDisplayName(ChatColor.GOLD + "Revert Changes");
 		revert.setItemMeta(revertMeta);
 		inv.setItem(23, revert);
-		
-		inventory = inv;
-		player.openInventory(inv);
 	}
 	
 	public void listConfigDetails(YamlConfigBackup config) {
@@ -886,6 +885,30 @@ public class ConfigInventory implements InventoryData{
 
 	public void setBackup(YamlConfigBackup backup) {
 		this.backup = backup;
+	}
+
+	@Override
+	public Inventory open(Inventory inv) {
+		opening = true;
+		if(inventory == null) {
+			inventory = inv;
+			player.openInventory(inv);
+		} else {
+			if(inv.getSize() == inventory.getSize()) {
+				inv = player.getOpenInventory().getTopInventory();
+				inventory = inv;
+			} else {
+				inventory = inv;
+				player.openInventory(inv);
+			}
+		}
+		for(int i = 0; i < inventory.getSize(); i++) {
+			inventory.setItem(i, new ItemStack(Material.AIR));
+		}
+		if(opening) {
+			opening = false;
+		}
+		return inv;
 	}
 
 }

@@ -13,19 +13,9 @@ import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 public class FrostWalker extends CustomEnchantment{
 	
 	public FrostWalker() {
-		addDefaultDisplayName("Frost Walker");
+		super("Frost Walker", 5, 5, 15, 10, 10, 1, 2, 2, Weight.RARE, "Creates frosted ice blocks when walking over water.");
 		addDefaultDisplayName(Language.GERMAN, "Eisläufer");
 		setTreasure(true);
-		setDefaultFiftyConstant(5);
-		setDefaultThirtyConstant(5);
-		setDefaultFiftyModifier(15);
-		setDefaultThirtyModifier(10);
-		setDefaultFiftyStartLevel(10);
-		setDefaultThirtyStartLevel(1);
-		setDefaultFiftyMaxLevel(2);
-		setDefaultThirtyMaxLevel(2);
-		setDefaultWeight(Weight.RARE);
-		addDefaultDescription("Creates frosted ice blocks when walking over water.");
 		addDefaultDescription(Language.GERMAN, "Erzeugt beim Gehen über Wasser gefrorene Eisblöcke.");
 	}
 

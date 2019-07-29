@@ -6,7 +6,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerFishEvent;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.listeners.fishing.mcmmo.McMMOClassicFishingListener;
-import org.ctp.eswrapper.McMMOOverhaulFishingListener;
+import org.ctp.enchantmentsolution.listeners.fishing.mcmmo.McMMOOverhaulFishingListener;
 
 import com.gmail.nossr50.events.skills.fishing.McMMOPlayerFishingTreasureEvent;
 

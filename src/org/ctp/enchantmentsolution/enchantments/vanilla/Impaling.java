@@ -12,22 +12,10 @@ import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 public class Impaling extends CustomEnchantment{
 	
 	public Impaling() {
-		addDefaultDisplayName("Impaling");
-		addDefaultDisplayName(Language.GERMAN, "Harpune");
-		setDefaultFiftyConstant(-12);
-		setDefaultThirtyConstant(1);
-		setDefaultFiftyModifier(13);
-		setDefaultThirtyModifier(8);
-		setDefaultFiftyStartLevel(1);
-		setDefaultThirtyStartLevel(1);
-		setDefaultFiftyMaxLevel(6);
-		setDefaultThirtyMaxLevel(5);
-		setDefaultWeight(Weight.RARE);
-		addDefaultDescription("Increases melee damage against aquatic mobs." + 
-				"\n" + 
+		super("Impaling", -12, 1, 13, 8, 1, 1, 6, 5, Weight.RARE, "Increases melee damage against aquatic mobs.\n" + 
 				"Adds 2.5 (half heart) extra damage for each additional level.");
-		addDefaultDescription(Language.GERMAN, "Erhöht Nahkampfschaden gegen Wassermobs." + 
-				"\n" + 
+		addDefaultDisplayName(Language.GERMAN, "Harpune");
+		addDefaultDescription(Language.GERMAN, "Erhöht Nahkampfschaden gegen Wassermobs.\n" + 
 				"Fügt für jede zusätzliche Stufe 2,5 (halbes Herz) zusätzlichen Schaden hinzu.");
 	}
 

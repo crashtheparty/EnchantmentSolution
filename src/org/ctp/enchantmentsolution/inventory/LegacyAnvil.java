@@ -58,4 +58,9 @@ public class LegacyAnvil implements InventoryData{
 		return;
 	}
 
+	@Override
+	public Inventory open(Inventory inv) {
+		return inv;
+	}
+
 }

@@ -13,18 +13,8 @@ import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 public class IronDefense extends CustomEnchantment{
 
 	public IronDefense() {
-		addDefaultDisplayName("Iron Defense");
+		super("Iron Defense", -4, -4, 14, 12, 1, 1, 5, 3, Weight.RARE, "Having the shield equipped will redirect damage to the shield.");
 		addDefaultDisplayName(Language.GERMAN, "Eiserne Verteidigung");
-		setDefaultFiftyConstant(-4);
-		setDefaultThirtyConstant(-4);
-		setDefaultFiftyModifier(14);
-		setDefaultThirtyModifier(12);
-		setDefaultFiftyStartLevel(1);
-		setDefaultThirtyStartLevel(1);
-		setDefaultFiftyMaxLevel(5);
-		setDefaultThirtyMaxLevel(3);
-		setDefaultWeight(Weight.UNCOMMON);
-		addDefaultDescription("Having the shield equipped will redirect damage to the shield.");
 		addDefaultDescription(Language.GERMAN, "Wenn der Schild ausgerüstet ist, werden Schäden am Schild umgeleitet.");
 	}
 	

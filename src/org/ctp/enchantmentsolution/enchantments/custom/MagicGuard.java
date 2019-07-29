@@ -13,19 +13,9 @@ import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 public class MagicGuard extends CustomEnchantment{
 	
 	public MagicGuard() {
-		addDefaultDisplayName("Magic Guard");
+		super("Magic Guard", 30, 25, 0, 0, 25, 1, 1, 1, Weight.VERY_RARE, "Negates bad potion effects.");
 		addDefaultDisplayName(Language.GERMAN, "Magischer Schutz");
-		setDefaultFiftyConstant(30);
-		setDefaultThirtyConstant(25);
-		setDefaultFiftyModifier(0);
-		setDefaultThirtyModifier(0);
-		setDefaultFiftyStartLevel(25);
-		setDefaultThirtyStartLevel(1);
-		setDefaultFiftyMaxLevel(20);
-		setDefaultThirtyMaxLevel(1);
-		setDefaultWeight(Weight.VERY_RARE);
 		setMaxLevelOne(true);
-		addDefaultDescription("Negates bad potion effects.");
 		addDefaultDescription(Language.GERMAN, "Negiert schlechte Trankeffekte.");
 	}
 

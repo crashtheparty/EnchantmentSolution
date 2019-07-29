@@ -1,7 +1,6 @@
 package org.ctp.enchantmentsolution.enchantments;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 
@@ -13,7 +12,6 @@ import org.ctp.enchantmentsolution.api.ApiEnchantmentWrapper;
 import org.ctp.enchantmentsolution.enchantments.custom.*;
 import org.ctp.enchantmentsolution.enchantments.helper.Weight;
 import org.ctp.enchantmentsolution.enchantments.vanilla.*;
-import org.ctp.enchantmentsolution.enchantments.wrappers.*;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.ConfigUtils;
 import org.ctp.enchantmentsolution.utils.StringUtils;
@@ -24,50 +22,50 @@ public class DefaultEnchantments {
 
 	private static List<CustomEnchantment> ENCHANTMENTS = new ArrayList<CustomEnchantment>();
 	
-	public static final Enchantment SOULBOUND = new SoulboundWrapper();
-	public static final Enchantment SOUL_REAPER = new SoulReaperWrapper();
-	public static final Enchantment SHOCK_ASPECT = new ShockAspectWrapper();
-	public static final Enchantment LIFE = new LifeWrapper();
-	public static final Enchantment BEHEADING = new BeheadingWrapper();
-	public static final Enchantment KNOCKUP = new KnockUpWrapper();
-	public static final Enchantment WARP = new WarpWrapper();
-	public static final Enchantment EXP_SHARE = new ExpShareWrapper();
-	public static final Enchantment MAGMA_WALKER = new MagmaWalkerWrapper();
-	public static final Enchantment SNIPER = new SniperWrapper();
-	public static final Enchantment TELEPATHY = new TelepathyWrapper();
-	public static final Enchantment SMELTERY = new SmelteryWrapper();
-	public static final Enchantment SACRIFICE = new SacrificeWrapper();
-	public static final Enchantment ANGLER = new AnglerWrapper();
-	public static final Enchantment FRIED = new FriedWrapper();
-	public static final Enchantment FREQUENT_FLYER = new FrequentFlyerWrapper();
-	public static final Enchantment TANK = new TankWrapper();
-	public static final Enchantment BRINE = new BrineWrapper();
-	public static final Enchantment DROWNED = new DrownedWrapper();
-	public static final Enchantment UNREST = new UnrestWrapper();
-	public static final Enchantment NO_REST = new NoRestWrapper();
-	public static final Enchantment WIDTH_PLUS_PLUS = new WidthPlusPlusWrapper();
-	public static final Enchantment HEIGHT_PLUS_PLUS = new HeightPlusPlusWrapper();
-	public static final Enchantment VOID_WALKER = new VoidWalkerWrapper();
-	public static final Enchantment ICARUS = new IcarusWrapper();
-	public static final Enchantment IRON_DEFENSE = new IronDefenseWrapper();
-	public static final Enchantment HARD_BOUNCE = new HardBounceWrapper();
-	public static final Enchantment MAGIC_GUARD = new MagicGuardWrapper();
-	public static final Enchantment SPLATTER_FEST = new SplatterFestWrapper();
-	public static final Enchantment SAND_VEIL = new SandVeilWrapper();
-	public static final Enchantment TRANSMUTATION = new TransmutationWrapper();
-	public static final Enchantment GOLD_DIGGER = new GoldDiggerWrapper();
-	public static final Enchantment FLOWER_GIFT = new FlowerGiftWrapper();
-	public static final Enchantment STONE_THROW = new StoneThrowWrapper();
-	public static final Enchantment PILLAGE = new PillageWrapper();
-	public static final Enchantment GUNG_HO = new GungHoWrapper();
-	public static final Enchantment WAND = new WandWrapper();
-	public static final Enchantment MOISTURIZE = new MoisturizeWrapper();
-	public static final Enchantment IRENES_LASSO = new IrenesLassoWrapper();
-	public static final Enchantment CURSE_OF_LAG = new CurseOfLagWrapper();
-	public static final Enchantment CURSE_OF_EXHAUSTION = new CurseOfExhaustionWrapper();
-	public static final Enchantment QUICK_STRIKE = new QuickStrikeWrapper();
-	public static final Enchantment TOUGHNESS = new ToughnessWrapper();
-	public static final Enchantment ARMORED = new ArmoredWrapper();
+	public static final Enchantment SOULBOUND = new CustomEnchantmentWrapper("soulbound", "SOULBOUND");
+	public static final Enchantment SOUL_REAPER = new CustomEnchantmentWrapper("soul_reaper", "SOUL_REAPER");
+	public static final Enchantment SHOCK_ASPECT = new CustomEnchantmentWrapper("shock_aspect", "SHOCK_ASPECT");
+	public static final Enchantment LIFE = new CustomEnchantmentWrapper("life", "LIFE");
+	public static final Enchantment BEHEADING = new CustomEnchantmentWrapper("beheading", "BEHEADING");
+	public static final Enchantment KNOCKUP = new CustomEnchantmentWrapper("knockip", "KNOCKUP");
+	public static final Enchantment WARP = new CustomEnchantmentWrapper("warp", "WARP");
+	public static final Enchantment EXP_SHARE = new CustomEnchantmentWrapper("exp_share", "EXP_SHARE");
+	public static final Enchantment MAGMA_WALKER = new CustomEnchantmentWrapper("magma_walker", "MAGMA_WALKER");
+	public static final Enchantment SNIPER = new CustomEnchantmentWrapper("sniper", "SNIPER");
+	public static final Enchantment TELEPATHY = new CustomEnchantmentWrapper("telepathy", "TELEPATHY");
+	public static final Enchantment SMELTERY = new CustomEnchantmentWrapper("smeltery", "SMELTERY");
+	public static final Enchantment SACRIFICE = new CustomEnchantmentWrapper("sacrifice", "SACRIFICE");
+	public static final Enchantment ANGLER = new CustomEnchantmentWrapper("angler", "ANGLER");
+	public static final Enchantment FRIED = new CustomEnchantmentWrapper("fried", "FRIED");
+	public static final Enchantment FREQUENT_FLYER = new CustomEnchantmentWrapper("frequent_flyer", "FREQUENT_FLYER");
+	public static final Enchantment TANK = new CustomEnchantmentWrapper("tank", "TANK");
+	public static final Enchantment BRINE = new CustomEnchantmentWrapper("brine", "BRINE");
+	public static final Enchantment DROWNED = new CustomEnchantmentWrapper("drowned", "DROWNED");
+	public static final Enchantment UNREST = new CustomEnchantmentWrapper("unrest", "UNREST");
+	public static final Enchantment NO_REST = new CustomEnchantmentWrapper("no_rest", "NO_REST");
+	public static final Enchantment WIDTH_PLUS_PLUS = new CustomEnchantmentWrapper("width_plus_plus", "WIDTH_PLUS_PLUS");
+	public static final Enchantment HEIGHT_PLUS_PLUS = new CustomEnchantmentWrapper("height_plus_plus", "HEIGHT_PLUS_PLUS");
+	public static final Enchantment VOID_WALKER = new CustomEnchantmentWrapper("void_walker", "VOID_WALKER");
+	public static final Enchantment ICARUS = new CustomEnchantmentWrapper("icarus", "ICARUS");
+	public static final Enchantment IRON_DEFENSE = new CustomEnchantmentWrapper("iron_defense", "IRON_DEFENSE");
+	public static final Enchantment HARD_BOUNCE = new CustomEnchantmentWrapper("hard_bounce", "HARD_BOUNCE");
+	public static final Enchantment MAGIC_GUARD = new CustomEnchantmentWrapper("magic_guard", "MAGIC_GUARD");
+	public static final Enchantment SPLATTER_FEST = new CustomEnchantmentWrapper("splatter_fest", "SPLATTER_FEST");
+	public static final Enchantment SAND_VEIL = new CustomEnchantmentWrapper("sand_veil", "SAND_VEIL");
+	public static final Enchantment TRANSMUTATION = new CustomEnchantmentWrapper("transmutation", "TRANSMUTATION");
+	public static final Enchantment GOLD_DIGGER = new CustomEnchantmentWrapper("gold_digger", "GOLD_DIGGER");
+	public static final Enchantment FLOWER_GIFT = new CustomEnchantmentWrapper("flower_gift", "FLOWER_GIFT");
+	public static final Enchantment STONE_THROW = new CustomEnchantmentWrapper("stone_throw", "STONE_THROW");
+	public static final Enchantment PILLAGE = new CustomEnchantmentWrapper("pillage", "PILLAGE");
+	public static final Enchantment GUNG_HO = new CustomEnchantmentWrapper("gung_ho", "GUNG_HO");
+	public static final Enchantment WAND = new CustomEnchantmentWrapper("wand", "WAND");
+	public static final Enchantment MOISTURIZE = new CustomEnchantmentWrapper("moisturize", "MOISTURIZE");
+	public static final Enchantment IRENES_LASSO = new CustomEnchantmentWrapper("irenes_lasso", "LASSO_OF_IRENE");
+	public static final Enchantment CURSE_OF_LAG = new CustomEnchantmentWrapper("lagging_curse", "LAGGING_CURSE");
+	public static final Enchantment CURSE_OF_EXHAUSTION = new CustomEnchantmentWrapper("exhaustion_curse", "EXHAUSTION_CURSE");
+	public static final Enchantment QUICK_STRIKE = new CustomEnchantmentWrapper("quick_strike", "QUICK_STRIKE");
+	public static final Enchantment TOUGHNESS = new CustomEnchantmentWrapper("toughness", "TOUGHNESS");
+	public static final Enchantment ARMORED = new CustomEnchantmentWrapper("armored", "ARMORED");
 
 	public static List<CustomEnchantment> getEnchantments() {
 		return ENCHANTMENTS;
@@ -92,44 +90,67 @@ public class DefaultEnchantments {
 	public static void setEnchantments() {
 		ConfigFiles files = EnchantmentSolution.getPlugin().getConfigFiles();
 		for (int i = 0; i < ENCHANTMENTS.size(); i++) {
+			CustomEnchantment enchantment = ENCHANTMENTS.get(i);
+			YamlConfig config = null;
+			boolean advanced = false;
+			YamlConfig language = files.getLanguageFile();
 			if(ConfigUtils.useAdvancedFile()) {
-				CustomEnchantment enchantment = ENCHANTMENTS.get(i);
-				YamlConfig advanced = files.getEnchantmentAdvancedConfig();
-				YamlConfig language = files.getLanguageFile();
-				String namespace = "default_enchantments";
-				if (enchantment.getRelativeEnchantment() instanceof ApiEnchantmentWrapper) {
-					JavaPlugin plugin = ((ApiEnchantmentWrapper) enchantment.getRelativeEnchantment()).getPlugin();
-					if(plugin == null) {
-						ChatUtils.sendToConsole(Level.WARNING, "Enchantment " + enchantment.getName() + " (Display Name " + enchantment.getDisplayName() + ")"
-								+ " does not have a JavaPlugin set. Refusing to set.");
-						continue;
-					}
-					namespace = plugin.getName().toLowerCase();
-				} else if (enchantment.getRelativeEnchantment() instanceof CustomEnchantmentWrapper) {
-					namespace = "custom_enchantments";
+				config = files.getEnchantmentAdvancedConfig();
+				advanced = true;
+			} else {
+				config = files.getEnchantmentConfig();
+			}
+			String namespace = "default_enchantments";
+			if (enchantment.getRelativeEnchantment() instanceof ApiEnchantmentWrapper) {
+				JavaPlugin plugin = ((ApiEnchantmentWrapper) enchantment.getRelativeEnchantment()).getPlugin();
+				if(plugin == null) {
+					ChatUtils.sendToConsole(Level.WARNING, "Enchantment " + enchantment.getName() + " (Display Name " + enchantment.getDisplayName() + ")"
+							+ " does not have a JavaPlugin set. Refusing to set.");
+					continue;
 				}
+				namespace = plugin.getName().toLowerCase();
+			} else if (enchantment.getRelativeEnchantment() instanceof CustomEnchantmentWrapper) {
+				namespace = "custom_enchantments";
+			}
+			if(!advanced && !(enchantment.getRelativeEnchantment() instanceof CustomEnchantmentWrapper)) {
 				if(Enchantments.addEnchantment(enchantment)) {
-					if (advanced.getBoolean(namespace+"."+enchantment.getName()+".enabled")) {
-						ENCHANTMENTS.get(i).setEnabled(true);
-					} else {
-						ENCHANTMENTS.get(i).setEnabled(false);
-					}
+					ENCHANTMENTS.get(i).setEnabled(true);
 				} else {
 					ENCHANTMENTS.get(i).setEnabled(false);
 				}
-				if (advanced.getBoolean(namespace+"."+enchantment.getName()+".treasure")) {
-					ENCHANTMENTS.get(i).setTreasure(true);
+				String description = StringUtils.decodeString(language.getString("enchantment.descriptions.default_enchantments."+enchantment.getName()));
+				ENCHANTMENTS.get(i).setDescription(description);
+				if(ConfigUtils.isLevel50()) {
+					ENCHANTMENTS.get(i).setLevelFifty();
 				} else {
-					ENCHANTMENTS.get(i).setTreasure(false);
+					ENCHANTMENTS.get(i).setLevelThirty();
 				}
-				int constant = advanced.getInt(namespace+"."+enchantment.getName()+".enchantability_constant");
-				int modifier = advanced.getInt(namespace+"."+enchantment.getName()+".enchantability_modifier");
-				int startLevel = advanced.getInt(namespace+"."+enchantment.getName()+".enchantability_start_level");
-				int maxLevel = advanced.getInt(namespace+"."+enchantment.getName()+".enchantability_max_level");
-				String displayName = StringUtils.decodeString(language.getString("enchantment.display_names."+namespace+"."+enchantment.getName()));
-				String description = StringUtils.decodeString(language.getString("enchantment.descriptions."+namespace+"."+enchantment.getName()));
-				Weight weight = Weight.getWeight(advanced.getString(namespace+"."+enchantment.getName()+".weight"));
-				List<String> conflictingEnchantmentsString = advanced.getStringList(namespace+"."+enchantment.getName()+".conflicting_enchantments");
+				continue;
+			}
+			
+			if(Enchantments.addEnchantment(enchantment)) {
+				if (config.getBoolean(namespace+"."+enchantment.getName()+".enabled")) {
+					ENCHANTMENTS.get(i).setEnabled(true);
+				} else {
+					ENCHANTMENTS.get(i).setEnabled(false);
+				}
+			} else {
+				ENCHANTMENTS.get(i).setEnabled(false);
+			}
+			if (config.getBoolean(namespace+"."+enchantment.getName()+".treasure")) {
+				ENCHANTMENTS.get(i).setTreasure(true);
+			} else {
+				ENCHANTMENTS.get(i).setTreasure(false);
+			}
+			String displayName = StringUtils.decodeString(language.getString("enchantment.display_names."+namespace+"."+enchantment.getName()));
+			String description = StringUtils.decodeString(language.getString("enchantment.descriptions."+namespace+"."+enchantment.getName()));
+			if(advanced) {
+				int constant = config.getInt(namespace+"."+enchantment.getName()+".enchantability_constant");
+				int modifier = config.getInt(namespace+"."+enchantment.getName()+".enchantability_modifier");
+				int startLevel = config.getInt(namespace+"."+enchantment.getName()+".enchantability_start_level");
+				int maxLevel = config.getInt(namespace+"."+enchantment.getName()+".enchantability_max_level");
+				Weight weight = Weight.getWeight(config.getString(namespace+"."+enchantment.getName()+".weight"));
+				List<String> conflictingEnchantmentsString = config.getStringList(namespace+"."+enchantment.getName()+".conflicting_enchantments");
 				List<Enchantment> conflictingEnchantments = new ArrayList<Enchantment>();
 				if(conflictingEnchantmentsString != null) {
 					for(String s : conflictingEnchantmentsString) {
@@ -139,7 +160,7 @@ public class DefaultEnchantments {
 						}
 					}
 				}
-				List<String> disabledItemsString = advanced.getStringList(namespace+"."+enchantment.getName()+".disabled_items");
+				List<String> disabledItemsString = config.getStringList(namespace+"."+enchantment.getName()+".disabled_items");
 				List<Material> disabledItems = new ArrayList<Material>();
 				if(disabledItemsString != null) {
 					for(String s : disabledItemsString) {
@@ -152,76 +173,19 @@ public class DefaultEnchantments {
 				ENCHANTMENTS.get(i).setCustom(constant, modifier, startLevel, maxLevel, weight);
 				ENCHANTMENTS.get(i).setConflictingEnchantments(conflictingEnchantments);
 				ENCHANTMENTS.get(i).setDisabledItems(disabledItems);
-				if(!namespace.equals("default_enchantments")) {
-					ENCHANTMENTS.get(i).setDisplayName(displayName);
-				} else {
-					ENCHANTMENTS.get(i).setDisplayName(ConfigUtils.getLanguage());
-				}
-				ENCHANTMENTS.get(i).setDescription(description);
 			} else {
-				CustomEnchantment enchantment = ENCHANTMENTS.get(i);
-				YamlConfig config = files.getEnchantmentConfig();
-				YamlConfig language = files.getLanguageFile();
-				String description = "", displayName = null;
-				if (enchantment.getRelativeEnchantment() instanceof ApiEnchantmentWrapper) {
-					JavaPlugin plugin = ((ApiEnchantmentWrapper) enchantment.getRelativeEnchantment()).getPlugin();
-					if(plugin == null) {
-						ChatUtils.sendToConsole(Level.WARNING, "Enchantment " + enchantment.getName() + " (Display Name " + enchantment.getDisplayName() + ")"
-								+ " does not have a JavaPlugin set. Refusing to set.");
-						continue;
-					}
-					String namespace = plugin.getName().toLowerCase();
-					if(Enchantments.addEnchantment(enchantment)) {
-						if (config.getBoolean(namespace+"."+enchantment.getName()+".enabled")) {
-							ENCHANTMENTS.get(i).setEnabled(true);
-						} else {
-							ENCHANTMENTS.get(i).setEnabled(false);
-						}
-					} else {
-						ENCHANTMENTS.get(i).setEnabled(false);
-					}
-					if (files.getEnchantmentConfig().getBoolean(namespace+"."+enchantment.getName()+".treasure")) {
-						ENCHANTMENTS.get(i).setTreasure(true);
-					}
-					displayName = StringUtils.decodeString(language.getString("enchantment.display_names."+namespace+"."+enchantment.getName()));
-					description = StringUtils.decodeString(language.getString("enchantment.descriptions."+namespace+"."+enchantment.getName()));
-				} else if (enchantment.getRelativeEnchantment() instanceof CustomEnchantmentWrapper) {
-					if(Enchantments.addEnchantment(enchantment)) {
-						if (config.getBoolean("custom_enchantments."+enchantment.getName()+".enabled")) {
-							ENCHANTMENTS.get(i).setEnabled(true);
-						} else {
-							ENCHANTMENTS.get(i).setEnabled(false);
-						}
-					} else {
-						ENCHANTMENTS.get(i).setEnabled(false);
-					}
-					if (files.getEnchantmentConfig().getBoolean("custom_enchantments."+enchantment.getName()+".treasure")) {
-						ENCHANTMENTS.get(i).setTreasure(true);
-					}
-					displayName = StringUtils.decodeString(language.getString("enchantment.display_names.custom_enchantments."+enchantment.getName()));
-					description = StringUtils.decodeString(language.getString("enchantment.descriptions.custom_enchantments."+enchantment.getName()));
-				} else {
-					if(Enchantments.addEnchantment(enchantment)) {
-						ENCHANTMENTS.get(i).setEnabled(true);
-					} else {
-						ENCHANTMENTS.get(i).setEnabled(false);
-					}
-					description = StringUtils.decodeString(language.getString("enchantment.descriptions.default_enchantments."+enchantment.getName()));
-				}
 				if(ConfigUtils.isLevel50()) {
 					ENCHANTMENTS.get(i).setLevelFifty();
 				} else {
 					ENCHANTMENTS.get(i).setLevelThirty();
 				}
-				ENCHANTMENTS.get(i).setConflictingEnchantments();
-				ENCHANTMENTS.get(i).setDisabledItems(Arrays.asList());
-				if(displayName != null) {
-					ENCHANTMENTS.get(i).setDisplayName(displayName);
-				} else {
-					ENCHANTMENTS.get(i).setDisplayName(ConfigUtils.getLanguage());
-				}
-				ENCHANTMENTS.get(i).setDescription(description);
 			}
+			if(!namespace.equals("default_enchantments")) {
+				ENCHANTMENTS.get(i).setDisplayName(displayName);
+			} else {
+				ENCHANTMENTS.get(i).setDisplayName(ConfigUtils.getLanguage());
+			}
+			ENCHANTMENTS.get(i).setDescription(description);
 		}
 	}
 	
@@ -236,96 +200,96 @@ public class DefaultEnchantments {
 	
 	public static void addDefaultEnchantments() {
 		if(getEnchantments().size() > 0) return;
-		DefaultEnchantments.addDefaultEnchantment(new AquaAffinity());
-		DefaultEnchantments.addDefaultEnchantment(new BaneOfArthropods());
-		DefaultEnchantments.addDefaultEnchantment(new BlastProtection());
-		DefaultEnchantments.addDefaultEnchantment(new Channeling());
-		DefaultEnchantments.addDefaultEnchantment(new CurseOfBinding());
-		DefaultEnchantments.addDefaultEnchantment(new CurseOfVanishing());
-		DefaultEnchantments.addDefaultEnchantment(new DepthStrider());
-		DefaultEnchantments.addDefaultEnchantment(new Efficiency());
-		DefaultEnchantments.addDefaultEnchantment(new FeatherFalling());
-		DefaultEnchantments.addDefaultEnchantment(new FireAspect());
-		DefaultEnchantments.addDefaultEnchantment(new FireProtection());
-		DefaultEnchantments.addDefaultEnchantment(new Flame());
-		DefaultEnchantments.addDefaultEnchantment(new Fortune());
-		DefaultEnchantments.addDefaultEnchantment(new FrostWalker());
-		DefaultEnchantments.addDefaultEnchantment(new Impaling());
-		DefaultEnchantments.addDefaultEnchantment(new Infinity());
-		DefaultEnchantments.addDefaultEnchantment(new Knockback());
-		DefaultEnchantments.addDefaultEnchantment(new Looting());
-		DefaultEnchantments.addDefaultEnchantment(new Loyalty());
-		DefaultEnchantments.addDefaultEnchantment(new LuckOfTheSea());
-		DefaultEnchantments.addDefaultEnchantment(new Lure());
-		DefaultEnchantments.addDefaultEnchantment(new Mending());
+		addDefaultEnchantment(new AquaAffinity());
+		addDefaultEnchantment(new BaneOfArthropods());
+		addDefaultEnchantment(new BlastProtection());
+		addDefaultEnchantment(new Channeling());
+		addDefaultEnchantment(new CurseOfBinding());
+		addDefaultEnchantment(new CurseOfVanishing());
+		addDefaultEnchantment(new DepthStrider());
+		addDefaultEnchantment(new Efficiency());
+		addDefaultEnchantment(new FeatherFalling());
+		addDefaultEnchantment(new FireAspect());
+		addDefaultEnchantment(new FireProtection());
+		addDefaultEnchantment(new Flame());
+		addDefaultEnchantment(new Fortune());
+		addDefaultEnchantment(new FrostWalker());
+		addDefaultEnchantment(new Impaling());
+		addDefaultEnchantment(new Infinity());
+		addDefaultEnchantment(new Knockback());
+		addDefaultEnchantment(new Looting());
+		addDefaultEnchantment(new Loyalty());
+		addDefaultEnchantment(new LuckOfTheSea());
+		addDefaultEnchantment(new Lure());
+		addDefaultEnchantment(new Mending());
 		if(EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber() > 3) {
-			DefaultEnchantments.addDefaultEnchantment(new Multishot());
-			DefaultEnchantments.addDefaultEnchantment(new Piercing());
+			addDefaultEnchantment(new Multishot());
+			addDefaultEnchantment(new Piercing());
 		}
-		DefaultEnchantments.addDefaultEnchantment(new Power());
-		DefaultEnchantments.addDefaultEnchantment(new ProjectileProtection());
-		DefaultEnchantments.addDefaultEnchantment(new Protection());
-		DefaultEnchantments.addDefaultEnchantment(new Punch());
+		addDefaultEnchantment(new Power());
+		addDefaultEnchantment(new ProjectileProtection());
+		addDefaultEnchantment(new Protection());
+		addDefaultEnchantment(new Punch());
 		if(EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber() > 3) {
-			DefaultEnchantments.addDefaultEnchantment(new QuickCharge());
+			addDefaultEnchantment(new QuickCharge());
 		}
-		DefaultEnchantments.addDefaultEnchantment(new Respiration());
-		DefaultEnchantments.addDefaultEnchantment(new Riptide());
-		DefaultEnchantments.addDefaultEnchantment(new Sharpness());
-		DefaultEnchantments.addDefaultEnchantment(new SilkTouch());
-		DefaultEnchantments.addDefaultEnchantment(new Smite());
-		DefaultEnchantments.addDefaultEnchantment(new SweepingEdge());
-		DefaultEnchantments.addDefaultEnchantment(new Thorns());
-		DefaultEnchantments.addDefaultEnchantment(new Unbreaking());
+		addDefaultEnchantment(new Respiration());
+		addDefaultEnchantment(new Riptide());
+		addDefaultEnchantment(new Sharpness());
+		addDefaultEnchantment(new SilkTouch());
+		addDefaultEnchantment(new Smite());
+		addDefaultEnchantment(new SweepingEdge());
+		addDefaultEnchantment(new Thorns());
+		addDefaultEnchantment(new Unbreaking());
 
-		DefaultEnchantments.addDefaultEnchantment(new Angler());
-		DefaultEnchantments.addDefaultEnchantment(new Armored());
-		DefaultEnchantments.addDefaultEnchantment(new Beheading());
-		DefaultEnchantments.addDefaultEnchantment(new Brine());
-		DefaultEnchantments.addDefaultEnchantment(new CurseOfExhaustion());
-		DefaultEnchantments.addDefaultEnchantment(new CurseOfLag());
-		DefaultEnchantments.addDefaultEnchantment(new Drowned());
-		DefaultEnchantments.addDefaultEnchantment(new ExpShare());
-		DefaultEnchantments.addDefaultEnchantment(new FlowerGift());
-		DefaultEnchantments.addDefaultEnchantment(new FrequentFlyer());
-		DefaultEnchantments.addDefaultEnchantment(new Fried());
-		DefaultEnchantments.addDefaultEnchantment(new GoldDigger());
-		DefaultEnchantments.addDefaultEnchantment(new GungHo());
-		DefaultEnchantments.addDefaultEnchantment(new HardBounce());
-		DefaultEnchantments.addDefaultEnchantment(new HeightPlusPlus());
-		DefaultEnchantments.addDefaultEnchantment(new Icarus());
-		DefaultEnchantments.addDefaultEnchantment(new IrenesLasso());
-		DefaultEnchantments.addDefaultEnchantment(new IronDefense());
-		DefaultEnchantments.addDefaultEnchantment(new KnockUp());
-		DefaultEnchantments.addDefaultEnchantment(new Life());
-		DefaultEnchantments.addDefaultEnchantment(new MagicGuard());
-		DefaultEnchantments.addDefaultEnchantment(new MagmaWalker());
-		DefaultEnchantments.addDefaultEnchantment(new Moisturize());
-		DefaultEnchantments.addDefaultEnchantment(new NoRest());
+		addDefaultEnchantment(new Angler());
+		addDefaultEnchantment(new Armored());
+		addDefaultEnchantment(new Beheading());
+		addDefaultEnchantment(new Brine());
+		addDefaultEnchantment(new CurseOfExhaustion());
+		addDefaultEnchantment(new CurseOfLag());
+		addDefaultEnchantment(new Drowned());
+		addDefaultEnchantment(new ExpShare());
+		addDefaultEnchantment(new FlowerGift());
+		addDefaultEnchantment(new FrequentFlyer());
+		addDefaultEnchantment(new Fried());
+		addDefaultEnchantment(new GoldDigger());
+		addDefaultEnchantment(new GungHo());
+		addDefaultEnchantment(new HardBounce());
+		addDefaultEnchantment(new HeightPlusPlus());
+		addDefaultEnchantment(new Icarus());
+		addDefaultEnchantment(new IrenesLasso());
+		addDefaultEnchantment(new IronDefense());
+		addDefaultEnchantment(new KnockUp());
+		addDefaultEnchantment(new Life());
+		addDefaultEnchantment(new MagicGuard());
+		addDefaultEnchantment(new MagmaWalker());
+		addDefaultEnchantment(new Moisturize());
+		addDefaultEnchantment(new NoRest());
 		if(EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber() > 3) {
-			DefaultEnchantments.addDefaultEnchantment(new Pillage());
+			addDefaultEnchantment(new Pillage());
 		}
-		DefaultEnchantments.addDefaultEnchantment(new QuickStrike());
-		DefaultEnchantments.addDefaultEnchantment(new Sacrifice());
-		DefaultEnchantments.addDefaultEnchantment(new SandVeil());
-		DefaultEnchantments.addDefaultEnchantment(new ShockAspect());
-		DefaultEnchantments.addDefaultEnchantment(new Smeltery());
-		DefaultEnchantments.addDefaultEnchantment(new Sniper());
-		DefaultEnchantments.addDefaultEnchantment(new Soulbound());
-		DefaultEnchantments.addDefaultEnchantment(new SoulReaper());
-		DefaultEnchantments.addDefaultEnchantment(new SplatterFest());
+		addDefaultEnchantment(new QuickStrike());
+		addDefaultEnchantment(new Sacrifice());
+		addDefaultEnchantment(new SandVeil());
+		addDefaultEnchantment(new ShockAspect());
+		addDefaultEnchantment(new Smeltery());
+		addDefaultEnchantment(new Sniper());
+		addDefaultEnchantment(new Soulbound());
+		addDefaultEnchantment(new SoulReaper());
+		addDefaultEnchantment(new SplatterFest());
 		if(EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber() > 3) {
-			DefaultEnchantments.addDefaultEnchantment(new StoneThrow());
+			addDefaultEnchantment(new StoneThrow());
 		}
-		DefaultEnchantments.addDefaultEnchantment(new Tank());
-		DefaultEnchantments.addDefaultEnchantment(new Telepathy());
-		DefaultEnchantments.addDefaultEnchantment(new Toughness());
-		DefaultEnchantments.addDefaultEnchantment(new Transmutation());
-		DefaultEnchantments.addDefaultEnchantment(new Unrest());
-		DefaultEnchantments.addDefaultEnchantment(new VoidWalker());
-		DefaultEnchantments.addDefaultEnchantment(new Wand());
-		DefaultEnchantments.addDefaultEnchantment(new Warp());
-		DefaultEnchantments.addDefaultEnchantment(new WidthPlusPlus());
+		addDefaultEnchantment(new Tank());
+		addDefaultEnchantment(new Telepathy());
+		addDefaultEnchantment(new Toughness());
+		addDefaultEnchantment(new Transmutation());
+		addDefaultEnchantment(new Unrest());
+		addDefaultEnchantment(new VoidWalker());
+		addDefaultEnchantment(new Wand());
+		addDefaultEnchantment(new Warp());
+		addDefaultEnchantment(new WidthPlusPlus());
 	}
 	
 	public static List<String> getEnchantmentNames(){

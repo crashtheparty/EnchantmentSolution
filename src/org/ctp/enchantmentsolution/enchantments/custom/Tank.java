@@ -13,18 +13,8 @@ import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 public class Tank extends CustomEnchantment{
 	
 	public Tank() {
-		addDefaultDisplayName("Tank");
+		super("Tank", 10, -5, 20, 15, 20, 1, 3, 3, Weight.RARE, "Gives additional unbreaking protection to armor.");
 		addDefaultDisplayName(Language.GERMAN, "Panzer");
-		setDefaultFiftyConstant(10);
-		setDefaultThirtyConstant(-5);
-		setDefaultFiftyModifier(20);
-		setDefaultThirtyModifier(15);
-		setDefaultFiftyStartLevel(20);
-		setDefaultThirtyStartLevel(1);
-		setDefaultFiftyMaxLevel(3);
-		setDefaultThirtyMaxLevel(3);
-		setDefaultWeight(Weight.RARE);
-		addDefaultDescription("Gives additional unbreaking protection to armor.");
 		addDefaultDescription(Language.GERMAN, "Verleiht der Rüstung zusätzlichen Schutz.");
 	}
 	

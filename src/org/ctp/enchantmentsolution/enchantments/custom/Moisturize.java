@@ -13,19 +13,9 @@ import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 public class Moisturize extends CustomEnchantment{
 
 	public Moisturize() {
-		addDefaultDisplayName("Moisturize");
+		super("Moisturize", 50, 35, 0, 0, 20, 1, 1, 1, Weight.VERY_RARE, "Waters blocks by right clicking them.");
 		addDefaultDisplayName(Language.GERMAN, "Befeuchten");
-		setDefaultFiftyConstant(50);
-		setDefaultThirtyConstant(35);
-		setDefaultFiftyModifier(0);
-		setDefaultThirtyModifier(0);
-		setDefaultFiftyStartLevel(20);
-		setDefaultThirtyStartLevel(1);
-		setDefaultFiftyMaxLevel(1);
-		setDefaultThirtyMaxLevel(1);
 		setMaxLevelOne(true);
-		setDefaultWeight(Weight.VERY_RARE);
-		addDefaultDescription("Waters blocks by right-clicking them.");
 		addDefaultDescription(Language.GERMAN, "Befeuchtet Blöcke durch Rechtsklick.");
 	}
 	

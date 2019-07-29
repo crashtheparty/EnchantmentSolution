@@ -12,18 +12,8 @@ import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 public class QuickCharge extends CustomEnchantment{
 	
 	public QuickCharge() {
-		addDefaultDisplayName("Quick Charge");
+		super("Quick Charge", -15, -8, 20, 20, 1, 1, 4, 3, Weight.UNCOMMON, "Places arrows in the crossbow faster.");
 		addDefaultDisplayName(Language.GERMAN, "Schnellladen");
-		setDefaultFiftyConstant(-15);
-		setDefaultThirtyConstant(-8);
-		setDefaultFiftyModifier(20);
-		setDefaultThirtyModifier(20);
-		setDefaultFiftyStartLevel(1);
-		setDefaultThirtyStartLevel(1);
-		setDefaultFiftyMaxLevel(4);
-		setDefaultThirtyMaxLevel(3);
-		setDefaultWeight(Weight.UNCOMMON);
-		addDefaultDescription("Place arrows in the crossbow faster.");
 		addDefaultDescription(Language.GERMAN, "Setzen Sie die Pfeile schneller in die Armbrust.");
 	}
 	

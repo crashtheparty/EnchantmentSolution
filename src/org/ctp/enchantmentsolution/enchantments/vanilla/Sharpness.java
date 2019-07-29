@@ -13,23 +13,11 @@ import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 public class Sharpness extends CustomEnchantment{
 	
 	public Sharpness() {
-		addDefaultDisplayName("Sharpness");
-		addDefaultDisplayName(Language.GERMAN, "Schärfe");
-		setDefaultFiftyConstant(-12);
-		setDefaultThirtyConstant(-10);
-		setDefaultFiftyModifier(13);
-		setDefaultThirtyModifier(11);
-		setDefaultFiftyStartLevel(1);
-		setDefaultThirtyStartLevel(1);
-		setDefaultFiftyMaxLevel(6);
-		setDefaultThirtyMaxLevel(5);
-		setDefaultWeight(Weight.COMMON);
-		addDefaultDescription("Increases melee damage." + 
-				"\n" + 
+		super("Sharpness", -12, -10, 13, 11, 1, 1, 6, 5, Weight.COMMON, "Increases melee damage.\n" + 
 				"Adds 1 (half heart) extra damage for the first level, and 0.5 (half heart) for each additional level.");
+		addDefaultDisplayName(Language.GERMAN, "Schärfe");
 		addDefaultDescription(Language.GERMAN, "Erhöht Nahkampfschaden." + 
-				"\n" + 
-				"Fügt 1 (halbes Herz) zusätzlichen Schaden für die erste Stufe und 0,5 (halbes Herz) für jede zusätzliche Stufe hinzu.");
+				"\nFügt 1 (halbes Herz) zusätzlichen Schaden für die erste Stufe und 0,5 (halbes Herz) für jede zusätzliche Stufe hinzu.");
 	}
 	
 	@Override

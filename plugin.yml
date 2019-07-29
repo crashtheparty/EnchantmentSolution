@@ -1,8 +1,8 @@
 name: EnchantmentSolution
-version: 2.1.2
+version: 2.1.3
 main: org.ctp.enchantmentsolution.EnchantmentSolution
 api-version: 1.13
-softdepend: [mcMMO, Jobs]
+softdepend: [mcMMO, Jobs, VeinMiner]
 commands:
   enchant:
     aliases: [es,customenchant]

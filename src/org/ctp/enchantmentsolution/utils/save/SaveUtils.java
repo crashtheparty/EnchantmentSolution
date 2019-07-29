@@ -1,5 +1,7 @@
 package org.ctp.enchantmentsolution.utils.save;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
@@ -10,8 +12,9 @@ import org.bukkit.metadata.MetadataValue;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.advancements.ESAdvancementProgress;
-import org.ctp.enchantmentsolution.listeners.abilities.MagmaWalkerListener;
-import org.ctp.enchantmentsolution.listeners.abilities.VoidWalkerListener;
+import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
+import org.ctp.enchantmentsolution.listeners.abilities.WalkerListener;
+import org.ctp.enchantmentsolution.listeners.abilities.helpers.WalkerHelper;
 import org.ctp.enchantmentsolution.nms.AnimalMobNMS;
 import org.ctp.enchantmentsolution.nms.animalmob.AnimalMob;
 import org.ctp.enchantmentsolution.utils.config.YamlConfig;
@@ -42,6 +45,8 @@ public class SaveUtils {
 		}
 		if (config.containsElements("magma_blocks")) {
 			int i = 0;
+			List<Block> blocks = new ArrayList<Block>();
+			WalkerHelper helper = new WalkerHelper(DefaultEnchantments.MAGMA_WALKER);
 			while (config.getString("magma_blocks." + i) != null) {
 				String stringBlock = config.getString("magma_blocks." + i);
 				String[] arrayBlock = stringBlock.split(" ");
@@ -50,8 +55,8 @@ public class SaveUtils {
 							Integer.parseInt(arrayBlock[1]),
 							Integer.parseInt(arrayBlock[2]),
 							Integer.parseInt(arrayBlock[3]))).getBlock();
-					block.setMetadata("MagmaWalker", new FixedMetadataValue(EnchantmentSolution.getPlugin(), Integer.parseInt(arrayBlock[4])));
-					MagmaWalkerListener.BLOCKS.add(block);
+					block.setMetadata(helper.getMetadata(), new FixedMetadataValue(EnchantmentSolution.getPlugin(), Integer.parseInt(arrayBlock[4])));
+					blocks.add(block);
 				} catch (Exception ex) {
 					Bukkit.getLogger().info(
 							"Block at position " + i
@@ -59,10 +64,13 @@ public class SaveUtils {
 				}
 				i++;
 			}
+			WalkerListener.BLOCKS.put(DefaultEnchantments.MAGMA_WALKER, blocks);
 			config.removeKeys("magma_blocks");
 		}
 		if(config.containsElements("obsidian_blocks")) {
 			int i = 0;
+			List<Block> blocks = new ArrayList<Block>();
+			WalkerHelper helper = new WalkerHelper(DefaultEnchantments.VOID_WALKER);
 			while (config.getString("obsidian_blocks." + i) != null) {
 				String stringBlock = config.getString("obsidian_blocks." + i);
 				String[] arrayBlock = stringBlock.split(" ");
@@ -71,8 +79,8 @@ public class SaveUtils {
 							Integer.parseInt(arrayBlock[1]),
 							Integer.parseInt(arrayBlock[2]),
 							Integer.parseInt(arrayBlock[3]))).getBlock();
-					block.setMetadata("VoidWalker", new FixedMetadataValue(EnchantmentSolution.getPlugin(), Integer.parseInt(arrayBlock[4])));
-					VoidWalkerListener.BLOCKS.add(block);
+					block.setMetadata(helper.getMetadata(), new FixedMetadataValue(EnchantmentSolution.getPlugin(), Integer.parseInt(arrayBlock[4])));
+					blocks.add(block);
 				} catch (Exception ex) {
 					Bukkit.getLogger().info(
 							"Block at position " + i
@@ -80,6 +88,7 @@ public class SaveUtils {
 				}
 				i++;
 			}
+			WalkerListener.BLOCKS.put(DefaultEnchantments.VOID_WALKER, blocks);
 			config.removeKeys("obsidian_blocks");
 		}
 		if(config.containsElements("animals")) {
@@ -107,22 +116,28 @@ public class SaveUtils {
 			i++;
 		}
 		i = 0;
-		for (Block block : MagmaWalkerListener.BLOCKS) {
-			for(MetadataValue value : block.getMetadata("MagmaWalker")){
-				config.set("magma_blocks." + i,
-						(block.getWorld().getName() + " " + block.getX() + " "
-								+ block.getY() + " " + block.getZ() + " " + value.asInt()));
+		if(WalkerListener.BLOCKS.get(DefaultEnchantments.MAGMA_WALKER) != null) {
+			WalkerHelper helper = new WalkerHelper(DefaultEnchantments.MAGMA_WALKER);
+			for (Block block : WalkerListener.BLOCKS.get(DefaultEnchantments.MAGMA_WALKER)) {
+				for(MetadataValue value : block.getMetadata(helper.getMetadata())){
+					config.set("magma_blocks." + i,
+							(block.getWorld().getName() + " " + block.getX() + " "
+									+ block.getY() + " " + block.getZ() + " " + value.asInt()));
+				}
+				i++;
 			}
-			i++;
 		}
 		i = 0;
-		for (Block block : VoidWalkerListener.BLOCKS) {
-			for(MetadataValue value : block.getMetadata("VoidWalker")){
-				config.set("obsidian_blocks." + i,
-						(block.getWorld().getName() + " " + block.getX() + " "
-								+ block.getY() + " " + block.getZ() + " " + value.asInt()));
+		if(WalkerListener.BLOCKS.get(DefaultEnchantments.VOID_WALKER) != null) {
+			WalkerHelper helper = new WalkerHelper(DefaultEnchantments.VOID_WALKER);
+			for (Block block : WalkerListener.BLOCKS.get(DefaultEnchantments.VOID_WALKER)) {
+				for(MetadataValue value : block.getMetadata(helper.getMetadata())){
+					config.set("obsidian_blocks." + i,
+							(block.getWorld().getName() + " " + block.getX() + " "
+									+ block.getY() + " " + block.getZ() + " " + value.asInt()));
+				}
+				i++;
 			}
-			i++;
 		}
 		i = 0;
 		try {

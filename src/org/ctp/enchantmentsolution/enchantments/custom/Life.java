@@ -13,18 +13,8 @@ import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 public class Life extends CustomEnchantment{
 	
 	public Life() {
-		addDefaultDisplayName("Life");
+		super("Life", -5, -5, 25, 15, 10, 1, 3, 3, Weight.RARE, "Increases maximum health by 4 (half hearts) per level when worn.");
 		addDefaultDisplayName(Language.GERMAN, "Leben");
-		setDefaultFiftyConstant(-5);
-		setDefaultThirtyConstant(-5);
-		setDefaultFiftyModifier(25);
-		setDefaultThirtyModifier(15);
-		setDefaultFiftyStartLevel(10);
-		setDefaultThirtyStartLevel(1);
-		setDefaultFiftyMaxLevel(3);
-		setDefaultThirtyMaxLevel(3);
-		setDefaultWeight(Weight.RARE);
-		addDefaultDescription("Increases maximum health by 4 (half hearts) per level when worn.");
 		addDefaultDescription(Language.GERMAN, "Erhöht die maximale Gesundheit um 4 (halbe Herzen) pro Level, wenn er getragen wird.");
 	}
 	

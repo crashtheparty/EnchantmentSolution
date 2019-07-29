@@ -40,6 +40,11 @@ public class GrindstoneUtils {
 	
 	public static ItemStack takeEnchantments(Player player, ItemStack first, ItemStack second) {
 		ItemStack take = new ItemStack(second.getType());
+		if(take.getType() == Material.BOOK && ConfigUtils.getEnchantedBook()) {
+			take = Enchantments.convertToEnchantedBook(take);
+		} else if (take.getType() == Material.ENCHANTED_BOOK && !ConfigUtils.getEnchantedBook()) {
+			take = Enchantments.convertToRegularBook(take);
+		}
 		
 		List<EnchantmentLevel> enchantments = new ArrayList<EnchantmentLevel>();
 		for (Iterator<java.util.Map.Entry<Enchantment, Integer>> it = first.getEnchantments().entrySet().iterator(); it.hasNext();) {
@@ -85,7 +90,7 @@ public class GrindstoneUtils {
         }
         
         if (j > 0) {
-            int k = (int) Math.ceil((double) j / 2.0D);
+            int k = (int) Math.ceil(j / 2.0D);
             return k + random.nextInt(k);
         } else {
             return 0;
@@ -102,9 +107,9 @@ public class GrindstoneUtils {
         Iterator<Entry<Enchantment, Integer>> iterator = map.entrySet().iterator();
 
         while (iterator.hasNext()) {
-            Entry<Enchantment, Integer> entry = (Entry<Enchantment, Integer>) iterator.next();
-            Enchantment enchantment = (Enchantment) entry.getKey();
-            Integer integer = (Integer) entry.getValue();
+            Entry<Enchantment, Integer> entry = iterator.next();
+            Enchantment enchantment = entry.getKey();
+            Integer integer = entry.getValue();
             
             CustomEnchantment custom = DefaultEnchantments.getCustomEnchantment(enchantment);
             

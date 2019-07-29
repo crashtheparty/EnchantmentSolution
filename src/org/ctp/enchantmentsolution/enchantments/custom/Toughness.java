@@ -13,18 +13,8 @@ import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 public class Toughness extends CustomEnchantment{
 	
 	public Toughness() {
-		addDefaultDisplayName("Toughness");
+		super("Toughness", -15, -10, 16, 11, 1, 1, 4, 4, Weight.UNCOMMON, "Increases armor toughness.");
 		addDefaultDisplayName(Language.GERMAN, "Rüstungshärte");
-		setDefaultFiftyConstant(-15);
-		setDefaultThirtyConstant(-10);
-		setDefaultFiftyModifier(16);
-		setDefaultThirtyModifier(11);
-		setDefaultFiftyStartLevel(1);
-		setDefaultThirtyStartLevel(1);
-		setDefaultFiftyMaxLevel(4);
-		setDefaultThirtyMaxLevel(4);
-		setDefaultWeight(Weight.UNCOMMON);
-		addDefaultDescription("Increases armor toughness.");
 		addDefaultDescription(Language.GERMAN, "Erhöht die Rüstungsstärke.");
 	}
 

@@ -13,18 +13,8 @@ import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 public class Beheading extends CustomEnchantment{
 	
 	public Beheading() {
-		addDefaultDisplayName("Beheading");
+		super("Beheading", 10, 5, 20, 12, 20, 1, 3, 3, Weight.RARE, "Adds a chance to drop mob heads on death.");
 		addDefaultDisplayName(Language.GERMAN, "Beheading");
-		setDefaultFiftyConstant(10);
-		setDefaultThirtyConstant(5);
-		setDefaultFiftyModifier(20);
-		setDefaultThirtyModifier(12);
-		setDefaultFiftyStartLevel(20);
-		setDefaultThirtyStartLevel(1);
-		setDefaultFiftyMaxLevel(3);
-		setDefaultThirtyMaxLevel(3);
-		setDefaultWeight(Weight.RARE);
-		addDefaultDescription("Adds a chance to drop mob heads on death.");
 		addDefaultDescription(Language.GERMAN, "Fügt dem Tod die Chance hinzu, Mobköpfe abzulegen.");
 	}
 	

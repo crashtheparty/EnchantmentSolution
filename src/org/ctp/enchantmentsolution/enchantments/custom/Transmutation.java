@@ -13,19 +13,9 @@ import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 public class Transmutation extends CustomEnchantment{
 	
 	public Transmutation() {
-		addDefaultDisplayName("Transmutation");
+		super("Transmutation", 65, 35, 0, 0, 40, 1, 1, 1, Weight.VERY_RARE, "On killing mobs, all non-sea drop items become sea drop items.");
 		addDefaultDisplayName(Language.GERMAN, "Transmutation");
-		setDefaultFiftyConstant(65);
-		setDefaultThirtyConstant(35);
-		setDefaultFiftyModifier(0);
-		setDefaultThirtyModifier(0);
-		setDefaultFiftyStartLevel(40);
-		setDefaultThirtyStartLevel(1);
-		setDefaultFiftyMaxLevel(1);
-		setDefaultThirtyMaxLevel(1);
-		setDefaultWeight(Weight.VERY_RARE);
 		setMaxLevelOne(true);
-		addDefaultDescription("On killing mobs, all non-sea drop items become sea drop items.");
 		addDefaultDescription(Language.GERMAN, "Beim Töten von Mobs werden alle Gegenstände, die nicht aus dem Meer stammen, zu Teilen aus dem Meer.");
 	}
 	

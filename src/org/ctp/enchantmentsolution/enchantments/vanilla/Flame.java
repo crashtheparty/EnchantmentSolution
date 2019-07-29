@@ -12,24 +12,10 @@ import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 public class Flame extends CustomEnchantment{
 	
 	public Flame() {
-		addDefaultDisplayName("Flame");
+		super("Flame", 35, 20, 0, 0, 20, 1, 1, 1, Weight.RARE, "Flaming arrows.\nArrows are on fire when shot and deal 4 (2 Hearts) fire damage over 5 seconds.");
 		addDefaultDisplayName(Language.GERMAN, "Flamme");
-		setDefaultFiftyConstant(35);
-		setDefaultThirtyConstant(20);
-		setDefaultFiftyModifier(0);
-		setDefaultThirtyModifier(0);
-		setDefaultFiftyStartLevel(20);
-		setDefaultThirtyStartLevel(1);
-		setDefaultFiftyMaxLevel(1);
-		setDefaultThirtyMaxLevel(1);
-		setDefaultWeight(Weight.RARE);
 		setMaxLevelOne(true);
-		addDefaultDescription("Flaming arrows." + 
-				"\n" + 
-				"Arrows are on fire when shot and deal 4 (2 Hearts) fire damage over 5 seconds.");
-		addDefaultDescription(Language.GERMAN, "Brennende Pfeile." + 
-				"\n" + 
-				"Pfeile brennen beim Schieﬂen und verursachen 5 Sekunden lang 4 Feuerschaden");
+		addDefaultDescription(Language.GERMAN, "Brennende Pfeile.\nPfeile brennen beim Schieﬂen und verursachen 5 Sekunden lang 4 Feuerschaden");
 	}
 
 	@Override

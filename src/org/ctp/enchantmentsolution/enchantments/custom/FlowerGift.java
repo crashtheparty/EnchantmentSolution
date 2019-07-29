@@ -13,19 +13,9 @@ import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 public class FlowerGift extends CustomEnchantment{
 	
 	public FlowerGift() {
-		addDefaultDisplayName("Flower Gift");
+		super("Flower Gift", 30, 20, 0, 0, 20, 1, 1, 1, Weight.VERY_RARE, "Has a chance of dropping flowers when right clicking them.");
 		addDefaultDisplayName(Language.GERMAN, "Blumengeschenk");
-		setDefaultFiftyConstant(30);
-		setDefaultThirtyConstant(20);
-		setDefaultFiftyModifier(0);
-		setDefaultThirtyModifier(0);
-		setDefaultFiftyStartLevel(20);
-		setDefaultThirtyStartLevel(1);
-		setDefaultFiftyMaxLevel(1);
-		setDefaultThirtyMaxLevel(1);
-		setDefaultWeight(Weight.VERY_RARE);
 		setMaxLevelOne(true);
-		addDefaultDescription("Has a chance of dropping flowers when right clicking them.");
 		addDefaultDescription(Language.GERMAN, "Hat eine Chance, Blumen fallen zu lassen, wenn Sie mit der rechten Maustaste darauf klicken.");
 	}
 	

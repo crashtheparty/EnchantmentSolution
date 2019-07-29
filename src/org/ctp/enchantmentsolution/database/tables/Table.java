@@ -11,7 +11,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 
-import org.ctp.enchantmentsolution.database.Errors;
 import org.ctp.enchantmentsolution.database.SQLite;
 import org.ctp.enchantmentsolution.database.columns.Column;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
@@ -79,192 +78,36 @@ public class Table {
 		return true;
 	}
 	
-	public <E> boolean hasRecord(String tableName, String key, E value) {
-		Connection conn = null;
-		ResultSet rs = null;
-		PreparedStatement ps = null;
-		boolean found = false;
-		try {
-			String query = "SELECT (count(*) > 0) as found FROM " + tableName + " WHERE " + key + " LIKE ?";
-			conn = db.getSQLConnection();
-			ps = conn.prepareStatement(query);
-			ps.setObject(1, value);
-			rs = ps.executeQuery();
-			
-			if (rs.next()) {
-				found = rs.getBoolean(1); // "found" column
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				if (ps != null)
-					ps.close();
-				if (conn != null)
-					conn.close();
-			} catch (SQLException ex) {
-				db.getPlugin().getLogger().log(Level.SEVERE,
-						Errors.sqlConnectionClose(), ex);
-			}
-		}
-		return found;
-	}
-	
-	public Integer getInteger(String player, String fieldName){
-		Connection conn = null;
-		PreparedStatement ps = null;
-		ResultSet rs = null;
-		Integer integer = 0;
-		try {
-			conn = getDb().getSQLConnection();
-			ps = conn.prepareStatement("SELECT * FROM " + getName()
-					+ " WHERE player = '" + player + "';");
-
-			rs = ps.executeQuery();
-			while (rs.next()) {
-				integer = rs.getInt(fieldName);
-			}
-		} catch (SQLException ex) {
-			getDb().getPlugin().getLogger().log(Level.SEVERE, Errors.sqlConnectionExecute(),
-					ex);
-		} finally {
-			try {
-				if (ps != null)
-					ps.close();
-				if (conn != null)
-					conn.close();
-			} catch (SQLException ex) {
-				getDb().getPlugin().getLogger().log(Level.SEVERE,
-						Errors.sqlConnectionClose(), ex);
-			}
-		}
-		return integer;
-	}
-	
-	public void setInteger(String player, String fieldName, Integer integer){
-		Connection conn = null;
-		PreparedStatement ps = null;
-		boolean hasRecord = hasRecord(this.getName(), "player", player);
-		try {
-			conn = getDb().getSQLConnection();
-			if(hasRecord){
-				ps = conn.prepareStatement("UPDATE " + this.getName() + " SET " + fieldName + " = ? WHERE player = ?");
-	
-				ps.setInt(1, integer); 
-	
-				ps.setString(2, player);
-			}else{
-				ps = conn.prepareStatement("INSERT INTO " + this.getName() + " (player, " + integer + ") VALUES (?, ?)");
-				
-				ps.setInt(2, integer); 
-	
-				ps.setString(1, player);
-			}
-			ps.executeUpdate();
-			return;
-		} catch (SQLException ex) {
-			getDb().getPlugin().getLogger().log(Level.SEVERE, Errors.sqlConnectionExecute(),
-					ex);
-		} finally {
-			try {
-				if (ps != null)
-					ps.close();
-				if (conn != null)
-					conn.close();
-			} catch (SQLException ex) {
-				getDb().getPlugin().getLogger().log(Level.SEVERE,
-						Errors.sqlConnectionClose(), ex);
-			}
-		}
-		return;
-	}
-	
-	public String getString(String player, String fieldName){
-		Connection conn = null;
-		PreparedStatement ps = null;
-		ResultSet rs = null;
-		String string = "";
-		try {
-			conn = getDb().getSQLConnection();
-			ps = conn.prepareStatement("SELECT * FROM " + getName()
-					+ " WHERE player = '" + player + "';");
-
-			rs = ps.executeQuery();
-			while (rs.next()) {
-				string = rs.getString(fieldName);
-			}
-		} catch (SQLException ex) {
-			getDb().getPlugin().getLogger().log(Level.SEVERE, Errors.sqlConnectionExecute(),
-					ex);
-		} finally {
-			try {
-				if (ps != null)
-					ps.close();
-				if (conn != null)
-					conn.close();
-			} catch (SQLException ex) {
-				getDb().getPlugin().getLogger().log(Level.SEVERE,
-						Errors.sqlConnectionClose(), ex);
-			}
-		}
-		return string;
-	}
-	
-	public void setString(String player, String fieldName, String string){
-		Connection conn = null;
-		PreparedStatement ps = null;
-		boolean hasRecord = hasRecord(this.getName(), "player", player);
-		try {
-			conn = getDb().getSQLConnection();
-			if(hasRecord){
-				ps = conn.prepareStatement("UPDATE " + this.getName() + " SET " + fieldName + " = ? WHERE player = ?");
-	
-				ps.setString(1, string); 
-	
-				ps.setString(2, player);
-			}else{
-				ps = conn.prepareStatement("INSERT INTO " + this.getName() + " (player, " + string + ") VALUES (?, ?)");
-				
-				ps.setString(2, string); 
-	
-				ps.setString(1, player);
-			}
-			ps.executeUpdate();
-			return;
-		} catch (SQLException ex) {
-			getDb().getPlugin().getLogger().log(Level.SEVERE, Errors.sqlConnectionExecute(),
-					ex);
-		} finally {
-			try {
-				if (ps != null)
-					ps.close();
-				if (conn != null)
-					conn.close();
-			} catch (SQLException ex) {
-				getDb().getPlugin().getLogger().log(Level.SEVERE,
-						Errors.sqlConnectionClose(), ex);
-			}
-		}
-		return;
-	}
-	
 	public boolean tableExists(Connection connection) {
+		ResultSet rs = null;
+		boolean exists = false;
 		try {
 			DatabaseMetaData md = connection.getMetaData();
-			ResultSet rs = md.getTables(null, null, name, null);
+			rs = md.getTables(null, null, name, null);
 			if (rs.next()) {
-				return true;
+				if (rs != null)
+					rs.close();
+				exists = true;
 			}
 		} catch (SQLException ex) {
-
+			
+		} finally {
+			try {
+				if (rs != null)
+					rs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
-		return false;
+		return exists;
 	}
 	
 	public void createTable(Connection connection){
+		PreparedStatement ps = null;
+		ResultSet rs = null;
 		try{
-			PreparedStatement s = connection.prepareStatement("PRAGMA table_info(" + name + ")");
-			ResultSet rs = s.executeQuery();
+			ps = connection.prepareStatement("PRAGMA table_info(" + name + ")");
+			rs = ps.executeQuery();
 			ArrayList<String> columnsInTable = new ArrayList<String>();
 			boolean has_table = tableExists(connection);
 			while(rs.next()){
@@ -353,6 +196,16 @@ public class Table {
 			}else{
 				ex.printStackTrace();
 			}
+		} finally {
+			try {
+				if (ps != null)
+					ps.close();
+				if (rs != null)
+					rs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			
 		}
 	}
 

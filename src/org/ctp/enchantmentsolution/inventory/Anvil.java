@@ -13,7 +13,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
-import org.ctp.enchantmentsolution.nms.AnvilNMS;
+import org.ctp.enchantmentsolution.enchantments.helper.UpdateItem;
 import org.ctp.enchantmentsolution.utils.AnvilUtils;
 import org.ctp.enchantmentsolution.utils.AnvilUtils.RepairType;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
@@ -26,9 +26,10 @@ public class Anvil implements InventoryData{
 	private Player player;
 	private Inventory inventory;
 	private List<ItemStack> playerItems;
-	private ItemStack combinedItem;
+	private UpdateItem combinedItem;
 	private Block block;
 	private boolean inLegacy;
+	private boolean opening;
 
 	public Anvil(Player player, Block block) {
 		this.setPlayer(player);
@@ -48,86 +49,46 @@ public class Anvil implements InventoryData{
 				size = 45;
 			}
 			Inventory inv = Bukkit.createInventory(null, size, ChatUtils.getMessage(getCodes(), "anvil.name"));
-			if(inventory == null || isInLegacy()) {
-				inLegacy = false;
-				inventory = inv;
-				player.openInventory(inv);
-			} else {
-				inv = player.getOpenInventory().getTopInventory();
-				inventory = inv;
-			}
+			inv = open(inv);
 	
 			ItemStack mirror = new ItemStack(Material.BLACK_STAINED_GLASS_PANE);
 			ItemMeta mirrorMeta = mirror.getItemMeta();
 			mirrorMeta.setDisplayName(ChatUtils.getMessage(getCodes(), "anvil.mirror"));
 			mirror.setItemMeta(mirrorMeta);
-			inv.setItem(0, mirror);
-			inv.setItem(1, mirror);
-			inv.setItem(2, mirror);
-			inv.setItem(3, mirror);
-			inv.setItem(5, mirror);
-			inv.setItem(6, mirror);
-			inv.setItem(7, mirror);
-			inv.setItem(8, mirror);
-			inv.setItem(9, mirror);
-			inv.setItem(11, mirror);
-			inv.setItem(13, mirror);
-			inv.setItem(15, mirror);
-			inv.setItem(17, mirror);
-			inv.setItem(18, mirror);
-			inv.setItem(19, mirror);
-			inv.setItem(20, mirror);
-			inv.setItem(21, mirror);
-			inv.setItem(22, mirror);
-			inv.setItem(23, mirror);
-			inv.setItem(24, mirror);
-			inv.setItem(25, mirror);
-			inv.setItem(26, mirror);
+			int num_mirrors = 27;
 			if(ConfigUtils.useAnvilInGui() || ConfigUtils.useLegacyGrindstone()) {
-				inv.setItem(27, mirror);
-				inv.setItem(28, mirror);
-				inv.setItem(29, mirror);
-				inv.setItem(30, mirror);
-				inv.setItem(31, mirror);
-				inv.setItem(32, mirror);
-				inv.setItem(33, mirror);
-				inv.setItem(34, mirror);
-				inv.setItem(35, mirror);
-				inv.setItem(36, mirror);
-				inv.setItem(37, mirror);
-				inv.setItem(38, mirror);
-				inv.setItem(39, mirror);
-				inv.setItem(40, mirror);
-				inv.setItem(41, mirror);
-				inv.setItem(42, mirror);
-				inv.setItem(43, mirror);
-				inv.setItem(44, mirror);
-				if(ConfigUtils.useAnvilInGui() && ConfigUtils.useLegacyGrindstone()) {
-					ItemStack anvil = new ItemStack(Material.ANVIL);
-					ItemMeta anvilMeta = anvil.getItemMeta();
-					anvilMeta.setDisplayName(ChatUtils.getMessage(getCodes(), "anvil.legacy-gui"));
-					anvilMeta.setLore(ChatUtils.getMessages(getCodes(), "anvil.legacy-gui-warning"));
-					anvil.setItemMeta(anvilMeta);
-					inv.setItem(30, anvil);
-					ItemStack grindstone = new ItemStack(Material.SMOOTH_STONE);
-					ItemMeta grindstoneMeta = grindstone.getItemMeta();
-					grindstoneMeta.setDisplayName(ChatUtils.getMessage(getCodes(), "grindstone.legacy-open"));
-					grindstone.setItemMeta(grindstoneMeta);
-					inv.setItem(32, grindstone);
-				} else if (ConfigUtils.useAnvilInGui()) {
-					ItemStack anvil = new ItemStack(Material.ANVIL);
-					ItemMeta anvilMeta = anvil.getItemMeta();
-					anvilMeta.setDisplayName(ChatUtils.getMessage(getCodes(), "anvil.legacy-gui"));
-					anvilMeta.setLore(ChatUtils.getMessages(getCodes(), "anvil.legacy-gui-warning"));
-					anvil.setItemMeta(anvilMeta);
-					inv.setItem(31, anvil);
-				} else {
-					ItemStack grindstone = new ItemStack(Material.SMOOTH_STONE);
-					ItemMeta grindstoneMeta = grindstone.getItemMeta();
-					grindstoneMeta.setDisplayName(ChatUtils.getMessage(getCodes(), "grindstone.legacy-open"));
-					grindstone.setItemMeta(grindstoneMeta);
-					inv.setItem(31, grindstone);
+				num_mirrors = 45;
+			}
+			for(int i = 0; i < num_mirrors; i++) {
+				if(i != 4 && i != 10 && i != 12 && i != 16) {
+					inv.setItem(i, mirror);
 				}
+			}
+			if(ConfigUtils.useAnvilInGui() && ConfigUtils.useLegacyGrindstone()) {
+				ItemStack anvil = new ItemStack(Material.ANVIL);
+				ItemMeta anvilMeta = anvil.getItemMeta();
+				anvilMeta.setDisplayName(ChatUtils.getMessage(getCodes(), "anvil.legacy-gui"));
+				anvilMeta.setLore(ChatUtils.getMessages(getCodes(), "anvil.legacy-gui-warning"));
+				anvil.setItemMeta(anvilMeta);
+				inv.setItem(30, anvil);
+				ItemStack grindstone = new ItemStack(Material.SMOOTH_STONE);
+				ItemMeta grindstoneMeta = grindstone.getItemMeta();
+				grindstoneMeta.setDisplayName(ChatUtils.getMessage(getCodes(), "grindstone.legacy-open"));
+				grindstone.setItemMeta(grindstoneMeta);
+				inv.setItem(32, grindstone);
+			} else if (ConfigUtils.useAnvilInGui()) {
+				ItemStack anvil = new ItemStack(Material.ANVIL);
+				ItemMeta anvilMeta = anvil.getItemMeta();
+				anvilMeta.setDisplayName(ChatUtils.getMessage(getCodes(), "anvil.legacy-gui"));
+				anvilMeta.setLore(ChatUtils.getMessages(getCodes(), "anvil.legacy-gui-warning"));
+				anvil.setItemMeta(anvilMeta);
+				inv.setItem(31, anvil);
+			} else if (ConfigUtils.useLegacyGrindstone()) {
+				ItemStack grindstone = new ItemStack(Material.SMOOTH_STONE);
+				ItemMeta grindstoneMeta = grindstone.getItemMeta();
+				grindstoneMeta.setDisplayName(ChatUtils.getMessage(getCodes(), "grindstone.legacy-open"));
+				grindstone.setItemMeta(grindstoneMeta);
+				inv.setItem(31, grindstone);
 			}
 			
 			ItemStack rename = new ItemStack(Material.LIME_STAINED_GLASS_PANE);
@@ -137,7 +98,8 @@ public class Anvil implements InventoryData{
 			
 			ItemStack combine = null;
 			if(playerItems.size() == 2 && AnvilUtils.canCombineItems(playerItems.get(0), playerItems.get(1))) {
-				int repairCost = AnvilUtils.getRepairCost(player, playerItems.get(0), playerItems.get(1));
+				combinedItem = new UpdateItem(player, playerItems.get(0), playerItems.get(1));
+				int repairCost = combinedItem.getRepairCost();
 				int playerLevel = player.getLevel();
 				List<String> lore = new ArrayList<String>();
 				if(player.getGameMode().equals(GameMode.CREATIVE) || repairCost <= playerLevel) {
@@ -196,8 +158,7 @@ public class Anvil implements InventoryData{
 			if(playerItems.size() == 2) {
 				ItemStack item = playerItems.get(1);
 				inv.setItem(12, item);
-				combinedItem = ItemUtils.combineItems(player, playerItems.get(0), playerItems.get(1));
-				inv.setItem(16, combinedItem);
+				inv.setItem(16, combinedItem.getCombinedItem());
 			}else {
 				combinedItem = null;
 			}
@@ -252,25 +213,20 @@ public class Anvil implements InventoryData{
 	
 	public void combine() {
 		if(inventory.getItem(14).getType().equals(Material.LIME_STAINED_GLASS_PANE)) {
-			RepairType type = AnvilUtils.RepairType.getRepairType(playerItems.get(0), playerItems.get(1));
-			if(player.getGameMode() != GameMode.CREATIVE){
-				player.setLevel(player.getLevel() - AnvilUtils.getRepairCost(player, playerItems.get(0), playerItems.get(1)));
+			combinedItem.update();
+			if(player.getGameMode() != GameMode.CREATIVE) {
+				if (combinedItem.getRepairCost() > player.getLevel()) {
+					ChatUtils.sendMessage(player, ChatUtils.getMessage(getCodes(), "anvil.message-cannot-combine"));
+					return;
+				}
+				player.setLevel(player.getLevel() - combinedItem.getRepairCost());
 			}
-			int itemOneRepair = AnvilNMS.getRepairCost(playerItems.get(0));
-			int itemTwoRepair = AnvilNMS.getRepairCost(playerItems.get(1));
-			if(itemOneRepair > itemTwoRepair) {
-				combinedItem = AnvilNMS.setRepairCost(combinedItem, itemOneRepair * 2 + 1);
-			}else {
-				combinedItem = AnvilNMS.setRepairCost(combinedItem, itemTwoRepair * 2 + 1);
-			}
-			ItemUtils.giveItemToPlayer(player, combinedItem, player.getLocation(), false);
-			if(type.equals(RepairType.REPAIR)) {
-				ItemStack repairItem = playerItems.get(1).clone();
-				repairItem.setAmount(repairItem.getAmount() - ItemUtils.repairItem(playerItems.get(0), repairItem));
-				ItemUtils.giveItemToPlayer(player, repairItem, player.getLocation(), false);
+			ItemUtils.giveItemToPlayer(player, combinedItem.getCombinedItem(), player.getLocation(), false);
+			if(combinedItem.getRepairType().equals(RepairType.REPAIR)) {
+				ItemUtils.giveItemToPlayer(player, combinedItem.getItemTwoLeftover(), player.getLocation(), false);
 			}
 			if(EnchantmentSolution.getPlugin().isJobsEnabled()) {
-				JobsUtils.sendAnvilAction(player, playerItems.get(1), combinedItem);
+				JobsUtils.sendAnvilAction(player, playerItems.get(1), combinedItem.getCombinedItem());
 			}
 			combinedItem = null;
 			playerItems.clear();
@@ -323,5 +279,30 @@ public class Anvil implements InventoryData{
 
 	public void setInLegacy(boolean inLegacy) {
 		this.inLegacy = inLegacy;
+	}
+
+	@Override
+	public Inventory open(Inventory inv) {
+		opening = true;
+		if(inventory == null || isInLegacy()) {
+			inLegacy = false;
+			inventory = inv;
+			player.openInventory(inv);
+		} else {
+			if(inv.getSize() == inventory.getSize()) {
+				inv = player.getOpenInventory().getTopInventory();
+				inventory = inv;
+			} else {
+				inventory = inv;
+				player.openInventory(inv);
+			}
+		}
+		for(int i = 0; i < inventory.getSize(); i++) {
+			inventory.setItem(i, new ItemStack(Material.AIR));
+		}
+		if(opening) {
+			opening = false;
+		}
+		return inv;
 	}
 }

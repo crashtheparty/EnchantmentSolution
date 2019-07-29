@@ -13,19 +13,9 @@ import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 public class FrequentFlyer extends CustomEnchantment{
 	
 	public FrequentFlyer() {
-		addDefaultDisplayName("Frequent Flyer");
+		super("Frequent Flyer", 20, 5, 15, 10, 30, 1, 3, 3, Weight.VERY_RARE, "Allows flight. Durability damage every (3 * level) seconds "
+				+ "when below 255 height and every (level) seconds above 255 height. Removes flight at 32 durability.");
 		addDefaultDisplayName(Language.GERMAN, "Vielflieger");
-		setDefaultFiftyConstant(20);
-		setDefaultThirtyConstant(5);
-		setDefaultFiftyModifier(15);
-		setDefaultThirtyModifier(10);
-		setDefaultFiftyStartLevel(30);
-		setDefaultThirtyStartLevel(1);
-		setDefaultFiftyMaxLevel(3);
-		setDefaultThirtyMaxLevel(3);
-		setDefaultWeight(Weight.VERY_RARE);
-		addDefaultDescription("Allows flight. Durability damage every (3 * level) seconds when below 255 height and every (level) seconds above 255 height. "
-				+ "Removes flight at 32 durability.");
 		addDefaultDescription(Language.GERMAN, "Erlaubt den Flug. Haltbarkeitsschaden alle (3 * Level) Sekunden, wenn die Höhe unter 255 liegt, "
 				+ "und jede (Level) Sekunde über 255 Höhe. Entfernt den Flug bei 32 Haltbarkeit.");
 	}

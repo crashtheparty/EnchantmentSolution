@@ -13,22 +13,10 @@ import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 public class BaneOfArthropods extends CustomEnchantment{
 	
 	public BaneOfArthropods() {
-		addDefaultDisplayName("Bane of Arthropods");
+		super("Bane of Arthropods", -4, -3, 9, 8, 1, 1, 6, 5, Weight.UNCOMMON, "Increases damage to \"arthropod\" mobs "
+				+ "(spiders, cave spiders, silverfish and endermites).\nEach level separately adds 2.5 (half heart) extra damage to "
+				+ "each hit, to \"arthropods\" only.\nThe enchantment will also cause \"arthropods\" to have the Slowness IV effect when hit.");
 		addDefaultDisplayName(Language.GERMAN, "Nemesis der Gliederfüßer");
-		setDefaultFiftyConstant(-4);
-		setDefaultThirtyConstant(-3);
-		setDefaultFiftyModifier(9);
-		setDefaultThirtyModifier(8);
-		setDefaultFiftyStartLevel(1);
-		setDefaultThirtyStartLevel(1);
-		setDefaultFiftyMaxLevel(6);
-		setDefaultThirtyMaxLevel(5);
-		setDefaultWeight(Weight.UNCOMMON);
-		addDefaultDescription("Increases damage to \"arthropod\" mobs (spiders, cave spiders, silverfish and endermites)." + 
-				"\n" + 
-				"Each level separately adds 2.5 (half heart) extra damage to each hit, to \"arthropods\" only." + 
-				"\n" + 
-				"The enchantment will also cause \"arthropods\" to have the Slowness IV effect when hit.");
 		addDefaultDescription(Language.GERMAN, "Erhöht den Schaden an \"Arthropoden\" -Mobs (Spinnen, Höhlenspinnen, Silberfischen und Endermiten)." + 
 				"\n" + 
 				"Jedes Level fügt jedem Treffer separat 2,5 (halbes Herz) Schaden hinzu, nur für \"Arthropoden\"." + 
