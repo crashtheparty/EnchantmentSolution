@@ -10,8 +10,8 @@ import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.listeners.abilities.support.McMMOClassicAbility;
 import org.ctp.enchantmentsolution.listeners.abilities.support.McMMOClassicHandler;
-import org.ctp.eswrapper.McMMOOverhaulAbility;
-import org.ctp.eswrapper.McMMOOverhaulHandler;
+import org.ctp.enchantmentsolution.listeners.abilities.support.McMMOOverhaulAbility;
+import org.ctp.enchantmentsolution.listeners.abilities.support.McMMOOverhaulHandler;
 
 public class McMMO {
 	

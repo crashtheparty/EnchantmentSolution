@@ -53,15 +53,15 @@ public class UpdateItem {
 		
 		if(repairType.equals(RepairType.REPAIR)) {
 			int amount = itemTwo.getAmount();
-			int durPerItem = itemOne.getType().getMaxDurability() / 4;
-			while(DamageUtils.getDamage(itemOne.getItemMeta()) > 0 && amount > 0) {
+			int durPerItem = combinedItem.getType().getMaxDurability() / 4;
+			while(DamageUtils.getDamage(combinedItem.getItemMeta()) > 0 && amount > 0) {
 				amount--;
 				repairCost++;
-				DamageUtils.setDamage(itemOne, (DamageUtils.getDamage(itemOne.getItemMeta()) - durPerItem));
+				DamageUtils.setDamage(combinedItem, (DamageUtils.getDamage(combinedItem.getItemMeta()) - durPerItem));
 			}
 			
-			if(DamageUtils.getDamage(itemOne.getItemMeta()) < 0) {
-				DamageUtils.setDamage(itemOne, 0);
+			if(DamageUtils.getDamage(combinedItem.getItemMeta()) < 0) {
+				DamageUtils.setDamage(combinedItem, 0);
 			}
 			if(amount > 0) {
 				itemTwoLeftover = itemTwo.clone();
@@ -84,6 +84,9 @@ public class UpdateItem {
 			combinedItem = AnvilNMS.setRepairCost(combinedItem, itemOneRepair * 2 + 1);
 		}else {
 			combinedItem = AnvilNMS.setRepairCost(combinedItem, itemTwoRepair * 2 + 1);
+		}
+		if(enchantments != null) {
+			combinedItem = Enchantments.addEnchantmentsToItem(combinedItem, enchantments.getEnchantments());
 		}
 		repairCost += itemOneRepair + itemTwoRepair;
 		
