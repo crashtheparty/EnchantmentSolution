@@ -4,8 +4,7 @@ package org.ctp.enchantmentsolution.api.shared;
  * Specifies a world type.
  * @see LocationObject
  */
-@SuppressWarnings("unused")
-public enum Dimension implements SharedEnum {
+@SuppressWarnings("unused") enum Dimension implements SharedEnum {
 	OVERWORLD,
 	THE_NETHER,
 	THE_END;

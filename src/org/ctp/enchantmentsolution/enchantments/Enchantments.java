@@ -277,7 +277,7 @@ public class Enchantments {
 		return bookshelves;
 	}
 
-	public static int getEnchantability(Material material, int level, int lapis) {
+	private static int getEnchantability(Material material, int level, int lapis) {
 		int enchantability = 1;
 		if (ItemType.WOODEN_TOOLS.getItemTypes().contains(material)) {
 			enchantability = 15;

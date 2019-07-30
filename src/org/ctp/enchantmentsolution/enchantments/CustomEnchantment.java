@@ -85,7 +85,7 @@ public abstract class CustomEnchantment {
 		return names;
 	}
 	
-	public void setConflictingEnchantments() {
+	private void setConflictingEnchantments() {
 		List<Enchantment> enchantments = new ArrayList<Enchantment>();
 		enchantments.addAll(getDefaultConflictingEnchantments());
 		if(this.getRelativeEnchantment() != null && enchantments.contains(this.getRelativeEnchantment())) {
@@ -216,7 +216,7 @@ public abstract class CustomEnchantment {
 		return false;
 	}
 
-	public boolean conflictsWith(CustomEnchantment ench) {
+	private boolean conflictsWith(CustomEnchantment ench) {
 		for(Enchantment enchantment : getConflictingEnchantments()) {
 			if(enchantment.equals(ench.getRelativeEnchantment())) {
 				return true;
@@ -267,7 +267,7 @@ public abstract class CustomEnchantment {
 		return 0;
 	}
 
-	public boolean canEnchant(Player player, int enchantability, int level) {
+	boolean canEnchant(Player player, int enchantability, int level) {
 		if (ConfigUtils.useStartLevel() && level < getStartLevel()) {
 			return false;
 		}
@@ -278,7 +278,7 @@ public abstract class CustomEnchantment {
 		return false;
 	}
 
-	public int getEnchantLevel(Player player, int enchantability) {
+	int getEnchantLevel(Player player, int enchantability) {
 		for(int i = getMaxLevel(); i > 0; i--) {
 			int level = enchantability(i);
 			if (PermissionUtils.canEnchant(player, this, i)) {
@@ -329,7 +329,7 @@ public abstract class CustomEnchantment {
 		return defaultThirtyConstant;
 	}
 
-	protected void setDefaultThirtyConstant(int constant) {
+	private void setDefaultThirtyConstant(int constant) {
 		defaultThirtyConstant = constant;
 	}
 
@@ -337,7 +337,7 @@ public abstract class CustomEnchantment {
 		return defaultFiftyConstant;
 	}
 
-	protected void setDefaultFiftyConstant(int constant) {
+	private void setDefaultFiftyConstant(int constant) {
 		defaultFiftyConstant = constant;
 	}
 	
@@ -356,7 +356,7 @@ public abstract class CustomEnchantment {
 		return defaultThirtyModifier;
 	}
 
-	protected void setDefaultThirtyModifier(int modifier) {
+	private void setDefaultThirtyModifier(int modifier) {
 		defaultThirtyModifier = modifier;
 	}
 
@@ -364,7 +364,7 @@ public abstract class CustomEnchantment {
 		return defaultFiftyModifier;
 	}
 
-	protected void setDefaultFiftyModifier(int modifier) {
+	private void setDefaultFiftyModifier(int modifier) {
 		defaultFiftyModifier = modifier;
 	}
 	
@@ -383,7 +383,7 @@ public abstract class CustomEnchantment {
 		return defaultThirtyStartLevel;
 	}
 
-	protected void setDefaultThirtyStartLevel(int startLevel) {
+	private void setDefaultThirtyStartLevel(int startLevel) {
 		defaultThirtyStartLevel = startLevel;
 	}
 
@@ -391,7 +391,7 @@ public abstract class CustomEnchantment {
 		return defaultFiftyStartLevel;
 	}
 
-	protected void setDefaultFiftyStartLevel(int startLevel) {
+	private void setDefaultFiftyStartLevel(int startLevel) {
 		defaultFiftyStartLevel = startLevel;
 	}
 	
@@ -410,7 +410,7 @@ public abstract class CustomEnchantment {
 		return defaultThirtyMaxLevel;
 	}
 
-	protected void setDefaultThirtyMaxLevel(int maxLevel) {
+	private void setDefaultThirtyMaxLevel(int maxLevel) {
 		defaultThirtyMaxLevel = maxLevel;
 	}
 
@@ -418,7 +418,7 @@ public abstract class CustomEnchantment {
 		return defaultFiftyMaxLevel;
 	}
 
-	protected void setDefaultFiftyMaxLevel(int maxLevel) {
+	private void setDefaultFiftyMaxLevel(int maxLevel) {
 		defaultFiftyMaxLevel = maxLevel;
 	}
 	
@@ -437,7 +437,7 @@ public abstract class CustomEnchantment {
 		}
 	}
 
-	public void setLevelFifty() {
+	void setLevelFifty() {
 		setConstant(getDefaultFiftyConstant());
 		setModifier(getDefaultFiftyModifier());
 		setStartLevel(getDefaultFiftyStartLevel());
@@ -445,7 +445,7 @@ public abstract class CustomEnchantment {
 		setWeight(null);
 	}
 
-	public void setLevelThirty() {
+	void setLevelThirty() {
 		setConstant(getDefaultThirtyConstant());
 		setModifier(getDefaultThirtyModifier());
 		setStartLevel(getDefaultThirtyStartLevel());
@@ -453,7 +453,7 @@ public abstract class CustomEnchantment {
 		setWeight(null);
 	}
 
-	public void setCustom(int constant, int modifier, int startLevel, int maxLevel, Weight weight) {
+	void setCustom(int constant, int modifier, int startLevel, int maxLevel, Weight weight) {
 		setConstant(constant);
 		setModifier(modifier);
 		setStartLevel(startLevel);
@@ -482,7 +482,7 @@ public abstract class CustomEnchantment {
 		this.weight = defaultWeight;
 	}
 
-	protected void setWeight(Weight weight) {
+	private void setWeight(Weight weight) {
 		if(weight != null) {
 			this.weight = weight;
 		} else {

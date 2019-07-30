@@ -8,18 +8,18 @@ public class ESTrigger {
 	private Trigger trigger;
 	private int maxAmount = 0, versionMinimum = 0, versionMaximum = 0;
 	
-	public ESTrigger(String criteria, Trigger trigger) {
+	ESTrigger(String criteria, Trigger trigger) {
 		this.criteria = criteria;
 		this.trigger = trigger;
 	}
 	
-	public ESTrigger(String criteria, Trigger trigger, int maxAmount) {
+	ESTrigger(String criteria, Trigger trigger, int maxAmount) {
 		this.criteria = criteria;
 		this.trigger = trigger;
 		this.maxAmount = maxAmount;
 	}
 	
-	public ESTrigger(String criteria, Trigger trigger, int maxAmount, int versionMinimum, int versionMaximum) {
+	ESTrigger(String criteria, Trigger trigger, int maxAmount, int versionMinimum, int versionMaximum) {
 		this.criteria = criteria;
 		this.trigger = trigger;
 		this.maxAmount = maxAmount;

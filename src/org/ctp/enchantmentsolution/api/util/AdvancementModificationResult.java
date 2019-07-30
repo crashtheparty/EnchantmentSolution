@@ -5,10 +5,6 @@ public class AdvancementModificationResult {
 	private boolean loaded, changed;
 	private String message;
 	
-	public AdvancementModificationResult(boolean loaded){
-		this.setLoaded(loaded);
-	}
-	
 	public AdvancementModificationResult(boolean loaded, boolean changed, String message) {
 		this.setLoaded(loaded);
 		this.setChanged(changed);

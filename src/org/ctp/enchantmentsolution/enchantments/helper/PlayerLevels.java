@@ -71,7 +71,7 @@ public class PlayerLevels {
 		return material;
 	}
 	
-	public boolean compare(int books, Player player, Material material){
+	private boolean compare(int books, Player player, Material material){
 		if(this.books == books && player.getUniqueId().toString().equals(this.player.getUniqueId().toString()) && material.equals(this.material)){
 			return true;
 		}
@@ -163,7 +163,7 @@ public class PlayerLevels {
 	}
 
 
-	public void generateEnchants(List<Integer> intList, boolean treasure) {
+	private void generateEnchants(List<Integer> intList, boolean treasure) {
 		if(enchants.size() > 0) return;
 		for(int i = 0; i < intList.size(); i++){
 			if(intList.get(i) == -1){

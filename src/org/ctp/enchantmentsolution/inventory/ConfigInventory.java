@@ -43,7 +43,7 @@ public class ConfigInventory implements InventoryData{
 		change();
 	}
 	
-	public void change() {
+	private void change() {
 		ConfigFiles files = EnchantmentSolution.getPlugin().getConfigFiles();
 		SQLite db = EnchantmentSolution.getPlugin().getDb();
 		isChanged.put(files.getDefaultConfig(), db.isConfigDifferent(files.getDefaultConfig()));
@@ -55,7 +55,7 @@ public class ConfigInventory implements InventoryData{
 		hasChanged = isChanged.containsValue(true);
 	}
 	
-	public void change(YamlConfigBackup config) {
+	private void change(YamlConfigBackup config) {
 		isChanged.put(config, EnchantmentSolution.getPlugin().getDb().isConfigDifferent(config));
 		
 		hasChanged = isChanged.containsValue(true);

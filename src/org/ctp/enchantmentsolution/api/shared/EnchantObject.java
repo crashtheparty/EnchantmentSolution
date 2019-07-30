@@ -9,7 +9,7 @@ import org.ctp.enchantmentsolution.api.util.JsonBuilder;
  * @see ItemObject
  */
 
-public class EnchantObject extends SharedObject {
+class EnchantObject extends SharedObject {
 	private @Nullable Enchant enchant = null;
 	private @Nullable RangeObject levels = null;
 	

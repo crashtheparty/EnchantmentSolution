@@ -46,7 +46,7 @@ public class Advancement {
 	private boolean announce = true;
 	private boolean hidden = false;
 	
-	public Advancement(NamespacedKey id, ItemObject icon, TextComponent title, TextComponent description) {
+	Advancement(NamespacedKey id, ItemObject icon, TextComponent title, TextComponent description) {
 		Validate.notNull(id);
 		Validate.notNull(icon);
 		Validate.notNull(title);

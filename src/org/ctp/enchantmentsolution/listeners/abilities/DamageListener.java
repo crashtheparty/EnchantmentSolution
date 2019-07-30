@@ -20,6 +20,7 @@ import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
+import org.ctp.enchantmentsolution.events.PlayerWarpEvent;
 import org.ctp.enchantmentsolution.listeners.abilities.helpers.DrownedEntity;
 import org.ctp.enchantmentsolution.listeners.abilities.helpers.EntityAccuracy;
 import org.ctp.enchantmentsolution.nms.AnimalMobNMS;
@@ -412,6 +413,11 @@ public class DamageListener extends EnchantmentListener{
 				if(chance > random && locsToTp.size() > 0){
 					int randomLoc = (int) (Math.random() * locsToTp.size());
 					Location toTeleport = locsToTp.get(randomLoc);
+					if(player instanceof Player) {
+						PlayerWarpEvent e = new PlayerWarpEvent((Player) player, player.getLocation(), toTeleport);
+						Bukkit.getPluginManager().callEvent(e);
+						if(e.isCancelled()) return;
+					}
 					World world = toTeleport.getWorld();
 					world.spawnParticle(Particle.PORTAL, toTeleport, 50, 0.2, 2, 0.2);
 					world.spawnParticle(Particle.PORTAL, attacked.getLocation(), 50, 0.2, 2, 0.2);

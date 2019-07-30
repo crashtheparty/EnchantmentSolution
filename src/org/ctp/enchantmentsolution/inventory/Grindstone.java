@@ -251,10 +251,6 @@ public class Grindstone implements InventoryData{
 		return false;
 	}
 
-	public boolean removeItem(ItemStack item) {
-		return playerItems.remove(item);
-	}
-
 	public boolean removeItem(int slot) {
 		if(slot == 2) {
 			slot = 0;

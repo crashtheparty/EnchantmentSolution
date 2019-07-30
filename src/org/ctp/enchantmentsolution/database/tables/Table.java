@@ -78,7 +78,7 @@ public class Table {
 		return true;
 	}
 	
-	public boolean tableExists(Connection connection) {
+	private boolean tableExists(Connection connection) {
 		ResultSet rs = null;
 		boolean exists = false;
 		try {

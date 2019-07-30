@@ -18,9 +18,9 @@ import org.ctp.enchantmentsolution.utils.config.YamlInfo;
 
 public class SQLite extends Database {
 
-	String dbname;
+	private String dbname;
 
-	public ArrayList<Table> tables = new ArrayList<Table>();
+	private ArrayList<Table> tables = new ArrayList<Table>();
 
 	public SQLite(EnchantmentSolution instance) {
 		super(instance);
@@ -30,7 +30,7 @@ public class SQLite extends Database {
 		dbname = "enchantment_solution"; // Set the table name here e.g player_kills
 	}
 	
-	public <T> Table getTable(Class<T> cls) {
+	private <T> Table getTable(Class<T> cls) {
 		for(Table table : tables) {
 			if(table.getClass().equals(cls)) {
 				return table;

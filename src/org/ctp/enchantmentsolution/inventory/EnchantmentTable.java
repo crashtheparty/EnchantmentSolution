@@ -289,10 +289,6 @@ public class EnchantmentTable implements InventoryData {
 		return true;
 	}
 
-	public boolean removeItem(ItemStack item) {
-		return playerItems.remove(item);
-	}
-
 	public boolean removeItem(ItemStack item, int slot) {
 		int newSlot = (slot / 9) - 2;
 		if (playerItems.get(newSlot).equals(item)) {

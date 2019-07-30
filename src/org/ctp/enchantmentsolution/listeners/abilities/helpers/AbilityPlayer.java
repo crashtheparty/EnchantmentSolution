@@ -11,14 +11,14 @@ public abstract class AbilityPlayer {
 	private Enchantment enchantment;
 	private boolean alwaysRefresh;
 	
-	public AbilityPlayer(Player player, ItemStack item, Enchantment enchantment) {
+	AbilityPlayer(Player player, ItemStack item, Enchantment enchantment) {
 		this.player = player;
 		this.enchantment = enchantment;
 		this.setItem(item);
 		alwaysRefresh = false;
 	}
 	
-	public AbilityPlayer(Player player, ItemStack item, Enchantment enchantment, boolean alwaysRefresh) {
+	AbilityPlayer(Player player, ItemStack item, Enchantment enchantment, boolean alwaysRefresh) {
 		this.player = player;
 		this.enchantment = enchantment;
 		this.setItem(item);

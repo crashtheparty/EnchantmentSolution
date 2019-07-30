@@ -4,8 +4,7 @@ package org.ctp.enchantmentsolution.api.shared;
  * Specifies an item enchantment.
  * @see ItemObject
  */
-@SuppressWarnings("unused")
-public enum Enchant implements SharedEnum {
+@SuppressWarnings("unused") enum Enchant implements SharedEnum {
 	PROTECTION,
 	FIRE_PROTECTION,
 	FEATHER_FALLING,

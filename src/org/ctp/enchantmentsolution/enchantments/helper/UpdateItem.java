@@ -18,12 +18,6 @@ public class UpdateItem {
 	private Player player;
 	private int repairCost;
 	
-	public UpdateItem(Player player, ItemStack itemOne) {
-		this.setPlayer(player);
-		this.setItemOne(itemOne);
-		update();
-	}
-	
 	public UpdateItem(Player player, ItemStack itemOne, ItemStack itemTwo) {
 		this.setPlayer(player);
 		this.setItemOne(itemOne);

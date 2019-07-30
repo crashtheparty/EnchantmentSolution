@@ -10,17 +10,12 @@ import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
 
-public class FishingEnchanted {
+class FishingEnchanted {
 
 	private CustomEnchantment enchant;
 	private int level;
 	
-	public FishingEnchanted(CustomEnchantment enchant, int level) {
-		this.enchant = enchant;
-		this.level = level;
-	}
-	
-	public FishingEnchanted(String configString) {
+	FishingEnchanted(String configString) {
 		String[] split = configString.split(" ");
 		if(split.length == 2) {
 			try {

@@ -194,10 +194,6 @@ public class Anvil implements InventoryData{
 		return true;
 	}
 
-	public boolean removeItem(ItemStack item) {
-		return playerItems.remove(item);
-	}
-
 	public boolean removeItem(int slot) {
 		if(slot == 10) {
 			slot = 0;

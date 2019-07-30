@@ -14,7 +14,7 @@ public class EntityAccuracy{
 	private double accuracy;
 	private int run, scheduler;
 	
-	public EntityAccuracy(Player attacker, LivingEntity entity, double accuracy) {
+	private EntityAccuracy(Player attacker, LivingEntity entity, double accuracy) {
 		this.setAttacker(attacker);
 		this.setEntity(entity);
 		this.setAccuracy(accuracy);

@@ -7,7 +7,7 @@ public class ESLocalization {
 	private String name, description;
 	private Language language;
 	
-	public ESLocalization(Language language, String name, String description) {
+	ESLocalization(Language language, String name, String description) {
 		this.language = language;
 		this.name = name;
 		this.description = description;

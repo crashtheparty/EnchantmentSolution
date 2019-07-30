@@ -30,7 +30,7 @@ public class FrequentFlyerPlayer extends AbilityPlayer{
 		setItem(item, reset);
 	}
 	
-	public void setItem(ItemStack item, boolean reset) {
+	private void setItem(ItemStack item, boolean reset) {
 		setPreviousItem(getItem());
 		super.setItem(item);
 		underLimit = 0;

@@ -5,8 +5,7 @@ import org.bukkit.Material;
 /**
  * Specifies a potion's effect.
  */
-@SuppressWarnings("unused")
-public enum Potion implements SharedEnum {
+@SuppressWarnings("unused") enum Potion implements SharedEnum {
 	/**
 	 * Also known as the uncraftable potion. It is not actually empty: the texture does not equal {@link MaterialId#GLASS_BOTTLE}'s
 	 */

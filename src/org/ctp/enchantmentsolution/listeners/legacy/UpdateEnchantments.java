@@ -33,7 +33,7 @@ public class UpdateEnchantments implements Listener{
 		}
 	}
 	
-	public void updateEnchantments(PlayerInventory inv) {
+	private void updateEnchantments(PlayerInventory inv) {
 		if(ConfigUtils.updateLegacyEnchantments()) {
 			for(int i = 0; i < 36; i++) {
 				ItemStack item = inv.getItem(i);

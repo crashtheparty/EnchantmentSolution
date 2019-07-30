@@ -4,8 +4,7 @@ package org.ctp.enchantmentsolution.api.shared;
  * Specifies a structure in a world.
  * @see LocationObject
  */
-@SuppressWarnings("unused")
-public enum Feature implements SharedEnum {
+@SuppressWarnings("unused") enum Feature implements SharedEnum {
 	END_CITY("EndCity"),
 	FORTRESS("Fortress"),
 	MANSION("Mansion"),
