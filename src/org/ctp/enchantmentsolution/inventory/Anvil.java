@@ -158,7 +158,9 @@ public class Anvil implements InventoryData{
 			if(playerItems.size() == 2) {
 				ItemStack item = playerItems.get(1);
 				inv.setItem(12, item);
-				inv.setItem(16, combinedItem.getCombinedItem());
+				if(combinedItem != null) {
+					inv.setItem(16, combinedItem.getCombinedItem());
+				}
 			}else {
 				combinedItem = null;
 			}

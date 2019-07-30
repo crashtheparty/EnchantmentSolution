@@ -64,7 +64,7 @@ public class SaveUtils {
 				}
 				i++;
 			}
-			WalkerListener.BLOCKS.put(DefaultEnchantments.MAGMA_WALKER, blocks);
+			WalkerListener.setBlocks(DefaultEnchantments.MAGMA_WALKER, blocks);
 			config.removeKeys("magma_blocks");
 		}
 		if(config.containsElements("obsidian_blocks")) {
@@ -88,7 +88,7 @@ public class SaveUtils {
 				}
 				i++;
 			}
-			WalkerListener.BLOCKS.put(DefaultEnchantments.VOID_WALKER, blocks);
+			WalkerListener.setBlocks(DefaultEnchantments.VOID_WALKER, blocks);
 			config.removeKeys("obsidian_blocks");
 		}
 		if(config.containsElements("animals")) {
@@ -116,9 +116,9 @@ public class SaveUtils {
 			i++;
 		}
 		i = 0;
-		if(WalkerListener.BLOCKS.get(DefaultEnchantments.MAGMA_WALKER) != null) {
+		if(WalkerListener.getBlocks(DefaultEnchantments.MAGMA_WALKER) != null) {
 			WalkerHelper helper = new WalkerHelper(DefaultEnchantments.MAGMA_WALKER);
-			for (Block block : WalkerListener.BLOCKS.get(DefaultEnchantments.MAGMA_WALKER)) {
+			for (Block block : WalkerListener.getBlocks(DefaultEnchantments.MAGMA_WALKER)) {
 				for(MetadataValue value : block.getMetadata(helper.getMetadata())){
 					config.set("magma_blocks." + i,
 							(block.getWorld().getName() + " " + block.getX() + " "
@@ -128,9 +128,9 @@ public class SaveUtils {
 			}
 		}
 		i = 0;
-		if(WalkerListener.BLOCKS.get(DefaultEnchantments.VOID_WALKER) != null) {
+		if(WalkerListener.getBlocks(DefaultEnchantments.VOID_WALKER) != null) {
 			WalkerHelper helper = new WalkerHelper(DefaultEnchantments.VOID_WALKER);
-			for (Block block : WalkerListener.BLOCKS.get(DefaultEnchantments.VOID_WALKER)) {
+			for (Block block : WalkerListener.getBlocks(DefaultEnchantments.VOID_WALKER)) {
 				for(MetadataValue value : block.getMetadata(helper.getMetadata())){
 					config.set("obsidian_blocks." + i,
 							(block.getWorld().getName() + " " + block.getX() + " "

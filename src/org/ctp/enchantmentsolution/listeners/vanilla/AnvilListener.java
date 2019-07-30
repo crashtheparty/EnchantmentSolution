@@ -29,7 +29,9 @@ public class AnvilListener implements Listener{
 			if(AnvilUtils.canCombineItems(first, second)) {
 				if (event.getViewers().get(0) instanceof Player) {
 					UpdateItem items = new UpdateItem((Player) event.getViewers().get(0), first, second);
-					event.setResult(items.getCombinedItem());
+					if(items != null){
+						event.setResult(items.getCombinedItem());
+					}
 				}
 			}
 		}
@@ -58,46 +60,48 @@ public class AnvilListener implements Listener{
 							|| event.getCursor().getType() == Material.AIR)) {
 						event.setCancelled(true);
 						UpdateItem combinedItem = new UpdateItem((Player) event.getViewers().get(0), first, second);
-						int cost = combinedItem.getRepairCost();
-						if(cost > ConfigUtils.getMaxRepairLevel()) {
-							HashMap<String, Object> loreCodes = ChatUtils.getCodes();
-							loreCodes.put("%repairCost%", cost);
-							ChatUtils.sendMessage(player, ChatUtils.getMessage(loreCodes, "anvil.cannot-repair"));
-							return;
-						}
-						if(player.getLevel() >= cost) {
-							switch(event.getClick()) {
-							case LEFT:
-							case RIGHT:
-							case SHIFT_RIGHT:
-								player.setItemOnCursor(combinedItem.getCombinedItem());
-								player.setLevel(player.getLevel() - cost);
-								inv.setContents(new ItemStack[3]);
-								AnvilUtils.checkAnvilBreak(player, inv.getLocation().getBlock(), null);
-								if(combinedItem.getRepairType().equals(RepairType.REPAIR)) {
-									inv.setItem(1, combinedItem.getItemTwoLeftover());
-								}
-								break;
-							case SHIFT_LEFT:
-								HashMap<Integer, ItemStack> items = player.getInventory().addItem(combinedItem.getCombinedItem());
-								if(!items.isEmpty()) {
-									return;
-								}
-								player.setLevel(player.getLevel() - cost);
-								inv.setContents(new ItemStack[3]);
-								if(combinedItem.getRepairType().equals(RepairType.REPAIR)) {
-									inv.setItem(1, combinedItem.getItemTwoLeftover());
-								}
-								AnvilUtils.checkAnvilBreak(player, inv.getLocation().getBlock(), null);
-								break;
-							default:
-								break;
-							
+						if(items != null){
+							int cost = combinedItem.getRepairCost();
+							if(cost > ConfigUtils.getMaxRepairLevel()) {
+								HashMap<String, Object> loreCodes = ChatUtils.getCodes();
+								loreCodes.put("%repairCost%", cost);
+								ChatUtils.sendMessage(player, ChatUtils.getMessage(loreCodes, "anvil.cannot-repair"));
+								return;
 							}
-						} else {
-							HashMap<String, Object> codes = ChatUtils.getCodes();
-							codes.put("%level%", cost);
-							ChatUtils.sendMessage(player, ChatUtils.getMessage(ChatUtils.getCodes(), "anvil.message-cannot-combine-cost"));
+							if(player.getLevel() >= cost) {
+								switch(event.getClick()) {
+								case LEFT:
+								case RIGHT:
+								case SHIFT_RIGHT:
+									player.setItemOnCursor(combinedItem.getCombinedItem());
+									player.setLevel(player.getLevel() - cost);
+									inv.setContents(new ItemStack[3]);
+									AnvilUtils.checkAnvilBreak(player, inv.getLocation().getBlock(), null);
+									if(combinedItem.getRepairType().equals(RepairType.REPAIR)) {
+										inv.setItem(1, combinedItem.getItemTwoLeftover());
+									}
+									break;
+								case SHIFT_LEFT:
+									HashMap<Integer, ItemStack> items = player.getInventory().addItem(combinedItem.getCombinedItem());
+									if(!items.isEmpty()) {
+										return;
+									}
+									player.setLevel(player.getLevel() - cost);
+									inv.setContents(new ItemStack[3]);
+									if(combinedItem.getRepairType().equals(RepairType.REPAIR)) {
+										inv.setItem(1, combinedItem.getItemTwoLeftover());
+									}
+									AnvilUtils.checkAnvilBreak(player, inv.getLocation().getBlock(), null);
+									break;
+								default:
+									break;
+								
+								}
+							} else {
+								HashMap<String, Object> codes = ChatUtils.getCodes();
+								codes.put("%level%", cost);
+								ChatUtils.sendMessage(player, ChatUtils.getMessage(ChatUtils.getCodes(), "anvil.message-cannot-combine-cost"));
+							}
 						}
 					}
 				}

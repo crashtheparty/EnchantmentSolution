@@ -1,6 +1,7 @@
 package org.ctp.enchantmentsolution.listeners.abilities;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,7 +31,7 @@ import org.ctp.enchantmentsolution.utils.LocationUtils;
 
 public class WalkerListener extends EnchantmentListener implements Runnable{
 
-	public static Map<Enchantment, List<Block>> BLOCKS = new HashMap<Enchantment, List<Block>>();
+	private static Map<Enchantment, List<Block>> BLOCKS = new HashMap<Enchantment, List<Block>>();
 	private static Map<Player, Integer> DELAYS = new HashMap<Player, Integer>();
 	private static int run = 0;
 	
@@ -58,6 +59,17 @@ public class WalkerListener extends EnchantmentListener implements Runnable{
 			if(!DefaultEnchantments.isEnabled(magmaWalker.getEnchantment())) return;
 			updateBlocks(player, boots, loc, magmaWalker);
 		}
+	}
+
+	public static List<Block> getBlocks(Enchantment enchantment) {
+		if(BLOCKS != null && BLOCKS.get(enchantment) != null) {
+			return BLOCKS.get(enchantment);
+		}
+		return Arrays.asList();
+	}
+
+	public static void setBlocks(Enchantment enchantment, List<Block> blocks) {
+		BLOCKS.put(enchantment, blocks);
 	}
 	
 	private void updateBlocks(Player player, ItemStack boots, Location loc, WalkerHelper helper) {
