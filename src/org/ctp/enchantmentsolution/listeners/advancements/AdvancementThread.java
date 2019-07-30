@@ -32,7 +32,7 @@ public class AdvancementThread implements Runnable{
 			if(player.getFireTicks() != 0 && player.getInventory().getBoots() != null) {
 				ItemStack boots = player.getInventory().getBoots();
 				if(Enchantments.hasEnchantment(boots, DefaultEnchantments.MAGMA_WALKER)) {
-					List<Block> blocks = WalkerListener.BLOCKS.get(DefaultEnchantments.MAGMA_WALKER);
+					List<Block> blocks = WalkerListener.getBlocks(DefaultEnchantments.MAGMA_WALKER);
 					if(blocks != null && blocks.contains(player.getLocation().getBlock().getRelative(BlockFace.DOWN)) && player.getFireTicks() > 0) {
 						AdvancementUtils.awardCriteria(player, ESAdvancement.THIS_GIRL_IS_ON_FIRE, "lava");
 					}
@@ -40,7 +40,7 @@ public class AdvancementThread implements Runnable{
 
 				if(Enchantments.hasEnchantment(boots, DefaultEnchantments.VOID_WALKER)) {
 					Block block = player.getLocation().getBlock().getRelative(BlockFace.DOWN);
-					List<Block> blocks = WalkerListener.BLOCKS.get(DefaultEnchantments.VOID_WALKER);
+					List<Block> blocks = WalkerListener.getBlocks(DefaultEnchantments.VOID_WALKER);
 					if(blocks != null && blocks.contains(block)) {
 						if(!LocationUtils.hasBlockBelow(block.getRelative(BlockFace.DOWN).getLocation())) {
 							AdvancementUtils.awardCriteria(player, ESAdvancement.MADE_FOR_WALKING, "boots");
