@@ -40,11 +40,11 @@ public class BlockListener implements Listener{
 
 	@EventHandler(priority=EventPriority.HIGHEST)
 	public void onBlockBreak(BlockBreakEvent event) {
-		if(WalkerListener.BLOCKS.get(DefaultEnchantments.VOID_WALKER).contains(event.getBlock())) {
+		if(WalkerListener.getBlocks(DefaultEnchantments.VOID_WALKER).contains(event.getBlock())) {
 			event.setCancelled(true);
 			AdvancementUtils.awardCriteria(event.getPlayer(), ESAdvancement.DETERMINED_CHEATER, "cheater");
 		}
-		if(WalkerListener.BLOCKS.get(DefaultEnchantments.MAGMA_WALKER).contains(event.getBlock())) {
+		if(WalkerListener.getBlocks(DefaultEnchantments.MAGMA_WALKER).contains(event.getBlock())) {
 			event.setCancelled(true);
 		}
 		

@@ -47,11 +47,11 @@ public class UpdateItem {
 		if(repairType == null) {
 			return;
 		}
-		if(repairType.equals(RepairType.COMBINE) && DamageUtils.getDamage(itemOne.getItemMeta()) != 0) {
+		if(repairType == RepairType.COMBINE && DamageUtils.getDamage(itemOne.getItemMeta()) != 0) {
 			repairCost += 2;
 		}
-		
-		if(repairType.equals(RepairType.REPAIR)) {
+
+		if(repairType == RepairType.REPAIR) {
 			int amount = itemTwo.getAmount();
 			int durPerItem = combinedItem.getType().getMaxDurability() / 4;
 			while(DamageUtils.getDamage(combinedItem.getItemMeta()) > 0 && amount > 0) {
@@ -69,15 +69,15 @@ public class UpdateItem {
 			} else {
 				itemTwoLeftover = new ItemStack(Material.AIR);
 			}
-		}else if(itemTwo.getType().equals(itemOne.getType())) {
+		}else if(itemTwo.getType() == itemOne.getType()) {
 			int extraDurability = itemTwo.getType().getMaxDurability() - DamageUtils.getDamage(itemTwo.getItemMeta()) + (int) (itemTwo.getType().getMaxDurability() * .12);
 			DamageUtils.setDamage(combinedItem, DamageUtils.getDamage(combinedItem.getItemMeta()) - extraDurability);
 			if(DamageUtils.getDamage(combinedItem.getItemMeta()) < 0) {
 				DamageUtils.setDamage(combinedItem, 0);
 			}
-			enchantments = Enchantments.combineEnchantments(player, itemOne, itemTwo);
-			repairCost += enchantments.getCost();
 		}
+		enchantments = Enchantments.combineEnchantments(player, itemOne, itemTwo);
+		repairCost += enchantments.getCost();
 		int itemOneRepair = AnvilNMS.getRepairCost(itemOne);
 		int itemTwoRepair = AnvilNMS.getRepairCost(itemTwo);
 		if(itemOneRepair > itemTwoRepair) {
