@@ -144,7 +144,7 @@ public class EnchantmentSolution extends JavaPlugin {
 							warning = true;
 						}
 					} catch (NumberFormatException ex) {
-						ex.printStackTrace();
+						warning = true;
 					}
 				}
 				if(warning) {
