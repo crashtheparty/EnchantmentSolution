@@ -60,7 +60,7 @@ public class AnvilListener implements Listener{
 							|| event.getCursor().getType() == Material.AIR)) {
 						event.setCancelled(true);
 						UpdateItem combinedItem = new UpdateItem((Player) event.getViewers().get(0), first, second);
-						if(items != null){
+						if(combinedItem != null){
 							int cost = combinedItem.getRepairCost();
 							if(cost > ConfigUtils.getMaxRepairLevel()) {
 								HashMap<String, Object> loreCodes = ChatUtils.getCodes();
