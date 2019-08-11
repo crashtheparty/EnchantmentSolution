@@ -10,9 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map.Entry;
 import java.util.logging.Level;
 
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -581,17 +579,15 @@ public class ConfigFiles {
 		backup.set("plugins.mcmmo", EnchantmentSolution.getPlugin().getMcMMOType());
 		backup.set("plugins.mcmmo_version", EnchantmentSolution.getPlugin().getMcMMOVersion());
 		
-		Iterator<Entry<PlayerLevels, List<Integer>>> iterator = PlayerLevels.PLAYER_LEVELS.entrySet().iterator();
-		
-		while(iterator.hasNext()) {
-			Entry<PlayerLevels, List<Integer>> entry = iterator.next();
-			List<List<EnchantmentLevel>> enchantmentLevels = entry.getKey().getEnchants();
+		for(PlayerLevels levels : PlayerLevels.PLAYER_LEVELS) {
+			List<List<EnchantmentLevel>> enchantmentLevels = levels.getEnchants();
 			for(int i = 0; i < enchantmentLevels.size(); i++) {
+				int levelList = levels.getLevelList().get(i);
 				List<EnchantmentLevel> enchantments = enchantmentLevels.get(i);
 				for(int j = 0; j < enchantments.size(); j++) {
 					EnchantmentLevel enchantment = enchantments.get(j);
-					backup.set("players.levels." + entry.getKey().getPlayer().getName() + ".item." + entry.getKey().getMaterial().name().toLowerCase()
-							+ ".books." + entry.getKey().getBooks() + "." + i + "." + j, enchantment.getEnchant().getName() + " " + enchantment.getLevel());
+					backup.set("players.levels." + levels.getPlayer().getName() + ".item." + levels.getMaterial().name().toLowerCase()
+							+ ".books." + levels.getBooks() + "." + levelList + "." + j, enchantment.getEnchant().getName() + " " + enchantment.getLevel());
 				}
 			}
 		}
