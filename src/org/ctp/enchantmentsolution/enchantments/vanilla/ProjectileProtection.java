@@ -15,7 +15,7 @@ public class ProjectileProtection extends CustomEnchantment{
 	public ProjectileProtection() {
 		super("Projectile Protection", -9, -3, 13, 6, 1, 1, 4, 4, Weight.UNCOMMON, "Reduces projectile damage (arrows, ghast/blaze fire charges, etc.).");
 		addDefaultDisplayName(Language.GERMAN, "Schusssicher");
-		addDefaultDescription(Language.GERMAN, "Reduziert Projektilbesch‰digungen (Pfeile, Feuerschl‰ge usw.).");
+		addDefaultDescription(Language.GERMAN, "Reduziert Projektilbesch√§digungen (Pfeile, Feuerschl√§ge usw.).");
 	}
 	
 	@Override

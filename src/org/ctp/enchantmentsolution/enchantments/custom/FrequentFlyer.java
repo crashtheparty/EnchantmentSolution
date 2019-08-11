@@ -16,8 +16,8 @@ public class FrequentFlyer extends CustomEnchantment{
 		super("Frequent Flyer", 20, 5, 15, 10, 30, 1, 3, 3, Weight.VERY_RARE, "Allows flight. Durability damage every (3 * level) seconds "
 				+ "when below 255 height and every (level) seconds above 255 height. Removes flight at 32 durability.");
 		addDefaultDisplayName(Language.GERMAN, "Vielflieger");
-		addDefaultDescription(Language.GERMAN, "Erlaubt den Flug. Haltbarkeitsschaden alle (3 * Level) Sekunden, wenn die Höhe unter 255 liegt, "
-				+ "und jede (Level) Sekunde über 255 Höhe. Entfernt den Flug bei 32 Haltbarkeit.");
+		addDefaultDescription(Language.GERMAN, "Erlaubt den Flug. Haltbarkeitsschaden alle (3 * Level) Sekunden, wenn die HÃ¶he unter 255 liegt, "
+				+ "und jede (Level) Sekunde Ã¼ber 255 HÃ¶he. Entfernt den Flug bei 32 Haltbarkeit.");
 	}
 	
 	@Override

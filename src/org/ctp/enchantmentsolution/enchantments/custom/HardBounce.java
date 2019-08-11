@@ -15,7 +15,7 @@ public class HardBounce extends CustomEnchantment{
 	public HardBounce() {
 		super("Hard Bounce", -4, -4, 14, 12, 1, 1, 5, 3, Weight.RARE, "Projectiles bounce back from the shield.");
 		addDefaultDisplayName(Language.GERMAN, "Harter Aufprall");
-		addDefaultDescription(Language.GERMAN, "Projektile springen vom Schild zurück.");
+		addDefaultDescription(Language.GERMAN, "Projektile springen vom Schild zurÃ¼ck.");
 	}
 	
 	@Override

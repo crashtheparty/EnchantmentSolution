@@ -14,7 +14,7 @@ public class Unbreaking extends CustomEnchantment{
 	public Unbreaking() {
 		super("Unbreaking", -10, -3, 15, 8, 1, 1, 5, 3, Weight.UNCOMMON, "Increases effective durability.");
 		addDefaultDisplayName(Language.GERMAN, "Haltbarkeit");
-		addDefaultDescription(Language.GERMAN, "Erhöht die effektive Haltbarkeit.");
+		addDefaultDescription(Language.GERMAN, "ErhÃ¶ht die effektive Haltbarkeit.");
 	}
 	
 	@Override

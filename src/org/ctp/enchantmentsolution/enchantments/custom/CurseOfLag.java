@@ -14,7 +14,7 @@ public class CurseOfLag extends CustomEnchantment{
 	
 	public CurseOfLag() {
 		super("Curse of Lag", 25, 25, 0, 0, 1, 1, 1, 1, Weight.RARE, "Ah, fireworks!");
-		addDefaultDisplayName(Language.GERMAN, "Fluch der Verzögerung");
+		addDefaultDisplayName(Language.GERMAN, "Fluch der VerzÃ¶gerung");
 		setTreasure(true);
 		setMaxLevelOne(true);
 		setCurse(true);

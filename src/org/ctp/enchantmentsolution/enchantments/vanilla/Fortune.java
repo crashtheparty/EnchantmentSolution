@@ -13,8 +13,8 @@ public class Fortune extends CustomEnchantment{
 	
 	public Fortune() {
 		super("Fortune", 7, 6, 11, 9, 1, 1, 5, 3, Weight.RARE, "Increases block drops.");
-		addDefaultDisplayName(Language.GERMAN, "Glück");
-		addDefaultDescription(Language.GERMAN, "Erhöht Blocktropfen.");
+		addDefaultDisplayName(Language.GERMAN, "GlÃ¼ck");
+		addDefaultDescription(Language.GERMAN, "ErhÃ¶ht Blocktropfen.");
 	}
 	
 	@Override

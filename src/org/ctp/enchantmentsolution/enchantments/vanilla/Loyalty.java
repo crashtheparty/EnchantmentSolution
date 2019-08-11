@@ -14,7 +14,7 @@ public class Loyalty extends CustomEnchantment{
 	public Loyalty() {
 		super("Loyalty", 7, 5, 11, 7, 1, 1, 3, 3, Weight.UNCOMMON, "Returns a thrown trident after it hits something.");
 		addDefaultDisplayName(Language.GERMAN, "Treue");
-		addDefaultDescription(Language.GERMAN, "Gibt einen geworfenen Dreizack zurück, nachdem er etwas getroffen hat.");
+		addDefaultDescription(Language.GERMAN, "Gibt einen geworfenen Dreizack zurÃ¼ck, nachdem er etwas getroffen hat.");
 	}
 
 	@Override

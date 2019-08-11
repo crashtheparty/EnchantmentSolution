@@ -13,8 +13,8 @@ public class Lure extends CustomEnchantment{
 	
 	public Lure() {
 		super("Lure", 7, 5, 11, 10, 1, 1, 4, 3, Weight.RARE, "Increases rate of fish biting your hook while fishing.");
-		addDefaultDisplayName(Language.GERMAN, "Köder");
-		addDefaultDescription(Language.GERMAN, "Erhöht die Rate der Fische, die sich beim Angeln an den Haken beißen.");
+		addDefaultDisplayName(Language.GERMAN, "KÃ¶der");
+		addDefaultDescription(Language.GERMAN, "ErhÃ¶ht die Rate der Fische, die sich beim Angeln an den Haken beiÃŸen.");
 	}
 	
 	@Override

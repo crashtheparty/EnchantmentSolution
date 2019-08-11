@@ -16,7 +16,7 @@ public class Moisturize extends CustomEnchantment{
 		super("Moisturize", 50, 35, 0, 0, 20, 1, 1, 1, Weight.VERY_RARE, "Waters blocks by right clicking them.");
 		addDefaultDisplayName(Language.GERMAN, "Befeuchten");
 		setMaxLevelOne(true);
-		addDefaultDescription(Language.GERMAN, "Befeuchtet Blöcke durch Rechtsklick.");
+		addDefaultDescription(Language.GERMAN, "Befeuchtet BlÃ¶cke durch Rechtsklick.");
 	}
 	
 	@Override

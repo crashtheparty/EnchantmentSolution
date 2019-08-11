@@ -22,7 +22,7 @@ public enum GermanNames_v1_14 {
 	LEATHER_LEGGINGS(Material.LEATHER_LEGGINGS, "Lederhose"), SHEARS(Material.SHEARS, "Schere"), SHIELD(Material.SHIELD, "Schild"), 
 	STONE_AXE(Material.STONE_AXE, "Steinaxt"), STONE_HOE(Material.STONE_HOE, "Steinhacke"), STONE_PICKAXE(Material.STONE_PICKAXE, "Steinspitzhacke"),
 	STONE_SHOVEL(Material.STONE_SHOVEL, "Steinschaufel"), STONE_SWORD(Material.STONE_SWORD, "Steinschwert"), TRIDENT(Material.TRIDENT, "Dreizack"), 
-	TURTLE_HELMET(Material.TURTLE_HELMET, "Schildkrötenpanzer"), WOODEN_AXE(Material.WOODEN_AXE, "Holzaxt"), WOODEN_HOE(Material.WOODEN_HOE, "Holzhacke"), 
+	TURTLE_HELMET(Material.TURTLE_HELMET, "SchildkrÃ¶tenpanzer"), WOODEN_AXE(Material.WOODEN_AXE, "Holzaxt"), WOODEN_HOE(Material.WOODEN_HOE, "Holzhacke"), 
 	WOODEN_PICKAXE(Material.WOODEN_PICKAXE, "Holzspitzhacke"), WOODEN_SHOVEL(Material.WOODEN_SHOVEL, "Holzschaufel"), WOODEN_SWORD(Material.WOODEN_SWORD, "Holzschwert"),
 	CROSSBOW(Material.CROSSBOW, "Armbrust");
 	

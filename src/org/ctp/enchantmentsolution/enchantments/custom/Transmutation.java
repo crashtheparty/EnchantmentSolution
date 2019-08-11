@@ -16,7 +16,7 @@ public class Transmutation extends CustomEnchantment{
 		super("Transmutation", 65, 35, 0, 0, 40, 1, 1, 1, Weight.VERY_RARE, "On killing mobs, all non-sea drop items become sea drop items.");
 		addDefaultDisplayName(Language.GERMAN, "Transmutation");
 		setMaxLevelOne(true);
-		addDefaultDescription(Language.GERMAN, "Beim Töten von Mobs werden alle Gegenstände, die nicht aus dem Meer stammen, zu Teilen aus dem Meer.");
+		addDefaultDescription(Language.GERMAN, "Beim TÃ¶ten von Mobs werden alle GegenstÃ¤nde, die nicht aus dem Meer stammen, zu Teilen aus dem Meer.");
 	}
 	
 	@Override

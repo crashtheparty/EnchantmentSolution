@@ -20,7 +20,7 @@ public class CurseOfBinding extends CustomEnchantment{
 		setCurse(true);
 		addDefaultDescription(Language.GERMAN, "Verhindert das Entfernen des verfluchten Gegenstands." + 
 				"\n" + 
-				"Der verfluchte Gegenstand kann nicht aus einem Rüstungsplatz (außerhalb des Kreativmodus) " + 
+				"Der verfluchte Gegenstand kann nicht aus einem RÃ¼stungsplatz (auÃŸerhalb des Kreativmodus) " + 
 				"entfernt werden, es sei denn, der Spieler stirbt oder der Gegenstand zerbricht.");
 	}
 	

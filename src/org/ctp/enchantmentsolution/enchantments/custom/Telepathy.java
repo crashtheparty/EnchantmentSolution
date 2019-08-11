@@ -16,7 +16,7 @@ public class Telepathy extends CustomEnchantment{
 		super("Telepathy", 65, 35, 0, 0, 40, 1, 1, 1, Weight.VERY_RARE, "Items mined go straight into your inventory.");
 		addDefaultDisplayName(Language.GERMAN, "Telepathie");
 		setMaxLevelOne(true);
-		addDefaultDescription(Language.GERMAN, "Abgebaute Gegenst‰nde gelangen direkt in Ihr Inventar.");
+		addDefaultDescription(Language.GERMAN, "Abgebaute Gegenst√§nde gelangen direkt in Ihr Inventar.");
 	}
 	
 	@Override

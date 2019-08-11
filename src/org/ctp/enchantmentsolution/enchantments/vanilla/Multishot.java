@@ -15,7 +15,7 @@ public class Multishot extends CustomEnchantment{
 		super("Multishot", 35, 20, 0, 0, 20, 1, 1, 1, Weight.RARE, "Shoot multiple arrows at once.");
 		addDefaultDisplayName(Language.GERMAN, "Mehrfachschuss");
 		setMaxLevelOne(true);
-		addDefaultDescription(Language.GERMAN, "Schieﬂen Sie mehrere Pfeile gleichzeitig.");
+		addDefaultDescription(Language.GERMAN, "Schie√üen Sie mehrere Pfeile gleichzeitig.");
 	}
 	
 	@Override

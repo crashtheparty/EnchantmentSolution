@@ -15,7 +15,7 @@ public class MagmaWalker extends CustomEnchantment{
 	public MagmaWalker() {
 		super("Magma Walker", 5, 5, 15, 10, 10, 1, 2, 2, Weight.RARE, "Allows players to walk on lava, turning it into magma.");
 		setTreasure(true);
-		addDefaultDisplayName(Language.GERMAN, "Laval‰ufer");
+		addDefaultDisplayName(Language.GERMAN, "Laval√§ufer");
 		addDefaultDescription(Language.GERMAN, "Erlaubt es den Spielern, auf Lava zu gehen und sie in Magma umzuwandeln.");
 	}
 	

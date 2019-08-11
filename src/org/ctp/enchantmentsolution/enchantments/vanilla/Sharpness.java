@@ -15,9 +15,9 @@ public class Sharpness extends CustomEnchantment{
 	public Sharpness() {
 		super("Sharpness", -12, -10, 13, 11, 1, 1, 6, 5, Weight.COMMON, "Increases melee damage.\n" + 
 				"Adds 1 (half heart) extra damage for the first level, and 0.5 (half heart) for each additional level.");
-		addDefaultDisplayName(Language.GERMAN, "Schärfe");
-		addDefaultDescription(Language.GERMAN, "Erhöht Nahkampfschaden." + 
-				"\nFügt 1 (halbes Herz) zusätzlichen Schaden für die erste Stufe und 0,5 (halbes Herz) für jede zusätzliche Stufe hinzu.");
+		addDefaultDisplayName(Language.GERMAN, "SchÃ¤rfe");
+		addDefaultDescription(Language.GERMAN, "ErhÃ¶ht Nahkampfschaden." + 
+				"\nFÃ¼gt 1 (halbes Herz) zusÃ¤tzlichen Schaden fÃ¼r die erste Stufe und 0,5 (halbes Herz) fÃ¼r jede zusÃ¤tzliche Stufe hinzu.");
 	}
 	
 	@Override

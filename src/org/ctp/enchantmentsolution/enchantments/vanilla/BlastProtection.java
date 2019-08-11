@@ -14,12 +14,12 @@ public class BlastProtection extends CustomEnchantment{
 	
 	public BlastProtection() {
 		super("Blast Protection", -8, -3, 14, 8, 1, 1, 4, 4, Weight.RARE, "Reduces explosion damage.\n" + 
-				"Also reduces explosion knockback by (15 × level)%. If multiple pieces have the enchantment, only the highest level's reduction is used.");
+				"Also reduces explosion knockback by (15 Ã— level)%. If multiple pieces have the enchantment, only the highest level's reduction is used.");
 		addDefaultDisplayName(Language.GERMAN, "Explosionsshutz");
-		addDefaultDescription(Language.GERMAN, "Reduziert Explosionsschäden. " + 
+		addDefaultDescription(Language.GERMAN, "Reduziert ExplosionsschÃ¤den. " + 
 				"\n" + 
-				"Verringert außerdem den Explosionsrückschlag um (15 × Level)%. Wenn mehrere Teile die Verzauberung besitzen, " + 
-				"wird nur die Reduzierung der höchsten Stufe verwendet.");
+				"Verringert auÃŸerdem den ExplosionsrÃ¼ckschlag um (15 Ã— Level)%. Wenn mehrere Teile die Verzauberung besitzen, " + 
+				"wird nur die Reduzierung der hÃ¶chsten Stufe verwendet.");
 	}
 	
 	@Override

@@ -13,8 +13,8 @@ public class LuckOfTheSea extends CustomEnchantment{
 	
 	public LuckOfTheSea() {
 		super("Luck of the Sea", 7, 5, 11, 10, 1, 1, 4, 3, Weight.RARE, "Increases luck while fishing.");
-		addDefaultDisplayName(Language.GERMAN, "Glück des Meeres");
-		addDefaultDescription(Language.GERMAN, "Erhöht das Glück beim Fischen.");
+		addDefaultDisplayName(Language.GERMAN, "GlÃ¼ck des Meeres");
+		addDefaultDescription(Language.GERMAN, "ErhÃ¶ht das GlÃ¼ck beim Fischen.");
 	}
 	
 	@Override

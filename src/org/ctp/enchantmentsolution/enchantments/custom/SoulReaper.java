@@ -16,7 +16,7 @@ public class SoulReaper extends CustomEnchantment{
 		super("Soul Reaper", 30, 20, 0, 0, 25, 1, 1, 1, Weight.VERY_RARE, "Has a chance of stealing soulbounded items from the killed player.");
 		addDefaultDisplayName(Language.GERMAN, "Seelendieb");
 		setMaxLevelOne(true);
-		addDefaultDescription(Language.GERMAN, "Hat eine Chance, vom getöteten Spieler seelengebundene Gegenstände zu stehlen.");
+		addDefaultDescription(Language.GERMAN, "Hat eine Chance, vom getÃ¶teten Spieler seelengebundene GegenstÃ¤nde zu stehlen.");
 	}
 	
 	@Override

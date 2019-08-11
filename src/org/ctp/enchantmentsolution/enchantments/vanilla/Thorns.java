@@ -15,8 +15,8 @@ public class Thorns extends CustomEnchantment{
 		super("Thorns", 10, -10, 20, 20, 20, 1, 3, 3, Weight.VERY_RARE, "Attackers are damaged when they attack the wearer. " + 
 				"This does additional durability damage to armor.");
 		addDefaultDisplayName(Language.GERMAN, "Dornen");
-		addDefaultDescription(Language.GERMAN, "Angreifer werden beschädigt, wenn sie den Träger angreifen. " + 
-				"Dies führt auch zu einer zusätzlichen Haltbarkeit der Rüstung.");
+		addDefaultDescription(Language.GERMAN, "Angreifer werden beschÃ¤digt, wenn sie den TrÃ¤ger angreifen. " + 
+				"Dies fÃ¼hrt auch zu einer zusÃ¤tzlichen Haltbarkeit der RÃ¼stung.");
 	}
 	
 	@Override

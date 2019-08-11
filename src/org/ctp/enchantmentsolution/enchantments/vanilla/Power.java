@@ -12,9 +12,9 @@ import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 public class Power extends CustomEnchantment{
 	
 	public Power() {
-		super("Power", -10, -9, 11, 10, 1, 1, 6, 5, Weight.COMMON, "Increases arrow damage by 25% × (level + 1), rounded up to nearest half-heart.");
-		addDefaultDisplayName(Language.GERMAN, "Stärke");
-		addDefaultDescription(Language.GERMAN, "Erhöht den Pfeilschaden um 25% × (Stufe + 1), aufgerundet auf das nächste Herz.");
+		super("Power", -10, -9, 11, 10, 1, 1, 6, 5, Weight.COMMON, "Increases arrow damage by 25% Ã— (level + 1), rounded up to nearest half-heart.");
+		addDefaultDisplayName(Language.GERMAN, "StÃ¤rke");
+		addDefaultDescription(Language.GERMAN, "ErhÃ¶ht den Pfeilschaden um 25% Ã— (Stufe + 1), aufgerundet auf das nÃ¤chste Herz.");
 	}
 	
 	@Override

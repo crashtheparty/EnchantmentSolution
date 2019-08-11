@@ -17,7 +17,7 @@ public class FireAspect extends CustomEnchantment{
 				"Fire Aspect adds 80 fire ticks (4 seconds of burning) per level to the target.");
 		addDefaultDisplayName(Language.GERMAN, "Verbrennung");
 		addDefaultDescription(Language.GERMAN, "Setzt das Ziel in Brand.\n" + 
-				"Feueraspekt fügt dem Ziel 80 Feuerzecken (4 Sekunden Brennen) pro Stufe hinzu.");
+				"Feueraspekt fÃ¼gt dem Ziel 80 Feuerzecken (4 Sekunden Brennen) pro Stufe hinzu.");
 	}
 
 	@Override

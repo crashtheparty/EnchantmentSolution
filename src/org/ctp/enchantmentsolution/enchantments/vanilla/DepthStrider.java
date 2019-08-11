@@ -14,8 +14,8 @@ public class DepthStrider extends CustomEnchantment{
 	
 	public DepthStrider() {
 		super("Depth Strider", 5, 0, 15, 10, 10, 1, 3, 3, Weight.RARE, "Increases underwater movement speed.");
-		addDefaultDisplayName(Language.GERMAN, "Wasserläufer");
-		addDefaultDescription(Language.GERMAN, "Erhöht die Bewegungsgeschwindigkeit unter Wasser.");
+		addDefaultDisplayName(Language.GERMAN, "WasserlÃ¤ufer");
+		addDefaultDescription(Language.GERMAN, "ErhÃ¶ht die Bewegungsgeschwindigkeit unter Wasser.");
 	}
 
 	@Override

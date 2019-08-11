@@ -14,8 +14,8 @@ public class GoldDigger extends CustomEnchantment{
 	
 	public GoldDigger() {
 		super("Gold Digger", -2, -10, 12, 11, 10, 1, 6, 5, Weight.UNCOMMON, "Earn experience and gold nuggets for breaking crops.");
-		addDefaultDisplayName(Language.GERMAN, "Goldgräber");
-		addDefaultDescription(Language.GERMAN, "Sammeln Sie Erfahrung und Gold-Nuggets für das Ernten.");
+		addDefaultDisplayName(Language.GERMAN, "GoldgrÃ¤ber");
+		addDefaultDescription(Language.GERMAN, "Sammeln Sie Erfahrung und Gold-Nuggets fï¿½r das Ernten.");
 	}
 	
 	@Override

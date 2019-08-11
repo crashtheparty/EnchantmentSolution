@@ -14,11 +14,11 @@ public class CurseOfExhaustion extends CustomEnchantment{
 	
 	public CurseOfExhaustion() {
 		super("Curse of Exhaustion", 25, 25, 0, 0, 1, 1, 1, 1, Weight.VERY_RARE, "Increases exhaustion when equipped.");
-		addDefaultDisplayName(Language.GERMAN, "Fluch der Erschöpfung");
+		addDefaultDisplayName(Language.GERMAN, "Fluch der ErschÃ¶pfung");
 		setTreasure(true);
 		setMaxLevelOne(true);
 		setCurse(true);
-		addDefaultDescription(Language.GERMAN, "Erhöht die Erschöpfung, wenn ausgerüstet.");
+		addDefaultDescription(Language.GERMAN, "ErhÃ¶ht die ErschÃ¶pfung, wenn ausgerÃ¼stet.");
 	}
 	
 	@Override

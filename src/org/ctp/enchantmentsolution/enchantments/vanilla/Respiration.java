@@ -14,7 +14,7 @@ public class Respiration extends CustomEnchantment{
 	public Respiration() {
 		super("Respiration", -5, 0, 15, 10, 1, 1, 3, 3, Weight.RARE, "Extends underwater breathing time.");
 		addDefaultDisplayName(Language.GERMAN, "Atmung");
-		addDefaultDescription(Language.GERMAN, "Verl‰ngert die Atmungszeit unter Wasser.");
+		addDefaultDescription(Language.GERMAN, "Verl√§ngert die Atmungszeit unter Wasser.");
 	}
 	
 	@Override

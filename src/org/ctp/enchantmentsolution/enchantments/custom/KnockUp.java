@@ -15,7 +15,7 @@ public class KnockUp extends CustomEnchantment{
 	public KnockUp() {
 		super("Knockup", -15, 5, 20, 10, 1, 1, 4, 2, Weight.UNCOMMON, "Increases knockback upwards.");
 		addDefaultDisplayName(Language.GERMAN, "Werfen");
-		addDefaultDescription(Language.GERMAN, "Erhöht den Rückstoß nach oben.");
+		addDefaultDescription(Language.GERMAN, "ErhÃ¶ht den RÃ¼ckstoÃŸ nach oben.");
 	}
 	
 	@Override

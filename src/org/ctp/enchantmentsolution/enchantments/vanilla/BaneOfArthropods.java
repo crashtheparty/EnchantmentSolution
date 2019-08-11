@@ -16,10 +16,10 @@ public class BaneOfArthropods extends CustomEnchantment{
 		super("Bane of Arthropods", -4, -3, 9, 8, 1, 1, 6, 5, Weight.UNCOMMON, "Increases damage to \"arthropod\" mobs "
 				+ "(spiders, cave spiders, silverfish and endermites).\nEach level separately adds 2.5 (half heart) extra damage to "
 				+ "each hit, to \"arthropods\" only.\nThe enchantment will also cause \"arthropods\" to have the Slowness IV effect when hit.");
-		addDefaultDisplayName(Language.GERMAN, "Nemesis der Gliederfüßer");
-		addDefaultDescription(Language.GERMAN, "Erhöht den Schaden an \"Arthropoden\" -Mobs (Spinnen, Höhlenspinnen, Silberfischen und Endermiten)." + 
+		addDefaultDisplayName(Language.GERMAN, "Nemesis der GliederfÃ¼ÃŸer");
+		addDefaultDescription(Language.GERMAN, "ErhÃ¶ht den Schaden an \"Arthropoden\" -Mobs (Spinnen, HÃ¶hlenspinnen, Silberfischen und Endermiten)." + 
 				"\n" + 
-				"Jedes Level fügt jedem Treffer separat 2,5 (halbes Herz) Schaden hinzu, nur für \"Arthropoden\"." + 
+				"Jedes Level fÃ¼gt jedem Treffer separat 2,5 (halbes Herz) Schaden hinzu, nur fÃ¼r \"Arthropoden\"." + 
 				"\n" + 
 				"Die Verzauberung bewirkt auch, dass \"Arthropoden\" den Effekt von Slowness IV haben, wenn sie getroffen werden");
 	}

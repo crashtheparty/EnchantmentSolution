@@ -28,6 +28,20 @@ public class ItemNameNMS {
 				return GermanNames_v1_14.getName(item.getType());
 			}
 			break;
+		case CHINA_SIMPLE:
+			switch(EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber()) {
+			case 1:
+			case 2:
+			case 3:
+				return ChinaNames_v1_13.getName(item.getType());
+			case 4:
+			case 5:
+			case 6:
+			case 7:
+			case 8:
+				return ChinaNames_v1_14.getName(item.getType());
+			}
+			break;
 		case US:
 			switch(EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber()) {
 			case 1:

@@ -16,9 +16,9 @@ public class StoneThrow extends CustomEnchantment{
 		super("Stone Throw", -12, -10, 13, 11, 1, 1, 6, 5, Weight.COMMON, "Increases ranged damage against flying mobs.\n"
 				+ "Adds 40% * level + 20% damage against flying mobs.");
 		addDefaultDisplayName(Language.GERMAN, "Steinwurf");
-		addDefaultDescription(Language.GERMAN, "Erhöht den Distanzschaden gegen fliegende Mobs." + 
+		addDefaultDescription(Language.GERMAN, "ErhÃ¶ht den Distanzschaden gegen fliegende Mobs." + 
 				"\n" + 
-				"Fügt 40% * Level + 20% Schaden gegen fliegende Mobs hinzu.");
+				"FÃ¼gt 40% * Level + 20% Schaden gegen fliegende Mobs hinzu.");
 	}
 	
 	@Override

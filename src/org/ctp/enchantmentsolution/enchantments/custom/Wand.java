@@ -16,7 +16,7 @@ public class Wand extends CustomEnchantment{
 		super("Wand", 20, 10, 15, 10, 30, 1, 3, 2, Weight.VERY_RARE, "Places blocks from the offhand.");
 		addDefaultDisplayName(Language.GERMAN, "Zauberstab");
 		setTreasure(true);
-		addDefaultDescription(Language.GERMAN, "Platziert Blöcke von der Nebenhand.");
+		addDefaultDescription(Language.GERMAN, "Platziert BlÃ¶cke von der Nebenhand.");
 	}
 	
 	@Override

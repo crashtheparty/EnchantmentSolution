@@ -15,7 +15,7 @@ public class Beheading extends CustomEnchantment{
 	public Beheading() {
 		super("Beheading", 10, 5, 20, 12, 20, 1, 3, 3, Weight.RARE, "Adds a chance to drop mob heads on death.");
 		addDefaultDisplayName(Language.GERMAN, "Beheading");
-		addDefaultDescription(Language.GERMAN, "Fügt dem Tod die Chance hinzu, Mobköpfe abzulegen.");
+		addDefaultDescription(Language.GERMAN, "FÃ¼gt dem Tod die Chance hinzu, MobkÃ¶pfe abzulegen.");
 	}
 	
 	@Override

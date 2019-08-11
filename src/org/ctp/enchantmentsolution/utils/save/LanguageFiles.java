@@ -25,8 +25,8 @@ import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 
 public class LanguageFiles {
 
-	private File languageFile, englishUSFile, germanFile;
-	private YamlConfig englishUS, german;
+	private File languageFile, englishUSFile, germanFile, simplifiedChineseFile;
+	private YamlConfig englishUS, german, simplifiedChinese;
 	private Language defaultLanguage;
 	private YamlConfigBackup language;
 	private ConfigFiles files;
@@ -54,10 +54,12 @@ public class LanguageFiles {
 		case "display_name":
 			englishUS.addDefault(path, StringUtils.encodeString(enchantment.getDefaultDisplayName(Language.US)));
 			german.addDefault(path, StringUtils.encodeString(enchantment.getDefaultDisplayName(Language.GERMAN)));
+			simplifiedChinese.addDefault(path, StringUtils.encodeString(enchantment.getDefaultDisplayName(Language.CHINA_SIMPLE)));
 			break;
 		case "description":
 			englishUS.addDefault(path, StringUtils.encodeString(enchantment.getDefaultDescription(Language.US)));
 			german.addDefault(path, StringUtils.encodeString(enchantment.getDefaultDescription(Language.GERMAN)));
+			simplifiedChinese.addDefault(path, StringUtils.encodeString(enchantment.getDefaultDescription(Language.CHINA_SIMPLE)));
 			break;
 		}
 	}
@@ -106,6 +108,8 @@ public class LanguageFiles {
 			return englishUS;
 		case GERMAN:
 			return german;
+		case CHINA_SIMPLE:
+			return simplifiedChinese;
 		}
 		return englishUS;
 	}
@@ -122,12 +126,15 @@ public class LanguageFiles {
 			YamlConfiguration.loadConfiguration(englishUSFile);
 			germanFile = new File(dataFolder + "/languages/de_de.yml");
 			YamlConfiguration.loadConfiguration(germanFile);
+			simplifiedChineseFile = new File(dataFolder + "/languages/zh_cn.yml");
+			YamlConfiguration.loadConfiguration(simplifiedChineseFile);
 		} catch (final Exception e) {
 			e.printStackTrace();
 		}
 
 		defaultenglishUSFile();
 		defaultGermanFile();
+		defaultSimplifiedChineseFile();
 	}
 
 	private void defaultenglishUSFile() {
@@ -250,6 +257,60 @@ public class LanguageFiles {
 		}
 
 		german.saveConfig();
+		file.delete();
+	}
+
+	private void defaultSimplifiedChineseFile() {
+		if (simplifiedChinese == null)
+			simplifiedChinese = new YamlConfigBackup(simplifiedChineseFile, new String[0]);
+				
+		File file = files.getTempFile("/resources/zh_cn.yml");
+		
+		YamlConfig defaultSimplifiedChineseConfig = new YamlConfig(file, new String[] {});
+		defaultSimplifiedChineseConfig.getFromConfig();
+		for(String str : defaultSimplifiedChineseConfig.getAllEntryKeys()) {
+			if(defaultSimplifiedChineseConfig.get(str) != null) {
+				if(str.startsWith("config_comments.")) {
+					simplifiedChinese.addComments(str, defaultSimplifiedChineseConfig.getStringList(str).toArray(new String[] {}));
+				} else {
+					simplifiedChinese.addDefault(str, defaultSimplifiedChineseConfig.get(str));
+				}
+			}
+		}
+		
+		for(CustomEnchantment enchant: DefaultEnchantments.getEnchantments()) {
+			String enchantmentDescription = enchant.getDefaultDescription(Language.GERMAN);
+			if (enchantmentDescription == null) {
+				enchantmentDescription = "没有说明";
+			}
+			if (enchant.getRelativeEnchantment() instanceof ApiEnchantmentWrapper) {
+				JavaPlugin plugin = ((ApiEnchantmentWrapper) enchant.getRelativeEnchantment()).getPlugin();
+				if (plugin == null) {
+					ChatUtils.sendToConsole(Level.WARNING,
+							"Enchantment " + enchant.getName() + " (Display Name " + enchant.getDisplayName() + ")"
+									+ " does not have a JavaPlugin set. Refusing to set language defaults.");
+					continue;
+				}
+				simplifiedChinese.addDefault(
+						"enchantment.descriptions." + plugin.getName().toLowerCase() + "." + enchant.getName(),
+						StringUtils.encodeString(enchantmentDescription));
+			} else if (enchant.getRelativeEnchantment() instanceof CustomEnchantmentWrapper) {
+				simplifiedChinese.addDefault("enchantment.descriptions." + "custom_enchantments." + enchant.getName(),
+						StringUtils.encodeString(enchantmentDescription));
+			} else {
+				simplifiedChinese.addDefault("enchantment.descriptions." + "default_enchantments." + enchant.getName(),
+						StringUtils.encodeString(enchantmentDescription));
+			}
+		}
+
+		for(Iterator<java.util.Map.Entry<Material, String>> it = ItemType.ALL.getUnlocalizedNames().entrySet()
+				.iterator(); it.hasNext();) {
+			java.util.Map.Entry<Material, String> e = it.next();
+			simplifiedChinese.addDefault("vanilla." + e.getValue(),
+					ItemNameNMS.returnLocalizedItemName(Language.CHINA_SIMPLE, e.getKey()));
+		}
+
+		simplifiedChinese.saveConfig();
 		file.delete();
 	}
 }

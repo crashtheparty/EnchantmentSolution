@@ -14,7 +14,7 @@ public class Punch extends CustomEnchantment{
 	public Punch() {
 		super("Punch", -8, -8, 20, 20, 1, 1, 3, 2, Weight.RARE, "Increases knockback on bows.");
 		addDefaultDisplayName(Language.GERMAN, "Schlag");
-		addDefaultDescription(Language.GERMAN, "Erhöht den Rückstoß an den Bögen.");
+		addDefaultDescription(Language.GERMAN, "ErhÃ¶ht den RÃ¼ckstoÃŸ an den BÃ¶gen.");
 	}
 	
 	@Override

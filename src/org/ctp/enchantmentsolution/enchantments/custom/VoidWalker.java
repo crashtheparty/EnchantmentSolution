@@ -15,7 +15,7 @@ public class VoidWalker extends CustomEnchantment{
 	public VoidWalker() {
 		super("Void Walker", 5, 5, 15, 10, 10, 1, 2, 2, Weight.RARE, "Allows players to walk on air, turning it into obsidian.");
 		setTreasure(true);
-		addDefaultDisplayName(Language.GERMAN, "Ungültiger Läufer");
+		addDefaultDisplayName(Language.GERMAN, "UngÃ¼ltiger LÃ¤ufer");
 		addDefaultDescription(Language.GERMAN, "Erlaubt es den Spielern, in der Luft zu gehen und es in Obsidian umzuwandeln.");
 	}
 	
