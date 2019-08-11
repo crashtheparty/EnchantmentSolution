@@ -60,6 +60,9 @@ permissions:
   enchantmentsolution.demigod-anvil:
     description: Allows players to repair items with enchantments they cannot combine
     default: false
+  enchantmentsolution.demigod-books:
+    description: Allows players to add levels from enchanted books to items even if they cannot combine the levels
+    default: false
   enchantmentsolution.god-anvil:
     description: Allows players to combine items higher than their max levels
     default: false
