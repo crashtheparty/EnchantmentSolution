@@ -565,6 +565,7 @@ public class Enchantments {
 		if(godAnvil) {
 			demiGodAnvil = true;
 		}
+		boolean demiGodBooks = demiGodAnvil && player.hasPermission("enchantmentsolution.demigod-books");
 		
 		for(EnchantmentLevel enchantTwo : secondLevels) {
 			boolean conflict = false;
@@ -599,9 +600,11 @@ public class Enchantments {
 					conflict = true;
 				}
 			}
-			
+			ChatUtils.sendInfo("Is in here " + levelCost + " " + enchantTwo.getEnchant().canAnvil(player, levelCost));
 			if(demiGodAnvil) {
-				if(!enchantTwo.getEnchant().canAnvil(player, levelCost) && originalLevel >= levelCost) {
+				if(demiGodBooks && (second.getType() == Material.BOOK || second.getType() == Material.ENCHANTED_BOOK)) {
+					// nothing needs to change
+				} else if(!enchantTwo.getEnchant().canAnvil(player, levelCost) && originalLevel >= levelCost) {
 					levelCost = originalLevel;
 					if(!godAnvil && levelCost > enchantTwo.getEnchant().getMaxLevel()) {
 						levelCost = enchantTwo.getEnchant().getMaxLevel();

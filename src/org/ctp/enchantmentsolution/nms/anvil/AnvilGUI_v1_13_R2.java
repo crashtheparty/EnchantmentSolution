@@ -319,6 +319,11 @@ public class AnvilGUI_v1_13_R2 {
 					event.setWillDestroy(false);
 					return;
 				}
+				if(player.getLevel() < 1) {
+					event.setWillClose(true);
+					event.setWillDestroy(true);
+					return;
+				}
 				if(event.getName().equals("")) {
 					if(data instanceof Anvil) {
 						Anvil anvil = (Anvil) data;

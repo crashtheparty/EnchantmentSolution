@@ -45,12 +45,11 @@ public class AbilityPlayerRunnable implements Runnable{
 		}
 		
 		Iterator<Entry<UUID, List<AbilityPlayer>>> iterator = PLAYERS.entrySet().iterator();
-		List<UUID> toRemove = new ArrayList<UUID>();
 		while(iterator.hasNext()) {
 			Entry<UUID, List<AbilityPlayer>> entry = iterator.next();
 			Player player = Bukkit.getPlayer(entry.getKey());
 			if(player == null || !player.isOnline()) {
-				toRemove.add(entry.getKey());
+				iterator.remove();
 				continue;
 			}
 			
