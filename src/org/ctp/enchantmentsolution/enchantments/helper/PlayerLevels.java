@@ -67,7 +67,7 @@ public class PlayerLevels {
 		return material;
 	}
 	
-	private boolean compare(int books, Player player, Material material){
+	public boolean compare(int books, Player player, Material material){
 		if(this.books == books && player.getUniqueId().toString().equals(this.player.getUniqueId().toString()) && material.equals(this.material)){
 			return true;
 		}
@@ -159,7 +159,7 @@ public class PlayerLevels {
 	}
 
 
-	private void generateEnchants(List<Integer> intList, boolean treasure) {
+	public void generateEnchants(List<Integer> intList, boolean treasure) {
 		if(enchants.size() > 0) return;
 		for(int i = 0; i < intList.size(); i++){
 			if(intList.get(i) == -1){
@@ -207,10 +207,15 @@ public class PlayerLevels {
 	}
 	
 	public static PlayerLevels generateFakePlayerLevels(Material material, int minBookshelves, boolean treasure) {
+		return generateFakePlayerLevels(material, minBookshelves, treasure, 0);
+	}
+	
+	public static PlayerLevels generateFakePlayerLevels(Material material, int minBookshelves, boolean treasure, int mobLevel) {
 		int books = 16;
 		if(ConfigUtils.isLevel50()) books = 24;
 		int random = (int)(Math.random() * books) + minBookshelves;
 		if(random >= books) random = books - 1;
+		if(books < getMinBooks(mobLevel)) books = getMinBooks(mobLevel);
 		PlayerLevels levels = new PlayerLevels(random, material, treasure);
 		
 		if(ConfigUtils.isLevel50() && random < 15) {
@@ -220,6 +225,17 @@ public class PlayerLevels {
 		}
 		
 		return levels;
+	}
+	
+	private static int getMinBooks(int mobLevel) {
+		if(mobLevel > 30) {
+			return 15;
+		} else if (mobLevel > 18) {
+			return 10;
+		} else if (mobLevel > 0) {
+			return 4;
+		}
+		return 0;
 	}
 	
 	public static MerchantRecipe generateVillagerTrade(MerchantRecipe original) {
