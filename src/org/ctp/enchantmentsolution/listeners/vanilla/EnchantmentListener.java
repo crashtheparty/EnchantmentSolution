@@ -2,7 +2,13 @@ package org.ctp.enchantmentsolution.listeners.vanilla;
 
 import java.util.List;
 
+import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
+import org.bukkit.Sound;
+import org.bukkit.Statistic;
+import org.bukkit.advancement.Advancement;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -10,11 +16,13 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.enchantment.EnchantItemEvent;
 import org.bukkit.event.enchantment.PrepareItemEnchantEvent;
 import org.bukkit.inventory.ItemStack;
+import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantmentWrapper;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.enchantments.helper.PlayerLevels;
 import org.ctp.enchantmentsolution.utils.ConfigUtils;
+import org.ctp.enchantmentsolution.utils.JobsUtils;
 
 public class EnchantmentListener implements Listener{
 
@@ -54,8 +62,18 @@ public class EnchantmentListener implements Listener{
 				if(item.getType() == Material.BOOK && ConfigUtils.getEnchantedBook()) {
 					item = Enchantments.convertToEnchantedBook(item);
 				}
+				if(player.getGameMode() != GameMode.CREATIVE) {
+					player.setLevel(player.getLevel() - i - 1);
+				}
 				event.getInventory().setItem(0, item);
 				event.getInventory().removeItem(new ItemStack(Material.LAPIS_LAZULI, i + 1));
+				player.playSound(player.getLocation(), Sound.BLOCK_ENCHANTMENT_TABLE_USE, 1, 1);
+				player.setStatistic(Statistic.ITEM_ENCHANTED, player.getStatistic(Statistic.ITEM_ENCHANTED) + 1);
+				Advancement enchanted = Bukkit.getAdvancement(NamespacedKey.minecraft("story/enchant_item"));
+				player.getAdvancementProgress(enchanted).awardCriteria("enchanted_item");
+				if(EnchantmentSolution.getPlugin().isJobsEnabled()) {
+					JobsUtils.sendEnchantAction(player, item, item, enchantments);
+				}
 				break;
 			}
 		}

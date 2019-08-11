@@ -1,8 +1,7 @@
 package org.ctp.enchantmentsolution.enchantments.helper;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
+import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.Material;
@@ -19,15 +18,16 @@ public class PlayerLevels {
 	private int books;
 	private Player player;
 	private Material material;
-	public static HashMap<PlayerLevels, List<Integer>> PLAYER_LEVELS = new HashMap<PlayerLevels, List<Integer>>();
+	public static List<PlayerLevels> PLAYER_LEVELS = new ArrayList<PlayerLevels>();
 	private List<List<EnchantmentLevel>> enchants = new ArrayList<List<EnchantmentLevel>>();
+	private List<Integer> levelList;
 	
 	public PlayerLevels(int books, Player player, Material material){
 		this.books = books;
 		this.player = player;
 		this.material = material;
 		
-		List<Integer> levelList = getIntList(player, books);
+		levelList = getIntList(player, books);
 		
 		if(levelList == null){
 			if(ConfigUtils.isLevel50()) {
@@ -39,22 +39,18 @@ public class PlayerLevels {
 		
 		generateEnchants(levelList, false);
 		
-		PLAYER_LEVELS.put(this, levelList);
+		PLAYER_LEVELS.add(this);
 	}
 	
 	private PlayerLevels(int books, Material material, boolean treasure) {
 		this.books = books;
 		this.player = null;
 		this.material = material;
-		
-		List<Integer> levelList = getIntList(player, books);
-		
-		if(levelList == null){
-			if(ConfigUtils.isLevel50()) {
-				levelList = generateFiftyLevels();
-			} else {
-				levelList = generateThirtyLevels();
-			}
+				
+		if(ConfigUtils.isLevel50()) {
+			levelList = generateFiftyLevels();
+		} else {
+			levelList = generateThirtyLevels();
 		}
 		
 		generateEnchants(levelList, treasure);
@@ -178,12 +174,9 @@ public class PlayerLevels {
 		if(player == null) return null;
 		List<Integer> levelList = null;
 		
-		for (Iterator<java.util.Map.Entry<PlayerLevels, List<Integer>>> it = PLAYER_LEVELS.entrySet().iterator(); it.hasNext();) {
-			java.util.Map.Entry<PlayerLevels, List<Integer>> e = it.next();
-			PlayerLevels levels = e.getKey();
-			List<Integer> intList = e.getValue();
+		for(PlayerLevels levels : PLAYER_LEVELS) {
 			if(levels.getPlayer().getUniqueId().toString().equals(player.getUniqueId().toString()) && levels.getBooks() == books){
-				levelList = intList;
+				levelList = levels.getLevelList();
 				break;
 			}
 		}
@@ -192,9 +185,7 @@ public class PlayerLevels {
 	}
 	
 	public static PlayerLevels getPlayerLevels(int books, Player player, Material material){
-		for (Iterator<java.util.Map.Entry<PlayerLevels, List<Integer>>> it = PLAYER_LEVELS.entrySet().iterator(); it.hasNext();) {
-			java.util.Map.Entry<PlayerLevels, List<Integer>> e = it.next();
-			PlayerLevels levels = e.getKey();
+		for(PlayerLevels levels : PLAYER_LEVELS) {
 			if(levels.compare(books, player, material)){
 				return levels;
 			}
@@ -203,19 +194,16 @@ public class PlayerLevels {
 	}
 	
 	public static void resetPlayerLevels() {
-		PLAYER_LEVELS = new HashMap<PlayerLevels, List<Integer>>();
+		PLAYER_LEVELS = new ArrayList<PlayerLevels>();
 	}
 	
 	public static void removePlayerLevels(Player player){
-		HashMap<PlayerLevels, List<Integer>> playerLevels = new HashMap<PlayerLevels, List<Integer>>();
-		for (Iterator<java.util.Map.Entry<PlayerLevels, List<Integer>>> it = PLAYER_LEVELS.entrySet().iterator(); it.hasNext();) {
-			java.util.Map.Entry<PlayerLevels, List<Integer>> e = it.next();
-			PlayerLevels levels = e.getKey();
-			if(!levels.getPlayer().getUniqueId().toString().equals(player.getUniqueId().toString())){
-				playerLevels.put(levels, e.getValue());
+		for(int i = PLAYER_LEVELS.size() - 1; i >= 0; i--) {
+			PlayerLevels levels = PLAYER_LEVELS.get(i);
+			if(levels.getPlayer().equals(player)) {
+				PLAYER_LEVELS.remove(i);
 			}
 		}
-		PLAYER_LEVELS = playerLevels;
 	}
 	
 	public static PlayerLevels generateFakePlayerLevels(Material material, int minBookshelves, boolean treasure) {
@@ -385,5 +373,9 @@ public class PlayerLevels {
 	        num += Math.random() * ((double) max / (double) curve);
 	    }
 	    return (int) num;
+	}
+	
+	public List<Integer> getLevelList(){
+		return Arrays.asList(levelList.toArray(new Integer[] {}));
 	}
 }
