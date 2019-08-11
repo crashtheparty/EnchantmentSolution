@@ -41,16 +41,12 @@ public class ChestPopulate_v1_13_R1 {
             	}
             }
         }
-		nmsWorld.close();
 	}
 	
 	public static boolean isLootChest(Block block) {
 		World nmsWorld = ((CraftWorld) block.getWorld()).getHandle();
         TileEntityLootable te = (TileEntityLootable) nmsWorld.getTileEntity(new BlockPosition(block.getX(), block.getY(), block.getZ()));
-        boolean isLootChest = te.Q_() != null;
-
-		nmsWorld.close();
-        return isLootChest;
+        return te.Q_() != null;
 	}
 	
 	public static void populateCart(Entity e) {
