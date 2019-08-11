@@ -122,8 +122,46 @@ public class ItemUtils {
 		
 		return duplicate;
 	}
+	
+	public static ItemStack addNMSEnchantment(ItemStack item, String type, float[] regionalDifficulty) {
+		ItemStack duplicate = item.clone();
+		ItemMeta duplicateMeta = duplicate.getItemMeta();
+		
+		duplicateMeta.setDisplayName(duplicateMeta.getDisplayName());
+		duplicate.setItemMeta(duplicateMeta);
+		DamageUtils.setDamage(duplicate, DamageUtils.getDamage(duplicateMeta));
+		
+		List<EnchantmentLevel> enchants = null;
+		int level = getLevel(regionalDifficulty[1]);
+		while(enchants == null) {
+			PlayerLevels levels = PlayerLevels.generateFakePlayerLevels(duplicate.getType(), 
+					ConfigUtils.getBookshelvesFromType(type), ConfigUtils.includeTreasureFromType(type), level);
+			List<Integer> levelList = levels.getLevelList();
+			for(int i = levelList.size() - 1; i >= 0; i--) {
+				if(levelList.get(i) == -1) continue;
+				if(levelList.get(i) >= level) {
+					enchants = levels.getEnchants().get(i);
+					break;
+				}
+			}
+		}
+		
+		duplicate = Enchantments.addEnchantmentsToItem(duplicate, enchants);
+		
+		return duplicate;
+	}
 
 	public static List<Material> getShulkerBoxes() {
 		return SHULKER_BOXES;
+	}
+	
+	private static int getLevel(float f) {
+		boolean fifty = ConfigUtils.isLevel50();
+		int j = fifty ? 8 : 5;
+		float k = fifty ? f * 32 : f * 18;
+		if((int) k < k) {
+			return (int) (j + k + 1);
+		}
+		return (int) (j + k);
 	}
 }

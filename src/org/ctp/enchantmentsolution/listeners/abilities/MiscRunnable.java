@@ -66,7 +66,7 @@ public class MiscRunnable implements Runnable{
 				}
 				EXHAUSTION.put(player.getUniqueId(), AbilityUtils.getExhaustion(player));
 			} else {
-				EXHAUSTION.remove(entry.getKey());
+				iterator.remove();
 			}
 		}
 	}
