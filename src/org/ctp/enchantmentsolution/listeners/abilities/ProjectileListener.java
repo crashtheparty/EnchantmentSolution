@@ -21,20 +21,21 @@ import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.LocationUtils;
 import org.ctp.enchantmentsolution.utils.items.nms.AbilityUtils;
 
+@SuppressWarnings("unused")
 public class ProjectileListener extends EnchantmentListener{
 
 	@EventHandler
 	public void onProjectileLaunch(ProjectileLaunchEvent event) {
-		curseOfLag(event);
-		drowned(event);
-		sniper(event);
-		transmutation(event);
+		runMethod(this, "curseOfLag", event);
+		runMethod(this, "drowned", event);
+		runMethod(this, "sniper", event);
+		runMethod(this, "transmutation", event);
 	}
 	
 	@EventHandler
 	public void onProjectileHit(ProjectileHitEvent event) {
-		hardBounce(event);
-		splatterFest(event);
+		runMethod(this, "hardBounce", event);
+		runMethod(this, "splatterFest", event);
 	}
 	
 	private void curseOfLag(ProjectileLaunchEvent event){

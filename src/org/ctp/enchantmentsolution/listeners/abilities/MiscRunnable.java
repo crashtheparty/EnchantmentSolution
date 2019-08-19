@@ -24,20 +24,22 @@ import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 import org.ctp.enchantmentsolution.utils.items.nms.AbilityUtils;
 
-public class MiscRunnable implements Runnable{
+@SuppressWarnings("unused")
+public class MiscRunnable extends EnchantmentListener implements Runnable{
 
 	private static Map<UUID, Float> EXHAUSTION = new HashMap<UUID, Float>();
 	private int run = 0;
 	
 	@Override
 	public void run() {
-		curseOfExhaustion();
-		drowned();
+		runMethod(this, "curseOfExhaustion");
+		runMethod(this, "drowned");
+		runMethod(this, "icarus");
 		if(run == 0) {
-			icarus();
+			runMethod(this, "icarus");
 		}
-		magicGuard();
-		sandVeil();
+		runMethod(this, "magicGuard");
+		runMethod(this, "sandVeil");
 		run++;
 		if(run / 20 > 0) run = 0;
 	}

@@ -493,10 +493,10 @@ public abstract class CustomEnchantment {
 	public String getDefaultDisplayName(Language lang) {
 		String english = null;
 		for(EnchantmentDisplayName d : defaultDisplayNames) {
-			if(lang.equals(d.getLanguage())) {
+			if(lang == d.getLanguage()) {
 				return d.getDisplayName();
 			}
-			if(d.getLanguage().equals(Language.US)) {
+			if(d.getLanguage() == Language.US) {
 				english = d.getDisplayName();
 			}
 		}
@@ -505,7 +505,7 @@ public abstract class CustomEnchantment {
 
 	protected void addDefaultDisplayName(EnchantmentDisplayName defaultDisplayName) {
 		for(EnchantmentDisplayName displayName : defaultDisplayNames) {
-			if(displayName.getLanguage().equals(defaultDisplayName.getLanguage())) {
+			if(displayName.getLanguage() == defaultDisplayName.getLanguage()) {
 				displayName.setDescription(defaultDisplayName.getDisplayName());
 				return;
 			}
@@ -558,10 +558,10 @@ public abstract class CustomEnchantment {
 	public String getDefaultDescription(Language lang) {
 		String english = null;
 		for(EnchantmentDescription d : defaultDescriptions) {
-			if(lang.equals(d.getLanguage())) {
+			if(lang == d.getLanguage()) {
 				return d.getDescription();
 			}
-			if(d.getLanguage().equals(Language.US)) {
+			if(d.getLanguage() == Language.US) {
 				english = d.getDescription();
 			}
 		}

@@ -38,25 +38,26 @@ import org.ctp.enchantmentsolution.utils.LocationUtils;
 import org.ctp.enchantmentsolution.utils.items.*;
 import org.ctp.enchantmentsolution.utils.items.nms.*;
 
+@SuppressWarnings("unused")
 public class BlockListener extends EnchantmentListener{
 
 	@EventHandler
 	public void onBlockBreak(BlockBreakEvent event){
-		expShare(event);
+		runMethod(this, "expShare", event);
 	}
 	
 	@EventHandler(priority=EventPriority.HIGHEST)
 	public void onBlockBreakHighest(BlockBreakEvent event) {
-		heightWidth(event);
-		curseOfLag(event);
-		goldDigger(event);
-		smeltery(event);
-		telepathy(event);
+		runMethod(this, "heightWidth", event);
+		runMethod(this, "curseOfLag", event);
+		runMethod(this, "goldDigger", event);
+		runMethod(this, "smeltery", event);
+		runMethod(this, "telepathy", event);
 	}
 	
 	@EventHandler(priority=EventPriority.HIGHEST)
 	public void onBlockPlaceHighest(BlockPlaceEvent event) {
-		wand(event);
+		runMethod(this, "wand", event);
 	}
 	
 	private void curseOfLag(BlockBreakEvent event) {

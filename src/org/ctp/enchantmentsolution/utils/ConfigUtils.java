@@ -215,4 +215,8 @@ public class ConfigUtils {
 	public static boolean getVillagerTrades() {
 		return EnchantmentSolution.getPlugin().getConfigFiles().getDefaultConfig().getBoolean("villager_trades");
 	}
+
+	public static boolean useLapisLevels() {
+		return (useAdvancedFile() ? EnchantmentSolution.getPlugin().getConfigFiles().getDefaultConfig().getBoolean("use_lapis_modifiers") : isLevel50());
+	}
 }

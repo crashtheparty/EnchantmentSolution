@@ -2,15 +2,12 @@ package org.ctp.enchantmentsolution.utils.save;
 
 import java.io.File;
 import java.util.Iterator;
-import java.util.List;
 import java.util.logging.Level;
 
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
-import org.ctp.enchantmentsolution.advancements.ESAdvancement;
-import org.ctp.enchantmentsolution.advancements.ESLocalization;
 import org.ctp.enchantmentsolution.api.ApiEnchantmentWrapper;
 import org.ctp.enchantmentsolution.api.Language;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
@@ -186,21 +183,6 @@ public class LanguageFiles {
 			englishUS.addDefault("vanilla." + e.getValue(),
 					ItemNameNMS.returnLocalizedItemName(Language.US, e.getKey()));
 		}
-
-		for(ESAdvancement advancement: ESAdvancement.values()) {
-			List<ESLocalization> localizations = advancement.getLocalizations();
-			String localeName = "No name specified";
-			String localeDescription = "No description specified";
-			for(ESLocalization locale: localizations) {
-				if (locale.getLanguage() == Language.US) {
-					localeName = locale.getName();
-					localeDescription = locale.getDescription();
-				}
-			}
-			englishUS.addDefault("advancements." + advancement.getNamespace().getKey() + ".name", localeName);
-			englishUS.addDefault("advancements." + advancement.getNamespace().getKey() + ".description",
-					localeDescription);
-		}
 		
 		englishUS.saveConfig();
 		file.delete();
@@ -279,7 +261,7 @@ public class LanguageFiles {
 		}
 		
 		for(CustomEnchantment enchant: DefaultEnchantments.getEnchantments()) {
-			String enchantmentDescription = enchant.getDefaultDescription(Language.GERMAN);
+			String enchantmentDescription = enchant.getDefaultDescription(Language.CHINA_SIMPLE);
 			if (enchantmentDescription == null) {
 				enchantmentDescription = "没有说明";
 			}

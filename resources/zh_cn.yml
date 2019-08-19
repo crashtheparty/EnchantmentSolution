@@ -254,7 +254,6 @@ vanilla:
             diamond_pickaxe: '钻石镐'
             diamond_chestplate: '钻石胸甲'
             leather_boots: '皮革鞋子'
-            crossbow: '十字弓'
             stone_axe: '石斧头'
             iron_helmet: '铁头盔'
             leather_helmet: '皮革帽子'
@@ -298,6 +297,7 @@ vanilla:
             iron_sword: '铁剑'
             diamond_leggings: '钻石护腿'
             golden_leggings: '金护腿'
+            crossbow: '十字弓'
 advancements: 
     enchantments/enchantment_solution: 
         name: '更多的附魔'

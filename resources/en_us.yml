@@ -103,7 +103,7 @@ enchantment:
         default_enchantments: 
             aqua_affinity: 'Increases underwater mining rate.'
             bane_of_arthropods: 'Increases damage to "arthropod" mobs (spiders, cave spiders, silverfish and endermites).\nEach level separately adds 2.5 (half heart) extra damage to each hit, to "arthropods" only.\nThe enchantment will also cause "arthropods" to have the Slowness IV effect when hit.'
-            blast_protection: 'Reduces explosion damage.\nAlso reduces explosion knockback by (15 × level)%. If multiple pieces have the enchantment, only the highest level''s reduction is used.'
+            blast_protection: 'Reduces explosion damage.\nAlso reduces explosion knockback by (15 ï¿½ level)%. If multiple pieces have the enchantment, only the highest level''s reduction is used.'
             channeling: 'Summons a lightning bolt when a mob is hit by a thrown trident.'
             binding_curse: 'Prevents removal of the cursed item.\nThe cursed item cannot be removed from any armor slot (outside of Creative mode) unless the player dies or the item breaks.'
             vanishing_curse: 'Causes the item to disappear on death.\nWhen the player dies, the item disappears instead of dropping on the ground. The item may still be dropped normally.'
@@ -125,7 +125,7 @@ enchantment:
             mending: 'Repair durability with experience.'
             multishot: 'Shoot multiple arrows at once.'
             piercing: 'Arrows go through and attack multiple mobs.'
-            power: 'Increases arrow damage by 25% × (level + 1), rounded up to nearest half-heart.'
+            power: 'Increases arrow damage by 25% ï¿½ (level + 1), rounded up to nearest half-heart.'
             projectile_protection: 'Reduces projectile damage (arrows, ghast/blaze fire charges, etc.).'
             protection: 'Reduces all damage, except damage from the Void, the /kill command, or hunger damage.'
             punch: 'Increases knockback on bows.'
@@ -300,3 +300,200 @@ vanilla:
             trident: 'Trident'
             fishing_rod: 'Fishing Rod'
             crossbow: 'Crossbow'
+
+advancements: 
+    enchantments/enchantment_solution: 
+        name: 'Enchantment Solution'
+        description: 'Advancements surrounding the added enchantments'
+    enchantments/fish_sticks: 
+        name: 'Fish Sticks'
+        description: 'Cook a fish with Fried'
+    enchantments/fed_for_a_lifetime: 
+        name: 'Fed For a Lifetime'
+        description: 'Get more than one of each kind of fish with Angler'
+    enchantments/nemo_enim_coquit: 
+        name: 'Nemo Enim Coquit'
+        description: 'Catch a tropical fish with Fried'
+    enchantments/breaker_breaker: 
+        name: 'Breaker, Breaker'
+        description: 'Place blocks over a torch using Wand'
+    enchantments/thorgy: 
+        name: 'Thorgy!'
+        description: 'Put a tamed wolf into your Irene''s Lasso'
+    enchantments/did_you_really_wand_to_do_that: 
+        name: 'Did You Really Wand To Do That?'
+        description: 'Break a Carrot on a Stick with the Wand enchantment'
+    enchantments/free_pets: 
+        name: 'Free Pets'
+        description: 'Grab every tameable animal in Irene''s Lasso'
+    enchantments/sharing_is_caring: 
+        name: 'Sharing Is Caring'
+        description: 'Give your friend an item with Exp. Share'
+    enchantments/not_that_kind: 
+        name: 'Not That Kind'
+        description: 'Kill every breedable animal with Knock Up'
+    enchantments/super_charged: 
+        name: 'Super Charged'
+        description: 'Create a charged creeper with a Shock Aspect attack'
+    enchantments/not_very_effective: 
+        name: 'Not Very Effective...'
+        description: 'Kill a Drowned with a Brine sword'
+    enchantments/pre_combat_update: 
+        name: 'Pre-Combat Update'
+        description: 'Kill a player with a Quick Strike weapon'
+    enchantments/headhunter: 
+        name: 'Headhunter'
+        description: 'Steal a player''s head'
+    enchantments/double_header: 
+        name: 'Double Header'
+        description: 'Get two Wither Skeleton skulls from one kill'
+    enchantments/super_effective: 
+        name: 'Super Effective!'
+        description: 'Kill a Minecraft boss with a Brine sword'
+    enchantments/motherload: 
+        name: 'Motherload'
+        description: 'Kill the Ender Dragon using Exp. Share'
+    enchantments/hex_bag: 
+        name: 'Hex Bag'
+        description: 'Drown a player using Drowned'
+    enchantments/seven_point_eight: 
+        name: '7.8/10'
+        description: 'Have 3 mobs drowning at the same time with Drowned'
+    enchantments/poseidons_day_off: 
+        name: 'Poseidon''s Day Off'
+        description: 'Kill a mob with Transmutation without changing the loot'
+    enchantments/fishy_business: 
+        name: 'Fishier Business'
+        description: 'Collect all types of fish using Transmutation'
+    enchantments/poseidon_reborn: 
+        name: 'Poseidon Reborn'
+        description: 'Use Transmutation to obtain a Trident'
+    enchantments/cerberus: 
+        name: 'Cerberus?'
+        description: 'Increase your reward while using a Transmutation trident'
+    enchantments/bonemeal_plus: 
+        name: 'Bonemeal Plus'
+        description: 'Use Flower Gift on a two-high flower'
+    enchantments/fourty_niners: 
+        name: '49ers'
+        description: 'Get 81 nuggets from using Gold Digger'
+    enchantments/chicken_or_the_egg: 
+        name: 'Chicken or the Egg?'
+        description: 'Hit a chicken with an egg using Splatter Fest'
+    enchantments/egged_by_myself: 
+        name: 'Egged By Myself'
+        description: 'Hit yourself with an egg launched from Splatter Fest'
+    enchantments/missed: 
+        name: 'Missed'
+        description: 'Make 16 attacks miss with Sand Veil'
+    enchantments/just_as_sweet: 
+        name: 'Just As Sweet'
+        description: 'Successfully get a Wither Rose using Flower Gift'
+    enchantments/laaagggggg: 
+        name: 'Laaagggggg'
+        description: 'Lag the server with various particle effects'
+    enchantments/easy_out: 
+        name: 'Easy Out'
+        description: 'Turn off the campfire using Moisturize'
+    enchantments/just_add_water: 
+        name: 'Just Add Water'
+        description: 'Add water to concrete powder using Moisturize'
+    enchantments/repaired: 
+        name: 'Repaired'
+        description: 'Repair a broken block with Moisturize'
+    enchantments/kept_on_hand: 
+        name: 'Kept On Hand'
+        description: 'Keep an item after death using Soulbound'
+    enchantments/fear_the_reaper: 
+        name: 'Fear the Reaper'
+        description: 'Steal another player''s item using Soul Reaper'
+    enchantments/high_metabolism: 
+        name: 'High Metabolism'
+        description: 'Quadruple the amount of exhaustion experienced using Curse of Exhaustion'
+    enchantments/ready_after_death: 
+        name: 'Ready After Death'
+        description: 'Save 9 unique types of diamond tools, weapons, and armor in death using Soulbound'
+    enchantments/reaped_the_reaper: 
+        name: 'Reaped the Reaper'
+        description: 'Steal another player''s Soul Reaper item with Soul Reaper'
+    enchantments/coffee_break: 
+        name: 'Coffee Break'
+        description: 'Put a No Rest helmet on when Phantoms can spawn'
+    enchantments/this_girl_is_on_fire: 
+        name: 'This Girl is on Fire'
+        description: 'While walking on Magma-ized lava, catch fire'
+    enchantments/flame_keeper: 
+        name: 'Flame Keeper'
+        description: 'Create magma in a world that shouldn''t have lava'
+    enchantments/made_for_walking: 
+        name: 'Made for Walking'
+        description: 'Walk over the void with Void Walker'
+    enchantments/determined_cheater: 
+        name: 'Determined Cheater'
+        description: 'Break obsidian made using Void Walker'
+    enchantments/i_aint_afraid_of_no_ghosts: 
+        name: 'I Ain''t Afraid of No Ghosts'
+        description: 'Sleep 10 times while wearing an Unrest helmet'
+    enchantments/im_you_but_shorter: 
+        name: 'I''m You, But Shorter'
+        description: 'Teleport away from an enderman using Warp'
+    enchantments/panzer_soldier: 
+        name: 'Panzer Soldier'
+        description: 'Wear 4 pieces of armor with the highest level of Tank'
+    enchantments/too_close: 
+        name: 'Too Close'
+        description: 'Fail to activate Icarus in flight'
+    enchantments/armored_evolution: 
+        name: 'Armored Evolution'
+        description: 'Upgrade your Elytra with armor using Armored'
+    enchantments/extra_power: 
+        name: 'Extra Power'
+        description: 'Eat an enchanted golden apple while wearing the highest level of Life'
+    enchantments/cruising_altitude: 
+        name: 'Cruising Altitude'
+        description: 'Travel to 12000m using Frequent Flyer'
+    enchantments/graphene_armor: 
+        name: 'Graphene Armor'
+        description: 'Gain 20 armor toughness using Toughness'
+    enchantments/danger_defeated: 
+        name: 'Danger Defeated'
+        description: 'Kill a Wither using Gung Ho'
+    enchantments/divine_retribution: 
+        name: 'Divine Retribution'
+        description: 'Kill a player from the dead using a Sacrifice chestplate'
+    enchantments/look_what_you_made_me_do: 
+        name: 'Look What You Made Me Do'
+        description: 'Kill a Pillager using a Pillage crossbow'
+    enchantments/just_die_already: 
+        name: 'Just DIE Already!'
+        description: 'Kill a Phantom in one shot using Stone Throw'
+    enchantments/underkill: 
+        name: 'Underkill'
+        description: 'Hit the Ender Dragon using Stone Throw'
+    enchantments/where_did_that_come_from: 
+        name: 'Where Did That Come From?'
+        description: 'Kill a skeleton from 100 blocks away using Sniper'
+    enchantments/that_food_is_fine: 
+        name: 'That Food is... Fine?'
+        description: 'Eat a piece of food with a negative potion effect and remove it with Magic Guard'
+    enchantments/deflection: 
+        name: 'Deflection'
+        description: 'Kill a mob with an arrow deflected with Hard Bounce'
+    enchantments/iron_man: 
+        name: 'Iron Man'
+        description: 'Live through a death blow because of Iron Defense'
+    enchantments/iront_you_glad: 
+        name: 'Iron''t You Glad?'
+        description: 'Obtain more than one iron ingot from an iron ore using Smeltery'
+    enchantments/fast_and_furious: 
+        name: 'Fast and Furious'
+        description: 'Break multiple blocks at once using Height++ or Width++'
+    enchantments/hey_it_works: 
+        name: 'Hey It Works!'
+        description: 'Break a Shulker Box using Telepathy'
+    enchantments/no_panic: 
+        name: 'No Panic'
+        description: 'Grab an item directly over lava using Telepathy'
+    enchantments/over_9000: 
+        name: 'Over 9000'
+        description: 'Collect 9001 extra items with Height++ or Width++'

@@ -37,6 +37,7 @@ import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 import org.ctp.enchantmentsolution.utils.items.nms.AbilityUtils;
 import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 
+@SuppressWarnings("unused")
 public class DeathListener extends EnchantmentListener{
 
 	private static List<UUID> SACRIFICE_ADVANCEMENT = new ArrayList<UUID>();
@@ -44,11 +45,11 @@ public class DeathListener extends EnchantmentListener{
 	
 	@EventHandler
 	public void onEntityDeath(EntityDeathEvent event){
-		beheading(event);
-		drowned(event);
-		expShare(event);
-		pillage(event);
-		transmutation(event);
+		runMethod(this, "beheading", event);
+		runMethod(this, "drowned", event);
+		runMethod(this, "expShare", event);
+		runMethod(this, "pillage", event);
+		runMethod(this, "transmutation", event);
 	}
 	
 	private void beheading(EntityDeathEvent event) {

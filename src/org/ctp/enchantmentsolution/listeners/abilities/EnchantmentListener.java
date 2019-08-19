@@ -1,5 +1,7 @@
 package org.ctp.enchantmentsolution.listeners.abilities;
 
+import java.lang.reflect.Method;
+
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -15,8 +17,28 @@ import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
 import org.ctp.enchantmentsolution.utils.items.DamageUtils;
 
-public class EnchantmentListener implements Listener{
+public abstract class EnchantmentListener implements Listener{
 
+	protected void runMethod(EnchantmentListener superClass, String name) {
+		try {
+			Method superMethod = superClass.getClass().getDeclaredMethod(name);
+			superMethod.setAccessible(true);
+			superMethod.invoke(superClass);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+	}
+	
+	protected void runMethod(EnchantmentListener superClass, String name, Event event) {
+		try {
+			Method superMethod = superClass.getClass().getDeclaredMethod(name, event.getClass());
+			superMethod.setAccessible(true);
+			superMethod.invoke(superClass, event);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+	}
+	
 	protected boolean canRun(Enchantment enchantment, Event event) {
 		if(!DefaultEnchantments.isEnabled(enchantment)) return false;
 		if(event instanceof Cancellable) {

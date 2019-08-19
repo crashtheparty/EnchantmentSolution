@@ -1,8 +1,11 @@
 package org.ctp.enchantmentsolution.enchantments.helper;
 
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map.Entry;
 
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
@@ -133,5 +136,24 @@ public class UpdateItem {
 	
 	public ItemStack getItemTwoLeftover(){
 		return itemTwoLeftover;
+	}
+
+	public boolean isDifferent() {
+		return checkEnchantments(itemOne, combinedItem) || checkEnchantments(combinedItem, itemOne) ||
+				DamageUtils.getDamage(itemOne.getItemMeta()) != DamageUtils.getDamage(combinedItem.getItemMeta());
+	}
+	
+	private boolean checkEnchantments(ItemStack one, ItemStack two) {
+		Iterator<Entry<Enchantment, Integer>> i = one.getItemMeta().getEnchants().entrySet().iterator();
+		
+		while(i.hasNext()) {
+			Entry<Enchantment, Integer> entry = i.next();
+			
+			if(two.getItemMeta().getEnchantLevel(entry.getKey()) != entry.getValue()) {
+				return true;
+			}
+		}
+		
+		return false;
 	}
 }
