@@ -8,6 +8,7 @@ import org.bukkit.inventory.Inventory;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.inventory.Anvil;
 import org.ctp.enchantmentsolution.inventory.ConfigInventory;
+import org.ctp.enchantmentsolution.inventory.EnchantabilityCalc;
 import org.ctp.enchantmentsolution.inventory.EnchantmentTable;
 import org.ctp.enchantmentsolution.inventory.Grindstone;
 import org.ctp.enchantmentsolution.inventory.InventoryData;
@@ -50,6 +51,10 @@ public class InventoryClick implements Listener {
 				ConfigInventory configInv = (ConfigInventory) invData;
 
 				InventoryClickUtils.setConfigInventoryDetails(configInv, player, inv, event.getClickedInventory(), event.getSlot(), event.getClick());
+			} else if (invData instanceof EnchantabilityCalc) {
+				EnchantabilityCalc enchantabilityCalc = (EnchantabilityCalc) invData;
+
+				InventoryClickUtils.setEnchantabilityCalc(enchantabilityCalc, player, inv, event.getClickedInventory(), event.getSlot(), event.getClick());
 			}
 		}
 	}

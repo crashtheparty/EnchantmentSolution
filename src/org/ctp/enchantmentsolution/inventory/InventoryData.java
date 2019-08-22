@@ -22,4 +22,6 @@ public interface InventoryData {
 	public void setItemName(String name);
 	
 	public Inventory open(Inventory inv);
+
+	public List<ItemStack> getItems();
 }

@@ -7,6 +7,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.inventory.ConfigInventory;
+import org.ctp.enchantmentsolution.inventory.EnchantabilityCalc;
 import org.ctp.enchantmentsolution.inventory.InventoryData;
 
 public class ChatMessage implements Listener{
@@ -35,6 +36,23 @@ public class ChatMessage implements Listener{
 				});
 			} else {
 				EnchantmentSolution.getPlugin().removeInventory(configInv);
+			}
+		} else if (inv != null && inv instanceof EnchantabilityCalc) {
+			EnchantabilityCalc enchantabilityCalc = (EnchantabilityCalc) inv;
+			if(enchantabilityCalc.isChat()) {
+				event.setCancelled(true);
+				String chat = event.getMessage();
+				enchantabilityCalc.setItemName(chat);
+				enchantabilityCalc.setChat(false);
+				Bukkit.getScheduler().runTask(EnchantmentSolution.getPlugin(), new Runnable() {
+					@Override
+					public void run() {
+						enchantabilityCalc.setInventory();
+					}
+					
+				});
+			} else {
+				EnchantmentSolution.getPlugin().removeInventory(enchantabilityCalc);
 			}
 		}
 	}

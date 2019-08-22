@@ -16,6 +16,7 @@ import org.ctp.enchantmentsolution.inventory.ConfigInventory;
 import org.ctp.enchantmentsolution.inventory.EnchantmentTable;
 import org.ctp.enchantmentsolution.inventory.Grindstone;
 import org.ctp.enchantmentsolution.inventory.ConfigInventory.Screen;
+import org.ctp.enchantmentsolution.inventory.EnchantabilityCalc;
 import org.ctp.enchantmentsolution.nms.Anvil_GUI_NMS;
 import org.ctp.enchantmentsolution.utils.config.YamlConfigBackup;
 import org.ctp.enchantmentsolution.utils.config.YamlInfo;
@@ -551,6 +552,67 @@ public class InventoryClickUtils {
 						}
 					}
 				}
+			}
+		}
+	}
+
+	public static void setEnchantabilityCalc(EnchantabilityCalc enchantabilityCalc, Player player, Inventory inv,
+			Inventory clickedInv, int slot, ClickType click) {
+		if (!(inv.getType().equals(InventoryType.CHEST))) {
+			return;
+		} else {
+			ItemStack item = clickedInv.getItem(slot);
+			if(item == null) return;
+			if(enchantabilityCalc.isEnchantments()) {
+				if(slot < 36) {
+					enchantabilityCalc.setEnchantability(slot);
+					return;
+				}
+			} else if (enchantabilityCalc.getPage() == 1) {
+				switch(slot) {
+					case 21:
+						if (click == ClickType.LEFT) {
+							enchantabilityCalc.openAnvil("constant");
+						} else if (click == ClickType.RIGHT) {
+							enchantabilityCalc.openChat("constant");
+						}
+						return;
+					case 22:
+						if (click == ClickType.LEFT) {
+							enchantabilityCalc.openAnvil("modifier");
+						} else if (click == ClickType.RIGHT) {
+							enchantabilityCalc.openChat("modifier");
+						}
+						return;
+					case 23:
+						enchantabilityCalc.setPage(1);
+						enchantabilityCalc.setEnchantments(true);
+						enchantabilityCalc.setInventory();
+						return;
+				}
+				// TODO: set the anvil and chat to show up
+				// TODO: if clicks one of these, return
+				if(slot == 23) {
+					return;
+				}
+			}
+			switch(slot) {
+				case 53:
+					if(item.getType().equals(Material.ARROW)) {
+						enchantabilityCalc.setPage(enchantabilityCalc.getPage() + 1);
+						enchantabilityCalc.setInventory();
+					}
+					break;
+				case 45:
+					if(item.getType().equals(Material.ARROW)) {
+						enchantabilityCalc.setPage(enchantabilityCalc.getPage() - 1);
+						if(enchantabilityCalc.getPage() == 0 && enchantabilityCalc.isEnchantments()) {
+							enchantabilityCalc.setPage(1);
+							enchantabilityCalc.setEnchantments(false);
+						}
+						enchantabilityCalc.setInventory();
+					}
+					break;
 			}
 		}
 	}

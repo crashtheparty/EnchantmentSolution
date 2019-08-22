@@ -63,4 +63,10 @@ public class LegacyAnvil implements InventoryData{
 		return inv;
 	}
 
+	@Override
+	public List<ItemStack> getItems() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

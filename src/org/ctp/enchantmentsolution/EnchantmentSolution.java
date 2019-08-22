@@ -191,6 +191,7 @@ public class EnchantmentSolution extends JavaPlugin {
 		getCommand("ESConfig").setExecutor(new ConfigEdit());
 		getCommand("ESReset").setExecutor(new Reset());
 		getCommand("ESDebug").setExecutor(new Debug());
+		getCommand("ESCalc").setExecutor(new EnchantabilityCalculator());
 		getCommand("Enchant").setTabCompleter(new PlayerChatTabComplete());
 		getCommand("Info").setTabCompleter(new PlayerChatTabComplete());
 		getCommand("RemoveEnchant").setTabCompleter(new PlayerChatTabComplete());

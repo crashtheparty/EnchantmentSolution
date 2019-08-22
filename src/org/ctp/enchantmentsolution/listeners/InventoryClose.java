@@ -6,6 +6,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.inventory.ConfigInventory;
+import org.ctp.enchantmentsolution.inventory.EnchantabilityCalc;
 import org.ctp.enchantmentsolution.inventory.InventoryData;
 
 public class InventoryClose implements Listener{
@@ -16,10 +17,14 @@ public class InventoryClose implements Listener{
 		InventoryData inv = EnchantmentSolution.getPlugin().getInventory(player);
 		if(inv != null) {
 			if(inv instanceof ConfigInventory) {
-				if(!((ConfigInventory)inv).isChat() && inv.getInventory().equals(event.getInventory())){
+				if(!((ConfigInventory)inv).isChat() && inv.getInventory() != null &&  inv.getInventory().equals(event.getInventory())){
 					inv.close(true);
 				}
-			} else if(inv.getInventory().equals(event.getInventory())) {
+			} else if(inv instanceof EnchantabilityCalc) {
+				if(!((EnchantabilityCalc)inv).isChat() && inv.getInventory() != null && inv.getInventory().equals(event.getInventory())){
+					inv.close(true);
+				}
+			} else if(inv.getInventory() != null && inv.getInventory().equals(event.getInventory())) {
 				inv.close(true);
 			}
 		}
