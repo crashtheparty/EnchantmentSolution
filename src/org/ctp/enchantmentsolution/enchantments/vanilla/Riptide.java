@@ -14,7 +14,9 @@ public class Riptide extends CustomEnchantment{
 	public Riptide() {
 		super("Riptide", 7, 7, 11, 19, 1, 1, 5, 3, Weight.RARE, "Allows the trident to be used as a means of fast transportation.");
 		addDefaultDisplayName(Language.GERMAN, "Sog");
-		addDefaultDescription(Language.GERMAN, "Erm�glicht die Verwendung des Dreizackes als schnelles Transportmittel.");
+		addDefaultDescription(Language.GERMAN, "Ermöglicht die Verwendung des Dreizackes als schnelles Transportmittel.");
+		addDefaultDisplayName(Language.CHINA_SIMPLE, "激流");
+		addDefaultDescription(Language.CHINA_SIMPLE, "可用三叉戟进行快速传送.");
 	}
 
 	@Override

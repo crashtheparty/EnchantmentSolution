@@ -29,4 +29,9 @@ public class NoRestPlayer extends AbilityPlayer{
 	protected void doUnequip(ItemStack item) {
 		
 	}
+	
+	@Override
+	protected void doUnequip() {
+		
+	}
 }

@@ -19,10 +19,14 @@ public class ToughnessPlayer extends AbilityPlayer{
 
 	public ToughnessPlayer(Player player, ItemStack[] contents) {
 		super(player, null, DefaultEnchantments.TOUGHNESS);
-		setContents(contents);
+		setContents(contents, true);
+	}
+	
+	public void setContents(ItemStack[] contents) {
+		setContents(contents, false);
 	}
 
-	public void setContents(ItemStack[] contents) {
+	public void setContents(ItemStack[] contents, boolean constructor) {
 		this.previousContents = this.contents;
 		
 		for(int i = 0; i < contents.length; i++) {
@@ -56,6 +60,8 @@ public class ToughnessPlayer extends AbilityPlayer{
 						doUnequip(previousItem, slot);
 						doEquip(item, slot);
 					}
+				}else if(previousItem == null && item == null && constructor) {
+					doUnequip(slot);
 				}
 			}
 		}
@@ -68,9 +74,8 @@ public class ToughnessPlayer extends AbilityPlayer{
 			int level = Enchantments.getLevel(item, DefaultEnchantments.TOUGHNESS);
 			AttributeInstance a = getPlayer().getAttribute(Attribute.GENERIC_ARMOR_TOUGHNESS);
 			AttributeModifier modifier = new AttributeModifier(slot.getUUID(), slot.getName(), level, Operation.ADD_NUMBER);
-			if(!a.getModifiers().contains(modifier)) {
-				a.addModifier(modifier);
-			}
+
+			addModifier(a, modifier);
 			if(a.getValue() >= 20) {
 				AdvancementUtils.awardCriteria(getPlayer(), ESAdvancement.GRAPHENE_ARMOR, "toughness");
 			}
@@ -82,10 +87,16 @@ public class ToughnessPlayer extends AbilityPlayer{
 			int level = Enchantments.getLevel(item, DefaultEnchantments.TOUGHNESS);
 			AttributeInstance a = getPlayer().getAttribute(Attribute.GENERIC_ARMOR_TOUGHNESS);
 			AttributeModifier modifier = new AttributeModifier(slot.getUUID(), slot.getName(), level, Operation.ADD_NUMBER);
-			if(a.getModifiers().contains(modifier)) {
-				a.removeModifier(modifier);
-			}
+
+			removeModifier(a, modifier);
 		}
+	}
+
+	private void doUnequip(Slot slot) {
+		AttributeInstance a = getPlayer().getAttribute(Attribute.GENERIC_ARMOR_TOUGHNESS);
+		AttributeModifier modifier = new AttributeModifier(slot.getUUID(), slot.getName(), 1, Operation.ADD_NUMBER);
+
+		removeModifier(a, modifier);
 	}
 	
 	private enum Slot{
@@ -113,14 +124,17 @@ public class ToughnessPlayer extends AbilityPlayer{
 
 	@Override
 	protected void doEquip(ItemStack item) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	protected void doUnequip(ItemStack item) {
-		// TODO Auto-generated method stub
 		
+	}
+	
+	@Override
+	protected void doUnequip() {
+
 	}
 
 }

@@ -8,14 +8,14 @@ anvil:
     combine: '&aItems kombinieren'
     cannot-combine: '&cNicht kombinierbar'
     cannot-rename: '&cKann nicht benannt werden'
-    message-cannot-combine: 'Diese Items können nicht kombiniert werden!'
-    legacy-gui: '&fÖffne den Vanilla-Amboss'
+    message-cannot-combine: 'Diese Items kÃ¶nnen nicht kombiniert werden!'
+    legacy-gui: '&fÃ–ffne den Vanilla-Amboss'
     legacy-gui-warning: 
     - '&cManche Verzauberungen gehen in diesem Amboss verloren!'
     - '&cViele Eigenschaften der Items gehen ebenfalls verloren.'
-    - '&cDas sollte nur für alternative Rezepte verwendet werden.'
+    - '&cDas sollte nur fÃ¼r alternative Rezepte verwendet werden.'
 
-    legacy-gui-open: '&fVanilla-Amboss-GUI wird beim nächsten klick geöffnet.'
+    legacy-gui-open: '&fVanilla-Amboss-GUI wird beim nÃ¤chsten klick geÃ¶ffnet.'
     legacy-gui-close: '&fVanilla-Amboss-GUI wurde geschlossen.'
 table: 
     name: '&9Verzauberungstisch'
@@ -23,26 +23,26 @@ table:
     red-mirror: '&f'
     blue-mirror: '&1Lapis zugeben'
     blue-mirror-lore: 
-    - '&9Wähle Lapis in deinem Inventar um ihn diesem Slot zuzufügen.'
+    - '&9WÃ¤hle Lapis in deinem Inventar um ihn diesem Slot zuzufÃ¼gen.'
 
-    instructions-title: 'Anleitung fürs verzaubern.'
+    instructions-title: 'Anleitung fÃ¼rs verzaubern.'
     instructions: 
-    - 'Klicke auf ein Item um es links zuzufügen.'
-    - 'Du siehst dann eine Liste mit Büchern'
-    - ' und den Lapiskosten für eine Verzauberung.'
-    - 'Wähle ein Buch zum verzaubern.'
+    - 'Klicke auf ein Item um es links zuzufÃ¼gen.'
+    - 'Du siehst dann eine Liste mit BÃ¼chern'
+    - ' und den Lapiskosten fÃ¼r eine Verzauberung.'
+    - 'WÃ¤hle ein Buch zum verzaubern.'
     - 'Klicke das Item erneut um es zu entfernen.'
     - 'Du kannst 4 Items gleichzeitig sehen.'
 
     generate-enchants-error: 'Beim generieren der Verzauberungen ist ein Fehler aufgetreten.'
     enchant-level: 'Level %level% Verzauberung.'
     enchant-level-lore: 
-    - 'Lvl benötigt: %levelReq%.'
+    - 'Lvl benÃ¶tigt: %levelReq%.'
     - 'Lvl Kosten: %level%.'
     - 'Lvls genommen: %levelsTaken%.'
 
     level-fifty-disabled: 'Level 50 Verzauberungen sind ausgeschaltet.'
-    level-fifty-lack: 'Benötigt 15 Bücherregale um den Tisch herum.'
+    level-fifty-lack: 'BenÃ¶tigt 15 BÃ¼cherregale um den Tisch herum.'
     lapis-cost-okay: '&aLapiskosten: %cost%'
     lapis-cost-lack: '&cLapiskosten: %cost%'
     level-cost-okay: '&aLevelanforderung: %levelReq%'
@@ -51,14 +51,14 @@ table:
     level-taken-lack: '&cVerzauberungsstufen genommen: %levelsTaken%'
     item-enchant-name: '%name% Level %level% Verzauberung'
     enchant-name: '%enchant%...'
-    lack-reqs: 'Du erfüllst nicht alle Anforderungen um dieses Item zu verzaubern.'
+    lack-reqs: 'Du erfÃ¼llst nicht alle Anforderungen um dieses Item zu verzaubern.'
     lack-enchants: 'Dieses Item hat keine Verzauberungen generiert.'
 commands: 
-    no-permission: '&cDafür hast du keine Berechtigung!'
+    no-permission: '&cDafÃ¼r hast du keine Berechtigung!'
     invalid-level: '%level% ist kein erlaubtes Level. Level 1 wurde angenommen.'
     level-too-low: 'Das Level kann nicht 0 oder weniger sein. Level 1 wurde angenommen.'
     level-too-high: '%level% ist ein zu hohes Level. Level %maxLevel% wurde angenommen.'
-    add-enchant: 'Verzauberung %enchant% Level %level% wurde zum Item zugefügt.'
+    add-enchant: 'Verzauberung %enchant% Level %level% wurde zum Item zugefÃ¼gt.'
     cannot-enchant-item: 'Verzauberungen wirken auf diesem Item nicht.'
     too-many-enchants: 'Das Item hat bereits zu viele Verzauberungen.'
     enchant-fail: 'Versuche es nochmal.'
@@ -71,7 +71,7 @@ commands:
     reset-inventory: 'Alle Spezialinventare geschlossen.'
     debug: 'In debug.yml gespeicherte Debug-Informationen'
 grindstone: 
-    legacy-open: '&aÖffne den Schleifstein'
+    legacy-open: '&aÃ–ffne den Schleifstein'
     name: '&9Schleifstein'
     mirror: '&f'
     combine-lore: '&fRepariere die Items und entferne Verzauberungen'
@@ -79,16 +79,16 @@ grindstone:
     cannot-combine: '&cKann nicht kombinieren'
     remove-enchants: '&aEntferne Verzauberungen'
     no-items: '&fKeine Items'
-    no-items-lore: '&fFügen Sie Artikel hinzu, indem Sie sie aus Ihrem Inventar auswählen'
-    no-enchants: '&fKeine Verzauberungen für Items'
+    no-items-lore: '&fFÃ¼gen Sie Artikel hinzu, indem Sie sie aus Ihrem Inventar auswÃ¤hlen'
+    no-enchants: '&fKeine Verzauberungen fÃ¼r Items'
     no-enchants-lore: 
-    - '&fFügen Sie ein zweites zu reparierendes item hinzu'
+    - '&fFÃ¼gen Sie ein zweites zu reparierendes item hinzu'
 
-    anvil: '&aÖffne den Amboss'
-    switch-to-anvil: '&fGehe zurück zum Amboss-Inventar'
+    anvil: '&aÃ–ffne den Amboss'
+    switch-to-anvil: '&fGehe zurÃ¼ck zum Amboss-Inventar'
     message-cannot-combine: '&cNicht kombinierbar.'
     cannot-take-enchantments: '&cKosten: &9%levelCost%'
-    message-cannot-take-enchantments: '&cDie Verzauberungen können nicht von diesem Gegenstand entfernt werden'
+    message-cannot-take-enchantments: '&cDie Verzauberungen kÃ¶nnen nicht von diesem Gegenstand entfernt werden'
     take-enchantments: '&aKosten: &9%levelCost%'
     take-enchantments-lore: 
     - '&fAlle Verzauberungen aus dem Gegenstand werden in das Buch aufgenommen'
@@ -98,94 +98,94 @@ enchantment:
     description: '&6Beschreibung: &f'
     descriptions: 
         default_enchantments: 
-            aqua_affinity: 'Erhöht die Unterwasserabbaugeschwindigkeit.'
-            bane_of_arthropods: 'Erhöht den Schaden an "Arthropoden" -Mobs (Spinnen, Höhlenspinnen, Silberfischen und Endermiten).\nJedes Level fügt jedem Treffer separat 2,5 (halbes Herz) Schaden hinzu, nur für "Arthropoden".\nDie Verzauberung bewirkt auch, dass "Arthropoden" den Effekt von Slowness IV haben, wenn sie getroffen werden'
-            blast_protection: 'Reduziert Explosionsschäden. \nVerringert außerdem den Explosionsrückschlag um (15 × Level)%. Wenn mehrere Teile die Verzauberung besitzen, wird nur die Reduzierung der höchsten Stufe verwendet.'
-            channeling: 'Beschwört einen Blitz, wenn ein Mob von einem geworfenen Dreizack getroffen wird.'
-            binding_curse: 'Verhindert das Entfernen des verfluchten Gegenstands.\nDer verfluchte Gegenstand kann nicht aus einem Rüstungsplatz (außerhalb des Kreativmodus) entfernt werden, es sei denn, der Spieler stirbt oder der Gegenstand zerbricht.'
+            aqua_affinity: 'ErhÃ¶ht die Unterwasserabbaugeschwindigkeit.'
+            bane_of_arthropods: 'ErhÃ¶ht den Schaden an "Arthropoden" -Mobs (Spinnen, HÃ¶hlenspinnen, Silberfischen und Endermiten).\nJedes Level fÃ¼gt jedem Treffer separat 2,5 (halbes Herz) Schaden hinzu, nur fÃ¼r "Arthropoden".\nDie Verzauberung bewirkt auch, dass "Arthropoden" den Effekt von Slowness IV haben, wenn sie getroffen werden'
+            blast_protection: 'Reduziert ExplosionsschÃ¤den.\nVerringert auÃŸerdem den ExplosionsrÃ¼ckschlag um (15 * Level)%. Wenn mehrere Teile die Verzauberung besitzen, wird nur die Reduzierung der hÃ¶chsten Stufe verwendet.'
+            channeling: 'BeschwÃ¶rt einen Blitz, wenn ein Mob von einem geworfenen Dreizack getroffen wird.'
+            binding_curse: 'Verhindert das Entfernen des verfluchten Gegenstands.\nDer verfluchte Gegenstand kann nicht aus einem RÃ¼stungsplatz (auÃŸerhalb des Kreativmodus) entfernt werden, es sei denn, der Spieler stirbt oder der Gegenstand zerbricht.'
             vanishing_curse: 'Bewirkt, dass der Gegenstand beim Tod verschwindet.\nWenn der Spieler stirbt, verschwindet der Gegenstand, anstatt auf den Boden zu fallen. Der Artikel kann noch normal abgeworfen werden.'
-            depth_strider: 'Erhöht die Bewegungsgeschwindigkeit unter Wasser.'
-            efficiency: 'Erhöht die Mining-Geschwindigkeit.\nMan muss das richtige Werkzeug für einen Block verwenden, um die Geschwindigkeit zu erhalten. Es spielt keine Rolle, wenn Sie es mit der falschen Stufe abbauen.'
-            feather_falling: 'Reduziert Sturzschäden.'
-            fire_aspect: 'Setzt das Ziel in Brand.\nFeueraspekt fügt dem Ziel 80 Feuerzecken (4 Sekunden Brennen) pro Stufe hinzu.'
-            fire_protection: 'Reduziert Feuerschäden.'
-            flame: 'Brennende Pfeile.\nPfeile brennen beim Schießen und verursachen 5 Sekunden lang 4 Feuerschaden'
-            fortune: 'Erhöht Blocktropfen.'
-            frost_walker: 'Erzeugt beim Gehen über Wasser gefrorene Eisblöcke.'
-            impaling: 'Erhöht Nahkampfschaden gegen Wassermobs.\nFügt für jede zusätzliche Stufe 2,5 (halbes Herz) zusätzlichen Schaden hinzu.'
-            infinity: 'Beim Schießen werden keine normalen Pfeile verbraucht.'
-            knockback: 'Erhöht den Rückstoß.'
-            looting: 'Mobs können mehr Beute fallen lassen.'
-            loyalty: 'Gibt einen geworfenen Dreizack zurück, nachdem er etwas getroffen hat.'
-            luck_of_the_sea: 'Erhöht das Glück beim Fischen.'
-            lure: 'Erhöht die Rate der Fische, die sich beim Angeln an den Haken beißen.'
+            depth_strider: 'ErhÃ¶ht die Bewegungsgeschwindigkeit unter Wasser.'
+            efficiency: 'ErhÃ¶ht die Mining-Geschwindigkeit.\nMan muss das richtige Werkzeug fÃ¼r einen Block verwenden, um die Geschwindigkeit zu erhalten. Es spielt keine Rolle, wenn Sie es mit der falschen Stufe abbauen.'
+            feather_falling: 'Reduziert SturzschÃ¤den.'
+            fire_aspect: 'Setzt das Ziel in Brand.\nFeueraspekt fÃ¼gt dem Ziel 80 Feuerzecken (4 Sekunden Brennen) pro Stufe hinzu.'
+            fire_protection: 'Reduziert FeuerschÃ¤den.'
+            flame: 'Brennende Pfeile.\nPfeile brennen beim SchieÃŸen und verursachen 5 Sekunden lang 4 Feuerschaden.'
+            fortune: 'ErhÃ¶ht Blocktropfen.'
+            frost_walker: 'Erzeugt beim Gehen Ã¼ber Wasser gefrorene EisblÃ¶cke.'
+            impaling: 'ErhÃ¶ht Nahkampfschaden gegen Wassermobs.\nFÃ¼gt fÃ¼r jede zusÃ¤tzliche Stufe 2,5 (halbes Herz) zusÃ¤tzlichen Schaden hinzu.'
+            infinity: 'Beim SchieÃŸen werden keine normalen Pfeile verbraucht.'
+            knockback: 'ErhÃ¶ht den RÃ¼ckstoÃŸ.'
+            looting: 'Mobs kÃ¶nnen mehr Beute fallen lassen.'
+            loyalty: 'Gibt einen geworfenen Dreizack zurÃ¼ck, nachdem er etwas getroffen hat.'
+            luck_of_the_sea: 'ErhÃ¶ht das GlÃ¼ck beim Fischen.'
+            lure: 'ErhÃ¶ht die Rate der Fische, die sich beim Angeln an den Haken beiÃŸen.'
             mending: 'Haltbarkeit mit Erfahrung reparieren.'
-            multishot: 'Schießen Sie mehrere Pfeile gleichzeitig.'
+            multishot: 'SchieÃŸen Sie mehrere Pfeile gleichzeitig.'
             piercing: 'Pfeile gehen durch und greifen mehrere Mobs an.'
-            power: 'Erhöht den Pfeilschaden um 25% × (Stufe + 1), aufgerundet auf das nächste Herz.'
-            projectile_protection: 'Reduziert Projektilbeschädigungen (Pfeile, Feuerschläge usw.).'
+            power: 'ErhÃ¶ht den Pfeilschaden um 25% * (Stufe + 1), aufgerundet auf das nÃ¤chste Herz.'
+            projectile_protection: 'Reduziert ProjektilbeschÃ¤digungen (Pfeile, FeuerschlÃ¤ge usw.).'
             protection: 'Reduziert jeglichen Schaden, mit Ausnahme des Schadens durch die Leere, den Befehl / kill oder den Hunger-Schaden.'
-            punch: 'Erhöht den Rückstoß an den Bögen.'
+            punch: 'ErhÃ¶ht den RÃ¼ckstoÃŸ an den BÃ¶gen.'
             quick_charge: 'Setzen Sie die Pfeile schneller in die Armbrust.'
-            respiration: 'Verlängert die Atmungszeit unter Wasser.'
-            riptide: 'Ermöglicht die Verwendung des Dreizackes als schnelles Transportmittel.'
-            sharpness: 'Erhöht Nahkampfschaden.\nFügt 1 (halbes Herz) zusätzlichen Schaden für die erste Stufe und 0,5 (halbes Herz) für jede zusätzliche Stufe hinzu.'
-            silk_touch: 'Abgebaute Blöcke lassen sich anstelle der üblichen Gegenstände fallen.\nErmöglicht das Sammeln von Blöcken, die normalerweise nicht erreichbar sind.'
-            smite: 'Erhöht den Schaden "untoter" Mobs (Skelette, Zombies, Widerrist, Widerrist-Skelette, Zombie-Schweiner, Skelettpferde und Zombie-Pferde). \nJeder Level fügt jedem Treffer separat 2,5 (halbes Herz) zusätzlichen Schaden hinzu, nur "Untoten" -Mobs.'
-            sweeping_edge: 'Erhöht den Angriffsschaden.'
-            thorns: 'Angreifer werden beschädigt, wenn sie den Träger angreifen. Dies führt auch zu einer zusätzlichen Haltbarkeit der Rüstung.'
-            unbreaking: 'Erhöht die effektive Haltbarkeit.'
+            respiration: 'VerlÃ¤ngert die Atmungszeit unter Wasser.'
+            riptide: 'ErmÃ¶glicht die Verwendung des Dreizackes als schnelles Transportmittel.'
+            sharpness: 'ErhÃ¶ht Nahkampfschaden.\nFÃ¼gt 1 (halbes Herz) zusÃ¤tzlichen Schaden fÃ¼r die erste Stufe und 0,5 (halbes Herz) fÃ¼r jede zusÃ¤tzliche Stufe hinzu.'
+            silk_touch: 'Abgebaute BlÃ¶cke lassen sich anstelle der Ã¼blichen GegenstÃ¤nde fallen.\nErmÃ¶glicht das Sammeln von BlÃ¶cken, die normalerweise nicht erreichbar sind.'
+            smite: 'ErhÃ¶ht den Schaden "untoter" Mobs (Skelette, Zombies, Widerrist, Widerrist-Skelette, Zombie-Schweiner, Skelettpferde und Zombie-Pferde).\nJeder Level fÃ¼gt jedem Treffer separat 2,5 (halbes Herz) zusÃ¤tzlichen Schaden hinzu, nur "Untoten" -Mobs.'
+            sweeping_edge: 'ErhÃ¶ht den Angriffsschaden.'
+            thorns: 'Angreifer werden beschÃ¤digt, wenn sie den TrÃ¤ger angreifen. Dies fÃ¼hrt auch zu einer zusÃ¤tzlichen Haltbarkeit der RÃ¼stung.'
+            unbreaking: 'ErhÃ¶ht die effektive Haltbarkeit.'
         custom_enchantments: 
-            angler: 'Fangen Sie einen zusätzlichen Fisch pro Level, wenn Sie einen Fisch fangen.'
-            armored: 'Fügt Rüstungspunkte für das Tragen von Elytren hinzu.'
-            beheading: 'Fügt dem Tod die Chance hinzu, Mobköpfe abzulegen.'
+            angler: 'Fangen Sie einen zusÃ¤tzlichen Fisch pro Level, wenn Sie einen Fisch fangen.'
+            armored: 'FÃ¼gt RÃ¼stungspunkte fÃ¼r das Tragen von Elytren hinzu.'
+            beheading: 'FÃ¼gt dem Tod die Chance hinzu, MobkÃ¶pfe abzulegen.'
             brine: 'Verdoppelt den Schaden, wenn die gegnerische Menge weniger als 50% Gesundheit hat.'
-            exhaustion_curse: 'Erhöht die Erschöpfung, wenn ausgerüstet.'
+            exhaustion_curse: 'ErhÃ¶ht die ErschÃ¶pfung, wenn ausgerÃ¼stet.'
             lagging_curse: 'Ah, Feuerwerk!'
-            drowned: 'Ertrinken Sie nicht Wasser-Mobs für kurze Zeit.'
-            exp_share: 'Erhöhen Sie die Erfahrung durch das Töten von Mobs und Blockaden.'
+            drowned: 'Ertrinken Sie nicht Wasser-Mobs fÃ¼r kurze Zeit.'
+            exp_share: 'ErhÃ¶hen Sie die Erfahrung durch das TÃ¶ten von Mobs und Blockaden.'
             flower_gift: 'Hat eine Chance, Blumen fallen zu lassen, wenn Sie mit der rechten Maustaste darauf klicken.'
-            frequent_flyer: 'Erlaubt den Flug. Haltbarkeitsschaden alle (3 * Level) Sekunden, wenn die Höhe unter 255 liegt, und jede (Level) Sekunde über 255 Höhe. Entfernt den Flug bei 32 Haltbarkeit.'
-            fried: 'Köche Fische, wenn sie gefangen werden.'
-            gold_digger: 'Sammeln Sie Erfahrung und Gold-Nuggets für das Ernten.'
+            frequent_flyer: 'Erlaubt den Flug. Haltbarkeitsschaden alle (3 * Level) Sekunden, wenn die HÃ¶he unter 255 liegt, und jede (Level) Sekunde Ã¼ber 255 HÃ¶he. Entfernt den Flug bei 32 Haltbarkeit.'
+            fried: 'KÃ¶che Fische, wenn sie gefangen werden.'
+            gold_digger: 'Sammeln Sie Erfahrung und Gold-Nuggets fÃ¼r das Ernten.'
             gung_ho: 'Verringert die Gesundheit auf 5 (Herz). Alle Angriffe verursachen den dreifachen Schaden.'
-            hard_bounce: 'Projektile springen vom Schild zurück.'
-            height_plus_plus: 'Erhöhen Sie den Aufwärts- / Abwärtsbruch-Radius um 1 pro Ebene.'
-            icarus: 'Aufwärtsfliegen erhöht gelegentlich die Geschwindigkeit.'
-            lasso_of_irene: 'Greift Tiere zum Mitnehmen und Platzieren später.'
-            iron_defense: 'Wenn der Schild ausgerüstet ist, werden Schäden am Schild umgeleitet.'
-            knockup: 'Erhöht den Rückstoß nach oben.'
-            life: 'Erhöht die maximale Gesundheit um 4 (halbe Herzen) pro Level, wenn er getragen wird.'
+            hard_bounce: 'Projektile springen vom Schild zurÃ¼ck.'
+            height_plus_plus: 'ErhÃ¶hen Sie den AufwÃ¤rts- / AbwÃ¤rtsbruch-Radius um 1 pro Ebene.'
+            icarus: 'AufwÃ¤rtsfliegen erhÃ¶ht gelegentlich die Geschwindigkeit.'
+            lasso_of_irene: 'Greift Tiere zum Mitnehmen und Platzieren spÃ¤ter.'
+            iron_defense: 'Wenn der Schild ausgerÃ¼stet ist, werden SchÃ¤den am Schild umgeleitet.'
+            knockup: 'ErhÃ¶ht den RÃ¼ckstoÃŸ nach oben.'
+            life: 'ErhÃ¶ht die maximale Gesundheit um 4 (halbe Herzen) pro Level, wenn er getragen wird.'
             magic_guard: 'Negiert schlechte Trankeffekte.'
             magma_walker: 'Erlaubt es den Spielern, auf Lava zu gehen und sie in Magma umzuwandeln.'
-            moisturize: 'Befeuchtet Blöcke durch Rechtsklick.'
+            moisturize: 'Befeuchtet BlÃ¶cke durch Rechtsklick.'
             no_rest: 'Es werden keine Phantome um Sie herum erscheinen.'
-            pillage: 'Erhöht Mob-Tropfen.'
-            quick_strike: 'Erhöht die Angriffsgeschwindigkeit'
-            sacrifice: 'Zerstöre den Mob, der dich getötet hat, basierend auf deinem Erfahrungslevel.'
-            sand_veil: 'Verringert die Genauigkeit der Angriffe der Entität.'
+            pillage: 'ErhÃ¶ht Mob-Tropfen.'
+            quick_strike: 'ErhÃ¶ht die Angriffsgeschwindigkeit'
+            sacrifice: 'ZerstÃ¶re den Mob, der dich getÃ¶tet hat, basierend auf deinem Erfahrungslevel.'
+            sand_veil: 'Verringert die Genauigkeit der Angriffe der EntitÃ¤t.'
             shock_aspect: 'Hat eine Chance, angegriffene Mobs mit Blitzen zu treffen.'
-            smeltery: 'Schmelzen Blöcke während des Bergbaus.'
-            sniper: 'Erhöht die Geschwindigkeit von Geschossen.'
+            smeltery: 'Schmelzen BlÃ¶cke wÃ¤hrend des Bergbaus.'
+            sniper: 'ErhÃ¶ht die Geschwindigkeit von Geschossen.'
             soulbound: 'Behalte den Gegenstand auf dem Tod.'
-            soul_reaper: 'Hat eine Chance, vom getöteten Spieler seelengebundene Gegenstände zu stehlen.'
-            splatter_fest: 'Schießt mit dem Linksklick Eier aus der Hacke.'
-            stone_throw: 'Erhöht den Distanzschaden gegen fliegende Mobs.\nFügt 40% * Level + 20% Schaden gegen fliegende Mobs hinzu.'
-            tank: 'Verleiht der Rüstung zusätzlichen Schutz.'
-            telepathy: 'Abgebaute Gegenstände gelangen direkt in Ihr Inventar.'
-            toughness: 'Erhöht die Rüstungsstärke.'
-            transmutation: 'Beim Töten von Mobs werden alle Gegenstände, die nicht aus dem Meer stammen, zu Teilen aus dem Meer.'
+            soul_reaper: 'Hat eine Chance, vom getÃ¶teten Spieler seelengebundene GegenstÃ¤nde zu stehlen.'
+            splatter_fest: 'SchieÃŸt mit dem Linksklick Eier aus der Hacke.'
+            stone_throw: 'ErhÃ¶ht den Distanzschaden gegen fliegende Mobs.\nFÃ¼gt 40% * Level + 20% Schaden gegen fliegende Mobs hinzu.'
+            tank: 'Verleiht der RÃ¼stung zusÃ¤tzlichen Schutz.'
+            telepathy: 'Abgebaute GegenstÃ¤nde gelangen direkt in Ihr Inventar.'
+            toughness: 'ErhÃ¶ht die RÃ¼stungsstÃ¤rke.'
+            transmutation: 'Beim TÃ¶ten von Mobs werden alle GegenstÃ¤nde, die nicht aus dem Meer stammen, zu Teilen aus dem Meer.'
             unrest: 'Nachtsicht auf Kosten eines Phantomlaichens.'
             void_walker: 'Erlaubt es den Spielern, in der Luft zu gehen und es in Obsidian umzuwandeln.'
-            wand: 'Platziert Blöcke von der Nebenhand.'
+            wand: 'Platziert BlÃ¶cke von der Nebenhand.'
             warp: 'Gibt eine Chance, bei einem Treffer eine kleine Entfernung zu teleportieren.'
-            width_plus_plus: 'Erhöhen Sie den linken / rechten Umbruchradius um 1 pro Ebene.'
+            width_plus_plus: 'ErhÃ¶hen Sie den linken / rechten Umbruchradius um 1 pro Ebene.'
     max-level: '&6Maximales Level: &f'
     weight: '&6Bedeutung: &f'
     start-level: '&6Start Level: &f'
     enchantable-items: '&6Bezaubernde Items: &f'
-    anvilable-items: '&6Amboßfähige Items: &f'
-    conflicting-enchantments: '&6Widersprüchliche Verzauberungen: &f'
+    anvilable-items: '&6AmboÃŸfÃ¤hige Items: &f'
+    conflicting-enchantments: '&6WidersprÃ¼chliche Verzauberungen: &f'
     enabled: '&6Verzauberung aktiviert: &f'
     treasure: '&6Schatzzauber: &f'
     disabled-items: '&6Deaktivierte Items: &f'
@@ -195,27 +195,27 @@ enchantment:
             armored: 'Gepanzert'
             beheading: 'Beheading'
             brine: 'Salzlake'
-            exhaustion_curse: 'Fluch der Erschöpfung'
-            lagging_curse: 'Fluch der Verzögerung'
+            exhaustion_curse: 'Fluch der ErschÃ¶pfung'
+            lagging_curse: 'Fluch der VerzÃ¶gerung'
             drowned: 'Ertrinken'
             exp_share: 'Erfahrung'
             flower_gift: 'Blumengeschenk'
             frequent_flyer: 'Vielflieger'
             fried: 'Fritieren'
-            gold_digger: 'Goldgräber'
+            gold_digger: 'GoldgrÃ¤ber'
             gung_ho: 'Gung-Ho'
             hard_bounce: 'Harter Aufprall'
-            height_plus_plus: 'Höhe++'
+            height_plus_plus: 'HÃ¶he++'
             icarus: 'Ikarus'
             lasso_of_irene: 'Lasso von Irene'
             iron_defense: 'Eiserne Verteidigung'
             knockup: 'Werfen'
             life: 'Leben'
             magic_guard: 'Magischer Schutz'
-            magma_walker: 'Lavaläufer'
+            magma_walker: 'LavalÃ¤ufer'
             moisturize: 'Befeuchten'
             no_rest: 'Keine Pause'
-            pillage: 'Plündern'
+            pillage: 'PlÃ¼ndern'
             quick_strike: 'Schneller Schlag'
             sacrifice: 'Opferung'
             sand_veil: 'Sandschleier'
@@ -228,15 +228,15 @@ enchantment:
             stone_throw: 'Steinwurf'
             tank: 'Panzer'
             telepathy: 'Telepathie'
-            toughness: 'Rüstungshärte'
+            toughness: 'RÃ¼stungshÃ¤rte'
             transmutation: 'Transmutation'
             unrest: 'Unruhe'
-            void_walker: 'Ungültiger Läufer'
+            void_walker: 'UngÃ¼ltiger LÃ¤ufer'
             wand: 'Zauberstab'
             warp: 'Warp'
             width_plus_plus: 'Breite++'
 irenes_lasso: 
-    error: 'Dieses Tier gehört dir nicht!'
+    error: 'Dieses Tier gehÃ¶rt dir nicht!'
 vanilla: 
     item: 
         minecraft: 
@@ -287,9 +287,9 @@ vanilla:
             iron_hoe: 'Eisenhacke'
             iron_helmet: 'Eisenhelm'
             diamond_axe: 'Diamantaxt'
-            turtle_helmet: 'Schildkrötenpanzer'
+            turtle_helmet: 'SchildkrÃ¶tenpanzer'
             golden_sword: 'Goldschwert'
-            bow: 'BOGEN'
+            bow: 'Bogen'
             leather_helmet: 'Lederkappe'
             diamond_pickaxe: 'Diamantspitzhacke'
             diamond_hoe: 'Diamanthacke'
@@ -297,3 +297,246 @@ vanilla:
             trident: 'Dreizack'
             fishing_rod: 'Angel'
             crossbow: 'Armbrust'
+
+item_display_types:
+    all: "Alle normalen GegenstÃ¤nde"
+    armor: "RÃ¼stung"
+    axes: "Ã„xte"
+    book: "BÃ¼cher"
+    boots: "Stiefel"
+    bow: "Bogen"
+    carrot_on_a_stick: "Karottenrute"
+    chainmail_armor: "KettenrÃ¼stung"
+    chestplates: "Brustplatten"
+    crossbow: "Armbrust"
+    diamond_armor: "Diamant-RÃ¼stung"
+    diamond_tools: "Diamantwerkzeuge"
+    elytra: "Elytren"
+    enchantable: "Verzaubern"
+    fishing_rod: "Angel"
+    flint_and_steel: "Feuerzeug"
+    golden_armor: "Goldene RÃ¼stung"
+    golden_tools: "Goldene Werkzeuge"
+    helmets: "Helme"
+    hoes: "Hoes"
+    iron_armor: "Eiserne RÃ¼stung"
+    iron_tools: "Eisenwerkzeuge"
+    leather_armor: "LederrÃ¼stung"
+    leggings: "Gamaschen"
+    melee: "Nahkampfwaffen"
+    misc: "Sonstiges"
+    pickaxes: "Spitzhacken"
+    ranged: "Fernkampfwaffen"
+    shears: "Schere"
+    shield: "Schild"
+    shovels: "Schaufeln"
+    shulker_boxes: "Shulker-Boxen"
+    stone_tools: "Steinwerkzeuge"
+    swords: "Schwerter"
+    tools: "Werkzeuge"
+    trident: "Dreizack"
+    turtle_helmet: "SchildkrÃ¶tenpanzer"
+    wooden_tools: "Holzwerkzeuge"
+    none: "Keiner"
+misc:
+    no_conflicting_enchantments: "Keiner"
+    no_disabled_items: "Keiner"
+    true: "Wahr"
+    false: "Falsch"
+
+advancements: 
+    enchantments/enchantment_solution: 
+        name: 'Enchantment Solution'
+        description: 'Verbesserungen rund um die hinzugefÃ¼gten Verzauberungen'
+    enchantments/fish_sticks: 
+        name: 'FischstÃ¤bchen'
+        description: 'Mit Fritieren einen Fisch kochen'
+    enchantments/fed_for_a_lifetime: 
+        name: 'Ein Leben lang gefÃ¼ttert'
+        description: 'Holen Sie sich mit Profiangler mehr als einen Fisch von jeder Art'
+    enchantments/nemo_enim_coquit: 
+        name: 'Nemo Enim Coquit'
+        description: 'Fange einen tropischen Fisch mit Fritieren'
+    enchantments/breaker_breaker: 
+        name: 'Breaker, Breaker'
+        description: 'Platziere die BlÃ¶cke mit dem Zauberstab Ã¼ber einer Fackel'
+    enchantments/thorgy: 
+        name: 'Thorgy!'
+        description: 'Stecke einen gezÃ¤hmten Wolf in dein Lasso von Irene'
+    enchantments/did_you_really_wand_to_do_that: 
+        name: 'Hast du das wirklich gemacht?'
+        description: 'Zerbrich eine Karotte am Stiel mit der Zauberstabverzauberung'
+    enchantments/free_pets: 
+        name: 'Kostenlose Haustiere'
+        description: 'Schnapp dir jedes zÃ¤hmbare Tier in Lasso von Irene'
+    enchantments/sharing_is_caring: 
+        name: 'Teilen ist KÃ¼mmern'
+        description: 'Geben Sie Ihrem Freund einen Artikel mit Erfahrung'
+    enchantments/not_that_kind: 
+        name: 'Nicht diese Art'
+        description: 'TÃ¶te jedes zÃ¼chtbare Tier mit Werfen'
+    enchantments/super_charged: 
+        name: 'Super aufgeladen'
+        description: 'Erschaffe einen aufgeladenen Creeper mit einem Schockangriff'
+    enchantments/not_very_effective: 
+        name: 'Nicht sehr effektiv...'
+        description: 'TÃ¶te einen Ertrunkenen mit einem Salzlake schwert'
+    enchantments/pre_combat_update: 
+        name: 'Pre-Combat Update'
+        description: 'TÃ¶te einen Spieler mit einer Schneller Schlag waffe'
+    enchantments/headhunter: 
+        name: 'Headhunter'
+        description: 'Den Kopf eines Spielers stehlen'
+    enchantments/double_header: 
+        name: 'Doppelter Header'
+        description: 'Holen Sie sich zwei Wither-Skeleton-SchÃ¤del mit einem Kill'
+    enchantments/super_effective: 
+        name: 'Super effektiv!'
+        description: 'TÃ¶te einen Minecraft-Boss mit einem Salzlake schwert'
+    enchantments/motherload: 
+        name: 'Mutterlast'
+        description: 'TÃ¶te den Enderdrachen mit Erfahrung'
+    enchantments/hex_bag: 
+        name: 'Hex-Tasche'
+        description: 'Ertrinke einen Spieler'
+    enchantments/seven_point_eight: 
+        name: '7.8/10'
+        description: 'Lass 3 Mobs gleichzeitig mit Ertrinken ertrinken'
+    enchantments/poseidons_day_off: 
+        name: 'Poseidons freier Tag'
+        description: 'TÃ¶te einen Mob mit Transmutation, ohne die Beute zu Ã¤ndern'
+    enchantments/fishy_business: 
+        name: 'Fischreichere GeschÃ¤fte'
+        description: 'Sammle alle Arten von Fischen mit Transmutation'
+    enchantments/poseidon_reborn: 
+        name: 'Poseidon Reborn'
+        description: 'Verwende Transmutation, um einen Dreizack zu erhalten'
+    enchantments/cerberus: 
+        name: 'Cerberus?'
+        description: 'ErhÃ¶hen Sie Ihre Belohnung, wenn Sie einen Transmutations-Dreizack verwenden'
+    enchantments/bonemeal_plus: 
+        name: 'Knochenmehl Plus'
+        description: 'Verwenden Sie Blumengeschenk fÃ¼r eine Blume mit zwei HÃ¶hen'
+    enchantments/fourty_niners: 
+        name: '49ers'
+        description: 'Holen Sie sich 81 Nuggets mit GoldgrÃ¤ber'
+    enchantments/chicken_or_the_egg: 
+        name: 'Huhn oder Ei?'
+        description: 'Schlagen Sie mit Ei Splatter ein Huhn mit einem Ei'
+    enchantments/egged_by_myself: 
+        name: 'Egged von mir'
+        description: 'Schlagen Sie sich mit einem Ei vom Ei Splatter'
+    enchantments/missed: 
+        name: 'Verpasst'
+        description: 'Mit Sand Veil 16 Angriffe verpassen'
+    enchantments/just_as_sweet: 
+        name: 'Genauso sÃ¼ÃŸ'
+        description: 'Holen Sie sich mit Blumengeschenk erfolgreich eine Wither Rose'
+    enchantments/laaagggggg: 
+        name: 'VerzÃ¶gerung'
+        description: 'Lag den Server mit verschiedenen Partikeleffekten'
+    enchantments/easy_out: 
+        name: 'Einfach raus'
+        description: 'Schalten Sie das Lagerfeuer mit Befeuchten aus'
+    enchantments/just_add_water: 
+        name: 'Einfach Wasser hinzufÃ¼gen'
+        description: 'FÃ¼gen Sie dem Betonpulver mit Befeuchten Wasser hinzu'
+    enchantments/repaired: 
+        name: 'Repariert'
+        description: 'Reparieren Sie einen defekten Block mit Befeuchten'
+    enchantments/kept_on_hand: 
+        name: 'An Hand gehalten'
+        description: 'Behalte einen Gegenstand nach dem Tod mit Seelengebunden'
+    enchantments/fear_the_reaper: 
+        name: 'FÃ¼rchte den Schnitter'
+        description: 'Stehlen Sie den Gegenstand eines anderen Spielers mit Seelendieb'
+    enchantments/high_metabolism: 
+        name: 'Hoher Stoffwechsel'
+        description: 'Mit Fluch der ErschÃ¶pfung die ErschÃ¶pfung vervierfachen'
+    enchantments/ready_after_death: 
+        name: 'Bereit nach dem Tod'
+        description: 'Speichern Sie 9 einzigartige Arten von Diamantwerkzeugen, Waffen und RÃ¼stungen im Tod mit Seelengebunden'
+    enchantments/reaped_the_reaper: 
+        name: 'Schnappte den Reaper'
+        description: 'Stehlen Sie mit Seelendieb den Gegenstand eines anderen Spielers'
+    enchantments/coffee_break: 
+        name: 'Kaffeepause'
+        description: 'Setzen Sie einen Keine Pause-Helm auf, wenn Phantoms laichen kÃ¶nnen'
+    enchantments/this_girl_is_on_fire: 
+        name: 'Dieses MÃ¤dchen steht in Flammen'
+        description: 'WÃ¤hrend Sie auf Lava gehen, die sich in Magma verwandelt hat, fangen Sie Feuer'
+    enchantments/flame_keeper: 
+        name: 'Flammenbewahrer'
+        description: 'Erschaffe Magma in einer Welt, die keine Lava haben sollte'
+    enchantments/made_for_walking: 
+        name: 'Gemacht zum Laufen'
+        description: 'Gehen Sie mit UngÃ¼ltiger LÃ¤ufer Ã¼ber die Leere'
+    enchantments/determined_cheater: 
+        name: 'Entschlossener BetrÃ¼ger'
+        description: 'Brechen Sie den Obsidian, der mit UngÃ¼ltiger LÃ¤ufer hergestellt wurde'
+    enchantments/i_aint_afraid_of_no_ghosts: 
+        name: 'Ich habe keine Angst vor Geistern'
+        description: 'Schlafen Sie 10 Mal, wÃ¤hrend Sie einen Unruhe-Helm tragen'
+    enchantments/im_you_but_shorter: 
+        name: 'Ich bin du, aber kÃ¼rzer'
+        description: 'Teleportiere mit Warp von einem Enderman weg'
+    enchantments/panzer_soldier: 
+        name: 'Panzersoldat'
+        description: 'Tragen Sie 4 RÃ¼stungen mit dem hÃ¶chsten Panzerlevel'
+    enchantments/too_close: 
+        name: 'Zu nah'
+        description: 'Ikarus kann im Flug nicht aktiviert werden'
+    enchantments/armored_evolution: 
+        name: 'Gepanzerte Evolution'
+        description: 'RÃ¼sten Sie Ihren Elytren mit Gepanzert auf'
+    enchantments/extra_power: 
+        name: 'Extra Power'
+        description: 'Iss einen verzauberten goldenen Apfel, wÃ¤hrend du die hÃ¶chste Lebensstufe trÃ¤gst'
+    enchantments/cruising_altitude: 
+        name: 'FlughÃ¶he'
+        description: 'Reisen Sie mit dem Vielflieger auf 12000 m'
+    enchantments/graphene_armor: 
+        name: 'Graphen-RÃ¼stung'
+        description: 'Erhalte 20 RÃ¼stungsstÃ¤rke mit ZÃ¤higkeit'
+    enchantments/danger_defeated: 
+        name: 'Gefahr besiegt'
+        description: 'TÃ¶te einen Wither mit Gung-Ho'
+    enchantments/divine_retribution: 
+        name: 'GÃ¶ttliche Vergeltung'
+        description: 'TÃ¶te einen Spieler mit einem Opferung-Brustpanzer von den Toten'
+    enchantments/look_what_you_made_me_do: 
+        name: 'Du hast mich dazu gebracht'
+        description: 'TÃ¶te einen PlÃ¼nderer mit einer PlÃ¼ndernarmbrust'
+    enchantments/just_die_already: 
+        name: 'Stirb einfach schon!'
+        description: 'TÃ¶te ein Phantom in einem Schuss mit Steinwurf'
+    enchantments/underkill: 
+        name: 'Underkill'
+        description: 'Schlage den Enderdrachen mit Steinwurf'
+    enchantments/where_did_that_come_from: 
+        name: 'Woher kommt das?'
+        description: 'TÃ¶te mit Sniper ein Skelett aus 100 BlÃ¶cken Entfernung'
+    enchantments/that_food_is_fine: 
+        name: 'Das Essen ist ... gut?'
+        description: 'Iss ein StÃ¼ck Essen mit einem negativen Trankeffekt und entferne es mit Magischer Schutz'
+    enchantments/deflection: 
+        name: 'Ablenkung'
+        description: 'TÃ¶te einen Mob mit einem Pfeil, der mit Harter Aufprall abgefÃ¤lscht wird'
+    enchantments/iron_man: 
+        name: 'Ironman'
+        description: 'Erlebe einen TodesstoÃŸ wegen Eisenverteidigung'
+    enchantments/iront_you_glad: 
+        name: 'Bist du nicht froh?'
+        description: 'Beziehen Sie mit Smeltery mehr als einen Eisenbarren aus einem Eisenerz'
+    enchantments/fast_and_furious: 
+        name: 'Schnell und wÃ¼tend'
+        description: 'Brechen Sie mehrere BlÃ¶cke gleichzeitig mit HÃ¶he++ oder Breite++'
+    enchantments/hey_it_works: 
+        name: 'Hey es funktioniert!'
+        description: 'Zerbrich eine Shulker-Box mit Telepathie'
+    enchantments/no_panic: 
+        name: 'Keine Panik'
+        description: 'Schnapp dir mit Telepathie einen Gegenstand direkt Ã¼ber Lava'
+    enchantments/over_9000: 
+        name: 'Over 9000'
+        description: 'Sammle 9001 zusÃ¤tzliche GegenstÃ¤nde mit HÃ¶he++ oder Breite++'

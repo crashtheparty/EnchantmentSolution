@@ -22,11 +22,9 @@ public class GungHoPlayer extends AbilityPlayer{
 			AttributeInstance a = getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH);
 			AttributeModifier modifier = new AttributeModifier(UUID.fromString("eeeeeeee-ffff-ffff-ffff-000000000000"), "generic.maxHealth", 
 					-1 * a.getDefaultValue() / 2, Operation.ADD_NUMBER);
-			if(!a.getModifiers().contains(modifier)) {
-				a.addModifier(modifier);
-				if(getPlayer().getHealth() > a.getBaseValue()) {
-					getPlayer().setHealth(a.getBaseValue());
-				}
+			addModifier(a, modifier);
+			if(getPlayer().getHealth() > a.getBaseValue()) {
+				getPlayer().setHealth(a.getBaseValue());
 			}
 		}
 	}
@@ -36,10 +34,16 @@ public class GungHoPlayer extends AbilityPlayer{
 			AttributeInstance a = getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH);
 			AttributeModifier modifier = new AttributeModifier(UUID.fromString("eeeeeeee-ffff-ffff-ffff-000000000000"), "generic.maxHealth", 
 					-1 * a.getDefaultValue() / 2, Operation.ADD_NUMBER);
-			if(a.getModifiers().contains(modifier)) {
-				a.removeModifier(modifier);
-			}
+			removeModifier(a, modifier);
 		}
+	}
+	
+	@Override
+	protected void doUnequip() {
+		AttributeInstance a = getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH);
+		AttributeModifier modifier = new AttributeModifier(UUID.fromString("eeeeeeee-ffff-ffff-ffff-000000000000"), "generic.maxHealth", 
+				-1 * a.getDefaultValue() / 2, Operation.ADD_NUMBER);
+		removeModifier(a, modifier);
 	}
 
 }

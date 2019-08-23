@@ -15,7 +15,9 @@ public class FireProtection extends CustomEnchantment{
 	public FireProtection() {
 		super("Fire Protection", -8, 2, 15, 8, 1, 1, 4, 4, Weight.UNCOMMON, "Reduces fire damage.");
 		addDefaultDisplayName(Language.GERMAN, "Feuerschutz");
-		addDefaultDescription(Language.GERMAN, "Reduziert Feuersch�den.");
+		addDefaultDescription(Language.GERMAN, "Reduziert Feuerschäden.");
+		addDefaultDisplayName(Language.CHINA_SIMPLE, "火焰保护");
+		addDefaultDescription(Language.CHINA_SIMPLE, "减少受到的火焰伤害.");
 	}
 
 	@Override

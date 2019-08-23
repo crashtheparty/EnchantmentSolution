@@ -15,7 +15,9 @@ public class Flame extends CustomEnchantment{
 		super("Flame", 35, 20, 0, 0, 20, 1, 1, 1, Weight.RARE, "Flaming arrows.\nArrows are on fire when shot and deal 4 (2 Hearts) fire damage over 5 seconds.");
 		addDefaultDisplayName(Language.GERMAN, "Flamme");
 		setMaxLevelOne(true);
-		addDefaultDescription(Language.GERMAN, "Brennende Pfeile.\nPfeile brennen beim Schie�en und verursachen 5 Sekunden lang 4 Feuerschaden");
+		addDefaultDescription(Language.GERMAN, "Brennende Pfeile.\nPfeile brennen beim Schießen und verursachen 5 Sekunden lang 4 Feuerschaden");
+		addDefaultDisplayName(Language.CHINA_SIMPLE, "火矢");
+		addDefaultDescription(Language.CHINA_SIMPLE, "点燃你发射的弓箭.\n5秒内造成4点燃烧伤害.");
 	}
 
 	@Override

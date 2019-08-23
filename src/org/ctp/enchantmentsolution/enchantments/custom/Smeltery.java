@@ -16,7 +16,9 @@ public class Smeltery extends CustomEnchantment{
 		super("Smeltery", 40, 20, 0, 0, 30, 1, 1, 1, Weight.RARE, "Smelts blocks while mining.");
 		addDefaultDisplayName(Language.GERMAN, "Schmelzen");
 		setMaxLevelOne(true);
-		addDefaultDescription(Language.GERMAN, "Schmelzen Bl�cke w�hrend des Bergbaus.");
+		addDefaultDescription(Language.GERMAN, "Schmelzen Blöcke während des Bergbaus.");
+		addDefaultDisplayName(Language.CHINA_SIMPLE, "熔炼");
+		addDefaultDescription(Language.CHINA_SIMPLE, "挖掘方块的同时进行熔炼.");
 	}
 	
 	@Override

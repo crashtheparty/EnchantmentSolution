@@ -17,8 +17,10 @@ public class SilkTouch extends CustomEnchantment{
 				"Allows collection of blocks that are normally unobtainable.");
 		addDefaultDisplayName(Language.GERMAN, "Behutsamkeit");
 		setMaxLevelOne(true);
-		addDefaultDescription(Language.GERMAN, "Abgebaute Bl�cke lassen sich anstelle der �blichen Gegenst�nde fallen.\n" + 
-				"Erm�glicht das Sammeln von Bl�cken, die normalerweise nicht erreichbar sind.");
+		addDefaultDescription(Language.GERMAN, "Abgebaute Blöcke lassen sich anstelle der üblichen Gegenstände fallen.\n" + 
+				"Ermöglicht das Sammeln von Blöcken, die normalerweise nicht erreichbar sind.");
+		addDefaultDisplayName(Language.CHINA_SIMPLE, "精准采集");
+		addDefaultDescription(Language.CHINA_SIMPLE, "挖掘方块可获得原样的方块.");
 	}
 	
 	@Override

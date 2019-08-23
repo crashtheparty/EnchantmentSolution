@@ -308,7 +308,11 @@ public class Enchantments {
 		int rand_enchantability = 1 + randomInt(enchantability_2 / 2 + 1)
 				+ randomInt(enchantability_2 / 2 + 1);
 
-		int k = level + rand_enchantability + (lapis - ConfigUtils.getLapisConstant()) * ConfigUtils.getLapisModifier();
+		if(ConfigUtils.useLapisLevels()) {
+			rand_enchantability += (lapis - ConfigUtils.getLapisConstant()) * ConfigUtils.getLapisModifier();
+		}
+		
+		int k = level + rand_enchantability;
 		float rand_bonus_percent = (float) (1 + (randomFloat() + randomFloat() - 1) * .15);
 		return (int) (k * rand_bonus_percent + 0.5);
 	}
@@ -600,7 +604,6 @@ public class Enchantments {
 					conflict = true;
 				}
 			}
-			ChatUtils.sendInfo("Is in here " + levelCost + " " + enchantTwo.getEnchant().canAnvil(player, levelCost));
 			if(demiGodAnvil) {
 				if(demiGodBooks && (second.getType() == Material.BOOK || second.getType() == Material.ENCHANTED_BOOK)) {
 					// nothing needs to change
@@ -695,5 +698,28 @@ public class Enchantments {
 		}
 		meta.setLore(enchantmentsFirst);
 		return meta;
+	}
+
+	public static int[] getEnchantabilityCalc(int enchantability, int constant, int modifier) {
+		int enchantability_2 = enchantability / 2;
+		int rand_enchantability = 1 + enchantability_2;
+		
+		int level = 1;
+	
+		int max = ((ConfigUtils.isLevel50() ? 50 : 30) + rand_enchantability);
+		if(ConfigUtils.useLapisLevels()) {
+			max += ((ConfigUtils.isLevel50() ? 6 : 3) - ConfigUtils.getLapisConstant()) * ConfigUtils.getLapisModifier();
+		}
+		max = (int) (max * 1.15 + 0.5);
+		
+		if(modifier <= 0) return new int[] {1, max};
+		
+		int maxEnchantability = modifier * level + constant;
+		while (max > maxEnchantability + modifier) {
+			level ++;
+			maxEnchantability = modifier * level + constant;
+		}
+		
+		return new int[] {level--, max};
 	}
 }

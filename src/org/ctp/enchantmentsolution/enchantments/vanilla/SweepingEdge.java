@@ -14,7 +14,9 @@ public class SweepingEdge extends CustomEnchantment{
 	public SweepingEdge() {
 		super("Sweeping Edge", -7, -4, 12, 9, 1, 1, 3, 3, Weight.RARE, "Increases sweeping attack damage.");
 		addDefaultDisplayName(Language.GERMAN, "Schwungkraft");
-		addDefaultDescription(Language.GERMAN, "Erh�ht den Angriffsschaden.");
+		addDefaultDescription(Language.GERMAN, "Erhöht den Angriffsschaden.");
+		addDefaultDisplayName(Language.CHINA_SIMPLE, "横扫之刃");
+		addDefaultDescription(Language.CHINA_SIMPLE, "增加横扫伤害.");
 	}
 	
 	@Override

@@ -22,6 +22,8 @@ public class CurseOfVanishing extends CustomEnchantment{
 		addDefaultDescription(Language.GERMAN, "Bewirkt, dass der Gegenstand beim Tod verschwindet." + 
 				"\n" + 
 				"Wenn der Spieler stirbt, verschwindet der Gegenstand, anstatt auf den Boden zu fallen. Der Artikel kann noch normal abgeworfen werden.");
+		addDefaultDisplayName(Language.CHINA_SIMPLE, "消失诅咒");
+		addDefaultDescription(Language.CHINA_SIMPLE, "使物品在玩家死亡时消失.");
 	}
 
 	@Override

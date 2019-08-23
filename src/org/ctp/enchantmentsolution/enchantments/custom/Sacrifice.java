@@ -15,7 +15,9 @@ public class Sacrifice extends CustomEnchantment{
 	public Sacrifice() {
 		super("Sacrifice", 35, 15, 15, 15, 30, 1, 2, 2, Weight.VERY_RARE, "Damage the mob who killed you based upon your experience level.");
 		addDefaultDisplayName(Language.GERMAN, "Opferung");
-		addDefaultDescription(Language.GERMAN, "Zerst�re den Mob, der dich get�tet hat, basierend auf deinem Erfahrungslevel.");
+		addDefaultDescription(Language.GERMAN, "Zerstöre den Mob, der dich getötet hat, basierend auf deinem Erfahrungslevel.");
+		addDefaultDisplayName(Language.CHINA_SIMPLE, "牺牲");
+		addDefaultDescription(Language.CHINA_SIMPLE, "基于你的经验等级对杀死你的怪物造成伤害.");
 	}
 	
 	@Override

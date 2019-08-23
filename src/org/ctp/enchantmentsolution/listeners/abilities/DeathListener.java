@@ -37,6 +37,7 @@ import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 import org.ctp.enchantmentsolution.utils.items.nms.AbilityUtils;
 import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
 
+@SuppressWarnings("unused")
 public class DeathListener extends EnchantmentListener{
 
 	private static List<UUID> SACRIFICE_ADVANCEMENT = new ArrayList<UUID>();
@@ -44,11 +45,23 @@ public class DeathListener extends EnchantmentListener{
 	
 	@EventHandler
 	public void onEntityDeath(EntityDeathEvent event){
-		beheading(event);
-		drowned(event);
-		expShare(event);
-		pillage(event);
-		transmutation(event);
+		runMethod(this, "beheading", event, EntityDeathEvent.class);
+		runMethod(this, "drowned", event, EntityDeathEvent.class);
+		runMethod(this, "expShare", event, EntityDeathEvent.class);
+		runMethod(this, "pillage", event, EntityDeathEvent.class);
+		runMethod(this, "transmutation", event, EntityDeathEvent.class);
+	}
+	
+	@EventHandler(priority=EventPriority.HIGHEST)
+	public void onPlayerDeath(PlayerDeathEvent event){
+		runMethod(this, "sacrifice", event, PlayerDeathEvent.class);
+		runMethod(this, "soulbound", event, PlayerDeathEvent.class);
+	}
+	
+	@EventHandler
+	public void onPlayerRespawn(PlayerRespawnEvent event) {
+		runMethod(this, "sacrifice", event, PlayerRespawnEvent.class);
+		runMethod(this, "soulbound", event, PlayerRespawnEvent.class);
 	}
 	
 	private void beheading(EntityDeathEvent event) {
@@ -196,12 +209,6 @@ public class DeathListener extends EnchantmentListener{
 		}
 	}
 	
-	@EventHandler(priority=EventPriority.HIGHEST)
-	public void onPlayerDeath(PlayerDeathEvent event){
-		sacrifice(event);
-		soulbound(event);
-	}
-	
 	private void sacrifice(PlayerDeathEvent event) {
 		if(!canRun(DefaultEnchantments.SACRIFICE, event)) return;
 		Player player = event.getEntity();
@@ -275,12 +282,6 @@ public class DeathListener extends EnchantmentListener{
 			}
 			SOUL_ITEMS.put(player.getUniqueId().toString(), newItems);
 		}
-	}
-	
-	@EventHandler
-	public void onPlayerRespawn(PlayerRespawnEvent event) {
-		sacrifice(event);
-		soulbound(event);
 	}
 	
 	private void sacrifice(PlayerRespawnEvent event) {

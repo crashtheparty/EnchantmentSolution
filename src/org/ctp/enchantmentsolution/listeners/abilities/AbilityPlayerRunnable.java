@@ -22,25 +22,29 @@ public class AbilityPlayerRunnable implements Runnable{
 	@Override
 	public void run() {
 		for(Player player : Bukkit.getOnlinePlayers()) {
-			if(!PLAYERS.containsKey(player.getUniqueId())) {
-				List<AbilityPlayer> abilities = new ArrayList<AbilityPlayer>();
-				ItemStack elytra = player.getInventory().getChestplate();
-				if(elytra != null && !elytra.getType().equals(Material.ELYTRA)) {
-					elytra = null;
+			try {
+				if(!PLAYERS.containsKey(player.getUniqueId())) {
+					List<AbilityPlayer> abilities = new ArrayList<AbilityPlayer>();
+					ItemStack elytra = player.getInventory().getChestplate();
+					if(elytra != null && !elytra.getType().equals(Material.ELYTRA)) {
+						elytra = null;
+					}
+					FrequentFlyerPlayer ffPlayer = new FrequentFlyerPlayer(player, elytra);
+					if(ffPlayer.canFly() && !player.isOnGround() && !player.getGameMode().equals(GameMode.CREATIVE) && !player.getGameMode().equals(GameMode.SPECTATOR)) {
+						player.setFlying(true);
+					}
+					abilities.add(new ArmoredPlayer(player, player.getInventory().getChestplate()));
+					abilities.add(ffPlayer);
+					abilities.add(new GungHoPlayer(player, player.getInventory().getChestplate()));
+					abilities.add(new LifePlayer(player, player.getInventory().getChestplate()));
+					abilities.add(new NoRestPlayer(player, player.getInventory().getHelmet()));
+					abilities.add(new QuickStrikePlayer(player, player.getInventory().getItemInMainHand()));
+					abilities.add(new ToughnessPlayer(player, player.getInventory().getArmorContents()));
+					abilities.add(new UnrestPlayer(player, player.getInventory().getHelmet()));
+					PLAYERS.put(player.getUniqueId(), abilities);
 				}
-				FrequentFlyerPlayer ffPlayer = new FrequentFlyerPlayer(player, elytra);
-				if(ffPlayer.canFly() && !player.isOnGround() && !player.getGameMode().equals(GameMode.CREATIVE) && !player.getGameMode().equals(GameMode.SPECTATOR)) {
-					player.setFlying(true);
-				}
-				abilities.add(new ArmoredPlayer(player, player.getInventory().getChestplate()));
-				abilities.add(ffPlayer);
-				abilities.add(new GungHoPlayer(player, player.getInventory().getChestplate()));
-				abilities.add(new LifePlayer(player, player.getInventory().getChestplate()));
-				abilities.add(new NoRestPlayer(player, player.getInventory().getHelmet()));
-				abilities.add(new QuickStrikePlayer(player, player.getInventory().getItemInMainHand()));
-				abilities.add(new ToughnessPlayer(player, player.getInventory().getArmorContents()));
-				abilities.add(new UnrestPlayer(player, player.getInventory().getHelmet()));
-				PLAYERS.put(player.getUniqueId(), abilities);
+			} catch (Exception ex) {
+				ex.printStackTrace();
 			}
 		}
 		

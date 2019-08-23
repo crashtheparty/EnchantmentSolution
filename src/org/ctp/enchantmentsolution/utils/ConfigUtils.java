@@ -215,4 +215,16 @@ public class ConfigUtils {
 	public static boolean getVillagerTrades() {
 		return EnchantmentSolution.getPlugin().getConfigFiles().getDefaultConfig().getBoolean("villager_trades");
 	}
+
+	public static boolean useLapisLevels() {
+		return (useAdvancedFile() ? EnchantmentSolution.getPlugin().getConfigFiles().getDefaultConfig().getBoolean("use_lapis_modifiers") : isLevel50());
+	}
+
+	public static String getItemDisplayType(String type) {
+		return EnchantmentSolution.getPlugin().getConfigFiles().getLanguageFile().getString("item_display_types." + type);
+	}
+
+	public static String getLanguageString(String s) {
+		return EnchantmentSolution.getPlugin().getConfigFiles().getLanguageFile().getString(s);
+	}
 }

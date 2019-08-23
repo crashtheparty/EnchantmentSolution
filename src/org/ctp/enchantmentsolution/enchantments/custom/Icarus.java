@@ -15,7 +15,9 @@ public class Icarus extends CustomEnchantment{
 	public Icarus() {
 		super("Icarus", 8, 5, 12, 10, 20, 1, 5, 3, Weight.VERY_RARE, "Flying upwards will occassionally increase velocity.");
 		addDefaultDisplayName(Language.GERMAN, "Ikarus");
-		addDefaultDescription(Language.GERMAN, "Aufw�rtsfliegen erh�ht gelegentlich die Geschwindigkeit.");
+		addDefaultDescription(Language.GERMAN, "Aufwärtsfliegen erhöht gelegentlich die Geschwindigkeit.");
+		addDefaultDisplayName(Language.CHINA_SIMPLE, "伊卡洛斯");
+		addDefaultDescription(Language.CHINA_SIMPLE, "向上飞行有时会增加速度.");
 	}
 	
 	@Override
