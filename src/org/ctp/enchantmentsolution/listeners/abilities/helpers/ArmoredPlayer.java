@@ -9,13 +9,11 @@ import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.attribute.AttributeModifier.Operation;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
 import org.ctp.enchantmentsolution.events.AbilityEquipEvent;
 import org.ctp.enchantmentsolution.events.AbilityUnequipEvent;
 import org.ctp.enchantmentsolution.events.SlotType;
-import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 
 public class ArmoredPlayer extends AbilityPlayer{
 
@@ -34,10 +32,7 @@ public class ArmoredPlayer extends AbilityPlayer{
 			AttributeInstance a = getPlayer().getAttribute(Attribute.GENERIC_ARMOR);
 			AttributeModifier modifier = new AttributeModifier(UUID.fromString("cccccccc-fefe-fefe-fefe-000000000000"), "armored_armor", 
 					2 * level, Operation.ADD_NUMBER);
-			if(!a.getModifiers().contains(modifier)) {
-				a.addModifier(modifier);
-				AdvancementUtils.awardCriteria(getPlayer(), ESAdvancement.ARMORED_EVOLUTION, "armored");
-			}
+			addModifier(a, modifier);
 		}
 	}
 
@@ -50,10 +45,16 @@ public class ArmoredPlayer extends AbilityPlayer{
 			AttributeInstance a = getPlayer().getAttribute(Attribute.GENERIC_ARMOR);
 			AttributeModifier modifier = new AttributeModifier(UUID.fromString("cccccccc-fefe-fefe-fefe-000000000000"), "armored_armor", 
 					2 * level, Operation.ADD_NUMBER);
-			if(a.getModifiers().contains(modifier)) {
-				a.removeModifier(modifier);
-			}
+			removeModifier(a, modifier);
 		}
+	}
+	
+	@Override
+	protected void doUnequip() {
+		AttributeInstance a = getPlayer().getAttribute(Attribute.GENERIC_ARMOR);
+		AttributeModifier modifier = new AttributeModifier(UUID.fromString("cccccccc-fefe-fefe-fefe-000000000000"), "armored_armor", 
+				2, Operation.ADD_NUMBER);
+		removeModifier(a, modifier);
 	}
 
 }

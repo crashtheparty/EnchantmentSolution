@@ -16,6 +16,8 @@ public class IrenesLasso extends CustomEnchantment{
 		super("Irene's Lasso", 0, 15, 30, 0, 30, 1, 2, 1, Weight.VERY_RARE, "Grabs animals to carry around with you and place later.");
 		addDefaultDisplayName(Language.GERMAN, "Lasso von Irene");
 		addDefaultDescription(Language.GERMAN, "Greift Tiere zum Mitnehmen und Platzieren später.");
+		addDefaultDisplayName(Language.CHINA_SIMPLE, "");
+		addDefaultDescription(Language.CHINA_SIMPLE, "");
 	}
 	
 	@Override

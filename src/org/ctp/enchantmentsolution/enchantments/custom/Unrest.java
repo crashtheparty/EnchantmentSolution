@@ -17,6 +17,8 @@ public class Unrest extends CustomEnchantment{
 		addDefaultDisplayName(Language.GERMAN, "Unruhe");
 		setMaxLevelOne(true);
 		addDefaultDescription(Language.GERMAN, "Nachtsicht auf Kosten eines Phantomlaichens.");
+		addDefaultDisplayName(Language.CHINA_SIMPLE, "");
+		addDefaultDescription(Language.CHINA_SIMPLE, "");
 	}
 
 	@Override

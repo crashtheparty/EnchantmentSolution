@@ -17,6 +17,8 @@ public class Transmutation extends CustomEnchantment{
 		addDefaultDisplayName(Language.GERMAN, "Transmutation");
 		setMaxLevelOne(true);
 		addDefaultDescription(Language.GERMAN, "Beim Töten von Mobs werden alle Gegenstände, die nicht aus dem Meer stammen, zu Teilen aus dem Meer.");
+		addDefaultDisplayName(Language.CHINA_SIMPLE, "");
+		addDefaultDescription(Language.CHINA_SIMPLE, "");
 	}
 	
 	@Override

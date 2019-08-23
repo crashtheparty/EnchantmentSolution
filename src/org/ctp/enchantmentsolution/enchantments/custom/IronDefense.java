@@ -16,6 +16,8 @@ public class IronDefense extends CustomEnchantment{
 		super("Iron Defense", -4, -4, 14, 12, 1, 1, 5, 3, Weight.RARE, "Having the shield equipped will redirect damage to the shield.");
 		addDefaultDisplayName(Language.GERMAN, "Eiserne Verteidigung");
 		addDefaultDescription(Language.GERMAN, "Wenn der Schild ausgerüstet ist, werden Schäden am Schild umgeleitet.");
+		addDefaultDisplayName(Language.CHINA_SIMPLE, "");
+		addDefaultDescription(Language.CHINA_SIMPLE, "");
 	}
 	
 	@Override

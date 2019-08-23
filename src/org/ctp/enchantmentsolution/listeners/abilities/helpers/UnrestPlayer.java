@@ -29,4 +29,9 @@ public class UnrestPlayer extends AbilityPlayer{
 		
 	}
 
+	@Override
+	protected void doUnequip() {
+		
+	}
+
 }

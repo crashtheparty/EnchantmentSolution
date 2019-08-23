@@ -17,6 +17,8 @@ public class VoidWalker extends CustomEnchantment{
 		setTreasure(true);
 		addDefaultDisplayName(Language.GERMAN, "Ungültiger Läufer");
 		addDefaultDescription(Language.GERMAN, "Erlaubt es den Spielern, in der Luft zu gehen und es in Obsidian umzuwandeln.");
+		addDefaultDisplayName(Language.CHINA_SIMPLE, "");
+		addDefaultDescription(Language.CHINA_SIMPLE, "");
 	}
 	
 	@Override

@@ -129,7 +129,7 @@ public class PlayerListener extends EnchantmentListener{
 			ItemStack item = event.getItem();
 			if(item != null && Enchantments.hasEnchantment(item, DefaultEnchantments.MOISTURIZE)) {
 				Block block = event.getClickedBlock();
-				ItemMoisturizeType type = ItemMoisturizeType.getType(block.getType());
+				ItemMoisturizeType type = ItemMoisturizeType.getMoisturizeType(block.getType());
 				if(type != null) {
 					switch(type.getName().toLowerCase()) {
 					case "extinguish":

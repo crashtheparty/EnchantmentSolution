@@ -236,7 +236,7 @@ enchantment:
             warp: 'Warp'
             width_plus_plus: 'Breite++'
 irenes_lasso: 
-    error: 'Dieses Tier geh�rt dir nicht!'
+    error: 'Dieses Tier gehört dir nicht!'
 vanilla: 
     item: 
         minecraft: 
@@ -412,46 +412,46 @@ advancements:
         description: 'Speichern Sie 9 einzigartige Arten von Diamantwerkzeugen, Waffen und Rüstungen im Tod mit Seelengebunden'
     enchantments/reaped_the_reaper: 
         name: 'Schnappte den Reaper'
-        description: 'Steal another player''s Soul Reaper item with Soul Reaper'
+        description: 'Stehlen Sie mit Seelendieb den Gegenstand eines anderen Spielers'
     enchantments/coffee_break: 
-        name: 'Coffee Break'
-        description: 'Put a No Rest helmet on when Phantoms can spawn'
+        name: 'Kaffeepause'
+        description: 'Setzen Sie einen Keine Pause-Helm auf, wenn Phantoms laichen können'
     enchantments/this_girl_is_on_fire: 
-        name: 'This Girl is on Fire'
-        description: 'While walking on Magma-ized lava, catch fire'
+        name: 'Dieses Mädchen steht in Flammen'
+        description: 'Während Sie auf Lava gehen, die sich in Magma verwandelt hat, fangen Sie Feuer'
     enchantments/flame_keeper: 
-        name: 'Flame Keeper'
-        description: 'Create magma in a world that shouldn''t have lava'
+        name: 'Flammenbewahrer'
+        description: 'Erschaffe Magma in einer Welt, die keine Lava haben sollte'
     enchantments/made_for_walking: 
-        name: 'Made for Walking'
-        description: 'Walk over the void with Void Walker'
+        name: 'Gemacht zum Laufen'
+        description: 'Gehen Sie mit Ungültiger Läufer über die Leere'
     enchantments/determined_cheater: 
-        name: 'Determined Cheater'
-        description: 'Break obsidian made using Void Walker'
+        name: 'Entschlossener Betrüger'
+        description: 'Brechen Sie den Obsidian, der mit Ungültiger Läufer hergestellt wurde'
     enchantments/i_aint_afraid_of_no_ghosts: 
-        name: 'I Ain''t Afraid of No Ghosts'
-        description: 'Sleep 10 times while wearing an Unrest helmet'
+        name: 'Ich habe keine Angst vor Geistern'
+        description: 'Schlafen Sie 10 Mal, während Sie einen Unruhe-Helm tragen'
     enchantments/im_you_but_shorter: 
-        name: 'I''m You, But Shorter'
-        description: 'Teleport away from an enderman using Warp'
+        name: 'Ich bin du, aber kürzer'
+        description: 'Teleportiere mit Warp von einem Enderman weg'
     enchantments/panzer_soldier: 
-        name: 'Panzer Soldier'
-        description: 'Wear 4 pieces of armor with the highest level of Tank'
+        name: 'Panzersoldat'
+        description: 'Tragen Sie 4 Rüstungen mit dem höchsten Panzerlevel'
     enchantments/too_close: 
-        name: 'Too Close'
-        description: 'Fail to activate Icarus in flight'
+        name: 'Zu nah'
+        description: 'Ikarus kann im Flug nicht aktiviert werden'
     enchantments/armored_evolution: 
-        name: 'Armored Evolution'
-        description: 'Upgrade your Elytra with armor using Armored'
+        name: 'Gepanzerte Evolution'
+        description: 'Rüsten Sie Ihren Elytren mit Gepanzert auf'
     enchantments/extra_power: 
         name: 'Extra Power'
-        description: 'Eat an enchanted golden apple while wearing the highest level of Life'
+        description: 'Iss einen verzauberten goldenen Apfel, während du die höchste Lebensstufe trägst'
     enchantments/cruising_altitude: 
-        name: 'Cruising Altitude'
-        description: 'Travel to 12000m using Frequent Flyer'
+        name: 'Flughöhe'
+        description: 'Reisen Sie mit dem Vielflieger auf 12000 m'
     enchantments/graphene_armor: 
-        name: 'Graphene Armor'
-        description: 'Gain 20 armor toughness using Toughness'
+        name: 'Graphen-Rüstung'
+        description: 'Erhalte 20 Rüstungsstärke mit Zähigkeit'
     enchantments/danger_defeated: 
         name: 'Danger Defeated'
         description: 'Kill a Wither using Gung Ho'

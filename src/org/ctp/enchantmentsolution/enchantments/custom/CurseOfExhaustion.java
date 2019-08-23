@@ -19,6 +19,8 @@ public class CurseOfExhaustion extends CustomEnchantment{
 		setMaxLevelOne(true);
 		setCurse(true);
 		addDefaultDescription(Language.GERMAN, "Erhöht die Erschöpfung, wenn ausgerüstet.");
+		addDefaultDisplayName(Language.CHINA_SIMPLE, "");
+		addDefaultDescription(Language.CHINA_SIMPLE, "");
 	}
 	
 	@Override

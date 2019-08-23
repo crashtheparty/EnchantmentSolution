@@ -17,6 +17,8 @@ public class NoRest extends CustomEnchantment{
 		addDefaultDisplayName(Language.GERMAN, "Keine Pause");
 		setMaxLevelOne(true);
 		addDefaultDescription(Language.GERMAN, "Es werden keine Phantome um Sie herum erscheinen.");
+		addDefaultDisplayName(Language.CHINA_SIMPLE, "");
+		addDefaultDescription(Language.CHINA_SIMPLE, "");
 	}
 
 	@Override

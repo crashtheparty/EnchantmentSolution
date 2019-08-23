@@ -16,7 +16,9 @@ public class GungHo extends CustomEnchantment{
 		super("Gung-Ho", 40, 20, 0, 0, 30, 1, 1, 1, Weight.RARE, "Decreases health by half. All attacks do 3 times the damage.");
 		addDefaultDisplayName(Language.GERMAN, "Gung-Ho");
 		setMaxLevelOne(true);
-		addDefaultDescription(Language.GERMAN, "Verringert die Gesundheit um die Hälfte. Alle Angriffe verursachen das Dreifache des Schadens.");
+		addDefaultDescription(Language.GERMAN, "Verringert die Gesundheit um die Hï¿½lfte. Alle Angriffe verursachen das Dreifache des Schadens.");
+		addDefaultDisplayName(Language.CHINA_SIMPLE, "");
+		addDefaultDescription(Language.CHINA_SIMPLE, "");
 	}
 	
 	@Override

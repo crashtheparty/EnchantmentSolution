@@ -17,6 +17,8 @@ public class SplatterFest extends CustomEnchantment{
 		addDefaultDisplayName(Language.GERMAN, "Ei Splatter");
 		setMaxLevelOne(true);
 		addDefaultDescription(Language.GERMAN, "Schießt mit dem Linksklick Eier aus der Hacke.");
+		addDefaultDisplayName(Language.CHINA_SIMPLE, "");
+		addDefaultDescription(Language.CHINA_SIMPLE, "");
 	}
 
 	@Override

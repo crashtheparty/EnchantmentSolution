@@ -18,21 +18,25 @@ public class FrequentFlyerPlayer extends AbilityPlayer{
 	public FrequentFlyerPlayer(Player player, ItemStack item) {
 		super(player, item, DefaultEnchantments.FREQUENT_FLYER);
 		setPreviousItem(null);
-		setItem(item);
+		this.setItem(item, true);
 	}
 	
 	public void setItem(ItemStack item) {
+		this.setItem(item, false);
+	}
+	
+	public void setItem(ItemStack item, boolean constructor) {
 		boolean reset = false;
 		
 		if(item != null && getPreviousItem() != null && !item.toString().equalsIgnoreCase(getPreviousItem().toString())) {
 			reset = true;
 		}
-		setItem(item, reset);
+		this.setItem(item, constructor, reset);
 	}
 	
-	private void setItem(ItemStack item, boolean reset) {
+	private void setItem(ItemStack item, boolean constructor, boolean reset) {
 		setPreviousItem(getItem());
-		super.setItem(item);
+		super.setItem(item, constructor);
 		underLimit = 0;
 		aboveLimit = 0;
 		boolean fly = false;
@@ -121,6 +125,11 @@ public class FrequentFlyerPlayer extends AbilityPlayer{
 	@Override
 	protected void doUnequip(ItemStack item) {
 		
+	}
+	
+	@Override
+	protected void doUnequip() {
+
 	}
 
 }

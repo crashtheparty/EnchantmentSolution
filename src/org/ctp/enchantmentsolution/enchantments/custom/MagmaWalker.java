@@ -17,6 +17,8 @@ public class MagmaWalker extends CustomEnchantment{
 		setTreasure(true);
 		addDefaultDisplayName(Language.GERMAN, "Lavaläufer");
 		addDefaultDescription(Language.GERMAN, "Erlaubt es den Spielern, auf Lava zu gehen und sie in Magma umzuwandeln.");
+		addDefaultDisplayName(Language.CHINA_SIMPLE, "");
+		addDefaultDescription(Language.CHINA_SIMPLE, "");
 	}
 	
 	@Override

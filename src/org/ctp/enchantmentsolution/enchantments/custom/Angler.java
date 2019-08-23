@@ -16,6 +16,8 @@ public class Angler extends CustomEnchantment{
 		super("Angler", 0, 0, 10, 8, 1, 1, 5, 3, Weight.RARE, "Catch one additional fish per level if you caught a fish.");
 		addDefaultDisplayName(Language.GERMAN, "Profiangler");
 		addDefaultDescription(Language.GERMAN, "Fangen Sie einen zusätzlichen Fisch pro Level, wenn Sie einen Fisch fangen.");
+		addDefaultDisplayName(Language.CHINA_SIMPLE, "垂钓者");
+		addDefaultDescription(Language.CHINA_SIMPLE, "增加钓到的鱼数量.");
 	}
 	
 	@Override

@@ -23,9 +23,7 @@ public class QuickStrikePlayer extends AbilityPlayer{
 			AttributeInstance a = getPlayer().getAttribute(Attribute.GENERIC_ATTACK_SPEED);
 			AttributeModifier modifier = new AttributeModifier(UUID.fromString("dddddddd-fefe-fefe-fefe-000000000000"), "quick_strike_armor", 
 					0.5 * level, Operation.ADD_SCALAR);
-			if(!a.getModifiers().contains(modifier)) {
-				a.addModifier(modifier);
-			}
+			addModifier(a, modifier);
 		}
 	}
 
@@ -35,10 +33,15 @@ public class QuickStrikePlayer extends AbilityPlayer{
 			AttributeInstance a = getPlayer().getAttribute(Attribute.GENERIC_ATTACK_SPEED);
 			AttributeModifier modifier = new AttributeModifier(UUID.fromString("dddddddd-fefe-fefe-fefe-000000000000"), "quick_strike_armor", 
 					0.5 * level, Operation.ADD_SCALAR);
-			if(a.getModifiers().contains(modifier)) {
-				a.removeModifier(modifier);
-			}
+			removeModifier(a, modifier);
 		}
 	}
-
+	
+	@Override
+	protected void doUnequip() {
+		AttributeInstance a = getPlayer().getAttribute(Attribute.GENERIC_ARMOR);
+		AttributeModifier modifier = new AttributeModifier(UUID.fromString("cccccccc-fefe-fefe-fefe-000000000000"), "armored_armor", 
+				2, Operation.ADD_NUMBER);
+		removeModifier(a, modifier);
+	}
 }

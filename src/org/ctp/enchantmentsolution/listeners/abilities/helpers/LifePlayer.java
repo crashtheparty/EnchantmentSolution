@@ -25,12 +25,8 @@ public class LifePlayer extends AbilityPlayer{
 					4 * level, Operation.ADD_NUMBER);
 			AttributeModifier legacyModifier = new AttributeModifier(UUID.fromString("eeeeeeee-fefe-fefe-fefe-000000000000"), "generic.maxHealth", 
 					4 * level, Operation.ADD_NUMBER);
-			if(a.getModifiers().contains(legacyModifier)) {
-				a.removeModifier(legacyModifier);
-			}
-			if(!a.getModifiers().contains(modifier)) {
-				a.addModifier(modifier);
-			}
+			removeModifier(a, legacyModifier);
+			addModifier(a, modifier);
 		}
 	}
 
@@ -42,16 +38,25 @@ public class LifePlayer extends AbilityPlayer{
 					4 * level, Operation.ADD_NUMBER);
 			AttributeModifier legacyModifier = new AttributeModifier(UUID.fromString("eeeeeeee-fefe-fefe-fefe-000000000000"), "generic.maxHealth", 
 					4 * level, Operation.ADD_NUMBER);
-			if(a.getModifiers().contains(modifier)) {
-				a.removeModifier(modifier);
-			}
-			if(a.getModifiers().contains(legacyModifier)) {
-				a.removeModifier(legacyModifier);
-			}
+			removeModifier(a, modifier);
+			removeModifier(a, legacyModifier);
 			if(getPlayer().getHealth() > a.getBaseValue()) {
 				getPlayer().setHealth(a.getBaseValue());
 			}
 		}
 	}
-
+	
+	@Override
+	protected void doUnequip() {
+		AttributeInstance a = getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH);
+		AttributeModifier modifier = new AttributeModifier(UUID.fromString("eeeeeeee-fefe-fefe-fefe-000000000000"), "life_health", 
+				4, Operation.ADD_NUMBER);
+		AttributeModifier legacyModifier = new AttributeModifier(UUID.fromString("eeeeeeee-fefe-fefe-fefe-000000000000"), "generic.maxHealth", 
+				4, Operation.ADD_NUMBER);
+		removeModifier(a, modifier);
+		removeModifier(a, legacyModifier);
+		if(getPlayer().getHealth() > a.getBaseValue()) {
+			getPlayer().setHealth(a.getBaseValue());
+		}
+	}
 }

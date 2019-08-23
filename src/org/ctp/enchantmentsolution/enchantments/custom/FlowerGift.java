@@ -17,6 +17,8 @@ public class FlowerGift extends CustomEnchantment{
 		addDefaultDisplayName(Language.GERMAN, "Blumengeschenk");
 		setMaxLevelOne(true);
 		addDefaultDescription(Language.GERMAN, "Hat eine Chance, Blumen fallen zu lassen, wenn Sie mit der rechten Maustaste darauf klicken.");
+		addDefaultDisplayName(Language.CHINA_SIMPLE, "");
+		addDefaultDescription(Language.CHINA_SIMPLE, "");
 	}
 	
 	@Override

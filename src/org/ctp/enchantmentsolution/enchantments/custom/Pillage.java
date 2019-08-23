@@ -16,6 +16,8 @@ public class Pillage extends CustomEnchantment{
 		super("Pillage", 7, 6, 11, 9, 1, 1, 5, 3, Weight.RARE, "Increases mob drops.");
 		addDefaultDisplayName(Language.GERMAN, "Plündern");
 		addDefaultDescription(Language.GERMAN, "Erhöht Mob-Tropfen.");
+		addDefaultDisplayName(Language.CHINA_SIMPLE, "");
+		addDefaultDescription(Language.CHINA_SIMPLE, "");
 	}
 	
 	@Override

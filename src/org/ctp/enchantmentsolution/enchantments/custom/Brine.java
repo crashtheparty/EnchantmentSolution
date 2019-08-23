@@ -17,6 +17,8 @@ public class Brine extends CustomEnchantment{
 		addDefaultDisplayName(Language.GERMAN, "Salzlake");
 		setMaxLevelOne(true);
 		addDefaultDescription(Language.GERMAN, "Verdoppelt den Schaden, wenn die gegnerische Menge weniger als 50% Gesundheit hat.");
+		addDefaultDisplayName(Language.CHINA_SIMPLE, "");
+		addDefaultDescription(Language.CHINA_SIMPLE, "");
 	}
 
 	@Override

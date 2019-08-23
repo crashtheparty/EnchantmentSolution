@@ -16,6 +16,8 @@ public class Toughness extends CustomEnchantment{
 		super("Toughness", -15, -10, 16, 11, 1, 1, 4, 4, Weight.UNCOMMON, "Increases armor toughness.");
 		addDefaultDisplayName(Language.GERMAN, "Rüstungshärte");
 		addDefaultDescription(Language.GERMAN, "Erhöht die Rüstungsstärke.");
+		addDefaultDisplayName(Language.CHINA_SIMPLE, "");
+		addDefaultDescription(Language.CHINA_SIMPLE, "");
 	}
 
 	@Override

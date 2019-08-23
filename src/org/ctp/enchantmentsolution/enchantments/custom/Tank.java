@@ -16,6 +16,8 @@ public class Tank extends CustomEnchantment{
 		super("Tank", 10, -5, 20, 15, 20, 1, 3, 3, Weight.RARE, "Gives additional unbreaking protection to armor.");
 		addDefaultDisplayName(Language.GERMAN, "Panzer");
 		addDefaultDescription(Language.GERMAN, "Verleiht der Rüstung zusätzlichen Schutz.");
+		addDefaultDisplayName(Language.CHINA_SIMPLE, "");
+		addDefaultDescription(Language.CHINA_SIMPLE, "");
 	}
 	
 	@Override
