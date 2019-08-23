@@ -17,8 +17,8 @@ public class MagicGuard extends CustomEnchantment{
 		addDefaultDisplayName(Language.GERMAN, "Magischer Schutz");
 		setMaxLevelOne(true);
 		addDefaultDescription(Language.GERMAN, "Negiert schlechte Trankeffekte.");
-		addDefaultDisplayName(Language.CHINA_SIMPLE, "");
-		addDefaultDescription(Language.CHINA_SIMPLE, "");
+		addDefaultDisplayName(Language.CHINA_SIMPLE, "清醒");
+		addDefaultDescription(Language.CHINA_SIMPLE, "清除负面药水效果.");
 	}
 
 	@Override

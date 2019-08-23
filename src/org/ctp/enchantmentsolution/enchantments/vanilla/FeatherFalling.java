@@ -15,6 +15,8 @@ public class FeatherFalling extends CustomEnchantment{
 		super("Feather Falling", -7, -1, 12, 6, 1, 1, 4, 4, Weight.UNCOMMON, "Reduces fall damage.");
 		addDefaultDisplayName(Language.GERMAN, "Federfall");
 		addDefaultDescription(Language.GERMAN, "Reduziert Sturzschäden.");
+		addDefaultDisplayName(Language.CHINA_SIMPLE, "摔落保护");
+		addDefaultDescription(Language.CHINA_SIMPLE, "减少摔落伤害.");
 	}
 
 	@Override

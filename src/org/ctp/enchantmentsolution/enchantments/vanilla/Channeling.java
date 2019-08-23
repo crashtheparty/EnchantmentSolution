@@ -16,6 +16,8 @@ public class Channeling extends CustomEnchantment{
 		addDefaultDisplayName(Language.GERMAN, "Entladung");
 		setMaxLevelOne(true);
 		addDefaultDescription(Language.GERMAN, "Beschwört einen Blitz, wenn ein Mob von einem geworfenen Dreizack getroffen wird.");
+		addDefaultDisplayName(Language.CHINA_SIMPLE, "引雷");
+		addDefaultDescription(Language.CHINA_SIMPLE, "扔出三叉戟击中目标时召唤闪电.");
 	}
 
 	@Override

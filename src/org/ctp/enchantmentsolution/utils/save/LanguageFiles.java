@@ -34,16 +34,8 @@ public class LanguageFiles {
 		defaultLanguage = lang;
 
 		createDefaultFiles();
-		
-		YamlConfig main = files.getDefaultConfig();
-		boolean getFromConfig = true;
-		if (main.getBoolean("reset_language")) {
-			getFromConfig = false;
-			main.set("reset_language", false);
-			main.saveConfig();
-		}
 
-		save(getFromConfig);
+		save();
 	}
 
 	public void addDefault(String path, CustomEnchantment enchantment, String type) {
@@ -61,12 +53,19 @@ public class LanguageFiles {
 		}
 	}
 
-	private void save(boolean getFromConfig) {
+	private void save() {
 		if (EnchantmentSolution.getPlugin().isInitializing()) {
 			ChatUtils.sendInfo("Loading language file...");
 		}
-		language = new YamlConfigBackup(languageFile, null);
-		if (getFromConfig) {
+		YamlConfig main = EnchantmentSolution.getPlugin().getConfigFiles().getDefaultConfig();
+		if(language == null) {
+			language = new YamlConfigBackup(languageFile, null);
+		}
+		if (main.getBoolean("reset_language")) {
+			main.set("reset_language", false);
+			main.saveConfig();
+			language = new YamlConfigBackup(languageFile, null);
+		} else {
 			language.getFromConfig();
 		}
 		language.copyDefaults(getLanguageFile());
@@ -85,18 +84,10 @@ public class LanguageFiles {
 		this.language = language;
 	}
 
-	public void setLanguage(File langFile, Language lang) {
-		languageFile = langFile;
+	public void setLanguage(Language lang) {
 		defaultLanguage = lang;
 		createDefaultFiles();
-		YamlConfig main = EnchantmentSolution.getPlugin().getConfigFiles().getDefaultConfig();
-		boolean getFromConfig = true;
-		if (main.getBoolean("reset_language")) {
-			getFromConfig = false;
-			main.set("reset_language", false);
-			main.saveConfig();
-		}
-		save(getFromConfig);
+		save();
 	}
 
 	private YamlConfig getLanguageFile() {

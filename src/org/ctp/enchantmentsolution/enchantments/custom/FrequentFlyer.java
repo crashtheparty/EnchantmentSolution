@@ -18,8 +18,8 @@ public class FrequentFlyer extends CustomEnchantment{
 		addDefaultDisplayName(Language.GERMAN, "Vielflieger");
 		addDefaultDescription(Language.GERMAN, "Erlaubt den Flug. Haltbarkeitsschaden alle (3 * Level) Sekunden, wenn die Höhe unter 255 liegt, "
 				+ "und jede (Level) Sekunde über 255 Höhe. Entfernt den Flug bei 32 Haltbarkeit.");
-		addDefaultDisplayName(Language.CHINA_SIMPLE, "");
-		addDefaultDescription(Language.CHINA_SIMPLE, "");
+		addDefaultDisplayName(Language.CHINA_SIMPLE, "御空");
+		addDefaultDescription(Language.CHINA_SIMPLE, "可以让你飞行.在低于255格高度飞行时每(3 * 附魔等级)秒消耗耐久.在高空则每(附魔等级)秒消耗耐久. 耐久低于32时无法飞行.");
 	}
 	
 	@Override

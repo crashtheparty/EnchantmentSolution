@@ -16,6 +16,8 @@ public class Multishot extends CustomEnchantment{
 		addDefaultDisplayName(Language.GERMAN, "Mehrfachschuss");
 		setMaxLevelOne(true);
 		addDefaultDescription(Language.GERMAN, "Schießen Sie mehrere Pfeile gleichzeitig.");
+		addDefaultDisplayName(Language.CHINA_SIMPLE, "多重射击");
+		addDefaultDescription(Language.CHINA_SIMPLE, "一次射出多枝箭.");
 	}
 	
 	@Override

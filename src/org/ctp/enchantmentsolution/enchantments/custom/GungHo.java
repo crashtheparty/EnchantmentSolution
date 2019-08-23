@@ -17,8 +17,8 @@ public class GungHo extends CustomEnchantment{
 		addDefaultDisplayName(Language.GERMAN, "Gung-Ho");
 		setMaxLevelOne(true);
 		addDefaultDescription(Language.GERMAN, "Verringert die Gesundheit um die H�lfte. Alle Angriffe verursachen das Dreifache des Schadens.");
-		addDefaultDisplayName(Language.CHINA_SIMPLE, "");
-		addDefaultDescription(Language.CHINA_SIMPLE, "");
+		addDefaultDisplayName(Language.CHINA_SIMPLE, "炼血");
+		addDefaultDescription(Language.CHINA_SIMPLE, "将血量降为5颗心. 你的所有攻击会造成3倍伤害.");
 	}
 	
 	@Override

@@ -15,7 +15,7 @@ public enum ItemType {
 	CARROT_ON_A_STICK("carrot_on_a_stick"), ELYTRA("elytra"), TRIDENT("trident"), RANGED("ranged"), ARMOR("armor"), TOOLS("tools"), MELEE("melee"), MISC("misc"), 
 	WOODEN_TOOLS("wooden_tools"), STONE_TOOLS("stone_tools"), IRON_TOOLS("iron_tools"), GOLDEN_TOOLS("golden_tools"), DIAMOND_TOOLS("diamond_tools"), 
 	LEATHER_ARMOR("leather_armor"), GOLDEN_ARMOR("golden_armor"), CHAINMAIL_ARMOR("chainmail_armor"), IRON_ARMOR("iron_armor"), DIAMOND_ARMOR("diamond_armor"), 
-	CROSSBOW("crossbow"), BOOK("book"), ALL("all"), ENCHANTABLE("enchantable"), TURTLE_HELMET("turtle_helmet"), SHULKER_BOXES("shulker_boxes");
+	CROSSBOW("crossbow"), BOOK("book"), ALL("all"), ENCHANTABLE("enchantable"), TURTLE_HELMET("turtle_helmet"), SHULKER_BOXES("shulker_boxes"), NONE("none");
 
 	private String type, display;
 	private List<Material> itemTypes;

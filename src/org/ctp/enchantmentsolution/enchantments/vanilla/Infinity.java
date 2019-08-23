@@ -16,6 +16,8 @@ public class Infinity extends CustomEnchantment{
 		addDefaultDisplayName(Language.GERMAN, "Unendlichkeit");
 		setMaxLevelOne(true);
 		addDefaultDescription(Language.GERMAN, "Beim Schießen werden keine normalen Pfeile verbraucht.");
+		addDefaultDisplayName(Language.CHINA_SIMPLE, "无限");
+		addDefaultDescription(Language.CHINA_SIMPLE, "无限射箭.");
 	}
 
 	@Override

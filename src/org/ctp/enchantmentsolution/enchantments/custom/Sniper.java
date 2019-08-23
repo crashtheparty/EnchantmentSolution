@@ -16,8 +16,8 @@ public class Sniper extends CustomEnchantment{
 		super("Sniper", 12, 5, 18, 10, 25, 1, 3, 3, Weight.RARE, "Increases speed of projectiles.");
 		addDefaultDisplayName(Language.GERMAN, "Sniper");
 		addDefaultDescription(Language.GERMAN, "Erhöht die Geschwindigkeit von Geschossen.");
-		addDefaultDisplayName(Language.CHINA_SIMPLE, "");
-		addDefaultDescription(Language.CHINA_SIMPLE, "");
+		addDefaultDisplayName(Language.CHINA_SIMPLE, "狙击手");
+		addDefaultDescription(Language.CHINA_SIMPLE, "增加弹射物速度.");
 	}
 	
 	@Override

@@ -17,8 +17,8 @@ public class SoulReaper extends CustomEnchantment{
 		addDefaultDisplayName(Language.GERMAN, "Seelendieb");
 		setMaxLevelOne(true);
 		addDefaultDescription(Language.GERMAN, "Hat eine Chance, vom getöteten Spieler seelengebundene Gegenstände zu stehlen.");
-		addDefaultDisplayName(Language.CHINA_SIMPLE, "");
-		addDefaultDescription(Language.CHINA_SIMPLE, "");
+		addDefaultDisplayName(Language.CHINA_SIMPLE, "灵魂收割者");
+		addDefaultDescription(Language.CHINA_SIMPLE, "有几率在击杀玩家时偷走该玩家的灵魂绑定物品.");
 	}
 	
 	@Override

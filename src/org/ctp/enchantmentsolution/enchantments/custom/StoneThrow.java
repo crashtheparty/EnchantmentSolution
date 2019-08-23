@@ -18,8 +18,8 @@ public class StoneThrow extends CustomEnchantment{
 		addDefaultDisplayName(Language.GERMAN, "Steinwurf");
 		addDefaultDescription(Language.GERMAN, "Erhöht den Distanzschaden gegen fliegende Mobs.\n" + 
 				"Fügt 40% * Level + 20% Schaden gegen fliegende Mobs hinzu.");
-		addDefaultDisplayName(Language.CHINA_SIMPLE, "");
-		addDefaultDescription(Language.CHINA_SIMPLE, "");
+		addDefaultDisplayName(Language.CHINA_SIMPLE, "投石");
+		addDefaultDescription(Language.CHINA_SIMPLE, "增加对飞行怪物的范围伤害.\\n增加40% * 附魔等级 + 20% 点伤害.");
 	}
 	
 	@Override

@@ -16,6 +16,8 @@ public class Knockback extends CustomEnchantment{
 		super("Knockback", -15, -15, 20, 20, 1, 1, 4, 2, Weight.UNCOMMON, "Increases knockback.");
 		addDefaultDisplayName(Language.GERMAN, "Rückstoß");
 		addDefaultDescription(Language.GERMAN, "Erhöht den Rückstoß.");
+		addDefaultDisplayName(Language.CHINA_SIMPLE, "击退");
+		addDefaultDescription(Language.CHINA_SIMPLE, "增加击退距离.");
 	}
 
 	@Override

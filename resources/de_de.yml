@@ -298,6 +298,52 @@ vanilla:
             fishing_rod: 'Angel'
             crossbow: 'Armbrust'
 
+item_display_types:
+    all: "Alle normalen Gegenstände"
+    armor: "Rüstung"
+    axes: "Äxte"
+    book: "Bücher"
+    boots: "Stiefel"
+    bow: "Bogen"
+    carrot_on_a_stick: "Karottenrute"
+    chainmail_armor: "Kettenrüstung"
+    chestplates: "Brustplatten"
+    crossbow: "Armbrust"
+    diamond_armor: "Diamant-Rüstung"
+    diamond_tools: "Diamantwerkzeuge"
+    elytra: "Elytren"
+    enchantable: "Verzaubern"
+    fishing_rod: "Angel"
+    flint_and_steel: "Feuerzeug"
+    golden_armor: "Goldene Rüstung"
+    golden_tools: "Goldene Werkzeuge"
+    helmets: "Helme"
+    hoes: "Hoes"
+    iron_armor: "Eiserne Rüstung"
+    iron_tools: "Eisenwerkzeuge"
+    leather_armor: "Lederrüstung"
+    leggings: "Gamaschen"
+    melee: "Nahkampfwaffen"
+    misc: "Sonstiges"
+    pickaxes: "Spitzhacken"
+    ranged: "Fernkampfwaffen"
+    shears: "Schere"
+    shield: "Schild"
+    shovels: "Schaufeln"
+    shulker_boxes: "Shulker-Boxen"
+    stone_tools: "Steinwerkzeuge"
+    swords: "Schwerter"
+    tools: "Werkzeuge"
+    trident: "Dreizack"
+    turtle_helmet: "Schildkrötenpanzer"
+    wooden_tools: "Holzwerkzeuge"
+    none: "Keiner"
+misc:
+    no_conflicting_enchantments: "Keiner"
+    no_disabled_items: "Keiner"
+    true: "Wahr"
+    false: "Falsch"
+
 advancements: 
     enchantments/enchantment_solution: 
         name: 'Enchantment Solution'
@@ -453,44 +499,44 @@ advancements:
         name: 'Graphen-Rüstung'
         description: 'Erhalte 20 Rüstungsstärke mit Zähigkeit'
     enchantments/danger_defeated: 
-        name: 'Danger Defeated'
-        description: 'Kill a Wither using Gung Ho'
+        name: 'Gefahr besiegt'
+        description: 'Töte einen Wither mit Gung-Ho'
     enchantments/divine_retribution: 
-        name: 'Divine Retribution'
-        description: 'Kill a player from the dead using a Sacrifice chestplate'
+        name: 'Göttliche Vergeltung'
+        description: 'Töte einen Spieler mit einem Opferung-Brustpanzer von den Toten'
     enchantments/look_what_you_made_me_do: 
-        name: 'Look What You Made Me Do'
-        description: 'Kill a Pillager using a Pillage crossbow'
+        name: 'Du hast mich dazu gebracht'
+        description: 'Töte einen Plünderer mit einer Plündernarmbrust'
     enchantments/just_die_already: 
-        name: 'Just DIE Already!'
-        description: 'Kill a Phantom in one shot using Stone Throw'
+        name: 'Stirb einfach schon!'
+        description: 'Töte ein Phantom in einem Schuss mit Steinwurf'
     enchantments/underkill: 
         name: 'Underkill'
-        description: 'Hit the Ender Dragon using Stone Throw'
+        description: 'Schlage den Enderdrachen mit Steinwurf'
     enchantments/where_did_that_come_from: 
-        name: 'Where Did That Come From?'
-        description: 'Kill a skeleton from 100 blocks away using Sniper'
+        name: 'Woher kommt das?'
+        description: 'Töte mit Sniper ein Skelett aus 100 Blöcken Entfernung'
     enchantments/that_food_is_fine: 
-        name: 'That Food is... Fine?'
-        description: 'Eat a piece of food with a negative potion effect and remove it with Magic Guard'
+        name: 'Das Essen ist ... gut?'
+        description: 'Iss ein Stück Essen mit einem negativen Trankeffekt und entferne es mit Magischer Schutz'
     enchantments/deflection: 
-        name: 'Deflection'
-        description: 'Kill a mob with an arrow deflected with Hard Bounce'
+        name: 'Ablenkung'
+        description: 'Töte einen Mob mit einem Pfeil, der mit Harter Aufprall abgefälscht wird'
     enchantments/iron_man: 
-        name: 'Iron Man'
-        description: 'Live through a death blow because of Iron Defense'
+        name: 'Ironman'
+        description: 'Erlebe einen Todesstoß wegen Eisenverteidigung'
     enchantments/iront_you_glad: 
-        name: 'Iron''t You Glad?'
-        description: 'Obtain more than one iron ingot from an iron ore using Smeltery'
+        name: 'Bist du nicht froh?'
+        description: 'Beziehen Sie mit Smeltery mehr als einen Eisenbarren aus einem Eisenerz'
     enchantments/fast_and_furious: 
-        name: 'Fast and Furious'
-        description: 'Break multiple blocks at once using Height++ or Width++'
+        name: 'Schnell und wütend'
+        description: 'Brechen Sie mehrere Blöcke gleichzeitig mit Höhe++ oder Breite++'
     enchantments/hey_it_works: 
-        name: 'Hey It Works!'
-        description: 'Break a Shulker Box using Telepathy'
+        name: 'Hey es funktioniert!'
+        description: 'Zerbrich eine Shulker-Box mit Telepathie'
     enchantments/no_panic: 
-        name: 'No Panic'
-        description: 'Grab an item directly over lava using Telepathy'
+        name: 'Keine Panik'
+        description: 'Schnapp dir mit Telepathie einen Gegenstand direkt über Lava'
     enchantments/over_9000: 
         name: 'Over 9000'
-        description: 'Collect 9001 extra items with Height++ or Width++'
+        description: 'Sammle 9001 zusätzliche Gegenstände mit Höhe++ oder Breite++'

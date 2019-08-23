@@ -22,6 +22,8 @@ public class BaneOfArthropods extends CustomEnchantment{
 				"Jedes Level fügt jedem Treffer separat 2,5 (halbes Herz) Schaden hinzu, nur für \"Arthropoden\"." + 
 				"\n" + 
 				"Die Verzauberung bewirkt auch, dass \"Arthropoden\" den Effekt von Slowness IV haben, wenn sie getroffen werden");
+		addDefaultDisplayName(Language.CHINA_SIMPLE, "节肢杀手");
+		addDefaultDescription(Language.CHINA_SIMPLE, "增加对节肢生物的伤害(蜘蛛、洞穴蜘蛛、蠹虫和末影螨).\n每一级增加2.5点伤害.\n该附魔同时会给予节肢生物 缓慢IV 的效果.");
 	}
 
 	@Override

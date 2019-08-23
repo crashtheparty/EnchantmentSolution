@@ -105,52 +105,52 @@ public abstract class CustomEnchantment {
 
 	public String getDetails() {
 		String page = "\n" + "\n" + 
-				ChatUtils.getMessage(ChatUtils.getCodes(), "enchantment.name") + getDisplayName() + "\n" + "\n";
+				ChatUtils.getMessage(ChatUtils.getCodes(), "enchantment.name") + getDisplayName() + "\n\n";
 		page += ChatUtils.getMessage(ChatUtils.getCodes(), "enchantment.description") + getDescription() + "\n";
-		page += ChatUtils.getMessage(ChatUtils.getCodes(), "enchantment.max-level") + getMaxLevel() + "."+ "\n";
-		page += ChatUtils.getMessage(ChatUtils.getCodes(), "enchantment.weight") + getWeightName() + "."+ "\n";
-		page += ChatUtils.getMessage(ChatUtils.getCodes(), "enchantment.start-level") + getStartLevel() + "."+ "\n";
+		page += ChatUtils.getMessage(ChatUtils.getCodes(), "enchantment.max-level") + getMaxLevel() + ".\n";
+		page += ChatUtils.getMessage(ChatUtils.getCodes(), "enchantment.weight") + getWeightName() + ".\n";
+		page += ChatUtils.getMessage(ChatUtils.getCodes(), "enchantment.start-level") + getStartLevel() + ".\n";
 		page +=  ChatUtils.getMessage(ChatUtils.getCodes(), "enchantment.enchantable-items");
 		if(getEnchantmentItemTypes().size() > 0) {
 			if (getEnchantmentItemTypes().get(0).equals(ItemType.ALL)) {
-				page += getEnchantmentItemTypes().get(0).getDisplayName() + "." + "\n";
+				page += getEnchantmentItemTypes().get(0).getDisplayName() + ".\n";
 			} else {
 				boolean includesBooks = false;
 				for(ItemType type : getEnchantmentItemTypes()) {
 					page += type.getDisplayName() + ", ";
-					if(type.getDisplayName().equals("Books")) {
+					if(type == ItemType.BOOK) {
 						includesBooks = true;
 					}
 				}
 				if(!includesBooks) {
-					page += "Books." + "\n";
+					page += ItemType.BOOK.getDisplayName() + ".\n";
 				} else {
-					page = page.substring(0, page.lastIndexOf(", ")) + "." + "\n";
+					page = page.substring(0, page.lastIndexOf(", ")) + ".\n";
 				}
 			}
 		} else {
-			page += "None." + "\n";
+			page += ItemType.NONE + ".\n";
 		}
 		page +=  ChatUtils.getMessage(ChatUtils.getCodes(), "enchantment.anvilable-items");
 		if(getAnvilItemTypes().size() > 0) {
 			if (getAnvilItemTypes().get(0).equals(ItemType.ALL)) {
-				page += getAnvilItemTypes().get(0).getDisplayName() + "." + "\n";
+				page += getAnvilItemTypes().get(0).getDisplayName() + ".\n";
 			} else {
 				boolean includesBooks = false;
 				for(ItemType type : getAnvilItemTypes()) {
 					page += type.getDisplayName() + ", ";
-					if(type.getDisplayName().equals("Books")) {
+					if(type == ItemType.BOOK) {
 						includesBooks = true;
 					}
 				}
 				if(!includesBooks) {
-					page += "Books." + "\n";
+					page += ItemType.BOOK.getDisplayName() + ".\n";
 				} else {
-					page = page.substring(0, page.lastIndexOf(", ")) + "." + "\n";
+					page = page.substring(0, page.lastIndexOf(", ")) + ".\n";
 				}
 			}
 		} else {
-			page += "None." + "\n";
+			page += ItemType.NONE + ".\n";
 		}
 		page +=  ChatUtils.getMessage(ChatUtils.getCodes(), "enchantment.disabled-items");
 		if(getDisabledItems().size() > 0) {
@@ -161,12 +161,12 @@ public abstract class CustomEnchantment {
 			}
 			
 			if(names.isEmpty()) {
-				page += "None" + "." + "\n";
+				page += ConfigUtils.getLanguageString("misc.no_disabled_items") + ".\n";
 			} else {
-				page += StringUtils.join(names, ",") + "." + "\n";
+				page += StringUtils.join(names, ",") + ".\n";
 			}
 		} else {
-			page += "None." + "\n";
+			page += ConfigUtils.getLanguageString("misc.no_disabled_items") + ".\n";
 		}
 		page +=  ChatUtils.getMessage(ChatUtils.getCodes(), "enchantment.conflicting-enchantments");
 		if(getConflictingEnchantments().size() > 0) {
@@ -180,16 +180,16 @@ public abstract class CustomEnchantment {
 			}
 			
 			if(names.isEmpty()) {
-				page += "None";
+				page += ConfigUtils.getLanguageString("misc.no_conflicting_enchantments");
 			} else {
 				page += StringUtils.join(names, ", ");
 			}
-			page += "." + "\n";
+			page += ".\n";
 		} else {
-			page += "None." + "\n";
+			page += ConfigUtils.getLanguageString("misc.no_conflicting_enchantments") + ".\n";
 		}
-		page += ChatUtils.getMessage(ChatUtils.getCodes(), "enchantment.enabled") + isEnabled() + ". " + "\n";
-		page += ChatUtils.getMessage(ChatUtils.getCodes(), "enchantment.treasure") + isTreasure() + ". " + "\n";
+		page += ChatUtils.getMessage(ChatUtils.getCodes(), "enchantment.enabled") + ConfigUtils.getLanguageString("misc." + isEnabled()) + ".\n";
+		page += ChatUtils.getMessage(ChatUtils.getCodes(), "enchantment.treasure") + ConfigUtils.getLanguageString("misc." + isTreasure()) + ".\n";
 		return page;
 	}
 
@@ -233,7 +233,7 @@ public abstract class CustomEnchantment {
 
 	public String getDisplayName() {
 		if(displayName == null)
-			return getDefaultDisplayName(ConfigUtils.getLanguage());
+			displayName = getDefaultDisplayName(ConfigUtils.getLanguage());
 		return displayName;
 	}
 

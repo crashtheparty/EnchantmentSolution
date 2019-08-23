@@ -16,8 +16,8 @@ public class SandVeil extends CustomEnchantment{
 		super("Sand Veil", -12, -10, 13, 11, 1, 1, 6, 5, Weight.COMMON, "Lowers accuracy of entity's attacks.");
 		addDefaultDisplayName(Language.GERMAN, "Sandschleier");
 		addDefaultDescription(Language.GERMAN, "Verringert die Genauigkeit der Angriffe der Entität.");
-		addDefaultDisplayName(Language.CHINA_SIMPLE, "");
-		addDefaultDescription(Language.CHINA_SIMPLE, "");
+		addDefaultDisplayName(Language.CHINA_SIMPLE, "沙隐");
+		addDefaultDescription(Language.CHINA_SIMPLE, "降低实体攻击的精准度.");
 	}
 	
 	@Override

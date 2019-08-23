@@ -17,6 +17,8 @@ public class Thorns extends CustomEnchantment{
 		addDefaultDisplayName(Language.GERMAN, "Dornen");
 		addDefaultDescription(Language.GERMAN, "Angreifer werden beschädigt, wenn sie den Träger angreifen. " + 
 				"Dies führt auch zu einer zusätzlichen Haltbarkeit der Rüstung.");
+		addDefaultDisplayName(Language.CHINA_SIMPLE, "荆棘");
+		addDefaultDescription(Language.CHINA_SIMPLE, "反伤.消耗更多耐久.");
 	}
 	
 	@Override

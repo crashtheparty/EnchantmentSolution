@@ -17,8 +17,8 @@ public class Moisturize extends CustomEnchantment{
 		addDefaultDisplayName(Language.GERMAN, "Befeuchten");
 		setMaxLevelOne(true);
 		addDefaultDescription(Language.GERMAN, "Befeuchtet Blöcke durch Rechtsklick.");
-		addDefaultDisplayName(Language.CHINA_SIMPLE, "");
-		addDefaultDescription(Language.CHINA_SIMPLE, "");
+		addDefaultDisplayName(Language.CHINA_SIMPLE, "湿润");
+		addDefaultDescription(Language.CHINA_SIMPLE, "右击方块进行湿润.");
 	}
 	
 	@Override

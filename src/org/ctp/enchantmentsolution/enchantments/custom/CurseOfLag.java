@@ -19,8 +19,8 @@ public class CurseOfLag extends CustomEnchantment{
 		setMaxLevelOne(true);
 		setCurse(true);
 		addDefaultDescription(Language.GERMAN, "Ah, Feuerwerk!");
-		addDefaultDisplayName(Language.CHINA_SIMPLE, "");
-		addDefaultDescription(Language.CHINA_SIMPLE, "");
+		addDefaultDisplayName(Language.CHINA_SIMPLE, "卡顿诅咒");
+		addDefaultDescription(Language.CHINA_SIMPLE, "啊啊啊!是烟花");
 	}
 	
 	@Override

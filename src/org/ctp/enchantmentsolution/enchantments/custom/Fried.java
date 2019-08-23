@@ -17,8 +17,8 @@ public class Fried extends CustomEnchantment{
 		addDefaultDisplayName(Language.GERMAN, "Fritieren");
 		setMaxLevelOne(true);
 		addDefaultDescription(Language.GERMAN, "Köche Fische, wenn sie gefangen werden.");
-		addDefaultDisplayName(Language.CHINA_SIMPLE, "");
-		addDefaultDescription(Language.CHINA_SIMPLE, "");
+		addDefaultDisplayName(Language.CHINA_SIMPLE, "烤鱼");
+		addDefaultDescription(Language.CHINA_SIMPLE, "捕鱼后直接烤鱼.");
 	}
 	
 	@Override 

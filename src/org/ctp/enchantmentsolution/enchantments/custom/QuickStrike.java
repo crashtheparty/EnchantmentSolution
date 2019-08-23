@@ -16,8 +16,8 @@ public class QuickStrike extends CustomEnchantment{
 		super("Quick Strike", 7, 6, 11, 9, 1, 1, 5, 3, Weight.RARE, "Increases attack speed.");
 		addDefaultDisplayName(Language.GERMAN, "Schneller Schlag");
 		addDefaultDescription(Language.GERMAN, "Erhöht die Angriffsgeschwindigkeit");
-		addDefaultDisplayName(Language.CHINA_SIMPLE, "");
-		addDefaultDescription(Language.CHINA_SIMPLE, "");
+		addDefaultDisplayName(Language.CHINA_SIMPLE, "迅捷打击");
+		addDefaultDescription(Language.CHINA_SIMPLE, "增加攻速.");
 	}
 	
 	@Override

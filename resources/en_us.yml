@@ -305,7 +305,7 @@ item_display_types:
     all: "All Normal Items"
     armor: "Armor"
     axes: "Axes"
-    books: "Books"
+    book: "Books"
     boots: "Boots"
     bow: "Bow"
     carrot_on_a_stick: "Carrot on a Stick"
@@ -340,6 +340,12 @@ item_display_types:
     trident: "Trident"
     turtle_helmet: "Turtle Helmet"
     wooden_tools: "Wooden Tools"
+    none: "None"
+misc:
+    no_conflicting_enchantments: "None"
+    no_disabled_items: "None"
+    true: "True"
+    false: "False"
 
 advancements: 
     enchantments/enchantment_solution: 

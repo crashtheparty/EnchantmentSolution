@@ -15,10 +15,10 @@ public class Efficiency extends CustomEnchantment{
 		super("Efficiency", -11, -9, 12, 10, 1, 1, 6, 5, Weight.COMMON, "Increases mining speed.\n" + 
 				"One must use the proper tool for a block in order to receive the speed. Does not matter if you mine it with the incorrect tier.");
 		addDefaultDisplayName(Language.GERMAN, "Effizienz");
-		addDefaultDescription(Language.GERMAN, "Erhöht die Mining-Geschwindigkeit." + 
-				"\n" + 
-				"Man muss das richtige Werkzeug für einen Block verwenden, um die Geschwindigkeit zu erhalten. " + 
-				"Es spielt keine Rolle, wenn Sie es mit der falschen Stufe abbauen.");
+		addDefaultDescription(Language.GERMAN, "Erhöht die Mining-Geschwindigkeit.\nMan muss das richtige Werkzeug für einen Block verwenden," + 
+				"um die Geschwindigkeit zu erhalten. Es spielt keine Rolle, wenn Sie es mit der falschen Stufe abbauen.");
+		addDefaultDisplayName(Language.CHINA_SIMPLE, "效率");
+		addDefaultDescription(Language.CHINA_SIMPLE, "增加挖掘速度.\n玩家必须使用正确的工具才能增加挖掘速度.");
 	}
 
 	@Override

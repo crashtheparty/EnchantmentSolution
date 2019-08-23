@@ -22,6 +22,8 @@ public class CurseOfBinding extends CustomEnchantment{
 				"\n" + 
 				"Der verfluchte Gegenstand kann nicht aus einem Rüstungsplatz (außerhalb des Kreativmodus) " + 
 				"entfernt werden, es sei denn, der Spieler stirbt oder der Gegenstand zerbricht.");
+		addDefaultDisplayName(Language.CHINA_SIMPLE, "绑定诅咒");
+		addDefaultDescription(Language.CHINA_SIMPLE, "无法从身上取下装备.\n除非玩家死亡或装备损坏.");
 	}
 	
 	@Override

@@ -17,8 +17,8 @@ public class Telepathy extends CustomEnchantment{
 		addDefaultDisplayName(Language.GERMAN, "Telepathie");
 		setMaxLevelOne(true);
 		addDefaultDescription(Language.GERMAN, "Abgebaute Gegenstände gelangen direkt in Ihr Inventar.");
-		addDefaultDisplayName(Language.CHINA_SIMPLE, "");
-		addDefaultDescription(Language.CHINA_SIMPLE, "");
+		addDefaultDisplayName(Language.CHINA_SIMPLE, "感应");
+		addDefaultDescription(Language.CHINA_SIMPLE, "你挖掘的物品会直接放到你的背包内.");
 	}
 	
 	@Override

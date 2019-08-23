@@ -16,8 +16,8 @@ public class Drowned extends CustomEnchantment{
 		super("Drowned", 10, 0, 20, 12, 20, 1, 3, 3, Weight.RARE, "Drown non-water mobs for a short time.");
 		addDefaultDisplayName(Language.GERMAN, "Ertrinken");
 		addDefaultDescription(Language.GERMAN, "Ertrinken Sie nicht Wasser-Mobs für kurze Zeit.");
-		addDefaultDisplayName(Language.CHINA_SIMPLE, "");
-		addDefaultDescription(Language.CHINA_SIMPLE, "");
+		addDefaultDisplayName(Language.CHINA_SIMPLE, "淹浸");
+		addDefaultDescription(Language.CHINA_SIMPLE, "将非水生动物浸入水中.");
 	}
 	
 	@Override

@@ -18,6 +18,8 @@ public class Sharpness extends CustomEnchantment{
 		addDefaultDisplayName(Language.GERMAN, "Schärfe");
 		addDefaultDescription(Language.GERMAN, "Erhöht Nahkampfschaden." + 
 				"\nFügt 1 (halbes Herz) zusätzlichen Schaden für die erste Stufe und 0,5 (halbes Herz) für jede zusätzliche Stufe hinzu.");
+		addDefaultDisplayName(Language.CHINA_SIMPLE, "锋利");
+		addDefaultDescription(Language.CHINA_SIMPLE, "增加近战伤害.\n1级增加1点伤害,每级增加0.5点（半颗心）伤害.");
 	}
 	
 	@Override

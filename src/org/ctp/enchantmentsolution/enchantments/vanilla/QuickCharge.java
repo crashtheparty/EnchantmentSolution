@@ -15,6 +15,8 @@ public class QuickCharge extends CustomEnchantment{
 		super("Quick Charge", -15, -8, 20, 20, 1, 1, 4, 3, Weight.UNCOMMON, "Places arrows in the crossbow faster.");
 		addDefaultDisplayName(Language.GERMAN, "Schnellladen");
 		addDefaultDescription(Language.GERMAN, "Setzen Sie die Pfeile schneller in die Armbrust.");
+		addDefaultDisplayName(Language.CHINA_SIMPLE, "快速装填");
+		addDefaultDescription(Language.CHINA_SIMPLE, "增加十字弓装填速度.");
 	}
 	
 	@Override

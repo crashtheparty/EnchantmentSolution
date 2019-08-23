@@ -16,8 +16,8 @@ public class HeightPlusPlus extends CustomEnchantment{
 		super("Height++", 0, -10, 20, 20, 15, 1, 3, 2, Weight.RARE, "Increase up/down break radius by 1 per level.");
 		addDefaultDisplayName(Language.GERMAN, "Höhe++");
 		addDefaultDescription(Language.GERMAN, "Erhöhen Sie den Aufwärts- / Abwärtsbruch-Radius um 1 pro Ebene.");
-		addDefaultDisplayName(Language.CHINA_SIMPLE, "");
-		addDefaultDescription(Language.CHINA_SIMPLE, "");
+		addDefaultDisplayName(Language.CHINA_SIMPLE, "纵掘千古");
+		addDefaultDescription(Language.CHINA_SIMPLE, "增加纵向挖掘范围.");
 	}
 	
 	@Override

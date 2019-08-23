@@ -16,8 +16,8 @@ public class Warp extends CustomEnchantment{
 		super("Warp", -5, -7, 20, 14, 10, 1, 3, 3, Weight.RARE, "Gives a chance of teleporting a small distance away on hit.");
 		addDefaultDisplayName(Language.GERMAN, "Warp");
 		addDefaultDescription(Language.GERMAN, "Gibt eine Chance, bei einem Treffer eine kleine Entfernung zu teleportieren.");
-		addDefaultDisplayName(Language.CHINA_SIMPLE, "");
-		addDefaultDescription(Language.CHINA_SIMPLE, "");
+		addDefaultDisplayName(Language.CHINA_SIMPLE, "传送");
+		addDefaultDescription(Language.CHINA_SIMPLE, "有几率在受伤时进行传送.");
 	}
 	
 	@Override

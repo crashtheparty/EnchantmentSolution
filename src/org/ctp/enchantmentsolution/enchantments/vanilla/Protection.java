@@ -16,6 +16,8 @@ public class Protection extends CustomEnchantment{
 		super("Protection", -15, -10, 16, 11, 1, 1, 4, 4, Weight.COMMON, "Reduces all damage, except damage from the Void, the /kill command, or hunger damage.");
 		addDefaultDisplayName(Language.GERMAN, "Schutz");
 		addDefaultDescription(Language.GERMAN, "Reduziert jeglichen Schaden, mit Ausnahme des Schadens durch die Leere, den Befehl / kill oder den Hunger-Schaden.");
+		addDefaultDisplayName(Language.CHINA_SIMPLE, "保护");
+		addDefaultDescription(Language.CHINA_SIMPLE, "减少受到的所有伤害, 除了虚空伤害、/kill 自杀和饥饿伤害.");
 	}
 
 	@Override

@@ -17,6 +17,8 @@ public class AquaAffinity extends CustomEnchantment{
 		addDefaultDisplayName(Language.GERMAN, "Wasseraffinität");
 		setMaxLevelOne(true);
 		addDefaultDescription(Language.GERMAN, "Erhöht die Unterwasserabbaugeschwindigkeit.");
+		addDefaultDisplayName(Language.CHINA_SIMPLE, "水下速掘");
+		addDefaultDescription(Language.CHINA_SIMPLE, "增加水下挖掘速度.");
 	}
 	
 	@Override

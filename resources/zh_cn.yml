@@ -298,6 +298,53 @@ vanilla:
             diamond_leggings: '钻石护腿'
             golden_leggings: '金护腿'
             crossbow: '十字弓'
+            
+item_display_types:
+    all: "All Normal Items"
+    armor: "Armor"
+    axes: "Axes"
+    book: "Books"
+    boots: "Boots"
+    bow: "Bow"
+    carrot_on_a_stick: "Carrot on a Stick"
+    chainmail_armor: "Chainmail Armor"
+    chestplates: "Chestplates"
+    crossbow: "Crossbow"
+    diamond_armor: "Diamond Armor"
+    diamond_tools: "Diamond Tools"
+    elytra: "Elytra"
+    enchantable: "Enchantable"
+    fishing_rod: "Fishing Rod"
+    flint_and_steel: "Flint and Steel"
+    golden_armor: "Golden Armor"
+    golden_tools: "Golden Tools"
+    helmets: "Helmets"
+    hoes: "Hoes"
+    iron_armor: "Iron Armor"
+    iron_tools: "Iron Tools"
+    leather_armor: "Leather Armor"
+    leggings: "Leggings"
+    melee: "Melee Weapons"
+    misc: "Misc"
+    pickaxes: "Pickaxes"
+    ranged: "Ranged Weapons"
+    shears: "Shears"
+    shield: "Shield"
+    shovels: "Shovels"
+    shulker_boxes: "Shulker Boxes"
+    stone_tools: "Stone Tools"
+    swords: "Swords"
+    tools: "Tools"
+    trident: "Trident"
+    turtle_helmet: "Turtle Helmet"
+    wooden_tools: "Wooden Tools"
+    none: "None"
+misc:
+    no_conflicting_enchantments: "None"
+    no_disabled_items: "None"
+    true: "True"
+    false: "False"
+
 advancements: 
     enchantments/enchantment_solution: 
         name: '更多的附魔'

@@ -16,8 +16,8 @@ public class WidthPlusPlus extends CustomEnchantment{
 		super("Width++", 0, -10, 20, 20, 15, 1, 3, 2, Weight.RARE, "Increase left/right break radius by 1 per level.");
 		addDefaultDisplayName(Language.GERMAN, "Breite++");
 		addDefaultDescription(Language.GERMAN, "Erhöhen Sie den linken / rechten Umbruchradius um 1 pro Ebene.");
-		addDefaultDisplayName(Language.CHINA_SIMPLE, "");
-		addDefaultDescription(Language.CHINA_SIMPLE, "");
+		addDefaultDisplayName(Language.CHINA_SIMPLE, "横毁八荒");
+		addDefaultDescription(Language.CHINA_SIMPLE, "每级增加1格横向挖掘范围.");
 	}
 	
 	@Override

@@ -17,6 +17,8 @@ public class Impaling extends CustomEnchantment{
 		addDefaultDisplayName(Language.GERMAN, "Harpune");
 		addDefaultDescription(Language.GERMAN, "Erhöht Nahkampfschaden gegen Wassermobs.\n" + 
 				"Fügt für jede zusätzliche Stufe 2,5 (halbes Herz) zusätzlichen Schaden hinzu.");
+		addDefaultDisplayName(Language.CHINA_SIMPLE, "穿刺");
+		addDefaultDescription(Language.CHINA_SIMPLE, "增加对水生怪物的近战伤害.\n每级增加2.5的伤害.");
 	}
 
 	@Override

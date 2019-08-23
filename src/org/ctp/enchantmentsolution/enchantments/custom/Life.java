@@ -16,8 +16,8 @@ public class Life extends CustomEnchantment{
 		super("Life", -5, -5, 25, 15, 10, 1, 3, 3, Weight.RARE, "Increases maximum health by 4 (half hearts) per level when worn.");
 		addDefaultDisplayName(Language.GERMAN, "Leben");
 		addDefaultDescription(Language.GERMAN, "Erhöht die maximale Gesundheit um 4 (halbe Herzen) pro Level, wenn er getragen wird.");
-		addDefaultDisplayName(Language.CHINA_SIMPLE, "");
-		addDefaultDescription(Language.CHINA_SIMPLE, "");
+		addDefaultDisplayName(Language.CHINA_SIMPLE, "生命");
+		addDefaultDescription(Language.CHINA_SIMPLE, "每级增加半颗血量上限.");
 	}
 	
 	@Override

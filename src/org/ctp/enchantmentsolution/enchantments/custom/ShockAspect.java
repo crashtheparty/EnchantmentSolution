@@ -16,8 +16,8 @@ public class ShockAspect extends CustomEnchantment{
 		super("Shock Aspect", -15, -10, 20, 20, 5, 1, 3, 2, Weight.RARE, "Has a chance to strike lightning on attacked mobs.");
 		addDefaultDisplayName(Language.GERMAN, "Schock");
 		addDefaultDescription(Language.GERMAN, "Hat eine Chance, angegriffene Mobs mit Blitzen zu treffen.");
-		addDefaultDisplayName(Language.CHINA_SIMPLE, "");
-		addDefaultDescription(Language.CHINA_SIMPLE, "");
+		addDefaultDisplayName(Language.CHINA_SIMPLE, "雷击");
+		addDefaultDescription(Language.CHINA_SIMPLE, "攻击时有几率雷击怪物.");
 	}
 	
 	@Override

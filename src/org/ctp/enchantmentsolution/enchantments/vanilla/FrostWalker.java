@@ -17,6 +17,8 @@ public class FrostWalker extends CustomEnchantment{
 		addDefaultDisplayName(Language.GERMAN, "Eisläufer");
 		setTreasure(true);
 		addDefaultDescription(Language.GERMAN, "Erzeugt beim Gehen über Wasser gefrorene Eisblöcke.");
+		addDefaultDisplayName(Language.CHINA_SIMPLE, "冰霜行者");
+		addDefaultDescription(Language.CHINA_SIMPLE, "在水上行走时生成冰块.");
 	}
 
 	@Override

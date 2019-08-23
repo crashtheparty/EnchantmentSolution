@@ -16,8 +16,8 @@ public class ExpShare extends CustomEnchantment{
 		super("Exp. Share", 0, -2, 20, 12, 1, 1, 3, 3, Weight.UNCOMMON, "Increase experience earned from killing mobs and breaking blocks.");
 		addDefaultDisplayName(Language.GERMAN, "Erfahrung");
 		addDefaultDescription(Language.GERMAN, "Erhöhen Sie die Erfahrung durch das Töten von Mobs und Blockaden.");
-		addDefaultDisplayName(Language.CHINA_SIMPLE, "");
-		addDefaultDescription(Language.CHINA_SIMPLE, "");
+		addDefaultDisplayName(Language.CHINA_SIMPLE, "经验分享");
+		addDefaultDescription(Language.CHINA_SIMPLE, "增加击杀怪物和破坏方块获得的经验.");
 	}
 	
 	@Override

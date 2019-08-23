@@ -17,8 +17,8 @@ public class Wand extends CustomEnchantment{
 		addDefaultDisplayName(Language.GERMAN, "Zauberstab");
 		setTreasure(true);
 		addDefaultDescription(Language.GERMAN, "Platziert Blöcke von der Nebenhand.");
-		addDefaultDisplayName(Language.CHINA_SIMPLE, "");
-		addDefaultDescription(Language.CHINA_SIMPLE, "");
+		addDefaultDisplayName(Language.CHINA_SIMPLE, "法杖");
+		addDefaultDescription(Language.CHINA_SIMPLE, "放置副手的方块.");
 	}
 	
 	@Override

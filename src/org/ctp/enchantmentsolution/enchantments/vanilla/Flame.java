@@ -16,6 +16,8 @@ public class Flame extends CustomEnchantment{
 		addDefaultDisplayName(Language.GERMAN, "Flamme");
 		setMaxLevelOne(true);
 		addDefaultDescription(Language.GERMAN, "Brennende Pfeile.\nPfeile brennen beim Schießen und verursachen 5 Sekunden lang 4 Feuerschaden");
+		addDefaultDisplayName(Language.CHINA_SIMPLE, "火矢");
+		addDefaultDescription(Language.CHINA_SIMPLE, "点燃你发射的弓箭.\n5秒内造成4点燃烧伤害.");
 	}
 
 	@Override

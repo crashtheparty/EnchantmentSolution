@@ -15,6 +15,8 @@ public class Piercing extends CustomEnchantment{
 		super("Piercing", -14, -9, 15, 10, 1, 1, 5, 4, Weight.COMMON, "Arrows go through and attack multiple mobs.");
 		addDefaultDisplayName(Language.GERMAN, "Durchschuss");
 		addDefaultDescription(Language.GERMAN, "Pfeile gehen durch und greifen mehrere Mobs an.");
+		addDefaultDisplayName(Language.CHINA_SIMPLE, "穿透");
+		addDefaultDescription(Language.CHINA_SIMPLE, "弓箭可造成穿透伤害.");
 	}
 	
 	@Override
