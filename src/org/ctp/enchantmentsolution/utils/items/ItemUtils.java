@@ -52,7 +52,7 @@ public class ItemUtils {
 	
 	public static List<String> getRepairMaterialsStrings(){
 		List<String> names = new ArrayList<String>();
-		for(ItemRepairType type : ItemRepairType.getValues()) {
+		for(ItemRepairType type : ItemRepairType.values()) {
 			for(Material m : type.getRepairTypes()) {
 				if(!names.contains(m.name())) {
 					names.add(m.name());

@@ -144,6 +144,8 @@ public class SilkTouch_v1_14 {
 				return new ItemStack(block.getType());
 			}
 			break;
+		case TURTLE_EGG:
+			return new ItemStack(Material.TURTLE_EGG);
 		default:
 			break;
 		}

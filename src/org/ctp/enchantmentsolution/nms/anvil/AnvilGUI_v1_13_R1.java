@@ -84,7 +84,7 @@ public class AnvilGUI_v1_13_R1 extends AnvilGUI{
 					event.setWillDestroy(false);
 					return;
 				}
-				if(player.getLevel() < 1) {
+				if(player.getLevel() < 1 && player.getGameMode() != GameMode.CREATIVE && data instanceof Anvil) {
 					event.setWillClose(true);
 					event.setWillDestroy(true);
 					return;
