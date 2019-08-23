@@ -7,7 +7,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.ctp.enchantmentsolution.api.Language;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.helper.Weight;
-import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
+import org.ctp.enchantmentsolution.utils.items.ItemType;
 
 public class LuckOfTheSea extends CustomEnchantment{
 	

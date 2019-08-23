@@ -18,7 +18,7 @@ import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.utils.items.DamageUtils;
-import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
+import org.ctp.enchantmentsolution.utils.items.ItemType;
 
 public class GrindstoneUtils {
 	

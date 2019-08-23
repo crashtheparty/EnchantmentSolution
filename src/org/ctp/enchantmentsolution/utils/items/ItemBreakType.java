@@ -1,4 +1,4 @@
-package org.ctp.enchantmentsolution.utils.items.nms;
+package org.ctp.enchantmentsolution.utils.items;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -53,16 +53,15 @@ public enum ItemBreakType {
 	
 	private List<String> getItemBreakStrings(){
 		List<String> itemTypes = new ArrayList<String>();
-		switch(this) {
-		case DIAMOND_PICKAXE:
+		switch(this.name()) {
+		case "DIAMOND_PICKAXE":
 			itemTypes.addAll(Arrays.asList("OBSIDIAN"));
-			return itemTypes;
-		case IRON_PICKAXE:
+		case "IRON_PICKAXE":
 			itemTypes.addAll(Arrays.asList("DIAMOND_BLOCK", "EMERALD_BLOCK", "GOLD_BLOCK", "DIAMOND_ORE", "EMERALD_ORE", "GOLD_ORE", "REDSTONE_ORE"));
-		case STONE_PICKAXE:
+		case "STONE_PICKAXE":
 			itemTypes.addAll(Arrays.asList("IRON_BLOCK", "LAPIS_BLOCK", "IRON_ORE", "LAPIS_ORE"));
-		case GOLDEN_PICKAXE:
-		case WOODEN_PICKAXE:
+		case "GOLDEN_PICKAXE":
+		case "WOODEN_PICKAXE":
 			itemTypes.addAll(Arrays.asList("ICE", "PACKED_ICE", "FROSTED_ICE", "BLUE_ICE", "REDSTONE_BLOCK", "IRON_BARS", "ACTIVATOR_RAIL", "DETECTOR_RAIL", 
 					"POWERED_RAIL", "RAIL", "ANDESITE", "COAL_BLOCK", "QUARTZ_BLOCK", "BRICKS", "COAL_ORE", "COBBLESTONE", "COBBLESTONE_WALL", "BLACK_CONCRETE", 
 					"BLUE_CONCRETE", "BROWN_CONCRETE", "CYAN_CONCRETE", "GRAY_CONCRETE", "GREEN_CONCRETE", "LIGHT_BLUE_CONCRETE", "LIGHT_GRAY_CONCRETE", 
@@ -80,11 +79,11 @@ public enum ItemBreakType {
 					"BRAIN_CORAL_BLOCK", "BUBBLE_CORAL_BLOCK", "FIRE_CORAL_BLOCK", "HORN_CORAL_BLOCK", "TUBE_CORAL_BLOCK", "CAMPFIRE", "SMOOTH_QUARTZ", 
 					"MAGMA_BLOCK", "SMOOTH_STONE", "SMOOTH_RED_SANDSTONE", "SMOOTH_SANDSTONE"));
 			return itemTypes;
-		case DIAMOND_AXE:
-		case GOLDEN_AXE:
-		case IRON_AXE:
-		case STONE_AXE:
-		case WOODEN_AXE:
+		case "DIAMOND_AXE":
+		case "GOLDEN_AXE":
+		case "IRON_AXE":
+		case "STONE_AXE":
+		case "WOODEN_AXE":
 			itemTypes.addAll(Arrays.asList("COCOA", "JACK_O_LANTERN", "PUMPKIN", "MELON", "BOOKSHELF", "ACACIA_FENCE", "ACACIA_FENCE_GATE", "BIRCH_FENCE", 
 					"BIRCH_FENCE_GATE", "DARK_OAK_FENCE", "DARK_OAK_FENCE_GATE", "JUNGLE_FENCE", "JUNGLE_FENCE_GATE", "OAK_FENCE", "OAK_FENCE_GATE", "SPRUCE_FENCE", 
 					"SPRUCE_FENCE_GATE", "ACACIA_LOG", "ACACIA_PLANKS", "BIRCH_LOG", "BIRCH_PLANKS", "DARK_OAK_LOG", "DARK_OAK_PLANKS", "JUNGLE_LOG", 
@@ -93,11 +92,11 @@ public enum ItemBreakType {
 					"STRIPPED_SPRUCE_LOG", "STRIPPED_ACACIA_WOOD", "STRIPPED_BIRCH_WOOD", "STRIPPED_DARK_OAK_WOOD", "STRIPPED_JUNGLE_WOOD", "STRIPPED_OAK_WOOD", 
 					"STRIPPED_SPRUCE_WOOD", "BROWN_MUSHROOM_BLOCK", "RED_MUSHROOM_BLOCK", "LADDER"));
 			return itemTypes;
-		case DIAMOND_SHOVEL:
-		case IRON_SHOVEL:
-		case GOLDEN_SHOVEL:
-		case STONE_SHOVEL:
-		case WOODEN_SHOVEL:
+		case "DIAMOND_SHOVEL":
+		case "IRON_SHOVEL":
+		case "GOLDEN_SHOVEL":
+		case "STONE_SHOVEL":
+		case "WOODEN_SHOVEL":
 			itemTypes.addAll(Arrays.asList("SNOW", "SNOW_BLOCK", "CLAY", "COARSE_DIRT", "DIRT", "FARMLAND", "GRASS_BLOCK", "GRAVEL", "MYCELIUM", "PODZOL", 
 					"RED_SAND", "SAND", "SOUL_SAND", "BLACK_CONCRETE_POWDER", "BLUE_CONCRETE_POWDER", "BROWN_CONCRETE_POWDER", "CYAN_CONCRETE_POWDER", 
 					"GRAY_CONCRETE_POWDER", "GREEN_CONCRETE_POWDER", "LIGHT_BLUE_CONCRETE_POWDER", "LIGHT_GRAY_CONCRETE_POWDER", "LIME_CONCRETE_POWDER", 

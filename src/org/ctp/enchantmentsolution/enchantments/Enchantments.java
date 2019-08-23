@@ -22,7 +22,7 @@ import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.ConfigUtils;
 import org.ctp.enchantmentsolution.utils.StringUtils;
-import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
+import org.ctp.enchantmentsolution.utils.items.ItemType;
 
 public class Enchantments {
 

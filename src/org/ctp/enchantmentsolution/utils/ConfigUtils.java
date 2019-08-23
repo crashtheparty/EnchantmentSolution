@@ -4,7 +4,7 @@ import org.bukkit.Material;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.api.Language;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
-import org.ctp.enchantmentsolution.utils.items.nms.ItemType;
+import org.ctp.enchantmentsolution.utils.items.ItemType;
 
 public class ConfigUtils {
 

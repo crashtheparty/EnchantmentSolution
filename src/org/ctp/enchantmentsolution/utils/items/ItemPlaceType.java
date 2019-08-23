@@ -1,4 +1,4 @@
-package org.ctp.enchantmentsolution.utils.items.nms;
+package org.ctp.enchantmentsolution.utils.items;
 
 import java.util.ArrayList;
 import java.util.Arrays;

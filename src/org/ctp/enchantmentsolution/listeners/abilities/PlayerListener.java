@@ -28,26 +28,26 @@ import org.ctp.enchantmentsolution.nms.animalmob.AnimalMob;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.StringUtils;
 import org.ctp.enchantmentsolution.utils.items.DamageUtils;
-import org.ctp.enchantmentsolution.utils.items.nms.ItemMoisturizeType;
+import org.ctp.enchantmentsolution.utils.items.ItemMoisturizeType;
 
 @SuppressWarnings("unused")
 public class PlayerListener extends EnchantmentListener{
 	
 	@EventHandler
 	public void onPlayerInteract(PlayerInteractEvent event) {
-		runMethod(this, "flowerGift", event);
-		runMethod(this, "irenesLasso", event);
-		runMethod(this, "splatterFest", event);
+		runMethod(this, "flowerGift", event, PlayerInteractEvent.class);
+		runMethod(this, "irenesLasso", event, PlayerInteractEvent.class);
+		runMethod(this, "splatterFest", event, PlayerInteractEvent.class);
 	}
 	
 	@EventHandler(priority=EventPriority.HIGHEST)
 	public void onPlayerInteractHighest(PlayerInteractEvent event) {
-		runMethod(this, "moisturize", event);
+		runMethod(this, "moisturize", event, PlayerInteractEvent.class);
 	}
 	
 	@EventHandler
 	public void onPlayerMove(PlayerMoveEvent event) {
-		runMethod(this, "icarus", event);
+		runMethod(this, "icarus", event, PlayerMoveEvent.class);
 	}
 	
 	private void flowerGift(PlayerInteractEvent event) {

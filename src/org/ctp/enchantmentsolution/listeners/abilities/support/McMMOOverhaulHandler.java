@@ -11,8 +11,10 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.MetadataValue;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
+import org.ctp.enchantmentsolution.utils.items.Fortune;
 import org.ctp.enchantmentsolution.utils.items.ItemUtils;
-import org.ctp.enchantmentsolution.utils.items.nms.AbilityUtils;
+import org.ctp.enchantmentsolution.utils.items.SilkTouch;
+import org.ctp.enchantmentsolution.utils.items.Smeltery;
 
 import com.gmail.nossr50.mcMMO;
 import com.gmail.nossr50.config.Config;
@@ -42,7 +44,7 @@ public class McMMOOverhaulHandler {
 				}
 			}
 		} else if(Enchantments.hasEnchantment(item, DefaultEnchantments.SMELTERY)) {
-			ItemStack smelted = AbilityUtils.getSmelteryItem(block, item);
+			ItemStack smelted = Smeltery.getSmelteryItem(block, item);
 			ItemStack drop = item.clone();
 			if(smelted != null) {
 				drop = smelted.clone();
@@ -83,16 +85,16 @@ public class McMMOOverhaulHandler {
 
 	private static void giveItems(Player player, ItemStack item, Block block, Collection<ItemStack> drops) {
 		if (Enchantments.hasEnchantment(item, Enchantment.LOOT_BONUS_BLOCKS)) {
-			Collection<ItemStack> fortuneItems = AbilityUtils.getFortuneItems(item, block, drops);
+			Collection<ItemStack> fortuneItems = Fortune.getFortuneItems(item, block, drops);
 			for(ItemStack drop: fortuneItems) {
 				ItemUtils.giveItemToPlayer(player, drop, player.getLocation(), true);
 			}
 		} else if (Enchantments.hasEnchantment(item, Enchantment.SILK_TOUCH)
-				&& AbilityUtils.getSilkTouchItem(block, item) != null) {
-			ItemUtils.giveItemToPlayer(player, AbilityUtils.getSilkTouchItem(block, item), player.getLocation(), true);
+				&& SilkTouch.getSilkTouchItem(block, item) != null) {
+			ItemUtils.giveItemToPlayer(player, SilkTouch.getSilkTouchItem(block, item), player.getLocation(), true);
 		} else {
 			if (Enchantments.hasEnchantment(item, DefaultEnchantments.SMELTERY)) {
-				ItemStack smelted = AbilityUtils.getSmelteryItem(block, item);
+				ItemStack smelted = Smeltery.getSmelteryItem(block, item);
 				if (smelted != null) {
 					ItemUtils.giveItemToPlayer(player, smelted, player.getLocation(), true);
 				} else {

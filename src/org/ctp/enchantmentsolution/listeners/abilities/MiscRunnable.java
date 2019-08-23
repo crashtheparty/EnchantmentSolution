@@ -21,8 +21,8 @@ import org.ctp.enchantmentsolution.listeners.abilities.helpers.DrownedEntity;
 import org.ctp.enchantmentsolution.listeners.abilities.helpers.EntityAccuracy;
 import org.ctp.enchantmentsolution.listeners.abilities.helpers.IcarusDelay;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
+import org.ctp.enchantmentsolution.utils.items.AbilityUtils;
 import org.ctp.enchantmentsolution.utils.items.ItemUtils;
-import org.ctp.enchantmentsolution.utils.items.nms.AbilityUtils;
 
 @SuppressWarnings("unused")
 public class MiscRunnable extends EnchantmentListener implements Runnable{

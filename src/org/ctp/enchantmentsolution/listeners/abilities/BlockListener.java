@@ -36,28 +36,27 @@ import org.ctp.enchantmentsolution.nms.McMMO;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.LocationUtils;
 import org.ctp.enchantmentsolution.utils.items.*;
-import org.ctp.enchantmentsolution.utils.items.nms.*;
 
 @SuppressWarnings("unused")
 public class BlockListener extends EnchantmentListener{
 
 	@EventHandler
 	public void onBlockBreak(BlockBreakEvent event){
-		runMethod(this, "expShare", event);
+		runMethod(this, "expShare", event, BlockBreakEvent.class);
 	}
 	
 	@EventHandler(priority=EventPriority.HIGHEST)
 	public void onBlockBreakHighest(BlockBreakEvent event) {
-		runMethod(this, "heightWidth", event);
-		runMethod(this, "curseOfLag", event);
-		runMethod(this, "goldDigger", event);
-		runMethod(this, "smeltery", event);
-		runMethod(this, "telepathy", event);
+		runMethod(this, "heightWidth", event, BlockBreakEvent.class);
+		runMethod(this, "curseOfLag", event, BlockBreakEvent.class);
+		runMethod(this, "goldDigger", event, BlockBreakEvent.class);
+		runMethod(this, "smeltery", event, BlockBreakEvent.class);
+		runMethod(this, "telepathy", event, BlockBreakEvent.class);
 	}
 	
 	@EventHandler(priority=EventPriority.HIGHEST)
 	public void onBlockPlaceHighest(BlockPlaceEvent event) {
-		runMethod(this, "wand", event);
+		runMethod(this, "wand", event, BlockPlaceEvent.class);
 	}
 	
 	private void curseOfLag(BlockBreakEvent event) {
@@ -117,7 +116,7 @@ public class BlockListener extends EnchantmentListener{
 		if(player.getGameMode().equals(GameMode.CREATIVE) || player.getGameMode().equals(GameMode.SPECTATOR)) return;
 		if(item != null) {
 			if(Enchantments.hasEnchantment(item, DefaultEnchantments.SMELTERY)) {
-				ItemStack smelted = AbilityUtils.getSmelteryItem(blockBroken, item);
+				ItemStack smelted = Smeltery.getSmelteryItem(blockBroken, item);
 				if(smelted != null) {
 					if(smelted.getAmount() > 1 && smelted.getType() == Material.IRON_INGOT) {
 						AdvancementUtils.awardCriteria(player, ESAdvancement.IRONT_YOU_GLAD, "iron"); 
@@ -579,18 +578,18 @@ public class BlockListener extends EnchantmentListener{
 	
 	private void giveItems(Player player, ItemStack item, Block block, Collection<ItemStack> drops) {
 		if (Enchantments.hasEnchantment(item, Enchantment.LOOT_BONUS_BLOCKS)) {
-			Collection<ItemStack> fortuneItems = AbilityUtils.getFortuneItems(item, block,
+			Collection<ItemStack> fortuneItems = Fortune.getFortuneItems(item, block,
 					drops);
 			for(ItemStack drop: fortuneItems) {
 				ItemUtils.giveItemToPlayer(player, drop, player.getLocation(), true);
 			}
 		} else if (Enchantments.hasEnchantment(item, Enchantment.SILK_TOUCH)
-				&& AbilityUtils.getSilkTouchItem(block, item) != null) {
-			ItemUtils.giveItemToPlayer(player, AbilityUtils.getSilkTouchItem(block, item),
+				&& SilkTouch.getSilkTouchItem(block, item) != null) {
+			ItemUtils.giveItemToPlayer(player, SilkTouch.getSilkTouchItem(block, item),
 					player.getLocation(), true);
 		} else {
 			if (Enchantments.hasEnchantment(item, DefaultEnchantments.SMELTERY)) {
-				ItemStack smelted = AbilityUtils.getSmelteryItem(block, item);
+				ItemStack smelted = Smeltery.getSmelteryItem(block, item);
 				if (smelted != null) {
 					ItemUtils.giveItemToPlayer(player, smelted, player.getLocation(), true);
 				} else {

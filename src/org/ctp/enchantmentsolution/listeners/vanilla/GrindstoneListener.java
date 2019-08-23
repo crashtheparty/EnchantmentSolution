@@ -16,7 +16,7 @@ import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.nms.AnvilNMS;
 import org.ctp.enchantmentsolution.utils.ConfigUtils;
 import org.ctp.enchantmentsolution.utils.GrindstoneUtils;
-import org.ctp.enchantmentsolution.utils.items.nms.AbilityUtils;
+import org.ctp.enchantmentsolution.utils.items.AbilityUtils;
 
 public class GrindstoneListener implements Listener{
 	

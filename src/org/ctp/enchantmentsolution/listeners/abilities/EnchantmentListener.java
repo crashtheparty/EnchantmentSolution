@@ -29,9 +29,9 @@ public abstract class EnchantmentListener implements Listener{
 		}
 	}
 	
-	protected void runMethod(EnchantmentListener superClass, String name, Event event) {
+	protected void runMethod(EnchantmentListener superClass, String name, Event event, Class<? extends Event> eventClass) {
 		try {
-			Method superMethod = superClass.getClass().getDeclaredMethod(name, event.getClass());
+			Method superMethod = superClass.getClass().getDeclaredMethod(name, eventClass);
 			superMethod.setAccessible(true);
 			superMethod.invoke(superClass, event);
 		} catch (Exception ex) {

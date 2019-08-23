@@ -29,34 +29,34 @@ import org.ctp.enchantmentsolution.nms.animalmob.AnimalMob;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.StringUtils;
-import org.ctp.enchantmentsolution.utils.items.nms.AbilityUtils;
+import org.ctp.enchantmentsolution.utils.items.AbilityUtils;
 
 @SuppressWarnings("unused")
 public class DamageListener extends EnchantmentListener{
 	
 	@EventHandler
 	public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
-		runMethod(this, "brine", event);
-		runMethod(this, "curseOfLag", event);
-		runMethod(this, "drowned", event);
-		runMethod(this, "gungHo", event);
-		runMethod(this, "ironDefense", event);
-		runMethod(this, "knockUp", event);
-		runMethod(this, "magicGuard", event);
-		runMethod(this, "sandVeil", event);
+		runMethod(this, "brine", event, EntityDamageByEntityEvent.class);
+		runMethod(this, "curseOfLag", event, EntityDamageByEntityEvent.class);
+		runMethod(this, "drowned", event, EntityDamageByEntityEvent.class);
+		runMethod(this, "gungHo", event, EntityDamageByEntityEvent.class);
+		runMethod(this, "ironDefense", event, EntityDamageByEntityEvent.class);
+		runMethod(this, "knockUp", event, EntityDamageByEntityEvent.class);
+		runMethod(this, "magicGuard", event, EntityDamageByEntityEvent.class);
+		runMethod(this, "sandVeil", event, EntityDamageByEntityEvent.class);
 	}
 	
 	@EventHandler
 	public void onEntityDamage(EntityDamageEvent event) {
-		runMethod(this, "magicGuard", event);
+		runMethod(this, "magicGuard", event, EntityDamageEvent.class);
 	}
 	
 	@EventHandler(priority=EventPriority.HIGHEST)
 	public void onEntityDamageByEntityHighest(EntityDamageByEntityEvent event) {
-		runMethod(this, "irenesLasso", event);
-		runMethod(this, "shockAspect", event);
-		runMethod(this, "stoneThrow", event);
-		runMethod(this, "warp", event);
+		runMethod(this, "irenesLasso", event, EntityDamageByEntityEvent.class);
+		runMethod(this, "shockAspect", event, EntityDamageByEntityEvent.class);
+		runMethod(this, "stoneThrow", event, EntityDamageByEntityEvent.class);
+		runMethod(this, "warp", event, EntityDamageByEntityEvent.class);
 	}
 	
 	private void brine(EntityDamageByEntityEvent event) {
