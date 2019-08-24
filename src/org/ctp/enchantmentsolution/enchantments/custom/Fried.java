@@ -16,10 +16,12 @@ public class Fried extends CustomEnchantment{
 		super("Fried", 40, 15, 0, 0, 30, 1, 1, 1, Weight.RARE, "Cooks fish upon catching them.");
 		addDefaultDisplayName(Language.GERMAN, "Fritieren");
 		setMaxLevelOne(true);
-		addDefaultDescription(Language.GERMAN, "K�che Fische, wenn sie gefangen werden.");
+		addDefaultDescription(Language.GERMAN, "Köche Fische, wenn sie gefangen werden.");
+		addDefaultDisplayName(Language.CHINA_SIMPLE, "烤鱼");
+		addDefaultDescription(Language.CHINA_SIMPLE, "捕鱼后直接烤鱼.");
 	}
 	
-	@Override
+	@Override 
 	public Enchantment getRelativeEnchantment() {
 		return DefaultEnchantments.FRIED;
 	}

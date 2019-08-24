@@ -4,8 +4,8 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.api.Language;
-import org.ctp.enchantmentsolution.nms.itemname.GermanNames_v1_13;
-import org.ctp.enchantmentsolution.nms.itemname.GermanNames_v1_14;
+import org.ctp.enchantmentsolution.nms.itemname.ChinaSimplified;
+import org.ctp.enchantmentsolution.nms.itemname.GermanNames;
 import org.ctp.enchantmentsolution.nms.itemname.ItemName_v1_13_R1;
 import org.ctp.enchantmentsolution.nms.itemname.ItemName_v1_13_R2;
 import org.ctp.enchantmentsolution.nms.itemname.ItemName_v1_14_R1;
@@ -15,19 +15,9 @@ public class ItemNameNMS {
 	public static String returnLocalizedItemName(Language language, ItemStack item) {
 		switch(language) {
 		case GERMAN:
-			switch(EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber()) {
-			case 1:
-			case 2:
-			case 3:
-				return GermanNames_v1_13.getName(item.getType());
-			case 4:
-			case 5:
-			case 6:
-			case 7:
-			case 8:
-				return GermanNames_v1_14.getName(item.getType());
-			}
-			break;
+			return GermanNames.getName(item.getType());
+		case CHINA_SIMPLE:
+			return ChinaSimplified.getName(item.getType());
 		case US:
 			switch(EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber()) {
 			case 1:

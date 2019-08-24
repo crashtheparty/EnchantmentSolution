@@ -17,6 +17,8 @@ public class Soulbound extends CustomEnchantment{
 		addDefaultDisplayName(Language.GERMAN, "Seelengebunden");
 		setMaxLevelOne(true);
 		addDefaultDescription(Language.GERMAN, "Behalte den Gegenstand auf dem Tod.");
+		addDefaultDisplayName(Language.CHINA_SIMPLE, "灵魂绑定");
+		addDefaultDescription(Language.CHINA_SIMPLE, "死亡保留物品.");
 	}
 	
 	@Override

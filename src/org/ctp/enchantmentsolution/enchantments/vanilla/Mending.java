@@ -17,6 +17,8 @@ public class Mending extends CustomEnchantment{
 		setTreasure(true);
 		setMaxLevelOne(true);
 		addDefaultDescription(Language.GERMAN, "Haltbarkeit mit Erfahrung reparieren.");
+		addDefaultDisplayName(Language.CHINA_SIMPLE, "经验修补");
+		addDefaultDescription(Language.CHINA_SIMPLE, "使用经验修复物品.");
 	}
 
 	@Override

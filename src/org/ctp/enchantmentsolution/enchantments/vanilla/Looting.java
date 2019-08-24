@@ -13,8 +13,10 @@ public class Looting extends CustomEnchantment{
 	
 	public Looting() {
 		super("Looting", 7, 6, 11, 9, 1, 1, 5, 3, Weight.RARE, "Mobs can drop more loot.");
-		addDefaultDisplayName(Language.GERMAN, "Pl�nderung");
-		addDefaultDescription(Language.GERMAN, "Mobs k�nnen mehr Beute fallen lassen.");
+		addDefaultDisplayName(Language.GERMAN, "Plünderung");
+		addDefaultDescription(Language.GERMAN, "Mobs können mehr Beute fallen lassen.");
+		addDefaultDisplayName(Language.CHINA_SIMPLE, "抢夺");
+		addDefaultDescription(Language.CHINA_SIMPLE, "怪物掉落更多物品.");
 	}
 	
 	@Override

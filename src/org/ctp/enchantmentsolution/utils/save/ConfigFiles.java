@@ -185,8 +185,7 @@ public class ConfigFiles {
 			languageFiles = new LanguageFiles(this, new File(dataFolder + "/" + langFile), 
 					Language.getLanguage(EnchantmentSolution.getPlugin().getConfigFiles().getDefaultConfig().getString("language")));
 		} else {
-			languageFiles.setLanguage(new File(dataFolder + "/" + langFile), 
-					Language.getLanguage(EnchantmentSolution.getPlugin().getConfigFiles().getDefaultConfig().getString("language")));
+			languageFiles.setLanguage(Language.getLanguage(EnchantmentSolution.getPlugin().getConfigFiles().getDefaultConfig().getString("language")));
 		}
 	}
 

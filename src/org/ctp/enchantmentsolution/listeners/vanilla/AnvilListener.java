@@ -29,7 +29,7 @@ public class AnvilListener implements Listener{
 			if(AnvilUtils.canCombineItems(first, second)) {
 				if (event.getViewers().get(0) instanceof Player) {
 					UpdateItem items = new UpdateItem((Player) event.getViewers().get(0), first, second);
-					if(items != null){
+					if(items != null && items.isDifferent()){
 						event.setResult(items.getCombinedItem());
 					}
 				}

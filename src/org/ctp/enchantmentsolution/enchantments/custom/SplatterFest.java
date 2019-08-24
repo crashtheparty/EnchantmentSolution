@@ -16,7 +16,9 @@ public class SplatterFest extends CustomEnchantment{
 		super("Splatter Fest", 25, 25, 0, 0, 20, 1, 1, 1, Weight.RARE, "Shoots eggs out of hoe on left click.");
 		addDefaultDisplayName(Language.GERMAN, "Ei Splatter");
 		setMaxLevelOne(true);
-		addDefaultDescription(Language.GERMAN, "Schie�t mit dem Linksklick Eier aus der Hacke.");
+		addDefaultDescription(Language.GERMAN, "Schießt mit dem Linksklick Eier aus der Hacke.");
+		addDefaultDisplayName(Language.CHINA_SIMPLE, "飞蛋");
+		addDefaultDescription(Language.CHINA_SIMPLE, "左击发射鸡蛋.");
 	}
 
 	@Override

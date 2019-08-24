@@ -15,7 +15,9 @@ public class Armored extends CustomEnchantment{
 	public Armored() {
 		super("Armored", 20, 5, 15, 10, 30, 1, 3, 3, Weight.RARE, "Adds armor points for wearing elytra.");
 		addDefaultDisplayName(Language.GERMAN, "Gepanzert");
-		addDefaultDescription(Language.GERMAN, "F�gt R�stungspunkte f�r das Tragen von Elytren hinzu.");
+		addDefaultDescription(Language.GERMAN, "Fügt Rüstungspunkte für das Tragen von Elytren hinzu.");
+		addDefaultDisplayName(Language.CHINA_SIMPLE, "守护之翼");
+		addDefaultDescription(Language.CHINA_SIMPLE, "穿戴鞘翅增加护甲值.");
 	}
 
 	@Override

@@ -30,31 +30,32 @@ import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.StringUtils;
 import org.ctp.enchantmentsolution.utils.items.nms.AbilityUtils;
 
+@SuppressWarnings("unused")
 public class DamageListener extends EnchantmentListener{
 	
 	@EventHandler
 	public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
-		brine(event);
-		curseOfLag(event);
-		drowned(event);
-		gungHo(event);
-		ironDefense(event);
-		knockUp(event);
-		magicGuard(event);
-		sandVeil(event);
+		runMethod(this, "brine", event, EntityDamageByEntityEvent.class);
+		runMethod(this, "curseOfLag", event, EntityDamageByEntityEvent.class);
+		runMethod(this, "drowned", event, EntityDamageByEntityEvent.class);
+		runMethod(this, "gungHo", event, EntityDamageByEntityEvent.class);
+		runMethod(this, "ironDefense", event, EntityDamageByEntityEvent.class);
+		runMethod(this, "knockUp", event, EntityDamageByEntityEvent.class);
+		runMethod(this, "magicGuard", event, EntityDamageByEntityEvent.class);
+		runMethod(this, "sandVeil", event, EntityDamageByEntityEvent.class);
 	}
 	
 	@EventHandler
 	public void onEntityDamage(EntityDamageEvent event) {
-		magicGuard(event);
+		runMethod(this, "magicGuard", event, EntityDamageEvent.class);
 	}
 	
 	@EventHandler(priority=EventPriority.HIGHEST)
 	public void onEntityDamageByEntityHighest(EntityDamageByEntityEvent event) {
-		irenesLasso(event);
-		shockAspect(event);
-		stoneThrow(event);
-		warp(event);
+		runMethod(this, "irenesLasso", event, EntityDamageByEntityEvent.class);
+		runMethod(this, "shockAspect", event, EntityDamageByEntityEvent.class);
+		runMethod(this, "stoneThrow", event, EntityDamageByEntityEvent.class);
+		runMethod(this, "warp", event, EntityDamageByEntityEvent.class);
 	}
 	
 	private void brine(EntityDamageByEntityEvent event) {
@@ -94,8 +95,8 @@ public class DamageListener extends EnchantmentListener{
 		if(!canRun(DefaultEnchantments.DROWNED, event)) return;
 		if(event.getDamager() instanceof Trident) {
 			Trident trident = (Trident) event.getDamager();
-			HumanEntity human = (HumanEntity) trident.getShooter();
 			if(trident.hasMetadata("drowned")) {
+				HumanEntity human = (HumanEntity) trident.getShooter();
 				List<MetadataValue> values = trident.getMetadata("drowned");
 				for(MetadataValue value : values) {
 					if(value.getOwningPlugin().equals(EnchantmentSolution.getPlugin())) {

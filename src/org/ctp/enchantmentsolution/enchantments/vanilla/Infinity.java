@@ -15,7 +15,9 @@ public class Infinity extends CustomEnchantment{
 		super("Infinity", 35, 20, 0, 0, 20, 1, 1, 1, Weight.RARE, "Shooting doesn't consume regular arrows.");
 		addDefaultDisplayName(Language.GERMAN, "Unendlichkeit");
 		setMaxLevelOne(true);
-		addDefaultDescription(Language.GERMAN, "Beim Schie�en werden keine normalen Pfeile verbraucht.");
+		addDefaultDescription(Language.GERMAN, "Beim Schießen werden keine normalen Pfeile verbraucht.");
+		addDefaultDisplayName(Language.CHINA_SIMPLE, "无限");
+		addDefaultDescription(Language.CHINA_SIMPLE, "无限射箭.");
 	}
 
 	@Override

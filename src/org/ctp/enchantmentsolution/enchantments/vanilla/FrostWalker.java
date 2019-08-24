@@ -14,9 +14,11 @@ public class FrostWalker extends CustomEnchantment{
 	
 	public FrostWalker() {
 		super("Frost Walker", 5, 5, 15, 10, 10, 1, 2, 2, Weight.RARE, "Creates frosted ice blocks when walking over water.");
-		addDefaultDisplayName(Language.GERMAN, "Eisl�ufer");
+		addDefaultDisplayName(Language.GERMAN, "Eisläufer");
 		setTreasure(true);
-		addDefaultDescription(Language.GERMAN, "Erzeugt beim Gehen �ber Wasser gefrorene Eisbl�cke.");
+		addDefaultDescription(Language.GERMAN, "Erzeugt beim Gehen über Wasser gefrorene Eisblöcke.");
+		addDefaultDisplayName(Language.CHINA_SIMPLE, "冰霜行者");
+		addDefaultDescription(Language.CHINA_SIMPLE, "在水上行走时生成冰块.");
 	}
 
 	@Override

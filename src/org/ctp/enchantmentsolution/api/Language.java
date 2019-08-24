@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public enum Language{
-	US("en_us"), GERMAN("de_de");
+	US("en_us"), GERMAN("de_de"), CHINA_SIMPLE("zh_cn");
 	
 	private String locale;
 	

@@ -15,7 +15,9 @@ public class Channeling extends CustomEnchantment{
 		super("Channeling", 25, 25, 0, 0, 1, 1, 1, 1, Weight.VERY_RARE, "Summons a lightning bolt when a mob is hit by a thrown trident.");
 		addDefaultDisplayName(Language.GERMAN, "Entladung");
 		setMaxLevelOne(true);
-		addDefaultDescription(Language.GERMAN, "Beschw�rt einen Blitz, wenn ein Mob von einem geworfenen Dreizack getroffen wird.");
+		addDefaultDescription(Language.GERMAN, "Beschwört einen Blitz, wenn ein Mob von einem geworfenen Dreizack getroffen wird.");
+		addDefaultDisplayName(Language.CHINA_SIMPLE, "引雷");
+		addDefaultDescription(Language.CHINA_SIMPLE, "扔出三叉戟击中目标时召唤闪电.");
 	}
 
 	@Override

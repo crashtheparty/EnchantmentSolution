@@ -14,11 +14,13 @@ public class CurseOfLag extends CustomEnchantment{
 	
 	public CurseOfLag() {
 		super("Curse of Lag", 25, 25, 0, 0, 1, 1, 1, 1, Weight.RARE, "Ah, fireworks!");
-		addDefaultDisplayName(Language.GERMAN, "Fluch der Verz�gerung");
+		addDefaultDisplayName(Language.GERMAN, "Fluch der Verzögerung");
 		setTreasure(true);
 		setMaxLevelOne(true);
 		setCurse(true);
 		addDefaultDescription(Language.GERMAN, "Ah, Feuerwerk!");
+		addDefaultDisplayName(Language.CHINA_SIMPLE, "卡顿诅咒");
+		addDefaultDescription(Language.CHINA_SIMPLE, "啊啊啊!是烟花");
 	}
 	
 	@Override

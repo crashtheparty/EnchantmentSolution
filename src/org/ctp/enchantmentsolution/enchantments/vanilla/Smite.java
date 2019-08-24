@@ -17,9 +17,11 @@ public class Smite extends CustomEnchantment{
 				"(skeletons, zombies, withers, wither skeletons, zombie pigmen, skeleton horses and zombie horses)\n" + 
 				"Each level separately adds 2.5 (half heart) extra damage to each hit, to \"undead\" mobs only.");
 		addDefaultDisplayName(Language.GERMAN, "Bann");
-		addDefaultDescription(Language.GERMAN, "Erh�ht den Schaden \"untoter\" Mobs " + 
+		addDefaultDescription(Language.GERMAN, "Erhöht den Schaden \"untoter\" Mobs " + 
 				"(Skelette, Zombies, Widerrist, Widerrist-Skelette, Zombie-Schweiner, Skelettpferde und Zombie-Pferde).\n" + 
-				"Jeder Level f�gt jedem Treffer separat 2,5 (halbes Herz) zus�tzlichen Schaden hinzu, nur \"Untoten\" -Mobs.");
+				"Jeder Level fügt jedem Treffer separat 2,5 (halbes Herz) zusätzlichen Schaden hinzu, nur \"Untoten\" -Mobs.");
+		addDefaultDisplayName(Language.CHINA_SIMPLE, "亡灵杀手");
+		addDefaultDescription(Language.CHINA_SIMPLE, "增加对亡灵生物造成的伤害(骷髅、僵尸、凋灵、凋灵骷髅、骷髅马、僵尸猪人等)\n每级增加2.5点伤害.");
 	}
 	
 	@Override
