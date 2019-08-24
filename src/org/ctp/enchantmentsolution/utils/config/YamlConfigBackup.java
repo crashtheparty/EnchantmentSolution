@@ -225,5 +225,6 @@ public class YamlConfigBackup extends YamlConfig {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		getFromConfig();
 	}
 }

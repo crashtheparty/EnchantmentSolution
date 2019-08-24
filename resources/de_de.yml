@@ -9,7 +9,7 @@ anvil:
     cannot-combine: '&cNicht kombinierbar'
     cannot-rename: '&cKann nicht benannt werden'
     message-cannot-combine: 'Diese Items können nicht kombiniert werden!'
-    legacy-gui: '&fÖffne den Vanille Amboss'
+    legacy-gui: '&fÖffne den Vanilla-Amboss'
     legacy-gui-warning: 
     - '&cManche Verzauberungen gehen in diesem Amboss verloren!'
     - '&cViele Eigenschaften der Items gehen ebenfalls verloren.'
@@ -23,11 +23,11 @@ table:
     red-mirror: '&f'
     blue-mirror: '&1Lapis zugeben'
     blue-mirror-lore: 
-    - '&9Wähle Lapis in deinem Inventar um ihn diesem Slot zuzug gen.'
+    - '&9Wähle Lapis in deinem Inventar um ihn diesem Slot zuzufügen.'
 
     instructions-title: 'Anleitung fürs verzaubern.'
     instructions: 
-    - 'Klicke auf ein Item um es links zu zufügen.'
+    - 'Klicke auf ein Item um es links zuzufügen.'
     - 'Du siehst dann eine Liste mit Büchern'
     - ' und den Lapiskosten für eine Verzauberung.'
     - 'Wähle ein Buch zum verzaubern.'
@@ -58,7 +58,7 @@ commands:
     invalid-level: '%level% ist kein erlaubtes Level. Level 1 wurde angenommen.'
     level-too-low: 'Das Level kann nicht 0 oder weniger sein. Level 1 wurde angenommen.'
     level-too-high: '%level% ist ein zu hohes Level. Level %maxLevel% wurde angenommen.'
-    add-enchant: 'Verzauberung angler Level 1 wurde zum Item gef gt.'
+    add-enchant: 'Verzauberung %enchant% Level %level% wurde zum Item zugefügt.'
     cannot-enchant-item: 'Verzauberungen wirken auf diesem Item nicht.'
     too-many-enchants: 'Das Item hat bereits zu viele Verzauberungen.'
     enchant-fail: 'Versuche es nochmal.'
@@ -100,7 +100,7 @@ enchantment:
         default_enchantments: 
             aqua_affinity: 'Erhöht die Unterwasserabbaugeschwindigkeit.'
             bane_of_arthropods: 'Erhöht den Schaden an "Arthropoden" -Mobs (Spinnen, Höhlenspinnen, Silberfischen und Endermiten).\nJedes Level fügt jedem Treffer separat 2,5 (halbes Herz) Schaden hinzu, nur für "Arthropoden".\nDie Verzauberung bewirkt auch, dass "Arthropoden" den Effekt von Slowness IV haben, wenn sie getroffen werden'
-            blast_protection: 'Reduziert Explosionsschäden.\nVerringert außerdem den Explosionsrückschlag um (15 × Level)%. Wenn mehrere Teile die Verzauberung besitzen, wird nur die Reduzierung der höchsten Stufe verwendet.'
+            blast_protection: 'Reduziert Explosionsschäden.\nVerringert außerdem den Explosionsrückschlag um (15 * Level)%. Wenn mehrere Teile die Verzauberung besitzen, wird nur die Reduzierung der höchsten Stufe verwendet.'
             channeling: 'Beschwört einen Blitz, wenn ein Mob von einem geworfenen Dreizack getroffen wird.'
             binding_curse: 'Verhindert das Entfernen des verfluchten Gegenstands.\nDer verfluchte Gegenstand kann nicht aus einem Rüstungsplatz (außerhalb des Kreativmodus) entfernt werden, es sei denn, der Spieler stirbt oder der Gegenstand zerbricht.'
             vanishing_curse: 'Bewirkt, dass der Gegenstand beim Tod verschwindet.\nWenn der Spieler stirbt, verschwindet der Gegenstand, anstatt auf den Boden zu fallen. Der Artikel kann noch normal abgeworfen werden.'
@@ -122,7 +122,7 @@ enchantment:
             mending: 'Haltbarkeit mit Erfahrung reparieren.'
             multishot: 'Schießen Sie mehrere Pfeile gleichzeitig.'
             piercing: 'Pfeile gehen durch und greifen mehrere Mobs an.'
-            power: 'Erhöht den Pfeilschaden um 25% × (Stufe + 1), aufgerundet auf das nächste Herz.'
+            power: 'Erhöht den Pfeilschaden um 25% * (Stufe + 1), aufgerundet auf das nächste Herz.'
             projectile_protection: 'Reduziert Projektilbeschädigungen (Pfeile, Feuerschläge usw.).'
             protection: 'Reduziert jeglichen Schaden, mit Ausnahme des Schadens durch die Leere, den Befehl / kill oder den Hunger-Schaden.'
             punch: 'Erhöht den Rückstoß an den Bögen.'
@@ -184,7 +184,7 @@ enchantment:
     weight: '&6Bedeutung: &f'
     start-level: '&6Start Level: &f'
     enchantable-items: '&6Bezaubernde Items: &f'
-    anvilable-items: '&6Amboss Fähige Items: &f'
+    anvilable-items: '&6Amboßfähige Items: &f'
     conflicting-enchantments: '&6Widersprüchliche Verzauberungen: &f'
     enabled: '&6Verzauberung aktiviert: &f'
     treasure: '&6Schatzzauber: &f'

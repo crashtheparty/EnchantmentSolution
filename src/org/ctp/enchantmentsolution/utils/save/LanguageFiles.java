@@ -61,12 +61,11 @@ public class LanguageFiles {
 		if(language == null) {
 			language = new YamlConfigBackup(languageFile, null);
 		}
+		language.getFromConfig();
 		if (main.getBoolean("reset_language")) {
 			main.set("reset_language", false);
 			main.saveConfig();
-			language = new YamlConfigBackup(languageFile, null);
-		} else {
-			language.getFromConfig();
+			language.resetInfo();
 		}
 		language.copyDefaults(getLanguageFile());
 

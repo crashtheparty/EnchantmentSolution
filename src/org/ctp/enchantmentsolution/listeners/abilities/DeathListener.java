@@ -52,6 +52,18 @@ public class DeathListener extends EnchantmentListener{
 		runMethod(this, "transmutation", event, EntityDeathEvent.class);
 	}
 	
+	@EventHandler(priority=EventPriority.HIGHEST)
+	public void onPlayerDeath(PlayerDeathEvent event){
+		runMethod(this, "sacrifice", event, PlayerDeathEvent.class);
+		runMethod(this, "soulbound", event, PlayerDeathEvent.class);
+	}
+	
+	@EventHandler
+	public void onPlayerRespawn(PlayerRespawnEvent event) {
+		runMethod(this, "sacrifice", event, PlayerRespawnEvent.class);
+		runMethod(this, "soulbound", event, PlayerRespawnEvent.class);
+	}
+	
 	private void beheading(EntityDeathEvent event) {
 		if(!canRun(DefaultEnchantments.BEHEADING, event)) return;
 		Entity entity = event.getEntity();
@@ -197,12 +209,6 @@ public class DeathListener extends EnchantmentListener{
 		}
 	}
 	
-	@EventHandler(priority=EventPriority.HIGHEST)
-	public void onPlayerDeath(PlayerDeathEvent event){
-		runMethod(this, "sacrifice", event, PlayerDeathEvent.class);
-		runMethod(this, "soulbound", event, PlayerDeathEvent.class);
-	}
-	
 	private void sacrifice(PlayerDeathEvent event) {
 		if(!canRun(DefaultEnchantments.SACRIFICE, event)) return;
 		Player player = event.getEntity();
@@ -276,12 +282,6 @@ public class DeathListener extends EnchantmentListener{
 			}
 			SOUL_ITEMS.put(player.getUniqueId().toString(), newItems);
 		}
-	}
-	
-	@EventHandler
-	public void onPlayerRespawn(PlayerRespawnEvent event) {
-		runMethod(this, "sacrifice", event, PlayerRespawnEvent.class);
-		runMethod(this, "soulbound", event, PlayerRespawnEvent.class);
 	}
 	
 	private void sacrifice(PlayerRespawnEvent event) {

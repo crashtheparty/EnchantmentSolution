@@ -44,6 +44,10 @@ public class YamlConfig {
 		return file;
 	}
 	
+	public void resetInfo() {
+		info = new LinkedHashMap<String, YamlInfo>();
+	}
+	
 	protected void setInfo(String key, YamlInfo info) {
 		this.info.put(key, info);
 	}
@@ -570,6 +574,7 @@ public class YamlConfig {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		getFromConfig();
 	}
 	
 	private String getLevel(YamlChild child) {

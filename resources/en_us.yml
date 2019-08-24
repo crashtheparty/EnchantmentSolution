@@ -103,7 +103,7 @@ enchantment:
         default_enchantments: 
             aqua_affinity: 'Increases underwater mining rate.'
             bane_of_arthropods: 'Increases damage to "arthropod" mobs (spiders, cave spiders, silverfish and endermites).\nEach level separately adds 2.5 (half heart) extra damage to each hit, to "arthropods" only.\nThe enchantment will also cause "arthropods" to have the Slowness IV effect when hit.'
-            blast_protection: 'Reduces explosion damage.\nAlso reduces explosion knockback by (15 � level)%. If multiple pieces have the enchantment, only the highest level''s reduction is used.'
+            blast_protection: 'Reduces explosion damage.\nAlso reduces explosion knockback by (15 * level)%. If multiple pieces have the enchantment, only the highest level''s reduction is used.'
             channeling: 'Summons a lightning bolt when a mob is hit by a thrown trident.'
             binding_curse: 'Prevents removal of the cursed item.\nThe cursed item cannot be removed from any armor slot (outside of Creative mode) unless the player dies or the item breaks.'
             vanishing_curse: 'Causes the item to disappear on death.\nWhen the player dies, the item disappears instead of dropping on the ground. The item may still be dropped normally.'
@@ -125,7 +125,7 @@ enchantment:
             mending: 'Repair durability with experience.'
             multishot: 'Shoot multiple arrows at once.'
             piercing: 'Arrows go through and attack multiple mobs.'
-            power: 'Increases arrow damage by 25% � (level + 1), rounded up to nearest half-heart.'
+            power: 'Increases arrow damage by 25% * (level + 1), rounded up to nearest half-heart.'
             projectile_protection: 'Reduces projectile damage (arrows, ghast/blaze fire charges, etc.).'
             protection: 'Reduces all damage, except damage from the Void, the /kill command, or hunger damage.'
             punch: 'Increases knockback on bows.'

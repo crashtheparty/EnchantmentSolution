@@ -12,11 +12,11 @@ import org.ctp.enchantmentsolution.utils.items.ItemType;
 public class Power extends CustomEnchantment{
 	
 	public Power() {
-		super("Power", -10, -9, 11, 10, 1, 1, 6, 5, Weight.COMMON, "Increases arrow damage by 25% × (level + 1), rounded up to nearest half-heart.");
+		super("Power", -10, -9, 11, 10, 1, 1, 6, 5, Weight.COMMON, "Increases arrow damage by 25% * (level + 1), rounded up to nearest half-heart.");
 		addDefaultDisplayName(Language.GERMAN, "Stärke");
-		addDefaultDescription(Language.GERMAN, "Erhöht den Pfeilschaden um 25% × (Stufe + 1), aufgerundet auf das nächste Herz.");
+		addDefaultDescription(Language.GERMAN, "Erhöht den Pfeilschaden um 25% * (Stufe + 1), aufgerundet auf das nächste Herz.");
 		addDefaultDisplayName(Language.CHINA_SIMPLE, "力量");
-		addDefaultDescription(Language.CHINA_SIMPLE, "增加弓箭伤害： 25% × (附魔等级 + 1).");
+		addDefaultDescription(Language.CHINA_SIMPLE, "增加弓箭伤害： 25% * (附魔等级 + 1).");
 	}
 	
 	@Override

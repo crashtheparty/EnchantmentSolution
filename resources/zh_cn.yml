@@ -103,7 +103,7 @@ enchantment:
         default_enchantments: 
             aqua_affinity: '增加水下挖掘速度.'
             bane_of_arthropods: '增加对节肢生物的伤害(蜘蛛、洞穴蜘蛛、蠹虫和末影螨).\n每一级增加2.5点伤害.\n该附魔同时会给予节肢生物 缓慢IV 的效果.'
-            blast_protection: '减少受到的爆炸伤害.\n同时减少爆炸击退 (15 × 等级)%. 如果多件装备拥有该附魔, 则只有最高级的附魔生效.'
+            blast_protection: '减少受到的爆炸伤害.\n同时减少爆炸击退 (15 * 等级)%. 如果多件装备拥有该附魔, 则只有最高级的附魔生效.'
             channeling: '扔出三叉戟击中目标时召唤闪电.'
             binding_curse: '无法从身上取下装备.\n除非玩家死亡或装备损坏.'
             vanishing_curse: '使物品在玩家死亡时消失.'
@@ -125,7 +125,7 @@ enchantment:
             mending: '使用经验修复物品.'
             multishot: '一次射出多枝箭.'
             piercing: '弓箭可造成穿透伤害.'
-            power: '增加弓箭伤害： 25% × (附魔等级 + 1).'
+            power: '增加弓箭伤害： 25% * (附魔等级 + 1).'
             projectile_protection: '减少受到的弹射物伤害 (弓箭、火球等).'
             protection: '减少受到的所有伤害, 除了虚空伤害、/kill 自杀和饥饿伤害.'
             punch: '增加弓箭击退距离.'
