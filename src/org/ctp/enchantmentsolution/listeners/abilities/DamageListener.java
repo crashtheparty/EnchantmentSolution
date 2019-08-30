@@ -20,7 +20,7 @@ import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
-import org.ctp.enchantmentsolution.events.PlayerWarpEvent;
+import org.ctp.enchantmentsolution.events.WarpEvent;
 import org.ctp.enchantmentsolution.listeners.abilities.helpers.DrownedEntity;
 import org.ctp.enchantmentsolution.listeners.abilities.helpers.EntityAccuracy;
 import org.ctp.enchantmentsolution.nms.AnimalMobNMS;
@@ -212,7 +212,7 @@ public class DamageListener extends EnchantmentListener{
 				event.setDamage(originalDamage - damage);
 				int shieldDamage = (int) damage;
 				if(shieldDamage < damage) shieldDamage += 1;
-				super.damageItem(player, shield, shieldDamage);
+				AbilityUtils.damageItem(player, shield, shieldDamage);
 				if(player instanceof Player) {
 					if((int) (damage * 10) > 0 && EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber() > 1) {
 						((Player) player).incrementStatistic(Statistic.DAMAGE_BLOCKED_BY_SHIELD, (int) (damage * 10));
@@ -415,7 +415,7 @@ public class DamageListener extends EnchantmentListener{
 					int randomLoc = (int) (Math.random() * locsToTp.size());
 					Location toTeleport = locsToTp.get(randomLoc);
 					if(player instanceof Player) {
-						PlayerWarpEvent e = new PlayerWarpEvent((Player) player, player.getLocation(), toTeleport);
+						WarpEvent e = new WarpEvent((Player) player, player.getLocation(), toTeleport);
 						Bukkit.getPluginManager().callEvent(e);
 						if(e.isCancelled()) return;
 					}

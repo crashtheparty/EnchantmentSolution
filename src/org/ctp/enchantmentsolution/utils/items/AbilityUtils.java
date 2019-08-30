@@ -2,25 +2,39 @@ package org.ctp.enchantmentsolution.utils.items;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
+import org.bukkit.Statistic;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.Ageable;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.ExperienceOrb;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
+import org.ctp.enchantmentsolution.events.LagParticle;
+import org.ctp.enchantmentsolution.events.SmelteryEvent;
+import org.ctp.enchantmentsolution.events.TelepathyBreakEvent;
+import org.ctp.enchantmentsolution.events.TelepathyDropEvent;
+import org.ctp.enchantmentsolution.events.ExpShareEvent;
+import org.ctp.enchantmentsolution.events.LagEvent;
+import org.ctp.enchantmentsolution.nms.McMMO;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
+import org.ctp.enchantmentsolution.utils.LocationUtils;
 
 public class AbilityUtils {
 
@@ -28,6 +42,77 @@ public class AbilityUtils {
 	private static List<Block> HEIGHT_WIDTH_BLOCKS = new ArrayList<Block>();
 	private static List<Material> CROPS = Arrays.asList(Material.WHEAT, Material.CARROTS, Material.POTATOES, Material.NETHER_WART, 
 			Material.BEETROOTS, Material.COCOA_BEANS);
+
+	public static void breakBlockTelepathy(BlockBreakEvent event, Player player, ItemStack tool, 
+			Block block, Collection<ItemStack> originalDrops) {
+		breakBlockTelepathy(event, player, tool, block, originalDrops, new ArrayList<ItemStack>());
+	}
+	
+	public static void breakBlockTelepathy(BlockBreakEvent event, Player player, ItemStack tool, 
+			Block block, Collection<ItemStack> originalDrops, Collection<ItemStack> extraDrops) {
+		if(Enchantments.hasEnchantment(tool, DefaultEnchantments.SMELTERY)) {
+			switch(event.getBlock().getType()) {
+				case IRON_ORE:
+				case GOLD_ORE:
+					event.setExpToDrop((int) (Math.random() * 3) + 1 + event.getExpToDrop());
+					break;
+				default:
+					break;
+			}
+		}
+		int newExp = event.getExpToDrop();
+		if(Enchantments.hasEnchantment(tool, DefaultEnchantments.EXP_SHARE)) {
+			newExp = setExp(event.getExpToDrop(), Enchantments.getLevel(tool, DefaultEnchantments.EXP_SHARE));
+			ExpShareEvent expShare = new ExpShareEvent(player, event.getExpToDrop(), newExp);
+			Bukkit.getPluginManager().callEvent(expShare);
+			if(!expShare.isCancelled()) {
+				newExp = expShare.getNewExp();
+			}
+		}
+		
+		TelepathyBreakEvent telepathy = new TelepathyBreakEvent(player, tool, block);
+		Bukkit.getPluginManager().callEvent(telepathy);
+		
+		if(!telepathy.isCancelled()) {
+			Collection<ItemStack> finalDrops = new ArrayList<ItemStack>();
+			if (telepathy.applyFortune()) {
+				finalDrops.addAll(Fortune.getFortuneItems(player, tool, block, originalDrops, telepathy.applySmeltery()));
+			} else if (telepathy.applySilkTouch()
+					&& SilkTouch.getSilkTouchItem(block, tool) != null) {
+				finalDrops.add(SilkTouch.getSilkTouchItem(block, tool));
+			} else {
+				if (telepathy.applySmeltery()) {
+					ItemStack smelted = Smeltery.getSmelteryItem(block, tool);
+					if (smelted != null) {
+						SmelteryEvent smeltery = new SmelteryEvent(player, tool, block, smelted, true);
+						Bukkit.getPluginManager().callEvent(smeltery);
+						if(!event.isCancelled()) {
+							finalDrops.add(smeltery.getDrop());
+						}
+					}
+				}
+				if(finalDrops.size() == 0) {
+					finalDrops.addAll(originalDrops);
+				}
+			}
+			finalDrops.addAll(extraDrops);
+			
+			TelepathyDropEvent telepathyDrop = new TelepathyDropEvent(player, finalDrops, newExp, LocationUtils.offset(player.getLocation()));
+			Bukkit.getPluginManager().callEvent(telepathyDrop);
+			
+			if(!telepathyDrop.willDrop()) {
+				ItemUtils.giveItemsToPlayer(player, telepathyDrop.getDrops(), telepathyDrop.getDropLocation(), true, telepathyDrop.willDropNaturally());
+				
+				AbilityUtils.giveExperience(player, event.getExpToDrop());
+				player.incrementStatistic(Statistic.MINE_BLOCK, block.getType());
+				player.incrementStatistic(Statistic.USE_ITEM, tool.getType());
+				McMMO.handleMcMMO(event, tool);
+				damageItem(player, tool);
+				block.setType(Material.AIR);
+				event.setCancelled(true);
+			}
+		}
+	}
 	
 	public static ItemStack getGoldDiggerItems(ItemStack item,
 			Block brokenBlock) {
@@ -117,13 +202,24 @@ public class AbilityUtils {
 	
 	public static void createEffects(Player player) {
 		int random = (int) ((Math.random() * 5) + 2);
-		int numParticles = (int) ((Math.random() * 400) + 11);
+		
+		List<LagParticle> particles = new ArrayList<LagParticle>();
 		
 		for(int i = 0; i < random; i++) {
 			Particle particle = generateParticle();
-			player.getWorld().spawnParticle(particle, player.getLocation(), numParticles, 0.5, 2, 0.5);
+			int numParticles = (int) ((Math.random() * 400) + 11);
+			particles.add(new LagParticle(particle, numParticles));
 		}
-		player.getWorld().playSound(player.getLocation(), Sound.ENTITY_ELDER_GUARDIAN_CURSE, 1, 1);
+		LagEvent event = new LagEvent(player, particles, player.getLocation(), Sound.ENTITY_ELDER_GUARDIAN_CURSE);
+		Bukkit.getPluginManager().callEvent(event);
+		
+		if(event.isCancelled()) return;
+		
+		for(LagParticle particle : event.getParticles()) {
+			player.getWorld().spawnParticle(particle.getParticle(), event.getLocation(), particle.getNumParticles(), 0.5, 2, 0.5);
+		}
+
+		player.getWorld().playSound(event.getLocation(), event.getSound(), 1, 1);
 		AdvancementUtils.awardCriteria(player, ESAdvancement.LAAAGGGGGG, "lag");
 	}
 	
@@ -162,6 +258,43 @@ public class AbilityUtils {
 			exhaustionCurse += Enchantments.getLevel(offHand, DefaultEnchantments.CURSE_OF_EXHAUSTION);
 		}
 		return exhaustionCurse;
+	}
+	
+	public static ItemStack damageItem(HumanEntity player, ItemStack item) {
+		return damageItem(player, item, 1.0D, 1.0D);
+	}
+	
+	public static ItemStack damageItem(HumanEntity player, ItemStack item, double damage) {
+		return damageItem(player, item, damage, 1.0D);
+	}
+	
+	public static ItemStack damageItem(HumanEntity player, ItemStack item, double damage, double extraChance) {
+		if (player.getGameMode().equals(GameMode.CREATIVE) || player.getGameMode().equals(GameMode.SPECTATOR))
+			return null;
+		int numBreaks = 0;
+		int unbreaking = Enchantments.getLevel(item, Enchantment.DURABILITY);
+		for(int i = 0; i < damage; i++) {
+			double chance = (1.0D) / (unbreaking + extraChance);
+			double random = Math.random();
+			if(chance > random) {
+				numBreaks ++;
+			}
+		};
+		if (item.getItemMeta().isUnbreakable()) numBreaks = 0;
+		if (numBreaks > 0) {
+			DamageUtils.setDamage(item, DamageUtils.getDamage(item.getItemMeta()) + numBreaks);
+			if (DamageUtils.getDamage(item.getItemMeta()) > item.getType().getMaxDurability()) {
+				ItemStack deadItem = item.clone();
+				player.getInventory().setItemInMainHand(new ItemStack(Material.AIR));
+				player.getWorld().playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 1, 1);
+				if(player instanceof Player) {
+					Player p = (Player) player;
+					p.incrementStatistic(Statistic.BREAK_ITEM, item.getType());
+				}
+				return deadItem;
+			}
+		}
+		return item;
 	}
 	
 	public static float getExhaustion(Player player) {

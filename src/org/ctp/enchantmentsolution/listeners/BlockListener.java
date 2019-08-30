@@ -78,7 +78,7 @@ public class BlockListener implements Listener{
 									fallback,
 									drop);
 							droppedItem.setVelocity(new Vector(0,0,0));
-							droppedItem.teleport(fallback);
+							droppedItem.teleport(fallback);f
 							i.remove();
 						}
 					}

@@ -227,4 +227,8 @@ public class ConfigUtils {
 	public static String getLanguageString(String s) {
 		return EnchantmentSolution.getPlugin().getConfigFiles().getLanguageFile().getString(s);
 	}
+
+	public static boolean dropNaturally() {
+		return EnchantmentSolution.getPlugin().getConfigFiles().getDefaultConfig().getBoolean("drop_naturally");
+	}
 }

@@ -92,14 +92,14 @@ public class GrindstoneListener implements Listener{
 		if(second != null) {
 			combinedItem = GrindstoneUtils.combineItems(player, first, second);
 		}
+		Location loc = LocationUtils.offset(inv.getLocation());
 		switch(click) {
 		case LEFT:
 		case RIGHT:
 		case SHIFT_RIGHT:
 			player.setItemOnCursor(combinedItem);
 			inv.setContents(new ItemStack[3]);
-			AbilityUtils.dropExperience(inv.getLocation().clone().add(new Location(inv.getLocation().getWorld(), 0.5, 0.5, 0.5)), 
-					GrindstoneUtils.getExperience(first, second));
+			AbilityUtils.dropExperience(loc, GrindstoneUtils.getExperience(first, second));
 			break;
 		case SHIFT_LEFT:
 			HashMap<Integer, ItemStack> items = player.getInventory().addItem(combinedItem);
@@ -107,8 +107,7 @@ public class GrindstoneListener implements Listener{
 				return;
 			}
 			inv.setContents(new ItemStack[3]);
-			AbilityUtils.dropExperience(inv.getLocation().clone().add(new Location(inv.getLocation().getWorld(), 0.5, 0.5, 0.5)), 
-					GrindstoneUtils.getExperience(first, second));
+			AbilityUtils.dropExperience(loc, GrindstoneUtils.getExperience(first, second));
 			break;
 		default:
 			break;

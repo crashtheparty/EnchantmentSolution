@@ -104,4 +104,8 @@ public class LocationUtils {
 		return loc.getBlockX() + " @ " + loc.getBlockY() + " @ " + loc.getBlockZ() + " @ " + loc.getWorld().getName();
 	}
 
+	public static Location offset(Location location) {
+		return location.clone().add(0.5, 0.5, 0.5);
+	}
+
 }

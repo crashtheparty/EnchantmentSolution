@@ -6,13 +6,16 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.Ageable;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
+import org.ctp.enchantmentsolution.events.SmelteryEvent;
 import org.ctp.enchantmentsolution.utils.items.ItemBreakType;
 import org.ctp.enchantmentsolution.utils.items.helpers.FortuneLeaves;
 import org.ctp.enchantmentsolution.utils.items.helpers.FortuneMaterial;
@@ -33,8 +36,8 @@ public class Fortune {
 	
 	private static List<String> LEAVES = Arrays.asList("ACACIA_LEAVES", "BIRCH_LEAVES", "DARK_OAK_LEAVES", "JUNGLE_LEAVES", "OAK_LEAVES", "SPRUCE_LEAVES");
 
-	public static Collection<ItemStack> getFortuneItems(ItemStack item,
-			Block brokenBlock, Collection<ItemStack> priorItems) {
+	public static Collection<ItemStack> getFortuneItems(Player player, ItemStack item,
+			Block brokenBlock, Collection<ItemStack> priorItems, boolean applySmeltery) {
 		boolean ironGold = false;
 		int level = Enchantments.getLevel(item,
 				Enchantment.LOOT_BONUS_BLOCKS);
@@ -44,34 +47,27 @@ public class Fortune {
 		while(iter.hasNext()) {
 			duplicate.add(iter.next());
 		}
-		if ((brokenBlock.getType().equals(Material.IRON_ORE) || brokenBlock
-				.getType().equals(Material.GOLD_ORE))
-				&& item.containsEnchantment(DefaultEnchantments.SMELTERY)) {
-			if(DefaultEnchantments.isEnabled(DefaultEnchantments.SMELTERY)) {
-				priorItems.clear();
-				ItemBreakType type = ItemBreakType.getType(item.getType());
-				if(type.getBreakTypes().contains(brokenBlock.getType())) {
-					priorItems.add(new ItemStack(Smeltery.getSmelteryItem(brokenBlock, item)));
-					ironGold = true;
-				}
-				iter = priorItems.iterator();
-				duplicate = new ArrayList<ItemStack>();
-				while(iter.hasNext()) {
-					duplicate.add(iter.next());
-				}
-			}
-			
-		} else if (!(FORTUNE_ITEMS.contains(brokenBlock.getType().name()))) {
-			if(Enchantments.hasEnchantment(item, DefaultEnchantments.SMELTERY)) {
-				if(DefaultEnchantments.isEnabled(DefaultEnchantments.SMELTERY)) {
-					ItemStack smelted = Smeltery.getSmelteryItem(brokenBlock, item);
-					if(smelted != null) {
+		
+		if (applySmeltery && !(FORTUNE_ITEMS.contains(brokenBlock.getType().name()))) {
+			boolean returnAfterApplying = true;
+			if(Enchantments.hasEnchantment(item, DefaultEnchantments.SMELTERY) && DefaultEnchantments.isEnabled(DefaultEnchantments.SMELTERY)) {
+				ItemStack smelted = Smeltery.getSmelteryItem(brokenBlock, item);
+				if(smelted != null) {
+					SmelteryEvent event = new SmelteryEvent(player, item, brokenBlock, smelted, true);
+					Bukkit.getPluginManager().callEvent(event);
+					if(!event.isCancelled()) {
 						priorItems.clear();
-						priorItems.add(smelted);
+						priorItems.add(event.getDrop());
+						if(event.getBlock().getType() == Material.IRON_ORE || event.getBlock().getType() == Material.GOLD_ORE) {
+							ironGold = true;
+							returnAfterApplying = false;
+						}
 					}
 				}
 			}
-			return priorItems;
+			if(returnAfterApplying) {
+				return priorItems;
+			}
 		}
 
 		if (SIMPLE_MULTIPLY.contains(brokenBlock.getType().name()) || ironGold) {

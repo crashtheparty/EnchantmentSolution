@@ -13,7 +13,7 @@ import org.ctp.enchantmentsolution.utils.items.ItemType;
 public class BlastProtection extends CustomEnchantment{
 	
 	public BlastProtection() {
-		super("Blast Protection", -8, -3, 14, 8, 1, 1, 4, 4, Weight.RARE, "Reduces explosion damage.\n" + 
+		super("Blast Protection", -8, -3, 14, 8, 1, 1, 4, 4, Weight.UNCOMMON, "Reduces explosion damage.\n" + 
 				"Also reduces explosion knockback by (15 * level)%. If multiple pieces have the enchantment, only the highest level's reduction is used.");
 		addDefaultDisplayName(Language.GERMAN, "Explosionsshutz");
 		addDefaultDescription(Language.GERMAN, "Reduziert Explosionsschäden.\nVerringert außerdem den Explosionsrückschlag um (15 * Level)%." + 

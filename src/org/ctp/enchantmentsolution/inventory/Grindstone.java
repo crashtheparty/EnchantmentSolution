@@ -226,7 +226,7 @@ public class Grindstone implements InventoryData{
 					one = playerItems.get(0);
 				}
 				ItemUtils.giveItemToPlayer(player, combinedItem, player.getLocation(), false);
-				AbilityUtils.dropExperience(block.getLocation().clone().add(new Location(block.getLocation().getWorld(), 0.5, 0.5, 0.5)), 
+				AbilityUtils.dropExperience(LocationUtils.offset(block.getLocation()), 
 						GrindstoneUtils.getExperience(one, two));
 				combinedItem = null;
 				playerItems.clear();

@@ -36,6 +36,7 @@ public class McMMOOverhaulHandler {
 			if(state.getMetadata(mcMMO.BONUS_DROPS_METAKEY).size() > 0) {
 				for(MetadataValue value : state.getMetadata(mcMMO.BONUS_DROPS_METAKEY)) {
 					int num = value.asInt();
+					// TODO: add a TelepathyBonusDrops event
 					while(num > 0) {
 						giveItems(event.getPlayer(), item, block, drops);
 						num--;
@@ -46,6 +47,7 @@ public class McMMOOverhaulHandler {
 		} else if(Enchantments.hasEnchantment(item, DefaultEnchantments.SMELTERY)) {
 			ItemStack smelted = Smeltery.getSmelteryItem(block, item);
 			ItemStack drop = item.clone();
+			// TODO: add a SmelteryBonusDrops event
 			if(smelted != null) {
 				drop = smelted.clone();
 			}

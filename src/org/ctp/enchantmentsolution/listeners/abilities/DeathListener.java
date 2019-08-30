@@ -98,7 +98,7 @@ public class DeathListener extends EnchantmentListener{
 						skullMeta.setDisplayName(ChatColor.DARK_RED + ((Player) entity).getName() + "'s Skull");
 						skull.setItemMeta(skullMeta);
 						if(((PlayerDeathEvent) event).getKeepInventory() == true) {
-							ItemUtils.dropItem(skull, entity.getLocation());
+							ItemUtils.dropItem(skull, entity.getLocation(), true);
 						} else {
 							event.getDrops().add(skull);
 						}

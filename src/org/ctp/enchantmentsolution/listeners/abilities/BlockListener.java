@@ -1,8 +1,10 @@
 package org.ctp.enchantmentsolution.listeners.abilities;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -30,6 +32,8 @@ import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
+import org.ctp.enchantmentsolution.events.ExpShareEvent;
+import org.ctp.enchantmentsolution.events.GoldDiggerEvent;
 import org.ctp.enchantmentsolution.listeners.abilities.helpers.GoldDiggerCrop;
 import org.ctp.enchantmentsolution.listeners.abilities.support.VeinMinerListener;
 import org.ctp.enchantmentsolution.nms.McMMO;
@@ -50,8 +54,8 @@ public class BlockListener extends EnchantmentListener{
 		runMethod(this, "heightWidth", event, BlockBreakEvent.class);
 		runMethod(this, "curseOfLag", event, BlockBreakEvent.class);
 		runMethod(this, "goldDigger", event, BlockBreakEvent.class);
-		runMethod(this, "smeltery", event, BlockBreakEvent.class);
 		runMethod(this, "telepathy", event, BlockBreakEvent.class);
+		runMethod(this, "smeltery", event, BlockBreakEvent.class);
 	}
 	
 	@EventHandler(priority=EventPriority.HIGHEST)
@@ -77,7 +81,13 @@ public class BlockListener extends EnchantmentListener{
 		if(killItem != null && Enchantments.hasEnchantment(killItem, DefaultEnchantments.EXP_SHARE)){
 			int exp = event.getExpToDrop();
 			int level = Enchantments.getLevel(killItem, DefaultEnchantments.EXP_SHARE);
-			event.setExpToDrop(AbilityUtils.setExp(exp, level));
+			int newExp = AbilityUtils.setExp(exp, level);
+			
+			ExpShareEvent e = new ExpShareEvent(player, exp, newExp);
+			Bukkit.getPluginManager().callEvent(e);
+			if(e.isCancelled()) return;
+			
+			event.setExpToDrop(e.getNewExp());
 		}
 	}
 	
@@ -90,18 +100,20 @@ public class BlockListener extends EnchantmentListener{
 			if (!Enchantments
 					.hasEnchantment(item, DefaultEnchantments.TELEPATHY)) {
 				if(Enchantments.hasEnchantment(item, DefaultEnchantments.GOLD_DIGGER)) {
-					Location loc = event.getBlock().getLocation().clone().add(0.5, 0.5, 0.5);
+					Location loc = LocationUtils.offset(event.getBlock().getLocation());
 					ItemStack goldDigger = AbilityUtils.getGoldDiggerItems(item, event.getBlock());
 					if(goldDigger != null) {
-						AbilityUtils.dropExperience(loc, 
-								GoldDiggerCrop.getExp(event.getBlock().getType(), Enchantments.getLevel(item, DefaultEnchantments.GOLD_DIGGER)));
-						Item droppedItem = player.getWorld().dropItem(
-								loc,
-								goldDigger);
-						droppedItem.setVelocity(new Vector(0,0,0));
+						int exp = GoldDiggerCrop.getExp(event.getBlock().getType(), Enchantments.getLevel(item, DefaultEnchantments.GOLD_DIGGER));
+						List<ItemStack> drops = new ArrayList<ItemStack>();
+						drops.add(goldDigger);
+						GoldDiggerEvent e = new GoldDiggerEvent(player, exp, drops, loc);
+						Bukkit.getPluginManager().callEvent(e);
+						if(e.isCancelled()) return;
+						AbilityUtils.dropExperience(e.getLocation(), e.getExp());
+						ItemUtils.dropItems(drops, e.getLocation(), e.willDropNaturally());
 						AdvancementUtils.awardCriteria(player, ESAdvancement.FOURTY_NINERS, "goldblock", goldDigger.getAmount());
 						player.incrementStatistic(Statistic.USE_ITEM, item.getType());
-						super.damageItem(player, item);
+						AbilityUtils.damageItem(player, item);
 					}
 				}
 			}
@@ -121,25 +133,20 @@ public class BlockListener extends EnchantmentListener{
 					if(smelted.getAmount() > 1 && smelted.getType() == Material.IRON_INGOT) {
 						AdvancementUtils.awardCriteria(player, ESAdvancement.IRONT_YOU_GLAD, "iron"); 
 					}
-					if(!DefaultEnchantments.isEnabled(DefaultEnchantments.TELEPATHY) || !Enchantments.hasEnchantment(item, DefaultEnchantments.TELEPATHY)) {
-						switch(event.getBlock().getType()) {
-						case IRON_ORE:
-						case GOLD_ORE:
-							AbilityUtils.dropExperience(blockBroken.getLocation().add(0.5, 0.5, 0.5), (int) (Math.random() * 3) + 1);
-							break;
-						default:
-							break;
-						}
-						player.incrementStatistic(Statistic.MINE_BLOCK, event.getBlock().getType());
-						player.incrementStatistic(Statistic.USE_ITEM, item.getType());
-						McMMO.handleMcMMO(event, item);
-						super.damageItem(player, item);
-						event.getBlock().setType(Material.AIR);
-						Item droppedItem = player.getWorld().dropItem(
-								blockBroken.getLocation().add(0.5, 0.5, 0.5),
-								smelted);
-						droppedItem.setVelocity(new Vector(0,0,0));
+					switch(event.getBlock().getType()) {
+					case IRON_ORE:
+					case GOLD_ORE:
+						AbilityUtils.dropExperience(LocationUtils.offset(blockBroken.getLocation()), (int) (Math.random() * 3) + 1);
+						break;
+					default:
+						break;
 					}
+					player.incrementStatistic(Statistic.MINE_BLOCK, event.getBlock().getType());
+					player.incrementStatistic(Statistic.USE_ITEM, item.getType());
+					McMMO.handleMcMMO(event, item);
+					AbilityUtils.damageItem(player, item);
+					event.getBlock().setType(Material.AIR);
+					ItemUtils.dropItem(smelted, LocationUtils.offset(blockBroken.getLocation()), true);
 				}
 			}
 		}
@@ -158,6 +165,7 @@ public class BlockListener extends EnchantmentListener{
 					AdvancementUtils.awardCriteria(player, ESAdvancement.NO_PANIC, "lava");
 				}
 				Collection<ItemStack> drops = block.getDrops(item);
+				Collection<ItemStack> newDrops = new ArrayList<ItemStack>();
 				if (ItemUtils.getShulkerBoxes().contains(block.getType())) {
 					Iterator<ItemStack> i = drops.iterator();
 					while(i.hasNext()) {
@@ -176,21 +184,21 @@ public class BlockListener extends EnchantmentListener{
 								drop = Enchantments.addEnchantmentsToItem(drop, Arrays.asList(
 										new EnchantmentLevel(DefaultEnchantments.getCustomEnchantment(DefaultEnchantments.SOULBOUND), 1)));
 							}
-							ItemUtils.giveItemToPlayer(player, drop, player.getLocation(), true);
-							i.remove();
-							AdvancementUtils.awardCriteria(player, ESAdvancement.HEY_IT_WORKS, "shulker_box");
+							newDrops.add(drop);
+						} else {
+							newDrops.add(drop);
 						}
 					}
-					giveItems(player, item, block, drops);
-					damageItem(event);
+					AbilityUtils.breakBlockTelepathy(event, player, item, block, drops);
 					return;
 				} else if (block.getState() instanceof Container) {
 					Iterator<ItemStack> i = drops.iterator();
 					while(i.hasNext()) {
 						ItemStack drop = i.next();
-						ItemUtils.giveItemToPlayer(player, drop, player.getLocation(), true);
+						newDrops.add(drop);
 					}
 					Container container = (Container) block.getState();
+					Inventory clearInv = null;
 					if(container.getInventory().getHolder() instanceof DoubleChest) {
 						DoubleChest doubleChest = (DoubleChest) container.getInventory().getHolder();
 						if (doubleChest.getLeftSide().getInventory().getLocation().equals(container.getLocation())) {
@@ -198,45 +206,50 @@ public class BlockListener extends EnchantmentListener{
 							for(int j = 0; j < 27; j++) {
 								ItemStack drop = inv.getItem(j);
 								if(drop != null) {
-									ItemUtils.giveItemToPlayer(player, drop, player.getLocation(), true);
+									newDrops.add(drop);
 								}
-								inv.setItem(j, new ItemStack(Material.AIR));
 							}
+							clearInv = inv;
 						} else {
 							Inventory inv = doubleChest.getRightSide().getInventory();
 							for(int j = 27; j < 54; j++) {
 								ItemStack drop = inv.getItem(j);
 								if(drop != null) {
-									ItemUtils.giveItemToPlayer(player, drop, player.getLocation(), true);
+									newDrops.add(drop);
 								}
-								inv.setItem(j, new ItemStack(Material.AIR));
 							}
+							clearInv = inv;
 						}
 					} else {
-						for(ItemStack drop : container.getInventory().getContents()) {
-							if(drop != null) {
-								ItemUtils.giveItemToPlayer(player, drop, player.getLocation(), true);
-							}
-						}
-						container.getInventory().clear();
+						newDrops.addAll(Arrays.asList(container.getInventory().getContents()));
+						clearInv = container.getInventory();
 					}
-					damageItem(event);
+					
+					AbilityUtils.breakBlockTelepathy(event, player, item, block, newDrops);
+					
+					if(!event.isCancelled()) {
+						clearInv.clear();
+					}
 					return;
 				}
 				if(block.getType().equals(Material.SNOW) && ItemBreakType.getType(item.getType()).getBreakTypes().contains(Material.SNOW)) {
 					int num = ((Snow) block.getBlockData()).getLayers();
 					drops.add(new ItemStack(Material.SNOWBALL, num));
 				}
-				giveItems(player, item, block, drops);
+				int exp = 0;
+				Collection<ItemStack> extraDrops = new ArrayList<ItemStack>();
 				if (Enchantments.hasEnchantment(item, DefaultEnchantments.GOLD_DIGGER)) {
 					ItemStack goldDigger = AbilityUtils.getGoldDiggerItems(item, block);
 					if (goldDigger != null) {
-						player.giveExp(GoldDiggerCrop.getExp(block.getType(),
-								Enchantments.getLevel(item, DefaultEnchantments.GOLD_DIGGER)));
-						ItemUtils.giveItemToPlayer(player, goldDigger, player.getLocation(), true);
+						GoldDiggerEvent e = new GoldDiggerEvent(player, exp, drops, LocationUtils.offset(player.getLocation()));
+						Bukkit.getPluginManager().callEvent(e);
+						if(!e.isCancelled()) {
+							event.setExpToDrop(event.getExpToDrop() + e.getExp());
+							extraDrops.addAll(e.getDrops());
+						}
 					}
 				}
-				damageItem(event);
+				AbilityUtils.breakBlockTelepathy(event, player, item, block, drops, extraDrops);
 			}
 		}
 	}
@@ -358,6 +371,7 @@ public class BlockListener extends EnchantmentListener{
 										Bukkit.getServer().getPluginManager().callEvent(newEvent);
 										if(item != null && newEvent.getBlock().getType() != Material.AIR && !newEvent.isCancelled()) {
 											AdvancementUtils.awardCriteria(player, ESAdvancement.FAST_AND_FURIOUS, "diamond_pickaxe"); 
+											// TODO: modify this to use the ItemUtils.dropItems() method
 											if(newEvent.getBlock().getType().equals(Material.SNOW) && ItemBreakType.getType(item.getType()).getBreakTypes().contains(Material.SNOW)) {
 												int num = ((Snow) newEvent.getBlock().getBlockData()).getLayers();
 												Item droppedItem = player.getWorld().dropItem(
@@ -369,8 +383,8 @@ public class BlockListener extends EnchantmentListener{
 											player.incrementStatistic(Statistic.MINE_BLOCK, event.getBlock().getType());
 											player.incrementStatistic(Statistic.USE_ITEM, item.getType());
 											newEvent.getBlock().breakNaturally(item);
-											AbilityUtils.dropExperience(newEvent.getBlock().getLocation().add(0.5, 0.5, 0.5), newEvent.getExpToDrop());
-											super.damageItem(player, item);
+											AbilityUtils.dropExperience(LocationUtils.offset(newEvent.getBlock().getLocation()), newEvent.getExpToDrop());
+											AbilityUtils.damageItem(player, item);
 										} else {
 											AbilityUtils.removeHeightWidthBlock(event.getBlock());
 										}
@@ -502,7 +516,7 @@ public class BlockListener extends EnchantmentListener{
 				if(!removed) {
 					ItemStack removedItem = item.clone();
 					removedItem.setAmount(1);
-					ItemUtils.giveItemToPlayer(player, removedItem, player.getLocation(), false);
+					ItemUtils.giveItemToPlayer(player, removedItem, player.getLocation(), false, true);
 				}
 				damageItem(event);
 			}
@@ -549,59 +563,30 @@ public class BlockListener extends EnchantmentListener{
 		if (player.getGameMode().equals(GameMode.CREATIVE) || player.getGameMode().equals(GameMode.SPECTATOR))
 			return;
 		ItemStack item = player.getInventory().getItemInMainHand();
-		ItemStack deadItem = super.damageItem(player, item, 1, 2);
+		ItemStack deadItem = AbilityUtils.damageItem(player, item, 1, 2);
 		if(DamageUtils.getDamage(deadItem.getItemMeta()) > deadItem.getType().getMaxDurability()) {
 			AdvancementUtils.awardCriteria(player, ESAdvancement.DID_YOU_REALLY_WAND_TO_DO_THAT, "break");
 		}
 	}
 	
-	private void damageItem(BlockBreakEvent event) {
-		Player player = event.getPlayer();
-		ItemStack item = player.getInventory().getItemInMainHand();
-		if(Enchantments.hasEnchantment(item, DefaultEnchantments.SMELTERY)) {
-			switch(event.getBlock().getType()) {
-			case IRON_ORE:
-			case GOLD_ORE:
-				event.setExpToDrop((int) (Math.random() * 3) + 1);
-				break;
-			default:
-				break;
-			}
-		}
-		AbilityUtils.giveExperience(player, event.getExpToDrop());
-		player.incrementStatistic(Statistic.MINE_BLOCK, event.getBlock().getType());
-		player.incrementStatistic(Statistic.USE_ITEM, item.getType());
-		super.damageItem(player, item);
-		McMMO.handleMcMMO(event, item);
-		event.getBlock().setType(Material.AIR);
-	}
-	
-	private void giveItems(Player player, ItemStack item, Block block, Collection<ItemStack> drops) {
-		if (Enchantments.hasEnchantment(item, Enchantment.LOOT_BONUS_BLOCKS)) {
-			Collection<ItemStack> fortuneItems = Fortune.getFortuneItems(item, block,
-					drops);
-			for(ItemStack drop: fortuneItems) {
-				ItemUtils.giveItemToPlayer(player, drop, player.getLocation(), true);
-			}
-		} else if (Enchantments.hasEnchantment(item, Enchantment.SILK_TOUCH)
-				&& SilkTouch.getSilkTouchItem(block, item) != null) {
-			ItemUtils.giveItemToPlayer(player, SilkTouch.getSilkTouchItem(block, item),
-					player.getLocation(), true);
-		} else {
-			if (Enchantments.hasEnchantment(item, DefaultEnchantments.SMELTERY)) {
-				ItemStack smelted = Smeltery.getSmelteryItem(block, item);
-				if (smelted != null) {
-					ItemUtils.giveItemToPlayer(player, smelted, player.getLocation(), true);
-				} else {
-					for(ItemStack drop: drops) {
-						ItemUtils.giveItemToPlayer(player, drop, player.getLocation(), true);
-					}
-				}
-			} else {
-				for(ItemStack drop: drops) {
-					ItemUtils.giveItemToPlayer(player, drop, player.getLocation(), true);
-				}
-			}
-		}
-	}
+//	private void damageItem(BlockBreakEvent event) {
+//		Player player = event.getPlayer();
+//		ItemStack item = player.getInventory().getItemInMainHand();
+//		if(Enchantments.hasEnchantment(item, DefaultEnchantments.SMELTERY)) {
+//			switch(event.getBlock().getType()) {
+//			case IRON_ORE:
+//			case GOLD_ORE:
+//				event.setExpToDrop((int) (Math.random() * 3) + 1);
+//				break;
+//			default:
+//				break;
+//			}
+//		}
+//		AbilityUtils.giveExperience(player, event.getExpToDrop());
+//		player.incrementStatistic(Statistic.MINE_BLOCK, event.getBlock().getType());
+//		player.incrementStatistic(Statistic.USE_ITEM, item.getType());
+//		AbilityUtils.damageItem(player, item);
+//		McMMO.handleMcMMO(event, item);
+//		event.getBlock().setType(Material.AIR);
+//	}
 }

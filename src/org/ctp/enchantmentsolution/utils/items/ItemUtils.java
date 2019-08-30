@@ -2,6 +2,7 @@ package org.ctp.enchantmentsolution.utils.items;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -16,9 +17,12 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
+import org.ctp.enchantmentsolution.advancements.ESAdvancement;
+import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
 import org.ctp.enchantmentsolution.enchantments.Enchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.enchantments.helper.PlayerLevels;
+import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.ConfigUtils;
 
 public class ItemUtils {
@@ -59,36 +63,6 @@ public class ItemUtils {
 			}
 		}
 		return names;
-	}
-	
-	public static void giveItemToPlayer(Player player, ItemStack item, Location fallback, boolean statistic) {
-		HashMap<Integer, ItemStack> leftOver = new HashMap<Integer, ItemStack>();
-		int amount = item.getAmount();
-		leftOver.putAll((player.getInventory().addItem(item)));
-		if (!leftOver.isEmpty()) {
-			for (Iterator<java.util.Map.Entry<Integer, ItemStack>> it = leftOver.entrySet().iterator(); it.hasNext();) {
-				java.util.Map.Entry<Integer, ItemStack> e = it.next();
-				amount -= e.getValue().getAmount();
-				fallback.add(0.5, 0.5, 0.5);
-				Item droppedItem = player.getWorld().dropItem(
-						fallback,
-						e.getValue());
-				droppedItem.setVelocity(new Vector(0,0,0));
-				droppedItem.teleport(fallback);
-			}
-		}
-		if(amount > 0 && statistic) {
-			player.incrementStatistic(Statistic.PICKUP, item.getType(), amount);
-		}
-	}
-	
-	public static void dropItem(ItemStack item, Location loc) {
-		Location location = loc.clone();
-		Item droppedItem = location.getWorld().dropItem(
-				location,
-				item);
-		droppedItem.setVelocity(new Vector(0,0,0));
-		droppedItem.teleport(location);
 	}
 	
 	public static ItemStack addNMSEnchantment(ItemStack item, String type) {
@@ -162,5 +136,60 @@ public class ItemUtils {
 			return (int) (j + k + 1);
 		}
 		return (int) (j + k);
+	}
+
+	public static void giveItemsToPlayer(Player player, Collection<ItemStack> drops, Location fallback, boolean statistic, boolean dropNaturally) {
+		for(ItemStack drop : drops) {
+			giveItemToPlayer(player, drop, fallback, statistic, dropNaturally);
+		}
+	}
+	
+	public static void giveItemToPlayer(Player player, ItemStack item, Location fallback, boolean statistic, boolean dropNaturally) {
+		HashMap<Integer, ItemStack> leftOver = new HashMap<Integer, ItemStack>();
+		int amount = item.getAmount();
+		boolean shulkerBox = getShulkerBoxes().contains(item.getType()) && Enchantments.hasEnchantment(item, DefaultEnchantments.SOULBOUND);
+		leftOver.putAll((player.getInventory().addItem(item)));
+		Location fallbackClone = fallback.clone();
+		if (!leftOver.isEmpty()) {
+			shulkerBox = false;
+			for (Iterator<java.util.Map.Entry<Integer, ItemStack>> it = leftOver.entrySet().iterator(); it.hasNext();) {
+				java.util.Map.Entry<Integer, ItemStack> e = it.next();
+				amount -= e.getValue().getAmount();
+				if(!dropNaturally) {
+					Item droppedItem = fallbackClone.getWorld().dropItem(
+							fallbackClone,
+							e.getValue());
+					droppedItem.setVelocity(new Vector(0,0,0));
+					droppedItem.teleport(fallbackClone);
+				} else {
+					fallbackClone.getWorld().dropItemNaturally(fallbackClone, item);
+				}
+			}
+		}
+		if(amount > 0 && statistic) {
+			if(shulkerBox) {
+				AdvancementUtils.awardCriteria(player, ESAdvancement.HEY_IT_WORKS, "shulker_box");
+			}
+			player.incrementStatistic(Statistic.PICKUP, item.getType(), amount);
+		}
+	}
+	
+	public static void dropItems(Collection<ItemStack> drops, Location loc, boolean dropNaturally) {
+		for(ItemStack drop : drops) {
+			dropItem(drop, loc, dropNaturally);
+		}
+	}
+	
+	public static void dropItem(ItemStack item, Location loc, boolean dropNaturally) {
+		Location location = loc.clone();
+		if(!dropNaturally) {
+			Item droppedItem = location.getWorld().dropItem(
+					location,
+					item);
+			droppedItem.setVelocity(new Vector(0,0,0));
+			droppedItem.teleport(location);
+		} else {
+			location.getWorld().dropItemNaturally(location, item);
+		}
 	}
 }
