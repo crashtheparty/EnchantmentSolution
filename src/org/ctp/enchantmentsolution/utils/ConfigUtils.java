@@ -217,7 +217,7 @@ public class ConfigUtils {
 	}
 
 	public static boolean useLapisLevels() {
-		return (useAdvancedFile() ? EnchantmentSolution.getPlugin().getConfigFiles().getDefaultConfig().getBoolean("use_lapis_modifiers") : isLevel50());
+		return (useAdvancedFile() ? EnchantmentSolution.getPlugin().getConfigFiles().getEnchantmentAdvancedConfig().getBoolean("use_lapis_modifiers") : isLevel50());
 	}
 
 	public static String getItemDisplayType(String type) {
