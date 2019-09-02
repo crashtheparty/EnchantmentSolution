@@ -20,13 +20,15 @@ public class UnrestPlayer extends AbilityPlayer{
 			if(getPlayer().getStatistic(Statistic.TIME_SINCE_REST) < 96000) {
 				getPlayer().setStatistic(Statistic.TIME_SINCE_REST, 96000);
 			}
-			getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 305, 0, false, false), true);
+			getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 10000000, 0, false, false), true);
 		}
 	}
 
 	@Override
 	protected void doUnequip(ItemStack item) {
-		
+		if(Enchantments.hasEnchantment(item, getEnchantment())) {
+			getPlayer().removePotionEffect(PotionEffectType.NIGHT_VISION);
+		}
 	}
 
 	@Override
