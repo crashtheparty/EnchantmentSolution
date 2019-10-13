@@ -9,6 +9,8 @@ import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.ClickType;
+import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -228,7 +230,8 @@ public class Anvil implements InventoryData{
 				ItemUtils.giveItemToPlayer(player, combinedItem.getItemTwoLeftover(), player.getLocation(), false);
 			}
 			if(EnchantmentSolution.getPlugin().isJobsEnabled()) {
-				JobsUtils.sendAnvilAction(player, playerItems.get(1), combinedItem.getCombinedItem());
+				JobsUtils.sendAnvilAction(player, playerItems.get(0), playerItems.get(1), combinedItem.getCombinedItem(), 
+						InventoryAction.PICKUP_ALL, ClickType.LEFT, false);
 			}
 			combinedItem = null;
 			playerItems.clear();

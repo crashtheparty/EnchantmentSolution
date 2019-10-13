@@ -53,7 +53,7 @@ public class UpdateEnchantments implements Listener{
 								}
 							}
 							if(levels.size() > 0) {
-								item = Enchantments.removeAllEnchantments(item);
+								item = Enchantments.removeAllEnchantments(item, true);
 								Enchantments.addEnchantmentsToItem(item, levels);
 							}
 						}

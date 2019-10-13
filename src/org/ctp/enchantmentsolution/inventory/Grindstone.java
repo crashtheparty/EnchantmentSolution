@@ -119,7 +119,7 @@ public class Grindstone implements InventoryData{
 				combine.setItemMeta(combineMeta);
 			} else if (playerItems.size() == 1) {
 				if(playerItems.get(0).getItemMeta().hasEnchants() || (playerItems.get(0).getType() == Material.ENCHANTED_BOOK)) {
-					combinedItem = GrindstoneUtils.combineItems(getPlayer(), playerItems.get(0));
+					combinedItem = GrindstoneUtils.combineItems(getPlayer(), playerItems.get(0), null);
 					combine = new ItemStack(Material.LIME_STAINED_GLASS_PANE);
 					ItemMeta combineMeta = combine.getItemMeta();
 					combineMeta.setDisplayName(ChatUtils.getMessage(getCodes(), "grindstone.remove-enchants"));
@@ -214,7 +214,7 @@ public class Grindstone implements InventoryData{
 				if(ConfigUtils.grindstoneDestroyItem()) {
 					playerItems.remove(0);
 				} else {
-					playerItems.set(0, Enchantments.removeAllEnchantments(playerItems.get(0)));
+					playerItems.set(0, Enchantments.removeAllEnchantments(playerItems.get(0), true));
 				}
 			} else {
 				ItemStack one = null;

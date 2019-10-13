@@ -34,6 +34,7 @@ import org.ctp.enchantmentsolution.listeners.abilities.helpers.GoldDiggerCrop;
 import org.ctp.enchantmentsolution.listeners.abilities.support.VeinMinerListener;
 import org.ctp.enchantmentsolution.nms.McMMO;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
+import org.ctp.enchantmentsolution.utils.JobsUtils;
 import org.ctp.enchantmentsolution.utils.LocationUtils;
 import org.ctp.enchantmentsolution.utils.items.*;
 import org.ctp.enchantmentsolution.utils.items.nms.*;
@@ -574,6 +575,7 @@ public class BlockListener extends EnchantmentListener{
 		player.incrementStatistic(Statistic.USE_ITEM, item.getType());
 		super.damageItem(player, item);
 		McMMO.handleMcMMO(event, item);
+		JobsUtils.sendBlockBreakAction(event);
 		event.getBlock().setType(Material.AIR);
 	}
 	

@@ -37,7 +37,7 @@ public class UpdateItem {
 	public void update() {
 		repairCost = 0;
 		combinedItem = itemOne.clone();
-		combinedItem = Enchantments.removeAllEnchantments(combinedItem);
+		combinedItem = Enchantments.removeAllEnchantments(combinedItem, true);
 		if(itemOne.getType() == Material.BOOK || itemOne.getType() == Material.ENCHANTED_BOOK) {
 			if(ConfigUtils.getEnchantedBook()) {
 				combinedItem = new ItemStack(Material.ENCHANTED_BOOK);
