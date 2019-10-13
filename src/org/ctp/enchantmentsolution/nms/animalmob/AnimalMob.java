@@ -105,7 +105,7 @@ public class AnimalMob {
 			if(aHorse instanceof ChestedHorse) {
 				ChestedHorse cHorse = (ChestedHorse) aHorse;
 				setCarryingChest(cHorse.isCarryingChest());
-				for(int i = 2; i < cHorse.getInventory().getSize(); i++) {						
+				for(int i = 0; i < cHorse.getInventory().getSize(); i++) {						
 					inventoryItems.put(i, cHorse.getInventory().getItem(i));
 				}
 			}
@@ -144,7 +144,7 @@ public class AnimalMob {
 		config.set("animals." + i + ".saddle", getSaddle() != null ? ItemSerialization.itemToString(getSaddle()) : null);
 		config.set("animals." + i + ".armor", getArmor() != null ? ItemSerialization.itemToString(getArmor()) : null);
 		
-		for(int k = 2; k < 17; k++) {
+		for(int k = 0; k < 15; k++) {
 			if(inventoryItems != null && inventoryItems.get(k) != null) {
 				config.set("animals." + i + ".inventory_items." + k, ItemSerialization.itemToString(inventoryItems.get(k)));
 			}
@@ -209,7 +209,7 @@ public class AnimalMob {
 					if(aHorse instanceof ChestedHorse) {
 						ChestedHorse cHorse = (ChestedHorse) aHorse;
 						cHorse.setCarryingChest(isCarryingChest());
-						for(int i = 2; i < inventoryItems.size(); i++) {
+						for(int i = 0; i < inventoryItems.size(); i++) {
 							cHorse.getInventory().setItem(i, inventoryItems.get(i));
 						}
 					}

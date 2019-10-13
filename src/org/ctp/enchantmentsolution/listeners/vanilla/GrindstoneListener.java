@@ -68,7 +68,7 @@ public class GrindstoneListener implements Listener{
 				item = second;
 			}
 			if(item.getItemMeta().hasEnchants() || (item.getType() == Material.ENCHANTED_BOOK)) {
-				combinedItem = GrindstoneUtils.combineItems(player, item);
+				combinedItem = GrindstoneUtils.combineItems(player, item, null);
 			}
 		}
 		
@@ -88,10 +88,7 @@ public class GrindstoneListener implements Listener{
 	}
 	
 	private void combine(Player player, ItemStack first, ItemStack second, ClickType click, GrindstoneInventory inv) {
-		ItemStack combinedItem = GrindstoneUtils.combineItems(player, first);
-		if(second != null) {
-			combinedItem = GrindstoneUtils.combineItems(player, first, second);
-		}
+		ItemStack combinedItem = GrindstoneUtils.combineItems(player, first, second);
 		switch(click) {
 		case LEFT:
 		case RIGHT:

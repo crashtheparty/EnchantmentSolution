@@ -39,7 +39,8 @@ public class GrindstoneUtils {
 	}
 	
 	public static ItemStack takeEnchantments(Player player, ItemStack first, ItemStack second) {
-		ItemStack take = new ItemStack(second.getType());
+		ItemStack take = second.clone();
+		if(take.hasItemMeta() && take.getItemMeta().hasEnchants()) return null;
 		if(take.getType() == Material.BOOK && ConfigUtils.getEnchantedBook()) {
 			take = Enchantments.convertToEnchantedBook(take);
 		} else if (take.getType() == Material.ENCHANTED_BOOK && !ConfigUtils.getEnchantedBook()) {
@@ -122,124 +123,32 @@ public class GrindstoneUtils {
     }
 	
 	public static ItemStack combineItems(Player player, ItemStack first, ItemStack second) {
-		ItemStack combined = new ItemStack(first.getType());
-		if(first.getType().equals(Material.ENCHANTED_BOOK)) {
+		ItemStack combined = Enchantments.removeAllEnchantments(first.clone(), false);
+		
+		if(!combined.getItemMeta().hasEnchants() && first.getType().equals(Material.ENCHANTED_BOOK)) {
 			combined = new ItemStack(Material.BOOK);
 		}
 		
 		if(first.getType() != Material.BOOK && first.getType() != Material.ENCHANTED_BOOK && ItemType.hasItemType(first.getType())) {
-			DamageUtils.setDamage(combined, DamageUtils.getDamage(first.getItemMeta()));
-			int extraDurability = second.getType().getMaxDurability() - DamageUtils.getDamage(second.getItemMeta()) + (int) (second.getType().getMaxDurability() * .05);
-			DamageUtils.setDamage(combined, DamageUtils.getDamage(first.getItemMeta()) - extraDurability);
-			if(DamageUtils.getDamage(combined.getItemMeta()) < 0) {
-				DamageUtils.setDamage(combined, 0);
+			if(second != null) {
+				DamageUtils.setDamage(combined, DamageUtils.getDamage(first.getItemMeta()));
+				int extraDurability = second.getType().getMaxDurability() - DamageUtils.getDamage(second.getItemMeta()) + (int) (second.getType().getMaxDurability() * .05);
+				DamageUtils.setDamage(combined, DamageUtils.getDamage(first.getItemMeta()) - extraDurability);
+				if(DamageUtils.getDamage(combined.getItemMeta()) < 0) {
+					DamageUtils.setDamage(combined, 0);
+				}
 			}
 		} else {
 			combined.setAmount(1);
 		}
-		
-		ItemMeta firstMeta = first.getItemMeta();
-		ItemMeta combinedMeta = combined.getItemMeta();
-		
-		combinedMeta.setDisplayName(firstMeta.getDisplayName());
-		
-		combined.setItemMeta(combinedMeta);
-		
-		Enchantments.addEnchantmentsToItem(combined, combineEnchants(player, first, second));
-		
-		return combined;
-	}
-	
-	public static ItemStack combineItems(Player player, ItemStack first) {
-		ItemStack combined = new ItemStack(first.getType());
-		if(first.getType().equals(Material.ENCHANTED_BOOK)) {
-			combined = new ItemStack(Material.BOOK);
-		}
-		
-		DamageUtils.setDamage(combined, DamageUtils.getDamage(first.getItemMeta()));
-		
-		ItemMeta firstMeta = first.getItemMeta();
-		ItemMeta combinedMeta = combined.getItemMeta();
-		
-		combinedMeta.setDisplayName(firstMeta.getDisplayName());
-		
-		combined.setItemMeta(combinedMeta);
-		
-		Enchantments.addEnchantmentsToItem(combined, combineEnchants(player, first, null));
-		
+				
 		return combined;
 	}
 	
 	public static List<EnchantmentLevel> combineEnchants(Player player, ItemStack first, ItemStack second){
-		ItemMeta firstMeta = first.clone().getItemMeta();
-		Map<Enchantment, Integer> firstEnchants = firstMeta.getEnchants();
-		if(first.getType().equals(Material.ENCHANTED_BOOK)) {
-			EnchantmentStorageMeta meta = (EnchantmentStorageMeta) firstMeta;
-			firstEnchants = meta.getStoredEnchants();
+		if(second == null || second.getItemMeta().hasEnchants()) {
+			return new ArrayList<EnchantmentLevel>();
 		}
-		List<EnchantmentLevel> enchantments = new ArrayList<EnchantmentLevel>();
-		if(second != null) {
-			ItemMeta secondMeta = second.clone().getItemMeta();
-			Map<Enchantment, Integer> secondEnchants = secondMeta.getEnchants();
-			if(second.getType().equals(Material.ENCHANTED_BOOK)) {
-				EnchantmentStorageMeta meta = (EnchantmentStorageMeta) secondMeta;
-				secondEnchants = meta.getStoredEnchants();
-			}
-			
-			for (Iterator<java.util.Map.Entry<Enchantment, Integer>> it = secondEnchants.entrySet().iterator(); it.hasNext();) {
-				java.util.Map.Entry<Enchantment, Integer> e = it.next();
-				Enchantment enchant = e.getKey();
-				int level = e.getValue();
-				for(CustomEnchantment customEnchant : Enchantments.getEnchantments()) {
-					boolean added = false;
-					if(ConfigUtils.isRepairable(customEnchant) && customEnchant.getRelativeEnchantment().equals(enchant) && customEnchant.isCurse()) {
-						for(EnchantmentLevel enchantment : enchantments) {
-							if(customEnchant.getRelativeEnchantment().equals(enchantment.getEnchant().getRelativeEnchantment())) {
-								added = true; 
-								break;
-							}
-						}
-						if(!added) {
-							enchantments.add(new EnchantmentLevel(customEnchant, level));
-						}
-					}
-				}
-			}
-			
-		}
-			
-		for (Iterator<java.util.Map.Entry<Enchantment, Integer>> it = firstEnchants.entrySet().iterator(); it.hasNext();) {
-			java.util.Map.Entry<Enchantment, Integer> e = it.next();
-			Enchantment enchant = e.getKey();
-			int level = e.getValue();
-			for(CustomEnchantment customEnchant : Enchantments.getEnchantments()) {
-				boolean added = false;
-				if(ConfigUtils.isRepairable(customEnchant) && customEnchant.getRelativeEnchantment().equals(enchant) && customEnchant.isCurse()) {
-					for(EnchantmentLevel enchantment : enchantments) {
-						if(customEnchant.getRelativeEnchantment().equals(enchantment.getEnchant().getRelativeEnchantment())) {
-							added = true; 
-							break;
-						}
-					}
-					if(!added) {
-						enchantments.add(new EnchantmentLevel(customEnchant, level));
-					}
-				}
-			}
-		}
-		
-		for(int i = enchantments.size() - 1; i >= 0; i--) {
-			EnchantmentLevel enchant = enchantments.get(i);
-			if(!enchant.getEnchant().canAnvil(player, enchant.getLevel())) {
-				int level = enchant.getEnchant().getAnvilLevel(player, enchant.getLevel());
-				if(level > 0) {
-					enchantments.get(i).setLevel(level);
-				} else {
-					enchantments.remove(i);
-				}
-			}
-		}
-		
-		return enchantments;
+		return Enchantments.combineEnchantments(player, first, second).getEnchantments();
 	}
 }

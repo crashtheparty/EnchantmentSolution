@@ -430,26 +430,12 @@ public class Enchantments {
 		return item;
 	}
 	
-	public static ItemStack removeAllEnchantments(ItemStack item) {
-		ItemMeta meta = item.getItemMeta();
-		List<String> lore = meta.getLore();
-		if(lore == null){
-			lore = new ArrayList<String>();
-		}
+	public static ItemStack removeAllEnchantments(ItemStack item, boolean removeCurses) {
 		for(CustomEnchantment enchantment : DefaultEnchantments.getEnchantments()) {
-			if(Enchantments.hasEnchantment(item, enchantment.getRelativeEnchantment())){
-				if(enchantment.getRelativeEnchantment() instanceof CustomEnchantmentWrapper) {
-					lore = StringUtils.removeEnchantment(enchantment, meta.getEnchantLevel(enchantment.getRelativeEnchantment()), lore);
-				}
-				if(meta instanceof EnchantmentStorageMeta) {
-					((EnchantmentStorageMeta) meta).removeStoredEnchant(enchantment.getRelativeEnchantment());
-				} else {
-					meta.removeEnchant(enchantment.getRelativeEnchantment());
-				}
+			if(!removeCurses || !enchantment.isCurse()) {
+				item = removeEnchantmentFromItem(item, enchantment);
 			}
 		}
-		meta = Enchantments.setLore(meta, lore);
-		item.setItemMeta(meta);
 		return item;
 	}
 	

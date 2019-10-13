@@ -86,7 +86,7 @@ public class ChatUtils {
 			messages.add(EnchantmentSolution.getPlugin().getConfigFiles().getLanguageFile().getString(location));
 		}
 		for(int i = 0; i < messages.size(); i++) {
-			messages.set(i, translateCodes(codes, ChatColor.translateAlternateColorCodes('&', messages.get(i))));
+			messages.set(i, messages.get(i) == null ? "" : translateCodes(codes, ChatColor.translateAlternateColorCodes('&', messages.get(i))));
 		}
 		if (messages.size() == 0)
 			messages.add(location + " must be a list or a string.");

@@ -163,7 +163,7 @@ public class DeathListener extends EnchantmentListener{
 					LootContext context = contextBuilder.build();
 					Collection<ItemStack> items = ((Lootable)event.getEntity()).getLootTable().populateLoot(new Random(), context);
 					event.getDrops().addAll(items);
-					Enchantments.removeAllEnchantments(item);
+					Enchantments.removeAllEnchantments(item, true);
 					Enchantments.addEnchantmentsToItem(item, levels);
 					if(event.getEntity().getType() == EntityType.PILLAGER) {
 						AdvancementUtils.awardCriteria(player, ESAdvancement.LOOK_WHAT_YOU_MADE_ME_DO, "pillage");

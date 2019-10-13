@@ -12,7 +12,7 @@ public class DamageUtils {
 	
 	private DamageUtils(ItemMeta item) {
 		meta = item;
-		if(item instanceof Damageable) {
+		if(item instanceof Damageable && !item.isUnbreakable()) {
 			damageable = true;
 			damage = ((Damageable) item).getDamage();
 		}
