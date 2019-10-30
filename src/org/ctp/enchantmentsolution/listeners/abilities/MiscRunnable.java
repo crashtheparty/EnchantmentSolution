@@ -34,7 +34,6 @@ public class MiscRunnable extends EnchantmentListener implements Runnable{
 	public void run() {
 		runMethod(this, "curseOfExhaustion");
 		runMethod(this, "drowned");
-		runMethod(this, "icarus");
 		if(run == 0) {
 			runMethod(this, "icarus");
 		}

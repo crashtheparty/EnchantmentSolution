@@ -39,7 +39,6 @@ public class DamageListener extends EnchantmentListener{
 		runMethod(this, "curseOfLag", event, EntityDamageByEntityEvent.class);
 		runMethod(this, "drowned", event, EntityDamageByEntityEvent.class);
 		runMethod(this, "gungHo", event, EntityDamageByEntityEvent.class);
-		runMethod(this, "ironDefense", event, EntityDamageByEntityEvent.class);
 		runMethod(this, "knockUp", event, EntityDamageByEntityEvent.class);
 		runMethod(this, "magicGuard", event, EntityDamageByEntityEvent.class);
 		runMethod(this, "sandVeil", event, EntityDamageByEntityEvent.class);
@@ -53,6 +52,7 @@ public class DamageListener extends EnchantmentListener{
 	@EventHandler(priority=EventPriority.HIGHEST)
 	public void onEntityDamageByEntityHighest(EntityDamageByEntityEvent event) {
 		runMethod(this, "irenesLasso", event, EntityDamageByEntityEvent.class);
+		runMethod(this, "ironDefense", event, EntityDamageByEntityEvent.class);
 		runMethod(this, "shockAspect", event, EntityDamageByEntityEvent.class);
 		runMethod(this, "stoneThrow", event, EntityDamageByEntityEvent.class);
 		runMethod(this, "warp", event, EntityDamageByEntityEvent.class);
