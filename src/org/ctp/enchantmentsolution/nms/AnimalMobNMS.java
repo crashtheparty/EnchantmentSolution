@@ -7,7 +7,7 @@ import org.ctp.enchantmentsolution.nms.animalmob.AnimalMob;
 import org.ctp.enchantmentsolution.nms.animalmob.AnimalMob_v1_13_R1;
 import org.ctp.enchantmentsolution.nms.animalmob.AnimalMob_v1_13_R2;
 import org.ctp.enchantmentsolution.nms.animalmob.AnimalMob_v1_14_R1;
-import org.ctp.enchantmentsolution.utils.config.YamlConfig;
+import org.ctp.enchantmentsolution.utils.yaml.YamlConfig;
 
 public class AnimalMobNMS {
 

@@ -14,8 +14,8 @@ import java.util.logging.Level;
 import org.ctp.enchantmentsolution.database.Errors;
 import org.ctp.enchantmentsolution.database.SQLite;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
-import org.ctp.enchantmentsolution.utils.config.YamlConfigBackup;
-import org.ctp.enchantmentsolution.utils.config.YamlInfo;
+import org.ctp.enchantmentsolution.utils.yaml.YamlConfigBackup;
+import org.ctp.enchantmentsolution.utils.yaml.YamlInfo;
 
 public class BackupTable extends Table{
 	

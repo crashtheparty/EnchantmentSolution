@@ -27,8 +27,8 @@ import org.bukkit.entity.Parrot.Variant;
 import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.utils.StringUtils;
-import org.ctp.enchantmentsolution.utils.config.YamlConfig;
 import org.ctp.enchantmentsolution.utils.items.ItemSerialization;
+import org.ctp.enchantmentsolution.utils.yaml.YamlConfig;
 
 public class AnimalMob {
 	
@@ -105,7 +105,7 @@ public class AnimalMob {
 			if(aHorse instanceof ChestedHorse) {
 				ChestedHorse cHorse = (ChestedHorse) aHorse;
 				setCarryingChest(cHorse.isCarryingChest());
-				for(int i = 0; i < cHorse.getInventory().getSize(); i++) {						
+				for(int i = 2; i < cHorse.getInventory().getSize(); i++) {						
 					inventoryItems.put(i, cHorse.getInventory().getItem(i));
 				}
 			}
@@ -144,7 +144,7 @@ public class AnimalMob {
 		config.set("animals." + i + ".saddle", getSaddle() != null ? ItemSerialization.itemToString(getSaddle()) : null);
 		config.set("animals." + i + ".armor", getArmor() != null ? ItemSerialization.itemToString(getArmor()) : null);
 		
-		for(int k = 0; k < 15; k++) {
+		for(int k = 2; k < 17; k++) {
 			if(inventoryItems != null && inventoryItems.get(k) != null) {
 				config.set("animals." + i + ".inventory_items." + k, ItemSerialization.itemToString(inventoryItems.get(k)));
 			}
@@ -209,7 +209,7 @@ public class AnimalMob {
 					if(aHorse instanceof ChestedHorse) {
 						ChestedHorse cHorse = (ChestedHorse) aHorse;
 						cHorse.setCarryingChest(isCarryingChest());
-						for(int i = 0; i < inventoryItems.size(); i++) {
+						for(int i = 2; i < inventoryItems.size(); i++) {
 							cHorse.getInventory().setItem(i, inventoryItems.get(i));
 						}
 					}
@@ -456,5 +456,13 @@ public class AnimalMob {
 
 	public void setRabbitType(org.bukkit.entity.Rabbit.Type rabbitType) {
 		this.rabbitType = rabbitType;
+	}
+
+	public boolean inItem(ItemStack attackItem) {
+		return getItem() != null && getItem().equals(attackItem) || StringUtils.getAnimalIDsFromItem(attackItem).contains(getEntityID());
+	}
+
+	public boolean inItem(ItemStack item, int entityID) {
+		return getItem() != null && item.equals(getItem()) || entityID == getEntityID();
 	}
 }

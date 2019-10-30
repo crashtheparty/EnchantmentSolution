@@ -12,15 +12,17 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
-import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
-import org.ctp.enchantmentsolution.enchantments.Enchantments;
+import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.inventory.InventoryData;
+import org.ctp.enchantmentsolution.utils.ConfigUtils;
+import org.ctp.enchantmentsolution.utils.config.MainConfiguration;
+import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 
 public class VanishListener implements Listener{
 	
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent event) {
-		if(EnchantmentSolution.getPlugin().getConfigFiles().getDefaultConfig().getString("disable_enchant_method").equals("vanish")) {
+		if(ConfigUtils.getString(MainConfiguration.class, "disable_enchant_method").equals("vanish")) {
 			Player player = event.getPlayer();
 			
 			PlayerInventory inv = player.getInventory();
@@ -55,7 +57,7 @@ public class VanishListener implements Listener{
 	
 	@EventHandler
 	public void onInventoryOpen(InventoryOpenEvent event) {
-		if(EnchantmentSolution.getPlugin().getConfigFiles().getDefaultConfig().getString("disable_enchant_method").equals("vanish")) {
+		if(ConfigUtils.getString(MainConfiguration.class, "disable_enchant_method").equals("vanish")) {
 			boolean shouldCheck = true;
 			if(event.getPlayer() instanceof Player) {
 				Player player = (Player) event.getPlayer();
@@ -76,14 +78,14 @@ public class VanishListener implements Listener{
 	
 	@EventHandler
 	public void onEntityPickupItem(EntityPickupItemEvent event) {
-		if(EnchantmentSolution.getPlugin().getConfigFiles().getDefaultConfig().getString("disable_enchant_method").equals("vanish")) {
+		if(ConfigUtils.getString(MainConfiguration.class, "disable_enchant_method").equals("vanish")) {
 			ItemStack item = event.getItem().getItemStack();
 			event.getItem().setItemStack(removeEnchants(item));
 		}
 	}
 	
 	public static void reload() {
-		if(EnchantmentSolution.getPlugin().getConfigFiles().getDefaultConfig().getString("disable_enchant_method").equals("vanish")) {
+		if(ConfigUtils.getString(MainConfiguration.class, "disable_enchant_method").equals("vanish")) {
 			for(Player player : Bukkit.getOnlinePlayers()) {
 				Bukkit.getScheduler().scheduleSyncDelayedTask(EnchantmentSolution.getPlugin(), new Runnable(){
 					@Override
@@ -133,9 +135,9 @@ public class VanishListener implements Listener{
 	
 	private static ItemStack removeEnchants(ItemStack item) {
 		if(item == null || item.getItemMeta() == null) return item;
-		for(CustomEnchantment enchant : DefaultEnchantments.getEnchantments()) {
+		for(CustomEnchantment enchant : RegisterEnchantments.getEnchantments()) {
 			if(!enchant.isEnabled()) {
-				item = Enchantments.removeEnchantmentFromItem(item, enchant);
+				item = ItemUtils.removeEnchantmentFromItem(item, enchant);
 			}
 		}
 		return item;

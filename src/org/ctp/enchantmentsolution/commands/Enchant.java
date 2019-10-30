@@ -7,9 +7,11 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
-import org.ctp.enchantmentsolution.enchantments.Enchantments;
+import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.ConfigUtils;
+import org.ctp.enchantmentsolution.utils.config.MainConfiguration;
+import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 
 import java.util.HashMap;
 
@@ -23,7 +25,7 @@ public class Enchant implements CommandExecutor {
 			if(player.hasPermission("enchantmentsolution.command.enchant")) {
 				if(args.length > 0){
 					String enchantmentName = args[0];
-					for(CustomEnchantment enchant : Enchantments.getEnchantments()){
+					for(CustomEnchantment enchant : RegisterEnchantments.getRegisteredEnchantments()){
 						if(enchant.getName().equalsIgnoreCase(enchantmentName)){
 							if(!enchant.isEnabled()) {
 								HashMap<String, Object> codes = ChatUtils.getCodes();
@@ -57,15 +59,17 @@ public class Enchant implements CommandExecutor {
 							ItemStack itemToEnchant = player.getInventory().getItemInMainHand();
 							if(itemToEnchant != null){
 								int maxEnchants = ConfigUtils.getMaxEnchantments();
-								int itemEnchants = Enchantments.getTotalEnchantments(itemToEnchant);
+								int itemEnchants = ItemUtils.getTotalEnchantments(itemToEnchant);
 								if(maxEnchants <= 0 || (itemEnchants < maxEnchants && maxEnchants > 0)) {
 									if(enchant.canAnvilItem(itemToEnchant.getType()) || enchant.canEnchantItem(itemToEnchant.getType())){
-										if(itemToEnchant.getType() == Material.BOOK && ConfigUtils.getEnchantedBook()) {
-											itemToEnchant = Enchantments.convertToEnchantedBook(itemToEnchant);
-										} else if (itemToEnchant.getType() == Material.ENCHANTED_BOOK && !ConfigUtils.getEnchantedBook()) {
-											itemToEnchant = Enchantments.convertToRegularBook(itemToEnchant);
+										boolean useBooks = ConfigUtils.getBoolean(MainConfiguration.class, "use_enchanted_books");
+										if(itemToEnchant.getType() == Material.BOOK && useBooks) {
+											itemToEnchant = ItemUtils.convertToEnchantedBook(itemToEnchant);
+										} else if (itemToEnchant.getType() == Material.ENCHANTED_BOOK && !useBooks) {
+											itemToEnchant = ItemUtils.convertToRegularBook(itemToEnchant);
 										}
-										itemToEnchant = Enchantments.addEnchantmentToItem(itemToEnchant, enchant, level);
+										itemToEnchant = ItemUtils.addEnchantmentToItem(itemToEnchant, enchant, level);
+										
 										player.getInventory().setItemInMainHand(itemToEnchant);
 										HashMap<String, Object> codes = ChatUtils.getCodes();
 										codes.put("%level%", level);

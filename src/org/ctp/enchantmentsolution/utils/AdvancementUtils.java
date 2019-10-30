@@ -1,14 +1,12 @@
 package org.ctp.enchantmentsolution.utils;
 
+import java.util.List;
+
 import org.bukkit.Bukkit;
 import org.bukkit.advancement.AdvancementProgress;
 import org.bukkit.entity.Player;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
-import org.ctp.enchantmentsolution.advancements.ESAdvancement;
-import org.ctp.enchantmentsolution.advancements.ESAdvancementProgress;
-import org.ctp.enchantmentsolution.advancements.ESTrigger;
-import org.ctp.enchantmentsolution.api.Advancement;
-import org.ctp.enchantmentsolution.api.AdvancementFactory;
+import org.ctp.enchantmentsolution.advancements.*;
 
 public class AdvancementUtils {
 	
@@ -19,12 +17,15 @@ public class AdvancementUtils {
 		Advancement last = null;
 		boolean reload = false;
 		for(ESAdvancement advancement : ESAdvancement.values()) {
+			String namespace = advancement.getNamespace().getKey();
+			boolean announce = ConfigUtils.announceAdvancement(namespace);
+			boolean toast = ConfigUtils.toastAdvancement(namespace);
 			if(advancement.getParent() == null) {
-				if(ConfigUtils.isAdvancementActive(advancement.getNamespace().getKey())) {
-					root = factory.getRoot(advancement.getNamespace().getKey(), ConfigUtils.getAdvancementName(advancement.getNamespace().getKey()), 
-							ConfigUtils.getAdvancementDescription(advancement.getNamespace().getKey()), advancement.getIcon(), "block/bookshelf");
-					root.setAnnounce(ConfigUtils.announceAdvancement(advancement.getNamespace().getKey()));
-					root.setToast(ConfigUtils.toastAdvancement(advancement.getNamespace().getKey()));
+				if(ConfigUtils.isAdvancementActive(namespace)) {
+					root = factory.getRoot(namespace, ConfigUtils.getAdvancementName(namespace), 
+							ConfigUtils.getAdvancementDescription(namespace), advancement.getIcon(), "block/bookshelf");
+					root.setAnnounce(announce);
+					root.setToast(toast);
 					if(root.activate(false).isChanged()) {
 						reload = true;
 					}
@@ -36,21 +37,22 @@ public class AdvancementUtils {
 					}
 				}
 			} else {
-				if(root != null && ConfigUtils.isAdvancementActive(advancement.getNamespace().getKey()) && advancement.getActivatedVersion() < version) {
+				if(root != null && ConfigUtils.isAdvancementActive(namespace) && advancement.getActivatedVersion() < version) {
 					if(advancement.getParent() == ESAdvancement.ENCHANTMENT_SOLUTION) {
 						last = root;
 					}
-					last = factory.getSimple(advancement.getNamespace().getKey(), last, ConfigUtils.getAdvancementName(advancement.getNamespace().getKey()), 
-						ConfigUtils.getAdvancementDescription(advancement.getNamespace().getKey()), advancement.getIcon(), 
-						advancement.getTriggers().get(0).getCriteria(), advancement.getTriggers().get(0).getTrigger());
-					for(int i = 1; i < advancement.getTriggers().size(); i++) {
-						ESTrigger trigger = advancement.getTriggers().get(i);
+					List<ESTrigger> triggers = advancement.getTriggers();
+					last = factory.getSimple(namespace, last, ConfigUtils.getAdvancementName(namespace), 
+						ConfigUtils.getAdvancementDescription(namespace), advancement.getIcon(), 
+						triggers.get(0).getCriteria(), triggers.get(0).getTrigger());
+					for(int i = 1; i < triggers.size(); i++) {
+						ESTrigger trigger = triggers.get(i);
 						if(version >= trigger.getVersionMinimum() && (trigger.getVersionMaximum() == 0 || version <= trigger.getVersionMaximum())) {
-							last.addTrigger(advancement.getTriggers().get(i).getCriteria(), advancement.getTriggers().get(i).getTrigger());
+							last.addTrigger(trigger.getCriteria(), trigger.getTrigger());
 						}
 					}
-					root.setAnnounce(ConfigUtils.announceAdvancement(advancement.getNamespace().getKey()));
-					root.setToast(ConfigUtils.toastAdvancement(advancement.getNamespace().getKey()));
+					last.setAnnounce(announce);
+					last.setToast(toast);
 					last.setFrame(advancement.getFrame());
 					last.setRewards(advancement.getRewards());
 					if(last.activate(false).isChanged()) {

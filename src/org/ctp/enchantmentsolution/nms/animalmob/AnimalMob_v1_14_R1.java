@@ -17,9 +17,8 @@ import org.bukkit.entity.Cat.Type;
 import org.bukkit.entity.Parrot.Variant;
 import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
-import org.ctp.enchantmentsolution.utils.ChatUtils;
-import org.ctp.enchantmentsolution.utils.config.YamlConfig;
 import org.ctp.enchantmentsolution.utils.items.ItemSerialization;
+import org.ctp.enchantmentsolution.utils.yaml.YamlConfig;
 
 public class AnimalMob_v1_14_R1 extends AnimalMob{
 	
@@ -70,7 +69,6 @@ public class AnimalMob_v1_14_R1 extends AnimalMob{
 		try {
 			if(e instanceof Cat) {
 				Cat cat = (Cat) e;
-				ChatUtils.sendInfo("Edit Type: " + getCatType());
 				cat.setCatType(getCatType());
 				cat.setCollarColor(getCollarColor());
 			}

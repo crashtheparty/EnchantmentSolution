@@ -15,8 +15,8 @@ import org.bukkit.entity.Ocelot.Type;
 import org.bukkit.entity.Parrot.Variant;
 import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
-import org.ctp.enchantmentsolution.utils.config.YamlConfig;
 import org.ctp.enchantmentsolution.utils.items.ItemSerialization;
+import org.ctp.enchantmentsolution.utils.yaml.YamlConfig;
 
 @SuppressWarnings("deprecation")
 public class AnimalMob_v1_13_R1 extends AnimalMob{

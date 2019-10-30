@@ -11,7 +11,7 @@ public class CustomEnchantmentWrapper extends Enchantment{
 
 	private String name;
 	
-	public CustomEnchantmentWrapper(String namespace, String name) {
+	CustomEnchantmentWrapper(String namespace, String name) {
 		super(new NamespacedKey(EnchantmentSolution.getPlugin(), namespace));
 		this.name = name;
 	}

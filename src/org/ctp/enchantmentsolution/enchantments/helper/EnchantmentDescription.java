@@ -1,6 +1,6 @@
 package org.ctp.enchantmentsolution.enchantments.helper;
 
-import org.ctp.enchantmentsolution.api.Language;
+import org.ctp.enchantmentsolution.enums.Language;
 
 public class EnchantmentDescription {
 

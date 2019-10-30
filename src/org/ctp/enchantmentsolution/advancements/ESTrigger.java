@@ -1,6 +1,6 @@
 package org.ctp.enchantmentsolution.advancements;
 
-import org.ctp.enchantmentsolution.api.trigger.Trigger;
+import org.ctp.enchantmentsolution.advancements.trigger.*;
 
 public class ESTrigger {
 
@@ -8,23 +8,24 @@ public class ESTrigger {
 	private Trigger trigger;
 	private int maxAmount = 0, versionMinimum = 0, versionMaximum = 0;
 	
-	public ESTrigger(String criteria, Trigger trigger) {
-		this.criteria = criteria;
-		this.trigger = trigger;
+	ESTrigger(String criteria) {
+		this(criteria, 0, 0, 0, new ImpossibleTrigger());
 	}
 	
-	public ESTrigger(String criteria, Trigger trigger, int maxAmount) {
-		this.criteria = criteria;
-		this.trigger = trigger;
-		this.maxAmount = maxAmount;
+	ESTrigger(String criteria, int maxAmount) {
+		this(criteria, maxAmount, 0, 0, new ImpossibleTrigger());
 	}
 	
-	public ESTrigger(String criteria, Trigger trigger, int maxAmount, int versionMinimum, int versionMaximum) {
+	ESTrigger(String criteria, int maxAmount, int versionMinimum, int versionMaximum) {
+		this(criteria, maxAmount, versionMinimum, versionMaximum, new ImpossibleTrigger());
+	}
+	
+	ESTrigger(String criteria, int maxAmount, int versionMinimum, int versionMaximum, Trigger trigger) {
 		this.criteria = criteria;
-		this.trigger = trigger;
 		this.maxAmount = maxAmount;
 		this.versionMinimum = versionMinimum;
 		this.versionMaximum = versionMaximum;
+		this.trigger = trigger;
 	}
 	
 	public String getCriteria() {
