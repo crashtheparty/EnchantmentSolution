@@ -574,7 +574,6 @@ public class YamlConfig {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		getFromConfig();
 	}
 	
 	private String getLevel(YamlChild child) {
