@@ -10,13 +10,18 @@ public class MobLootEnchantments extends LootEnchantments {
 		super(player, item, bookshelves, treasure);
 	}
 
-	public static MobLootEnchantments generateMobLoot(Player player, ItemStack item, int minBookshelves, boolean treasure) {
+	public static MobLootEnchantments generateMobLoot(Player player, ItemStack item, int minBookshelves,
+			boolean treasure) {
 		int books = 16;
-		if(ConfigUtils.isLevel50()) books = 24;
-		int random = (int)(Math.random() * books) + minBookshelves;
-		if(random >= books) random = books - 1;
-		
+		if (ConfigUtils.isLevel50()) {
+			books = 24;
+		}
+		int random = (int) (Math.random() * books) + minBookshelves;
+		if (random >= books) {
+			random = books - 1;
+		}
+
 		return new MobLootEnchantments(player, item, books, treasure);
 	}
-	
+
 }

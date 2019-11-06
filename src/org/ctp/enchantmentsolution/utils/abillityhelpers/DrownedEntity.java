@@ -15,28 +15,28 @@ import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 
 public class DrownedEntity {
-	
+
 	private int damageTime;
 	private UUID hurtEntity, attackerEntity;
 	private int ticksLastDamage = 1;
-	
+
 	public DrownedEntity(LivingEntity hurtEntity, LivingEntity attackerEntity, int ticks) {
 		this.hurtEntity = hurtEntity.getUniqueId();
 		this.attackerEntity = attackerEntity.getUniqueId();
-		this.damageTime = ticks;
+		damageTime = ticks;
 	}
-	
+
 	public LivingEntity getHurtEntity() {
-		return (LivingEntity) Bukkit.getEntity(this.hurtEntity);
+		return (LivingEntity) Bukkit.getEntity(hurtEntity);
 	}
-	
+
 	public LivingEntity getAttackerEntity() {
-		return (LivingEntity) Bukkit.getEntity(this.attackerEntity);
+		return (LivingEntity) Bukkit.getEntity(attackerEntity);
 	}
-	
+
 	public void inflictDamage() {
 		LivingEntity hurtEntity = getHurtEntity();
-		if(hurtEntity instanceof Player) {
+		if (hurtEntity instanceof Player) {
 			if (!((Player) hurtEntity).isOnline() || hurtEntity == null) {
 				return;
 			}
@@ -45,13 +45,13 @@ public class DrownedEntity {
 			return;
 		}
 		hurtEntity.setRemainingAir(0);
-		if(ticksLastDamage >= 20) {
+		if (ticksLastDamage >= 20) {
 			int level = 0;
-			if(hurtEntity instanceof HumanEntity) {
+			if (hurtEntity instanceof HumanEntity) {
 				HumanEntity hEntity = (HumanEntity) hurtEntity;
 				ItemStack helmet = hEntity.getInventory().getHelmet();
-				
-				if(helmet != null) {
+
+				if (helmet != null) {
 					level = ItemUtils.getLevel(helmet, Enchantment.OXYGEN);
 				}
 			}
@@ -59,23 +59,23 @@ public class DrownedEntity {
 			double random = Math.random();
 			DrownDamageEvent event = new DrownDamageEvent(hurtEntity, 2, chance <= random ? 2 : 0);
 			Bukkit.getPluginManager().callEvent(event);
-			if(!event.isCancelled() && event.getNewDamage() > 0) {
+			if (!event.isCancelled() && event.getNewDamage() > 0) {
 				DamageEvent.damageEntity(hurtEntity, "drown", (float) event.getNewDamage());
 			}
-			if(hurtEntity.isDead() && hurtEntity instanceof Player && getAttackerEntity() instanceof Player) {
+			if (hurtEntity.isDead() && hurtEntity instanceof Player && getAttackerEntity() instanceof Player) {
 				AdvancementUtils.awardCriteria(((Player) getAttackerEntity()), ESAdvancement.HEX_BAG, "player");
 			}
 			ticksLastDamage = 1;
-		}else {
+		} else {
 			ticksLastDamage++;
 		}
-		damageTime --;
+		damageTime--;
 	}
-	
+
 	public int getDamageTime() {
 		return damageTime;
 	}
-	
+
 	public void setDamageTime(int time) {
 		damageTime = time;
 	}

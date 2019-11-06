@@ -20,16 +20,16 @@ import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 
 public class FishingListener extends Enchantmentable {
-	
+
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerFish(PlayerFishEvent event) {
-		if(event.getState().equals(PlayerFishEvent.State.CAUGHT_FISH)) {
-			Item item = (Item)event.getCaught();
+		if (event.getState().equals(PlayerFishEvent.State.CAUGHT_FISH)) {
+			Item item = (Item) event.getCaught();
 			ItemStack caught = item.getItemStack();
 			Player player = event.getPlayer();
 			ItemStack rod = player.getInventory().getItemInMainHand();
-			if(ItemUtils.hasEnchantment(rod, RegisterEnchantments.FRIED)) {
-				if(canRun(RegisterEnchantments.FRIED, event)) {
+			if (ItemUtils.hasEnchantment(rod, RegisterEnchantments.FRIED)) {
+				if (canRun(RegisterEnchantments.FRIED, event)) {
 					FriedEvent e = new FriedEvent(player, caught.getType());
 					Bukkit.getPluginManager().callEvent(e);
 					if (!e.isCancelled()) {
@@ -46,19 +46,26 @@ public class FishingListener extends Enchantmentable {
 					}
 				}
 			}
-			if(ItemUtils.hasEnchantment(rod, RegisterEnchantments.ANGLER)) {
-				if(canRun(RegisterEnchantments.ANGLER, event)) {
-					List<Material> fish = Arrays.asList(Material.COD, Material.COOKED_COD, Material.SALMON, Material.COOKED_SALMON, Material.TROPICAL_FISH, Material.PUFFERFISH);
-					if(fish.contains(caught.getType())) {
-						AnglerEvent e = new AnglerEvent(player, caught.getType(), ItemUtils.getLevel(rod, RegisterEnchantments.ANGLER));
+			if (ItemUtils.hasEnchantment(rod, RegisterEnchantments.ANGLER)) {
+				if (canRun(RegisterEnchantments.ANGLER, event)) {
+					List<Material> fish = Arrays.asList(Material.COD, Material.COOKED_COD, Material.SALMON,
+							Material.COOKED_SALMON, Material.TROPICAL_FISH, Material.PUFFERFISH);
+					if (fish.contains(caught.getType())) {
+						AnglerEvent e = new AnglerEvent(player, caught.getType(),
+								ItemUtils.getLevel(rod, RegisterEnchantments.ANGLER));
 						Bukkit.getPluginManager().callEvent(e);
-						if(!e.isCancelled()) { 
+						if (!e.isCancelled()) {
 							caught.setType(e.getFish());
 							caught.setAmount(e.getFishAmount());
 							Material type = e.getFish();
-							if(type == Material.COOKED_COD) type = Material.COD;
-							if(type == Material.COOKED_SALMON) type = Material.SALMON;
-							AdvancementUtils.awardCriteria(player, ESAdvancement.FED_FOR_A_LIFETIME, type.name().toLowerCase());
+							if (type == Material.COOKED_COD) {
+								type = Material.COD;
+							}
+							if (type == Material.COOKED_SALMON) {
+								type = Material.SALMON;
+							}
+							AdvancementUtils.awardCriteria(player, ESAdvancement.FED_FOR_A_LIFETIME,
+									type.name().toLowerCase());
 						}
 					}
 				}

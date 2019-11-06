@@ -9,5 +9,4 @@ public class StoneThrowEvent extends ESEntityDamageEntityEvent {
 		super(damaged, damager, damage, newDamage);
 	}
 
-	
 }

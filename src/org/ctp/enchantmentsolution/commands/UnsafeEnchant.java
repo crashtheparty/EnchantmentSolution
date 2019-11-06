@@ -18,40 +18,42 @@ import java.util.HashMap;
 public class UnsafeEnchant implements CommandExecutor {
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command command,
-			String label, String[] args) {
-		if(sender instanceof Player){
+	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+		if (sender instanceof Player) {
 			Player player = (Player) sender;
-			if(player.hasPermission("enchantmentsolution.command.enchantunsafe")) {
-				if(args.length > 0){
+			if (player.hasPermission("enchantmentsolution.command.enchantunsafe")) {
+				if (args.length > 0) {
 					String enchantmentName = args[0];
-					for(CustomEnchantment enchant : RegisterEnchantments.getRegisteredEnchantments()){
-						if(enchant.getName().equalsIgnoreCase(enchantmentName)){
-							if(!enchant.isEnabled()) {
+					for(CustomEnchantment enchant: RegisterEnchantments.getRegisteredEnchantments()) {
+						if (enchant.getName().equalsIgnoreCase(enchantmentName)) {
+							if (!enchant.isEnabled()) {
 								HashMap<String, Object> codes = ChatUtils.getCodes();
 								ChatUtils.sendMessage(player, ChatUtils.getMessage(codes, "commands.enchant-disabled"));
 								return true;
 							}
 							int level = 1;
-							if(args.length > 1){
-								try{
+							if (args.length > 1) {
+								try {
 									level = Integer.parseInt(args[1]);
 									if (level < 1) {
 										HashMap<String, Object> codes = ChatUtils.getCodes();
 										codes.put("%level%", level);
-										ChatUtils.sendMessage(player, ChatUtils.getMessage(codes, "commands.level-too-low"));
+										ChatUtils.sendMessage(player,
+												ChatUtils.getMessage(codes, "commands.level-too-low"));
 										level = 1;
 									}
-								}catch(NumberFormatException ex){
+								} catch (NumberFormatException ex) {
 									HashMap<String, Object> codes = ChatUtils.getCodes();
 									codes.put("%level%", args[1]);
-									ChatUtils.sendMessage(player, ChatUtils.getMessage(codes, "commands.invalid-level"));
+									ChatUtils.sendMessage(player,
+											ChatUtils.getMessage(codes, "commands.invalid-level"));
 								}
 							}
 							ItemStack itemToEnchant = player.getInventory().getItemInMainHand();
-							if(itemToEnchant != null){
-								boolean useBooks = ConfigUtils.getBoolean(MainConfiguration.class, "use_enchanted_books");
-								if(itemToEnchant.getType() == Material.BOOK && useBooks) {
+							if (itemToEnchant != null) {
+								boolean useBooks = ConfigUtils.getBoolean(MainConfiguration.class,
+										"use_enchanted_books");
+								if (itemToEnchant.getType() == Material.BOOK && useBooks) {
 									itemToEnchant = ItemUtils.convertToEnchantedBook(itemToEnchant);
 								} else if (itemToEnchant.getType() == Material.ENCHANTED_BOOK && !useBooks) {
 									itemToEnchant = ItemUtils.convertToRegularBook(itemToEnchant);
@@ -62,10 +64,11 @@ public class UnsafeEnchant implements CommandExecutor {
 								codes.put("%level%", level);
 								codes.put("%enchant%", enchant.getDisplayName());
 								ChatUtils.sendMessage(player, ChatUtils.getMessage(codes, "commands.add-enchant"));
-							}else{
+							} else {
 								HashMap<String, Object> codes = ChatUtils.getCodes();
 								codes.put("%enchant%", enchant.getDisplayName());
-								ChatUtils.sendMessage(player, ChatUtils.getMessage(codes, "commands.cannot-enchant-item"));
+								ChatUtils.sendMessage(player,
+										ChatUtils.getMessage(codes, "commands.cannot-enchant-item"));
 							}
 							return true;
 						}
@@ -73,10 +76,11 @@ public class UnsafeEnchant implements CommandExecutor {
 					HashMap<String, Object> codes = ChatUtils.getCodes();
 					codes.put("%enchant%", enchantmentName);
 					ChatUtils.sendMessage(player, ChatUtils.getMessage(codes, "commands.enchant-not-found"));
-				}else{
-					ChatUtils.sendMessage(player, ChatUtils.getMessage(ChatUtils.getCodes(), "commands.enchant-not-specified"));
+				} else {
+					ChatUtils.sendMessage(player,
+							ChatUtils.getMessage(ChatUtils.getCodes(), "commands.enchant-not-specified"));
 				}
-			}else {
+			} else {
 				ChatUtils.sendMessage(player, ChatUtils.getMessage(ChatUtils.getCodes(), "commands.no-permission"));
 			}
 		}

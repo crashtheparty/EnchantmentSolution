@@ -8,32 +8,32 @@ import org.ctp.enchantmentsolution.utils.DBUtils;
 import org.ctp.enchantmentsolution.utils.yaml.YamlConfigBackup;
 import org.ctp.enchantmentsolution.utils.yaml.YamlInfo;
 
-public abstract class Configuration implements Configurable{
-	
+public abstract class Configuration implements Configurable {
+
 	private File file;
 	private YamlConfigBackup config;
 	private boolean comments = true;
-	
+
 	public Configuration(File file) {
 		this(file, true);
 	}
-	
+
 	public Configuration(File file, boolean setDefault) {
 		this.file = file;
 		try {
 			YamlConfiguration.loadConfiguration(file);
-			
+
 			String[] header = { "Enchantment Solution", "Plugin by", "crashtheparty" };
 			config = new YamlConfigBackup(file, header);
 			config.getFromConfig();
-			if(setDefault) {
+			if (setDefault) {
 				setDefaults();
 			}
 		} catch (final Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	@Override
 	public File getFile() {
 		return file;
@@ -53,7 +53,7 @@ public abstract class Configuration implements Configurable{
 	public void save() {
 		config.setComments(comments);
 		config.saveConfig();
-		
+
 		DBUtils.updateConfig(this);
 	}
 
@@ -65,9 +65,9 @@ public abstract class Configuration implements Configurable{
 	@Override
 	public void revert(int backup) {
 		config.revert();
-		
+
 		List<YamlInfo> info = DBUtils.getBackup(this, backup);
-		
+
 		for(YamlInfo i: info) {
 			if (i.getValue() != null) {
 				config.set(i.getPath(), i.getValue());
@@ -76,7 +76,7 @@ public abstract class Configuration implements Configurable{
 
 		save();
 	}
-	
+
 	@Override
 	public void reload() {
 		revert();
@@ -108,7 +108,7 @@ public abstract class Configuration implements Configurable{
 	public double getDouble(String s) {
 		return config.getDouble(s);
 	}
-	
+
 	@Override
 	public void updatePath(String s, Object value) {
 		config.set(s, value);

@@ -69,17 +69,17 @@ public class EnchantmentSolution extends JavaPlugin {
 		RegisterEnchantments.addRegisterEnchantments();
 
 		Configurations.onEnable();
-		
+
 		registerEvent(new InventoryClick());
 		registerEvent(new InventoryClose());
 		registerEvent(new PlayerInteract());
 		registerEvent(new ChatMessage());
-		
-		registerEvent(new BlockListener());
+
+		registerEvent(new ExtraBlockListener());
 		registerEvent(new VanishListener());
 		registerEvent(new EquipListener());
 		registerEvent(new BadAttributesListener());
-		
+
 		registerEvent(new FishingListener());
 		registerEvent(new DropsListener());
 		registerEvent(new SoulListener());
@@ -88,6 +88,7 @@ public class EnchantmentSolution extends JavaPlugin {
 		registerEvent(new AfterEffectsListener());
 		registerEvent(new AttributeListener());
 		registerEvent(new ProjectileListener());
+		registerEvent(new BlockListener());
 
 		registerEvent(new Testers());
 
@@ -127,12 +128,12 @@ public class EnchantmentSolution extends JavaPlugin {
 		} else {
 			mcmmoType = "Disabled";
 		}
-		
-		if(!mcmmoType.equals("Disabled")) {
+
+		if (!mcmmoType.equals("Disabled")) {
 			registerEvent(new McMMOAbility());
 		}
-		
-		if(Bukkit.getPluginManager().isPluginEnabled("AuctionHouse")) {
+
+		if (Bukkit.getPluginManager().isPluginEnabled("AuctionHouse")) {
 			Bukkit.getScheduler().runTaskLater(this, new Runnable() {
 				@Override
 				public void run() {
@@ -141,13 +142,11 @@ public class EnchantmentSolution extends JavaPlugin {
 			}, 20l);
 		}
 
-		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN,
-				new AbilityRunnable(), 80l, 80l);
-		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN,
-				new MiscRunnable(), 1l, 1l);
-		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN,
-				new SnapshotRunnable(), 1l, 1l);
-		
+		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN, new AbilityRunnable(), 80l, 80l);
+		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN, new ExhaustionRunnable(), 4l, 4l);
+		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN, new MiscRunnable(), 1l, 1l);
+		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN, new SnapshotRunnable(), 1l, 1l);
+
 		getCommand("Enchant").setExecutor(new Enchant());
 		getCommand("Info").setExecutor(new EnchantInfo());
 		getCommand("RemoveEnchant").setExecutor(new RemoveEnchant());
@@ -161,7 +160,7 @@ public class EnchantmentSolution extends JavaPlugin {
 		getCommand("Info").setTabCompleter(new PlayerChatTabComplete());
 		getCommand("RemoveEnchant").setTabCompleter(new PlayerChatTabComplete());
 		getCommand("EnchantUnsafe").setTabCompleter(new PlayerChatTabComplete());
-		
+
 		check = new VersionCheck(pluginVersion,
 				"https://raw.githubusercontent.com/crashtheparty/EnchantmentSolution/master/VersionHistory",
 				"https://www.spigotmc.org/resources/enchantment-solution.59556/",

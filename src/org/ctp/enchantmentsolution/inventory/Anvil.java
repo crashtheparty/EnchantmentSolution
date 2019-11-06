@@ -22,7 +22,7 @@ import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.ConfigUtils;
 import org.ctp.enchantmentsolution.utils.compatibility.JobsUtils;
 
-public class Anvil implements InventoryData{
+public class Anvil implements InventoryData {
 
 	private Player player;
 	private Inventory inventory;
@@ -33,9 +33,9 @@ public class Anvil implements InventoryData{
 	private boolean opening;
 
 	public Anvil(Player player, Block block) {
-		this.setPlayer(player);
-		this.setBlock(block);
-		this.playerItems = new ArrayList<ItemStack>();
+		setPlayer(player);
+		setBlock(block);
+		playerItems = new ArrayList<ItemStack>();
 	}
 
 	public void setInventory() {
@@ -43,32 +43,34 @@ public class Anvil implements InventoryData{
 	}
 
 	public void setInventory(List<ItemStack> items) {
-		if(block.getType() == Material.AIR) return;
+		if (block.getType() == Material.AIR) {
+			return;
+		}
 		boolean useAnvil = ConfigUtils.getBoolean(MainConfiguration.class, "anvil.default_use");
 		int maxRepairLevel = ConfigUtils.getInt(MainConfiguration.class, "anvil.max_repair_level");
 		boolean useLegacyGrindstone = ConfigUtils.useLegacyGrindstone();
 		try {
 			int size = 27;
-			if(useAnvil || useLegacyGrindstone) {
+			if (useAnvil || useLegacyGrindstone) {
 				size = 45;
 			}
 			Inventory inv = Bukkit.createInventory(null, size, ChatUtils.getMessage(getCodes(), "anvil.name"));
 			inv = open(inv);
-	
+
 			ItemStack mirror = new ItemStack(Material.BLACK_STAINED_GLASS_PANE);
 			ItemMeta mirrorMeta = mirror.getItemMeta();
 			mirrorMeta.setDisplayName(ChatUtils.getMessage(getCodes(), "anvil.mirror"));
 			mirror.setItemMeta(mirrorMeta);
 			int num_mirrors = 27;
-			if(useAnvil || ConfigUtils.useLegacyGrindstone()) {
+			if (useAnvil || ConfigUtils.useLegacyGrindstone()) {
 				num_mirrors = 45;
 			}
 			for(int i = 0; i < num_mirrors; i++) {
-				if(i != 4 && i != 10 && i != 12 && i != 16) {
+				if (i != 4 && i != 10 && i != 12 && i != 16) {
 					inv.setItem(i, mirror);
 				}
 			}
-			if(useAnvil && useLegacyGrindstone) {
+			if (useAnvil && useLegacyGrindstone) {
 				ItemStack anvil = new ItemStack(Material.ANVIL);
 				ItemMeta anvilMeta = anvil.getItemMeta();
 				anvilMeta.setDisplayName(ChatUtils.getMessage(getCodes(), "anvil.legacy-gui"));
@@ -94,28 +96,28 @@ public class Anvil implements InventoryData{
 				grindstone.setItemMeta(grindstoneMeta);
 				inv.setItem(31, grindstone);
 			}
-			
+
 			ItemStack rename = new ItemStack(Material.LIME_STAINED_GLASS_PANE);
 			ItemMeta renameMeta = rename.getItemMeta();
 			renameMeta.setDisplayName(ChatUtils.getMessage(getCodes(), "anvil.rename"));
 			rename.setItemMeta(renameMeta);
-			
+
 			ItemStack combine = null;
 			ItemStack first = null;
 			ItemStack second = null;
-			if(playerItems.size() == 2) {
+			if (playerItems.size() == 2) {
 				first = playerItems.get(0);
 				second = playerItems.get(1);
 			} else if (playerItems.size() == 1) {
 				first = playerItems.get(0);
 			}
 			anvil = AnvilEnchantments.getAnvilEnchantments(player, first, second);
-			if(anvil.canCombine()) {
+			if (anvil.canCombine()) {
 				int repairCost = anvil.getRepairCost();
 				int playerLevel = player.getLevel();
-				
+
 				List<String> lore = new ArrayList<String>();
-				if(player.getGameMode().equals(GameMode.CREATIVE) || repairCost <= playerLevel) {
+				if (player.getGameMode().equals(GameMode.CREATIVE) || repairCost <= playerLevel) {
 					if (!player.getGameMode().equals(GameMode.CREATIVE) && repairCost > maxRepairLevel) {
 						combine = new ItemStack(Material.RED_STAINED_GLASS_PANE);
 						HashMap<String, Object> loreCodes = getCodes();
@@ -127,7 +129,7 @@ public class Anvil implements InventoryData{
 						loreCodes.put("%repairCost%", repairCost);
 						lore.add(ChatUtils.getMessage(loreCodes, "anvil.repair-cost"));
 					}
-				}else {
+				} else {
 					combine = new ItemStack(Material.RED_STAINED_GLASS_PANE);
 					if (!player.getGameMode().equals(GameMode.CREATIVE) && repairCost > maxRepairLevel) {
 						lore.add(ChatUtils.getMessage(getCodes(), "anvil.cannot-repair"));
@@ -148,41 +150,41 @@ public class Anvil implements InventoryData{
 				combineMeta.setDisplayName(ChatUtils.getMessage(getCodes(), "anvil.cannot-combine"));
 				combine.setItemMeta(combineMeta);
 			}
-			
+
 			ItemStack barrierRename = new ItemStack(Material.BARRIER);
 			ItemMeta barrierRenameMeta = barrierRename.getItemMeta();
 			barrierRenameMeta.setDisplayName(ChatUtils.getMessage(getCodes(), "anvil.cannot-rename"));
 			barrierRename.setItemMeta(barrierRenameMeta);
-			
+
 			inv.setItem(10, new ItemStack(Material.AIR));
 			inv.setItem(12, new ItemStack(Material.AIR));
 			inv.setItem(16, new ItemStack(Material.AIR));
-			
-			if(playerItems.size() == 1) {
+
+			if (playerItems.size() == 1) {
 				inv.setItem(4, rename);
-			}else {
+			} else {
 				inv.setItem(4, barrierRename);
 			}
-			
-			if(playerItems.size() >= 1) {
+
+			if (playerItems.size() >= 1) {
 				ItemStack item = playerItems.get(0);
 				inv.setItem(10, item);
 			}
-			if(playerItems.size() == 2) {
+			if (playerItems.size() == 2) {
 				ItemStack item = playerItems.get(1);
 				inv.setItem(12, item);
-				if(anvil != null) {
+				if (anvil != null) {
 					inv.setItem(16, anvil.getCombinedItem());
 				}
-			}else {
+			} else {
 				anvil = null;
 			}
 			inv.setItem(14, combine);
-		}catch(Exception ex) {
+		} catch (Exception ex) {
 			ex.printStackTrace();
-			if(playerItems.size() - 1 >= 0) {
+			if (playerItems.size() - 1 >= 0) {
 				ItemStack item = playerItems.get(playerItems.size() - 1);
-				if(removeItem(playerItems.size() - 1)) {
+				if (removeItem(playerItems.size() - 1)) {
 					ItemUtils.giveItemToPlayer(player, item, player.getLocation(), false);
 				}
 			}
@@ -210,9 +212,9 @@ public class Anvil implements InventoryData{
 	}
 
 	public boolean removeItem(int slot) {
-		if(slot == 10) {
+		if (slot == 10) {
 			slot = 0;
-		}else if(slot == 12) {
+		} else if (slot == 12) {
 			slot = 1;
 		}
 		return playerItems.remove(slot) != null;
@@ -221,10 +223,10 @@ public class Anvil implements InventoryData{
 	public List<ItemStack> getItems() {
 		return playerItems;
 	}
-	
+
 	public void combine() {
-		if(inventory.getItem(14).getType().equals(Material.LIME_STAINED_GLASS_PANE)) {
-			if(player.getGameMode() != GameMode.CREATIVE) {
+		if (inventory.getItem(14).getType().equals(Material.LIME_STAINED_GLASS_PANE)) {
+			if (player.getGameMode() != GameMode.CREATIVE) {
 				if (anvil.getRepairCost() > player.getLevel()) {
 					ChatUtils.sendMessage(player, ChatUtils.getMessage(getCodes(), "anvil.message-cannot-combine"));
 					return;
@@ -232,17 +234,17 @@ public class Anvil implements InventoryData{
 				player.setLevel(player.getLevel() - anvil.getRepairCost());
 			}
 			ItemUtils.giveItemToPlayer(player, anvil.getCombinedItem(), player.getLocation(), false);
-			if(anvil.getRepairType().equals(RepairType.REPAIR)) {
+			if (anvil.getRepairType().equals(RepairType.REPAIR)) {
 				ItemUtils.giveItemToPlayer(player, anvil.getItemLeftover(), player.getLocation(), false);
 			}
-			if(EnchantmentSolution.getPlugin().isJobsEnabled()) {
-				JobsUtils.sendAnvilAction(player, playerItems.get(1),  anvil.getCombinedItem());
+			if (EnchantmentSolution.getPlugin().isJobsEnabled()) {
+				JobsUtils.sendAnvilAction(player, playerItems.get(1), anvil.getCombinedItem());
 			}
 			anvil = null;
 			playerItems.clear();
 
 			AnvilUtils.checkAnvilBreak(player, block, this);
-		}else {
+		} else {
 			ChatUtils.sendMessage(player, ChatUtils.getMessage(getCodes(), "anvil.message-cannot-combine"));
 		}
 	}
@@ -254,9 +256,9 @@ public class Anvil implements InventoryData{
 	public void setBlock(Block block) {
 		this.block = block;
 	}
-	
+
 	public void setItemName(String name) {
-		if(playerItems.size() == 1) {
+		if (playerItems.size() == 1) {
 			ItemStack item = playerItems.remove(0);
 			ItemMeta meta = item.getItemMeta();
 			meta.setDisplayName(name);
@@ -264,14 +266,14 @@ public class Anvil implements InventoryData{
 			ItemUtils.giveItemToPlayer(player, item, player.getLocation(), false);
 		}
 	}
-	
+
 	public void close(boolean external) {
-		if(EnchantmentSolution.getPlugin().hasInventory(this)) {
-			for(ItemStack item : getItems()){
+		if (EnchantmentSolution.getPlugin().hasInventory(this)) {
+			for(ItemStack item: getItems()) {
 				ItemUtils.giveItemToPlayer(player, item, player.getLocation(), false);
 			}
 			EnchantmentSolution.getPlugin().removeInventory(this);
-			if(!external) {
+			if (!external) {
 				player.getOpenInventory().close();
 			}
 		}
@@ -294,12 +296,12 @@ public class Anvil implements InventoryData{
 	@Override
 	public Inventory open(Inventory inv) {
 		opening = true;
-		if(inventory == null || isInLegacy()) {
+		if (inventory == null || isInLegacy()) {
 			inLegacy = false;
 			inventory = inv;
 			player.openInventory(inv);
 		} else {
-			if(inv.getSize() == inventory.getSize()) {
+			if (inv.getSize() == inventory.getSize()) {
 				inv = player.getOpenInventory().getTopInventory();
 				inventory = inv;
 			} else {
@@ -310,7 +312,7 @@ public class Anvil implements InventoryData{
 		for(int i = 0; i < inventory.getSize(); i++) {
 			inventory.setItem(i, new ItemStack(Material.AIR));
 		}
-		if(opening) {
+		if (opening) {
 			opening = false;
 		}
 		return inv;

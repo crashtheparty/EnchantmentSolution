@@ -45,8 +45,8 @@ public class ChatUtils {
 	private static String getStarter() {
 		String config = ConfigUtils.getString(MainConfiguration.class, "starter");
 		String starter = null;
-		if(config != null) {
-			 starter = ChatColor.translateAlternateColorCodes('&', config);
+		if (config != null) {
+			starter = ChatColor.translateAlternateColorCodes('&', config);
 		}
 		if (starter != null) {
 			return starter + ChatColor.WHITE + " ";
@@ -78,8 +78,9 @@ public class ChatUtils {
 		} catch (Exception e) {
 
 		}
-		if (s.isEmpty())
+		if (s.isEmpty()) {
 			return location + " must be a string.";
+		}
 		return s;
 	}
 
@@ -90,12 +91,13 @@ public class ChatUtils {
 			messages.add(ConfigUtils.getString(LanguageConfiguration.class, location));
 		}
 		for(int i = 0; i < messages.size(); i++) {
-			if(messages.get(i) != null) {
+			if (messages.get(i) != null) {
 				messages.set(i, translateCodes(codes, ChatColor.translateAlternateColorCodes('&', messages.get(i))));
 			}
 		}
-		if (messages.size() == 0)
+		if (messages.size() == 0) {
 			messages.add(location + " must be a list or a string.");
+		}
 		return messages;
 	}
 
@@ -142,9 +144,9 @@ public class ChatUtils {
 
 		IntStream.range(0, chars.length).filter(value -> value % 2 != 0)
 				.forEach(value -> hexChars[value / 2] = chars[value]);
-		
+
 		String newChars = "";
-		for(char c : hexChars) {
+		for(char c: hexChars) {
 			newChars += c;
 		}
 

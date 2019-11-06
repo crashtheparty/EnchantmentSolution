@@ -7,19 +7,19 @@ public class ESTrigger {
 	private String criteria;
 	private Trigger trigger;
 	private int maxAmount = 0, versionMinimum = 0, versionMaximum = 0;
-	
+
 	ESTrigger(String criteria) {
 		this(criteria, 0, 0, 0, new ImpossibleTrigger());
 	}
-	
+
 	ESTrigger(String criteria, int maxAmount) {
 		this(criteria, maxAmount, 0, 0, new ImpossibleTrigger());
 	}
-	
+
 	ESTrigger(String criteria, int maxAmount, int versionMinimum, int versionMaximum) {
 		this(criteria, maxAmount, versionMinimum, versionMaximum, new ImpossibleTrigger());
 	}
-	
+
 	ESTrigger(String criteria, int maxAmount, int versionMinimum, int versionMaximum, Trigger trigger) {
 		this.criteria = criteria;
 		this.maxAmount = maxAmount;
@@ -27,27 +27,27 @@ public class ESTrigger {
 		this.versionMaximum = versionMaximum;
 		this.trigger = trigger;
 	}
-	
+
 	public String getCriteria() {
 		return criteria;
 	}
-	
+
 	public void setCriteria(String criteria) {
 		this.criteria = criteria;
 	}
-	
+
 	public Trigger getTrigger() {
 		return trigger;
 	}
-	
+
 	public void setTrigger(Trigger trigger) {
 		this.trigger = trigger;
 	}
-	
+
 	public int getMaxAmount() {
 		return maxAmount;
 	}
-	
+
 	public void setMaxAmount(int maxAmount) {
 		this.maxAmount = maxAmount;
 	}

@@ -17,7 +17,7 @@ public interface Reflectionable {
 			ex.printStackTrace();
 		}
 	}
-	
+
 	default void runMethod(Reflectionable superClass, String name, Event event, Class<? extends Event> className) {
 		try {
 			Method superMethod = superClass.getClass().getDeclaredMethod(name, className);
@@ -27,20 +27,24 @@ public interface Reflectionable {
 			ex.printStackTrace();
 		}
 	}
-	
+
 	default boolean canRun(Enchantment enchantment) {
 		return RegisterEnchantments.isEnabled(enchantment);
 	}
-	
+
 	default boolean canRun(boolean all, Enchantment... enchantments) {
-		if(all) {
-			for(Enchantment enchantment : enchantments) {
-				if(!RegisterEnchantments.isEnabled(enchantment)) all = false;
+		if (all) {
+			for(Enchantment enchantment: enchantments) {
+				if (!RegisterEnchantments.isEnabled(enchantment)) {
+					all = false;
+				}
 			}
 			return all;
 		} else {
-			for(Enchantment enchantment : enchantments) {
-				if(RegisterEnchantments.isEnabled(enchantment)) return true;
+			for(Enchantment enchantment: enchantments) {
+				if (RegisterEnchantments.isEnabled(enchantment)) {
+					return true;
+				}
 			}
 			return false;
 		}

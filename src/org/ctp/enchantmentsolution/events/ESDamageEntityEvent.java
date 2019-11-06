@@ -17,14 +17,14 @@ public abstract class ESDamageEntityEvent extends EntityEvent implements Cancell
 	public HandlerList getHandlers() {
 		return handlers;
 	}
-	
+
 	private double damage, newDamage;
 	private boolean cancelled;
-	
+
 	public ESDamageEntityEvent(LivingEntity damaged, double damage, double newDamage) {
 		super(damaged);
 		this.damage = damage;
-		this.setNewDamage(newDamage);
+		setNewDamage(newDamage);
 	}
 
 	public double getDamage() {
@@ -38,12 +38,12 @@ public abstract class ESDamageEntityEvent extends EntityEvent implements Cancell
 	public void setNewDamage(double newDamage) {
 		this.newDamage = newDamage;
 	}
-	
+
 	@Override
 	public boolean isCancelled() {
 		return cancelled;
 	}
-	
+
 	@Override
 	public void setCancelled(boolean cancelled) {
 		this.cancelled = cancelled;

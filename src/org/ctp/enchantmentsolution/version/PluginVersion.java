@@ -7,23 +7,23 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.ctp.enchantmentsolution.version.Version.VersionType;
 
 public class PluginVersion {
-	
+
 	private List<Version> pluginVersions = new ArrayList<Version>();
 	private String current;
 	private JavaPlugin plugin;
 
 	public PluginVersion(JavaPlugin plugin, String version) {
 		current = version;
-		this.setPlugin(plugin);
+		setPlugin(plugin);
 	}
-	
+
 	public String getCurrent() {
 		return current;
 	}
-	
+
 	public Version getNewestVersion(boolean experimental) {
 		for(int i = pluginVersions.size() - 1; i >= 0; i--) {
-			if(pluginVersions.get(i).getType() == VersionType.LIVE) {
+			if (pluginVersions.get(i).getType() == VersionType.LIVE) {
 				return pluginVersions.get(i);
 			} else if (pluginVersions.get(i).getType() == VersionType.EXPERIMENTAL) {
 				return pluginVersions.get(i);
@@ -31,44 +31,44 @@ public class PluginVersion {
 		}
 		return null;
 	}
-	
+
 	public boolean isOfficialVersion() {
 		for(int i = pluginVersions.size() - 1; i >= 0; i--) {
-			if(pluginVersions.get(i).getVersionName().equalsIgnoreCase(current)) {
+			if (pluginVersions.get(i).getVersionName().equalsIgnoreCase(current)) {
 				return true;
 			}
 		}
 		return false;
 	}
-	
+
 	public boolean hasNewerVersion(boolean experimental) {
 		for(int i = pluginVersions.size() - 1; i >= 0; i--) {
 			Version v = pluginVersions.get(i);
-			if(v.getVersionName().equalsIgnoreCase(current)) {
+			if (v.getVersionName().equalsIgnoreCase(current)) {
 				return false;
 			}
-			if(v.getType() == VersionType.LIVE) {
+			if (v.getType() == VersionType.LIVE) {
 				return true;
 			}
-			if(experimental && v.getType() == VersionType.EXPERIMENTAL) {
+			if (experimental && v.getType() == VersionType.EXPERIMENTAL) {
 				return true;
 			}
 		}
 		return true;
 	}
-	
+
 	public boolean isExperimentalVersion() {
 		for(int i = pluginVersions.size() - 1; i >= 0; i--) {
-			if(pluginVersions.get(i).getVersionName().equalsIgnoreCase(current)) {
+			if (pluginVersions.get(i).getVersionName().equalsIgnoreCase(current)) {
 				return pluginVersions.get(i).getType().equals(VersionType.EXPERIMENTAL);
 			}
 		}
 		return false;
 	}
-	
+
 	public boolean isUpcomingVersion() {
 		for(int i = pluginVersions.size() - 1; i >= 0; i--) {
-			if(pluginVersions.get(i).getVersionName().equalsIgnoreCase(current)) {
+			if (pluginVersions.get(i).getVersionName().equalsIgnoreCase(current)) {
 				return pluginVersions.get(i).getType().equals(VersionType.UPCOMING);
 			}
 		}

@@ -4,11 +4,11 @@ public class AdvancementModificationResult {
 
 	private boolean loaded, changed;
 	private String message;
-	
+
 	public AdvancementModificationResult(boolean loaded, boolean changed, String message) {
-		this.setLoaded(loaded);
-		this.setChanged(changed);
-		this.setMessage(message);
+		setLoaded(loaded);
+		setChanged(changed);
+		setMessage(message);
 	}
 
 	public boolean isLoaded() {

@@ -5,13 +5,13 @@ import org.bukkit.entity.Player;
 import org.ctp.enchantmentsolution.events.FishingEvent;
 
 public class AnglerEvent extends FishingEvent {
-	
+
 	private int level, fishAmount;
-	
+
 	public AnglerEvent(Player who, Material fish, int level) {
 		super(who, fish);
 		this.level = level;
-		this.fishAmount = this.level + 1;
+		fishAmount = this.level + 1;
 	}
 
 	public int getLevel() {

@@ -12,63 +12,65 @@ import org.ctp.enchantmentsolution.advancements.util.JsonBuilder;
 class RangeObject extends SharedObject {
 	private @Nullable Double min = null;
 	private @Nullable Double max = null;
-	
-	
-	
+
 	/**
 	 * @return the lower bound or null, if none is specified
 	 */
 	public @Nullable Double getMin() {
 		return min;
 	}
-	
+
 	/**
 	 * @return the upper bound or null, if none is specified
 	 */
 	public @Nullable Double getMax() {
 		return max;
 	}
-	
-	
-	
+
 	/**
-	 * @param min the lower bound or null, if it should be cleared
+	 * @param min
+	 *            the lower bound or null, if it should be cleared
 	 * @return the current range object for chaining
 	 */
 	public RangeObject setMin(@Nullable Double min) {
 		this.min = min;
 		return this;
 	}
-	
+
 	/**
-	 * @param min the lower bound or null, if it should be cleared
+	 * @param min
+	 *            the lower bound or null, if it should be cleared
 	 * @return the current range object for chaining
 	 */
 	public RangeObject setMin(@Nullable Integer min) {
-		this.min = min == null ? null : (double)min;
+		this.min = min == null ? null : (double) min;
 		return this;
 	}
-	
+
 	/**
-	 * @param max the upper bound or null, if it should be cleared
+	 * @param max
+	 *            the upper bound or null, if it should be cleared
 	 * @return the current range object for chaining
 	 */
 	public RangeObject setMax(@Nullable Double max) {
 		this.max = max;
 		return this;
 	}
-	
+
 	/**
-	 * @param max the upper bound or null, if it should be cleared
+	 * @param max
+	 *            the upper bound or null, if it should be cleared
 	 * @return the current range object for chaining
 	 */
 	public RangeObject setMax(@Nullable Integer max) {
-		this.max = max == null ? null : (double)max;
+		this.max = max == null ? null : (double) max;
 		return this;
 	}
-	
+
 	/**
-	 * @param exact the value which is to be assigned to both the lower and the upper bounds
+	 * @param exact
+	 *            the value which is to be assigned to both the lower and the upper
+	 *            bounds
 	 * @return the current range object for chaining
 	 */
 	public RangeObject setExact(double exact) {
@@ -76,19 +78,19 @@ class RangeObject extends SharedObject {
 		max = exact;
 		return this;
 	}
-	
+
 	/**
-	 * @param exact the value which is to be assigned to both the lower and the upper bounds
+	 * @param exact
+	 *            the value which is to be assigned to both the lower and the upper
+	 *            bounds
 	 * @return the current range object for chaining
 	 */
 	public RangeObject setExact(int exact) {
-		min = (double)exact;
+		min = (double) exact;
 		max = min;
 		return this;
 	}
-	
-	
-	
+
 	/**
 	 * @return the JSON representation of the range object
 	 */
@@ -97,9 +99,6 @@ class RangeObject extends SharedObject {
 		if (min != null && min.equals(max)) {
 			return new JsonPrimitive(min);
 		}
-		return new JsonBuilder()
-				.add("min", min)
-				.add("max", max)
-				.build();
+		return new JsonBuilder().add("min", min).add("max", max).build();
 	}
 }

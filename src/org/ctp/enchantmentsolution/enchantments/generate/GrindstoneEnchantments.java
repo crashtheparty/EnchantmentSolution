@@ -218,8 +218,9 @@ public class GrindstoneEnchantments extends GenerateEnchantments {
 						break;
 					}
 				}
-				if (!contains)
+				if (!contains) {
 					enchantments.add(new EnchantmentLevel(custom, entry.getValue()));
+				}
 			}
 		}
 
@@ -242,8 +243,9 @@ public class GrindstoneEnchantments extends GenerateEnchantments {
 							break;
 						}
 					}
-					if (!contains)
+					if (!contains) {
 						enchantments.add(new EnchantmentLevel(custom, entry.getValue()));
+					}
 				}
 			}
 		}

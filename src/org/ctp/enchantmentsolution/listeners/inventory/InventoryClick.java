@@ -16,7 +16,7 @@ import org.ctp.enchantmentsolution.inventory.LegacyAnvil;
 import org.ctp.enchantmentsolution.utils.InventoryClickUtils;
 
 public class InventoryClick implements Listener {
-	
+
 	@EventHandler
 	public void onInventoryClick(InventoryClickEvent event) {
 		Inventory inv = event.getClickedInventory();
@@ -30,31 +30,35 @@ public class InventoryClick implements Listener {
 			return;
 		}
 		InventoryData invData = EnchantmentSolution.getPlugin().getInventory(player);
-		if(invData != null) {
-			if(invData instanceof LegacyAnvil) {
+		if (invData != null) {
+			if (invData instanceof LegacyAnvil) {
 				return;
 			}
 			event.setCancelled(true);
-			if(invData instanceof EnchantmentTable) {
+			if (invData instanceof EnchantmentTable) {
 				EnchantmentTable table = (EnchantmentTable) invData;
-				
-				InventoryClickUtils.setEnchantmentTableDetails(table, player, inv, event.getClickedInventory(), event.getSlot());
-			} else if(invData instanceof Anvil) {
+
+				InventoryClickUtils.setEnchantmentTableDetails(table, player, inv, event.getClickedInventory(),
+						event.getSlot());
+			} else if (invData instanceof Anvil) {
 				Anvil anvil = (Anvil) invData;
-				
+
 				InventoryClickUtils.setAnvilDetails(anvil, player, inv, event.getClickedInventory(), event.getSlot());
 			} else if (invData instanceof Grindstone) {
 				Grindstone stone = (Grindstone) invData;
-				
-				InventoryClickUtils.setGrindstoneDetails(stone, player, inv, event.getClickedInventory(), event.getSlot());
+
+				InventoryClickUtils.setGrindstoneDetails(stone, player, inv, event.getClickedInventory(),
+						event.getSlot());
 			} else if (invData instanceof ConfigInventory) {
 				ConfigInventory configInv = (ConfigInventory) invData;
 
-				InventoryClickUtils.setConfigInventoryDetails(configInv, player, inv, event.getClickedInventory(), event.getSlot(), event.getClick());
+				InventoryClickUtils.setConfigInventoryDetails(configInv, player, inv, event.getClickedInventory(),
+						event.getSlot(), event.getClick());
 			} else if (invData instanceof EnchantabilityCalc) {
 				EnchantabilityCalc enchantabilityCalc = (EnchantabilityCalc) invData;
 
-				InventoryClickUtils.setEnchantabilityCalc(enchantabilityCalc, player, inv, event.getClickedInventory(), event.getSlot(), event.getClick());
+				InventoryClickUtils.setEnchantabilityCalc(enchantabilityCalc, player, inv, event.getClickedInventory(),
+						event.getSlot(), event.getClick());
 			}
 		}
 	}

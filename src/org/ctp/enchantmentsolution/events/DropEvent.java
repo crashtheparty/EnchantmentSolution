@@ -28,8 +28,8 @@ public abstract class DropEvent extends PlayerEvent implements Cancellable {
 	public DropEvent(Player who, List<ItemStack> newDrops, List<ItemStack> originalDrops, boolean override) {
 		super(who);
 		this.originalDrops = originalDrops;
-		this.setNewDrops(newDrops);
-		this.setOverride(override);
+		setNewDrops(newDrops);
+		setOverride(override);
 	}
 
 	public List<ItemStack> getOriginalDrops() {
@@ -51,12 +51,12 @@ public abstract class DropEvent extends PlayerEvent implements Cancellable {
 	public void setOverride(boolean override) {
 		this.override = override;
 	}
-	
+
 	@Override
 	public boolean isCancelled() {
 		return cancelled;
 	}
-	
+
 	@Override
 	public void setCancelled(boolean cancelled) {
 		this.cancelled = cancelled;

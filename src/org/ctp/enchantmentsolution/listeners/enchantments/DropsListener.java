@@ -43,13 +43,13 @@ public class DropsListener extends Enchantmentable {
 	}
 
 	private void beheading(EntityDeathEvent event) {
-		if (!canRun(RegisterEnchantments.BEHEADING, event))
+		if (!canRun(RegisterEnchantments.BEHEADING, event)) {
 			return;
+		}
 		Entity entity = event.getEntity();
 		Player killer = event.getEntity().getKiller();
 		if (killer != null) {
-			if (ItemUtils.hasEnchantment(killer.getInventory().getItemInMainHand(),
-					RegisterEnchantments.BEHEADING)) {
+			if (ItemUtils.hasEnchantment(killer.getInventory().getItemInMainHand(), RegisterEnchantments.BEHEADING)) {
 				double chance = ItemUtils.getLevel(killer.getInventory().getItemInMainHand(),
 						RegisterEnchantments.BEHEADING) * .05;
 				double random = Math.random();
@@ -108,10 +108,12 @@ public class DropsListener extends Enchantmentable {
 	}
 
 	private void transmutation(EntityDeathEvent event) {
-		if (!canRun(RegisterEnchantments.TRANSMUTATION, event))
+		if (!canRun(RegisterEnchantments.TRANSMUTATION, event)) {
 			return;
-		if (event.getEntity() instanceof Player)
+		}
+		if (event.getEntity() instanceof Player) {
 			return;
+		}
 		EntityDamageEvent e = event.getEntity().getLastDamageCause();
 		if (e instanceof EntityDamageByEntityEvent) {
 			EntityDamageByEntityEvent entityDamage = (EntityDamageByEntityEvent) e;
@@ -126,7 +128,8 @@ public class DropsListener extends Enchantmentable {
 				}
 			} else if (event.getEntity().getKiller() != null) {
 				Player killer = event.getEntity().getKiller();
-				if(ItemUtils.hasEnchantment(killer.getInventory().getItemInMainHand(), RegisterEnchantments.TRANSMUTATION)) {
+				if (ItemUtils.hasEnchantment(killer.getInventory().getItemInMainHand(),
+						RegisterEnchantments.TRANSMUTATION)) {
 					handleTransmutation(event);
 				}
 			}
@@ -151,7 +154,7 @@ public class DropsListener extends Enchantmentable {
 		}
 		return skulls;
 	}
-	
+
 	private void handleTransmutation(EntityDeathEvent event) {
 		List<ItemStack> drops = new ArrayList<ItemStack>();
 		boolean override = true;
@@ -163,23 +166,23 @@ public class DropsListener extends Enchantmentable {
 				drops.add(TransmutationLoot.getLoot(event.getEntity().getKiller()));
 			}
 		} else {
-			for(ItemStack item : event.getDrops()) {
+			for(ItemStack item: event.getDrops()) {
 				if (!TransmutationLoot.isTransmutatedLoot(item)) {
 					changedLoot = true;
 					drops.add(TransmutationLoot.getLoot(event.getEntity().getKiller()));
 				}
 			}
 		}
-		
+
 		if (!changedLoot) {
-			AdvancementUtils.awardCriteria(event.getEntity().getKiller(),
-					ESAdvancement.POSEIDONS_DAY_OFF, "day_off");
+			AdvancementUtils.awardCriteria(event.getEntity().getKiller(), ESAdvancement.POSEIDONS_DAY_OFF, "day_off");
 			return;
 		}
-		
-		TransmutationEvent transmutation = new TransmutationEvent(event.getEntity().getKiller(), drops, event.getDrops(), override);
+
+		TransmutationEvent transmutation = new TransmutationEvent(event.getEntity().getKiller(), drops,
+				event.getDrops(), override);
 		Bukkit.getPluginManager().callEvent(transmutation);
-		
+
 		if (!transmutation.isCancelled()) {
 			List<ItemStack> newDrops = new ArrayList<ItemStack>();
 			if (!transmutation.isOverride()) {
@@ -187,8 +190,7 @@ public class DropsListener extends Enchantmentable {
 			}
 			newDrops.addAll(transmutation.getNewDrops());
 			if (!override) {
-				AdvancementUtils.awardCriteria(event.getEntity().getKiller(), ESAdvancement.CERBERUS,
-						"obsidian");
+				AdvancementUtils.awardCriteria(event.getEntity().getKiller(), ESAdvancement.CERBERUS, "obsidian");
 			}
 			event.getDrops().clear();
 			for(ItemStack drop: newDrops) {

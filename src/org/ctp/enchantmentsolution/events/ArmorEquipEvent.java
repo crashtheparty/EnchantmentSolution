@@ -11,7 +11,7 @@ import org.ctp.enchantmentsolution.utils.ItemSlotType;
  * @author Arnah
  * @since Jul 30, 2015
  */
-public final class ArmorEquipEvent extends PlayerEvent implements Cancellable{
+public final class ArmorEquipEvent extends PlayerEvent implements Cancellable {
 
 	private static final HandlerList handlers = new HandlerList();
 	private boolean cancel = false;
@@ -19,7 +19,8 @@ public final class ArmorEquipEvent extends PlayerEvent implements Cancellable{
 	private final ItemSlotType type;
 	private ItemStack oldArmorPiece, newArmorPiece;
 
-	public ArmorEquipEvent(final Player player, final EquipMethod equipType, final ItemSlotType type, final ItemStack oldArmorPiece, final ItemStack newArmorPiece){
+	public ArmorEquipEvent(final Player player, final EquipMethod equipType, final ItemSlotType type,
+			final ItemStack oldArmorPiece, final ItemStack newArmorPiece) {
 		super(player);
 		this.equipType = equipType;
 		this.type = type;
@@ -27,54 +28,54 @@ public final class ArmorEquipEvent extends PlayerEvent implements Cancellable{
 		this.newArmorPiece = newArmorPiece;
 	}
 
-	public final static HandlerList getHandlerList(){
+	public final static HandlerList getHandlerList() {
 		return handlers;
 	}
 
 	@Override
-	public final HandlerList getHandlers(){
+	public final HandlerList getHandlers() {
 		return handlers;
 	}
 
-	public final void setCancelled(final boolean cancel){
+	public final void setCancelled(final boolean cancel) {
 		this.cancel = cancel;
 	}
 
-	public final boolean isCancelled(){
+	public final boolean isCancelled() {
 		return cancel;
 	}
 
-	public final ItemSlotType getType(){
+	public final ItemSlotType getType() {
 		return type;
 	}
 
-	public final ItemStack getOldArmorPiece(){
+	public final ItemStack getOldArmorPiece() {
 		return oldArmorPiece;
 	}
 
-	public final void setOldArmorPiece(final ItemStack oldArmorPiece){
+	public final void setOldArmorPiece(final ItemStack oldArmorPiece) {
 		this.oldArmorPiece = oldArmorPiece;
 	}
 
-	public final ItemStack getNewArmorPiece(){
+	public final ItemStack getNewArmorPiece() {
 		return newArmorPiece;
 	}
 
-	public final void setNewArmorPiece(final ItemStack newArmorPiece){
+	public final void setNewArmorPiece(final ItemStack newArmorPiece) {
 		this.newArmorPiece = newArmorPiece;
 	}
 
 	/**
 	 * Gets the method used to either equip or unequip an armor piece.
 	 */
-	public EquipMethod getMethod(){
+	public EquipMethod getMethod() {
 		return equipType;
 	}
 
-	public enum EquipMethod{// These have got to be the worst documentations ever.
-	    /**
-	     * When you shift click an armor piece to equip or unequip
-	     */
+	public enum EquipMethod {// These have got to be the worst documentations ever.
+		/**
+		 * When you shift click an armor piece to equip or unequip
+		 */
 		SHIFT_CLICK,
 		/**
 		 * When you drag and drop the item to equip or unequip
@@ -85,16 +86,19 @@ public final class ArmorEquipEvent extends PlayerEvent implements Cancellable{
 		 */
 		PICK_DROP,
 		/**
-		 * When you right click an armor piece in the hotbar without the inventory open to equip.
+		 * When you right click an armor piece in the hotbar without the inventory open
+		 * to equip.
 		 */
 		HOTBAR,
 		/**
-		 * When you press the hotbar slot number while hovering over the armor slot to equip or unequip
+		 * When you press the hotbar slot number while hovering over the armor slot to
+		 * equip or unequip
 		 */
 		HOTBAR_SWAP,
 		/**
 		 * When in range of a dispenser that shoots an armor piece to equip.<br>
-		 * Requires the spigot version to have {@link org.bukkit.event.block.BlockDispenseArmorEvent} implemented.
+		 * Requires the spigot version to have
+		 * {@link org.bukkit.event.block.BlockDispenseArmorEvent} implemented.
 		 */
 		DISPENSER,
 		/**
@@ -104,11 +108,10 @@ public final class ArmorEquipEvent extends PlayerEvent implements Cancellable{
 		/**
 		 * When you die causing all armor to unequip
 		 */
-		DEATH, 
+		DEATH,
 		/**
 		 * When you join the server.
 		 */
-		JOIN,
-		;
+		JOIN,;
 	}
 }

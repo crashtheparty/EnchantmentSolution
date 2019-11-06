@@ -9,10 +9,11 @@ import org.ctp.enchantmentsolution.events.DropEvent;
 public class BeheadingEvent extends DropEvent {
 
 	private boolean keepInventoryOverride;
-	
-	public BeheadingEvent(Player who, List<ItemStack> newDrops, List<ItemStack> originalDrops, boolean override, boolean keepInventoryOverride) {
+
+	public BeheadingEvent(Player who, List<ItemStack> newDrops, List<ItemStack> originalDrops, boolean override,
+			boolean keepInventoryOverride) {
 		super(who, newDrops, originalDrops, override);
-		this.setKeepInventoryOverride(keepInventoryOverride);
+		setKeepInventoryOverride(keepInventoryOverride);
 	}
 
 	public boolean isKeepInventoryOverride() {

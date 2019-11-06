@@ -21,7 +21,7 @@ import net.minecraft.server.v1_14_R1.EntityPlayer;
 import net.minecraft.server.v1_14_R1.PacketPlayOutOpenWindow;
 import net.minecraft.server.v1_14_R1.World;
 
-public class AnvilGUI_v1_14_R1 extends AnvilGUI{
+public class AnvilGUI_v1_14_R1 extends AnvilGUI {
 	private class AnvilContainer extends ContainerAnvil {
 		public AnvilContainer(EntityHuman entity, int windowId) {
 			super(windowId, entity.inventory, at(entity.world, new BlockPosition(0, 0, 0)));
@@ -59,7 +59,7 @@ public class AnvilGUI_v1_14_R1 extends AnvilGUI{
 		}
 
 		inv.setItem(0, new ItemStack(Material.NAME_TAG));
-		
+
 		setInventory(container.getBukkitView().getTopInventory());
 
 		// Send the packet
@@ -74,32 +74,32 @@ public class AnvilGUI_v1_14_R1 extends AnvilGUI{
 
 	public static void createAnvil(Player player, InventoryData data) {
 		AnvilClickEventHandler handler = AnvilClickEventHandler.getHandler(player, data);
-		if(data instanceof Anvil) {
+		if (data instanceof Anvil) {
 			((Anvil) data).setInLegacy(true);
 		}
 		AnvilGUI_v1_14_R1 gui = new AnvilGUI_v1_14_R1(player, handler, data);
 		gui.open();
 	}
-	
+
 	static ContainerAccess at(final World world, final BlockPosition blockposition) {
-        return new ContainerAccess() {
-            // CraftBukkit start
-            @Override
-            public World getWorld() {
-                return world;
-            }
+		return new ContainerAccess() {
+			// CraftBukkit start
+			@Override
+			public World getWorld() {
+				return world;
+			}
 
-            @Override
-            public BlockPosition getPosition() {
-                return blockposition;
-            }
-            // CraftBukkit end
+			@Override
+			public BlockPosition getPosition() {
+				return blockposition;
+			}
+			// CraftBukkit end
 
-            @Override
-            public <T> Optional<T> a(BiFunction<World, BlockPosition, T> bifunction) {
-                return Optional.of(bifunction.apply(world, blockposition));
-            }
-        };
-    }
+			@Override
+			public <T> Optional<T> a(BiFunction<World, BlockPosition, T> bifunction) {
+				return Optional.of(bifunction.apply(world, blockposition));
+			}
+		};
+	}
 
 }

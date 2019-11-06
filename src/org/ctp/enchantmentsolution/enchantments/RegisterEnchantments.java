@@ -249,8 +249,9 @@ public class RegisterEnchantments {
 	}
 
 	public static void addRegisterEnchantments() {
-		if (getEnchantments().size() > 0)
+		if (getEnchantments().size() > 0) {
 			return;
+		}
 		addDefaultEnchantment(CERegister.AQUA_AFFINITY);
 		addDefaultEnchantment(CERegister.BANE_OF_ARTHROPODS);
 		addDefaultEnchantment(CERegister.BLAST_PROTECTION);

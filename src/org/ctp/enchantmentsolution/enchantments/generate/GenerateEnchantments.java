@@ -8,7 +8,7 @@ public abstract class GenerateEnchantments {
 	private Player player;
 	private ItemStack item;
 	private boolean treasure;
-	
+
 	public GenerateEnchantments(Player player, ItemStack item, boolean treasure) {
 		this.player = player;
 		this.item = item;

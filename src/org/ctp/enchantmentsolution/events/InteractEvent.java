@@ -21,38 +21,34 @@ public abstract class InteractEvent extends PlayerEvent implements Cancellable {
 		return handlers;
 	}
 
-    private boolean cancelled = false;
-	private ItemStack item;
+	private boolean cancelled = false;
+	private final ItemStack item;
 	private Block block;
 	private Entity entity;
 	private Type type;
-	
+
 	public InteractEvent(Player who, ItemStack item) {
 		super(who);
-		this.setItem(item);
-		this.setType(Type.AIR);
-	}
-	
-	public InteractEvent(Player who, ItemStack item, Block block) {
-		super(who);
-		this.setItem(item);
-		this.setBlock(block);
-		this.setType(Type.BLOCK);
-	}
-	
-	public InteractEvent(Player who, ItemStack item, Entity entity) {
-		super(who);
-		this.setItem(item);
-		this.setEntity(entity);
-		this.setType(Type.ENTITY);
-	}
-	
-	public ItemStack getItem() {
-		return item;
+		this.item = item;
+		setType(Type.AIR);
 	}
 
-	public void setItem(ItemStack item) {
+	public InteractEvent(Player who, ItemStack item, Block block) {
+		super(who);
 		this.item = item;
+		setBlock(block);
+		setType(Type.BLOCK);
+	}
+
+	public InteractEvent(Player who, ItemStack item, Entity entity) {
+		super(who);
+		this.item = item;
+		setEntity(entity);
+		setType(Type.ENTITY);
+	}
+
+	public ItemStack getItem() {
+		return item;
 	}
 
 	public Block getBlock() {
@@ -79,15 +75,15 @@ public abstract class InteractEvent extends PlayerEvent implements Cancellable {
 		this.type = type;
 	}
 
-	public enum Type{
+	public enum Type {
 		AIR(), BLOCK(), ENTITY();
 	}
-	
+
 	@Override
 	public boolean isCancelled() {
 		return cancelled;
 	}
-	
+
 	@Override
 	public void setCancelled(boolean cancelled) {
 		this.cancelled = cancelled;

@@ -9,17 +9,17 @@ public abstract class ModifyActionEvent extends PlayerEvent implements Cancellab
 
 	private static final HandlerList handlers = new HandlerList();
 
-    @Override
-	public final HandlerList getHandlers(){
+	@Override
+	public final HandlerList getHandlers() {
 		return handlers;
 	}
-    
-    public final static HandlerList getHandlerList(){
+
+	public final static HandlerList getHandlerList() {
 		return handlers;
 	}
-    
-    private boolean cancelled;
-    
+
+	private boolean cancelled;
+
 	public ModifyActionEvent(Player who) {
 		super(who);
 	}

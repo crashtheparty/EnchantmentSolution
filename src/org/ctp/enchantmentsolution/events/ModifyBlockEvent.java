@@ -6,15 +6,18 @@ import org.bukkit.event.player.PlayerEvent;
 
 public class ModifyBlockEvent extends PlayerEvent {
 
-	public ModifyBlockEvent(Player who) {
-		super(who);
-		// TODO Auto-generated constructor stub
-	}
+	private static final HandlerList handlers = new HandlerList();
 
 	@Override
-	public HandlerList getHandlers() {
-		// TODO Auto-generated method stub
-		return null;
+	public final HandlerList getHandlers() {
+		return handlers;
 	}
 
+	public final static HandlerList getHandlerList() {
+		return handlers;
+	}
+
+	public ModifyBlockEvent(Player who) {
+		super(who);
+	}
 }

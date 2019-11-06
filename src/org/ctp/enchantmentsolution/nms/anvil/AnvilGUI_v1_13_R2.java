@@ -17,7 +17,7 @@ import net.minecraft.server.v1_13_R2.EntityHuman;
 import net.minecraft.server.v1_13_R2.EntityPlayer;
 import net.minecraft.server.v1_13_R2.PacketPlayOutOpenWindow;
 
-public class AnvilGUI_v1_13_R2 extends AnvilGUI{
+public class AnvilGUI_v1_13_R2 extends AnvilGUI {
 	private class AnvilContainer extends ContainerAnvil {
 		public AnvilContainer(EntityHuman entity) {
 			super(entity.inventory, entity.world, new BlockPosition(0, 0, 0), entity);
@@ -52,7 +52,7 @@ public class AnvilGUI_v1_13_R2 extends AnvilGUI{
 		}
 
 		inv.setItem(0, new ItemStack(Material.NAME_TAG));
-		
+
 		setInventory(inv);
 
 		// Counter stuff that the game uses to keep track of inventories
@@ -73,7 +73,7 @@ public class AnvilGUI_v1_13_R2 extends AnvilGUI{
 
 	public static void createAnvil(Player player, InventoryData data) {
 		AnvilClickEventHandler handler = AnvilClickEventHandler.getHandler(player, data);
-		if(data instanceof Anvil) {
+		if (data instanceof Anvil) {
 			((Anvil) data).setInLegacy(true);
 		}
 		AnvilGUI_v1_13_R2 gui = new AnvilGUI_v1_13_R2(player, handler, data);

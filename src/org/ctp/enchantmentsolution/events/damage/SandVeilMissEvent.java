@@ -7,11 +7,12 @@ public class SandVeilMissEvent extends ESEntityDamageEntityEvent {
 
 	private boolean particles;
 	private double accuracy;
-	
-	public SandVeilMissEvent(LivingEntity damaged, LivingEntity damager, double damage, boolean particles, double accuracy) {
+
+	public SandVeilMissEvent(LivingEntity damaged, LivingEntity damager, double damage, boolean particles,
+			double accuracy) {
 		super(damaged, damager, damage, damage);
-		this.setParticles(particles);
-		this.setAccuracy(accuracy);
+		setParticles(particles);
+		setAccuracy(accuracy);
 	}
 
 	public boolean isParticles() {

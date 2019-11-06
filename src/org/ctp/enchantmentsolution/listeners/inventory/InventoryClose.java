@@ -9,25 +9,27 @@ import org.ctp.enchantmentsolution.inventory.ConfigInventory;
 import org.ctp.enchantmentsolution.inventory.EnchantabilityCalc;
 import org.ctp.enchantmentsolution.inventory.InventoryData;
 
-public class InventoryClose implements Listener{
+public class InventoryClose implements Listener {
 
 	@EventHandler
-	public void onInventoryClose(InventoryCloseEvent event){
+	public void onInventoryClose(InventoryCloseEvent event) {
 		Player player = (Player) event.getPlayer();
 		InventoryData inv = EnchantmentSolution.getPlugin().getInventory(player);
-		if(inv != null) {
-			if(inv instanceof ConfigInventory) {
-				if(!((ConfigInventory)inv).isChat() && inv.getInventory() != null &&  inv.getInventory().equals(event.getInventory())){
+		if (inv != null) {
+			if (inv instanceof ConfigInventory) {
+				if (!((ConfigInventory) inv).isChat() && inv.getInventory() != null
+						&& inv.getInventory().equals(event.getInventory())) {
 					inv.close(true);
 				}
-			} else if(inv instanceof EnchantabilityCalc) {
-				if(!((EnchantabilityCalc)inv).isChat() && inv.getInventory() != null && inv.getInventory().equals(event.getInventory())){
+			} else if (inv instanceof EnchantabilityCalc) {
+				if (!((EnchantabilityCalc) inv).isChat() && inv.getInventory() != null
+						&& inv.getInventory().equals(event.getInventory())) {
 					inv.close(true);
 				}
-			} else if(inv.getInventory() != null && inv.getInventory().equals(event.getInventory())) {
+			} else if (inv.getInventory() != null && inv.getInventory().equals(event.getInventory())) {
 				inv.close(true);
 			}
 		}
 	}
-	
+
 }

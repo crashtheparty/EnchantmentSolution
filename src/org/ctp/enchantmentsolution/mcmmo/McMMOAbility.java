@@ -36,11 +36,11 @@ public class McMMOAbility implements Listener {
 
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onMcMMOAbilityActivated(McMMOPlayerAbilityActivateEvent event) {
-		if(isTreeFeller(event) && !IGNORE_PLAYERS.contains(event.getPlayer())) {
+		if (isTreeFeller(event) && !IGNORE_PLAYERS.contains(event.getPlayer())) {
 			IGNORE_PLAYERS.add(event.getPlayer());
 		}
 	}
-	
+
 	private boolean isTreeFeller(McMMOPlayerAbilityEvent event) {
 		if (VersionUtils.getMcMMOType().equals("Overhaul")) {
 			if (event.getAbility().equals(SuperAbilityType.TREE_FELLER)) {
@@ -56,16 +56,17 @@ public class McMMOAbility implements Listener {
 				e.printStackTrace();
 			}
 			if (clazz != null && abilityClazz != null) {
-				for(Object obj : clazz.getEnumConstants()) {
+				for(Object obj: clazz.getEnumConstants()) {
 					String name = obj.toString().toUpperCase();
-					if(name.equals("TREE_FELLER")) {
+					if (name.equals("TREE_FELLER")) {
 						try {
 							Method method = abilityClazz.getDeclaredMethod("getAbility");
 							Object returnType = method.invoke(event);
-							if(returnType.toString().toUpperCase().equals(name)) {
+							if (returnType.toString().toUpperCase().equals(name)) {
 								return true;
 							}
-						} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+						} catch (NoSuchMethodException | SecurityException | IllegalAccessException
+								| IllegalArgumentException | InvocationTargetException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
@@ -115,7 +116,7 @@ public class McMMOAbility implements Listener {
 
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onMcMMOAbilityDeactivated(McMMOPlayerAbilityDeactivateEvent event) {
-		if(isTreeFeller(event)) {
+		if (isTreeFeller(event)) {
 			IGNORE_PLAYERS.remove(event.getPlayer());
 		}
 	}

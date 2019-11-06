@@ -11,12 +11,26 @@ import org.ctp.enchantmentsolution.utils.ConfigUtils;
 import org.ctp.enchantmentsolution.utils.config.LanguageConfiguration;
 
 public enum ItemType {
-	HELMETS("helmets"), CHESTPLATES("chestplates"), LEGGINGS("leggings"), BOOTS("boots"), SWORDS("swords"), PICKAXES("pickaxes"), SHOVELS("shovels"), AXES("axes"), 
-	HOES("hoes"), BOW("bow"), SHIELD("shield"), FISHING_ROD("fishing_rod"), SHEARS("shears"), FLINT_AND_STEEL("flint_and_steel"), 
-	CARROT_ON_A_STICK("carrot_on_a_stick"), ELYTRA("elytra"), TRIDENT("trident"), RANGED("ranged"), ARMOR("armor"), TOOLS("tools"), MELEE("melee"), MISC("misc"), 
-	WOODEN_TOOLS("wooden_tools"), STONE_TOOLS("stone_tools"), IRON_TOOLS("iron_tools"), GOLDEN_TOOLS("golden_tools"), DIAMOND_TOOLS("diamond_tools"), 
-	LEATHER_ARMOR("leather_armor"), GOLDEN_ARMOR("golden_armor"), CHAINMAIL_ARMOR("chainmail_armor"), IRON_ARMOR("iron_armor"), DIAMOND_ARMOR("diamond_armor"), 
-	CROSSBOW("crossbow"), BOOK("book"), ALL("all"), ENCHANTABLE("enchantable"), TURTLE_HELMET("turtle_helmet"), SHULKER_BOXES("shulker_boxes"), NONE("none");
+	HELMETS("helmets"), CHESTPLATES("chestplates"), LEGGINGS("leggings"), BOOTS("boots"), SWORDS("swords"), PICKAXES(
+			"pickaxes"), SHOVELS("shovels"), AXES("axes"), HOES("hoes"), BOW("bow"), SHIELD("shield"), FISHING_ROD(
+					"fishing_rod"), SHEARS("shears"), FLINT_AND_STEEL("flint_and_steel"), CARROT_ON_A_STICK(
+							"carrot_on_a_stick"), ELYTRA("elytra"), TRIDENT("trident"), RANGED("ranged"), ARMOR(
+									"armor"), TOOLS("tools"), MELEE("melee"), MISC("misc"), WOODEN_TOOLS(
+											"wooden_tools"), STONE_TOOLS("stone_tools"), IRON_TOOLS(
+													"iron_tools"), GOLDEN_TOOLS("golden_tools"), DIAMOND_TOOLS(
+															"diamond_tools"), LEATHER_ARMOR(
+																	"leather_armor"), GOLDEN_ARMOR(
+																			"golden_armor"), CHAINMAIL_ARMOR(
+																					"chainmail_armor"), IRON_ARMOR(
+																							"iron_armor"), DIAMOND_ARMOR(
+																									"diamond_armor"), CROSSBOW(
+																											"crossbow"), BOOK(
+																													"book"), ALL(
+																															"all"), ENCHANTABLE(
+																																	"enchantable"), TURTLE_HELMET(
+																																			"turtle_helmet"), SHULKER_BOXES(
+																																					"shulker_boxes"), NONE(
+																																							"none");
 
 	private String type, display;
 	private List<Material> itemTypes;
@@ -65,7 +79,7 @@ public enum ItemType {
 	}
 
 	private String getDisplayType() {
-		return ConfigUtils.getString(LanguageConfiguration.class, "item_display_types." + this.name().toLowerCase());
+		return ConfigUtils.getString(LanguageConfiguration.class, "item_display_types." + name().toLowerCase());
 	}
 
 	private List<String> getItemStrings(String type) {
@@ -222,15 +236,15 @@ public enum ItemType {
 
 	private List<Material> getItemTypes(String type) {
 		List<Material> materials = new ArrayList<Material>();
-		
-		for(String s : getItemStrings(type)) {
+
+		for(String s: getItemStrings(type)) {
 			try {
 				materials.add(Material.valueOf(s));
 			} catch (Exception ex) {
-				
+
 			}
 		}
-		
+
 		return materials;
 	}
 

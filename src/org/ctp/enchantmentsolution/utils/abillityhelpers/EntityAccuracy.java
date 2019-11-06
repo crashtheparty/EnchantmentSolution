@@ -6,17 +6,17 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
-public class EntityAccuracy{	
+public class EntityAccuracy {
 	private UUID attacker;
 	private UUID entity;
 	private double accuracy;
 	private int ticks;
-	
+
 	public EntityAccuracy(Player attacker, LivingEntity entity, double accuracy, int ticks) {
-		this.setAttacker(attacker);
-		this.setEntity(entity);
-		this.setAccuracy(accuracy);
-		this.setTicks(ticks);
+		setAttacker(attacker);
+		setEntity(entity);
+		setAccuracy(accuracy);
+		setTicks(ticks);
 	}
 
 	public LivingEntity getEntity() {
@@ -34,9 +34,11 @@ public class EntityAccuracy{
 	public void setAccuracy(double accuracy) {
 		this.accuracy = accuracy;
 	}
-	
+
 	public void setTicks(int ticks) {
-		if(ticks > this.ticks) this.ticks = ticks;
+		if (ticks > this.ticks) {
+			this.ticks = ticks;
+		}
 	}
 
 	public Player getAttacker() {
@@ -50,7 +52,7 @@ public class EntityAccuracy{
 	public int getTicks() {
 		return ticks;
 	}
-	
+
 	public void minus() {
 		ticks -= 1;
 	}

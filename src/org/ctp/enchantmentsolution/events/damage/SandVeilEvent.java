@@ -3,15 +3,16 @@ package org.ctp.enchantmentsolution.events.damage;
 import org.bukkit.entity.LivingEntity;
 import org.ctp.enchantmentsolution.events.ESEntityDamageEntityEvent;
 
-public class SandVeilEvent extends ESEntityDamageEntityEvent{
+public class SandVeilEvent extends ESEntityDamageEntityEvent {
 
 	private int ticks;
 	private double accuracy;
-	
-	public SandVeilEvent(LivingEntity damaged, LivingEntity damager, double damage, double newDamage, int ticks, double accuracy) {
+
+	public SandVeilEvent(LivingEntity damaged, LivingEntity damager, double damage, double newDamage, int ticks,
+			double accuracy) {
 		super(damaged, damager, damage, newDamage);
-		this.setTicks(ticks);
-		this.setAccuracy(accuracy);
+		setTicks(ticks);
+		setAccuracy(accuracy);
 	}
 
 	public int getTicks() {

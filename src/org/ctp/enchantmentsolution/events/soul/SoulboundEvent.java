@@ -9,10 +9,10 @@ import org.ctp.enchantmentsolution.events.SoulEvent;
 public class SoulboundEvent extends SoulEvent {
 
 	private final List<ItemStack> savedItems;
-	
+
 	public SoulboundEvent(Player who, List<ItemStack> savedItems) {
 		super(who);
-		
+
 		this.savedItems = savedItems;
 	}
 

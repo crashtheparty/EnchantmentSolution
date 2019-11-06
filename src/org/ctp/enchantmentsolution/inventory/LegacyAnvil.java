@@ -10,16 +10,16 @@ import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.utils.AnvilUtils;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
 
-public class LegacyAnvil implements InventoryData{
-	
+public class LegacyAnvil implements InventoryData {
+
 	private Player player;
 	private Block block;
 	private Inventory inventory;
-	
+
 	public LegacyAnvil(Player player, Block block, Inventory inv) {
 		this.player = player;
 		this.block = block;
-		this.inventory = inv;
+		inventory = inv;
 	}
 
 	@Override
@@ -34,11 +34,11 @@ public class LegacyAnvil implements InventoryData{
 
 	@Override
 	public void close(boolean external) {
-		if(EnchantmentSolution.getPlugin().hasInventory(this)) {
+		if (EnchantmentSolution.getPlugin().hasInventory(this)) {
 			ChatUtils.sendMessage(player, ChatUtils.getMessage(ChatUtils.getCodes(), "anvil.legacy-gui-close"));
 			AnvilUtils.removeLegacyAnvil(this);
 			EnchantmentSolution.getPlugin().removeInventory(this);
-			if(!external) {
+			if (!external) {
 				player.closeInventory();
 			}
 		}

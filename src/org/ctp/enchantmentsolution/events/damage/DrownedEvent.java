@@ -7,11 +7,12 @@ public class DrownedEvent extends ESEntityDamageEntityEvent {
 
 	private boolean applyEffect;
 	private int ticks;
-	
-	public DrownedEvent(LivingEntity damaged, LivingEntity damager, double damage, double newDamage, boolean applyEffect, int ticks) {
+
+	public DrownedEvent(LivingEntity damaged, LivingEntity damager, double damage, double newDamage,
+			boolean applyEffect, int ticks) {
 		super(damaged, damager, damage, newDamage);
-		this.setApplyEffect(applyEffect);
-		this.setTicks(ticks);
+		setApplyEffect(applyEffect);
+		setTicks(ticks);
 	}
 
 	public boolean willApplyEffect() {

@@ -12,11 +12,11 @@ import org.ctp.enchantmentsolution.utils.config.EnchantmentsConfiguration;
 public class PermissionUtils {
 
 	public static boolean canEnchant(Player player, CustomEnchantment enchant, int level) {
-		if(player == null) {
+		if (player == null) {
 			return true;
 		}
-		if(ConfigUtils.getBoolean(EnchantmentsConfiguration.class, "use_permissions")) {
-			if(player.hasPermission("enchantmentsolution.permissions.ignore")) {
+		if (ConfigUtils.getBoolean(EnchantmentsConfiguration.class, "use_permissions")) {
+			if (player.hasPermission("enchantmentsolution.permissions.ignore")) {
 				return true;
 			}
 			String namespace = getNamespace(enchant);
@@ -24,16 +24,16 @@ public class PermissionUtils {
 			String permission = namespace + "." + enchant.getName().toLowerCase() + ".table.level";
 			return checkPermission(player, level, path, permission);
 		}
-		
+
 		return true;
 	}
-	
+
 	public static boolean canAnvil(Player player, CustomEnchantment enchant, int level) {
-		if(player == null) {
+		if (player == null) {
 			return true;
 		}
-		if(ConfigUtils.getBoolean(EnchantmentsConfiguration.class, "use_permissions")) {
-			if(player.hasPermission("enchantmentsolution.permissions.ignore")) {
+		if (ConfigUtils.getBoolean(EnchantmentsConfiguration.class, "use_permissions")) {
+			if (player.hasPermission("enchantmentsolution.permissions.ignore")) {
 				return true;
 			}
 			String namespace = getNamespace(enchant);
@@ -44,13 +44,14 @@ public class PermissionUtils {
 
 		return true;
 	}
-	
+
 	private static String getNamespace(CustomEnchantment enchant) {
 		if (enchant.getRelativeEnchantment() instanceof ApiEnchantmentWrapper) {
 			JavaPlugin plugin = ((ApiEnchantmentWrapper) enchant.getRelativeEnchantment()).getPlugin();
-			if(plugin == null) {
-				ChatUtils.sendToConsole(Level.WARNING, "Enchantment " + enchant.getName() + " (Display Name " + enchant.getDisplayName() + ")"
-						+ " does not have a JavaPlugin set. Refusing to check permissions.");
+			if (plugin == null) {
+				ChatUtils.sendToConsole(Level.WARNING,
+						"Enchantment " + enchant.getName() + " (Display Name " + enchant.getDisplayName() + ")"
+								+ " does not have a JavaPlugin set. Refusing to check permissions.");
 				return null;
 			}
 			return plugin.getName().toLowerCase();
@@ -60,11 +61,11 @@ public class PermissionUtils {
 			return "default_enchantments";
 		}
 	}
-	
+
 	private static boolean checkPermission(Player player, int level, String path, String permission) {
 		for(int i = 0; i < level; i++) {
-			if(Configurations.getEnchantments().getBoolean(path + (i + 1))) {
-				if(!player.hasPermission(permission + (i + 1))) {
+			if (Configurations.getEnchantments().getBoolean(path + (i + 1))) {
+				if (!player.hasPermission(permission + (i + 1))) {
 					return false;
 				}
 			}

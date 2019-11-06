@@ -20,103 +20,95 @@ import java.util.Collection;
 public class JsonBuilder {
 	public static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 	private final JsonObject json = new JsonObject();
-	
+
 	public JsonObject build() {
 		return json;
 	}
-	
-	
-	
+
 	public JsonBuilder add(String key, @Nullable String value) {
 		if (value != null) {
 			json.addProperty(key, value);
 		}
 		return this;
 	}
-	
+
 	public JsonBuilder add(String key, @Nullable Number value) {
 		if (value != null) {
 			json.addProperty(key, value);
 		}
 		return this;
 	}
-	
+
 	public JsonBuilder add(String key, @Nullable Boolean value) {
 		if (value != null) {
 			json.addProperty(key, value);
 		}
 		return this;
 	}
-	
-	
-	
+
 	public JsonBuilder addNonNegative(String key, int value) {
 		if (value >= 0) {
 			json.addProperty(key, value);
 		}
 		return this;
 	}
-	
+
 	public JsonBuilder addPositive(String key, int value) {
 		if (value > 0) {
 			json.addProperty(key, value);
 		}
 		return this;
 	}
-	
+
 	public JsonBuilder addTrue(String key, boolean value) {
 		if (value) {
 			json.addProperty(key, true);
 		}
 		return this;
 	}
-	
+
 	public JsonBuilder addFalse(String key, boolean value) {
 		if (!value) {
 			json.addProperty(key, false);
 		}
 		return this;
 	}
-	
-	
-	
+
 	public JsonBuilder add(String key, @Nullable JsonElement value) {
 		if (value != null) {
 			json.add(key, value);
 		}
 		return this;
 	}
-	
+
 	public JsonBuilder add(String key, @Nullable Collection<?> value, Type type) {
 		if (value != null && !value.isEmpty()) {
 			json.add(key, GSON.toJsonTree(value, type));
 		}
 		return this;
 	}
-	
-	
-	
+
 	public JsonBuilder add(String key, @Nullable SharedObject value) {
 		if (value != null) {
 			json.add(key, value.toJson());
 		}
 		return this;
 	}
-	
+
 	public JsonBuilder add(String key, @Nullable SharedEnum value) {
 		if (value != null) {
 			json.addProperty(key, value.getValue());
 		}
 		return this;
 	}
-	
+
 	public JsonBuilder add(String key, @Nullable NamespacedKey value) {
 		if (value != null) {
 			json.addProperty(key, value.toString());
 		}
 		return this;
 	}
-	
+
 	public JsonBuilder add(String key, @Nullable TextComponent value) {
 		if (value != null) {
 			json.add(key, GSON.fromJson(ComponentSerializer.toString(value), JsonElement.class));

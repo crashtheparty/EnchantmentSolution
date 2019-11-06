@@ -14,48 +14,48 @@ import org.ctp.enchantmentsolution.inventory.Anvil;
 import org.ctp.enchantmentsolution.inventory.LegacyAnvil;
 
 public class AnvilUtils {
-	
+
 	private static List<Player> OPEN_LEGACY = new ArrayList<Player>();
-	
+
 	public static void addLegacyAnvil(Player player) {
 		OPEN_LEGACY.add(player);
 	}
-	
+
 	public static boolean hasLegacyAnvil(Player player) {
-		for(Player p : OPEN_LEGACY) {
-			if(p.equals(player)) {
+		for(Player p: OPEN_LEGACY) {
+			if (p.equals(player)) {
 				return true;
 			}
 		}
 		return false;
 	}
-	
+
 	public static void removeLegacyAnvil(LegacyAnvil anvil) {
 		OPEN_LEGACY.remove(anvil.getPlayer());
 	}
-	
+
 	public static void checkAnvilBreak(Player player, Block block, Anvil anvil) {
-		if(player.getGameMode().equals(GameMode.CREATIVE)) {
+		if (player.getGameMode().equals(GameMode.CREATIVE)) {
 			block.getWorld().playSound(block.getLocation(), Sound.BLOCK_ANVIL_USE, 1, 1);
 			return;
 		}
 		double chance = .12;
 		double roll = Math.random();
-		if(chance > roll) {
+		if (chance > roll) {
 			Material material = Material.AIR;
-			switch(block.getType()) {
-			case ANVIL:
-				material = Material.CHIPPED_ANVIL;
-				break;
-			case CHIPPED_ANVIL:
-				material = Material.DAMAGED_ANVIL;
-				break;
-			default:
-				
+			switch (block.getType()) {
+				case ANVIL:
+					material = Material.CHIPPED_ANVIL;
+					break;
+				case CHIPPED_ANVIL:
+					material = Material.DAMAGED_ANVIL;
+					break;
+				default:
+
 			}
-			if(material == Material.AIR) {
+			if (material == Material.AIR) {
 				block.getWorld().playSound(block.getLocation(), Sound.BLOCK_ANVIL_DESTROY, 1, 1);
-				if(anvil != null) {
+				if (anvil != null) {
 					anvil.close(false);
 				}
 				block.setType(material);

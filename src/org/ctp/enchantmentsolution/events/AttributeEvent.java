@@ -7,7 +7,7 @@ import org.bukkit.event.player.PlayerEvent;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 
 public class AttributeEvent extends PlayerEvent implements Cancellable {
-	
+
 	private static final HandlerList handlers = new HandlerList();
 
 	public static HandlerList getHandlerList() {
@@ -18,7 +18,7 @@ public class AttributeEvent extends PlayerEvent implements Cancellable {
 	public HandlerList getHandlers() {
 		return handlers;
 	}
-	
+
 	private boolean cancelled;
 	private String removeModifier, addModifier;
 	private EnchantmentLevel enchantment;

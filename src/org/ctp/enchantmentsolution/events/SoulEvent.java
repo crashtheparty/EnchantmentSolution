@@ -6,7 +6,7 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerEvent;
 
 public abstract class SoulEvent extends PlayerEvent implements Cancellable {
-	
+
 	private static final HandlerList handlers = new HandlerList();
 
 	public static HandlerList getHandlerList() {
@@ -17,9 +17,9 @@ public abstract class SoulEvent extends PlayerEvent implements Cancellable {
 	public HandlerList getHandlers() {
 		return handlers;
 	}
-	
+
 	private boolean cancelled;
-	
+
 	public SoulEvent(Player who) {
 		super(who);
 	}

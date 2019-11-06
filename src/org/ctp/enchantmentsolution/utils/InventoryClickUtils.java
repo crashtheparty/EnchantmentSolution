@@ -23,13 +23,14 @@ import org.ctp.enchantmentsolution.utils.yaml.YamlInfo;
 
 public class InventoryClickUtils {
 
-	public static void setEnchantmentTableDetails(EnchantmentTable table, Player player, Inventory inv, Inventory clickedInv, int slot) {
+	public static void setEnchantmentTableDetails(EnchantmentTable table, Player player, Inventory inv,
+			Inventory clickedInv, int slot) {
 		if (!(inv.getType().equals(InventoryType.CHEST))) {
 			ItemStack item = clickedInv.getItem(slot);
 			if (ItemUtils.isEnchantable(item)) {
 				ItemStack replace = new ItemStack(Material.AIR);
 				int original_amount = item.getAmount();
-				if(original_amount > 1){
+				if (original_amount > 1) {
 					replace = item.clone();
 					replace.setAmount(replace.getAmount() - 1);
 					item.setAmount(1);
@@ -37,10 +38,10 @@ public class InventoryClickUtils {
 				if (table.addItem(item)) {
 					table.setInventory();
 					player.getInventory().setItem(slot, replace);
-				} else if (original_amount > 1){
+				} else if (original_amount > 1) {
 					item.setAmount(original_amount);
 				}
-			} else if(item != null && item.getType().equals(Material.LAPIS_LAZULI)) {
+			} else if (item != null && item.getType().equals(Material.LAPIS_LAZULI)) {
 				player.getInventory().setItem(slot, table.addToLapisStack(item));
 				table.setInventory();
 			}
@@ -51,30 +52,35 @@ public class InventoryClickUtils {
 					table.setInventory();
 					ItemUtils.giveItemToPlayer(player, item, player.getLocation(), false);
 				}
-			}else if(slot > 17 && slot % 9 >= 3 && slot % 9 <= 8 && item != null && item.getType() != Material.RED_STAINED_GLASS_PANE && item.getType() != Material.BLACK_STAINED_GLASS_PANE){
+			} else if (slot > 17 && slot % 9 >= 3 && slot % 9 <= 8 && item != null
+					&& item.getType() != Material.RED_STAINED_GLASS_PANE
+					&& item.getType() != Material.BLACK_STAINED_GLASS_PANE) {
 				int itemSlot = (slot - 18) / 9;
 				int itemLevel = (slot % 9) - 3;
 				table.enchantItem(itemSlot, itemLevel);
 			} else if (slot == 10) {
 				ItemStack lapisStack = table.removeFromLapisStack();
-				if(lapisStack != null) {
+				if (lapisStack != null) {
 					ItemUtils.giveItemToPlayer(player, lapisStack, player.getLocation(), false);
 				}
 				table.setInventory();
 			}
 		}
 	}
-	
+
 	public static void setAnvilDetails(Anvil anvil, Player player, Inventory inv, Inventory clickedInv, int slot) {
 		if (!(inv.getType().equals(InventoryType.CHEST))) {
-			if(inv.getType().equals(InventoryType.ANVIL)) return;
+			if (inv.getType().equals(InventoryType.ANVIL)) {
+				return;
+			}
 			ItemStack item = clickedInv.getItem(slot);
-			if(item == null || item.getType().equals(Material.AIR)) {
+			if (item == null || item.getType().equals(Material.AIR)) {
 				return;
 			}
 			ItemStack replace = new ItemStack(Material.AIR);
 			int original_amount = item.getAmount();
-			if(original_amount > 1 && (item.getType() == Material.BOOK && item.hasItemMeta() && item.getItemMeta().hasEnchants())){
+			if (original_amount > 1
+					&& (item.getType() == Material.BOOK && item.hasItemMeta() && item.getItemMeta().hasEnchants())) {
 				replace = item.clone();
 				replace.setAmount(replace.getAmount() - 1);
 				item.setAmount(1);
@@ -82,13 +88,13 @@ public class InventoryClickUtils {
 			if (anvil.addItem(item)) {
 				anvil.setInventory();
 				player.getInventory().setItem(slot, replace);
-			} else if (original_amount > 1){
+			} else if (original_amount > 1) {
 				item.setAmount(original_amount);
 			}
 		} else {
 			ItemStack item = clickedInv.getItem(slot);
 			if (slot == 4) {
-				if(item.getType().equals(Material.LIME_STAINED_GLASS_PANE)) {
+				if (item.getType().equals(Material.LIME_STAINED_GLASS_PANE)) {
 					Anvil_GUI_NMS.createAnvil(player, anvil);
 				}
 			} else if (slot == 16) {
@@ -111,16 +117,17 @@ public class InventoryClickUtils {
 			}
 		}
 	}
-	
-	public static void setGrindstoneDetails(Grindstone stone, Player player, Inventory inv, Inventory clickedInv, int slot) {
+
+	public static void setGrindstoneDetails(Grindstone stone, Player player, Inventory inv, Inventory clickedInv,
+			int slot) {
 		if (!(inv.getType().equals(InventoryType.CHEST))) {
 			ItemStack item = clickedInv.getItem(slot);
-			if(item == null || item.getType().equals(Material.AIR)) {
+			if (item == null || item.getType().equals(Material.AIR)) {
 				return;
 			}
 			ItemStack replace = new ItemStack(Material.AIR);
 			int original_amount = item.getAmount();
-			if(original_amount > 1){
+			if (original_amount > 1) {
 				replace = item.clone();
 				replace.setAmount(replace.getAmount() - 1);
 				item.setAmount(1);
@@ -128,7 +135,7 @@ public class InventoryClickUtils {
 			if (stone.addItem(item)) {
 				stone.setInventory();
 				player.getInventory().setItem(slot, replace);
-			} else if (original_amount > 1){
+			} else if (original_amount > 1) {
 				item.setAmount(original_amount);
 			}
 		} else {
@@ -149,287 +156,296 @@ public class InventoryClickUtils {
 			}
 		}
 	}
-	
-	public static void setConfigInventoryDetails(ConfigInventory configInv, Player player, Inventory inv, Inventory clickedInv, int slot, ClickType click) {
+
+	public static void setConfigInventoryDetails(ConfigInventory configInv, Player player, Inventory inv,
+			Inventory clickedInv, int slot, ClickType click) {
 		if (!(inv.getType().equals(InventoryType.CHEST))) {
 			return;
 		} else {
 			ItemStack item = clickedInv.getItem(slot);
-			if(item == null) return;
+			if (item == null) {
+				return;
+			}
 			YamlConfigBackup config = configInv.getConfig();
 			YamlConfigBackup backup = configInv.getBackup();
 			String level = configInv.getLevel();
 			String type = configInv.getType();
 			int page = configInv.getPage();
-			switch(configInv.getScreen()) {
-			case LIST_FILES:
-				switch(slot) {
-				case 2:
-					configInv.listConfigDetails(Configurations.getConfig().getConfig(), null);
-					break;
-				case 3:
-					configInv.listConfigDetails(Configurations.getFishing().getConfig(), null);
-					break;
-				case 5:
-					configInv.listConfigDetails(Configurations.getLanguage().getConfig(), null);
-					break;
-				case 6:
-					configInv.listConfigDetails(Configurations.getEnchantments().getConfig(), null);
-					break;
-				case 21:
-					if(!item.getType().equals(Material.BARRIER)) {
-						configInv.saveAll();
-					}
-					break;
-				case 23:
-					if(!item.getType().equals(Material.BARRIER)) {
-						configInv.revert();
-					}
-					break;
-				}
-				break;
-			case LIST_DETAILS:
-				switch(slot) {
-				case 53:
-					if(checkPagination(item)) {
-						configInv.listConfigDetails(config, null, level, page + 1);
-					}
-					break;
-				case 45:
-					if(checkPagination(item)) {
-						configInv.listConfigDetails(config, null, level, page - 1);
-					}
-					break;
-				case 48:
-					if(checkPagination(item)) {
-						if(level == null || level.equals("")) {
-							configInv.setInventory(Screen.LIST_FILES);
-						} else {
-							if(level.indexOf(".") > -1) {
-								configInv.listConfigDetails(config, null, level.substring(0, level.lastIndexOf(".")), page);
-							} else {
-								configInv.listConfigDetails(config, null, null, page);
+			switch (configInv.getScreen()) {
+				case LIST_FILES:
+					switch (slot) {
+						case 2:
+							configInv.listConfigDetails(Configurations.getConfig().getConfig(), null);
+							break;
+						case 3:
+							configInv.listConfigDetails(Configurations.getFishing().getConfig(), null);
+							break;
+						case 5:
+							configInv.listConfigDetails(Configurations.getLanguage().getConfig(), null);
+							break;
+						case 6:
+							configInv.listConfigDetails(Configurations.getEnchantments().getConfig(), null);
+							break;
+						case 21:
+							if (!item.getType().equals(Material.BARRIER)) {
+								configInv.saveAll();
 							}
-						}
+							break;
+						case 23:
+							if (!item.getType().equals(Material.BARRIER)) {
+								configInv.revert();
+							}
+							break;
 					}
 					break;
-				case 50:
-					if(item.getType().equals(Material.FIREWORK_STAR)) {
-						configInv.listBackup(config, 1);
+				case LIST_DETAILS:
+					switch (slot) {
+						case 53:
+							if (checkPagination(item)) {
+								configInv.listConfigDetails(config, null, level, page + 1);
+							}
+							break;
+						case 45:
+							if (checkPagination(item)) {
+								configInv.listConfigDetails(config, null, level, page - 1);
+							}
+							break;
+						case 48:
+							if (checkPagination(item)) {
+								if (level == null || level.equals("")) {
+									configInv.setInventory(Screen.LIST_FILES);
+								} else {
+									if (level.indexOf(".") > -1) {
+										configInv.listConfigDetails(config, null,
+												level.substring(0, level.lastIndexOf(".")), page);
+									} else {
+										configInv.listConfigDetails(config, null, null, page);
+									}
+								}
+							}
+							break;
+						case 50:
+							if (item.getType().equals(Material.FIREWORK_STAR)) {
+								configInv.listBackup(config, 1);
+							}
+							break;
 					}
 					break;
-				}
-				break;
-			case LIST_EDIT:
-				switch(slot) {
-				case 53:
-					if(checkPagination(item)) {
-						configInv.listDetails(config, null, level, type, page + 1);
+				case LIST_EDIT:
+					switch (slot) {
+						case 53:
+							if (checkPagination(item)) {
+								configInv.listDetails(config, null, level, type, page + 1);
+							}
+							break;
+						case 45:
+							if (checkPagination(item)) {
+								configInv.listDetails(config, null, level, type, page - 1);
+							}
+							break;
+						case 48:
+							if (checkPagination(item)) {
+								if (level.indexOf(".") > -1) {
+									configInv.listConfigDetails(config, null,
+											level.substring(0, level.lastIndexOf(".")));
+								} else {
+									configInv.listConfigDetails(config, null, null);
+								}
+							}
+							break;
+						case 50:
+							if (item.getType().equals(Material.NAME_TAG)) {
+								if (click.equals(ClickType.LEFT)) {
+									configInv.openAnvil(level, type);
+								} else if (click.equals(ClickType.RIGHT)) {
+									configInv.openChat(level, type);
+								}
+							}
+							break;
 					}
 					break;
-				case 45:
-					if(checkPagination(item)) {
-						configInv.listDetails(config, null, level, type, page - 1);
+				case LIST_ENUM:
+					switch (slot) {
+						case 53:
+							if (checkPagination(item)) {
+								configInv.listEnumDetails(config, level, type, page + 1);
+							}
+							break;
+						case 45:
+							if (checkPagination(item)) {
+								configInv.listEnumDetails(config, level, type, page - 1);
+							}
+							break;
+						case 49:
+							if (checkPagination(item)) {
+								if (level.indexOf(".") > -1) {
+									configInv.listConfigDetails(config, null,
+											level.substring(0, level.lastIndexOf(".")));
+								} else {
+									configInv.listConfigDetails(config, null, null);
+								}
+							}
+							break;
 					}
 					break;
-				case 48:
-					if(checkPagination(item)) {
-						if(level.indexOf(".") > -1) {
-							configInv.listConfigDetails(config, null, level.substring(0, level.lastIndexOf(".")));
-						} else {
-							configInv.listConfigDetails(config, null, null);
-						}
+				case LIST_ENUM_LIST_SHOW:
+					switch (slot) {
+						case 53:
+							if (checkPagination(item)) {
+								configInv.listEnumListShow(config, level, type, page + 1);
+							}
+							break;
+						case 45:
+							if (checkPagination(item)) {
+								configInv.listEnumListShow(config, level, type, page - 1);
+							}
+							break;
+						case 48:
+							if (checkPagination(item)) {
+								if (level.indexOf(".") > -1) {
+									configInv.listConfigDetails(config, null,
+											level.substring(0, level.lastIndexOf(".")));
+								} else {
+									configInv.listConfigDetails(config, null, null);
+								}
+							}
+							break;
+						case 50:
+							if (item.getType().equals(Material.NAME_TAG)) {
+								configInv.listEnumListEdit(config, level, type, 1);
+							}
+							break;
 					}
 					break;
-				case 50:
-					if(item.getType().equals(Material.NAME_TAG)) {
-						if(click.equals(ClickType.LEFT)) {
-							configInv.openAnvil(level, type);
-						} else if (click.equals(ClickType.RIGHT)) {
-							configInv.openChat(level, type);
-						}
+				case LIST_ENUM_LIST_EDIT:
+					switch (slot) {
+						case 53:
+							if (checkPagination(item)) {
+								configInv.listEnumListEdit(config, level, type, page + 1);
+							}
+							break;
+						case 45:
+							if (checkPagination(item)) {
+								configInv.listEnumListEdit(config, level, type, page - 1);
+							}
+							break;
+						case 49:
+							if (checkPagination(item)) {
+								configInv.listEnumListShow(config, level, type, 1);
+							}
+							break;
 					}
 					break;
-				}
-				break;
-			case LIST_ENUM:
-				switch(slot) {
-				case 53:
-					if(checkPagination(item)) {
-						configInv.listEnumDetails(config, level, type, page + 1);
+				case LIST_BACKUP:
+					switch (slot) {
+						case 53:
+							if (checkPagination(item)) {
+								configInv.listConfigDetails(config, backup, level, page + 1);
+							}
+							break;
+						case 45:
+							if (checkPagination(item)) {
+								configInv.listConfigDetails(config, backup, level, page - 1);
+							}
+							break;
+						case 49:
+							if (checkPagination(item)) {
+								configInv.setInventory(Screen.LIST_FILES);
+							}
+							break;
 					}
 					break;
-				case 45:
-					if(checkPagination(item)) {
-						configInv.listEnumDetails(config, level, type, page - 1);
-					}
-					break;
-				case 49:
-					if(checkPagination(item)) {
-						if(level.indexOf(".") > -1) {
-							configInv.listConfigDetails(config, null, level.substring(0, level.lastIndexOf(".")));
-						} else {
-							configInv.listConfigDetails(config, null, null);
-						}
-					}
-					break;
-				}
-				break;
-			case LIST_ENUM_LIST_SHOW:
-				switch(slot) {
-				case 53:
-					if(checkPagination(item)) {
-						configInv.listEnumListShow(config, level, type, page + 1);
-					}
-					break;
-				case 45:
-					if(checkPagination(item)) {
-						configInv.listEnumListShow(config, level, type, page - 1);
-					}
-					break;
-				case 48:
-					if(checkPagination(item)) {
-						if(level.indexOf(".") > -1) {
-							configInv.listConfigDetails(config, null, level.substring(0, level.lastIndexOf(".")));
-						} else {
-							configInv.listConfigDetails(config, null, null);
-						}
-					}
-					break;
-				case 50:
-					if(item.getType().equals(Material.NAME_TAG)) {
-						configInv.listEnumListEdit(config, level, type, 1);
-					}
-					break;
-				}
-				break;
-			case LIST_ENUM_LIST_EDIT:
-				switch(slot) {
-				case 53:
-					if(checkPagination(item)) {
-						configInv.listEnumListEdit(config, level, type, page + 1);
-					}
-					break;
-				case 45:
-					if(checkPagination(item)) {
-						configInv.listEnumListEdit(config, level, type, page - 1);
-					}
-					break;
-				case 49:
-					if(checkPagination(item)) {
-						configInv.listEnumListShow(config, level, type, 1);
-					}
-					break;
-				}
-				break;
-			case LIST_BACKUP:
-				switch(slot) {
-				case 53:
-					if(checkPagination(item)) {
-						configInv.listConfigDetails(config, backup, level, page + 1);
-					}
-					break;
-				case 45:
-					if(checkPagination(item)) {
-						configInv.listConfigDetails(config, backup, level, page - 1);
-					}
-					break;
-				case 49:
-					if(checkPagination(item)) {
-						configInv.setInventory(Screen.LIST_FILES);
-					}
-					break;
-				}
-				break;
 
-			case LIST_BACKUP_DETAILS:
-				switch(slot) {
-				case 53:
-					if(checkPagination(item)) {
-						configInv.listConfigDetails(config, backup, level, page + 1);
-					}
-					break;
-				case 45:
-					if(checkPagination(item)) {
-						configInv.listConfigDetails(config, backup, level, page - 1);
-					}
-					break;
-				case 48:
-					if(checkPagination(item)) {
-						if(level == null || level.equals("")) {
-							configInv.listBackup(config, 1);
-						} else {
-							if(level.indexOf(".") > -1) {
-								configInv.listConfigDetails(config, backup, level.substring(0, level.lastIndexOf(".")), page);
-							} else {
-								configInv.listConfigDetails(config, backup, null, page);
+				case LIST_BACKUP_DETAILS:
+					switch (slot) {
+						case 53:
+							if (checkPagination(item)) {
+								configInv.listConfigDetails(config, backup, level, page + 1);
 							}
-						}
+							break;
+						case 45:
+							if (checkPagination(item)) {
+								configInv.listConfigDetails(config, backup, level, page - 1);
+							}
+							break;
+						case 48:
+							if (checkPagination(item)) {
+								if (level == null || level.equals("")) {
+									configInv.listBackup(config, 1);
+								} else {
+									if (level.indexOf(".") > -1) {
+										configInv.listConfigDetails(config, backup,
+												level.substring(0, level.lastIndexOf(".")), page);
+									} else {
+										configInv.listConfigDetails(config, backup, null, page);
+									}
+								}
+							}
+							break;
+						case 50:
+							if (item.getType().equals(Material.FIREWORK_STAR)) {
+								ChatUtils.sendMessage(player, "Reverting to backup. Saving...");
+								config.setFromBackup(backup);
+								configInv.setInventory(Screen.LIST_FILES);
+							}
+							break;
+
 					}
 					break;
-				case 50:
-					if(item.getType().equals(Material.FIREWORK_STAR)) {
-						ChatUtils.sendMessage(player, "Reverting to backup. Saving...");
-						config.setFromBackup(backup);
-						configInv.setInventory(Screen.LIST_FILES);
+				case LIST_BACKUP_LIST:
+					switch (slot) {
+						case 53:
+							if (checkPagination(item)) {
+								configInv.listDetails(config, backup, level, type, page + 1);
+							}
+							break;
+						case 45:
+							if (checkPagination(item)) {
+								configInv.listDetails(config, backup, level, type, page + 1);
+							}
+							break;
+						case 49:
+							if (checkPagination(item)) {
+								if (level.indexOf(".") > -1) {
+									configInv.listConfigDetails(config, backup,
+											level.substring(0, level.lastIndexOf(".")), 1);
+								} else {
+									configInv.listConfigDetails(config, backup, null, 1);
+								}
+							}
+							break;
 					}
 					break;
-					
-				}
-				break;
-			case LIST_BACKUP_LIST:
-				switch(slot) {
-				case 53:
-					if(checkPagination(item)) {
-						configInv.listDetails(config, backup, level, type, page + 1);
-					}
-					break;
-				case 45:
-					if(checkPagination(item)) {
-						configInv.listDetails(config, backup, level, type, page + 1);
-					}
-					break;
-				case 49:
-					if(checkPagination(item)) {
-						if(level.indexOf(".") > -1) {
-							configInv.listConfigDetails(config, backup, level.substring(0, level.lastIndexOf(".")), 1);
-						} else {
-							configInv.listConfigDetails(config, backup, null, 1);
-						}
-					}
-					break;
-				}
-				break;
-			default:
+				default:
 			}
-			if(configInv.getScreen().equals(Screen.LIST_DETAILS)) {
-				if(slot < 36) {
-					if(item.hasItemMeta()) {
+			if (configInv.getScreen().equals(Screen.LIST_DETAILS)) {
+				if (slot < 36) {
+					if (item.hasItemMeta()) {
 						List<String> lore = item.getItemMeta().getLore();
-						if(lore != null) {
+						if (lore != null) {
 							String path = null;
 							type = null;
 							String value = null;
-							for(String s : lore) {
-								if(s.startsWith(ChatColor.GRAY + "Path: " + ChatColor.WHITE)) {
+							for(String s: lore) {
+								if (s.startsWith(ChatColor.GRAY + "Path: " + ChatColor.WHITE)) {
 									path = s.replace(ChatColor.GRAY + "Path: " + ChatColor.WHITE, "");
 								}
-								if(s.startsWith(ChatColor.GRAY + "Type: " + ChatColor.WHITE)) {
+								if (s.startsWith(ChatColor.GRAY + "Type: " + ChatColor.WHITE)) {
 									type = s.replace(ChatColor.GRAY + "Type: " + ChatColor.WHITE, "");
 								}
-								if(s.startsWith(ChatColor.GRAY + "Value: " + ChatColor.WHITE)) {
+								if (s.startsWith(ChatColor.GRAY + "Value: " + ChatColor.WHITE)) {
 									value = s.replace(ChatColor.GRAY + "Value: " + ChatColor.WHITE, "");
 								}
 							}
-							if(click.equals(ClickType.LEFT)) {
-								if(type.equals("nested value")) {
+							if (click.equals(ClickType.LEFT)) {
+								if (type.equals("nested value")) {
 									configInv.listConfigDetails(config, null, path, 1);
 								} else if (type.equals("list")) {
 									configInv.listDetails(config, null, path, type, 1);
 								} else if (type.equals("enum_list")) {
 									configInv.listEnumListShow(config, path, type, 1);
 								} else if (type.equals("boolean")) {
-									if(value != null && value.equals("true")) {
+									if (value != null && value.equals("true")) {
 										ChatUtils.sendMessage(player, "Set " + path + " to false.");
 										configInv.setPath(path, false);
 									} else if (value != null) {
@@ -451,24 +467,24 @@ public class InventoryClickUtils {
 					}
 				}
 			} else if (configInv.getScreen().equals(Screen.LIST_EDIT)) {
-				if(slot < 36) {
-					if(item.hasItemMeta()) {
+				if (slot < 36) {
+					if (item.hasItemMeta()) {
 						configInv.removeFromList(slot);
 						configInv.listDetails(config, null, level, type, page);
 					}
 				}
 			} else if (configInv.getScreen().equals(Screen.LIST_ENUM)) {
-				if(slot < 36) {
-					if(item.hasItemMeta()) {
+				if (slot < 36) {
+					if (item.hasItemMeta()) {
 						List<String> lore = item.getItemMeta().getLore();
-						if(lore != null) {
+						if (lore != null) {
 							String value = null;
-							for(String s : lore) {
-								if(s.startsWith(ChatColor.GRAY + "Value: " + ChatColor.WHITE)) {
+							for(String s: lore) {
+								if (s.startsWith(ChatColor.GRAY + "Value: " + ChatColor.WHITE)) {
 									value = s.replace(ChatColor.GRAY + "Value: " + ChatColor.WHITE, "");
 								}
 							}
-							if(value != null) {
+							if (value != null) {
 								configInv.setItemName(value);
 								configInv.listEnumDetails(config, level, type, page);
 							}
@@ -476,19 +492,20 @@ public class InventoryClickUtils {
 					}
 				}
 			} else if (configInv.getScreen().equals(Screen.LIST_BACKUP)) {
-				if(slot < 36) {
-					if(item.hasItemMeta()) {
+				if (slot < 36) {
+					if (item.hasItemMeta()) {
 						List<String> lore = item.getItemMeta().getLore();
-						if(lore != null) {
+						if (lore != null) {
 							String num = null;
-							for(String s : lore) {
-								if(s.startsWith(ChatColor.WHITE + "Num: " + ChatColor.GRAY)) {
+							for(String s: lore) {
+								if (s.startsWith(ChatColor.WHITE + "Num: " + ChatColor.GRAY)) {
 									num = s.replace(ChatColor.WHITE + "Num: " + ChatColor.GRAY, "");
 								}
 							}
-							if(num != null) {
+							if (num != null) {
 								backup = new YamlConfigBackup(null, null);
-								List<YamlInfo> backupInfo = EnchantmentSolution.getPlugin().getDb().getBackup(config, Integer.parseInt(num));
+								List<YamlInfo> backupInfo = EnchantmentSolution.getPlugin().getDb().getBackup(config,
+										Integer.parseInt(num));
 								backup.setFromBackup(backupInfo);
 								configInv.listConfigDetails(config, backup, level, 1);
 							}
@@ -496,22 +513,22 @@ public class InventoryClickUtils {
 					}
 				}
 			} else if (configInv.getScreen().equals(Screen.LIST_BACKUP_DETAILS)) {
-				if(slot < 36) {
-					if(item.hasItemMeta()) {
+				if (slot < 36) {
+					if (item.hasItemMeta()) {
 						List<String> lore = item.getItemMeta().getLore();
-						if(lore != null) {
+						if (lore != null) {
 							String path = null;
 							type = null;
-							for(String s : lore) {
-								if(s.startsWith(ChatColor.GRAY + "Path: " + ChatColor.WHITE)) {
+							for(String s: lore) {
+								if (s.startsWith(ChatColor.GRAY + "Path: " + ChatColor.WHITE)) {
 									path = s.replace(ChatColor.GRAY + "Path: " + ChatColor.WHITE, "");
 								}
-								if(s.startsWith(ChatColor.GRAY + "Type: " + ChatColor.WHITE)) {
+								if (s.startsWith(ChatColor.GRAY + "Type: " + ChatColor.WHITE)) {
 									type = s.replace(ChatColor.GRAY + "Type: " + ChatColor.WHITE, "");
 								}
 							}
-							if(click.equals(ClickType.LEFT)) {
-								if(type.equals("nested value")) {
+							if (click.equals(ClickType.LEFT)) {
+								if (type.equals("nested value")) {
 									configInv.listConfigDetails(config, backup, path, 1);
 								} else if (type.equals("list") || type.equals("enum_list")) {
 									configInv.listDetails(config, backup, path, type, 1);
@@ -521,24 +538,24 @@ public class InventoryClickUtils {
 					}
 				}
 			} else if (configInv.getScreen().equals(Screen.LIST_ENUM_LIST_SHOW)) {
-				if(slot < 36) {
-					if(item.hasItemMeta()) {
+				if (slot < 36) {
+					if (item.hasItemMeta()) {
 						configInv.removeFromList(slot);
 						configInv.listEnumListShow(config, level, type, page);
 					}
 				}
 			} else if (configInv.getScreen().equals(Screen.LIST_ENUM_LIST_EDIT)) {
-				if(slot < 36) {
-					if(item.hasItemMeta()) {
+				if (slot < 36) {
+					if (item.hasItemMeta()) {
 						List<String> lore = item.getItemMeta().getLore();
-						if(lore != null) {
+						if (lore != null) {
 							String value = null;
-							for(String s : lore) {
-								if(s.startsWith(ChatColor.GRAY + "Value: " + ChatColor.WHITE)) {
+							for(String s: lore) {
+								if (s.startsWith(ChatColor.GRAY + "Value: " + ChatColor.WHITE)) {
 									value = s.replace(ChatColor.GRAY + "Value: " + ChatColor.WHITE, "");
 								}
 							}
-							if(value != null) {
+							if (value != null) {
 								configInv.setItemName(value);
 								configInv.listEnumListEdit(config, level, type, page);
 							}
@@ -555,19 +572,23 @@ public class InventoryClickUtils {
 			return;
 		} else {
 			ItemStack item = clickedInv.getItem(slot);
-			if(item == null) return;
-			if(enchantabilityCalc.isEnchantments()) {
-				if(slot < 36) {
+			if (item == null) {
+				return;
+			}
+			if (enchantabilityCalc.isEnchantments()) {
+				if (slot < 36) {
 					enchantabilityCalc.setEnchantability(slot);
 					return;
 				}
 			} else if (enchantabilityCalc.getPage() == 1) {
 				String s = null;
-				switch(slot) {
+				switch (slot) {
 					case 21:
 						s = "constant";
 					case 22:
-						if (s == null) s = "modifier";
+						if (s == null) {
+							s = "modifier";
+						}
 						if (click == ClickType.LEFT) {
 							enchantabilityCalc.openAnvil(s);
 						} else if (click == ClickType.RIGHT) {
@@ -580,21 +601,21 @@ public class InventoryClickUtils {
 						enchantabilityCalc.setInventory();
 						return;
 				}
-				if(slot == 23) {
+				if (slot == 23) {
 					return;
 				}
 			}
-			switch(slot) {
+			switch (slot) {
 				case 53:
-					if(checkPagination(item)) {
+					if (checkPagination(item)) {
 						enchantabilityCalc.setPage(enchantabilityCalc.getPage() + 1);
 						enchantabilityCalc.setInventory();
 					}
 					break;
 				case 45:
-					if(checkPagination(item)) {
+					if (checkPagination(item)) {
 						enchantabilityCalc.setPage(enchantabilityCalc.getPage() - 1);
-						if(enchantabilityCalc.getPage() == 0 && enchantabilityCalc.isEnchantments()) {
+						if (enchantabilityCalc.getPage() == 0 && enchantabilityCalc.isEnchantments()) {
 							enchantabilityCalc.setPage(1);
 							enchantabilityCalc.setEnchantments(false);
 						}
@@ -604,7 +625,7 @@ public class InventoryClickUtils {
 			}
 		}
 	}
-	
+
 	private static boolean checkPagination(ItemStack item) {
 		return item.getType().equals(Material.ARROW);
 	}

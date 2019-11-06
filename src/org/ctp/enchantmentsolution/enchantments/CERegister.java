@@ -51,7 +51,8 @@ public class CERegister extends CustomEnchantment {
 					new EnchantmentDescription(Language.GERMAN,
 							"Beschwört einen Blitz, wenn ein Mob von einem geworfenen Dreizack getroffen wird."),
 					new EnchantmentDescription(Language.CHINA_SIMPLE, "扔出三叉戟击中目标时召唤闪电.")),
-			Arrays.asList(ItemType.TRIDENT), Arrays.asList(ItemType.TRIDENT), Arrays.asList(Enchantment.RIPTIDE), false, true, false);
+			Arrays.asList(ItemType.TRIDENT), Arrays.asList(ItemType.TRIDENT), Arrays.asList(Enchantment.RIPTIDE), false,
+			true, false);
 	public static CERegister BINDING_CURSE = new CERegister("binding_curse", "Curse of Binding",
 			"Prevents removal of the cursed item.\nThe cursed item cannot be removed from any armor slot (outside of Creative mode) unless the player dies or the item breaks.",
 			Enchantment.BINDING_CURSE, new int[] { 25, 25, 0, 0, 1, 1, 1, 1 }, Weight.VERY_RARE,
@@ -142,7 +143,8 @@ public class CERegister extends CustomEnchantment {
 					new EnchantmentDescription(Language.GERMAN, "Erzeugt beim Gehen über Wasser gefrorene Eisblöcke."),
 					new EnchantmentDescription(Language.CHINA_SIMPLE, "在水上行走时生成冰块.")),
 			Arrays.asList(ItemType.BOOTS), Arrays.asList(ItemType.BOOTS), Arrays.asList(Enchantment.DEPTH_STRIDER,
-					RegisterEnchantments.MAGMA_WALKER, RegisterEnchantments.VOID_WALKER), false, true, false);
+					RegisterEnchantments.MAGMA_WALKER, RegisterEnchantments.VOID_WALKER),
+			false, true, false);
 	public static CERegister IMPALING = new CERegister("impaling", "Impaling",
 			"Increases melee damage against aquatic mobs.\nAdds 2.5 (half heart) extra damage for each additional level.",
 			Enchantment.IMPALING, new int[] { -12, 1, 13, 8, 1, 1, 6, 5 }, Weight.RARE,
@@ -161,7 +163,8 @@ public class CERegister extends CustomEnchantment {
 					new EnchantmentDescription(Language.GERMAN,
 							"Beim Schießen werden keine normalen Pfeile verbraucht."),
 					new EnchantmentDescription(Language.CHINA_SIMPLE, "无限射箭.")),
-			Arrays.asList(ItemType.BOW), Arrays.asList(ItemType.BOW), Arrays.asList(Enchantment.MENDING), false, true, false);
+			Arrays.asList(ItemType.BOW), Arrays.asList(ItemType.BOW), Arrays.asList(Enchantment.MENDING), false, true,
+			false);
 	public static CERegister KNOCKBACK = new CERegister("knockback", "Knockback", "Increases knockback.",
 			Enchantment.KNOCKBACK, new int[] { -15, -15, 20, 20, 1, 1, 4, 2 }, Weight.UNCOMMON,
 			Arrays.asList(new EnchantmentDisplayName(Language.GERMAN, "Rückstoß"),
@@ -210,15 +213,16 @@ public class CERegister extends CustomEnchantment {
 					new EnchantmentDisplayName(Language.CHINA_SIMPLE, "经验修补")),
 			Arrays.asList(new EnchantmentDescription(Language.GERMAN, "Haltbarkeit mit Erfahrung reparieren."),
 					new EnchantmentDescription(Language.CHINA_SIMPLE, "使用经验修复物品.")),
-			Arrays.asList(ItemType.ENCHANTABLE), Arrays.asList(ItemType.ALL),
-			Arrays.asList(Enchantment.ARROW_INFINITE), false, true, true);
+			Arrays.asList(ItemType.ENCHANTABLE), Arrays.asList(ItemType.ALL), Arrays.asList(Enchantment.ARROW_INFINITE),
+			false, true, true);
 	public static CERegister MULTISHOT = new CERegister("multishot", "Multishot", "Shoot multiple arrows at once.",
 			Enchantment.MULTISHOT, new int[] { 35, 20, 0, 0, 20, 1, 1, 1 }, Weight.RARE,
 			Arrays.asList(new EnchantmentDisplayName(Language.GERMAN, "Mehrfachschuss"),
 					new EnchantmentDisplayName(Language.CHINA_SIMPLE, "多重射击")),
 			Arrays.asList(new EnchantmentDescription(Language.GERMAN, "Schießen Sie mehrere Pfeile gleichzeitig."),
 					new EnchantmentDescription(Language.CHINA_SIMPLE, "一次射出多枝箭.")),
-			Arrays.asList(ItemType.CROSSBOW), Arrays.asList(ItemType.CROSSBOW), Arrays.asList(Enchantment.PIERCING), false, true, false);
+			Arrays.asList(ItemType.CROSSBOW), Arrays.asList(ItemType.CROSSBOW), Arrays.asList(Enchantment.PIERCING),
+			false, true, false);
 	public static CERegister PIERCING = new CERegister("piercing", "Piercing",
 			"Arrows go through and attack multiple mobs.", Enchantment.PIERCING,
 			new int[] { -14, -9, 15, 10, 1, 1, 5, 4 }, Weight.COMMON,
@@ -384,7 +388,8 @@ public class CERegister extends CustomEnchantment {
 					new EnchantmentDescription(Language.GERMAN,
 							"Verdoppelt den Schaden, wenn die gegnerische Menge weniger als 50% Gesundheit hat."),
 					new EnchantmentDescription(Language.CHINA_SIMPLE, "当怪物血量低于一半时对怪物造成双倍伤害.")),
-			Arrays.asList(ItemType.SWORDS), Arrays.asList(ItemType.SWORDS, ItemType.AXES), Arrays.asList(), false, true, false);
+			Arrays.asList(ItemType.SWORDS), Arrays.asList(ItemType.SWORDS, ItemType.AXES), Arrays.asList(), false, true,
+			false);
 	public static CERegister CURSE_OF_EXHAUSTION = new CERegister("exhaustion_curse", "Curse of Exhaustion",
 			"Increases exhaustion when equipped.", RegisterEnchantments.CURSE_OF_EXHAUSTION,
 			new int[] { 25, 25, 0, 0, 1, 1, 1, 1 }, Weight.VERY_RARE,
@@ -446,7 +451,8 @@ public class CERegister extends CustomEnchantment {
 					new EnchantmentDisplayName(Language.CHINA_SIMPLE, "烤鱼")),
 			Arrays.asList(new EnchantmentDescription(Language.GERMAN, "Köche Fische, wenn sie gefangen werden."),
 					new EnchantmentDescription(Language.CHINA_SIMPLE, "捕鱼后直接烤鱼.")),
-			Arrays.asList(ItemType.FISHING_ROD), Arrays.asList(ItemType.FISHING_ROD), Arrays.asList(), false, true, false);
+			Arrays.asList(ItemType.FISHING_ROD), Arrays.asList(ItemType.FISHING_ROD), Arrays.asList(), false, true,
+			false);
 	public static CERegister GOLD_DIGGER = new CERegister("gold_digger", "Gold Digger",
 			"Earn experience and gold nuggets for breaking crops.", RegisterEnchantments.GOLD_DIGGER,
 			new int[] { -2, -10, 12, 11, 10, 1, 6, 5 }, Weight.UNCOMMON,
@@ -553,7 +559,8 @@ public class CERegister extends CustomEnchantment {
 							"Erlaubt es den Spielern, auf Lava zu gehen und sie in Magma umzuwandeln."),
 					new EnchantmentDescription(Language.CHINA_SIMPLE, "可以让玩家在岩浆上行走.")),
 			Arrays.asList(ItemType.BOOTS), Arrays.asList(ItemType.BOOTS),
-			Arrays.asList(Enchantment.FROST_WALKER, Enchantment.DEPTH_STRIDER, RegisterEnchantments.VOID_WALKER), false, false, true);
+			Arrays.asList(Enchantment.FROST_WALKER, Enchantment.DEPTH_STRIDER, RegisterEnchantments.VOID_WALKER), false,
+			false, true);
 	public static CERegister MOISTURIZE = new CERegister("moisturize", "Moisturize",
 			"Waters blocks by right clicking them.", RegisterEnchantments.MOISTURIZE,
 			new int[] { 50, 35, 0, 0, 20, 1, 1, 1 }, Weight.VERY_RARE,
@@ -623,7 +630,8 @@ public class CERegister extends CustomEnchantment {
 					new EnchantmentDisplayName(Language.CHINA_SIMPLE, "熔炼")),
 			Arrays.asList(new EnchantmentDescription(Language.GERMAN, "Schmelzen Blöcke während des Bergbaus."),
 					new EnchantmentDescription(Language.CHINA_SIMPLE, "挖掘方块的同时进行熔炼.")),
-			Arrays.asList(ItemType.TOOLS), Arrays.asList(ItemType.TOOLS), Arrays.asList(Enchantment.SILK_TOUCH), false, true, false);
+			Arrays.asList(ItemType.TOOLS), Arrays.asList(ItemType.TOOLS), Arrays.asList(Enchantment.SILK_TOUCH), false,
+			true, false);
 	public static CERegister SNIPER = new CERegister("sniper", "Sniper", "Increases speed of projectiles.",
 			RegisterEnchantments.SNIPER, new int[] { 12, 5, 18, 10, 25, 1, 3, 3 }, Weight.RARE,
 			Arrays.asList(new EnchantmentDisplayName(Language.GERMAN, "Sniper"),
@@ -638,10 +646,11 @@ public class CERegister extends CustomEnchantment {
 			Arrays.asList(new EnchantmentDescription(Language.GERMAN, "Behalte den Gegenstand auf dem Tod."),
 					new EnchantmentDescription(Language.CHINA_SIMPLE, "死亡保留物品.")),
 			Arrays.asList(ItemType.TOOLS, ItemType.MELEE, ItemType.RANGED, ItemType.ARMOR),
-			Arrays.asList(ItemType.ALL, ItemType.SHULKER_BOXES), Arrays.asList(Enchantment.VANISHING_CURSE), false, true, false);
+			Arrays.asList(ItemType.ALL, ItemType.SHULKER_BOXES), Arrays.asList(Enchantment.VANISHING_CURSE), false,
+			true, false);
 	public static CERegister SOUL_REAPER = new CERegister("soul_reaper", "Soul Reaper",
-			"Steals one item enchanted with Soulbound per level when killing players.", RegisterEnchantments.SOUL_REAPER,
-			new int[] { 20, 18, 12, 10, 25, 1, 4, 2 }, Weight.VERY_RARE,
+			"Steals one item enchanted with Soulbound per level when killing players.",
+			RegisterEnchantments.SOUL_REAPER, new int[] { 20, 18, 12, 10, 25, 1, 4, 2 }, Weight.VERY_RARE,
 			Arrays.asList(new EnchantmentDisplayName(Language.GERMAN, "Seelendieb"),
 					new EnchantmentDisplayName(Language.CHINA_SIMPLE, "灵魂收割者")),
 			Arrays.asList(
@@ -718,7 +727,8 @@ public class CERegister extends CustomEnchantment {
 							"Erlaubt es den Spielern, in der Luft zu gehen und es in Obsidian umzuwandeln."),
 					new EnchantmentDescription(Language.CHINA_SIMPLE, "可以让玩家在空气中行走并转化为黑曜石.")),
 			Arrays.asList(ItemType.BOOTS), Arrays.asList(ItemType.BOOTS),
-			Arrays.asList(Enchantment.FROST_WALKER, Enchantment.DEPTH_STRIDER, RegisterEnchantments.MAGMA_WALKER), false, true, true);
+			Arrays.asList(Enchantment.FROST_WALKER, Enchantment.DEPTH_STRIDER, RegisterEnchantments.MAGMA_WALKER),
+			false, true, true);
 	public static CERegister WAND = new CERegister("wand", "Wand", "Places blocks from the offhand.",
 			RegisterEnchantments.WAND, new int[] { 20, 10, 15, 10, 30, 1, 3, 2 }, Weight.VERY_RARE,
 			Arrays.asList(new EnchantmentDisplayName(Language.GERMAN, "Zauberstab"),
@@ -757,10 +767,10 @@ public class CERegister extends CustomEnchantment {
 			int[] enchantability, Weight weight, List<EnchantmentDisplayName> names,
 			List<EnchantmentDescription> descriptions, List<ItemType> enchantmentItems, List<ItemType> anvilItems,
 			List<Enchantment> conflictingEnchantments) {
-		this(name, englishDisplay, englishDescription, relative, enchantability, weight, names, descriptions, enchantmentItems, 
-				anvilItems, conflictingEnchantments, false, false, false);
+		this(name, englishDisplay, englishDescription, relative, enchantability, weight, names, descriptions,
+				enchantmentItems, anvilItems, conflictingEnchantments, false, false, false);
 	}
-	
+
 	private CERegister(String name, String englishDisplay, String englishDescription, Enchantment relative,
 			int[] enchantability, Weight weight, List<EnchantmentDisplayName> names,
 			List<EnchantmentDescription> descriptions, List<ItemType> enchantmentItems, List<ItemType> anvilItems,

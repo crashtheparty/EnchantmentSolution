@@ -8,11 +8,12 @@ public class ShockAspectEvent extends ESEntityDamageEntityEvent {
 
 	private double chance;
 	private Location location;
-	
-	public ShockAspectEvent(LivingEntity damaged, LivingEntity damager, double damage, double newDamage, double chance, Location location) {
+
+	public ShockAspectEvent(LivingEntity damaged, LivingEntity damager, double damage, double newDamage, double chance,
+			Location location) {
 		super(damaged, damager, damage, newDamage);
-		this.setChance(chance);
-		this.setLocation(location);
+		setChance(chance);
+		setLocation(location);
 	}
 
 	public double getChance() {

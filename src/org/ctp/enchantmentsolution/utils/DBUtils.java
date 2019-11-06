@@ -21,9 +21,9 @@ public class DBUtils {
 
 	public static Map<? extends YamlConfigBackup, ? extends Boolean> getDifferent(Configuration config) {
 		HashMap<YamlConfigBackup, Boolean> map = new HashMap<YamlConfigBackup, Boolean>();
-		
+
 		map.put(config.getConfig(), EnchantmentSolution.getPlugin().getDb().isConfigDifferent(config.getConfig()));
-		
+
 		return map;
 	}
 

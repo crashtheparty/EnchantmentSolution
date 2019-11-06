@@ -77,22 +77,27 @@ public class StringUtils {
 	}
 
 	public static boolean isRetroEnchantment(String s) {
-		if (s.startsWith(ChatUtils.hideText("legacy") + "" + ChatColor.GRAY + "" + ChatColor.BLUE))
+		if (s.startsWith(ChatUtils.hideText("legacy") + "" + ChatColor.GRAY + "" + ChatColor.BLUE)) {
 			return false;
-		if (s.startsWith(ChatUtils.hideText("legacy") + "" + ChatColor.GRAY))
+		}
+		if (s.startsWith(ChatUtils.hideText("legacy") + "" + ChatColor.GRAY)) {
 			return true;
+		}
 		return false;
 	}
-	
+
 	public static boolean isLegacyEnchantment(String s) {
-		if (s.startsWith(ChatUtils.hideText("solution") + "" + ChatColor.GRAY + "" + ChatColor.BLUE))
+		if (s.startsWith(ChatUtils.hideText("solution") + "" + ChatColor.GRAY + "" + ChatColor.BLUE)) {
 			return false;
-		if (s.startsWith(ChatUtils.hideText("solution") + "" + ChatColor.GRAY))
+		}
+		if (s.startsWith(ChatUtils.hideText("solution") + "" + ChatColor.GRAY)) {
 			return true;
+		}
 		s = ChatColor.stripColor(s);
 		String[] pieces = s.split(" ");
-		if (pieces.length == 0)
+		if (pieces.length == 0) {
 			return false;
+		}
 		int level = 0;
 		int repair = 0;
 		if (pieces[pieces.length - 1].contains("enchantment.level")) {
@@ -124,24 +129,25 @@ public class StringUtils {
 		}
 		return false;
 	}
-	
+
 	public static boolean isEnchantment(String s) {
-		if(s.indexOf(ChatColor.RESET + "") > -1) {
+		if (s.indexOf(ChatColor.RESET + "") > -1) {
 			String enchName = ChatUtils.revealText(s.substring(0, s.indexOf(ChatColor.RESET + "")));
-			if(RegisterEnchantments.getByName(enchName) != null) {
+			if (RegisterEnchantments.getByName(enchName) != null) {
 				return true;
 			}
 		}
 		return isLegacyEnchantment(s);
 	}
-	
+
 	public static String getEnchantmentString(EnchantmentLevel enchantment) {
-		return ChatUtils.hideText(enchantment.getEnchant().getName()) + ChatColor.RESET + ChatUtils.hideText(enchantment.getLevel() + "")
-			+ ChatColor.RESET + ChatColor.GRAY + returnEnchantmentName(enchantment.getEnchant(), enchantment.getLevel());
+		return ChatUtils.hideText(enchantment.getEnchant().getName()) + ChatColor.RESET
+				+ ChatUtils.hideText(enchantment.getLevel() + "") + ChatColor.RESET + ChatColor.GRAY
+				+ returnEnchantmentName(enchantment.getEnchant(), enchantment.getLevel());
 	}
-	
+
 	public static EnchantmentLevel getEnchantment(String s) {
-		if(s.indexOf(ChatColor.RESET + "") > -1) {
+		if (s.indexOf(ChatColor.RESET + "") > -1) {
 			String enchHidden = s.substring(0, s.indexOf(ChatColor.RESET + ""));
 			String enchName = ChatUtils.revealText(enchHidden);
 			CustomEnchantment enchant = RegisterEnchantments.getByName(enchName);
@@ -151,9 +157,9 @@ public class StringUtils {
 			try {
 				level = Integer.parseInt(ChatUtils.revealText(levelHidden));
 			} catch (NumberFormatException ex) {
-				
+
 			}
-			
+
 			return level > 0 && enchant != null ? new EnchantmentLevel(enchant, level) : null;
 		}
 		return null;
@@ -205,26 +211,27 @@ public class StringUtils {
 
 	public static List<String> removeEnchantment(CustomEnchantment enchantment, int level, List<String> lore) {
 		Iterator<String> iterator = lore.iterator();
-		while(iterator.hasNext()) {
+		while (iterator.hasNext()) {
 			String l = iterator.next();
-			if(l.endsWith(returnEnchantmentName(enchantment, level))) {
+			if (l.endsWith(returnEnchantmentName(enchantment, level))) {
 				iterator.remove();
 			}
 		}
-//		String versionOneEnchName = ChatColor.RESET + "" + ChatColor.GRAY + returnEnchantmentName(enchantment, level);
-//		String legacyEnchName = ChatUtils.hideText("legacy") + "" + ChatColor.GRAY
-//				+ returnEnchantmentName(enchantment, level);
-//		String enchName = ChatUtils.hideText("solution") + "" + ChatColor.GRAY
-//				+ returnEnchantmentName(enchantment, level);
-//		while (lore.contains(versionOneEnchName)) {
-//			lore.remove(versionOneEnchName);
-//		}
-//		while (lore.contains(legacyEnchName)) {
-//			lore.remove(legacyEnchName);
-//		}
-//		while (lore.contains(enchName)) {
-//			lore.remove(enchName);
-//		}
+		// String versionOneEnchName = ChatColor.RESET + "" + ChatColor.GRAY +
+		// returnEnchantmentName(enchantment, level);
+		// String legacyEnchName = ChatUtils.hideText("legacy") + "" + ChatColor.GRAY
+		// + returnEnchantmentName(enchantment, level);
+		// String enchName = ChatUtils.hideText("solution") + "" + ChatColor.GRAY
+		// + returnEnchantmentName(enchantment, level);
+		// while (lore.contains(versionOneEnchName)) {
+		// lore.remove(versionOneEnchName);
+		// }
+		// while (lore.contains(legacyEnchName)) {
+		// lore.remove(legacyEnchName);
+		// }
+		// while (lore.contains(enchName)) {
+		// lore.remove(enchName);
+		// }
 		return lore;
 	}
 
@@ -236,8 +243,9 @@ public class StringUtils {
 	}
 
 	public static String decodeString(String st) {
-		if (st == null)
+		if (st == null) {
 			return st;
+		}
 		StringBuilder sb = new StringBuilder(st.length());
 
 		for(int i = 0; i < st.length(); i++) {
@@ -260,30 +268,30 @@ public class StringUtils {
 					continue;
 				}
 				switch (nextChar) {
-				case '\\':
-					ch = '\\';
-					break;
-				case 'b':
-					ch = '\b';
-					break;
-				case 'f':
-					ch = '\f';
-					break;
-				case 'n':
-					ch = '\n';
-					break;
-				case 'r':
-					ch = '\r';
-					break;
-				case 't':
-					ch = '\t';
-					break;
-				case '\"':
-					ch = '\"';
-					break;
-				case '\'':
-					ch = '\'';
-					break;
+					case '\\':
+						ch = '\\';
+						break;
+					case 'b':
+						ch = '\b';
+						break;
+					case 'f':
+						ch = '\f';
+						break;
+					case 'n':
+						ch = '\n';
+						break;
+					case 'r':
+						ch = '\r';
+						break;
+					case 't':
+						ch = '\t';
+						break;
+					case '\"':
+						ch = '\"';
+						break;
+					case '\'':
+						ch = '\'';
+						break;
 				}
 				i++;
 			}

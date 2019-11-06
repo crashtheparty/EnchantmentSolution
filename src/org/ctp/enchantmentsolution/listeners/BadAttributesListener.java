@@ -17,37 +17,36 @@ import org.ctp.enchantmentsolution.events.AttributeEvent;
 import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 
 public class BadAttributesListener implements Listener {
-	
-	@EventHandler(priority=EventPriority.LOWEST, ignoreCancelled=true)
+
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onPlayerInteract(PlayerInteractEvent event) {
 		checkAttributes(event.getPlayer());
 	}
-	
-	@EventHandler(priority=EventPriority.LOWEST, ignoreCancelled=true)
+
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onInventoryClick(InventoryClickEvent event) {
-		if(event.getWhoClicked() instanceof Player) {
+		if (event.getWhoClicked() instanceof Player) {
 			checkAttributes((Player) event.getWhoClicked());
 		}
 	}
-	
-	@EventHandler(priority=EventPriority.LOWEST, ignoreCancelled=true)
+
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onInventoryClose(InventoryCloseEvent event) {
-		if(event.getPlayer() instanceof Player) {
+		if (event.getPlayer() instanceof Player) {
 			checkAttributes((Player) event.getPlayer());
 		}
 	}
-	
-	@EventHandler(priority=EventPriority.LOWEST, ignoreCancelled=true)
+
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onPlayerItemHeld(PlayerItemHeldEvent event) {
 		checkAttributes(event.getPlayer());
 	}
 
-	
 	private void checkAttributes(Player player) {
-		for(Attributable a : Attributable.values()) {
-			if(a.hasAttribute(player)) {
+		for(Attributable a: Attributable.values()) {
+			if (a.hasAttribute(player)) {
 				ItemStack check = null;
-				switch(a.getType()) {
+				switch (a.getType()) {
 					case BOOTS:
 						check = player.getInventory().getBoots();
 						break;
@@ -66,19 +65,20 @@ public class BadAttributesListener implements Listener {
 					case OFF_HAND:
 						check = player.getInventory().getItemInOffHand();
 						break;
-					
+
 				}
-				if(check != null) {
-					if(ItemUtils.hasEnchantment(check, a.getEnchantment())) {
+				if (check != null) {
+					if (ItemUtils.hasEnchantment(check, a.getEnchantment())) {
 						continue;
 					}
 				}
-				
-				AttributeEvent event = new AttributeEvent(player, new EnchantmentLevel(RegisterEnchantments.getCustomEnchantment(a.getEnchantment()), 0), 
+
+				AttributeEvent event = new AttributeEvent(player,
+						new EnchantmentLevel(RegisterEnchantments.getCustomEnchantment(a.getEnchantment()), 0),
 						a.getAttrName(), null);
 				Bukkit.getPluginManager().callEvent(event);
-				
-				if(!event.isCancelled()) {
+
+				if (!event.isCancelled()) {
 					a.removeModifier(player);
 				}
 			}

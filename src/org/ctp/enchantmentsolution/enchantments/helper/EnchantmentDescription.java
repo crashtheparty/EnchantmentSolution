@@ -6,7 +6,7 @@ public class EnchantmentDescription {
 
 	private Language language;
 	private String description;
-	
+
 	public EnchantmentDescription(Language lang, String desc) {
 		setLanguage(lang);
 		setDescription(desc);

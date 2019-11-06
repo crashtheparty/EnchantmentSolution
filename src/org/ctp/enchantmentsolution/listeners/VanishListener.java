@@ -18,15 +18,15 @@ import org.ctp.enchantmentsolution.utils.ConfigUtils;
 import org.ctp.enchantmentsolution.utils.config.MainConfiguration;
 import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 
-public class VanishListener implements Listener{
-	
+public class VanishListener implements Listener {
+
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent event) {
-		if(ConfigUtils.getString(MainConfiguration.class, "disable_enchant_method").equals("vanish")) {
+		if (ConfigUtils.getString(MainConfiguration.class, "disable_enchant_method").equals("vanish")) {
 			Player player = event.getPlayer();
-			
+
 			PlayerInventory inv = player.getInventory();
-			
+
 			for(int i = 0; i < 36; i++) {
 				ItemStack item = inv.getItem(i);
 				inv.setItem(i, removeEnchants(item));
@@ -36,37 +36,37 @@ public class VanishListener implements Listener{
 			ItemStack legs = inv.getLeggings();
 			ItemStack boots = inv.getBoots();
 			ItemStack offhand = inv.getItemInOffHand();
-			
-			if(helmet != null) {
+
+			if (helmet != null) {
 				inv.setHelmet(removeEnchants(helmet));
 			}
-			if(chest != null) {
+			if (chest != null) {
 				inv.setChestplate(removeEnchants(chest));
 			}
-			if(legs != null) {
+			if (legs != null) {
 				inv.setLeggings(removeEnchants(legs));
 			}
-			if(boots != null) {
+			if (boots != null) {
 				inv.setBoots(removeEnchants(boots));
 			}
-			if(offhand != null) {
+			if (offhand != null) {
 				inv.setItemInOffHand(removeEnchants(offhand));
 			}
 		}
 	}
-	
+
 	@EventHandler
 	public void onInventoryOpen(InventoryOpenEvent event) {
-		if(ConfigUtils.getString(MainConfiguration.class, "disable_enchant_method").equals("vanish")) {
+		if (ConfigUtils.getString(MainConfiguration.class, "disable_enchant_method").equals("vanish")) {
 			boolean shouldCheck = true;
-			if(event.getPlayer() instanceof Player) {
+			if (event.getPlayer() instanceof Player) {
 				Player player = (Player) event.getPlayer();
 				InventoryData invData = EnchantmentSolution.getPlugin().getInventory(player);
-				if(invData != null) {
+				if (invData != null) {
 					shouldCheck = false;
 				}
 			}
-			if(shouldCheck) {
+			if (shouldCheck) {
 				Inventory inv = event.getInventory();
 				for(int i = 0; i < inv.getSize(); i++) {
 					ItemStack item = inv.getItem(i);
@@ -75,25 +75,25 @@ public class VanishListener implements Listener{
 			}
 		}
 	}
-	
+
 	@EventHandler
 	public void onEntityPickupItem(EntityPickupItemEvent event) {
-		if(ConfigUtils.getString(MainConfiguration.class, "disable_enchant_method").equals("vanish")) {
+		if (ConfigUtils.getString(MainConfiguration.class, "disable_enchant_method").equals("vanish")) {
 			ItemStack item = event.getItem().getItemStack();
 			event.getItem().setItemStack(removeEnchants(item));
 		}
 	}
-	
+
 	public static void reload() {
-		if(ConfigUtils.getString(MainConfiguration.class, "disable_enchant_method").equals("vanish")) {
-			for(Player player : Bukkit.getOnlinePlayers()) {
-				Bukkit.getScheduler().scheduleSyncDelayedTask(EnchantmentSolution.getPlugin(), new Runnable(){
+		if (ConfigUtils.getString(MainConfiguration.class, "disable_enchant_method").equals("vanish")) {
+			for(Player player: Bukkit.getOnlinePlayers()) {
+				Bukkit.getScheduler().scheduleSyncDelayedTask(EnchantmentSolution.getPlugin(), new Runnable() {
 					@Override
 					public void run() {
-						if(player.getOpenInventory() != null) {
+						if (player.getOpenInventory() != null) {
 							Inventory inv = player.getOpenInventory().getTopInventory();
 							InventoryData invData = EnchantmentSolution.getPlugin().getInventory(player);
-							if(invData == null) {
+							if (invData == null) {
 								for(int i = 0; i < inv.getSize(); i++) {
 									ItemStack item = inv.getItem(i);
 									inv.setItem(i, removeEnchants(item));
@@ -101,7 +101,7 @@ public class VanishListener implements Listener{
 							}
 						}
 						PlayerInventory inv = player.getInventory();
-						
+
 						for(int i = 0; i < 36; i++) {
 							ItemStack item = inv.getItem(i);
 							inv.setItem(i, removeEnchants(item));
@@ -111,20 +111,20 @@ public class VanishListener implements Listener{
 						ItemStack legs = inv.getLeggings();
 						ItemStack boots = inv.getBoots();
 						ItemStack offhand = inv.getItemInOffHand();
-						
-						if(helmet != null) {
+
+						if (helmet != null) {
 							inv.setHelmet(removeEnchants(helmet));
 						}
-						if(chest != null) {
+						if (chest != null) {
 							inv.setChestplate(removeEnchants(chest));
 						}
-						if(legs != null) {
+						if (legs != null) {
 							inv.setLeggings(removeEnchants(legs));
 						}
-						if(boots != null) {
+						if (boots != null) {
 							inv.setBoots(removeEnchants(boots));
 						}
-						if(offhand != null) {
+						if (offhand != null) {
 							inv.setItemInOffHand(removeEnchants(offhand));
 						}
 					}
@@ -132,11 +132,13 @@ public class VanishListener implements Listener{
 			}
 		}
 	}
-	
+
 	private static ItemStack removeEnchants(ItemStack item) {
-		if(item == null || item.getItemMeta() == null) return item;
-		for(CustomEnchantment enchant : RegisterEnchantments.getEnchantments()) {
-			if(!enchant.isEnabled()) {
+		if (item == null || item.getItemMeta() == null) {
+			return item;
+		}
+		for(CustomEnchantment enchant: RegisterEnchantments.getEnchantments()) {
+			if (!enchant.isEnabled()) {
 				item = ItemUtils.removeEnchantmentFromItem(item, enchant);
 			}
 		}

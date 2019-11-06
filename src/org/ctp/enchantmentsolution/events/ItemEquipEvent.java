@@ -11,15 +11,15 @@ public final class ItemEquipEvent extends PlayerEvent implements Cancellable {
 
 	private static final HandlerList handlers = new HandlerList();
 
-    @Override
-	public final HandlerList getHandlers(){
+	@Override
+	public final HandlerList getHandlers() {
 		return handlers;
 	}
-    
-    public final static HandlerList getHandlerList(){
+
+	public final static HandlerList getHandlerList() {
 		return handlers;
 	}
-    
+
 	private boolean cancel = false;
 	private final HandMethod equipType;
 	private ItemStack oldItem, newItem;
@@ -28,43 +28,47 @@ public final class ItemEquipEvent extends PlayerEvent implements Cancellable {
 	/**
 	 * Constructor for the ItemEquipEvent.
 	 *
-	 * @param player The player who put on / removed the armor.
-	 * @param oldItem The ItemStack of the item removed.
-	 * @param newItem The ItemStack of the item added.
+	 * @param player
+	 *            The player who put on / removed the armor.
+	 * @param oldItem
+	 *            The ItemStack of the item removed.
+	 * @param newItem
+	 *            The ItemStack of the item added.
 	 */
-	public ItemEquipEvent(final Player player, final HandMethod equipType, final ItemSlotType slot, final ItemStack oldItem, final ItemStack newItem){
+	public ItemEquipEvent(final Player player, final HandMethod equipType, final ItemSlotType slot,
+			final ItemStack oldItem, final ItemStack newItem) {
 		super(player);
 		this.equipType = equipType;
 		this.slot = slot;
 		this.newItem = newItem;
 		this.oldItem = oldItem;
 	}
-	
-	public final void setCancelled(final boolean cancel){
+
+	public final void setCancelled(final boolean cancel) {
 		this.cancel = cancel;
 	}
 
-    public final boolean isCancelled(){
+	public final boolean isCancelled() {
 		return cancel;
 	}
 
-    public final ItemStack getOldItem(){
-		return this.oldItem;
+	public final ItemStack getOldItem() {
+		return oldItem;
 	}
 
-	public final void setOldItem(final ItemStack oldArmorPiece){
-		this.oldItem = oldArmorPiece;
+	public final void setOldItem(final ItemStack oldArmorPiece) {
+		oldItem = oldArmorPiece;
 	}
 
-    public final ItemStack getNewItem(){
-		return this.newItem;
+	public final ItemStack getNewItem() {
+		return newItem;
 	}
 
-	public final void setNewItem(final ItemStack newArmorPiece){
-		this.newItem = newArmorPiece;
+	public final void setNewItem(final ItemStack newArmorPiece) {
+		newItem = newArmorPiece;
 	}
 
-    public HandMethod getMethod(){
+	public HandMethod getMethod() {
 		return equipType;
 	}
 
@@ -77,12 +81,7 @@ public final class ItemEquipEvent extends PlayerEvent implements Cancellable {
 	}
 
 	public enum HandMethod {
-	    HELD_SWITCH,
-	    CRAFTED,
-	    PICK_UP,
-	    DROP,
-	    HOT_BAR,
-		HELD_SWAP,
+		HELD_SWITCH, CRAFTED, PICK_UP, DROP, HOT_BAR, HELD_SWAP,
 		/**
 		 * When in range of a dispenser that shoots an armor piece to equip.
 		 */
@@ -94,7 +93,6 @@ public final class ItemEquipEvent extends PlayerEvent implements Cancellable {
 		/**
 		 * When you die causing all armor to unequip
 		 */
-		DEATH,
-		;
+		DEATH,;
 	}
 }

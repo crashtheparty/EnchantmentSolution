@@ -7,9 +7,9 @@ public class YamlChild {
 
 	private String path;
 	private List<YamlChild> children;
-	
-	public YamlChild(String path){
-		this.setPath(path);
+
+	public YamlChild(String path) {
+		setPath(path);
 		children = new ArrayList<YamlChild>();
 	}
 
@@ -24,14 +24,14 @@ public class YamlChild {
 	public List<YamlChild> getChildren() {
 		return children;
 	}
-	
+
 	public boolean addChild(String path) {
-		if(path.startsWith(getPath())) {
-			if(path.equals(getPath())) {
+		if (path.startsWith(getPath())) {
+			if (path.equals(getPath())) {
 				return true;
 			}
-			for(YamlChild child : children) {
-				if(child.addChild(path)) {
+			for(YamlChild child: children) {
+				if (child.addChild(path)) {
 					return true;
 				}
 			}
@@ -40,20 +40,20 @@ public class YamlChild {
 		}
 		return false;
 	}
-	
+
 	public String toString() {
 		String ret = new String();
-		
+
 		ret += "path: " + path;
-		
-		if(children.size() > 0) {
+
+		if (children.size() > 0) {
 			ret += " children[";
-			for(YamlChild child : children) {
+			for(YamlChild child: children) {
 				ret += child.toString();
 			}
 			ret += "]";
 		}
-		
+
 		return ret;
 	}
 }

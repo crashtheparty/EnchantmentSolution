@@ -11,11 +11,11 @@ public class LassoInteractEvent extends InteractEvent {
 
 	private AnimalMob animal;
 	private BlockFace face;
-	
+
 	public LassoInteractEvent(Player who, ItemStack item, Block block, BlockFace face, AnimalMob animal) {
 		super(who, item, block);
-		this.setAnimal(animal);
-		this.setFace(face);
+		setAnimal(animal);
+		setFace(face);
 	}
 
 	public AnimalMob getAnimal() {
