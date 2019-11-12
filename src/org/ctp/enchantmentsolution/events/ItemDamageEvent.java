@@ -6,7 +6,7 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.inventory.ItemStack;
 
-public class ItemDamageEvent extends PlayerEvent implements Cancellable {
+public abstract class ItemDamageEvent extends PlayerEvent implements Cancellable {
 
 	private static final HandlerList handlers = new HandlerList();
 

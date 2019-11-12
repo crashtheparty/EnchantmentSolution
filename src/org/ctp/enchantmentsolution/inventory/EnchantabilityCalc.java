@@ -56,9 +56,9 @@ public class EnchantabilityCalc implements InventoryData {
 				ItemMeta enchantmentMeta = enchantment.getItemMeta();
 				enchantmentMeta.setDisplayName(ChatColor.BLUE + enchant.getDisplayName());
 				enchantmentMeta.setLore(Arrays.asList(
-						ChatColor.GOLD + "Enchantability Constant: " + ChatColor.DARK_AQUA + enchant.enchantability(0),
-						ChatColor.GOLD + "Enchantability Modifier: " + ChatColor.DARK_AQUA
-								+ (enchant.enchantability(1) - enchant.enchantability(0))));
+				ChatColor.GOLD + "Enchantability Constant: " + ChatColor.DARK_AQUA + enchant.enchantability(0),
+				ChatColor.GOLD + "Enchantability Modifier: " + ChatColor.DARK_AQUA
+				+ (enchant.enchantability(1) - enchant.enchantability(0))));
 				enchantment.setItemMeta(enchantmentMeta);
 				inv.setItem(i, enchantment);
 			}
@@ -84,9 +84,9 @@ public class EnchantabilityCalc implements InventoryData {
 			ItemMeta constantMeta = constant.getItemMeta();
 			constantMeta.setDisplayName(ChatColor.BLUE + "Enchantability Constant");
 			constantMeta.setLore(
-					Arrays.asList(ChatColor.GOLD + "Current Value: " + ChatColor.DARK_AQUA + enchantabilityConstant,
-							ChatColor.GRAY + "Left click to edit with anvil.",
-							ChatColor.GRAY + "Right click to edit in chat."));
+			Arrays.asList(ChatColor.GOLD + "Current Value: " + ChatColor.DARK_AQUA + enchantabilityConstant,
+			ChatColor.GRAY + "Left click to edit with anvil.",
+			ChatColor.GRAY + "Right click to edit in chat."));
 			constant.setItemMeta(constantMeta);
 			inv.setItem(21, constant);
 
@@ -94,9 +94,9 @@ public class EnchantabilityCalc implements InventoryData {
 			ItemMeta modifierMeta = modifier.getItemMeta();
 			modifierMeta.setDisplayName(ChatColor.BLUE + "Enchantability Modifier");
 			modifierMeta.setLore(
-					Arrays.asList(ChatColor.GOLD + "Current Value: " + ChatColor.DARK_AQUA + enchantabilityModifier,
-							ChatColor.GRAY + "Left click to edit with anvil.",
-							ChatColor.GRAY + "Right click to edit in chat."));
+			Arrays.asList(ChatColor.GOLD + "Current Value: " + ChatColor.DARK_AQUA + enchantabilityModifier,
+			ChatColor.GRAY + "Left click to edit with anvil.",
+			ChatColor.GRAY + "Right click to edit in chat."));
 			modifier.setItemMeta(modifierMeta);
 			inv.setItem(22, modifier);
 
@@ -116,15 +116,15 @@ public class EnchantabilityCalc implements InventoryData {
 			int slot = 0;
 			for(EnchantabilityValues value: EnchantabilityValues.values()) {
 				int[] enchantability = getEnchantabilityCalc(value.getEnchantability(), enchantabilityConstant,
-						enchantabilityModifier);
+				enchantabilityModifier);
 				ItemStack item = new ItemStack(value.getMaterial());
 				ItemMeta itemMeta = item.getItemMeta();
 				itemMeta.setDisplayName(value.getDisplay());
 				itemMeta.setLore(Arrays.asList(
-						ChatColor.GOLD + "Resource Enchantability: " + ChatColor.DARK_AQUA + value.getEnchantability(),
-						ChatColor.GOLD + "Max Level From Enchantability: " + ChatColor.DARK_AQUA + enchantability[0],
-						ChatColor.GOLD + "Max Enchantability at Level " + (ConfigUtils.isLevel50() ? "50: " : "30: ")
-								+ ChatColor.DARK_AQUA + enchantability[1]));
+				ChatColor.GOLD + "Resource Enchantability: " + ChatColor.DARK_AQUA + value.getEnchantability(),
+				ChatColor.GOLD + "Max Level From Enchantability: " + ChatColor.DARK_AQUA + enchantability[0],
+				ChatColor.GOLD + "Max Enchantability at Level " + (ConfigUtils.isLevel50() ? "50: " : "30: ")
+				+ ChatColor.DARK_AQUA + enchantability[1]));
 				item.setItemMeta(itemMeta);
 				inv.setItem(slots[slot], item);
 				slot++;
@@ -149,7 +149,7 @@ public class EnchantabilityCalc implements InventoryData {
 				ItemMeta levelMeta = level.getItemMeta();
 				levelMeta.setDisplayName(ChatColor.BLUE + "Level 1");
 				levelMeta.setLore(Arrays.asList(ChatColor.GOLD + "Required Enchantability: " + ChatColor.DARK_AQUA
-						+ enchantabilityConstant + "+"));
+				+ enchantabilityConstant + "+"));
 				level.setItemMeta(levelMeta);
 				inv.setItem(0, level);
 
@@ -165,7 +165,7 @@ public class EnchantabilityCalc implements InventoryData {
 					ItemMeta levelItemMeta = levelItem.getItemMeta();
 					levelItemMeta.setDisplayName(ChatColor.BLUE + "Level " + level);
 					levelItemMeta.setLore(Arrays.asList(ChatColor.GOLD + "Required Enchantability: "
-							+ ChatColor.DARK_AQUA + (enchantabilityModifier * level + enchantabilityConstant) + "+"));
+					+ ChatColor.DARK_AQUA + (enchantabilityModifier * level + enchantabilityConstant) + "+"));
 					levelItem.setItemMeta(levelItemMeta);
 					inv.setItem(i, levelItem);
 				}
@@ -333,25 +333,25 @@ public class EnchantabilityCalc implements InventoryData {
 
 	public static enum EnchantabilityValues {
 		WOODEN_TOOLS(15, Material.WOODEN_PICKAXE, ChatColor.BLUE + "Wooden Tools and Weapons"), STONE_TOOLS(5,
-				Material.STONE_PICKAXE, ChatColor.BLUE + "Stone Tools and Weapons"), GOLDEN_TOOLS(22,
-						Material.GOLDEN_PICKAXE, ChatColor.BLUE + "Golden Tools and Weapons"), IRON_TOOLS(10,
-								Material.IRON_PICKAXE, ChatColor.BLUE + "Iron Tools and Weapons"), DIAMOND_TOOLS(14,
-										Material.DIAMOND_PICKAXE,
-										ChatColor.BLUE + "Diamond Tools and Weapons"), LEATHER_ARMOR(15,
-												Material.LEATHER_CHESTPLATE,
-												ChatColor.BLUE + "Leather Armor"), CHAINMAIL_ARMOR(5,
-														Material.CHAINMAIL_CHESTPLATE,
-														ChatColor.BLUE + "Chainmail Armor"), GOLDEN_ARMOR(22,
-																Material.GOLDEN_CHESTPLATE,
-																ChatColor.BLUE + "Golden Armor"), IRON_ARMOR(10,
-																		Material.IRON_CHESTPLATE,
-																		ChatColor.BLUE + "Iron Armor"), DIAMOND_ARMOR(
-																				14, Material.DIAMOND_CHESTPLATE,
-																				ChatColor.BLUE
-																						+ "Diamond Armor"), OTHER(1,
-																								Material.BOOK,
-																								ChatColor.BLUE
-																										+ "Books and Other Items");
+		Material.STONE_PICKAXE, ChatColor.BLUE + "Stone Tools and Weapons"), GOLDEN_TOOLS(22,
+		Material.GOLDEN_PICKAXE, ChatColor.BLUE + "Golden Tools and Weapons"), IRON_TOOLS(10,
+		Material.IRON_PICKAXE, ChatColor.BLUE + "Iron Tools and Weapons"), DIAMOND_TOOLS(14,
+		Material.DIAMOND_PICKAXE,
+		ChatColor.BLUE + "Diamond Tools and Weapons"), LEATHER_ARMOR(15,
+		Material.LEATHER_CHESTPLATE,
+		ChatColor.BLUE + "Leather Armor"), CHAINMAIL_ARMOR(5,
+		Material.CHAINMAIL_CHESTPLATE,
+		ChatColor.BLUE + "Chainmail Armor"), GOLDEN_ARMOR(22,
+		Material.GOLDEN_CHESTPLATE,
+		ChatColor.BLUE + "Golden Armor"), IRON_ARMOR(10,
+		Material.IRON_CHESTPLATE,
+		ChatColor.BLUE + "Iron Armor"), DIAMOND_ARMOR(
+		14, Material.DIAMOND_CHESTPLATE,
+		ChatColor.BLUE
+		+ "Diamond Armor"), OTHER(1,
+		Material.BOOK,
+		ChatColor.BLUE
+		+ "Books and Other Items");
 
 		private int enchantability;
 		private Material material;
@@ -382,12 +382,12 @@ public class EnchantabilityCalc implements InventoryData {
 
 		int level = 1;
 
-		int max = ((ConfigUtils.isLevel50() ? 50 : 30) + rand_enchantability);
+		int max = (ConfigUtils.isLevel50() ? 50 : 30) + rand_enchantability;
 		Class<? extends Configuration> enchantmentsClazz = EnchantmentsConfiguration.class;
 		if (ConfigUtils.getBoolean(enchantmentsClazz, "use_lapis_modifier")) {
 			rand_enchantability += ((ConfigUtils.isLevel50() ? 6 : 3)
-					- ConfigUtils.getDouble(enchantmentsClazz, "lapis_modifiers.constant"))
-					* ConfigUtils.getDouble(enchantmentsClazz, "lapis_modifiers.modifier");
+			- ConfigUtils.getDouble(enchantmentsClazz, "lapis_modifiers.constant"))
+			* ConfigUtils.getDouble(enchantmentsClazz, "lapis_modifiers.modifier");
 		}
 		max = (int) (max * 1.15 + 0.5);
 

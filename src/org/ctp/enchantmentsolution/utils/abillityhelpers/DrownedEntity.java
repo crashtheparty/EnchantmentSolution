@@ -63,7 +63,7 @@ public class DrownedEntity {
 				DamageEvent.damageEntity(hurtEntity, "drown", (float) event.getNewDamage());
 			}
 			if (hurtEntity.isDead() && hurtEntity instanceof Player && getAttackerEntity() instanceof Player) {
-				AdvancementUtils.awardCriteria(((Player) getAttackerEntity()), ESAdvancement.HEX_BAG, "player");
+				AdvancementUtils.awardCriteria((Player) getAttackerEntity(), ESAdvancement.HEX_BAG, "player");
 			}
 			ticksLastDamage = 1;
 		} else {

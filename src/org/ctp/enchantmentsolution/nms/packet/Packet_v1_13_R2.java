@@ -14,7 +14,7 @@ public class Packet_v1_13_R2 {
 	public static int addParticle(Block block, int stage) {
 		int rand = Math.abs(new Random().nextInt());
 		PacketPlayOutBlockBreakAnimation packet = new PacketPlayOutBlockBreakAnimation(rand,
-				new BlockPosition(block.getX(), block.getY(), block.getZ()), stage);
+		new BlockPosition(block.getX(), block.getY(), block.getZ()), stage);
 		for(Player player: Bukkit.getOnlinePlayers()) {
 			((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
 		}
@@ -23,7 +23,7 @@ public class Packet_v1_13_R2 {
 
 	public static int updateParticle(Block block, int stage, int id) {
 		PacketPlayOutBlockBreakAnimation packet = new PacketPlayOutBlockBreakAnimation(id,
-				new BlockPosition(block.getX(), block.getY(), block.getZ()), stage);
+		new BlockPosition(block.getX(), block.getY(), block.getZ()), stage);
 		for(Player player: Bukkit.getOnlinePlayers()) {
 			((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
 		}

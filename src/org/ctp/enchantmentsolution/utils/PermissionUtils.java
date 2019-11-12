@@ -50,8 +50,8 @@ public class PermissionUtils {
 			JavaPlugin plugin = ((ApiEnchantmentWrapper) enchant.getRelativeEnchantment()).getPlugin();
 			if (plugin == null) {
 				ChatUtils.sendToConsole(Level.WARNING,
-						"Enchantment " + enchant.getName() + " (Display Name " + enchant.getDisplayName() + ")"
-								+ " does not have a JavaPlugin set. Refusing to check permissions.");
+				"Enchantment " + enchant.getName() + " (Display Name " + enchant.getDisplayName() + ")"
+				+ " does not have a JavaPlugin set. Refusing to check permissions.");
 				return null;
 			}
 			return plugin.getName().toLowerCase();

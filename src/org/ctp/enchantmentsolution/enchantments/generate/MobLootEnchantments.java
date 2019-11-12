@@ -11,7 +11,7 @@ public class MobLootEnchantments extends LootEnchantments {
 	}
 
 	public static MobLootEnchantments generateMobLoot(Player player, ItemStack item, int minBookshelves,
-			boolean treasure) {
+	boolean treasure) {
 		int books = 16;
 		if (ConfigUtils.isLevel50()) {
 			books = 24;

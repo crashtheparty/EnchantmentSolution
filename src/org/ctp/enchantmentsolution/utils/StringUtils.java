@@ -142,8 +142,8 @@ public class StringUtils {
 
 	public static String getEnchantmentString(EnchantmentLevel enchantment) {
 		return ChatUtils.hideText(enchantment.getEnchant().getName()) + ChatColor.RESET
-				+ ChatUtils.hideText(enchantment.getLevel() + "") + ChatColor.RESET + ChatColor.GRAY
-				+ returnEnchantmentName(enchantment.getEnchant(), enchantment.getLevel());
+		+ ChatUtils.hideText(enchantment.getLevel() + "") + ChatColor.RESET + ChatColor.GRAY
+		+ returnEnchantmentName(enchantment.getEnchant(), enchantment.getLevel());
 	}
 
 	public static EnchantmentLevel getEnchantment(String s) {
@@ -201,9 +201,9 @@ public class StringUtils {
 			lore = new ArrayList<String>();
 		}
 		while (lore.contains(ChatUtils.hideText("solution") + "" + ChatColor.GRAY + "" + ChatColor.BLUE + "Entity ID: "
-				+ entityID)) {
+		+ entityID)) {
 			lore.remove(ChatUtils.hideText("solution") + "" + ChatColor.GRAY + "" + ChatColor.BLUE + "Entity ID: "
-					+ entityID);
+			+ entityID);
 		}
 		meta.setLore(lore);
 		item.setItemMeta(meta);
@@ -251,15 +251,15 @@ public class StringUtils {
 		for(int i = 0; i < st.length(); i++) {
 			char ch = st.charAt(i);
 			if (ch == '\\') {
-				char nextChar = (i == st.length() - 1) ? '\\' : st.charAt(i + 1);
+				char nextChar = i == st.length() - 1 ? '\\' : st.charAt(i + 1);
 				// Octal escape?
 				if (nextChar >= '0' && nextChar <= '7') {
 					String code = "" + nextChar;
 					i++;
-					if ((i < st.length() - 1) && st.charAt(i + 1) >= '0' && st.charAt(i + 1) <= '7') {
+					if (i < st.length() - 1 && st.charAt(i + 1) >= '0' && st.charAt(i + 1) <= '7') {
 						code += st.charAt(i + 1);
 						i++;
-						if ((i < st.length() - 1) && st.charAt(i + 1) >= '0' && st.charAt(i + 1) <= '7') {
+						if (i < st.length() - 1 && st.charAt(i + 1) >= '0' && st.charAt(i + 1) <= '7') {
 							code += st.charAt(i + 1);
 							i++;
 						}

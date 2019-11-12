@@ -115,14 +115,14 @@ public class EnchantmentTable implements InventoryData {
 					int extra = 3;
 					for(EnchantmentList enchantmentList: enchantmentLists) {
 						if (enchantmentList != null && enchantmentList.getEnchantments() != null
-								&& enchantmentList.getEnchantments().size() > 0) {
+						&& enchantmentList.getEnchantments().size() > 0) {
 							List<EnchantmentLevel> enchants = enchantmentList.getEnchantments();
 							ItemStack book = new ItemStack(Material.ENCHANTED_BOOK);
 							ItemMeta bookMeta = book.getItemMeta();
 							String name = item.getItemMeta().getDisplayName();
 							if (name == null || name.equals("")) {
 								name = ConfigUtils.getString(LanguageConfiguration.class,
-										"vanilla." + ItemType.getUnlocalizedName(item.getType()));
+								"vanilla." + ItemType.getUnlocalizedName(item.getType()));
 							}
 							HashMap<String, Object> loreCodes = getCodes();
 							loreCodes.put("%level%", extra - 2);
@@ -146,7 +146,7 @@ public class EnchantmentTable implements InventoryData {
 									}
 								}
 							}
-							if (numLapis < (extra - 2) && player.getGameMode().equals(GameMode.SURVIVAL)) {
+							if (numLapis < extra - 2 && player.getGameMode().equals(GameMode.SURVIVAL)) {
 								lapisString = ChatUtils.getMessage(loreCodes, "table.lapis-cost-lack");
 							}
 							loreCodes.remove("%cost%");
@@ -164,9 +164,9 @@ public class EnchantmentTable implements InventoryData {
 							}
 							loreCodes.remove("%levelsTaken%");
 							loreCodes.put("%enchant%", StringUtils.returnEnchantmentName(enchants.get(0).getEnchant(),
-									enchants.get(0).getLevel()));
+							enchants.get(0).getLevel()));
 							bookMeta.setLore(Arrays.asList(levelReqString, lapisString, levelsTaken,
-									ChatUtils.getMessage(loreCodes, "table.enchant-name")));
+							ChatUtils.getMessage(loreCodes, "table.enchant-name")));
 							book.setItemMeta(bookMeta);
 							inv.setItem(start + extra, book);
 						} else {
@@ -227,7 +227,7 @@ public class EnchantmentTable implements InventoryData {
 				if (lapisStack.getAmount() < lapisStack.getType().getMaxStackSize()) {
 					if (lapisStack.getAmount() + clone.getAmount() > lapisStack.getType().getMaxStackSize()) {
 						clone.setAmount(
-								lapisStack.getAmount() + clone.getAmount() - lapisStack.getType().getMaxStackSize());
+						lapisStack.getAmount() + clone.getAmount() - lapisStack.getType().getMaxStackSize());
 						lapisStack.setAmount(lapisStack.getType().getMaxStackSize());
 					} else {
 						clone = new ItemStack(Material.AIR);
@@ -271,7 +271,7 @@ public class EnchantmentTable implements InventoryData {
 	}
 
 	public boolean removeItem(ItemStack item, int slot) {
-		int newSlot = (slot / 9) - 2;
+		int newSlot = slot / 9 - 2;
 		if (playerItems.get(newSlot).equals(item)) {
 			return playerItems.remove(newSlot) != null;
 		}
@@ -284,7 +284,7 @@ public class EnchantmentTable implements InventoryData {
 
 	public void enchantItem(int slot, int level) {
 		ItemStack enchantableItem = playerItems.get(slot);
-		int itemSlot = 17 + (9 * slot) + (4 + level);
+		int itemSlot = 17 + 9 * slot + 4 + level;
 		ItemStack enchantItem = inventory.getItem(itemSlot);
 		ItemMeta meta = enchantItem.getItemMeta();
 		for(String string: meta.getLore()) {
@@ -296,7 +296,7 @@ public class EnchantmentTable implements InventoryData {
 
 		TableEnchantments table = TableEnchantments.getTableEnchantments(player, null, getBooks(), false);
 		if (playerItems.get(slot).getType() == Material.BOOK
-				&& ConfigUtils.getBoolean(MainConfiguration.class, "use_enchanted_books")) {
+		&& ConfigUtils.getBoolean(MainConfiguration.class, "use_enchanted_books")) {
 			enchantableItem = ItemUtils.convertToEnchantedBook(enchantableItem);
 		}
 		if (player.getGameMode().equals(GameMode.SURVIVAL) || player.getGameMode().equals(GameMode.ADVENTURE)) {

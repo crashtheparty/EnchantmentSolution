@@ -80,14 +80,14 @@ public class AnvilEnchantments extends GenerateEnchantments {
 		}
 		if (itemTwo.getItemMeta().getEnchants().size() > 0 || DamageUtils.getDamage(item.getItemMeta()) > 0) {
 			if (items.contains(itemTwo.getType())) {
-				if ((!itemTwo.getType().equals(Material.BOOK) && !itemTwo.getType().equals(Material.ENCHANTED_BOOK))
-						|| DamageUtils.getDamage(item.getItemMeta()) > 0 || !itemTwo.getType().equals(item.getType())) {
+				if (!itemTwo.getType().equals(Material.BOOK) && !itemTwo.getType().equals(Material.ENCHANTED_BOOK)
+				|| DamageUtils.getDamage(item.getItemMeta()) > 0 || !itemTwo.getType().equals(item.getType())) {
 					canCombine = true;
 					return;
 				}
 				if (itemTwo.getType().equals(Material.ENCHANTED_BOOK)) {
 					Map<Enchantment, Integer> enchantments = ((EnchantmentStorageMeta) itemTwo.getItemMeta())
-							.getStoredEnchants();
+					.getStoredEnchants();
 					canCombine = checkEnchantments(enchantments, item);
 					return;
 				}
@@ -98,7 +98,7 @@ public class AnvilEnchantments extends GenerateEnchantments {
 		} else if (itemTwo.getType().equals(Material.ENCHANTED_BOOK)) {
 			if (((EnchantmentStorageMeta) itemTwo.getItemMeta()).getStoredEnchants().size() > 0) {
 				Map<Enchantment, Integer> enchantments = ((EnchantmentStorageMeta) itemTwo.getItemMeta())
-						.getStoredEnchants();
+				.getStoredEnchants();
 				canCombine = checkEnchantments(enchantments, item);
 				return;
 			}
@@ -108,7 +108,7 @@ public class AnvilEnchantments extends GenerateEnchantments {
 
 	private boolean checkEnchantments(Map<Enchantment, Integer> enchantments, ItemStack first) {
 		for(Iterator<java.util.Map.Entry<Enchantment, Integer>> it = enchantments.entrySet().iterator(); it
-				.hasNext();) {
+		.hasNext();) {
 			java.util.Map.Entry<Enchantment, Integer> e = it.next();
 			Enchantment enchant = e.getKey();
 			for(CustomEnchantment customEnchant: RegisterEnchantments.getEnchantments()) {
@@ -148,7 +148,7 @@ public class AnvilEnchantments extends GenerateEnchantments {
 			while (DamageUtils.getDamage(combinedItem.getItemMeta()) > 0 && amount > 0) {
 				amount--;
 				repairCost++;
-				DamageUtils.setDamage(combinedItem, (DamageUtils.getDamage(combinedItem.getItemMeta()) - durPerItem));
+				DamageUtils.setDamage(combinedItem, DamageUtils.getDamage(combinedItem.getItemMeta()) - durPerItem);
 			}
 
 			if (DamageUtils.getDamage(combinedItem.getItemMeta()) < 0) {
@@ -162,7 +162,7 @@ public class AnvilEnchantments extends GenerateEnchantments {
 			}
 		} else if (itemTwo.getType() == itemOne.getType()) {
 			int extraDurability = itemTwo.getType().getMaxDurability() - DamageUtils.getDamage(itemTwo.getItemMeta())
-					+ (int) (itemTwo.getType().getMaxDurability() * .12);
+			+ (int) (itemTwo.getType().getMaxDurability() * .12);
 			DamageUtils.setDamage(combinedItem, DamageUtils.getDamage(combinedItem.getItemMeta()) - extraDurability);
 			if (DamageUtils.getDamage(combinedItem.getItemMeta()) < 0) {
 				DamageUtils.setDamage(combinedItem, 0);
@@ -223,7 +223,7 @@ public class AnvilEnchantments extends GenerateEnchantments {
 		List<EnchantmentLevel> enchantments = new ArrayList<EnchantmentLevel>();
 		List<CustomEnchantment> registeredEnchantments = RegisterEnchantments.getEnchantments();
 		for(Iterator<java.util.Map.Entry<Enchantment, Integer>> it = secondEnchants.entrySet().iterator(); it
-				.hasNext();) {
+		.hasNext();) {
 			java.util.Map.Entry<Enchantment, Integer> e = it.next();
 			Enchantment enchant = e.getKey();
 			int level = e.getValue();
@@ -235,7 +235,7 @@ public class AnvilEnchantments extends GenerateEnchantments {
 		}
 
 		for(Iterator<java.util.Map.Entry<Enchantment, Integer>> it = firstEnchants.entrySet().iterator(); it
-				.hasNext();) {
+		.hasNext();) {
 			java.util.Map.Entry<Enchantment, Integer> e = it.next();
 			Enchantment enchant = e.getKey();
 			int level = e.getValue();
@@ -261,7 +261,7 @@ public class AnvilEnchantments extends GenerateEnchantments {
 			int originalLevel = -1;
 			for(EnchantmentLevel enchantOne: firstLevels) {
 				if (enchantTwo.getEnchant().getRelativeEnchantment()
-						.equals(enchantOne.getEnchant().getRelativeEnchantment())) {
+				.equals(enchantOne.getEnchant().getRelativeEnchantment())) {
 					same = true;
 					originalLevel = enchantOne.getLevel();
 					if (!godAnvil) {
@@ -289,7 +289,7 @@ public class AnvilEnchantments extends GenerateEnchantments {
 			}
 			if (demiGodAnvil) {
 				if (demiGodBooks
-						&& (itemTwo.getType() == Material.BOOK || itemTwo.getType() == Material.ENCHANTED_BOOK)) {
+				&& (itemTwo.getType() == Material.BOOK || itemTwo.getType() == Material.ENCHANTED_BOOK)) {
 					// nothing needs to change
 				} else if (!enchantTwo.getEnchant().canAnvil(player, levelCost) && originalLevel >= levelCost) {
 					levelCost = originalLevel;
@@ -332,7 +332,7 @@ public class AnvilEnchantments extends GenerateEnchantments {
 			boolean added = false;
 			for(EnchantmentLevel enchantment: enchantments) {
 				if (enchantOne.getEnchant().getRelativeEnchantment()
-						.equals(enchantment.getEnchant().getRelativeEnchantment())) {
+				.equals(enchantment.getEnchant().getRelativeEnchantment())) {
 					added = true;
 					break;
 				}

@@ -7,7 +7,7 @@ import org.ctp.enchantmentsolution.events.ESEntityDamageEntityEvent;
 public class SacrificeEvent extends ESEntityDamageEntityEvent {
 
 	public SacrificeEvent(LivingEntity damaged, Player damager, double damage) {
-		super(damaged, damager, damage, damage);
+		super(damaged, damager, 0, damage);
 	}
 
 }

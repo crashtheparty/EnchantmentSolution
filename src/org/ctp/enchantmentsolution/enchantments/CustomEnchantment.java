@@ -26,8 +26,8 @@ public abstract class CustomEnchantment {
 	protected List<EnchantmentDisplayName> defaultDisplayNames = new ArrayList<EnchantmentDisplayName>();
 	protected List<EnchantmentDescription> defaultDescriptions = new ArrayList<EnchantmentDescription>();
 	protected int defaultThirtyConstant = -1, defaultFiftyConstant = -1, constant = -1, defaultThirtyModifier = -1,
-			defaultFiftyModifier = -1, modifier = -1, defaultThirtyStartLevel = -1, defaultFiftyStartLevel = -1,
-			startLevel = -1, defaultThirtyMaxLevel = -1, defaultFiftyMaxLevel = -1, maxLevel = -1;
+	defaultFiftyModifier = -1, modifier = -1, defaultThirtyStartLevel = -1, defaultFiftyStartLevel = -1,
+	startLevel = -1, defaultThirtyMaxLevel = -1, defaultFiftyMaxLevel = -1, maxLevel = -1;
 	protected Weight defaultWeight = Weight.NULL;
 	protected Weight weight = Weight.NULL;
 	protected boolean maxLevelOne = false, curse = false;
@@ -35,8 +35,8 @@ public abstract class CustomEnchantment {
 	protected List<Material> disabledItems = new ArrayList<Material>();
 
 	public CustomEnchantment(String englishUSDisplayName, int fiftyConstant, int thirtyConstant, int fiftyModifier,
-			int thirtyModifier, int fiftyStartLevel, int thirtyStartLevel, int fiftyMaxLevel, int thirtyMaxLevel,
-			Weight weight, String englishUSDescription) {
+	int thirtyModifier, int fiftyStartLevel, int thirtyStartLevel, int fiftyMaxLevel, int thirtyMaxLevel,
+	Weight weight, String englishUSDescription) {
 		addDefaultDisplayName(englishUSDisplayName);
 		setDefaultFiftyConstant(fiftyConstant);
 		setDefaultThirtyConstant(thirtyConstant);
@@ -109,7 +109,7 @@ public abstract class CustomEnchantment {
 
 	public String getDetails() {
 		String page = "\n" + "\n" + ChatUtils.getMessage(ChatUtils.getCodes(), "enchantment.name") + getDisplayName()
-				+ "\n\n";
+		+ "\n\n";
 		page += ChatUtils.getMessage(ChatUtils.getCodes(), "enchantment.description") + getDescription() + "\n";
 		page += ChatUtils.getMessage(ChatUtils.getCodes(), "enchantment.max-level") + getMaxLevel() + ".\n";
 		page += ChatUtils.getMessage(ChatUtils.getCodes(), "enchantment.weight") + getWeightName() + ".\n";
@@ -193,9 +193,9 @@ public abstract class CustomEnchantment {
 			page += ConfigUtils.getString(LanguageConfiguration.class, "misc.no_conflicting_enchantments") + ".\n";
 		}
 		page += ChatUtils.getMessage(ChatUtils.getCodes(), "enchantment.enabled")
-				+ ConfigUtils.getString(LanguageConfiguration.class, "misc." + isEnabled()) + ".\n";
+		+ ConfigUtils.getString(LanguageConfiguration.class, "misc." + isEnabled()) + ".\n";
 		page += ChatUtils.getMessage(ChatUtils.getCodes(), "enchantment.treasure")
-				+ ConfigUtils.getString(LanguageConfiguration.class, "misc." + isTreasure()) + ".\n";
+		+ ConfigUtils.getString(LanguageConfiguration.class, "misc." + isTreasure()) + ".\n";
 		return page;
 	}
 

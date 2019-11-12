@@ -15,6 +15,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
@@ -32,18 +33,25 @@ import org.ctp.enchantmentsolution.utils.items.DamageUtils;
 import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 
 @SuppressWarnings("unused")
-public class InteractListener extends Enchantmentable {
+public class PlayerListener extends Enchantmentable {
 
 	@EventHandler
 	public void onPlayerInteract(PlayerInteractEvent event) {
 		runMethod(this, "flowerGift", event, PlayerInteractEvent.class);
 		runMethod(this, "irenesLasso", event, PlayerInteractEvent.class);
-		// runMethod(this, "splatterFest", event, PlayerInteractEvent.class);
+		runMethod(this, "splatterFest", event, PlayerInteractEvent.class);
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerInteractHighest(PlayerInteractEvent event) {
-		// runMethod(this, "moisturize", event, PlayerInteractEvent.class);
+		runMethod(this, "moisturize", event, PlayerInteractEvent.class);
+	}
+
+	@EventHandler
+	public void onPlayerMove(PlayerMoveEvent event) {
+		runMethod(this, "icarus", event, PlayerMoveEvent.class);
+		runMethod(this, "movementListener", event, RegisterEnchantments.MAGMA_WALKER);
+		runMethod(this, "movementListener", event, RegisterEnchantments.VOID_WALKER);
 	}
 
 	private void flowerGift(PlayerInteractEvent event) {

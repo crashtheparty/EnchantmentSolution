@@ -22,7 +22,7 @@ public class JobsUtils {
 
 	@SuppressWarnings("deprecation")
 	public static void sendEnchantAction(Player player, ItemStack item, ItemStack resultStack,
-			List<EnchantmentLevel> levels) {
+	List<EnchantmentLevel> levels) {
 		Jobs plugin = Jobs.getInstance();
 		if (!plugin.isEnabled()) {
 			return;
@@ -47,7 +47,7 @@ public class JobsUtils {
 
 		// Prevent item durability loss
 		if (!Jobs.getGCManager().payItemDurabilityLoss && item.getType().getMaxDurability()
-				- DamageUtils.getDamage(item.getItemMeta()) != item.getType().getMaxDurability()) {
+		- DamageUtils.getDamage(item.getItemMeta()) != item.getType().getMaxDurability()) {
 			return;
 		}
 
@@ -98,7 +98,7 @@ public class JobsUtils {
 		}
 
 		if (Jobs.getGCManager().PayForEnchantingOnAnvil
-				&& (combine.getType() == Material.ENCHANTED_BOOK || combine.getType() == Material.BOOK)) {
+		&& (combine.getType() == Material.ENCHANTED_BOOK || combine.getType() == Material.BOOK)) {
 			Map<Enchantment, Integer> enchants = resultStack.getEnchantments();
 			for(Entry<Enchantment, Integer> oneEnchant: enchants.entrySet()) {
 				Enchantment enchant = oneEnchant.getKey();
@@ -125,7 +125,7 @@ public class JobsUtils {
 
 	private static boolean payIfCreative(Player player) {
 		if (player.getGameMode().equals(GameMode.CREATIVE) && !Jobs.getGCManager().payInCreative()
-				&& !player.hasPermission("jobs.paycreative")) {
+		&& !player.hasPermission("jobs.paycreative")) {
 			return false;
 		}
 		return true;

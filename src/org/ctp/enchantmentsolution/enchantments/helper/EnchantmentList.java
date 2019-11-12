@@ -33,7 +33,7 @@ public class EnchantmentList {
 	}
 
 	public EnchantmentList(Player player, Material material, boolean treasure, List<EnchantmentLevel> fishing,
-			double multiEnchant) {
+	double multiEnchant) {
 		this.player = player;
 		this.material = material;
 		this.treasure = treasure;
@@ -70,8 +70,8 @@ public class EnchantmentList {
 
 		if (ConfigUtils.getBoolean(enchantmentsClazz, "use_lapis_modifier")) {
 			rand_enchantability += (level.getSlot()
-					- ConfigUtils.getDouble(enchantmentsClazz, "lapis_modifiers.constant"))
-					* ConfigUtils.getDouble(enchantmentsClazz, "lapis_modifiers.modifier");
+			- ConfigUtils.getDouble(enchantmentsClazz, "lapis_modifiers.constant"))
+			* ConfigUtils.getDouble(enchantmentsClazz, "lapis_modifiers.modifier");
 		}
 
 		int k = level.getLevel() + rand_enchantability;
@@ -99,16 +99,16 @@ public class EnchantmentList {
 		enchants.add(new EnchantmentLevel(enchantment, enchantment.getEnchantLevel(player, enchantability)));
 		int enchantability = this.enchantability;
 		int finalEnchantability = enchantability / 2;
-		while (((finalEnchantability + 1) / multiEnchantDivisor) > Math.random()
-				&& (ConfigUtils.getMaxEnchantments() == 0 ? true
-						: enchants.size() < ConfigUtils.getMaxEnchantments())) {
+		while ((finalEnchantability + 1) / multiEnchantDivisor > Math.random()
+		&& (ConfigUtils.getMaxEnchantments() == 0 ? true
+		: enchants.size() < ConfigUtils.getMaxEnchantments())) {
 			enchantment = getEnchantment(enchants);
 			if (enchantment == null) {
 				break;
 			}
 			if (ConfigUtils.getBoolean(enchantmentsClazz, "enchantability_decay")) {
 				enchants.add(
-						new EnchantmentLevel(enchantment, enchantment.getEnchantLevel(player, finalEnchantability)));
+				new EnchantmentLevel(enchantment, enchantment.getEnchantLevel(player, finalEnchantability)));
 			} else {
 				enchants.add(new EnchantmentLevel(enchantment, enchantment.getEnchantLevel(player, enchantability)));
 			}
@@ -126,9 +126,9 @@ public class EnchantmentList {
 		}
 		enchants.add(enchantment);
 		int finalEnchantability = enchantability / 2;
-		while (((finalEnchantability + 1) / multiEnchantDivisor) > Math.random()
-				&& (ConfigUtils.getMaxEnchantments() == 0 ? true
-						: enchants.size() < ConfigUtils.getMaxEnchantments())) {
+		while ((finalEnchantability + 1) / multiEnchantDivisor > Math.random()
+		&& (ConfigUtils.getMaxEnchantments() == 0 ? true
+		: enchants.size() < ConfigUtils.getMaxEnchantments())) {
 			enchantment = getPreselectedEnchantment(enchants, selections);
 			if (enchantment == null) {
 				break;
@@ -145,7 +145,7 @@ public class EnchantmentList {
 	}
 
 	private EnchantmentLevel getPreselectedEnchantment(List<EnchantmentLevel> previousLevels,
-			List<EnchantmentLevel> selections) {
+	List<EnchantmentLevel> selections) {
 		int totalWeight = 0;
 		List<EnchantmentLevel> customEnchants = new ArrayList<EnchantmentLevel>();
 		for(EnchantmentLevel enchantment: selections) {
@@ -201,14 +201,14 @@ public class EnchantmentList {
 
 		if (level == null) {
 			if (enchantment.isEnabled() && enchantment.canEnchantItem(material)
-					&& (treasure || !enchantment.isTreasure())) {
+			&& (treasure || !enchantment.isTreasure())) {
 				return true;
 			}
 			return false;
 		}
 
 		if (enchantment.isEnabled() && enchantment.canEnchantItem(material) && (treasure || !enchantment.isTreasure())
-				&& enchantment.canEnchant(player, enchantability, level.getLevel())) {
+		&& enchantment.canEnchant(player, enchantability, level.getLevel())) {
 			return true;
 		}
 		return false;

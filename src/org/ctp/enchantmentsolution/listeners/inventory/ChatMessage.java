@@ -26,13 +26,7 @@ public class ChatMessage implements Listener {
 					configInv.setPath(configInv.getLevel(), chat);
 				}
 				configInv.setChat(false);
-				Bukkit.getScheduler().runTask(EnchantmentSolution.getPlugin(), new Runnable() {
-					@Override
-					public void run() {
-						configInv.reopenFromAnvil(true);
-					}
-
-				});
+				Bukkit.getScheduler().runTask(EnchantmentSolution.getPlugin(), (Runnable) () -> configInv.reopenFromAnvil(true));
 			} else {
 				EnchantmentSolution.getPlugin().removeInventory(configInv);
 			}

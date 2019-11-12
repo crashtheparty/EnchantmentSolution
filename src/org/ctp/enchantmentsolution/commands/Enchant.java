@@ -39,14 +39,14 @@ public class Enchant implements CommandExecutor {
 										HashMap<String, Object> codes = ChatUtils.getCodes();
 										codes.put("%level%", level);
 										ChatUtils.sendMessage(player,
-												ChatUtils.getMessage(codes, "commands.level-too-low"));
+										ChatUtils.getMessage(codes, "commands.level-too-low"));
 										level = 1;
 									}
 								} catch (NumberFormatException ex) {
 									HashMap<String, Object> codes = ChatUtils.getCodes();
 									codes.put("%level%", args[1]);
 									ChatUtils.sendMessage(player,
-											ChatUtils.getMessage(codes, "commands.invalid-level"));
+									ChatUtils.getMessage(codes, "commands.invalid-level"));
 								}
 							}
 							if (level > enchant.getMaxLevel()) {
@@ -61,11 +61,11 @@ public class Enchant implements CommandExecutor {
 							if (itemToEnchant != null) {
 								int maxEnchants = ConfigUtils.getMaxEnchantments();
 								int itemEnchants = ItemUtils.getTotalEnchantments(itemToEnchant);
-								if (maxEnchants <= 0 || (itemEnchants < maxEnchants && maxEnchants > 0)) {
+								if (maxEnchants <= 0 || itemEnchants < maxEnchants && maxEnchants > 0) {
 									if (enchant.canAnvilItem(itemToEnchant.getType())
-											|| enchant.canEnchantItem(itemToEnchant.getType())) {
+									|| enchant.canEnchantItem(itemToEnchant.getType())) {
 										boolean useBooks = ConfigUtils.getBoolean(MainConfiguration.class,
-												"use_enchanted_books");
+										"use_enchanted_books");
 										if (itemToEnchant.getType() == Material.BOOK && useBooks) {
 											itemToEnchant = ItemUtils.convertToEnchantedBook(itemToEnchant);
 										} else if (itemToEnchant.getType() == Material.ENCHANTED_BOOK && !useBooks) {
@@ -78,22 +78,22 @@ public class Enchant implements CommandExecutor {
 										codes.put("%level%", level);
 										codes.put("%enchant%", enchant.getDisplayName());
 										ChatUtils.sendMessage(player,
-												ChatUtils.getMessage(codes, "commands.add-enchant"));
+										ChatUtils.getMessage(codes, "commands.add-enchant"));
 									} else {
 										HashMap<String, Object> codes = ChatUtils.getCodes();
 										codes.put("%enchant%", enchant.getDisplayName());
 										ChatUtils.sendMessage(player,
-												ChatUtils.getMessage(codes, "commands.cannot-enchant-item"));
+										ChatUtils.getMessage(codes, "commands.cannot-enchant-item"));
 									}
 								} else {
 									HashMap<String, Object> codes = ChatUtils.getCodes();
 									codes.put("%maxEnchants%", maxEnchants);
 									ChatUtils.sendMessage(player,
-											ChatUtils.getMessage(codes, "commands.too-many-enchants"));
+									ChatUtils.getMessage(codes, "commands.too-many-enchants"));
 								}
 							} else {
 								ChatUtils.sendMessage(player,
-										ChatUtils.getMessage(ChatUtils.getCodes(), "commands.enchant-fail"));
+								ChatUtils.getMessage(ChatUtils.getCodes(), "commands.enchant-fail"));
 							}
 							return true;
 						}
@@ -103,7 +103,7 @@ public class Enchant implements CommandExecutor {
 					ChatUtils.sendMessage(player, ChatUtils.getMessage(codes, "commands.enchant-not-found"));
 				} else {
 					ChatUtils.sendMessage(player,
-							ChatUtils.getMessage(ChatUtils.getCodes(), "commands.enchant-not-specified"));
+					ChatUtils.getMessage(ChatUtils.getCodes(), "commands.enchant-not-specified"));
 				}
 			} else {
 				ChatUtils.sendMessage(player, ChatUtils.getMessage(ChatUtils.getCodes(), "commands.no-permission"));

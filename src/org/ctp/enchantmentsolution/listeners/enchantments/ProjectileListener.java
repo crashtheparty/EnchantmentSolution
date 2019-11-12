@@ -6,10 +6,16 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.entity.*;
+import org.bukkit.entity.Arrow;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
+import org.bukkit.entity.Trident;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
+import org.bukkit.event.player.PlayerEggThrowEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
@@ -34,13 +40,18 @@ public class ProjectileListener extends Enchantmentable {
 		runMethod(this, "curseOfLag", event, ProjectileLaunchEvent.class);
 		runMethod(this, "drowned", event, ProjectileLaunchEvent.class);
 		runMethod(this, "sniper", event, ProjectileLaunchEvent.class);
-		// runMethod(this, "transmutation", event, ProjectileLaunchEvent.class);
+		runMethod(this, "transmutation", event, ProjectileLaunchEvent.class);
 	}
 
 	@EventHandler
 	public void onProjectileHit(ProjectileHitEvent event) {
 		runMethod(this, "hardBounce", event, ProjectileHitEvent.class);
-		// runMethod(this, "splatterFest", event, ProjectileHitEvent.class);
+		runMethod(this, "splatterFest", event, ProjectileHitEvent.class);
+	}
+
+	@EventHandler
+	public void onPlayerEggThrow(PlayerEggThrowEvent event) {
+		runMethod(this, "splatterFest", event, PlayerEggThrowEvent.class);
 	}
 
 	private void curseOfLag(ProjectileLaunchEvent event) {

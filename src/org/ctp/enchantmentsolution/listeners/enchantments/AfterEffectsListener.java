@@ -1,11 +1,18 @@
 package org.ctp.enchantmentsolution.listeners.enchantments;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
+import java.util.UUID;
+
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
@@ -19,10 +26,23 @@ import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 @SuppressWarnings("unused")
 public class AfterEffectsListener extends Enchantmentable {
 
+	private static List<UUID> SACRIFICE_ADVANCEMENT = new ArrayList<UUID>();
+
 	@EventHandler
 	public void onEntityDeath(EntityDeathEvent event) {
 		runMethod(this, "drowned", event, EntityDeathEvent.class);
 		runMethod(this, "expShare", event, EntityDeathEvent.class);
+		runMethod(this, "pillage", event, EntityDeathEvent.class);
+	}
+
+	@EventHandler(priority = EventPriority.HIGHEST)
+	public void onPlayerDeath(PlayerDeathEvent event) {
+		runMethod(this, "sacrifice", event, PlayerDeathEvent.class);
+	}
+
+	@EventHandler
+	public void onPlayerRespawn(PlayerRespawnEvent event) {
+		runMethod(this, "sacrifice", event, PlayerRespawnEvent.class);
 	}
 
 	private void drowned(EntityDeathEvent event) {

@@ -25,7 +25,7 @@ public class VersionCheck implements Listener, Runnable {
 	private boolean latestVersion, experimentalVersion, checked;
 
 	public VersionCheck(PluginVersion version, String historyURL, String spigotURL, String githubURL,
-			boolean getLatestVersion, boolean getExperimentalVersions) {
+	boolean getLatestVersion, boolean getExperimentalVersions) {
 		setPluginVersion(version);
 		setHistory(historyURL);
 		setSpigot(spigotURL);
@@ -69,7 +69,7 @@ public class VersionCheck implements Listener, Runnable {
 			version.setPluginVersions(versionHistory);
 			if (!version.isOfficialVersion()) {
 				ChatUtils.sendToConsole(Level.WARNING,
-						"Uh oh! Plugin author forgot to update version history. Go tell them: " + spigot);
+				"Uh oh! Plugin author forgot to update version history. Go tell them: " + spigot);
 			} else if (!version.hasNewerVersion(experimentalVersion)) {
 				ChatUtils.sendToConsole(Level.INFO, "Your version is up-to-date.");
 			} else {
@@ -77,20 +77,18 @@ public class VersionCheck implements Listener, Runnable {
 				String versionString = pluginVersion.getVersionName();
 				if (pluginVersion.getType() == VersionType.EXPERIMENTAL) {
 					ChatUtils.sendToConsole(Level.WARNING, "Experimental Version " + versionString + " of "
-							+ version.getPlugin().getName() + " is ready for testing! Download it here: " + github);
+					+ version.getPlugin().getName() + " is ready for testing! Download it here: " + github);
 				} else {
 					ChatUtils.sendToConsole(Level.WARNING, "Version " + versionString + " of "
-							+ version.getPlugin().getName() + " is available! Download it here: " + spigot);
+					+ version.getPlugin().getName() + " is available! Download it here: " + spigot);
 				}
 			}
 			if (!checked) {
-				Bukkit.getScheduler().runTaskLater(version.getPlugin(), new Runnable() {
-					public void run() {
-						for(Player player: Bukkit.getOnlinePlayers()) {
-							if (latestVersion && player
-									.hasPermission(version.getPlugin().getName().toLowerCase() + ".version-updater")) {
-								sendPlayerMessage(player);
-							}
+				Bukkit.getScheduler().runTaskLater(version.getPlugin(), (Runnable) () -> {
+					for(Player player: Bukkit.getOnlinePlayers()) {
+						if (latestVersion && player
+						.hasPermission(version.getPlugin().getName().toLowerCase() + ".version-updater")) {
+							sendPlayerMessage(player);
 						}
 					}
 				}, 1l);
@@ -103,7 +101,7 @@ public class VersionCheck implements Listener, Runnable {
 	public void onPlayerJoin(PlayerJoinEvent event) {
 		Player player = event.getPlayer();
 		if (latestVersion && player.hasPermission(version.getPlugin().getName().toLowerCase() + ".version-updater")
-				&& checked) {
+		&& checked) {
 			sendPlayerMessage(player);
 		}
 	}
@@ -111,31 +109,31 @@ public class VersionCheck implements Listener, Runnable {
 	private void sendPlayerMessage(Player player) {
 		if (!version.isOfficialVersion()) {
 			ChatUtils.sendMessage(player, "Uh oh! Plugin author forgot to update version history. Go tell them: ",
-					github);
+			github);
 		} else if (version.hasNewerVersion(experimentalVersion)) {
 			Version pluginVersion = version.getNewestVersion(experimentalVersion);
 			String versionString = pluginVersion.getVersionName();
 			if (pluginVersion.getType() == VersionType.EXPERIMENTAL) {
 				ChatUtils.sendMessage(player, "Experimental Version " + versionString + " of "
-						+ version.getPlugin().getName() + " is ready for testing! Download it here: " + github);
+				+ version.getPlugin().getName() + " is ready for testing! Download it here: " + github);
 			} else {
 				ChatUtils.sendMessage(player, "Version " + versionString + " of " + version.getPlugin().getName()
-						+ " is available! Download it here: " + spigot);
+				+ " is available! Download it here: " + spigot);
 			}
 			if (version.isExperimentalVersion()) {
 				ChatUtils.sendMessage(player, "Thank you for using an experimental version of "
-						+ version.getPlugin().getName() + "! Please report any bugs you find to github.");
+				+ version.getPlugin().getName() + "! Please report any bugs you find to github.");
 				ChatUtils.sendMessage(player, "Link: ", github);
 				ChatUtils.sendMessage(player, "Version: " + version.getCurrent());
 			}
 		} else if (version.isExperimentalVersion()) {
 			ChatUtils.sendMessage(player, "Thank you for using an experimental version of "
-					+ version.getPlugin().getName() + "! Please report any bugs you find to github.");
+			+ version.getPlugin().getName() + "! Please report any bugs you find to github.");
 			ChatUtils.sendMessage(player, "Link: ", github);
 			ChatUtils.sendMessage(player, "Version: " + version.getCurrent());
 		} else if (version.isUpcomingVersion()) {
 			ChatUtils.sendMessage(player, "Thank you for using an upcoming version of " + version.getPlugin().getName()
-					+ "! Please report any bugs you find to github.");
+			+ "! Please report any bugs you find to github.");
 			ChatUtils.sendMessage(player, "Link: ", github);
 			ChatUtils.sendMessage(player, "Version: " + version.getCurrent());
 		}

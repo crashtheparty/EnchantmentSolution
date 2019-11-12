@@ -10,7 +10,7 @@ public class ShockAspectEvent extends ESEntityDamageEntityEvent {
 	private Location location;
 
 	public ShockAspectEvent(LivingEntity damaged, LivingEntity damager, double damage, double newDamage, double chance,
-			Location location) {
+	Location location) {
 		super(damaged, damager, damage, newDamage);
 		setChance(chance);
 		setLocation(location);

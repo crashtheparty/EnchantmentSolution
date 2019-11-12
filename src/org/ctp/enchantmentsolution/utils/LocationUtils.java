@@ -12,7 +12,7 @@ public class LocationUtils {
 
 	public static boolean isLocationDifferent(Location locOne, Location locTwo, boolean includeY) {
 		return locOne.getX() != locTwo.getX() || locTwo.getZ() != locTwo.getZ()
-				|| (includeY && locTwo.getY() != locOne.getY());
+		|| includeY && locTwo.getY() != locOne.getY();
 	}
 
 	public static boolean hasBlockAbove(Player player) {
@@ -69,7 +69,7 @@ public class LocationUtils {
 			String[] values = string.split(" @ ");
 			if (values.length == 4) {
 				loc = new Location(Bukkit.getWorld(values[3]), Integer.parseInt(values[0]), Integer.parseInt(values[1]),
-						Integer.parseInt(values[2]));
+				Integer.parseInt(values[2]));
 			}
 		} catch (Exception ex) {
 
@@ -93,8 +93,8 @@ public class LocationUtils {
 		for(int x = loc.getBlockX() - 2; x < loc.getBlockX() + 3; x++) {
 			for(int y = loc.getBlockY(); y < loc.getBlockY() + 2; y++) {
 				for(int z = loc.getBlockZ() - 2; z < loc.getBlockZ() + 3; z++) {
-					if ((x == loc.getBlockX() - 2 || x == loc.getBlockX() + 2)
-							|| (z == loc.getBlockZ() - 2 || z == loc.getBlockZ() + 2)) {
+					if (x == loc.getBlockX() - 2 || x == loc.getBlockX() + 2
+					|| z == loc.getBlockZ() - 2 || z == loc.getBlockZ() + 2) {
 						Location bookshelf = new Location(loc.getWorld(), x, y, z);
 						if (bookshelf.getBlock().getType().equals(Material.BOOKSHELF)) {
 							bookshelves++;

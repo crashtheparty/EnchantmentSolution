@@ -45,14 +45,14 @@ public class EquipListener implements Listener {
 			numberkey = true;
 		}
 		if (e.getSlotType() != SlotType.ARMOR && e.getSlotType() != SlotType.QUICKBAR
-				&& e.getSlotType() != SlotType.CONTAINER) {
+		&& e.getSlotType() != SlotType.CONTAINER) {
 			return;
 		}
 		if (e.getClickedInventory() != null && !e.getClickedInventory().getType().equals(InventoryType.PLAYER)) {
 			return;
 		}
 		if (!e.getInventory().getType().equals(InventoryType.CRAFTING)
-				&& !e.getInventory().getType().equals(InventoryType.PLAYER)) {
+		&& !e.getInventory().getType().equals(InventoryType.PLAYER)) {
 			return;
 		}
 		if (!(e.getWhoClicked() instanceof Player)) {
@@ -70,20 +70,20 @@ public class EquipListener implements Listener {
 					equipping = false;
 				}
 				if (newItemSlotType.equals(ItemSlotType.HELMET)
-						&& (equipping ? isAirOrNull(e.getWhoClicked().getInventory().getHelmet())
-								: !isAirOrNull(e.getWhoClicked().getInventory().getHelmet()))
-						|| newItemSlotType.equals(ItemSlotType.CHESTPLATE)
-								&& (equipping ? isAirOrNull(e.getWhoClicked().getInventory().getChestplate())
-										: !isAirOrNull(e.getWhoClicked().getInventory().getChestplate()))
-						|| newItemSlotType.equals(ItemSlotType.LEGGINGS)
-								&& (equipping ? isAirOrNull(e.getWhoClicked().getInventory().getLeggings())
-										: !isAirOrNull(e.getWhoClicked().getInventory().getLeggings()))
-						|| newItemSlotType.equals(ItemSlotType.BOOTS)
-								&& (equipping ? isAirOrNull(e.getWhoClicked().getInventory().getBoots())
-										: !isAirOrNull(e.getWhoClicked().getInventory().getBoots()))) {
+				&& (equipping ? isAirOrNull(e.getWhoClicked().getInventory().getHelmet())
+				: !isAirOrNull(e.getWhoClicked().getInventory().getHelmet()))
+				|| newItemSlotType.equals(ItemSlotType.CHESTPLATE)
+				&& (equipping ? isAirOrNull(e.getWhoClicked().getInventory().getChestplate())
+				: !isAirOrNull(e.getWhoClicked().getInventory().getChestplate()))
+				|| newItemSlotType.equals(ItemSlotType.LEGGINGS)
+				&& (equipping ? isAirOrNull(e.getWhoClicked().getInventory().getLeggings())
+				: !isAirOrNull(e.getWhoClicked().getInventory().getLeggings()))
+				|| newItemSlotType.equals(ItemSlotType.BOOTS)
+				&& (equipping ? isAirOrNull(e.getWhoClicked().getInventory().getBoots())
+				: !isAirOrNull(e.getWhoClicked().getInventory().getBoots()))) {
 					ArmorEquipEvent armorEquipEvent = new ArmorEquipEvent((Player) e.getWhoClicked(),
-							EquipMethod.SHIFT_CLICK, newItemSlotType, equipping ? null : e.getCurrentItem(),
-							equipping ? e.getCurrentItem() : null);
+					EquipMethod.SHIFT_CLICK, newItemSlotType, equipping ? null : e.getCurrentItem(),
+					equipping ? e.getCurrentItem() : null);
 					Bukkit.getServer().getPluginManager().callEvent(armorEquipEvent);
 					if (armorEquipEvent.isCancelled()) {
 						e.setCancelled(true);
@@ -102,7 +102,7 @@ public class EquipListener implements Listener {
 						oldArmorPiece = e.getClickedInventory().getItem(e.getSlot());
 					} else {// Unequipping
 						newItemSlotType = ItemSlotType
-								.matchArmorType(!isAirOrNull(e.getCurrentItem()) ? e.getCurrentItem() : e.getCursor());
+						.matchArmorType(!isAirOrNull(e.getCurrentItem()) ? e.getCurrentItem() : e.getCursor());
 					}
 				}
 			} else {
@@ -116,7 +116,7 @@ public class EquipListener implements Listener {
 					method = EquipMethod.HOTBAR_SWAP;
 				}
 				ArmorEquipEvent armorEquipEvent = new ArmorEquipEvent((Player) e.getWhoClicked(), method,
-						newItemSlotType, oldArmorPiece, newArmorPiece);
+				newItemSlotType, oldArmorPiece, newArmorPiece);
 				Bukkit.getServer().getPluginManager().callEvent(armorEquipEvent);
 				if (armorEquipEvent.isCancelled()) {
 					e.setCancelled(true);
@@ -133,8 +133,8 @@ public class EquipListener implements Listener {
 		if (e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK) {
 			final Player player = e.getPlayer();
 			if (e.getClickedBlock() != null && e.getAction() == Action.RIGHT_CLICK_BLOCK) {// Having both of these
-																							// checks is useless, might
-																							// as well do it though.
+				// checks is useless, might
+				// as well do it though.
 				if (e.getClickedBlock().getType().isInteractable()) {
 					return;
 				}
@@ -142,14 +142,14 @@ public class EquipListener implements Listener {
 			ItemSlotType newItemSlotType = ItemSlotType.matchArmorType(e.getItem());
 			if (newItemSlotType != null) {
 				if (newItemSlotType.equals(ItemSlotType.HELMET) && isAirOrNull(e.getPlayer().getInventory().getHelmet())
-						|| newItemSlotType.equals(ItemSlotType.CHESTPLATE)
-								&& isAirOrNull(e.getPlayer().getInventory().getChestplate())
-						|| newItemSlotType.equals(ItemSlotType.LEGGINGS)
-								&& isAirOrNull(e.getPlayer().getInventory().getLeggings())
-						|| newItemSlotType.equals(ItemSlotType.BOOTS)
-								&& isAirOrNull(e.getPlayer().getInventory().getBoots())) {
+				|| newItemSlotType.equals(ItemSlotType.CHESTPLATE)
+				&& isAirOrNull(e.getPlayer().getInventory().getChestplate())
+				|| newItemSlotType.equals(ItemSlotType.LEGGINGS)
+				&& isAirOrNull(e.getPlayer().getInventory().getLeggings())
+				|| newItemSlotType.equals(ItemSlotType.BOOTS)
+				&& isAirOrNull(e.getPlayer().getInventory().getBoots())) {
 					ArmorEquipEvent armorEquipEvent = new ArmorEquipEvent(e.getPlayer(), EquipMethod.HOTBAR,
-							ItemSlotType.matchArmorType(e.getItem()), null, e.getItem());
+					ItemSlotType.matchArmorType(e.getItem()), null, e.getItem());
 					Bukkit.getServer().getPluginManager().callEvent(armorEquipEvent);
 					if (armorEquipEvent.isCancelled()) {
 						e.setCancelled(true);
@@ -167,7 +167,7 @@ public class EquipListener implements Listener {
 			ItemSlotType type = ItemSlotType.matchArmorType(item);
 			if (type != null) {
 				Bukkit.getServer().getPluginManager()
-						.callEvent(new ArmorEquipEvent(player, EquipMethod.JOIN, type, null, item));
+				.callEvent(new ArmorEquipEvent(player, EquipMethod.JOIN, type, null, item));
 			}
 		}
 	}
@@ -180,7 +180,7 @@ public class EquipListener implements Listener {
 		}
 		if (type != null && type.getSlot() == event.getRawSlots().stream().findFirst().orElse(0)) {
 			ArmorEquipEvent armorEquipEvent = new ArmorEquipEvent((Player) event.getWhoClicked(), EquipMethod.DRAG,
-					type, null, event.getOldCursor());
+			type, null, event.getOldCursor());
 			Bukkit.getServer().getPluginManager().callEvent(armorEquipEvent);
 			if (armorEquipEvent.isCancelled()) {
 				event.setResult(Result.DENY);
@@ -219,7 +219,7 @@ public class EquipListener implements Listener {
 		for(ItemStack i: p.getInventory().getArmorContents()) {
 			if (!isAirOrNull(i)) {
 				Bukkit.getServer().getPluginManager()
-						.callEvent(new ArmorEquipEvent(p, EquipMethod.DEATH, ItemSlotType.matchArmorType(i), i, null));
+				.callEvent(new ArmorEquipEvent(p, EquipMethod.DEATH, ItemSlotType.matchArmorType(i), i, null));
 			}
 		}
 	}
@@ -230,7 +230,7 @@ public class EquipListener implements Listener {
 		for(ItemStack i: p.getInventory().getArmorContents()) {
 			if (!isAirOrNull(i)) {
 				Bukkit.getServer().getPluginManager()
-						.callEvent(new ArmorEquipEvent(p, EquipMethod.DEATH, ItemSlotType.matchArmorType(i), null, i));
+				.callEvent(new ArmorEquipEvent(p, EquipMethod.DEATH, ItemSlotType.matchArmorType(i), null, i));
 			}
 		}
 	}
@@ -242,7 +242,7 @@ public class EquipListener implements Listener {
 			if (event.getTargetEntity() instanceof Player) {
 				Player p = (Player) event.getTargetEntity();
 				ArmorEquipEvent armorEquipEvent = new ArmorEquipEvent(p, ArmorEquipEvent.EquipMethod.DISPENSER, type,
-						null, event.getItem());
+				null, event.getItem());
 				Bukkit.getServer().getPluginManager().callEvent(armorEquipEvent);
 				if (armorEquipEvent.isCancelled()) {
 					event.setCancelled(true);
@@ -256,12 +256,12 @@ public class EquipListener implements Listener {
 		boolean shift = false, numberkey = false, dropping = false;
 
 		if (e.isCancelled() || !(e.getWhoClicked() instanceof Player)
-				|| e.getSlotType() == InventoryType.SlotType.OUTSIDE) {
+		|| e.getSlotType() == InventoryType.SlotType.OUTSIDE) {
 			return;
 		}
 
-		if ((!e.getInventory().getType().equals(InventoryType.CRAFTING)
-				&& !e.getInventory().getType().equals(InventoryType.WORKBENCH))) {
+		if (!e.getInventory().getType().equals(InventoryType.CRAFTING)
+		&& !e.getInventory().getType().equals(InventoryType.WORKBENCH)) {
 			return;
 		}
 
@@ -297,10 +297,10 @@ public class EquipListener implements Listener {
 
 		if (dropping) {
 			if (e.getSlotType().equals(InventoryType.SlotType.QUICKBAR) && e.getSlot() == holdslot
-					&& currentItem.getAmount() == 1) {
+			&& currentItem.getAmount() == 1) {
 
 				ItemEquipEvent event = new ItemEquipEvent((Player) e.getWhoClicked(), ItemEquipEvent.HandMethod.DROP,
-						ItemSlotType.MAIN_HAND, e.getCurrentItem(), null);
+				ItemSlotType.MAIN_HAND, e.getCurrentItem(), null);
 
 				Bukkit.getServer().getPluginManager().callEvent(event);
 
@@ -310,7 +310,7 @@ public class EquipListener implements Listener {
 
 			} else if (clicked == 45 && currentItem.getAmount() == 1) {
 				ItemEquipEvent event = new ItemEquipEvent((Player) e.getWhoClicked(), ItemEquipEvent.HandMethod.DROP,
-						ItemSlotType.OFF_HAND, e.getCurrentItem(), null);
+				ItemSlotType.OFF_HAND, e.getCurrentItem(), null);
 
 				Bukkit.getServer().getPluginManager().callEvent(event);
 
@@ -321,7 +321,7 @@ public class EquipListener implements Listener {
 		} else if (shift) {
 			if (clicked - 36 == holdslot) {
 				ItemEquipEvent event = new ItemEquipEvent((Player) e.getWhoClicked(),
-						ItemEquipEvent.HandMethod.HELD_SWAP, ItemSlotType.MAIN_HAND, e.getCurrentItem(), null);
+				ItemEquipEvent.HandMethod.HELD_SWAP, ItemSlotType.MAIN_HAND, e.getCurrentItem(), null);
 				Bukkit.getServer().getPluginManager().callEvent(event);
 
 				if (event.isCancelled()) {
@@ -331,7 +331,7 @@ public class EquipListener implements Listener {
 			} else {
 				if (clicked == 45) {
 					ItemEquipEvent event = new ItemEquipEvent((Player) e.getWhoClicked(),
-							ItemEquipEvent.HandMethod.DROP, ItemSlotType.OFF_HAND, e.getCurrentItem(), null);
+					ItemEquipEvent.HandMethod.DROP, ItemSlotType.OFF_HAND, e.getCurrentItem(), null);
 
 					Bukkit.getServer().getPluginManager().callEvent(event);
 
@@ -340,9 +340,9 @@ public class EquipListener implements Listener {
 					}
 					return;
 				} else if (currentItem.getType() == Material.SHIELD
-						&& isAirOrNull(e.getWhoClicked().getInventory().getItemInOffHand())) {
+				&& isAirOrNull(e.getWhoClicked().getInventory().getItemInOffHand())) {
 					ItemEquipEvent event = new ItemEquipEvent((Player) e.getWhoClicked(),
-							ItemEquipEvent.HandMethod.DROP, ItemSlotType.OFF_HAND, null, e.getCurrentItem());
+					ItemEquipEvent.HandMethod.DROP, ItemSlotType.OFF_HAND, null, e.getCurrentItem());
 
 					Bukkit.getServer().getPluginManager().callEvent(event);
 
@@ -372,7 +372,7 @@ public class EquipListener implements Listener {
 
 				if (empty == holdslot) {
 					ItemEquipEvent event = new ItemEquipEvent((Player) e.getWhoClicked(),
-							ItemEquipEvent.HandMethod.HELD_SWAP, ItemSlotType.MAIN_HAND, currentItem, null);
+					ItemEquipEvent.HandMethod.HELD_SWAP, ItemSlotType.MAIN_HAND, currentItem, null);
 					Bukkit.getServer().getPluginManager().callEvent(event);
 
 					if (event.isCancelled()) {
@@ -403,7 +403,7 @@ public class EquipListener implements Listener {
 				}
 
 				ItemEquipEvent event = new ItemEquipEvent((Player) e.getWhoClicked(), ItemEquipEvent.HandMethod.HOT_BAR,
-						ItemSlotType.MAIN_HAND, oldItem, newItem);
+				ItemSlotType.MAIN_HAND, oldItem, newItem);
 
 				Bukkit.getServer().getPluginManager().callEvent(event);
 
@@ -417,7 +417,7 @@ public class EquipListener implements Listener {
 				oldItem = currentItem;
 
 				ItemEquipEvent event = new ItemEquipEvent((Player) e.getWhoClicked(), ItemEquipEvent.HandMethod.HOT_BAR,
-						ItemSlotType.MAIN_HAND, oldItem, newItem);
+				ItemSlotType.MAIN_HAND, oldItem, newItem);
 
 				Bukkit.getServer().getPluginManager().callEvent(event);
 
@@ -430,7 +430,7 @@ public class EquipListener implements Listener {
 				oldItem = currentItem;
 
 				ItemEquipEvent event = new ItemEquipEvent((Player) e.getWhoClicked(), ItemEquipEvent.HandMethod.HOT_BAR,
-						ItemSlotType.OFF_HAND, oldItem, newItem);
+				ItemSlotType.OFF_HAND, oldItem, newItem);
 
 				Bukkit.getServer().getPluginManager().callEvent(event);
 
@@ -455,7 +455,7 @@ public class EquipListener implements Listener {
 			return; // only handle shift click
 		}
 
-		Player player = ((Player) e.getWhoClicked());
+		Player player = (Player) e.getWhoClicked();
 
 		ItemStack currentItem = e.getCurrentItem();
 
@@ -478,7 +478,7 @@ public class EquipListener implements Listener {
 
 		if (empty == player.getInventory().getHeldItemSlot()) {
 			ItemEquipEvent event = new ItemEquipEvent(player, ItemEquipEvent.HandMethod.CRAFTED, ItemSlotType.MAIN_HAND,
-					null, currentItem);
+			null, currentItem);
 
 			Bukkit.getServer().getPluginManager().callEvent(event);
 
@@ -510,7 +510,7 @@ public class EquipListener implements Listener {
 		}
 
 		ItemEquipEvent event = new ItemEquipEvent(e.getPlayer(), ItemEquipEvent.HandMethod.HELD_SWITCH,
-				ItemSlotType.MAIN_HAND, oldItem, newItem);
+		ItemSlotType.MAIN_HAND, oldItem, newItem);
 
 		Bukkit.getServer().getPluginManager().callEvent(event);
 
@@ -519,7 +519,7 @@ public class EquipListener implements Listener {
 		}
 
 		ItemEquipEvent offhand = new ItemEquipEvent(e.getPlayer(), ItemEquipEvent.HandMethod.HELD_SWITCH,
-				ItemSlotType.OFF_HAND, newItem, oldItem);
+		ItemSlotType.OFF_HAND, newItem, oldItem);
 
 		Bukkit.getServer().getPluginManager().callEvent(offhand);
 
@@ -541,7 +541,7 @@ public class EquipListener implements Listener {
 	@EventHandler
 	public void onInventoryPickupHandEquip(EntityPickupItemEvent e) {
 		if (e.isCancelled() || e.getItem() == null || e.getItem().getItemStack() == null
-				|| e.getItem().getItemStack().getType().equals(Material.AIR)) {
+		|| e.getItem().getItemStack().getType().equals(Material.AIR)) {
 			return;
 		}
 
@@ -568,7 +568,7 @@ public class EquipListener implements Listener {
 
 		if (empty == player.getInventory().getHeldItemSlot()) {
 			ItemEquipEvent event = new ItemEquipEvent(player, ItemEquipEvent.HandMethod.PICK_UP, ItemSlotType.MAIN_HAND,
-					null, item);
+			null, item);
 			Bukkit.getServer().getPluginManager().callEvent(event);
 
 			if (event.isCancelled()) {
@@ -592,7 +592,7 @@ public class EquipListener implements Listener {
 		}
 
 		ItemEquipEvent event = new ItemEquipEvent(player, ItemEquipEvent.HandMethod.HELD_SWAP, ItemSlotType.MAIN_HAND,
-				oldItem, newItem);
+		oldItem, newItem);
 
 		Bukkit.getServer().getPluginManager().callEvent(event);
 
@@ -612,7 +612,7 @@ public class EquipListener implements Listener {
 		}
 
 		ItemEquipEvent event = new ItemEquipEvent(player, ItemEquipEvent.HandMethod.BROKE, type, e.getBrokenItem(),
-				null);
+		null);
 		Bukkit.getServer().getPluginManager().callEvent(event);
 	}
 
@@ -621,9 +621,9 @@ public class EquipListener implements Listener {
 		Player p = e.getEntity();
 
 		Bukkit.getServer().getPluginManager().callEvent(new ItemEquipEvent(p, ItemEquipEvent.HandMethod.DEATH,
-				ItemSlotType.MAIN_HAND, p.getInventory().getItemInMainHand(), null));
+		ItemSlotType.MAIN_HAND, p.getInventory().getItemInMainHand(), null));
 		Bukkit.getServer().getPluginManager().callEvent(new ItemEquipEvent(p, ItemEquipEvent.HandMethod.DEATH,
-				ItemSlotType.OFF_HAND, p.getInventory().getItemInOffHand(), null));
+		ItemSlotType.OFF_HAND, p.getInventory().getItemInOffHand(), null));
 	}
 
 	@EventHandler
@@ -631,9 +631,9 @@ public class EquipListener implements Listener {
 		Player player = event.getPlayer();
 
 		Bukkit.getServer().getPluginManager().callEvent(new ItemEquipEvent(player, ItemEquipEvent.HandMethod.PICK_UP,
-				ItemSlotType.MAIN_HAND, null, player.getInventory().getItemInMainHand()));
+		ItemSlotType.MAIN_HAND, null, player.getInventory().getItemInMainHand()));
 		Bukkit.getServer().getPluginManager().callEvent(new ItemEquipEvent(player, ItemEquipEvent.HandMethod.PICK_UP,
-				ItemSlotType.OFF_HAND, null, player.getInventory().getItemInOffHand()));
+		ItemSlotType.OFF_HAND, null, player.getInventory().getItemInOffHand()));
 	}
 
 	private boolean fitsInInventory(HumanEntity who, ItemStack item, Event e) {

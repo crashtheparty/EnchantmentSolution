@@ -31,7 +31,7 @@ import org.ctp.enchantmentsolution.utils.config.MainConfiguration;
 public class ItemUtils {
 
 	public static void giveItemsToPlayer(Player player, Collection<ItemStack> drops, Location fallback,
-			boolean statistic) {
+	boolean statistic) {
 		for(ItemStack drop: drops) {
 			giveItemToPlayer(player, drop, fallback, statistic);
 		}
@@ -40,7 +40,7 @@ public class ItemUtils {
 	public static void giveItemToPlayer(Player player, ItemStack item, Location fallback, boolean statistic) {
 		HashMap<Integer, ItemStack> leftOver = new HashMap<Integer, ItemStack>();
 		int amount = item.getAmount();
-		leftOver.putAll((player.getInventory().addItem(item)));
+		leftOver.putAll(player.getInventory().addItem(item));
 		Location fallbackClone = fallback.clone();
 		boolean dropNaturally = ConfigUtils.getBoolean(MainConfiguration.class, "drop_items_naturally");
 		if (!leftOver.isEmpty()) {
@@ -93,7 +93,7 @@ public class ItemUtils {
 				enchantmentStorage.addStoredEnchant(enchant, level, true);
 				if (enchant instanceof CustomEnchantmentWrapper) {
 					lore.add(StringUtils.getEnchantmentString(
-							new EnchantmentLevel(RegisterEnchantments.getCustomEnchantment(enchant), level)));
+					new EnchantmentLevel(RegisterEnchantments.getCustomEnchantment(enchant), level)));
 				}
 				meta.removeEnchant(enchant);
 			}
@@ -113,14 +113,14 @@ public class ItemUtils {
 		if (enchantmentStorage != null && enchantmentStorage.getStoredEnchants().size() > 0) {
 			List<String> lore = new ArrayList<String>();
 			for(Iterator<Entry<Enchantment, Integer>> it = enchantmentStorage.getStoredEnchants().entrySet()
-					.iterator(); it.hasNext();) {
+			.iterator(); it.hasNext();) {
 				Entry<Enchantment, Integer> e = it.next();
 				Enchantment enchant = e.getKey();
 				int level = e.getValue();
 				meta.addEnchant(enchant, level, true);
 				if (enchant instanceof CustomEnchantmentWrapper) {
 					lore.add(StringUtils.getEnchantmentString(
-							new EnchantmentLevel(RegisterEnchantments.getCustomEnchantment(enchant), level)));
+					new EnchantmentLevel(RegisterEnchantments.getCustomEnchantment(enchant), level)));
 				}
 				enchantmentStorage.removeStoredEnchant(enchant);
 			}
@@ -173,7 +173,7 @@ public class ItemUtils {
 		ItemMeta meta = item.getItemMeta();
 		for(CustomEnchantment enchant: RegisterEnchantments.getRegisteredEnchantments()) {
 			if (item.getType() == Material.ENCHANTED_BOOK
-					&& ((EnchantmentStorageMeta) meta).hasStoredEnchant(enchant.getRelativeEnchantment())) {
+			&& ((EnchantmentStorageMeta) meta).hasStoredEnchant(enchant.getRelativeEnchantment())) {
 				return false;
 			} else if (meta.hasEnchant(enchant.getRelativeEnchantment())) {
 				return false;
@@ -198,7 +198,7 @@ public class ItemUtils {
 		for(EnchantmentLevel level: levels) {
 			if (item.getType() == Material.ENCHANTED_BOOK) {
 				((EnchantmentStorageMeta) meta).addStoredEnchant(level.getEnchant().getRelativeEnchantment(),
-						level.getLevel(), true);
+				level.getLevel(), true);
 			} else {
 				meta.addEnchant(level.getEnchant().getRelativeEnchantment(), level.getLevel(), true);
 			}
@@ -228,7 +228,7 @@ public class ItemUtils {
 		}
 		if (enchantment.getRelativeEnchantment() instanceof CustomEnchantmentWrapper) {
 			lore = StringUtils.removeEnchantment(enchantment,
-					meta.getEnchantLevel(enchantment.getRelativeEnchantment()), lore);
+			meta.getEnchantLevel(enchantment.getRelativeEnchantment()), lore);
 		}
 		if (hasEnchantment(item, enchantment.getRelativeEnchantment())) {
 			if (meta instanceof EnchantmentStorageMeta) {
@@ -243,26 +243,18 @@ public class ItemUtils {
 	}
 
 	public static ItemStack removeAllEnchantments(ItemStack item) {
-		ItemMeta meta = item.getItemMeta();
-		List<String> lore = meta.getLore();
-		if (lore == null) {
-			lore = new ArrayList<String>();
-		}
 		for(CustomEnchantment enchantment: RegisterEnchantments.getEnchantments()) {
-			if (hasEnchantment(item, enchantment.getRelativeEnchantment())) {
-				if (enchantment.getRelativeEnchantment() instanceof CustomEnchantmentWrapper) {
-					lore = StringUtils.removeEnchantment(enchantment,
-							meta.getEnchantLevel(enchantment.getRelativeEnchantment()), lore);
-				}
-				if (meta instanceof EnchantmentStorageMeta) {
-					((EnchantmentStorageMeta) meta).removeStoredEnchant(enchantment.getRelativeEnchantment());
-				} else {
-					meta.removeEnchant(enchantment.getRelativeEnchantment());
-				}
+			item = removeEnchantmentFromItem(item, enchantment);
+		}
+		return item;
+	}
+
+	public static ItemStack removeAllEnchantments(ItemStack item, boolean removeCurses) {
+		for(CustomEnchantment enchantment: RegisterEnchantments.getEnchantments()) {
+			if (!removeCurses || !enchantment.isCurse()) {
+				item = removeEnchantmentFromItem(item, enchantment);
 			}
 		}
-		meta = ItemUtils.setLore(meta, lore);
-		item.setItemMeta(meta);
 		return item;
 	}
 
@@ -331,7 +323,7 @@ public class ItemUtils {
 			for(CustomEnchantment custom: RegisterEnchantments.getRegisteredEnchantments()) {
 				if (custom.getRelativeEnchantment().equals(enchant)) {
 					if (CustomEnchantment.conflictsWith(customEnchant, custom)
-							&& !customEnchant.getName().equals(custom.getName())) {
+					&& !customEnchant.getName().equals(custom.getName())) {
 						return false;
 					}
 				}

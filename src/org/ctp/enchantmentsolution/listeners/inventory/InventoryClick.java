@@ -39,7 +39,7 @@ public class InventoryClick implements Listener {
 				EnchantmentTable table = (EnchantmentTable) invData;
 
 				InventoryClickUtils.setEnchantmentTableDetails(table, player, inv, event.getClickedInventory(),
-						event.getSlot());
+				event.getSlot());
 			} else if (invData instanceof Anvil) {
 				Anvil anvil = (Anvil) invData;
 
@@ -48,17 +48,17 @@ public class InventoryClick implements Listener {
 				Grindstone stone = (Grindstone) invData;
 
 				InventoryClickUtils.setGrindstoneDetails(stone, player, inv, event.getClickedInventory(),
-						event.getSlot());
+				event.getSlot());
 			} else if (invData instanceof ConfigInventory) {
 				ConfigInventory configInv = (ConfigInventory) invData;
 
 				InventoryClickUtils.setConfigInventoryDetails(configInv, player, inv, event.getClickedInventory(),
-						event.getSlot(), event.getClick());
+				event.getSlot(), event.getClick());
 			} else if (invData instanceof EnchantabilityCalc) {
 				EnchantabilityCalc enchantabilityCalc = (EnchantabilityCalc) invData;
 
 				InventoryClickUtils.setEnchantabilityCalc(enchantabilityCalc, player, inv, event.getClickedInventory(),
-						event.getSlot(), event.getClick());
+				event.getSlot(), event.getClick());
 			}
 		}
 	}

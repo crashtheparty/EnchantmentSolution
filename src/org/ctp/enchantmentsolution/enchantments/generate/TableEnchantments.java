@@ -21,7 +21,7 @@ public class TableEnchantments extends GenerateEnchantments {
 	private static List<TableEnchantments> TABLES = new ArrayList<TableEnchantments>();
 
 	public static TableEnchantments getTableEnchantments(Player player, ItemStack item, int bookshelves,
-			boolean treasure) {
+	boolean treasure) {
 		for(TableEnchantments enchantments: TABLES) {
 			if (enchantments.isSimilar(player, bookshelves)) {
 				if (item != null) {

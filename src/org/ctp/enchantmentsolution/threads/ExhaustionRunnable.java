@@ -44,7 +44,7 @@ public class ExhaustionRunnable implements Runnable {
 
 					if (!event.isCancelled() && event.getCurseLevel() > 0 && event.getExhaustionTick() > 0) {
 						player.setExhaustion(
-								player.getExhaustion() + event.getExhaustionTick() * event.getCurseLevel());
+						player.getExhaustion() + event.getExhaustionTick() * event.getCurseLevel());
 						if (event.getExhaustionTick() * event.getCurseLevel() / 4.0F > change) {
 							AdvancementUtils.awardCriteria(player, ESAdvancement.HIGH_METABOLISM, "exhaustion");
 						}

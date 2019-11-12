@@ -13,19 +13,19 @@ import org.ctp.enchantmentsolution.enums.ItemRepairType;
 public class ESArrays {
 
 	private static List<String> REPAIR_MATERIALS = Arrays.asList("DIAMOND", "IRON_INGOT", "COBBLESTONE",
-			"ACACIA_PLANKS", "BIRCH_PLANKS", "DARK_OAK_PLANKS", "JUNGLE_PLANKS", "OAK_PLANKS", "DARK_OAK_PLANKS",
-			"LEATHER", "PHANTOM_MEMBRANE", "STRING");
+	"ACACIA_PLANKS", "BIRCH_PLANKS", "DARK_OAK_PLANKS", "JUNGLE_PLANKS", "OAK_PLANKS", "DARK_OAK_PLANKS",
+	"LEATHER", "PHANTOM_MEMBRANE", "STRING");
 
 	private static List<String> SHULKER_BOXES = Arrays.asList("BLACK_SHULKER_BOX", "BLUE_SHULKER_BOX",
-			"BROWN_SHULKER_BOX", "CYAN_SHULKER_BOX", "GRAY_SHULKER_BOX", "GREEN_SHULKER_BOX", "LIGHT_BLUE_SHULKER_BOX",
-			"LIME_SHULKER_BOX", "MAGENTA_SHULKER_BOX", "ORANGE_SHULKER_BOX", "PINK_SHULKER_BOX", "PURPLE_SHULKER_BOX",
-			"RED_SHULKER_BOX", "LIGHT_GRAY_SHULKER_BOX", "WHITE_SHULKER_BOX", "YELLOW_SHULKER_BOX", "SHULKER_BOX");
+	"BROWN_SHULKER_BOX", "CYAN_SHULKER_BOX", "GRAY_SHULKER_BOX", "GREEN_SHULKER_BOX", "LIGHT_BLUE_SHULKER_BOX",
+	"LIME_SHULKER_BOX", "MAGENTA_SHULKER_BOX", "ORANGE_SHULKER_BOX", "PINK_SHULKER_BOX", "PURPLE_SHULKER_BOX",
+	"RED_SHULKER_BOX", "LIGHT_GRAY_SHULKER_BOX", "WHITE_SHULKER_BOX", "YELLOW_SHULKER_BOX", "SHULKER_BOX");
 
 	private static List<String> BAD_POTIONS = Arrays.asList("BAD_OMEN", "BLINDNESS", "CONFUSION", "HARM", "HUNGER",
-			"POISON", "SLOW", "SLOW_DIGGING", "UNLUCK", "WEAKNESS", "WITHER");
+	"POISON", "SLOW", "SLOW_DIGGING", "UNLUCK", "WEAKNESS", "WITHER");
 
 	private static List<String> CONTACT_CAUSES = Arrays.asList("BLOCK_EXPLOSION", "CONTACT", "CUSTOM", "ENTITY_ATTACK",
-			"ENTITY_EXPLOSION", "ENTITY_SWEEP_ATTACK", "LIGHTNING", "PROJECTILE", "THORNS");
+	"ENTITY_EXPLOSION", "ENTITY_SWEEP_ATTACK", "LIGHTNING", "PROJECTILE", "THORNS");
 
 	public static List<Material> getRepairMaterials() {
 		return changeValues(REPAIR_MATERIALS, Material.class);
@@ -57,7 +57,7 @@ public class ESArrays {
 		for(String s: original) {
 			try {
 				Method method = clazz.getMethod(clazz.equals(PotionEffectType.class) ? "getByName" : "valueOf",
-						String.class);
+				String.class);
 				Object value = method.invoke(clazz, s);
 				if (clazz.isAssignableFrom(value.getClass())) {
 					list.add((E) value);

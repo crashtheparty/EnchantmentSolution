@@ -36,7 +36,7 @@ public final class ItemEquipEvent extends PlayerEvent implements Cancellable {
 	 *            The ItemStack of the item added.
 	 */
 	public ItemEquipEvent(final Player player, final HandMethod equipType, final ItemSlotType slot,
-			final ItemStack oldItem, final ItemStack newItem) {
+	final ItemStack oldItem, final ItemStack newItem) {
 		super(player);
 		this.equipType = equipType;
 		this.slot = slot;

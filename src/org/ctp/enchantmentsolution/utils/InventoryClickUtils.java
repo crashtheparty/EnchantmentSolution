@@ -24,8 +24,8 @@ import org.ctp.enchantmentsolution.utils.yaml.YamlInfo;
 public class InventoryClickUtils {
 
 	public static void setEnchantmentTableDetails(EnchantmentTable table, Player player, Inventory inv,
-			Inventory clickedInv, int slot) {
-		if (!(inv.getType().equals(InventoryType.CHEST))) {
+	Inventory clickedInv, int slot) {
+		if (!inv.getType().equals(InventoryType.CHEST)) {
 			ItemStack item = clickedInv.getItem(slot);
 			if (ItemUtils.isEnchantable(item)) {
 				ItemStack replace = new ItemStack(Material.AIR);
@@ -53,10 +53,10 @@ public class InventoryClickUtils {
 					ItemUtils.giveItemToPlayer(player, item, player.getLocation(), false);
 				}
 			} else if (slot > 17 && slot % 9 >= 3 && slot % 9 <= 8 && item != null
-					&& item.getType() != Material.RED_STAINED_GLASS_PANE
-					&& item.getType() != Material.BLACK_STAINED_GLASS_PANE) {
+			&& item.getType() != Material.RED_STAINED_GLASS_PANE
+			&& item.getType() != Material.BLACK_STAINED_GLASS_PANE) {
 				int itemSlot = (slot - 18) / 9;
-				int itemLevel = (slot % 9) - 3;
+				int itemLevel = slot % 9 - 3;
 				table.enchantItem(itemSlot, itemLevel);
 			} else if (slot == 10) {
 				ItemStack lapisStack = table.removeFromLapisStack();
@@ -69,7 +69,7 @@ public class InventoryClickUtils {
 	}
 
 	public static void setAnvilDetails(Anvil anvil, Player player, Inventory inv, Inventory clickedInv, int slot) {
-		if (!(inv.getType().equals(InventoryType.CHEST))) {
+		if (!inv.getType().equals(InventoryType.CHEST)) {
 			if (inv.getType().equals(InventoryType.ANVIL)) {
 				return;
 			}
@@ -80,7 +80,7 @@ public class InventoryClickUtils {
 			ItemStack replace = new ItemStack(Material.AIR);
 			int original_amount = item.getAmount();
 			if (original_amount > 1
-					&& (item.getType() == Material.BOOK && item.hasItemMeta() && item.getItemMeta().hasEnchants())) {
+			&& item.getType() == Material.BOOK && item.hasItemMeta() && item.getItemMeta().hasEnchants()) {
 				replace = item.clone();
 				replace.setAmount(replace.getAmount() - 1);
 				item.setAmount(1);
@@ -119,8 +119,8 @@ public class InventoryClickUtils {
 	}
 
 	public static void setGrindstoneDetails(Grindstone stone, Player player, Inventory inv, Inventory clickedInv,
-			int slot) {
-		if (!(inv.getType().equals(InventoryType.CHEST))) {
+	int slot) {
+		if (!inv.getType().equals(InventoryType.CHEST)) {
 			ItemStack item = clickedInv.getItem(slot);
 			if (item == null || item.getType().equals(Material.AIR)) {
 				return;
@@ -158,8 +158,8 @@ public class InventoryClickUtils {
 	}
 
 	public static void setConfigInventoryDetails(ConfigInventory configInv, Player player, Inventory inv,
-			Inventory clickedInv, int slot, ClickType click) {
-		if (!(inv.getType().equals(InventoryType.CHEST))) {
+	Inventory clickedInv, int slot, ClickType click) {
+		if (!inv.getType().equals(InventoryType.CHEST)) {
 			return;
 		} else {
 			ItemStack item = clickedInv.getItem(slot);
@@ -217,7 +217,7 @@ public class InventoryClickUtils {
 								} else {
 									if (level.indexOf(".") > -1) {
 										configInv.listConfigDetails(config, null,
-												level.substring(0, level.lastIndexOf(".")), page);
+										level.substring(0, level.lastIndexOf(".")), page);
 									} else {
 										configInv.listConfigDetails(config, null, null, page);
 									}
@@ -247,7 +247,7 @@ public class InventoryClickUtils {
 							if (checkPagination(item)) {
 								if (level.indexOf(".") > -1) {
 									configInv.listConfigDetails(config, null,
-											level.substring(0, level.lastIndexOf(".")));
+									level.substring(0, level.lastIndexOf(".")));
 								} else {
 									configInv.listConfigDetails(config, null, null);
 								}
@@ -280,7 +280,7 @@ public class InventoryClickUtils {
 							if (checkPagination(item)) {
 								if (level.indexOf(".") > -1) {
 									configInv.listConfigDetails(config, null,
-											level.substring(0, level.lastIndexOf(".")));
+									level.substring(0, level.lastIndexOf(".")));
 								} else {
 									configInv.listConfigDetails(config, null, null);
 								}
@@ -304,7 +304,7 @@ public class InventoryClickUtils {
 							if (checkPagination(item)) {
 								if (level.indexOf(".") > -1) {
 									configInv.listConfigDetails(config, null,
-											level.substring(0, level.lastIndexOf(".")));
+									level.substring(0, level.lastIndexOf(".")));
 								} else {
 									configInv.listConfigDetails(config, null, null);
 								}
@@ -375,7 +375,7 @@ public class InventoryClickUtils {
 								} else {
 									if (level.indexOf(".") > -1) {
 										configInv.listConfigDetails(config, backup,
-												level.substring(0, level.lastIndexOf(".")), page);
+										level.substring(0, level.lastIndexOf(".")), page);
 									} else {
 										configInv.listConfigDetails(config, backup, null, page);
 									}
@@ -408,7 +408,7 @@ public class InventoryClickUtils {
 							if (checkPagination(item)) {
 								if (level.indexOf(".") > -1) {
 									configInv.listConfigDetails(config, backup,
-											level.substring(0, level.lastIndexOf(".")), 1);
+									level.substring(0, level.lastIndexOf(".")), 1);
 								} else {
 									configInv.listConfigDetails(config, backup, null, 1);
 								}
@@ -505,7 +505,7 @@ public class InventoryClickUtils {
 							if (num != null) {
 								backup = new YamlConfigBackup(null, null);
 								List<YamlInfo> backupInfo = EnchantmentSolution.getPlugin().getDb().getBackup(config,
-										Integer.parseInt(num));
+								Integer.parseInt(num));
 								backup.setFromBackup(backupInfo);
 								configInv.listConfigDetails(config, backup, level, 1);
 							}
@@ -567,8 +567,8 @@ public class InventoryClickUtils {
 	}
 
 	public static void setEnchantabilityCalc(EnchantabilityCalc enchantabilityCalc, Player player, Inventory inv,
-			Inventory clickedInv, int slot, ClickType click) {
-		if (!(inv.getType().equals(InventoryType.CHEST))) {
+	Inventory clickedInv, int slot, ClickType click) {
+		if (!inv.getType().equals(InventoryType.CHEST)) {
 			return;
 		} else {
 			ItemStack item = clickedInv.getItem(slot);

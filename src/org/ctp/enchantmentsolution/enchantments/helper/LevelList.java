@@ -29,21 +29,21 @@ public class LevelList {
 					list[0] = new Level(0, Math.max(base / 3, 1));
 					break;
 				case 2:
-					list[1] = new Level(1, (base * 2) / 3 + 1);
+					list[1] = new Level(1, base * 2 / 3 + 1);
 					break;
 				case 3:
 					list[2] = new Level(2, Math.max(base, bookThirty * 2));
 					break;
 				case 4:
 					if (isLevelFifty && bookThirty == 15) {
-						list[3] = new Level(3, ((base * 2) / 3 + 1 + (int) (addFifty * .75)) + 20);
+						list[3] = new Level(3, base * 2 / 3 + 1 + (int) (addFifty * .75) + 20);
 					} else {
 						list[3] = new Level(3, -1);
 					}
 					break;
 				case 5:
 					if (isLevelFifty && bookThirty == 15) {
-						list[4] = new Level(4, ((base * 2) / 3 + 1 + (int) (addFifty * .75)) + 20);
+						list[4] = new Level(4, base * 2 / 3 + 1 + (int) (addFifty * .75) + 20);
 					} else {
 						list[4] = new Level(4, -1);
 					}

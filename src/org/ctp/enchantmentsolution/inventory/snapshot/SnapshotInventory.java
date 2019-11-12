@@ -54,7 +54,7 @@ public class SnapshotInventory {
 						if (StringUtils.isEnchantment(s)) {
 							EnchantmentLevel enchant = StringUtils.getEnchantment(s);
 							if (enchant != null
-									&& !ItemUtils.hasEnchantment(item, enchant.getEnchant().getRelativeEnchantment())) {
+							&& !ItemUtils.hasEnchantment(item, enchant.getEnchant().getRelativeEnchantment())) {
 								enchants.add(enchant);
 							}
 						}

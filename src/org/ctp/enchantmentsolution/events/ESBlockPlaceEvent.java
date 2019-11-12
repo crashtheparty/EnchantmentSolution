@@ -10,7 +10,7 @@ import org.bukkit.inventory.ItemStack;
 public abstract class ESBlockPlaceEvent extends BlockPlaceEvent {
 
 	public ESBlockPlaceEvent(Block placedBlock, BlockState replacedBlockState, Block placedAgainst,
-			ItemStack itemInHand, Player thePlayer, boolean canBuild, EquipmentSlot hand) {
+	ItemStack itemInHand, Player thePlayer, boolean canBuild, EquipmentSlot hand) {
 		super(placedBlock, replacedBlockState, placedAgainst, itemInHand, thePlayer, canBuild, hand);
 	}
 

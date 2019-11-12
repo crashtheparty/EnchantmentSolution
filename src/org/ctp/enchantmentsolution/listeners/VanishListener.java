@@ -87,46 +87,43 @@ public class VanishListener implements Listener {
 	public static void reload() {
 		if (ConfigUtils.getString(MainConfiguration.class, "disable_enchant_method").equals("vanish")) {
 			for(Player player: Bukkit.getOnlinePlayers()) {
-				Bukkit.getScheduler().scheduleSyncDelayedTask(EnchantmentSolution.getPlugin(), new Runnable() {
-					@Override
-					public void run() {
-						if (player.getOpenInventory() != null) {
-							Inventory inv = player.getOpenInventory().getTopInventory();
-							InventoryData invData = EnchantmentSolution.getPlugin().getInventory(player);
-							if (invData == null) {
-								for(int i = 0; i < inv.getSize(); i++) {
-									ItemStack item = inv.getItem(i);
-									inv.setItem(i, removeEnchants(item));
-								}
+				Bukkit.getScheduler().scheduleSyncDelayedTask(EnchantmentSolution.getPlugin(), () -> {
+					if (player.getOpenInventory() != null) {
+						Inventory inv1 = player.getOpenInventory().getTopInventory();
+						InventoryData invData = EnchantmentSolution.getPlugin().getInventory(player);
+						if (invData == null) {
+							for(int i1 = 0; i1 < inv1.getSize(); i1++) {
+								ItemStack item1 = inv1.getItem(i1);
+								inv1.setItem(i1, removeEnchants(item1));
 							}
 						}
-						PlayerInventory inv = player.getInventory();
+					}
+					PlayerInventory inv2 = player.getInventory();
 
-						for(int i = 0; i < 36; i++) {
-							ItemStack item = inv.getItem(i);
-							inv.setItem(i, removeEnchants(item));
-						}
-						ItemStack helmet = inv.getHelmet();
-						ItemStack chest = inv.getChestplate();
-						ItemStack legs = inv.getLeggings();
-						ItemStack boots = inv.getBoots();
-						ItemStack offhand = inv.getItemInOffHand();
+					for(int i2 = 0; i2 < 36; i2++) {
+						ItemStack item2 = inv2.getItem(i2);
+						inv2.setItem(i2, removeEnchants(item2));
+					}
+					ItemStack helmet = inv2.getHelmet();
+					ItemStack chest = inv2.getChestplate();
+					ItemStack legs = inv2.getLeggings();
+					ItemStack boots = inv2.getBoots();
+					ItemStack offhand = inv2.getItemInOffHand();
 
-						if (helmet != null) {
-							inv.setHelmet(removeEnchants(helmet));
-						}
-						if (chest != null) {
-							inv.setChestplate(removeEnchants(chest));
-						}
-						if (legs != null) {
-							inv.setLeggings(removeEnchants(legs));
-						}
-						if (boots != null) {
-							inv.setBoots(removeEnchants(boots));
-						}
-						if (offhand != null) {
-							inv.setItemInOffHand(removeEnchants(offhand));
-						}
+					if (helmet != null) {
+						inv2.setHelmet(removeEnchants(helmet));
+					}
+					if (chest != null) {
+						inv2.setChestplate(removeEnchants(chest));
+					}
+					if (legs != null) {
+						inv2.setLeggings(removeEnchants(legs));
+					}
+					if (boots != null) {
+						inv2.setBoots(removeEnchants(boots));
+					}
+					if (offhand != null) {
+						inv2.setItemInOffHand(removeEnchants(offhand));
 					}
 				}, 1l);
 			}

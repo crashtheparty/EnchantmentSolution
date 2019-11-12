@@ -9,7 +9,7 @@ public class DrownedEvent extends ESEntityDamageEntityEvent {
 	private int ticks;
 
 	public DrownedEvent(LivingEntity damaged, LivingEntity damager, double damage, double newDamage,
-			boolean applyEffect, int ticks) {
+	boolean applyEffect, int ticks) {
 		super(damaged, damager, damage, newDamage);
 		setApplyEffect(applyEffect);
 		setTicks(ticks);

@@ -3,7 +3,6 @@ package org.ctp.enchantmentsolution.enchantments;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.logging.Level;
 
@@ -41,9 +40,9 @@ public class RegisterEnchantments {
 	public static final Enchantment UNREST = new CustomEnchantmentWrapper("unrest", "UNREST");
 	public static final Enchantment NO_REST = new CustomEnchantmentWrapper("no_rest", "NO_REST");
 	public static final Enchantment WIDTH_PLUS_PLUS = new CustomEnchantmentWrapper("width_plus_plus",
-			"WIDTH_PLUS_PLUS");
+	"WIDTH_PLUS_PLUS");
 	public static final Enchantment HEIGHT_PLUS_PLUS = new CustomEnchantmentWrapper("height_plus_plus",
-			"HEIGHT_PLUS_PLUS");
+	"HEIGHT_PLUS_PLUS");
 	public static final Enchantment VOID_WALKER = new CustomEnchantmentWrapper("void_walker", "VOID_WALKER");
 	public static final Enchantment ICARUS = new CustomEnchantmentWrapper("icarus", "ICARUS");
 	public static final Enchantment IRON_DEFENSE = new CustomEnchantmentWrapper("iron_defense", "IRON_DEFENSE");
@@ -62,7 +61,7 @@ public class RegisterEnchantments {
 	public static final Enchantment IRENES_LASSO = new CustomEnchantmentWrapper("irenes_lasso", "LASSO_OF_IRENE");
 	public static final Enchantment CURSE_OF_LAG = new CustomEnchantmentWrapper("lagging_curse", "LAGGING_CURSE");
 	public static final Enchantment CURSE_OF_EXHAUSTION = new CustomEnchantmentWrapper("exhaustion_curse",
-			"EXHAUSTION_CURSE");
+	"EXHAUSTION_CURSE");
 	public static final Enchantment QUICK_STRIKE = new CustomEnchantmentWrapper("quick_strike", "QUICK_STRIKE");
 	public static final Enchantment TOUGHNESS = new CustomEnchantmentWrapper("toughness", "TOUGHNESS");
 	public static final Enchantment ARMORED = new CustomEnchantmentWrapper("armored", "ARMORED");
@@ -83,12 +82,7 @@ public class RegisterEnchantments {
 		for(CustomEnchantment enchantment: REGISTERED_ENCHANTMENTS) {
 			alphabetical.add(enchantment);
 		}
-		Collections.sort(alphabetical, new Comparator<CustomEnchantment>() {
-			@Override
-			public int compare(CustomEnchantment o1, CustomEnchantment o2) {
-				return o1.getDisplayName().compareTo(o2.getDisplayName());
-			}
-		});
+		Collections.sort(alphabetical, (o1, o2) -> o1.getDisplayName().compareTo(o2.getDisplayName()));
 		return alphabetical;
 	}
 
@@ -111,7 +105,7 @@ public class RegisterEnchantments {
 		REGISTERED_ENCHANTMENTS.add(enchantment);
 		boolean custom = enchantment.getRelativeEnchantment() instanceof CustomEnchantmentWrapper;
 		String error_message = "Trouble adding the " + enchantment.getName() + (custom ? " custom" : "")
-				+ " enchantment: ";
+		+ " enchantment: ";
 		String success_message = "Added the " + enchantment.getName() + (custom ? " custom" : "") + " enchantment.";
 		if (!custom) {
 			ChatUtils.sendToConsole(Level.INFO, success_message);
@@ -150,7 +144,7 @@ public class RegisterEnchantments {
 				JavaPlugin plugin = ((ApiEnchantmentWrapper) enchantment.getRelativeEnchantment()).getPlugin();
 				if (plugin == null) {
 					ChatUtils.sendToConsole(Level.WARNING, "Enchantment " + enchantment.getName() + " (Display Name "
-							+ enchantment.getDisplayName() + ")" + " does not have a JavaPlugin set. Refusing to set.");
+					+ enchantment.getDisplayName() + ")" + " does not have a JavaPlugin set. Refusing to set.");
 					continue;
 				}
 				namespace = plugin.getName().toLowerCase();
@@ -164,7 +158,7 @@ public class RegisterEnchantments {
 					enchantment.setEnabled(false);
 				}
 				String description = StringUtils.decodeString(
-						language.getString("enchantment.descriptions.default_enchantments." + enchantment.getName()));
+				language.getString("enchantment.descriptions.default_enchantments." + enchantment.getName()));
 				enchantment.setDescription(description);
 				if (levelFifty) {
 					enchantment.setLevelFifty();
@@ -189,9 +183,9 @@ public class RegisterEnchantments {
 				enchantment.setTreasure(false);
 			}
 			String displayName = StringUtils.decodeString(
-					language.getString("enchantment.display_names." + namespace + "." + enchantment.getName()));
+			language.getString("enchantment.display_names." + namespace + "." + enchantment.getName()));
 			String description = StringUtils.decodeString(
-					language.getString("enchantment.descriptions." + namespace + "." + enchantment.getName()));
+			language.getString("enchantment.descriptions." + namespace + "." + enchantment.getName()));
 			if (advanced) {
 				int constant = config.getInt(namespace + "." + enchantment.getName() + ".enchantability_constant");
 				int modifier = config.getInt(namespace + "." + enchantment.getName() + ".enchantability_modifier");
@@ -199,7 +193,7 @@ public class RegisterEnchantments {
 				int maxLevel = config.getInt(namespace + "." + enchantment.getName() + ".enchantability_max_level");
 				Weight weight = Weight.getWeight(config.getString(namespace + "." + enchantment.getName() + ".weight"));
 				List<String> conflictingEnchantmentsString = config
-						.getStringList(namespace + "." + enchantment.getName() + ".conflicting_enchantments");
+				.getStringList(namespace + "." + enchantment.getName() + ".conflicting_enchantments");
 				List<Enchantment> conflictingEnchantments = new ArrayList<Enchantment>();
 				if (conflictingEnchantmentsString != null) {
 					for(String s: conflictingEnchantmentsString) {
@@ -210,7 +204,7 @@ public class RegisterEnchantments {
 					}
 				}
 				List<String> disabledItemsString = config
-						.getStringList(namespace + "." + enchantment.getName() + ".disabled_items");
+				.getStringList(namespace + "." + enchantment.getName() + ".disabled_items");
 				List<Material> disabledItems = new ArrayList<Material>();
 				if (disabledItemsString != null) {
 					for(String s: disabledItemsString) {

@@ -24,7 +24,7 @@ public class AbilityUtils {
 	private static List<Block> WAND_BLOCKS = new ArrayList<Block>();
 	private static List<Block> HEIGHT_WIDTH_BLOCKS = new ArrayList<Block>();
 	private static List<Material> CROPS = Arrays.asList(Material.WHEAT, Material.CARROTS, Material.POTATOES,
-			Material.NETHER_WART, Material.BEETROOTS, Material.COCOA_BEANS);
+	Material.NETHER_WART, Material.BEETROOTS, Material.COCOA_BEANS);
 
 	public static ItemStack getGoldDiggerItems(ItemStack item, Block brokenBlock) {
 
@@ -51,7 +51,7 @@ public class AbilityUtils {
 			level--;
 		}
 		if (amount > 0) {
-			return (new ItemStack(Material.GOLD_NUGGET, amount));
+			return new ItemStack(Material.GOLD_NUGGET, amount);
 		}
 
 		return null;
@@ -72,11 +72,11 @@ public class AbilityUtils {
 			}
 		}
 		if (playerInv.getItemInMainHand() != null
-				&& ItemUtils.hasEnchantment(playerInv.getItemInMainHand(), Enchantment.MENDING)) {
+		&& ItemUtils.hasEnchantment(playerInv.getItemInMainHand(), Enchantment.MENDING)) {
 			items.add(playerInv.getItemInMainHand());
 		}
 		if (playerInv.getItemInOffHand() != null
-				&& ItemUtils.hasEnchantment(playerInv.getItemInOffHand(), Enchantment.MENDING)) {
+		&& ItemUtils.hasEnchantment(playerInv.getItemInOffHand(), Enchantment.MENDING)) {
 			items.add(playerInv.getItemInOffHand());
 		}
 
@@ -115,7 +115,7 @@ public class AbilityUtils {
 	}
 
 	public static List<ParticleEffect> createEffects(Player player) {
-		int random = (int) ((Math.random() * 5) + 2);
+		int random = (int) (Math.random() * 5 + 2);
 		List<ParticleEffect> particles = new ArrayList<ParticleEffect>();
 		for(int i = 0; i < random; i++) {
 			particles.add(generateParticle());
@@ -126,7 +126,7 @@ public class AbilityUtils {
 	private static ParticleEffect generateParticle() {
 		Particle particle = null;
 		int tries = 0;
-		int numParticles = (int) ((Math.random() * 400) + 11);
+		int numParticles = (int) (Math.random() * 400 + 11);
 		while (particle == null && tries < 10) {
 			int particleType = (int) (Math.random() * Particle.values().length);
 			particle = Particle.values()[particleType];
@@ -140,8 +140,8 @@ public class AbilityUtils {
 
 	public static List<DamageCause> getContactCauses() {
 		return Arrays.asList(DamageCause.BLOCK_EXPLOSION, DamageCause.CONTACT, DamageCause.CUSTOM,
-				DamageCause.ENTITY_ATTACK, DamageCause.ENTITY_EXPLOSION, DamageCause.ENTITY_SWEEP_ATTACK,
-				DamageCause.LIGHTNING, DamageCause.PROJECTILE, DamageCause.THORNS);
+		DamageCause.ENTITY_ATTACK, DamageCause.ENTITY_EXPLOSION, DamageCause.ENTITY_SWEEP_ATTACK,
+		DamageCause.LIGHTNING, DamageCause.PROJECTILE, DamageCause.THORNS);
 	}
 
 	public static int getExhaustionCurse(Player player) {

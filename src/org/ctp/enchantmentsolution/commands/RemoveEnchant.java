@@ -30,7 +30,7 @@ public class RemoveEnchant implements CommandExecutor {
 							ItemStack itemToEnchant = player.getInventory().getItemInMainHand();
 							if (itemToEnchant != null) {
 								boolean useBooks = ConfigUtils.getBoolean(MainConfiguration.class,
-										"use_enchanted_books");
+								"use_enchanted_books");
 								if (itemToEnchant.getType() == Material.BOOK && useBooks) {
 									itemToEnchant = ItemUtils.convertToEnchantedBook(itemToEnchant);
 								} else if (itemToEnchant.getType() == Material.ENCHANTED_BOOK && !useBooks) {
@@ -38,8 +38,8 @@ public class RemoveEnchant implements CommandExecutor {
 								}
 								itemToEnchant = ItemUtils.removeEnchantmentFromItem(itemToEnchant, enchant);
 								if (itemToEnchant.getType() == Material.ENCHANTED_BOOK
-										&& !((EnchantmentStorageMeta) itemToEnchant.getItemMeta())
-												.hasStoredEnchants()) {
+								&& !((EnchantmentStorageMeta) itemToEnchant.getItemMeta())
+								.hasStoredEnchants()) {
 									itemToEnchant.setType(Material.BOOK);
 								}
 								player.getInventory().setItemInMainHand(itemToEnchant);
@@ -48,7 +48,7 @@ public class RemoveEnchant implements CommandExecutor {
 								ChatUtils.sendMessage(player, ChatUtils.getMessage(codes, "commands.enchant-removed"));
 							} else {
 								ChatUtils.sendMessage(player, ChatUtils.getMessage(ChatUtils.getCodes(),
-										"commands.enchant-remove-from-item"));
+								"commands.enchant-remove-from-item"));
 							}
 							return true;
 						}
@@ -58,7 +58,7 @@ public class RemoveEnchant implements CommandExecutor {
 					ChatUtils.sendMessage(player, ChatUtils.getMessage(codes, "commands.enchant-not-found"));
 				} else {
 					ChatUtils.sendMessage(player,
-							ChatUtils.getMessage(ChatUtils.getCodes(), "commands.enchant-not-specified"));
+					ChatUtils.getMessage(ChatUtils.getCodes(), "commands.enchant-not-specified"));
 				}
 			} else {
 				ChatUtils.sendMessage(player, ChatUtils.getMessage(ChatUtils.getCodes(), "commands.no-permission"));

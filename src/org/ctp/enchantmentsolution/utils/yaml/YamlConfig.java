@@ -204,7 +204,7 @@ public class YamlConfig {
 			case "enum_list":
 			case "list":
 				LinkedHashMap<String, Boolean> keySame = new LinkedHashMap<String, Boolean>();
-				String[] values = replaceLast((value.toString().replaceFirst("\\[", "")), "]", "").split(", ");
+				String[] values = replaceLast(value.toString().replaceFirst("\\[", ""), "]", "").split(", ");
 				for(Object key: values) {
 					if (!key.toString().trim().equals("")) {
 						keySame.put(key.toString(), false);
@@ -254,13 +254,13 @@ public class YamlConfig {
 
 	public void setLocation(String path, Location loc) {
 		String location = loc.getWorld().getName() + "," + loc.getX() + "," + loc.getY() + "," + loc.getZ() + ","
-				+ loc.getYaw() + "," + loc.getPitch();
+		+ loc.getYaw() + "," + loc.getPitch();
 		set(path, location);
 	}
 
 	public void setDefaultLocation(String path, Location loc) {
 		String location = loc.getWorld().getName() + "," + loc.getX() + "," + loc.getY() + "," + loc.getZ() + ","
-				+ loc.getYaw() + "," + loc.getPitch();
+		+ loc.getYaw() + "," + loc.getPitch();
 		addDefault(path, location);
 	}
 
@@ -556,7 +556,7 @@ public class YamlConfig {
 		String configuration = prepareConfigString();
 		try {
 			BufferedWriter writer = new BufferedWriter(
-					new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8));
+			new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8));
 			writer.write(configuration);
 			writer.flush();
 			writer.close();

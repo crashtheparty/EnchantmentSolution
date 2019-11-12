@@ -27,9 +27,9 @@ public class ChatUtils {
 
 	public static void sendMessage(Player player, String message, String url) {
 		Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "tellraw " + player.getName() + " [{\"text\":\""
-				+ getStarter() + message + "\"},{\"text\":\"" + url
-				+ "\", \"italic\": true, \"color\": \"green\", \"clickEvent\":{\"action\":\"open_url\",\"value\":\""
-				+ url + "\"}}]");
+		+ getStarter() + message + "\"},{\"text\":\"" + url
+		+ "\", \"italic\": true, \"color\": \"green\", \"clickEvent\":{\"action\":\"open_url\",\"value\":\""
+		+ url + "\"}}]");
 	}
 
 	public static void sendMessage(Player player, String[] messages) {
@@ -74,7 +74,7 @@ public class ChatUtils {
 		String s = "";
 		try {
 			s = translateCodes(codes, ChatColor.translateAlternateColorCodes('&',
-					ConfigUtils.getString(LanguageConfiguration.class, location)));
+			ConfigUtils.getString(LanguageConfiguration.class, location)));
 		} catch (Exception e) {
 
 		}
@@ -143,7 +143,7 @@ public class ChatUtils {
 		char[] hexChars = new char[chars.length / 2];
 
 		IntStream.range(0, chars.length).filter(value -> value % 2 != 0)
-				.forEach(value -> hexChars[value / 2] = chars[value]);
+		.forEach(value -> hexChars[value / 2] = chars[value]);
 
 		String newChars = "";
 		for(char c: hexChars) {

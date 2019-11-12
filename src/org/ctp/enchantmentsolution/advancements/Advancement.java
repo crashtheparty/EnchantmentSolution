@@ -192,14 +192,14 @@ public class Advancement {
 
 	@SuppressWarnings("deprecation")
 	public static AdvancementModificationResult activate(boolean reload, NamespacedKey id, String json,
-			JsonObject jsonObject) {
+	JsonObject jsonObject) {
 		File file = new File(Bukkit.getWorlds().get(0).getWorldFolder(), String.join(File.separator, "datapacks",
-				"bukkit", "data", id.getNamespace(), "advancements", id.getKey()) + ".json");
+		"bukkit", "data", id.getNamespace(), "advancements", id.getKey()) + ".json");
 		if (!file.exists()) {
 			try {
 				// noinspection deprecation
 				return new AdvancementModificationResult(Bukkit.getUnsafe().loadAdvancement(id, json) != null, true,
-						"Loaded successfully.");
+				"Loaded successfully.");
 			} catch (Exception e) {
 				Bukkit.getLogger().log(Level.SEVERE, "Error creating advancement file: " + id, e);
 				return new AdvancementModificationResult(false, false, "Error creating advancement file: " + id);
@@ -213,7 +213,7 @@ public class Advancement {
 			if (reload) {
 				Bukkit.reloadData();
 				return new AdvancementModificationResult(Bukkit.getAdvancement(id) != null, changed,
-						"Loaded successfully.");
+				"Loaded successfully.");
 			}
 			return new AdvancementModificationResult(true, changed, "Loaded successfully.");
 		} catch (IOException e) {
@@ -246,13 +246,13 @@ public class Advancement {
 
 	public static AdvancementModificationResult deactivate(boolean reload, NamespacedKey id) {
 		File file = new File(Bukkit.getWorlds().get(0).getWorldFolder(), String.join(File.separator, "datapacks",
-				"bukkit", "data", id.getNamespace(), "advancements", id.getKey()) + ".json");
+		"bukkit", "data", id.getNamespace(), "advancements", id.getKey()) + ".json");
 		if (file.exists()) {
 			if (file.delete()) {
 				if (reload) {
 					Bukkit.reloadData();
 					return new AdvancementModificationResult(Bukkit.getAdvancement(id) == null, true,
-							"Unloaded successfully.");
+					"Unloaded successfully.");
 				}
 				return new AdvancementModificationResult(true, true, "Unloaded successfully.");
 			}
@@ -269,9 +269,9 @@ public class Advancement {
 
 		Validate.notNull(icon.getItem());
 		json.add("display",
-				new JsonBuilder().add("icon", icon.toJson()).add("title", title).add("description", description)
-						.add("background", background).add("frame", frame.getValue()).addFalse("show_toast", toast)
-						.addFalse("announce_to_chat", announce).addTrue("hidden", hidden).build());
+		new JsonBuilder().add("icon", icon.toJson()).add("title", title).add("description", description)
+		.add("background", background).add("frame", frame.getValue()).addFalse("show_toast", toast)
+		.addFalse("announce_to_chat", announce).addTrue("hidden", hidden).build());
 
 		Validate.notEmpty(triggers, "All advancements must contain at least one trigger.");
 		JsonObject criteria = new JsonObject();
@@ -284,7 +284,7 @@ public class Advancement {
 			for(String[] array: requirements) {
 				for(String string: array) {
 					Validate.isTrue(triggers.containsKey(string),
-							"The " + string + " trigger doesn't exist in advancement: ", id);
+					"The " + string + " trigger doesn't exist in advancement: ", id);
 				}
 			}
 			json.add("requirements", JsonBuilder.GSON.toJsonTree(requirements, new TypeToken<Set<String[]>>() {
@@ -309,7 +309,7 @@ public class Advancement {
 	@Override
 	public int hashCode() {
 		return Objects.hash(id, icon, title, description, triggers, requirements, parent, background, rewards, frame,
-				toast, announce, hidden);
+		toast, announce, hidden);
 	}
 
 	@Override
@@ -320,12 +320,12 @@ public class Advancement {
 
 		Advancement adv = (Advancement) object;
 		if (!(Objects.equals(adv.id, id) && Objects.equals(adv.icon, icon)
-				&& Objects.equals(adv.title.toLegacyText(), title.toLegacyText())
-				&& Objects.equals(adv.description.toLegacyText(), description.toLegacyText())
-				&& Objects.equals(adv.triggers, triggers) && Objects.equals(adv.parent, parent)
-				&& Objects.equals(adv.background, background) && Objects.equals(adv.rewards, rewards)
-				&& Objects.equals(adv.frame, frame) && Objects.equals(adv.toast, toast)
-				&& Objects.equals(adv.announce, announce) && Objects.equals(adv.hidden, hidden))) {
+		&& Objects.equals(adv.title.toLegacyText(), title.toLegacyText())
+		&& Objects.equals(adv.description.toLegacyText(), description.toLegacyText())
+		&& Objects.equals(adv.triggers, triggers) && Objects.equals(adv.parent, parent)
+		&& Objects.equals(adv.background, background) && Objects.equals(adv.rewards, rewards)
+		&& Objects.equals(adv.frame, frame) && Objects.equals(adv.toast, toast)
+		&& Objects.equals(adv.announce, announce) && Objects.equals(adv.hidden, hidden))) {
 			return false;
 		}
 

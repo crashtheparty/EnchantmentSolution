@@ -18,12 +18,12 @@ public class InventoryClose implements Listener {
 		if (inv != null) {
 			if (inv instanceof ConfigInventory) {
 				if (!((ConfigInventory) inv).isChat() && inv.getInventory() != null
-						&& inv.getInventory().equals(event.getInventory())) {
+				&& inv.getInventory().equals(event.getInventory())) {
 					inv.close(true);
 				}
 			} else if (inv instanceof EnchantabilityCalc) {
 				if (!((EnchantabilityCalc) inv).isChat() && inv.getInventory() != null
-						&& inv.getInventory().equals(event.getInventory())) {
+				&& inv.getInventory().equals(event.getInventory())) {
 					inv.close(true);
 				}
 			} else if (inv.getInventory() != null && inv.getInventory().equals(event.getInventory())) {

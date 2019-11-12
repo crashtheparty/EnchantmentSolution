@@ -54,6 +54,6 @@ class EnchantObject extends SharedObject {
 	@Override
 	public JsonElement toJson() {
 		return new JsonBuilder() // Empty JsonObject -> any enchantment
-				.add("enchantment", enchant).add("levels", levels).build();
+		.add("enchantment", enchant).add("levels", levels).build();
 	}
 }

@@ -89,7 +89,7 @@ public class AnimalMob_v1_14_R1 extends AnimalMob {
 		config.set("animals." + i + ".collar_color", getCatType() != null ? getCollarColor().name() : null);
 		config.set("animals." + i + ".panda_main_gene", getPandaMainGene() != null ? getPandaMainGene().name() : null);
 		config.set("animals." + i + ".panda_hidden_gene",
-				getPandaHiddenGene() != null ? getPandaHiddenGene().name() : null);
+		getPandaHiddenGene() != null ? getPandaHiddenGene().name() : null);
 	}
 
 	public static AnimalMob createFromConfig(YamlConfig config, int i) {
@@ -144,17 +144,17 @@ public class AnimalMob_v1_14_R1 extends AnimalMob {
 		}
 		try {
 			((AnimalMob_v1_14_R1) mob)
-					.setPandaMainGene(Gene.valueOf(config.getString("animals." + i + ".panda_main_gene")));
+			.setPandaMainGene(Gene.valueOf(config.getString("animals." + i + ".panda_main_gene")));
 		} catch (Exception ex) {
 		}
 		try {
 			((AnimalMob_v1_14_R1) mob)
-					.setPandaHiddenGene(Gene.valueOf(config.getString("animals." + i + ".panda_hidden_gene")));
+			.setPandaHiddenGene(Gene.valueOf(config.getString("animals." + i + ".panda_hidden_gene")));
 		} catch (Exception ex) {
 		}
 		try {
 			((AnimalMob_v1_14_R1) mob)
-					.setCollarColor(DyeColor.valueOf(config.getString("animals." + i + ".collar_color")));
+			.setCollarColor(DyeColor.valueOf(config.getString("animals." + i + ".collar_color")));
 		} catch (Exception ex) {
 		}
 		try {

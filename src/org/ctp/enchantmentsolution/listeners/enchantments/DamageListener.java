@@ -15,9 +15,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerItemDamageEvent;
-import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.potion.PotionEffectType;
@@ -39,9 +39,9 @@ import org.ctp.enchantmentsolution.utils.ESArrays;
 import org.ctp.enchantmentsolution.utils.abillityhelpers.DrownedEntity;
 import org.ctp.enchantmentsolution.utils.abillityhelpers.EntityAccuracy;
 import org.ctp.enchantmentsolution.utils.abillityhelpers.ParticleEffect;
+import org.ctp.enchantmentsolution.utils.items.AbilityUtils;
 import org.ctp.enchantmentsolution.utils.items.DamageUtils;
 import org.ctp.enchantmentsolution.utils.items.ItemUtils;
-import org.ctp.enchantmentsolution.utils.items.AbilityUtils;
 
 @SuppressWarnings("unused")
 public class DamageListener extends Enchantmentable {
@@ -62,6 +62,7 @@ public class DamageListener extends Enchantmentable {
 		runMethod(this, "sandVeil", event, EntityDamageByEntityEvent.class);
 		runMethod(this, "shockAspect", event, EntityDamageByEntityEvent.class);
 		runMethod(this, "stoneThrow", event, EntityDamageByEntityEvent.class);
+		runMethod(this, "warp", event, EntityDamageByEntityEvent.class);
 	}
 
 	@EventHandler

@@ -23,7 +23,7 @@ public class AdvancementUtils {
 			if (advancement.getParent() == null) {
 				if (ConfigUtils.isAdvancementActive(namespace)) {
 					root = factory.getRoot(namespace, ConfigUtils.getAdvancementName(namespace),
-							ConfigUtils.getAdvancementDescription(namespace), advancement.getIcon(), "block/bookshelf");
+					ConfigUtils.getAdvancementDescription(namespace), advancement.getIcon(), "block/bookshelf");
 					root.setAnnounce(announce);
 					root.setToast(toast);
 					if (root.activate(false).isChanged()) {
@@ -38,18 +38,18 @@ public class AdvancementUtils {
 				}
 			} else {
 				if (root != null && ConfigUtils.isAdvancementActive(namespace)
-						&& advancement.getActivatedVersion() < version) {
+				&& advancement.getActivatedVersion() < version) {
 					if (advancement.getParent() == ESAdvancement.ENCHANTMENT_SOLUTION) {
 						last = root;
 					}
 					List<ESTrigger> triggers = advancement.getTriggers();
 					last = factory.getSimple(namespace, last, ConfigUtils.getAdvancementName(namespace),
-							ConfigUtils.getAdvancementDescription(namespace), advancement.getIcon(),
-							triggers.get(0).getCriteria(), triggers.get(0).getTrigger());
+					ConfigUtils.getAdvancementDescription(namespace), advancement.getIcon(),
+					triggers.get(0).getCriteria(), triggers.get(0).getTrigger());
 					for(int i = 1; i < triggers.size(); i++) {
 						ESTrigger trigger = triggers.get(i);
 						if (version >= trigger.getVersionMinimum()
-								&& (trigger.getVersionMaximum() == 0 || version <= trigger.getVersionMaximum())) {
+						&& (trigger.getVersionMaximum() == 0 || version <= trigger.getVersionMaximum())) {
 							last.addTrigger(trigger.getCriteria(), trigger.getTrigger());
 						}
 					}
@@ -81,7 +81,7 @@ public class AdvancementUtils {
 	public static boolean awardCriteria(Player player, ESAdvancement advancement, String criteria) {
 		if (advancement.isEnabled()) {
 			AdvancementProgress progress = player
-					.getAdvancementProgress(Bukkit.getAdvancement(advancement.getNamespace()));
+			.getAdvancementProgress(Bukkit.getAdvancement(advancement.getNamespace()));
 			if (progress.getRemainingCriteria().contains(criteria)) {
 				progress.awardCriteria(criteria);
 				return true;
@@ -93,10 +93,10 @@ public class AdvancementUtils {
 	public static boolean awardCriteria(Player player, ESAdvancement advancement, String criteria, int amount) {
 		if (advancement.isEnabled()) {
 			AdvancementProgress progress = player
-					.getAdvancementProgress(Bukkit.getAdvancement(advancement.getNamespace()));
+			.getAdvancementProgress(Bukkit.getAdvancement(advancement.getNamespace()));
 			if (progress.getRemainingCriteria().contains(criteria)) {
 				ESAdvancementProgress esProgress = EnchantmentSolution.getAdvancementProgress(player, advancement,
-						criteria);
+				criteria);
 				esProgress.setCurrentAmount(esProgress.getCurrentAmount() + amount);
 				ESTrigger trigger = null;
 				for(ESTrigger t: advancement.getTriggers()) {

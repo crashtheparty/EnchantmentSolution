@@ -27,7 +27,7 @@ public class YamlConfigBackup extends YamlConfig {
 	public List<String> getConfigInventoryEntryKeys() {
 		List<String> values = new ArrayList<String>();
 		for(Iterator<java.util.Map.Entry<String, YamlInfo>> it = configInventoryData.entrySet().iterator(); it
-				.hasNext();) {
+		.hasNext();) {
 			java.util.Map.Entry<String, YamlInfo> e = it.next();
 			List<String> entryKeys = getEntryKeys(e.getKey());
 			for(int i = 0; i < entryKeys.size(); i++) {
@@ -65,7 +65,7 @@ public class YamlConfigBackup extends YamlConfig {
 
 	public void setFromBackup(YamlConfig config) {
 		for(Iterator<java.util.Map.Entry<String, YamlInfo>> it = config.getAllInfo().entrySet().iterator(); it
-				.hasNext();) {
+		.hasNext();) {
 			java.util.Map.Entry<String, YamlInfo> e = it.next();
 			if (e.getValue().getValue() != null) {
 				if (contains(e.getKey())) {
@@ -83,7 +83,7 @@ public class YamlConfigBackup extends YamlConfig {
 
 	private void update() {
 		for(Iterator<java.util.Map.Entry<String, YamlInfo>> it = configInventoryData.entrySet().iterator(); it
-				.hasNext();) {
+		.hasNext();) {
 			java.util.Map.Entry<String, YamlInfo> e = it.next();
 			if (contains(e.getKey())) {
 				YamlInfo data = getAllInfo().get(e.getKey());
@@ -165,7 +165,7 @@ public class YamlConfigBackup extends YamlConfig {
 			case "list":
 			case "enum_list":
 				LinkedHashMap<String, Boolean> keySame = new LinkedHashMap<String, Boolean>();
-				String[] values = replaceLast((value.toString().replaceFirst("\\[", "")), "]", "").split(", ");
+				String[] values = replaceLast(value.toString().replaceFirst("\\[", ""), "]", "").split(", ");
 				for(Object key: values) {
 					if (!key.toString().trim().equals("")) {
 						keySame.put(key.toString(), false);

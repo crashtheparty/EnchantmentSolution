@@ -159,7 +159,7 @@ public class ItemObject extends SharedObject {
 	@Override
 	public JsonObject toJson() {
 		JsonBuilder builder = new JsonBuilder().add("item", item.name().toLowerCase()).add("durability", durability)
-				.add("count", count).add("nbt", nbt).add("potion", potion);
+		.add("count", count).add("nbt", nbt).add("potion", potion);
 		if (enchants != null) {
 			JsonArray enchants = new JsonArray();
 			for(EnchantObject enchant: this.enchants) {

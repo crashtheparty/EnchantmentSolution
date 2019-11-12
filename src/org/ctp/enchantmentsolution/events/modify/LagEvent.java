@@ -24,7 +24,7 @@ public class LagEvent extends ModifyActionEvent {
 	}
 
 	public LagEvent(Player player, Location location, List<ParticleEffect> effects, Sound sound, float volume,
-			float pitch) {
+	float pitch) {
 		super(player);
 		setLocation(location);
 		setEffects(effects);

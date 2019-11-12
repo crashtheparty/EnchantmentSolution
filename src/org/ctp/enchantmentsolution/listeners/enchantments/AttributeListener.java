@@ -37,7 +37,7 @@ public class AttributeListener extends Enchantmentable {
 		attributes.put(RegisterEnchantments.LIFE, new Attributable[] { Attributable.LIFE });
 		attributes.put(RegisterEnchantments.GUNG_HO, new Attributable[] { Attributable.GUNG_HO });
 		attributes.put(RegisterEnchantments.TOUGHNESS, new Attributable[] { Attributable.TOUGHNESS_HELMET,
-				Attributable.TOUGHNESS_CHESTPLATE, Attributable.TOUGHNESS_LEGGINGS, Attributable.TOUGHNESS_BOOTS });
+		Attributable.TOUGHNESS_CHESTPLATE, Attributable.TOUGHNESS_LEGGINGS, Attributable.TOUGHNESS_BOOTS });
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST)
@@ -62,9 +62,9 @@ public class AttributeListener extends Enchantmentable {
 					for(Attributable a: attributes.get(entry.getKey())) {
 						if (a.getType() == type) {
 							AttributeEvent attrEvent = new AttributeEvent(player,
-									new EnchantmentLevel(RegisterEnchantments.getCustomEnchantment(entry.getKey()),
-											entry.getValue()),
-									equip ? null : a.getAttrName(), equip ? a.getAttrName() : null);
+							new EnchantmentLevel(RegisterEnchantments.getCustomEnchantment(entry.getKey()),
+							entry.getValue()),
+							equip ? null : a.getAttrName(), equip ? a.getAttrName() : null);
 							Bukkit.getPluginManager().callEvent(attrEvent);
 
 							if (!attrEvent.isCancelled()) {
@@ -81,7 +81,7 @@ public class AttributeListener extends Enchantmentable {
 				} else if (entry.getKey() == RegisterEnchantments.UNREST) {
 					if (type == ItemSlotType.HELMET) {
 						UnrestPotionEvent event = new UnrestPotionEvent(player,
-								equip ? PotionEventType.ADD : PotionEventType.REMOVE);
+						equip ? PotionEventType.ADD : PotionEventType.REMOVE);
 						Bukkit.getPluginManager().callEvent(event);
 
 						if (!event.isCancelled()) {
@@ -90,11 +90,11 @@ public class AttributeListener extends Enchantmentable {
 									player.setStatistic(Statistic.TIME_SINCE_REST, 96000);
 								}
 								player.addPotionEffect(
-										new PotionEffect(PotionEffectType.NIGHT_VISION, 1000000000, 0, false, false),
-										true);
+								new PotionEffect(PotionEffectType.NIGHT_VISION, 1000000000, 0, false, false),
+								true);
 							} else {
 								player.addPotionEffect(
-										new PotionEffect(PotionEffectType.NIGHT_VISION, 160, 0, false, false), true);
+								new PotionEffect(PotionEffectType.NIGHT_VISION, 160, 0, false, false), true);
 							}
 						}
 					}

@@ -124,7 +124,7 @@ public enum ItemRepairType {
 			case "WOODEN_SHOVEL":
 			case "WOODEN_SWORD":
 				itemTypes.addAll(Arrays.asList(name(), "ACACIA_PLANKS", "BIRCH_PLANKS", "DARK_OAK_PLANKS",
-						"JUNGLE_PLANKS", "OAK_PLANKS", "DARK_OAK_PLANKS"));
+				"JUNGLE_PLANKS", "OAK_PLANKS", "DARK_OAK_PLANKS"));
 				break;
 			default:
 				break;

@@ -49,7 +49,7 @@ public class BackupTable extends Table {
 		try {
 			conn = getDb().getSQLConnection();
 			ps = conn.prepareStatement("SELECT * FROM " + getName() + " WHERE file_name = '" + config.getFileName()
-					+ "' AND backup_num = " + backupNum + " ORDER BY created_at asc;");
+			+ "' AND backup_num = " + backupNum + " ORDER BY created_at asc;");
 
 			rs = ps.executeQuery();
 			while (rs.next()) {
@@ -72,7 +72,7 @@ public class BackupTable extends Table {
 			}
 		} catch (SQLException ex) {
 			ChatUtils.sendSevere("ISSUE in \"SELECT * FROM " + getName() + " WHERE file_name = '" + config.getFileName()
-					+ "' AND backup_num = " + backupNum + " ORDER BY created_at asc;\"");
+			+ "' AND backup_num = " + backupNum + " ORDER BY created_at asc;\"");
 			getDb().getPlugin().getLogger().log(Level.SEVERE, Errors.sqlConnectionExecute(), ex);
 		} finally {
 			try {
@@ -105,7 +105,7 @@ public class BackupTable extends Table {
 		try {
 			conn = getDb().getSQLConnection();
 			ps = conn.prepareStatement("SELECT * FROM " + getName() + " WHERE file_name = '" + config.getFileName()
-					+ "' ORDER BY backup_num desc LIMIT 0,1;");
+			+ "' ORDER BY backup_num desc LIMIT 0,1;");
 
 			rs = ps.executeQuery();
 			while (rs.next()) {
@@ -113,7 +113,7 @@ public class BackupTable extends Table {
 			}
 		} catch (SQLException ex) {
 			ChatUtils.sendSevere("ISSUE in \"SELECT * FROM " + getName() + " WHERE file_name = '" + config.getFileName()
-					+ "' ORDER BY backup_num desc LIMIT 0,1;\"");
+			+ "' ORDER BY backup_num desc LIMIT 0,1;\"");
 			getDb().getPlugin().getLogger().log(Level.SEVERE, Errors.sqlConnectionExecute(), ex);
 		} finally {
 			try {
@@ -145,8 +145,8 @@ public class BackupTable extends Table {
 				conn = getDb().getSQLConnection();
 				conn.setAutoCommit(false);
 				ps = conn.prepareStatement(
-						"INSERT INTO " + getName() + " (info, file_name, backup_num, field, value, type, created_at) "
-								+ "VALUES (?, ?, ?, ?, ?, ?, ?)");
+				"INSERT INTO " + getName() + " (info, file_name, backup_num, field, value, type, created_at) "
+				+ "VALUES (?, ?, ?, ?, ?, ?, ?)");
 				for(String key: config.getAllEntryKeys()) {
 					ps.setString(1, backupNum + " " + config.getFileName() + " " + key);
 					ps.setString(2, config.getFileName());
@@ -224,8 +224,8 @@ public class BackupTable extends Table {
 						break;
 					case "enum_list":
 					case "list":
-						String[] values = config.replaceLast((rs.getString("value").replaceFirst("\\[", "")), "]", "")
-								.split(", ");
+						String[] values = config.replaceLast(rs.getString("value").replaceFirst("\\[", ""), "]", "")
+						.split(", ");
 						obj = Arrays.asList(values);
 						break;
 				}

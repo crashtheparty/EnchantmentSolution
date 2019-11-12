@@ -8,7 +8,7 @@ package org.ctp.enchantmentsolution.advancements.shared;
 @SuppressWarnings("unused")
 enum Feature implements SharedEnum {
 	END_CITY("EndCity"), FORTRESS("Fortress"), MANSION("Mansion"), MINESHAFT("Mineshaft"), MONUMENT(
-			"Monument"), STRONGHOLD("Stronghold"), TEMPLE("Temple"), VILLAGE("Village");
+	"Monument"), STRONGHOLD("Stronghold"), TEMPLE("Temple"), VILLAGE("Village");
 
 	private final String value;
 

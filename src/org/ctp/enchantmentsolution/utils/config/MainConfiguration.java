@@ -15,7 +15,7 @@ import org.ctp.enchantmentsolution.utils.yaml.YamlConfigBackup;
 public class MainConfiguration extends Configuration {
 
 	private List<String> enchantingTypes = Arrays.asList("vanilla_30", "vanilla_30_custom", "enhanced_30",
-			"enhanced_30_custom", "enhanced_50", "enhanced_50_custom");
+	"enhanced_30_custom", "enhanced_50", "enhanced_50_custom");
 
 	public MainConfiguration(File dataFolder) {
 		super(new File(dataFolder + "/config.yml"));

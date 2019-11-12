@@ -72,8 +72,8 @@ public class Rewards {
 	 */
 	JsonObject toJson() {
 		return new JsonBuilder().add("recipes", recipes, NAMESPACED_KEY_SET_TYPE)
-				.add("loot", loots, NAMESPACED_KEY_SET_TYPE).addPositive("experience", experience)
-				.add("function", function).build();
+		.add("loot", loots, NAMESPACED_KEY_SET_TYPE).addPositive("experience", experience)
+		.add("function", function).build();
 	}
 
 	/**
@@ -97,6 +97,6 @@ public class Rewards {
 
 		Rewards rew = (Rewards) object;
 		return Objects.equals(rew.recipes, recipes) && Objects.equals(rew.loots, loots)
-				&& Objects.equals(rew.experience, experience) && Objects.equals(rew.function, function);
+		&& Objects.equals(rew.experience, experience) && Objects.equals(rew.function, function);
 	}
 }

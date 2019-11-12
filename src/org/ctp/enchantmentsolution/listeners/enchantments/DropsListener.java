@@ -29,9 +29,9 @@ import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.events.drops.BeheadingEvent;
 import org.ctp.enchantmentsolution.events.drops.TransmutationEvent;
 import org.ctp.enchantmentsolution.listeners.Enchantmentable;
-import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.abillityhelpers.TransmutationLoot;
+import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 
 @SuppressWarnings("unused")
 public class DropsListener extends Enchantmentable {

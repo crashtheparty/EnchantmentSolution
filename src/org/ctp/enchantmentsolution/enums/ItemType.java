@@ -12,25 +12,25 @@ import org.ctp.enchantmentsolution.utils.config.LanguageConfiguration;
 
 public enum ItemType {
 	HELMETS("helmets"), CHESTPLATES("chestplates"), LEGGINGS("leggings"), BOOTS("boots"), SWORDS("swords"), PICKAXES(
-			"pickaxes"), SHOVELS("shovels"), AXES("axes"), HOES("hoes"), BOW("bow"), SHIELD("shield"), FISHING_ROD(
-					"fishing_rod"), SHEARS("shears"), FLINT_AND_STEEL("flint_and_steel"), CARROT_ON_A_STICK(
-							"carrot_on_a_stick"), ELYTRA("elytra"), TRIDENT("trident"), RANGED("ranged"), ARMOR(
-									"armor"), TOOLS("tools"), MELEE("melee"), MISC("misc"), WOODEN_TOOLS(
-											"wooden_tools"), STONE_TOOLS("stone_tools"), IRON_TOOLS(
-													"iron_tools"), GOLDEN_TOOLS("golden_tools"), DIAMOND_TOOLS(
-															"diamond_tools"), LEATHER_ARMOR(
-																	"leather_armor"), GOLDEN_ARMOR(
-																			"golden_armor"), CHAINMAIL_ARMOR(
-																					"chainmail_armor"), IRON_ARMOR(
-																							"iron_armor"), DIAMOND_ARMOR(
-																									"diamond_armor"), CROSSBOW(
-																											"crossbow"), BOOK(
-																													"book"), ALL(
-																															"all"), ENCHANTABLE(
-																																	"enchantable"), TURTLE_HELMET(
-																																			"turtle_helmet"), SHULKER_BOXES(
-																																					"shulker_boxes"), NONE(
-																																							"none");
+	"pickaxes"), SHOVELS("shovels"), AXES("axes"), HOES("hoes"), BOW("bow"), SHIELD("shield"), FISHING_ROD(
+	"fishing_rod"), SHEARS("shears"), FLINT_AND_STEEL("flint_and_steel"), CARROT_ON_A_STICK(
+	"carrot_on_a_stick"), ELYTRA("elytra"), TRIDENT("trident"), RANGED("ranged"), ARMOR(
+	"armor"), TOOLS("tools"), MELEE("melee"), MISC("misc"), WOODEN_TOOLS(
+	"wooden_tools"), STONE_TOOLS("stone_tools"), IRON_TOOLS(
+	"iron_tools"), GOLDEN_TOOLS("golden_tools"), DIAMOND_TOOLS(
+	"diamond_tools"), LEATHER_ARMOR(
+	"leather_armor"), GOLDEN_ARMOR(
+	"golden_armor"), CHAINMAIL_ARMOR(
+	"chainmail_armor"), IRON_ARMOR(
+	"iron_armor"), DIAMOND_ARMOR(
+	"diamond_armor"), CROSSBOW(
+	"crossbow"), BOOK(
+	"book"), ALL(
+	"all"), ENCHANTABLE(
+	"enchantable"), TURTLE_HELMET(
+	"turtle_helmet"), SHULKER_BOXES(
+	"shulker_boxes"), NONE(
+	"none");
 
 	private String type, display;
 	private List<Material> itemTypes;
@@ -105,7 +105,7 @@ public enum ItemType {
 			return itemTypes;
 		} else if (BOOTS.getType().equals(type)) {
 			itemTypes.addAll(
-					Arrays.asList("DIAMOND_BOOTS", "CHAINMAIL_BOOTS", "GOLDEN_BOOTS", "IRON_BOOTS", "LEATHER_BOOTS"));
+			Arrays.asList("DIAMOND_BOOTS", "CHAINMAIL_BOOTS", "GOLDEN_BOOTS", "IRON_BOOTS", "LEATHER_BOOTS"));
 			return itemTypes;
 		} else if (BOW.getType().equals(type)) {
 			itemTypes.add("BOW");
@@ -115,18 +115,18 @@ public enum ItemType {
 			return itemTypes;
 		} else if (CHAINMAIL_ARMOR.getType().equals(type)) {
 			itemTypes.addAll(
-					Arrays.asList("CHAINMAIL_HELMET", "CHAINMAIL_CHESTPLATE", "CHAINMAIL_LEGGINGS", "CHAINMAIL_BOOTS"));
+			Arrays.asList("CHAINMAIL_HELMET", "CHAINMAIL_CHESTPLATE", "CHAINMAIL_LEGGINGS", "CHAINMAIL_BOOTS"));
 			return itemTypes;
 		} else if (CHESTPLATES.getType().equals(type)) {
 			itemTypes.addAll(Arrays.asList("DIAMOND_CHESTPLATE", "CHAINMAIL_CHESTPLATE", "GOLDEN_CHESTPLATE",
-					"IRON_CHESTPLATE", "LEATHER_CHESTPLATE"));
+			"IRON_CHESTPLATE", "LEATHER_CHESTPLATE"));
 			return itemTypes;
 		} else if (CROSSBOW.getType().equals(type)) {
 			itemTypes.addAll(Arrays.asList("CROSSBOW"));
 			return itemTypes;
 		} else if (DIAMOND_ARMOR.getType().equals(type)) {
 			itemTypes
-					.addAll(Arrays.asList("DIAMOND_HELMET", "DIAMOND_CHESTPLATE", "DIAMOND_LEGGINGS", "DIAMOND_BOOTS"));
+			.addAll(Arrays.asList("DIAMOND_HELMET", "DIAMOND_CHESTPLATE", "DIAMOND_LEGGINGS", "DIAMOND_BOOTS"));
 			return itemTypes;
 		} else if (DIAMOND_TOOLS.getType().equals(type)) {
 			itemTypes.addAll(Arrays.asList("DIAMOND_AXE", "DIAMOND_SWORD", "DIAMOND_SHOVEL", "DIAMOND_PICKAXE"));
@@ -158,7 +158,7 @@ public enum ItemType {
 			return itemTypes;
 		} else if (HELMETS.getType().equals(type)) {
 			itemTypes.addAll(Arrays.asList("DIAMOND_HELMET", "CHAINMAIL_HELMET", "GOLDEN_HELMET", "IRON_HELMET",
-					"LEATHER_HELMET", "TURTLE_HELMET"));
+			"LEATHER_HELMET", "TURTLE_HELMET"));
 			return itemTypes;
 		} else if (HOES.getType().equals(type)) {
 			itemTypes.addAll(Arrays.asList("DIAMOND_HOE", "GOLDEN_HOE", "IRON_HOE", "STONE_HOE", "WOODEN_HOE"));
@@ -171,11 +171,11 @@ public enum ItemType {
 			return itemTypes;
 		} else if (LEATHER_ARMOR.getType().equals(type)) {
 			itemTypes
-					.addAll(Arrays.asList("LEATHER_HELMET", "LEATHER_CHESTPLATE", "LEATHER_LEGGINGS", "LEATHER_BOOTS"));
+			.addAll(Arrays.asList("LEATHER_HELMET", "LEATHER_CHESTPLATE", "LEATHER_LEGGINGS", "LEATHER_BOOTS"));
 			return itemTypes;
 		} else if (LEGGINGS.getType().equals(type)) {
 			itemTypes.addAll(Arrays.asList("DIAMOND_LEGGINGS", "CHAINMAIL_LEGGINGS", "GOLDEN_LEGGINGS", "IRON_LEGGINGS",
-					"LEATHER_LEGGINGS"));
+			"LEATHER_LEGGINGS"));
 			return itemTypes;
 		} else if (MELEE.getType().equals(type)) {
 			itemTypes.addAll(getItemStrings(AXES.getType()));
@@ -192,7 +192,7 @@ public enum ItemType {
 			return itemTypes;
 		} else if (PICKAXES.getType().equals(type)) {
 			itemTypes.addAll(Arrays.asList("DIAMOND_PICKAXE", "GOLDEN_PICKAXE", "IRON_PICKAXE", "STONE_PICKAXE",
-					"WOODEN_PICKAXE"));
+			"WOODEN_PICKAXE"));
 			return itemTypes;
 		} else if (RANGED.getType().equals(type)) {
 			itemTypes.addAll(getItemStrings(BOW.getType()));
@@ -207,14 +207,14 @@ public enum ItemType {
 			return itemTypes;
 		} else if (SHOVELS.getType().equals(type)) {
 			itemTypes.addAll(
-					Arrays.asList("DIAMOND_SHOVEL", "GOLDEN_SHOVEL", "IRON_SHOVEL", "STONE_SHOVEL", "WOODEN_SHOVEL"));
+			Arrays.asList("DIAMOND_SHOVEL", "GOLDEN_SHOVEL", "IRON_SHOVEL", "STONE_SHOVEL", "WOODEN_SHOVEL"));
 			return itemTypes;
 		} else if (STONE_TOOLS.getType().equals(type)) {
 			itemTypes.addAll(Arrays.asList("STONE_AXE", "STONE_SWORD", "STONE_SHOVEL", "STONE_PICKAXE"));
 			return itemTypes;
 		} else if (SWORDS.getType().equals(type)) {
 			itemTypes.addAll(
-					Arrays.asList("DIAMOND_SWORD", "GOLDEN_SWORD", "IRON_SWORD", "STONE_SWORD", "WOODEN_SWORD"));
+			Arrays.asList("DIAMOND_SWORD", "GOLDEN_SWORD", "IRON_SWORD", "STONE_SWORD", "WOODEN_SWORD"));
 			return itemTypes;
 		} else if (TOOLS.getType().equals(type)) {
 			itemTypes.addAll(getItemStrings(PICKAXES.getType()));

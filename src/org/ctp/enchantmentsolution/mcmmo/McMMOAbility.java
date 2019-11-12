@@ -66,7 +66,7 @@ public class McMMOAbility implements Listener {
 								return true;
 							}
 						} catch (NoSuchMethodException | SecurityException | IllegalAccessException
-								| IllegalArgumentException | InvocationTargetException e) {
+						| IllegalArgumentException | InvocationTargetException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
@@ -80,37 +80,32 @@ public class McMMOAbility implements Listener {
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onMcMMOPlayerRepairCheck(McMMOPlayerRepairCheckEvent event) {
 		ItemStack item = event.getRepairedObject();
-		Bukkit.getScheduler().runTaskLater(EnchantmentSolution.getPlugin(), new Runnable() {
-
-			@Override
-			public void run() {
-				if (!event.isCancelled()) {
-					ItemMeta meta = item.getItemMeta();
-					if (meta != null) {
-						List<String> lore = new ArrayList<String>();
-						List<String> previousLore = meta.getLore();
-						if (previousLore != null) {
-							for(String l: previousLore) {
-								if (!StringUtils.isEnchantment(l)) {
-									lore.add(l);
-								}
+		Bukkit.getScheduler().runTaskLater(EnchantmentSolution.getPlugin(), (Runnable) () -> {
+			if (!event.isCancelled()) {
+				ItemMeta meta = item.getItemMeta();
+				if (meta != null) {
+					List<String> lore = new ArrayList<String>();
+					List<String> previousLore = meta.getLore();
+					if (previousLore != null) {
+						for(String l: previousLore) {
+							if (!StringUtils.isEnchantment(l)) {
+								lore.add(l);
 							}
 						}
-						Iterator<Entry<Enchantment, Integer>> enchantmentLevels = meta.getEnchants().entrySet()
-								.iterator();
-						while (enchantmentLevels.hasNext()) {
-							Entry<Enchantment, Integer> entry = enchantmentLevels.next();
-							CustomEnchantment custom = RegisterEnchantments.getCustomEnchantment(entry.getKey());
-							if (custom != null && entry.getKey() instanceof CustomEnchantmentWrapper) {
-								lore.add(ChatUtils.hideText("solution") + "" + ChatColor.GRAY + custom.getName());
-							}
-						}
-						meta = ItemUtils.setLore(meta, lore);
-						item.setItemMeta(meta);
 					}
+					Iterator<Entry<Enchantment, Integer>> enchantmentLevels = meta.getEnchants().entrySet()
+					.iterator();
+					while (enchantmentLevels.hasNext()) {
+						Entry<Enchantment, Integer> entry = enchantmentLevels.next();
+						CustomEnchantment custom = RegisterEnchantments.getCustomEnchantment(entry.getKey());
+						if (custom != null && entry.getKey() instanceof CustomEnchantmentWrapper) {
+							lore.add(ChatUtils.hideText("solution") + "" + ChatColor.GRAY + custom.getName());
+						}
+					}
+					meta = ItemUtils.setLore(meta, lore);
+					item.setItemMeta(meta);
 				}
 			}
-
 		}, 1l);
 	}
 

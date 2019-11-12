@@ -45,7 +45,7 @@ public class GrindstoneEnchantments extends GenerateEnchantments {
 	}
 
 	public static GrindstoneEnchantments getGrindstoneEnchantments(Player player, ItemStack first, ItemStack second,
-			boolean grindstoneTakeEnchantments) {
+	boolean grindstoneTakeEnchantments) {
 		return new GrindstoneEnchantments(player, first, second, grindstoneTakeEnchantments);
 	}
 
@@ -67,9 +67,9 @@ public class GrindstoneEnchantments extends GenerateEnchantments {
 	private void setTakeEnchantments() {
 		ItemStack item = getItem();
 		if (item.getType() != Material.BOOK && item.getType() != Material.ENCHANTED_BOOK && item.hasItemMeta()
-				&& item.getItemMeta().hasEnchants()) {
-			if (itemTwo.getType() == Material.BOOK && (itemTwo.hasItemMeta() && !itemTwo.getItemMeta().hasEnchants())
-					|| !itemTwo.hasItemMeta()) {
+		&& item.getItemMeta().hasEnchants()) {
+			if (itemTwo.getType() == Material.BOOK && itemTwo.hasItemMeta() && !itemTwo.getItemMeta().hasEnchants()
+			|| !itemTwo.hasItemMeta()) {
 				takeEnchantments = true;
 			}
 		}
@@ -91,7 +91,7 @@ public class GrindstoneEnchantments extends GenerateEnchantments {
 
 		List<EnchantmentLevel> enchantments = new ArrayList<EnchantmentLevel>();
 		for(Iterator<java.util.Map.Entry<Enchantment, Integer>> it = getItem().getEnchantments().entrySet()
-				.iterator(); it.hasNext();) {
+		.iterator(); it.hasNext();) {
 			java.util.Map.Entry<Enchantment, Integer> e = it.next();
 			for(CustomEnchantment ench: RegisterEnchantments.getEnchantments()) {
 				if (ench.getRelativeEnchantment().equals(e.getKey())) {
@@ -177,11 +177,11 @@ public class GrindstoneEnchantments extends GenerateEnchantments {
 
 		if (itemTwo != null) {
 			if (item.getType() != Material.BOOK && item.getType() != Material.ENCHANTED_BOOK
-					&& ItemType.hasItemType(item.getType())) {
+			&& ItemType.hasItemType(item.getType())) {
 				DamageUtils.setDamage(combinedItem, DamageUtils.getDamage(item.getItemMeta()));
 				int extraDurability = itemTwo.getType().getMaxDurability()
-						- DamageUtils.getDamage(itemTwo.getItemMeta())
-						+ (int) (itemTwo.getType().getMaxDurability() * .05);
+				- DamageUtils.getDamage(itemTwo.getItemMeta())
+				+ (int) (itemTwo.getType().getMaxDurability() * .05);
 				DamageUtils.setDamage(combinedItem, DamageUtils.getDamage(item.getItemMeta()) - extraDurability);
 				if (DamageUtils.getDamage(combinedItem.getItemMeta()) < 0) {
 					DamageUtils.setDamage(combinedItem, 0);

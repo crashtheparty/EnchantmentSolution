@@ -80,11 +80,11 @@ public class ExtraBlockListener implements Listener {
 				String name = meta.getDisplayName();
 				if (name != null && !name.equals("")) {
 					event.getBlockPlaced().setMetadata("shulker_name",
-							new FixedMetadataValue(EnchantmentSolution.getPlugin(), name));
+					new FixedMetadataValue(EnchantmentSolution.getPlugin(), name));
 				}
 				if (ItemUtils.hasEnchantment(event.getItemInHand(), RegisterEnchantments.SOULBOUND)) {
 					event.getBlockPlaced().setMetadata("soulbound",
-							new FixedMetadataValue(EnchantmentSolution.getPlugin(), true));
+					new FixedMetadataValue(EnchantmentSolution.getPlugin(), true));
 				}
 			}
 		}

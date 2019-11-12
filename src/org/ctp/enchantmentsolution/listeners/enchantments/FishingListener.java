@@ -49,10 +49,10 @@ public class FishingListener extends Enchantmentable {
 			if (ItemUtils.hasEnchantment(rod, RegisterEnchantments.ANGLER)) {
 				if (canRun(RegisterEnchantments.ANGLER, event)) {
 					List<Material> fish = Arrays.asList(Material.COD, Material.COOKED_COD, Material.SALMON,
-							Material.COOKED_SALMON, Material.TROPICAL_FISH, Material.PUFFERFISH);
+					Material.COOKED_SALMON, Material.TROPICAL_FISH, Material.PUFFERFISH);
 					if (fish.contains(caught.getType())) {
 						AnglerEvent e = new AnglerEvent(player, caught.getType(),
-								ItemUtils.getLevel(rod, RegisterEnchantments.ANGLER));
+						ItemUtils.getLevel(rod, RegisterEnchantments.ANGLER));
 						Bukkit.getPluginManager().callEvent(e);
 						if (!e.isCancelled()) {
 							caught.setType(e.getFish());
@@ -65,7 +65,7 @@ public class FishingListener extends Enchantmentable {
 								type = Material.SALMON;
 							}
 							AdvancementUtils.awardCriteria(player, ESAdvancement.FED_FOR_A_LIFETIME,
-									type.name().toLowerCase());
+							type.name().toLowerCase());
 						}
 					}
 				}

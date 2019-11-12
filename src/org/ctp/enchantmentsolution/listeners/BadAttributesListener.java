@@ -74,8 +74,8 @@ public class BadAttributesListener implements Listener {
 				}
 
 				AttributeEvent event = new AttributeEvent(player,
-						new EnchantmentLevel(RegisterEnchantments.getCustomEnchantment(a.getEnchantment()), 0),
-						a.getAttrName(), null);
+				new EnchantmentLevel(RegisterEnchantments.getCustomEnchantment(a.getEnchantment()), 0),
+				a.getAttrName(), null);
 				Bukkit.getPluginManager().callEvent(event);
 
 				if (!event.isCancelled()) {

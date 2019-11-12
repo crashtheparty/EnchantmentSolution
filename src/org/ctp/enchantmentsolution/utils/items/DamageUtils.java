@@ -65,44 +65,56 @@ public class DamageUtils {
 		return 0;
 	}
 
-	public static ItemStack damageItem(HumanEntity player, ItemStack item) {
+	public static int damageItem(HumanEntity player, ItemStack item) {
 		return damageItem(player, item, 1.0D, 1.0D);
 	}
 
-	public static ItemStack damageItem(HumanEntity player, ItemStack item, double damage) {
+	public static int damageItem(HumanEntity player, ItemStack item, double damage) {
 		return damageItem(player, item, damage, 1.0D);
 	}
 
-	public static ItemStack damageItem(HumanEntity player, ItemStack item, double damage, double extraChance) {
+	public static int damageItem(HumanEntity player, ItemStack item, double damage, double extraChance) {
+		return damageItem(player, item, damage, extraChance, true);
+	}
+
+	public static int damageItem(HumanEntity player, ItemStack item, double damage, double extraChance,
+	boolean breakItem) {
 		if (player.getGameMode().equals(GameMode.CREATIVE) || player.getGameMode().equals(GameMode.SPECTATOR)) {
-			return null;
+			return 0;
 		}
+		int originalDamage = DamageUtils.getDamage(item.getItemMeta());
+		;
 		int numBreaks = 0;
 		int unbreaking = ItemUtils.getLevel(item, Enchantment.DURABILITY);
 		for(int i = 0; i < damage; i++) {
-			double chance = (1.0D) / (unbreaking + extraChance);
+			double chance = 1.0D / (unbreaking + extraChance);
 			double random = Math.random();
 			if (chance > random) {
 				numBreaks++;
 			}
 		}
-		;
+
 		if (numBreaks > 0) {
-			DamageUtils.setDamage(item, DamageUtils.getDamage(item.getItemMeta()) + numBreaks);
-			if (DamageUtils.getDamage(item.getItemMeta()) > item.getType().getMaxDurability()) {
-				ItemStack deadItem = item.clone();
-				PlayerItemBreakEvent event = new PlayerItemBreakEvent((Player) player, item);
-				Bukkit.getPluginManager().callEvent(event);
-				player.getInventory().setItemInMainHand(new ItemStack(Material.AIR));
-				player.getWorld().spawnParticle(Particle.BLOCK_CRACK, player.getEyeLocation(), 1, item.getType());
-				player.getWorld().playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 1, 1);
-				if (player instanceof Player) {
-					Player p = (Player) player;
-					p.incrementStatistic(Statistic.BREAK_ITEM, item.getType());
+			if (breakItem) {
+				DamageUtils.setDamage(item, DamageUtils.getDamage(item.getItemMeta()) + numBreaks);
+				if (DamageUtils.getDamage(item.getItemMeta()) > item.getType().getMaxDurability()
+				&& item.getType() != Material.ELYTRA) {
+					PlayerItemBreakEvent event = new PlayerItemBreakEvent((Player) player, item);
+					Bukkit.getPluginManager().callEvent(event);
+					player.getInventory().setItemInMainHand(new ItemStack(Material.AIR));
+					player.getWorld().spawnParticle(Particle.ITEM_CRACK, player.getEyeLocation(), 1, item.getType());
+					player.getWorld().playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 1, 1);
+					if (player instanceof Player) {
+						Player p = (Player) player;
+						p.incrementStatistic(Statistic.BREAK_ITEM, item.getType());
+					}
+					return item.getType().getMaxDurability() - originalDamage;
+				} else if (item.getType() == Material.ELYTRA) {
+					return item.getType().getMaxDurability() - originalDamage;
 				}
-				return deadItem;
 			}
+			return numBreaks;
 		}
-		return item;
+		return 0;
 	}
 }

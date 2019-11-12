@@ -142,13 +142,13 @@ public class AnimalMob {
 		config.set("animals." + i + ".rabbit_type", getRabbitType() != null ? getRabbitType().name() : null);
 		config.set("animals." + i + ".parrot_variant", getParrotVariant() != null ? getParrotVariant().name() : null);
 		config.set("animals." + i + ".saddle",
-				getSaddle() != null ? ItemSerialization.itemToString(getSaddle()) : null);
+		getSaddle() != null ? ItemSerialization.itemToString(getSaddle()) : null);
 		config.set("animals." + i + ".armor", getArmor() != null ? ItemSerialization.itemToString(getArmor()) : null);
 
 		for(int k = 2; k < 17; k++) {
 			if (inventoryItems != null && inventoryItems.get(k) != null) {
 				config.set("animals." + i + ".inventory_items." + k,
-						ItemSerialization.itemToString(inventoryItems.get(k)));
+				ItemSerialization.itemToString(inventoryItems.get(k)));
 			}
 		}
 	}
@@ -468,7 +468,7 @@ public class AnimalMob {
 
 	public boolean inItem(ItemStack attackItem) {
 		return getItem() != null && getItem().equals(attackItem)
-				|| StringUtils.getAnimalIDsFromItem(attackItem).contains(getEntityID());
+		|| StringUtils.getAnimalIDsFromItem(attackItem).contains(getEntityID());
 	}
 
 	public boolean inItem(ItemStack item, int entityID) {

@@ -187,8 +187,8 @@ public class ConfigInventory implements InventoryData {
 			List<String> names = new ArrayList<String>();
 			if (backup != null) {
 				names.addAll(Arrays.asList(ChatColor.GRAY + "Path: " + ChatColor.WHITE + key,
-						ChatColor.GRAY + "Type: " + ChatColor.WHITE + backup.getType(key),
-						ChatColor.GRAY + "Value: " + ChatColor.WHITE + backup.getStringValue(key)));
+				ChatColor.GRAY + "Type: " + ChatColor.WHITE + backup.getType(key),
+				ChatColor.GRAY + "Value: " + ChatColor.WHITE + backup.getStringValue(key)));
 			} else {
 				String leftClick = null;
 				if (config.getType(key) == "boolean") {
@@ -199,10 +199,10 @@ public class ConfigInventory implements InventoryData {
 					leftClick = ChatColor.WHITE + "Left click to edit with anvil.";
 				}
 				names.addAll(Arrays.asList(ChatColor.GRAY + "Path: " + ChatColor.WHITE + key,
-						ChatColor.GRAY + "Type: " + ChatColor.WHITE + config.getType(key),
-						ChatColor.GRAY + "Value: " + ChatColor.WHITE + config.getStringValue(key), leftClick));
+				ChatColor.GRAY + "Type: " + ChatColor.WHITE + config.getType(key),
+				ChatColor.GRAY + "Value: " + ChatColor.WHITE + config.getStringValue(key), leftClick));
 				String rightClick = config.getType(key) == "string" ? ChatColor.WHITE + "Right click to edit in chat."
-						: "";
+				: "";
 				if (rightClick != "") {
 					names.add(rightClick);
 				}
@@ -284,7 +284,7 @@ public class ConfigInventory implements InventoryData {
 			ItemMeta addMeta = add.getItemMeta();
 			addMeta.setDisplayName(ChatColor.GOLD + "Add New Value");
 			addMeta.setLore(Arrays.asList(ChatColor.WHITE + "Left Click to Open Anvil",
-					ChatColor.WHITE + "Right Click to Open Chat"));
+			ChatColor.WHITE + "Right Click to Open Chat"));
 			add.setItemMeta(addMeta);
 			inv.setItem(50, add);
 		}
@@ -510,7 +510,7 @@ public class ConfigInventory implements InventoryData {
 			return;
 		}
 
-		num += (PAGING * (page - 1));
+		num += PAGING * (page - 1);
 
 		keys.remove(num);
 		setPath(level, keys);

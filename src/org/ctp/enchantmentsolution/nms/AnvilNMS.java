@@ -12,12 +12,12 @@ public class AnvilNMS {
 		switch (EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber()) {
 			case 1:
 				net.minecraft.server.v1_13_R1.ItemStack nmsV1 = org.bukkit.craftbukkit.v1_13_R1.inventory.CraftItemStack
-						.asNMSCopy(item);
+				.asNMSCopy(item);
 				return nmsV1.getRepairCost();
 			case 2:
 			case 3:
 				net.minecraft.server.v1_13_R2.ItemStack nmsV2 = org.bukkit.craftbukkit.v1_13_R2.inventory.CraftItemStack
-						.asNMSCopy(item);
+				.asNMSCopy(item);
 				return nmsV2.getRepairCost();
 			case 4:
 			case 5:
@@ -25,7 +25,7 @@ public class AnvilNMS {
 			case 7:
 			case 8:
 				net.minecraft.server.v1_14_R1.ItemStack nmsV3 = org.bukkit.craftbukkit.v1_14_R1.inventory.CraftItemStack
-						.asNMSCopy(item);
+				.asNMSCopy(item);
 				return nmsV3.getRepairCost();
 		}
 		return 0;
@@ -35,13 +35,13 @@ public class AnvilNMS {
 		switch (EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber()) {
 			case 1:
 				net.minecraft.server.v1_13_R1.ItemStack nmsV1 = org.bukkit.craftbukkit.v1_13_R1.inventory.CraftItemStack
-						.asNMSCopy(item);
+				.asNMSCopy(item);
 				nmsV1.setRepairCost(repairCost);
 				return org.bukkit.craftbukkit.v1_13_R1.inventory.CraftItemStack.asBukkitCopy(nmsV1);
 			case 2:
 			case 3:
 				net.minecraft.server.v1_13_R2.ItemStack nmsV2 = org.bukkit.craftbukkit.v1_13_R2.inventory.CraftItemStack
-						.asNMSCopy(item);
+				.asNMSCopy(item);
 				nmsV2.setRepairCost(repairCost);
 				return org.bukkit.craftbukkit.v1_13_R2.inventory.CraftItemStack.asBukkitCopy(nmsV2);
 			case 4:
@@ -50,7 +50,7 @@ public class AnvilNMS {
 			case 7:
 			case 8:
 				net.minecraft.server.v1_14_R1.ItemStack nmsV3 = org.bukkit.craftbukkit.v1_14_R1.inventory.CraftItemStack
-						.asNMSCopy(item);
+				.asNMSCopy(item);
 				nmsV3.setRepairCost(repairCost);
 				return org.bukkit.craftbukkit.v1_14_R1.inventory.CraftItemStack.asBukkitCopy(nmsV3);
 		}

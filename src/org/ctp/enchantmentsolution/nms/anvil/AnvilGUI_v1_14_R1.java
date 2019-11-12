@@ -64,7 +64,7 @@ public class AnvilGUI_v1_14_R1 extends AnvilGUI {
 
 		// Send the packet
 		p.playerConnection
-				.sendPacket(new PacketPlayOutOpenWindow(c, container.getType(), new ChatMessage("Repairing")));
+		.sendPacket(new PacketPlayOutOpenWindow(c, container.getType(), new ChatMessage("Repairing")));
 		// Set their active container to the container
 		p.activeContainer = container;
 

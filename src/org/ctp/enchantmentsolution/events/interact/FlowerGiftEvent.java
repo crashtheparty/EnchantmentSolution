@@ -14,7 +14,7 @@ public class FlowerGiftEvent extends InteractEvent {
 	public FlowerGiftEvent(Player who, ItemStack item, Block block, ItemStack flower, Location dropLocation) {
 		super(who, item, block);
 		setFlower(flower);
-		setDropLocation(getDropLocation());
+		setDropLocation(dropLocation);
 	}
 
 	public ItemStack getFlower() {

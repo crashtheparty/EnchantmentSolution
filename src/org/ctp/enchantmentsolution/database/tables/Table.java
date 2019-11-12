@@ -123,10 +123,10 @@ public class Table {
 				for(Column column: columns) {
 					if (!columnsInTable.contains(column.getName())) {
 						String statement = "ALTER TABLE " + name + " ADD COLUMN `" + column.getName() + "` "
-								+ conversions.get(column.getType()) + " DEFAULT " + column.getDefaultValue();
+						+ conversions.get(column.getType()) + " DEFAULT " + column.getDefaultValue();
 						if (column.getType().equals("autoint")) {
 							ChatUtils.sendToConsole(Level.INFO,
-									"Can't add auto increment value to existing table: skipping.");
+							"Can't add auto increment value to existing table: skipping.");
 							continue;
 						}
 						ChatUtils.sendToConsole(Level.INFO, statement);
@@ -140,7 +140,7 @@ public class Table {
 					String statement = "CREATE TABLE IF NOT EXISTS " + name + " (";
 					for(Column column: columns) {
 						statement += "`" + column.getName() + "` " + conversions.get(column.getType()) + " DEFAULT "
-								+ column.getDefaultValue() + ",";
+						+ column.getDefaultValue() + ",";
 					}
 					String primaryString = "";
 					for(int i = 0; i < primary.size(); i++) {
@@ -172,7 +172,7 @@ public class Table {
 					String statement = "CREATE TABLE IF NOT EXISTS " + name + " (";
 					for(Column column: columns) {
 						statement += "`" + column.getName() + "` " + conversions.get(column.getType()) + " DEFAULT "
-								+ column.getDefaultValue() + ",";
+						+ column.getDefaultValue() + ",";
 					}
 					String primaryString = "";
 					for(int i = 0; i < primary.size(); i++) {

@@ -9,7 +9,7 @@ public class SandVeilMissEvent extends ESEntityDamageEntityEvent {
 	private double accuracy;
 
 	public SandVeilMissEvent(LivingEntity damaged, LivingEntity damager, double damage, boolean particles,
-			double accuracy) {
+	double accuracy) {
 		super(damaged, damager, damage, damage);
 		setParticles(particles);
 		setAccuracy(accuracy);

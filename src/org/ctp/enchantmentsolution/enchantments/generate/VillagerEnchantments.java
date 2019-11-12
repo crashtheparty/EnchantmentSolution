@@ -20,7 +20,7 @@ public class VillagerEnchantments extends LootEnchantments {
 	private List<EnchantmentLevel> enchantments;
 
 	private VillagerEnchantments(Player player, ItemStack item, int bookshelves, boolean treasure,
-			MerchantRecipe original) {
+	MerchantRecipe original) {
 		super(player, item, bookshelves, treasure);
 
 		setMerchantRecipe(original);
@@ -78,8 +78,8 @@ public class VillagerEnchantments extends LootEnchantments {
 		}
 
 		recipe = new MerchantRecipe(
-				ItemUtils.addEnchantmentToItem(new ItemStack(mat), enchant.getEnchant(), enchant.getLevel()),
-				original.getUses(), original.getMaxUses(), original.hasExperienceReward());
+		ItemUtils.addEnchantmentToItem(new ItemStack(mat), enchant.getEnchant(), enchant.getLevel()),
+		original.getUses(), original.getMaxUses(), original.hasExperienceReward());
 		recipe.setIngredients(ingredients);
 		if (VersionUtils.getBukkitVersionNumber() > 3) {
 			recipe.setVillagerExperience(original.getVillagerExperience());
@@ -87,7 +87,7 @@ public class VillagerEnchantments extends LootEnchantments {
 	}
 
 	public static VillagerEnchantments getVillagerEnchantments(Player player, ItemStack item, int minBookshelves,
-			boolean treasure, MerchantRecipe original) {
+	boolean treasure, MerchantRecipe original) {
 		int books = 16;
 		if (ConfigUtils.isLevel50()) {
 			books = 24;
@@ -122,9 +122,9 @@ public class VillagerEnchantments extends LootEnchantments {
 		int price = 0;
 		if (type == Material.ENCHANTED_BOOK) {
 			if (ConfigUtils.isLevel50()) {
-				price = (level * 2) * (level) + (int) ((Math.random() * (level * 3 + 7)) + 3);
+				price = level * 2 * level + (int) (Math.random() * (level * 3 + 7) + 3);
 			} else {
-				price = (level + 1) * (level * 2) * (level) + (int) ((Math.random() * (level * 3 + 15)) + 3);
+				price = (level + 1) * level * 2 * level + (int) (Math.random() * (level * 3 + 15) + 3);
 			}
 		} else {
 			switch (type.name()) {
@@ -150,7 +150,7 @@ public class VillagerEnchantments extends LootEnchantments {
 					price = (int) (Math.random() * 18 + 18);
 					break;
 				default:
-					price = (level * 2) * (level) + (int) ((Math.random() * (level * 3 + 7)) + 3);
+					price = level * 2 * level + (int) (Math.random() * (level * 3 + 7) + 3);
 					break;
 			}
 		}

@@ -32,7 +32,7 @@ public class EnchantmentLevel {
 			enchant = getEnchantFromString(split[0]);
 		} else {
 			ChatUtils.sendToConsole(Level.WARNING,
-					"Bad enchantment in fishing config: " + configString + ". No chance to get this enchantment.");
+			"Bad enchantment in fishing config: " + configString + ". No chance to get this enchantment.");
 		}
 	}
 
@@ -61,7 +61,7 @@ public class EnchantmentLevel {
 			}
 		}
 		ChatUtils.sendToConsole(Level.WARNING,
-				"Bad enchantment in fishing config: " + str + ". No chance to get this enchantment.");
+		"Bad enchantment in fishing config: " + str + ". No chance to get this enchantment.");
 		return null;
 	}
 

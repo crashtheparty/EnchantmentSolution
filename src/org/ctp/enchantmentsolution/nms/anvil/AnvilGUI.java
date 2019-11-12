@@ -212,34 +212,13 @@ public abstract class AnvilGUI {
 						destroy();
 						if (data instanceof Anvil) {
 							Bukkit.getScheduler().scheduleSyncDelayedTask(EnchantmentSolution.getPlugin(),
-									new Runnable() {
-
-										@Override
-										public void run() {
-											((Anvil) data).setInventory();
-										}
-
-									}, 2l);
+							() -> ((Anvil) data).setInventory(), 2l);
 						} else if (data instanceof ConfigInventory) {
 							Bukkit.getScheduler().scheduleSyncDelayedTask(EnchantmentSolution.getPlugin(),
-									new Runnable() {
-
-										@Override
-										public void run() {
-											((ConfigInventory) data).reopenFromAnvil(true);
-										}
-
-									}, 2l);
+							() -> ((ConfigInventory) data).reopenFromAnvil(true), 2l);
 						} else {
 							Bukkit.getScheduler().scheduleSyncDelayedTask(EnchantmentSolution.getPlugin(),
-									new Runnable() {
-
-										@Override
-										public void run() {
-											data.setInventory(data.getItems());
-										}
-
-									}, 2l);
+							() -> data.setInventory(data.getItems()), 2l);
 						}
 					}
 				}

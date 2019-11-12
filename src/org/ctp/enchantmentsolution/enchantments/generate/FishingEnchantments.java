@@ -18,7 +18,7 @@ public class FishingEnchantments extends LootEnchantments {
 	private EnchantmentList enchantmentList;
 
 	private FishingEnchantments(Player player, ItemStack item, boolean treasure, List<EnchantmentLevel> fishing,
-			double multiEnchant) {
+	double multiEnchant) {
 		super(player, item, treasure);
 
 		setEnchantmentList(new EnchantmentList(player, item.getType(), true, fishing, multiEnchant));
@@ -29,7 +29,7 @@ public class FishingEnchantments extends LootEnchantments {
 	}
 
 	public static FishingEnchantments getFishingEnchantments(Player player, ItemStack item, int minBookshelves,
-			boolean treasure) {
+	boolean treasure) {
 		int books = 16;
 		if (ConfigUtils.isLevel50()) {
 			books = 24;
@@ -43,7 +43,7 @@ public class FishingEnchantments extends LootEnchantments {
 	}
 
 	public static FishingEnchantments getMcMMOFishingEnchantments(Player player, ItemStack item, int tier,
-			boolean treasure) {
+	boolean treasure) {
 		HashMap<String, Double> chanceMap = new HashMap<String, Double>();
 		FishingConfiguration config = Configurations.getFishing();
 		String location = ConfigUtils.isLevel50() ? "Enchantments_Rarity_50" : "Enchantments_Rarity_30";
@@ -66,7 +66,7 @@ public class FishingEnchantments extends LootEnchantments {
 
 		if (fishing != null) {
 			return new FishingEnchantments(player, item, treasure, fishing,
-					config.getDouble(location + ".multiple_enchants_chance"));
+			config.getDouble(location + ".multiple_enchants_chance"));
 		}
 
 		return null;
