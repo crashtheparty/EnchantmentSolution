@@ -1,7 +1,6 @@
 package org.ctp.enchantmentsolution.events.blocks;
 
 import org.bukkit.block.Block;
-import org.ctp.enchantmentsolution.events.ESBlockEvent;
 
 public class WalkerDamageBlockEvent extends ESBlockEvent {
 

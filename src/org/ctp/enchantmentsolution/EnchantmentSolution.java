@@ -29,6 +29,7 @@ import org.ctp.enchantmentsolution.utils.abillityhelpers.DrownedEntity;
 import org.ctp.enchantmentsolution.utils.abillityhelpers.EntityAccuracy;
 import org.ctp.enchantmentsolution.utils.compatibility.AuctionHouseUtils;
 import org.ctp.enchantmentsolution.utils.config.MainConfiguration;
+import org.ctp.enchantmentsolution.utils.files.SaveUtils;
 import org.ctp.enchantmentsolution.version.*;
 
 public class EnchantmentSolution extends JavaPlugin {
@@ -69,6 +70,7 @@ public class EnchantmentSolution extends JavaPlugin {
 		RegisterEnchantments.addRegisterEnchantments();
 
 		Configurations.onEnable();
+		SaveUtils.getData();
 
 		registerEvent(new InventoryClick());
 		registerEvent(new InventoryClose());
@@ -166,6 +168,10 @@ public class EnchantmentSolution extends JavaPlugin {
 		ConfigUtils.getBoolean(MainConfiguration.class, "version.get_experimental"));
 		registerEvent(check);
 		checkVersion();
+	}
+	
+	public void onDisable() {
+		SaveUtils.setData();
 	}
 
 	private void registerEvent(Listener l) {

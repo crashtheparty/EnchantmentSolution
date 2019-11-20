@@ -211,4 +211,11 @@ public class ProjectileListener extends Enchantmentable {
 			}
 		}
 	}
+	
+	private void splatterFest(PlayerEggThrowEvent event) {
+		if(!canRun(RegisterEnchantments.SPLATTER_FEST, event)) return;
+		if(event.getEgg().hasMetadata("hatch_egg")) {
+			event.setHatching(false);
+		}
+	}
 }

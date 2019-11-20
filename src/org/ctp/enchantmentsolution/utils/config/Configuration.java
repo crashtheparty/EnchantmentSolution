@@ -8,7 +8,7 @@ import org.ctp.enchantmentsolution.utils.DBUtils;
 import org.ctp.enchantmentsolution.utils.yaml.YamlConfigBackup;
 import org.ctp.enchantmentsolution.utils.yaml.YamlInfo;
 
-public abstract class Configuration implements Configurable {
+public abstract class Configuration implements Configurable, Revertable {
 
 	private File file;
 	private YamlConfigBackup config;

@@ -68,6 +68,8 @@ public class Configurations {
 		if (LANGUAGE == null) {
 			LANGUAGE = new LanguageConfiguration(dataFolder, languageFile, LANGUAGE_FILES.get(0));
 		}
+		
+		DATA_FILE = new DataFile(dataFolder, "data.yml");
 
 		save();
 	}

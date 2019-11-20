@@ -1,90 +1,89 @@
 package org.ctp.enchantmentsolution.listeners;
 
+import java.util.Collection;
+
+import org.bukkit.Material;
+import org.bukkit.Statistic;
+import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
+import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
+import org.ctp.enchantmentsolution.mcmmo.McMMOHandler;
+import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.ESArrays;
+import org.ctp.enchantmentsolution.utils.abillityhelpers.WalkerUtils;
+import org.ctp.enchantmentsolution.utils.compatibility.JobsUtils;
+import org.ctp.enchantmentsolution.utils.items.AbilityUtils;
+import org.ctp.enchantmentsolution.utils.items.DamageUtils;
 import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 
 public class ExtraBlockListener implements Listener {
 
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onBlockBreak(BlockBreakEvent event) {
-		// TODO: add the walker listeners blocks to the listener
-		// if(WalkerListener.getBlocks(DefaultEnchantments.VOID_WALKER).contains(event.getBlock()))
-		// {
-		// event.setCancelled(true);
-		// AdvancementUtils.awardCriteria(event.getPlayer(),
-		// ESAdvancement.DETERMINED_CHEATER, "cheater");
-		// }
-		// if(WalkerListener.getBlocks(DefaultEnchantments.MAGMA_WALKER).contains(event.getBlock()))
-		// {
-		// event.setCancelled(true);
-		// }
+		if (WalkerUtils.hasBlock(event.getBlock())) {
+			event.setCancelled(true);
+			if (WalkerUtils.getWalker(event.getBlock()).getEnchantment() == RegisterEnchantments.VOID_WALKER) {
+				AdvancementUtils.awardCriteria(event.getPlayer(), ESAdvancement.DETERMINED_CHEATER, "cheater");
+			}
+		}
 
-		// TODO: create break shulker boxes event
-		// if(ItemUtils.getShulkerBoxes().contains(event.getBlock().getType())) {
-		// if(!Enchantments.hasEnchantment(event.getPlayer().getInventory().getItemInMainHand(),
-		// DefaultEnchantments.TELEPATHY)) {
-		// Player player = event.getPlayer();
-		// ItemStack item = player.getInventory().getItemInMainHand();
-		// Block block = event.getBlock();
-		// if(block.getMetadata("soulbound").size() > 0) {
-		// event.setCancelled(true);
-		// Collection<ItemStack> drops = block.getDrops();
-		// Iterator<ItemStack> i = drops.iterator();
-		// while(i.hasNext()) {
-		// ItemStack drop = i.next();
-		// if(ItemUtils.getShulkerBoxes().contains(drop.getType())) {
-		// BlockStateMeta im = (BlockStateMeta) drop.getItemMeta();
-		// Container container = (Container) block.getState();
-		// im.setBlockState(container);
-		// if(block.getMetadata("shulker_name") != null) {
-		// for(MetadataValue value : event.getBlock().getMetadata("shulker_name")) {
-		// im.setDisplayName(value.asString());
-		// }
-		// }
-		// drop.setItemMeta(im);
-		// drop = Enchantments.addEnchantmentsToItem(drop,
-		// Arrays.asList(new
-		// EnchantmentLevel(DefaultEnchantments.getCustomEnchantment(DefaultEnchantments.SOULBOUND),
-		// 1)));
-		// Location fallback = block.getLocation().clone().add(0.5, 0.5, 0.5);
-		// Item droppedItem = player.getWorld().dropItem(
-		// fallback,
-		// drop);
-		// droppedItem.setVelocity(new Vector(0,0,0));
-		// droppedItem.teleport(fallback);
-		// i.remove();
-		// }
-		// }
-		// giveItems(event.getPlayer(), item, block, drops);
-		// damageItem(event);
-		// block.setType(Material.AIR);
-		// }
-		// }
-		// }
+		if (ESArrays.getShulkerBoxes().contains(event.getBlock().getType())) {
+			if (!ItemUtils.hasEnchantment(event.getPlayer().getInventory().getItemInMainHand(),
+			RegisterEnchantments.TELEPATHY)) {
+
+			}
+		}
+
+		if (ESArrays.getShulkerBoxes().contains(event.getBlock().getType())) {
+			if (!ItemUtils.hasEnchantment(event.getPlayer().getInventory().getItemInMainHand(),
+			RegisterEnchantments.TELEPATHY)) {
+				Player player = event.getPlayer();
+				ItemStack item = player.getInventory().getItemInMainHand();
+				Block block = event.getBlock();
+				if (block.getMetadata("soulbound").size() > 0) {
+					event.setCancelled(true);
+					Collection<ItemStack> drops = block.getDrops();
+
+					drops = ItemUtils.getSoulboundShulkerBox(player, block, drops);
+					AbilityUtils.giveExperience(player, event.getExpToDrop());
+					player.incrementStatistic(Statistic.MINE_BLOCK, event.getBlock().getType());
+					player.incrementStatistic(Statistic.USE_ITEM, item.getType());
+					DamageUtils.damageItem(player, item);
+					McMMOHandler.handleMcMMO(event, item);
+					JobsUtils.sendBlockBreakAction(event);
+					event.getBlock().setType(Material.AIR);
+					ItemUtils.dropItems(drops, block.getLocation(), true);
+					block.setType(Material.AIR);
+				}
+			}
+		}
 	}
 
 	@EventHandler
 	public void onBlockPlace(BlockPlaceEvent event) {
-		if (ESArrays.getShulkerBoxes().contains(event.getItemInHand().getType())) {
-			ItemMeta meta = event.getItemInHand().getItemMeta();
-			if (meta != null) {
-				String name = meta.getDisplayName();
-				if (name != null && !name.equals("")) {
-					event.getBlockPlaced().setMetadata("shulker_name",
-					new FixedMetadataValue(EnchantmentSolution.getPlugin(), name));
-				}
-				if (ItemUtils.hasEnchantment(event.getItemInHand(), RegisterEnchantments.SOULBOUND)) {
-					event.getBlockPlaced().setMetadata("soulbound",
-					new FixedMetadataValue(EnchantmentSolution.getPlugin(), true));
+		if (ESArrays.getShulkerBoxes() != null && event.getItemInHand() != null) {
+			if (ESArrays.getShulkerBoxes().contains(event.getItemInHand().getType())) {
+				ItemMeta meta = event.getItemInHand().getItemMeta();
+				if (meta != null) {
+					String name = meta.getDisplayName();
+					if (name != null && !name.equals("")) {
+						event.getBlockPlaced().setMetadata("shulker_name",
+						new FixedMetadataValue(EnchantmentSolution.getPlugin(), name));
+					}
+					if (ItemUtils.hasEnchantment(event.getItemInHand(), RegisterEnchantments.SOULBOUND)) {
+						event.getBlockPlaced().setMetadata("soulbound",
+						new FixedMetadataValue(EnchantmentSolution.getPlugin(), true));
+					}
 				}
 			}
 		}

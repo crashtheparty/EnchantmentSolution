@@ -26,8 +26,22 @@ public enum DamageState {
 		return value;
 	}
 
-	public static int getStage(int asInt) {
-		return 0;
+	public static DamageState getState(int asInt) {
+		switch(asInt) {
+			case 4:
+				return DamageState.NORMAL;
+			case 3:
+				return DamageState.MINIMAL;
+			case 2:
+				return DamageState.LOW;
+			case 1:
+				return DamageState.HIGH;
+			case 0:
+				return DamageState.MAXIMAL;
+			case -1:
+				return DamageState.BREAK;
+		}
+		return DamageState.BREAK;
 	}
 
 	public int getStage() {

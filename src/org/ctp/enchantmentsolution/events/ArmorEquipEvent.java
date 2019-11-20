@@ -14,6 +14,16 @@ import org.ctp.enchantmentsolution.utils.ItemSlotType;
 public final class ArmorEquipEvent extends PlayerEvent implements Cancellable {
 
 	private static final HandlerList handlers = new HandlerList();
+
+	public final static HandlerList getHandlerList() {
+		return handlers;
+	}
+
+	@Override
+	public final HandlerList getHandlers() {
+		return handlers;
+	}
+	
 	private boolean cancel = false;
 	private final EquipMethod equipType;
 	private final ItemSlotType type;
@@ -26,15 +36,6 @@ public final class ArmorEquipEvent extends PlayerEvent implements Cancellable {
 		this.type = type;
 		this.oldArmorPiece = oldArmorPiece;
 		this.newArmorPiece = newArmorPiece;
-	}
-
-	public final static HandlerList getHandlerList() {
-		return handlers;
-	}
-
-	@Override
-	public final HandlerList getHandlers() {
-		return handlers;
 	}
 
 	public final void setCancelled(final boolean cancel) {

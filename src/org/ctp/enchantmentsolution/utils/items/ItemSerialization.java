@@ -129,7 +129,8 @@ public class ItemSerialization {
 		for(String itemInfo: serializedItem) {
 			String[] itemAttribute = itemInfo.split("@");
 			if (itemAttribute[0].equals("name") || itemAttribute[0].equals("amount")) {
-				metadata.replace(itemInfo + " ", "");
+				metadata = metadata.replace(itemInfo + " ", "");
+				metadata = metadata.replace(itemInfo, "");
 			}
 		}
 
@@ -137,6 +138,6 @@ public class ItemSerialization {
 	}
 
 	public static ItemStack dataToItem(Material material, int amount, String metadata) {
-		return stringToItem("name@" + material + " amount@" + amount);
+		return stringToItem("name@" + material + " amount@" + amount + " "+ metadata);
 	}
 }

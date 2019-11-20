@@ -4,7 +4,6 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
-import org.ctp.enchantmentsolution.events.ESBlockPlaceEvent;
 
 public abstract class WalkerBlockEvent extends ESBlockPlaceEvent {
 

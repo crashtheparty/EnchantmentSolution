@@ -20,6 +20,9 @@ public class AbilityRunnable implements Runnable, Reflectionable {
 	}
 
 	private void noRest() {
+		if (!RegisterEnchantments.isEnabled(RegisterEnchantments.NO_REST)) {
+			return;
+		}
 		for(Player player: Bukkit.getOnlinePlayers()) {
 			ItemStack helmet = player.getInventory().getHelmet();
 			if (helmet != null && ItemUtils.hasEnchantment(helmet, RegisterEnchantments.NO_REST)) {
@@ -33,6 +36,9 @@ public class AbilityRunnable implements Runnable, Reflectionable {
 	}
 
 	private void unrest() {
+		if (!RegisterEnchantments.isEnabled(RegisterEnchantments.UNREST)) {
+			return;
+		}
 		for(Player player: Bukkit.getOnlinePlayers()) {
 			ItemStack helmet = player.getInventory().getHelmet();
 			if (helmet != null && ItemUtils.hasEnchantment(helmet, RegisterEnchantments.UNREST)) {

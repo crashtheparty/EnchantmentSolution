@@ -4,7 +4,6 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.inventory.ItemStack;
-import org.ctp.enchantmentsolution.events.ModifyBlockEvent;
 
 public class GoldDiggerEvent extends ModifyBlockEvent implements Cancellable {
 

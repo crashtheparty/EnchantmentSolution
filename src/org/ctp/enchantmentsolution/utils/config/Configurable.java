@@ -3,25 +3,15 @@ package org.ctp.enchantmentsolution.utils.config;
 import java.io.File;
 import java.util.List;
 
-import org.ctp.enchantmentsolution.utils.yaml.YamlConfigBackup;
+import org.ctp.enchantmentsolution.utils.yaml.YamlConfig;
 
 public interface Configurable {
 
 	public File getFile();
 
-	public YamlConfigBackup getConfig();
-
-	public void setDefaults();
-
-	public void migrateVersion();
+	public YamlConfig getConfig();
 
 	public void save();
-
-	public void revert();
-
-	public void revert(int backup);
-
-	public void setComments(boolean comments);
 
 	public void reload();
 

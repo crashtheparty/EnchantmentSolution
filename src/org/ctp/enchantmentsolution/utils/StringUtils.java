@@ -210,6 +210,7 @@ public class StringUtils {
 	}
 
 	public static List<String> removeEnchantment(CustomEnchantment enchantment, int level, List<String> lore) {
+		if(lore == null) return lore;
 		Iterator<String> iterator = lore.iterator();
 		while (iterator.hasNext()) {
 			String l = iterator.next();
@@ -217,21 +218,6 @@ public class StringUtils {
 				iterator.remove();
 			}
 		}
-		// String versionOneEnchName = ChatColor.RESET + "" + ChatColor.GRAY +
-		// returnEnchantmentName(enchantment, level);
-		// String legacyEnchName = ChatUtils.hideText("legacy") + "" + ChatColor.GRAY
-		// + returnEnchantmentName(enchantment, level);
-		// String enchName = ChatUtils.hideText("solution") + "" + ChatColor.GRAY
-		// + returnEnchantmentName(enchantment, level);
-		// while (lore.contains(versionOneEnchName)) {
-		// lore.remove(versionOneEnchName);
-		// }
-		// while (lore.contains(legacyEnchName)) {
-		// lore.remove(legacyEnchName);
-		// }
-		// while (lore.contains(enchName)) {
-		// lore.remove(enchName);
-		// }
 		return lore;
 	}
 

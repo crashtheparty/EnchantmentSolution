@@ -1,5 +1,6 @@
 package org.ctp.enchantmentsolution.listeners.enchantments;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -7,7 +8,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
+import org.bukkit.Sound;
 import org.bukkit.Statistic;
+import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.*;
@@ -18,6 +21,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerItemDamageEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.potion.PotionEffectType;
@@ -29,6 +33,7 @@ import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.events.damage.*;
 import org.ctp.enchantmentsolution.events.modify.LagEvent;
 import org.ctp.enchantmentsolution.events.potion.MagicGuardPotionEvent;
+import org.ctp.enchantmentsolution.events.teleport.WarpEvent;
 import org.ctp.enchantmentsolution.listeners.Enchantmentable;
 import org.ctp.enchantmentsolution.mcmmo.McMMOHandler;
 import org.ctp.enchantmentsolution.nms.AnimalMobNMS;
@@ -195,6 +200,139 @@ public class DamageListener extends Enchantmentable {
 		}
 	}
 
+	private void irenesLasso(EntityDamageByEntityEvent event) {
+		if (!canRun(RegisterEnchantments.IRENES_LASSO, event)) {
+			return;
+		}
+		Entity attacker = event.getDamager();
+		Entity attacked = event.getEntity();
+		if (attacker instanceof Player && attacked instanceof Animals) {
+			Player player = (Player) attacker;
+			Animals animals = (Animals) attacked;
+			ItemStack attackItem = player.getInventory().getItemInMainHand();
+			if (attackItem != null && ItemUtils.hasEnchantment(attackItem, RegisterEnchantments.IRENES_LASSO)) {
+				event.setCancelled(true);
+				int max = ItemUtils.getLevel(attackItem, RegisterEnchantments.IRENES_LASSO);
+				int current = 0;
+				for(AnimalMob animal: EnchantmentSolution.getAnimals()) {
+					if (animal.inItem(attackItem)) {
+						current++;
+					}
+				}
+				if (current >= max) {
+					return;
+				}
+				LassoDamageEvent lasso = new LassoDamageEvent(animals, player);
+				Bukkit.getPluginManager().callEvent(lasso);
+				if (!lasso.isCancelled()) {
+					if (attacked instanceof Tameable) {
+						if (((Tameable) attacked).getOwner() != null
+								&& !((Tameable) attacked).getOwner().getUniqueId().equals(player.getUniqueId())) {
+							ChatUtils.sendMessage(player,
+									ChatUtils.getMessage(ChatUtils.getCodes(), "irenes_lasso.error"));
+							return;
+						}
+						String type = attacked.getType().name().toLowerCase();
+						AdvancementUtils.awardCriteria(player, ESAdvancement.THORGY, type);
+						AdvancementUtils.awardCriteria(player, ESAdvancement.FREE_PETS, type);
+					}
+					McMMOHandler.customName(attacked);
+					EnchantmentSolution.addAnimals(AnimalMobNMS.getMob(animals, attackItem));
+					attacked.remove();
+				}
+			}
+		}
+	}
+
+	private void ironDefense(EntityDamageByEntityEvent event) {
+		if (!canRun(RegisterEnchantments.IRON_DEFENSE, event)) {
+			return;
+		}
+		if (!ESArrays.getContactCauses().contains(event.getCause())) {
+			return;
+		}
+		Entity attacked = event.getEntity();
+		Entity attacker = event.getDamager();
+		if (attacker instanceof AreaEffectCloud) {
+			return;
+		}
+		if (attacked instanceof HumanEntity) {
+			HumanEntity player = (HumanEntity) attacked;
+			ItemStack shield = player.getEquipment().getItemInOffHand();
+			if (shield == null) {
+				return;
+			}
+			if (player.isBlocking()) {
+				return;
+			}
+			if (ItemUtils.hasEnchantment(shield, RegisterEnchantments.IRON_DEFENSE)) {
+				int level = ItemUtils.getLevel(shield, RegisterEnchantments.IRON_DEFENSE);
+				double percentage = .1 + .05 * level;
+				double originalDamage = event.getDamage();
+				double damage = originalDamage * percentage;
+				int shieldDamage = (int) damage;
+				if (shieldDamage < damage) {
+					shieldDamage += 1;
+				}
+
+				IronDefenseEvent ironDefense = new IronDefenseEvent(player, originalDamage, damage, shield,
+						shieldDamage);
+				Bukkit.getPluginManager().callEvent(ironDefense);
+
+				if (!ironDefense.isCancelled()) {
+					event.setDamage(originalDamage - damage);
+					DamageUtils.damageItem(player, shield, shieldDamage);
+
+					if (player instanceof Player) {
+						if ((int) (damage * 10) > 0
+								&& EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber() > 1) {
+							((Player) player).incrementStatistic(Statistic.DAMAGE_BLOCKED_BY_SHIELD,
+									(int) (damage * 10));
+						}
+						if (player.getHealth() <= originalDamage && player.getHealth() > originalDamage - damage) {
+							AdvancementUtils.awardCriteria((Player) player, ESAdvancement.IRON_MAN, "blocked");
+						}
+					}
+				}
+			}
+		}
+	}
+
+	private void knockUp(EntityDamageByEntityEvent event) {
+		if (!canRun(RegisterEnchantments.KNOCKUP, event)) {
+			return;
+		}
+		Entity attacker = event.getDamager();
+		Entity attacked = event.getEntity();
+		if (attacker instanceof Player && attacked instanceof LivingEntity) {
+			Player player = (Player) attacker;
+			ItemStack attackItem = player.getInventory().getItemInMainHand();
+			if (ItemUtils.hasEnchantment(attackItem, RegisterEnchantments.KNOCKUP)) {
+				int level = ItemUtils.getLevel(attackItem, RegisterEnchantments.KNOCKUP);
+				double levelMultiplier = 0.18;
+				KnockUpEvent knockUp = new KnockUpEvent((LivingEntity) attacked, player, event.getDamage(),
+						0.275184010449 + levelMultiplier * level);
+				Bukkit.getPluginManager().callEvent(knockUp);
+				if (!knockUp.isCancelled()) {
+					event.setDamage(knockUp.getNewDamage());
+					Bukkit.getScheduler().runTaskLater(EnchantmentSolution.getPlugin(), new Runnable() {
+
+						@Override
+						public void run() {
+							double knockup = knockUp.getKnockUp();
+							if (attacked.isDead()) {
+								knockup /= 1.5;
+							}
+							attacked.setVelocity(
+									new Vector(attacked.getVelocity().getX(), knockup, attacked.getVelocity().getZ()));
+						}
+
+					}, 0l);
+				}
+			}
+		}
+	}
+
 	private void magicGuard(EntityDamageByEntityEvent event) {
 		if (!canRun(RegisterEnchantments.MAGIC_GUARD, event)) {
 			return;
@@ -302,184 +440,6 @@ public class DamageListener extends Enchantmentable {
 		}
 	}
 
-	private void knockUp(EntityDamageByEntityEvent event) {
-		if (!canRun(RegisterEnchantments.KNOCKUP, event)) {
-			return;
-		}
-		Entity attacker = event.getDamager();
-		Entity attacked = event.getEntity();
-		if (attacker instanceof Player && attacked instanceof LivingEntity) {
-			Player player = (Player) attacker;
-			ItemStack attackItem = player.getInventory().getItemInMainHand();
-			if (ItemUtils.hasEnchantment(attackItem, RegisterEnchantments.KNOCKUP)) {
-				int level = ItemUtils.getLevel(attackItem, RegisterEnchantments.KNOCKUP);
-				double levelMultiplier = 0.18;
-				KnockUpEvent knockUp = new KnockUpEvent((LivingEntity) attacked, player, event.getDamage(),
-						0.275184010449 + levelMultiplier * level);
-				Bukkit.getPluginManager().callEvent(knockUp);
-				if (!knockUp.isCancelled()) {
-					event.setDamage(knockUp.getNewDamage());
-					Bukkit.getScheduler().runTaskLater(EnchantmentSolution.getPlugin(), new Runnable() {
-
-						@Override
-						public void run() {
-							double knockup = knockUp.getKnockUp();
-							if (attacked.isDead()) {
-								knockup /= 1.5;
-							}
-							attacked.setVelocity(
-									new Vector(attacked.getVelocity().getX(), knockup, attacked.getVelocity().getZ()));
-						}
-
-					}, 0l);
-				}
-			}
-		}
-	}
-
-	private void irenesLasso(EntityDamageByEntityEvent event) {
-		if (!canRun(RegisterEnchantments.IRENES_LASSO, event)) {
-			return;
-		}
-		Entity attacker = event.getDamager();
-		Entity attacked = event.getEntity();
-		if (attacker instanceof Player && attacked instanceof Animals) {
-			Player player = (Player) attacker;
-			Animals animals = (Animals) attacked;
-			ItemStack attackItem = player.getInventory().getItemInMainHand();
-			if (attackItem != null && ItemUtils.hasEnchantment(attackItem, RegisterEnchantments.IRENES_LASSO)) {
-				event.setCancelled(true);
-				int max = ItemUtils.getLevel(attackItem, RegisterEnchantments.IRENES_LASSO);
-				int current = 0;
-				for(AnimalMob animal: EnchantmentSolution.getAnimals()) {
-					if (animal.inItem(attackItem)) {
-						current++;
-					}
-				}
-				if (current >= max) {
-					return;
-				}
-				LassoDamageEvent lasso = new LassoDamageEvent(animals, player);
-				Bukkit.getPluginManager().callEvent(lasso);
-				if (!lasso.isCancelled()) {
-					if (attacked instanceof Tameable) {
-						if (((Tameable) attacked).getOwner() != null
-								&& !((Tameable) attacked).getOwner().getUniqueId().equals(player.getUniqueId())) {
-							ChatUtils.sendMessage(player,
-									ChatUtils.getMessage(ChatUtils.getCodes(), "irenes_lasso.error"));
-							return;
-						}
-						String type = attacked.getType().name().toLowerCase();
-						AdvancementUtils.awardCriteria(player, ESAdvancement.THORGY, type);
-						AdvancementUtils.awardCriteria(player, ESAdvancement.FREE_PETS, type);
-					}
-					McMMOHandler.customName(attacked);
-					EnchantmentSolution.addAnimals(AnimalMobNMS.getMob(animals, attackItem));
-					attacked.remove();
-				}
-			}
-		}
-	}
-
-	private void ironDefense(EntityDamageByEntityEvent event) {
-		if (!canRun(RegisterEnchantments.IRON_DEFENSE, event)) {
-			return;
-		}
-		if (!ESArrays.getContactCauses().contains(event.getCause())) {
-			return;
-		}
-		Entity attacked = event.getEntity();
-		Entity attacker = event.getDamager();
-		if (attacker instanceof AreaEffectCloud) {
-			return;
-		}
-		if (attacked instanceof HumanEntity) {
-			HumanEntity player = (HumanEntity) attacked;
-			ItemStack shield = player.getEquipment().getItemInOffHand();
-			if (shield == null) {
-				return;
-			}
-			if (player.isBlocking()) {
-				return;
-			}
-			if (ItemUtils.hasEnchantment(shield, RegisterEnchantments.IRON_DEFENSE)) {
-				int level = ItemUtils.getLevel(shield, RegisterEnchantments.IRON_DEFENSE);
-				double percentage = .1 + .05 * level;
-				double originalDamage = event.getDamage();
-				double damage = originalDamage * percentage;
-				int shieldDamage = (int) damage;
-				if (shieldDamage < damage) {
-					shieldDamage += 1;
-				}
-
-				IronDefenseEvent ironDefense = new IronDefenseEvent(player, originalDamage, damage, shield,
-						shieldDamage);
-				Bukkit.getPluginManager().callEvent(ironDefense);
-
-				if (!ironDefense.isCancelled()) {
-					event.setDamage(originalDamage - damage);
-					DamageUtils.damageItem(player, shield, shieldDamage);
-
-					if (player instanceof Player) {
-						if ((int) (damage * 10) > 0
-								&& EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber() > 1) {
-							((Player) player).incrementStatistic(Statistic.DAMAGE_BLOCKED_BY_SHIELD,
-									(int) (damage * 10));
-						}
-						if (player.getHealth() <= originalDamage && player.getHealth() > originalDamage - damage) {
-							AdvancementUtils.awardCriteria((Player) player, ESAdvancement.IRON_MAN, "blocked");
-						}
-					}
-				}
-			}
-		}
-	}
-
-	private void sacrifice(PlayerDeathEvent event) {
-		if (!canRun(RegisterEnchantments.SACRIFICE, event)) {
-			return;
-		}
-		Player player = event.getEntity();
-		ItemStack chest = player.getInventory().getChestplate();
-		if (chest != null) {
-			if (ItemUtils.hasEnchantment(chest, RegisterEnchantments.SACRIFICE)) {
-				int level = ItemUtils.getLevel(chest, RegisterEnchantments.SACRIFICE);
-				int playerLevel = player.getLevel();
-				double damage = (playerLevel) / (8.0D / level);
-				Entity killer = player.getKiller();
-				if (killer != null) {
-					if (killer instanceof Damageable) {
-						((Damageable) killer).damage(damage);
-						if (((Damageable) killer).getHealth() <= 0) {
-							// SACRIFICE_ADVANCEMENT.add(player.getUniqueId());
-						}
-					}
-				} else {
-					if (event.getEntity().getLastDamageCause() instanceof EntityDamageByEntityEvent) {
-						EntityDamageByEntityEvent nEvent = (EntityDamageByEntityEvent) event.getEntity()
-								.getLastDamageCause();
-						if (nEvent.getDamager() instanceof Projectile) {
-							Projectile proj = (Projectile) nEvent.getDamager();
-							if (proj.getShooter() instanceof Damageable) {
-								((Damageable) proj.getShooter()).damage(damage);
-								if (((Damageable) proj.getShooter()).getHealth() <= 0) {
-									// SACRIFICE_ADVANCEMENT.add(player.getUniqueId());
-								}
-							}
-						} else {
-							if (nEvent.getDamager() instanceof Damageable) {
-								((Damageable) nEvent.getDamager()).damage(damage);
-								if (((Damageable) nEvent.getDamager()).getHealth() <= 0) {
-									// SACRIFICE_ADVANCEMENT.add(player.getUniqueId());
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-	}
-
 	private void shockAspect(EntityDamageByEntityEvent event) {
 		if (!canRun(RegisterEnchantments.SHOCK_ASPECT, event)) {
 			return;
@@ -569,8 +529,7 @@ public class DamageListener extends Enchantmentable {
 			}
 		}
 	}
-
-	@EventHandler
+	
 	private void tank(PlayerItemDamageEvent event) {
 		if (!canRun(RegisterEnchantments.TANK, event)) {
 			return;
@@ -591,6 +550,67 @@ public class DamageListener extends Enchantmentable {
 
 			if (!tank.isCancelled()) {
 				event.setDamage(tank.getNewDamage());
+			}
+		}
+	}
+	
+	private void warp(EntityDamageByEntityEvent event) {
+		if(!canRun(RegisterEnchantments.WARP, event)) return;
+		if(event.getDamage() == 0) return;
+		Entity attacked = event.getEntity();
+		if(attacked instanceof LivingEntity){
+			LivingEntity player = (LivingEntity) attacked;
+			ItemStack leggings = player.getEquipment().getLeggings();
+			if(leggings == null) return;
+			if(ItemUtils.hasEnchantment(leggings, RegisterEnchantments.WARP)){
+				int level = ItemUtils.getLevel(leggings, RegisterEnchantments.WARP);
+				List<Location> locsToTp = new ArrayList<Location>();
+				for(int x = - (level + 4); x <= level + 5; x++){
+					for(int y = - (level + 4); y <= level + 5; y++){
+						if(y < 1) continue;
+						for(int z = - (level + 4); z <= level + 5; z++){
+							if(x == y && x == 0 && z == 0){
+								continue;
+							}
+							Location tp = new Location(player.getWorld(), player.getLocation().getBlockX() + x, player.getLocation().getBlockY() + y, 
+									player.getLocation().getBlockZ() + z);
+							World playerWorld = player.getWorld();
+							World tpWorld = tp.getWorld();
+							int blockX = tp.getBlockX();
+							int blockY = tp.getBlockY();
+							int blockZ = tp.getBlockZ();
+							if(playerWorld.getBlockAt(new Location(tpWorld, blockX, blockY + 1, blockZ)).getType().isSolid()
+									&& player.getWorld().getBlockAt(new Location(tpWorld, blockX, blockY, blockZ)).getType().isSolid()
+									&& !(player.getWorld().getBlockAt(new Location(tpWorld, blockX, blockY - 1, blockZ)).getType().isSolid())){
+								locsToTp.add(tp);
+							}
+							
+						}
+					}
+				}
+				double chance = .25;
+				double random = Math.random();
+				if(chance > random && locsToTp.size() > 0){
+					int randomLoc = (int) (Math.random() * locsToTp.size());
+					Location toTeleport = locsToTp.get(randomLoc);
+					
+					WarpEvent warp = new WarpEvent(player, player.getLocation(), toTeleport, locsToTp);
+					Bukkit.getPluginManager().callEvent(warp);
+					
+					if(!warp.isCancelled()) {
+						World world = warp.getTo().getWorld();
+						world.spawnParticle(Particle.PORTAL, warp.getTo(), 50, 0.2, 2, 0.2);
+						world.spawnParticle(Particle.PORTAL, warp.getFrom(), 50, 0.2, 2, 0.2);
+						world.playSound(warp.getTo(), Sound.ENTITY_ENDERMAN_TELEPORT, 1, 1);
+						
+						warp.getTo().setYaw(warp.getEntity().getLocation().getYaw());
+						warp.getTo().setPitch(warp.getEntity().getLocation().getPitch());
+						warp.getEntity().teleport(warp.getTo());
+						if(warp.getEntity() instanceof Player && event.getDamager() instanceof Enderman) {
+							AdvancementUtils.awardCriteria((Player) warp.getEntity(), ESAdvancement.IM_YOU_BUT_SHORTER, "enderpearl"); 
+						}
+					}
+				}
 			}
 		}
 	}

@@ -1,4 +1,4 @@
-package org.ctp.enchantmentsolution.events;
+package org.ctp.enchantmentsolution.events.blocks;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
