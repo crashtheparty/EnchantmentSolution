@@ -227,4 +227,14 @@ public class ConfigUtils {
 	public static String getLanguageString(String s) {
 		return EnchantmentSolution.getPlugin().getConfigFiles().getLanguageFile().getString(s);
 	}
+
+	public static boolean getLoreOnTop() {
+		return EnchantmentSolution.getPlugin().getConfigFiles().getDefaultConfig()
+		.getBoolean("lore_on_top");
+	}
+
+	public static boolean willAnvilBreak() {
+		return EnchantmentSolution.getPlugin().getConfigFiles().getDefaultConfig()
+		.getBoolean("anvil.damage");
+	}
 }

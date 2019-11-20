@@ -14,6 +14,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -347,7 +348,7 @@ public class Enchantments {
 			EnchantmentStorageMeta enchantmentStorage = (EnchantmentStorageMeta) meta;
 			for(EnchantmentLevel level : levels){
 				enchantmentStorage.addStoredEnchant(level.getEnchant().getRelativeEnchantment(), level.getLevel(), true);
-				if(level.getEnchant().getRelativeEnchantment() instanceof CustomEnchantmentWrapper) {
+				if(!item.getItemMeta().hasItemFlag(ItemFlag.HIDE_ENCHANTS) && level.getEnchant().getRelativeEnchantment() instanceof CustomEnchantmentWrapper) {
 					String enchName = StringUtils.returnEnchantmentName(level.getEnchant(), level.getLevel());
 					lore.add(ChatUtils.hideText("solution") + "" + ChatColor.GRAY + enchName);
 				}
@@ -356,7 +357,7 @@ public class Enchantments {
 		} else {
 			for(EnchantmentLevel level : levels){
 				meta.addEnchant(level.getEnchant().getRelativeEnchantment(), level.getLevel(), true);
-				if(level.getEnchant().getRelativeEnchantment() instanceof CustomEnchantmentWrapper) {
+				if(!item.getItemMeta().hasItemFlag(ItemFlag.HIDE_ENCHANTS) && level.getEnchant().getRelativeEnchantment() instanceof CustomEnchantmentWrapper) {
 					String enchName = StringUtils.returnEnchantmentName(level.getEnchant(), level.getLevel());
 					lore.add(ChatUtils.hideText("solution") + "" + ChatColor.GRAY + enchName);
 				}
@@ -387,7 +388,7 @@ public class Enchantments {
 				enchantmentStorage.removeStoredEnchant(enchantment.getRelativeEnchantment());
 			}
 			enchantmentStorage.addStoredEnchant(enchantment.getRelativeEnchantment(), level, true);
-			if(enchantment.getRelativeEnchantment() instanceof CustomEnchantmentWrapper) {
+			if(!item.getItemMeta().hasItemFlag(ItemFlag.HIDE_ENCHANTS) && enchantment.getRelativeEnchantment() instanceof CustomEnchantmentWrapper) {
 				String enchName = StringUtils.returnEnchantmentName(enchantment, level);
 				lore.add(ChatUtils.hideText("solution") + "" + ChatColor.GRAY + enchName);
 			}
@@ -398,7 +399,7 @@ public class Enchantments {
 				meta.removeEnchant(enchantment.getRelativeEnchantment());
 			}
 			meta.addEnchant(enchantment.getRelativeEnchantment(), level, true);
-			if(enchantment.getRelativeEnchantment() instanceof CustomEnchantmentWrapper) {
+			if(!item.getItemMeta().hasItemFlag(ItemFlag.HIDE_ENCHANTS) && enchantment.getRelativeEnchantment() instanceof CustomEnchantmentWrapper) {
 				String enchName = StringUtils.returnEnchantmentName(enchantment, level);
 				lore.add(ChatUtils.hideText("solution") + "" + ChatColor.GRAY + enchName);
 			}
@@ -671,18 +672,20 @@ public class Enchantments {
 			meta.setLore(new ArrayList<String>());
 			return meta;
 		}
-		List<String> enchantmentsFirst = new ArrayList<String>();
-		for(String l : lore) {
-			if(StringUtils.isEnchantment(l)) {
-				enchantmentsFirst.add(l);
+		if(ConfigUtils.getLoreOnTop()) {
+			List<String> enchantmentsFirst = new ArrayList<String>();
+			for(String l : lore) {
+				if(StringUtils.isEnchantment(l)) {
+					enchantmentsFirst.add(l);
+				}
 			}
-		}
-		for(String l : lore) {
-			if(!StringUtils.isEnchantment(l)) {
-				enchantmentsFirst.add(l);
+			for(String l : lore) {
+				if(!StringUtils.isEnchantment(l)) {
+					enchantmentsFirst.add(l);
+				}
 			}
+			meta.setLore(enchantmentsFirst);
 		}
-		meta.setLore(enchantmentsFirst);
 		return meta;
 	}
 

@@ -15,7 +15,7 @@ import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 public abstract class AbilityPlayer {
 
 	private Player player;
-	private ItemStack item, previousItem;
+	protected ItemStack item, previousItem;
 	private Enchantment enchantment;
 	private boolean alwaysRefresh;
 	

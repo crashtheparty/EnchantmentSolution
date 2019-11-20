@@ -39,7 +39,7 @@ public class UnrestPlayer extends AbilityPlayer{
 		}else if(item == null && previousItem == null && constructor) {
 			doUnequip();
 		}
-		setItem(item);
+		this.item = item;
 	}
 	
 	@Override

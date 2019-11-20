@@ -200,7 +200,7 @@ public class PlayerLevels {
 	public static void removePlayerLevels(Player player){
 		for(int i = PLAYER_LEVELS.size() - 1; i >= 0; i--) {
 			PlayerLevels levels = PLAYER_LEVELS.get(i);
-			if(levels.getPlayer().getUniqueId().equals(player.getUniqueId())) {
+			if(levels.getPlayer().getUniqueId().toString().equals(player.getUniqueId().toString())) {
 				PLAYER_LEVELS.remove(i);
 			}
 		}

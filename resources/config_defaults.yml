@@ -2,6 +2,7 @@ anvil:
     level_divisor: 4
     max_repair_level: 60
     default_use: false
+    damage: true
 enchanting_table: 
     enchanting_type: 'enhanced_50'
     lapis_in_table: true
@@ -25,6 +26,7 @@ grindstone:
     set_repair_cost: true
     destroy_take_item: true
 update_legacy_enchantments: false
+lore_on_top: true
 chest_loot: true
 mob_loot: true
 fishing_loot: true
@@ -91,6 +93,9 @@ config_comments:
         - 'Allow default use of anvil GUI via option at bottom right of custom GUI.'
         - 'Only used when enchanting type is enhanced.'
         - 'Should only be true if anvil is used for custom recipes.'
+
+        damage: 
+        - 'Custom anvil GUI will cause damage to the anvil.'
 
     enchanting_table: 
         enchanting_type: 
@@ -164,6 +169,9 @@ config_comments:
 
     update_legacy_enchantments: 
     - 'Update any enchantments generated in EnchantmentSolutionLegacy'
+
+    lore_on_top: 
+    - 'Custom Enchantment names will always appear at the top of the lore'
 
     chest_loot: 
     - 'Allow custom and/or high level enchants to spawn in chests'

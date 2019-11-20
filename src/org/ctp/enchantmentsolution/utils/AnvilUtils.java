@@ -107,7 +107,7 @@ public class AnvilUtils {
 	}
 	
 	public static void checkAnvilBreak(Player player, Block block, Anvil anvil) {
-		if(player.getGameMode().equals(GameMode.CREATIVE)) {
+		if(!ConfigUtils.willAnvilBreak() || player.getGameMode().equals(GameMode.CREATIVE)) {
 			block.getWorld().playSound(block.getLocation(), Sound.BLOCK_ANVIL_USE, 1, 1);
 			return;
 		}
