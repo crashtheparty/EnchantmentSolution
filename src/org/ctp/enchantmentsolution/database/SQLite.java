@@ -12,9 +12,8 @@ import java.util.logging.Level;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.database.tables.BackupTable;
 import org.ctp.enchantmentsolution.database.tables.Table;
-import org.ctp.enchantmentsolution.utils.config.YamlConfigBackup;
-import org.ctp.enchantmentsolution.utils.config.YamlInfo;
-
+import org.ctp.enchantmentsolution.utils.yaml.YamlConfigBackup;
+import org.ctp.enchantmentsolution.utils.yaml.YamlInfo;
 
 public class SQLite extends Database {
 
@@ -29,36 +28,36 @@ public class SQLite extends Database {
 
 		dbname = "enchantment_solution"; // Set the table name here e.g player_kills
 	}
-	
+
 	private <T> Table getTable(Class<T> cls) {
-		for(Table table : tables) {
-			if(table.getClass().equals(cls)) {
+		for(Table table: tables) {
+			if (table.getClass().equals(cls)) {
 				return table;
 			}
 		}
 		return null;
 	}
-	
+
 	public boolean isConfigDifferent(YamlConfigBackup config) {
 		Table table = getTable(BackupTable.class);
-		if(table instanceof BackupTable) {
+		if (table instanceof BackupTable) {
 			BackupTable bTable = (BackupTable) table;
 			return bTable.isConfigDifferent(config, bTable.getBackupNum(config) - 1, true);
 		}
 		return false;
 	}
-	
+
 	public void updateConfig(YamlConfigBackup config) {
 		Table table = getTable(BackupTable.class);
-		if(table instanceof BackupTable) {
+		if (table instanceof BackupTable) {
 			BackupTable bTable = (BackupTable) table;
 			bTable.setBackup(config);
 		}
 	}
-	
-	public List<Integer> getBackups(YamlConfigBackup config){
+
+	public List<Integer> getBackups(YamlConfigBackup config) {
 		Table table = getTable(BackupTable.class);
-		if(table instanceof BackupTable) {
+		if (table instanceof BackupTable) {
 			BackupTable bTable = (BackupTable) table;
 			int backup = bTable.getBackupNum(config);
 			List<Integer> backups = new ArrayList<Integer>();
@@ -69,10 +68,10 @@ public class SQLite extends Database {
 		}
 		return null;
 	}
-	
-	public List<YamlInfo> getBackup(YamlConfigBackup config, int backup){
+
+	public List<YamlInfo> getBackup(YamlConfigBackup config, int backup) {
 		Table table = getTable(BackupTable.class);
-		if(table instanceof BackupTable) {
+		if (table instanceof BackupTable) {
 			BackupTable bTable = (BackupTable) table;
 			return bTable.getBackup(config, backup);
 		}
@@ -86,8 +85,7 @@ public class SQLite extends Database {
 			try {
 				dataFolder.createNewFile();
 			} catch (IOException e) {
-				plugin.getLogger().log(Level.SEVERE,
-						"File write error: " + dbname + ".db");
+				plugin.getLogger().log(Level.SEVERE, "File write error: " + dbname + ".db");
 			}
 		}
 		try {
@@ -95,28 +93,24 @@ public class SQLite extends Database {
 				return connection;
 			}
 			Class.forName("org.sqlite.JDBC");
-			connection = DriverManager.getConnection("jdbc:sqlite:"
-					+ dataFolder);
+			connection = DriverManager.getConnection("jdbc:sqlite:" + dataFolder);
 			return connection;
 		} catch (SQLException ex) {
-			plugin.getLogger().log(Level.SEVERE,
-					"SQLite exception on initialize", ex);
+			plugin.getLogger().log(Level.SEVERE, "SQLite exception on initialize", ex);
 		} catch (ClassNotFoundException ex) {
-			plugin.getLogger()
-					.log(Level.SEVERE,
-							"You need the SQLite JBDC library. Google it. Put it in /lib folder.");
+			plugin.getLogger().log(Level.SEVERE, "You need the SQLite JBDC library. Google it. Put it in /lib folder.");
 		}
 		return null;
 	}
 
 	public void load() {
 		connection = getSQLConnection();
-		for (Table t : tables) {
+		for(Table t: tables) {
 			t.createTable(connection);
 		}
 		initialize();
 	}
-	
+
 	public EnchantmentSolution getPlugin() {
 		return plugin;
 	}

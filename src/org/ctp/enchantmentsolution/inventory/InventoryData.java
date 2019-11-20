@@ -10,17 +10,17 @@ import org.bukkit.inventory.ItemStack;
 public interface InventoryData {
 
 	public Player getPlayer();
-	
+
 	public Block getBlock();
-		
+
 	public void close(boolean external);
-	
+
 	public Inventory getInventory();
 
 	public void setInventory(List<ItemStack> items);
 
 	public void setItemName(String name);
-	
+
 	public Inventory open(Inventory inv);
 
 	public List<ItemStack> getItems();

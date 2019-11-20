@@ -25,15 +25,13 @@ abstract class Database {
 	void initialize() {
 		connection = getSQLConnection();
 		try {
-			PreparedStatement ps = connection.prepareStatement("SELECT * FROM "
-					+ table);
+			PreparedStatement ps = connection.prepareStatement("SELECT * FROM " + table);
 			ResultSet rs = ps.executeQuery();
 			ps.close();
 			rs.close();
 
 		} catch (SQLException ex) {
-			plugin.getLogger().log(Level.SEVERE,
-					"Unable to retreive connection", ex);
+			plugin.getLogger().log(Level.SEVERE, "Unable to retreive connection", ex);
 		}
 	}
 }

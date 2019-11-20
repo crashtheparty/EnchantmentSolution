@@ -7,15 +7,15 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 
-public class CustomEnchantmentWrapper extends Enchantment{
+public class CustomEnchantmentWrapper extends Enchantment {
 
 	private String name;
-	
+
 	CustomEnchantmentWrapper(String namespace, String name) {
 		super(new NamespacedKey(EnchantmentSolution.getPlugin(), namespace));
 		this.name = name;
 	}
-	
+
 	public CustomEnchantmentWrapper(JavaPlugin plugin, String namespace, String name) {
 		super(new NamespacedKey(plugin, namespace));
 		this.name = name;

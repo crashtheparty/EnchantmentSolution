@@ -1,142 +1,110 @@
 package org.ctp.enchantmentsolution;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.Callable;
 import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
-import org.ctp.enchantmentsolution.inventory.InventoryData;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.advancements.ESAdvancementProgress;
 import org.ctp.enchantmentsolution.commands.*;
 import org.ctp.enchantmentsolution.database.SQLite;
-import org.ctp.enchantmentsolution.enchantments.DefaultEnchantments;
+import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
+import org.ctp.enchantmentsolution.inventory.InventoryData;
 import org.ctp.enchantmentsolution.listeners.*;
-import org.ctp.enchantmentsolution.listeners.abilities.*;
-import org.ctp.enchantmentsolution.listeners.abilities.BlockListener;
-import org.ctp.enchantmentsolution.listeners.abilities.support.VeinMinerListener;
-import org.ctp.enchantmentsolution.listeners.advancements.AdvancementEntityDeath;
-import org.ctp.enchantmentsolution.listeners.advancements.AdvancementPlayerEvent;
-import org.ctp.enchantmentsolution.listeners.advancements.AdvancementThread;
-import org.ctp.enchantmentsolution.listeners.chestloot.ChestLootListener;
-import org.ctp.enchantmentsolution.listeners.fishing.EnchantsFishingListener;
-import org.ctp.enchantmentsolution.listeners.fishing.McMMOFishingNMS;
-import org.ctp.enchantmentsolution.listeners.legacy.UpdateEnchantments;
-import org.ctp.enchantmentsolution.listeners.mobs.MobSpawning;
-import org.ctp.enchantmentsolution.listeners.mobs.Villagers;
-import org.ctp.enchantmentsolution.listeners.vanilla.AnvilListener;
-import org.ctp.enchantmentsolution.listeners.vanilla.EnchantmentListener;
-import org.ctp.enchantmentsolution.listeners.vanilla.GrindstoneListener;
-import org.ctp.enchantmentsolution.nms.McMMO;
+import org.ctp.enchantmentsolution.listeners.enchantments.*;
+import org.ctp.enchantmentsolution.listeners.inventory.*;
+import org.ctp.enchantmentsolution.mcmmo.McMMOAbility;
 import org.ctp.enchantmentsolution.nms.animalmob.AnimalMob;
-import org.ctp.enchantmentsolution.utils.AdvancementUtils;
-import org.ctp.enchantmentsolution.utils.ChatUtils;
-import org.ctp.enchantmentsolution.utils.ConfigUtils;
-import org.ctp.enchantmentsolution.utils.Metrics;
-import org.ctp.enchantmentsolution.utils.save.ConfigFiles;
-import org.ctp.enchantmentsolution.utils.save.SaveUtils;
-import org.ctp.enchantmentsolution.version.BukkitVersion;
-import org.ctp.enchantmentsolution.version.PluginVersion;
+import org.ctp.enchantmentsolution.threads.*;
+import org.ctp.enchantmentsolution.utils.*;
+import org.ctp.enchantmentsolution.utils.abillityhelpers.DrownedEntity;
+import org.ctp.enchantmentsolution.utils.abillityhelpers.EntityAccuracy;
+import org.ctp.enchantmentsolution.utils.compatibility.AuctionHouseUtils;
+import org.ctp.enchantmentsolution.utils.config.MainConfiguration;
+import org.ctp.enchantmentsolution.utils.files.SaveUtils;
+import org.ctp.enchantmentsolution.version.*;
 
 public class EnchantmentSolution extends JavaPlugin {
 
 	private static EnchantmentSolution PLUGIN;
-	private List<InventoryData> inventories = new ArrayList<InventoryData>();
 	private static List<ESAdvancementProgress> PROGRESS = new ArrayList<ESAdvancementProgress>();
 	private static List<AnimalMob> ANIMALS = new ArrayList<AnimalMob>();
-	private boolean disable = false, initialization = true;
-	private SQLite db;
-	private String mcmmoType;
+	private static List<DrownedEntity> DROWNED = new ArrayList<DrownedEntity>();
+	private static List<EntityAccuracy> ACCURACY = new ArrayList<EntityAccuracy>();
+	private static HashMap<String, List<ItemStack>> SOUL_ITEMS = new HashMap<>();
+	private List<InventoryData> inventories = new ArrayList<InventoryData>();
+	private boolean initialization = true;
 	private BukkitVersion bukkitVersion;
 	private PluginVersion pluginVersion;
+	private SQLite db;
 	private Plugin jobsReborn;
-	private ConfigFiles files;
 	private VersionCheck check;
-	private String mcmmoVersion;
+	private String mcmmoVersion, mcmmoType;
 	private Plugin veinMiner;
 
 	public void onEnable() {
 		PLUGIN = this;
 		bukkitVersion = new BukkitVersion();
 		pluginVersion = new PluginVersion(this, getDescription().getVersion());
-		if(!bukkitVersion.isVersionAllowed()) {
-			Bukkit.getLogger().log(Level.WARNING, "Bukkit Version " + bukkitVersion.getVersion() + " is not compatible with this plugin. Please use a version that is compatible.");
-			Bukkit.getPluginManager().disablePlugin(PLUGIN);
-			return;
-		}
-		
-		if (!getDataFolder().exists()) {
-			getDataFolder().mkdirs();
-		}
-		
-		db = new SQLite(this);
-		db.load();
-		DefaultEnchantments.addDefaultEnchantments();
-		
-		files = new ConfigFiles(this);
-		files.createConfigFiles();
-		
-		if(disable) {
+		if (!bukkitVersion.isVersionAllowed()) {
+			Bukkit.getLogger().log(Level.WARNING, "Bukkit Version " + bukkitVersion.getVersion()
+			+ " is not compatible with this plugin. Please use a version that is compatible.");
 			Bukkit.getPluginManager().disablePlugin(PLUGIN);
 			return;
 		}
 
+		if (!getDataFolder().exists()) {
+			getDataFolder().mkdirs();
+		}
+
+		db = new SQLite(this);
+		db.load();
+		RegisterEnchantments.addRegisterEnchantments();
+
+		Configurations.onEnable();
 		SaveUtils.getData();
-		
-		registerEvent(new BlockListener());
-		registerEvent(new DamageListener());
-		registerEvent(new DeathListener());
-		registerEvent(new FishingListener());
-		registerEvent(new MiscListener());
-		registerEvent(new PlayerListener());
-		registerEvent(new ProjectileListener());
-		registerEvent(new WalkerListener());
-		registerEvent(new AdvancementEntityDeath());
-		registerEvent(new AdvancementPlayerEvent());
-		registerEvent(new org.ctp.enchantmentsolution.listeners.BlockListener());
-		registerEvent(new ChatMessage());
-		registerEvent(new ChestLootListener());
+
 		registerEvent(new InventoryClick());
 		registerEvent(new InventoryClose());
-		registerEvent(new MobSpawning());
 		registerEvent(new PlayerInteract());
-		registerEvent(new UpdateEnchantments());
+		registerEvent(new ChatMessage());
+
+		registerEvent(new ExtraBlockListener());
 		registerEvent(new VanishListener());
-		registerEvent(new Villagers());
-		registerEvent(new AnvilListener());
-		registerEvent(new EnchantmentListener());
-		if(bukkitVersion.getVersionNumber() > 3) {
-			registerEvent(new GrindstoneListener());
-		}
-		
-		if(Bukkit.getPluginManager().isPluginEnabled("Jobs")) {
-			jobsReborn = Bukkit.getPluginManager().getPlugin("Jobs");
-			ChatUtils.sendInfo("Jobs Reborn compatibility enabled!");
-		}
-		
-		if(Bukkit.getPluginManager().isPluginEnabled("VeinMiner")) {
-			veinMiner = Bukkit.getPluginManager().getPlugin("VeinMiner");
-			ChatUtils.sendInfo("Vein Miner compatibility enabled!");
-			registerEvent(new VeinMinerListener());
-		}
-		
-		if(Bukkit.getPluginManager().isPluginEnabled("mcMMO")) {
+		registerEvent(new EquipListener());
+		registerEvent(new BadAttributesListener());
+
+		registerEvent(new FishingListener());
+		registerEvent(new DropsListener());
+		registerEvent(new SoulListener());
+		registerEvent(new DamageListener());
+		registerEvent(new PlayerListener());
+		registerEvent(new AfterEffectsListener());
+		registerEvent(new AttributeListener());
+		registerEvent(new ProjectileListener());
+		registerEvent(new BlockListener());
+
+		registerEvent(new Testers());
+
+		if (Bukkit.getPluginManager().isPluginEnabled("mcMMO")) {
 			mcmmoVersion = Bukkit.getPluginManager().getPlugin("mcMMO").getDescription().getVersion();
 			ChatUtils.sendToConsole(Level.INFO, "mcMMO Version: " + mcmmoVersion);
-			if(mcmmoVersion.substring(0, mcmmoVersion.indexOf(".")).equals("2")) {
+			if (mcmmoVersion.substring(0, mcmmoVersion.indexOf(".")).equals("2")) {
 				ChatUtils.sendToConsole(Level.INFO, "Using the Overhaul Version!");
 				String[] mcVersion = mcmmoVersion.split("\\.");
 				boolean warning = false;
 				for(int i = 0; i < mcVersion.length; i++) {
 					try {
 						int num = Integer.parseInt(mcVersion[i]);
-						if(i == 0 && num > 2) {
+						if (i == 0 && num > 2) {
 							warning = true;
 						} else if (i == 1 && num > 1) {
 							warning = true;
@@ -147,9 +115,11 @@ public class EnchantmentSolution extends JavaPlugin {
 						warning = true;
 					}
 				}
-				if(warning) {
-					ChatUtils.sendToConsole(Level.WARNING, "McMMO Overhaul updates sporidically. Compatibility may break between versions.");
-					ChatUtils.sendToConsole(Level.WARNING, "If there are any compatibility issues, please notify the plugin author immediately.");
+				if (warning) {
+					ChatUtils.sendToConsole(Level.WARNING,
+					"McMMO Overhaul updates sporidically. Compatibility may break between versions.");
+					ChatUtils.sendToConsole(Level.WARNING,
+					"If there are any compatibility issues, please notify the plugin author immediately.");
 					ChatUtils.sendToConsole(Level.WARNING, "Current Working Version: 2.1.99");
 				}
 				mcmmoType = "Overhaul";
@@ -160,28 +130,21 @@ public class EnchantmentSolution extends JavaPlugin {
 		} else {
 			mcmmoType = "Disabled";
 		}
-		
-		switch(mcmmoType) {
-		case "Overhaul":
-		case "Classic":
-			registerEvent(new McMMOFishingNMS());
-			break;
-		case "Disabled":
-			registerEvent(new EnchantsFishingListener());
-			break;
-		}
-		if(McMMO.getAbilities() != null) {
-			registerEvent(McMMO.getAbilities());
+
+		if (!mcmmoType.equals("Disabled")) {
+			registerEvent(new McMMOAbility());
 		}
 
-		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN,
-				new AbilityPlayerRunnable(), 1l, 1l);
-		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN,
-				new AdvancementThread(), 1l, 1l);
-		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN,
-						new MiscRunnable(), 1l, 1l);
-		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN,
-				new WalkerListener(), 1l, 1l);
+		if (Bukkit.getPluginManager().isPluginEnabled("AuctionHouse")) {
+			Bukkit.getScheduler().runTaskLater(this, (Runnable) () -> AuctionHouseUtils.resetAuctionHouse(), 20l);
+		}
+
+		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN, new AbilityRunnable(), 80l, 80l);
+		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN, new ElytraRunnable(), 1l, 1l);
+		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN, new ExhaustionRunnable(), 4l, 4l);
+		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN, new MiscRunnable(), 1l, 1l);
+		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN, new SnapshotRunnable(), 1l, 1l);
+		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN, new WalkerRunnable(), 1l, 1l);
 
 		getCommand("Enchant").setExecutor(new Enchant());
 		getCommand("Info").setExecutor(new EnchantInfo());
@@ -196,138 +159,35 @@ public class EnchantmentSolution extends JavaPlugin {
 		getCommand("Info").setTabCompleter(new PlayerChatTabComplete());
 		getCommand("RemoveEnchant").setTabCompleter(new PlayerChatTabComplete());
 		getCommand("EnchantUnsafe").setTabCompleter(new PlayerChatTabComplete());
-				
-		check = new VersionCheck(pluginVersion, "https://raw.githubusercontent.com/crashtheparty/EnchantmentSolution/master/VersionHistory", 
-				"https://www.spigotmc.org/resources/enchantment-solution.59556/", "https://github.com/crashtheparty/EnchantmentSolution", 
-				getConfigFiles().getDefaultConfig().getBoolean("version.get_latest"), getConfigFiles().getDefaultConfig().getBoolean("version.get_experimental"));
+
+		check = new VersionCheck(pluginVersion,
+		"https://raw.githubusercontent.com/crashtheparty/EnchantmentSolution/master/VersionHistory",
+		"https://www.spigotmc.org/resources/enchantment-solution.59556/",
+		"https://github.com/crashtheparty/EnchantmentSolution",
+		ConfigUtils.getBoolean(MainConfiguration.class, "version.get_latest"),
+		ConfigUtils.getBoolean(MainConfiguration.class, "version.get_experimental"));
 		registerEvent(check);
 		checkVersion();
-		initialization = false;
-		
-		AdvancementUtils.createAdvancements();
-		
-		Metrics metrics = new Metrics(this);
-		
-		metrics.addCustomChart(new Metrics.SingleLineChart("level_fifty", new Callable<Integer>() {
-	        @Override
-	        public Integer call() throws Exception {
-	            if(ConfigUtils.isLevel50()) {
-	            	return 1;
-	            }
-	            return 0;
-	        }
-	    }));
-		
-		metrics.addCustomChart(new Metrics.SingleLineChart("level_thirty", new Callable<Integer>() {
-	        @Override
-	        public Integer call() throws Exception {
-	            if(!ConfigUtils.isLevel50()) {
-	            	return 1;
-	            }
-	            return 0;
-	        }
-	    }));
-		
-		metrics.addCustomChart(new Metrics.SingleLineChart("advanced_file", new Callable<Integer>() {
-	        @Override
-	        public Integer call() throws Exception {
-	            if(ConfigUtils.useAdvancedFile()) {
-	            	return 1;
-	            }
-	            return 0;
-	        }
-	    }));
-		
-		metrics.addCustomChart(new Metrics.SingleLineChart("basic_file", new Callable<Integer>() {
-	        @Override
-	        public Integer call() throws Exception {
-	            if(!ConfigUtils.useAdvancedFile()) {
-	            	return 1;
-	            }
-	            return 0;
-	        }
-	    }));
-		
-		metrics.addCustomChart(new Metrics.SingleLineChart("enhanced_gui", new Callable<Integer>() {
-	        @Override
-	        public Integer call() throws Exception {
-	            if(ConfigUtils.useESGUI()) {
-	            	return 1;
-	            }
-	            return 0;
-	        }
-	    }));
-		
-		metrics.addCustomChart(new Metrics.SingleLineChart("vanilla_gui", new Callable<Integer>() {
-	        @Override
-	        public Integer call() throws Exception {
-	            if(!ConfigUtils.useESGUI()) {
-	            	return 1;
-	            }
-	            return 0;
-	        }
-	    }));
 	}
 	
+	public void onDisable() {
+		SaveUtils.setData();
+	}
+
 	private void registerEvent(Listener l) {
 		getServer().getPluginManager().registerEvents(l, this);
 	}
-
-	public void onDisable() {
-		if(bukkitVersion.isVersionAllowed() && !disable) {
-			try {
-				resetInventories();
-			} catch (Exception ex) {
-				ex.printStackTrace();
-			}
-			try {
-				SaveUtils.setAbilityData();
-			} catch (NoClassDefFoundError ex) {
-				ChatUtils.sendInfo("Found a no class def found error");
-				ex.printStackTrace();
-			}
-		}
-	}
-	
-	public void resetInventories() {
-		for(int i = inventories.size() - 1; i >= 0; i--) {
-			InventoryData inv = inventories.get(i);
-			inv.close(true);
-		}
-	}
-	
-	public InventoryData getInventory(Player player) {
-		for(InventoryData inv : inventories) {
-			if(inv.getPlayer().getUniqueId().equals(player.getUniqueId())) {
-				return inv;
-			}
-		}
-		
-		return null;
-	}
-	
-	public boolean hasInventory(InventoryData inv) {
-		return inventories.contains(inv);
-	}
-	
-	public void addInventory(InventoryData inv) {
-		inventories.add(inv);
-	}
-	
-	public void removeInventory(InventoryData inv) {
-		inventories.remove(inv);
-	}
-	
-	private void checkVersion(){
-		Bukkit.getScheduler().runTaskTimerAsynchronously(PLUGIN, check, 20l, 20 * 60 * 60 * 4l);
-    }
 
 	public SQLite getDb() {
 		return db;
 	}
 
-	public String getMcMMOType() {
-		return mcmmoType;
+	public static EnchantmentSolution getPlugin() {
+		return PLUGIN;
+	}
+
+	public boolean isInitializing() {
+		return initialization;
 	}
 
 	public BukkitVersion getBukkitVersion() {
@@ -338,33 +198,48 @@ public class EnchantmentSolution extends JavaPlugin {
 		return pluginVersion;
 	}
 
-	public boolean isJobsEnabled() {
-		return jobsReborn != null;
+	public void resetInventories() {
+		for(int i = inventories.size() - 1; i >= 0; i--) {
+			InventoryData inv = inventories.get(i);
+			inv.close(true);
+		}
 	}
 
-	public ConfigFiles getConfigFiles() {
-		return files;
-	}
-	
-	public static EnchantmentSolution getPlugin() {
-		return PLUGIN;
+	public InventoryData getInventory(Player player) {
+		for(InventoryData inv: inventories) {
+			if (inv.getPlayer().getUniqueId().equals(player.getUniqueId())) {
+				return inv;
+			}
+		}
+
+		return null;
 	}
 
-	public boolean isInitializing() {
-		return initialization;
+	public boolean hasInventory(InventoryData inv) {
+		return inventories.contains(inv);
+	}
+
+	public void addInventory(InventoryData inv) {
+		inventories.add(inv);
+	}
+
+	public void removeInventory(InventoryData inv) {
+		inventories.remove(inv);
 	}
 
 	public static List<ESAdvancementProgress> getProgress() {
 		return PROGRESS;
 	}
-	
+
 	public static void addProgress(ESAdvancementProgress progress) {
 		PROGRESS.add(progress);
 	}
-	
-	public static ESAdvancementProgress getAdvancementProgress(OfflinePlayer player, ESAdvancement advancement, String criteria) {
-		for(ESAdvancementProgress progress : EnchantmentSolution.getProgress()) {
-			if(progress.getPlayer().equals(player) && progress.getAdvancement() == advancement && progress.getCriteria().equals(criteria)) {
+
+	public static ESAdvancementProgress getAdvancementProgress(OfflinePlayer player, ESAdvancement advancement,
+	String criteria) {
+		for(ESAdvancementProgress progress: EnchantmentSolution.getProgress()) {
+			if (progress.getPlayer().equals(player) && progress.getAdvancement() == advancement
+			&& progress.getCriteria().equals(criteria)) {
 				return progress;
 			}
 		}
@@ -372,10 +247,10 @@ public class EnchantmentSolution extends JavaPlugin {
 		EnchantmentSolution.addProgress(progress);
 		return progress;
 	}
-	
-	public static List<ESAdvancementProgress> getAdvancementProgress(){
+
+	public static List<ESAdvancementProgress> getAdvancementProgress() {
 		List<ESAdvancementProgress> progress = new ArrayList<ESAdvancementProgress>();
-		for(ESAdvancementProgress pr : PROGRESS) {
+		for(ESAdvancementProgress pr: PROGRESS) {
 			progress.add(pr);
 		}
 		return progress;
@@ -386,8 +261,9 @@ public class EnchantmentSolution extends JavaPlugin {
 	}
 
 	public static boolean exists(Player player, ESAdvancement advancement, String criteria) {
-		for(ESAdvancementProgress progress : PROGRESS) {
-			if(progress.getPlayer().equals(player) && progress.getAdvancement() == advancement && progress.getCriteria().equals(criteria)) {
+		for(ESAdvancementProgress progress: PROGRESS) {
+			if (progress.getPlayer().equals(player) && progress.getAdvancement() == advancement
+			&& progress.getCriteria().equals(criteria)) {
 				return true;
 			}
 		}
@@ -409,7 +285,35 @@ public class EnchantmentSolution extends JavaPlugin {
 	public static void removeAnimals(AnimalMob remove) {
 		ANIMALS.remove(remove);
 	}
-	
+
+	public static List<ItemStack> getSoulItems(Player player) {
+		return SOUL_ITEMS.get(player.getUniqueId().toString());
+	}
+
+	public static void setSoulItems(Player player, List<ItemStack> items) {
+		SOUL_ITEMS.put(player.getUniqueId().toString(), items);
+	}
+
+	public static void removeSoulItems(Player player) {
+		SOUL_ITEMS.put(player.getUniqueId().toString(), null);
+	}
+
+	public static List<DrownedEntity> getDrowned() {
+		return DROWNED;
+	}
+
+	public static void addDrowned(DrownedEntity drowned) {
+		DROWNED.add(drowned);
+	}
+
+	public static List<EntityAccuracy> getAccuracy() {
+		return ACCURACY;
+	}
+
+	public static void addAccuracy(EntityAccuracy accuracy) {
+		ACCURACY.add(accuracy);
+	}
+
 	public void setVersionCheck(boolean getRelease, boolean getExperimental) {
 		check.setLatestVersion(getRelease);
 		check.setExperimentalVersion(getExperimental);
@@ -424,4 +328,15 @@ public class EnchantmentSolution extends JavaPlugin {
 		return veinMiner;
 	}
 
+	public boolean isJobsEnabled() {
+		return jobsReborn != null;
+	}
+
+	public String getMcMMOType() {
+		return mcmmoType;
+	}
+
+	private void checkVersion() {
+		Bukkit.getScheduler().runTaskTimerAsynchronously(PLUGIN, check, 20l, 20 * 60 * 60 * 4l);
+	}
 }

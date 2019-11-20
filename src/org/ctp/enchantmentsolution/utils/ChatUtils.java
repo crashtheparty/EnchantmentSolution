@@ -14,6 +14,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
+import org.ctp.enchantmentsolution.utils.config.LanguageConfiguration;
+import org.ctp.enchantmentsolution.utils.config.MainConfiguration;
 
 public class ChatUtils {
 
@@ -25,9 +27,9 @@ public class ChatUtils {
 
 	public static void sendMessage(Player player, String message, String url) {
 		Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "tellraw " + player.getName() + " [{\"text\":\""
-				+ getStarter() + message + "\"},{\"text\":\"" + url
-				+ "\", \"italic\": true, \"color\": \"green\", \"clickEvent\":{\"action\":\"open_url\",\"value\":\""
-				+ url + "\"}}]");
+		+ getStarter() + message + "\"},{\"text\":\"" + url
+		+ "\", \"italic\": true, \"color\": \"green\", \"clickEvent\":{\"action\":\"open_url\",\"value\":\""
+		+ url + "\"}}]");
 	}
 
 	public static void sendMessage(Player player, String[] messages) {
@@ -41,8 +43,11 @@ public class ChatUtils {
 	}
 
 	private static String getStarter() {
-		String starter = ChatColor.translateAlternateColorCodes('&',
-				EnchantmentSolution.getPlugin().getConfigFiles().getDefaultConfig().getString("starter"));
+		String config = ConfigUtils.getString(MainConfiguration.class, "starter");
+		String starter = null;
+		if (config != null) {
+			starter = ChatColor.translateAlternateColorCodes('&', config);
+		}
 		if (starter != null) {
 			return starter + ChatColor.WHITE + " ";
 		}
@@ -69,27 +74,30 @@ public class ChatUtils {
 		String s = "";
 		try {
 			s = translateCodes(codes, ChatColor.translateAlternateColorCodes('&',
-					EnchantmentSolution.getPlugin().getConfigFiles().getLanguageFile().getString(location)));
+			ConfigUtils.getString(LanguageConfiguration.class, location)));
 		} catch (Exception e) {
 
 		}
-		if (s.isEmpty())
+		if (s.isEmpty()) {
 			return location + " must be a string.";
+		}
 		return s;
 	}
 
 	public static List<String> getMessages(HashMap<String, Object> codes, String location) {
-		List<String> messages = EnchantmentSolution.getPlugin().getConfigFiles().getLanguageFile()
-				.getStringList(location);
+		List<String> messages = ConfigUtils.getStringList(LanguageConfiguration.class, location);
 		if (messages == null) {
 			messages = new ArrayList<String>();
-			messages.add(EnchantmentSolution.getPlugin().getConfigFiles().getLanguageFile().getString(location));
+			messages.add(ConfigUtils.getString(LanguageConfiguration.class, location));
 		}
 		for(int i = 0; i < messages.size(); i++) {
-			messages.set(i, translateCodes(codes, ChatColor.translateAlternateColorCodes('&', messages.get(i))));
+			if (messages.get(i) != null) {
+				messages.set(i, translateCodes(codes, ChatColor.translateAlternateColorCodes('&', messages.get(i))));
+			}
 		}
-		if (messages.size() == 0)
+		if (messages.size() == 0) {
 			messages.add(location + " must be a list or a string.");
+		}
 		return messages;
 	}
 
@@ -107,13 +115,6 @@ public class ChatUtils {
 		return new HashMap<String, Object>();
 	}
 
-	/**
-	 * Hides text in color codes
-	 *
-	 * @param text
-	 *            The text to hide
-	 * @return The hidden text
-	 */
 	@Nonnull
 	public static String hideText(@Nonnull String text) {
 		Objects.requireNonNull(text, "text can not be null!");
@@ -129,15 +130,6 @@ public class ChatUtils {
 		return output.toString();
 	}
 
-	/**
-	 * Reveals the text hidden in color codes
-	 *
-	 * @param text
-	 *            The hidden text
-	 * @throws IllegalArgumentException
-	 *             if an error occurred while decoding.
-	 * @return The revealed text
-	 */
 	@Nonnull
 	public static String revealText(@Nonnull String text) {
 		Objects.requireNonNull(text, "text can not be null!");
@@ -151,10 +143,10 @@ public class ChatUtils {
 		char[] hexChars = new char[chars.length / 2];
 
 		IntStream.range(0, chars.length).filter(value -> value % 2 != 0)
-				.forEach(value -> hexChars[value / 2] = chars[value]);
-		
+		.forEach(value -> hexChars[value / 2] = chars[value]);
+
 		String newChars = "";
-		for(char c : hexChars) {
+		for(char c: hexChars) {
 			newChars += c;
 		}
 

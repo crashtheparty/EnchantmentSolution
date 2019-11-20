@@ -89,10 +89,6 @@ public abstract class AnvilGUI {
 		}
 	}
 
-	public interface AnvilClickEventHandler {
-		void onAnvilClick(AnvilClickEvent event);
-	}
-
 	private Player player;
 
 	private AnvilClickEventHandler handler;
@@ -107,10 +103,10 @@ public abstract class AnvilGUI {
 
 	public AnvilGUI(Player player, final AnvilClickEventHandler handler, InventoryData data) {
 		this.player = player;
-		this.setHandler(handler);
-		this.setData(data);
+		setHandler(handler);
+		setData(data);
 
-		this.listener = new Listener(){
+		listener = new Listener() {
 			@EventHandler
 			public void onInventoryClick(InventoryClickEvent event) {
 				if (event.getWhoClicked() instanceof Player) {
@@ -215,32 +211,14 @@ public abstract class AnvilGUI {
 						inv.clear();
 						destroy();
 						if (data instanceof Anvil) {
-							Bukkit.getScheduler().scheduleSyncDelayedTask(EnchantmentSolution.getPlugin(), new Runnable() {
-
-								@Override
-								public void run() {
-									((Anvil) data).setInventory();
-								}
-								
-							}, 2l);
+							Bukkit.getScheduler().scheduleSyncDelayedTask(EnchantmentSolution.getPlugin(),
+							() -> ((Anvil) data).setInventory(), 2l);
 						} else if (data instanceof ConfigInventory) {
-							Bukkit.getScheduler().scheduleSyncDelayedTask(EnchantmentSolution.getPlugin(), new Runnable() {
-
-								@Override
-								public void run() {
-									((ConfigInventory) data).reopenFromAnvil(true);
-								}
-								
-							}, 2l);
+							Bukkit.getScheduler().scheduleSyncDelayedTask(EnchantmentSolution.getPlugin(),
+							() -> ((ConfigInventory) data).reopenFromAnvil(true), 2l);
 						} else {
-							Bukkit.getScheduler().scheduleSyncDelayedTask(EnchantmentSolution.getPlugin(), new Runnable() {
-
-								@Override
-								public void run() {
-									data.setInventory(data.getItems());
-								}
-								
-							}, 2l);
+							Bukkit.getScheduler().scheduleSyncDelayedTask(EnchantmentSolution.getPlugin(),
+							() -> data.setInventory(data.getItems()), 2l);
 						}
 					}
 				}
@@ -290,9 +268,9 @@ public abstract class AnvilGUI {
 	}
 
 	public void setData(InventoryData anvil) {
-		this.data = anvil;
+		data = anvil;
 	}
-	
+
 	public void setInventory(Inventory inv) {
 		this.inv = inv;
 	}

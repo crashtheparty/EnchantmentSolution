@@ -2,7 +2,6 @@ package org.ctp.enchantmentsolution.nms.anvil;
 
 import java.util.HashMap;
 
-import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_13_R2.entity.CraftPlayer;
 import org.bukkit.entity.Player;
@@ -18,7 +17,7 @@ import net.minecraft.server.v1_13_R2.EntityHuman;
 import net.minecraft.server.v1_13_R2.EntityPlayer;
 import net.minecraft.server.v1_13_R2.PacketPlayOutOpenWindow;
 
-public class AnvilGUI_v1_13_R2 extends AnvilGUI{
+public class AnvilGUI_v1_13_R2 extends AnvilGUI {
 	private class AnvilContainer extends ContainerAnvil {
 		public AnvilContainer(EntityHuman entity) {
 			super(entity.inventory, entity.world, new BlockPosition(0, 0, 0), entity);
@@ -53,7 +52,7 @@ public class AnvilGUI_v1_13_R2 extends AnvilGUI{
 		}
 
 		inv.setItem(0, new ItemStack(Material.NAME_TAG));
-		
+
 		setInventory(inv);
 
 		// Counter stuff that the game uses to keep track of inventories
@@ -61,7 +60,7 @@ public class AnvilGUI_v1_13_R2 extends AnvilGUI{
 
 		// Send the packet
 		p.playerConnection
-				.sendPacket(new PacketPlayOutOpenWindow(c, "minecraft:anvil", new ChatMessage("Repairing"), 0));
+		.sendPacket(new PacketPlayOutOpenWindow(c, "minecraft:anvil", new ChatMessage("Repairing"), 0));
 		// Set their active container to the container
 		p.activeContainer = container;
 
@@ -73,48 +72,8 @@ public class AnvilGUI_v1_13_R2 extends AnvilGUI{
 	}
 
 	public static void createAnvil(Player player, InventoryData data) {
-		AnvilClickEventHandler handler = new AnvilClickEventHandler(){
-			public void onAnvilClick(AnvilClickEvent event) {
-				if (event.getSlot() == null) {
-					event.setWillClose(false);
-					event.setWillDestroy(false);
-					return;
-				}
-				if (event.getSlot().getSlot() != 2) {
-					event.setWillClose(false);
-					event.setWillDestroy(false);
-					return;
-				}
-				if(player.getLevel() < 1 && player.getGameMode() != GameMode.CREATIVE && data instanceof Anvil) {
-					event.setWillClose(true);
-					event.setWillDestroy(true);
-					return;
-				}
-				if(event.getName().equals("")) {
-					if(data instanceof Anvil) {
-						Anvil anvil = (Anvil) data;
-						ItemStack item = anvil.getItems().get(0);
-						if(item != null) {
-							if(!item.getItemMeta().hasDisplayName()) {
-								event.setWillClose(false);
-								event.setWillDestroy(false);
-								return;
-							}
-						}
-					} else {
-						event.setWillClose(false);
-						event.setWillDestroy(false);
-						return;
-					}
-				}
-
-				event.getData().setItemName(event.getName());
-				if(player.getGameMode() != GameMode.CREATIVE && data instanceof Anvil) {
-					player.setLevel(player.getLevel() - 1);
-				}
-			}
-		};
-		if(data instanceof Anvil) {
+		AnvilClickEventHandler handler = AnvilClickEventHandler.getHandler(player, data);
+		if (data instanceof Anvil) {
 			((Anvil) data).setInLegacy(true);
 		}
 		AnvilGUI_v1_13_R2 gui = new AnvilGUI_v1_13_R2(player, handler, data);

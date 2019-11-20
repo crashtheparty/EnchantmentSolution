@@ -20,10 +20,12 @@ version:
 max_enchantments: 0
 disable_enchant_method: 'visible'
 protection_conflicts: true
+drop_items_naturally: true
 grindstone: 
     take_enchantments: false
     set_repair_cost: true
     destroy_take_item: true
+    use_legacy: false
 update_legacy_enchantments: false
 chest_loot: true
 mob_loot: true
@@ -130,6 +132,10 @@ config_comments:
 
     use_comments: 
     - 'Show helpful comments in the config files'
+
+    drop_items_naturally: 
+    - 'Items will drop in the default Minecraft way rather than drop straight to the ground'
+    - 'May cause issues with items flying away'
 
     version: 
         get_latest: 

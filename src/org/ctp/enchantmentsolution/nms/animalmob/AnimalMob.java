@@ -27,11 +27,11 @@ import org.bukkit.entity.Parrot.Variant;
 import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.utils.StringUtils;
-import org.ctp.enchantmentsolution.utils.config.YamlConfig;
 import org.ctp.enchantmentsolution.utils.items.ItemSerialization;
+import org.ctp.enchantmentsolution.utils.yaml.YamlConfig;
 
 public class AnimalMob {
-	
+
 	private EntityType mob;
 	private String name, owner;
 	private double health, jumpStrength, movementSpeed, maxHealth;
@@ -47,42 +47,42 @@ public class AnimalMob {
 	private Style horseStyle;
 	private Variant parrotVariant;
 	private org.bukkit.entity.Rabbit.Type rabbitType;
-	
+
 	public AnimalMob(Animals mob, ItemStack item) {
-		this.setMob(mob.getType());
-		this.setName(mob.getCustomName());
-		this.setHealth(mob.getHealth());
-		this.setItem(item);
-		this.setAge(mob.getAge());
-		if(mob instanceof Sheep) {
+		setMob(mob.getType());
+		setName(mob.getCustomName());
+		setHealth(mob.getHealth());
+		setItem(item);
+		setAge(mob.getAge());
+		if (mob instanceof Sheep) {
 			Sheep sheep = (Sheep) mob;
 			setSheepColor(sheep.getColor());
 			setSheared(sheep.isSheared());
 		}
-		if(mob instanceof Parrot) {
+		if (mob instanceof Parrot) {
 			Parrot parrot = (Parrot) mob;
 			setParrotVariant(parrot.getVariant());
 		}
-		if(mob instanceof Tameable) {
+		if (mob instanceof Tameable) {
 			Tameable tameable = (Tameable) mob;
-			if(tameable.getOwner() != null) {
+			if (tameable.getOwner() != null) {
 				setOwner(tameable.getOwner().getUniqueId().toString());
 			}
 		}
-		if(mob instanceof Pig) {
+		if (mob instanceof Pig) {
 			Pig pig = (Pig) mob;
 			setPigSaddle(pig.hasSaddle());
 		}
-		if(mob instanceof Wolf) {
+		if (mob instanceof Wolf) {
 			Wolf wolf = (Wolf) mob;
 			setWolfCollar(wolf.getCollarColor());
 			setAngry(wolf.isAngry());
 		}
-		if(mob instanceof Rabbit) {
+		if (mob instanceof Rabbit) {
 			Rabbit rabbit = (Rabbit) mob;
 			setRabbitType(rabbit.getRabbitType());
 		}
-		if(mob instanceof AbstractHorse) {
+		if (mob instanceof AbstractHorse) {
 			inventoryItems = new HashMap<Integer, ItemStack>();
 			AbstractHorse aHorse = (AbstractHorse) mob;
 			setDomestication(aHorse.getDomestication());
@@ -91,31 +91,31 @@ public class AnimalMob {
 			setMovementSpeed(aHorse.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).getBaseValue());
 			setMaxHealth(aHorse.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());
 			setSaddle(aHorse.getInventory().getSaddle());
-			if(mob instanceof Horse) {
+			if (mob instanceof Horse) {
 				Horse horse = (Horse) mob;
 				setHorseColor(horse.getColor());
 				setHorseStyle(horse.getStyle());
 				setArmor(horse.getInventory().getArmor());
 			}
-			if(mob instanceof Llama) {
+			if (mob instanceof Llama) {
 				Llama llama = (Llama) mob;
 				setLlamaColor(llama.getColor());
 				setLlamaStrength(llama.getStrength());
 			}
-			if(aHorse instanceof ChestedHorse) {
+			if (aHorse instanceof ChestedHorse) {
 				ChestedHorse cHorse = (ChestedHorse) aHorse;
 				setCarryingChest(cHorse.isCarryingChest());
-				for(int i = 2; i < cHorse.getInventory().getSize(); i++) {						
+				for(int i = 2; i < cHorse.getInventory().getSize(); i++) {
 					inventoryItems.put(i, cHorse.getInventory().getItem(i));
 				}
 			}
 		}
 	}
-	
+
 	protected AnimalMob() {
-		
+
 	}
-	
+
 	public void setConfig(YamlConfig config, int i) {
 		config.set("animals." + i + ".entity_type", getMob().name());
 		config.set("animals." + i + ".name", getName());
@@ -141,62 +141,68 @@ public class AnimalMob {
 		config.set("animals." + i + ".llama_color", getLlamaColor() != null ? getLlamaColor().name() : null);
 		config.set("animals." + i + ".rabbit_type", getRabbitType() != null ? getRabbitType().name() : null);
 		config.set("animals." + i + ".parrot_variant", getParrotVariant() != null ? getParrotVariant().name() : null);
-		config.set("animals." + i + ".saddle", getSaddle() != null ? ItemSerialization.itemToString(getSaddle()) : null);
+		config.set("animals." + i + ".saddle",
+		getSaddle() != null ? ItemSerialization.itemToString(getSaddle()) : null);
 		config.set("animals." + i + ".armor", getArmor() != null ? ItemSerialization.itemToString(getArmor()) : null);
-		
+
 		for(int k = 2; k < 17; k++) {
-			if(inventoryItems != null && inventoryItems.get(k) != null) {
-				config.set("animals." + i + ".inventory_items." + k, ItemSerialization.itemToString(inventoryItems.get(k)));
+			if (inventoryItems != null && inventoryItems.get(k) != null) {
+				config.set("animals." + i + ".inventory_items." + k,
+				ItemSerialization.itemToString(inventoryItems.get(k)));
 			}
 		}
 	}
-	
+
 	public void editProperties(Entity e) {
 		try {
 			e.setCustomName(getName());
-			if(e instanceof Animals) {
+			if (e instanceof Animals) {
 				Animals animal = (Animals) e;
-				if(animal instanceof Sheep) {
-					if(sheepColor == null) sheepColor = DyeColor.WHITE;
+				if (animal instanceof Sheep) {
+					if (sheepColor == null) {
+						sheepColor = DyeColor.WHITE;
+					}
 					((Sheep) animal).setColor(sheepColor);
 					((Sheep) animal).setSheared(isSheared());
 				}
-				if(animal instanceof Parrot) {
-					if(parrotVariant == null) parrotVariant = Variant.RED;
+				if (animal instanceof Parrot) {
+					if (parrotVariant == null) {
+						parrotVariant = Variant.RED;
+					}
 					((Parrot) animal).setVariant(parrotVariant);
 				}
-				if(animal instanceof Tameable) {
+				if (animal instanceof Tameable) {
 					Tameable tameable = (Tameable) animal;
-					if(owner != null) {
+					if (owner != null) {
 						Entity eOwner = Bukkit.getEntity(UUID.fromString(owner));
-						if(eOwner != null && eOwner instanceof AnimalTamer) {
+						if (eOwner != null && eOwner instanceof AnimalTamer) {
 							tameable.setOwner((AnimalTamer) eOwner);
 						}
 					}
 				}
-				if(animal instanceof Pig) {
+				if (animal instanceof Pig) {
 					Pig pig = (Pig) animal;
 					pig.setSaddle(hasPigSaddle());
 				}
-				if(animal instanceof Wolf) {
+				if (animal instanceof Wolf) {
 					Wolf wolf = (Wolf) animal;
 					wolf.setCollarColor(getWolfCollar());
 					wolf.setAngry(isAngry());
 				}
-				if(animal instanceof Rabbit) {
+				if (animal instanceof Rabbit) {
 					Rabbit rabbit = (Rabbit) animal;
 					rabbit.setRabbitType(getRabbitType());
 				}
-				if(animal instanceof AbstractHorse) {
+				if (animal instanceof AbstractHorse) {
 					AbstractHorse aHorse = (AbstractHorse) animal;
 					aHorse.getInventory().setSaddle(getSaddle());
-					if(animal instanceof Horse) {
+					if (animal instanceof Horse) {
 						Horse horse = (Horse) animal;
 						horse.setColor(getHorseColor());
 						horse.setStyle(getHorseStyle());
 						horse.getInventory().setArmor(getArmor());
 					}
-					if(animal instanceof Llama) {
+					if (animal instanceof Llama) {
 						Llama llama = (Llama) animal;
 						llama.setColor(getLlamaColor());
 						llama.setStrength(getLlamaStrength());
@@ -206,7 +212,7 @@ public class AnimalMob {
 					aHorse.setMaxDomestication(getMaxDomestication());
 					aHorse.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(getMovementSpeed());
 					aHorse.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(getMaxHealth());
-					if(aHorse instanceof ChestedHorse) {
+					if (aHorse instanceof ChestedHorse) {
 						ChestedHorse cHorse = (ChestedHorse) aHorse;
 						cHorse.setCarryingChest(isCarryingChest());
 						for(int i = 2; i < inventoryItems.size(); i++) {
@@ -217,15 +223,17 @@ public class AnimalMob {
 				animal.setAge(getAge());
 				animal.setHealth(getHealth());
 			}
-		} catch(Exception ex) {
+		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
 	}
-	
+
 	private void generateID() {
 		int base = 100;
-		for(AnimalMob animal : EnchantmentSolution.getAnimals()) {
-			if(animal.getEntityID() > base) base = animal.getEntityID();
+		for(AnimalMob animal: EnchantmentSolution.getAnimals()) {
+			if (animal.getEntityID() > base) {
+				base = animal.getEntityID();
+			}
 		}
 		setEntityID(base + 1, true);
 	}
@@ -277,7 +285,7 @@ public class AnimalMob {
 
 	public void setEntityID(int entityID, boolean addLore) {
 		this.entityID = entityID;
-		if(addLore) {
+		if (addLore) {
 			StringUtils.addAnimal(item, entityID);
 		}
 	}
@@ -456,5 +464,14 @@ public class AnimalMob {
 
 	public void setRabbitType(org.bukkit.entity.Rabbit.Type rabbitType) {
 		this.rabbitType = rabbitType;
+	}
+
+	public boolean inItem(ItemStack attackItem) {
+		return getItem() != null && getItem().equals(attackItem)
+		|| StringUtils.getAnimalIDsFromItem(attackItem).contains(getEntityID());
+	}
+
+	public boolean inItem(ItemStack item, int entityID) {
+		return getItem() != null && item.equals(getItem()) || entityID == getEntityID();
 	}
 }

@@ -8,7 +8,7 @@ public class ESAdvancementProgress {
 	private String criteria;
 	private int currentAmount;
 	private OfflinePlayer player;
-	
+
 	public ESAdvancementProgress(ESAdvancement advancement, String criteria, int currentAmount, OfflinePlayer player) {
 		this.advancement = advancement;
 		this.criteria = criteria;
