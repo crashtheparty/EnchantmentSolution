@@ -40,7 +40,7 @@ public class QuickStrikePlayer extends AbilityPlayer{
 	@Override
 	protected void doUnequip() {
 		AttributeInstance a = getPlayer().getAttribute(Attribute.GENERIC_ARMOR);
-		AttributeModifier modifier = new AttributeModifier(UUID.fromString("cccccccc-fefe-fefe-fefe-000000000000"), "armored_armor", 
+		AttributeModifier modifier = new AttributeModifier(UUID.fromString("cccccccc-fefe-fefe-fefe-000000000000"), "quick_strike_armor", 
 				2, Operation.ADD_NUMBER);
 		removeModifier(a, modifier);
 	}

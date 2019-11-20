@@ -36,6 +36,7 @@ import org.ctp.enchantmentsolution.listeners.vanilla.GrindstoneListener;
 import org.ctp.enchantmentsolution.nms.McMMO;
 import org.ctp.enchantmentsolution.nms.animalmob.AnimalMob;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
+import org.ctp.enchantmentsolution.utils.AuctionHouseUtils;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.ConfigUtils;
 import org.ctp.enchantmentsolution.utils.Metrics;
@@ -173,6 +174,14 @@ public class EnchantmentSolution extends JavaPlugin {
 		if(McMMO.getAbilities() != null) {
 			registerEvent(McMMO.getAbilities());
 		}
+		if(Bukkit.getPluginManager().isPluginEnabled("AuctionHouse")) {
+			Bukkit.getScheduler().runTaskLater(this, new Runnable() {
+				@Override
+				public void run() {
+					AuctionHouseUtils.resetAuctionHouse();
+				}
+			}, 20l);
+		}
 
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN,
 				new AbilityPlayerRunnable(), 1l, 1l);
@@ -266,6 +275,7 @@ public class EnchantmentSolution extends JavaPlugin {
 	            return 0;
 	        }
 	    }));
+		
 	}
 	
 	private void registerEvent(Listener l) {
