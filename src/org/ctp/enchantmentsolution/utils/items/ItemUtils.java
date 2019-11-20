@@ -17,6 +17,7 @@ import org.bukkit.block.Container;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BlockStateMeta;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
@@ -207,7 +208,7 @@ public class ItemUtils {
 			} else {
 				meta.addEnchant(level.getEnchant().getRelativeEnchantment(), level.getLevel(), true);
 			}
-			if (level.getEnchant().getRelativeEnchantment() instanceof CustomEnchantmentWrapper) {
+			if (!item.getItemMeta().hasItemFlag(ItemFlag.HIDE_ENCHANTS) && level.getEnchant().getRelativeEnchantment() instanceof CustomEnchantmentWrapper) {
 				previousLore = StringUtils.removeEnchantment(level.getEnchant(), level.getLevel(), previousLore);
 				lore.add(StringUtils.getEnchantmentString(level));
 			}

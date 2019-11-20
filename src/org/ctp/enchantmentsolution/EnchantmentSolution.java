@@ -130,14 +130,6 @@ public class EnchantmentSolution extends JavaPlugin {
 		if (Bukkit.getPluginManager().isPluginEnabled("AuctionHouse")) {
 			Bukkit.getScheduler().runTaskLater(this, (Runnable) () -> AuctionHouseUtils.resetAuctionHouse(), 20l);
 		}
-		if(Bukkit.getPluginManager().isPluginEnabled("AuctionHouse")) {
-			Bukkit.getScheduler().runTaskLater(this, new Runnable() {
-				@Override
-				public void run() {
-					AuctionHouseUtils.resetAuctionHouse();
-				}
-			}, 20l);
-		}
 
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN, new AbilityRunnable(), 80l, 80l);
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN, new ElytraRunnable(), 1l, 1l);

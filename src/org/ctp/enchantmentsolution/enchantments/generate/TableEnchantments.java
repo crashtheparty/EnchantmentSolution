@@ -45,7 +45,7 @@ public class TableEnchantments extends GenerateEnchantments {
 		Iterator<TableEnchantments> iterator = TABLES.iterator();
 		while (iterator.hasNext()) {
 			TableEnchantments enchantments = iterator.next();
-			if (enchantments.getPlayer().getUniqueId().equals(player.getUniqueId())) {
+			if (enchantments.getPlayer().getUniqueId().toString().equals(player.getUniqueId().toString())) {
 				iterator.remove();
 			}
 		}
