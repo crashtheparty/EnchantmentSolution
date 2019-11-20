@@ -1,5 +1,5 @@
 name: EnchantmentSolution
-version: 2.1.10
+version: 2.2.0-pre1
 main: org.ctp.enchantmentsolution.EnchantmentSolution
 api-version: 1.13
 softdepend: [mcMMO, Jobs, VeinMiner, AuctionHouse]
@@ -32,6 +32,10 @@ commands:
   esdebug:
     description: Generates a debug file for debugging and testing
     usage: /esdebug
+  escalc:
+    aliases: [enchantabilitycalc,enchantabilitycalculator,escalculator]
+    description: Calculate the levels that would be possible with certain enchantabilities
+    usage: /escalc
 permissions:
   enchantmentsolution.command.edit: 
     description: Gives access to the /esconfig command. 
@@ -50,6 +54,9 @@ permissions:
     default: op
   enchantmentsolution.command.enchantunsafe: 
     description: Gives access to the /enchantunsafe command.
+    default: op
+  enchantmentsolution.command.calculator:
+    description: Allows players to use the /escalc command
     default: op
   enchantmentsolution.enable-flight:
     description: Enables use of external /fly commands without interference from FrequentFlyer
