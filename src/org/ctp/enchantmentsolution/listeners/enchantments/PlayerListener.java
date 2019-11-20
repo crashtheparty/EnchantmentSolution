@@ -12,7 +12,6 @@ import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.Statistic;
 import org.bukkit.block.Block;
-import org.bukkit.block.Container;
 import org.bukkit.block.data.Waterlogged;
 import org.bukkit.block.data.type.Campfire;
 import org.bukkit.enchantments.Enchantment;
@@ -89,7 +88,7 @@ public class PlayerListener extends Enchantmentable {
 				if (ItemUtils.hasEnchantment(item, RegisterEnchantments.FLOWER_GIFT)) {
 					if (FlowerGiftNMS.isItem(block.getType())) {
 						FlowerGiftEvent flowerGiftEvent = new FlowerGiftEvent(player, item, block,
-								FlowerGiftNMS.getItem(block.getType()), block.getLocation());
+						FlowerGiftNMS.getItem(block.getType()), block.getLocation());
 						Bukkit.getPluginManager().callEvent(flowerGiftEvent);
 
 						if (!flowerGiftEvent.isCancelled()) {
@@ -115,12 +114,14 @@ public class PlayerListener extends Enchantmentable {
 			}
 		}
 	}
-	
+
 	private void icarus(PlayerMoveEvent event) {
-		if(!canRun(RegisterEnchantments.ICARUS, event)) return;
+		if(!canRun(RegisterEnchantments.ICARUS, event)) {
+			return;
+		}
 		Player player = event.getPlayer();
 		ItemStack chestplate = player.getInventory().getChestplate();
-		if(chestplate != null && chestplate.getType().equals(Material.ELYTRA) && player.isGliding() && 
+		if(chestplate != null && chestplate.getType().equals(Material.ELYTRA) && player.isGliding() &&
 		ItemUtils.hasEnchantment(chestplate, RegisterEnchantments.ICARUS)) {
 			int level = ItemUtils.getLevel(player.getInventory().getChestplate(), RegisterEnchantments.ICARUS);
 			double additional = Math.log((2 * level + 8) / 5) + 1.5;
@@ -132,13 +133,13 @@ public class PlayerListener extends Enchantmentable {
 				}
 				int num_breaks = DamageUtils.damageItem(player, chestplate, level * 5, 1, false);
 				if(DamageUtils.getDamage(chestplate.getItemMeta()) + num_breaks >= chestplate.getType().getMaxDurability()) {
-					AdvancementUtils.awardCriteria(player, ESAdvancement.TOO_CLOSE, "failure"); 
+					AdvancementUtils.awardCriteria(player, ESAdvancement.TOO_CLOSE, "failure");
 					player.getWorld().spawnParticle(Particle.EXPLOSION_NORMAL, player.getLocation(), 5, 2, 2, 2);
 					return;
 				}
 				IcarusLaunchEvent icarus = new IcarusLaunchEvent(player, additional);
 				Bukkit.getPluginManager().callEvent(icarus);
-				
+
 				if(!icarus.isCancelled()) {
 					DamageUtils.setDamage(chestplate, DamageUtils.getDamage(chestplate.getItemMeta()) + num_breaks);
 					Vector pV = player.getVelocity().clone();
@@ -173,12 +174,12 @@ public class PlayerListener extends Enchantmentable {
 					AnimalMob animal = iterator.next();
 					if (animal.inItem(item, entityID)) {
 						LassoInteractEvent lasso = new LassoInteractEvent(player, item, event.getClickedBlock(),
-								event.getBlockFace(), animal);
+						event.getBlockFace(), animal);
 						if (!lasso.isCancelled()) {
 							event.setCancelled(true);
 							AnimalMob fromLasso = lasso.getAnimal();
 							Location loc = lasso.getBlock().getRelative(lasso.getFace()).getLocation().clone().add(0.5,
-									0, 0.5);
+							0, 0.5);
 							if (loc.getBlock().isPassable()) {
 								Entity e = loc.getWorld().spawnEntity(loc, fromLasso.getMob());
 								fromLasso.editProperties(e);
@@ -194,14 +195,16 @@ public class PlayerListener extends Enchantmentable {
 			}
 		}
 	}
-	
+
 	private void moisturize(PlayerInteractEvent event) {
-		if(!canRun(RegisterEnchantments.MOISTURIZE, event)) return;
-		
+		if(!canRun(RegisterEnchantments.MOISTURIZE, event)) {
+			return;
+		}
+
 		if(event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
 			if (event.getHand() == EquipmentSlot.OFF_HAND) {
-		        return; // off hand packet, ignore.
-		    }
+				return; // off hand packet, ignore.
+			}
 			ItemStack item = event.getItem();
 			if(item != null && ItemUtils.hasEnchantment(item, RegisterEnchantments.MOISTURIZE)) {
 				Block block = event.getClickedBlock();
@@ -209,73 +212,73 @@ public class PlayerListener extends Enchantmentable {
 				if(type != null) {
 					Sound sound = null;
 					switch(type.getName().toLowerCase()) {
-					case "extinguish":
-						if(block.getType() == Material.CAMPFIRE) {
-							Campfire fire = (Campfire) block.getBlockData();
-							if(fire.isLit()) {
-								sound = Sound.BLOCK_WATER_AMBIENT;
+						case "extinguish":
+							if(block.getType() == Material.CAMPFIRE) {
+								Campfire fire = (Campfire) block.getBlockData();
+								if(fire.isLit()) {
+									sound = Sound.BLOCK_WATER_AMBIENT;
+								}
 							}
-						}
-						break;
-					case "wet":
-					case "unsmelt":
-						sound = Sound.ENTITY_SHEEP_SHEAR;
-						break;
-					case "waterlog":
-						if(block.getBlockData() instanceof Waterlogged) {
-							Waterlogged water = (Waterlogged) block.getBlockData();
-							if(block.getType().isInteractable() && event.getPlayer().isSneaking() && !water.isWaterlogged()
-							|| !block.getType().isInteractable() && !water.isWaterlogged()) {
-								sound = Sound.ENTITY_SHEEP_SHEAR;
+							break;
+						case "wet":
+						case "unsmelt":
+							sound = Sound.ENTITY_SHEEP_SHEAR;
+							break;
+						case "waterlog":
+							if(block.getBlockData() instanceof Waterlogged) {
+								Waterlogged water = (Waterlogged) block.getBlockData();
+								if(block.getType().isInteractable() && event.getPlayer().isSneaking() && !water.isWaterlogged()
+								|| !block.getType().isInteractable() && !water.isWaterlogged()) {
+									sound = Sound.ENTITY_SHEEP_SHEAR;
+								}
 							}
-						}
-						break;
+							break;
 					}
 					if(sound != null) {
 						MoisturizeEvent moisturize = new MoisturizeEvent(event.getPlayer(), block, type, sound);
 						Bukkit.getPluginManager().callEvent(moisturize);
-						
+
 						if(!moisturize.isCancelled()) {
 							Block moisturizeBlock = moisturize.getBlock();
 							Player player = moisturize.getPlayer();
-							
+
 							switch(type.getName().toLowerCase()) {
-							case "extinguish":
-								Campfire fire = (Campfire) moisturizeBlock.getBlockData();
-								fire.setLit(false);
-								moisturizeBlock.setBlockData(fire);
-								DamageUtils.damageItem(player, item);
-								player.playSound(player.getLocation(), moisturize.getSound(), 1, 1);
-								player.incrementStatistic(Statistic.USE_ITEM, item.getType());
-								AdvancementUtils.awardCriteria(player, ESAdvancement.EASY_OUT, "campfire");
-								break;
-							case "wet":
-								if(moisturizeBlock.getType().name().contains("CONCRETE")) {
-									AdvancementUtils.awardCriteria(player, ESAdvancement.JUST_ADD_WATER, "concrete");
-								}
-								moisturizeBlock.setType(ItemMoisturizeType.getWet(moisturizeBlock.getType()));
-								DamageUtils.damageItem(player, item);
-								player.playSound(player.getLocation(), moisturize.getSound(), 1, 1);
-								player.incrementStatistic(Statistic.USE_ITEM, item.getType());
-								break;
-							case "unsmelt":
-								if(moisturizeBlock.getType() == Material.CRACKED_STONE_BRICKS) {
-									AdvancementUtils.awardCriteria(player, ESAdvancement.REPAIRED, "broken_bricks");
-								}
-								moisturizeBlock.setType(ItemMoisturizeType.getUnsmelt(moisturizeBlock.getType()));
-								DamageUtils.damageItem(player, item);
-								player.playSound(player.getLocation(), moisturize.getSound(), 1, 1);
-								player.incrementStatistic(Statistic.USE_ITEM, item.getType());
-								break;
-							case "waterlog":
-								Waterlogged water = (Waterlogged) moisturizeBlock.getBlockData();
-								water.setWaterlogged(true);
-								moisturizeBlock.setBlockData(water);
-								DamageUtils.damageItem(player, item);
-								player.playSound(player.getLocation(), moisturize.getSound(), 1, 1);
-								player.incrementStatistic(Statistic.USE_ITEM, item.getType());
-								event.setCancelled(true);
-								break;
+								case "extinguish":
+									Campfire fire = (Campfire) moisturizeBlock.getBlockData();
+									fire.setLit(false);
+									moisturizeBlock.setBlockData(fire);
+									DamageUtils.damageItem(player, item);
+									player.playSound(player.getLocation(), moisturize.getSound(), 1, 1);
+									player.incrementStatistic(Statistic.USE_ITEM, item.getType());
+									AdvancementUtils.awardCriteria(player, ESAdvancement.EASY_OUT, "campfire");
+									break;
+								case "wet":
+									if(moisturizeBlock.getType().name().contains("CONCRETE")) {
+										AdvancementUtils.awardCriteria(player, ESAdvancement.JUST_ADD_WATER, "concrete");
+									}
+									moisturizeBlock.setType(ItemMoisturizeType.getWet(moisturizeBlock.getType()));
+									DamageUtils.damageItem(player, item);
+									player.playSound(player.getLocation(), moisturize.getSound(), 1, 1);
+									player.incrementStatistic(Statistic.USE_ITEM, item.getType());
+									break;
+								case "unsmelt":
+									if(moisturizeBlock.getType() == Material.CRACKED_STONE_BRICKS) {
+										AdvancementUtils.awardCriteria(player, ESAdvancement.REPAIRED, "broken_bricks");
+									}
+									moisturizeBlock.setType(ItemMoisturizeType.getUnsmelt(moisturizeBlock.getType()));
+									DamageUtils.damageItem(player, item);
+									player.playSound(player.getLocation(), moisturize.getSound(), 1, 1);
+									player.incrementStatistic(Statistic.USE_ITEM, item.getType());
+									break;
+								case "waterlog":
+									Waterlogged water = (Waterlogged) moisturizeBlock.getBlockData();
+									water.setWaterlogged(true);
+									moisturizeBlock.setBlockData(water);
+									DamageUtils.damageItem(player, item);
+									player.playSound(player.getLocation(), moisturize.getSound(), 1, 1);
+									player.incrementStatistic(Statistic.USE_ITEM, item.getType());
+									event.setCancelled(true);
+									break;
 							}
 						}
 					}
@@ -283,20 +286,20 @@ public class PlayerListener extends Enchantmentable {
 			}
 		}
 	}
-	
+
 	private void splatterFest(PlayerInteractEvent event) {
 		if(event.getAction().equals(Action.LEFT_CLICK_AIR)) {
 			Player player = event.getPlayer();
 			ItemStack item = player.getInventory().getItemInMainHand();
 			if(ItemUtils.hasEnchantment(item, RegisterEnchantments.SPLATTER_FEST)) {
 				event.setCancelled(false);
-				if(!canRun(RegisterEnchantments.SPLATTER_FEST, event)) return;
-				boolean removed = false;
-				
-				SplatterFestEvent splatterFest = new SplatterFestEvent(player, player.getGameMode() != GameMode.CREATIVE, 
+				if(!canRun(RegisterEnchantments.SPLATTER_FEST, event)) {
+					return;
+				}
+				SplatterFestEvent splatterFest = new SplatterFestEvent(player, player.getGameMode() != GameMode.CREATIVE,
 				player.getInventory().all(Material.EGG).size() > 0);
 				Bukkit.getPluginManager().callEvent(splatterFest);
-				
+
 				if(!splatterFest.isCancelled()) {
 					if(splatterFest.takeEgg()) {
 						ItemStack[] contents = splatterFest.getPlayer().getInventory().getContents();
@@ -328,9 +331,11 @@ public class PlayerListener extends Enchantmentable {
 			}
 		}
 	}
-	
+
 	private void movementListener(PlayerMoveEvent event, Enchantment enchantment){
-		if(!canRun(enchantment, event)) return;
+		if(!canRun(enchantment, event)) {
+			return;
+		}
 		Player player = event.getPlayer();
 		Location loc = player.getLocation();
 		if(player.isFlying() || player.isGliding() || player.isInsideVehicle()){
@@ -344,10 +349,10 @@ public class PlayerListener extends Enchantmentable {
 				}
 			} else if (enchantment == RegisterEnchantments.VOID_WALKER) {
 				if (LocationUtils.isLocationDifferent(event.getFrom(), event.getTo(), false)) {
-					WalkerUtils.updateBlocks(player, boots, loc, enchantment, 
+					WalkerUtils.updateBlocks(player, boots, loc, enchantment,
 					Arrays.asList(Material.AIR, Material.CAVE_AIR, Material.VOID_AIR), Material.OBSIDIAN, "VoidWalker");
 				} else if (LocationUtils.isLocationDifferent(event.getFrom(), event.getTo(), true)) {
-					WalkerUtils.updateBlocks(player, boots, event.getTo(), enchantment, 
+					WalkerUtils.updateBlocks(player, boots, event.getTo(), enchantment,
 					Arrays.asList(Material.AIR, Material.CAVE_AIR, Material.VOID_AIR), Material.OBSIDIAN, "VoidWalker");
 				}
 			}

@@ -1,41 +1,29 @@
 package org.ctp.enchantmentsolution.listeners.enchantments;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Iterator;
-
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Statistic;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
-import org.bukkit.block.Container;
-import org.bukkit.block.DoubleChest;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Directional;
 import org.bukkit.block.data.Orientable;
 import org.bukkit.block.data.Rotatable;
 import org.bukkit.block.data.type.Snow;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.EquipmentSlot;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.BlockStateMeta;
-import org.bukkit.metadata.MetadataValue;
-import org.bukkit.util.Vector;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
-import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.enums.ItemBreakType;
 import org.ctp.enchantmentsolution.enums.ItemPlaceType;
 import org.ctp.enchantmentsolution.events.ExperienceEvent;
@@ -47,9 +35,7 @@ import org.ctp.enchantmentsolution.events.modify.LagEvent;
 import org.ctp.enchantmentsolution.listeners.Enchantmentable;
 import org.ctp.enchantmentsolution.listeners.VeinMinerListener;
 import org.ctp.enchantmentsolution.mcmmo.McMMOAbility;
-import org.ctp.enchantmentsolution.mcmmo.McMMOHandler;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
-import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.LocationUtils;
 import org.ctp.enchantmentsolution.utils.abillityhelpers.GoldDiggerCrop;
 import org.ctp.enchantmentsolution.utils.abillityhelpers.ParticleEffect;
@@ -161,25 +147,30 @@ public class BlockListener extends Enchantmentable {
 	}
 
 	private void smeltery(BlockBreakEvent event) {
-		if (!canRun(RegisterEnchantments.SMELTERY, event))
+		if (!canRun(RegisterEnchantments.SMELTERY, event)) {
 			return;
+		}
 		Block blockBroken = event.getBlock();
 		Player player = event.getPlayer();
 		ItemStack item = player.getInventory().getItemInMainHand();
-		if (player.getGameMode().equals(GameMode.CREATIVE) || player.getGameMode().equals(GameMode.SPECTATOR))
+		if (player.getGameMode().equals(GameMode.CREATIVE) || player.getGameMode().equals(GameMode.SPECTATOR)) {
 			return;
+		}
 		if (item != null) {
 			if (ItemUtils.hasEnchantment(item, RegisterEnchantments.SMELTERY)) {
 				SmelteryUtils.handleSmeltery(event, player, blockBroken, item);
 			}
 		}
 	}
-	
+
 	private void telepathy(BlockBreakEvent event) {
-		if(!canRun(RegisterEnchantments.TELEPATHY, event)) return;
-		Player player = event.getPlayer();
-		if (player.getGameMode().equals(GameMode.CREATIVE) || player.getGameMode().equals(GameMode.SPECTATOR))
+		if(!canRun(RegisterEnchantments.TELEPATHY, event)) {
 			return;
+		}
+		Player player = event.getPlayer();
+		if (player.getGameMode().equals(GameMode.CREATIVE) || player.getGameMode().equals(GameMode.SPECTATOR)) {
+			return;
+		}
 		Block block = event.getBlock();
 		ItemStack item = player.getInventory().getItemInMainHand();
 		if (item != null) {
@@ -188,10 +179,12 @@ public class BlockListener extends Enchantmentable {
 			}
 		}
 	}
-	
+
 	private void heightWidth(BlockBreakEvent event) {
 		Player player = event.getPlayer();
-		if(!canRun(event, false, RegisterEnchantments.WIDTH_PLUS_PLUS, RegisterEnchantments.HEIGHT_PLUS_PLUS)) return;
+		if(!canRun(event, false, RegisterEnchantments.WIDTH_PLUS_PLUS, RegisterEnchantments.HEIGHT_PLUS_PLUS)) {
+			return;
+		}
 		if(AbilityUtils.getHeightWidthBlocks().contains(event.getBlock())) {
 			AbilityUtils.removeHeightWidthBlock(event.getBlock());
 			return;
@@ -202,7 +195,9 @@ public class BlockListener extends Enchantmentable {
 		if(EnchantmentSolution.getPlugin().getVeinMiner() != null && VeinMinerListener.hasVeinMiner(player)) {
 			return;
 		}
-		if(player.getGameMode().equals(GameMode.CREATIVE) || player.getGameMode().equals(GameMode.SPECTATOR)) return;
+		if(player.getGameMode().equals(GameMode.CREATIVE) || player.getGameMode().equals(GameMode.SPECTATOR)) {
+			return;
+		}
 		ItemStack item = player.getInventory().getItemInMainHand();
 		if (item != null) {
 			int xt = 0;
@@ -210,21 +205,21 @@ public class BlockListener extends Enchantmentable {
 			int zt = 0;
 			boolean hasWidthHeight = false;
 			if (RegisterEnchantments.isEnabled(RegisterEnchantments.WIDTH_PLUS_PLUS) && ItemUtils
-					.hasEnchantment(item, RegisterEnchantments.WIDTH_PLUS_PLUS)) {
+			.hasEnchantment(item, RegisterEnchantments.WIDTH_PLUS_PLUS)) {
 				hasWidthHeight = true;
 				float yaw = player.getLocation().getYaw() % 360;
 				while(yaw < 0) {
 					yaw += 360;
 				}
-				if((yaw <= 45) || (yaw > 135 && yaw <= 225) || (yaw > 315)) {
+				if(yaw <= 45 || yaw > 135 && yaw <= 225 || yaw > 315) {
 					xt = ItemUtils.getLevel(item, RegisterEnchantments.WIDTH_PLUS_PLUS);
 				} else {
 					zt = ItemUtils.getLevel(item, RegisterEnchantments.WIDTH_PLUS_PLUS);
 				}
-				
+
 			}
 			if (RegisterEnchantments.isEnabled(RegisterEnchantments.HEIGHT_PLUS_PLUS) && ItemUtils
-					.hasEnchantment(item, RegisterEnchantments.HEIGHT_PLUS_PLUS)) {
+			.hasEnchantment(item, RegisterEnchantments.HEIGHT_PLUS_PLUS)) {
 				hasWidthHeight = true;
 				float pitch = player.getLocation().getPitch();
 				float yaw = player.getLocation().getYaw() % 360;
@@ -232,7 +227,7 @@ public class BlockListener extends Enchantmentable {
 					yaw += 360;
 				}
 				if(pitch > 53 || pitch <= -53) {
-					if((yaw <= 45) || (yaw > 135 && yaw <= 225) || (yaw > 315)) {
+					if(yaw <= 45 || yaw > 135 && yaw <= 225 || yaw > 315) {
 						zt = ItemUtils.getLevel(item, RegisterEnchantments.HEIGHT_PLUS_PLUS);
 					} else {
 						xt = ItemUtils.getLevel(item, RegisterEnchantments.HEIGHT_PLUS_PLUS);
@@ -240,11 +235,11 @@ public class BlockListener extends Enchantmentable {
 				} else {
 					yt = ItemUtils.getLevel(item, RegisterEnchantments.HEIGHT_PLUS_PLUS);
 				}
-				
+
 			}
 			Material original = event.getBlock().getType();
-			if(hasWidthHeight && ItemBreakType.getType(item.getType()) != null && ItemBreakType.getType(item.getType()).getBreakTypes() != null 
-					&& ItemBreakType.getType(item.getType()).getBreakTypes().contains(original)) {
+			if(hasWidthHeight && ItemBreakType.getType(item.getType()) != null && ItemBreakType.getType(item.getType()).getBreakTypes() != null
+			&& ItemBreakType.getType(item.getType()).getBreakTypes().contains(original)) {
 				int start = 1;
 				int blocksBroken = 0;
 				Collection<Block> blocks = new ArrayList<Block>();
@@ -264,11 +259,13 @@ public class BlockListener extends Enchantmentable {
 					for(int x = - xBegin; x <= xBegin; x++) {
 						for(int y = - yBegin; y <= yBegin; y++) {
 							for(int z = - zBegin; z <= zBegin; z++) {
-								if((Math.abs(x) == xBegin && Math.abs(y) == yBegin) 
-										|| (Math.abs(x) == xBegin && Math.abs(z) == zBegin) 
-										|| (Math.abs(y) == yBegin && Math.abs(z) == zBegin)) {
+								if(Math.abs(x) == xBegin && Math.abs(y) == yBegin
+								|| Math.abs(x) == xBegin && Math.abs(z) == zBegin
+								|| Math.abs(y) == yBegin && Math.abs(z) == zBegin) {
 									item = player.getInventory().getItemInMainHand();
-									if(item == null || item.getType() == Material.AIR) return;
+									if(item == null || item.getType() == Material.AIR) {
+										return;
+									}
 									if(x == 0 && y == 0 && z == 0) {
 										continue;
 									}
@@ -286,10 +283,10 @@ public class BlockListener extends Enchantmentable {
 					}
 					start ++;
 				}
-				
+
 				HeightWidthEvent heightWidth = new HeightWidthEvent(blocks, player);
 				Bukkit.getPluginManager().callEvent(heightWidth);
-				
+
 				if(!heightWidth.isCancelled()) {
 					for(Block block : heightWidth.getBlocks()) {
 						AbilityUtils.addHeightWidthBlock(block);
@@ -297,29 +294,29 @@ public class BlockListener extends Enchantmentable {
 						int exp = 0;
 						if(!ItemUtils.hasEnchantment(item, Enchantment.SILK_TOUCH)) {
 							switch(newEvent.getBlock().getType().name()) {
-							case "COAL_ORE":
-								exp = (int) (Math.random() * 3);
-								break;
-							case "DIAMOND_ORE":
-							case "EMERALD_ORE":
-								exp = (int) (Math.random() * 5) + 3;
-								break;
-							case "LAPIS_ORE":
-							case "NETHER_QUARTZ_ORE":
-								exp = (int) (Math.random() * 4) + 2;
-								break;
-							case "REDSTONE_ORE":
-								exp = (int) (Math.random() * 5) + 1;
-								break;
-							case "SPAWNER":
-								exp = (int) (Math.random() * 29) + 15;
-								break;
+								case "COAL_ORE":
+									exp = (int) (Math.random() * 3);
+									break;
+								case "DIAMOND_ORE":
+								case "EMERALD_ORE":
+									exp = (int) (Math.random() * 5) + 3;
+									break;
+								case "LAPIS_ORE":
+								case "NETHER_QUARTZ_ORE":
+									exp = (int) (Math.random() * 4) + 2;
+									break;
+								case "REDSTONE_ORE":
+									exp = (int) (Math.random() * 5) + 1;
+									break;
+								case "SPAWNER":
+									exp = (int) (Math.random() * 29) + 15;
+									break;
 							}
 						}
 						newEvent.setExpToDrop(exp);
 						Bukkit.getServer().getPluginManager().callEvent(newEvent);
 						if(item != null && newEvent.getBlock().getType() != Material.AIR && !newEvent.isCancelled()) {
-							AdvancementUtils.awardCriteria(player, ESAdvancement.FAST_AND_FURIOUS, "diamond_pickaxe"); 
+							AdvancementUtils.awardCriteria(player, ESAdvancement.FAST_AND_FURIOUS, "diamond_pickaxe");
 							if(newEvent.getBlock().getType().equals(Material.SNOW) && ItemBreakType.getType(item.getType()).getBreakTypes().contains(Material.SNOW)) {
 								int num = ((Snow) newEvent.getBlock().getBlockData()).getLayers();
 								ItemUtils.dropItem(new ItemStack(Material.SNOWBALL, num), newEvent.getBlock().getLocation(), true);
@@ -336,14 +333,16 @@ public class BlockListener extends Enchantmentable {
 					}
 				}
 
-				AdvancementUtils.awardCriteria(player, ESAdvancement.OVER_9000, "stone", blocksBroken); 
+				AdvancementUtils.awardCriteria(player, ESAdvancement.OVER_9000, "stone", blocksBroken);
 			}
 		}
 	}
-	
+
 	private void wand(BlockPlaceEvent event) {
 		Player player = event.getPlayer();
-		if(!canRun(RegisterEnchantments.WAND, event)) return;
+		if(!canRun(RegisterEnchantments.WAND, event)) {
+			return;
+		}
 		if(AbilityUtils.getWandBlocks().contains(event.getBlock())) {
 			AbilityUtils.removeWandBlock(event.getBlock());
 			return;
@@ -355,7 +354,9 @@ public class BlockListener extends Enchantmentable {
 			int zt = 0;
 			if (ItemUtils.hasEnchantment(item, RegisterEnchantments.WAND)) {
 				ItemStack offhand = player.getInventory().getItemInOffHand();
-				if(!ItemPlaceType.getPlaceTypes().contains(offhand.getType())) return;
+				if(!ItemPlaceType.getPlaceTypes().contains(offhand.getType())) {
+					return;
+				}
 				float yaw = player.getLocation().getYaw() % 360;
 				float pitch = player.getLocation().getPitch();
 				while(yaw < 0) {
@@ -367,7 +368,7 @@ public class BlockListener extends Enchantmentable {
 					zt = ItemUtils.getLevel(item, RegisterEnchantments.WAND);
 				} else {
 					yt = ItemUtils.getLevel(item, RegisterEnchantments.WAND);
-					if((yaw <= 45) || (yaw > 135 && yaw <= 225) || (yaw > 315)) {
+					if(yaw <= 45 || yaw > 135 && yaw <= 225 || yaw > 315) {
 						xt = ItemUtils.getLevel(item, RegisterEnchantments.WAND);
 					} else {
 						zt = ItemUtils.getLevel(item, RegisterEnchantments.WAND);
@@ -375,15 +376,13 @@ public class BlockListener extends Enchantmentable {
 				}
 				Location rangeOne = new Location(clickedBlock.getWorld(), clickedBlock.getX() - xt, clickedBlock.getY() - yt, clickedBlock.getZ() - zt);
 				Location rangeTwo = new Location(clickedBlock.getWorld(), clickedBlock.getX() + xt, clickedBlock.getY() + yt, clickedBlock.getZ() + zt);
-				
+
 				if(LocationUtils.getIntersecting(rangeOne, rangeTwo, player.getLocation(), player.getEyeLocation())) {
 					return;
 				}
 				int start = 0;
-				boolean removed = false;
-				
 				Collection<Block> blocks = new ArrayList<Block>();
-				
+
 				while(start <= xt || start <= yt || start <= zt) {
 					int xBegin = start;
 					int yBegin = start;
@@ -400,14 +399,16 @@ public class BlockListener extends Enchantmentable {
 					for(int x = - xBegin; x <= xBegin; x++) {
 						for(int y = - yBegin; y <= yBegin; y++) {
 							for(int z = - zBegin; z <= zBegin; z++) {
-								if((Math.abs(x) == xBegin && Math.abs(y) == yBegin) 
-										|| (Math.abs(x) == xBegin && Math.abs(z) == zBegin) 
-										|| (Math.abs(y) == yBegin && Math.abs(z) == zBegin)) {
+								if(Math.abs(x) == xBegin && Math.abs(y) == yBegin
+								|| Math.abs(x) == xBegin && Math.abs(z) == zBegin
+								|| Math.abs(y) == yBegin && Math.abs(z) == zBegin) {
 									offhand = player.getInventory().getItemInOffHand();
 									if(x == 0 && y == 0 && z == 0) {
 										continue;
 									}
-									if(offhand == null || offhand.getType() == Material.AIR) continue;
+									if(offhand == null || offhand.getType() == Material.AIR) {
+										continue;
+									}
 									Block block = clickedBlock.getRelative(x, y, z);
 									if(!block.getType().isSolid()) {
 										blocks.add(block);
@@ -421,11 +422,15 @@ public class BlockListener extends Enchantmentable {
 				WandEvent wand = new WandEvent(blocks, player);
 				Bukkit.getPluginManager().callEvent(wand);
 
-				if(!hasItem(player, offhand)) return;
+				if(!hasItem(player, offhand)) {
+					return;
+				}
 				if(!wand.isCancelled()) {
 					for(Block block : wand.getBlocks()) {
 						offhand = player.getInventory().getItemInOffHand();
-						if(!hasItem(player, offhand)) return;
+						if(!hasItem(player, offhand)) {
+							return;
+						}
 						AbilityUtils.addWandBlock(block);
 						if(block.getType() == Material.TORCH) {
 							AdvancementUtils.awardCriteria(player, ESAdvancement.BREAKER_BREAKER, "torch");
@@ -463,8 +468,9 @@ public class BlockListener extends Enchantmentable {
 							block.setType(oldType);
 							block.setBlockData(oldData);
 						}
-						if (player.getGameMode().equals(GameMode.CREATIVE) || player.getGameMode().equals(GameMode.SPECTATOR))
+						if (player.getGameMode().equals(GameMode.CREATIVE) || player.getGameMode().equals(GameMode.SPECTATOR)) {
 							return;
+						}
 						if(item == null || item.getType() == Material.AIR) {
 							AdvancementUtils.awardCriteria(player, ESAdvancement.DID_YOU_REALLY_WAND_TO_DO_THAT, "break");
 						}
@@ -474,14 +480,14 @@ public class BlockListener extends Enchantmentable {
 			}
 		}
 	}
-	
+
 	private boolean hasItem(Player player, ItemStack item) {
 		if(player.getGameMode() == GameMode.CREATIVE) {
 			return true;
 		}
 		for(int i = 0; i < 36; i++) {
 			ItemStack removeItem = player.getInventory().getItem(i);
-			if(removeItem != null) { 
+			if(removeItem != null) {
 				if(removeItem.getType() == item.getType() && ItemSerialization.itemToData(removeItem).equals(ItemSerialization.itemToData(item))) {
 					return true;
 				}
@@ -489,14 +495,14 @@ public class BlockListener extends Enchantmentable {
 		}
 		return false;
 	}
-	
+
 	private void remove(Player player, ItemStack item) {
 		if(player.getGameMode() == GameMode.CREATIVE) {
 			return;
 		}
 		for(int i = 0; i < 36; i++) {
 			ItemStack removeItem = player.getInventory().getItem(i);
-			if(removeItem != null) { 
+			if(removeItem != null) {
 				if(removeItem.getType() == item.getType() && ItemSerialization.itemToData(removeItem).equals(ItemSerialization.itemToData(item))) {
 					int left = removeItem.getAmount() - 1;
 					if(left == 0) {

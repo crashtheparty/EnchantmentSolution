@@ -6,7 +6,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
 public abstract class MultiBlockBreakEvent extends MultiBlockEvent {
-	
+
 	public MultiBlockBreakEvent(Collection<Block> blocks, Player player) {
 		super(blocks, player);
 	}

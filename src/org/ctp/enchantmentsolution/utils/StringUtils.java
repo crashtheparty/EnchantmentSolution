@@ -210,7 +210,9 @@ public class StringUtils {
 	}
 
 	public static List<String> removeEnchantment(CustomEnchantment enchantment, int level, List<String> lore) {
-		if(lore == null) return lore;
+		if(lore == null) {
+			return lore;
+		}
 		Iterator<String> iterator = lore.iterator();
 		while (iterator.hasNext()) {
 			String l = iterator.next();

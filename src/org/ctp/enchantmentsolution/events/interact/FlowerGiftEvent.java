@@ -4,7 +4,7 @@ import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.ctp.enchantmentsolution.events.InteractEvent;
+import org.ctp.enchantmentsolution.events.player.InteractEvent;
 
 public class FlowerGiftEvent extends InteractEvent {
 

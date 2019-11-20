@@ -39,7 +39,7 @@ public class TelepathyUtils {
 		if (ESArrays.getShulkerBoxes().contains(block.getType())) {
 			drops = ItemUtils.getSoulboundShulkerBox(player, block, drops);
 			drops = giveItems(player, item, block, drops);
-			
+
 			callTelepathy(event, block, player, drops, TelepathyType.SHULKER_BOX, true);
 			return;
 		} else if (block.getState() instanceof Container) {
@@ -101,14 +101,14 @@ public class TelepathyUtils {
 		}
 		drops = giveItems(player, item, block, drops);
 		// TODO - add GoldDiggerUtils
-//		if (ItemUtils.hasEnchantment(item, RegisterEnchantments.GOLD_DIGGER)) {
-//			ItemStack goldDigger = AbilityUtils.getGoldDiggerItems(item, block);
-//			if (goldDigger != null) {
-//				player.giveExp(GoldDiggerCrop.getExp(block.getType(),
-//				ItemUtils.getLevel(item, RegisterEnchantments.GOLD_DIGGER)));
-//				ItemUtils.giveItemToPlayer(player, goldDigger, player.getLocation(), true);
-//			}
-//		}
+		//		if (ItemUtils.hasEnchantment(item, RegisterEnchantments.GOLD_DIGGER)) {
+		//			ItemStack goldDigger = AbilityUtils.getGoldDiggerItems(item, block);
+		//			if (goldDigger != null) {
+		//				player.giveExp(GoldDiggerCrop.getExp(block.getType(),
+		//				ItemUtils.getLevel(item, RegisterEnchantments.GOLD_DIGGER)));
+		//				ItemUtils.giveItemToPlayer(player, goldDigger, player.getLocation(), true);
+		//			}
+		//		}
 		callTelepathy(event, block, player, drops, TelepathyType.NORMAL, true);
 	}
 
@@ -117,7 +117,7 @@ public class TelepathyUtils {
 			SmelteryEvent smeltery = SmelteryUtils.handleSmelteryTelepathy(player, block, item);
 			if(smeltery != null) {
 				Bukkit.getPluginManager().callEvent(smeltery);
-				
+
 				if(!smeltery.isCancelled()) {
 					AbilityUtils.giveExperience(player, smeltery.getExp());
 					if (smeltery.getDrop() != null) {
@@ -127,26 +127,26 @@ public class TelepathyUtils {
 			}
 		} else if (ItemUtils.hasEnchantment(item, Enchantment.LOOT_BONUS_BLOCKS)) {
 			Collection<ItemStack> fortuneItems = FortuneUtils.getFortuneItems(item, block,
-					drops);
+			drops);
 			return fortuneItems;
 		} else if (ItemUtils.hasEnchantment(item, Enchantment.SILK_TOUCH)
-				&& SilkTouchUtils.getSilkTouchItem(block, item) != null) {
+		&& SilkTouchUtils.getSilkTouchItem(block, item) != null) {
 			return Arrays.asList(SilkTouchUtils.getSilkTouchItem(block, item));
 		}
 		return drops;
 	}
-	
+
 	private static TelepathyEvent callTelepathy(BlockBreakEvent event, Block block, Player player, Collection<ItemStack> drops, TelepathyType type, boolean damageItems) {
 		TelepathyEvent telepathy = new TelepathyEvent(block, player, drops, type);
 		Bukkit.getPluginManager().callEvent(telepathy);
-		
+
 		if(!telepathy.isCancelled() && damageItems) {
 			damageItem(event);
 			ItemUtils.giveItemsToPlayer(telepathy.getPlayer(), telepathy.getDrops(), telepathy.getPlayer().getLocation(), true);
 		}
 		return telepathy;
 	}
-	
+
 	private static void damageItem(BlockBreakEvent event) {
 		Player player = event.getPlayer();
 		ItemStack item = player.getInventory().getItemInMainHand();

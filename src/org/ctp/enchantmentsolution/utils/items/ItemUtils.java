@@ -337,7 +337,7 @@ public class ItemUtils {
 		}
 		return true;
 	}
-	
+
 	public static Collection<ItemStack> getSoulboundShulkerBox(Player player, Block block, Collection<ItemStack> drops) {
 		Iterator<ItemStack> i = drops.iterator();
 		Collection<ItemStack> items = new ArrayList<ItemStack>();
@@ -355,7 +355,7 @@ public class ItemUtils {
 				drop.setItemMeta(im);
 				if(block.getMetadata("soulbound").size() > 0) {
 					drop = ItemUtils.addEnchantmentsToItem(drop, Arrays.asList(
-							new EnchantmentLevel(RegisterEnchantments.getCustomEnchantment(RegisterEnchantments.SOULBOUND), 1)));
+					new EnchantmentLevel(RegisterEnchantments.getCustomEnchantment(RegisterEnchantments.SOULBOUND), 1)));
 				}
 				items.add(drop);
 			}

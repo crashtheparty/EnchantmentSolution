@@ -14,8 +14,8 @@ import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.enums.ItemBreakType;
 
 public class FortuneUtils {
-	private static List<Material> CROPS = Arrays.asList(Material.WHEAT, Material.CARROTS, Material.POTATOES, Material.NETHER_WART, 
-			Material.BEETROOTS, Material.COCOA_BEANS);
+	private static List<Material> CROPS = Arrays.asList(Material.WHEAT, Material.CARROTS, Material.POTATOES, Material.NETHER_WART,
+	Material.BEETROOTS, Material.COCOA_BEANS);
 
 	public static ItemStack getFortuneForSmeltery(ItemStack smelted, ItemStack item) {
 		if(ItemUtils.hasEnchantment(item, Enchantment.LOOT_BONUS_BLOCKS)) {
@@ -27,10 +27,12 @@ public class FortuneUtils {
 		}
 		return smelted;
 	}
-	
+
 	public static Collection<ItemStack> getFortuneItems(ItemStack item, Block brokenBlock, Collection<ItemStack> priorItems){
 		int level = ItemUtils.getLevel(item, Enchantment.LOOT_BONUS_BLOCKS);
-		if(level <= 0) return priorItems;
+		if(level <= 0) {
+			return priorItems;
+		}
 		Iterator<ItemStack> iter = priorItems.iterator();
 		List<ItemStack> duplicate = new ArrayList<ItemStack>();
 		while(iter.hasNext()) {
@@ -47,19 +49,19 @@ public class FortuneUtils {
 				}
 			}
 		}
-		
+
 		double chance = 0;
 		double random = 0;
-		
+
 		Material breakBlock = null;
 		ItemBreakType itemBreak = null;
 		boolean minMax = false;
-		
+
 		double saplingChance = 0;
 		boolean setSaplingChance = false;
 		double appleChance = 0;
 		Material sapling = null;
-		
+
 		switch(brokenBlock.getType().name()) {
 			case "DIAMOND_ORE":
 			case "EMERALD_ORE":
@@ -164,7 +166,7 @@ public class FortuneUtils {
 					finalCount = actualMax;
 				}
 				ItemStack fortunableItem = new ItemStack(breakBlock, finalCount);
-				
+
 				fortunableItem.setAmount(finalCount);
 				priorItems.clear();
 				priorItems.add(fortunableItem);
@@ -199,18 +201,18 @@ public class FortuneUtils {
 					sapling = Material.JUNGLE_SAPLING;
 					saplingChance = 1.0D / 10.0D;
 					switch(level) {
-					case 1:
-						saplingChance = 1.0D / 36.0D;
-						break;
-					case 2:
-						saplingChance = 1.0D / 32.0D;
-						break;
-					case 3:
-						saplingChance = 1.0D / 24.0D;
-						break;
-					case 4:
-						saplingChance = 1.0D / 16.0D;
-						break;
+						case 1:
+							saplingChance = 1.0D / 36.0D;
+							break;
+						case 2:
+							saplingChance = 1.0D / 32.0D;
+							break;
+						case 3:
+							saplingChance = 1.0D / 24.0D;
+							break;
+						case 4:
+							saplingChance = 1.0D / 16.0D;
+							break;
 					}
 				}
 			case "OAK_LEAVES":
@@ -223,18 +225,18 @@ public class FortuneUtils {
 				}
 				appleChance = 1.0D / 80.0D;
 				switch(level) {
-				case 1:
-					appleChance = 1.0D / 180.0D;
-					break;
-				case 2:
-					appleChance = 1.0D / 160.0D;
-					break;
-				case 3:
-					appleChance = 1.0D / 120.0D;
-					break;
-				case 4:
-					appleChance = 1.0D / 100.0D;
-					break;
+					case 1:
+						appleChance = 1.0D / 180.0D;
+						break;
+					case 2:
+						appleChance = 1.0D / 160.0D;
+						break;
+					case 3:
+						appleChance = 1.0D / 120.0D;
+						break;
+					case 4:
+						appleChance = 1.0D / 100.0D;
+						break;
 				}
 			case "ACACIA_LEAVES":
 			case "BIRCH_LEAVES":
@@ -245,18 +247,18 @@ public class FortuneUtils {
 				if(!setSaplingChance) {
 					saplingChance = 1.0D / 5.0D;
 					switch(level) {
-					case 1:
-						saplingChance = 1.0D / 16.0D;
-						break;
-					case 2:
-						saplingChance = 1.0D / 12.0D;
-						break;
-					case 3:
-						saplingChance = 1.0D / 10.0D;
-						break;
-					case 4:
-						saplingChance = 1.0D / 8.0D;
-						break;
+						case 1:
+							saplingChance = 1.0D / 16.0D;
+							break;
+						case 2:
+							saplingChance = 1.0D / 12.0D;
+							break;
+						case 3:
+							saplingChance = 1.0D / 10.0D;
+							break;
+						case 4:
+							saplingChance = 1.0D / 8.0D;
+							break;
 					}
 				}
 				random = Math.random();
@@ -268,7 +270,7 @@ public class FortuneUtils {
 					priorItems.add(new ItemStack(Material.APPLE, 1));
 				}
 		}
-		
+
 		return priorItems;
 	}
 }

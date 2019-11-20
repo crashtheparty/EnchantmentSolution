@@ -13,19 +13,19 @@ public class WalkerBlock {
 	private final int tick;
 	private DamageState damage;
 	private final String meta;
-	
+
 	public WalkerBlock(Enchantment enchantment, Block block, Material replaceType, int tick) {
 		this.block = block;
 		this.tick = tick;
 		this.enchantment = enchantment;
 		this.replaceType = replaceType;
-		this.damage = DamageState.NORMAL;
+		damage = DamageState.NORMAL;
 		if (enchantment == RegisterEnchantments.MAGMA_WALKER) {
-			this.meta = "MagmaWalker";
+			meta = "MagmaWalker";
 		} else if (enchantment == RegisterEnchantments.VOID_WALKER) {
-			this.meta = "VoidWalker";
+			meta = "VoidWalker";
 		} else {
-			this.meta = "";
+			meta = "";
 		}
 	}
 
@@ -53,13 +53,13 @@ public class WalkerBlock {
 	public DamageState getDamage() {
 		return damage;
 	}
-	
+
 	public DamageState getNextDamage() {
 		return DamageState.getState(damage.getStage() - 1);
 	}
-	
+
 	public void nextDamage() {
-		this.damage = DamageState.getState(damage.getStage() - 1);
+		damage = DamageState.getState(damage.getStage() - 1);
 	}
 
 	public String getMeta() {

@@ -23,7 +23,7 @@ public final class ArmorEquipEvent extends PlayerEvent implements Cancellable {
 	public final HandlerList getHandlers() {
 		return handlers;
 	}
-	
+
 	private boolean cancel = false;
 	private final EquipMethod equipType;
 	private final ItemSlotType type;

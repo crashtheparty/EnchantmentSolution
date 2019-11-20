@@ -10,7 +10,7 @@ public class TelepathyEvent extends ESBlockBreakEvent {
 
 	private Collection<ItemStack> drops;
 	private final TelepathyType type;
-	
+
 	public TelepathyEvent(Block block, Player player, Collection<ItemStack> drops, TelepathyType type) {
 		super(block, player);
 		this.drops = drops;
@@ -20,7 +20,7 @@ public class TelepathyEvent extends ESBlockBreakEvent {
 	public Collection<ItemStack> getDrops() {
 		return drops;
 	}
-	
+
 	public TelepathyType getType() {
 		return type;
 	}

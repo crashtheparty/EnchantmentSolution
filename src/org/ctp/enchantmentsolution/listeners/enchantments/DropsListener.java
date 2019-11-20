@@ -51,7 +51,7 @@ public class DropsListener extends Enchantmentable {
 		if (killer != null) {
 			if (ItemUtils.hasEnchantment(killer.getInventory().getItemInMainHand(), RegisterEnchantments.BEHEADING)) {
 				double chance = ItemUtils.getLevel(killer.getInventory().getItemInMainHand(),
-						RegisterEnchantments.BEHEADING) * .05;
+				RegisterEnchantments.BEHEADING) * .05;
 				double random = Math.random();
 				if (chance > random) {
 					List<ItemStack> skulls = new ArrayList<ItemStack>();
@@ -66,7 +66,7 @@ public class DropsListener extends Enchantmentable {
 					} else if (entity instanceof Player) {
 						ItemStack skull = new ItemStack(Material.PLAYER_HEAD);
 						SkullMeta skullMeta = (SkullMeta) skull.getItemMeta();
-						skullMeta.setOwningPlayer(((Player) entity));
+						skullMeta.setOwningPlayer((Player) entity);
 						// TODO: move this text to language.yml
 						skullMeta.setDisplayName(ChatColor.DARK_RED + ((Player) entity).getName() + "'s Skull");
 						skull.setItemMeta(skullMeta);
@@ -83,7 +83,7 @@ public class DropsListener extends Enchantmentable {
 						if (!beheading.isOverride()) {
 							newDrops.addAll(beheading.getOriginalDrops());
 							if (heads(Material.WITHER_SKELETON_SKULL, beheading.getOriginalDrops(),
-									beheading.getNewDrops()) >= 2) {
+							beheading.getNewDrops()) >= 2) {
 								AdvancementUtils.awardCriteria(killer, ESAdvancement.DOUBLE_HEADER, "wither_skull");
 							}
 						}
@@ -129,7 +129,7 @@ public class DropsListener extends Enchantmentable {
 			} else if (event.getEntity().getKiller() != null) {
 				Player killer = event.getEntity().getKiller();
 				if (ItemUtils.hasEnchantment(killer.getInventory().getItemInMainHand(),
-						RegisterEnchantments.TRANSMUTATION)) {
+				RegisterEnchantments.TRANSMUTATION)) {
 					handleTransmutation(event);
 				}
 			}
@@ -180,7 +180,7 @@ public class DropsListener extends Enchantmentable {
 		}
 
 		TransmutationEvent transmutation = new TransmutationEvent(event.getEntity().getKiller(), drops,
-				event.getDrops(), override);
+		event.getDrops(), override);
 		Bukkit.getPluginManager().callEvent(transmutation);
 
 		if (!transmutation.isCancelled()) {

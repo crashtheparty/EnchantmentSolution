@@ -137,40 +137,48 @@ public class JobsUtils {
 	public static void sendBlockBreakAction(BlockBreakEvent event) {
 		Jobs plugin = Jobs.getInstance();
 		// make sure plugin is enabled
-		if (!plugin.isEnabled())
+		if (!plugin.isEnabled()) {
 			return;
+		}
 		// disabling plugin in world
-		if (event.getBlock() != null && !Jobs.getGCManager().canPerformActionInWorld(event.getBlock().getWorld()))
+		if (event.getBlock() != null && !Jobs.getGCManager().canPerformActionInWorld(event.getBlock().getWorld())) {
 			return;
+		}
 		Block block = event.getBlock();
-		if (block == null)
+		if (block == null) {
 			return;
+		}
 
 		Player player = event.getPlayer();
 
-		if (player == null || !player.isOnline())
+		if (player == null || !player.isOnline()) {
 			return;
+		}
 
 		// check if in creative
-		if (!payIfCreative(player))
+		if (!payIfCreative(player)) {
 			return;
+		}
 
 		// check if player is riding
-		if (Jobs.getGCManager().disablePaymentIfRiding && player.isInsideVehicle())
+		if (Jobs.getGCManager().disablePaymentIfRiding && player.isInsideVehicle()) {
 			return;
+		}
 
 		CMIMaterial cmat = CMIMaterial.get(block);
-		if (cmat.equals(CMIMaterial.FURNACE) && block.hasMetadata(JobsPaymentListener.furnaceOwnerMetadata))
+		if (cmat.equals(CMIMaterial.FURNACE) && block.hasMetadata(JobsPaymentListener.furnaceOwnerMetadata)) {
 			FurnaceBrewingHandling.removeFurnace(block);
-		else if (cmat.equals(CMIMaterial.SMOKER) && block.hasMetadata(JobsPaymentListener.furnaceOwnerMetadata))
+		} else if (cmat.equals(CMIMaterial.SMOKER) && block.hasMetadata(JobsPaymentListener.furnaceOwnerMetadata)) {
 			FurnaceBrewingHandling.removeFurnace(block);
-		else if (cmat.equals(CMIMaterial.BLAST_FURNACE) && block.hasMetadata(JobsPaymentListener.furnaceOwnerMetadata))
+		} else if (cmat.equals(CMIMaterial.BLAST_FURNACE) && block.hasMetadata(JobsPaymentListener.furnaceOwnerMetadata)) {
 			FurnaceBrewingHandling.removeFurnace(block);
-		else if (cmat.equals(CMIMaterial.BREWING_STAND) && block.hasMetadata(JobsPaymentListener.brewingOwnerMetadata))
+		} else if (cmat.equals(CMIMaterial.BREWING_STAND) && block.hasMetadata(JobsPaymentListener.brewingOwnerMetadata)) {
 			FurnaceBrewingHandling.removeBrewing(block);
+		}
 
-		if (!Jobs.getPermissionHandler().hasWorldPermission(player, player.getLocation().getWorld().getName()))
+		if (!Jobs.getPermissionHandler().hasWorldPermission(player, player.getLocation().getWorld().getName())) {
 			return;
+		}
 
 		BlockActionInfo bInfo = new BlockActionInfo(block, ActionType.BREAK);
 
@@ -178,7 +186,7 @@ public class JobsUtils {
 		if (fp != null) {
 			if (fp.getTime() > System.currentTimeMillis()) {
 				if (fp.getInfo().getName().equalsIgnoreCase(bInfo.getName())
-						|| fp.getInfo().getNameWithSub().equalsIgnoreCase(bInfo.getNameWithSub())) {
+				|| fp.getInfo().getNameWithSub().equalsIgnoreCase(bInfo.getNameWithSub())) {
 					Jobs.perform(fp.getPlayer(), fp.getInfo(), fp.getPayment(), fp.getJob());
 					return;
 				}
@@ -186,8 +194,9 @@ public class JobsUtils {
 			Jobs.FastPayment.remove(player.getUniqueId());
 		}
 
-		if (!payForItemDurabilityLoss(player))
+		if (!payForItemDurabilityLoss(player)) {
 			return;
+		}
 
 		// restricted area multiplier
 
@@ -198,16 +207,18 @@ public class JobsUtils {
 			if (Jobs.getGCManager().useSilkTouchProtection) {
 				for(Entry<Enchantment, Integer> one: item.getEnchantments().entrySet()) {
 					if (CMIEnchantment.get(one.getKey()) == CMIEnchantment.SILK_TOUCH) {
-						if (Jobs.getBpManager().isInBp(block))
+						if (Jobs.getBpManager().isInBp(block)) {
 							return;
+						}
 					}
 				}
 			}
 		}
 
 		JobsPlayer jPlayer = Jobs.getPlayerManager().getJobsPlayer(player);
-		if (jPlayer == null)
+		if (jPlayer == null) {
 			return;
+		}
 
 		Jobs.action(jPlayer, bInfo, block);
 	}
@@ -215,82 +226,99 @@ public class JobsUtils {
 	public static void sendBlockPlaceAction(BlockPlaceEvent event) {
 		Jobs plugin = Jobs.getInstance();
 		// make sure plugin is enabled
-		if (!plugin.isEnabled())
+		if (!plugin.isEnabled()) {
 			return;
+		}
 		Block block = event.getBlock();
 
-		if (block == null)
+		if (block == null) {
 			return;
+		}
 
 		// disabling plugin in world
-		if (!Jobs.getGCManager().canPerformActionInWorld(block.getWorld()))
+		if (!Jobs.getGCManager().canPerformActionInWorld(block.getWorld())) {
 			return;
+		}
 
 		// check to make sure you can build
-		if (!event.canBuild())
+		if (!event.canBuild()) {
 			return;
+		}
 
 		Player player = event.getPlayer();
 
-		if (player == null || !player.isOnline())
+		if (player == null || !player.isOnline()) {
 			return;
+		}
 
 		// check if in creative
-		if (!payIfCreative(player))
+		if (!payIfCreative(player)) {
 			return;
+		}
 
-		if (!Jobs.getPermissionHandler().hasWorldPermission(player, player.getLocation().getWorld().getName()))
+		if (!Jobs.getPermissionHandler().hasWorldPermission(player, player.getLocation().getWorld().getName())) {
 			return;
+		}
 
 		// check if player is riding
-		if (Jobs.getGCManager().disablePaymentIfRiding && player.isInsideVehicle())
+		if (Jobs.getGCManager().disablePaymentIfRiding && player.isInsideVehicle()) {
 			return;
+		}
 
 		JobsPlayer jPlayer = Jobs.getPlayerManager().getJobsPlayer(player);
-		if (jPlayer == null)
+		if (jPlayer == null) {
 			return;
+		}
 
 		Jobs.action(jPlayer, new BlockActionInfo(block, ActionType.PLACE), block);
 	}
-	
-    public static void sendFishAction(PlayerFishEvent event) {
+
+	public static void sendFishAction(PlayerFishEvent event) {
 		Jobs plugin = Jobs.getInstance();
 		// make sure plugin is enabled
-		if (!plugin.isEnabled())
-		    return;
-		//disabling plugin in world
-		if (event.getPlayer() != null && !Jobs.getGCManager().canPerformActionInWorld(event.getPlayer().getWorld()))
-		    return;
-	
-		Player player = event.getPlayer();
-	
-		// check if in creative
-		if (!payIfCreative(player))
-		    return;
-	
-		if (!Jobs.getPermissionHandler().hasWorldPermission(player, player.getLocation().getWorld().getName()))
-		    return;
-	
-		// check if player is riding
-		if (Jobs.getGCManager().disablePaymentIfRiding && player.isInsideVehicle())
-		    return;
-	
-		if (!payForItemDurabilityLoss(player))
-		    return;
-	
-		if (event.getState().equals(PlayerFishEvent.State.CAUGHT_FISH) && event.getCaught() instanceof Item) {
-		    JobsPlayer jPlayer = Jobs.getPlayerManager().getJobsPlayer(player);
-		    if (jPlayer == null)
+		if (!plugin.isEnabled()) {
 			return;
-		    ItemStack items = ((Item) event.getCaught()).getItemStack();
-		    Jobs.action(jPlayer, new ItemActionInfo(items, ActionType.FISH));
 		}
-    }
+		//disabling plugin in world
+		if (event.getPlayer() != null && !Jobs.getGCManager().canPerformActionInWorld(event.getPlayer().getWorld())) {
+			return;
+		}
+
+		Player player = event.getPlayer();
+
+		// check if in creative
+		if (!payIfCreative(player)) {
+			return;
+		}
+
+		if (!Jobs.getPermissionHandler().hasWorldPermission(player, player.getLocation().getWorld().getName())) {
+			return;
+		}
+
+		// check if player is riding
+		if (Jobs.getGCManager().disablePaymentIfRiding && player.isInsideVehicle()) {
+			return;
+		}
+
+		if (!payForItemDurabilityLoss(player)) {
+			return;
+		}
+
+		if (event.getState().equals(PlayerFishEvent.State.CAUGHT_FISH) && event.getCaught() instanceof Item) {
+			JobsPlayer jPlayer = Jobs.getPlayerManager().getJobsPlayer(player);
+			if (jPlayer == null) {
+				return;
+			}
+			ItemStack items = ((Item) event.getCaught()).getItemStack();
+			Jobs.action(jPlayer, new ItemActionInfo(items, ActionType.FISH));
+		}
+	}
 
 	private static boolean payIfCreative(Player player) {
 		if (player.getGameMode().equals(GameMode.CREATIVE) && !Jobs.getGCManager().payInCreative()
-				&& !player.hasPermission("jobs.paycreative"))
+		&& !player.hasPermission("jobs.paycreative")) {
 			return false;
+		}
 		return true;
 	}
 
@@ -299,8 +327,8 @@ public class JobsUtils {
 		ItemStack hand = Jobs.getNms().getItemInMainHand(p);
 
 		if (!Jobs.getGCManager().payItemDurabilityLoss && hand != null && !hand.getType().equals(Material.AIR)
-				&& hand.getType().getMaxDurability() - Jobs.getNms().getDurability(hand) != hand.getType()
-						.getMaxDurability()) {
+		&& hand.getType().getMaxDurability() - Jobs.getNms().getDurability(hand) != hand.getType()
+		.getMaxDurability()) {
 			for(String whiteList: Jobs.getGCManager().WhiteListedItems) {
 				String item = whiteList.contains("=") ? whiteList.split("=")[0] : whiteList;
 				if (item.contains("-")) {

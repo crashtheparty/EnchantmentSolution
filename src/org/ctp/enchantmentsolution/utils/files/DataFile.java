@@ -12,9 +12,9 @@ public class DataFile implements Configurable {
 
 	private File file;
 	private YamlConfig config;
-	
+
 	public DataFile(File dataFolder, String fileName) {
-		this.file = new File(dataFolder + "/extras/" + fileName);
+		file = new File(dataFolder + "/extras/" + fileName);
 		try {
 			YamlConfiguration.loadConfiguration(file);
 

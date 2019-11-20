@@ -27,7 +27,7 @@ public class AbilityRunnable implements Runnable, Reflectionable {
 			ItemStack helmet = player.getInventory().getHelmet();
 			if (helmet != null && ItemUtils.hasEnchantment(helmet, RegisterEnchantments.NO_REST)) {
 				if (player.getStatistic(Statistic.TIME_SINCE_REST) > 72000 && player.getWorld().getTime() > 12540
-						&& player.getWorld().getTime() < 23459) {
+				&& player.getWorld().getTime() < 23459) {
 					AdvancementUtils.awardCriteria(player, ESAdvancement.COFFEE_BREAK, "coffee");
 				}
 				player.setStatistic(Statistic.TIME_SINCE_REST, 0);

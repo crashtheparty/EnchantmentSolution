@@ -1,13 +1,12 @@
 package org.ctp.enchantmentsolution.version;
 
-import java.util.logging.Level;
-
 import org.bukkit.Bukkit;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
 
 public class BukkitVersion {
 
 	private String version = getBukkitVersion();
+	private String apiVersion = getBukkitApiVersion();
 	private boolean versionAllowed = allowedBukkitVersion();
 	private int versionNumber;
 
@@ -18,39 +17,73 @@ public class BukkitVersion {
 		return version;
 	}
 
+	private String getBukkitApiVersion() {
+		String a = Bukkit.getServer().getClass().getPackage().getName();
+		String apiVersion = a.substring(a.lastIndexOf('.') + 1).trim();
+
+		return apiVersion;
+	}
+
 	private boolean allowedBukkitVersion() {
 		versionNumber = 0;
 
 		// BukkitVersion
-		ChatUtils.sendToConsole(Level.INFO, "Bukkit Version: " + version);
+		ChatUtils.sendInfo("Checking Bukkit Version: " + version);
 
 		// Check
 		switch (version) {
 			case "1.13":
 				versionNumber = 1;
-				return true;
+				break;
 			case "1.13.1":
 				versionNumber = 2;
-				return true;
+				break;
 			case "1.13.2":
 				versionNumber = 3;
-				return true;
+				break;
 			case "1.14":
 				versionNumber = 4;
-				return true;
+				break;
 			case "1.14.1":
 				versionNumber = 5;
-				return true;
+				break;
 			case "1.14.2":
 				versionNumber = 6;
-				return true;
+				break;
 			case "1.14.3":
 				versionNumber = 7;
-				return true;
-			case "1.14.4":
-				versionNumber = 8;
-				return true;
+				break;
+				//			case "1.14.4":
+				//				versionNumber = 8;
+				//				break;
 		}
+		if(versionNumber > 0) {
+			ChatUtils.sendInfo("Found version " + version + ". Setting version number to " + versionNumber + ".");
+			return true;
+		}
+
+		// BukkitApiVersion
+		ChatUtils.sendWarning("Could not find version " + version + ".");
+		ChatUtils.sendInfo("Checking Bukkit API Version: " + apiVersion);
+
+		// Check
+		switch (apiVersion) {
+			case "v1_13_R1":
+				versionNumber = 1;
+				break;
+			case "v1_13_R2":
+				versionNumber = 3;
+				break;
+				//			case "v1_14_R1":
+				//				versionNumber = 8;
+				//				break;
+		}
+		if(versionNumber > 0) {
+			ChatUtils.sendInfo("Found version " + apiVersion + ". Setting version number to " + versionNumber + ".");
+			return true;
+		}
+		ChatUtils.sendSevere("This version is not defined! Features that require NMS have been disabled, and issues may arise with certain features. "
+		+ "Please wait for an update for this version.");
 		return false;
 	}
 

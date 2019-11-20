@@ -34,9 +34,9 @@ public class SaveUtils {
 			while (config.containsElements("advancement_progress." + i)) {
 				try {
 					ESAdvancementProgress progress = EnchantmentSolution.getAdvancementProgress(
-							Bukkit.getOfflinePlayer(UUID.fromString(config.getString("advancement_progress." + i + ".player"))), 
-							ESAdvancement.valueOf(config.getString("advancement_progress." + i + ".advancement")), 
-							config.getString("advancement_progress." + i + ".criteria"));
+					Bukkit.getOfflinePlayer(UUID.fromString(config.getString("advancement_progress." + i + ".player"))),
+					ESAdvancement.valueOf(config.getString("advancement_progress." + i + ".advancement")),
+					config.getString("advancement_progress." + i + ".criteria"));
 					progress.setCurrentAmount(config.getInt("advancement_progress." + i + ".current_amount"));
 					config.removeKey("advancement_progress." + i);
 				} catch(Exception ex) {
@@ -53,18 +53,18 @@ public class SaveUtils {
 				String stringBlock = config.getString("blocks." + i);
 				String[] arrayBlock = stringBlock.split(" ");
 				try {
-					Block block = (new Location(Bukkit.getWorld(arrayBlock[1]),
-							Integer.parseInt(arrayBlock[2]),
-							Integer.parseInt(arrayBlock[3]),
-							Integer.parseInt(arrayBlock[4]))).getBlock();
+					Block block = new Location(Bukkit.getWorld(arrayBlock[1]),
+					Integer.parseInt(arrayBlock[2]),
+					Integer.parseInt(arrayBlock[3]),
+					Integer.parseInt(arrayBlock[4])).getBlock();
 					Enchantment enchantment = RegisterEnchantments.getByName(arrayBlock[0]).getRelativeEnchantment();
-					WalkerBlock walkerBlock = new WalkerBlock(enchantment, block, Material.valueOf(arrayBlock[5]), 
+					WalkerBlock walkerBlock = new WalkerBlock(enchantment, block, Material.valueOf(arrayBlock[5]),
 					Integer.parseInt(arrayBlock[6]), DamageState.valueOf(arrayBlock[7]));
 					blocks.add(walkerBlock);
 				} catch (Exception ex) {
 					Bukkit.getLogger().info(
-							"Block at position " + i
-									+ " was invalid, skipping.");
+					"Block at position " + i
+					+ " was invalid, skipping.");
 				}
 				i++;
 			}

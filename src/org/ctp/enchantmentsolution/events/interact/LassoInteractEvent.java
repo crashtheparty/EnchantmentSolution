@@ -4,7 +4,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.ctp.enchantmentsolution.events.InteractEvent;
+import org.ctp.enchantmentsolution.events.player.InteractEvent;
 import org.ctp.enchantmentsolution.nms.animalmob.AnimalMob;
 
 public class LassoInteractEvent extends InteractEvent {

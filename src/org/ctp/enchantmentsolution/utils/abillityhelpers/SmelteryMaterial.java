@@ -7,11 +7,11 @@ public class SmelteryMaterial {
 
 	private ItemStack smelted;
 	private Material fromMaterial, toMaterial;
-	
+
 	public SmelteryMaterial(ItemStack smelted, Material fromMaterial, Material toMaterial) {
-		this.setSmelted(smelted);
-		this.setFromMaterial(fromMaterial);
-		this.setToMaterial(toMaterial);
+		setSmelted(smelted);
+		setFromMaterial(fromMaterial);
+		setToMaterial(toMaterial);
 	}
 
 	public ItemStack getSmelted() {

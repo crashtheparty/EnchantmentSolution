@@ -6,12 +6,12 @@ import org.ctp.enchantmentsolution.events.ESDamageEntityEvent;
 public class IronDefenseDamageEvent extends ESDamageEntityEvent {
 
 	private int shieldDamage;
-	
+
 	public IronDefenseDamageEvent(LivingEntity damaged, double damage, double newDamage, int shieldDamage) {
 		super(damaged, damage, newDamage);
-		this.setShieldDamage(shieldDamage);
+		setShieldDamage(shieldDamage);
 	}
-	
+
 	public void setNewDamage(double newDamage) {
 		if(newDamage > getDamage()) {
 			super.setNewDamage(getDamage());

@@ -50,7 +50,7 @@ public class MiscRunnable implements Runnable, Reflectionable {
 					attackers.get(entity.getAttackerEntity().getUniqueId()) + 1);
 					if (attackers.get(entity.getAttackerEntity().getUniqueId()) >= 3
 					&& entity.getAttackerEntity() instanceof Player) {
-						AdvancementUtils.awardCriteria(((Player) entity.getAttackerEntity()),
+						AdvancementUtils.awardCriteria((Player) entity.getAttackerEntity(),
 						ESAdvancement.SEVEN_POINT_EIGHT, "drowning");
 					}
 				} else {
@@ -83,7 +83,9 @@ public class MiscRunnable implements Runnable, Reflectionable {
 	}
 
 	private void sandVeil() {
-		if(!RegisterEnchantments.isEnabled(RegisterEnchantments.SAND_VEIL)) return;
+		if(!RegisterEnchantments.isEnabled(RegisterEnchantments.SAND_VEIL)) {
+			return;
+		}
 		Iterator<EntityAccuracy> entities = EnchantmentSolution.getAccuracy().iterator();
 		while (entities.hasNext()) {
 			EntityAccuracy entity = entities.next();

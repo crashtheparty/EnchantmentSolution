@@ -52,7 +52,7 @@ public class AnvilGUI_v1_13_R1 extends AnvilGUI {
 		}
 
 		inv.setItem(0, new ItemStack(Material.NAME_TAG));
-		
+
 		setInventory(inv);
 
 		setInventory(inv);

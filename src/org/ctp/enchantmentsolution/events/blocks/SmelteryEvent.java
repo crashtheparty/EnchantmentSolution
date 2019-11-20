@@ -11,12 +11,12 @@ public class SmelteryEvent extends ESBlockBreakEvent {
 	private Material changeTo;
 	private boolean fortune = true;
 	private int exp;
-	
+
 	public SmelteryEvent(Block block, Player player, ItemStack drop, Material changeTo, int exp) {
 		super(block, player);
-		this.setDrop(drop);
-		this.setChangeTo(changeTo);
-		this.setExp(exp);
+		setDrop(drop);
+		setChangeTo(changeTo);
+		setExp(exp);
 	}
 
 	public Material getChangeTo() {

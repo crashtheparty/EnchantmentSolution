@@ -4,7 +4,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
 public abstract class ESBlockBreakEvent extends ESBlockEvent {
-	
+
 	private final Player player;
 
 	public ESBlockBreakEvent(Block block, Player player) {

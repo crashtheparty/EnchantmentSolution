@@ -20,11 +20,11 @@ public abstract class MultiBlockEvent extends Event implements Cancellable {
 	public final HandlerList getHandlers() {
 		return handlers;
 	}
-	
+
 	private Collection<Block> blocks;
 	private final Player player;
 	private boolean cancelled;
-	
+
 	public MultiBlockEvent(Collection<Block> blocks, Player player) {
 		this.blocks = blocks;
 		this.player = player;

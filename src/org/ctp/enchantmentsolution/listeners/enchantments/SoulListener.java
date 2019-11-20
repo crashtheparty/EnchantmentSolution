@@ -70,7 +70,7 @@ public class SoulListener extends Enchantmentable {
 			savedItems.addAll(soulboundEvent.getSavedItems());
 
 			if (killItem != null && RegisterEnchantments.isEnabled(RegisterEnchantments.SOUL_REAPER)
-					&& ItemUtils.hasEnchantment(killItem, RegisterEnchantments.SOUL_REAPER)) {
+			&& ItemUtils.hasEnchantment(killItem, RegisterEnchantments.SOUL_REAPER)) {
 				List<ItemStack> soulReaper = new ArrayList<ItemStack>();
 				int level = ItemUtils.getLevel(killItem, RegisterEnchantments.SOUL_REAPER);
 				if (level > savedItems.size()) {
@@ -92,12 +92,12 @@ public class SoulListener extends Enchantmentable {
 						if (soulReaperEvent.getReapedItems().size() > 0) {
 							AdvancementUtils.awardCriteria(player.getKiller(), ESAdvancement.FEAR_THE_REAPER, "reaper");
 							player.getWorld().spawnParticle(Particle.EXPLOSION_HUGE, player.getLocation(), 50, 0.2, 2,
-									0.2);
+							0.2);
 							player.getWorld().playSound(player.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 0.6f, 0.6f);
 							for(ItemStack item: soulReaperEvent.getReapedItems()) {
 								if (ItemUtils.hasEnchantment(item, RegisterEnchantments.SOUL_REAPER)) {
 									AdvancementUtils.awardCriteria(player.getKiller(), ESAdvancement.REAPED_THE_REAPER,
-											"reaper");
+									"reaper");
 								}
 							}
 						}

@@ -177,4 +177,9 @@ public class ConfigUtils {
 		file.deleteOnExit();
 		return file;
 	}
+
+	public static boolean dropNaturally() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

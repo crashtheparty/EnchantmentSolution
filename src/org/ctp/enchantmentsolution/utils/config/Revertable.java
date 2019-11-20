@@ -1,7 +1,7 @@
 package org.ctp.enchantmentsolution.utils.config;
 
 public interface Revertable {
-	
+
 	public void setDefaults();
 
 	public void migrateVersion();

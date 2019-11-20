@@ -40,7 +40,7 @@ public class WalkerUtils {
 		}
 		return false;
 	}
-	
+
 	public static void updateBlocks(Player player, ItemStack boots, Location loc, Enchantment enchantment,
 	List<Material> checkMaterial, Material replaceMaterial, String metadata) {
 		int radius = 1 + ItemUtils.getLevel(boots, enchantment);
@@ -65,7 +65,7 @@ public class WalkerUtils {
 							WalkerBlock walker = new WalkerBlock(enchantment, block, checkMaterial.get(0), TICK);
 							MagmaWalkerBlockEvent magmaWalker = new MagmaWalkerBlockEvent(block, block.getState(), player);
 							Bukkit.getPluginManager().callEvent(magmaWalker);
-							
+
 							if(!magmaWalker.isCancelled()) {
 								BLOCKS.add(walker);
 								setBlockMeta(walker);
@@ -80,7 +80,7 @@ public class WalkerUtils {
 							WalkerBlock walker = new WalkerBlock(enchantment, block, checkMaterial.get(0), TICK);
 							VoidWalkerBlockEvent voidWalker = new VoidWalkerBlockEvent(block, block.getState(), player);
 							Bukkit.getPluginManager().callEvent(voidWalker);
-							
+
 							if(!voidWalker.isCancelled()) {
 								BLOCKS.add(walker);
 								setBlockMeta(walker);
@@ -93,7 +93,7 @@ public class WalkerUtils {
 			}
 		}
 	}
-	
+
 	private static void setBlockMeta(WalkerBlock block) {
 		int packetID = -100;
 		if (block.getBlock().hasMetadata("packet_id")) {
@@ -121,11 +121,11 @@ public class WalkerUtils {
 	public static void updateBlocks() {
 		for(int i = BLOCKS.size() - 1; i >= 0; i--) {
 			WalkerBlock walker = BLOCKS.get(i);
-			if(walker.getTick() == TICK && (new Random()).nextInt(4) == 0) {
+			if(walker.getTick() == TICK && new Random().nextInt(4) == 0) {
 				if(walker.getEnchantment() == RegisterEnchantments.MAGMA_WALKER) {
 					MagmaWalkerDamageBlockEvent event = new MagmaWalkerDamageBlockEvent(walker.getBlock(), walker.getNextDamage());
 					Bukkit.getPluginManager().callEvent(event);
-					
+
 					if(!event.isCancelled()) {
 						walker.nextDamage();
 						setBlockMeta(walker);
@@ -137,7 +137,7 @@ public class WalkerUtils {
 				} else if (walker.getEnchantment() == RegisterEnchantments.VOID_WALKER) {
 					VoidWalkerDamageBlockEvent event = new VoidWalkerDamageBlockEvent(walker.getBlock(), walker.getNextDamage());
 					Bukkit.getPluginManager().callEvent(event);
-					
+
 					if(!event.isCancelled()) {
 						walker.nextDamage();
 						setBlockMeta(walker);

@@ -1,6 +1,5 @@
 package org.ctp.enchantmentsolution.threads;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -35,9 +34,11 @@ public class ElytraRunnable implements Runnable, Reflectionable {
 		}
 		run++;
 	}
-	
+
 	private void frequentFlyer() {
-		if(!RegisterEnchantments.isEnabled(RegisterEnchantments.FREQUENT_FLYER)) return;
+		if(!RegisterEnchantments.isEnabled(RegisterEnchantments.FREQUENT_FLYER)) {
+			return;
+		}
 		for(Player player : Bukkit.getOnlinePlayers()) {
 			try {
 				if(!PLAYERS.containsKey(player.getUniqueId())) {
@@ -55,7 +56,7 @@ public class ElytraRunnable implements Runnable, Reflectionable {
 				ex.printStackTrace();
 			}
 		}
-		
+
 		Iterator<Entry<UUID, FrequentFlyerPlayer>> iterator = PLAYERS.entrySet().iterator();
 		while(iterator.hasNext()) {
 			Entry<UUID, FrequentFlyerPlayer> entry = iterator.next();
@@ -64,7 +65,7 @@ public class ElytraRunnable implements Runnable, Reflectionable {
 				iterator.remove();
 				continue;
 			}
-			FrequentFlyerPlayer ffPlayer = (FrequentFlyerPlayer) entry.getValue();
+			FrequentFlyerPlayer ffPlayer = entry.getValue();
 			ItemStack elytra = ffPlayer.getPlayer().getInventory().getChestplate();
 			if (elytra != null && elytra.getType().equals(Material.ELYTRA)) {
 				ffPlayer.setElytra(elytra);
@@ -72,17 +73,19 @@ public class ElytraRunnable implements Runnable, Reflectionable {
 					ffPlayer.minus();
 				}
 			} else {
-				if((elytra == null || !elytra.getType().equals(Material.ELYTRA)) && !player.getGameMode().equals(GameMode.CREATIVE) 
-						&& !player.getGameMode().equals(GameMode.SPECTATOR)) {
+				if((elytra == null || !elytra.getType().equals(Material.ELYTRA)) && !player.getGameMode().equals(GameMode.CREATIVE)
+				&& !player.getGameMode().equals(GameMode.SPECTATOR)) {
 					ffPlayer.setElytra(null);
 					ffPlayer.setCanFly(false);
 				}
 			}
 		}
 	}
-	
+
 	private void icarus() {
-		if(!RegisterEnchantments.isEnabled(RegisterEnchantments.ICARUS)) return;
+		if(!RegisterEnchantments.isEnabled(RegisterEnchantments.ICARUS)) {
+			return;
+		}
 		List<IcarusDelay> icarusDelay = IcarusDelay.getIcarusDelay();
 		for(int i = icarusDelay.size() - 1; i >= 0; i--) {
 			IcarusDelay icarus = icarusDelay.get(i);

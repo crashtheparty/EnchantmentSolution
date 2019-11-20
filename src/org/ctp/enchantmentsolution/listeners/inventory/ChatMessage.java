@@ -38,13 +38,7 @@ public class ChatMessage implements Listener {
 				String chat = event.getMessage();
 				enchantabilityCalc.setItemName(chat);
 				enchantabilityCalc.setChat(false);
-				Bukkit.getScheduler().runTask(EnchantmentSolution.getPlugin(), new Runnable() {
-					@Override
-					public void run() {
-						enchantabilityCalc.setInventory();
-					}
-					
-				});
+				Bukkit.getScheduler().runTask(EnchantmentSolution.getPlugin(), (Runnable) () -> enchantabilityCalc.setInventory());
 			} else {
 				EnchantmentSolution.getPlugin().removeInventory(enchantabilityCalc);
 			}
