@@ -7,8 +7,8 @@ import java.util.Map.Entry;
 
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
-import org.ctp.enchantmentsolution.enchantments.Enchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
+import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 
 import com.spawnchunk.auctionhouse.AuctionHouse;
 import com.spawnchunk.auctionhouse.modules.Listing;
@@ -33,8 +33,8 @@ public class AuctionHouseUtils {
 					}
 				}
 				for(EnchantmentLevel level : levels) {
-					item = Enchantments.removeEnchantmentFromItem(item, level.getEnchant());
-					item = Enchantments.addEnchantmentToItem(item, level.getEnchant(), level.getLevel());
+					item = ItemUtils.removeEnchantmentFromItem(item, level.getEnchant());
+					item = ItemUtils.addEnchantmentToItem(item, level.getEnchant(), level.getLevel());
 				}
 			}
 			l.setItemStack(item);
