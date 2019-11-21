@@ -70,7 +70,9 @@ public class EnchantmentListener implements Listener{
 				player.playSound(player.getLocation(), Sound.BLOCK_ENCHANTMENT_TABLE_USE, 1, 1);
 				player.setStatistic(Statistic.ITEM_ENCHANTED, player.getStatistic(Statistic.ITEM_ENCHANTED) + 1);
 				Advancement enchanted = Bukkit.getAdvancement(NamespacedKey.minecraft("story/enchant_item"));
-				player.getAdvancementProgress(enchanted).awardCriteria("enchanted_item");
+				if(enchanted != null) {
+					player.getAdvancementProgress(enchanted).awardCriteria("enchanted_item");
+				}
 				if(EnchantmentSolution.getPlugin().isJobsEnabled()) {
 					JobsUtils.sendEnchantAction(player, item, item, enchantments);
 				}

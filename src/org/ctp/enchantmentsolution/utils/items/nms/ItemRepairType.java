@@ -23,6 +23,7 @@ public interface ItemRepairType {
 		case 6:
 		case 7:
 		case 8:
+		case 9:
 			return ItemRepair_v1_14.getType(type);
 		}
 		return null;
@@ -39,6 +40,7 @@ public interface ItemRepairType {
 		case 6:
 		case 7:
 		case 8:
+		case 9:
 			return ItemRepair_v1_14.values();
 		}
 		return null;

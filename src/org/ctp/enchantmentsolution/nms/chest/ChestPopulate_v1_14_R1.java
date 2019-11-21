@@ -17,6 +17,7 @@ import net.minecraft.server.v1_14_R1.MinecraftKey;
 import net.minecraft.server.v1_14_R1.TileEntityLootable;
 import net.minecraft.server.v1_14_R1.World;
 
+@SuppressWarnings("resource")
 public class ChestPopulate_v1_14_R1 {
 
 	public static void populateChest(Block block) {

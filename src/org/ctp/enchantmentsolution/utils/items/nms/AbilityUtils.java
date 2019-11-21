@@ -49,6 +49,7 @@ public class AbilityUtils {
 		case 6:
 		case 7:
 		case 8:
+		case 9:
 			return Smeltery_v1_14.getSmelteryItem(block, item);
 		}
 		return null;
@@ -65,6 +66,7 @@ public class AbilityUtils {
 		case 6:
 		case 7:
 		case 8:
+		case 9:
 			return SilkTouch_v1_14.getSilkTouchItem(block, item);
 		}
 		return null;
@@ -82,6 +84,7 @@ public class AbilityUtils {
 		case 6:
 		case 7:
 		case 8:
+		case 9:
 			return Fortune_v1_14.getFortuneItems(item, brokenBlock, priorItems);
 		}
 		return null;

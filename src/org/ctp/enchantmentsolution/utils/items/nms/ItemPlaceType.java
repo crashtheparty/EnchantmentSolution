@@ -22,6 +22,7 @@ public interface ItemPlaceType {
 		case 6:
 		case 7:
 		case 8:
+		case 9:
 			return new ItemPlaceType_v1_14().getItemPlaceTypes();
 		}
 		return null;

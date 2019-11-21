@@ -575,7 +575,9 @@ public class BlockListener extends EnchantmentListener{
 		player.incrementStatistic(Statistic.USE_ITEM, item.getType());
 		super.damageItem(player, item);
 		McMMO.handleMcMMO(event, item);
-		JobsUtils.sendBlockBreakAction(event);
+		if(EnchantmentSolution.getPlugin().isJobsEnabled()) {
+			JobsUtils.sendBlockBreakAction(event);
+		}
 		event.getBlock().setType(Material.AIR);
 	}
 	

@@ -358,7 +358,9 @@ public class EnchantmentTable implements InventoryData {
 		setInventory(playerItems);
 		player.setStatistic(Statistic.ITEM_ENCHANTED, player.getStatistic(Statistic.ITEM_ENCHANTED) + 1);
 		Advancement enchanted = Bukkit.getAdvancement(NamespacedKey.minecraft("story/enchant_item"));
-		player.getAdvancementProgress(enchanted).awardCriteria("enchanted_item");
+		if(enchanted != null) {
+			player.getAdvancementProgress(enchanted).awardCriteria("enchanted_item");
+		}
 		if(EnchantmentSolution.getPlugin().isJobsEnabled()) {
 			JobsUtils.sendEnchantAction(player, enchantItem, enchantableItem, enchLevels);
 		}

@@ -38,10 +38,14 @@ public class FishingListener extends EnchantmentListener{
 				if(canRun(DefaultEnchantments.FRIED, event)) {
 					if (caught.getType().equals(Material.COD)) {
 						caught.setType(Material.COOKED_COD);
-						JobsUtils.sendFishAction(event);
+						if(EnchantmentSolution.getPlugin().isJobsEnabled()){
+							JobsUtils.sendFishAction(event);
+						}
 						AdvancementUtils.awardCriteria(player, ESAdvancement.FISH_STICKS, "cooked");
 					} else if (caught.getType().equals(Material.SALMON)) {
-						JobsUtils.sendFishAction(event);
+						if(EnchantmentSolution.getPlugin().isJobsEnabled()){
+							JobsUtils.sendFishAction(event);
+						}
 						caught.setType(Material.COOKED_SALMON);
 						AdvancementUtils.awardCriteria(player, ESAdvancement.FISH_STICKS, "cooked");
 					} else if (caught.getType() == Material.TROPICAL_FISH) {
