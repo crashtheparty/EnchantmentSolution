@@ -132,7 +132,7 @@ public class RegisterEnchantments {
 	}
 
 	public static void setEnchantments() {
-		boolean levelFifty = ConfigUtils.isLevel50();
+		boolean levelFifty = ConfigString.LEVEL_FIFTY.getBoolean();
 		for(int i = 0; i < ENCHANTMENTS.size(); i++) {
 			CustomEnchantment enchantment = ENCHANTMENTS.get(i);
 			LanguageConfiguration language = Configurations.getLanguage();

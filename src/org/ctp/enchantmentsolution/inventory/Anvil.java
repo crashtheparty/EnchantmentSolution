@@ -15,12 +15,12 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.generate.AnvilEnchantments;
 import org.ctp.enchantmentsolution.enchantments.generate.AnvilEnchantments.RepairType;
-import org.ctp.enchantmentsolution.utils.config.MainConfiguration;
 import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 import org.ctp.enchantmentsolution.utils.AnvilUtils;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
-import org.ctp.enchantmentsolution.utils.ConfigUtils;
 import org.ctp.enchantmentsolution.utils.compatibility.JobsUtils;
+import org.ctp.enchantmentsolution.utils.config.ConfigString;
+import org.ctp.enchantmentsolution.utils.config.ConfigUtils;
 
 public class Anvil implements InventoryData {
 
@@ -46,8 +46,8 @@ public class Anvil implements InventoryData {
 		if (block.getType() == Material.AIR) {
 			return;
 		}
-		boolean useAnvil = ConfigUtils.getBoolean(MainConfiguration.class, "anvil.default_use");
-		int maxRepairLevel = ConfigUtils.getInt(MainConfiguration.class, "anvil.max_repair_level");
+		boolean useAnvil = ConfigString.DEFAULT_ANVIL.getBoolean();
+		int maxRepairLevel = ConfigString.MAX_REPAIR_LEVEL.getInt();
 		boolean useLegacyGrindstone = ConfigUtils.useLegacyGrindstone();
 		try {
 			int size = 27;

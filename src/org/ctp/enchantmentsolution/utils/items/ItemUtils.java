@@ -17,6 +17,7 @@ import org.bukkit.block.Container;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BlockStateMeta;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
@@ -28,10 +29,9 @@ import org.ctp.enchantmentsolution.enchantments.CustomEnchantmentWrapper;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.enums.ItemType;
-import org.ctp.enchantmentsolution.utils.ConfigUtils;
 import org.ctp.enchantmentsolution.utils.ESArrays;
 import org.ctp.enchantmentsolution.utils.StringUtils;
-import org.ctp.enchantmentsolution.utils.config.MainConfiguration;
+import org.ctp.enchantmentsolution.utils.config.ConfigString;
 
 public class ItemUtils {
 
@@ -47,7 +47,7 @@ public class ItemUtils {
 		int amount = item.getAmount();
 		leftOver.putAll(player.getInventory().addItem(item));
 		Location fallbackClone = fallback.clone();
-		boolean dropNaturally = ConfigUtils.getBoolean(MainConfiguration.class, "drop_items_naturally");
+		boolean dropNaturally = ConfigString.DROP_ITEMS_NATURALLY.getBoolean();
 		if (!leftOver.isEmpty()) {
 			for(Iterator<Entry<Integer, ItemStack>> it = leftOver.entrySet().iterator(); it.hasNext();) {
 				Entry<Integer, ItemStack> e = it.next();
@@ -66,15 +66,15 @@ public class ItemUtils {
 		}
 	}
 
-	public static void dropItems(Collection<ItemStack> drops, Location loc, boolean dropNaturally) {
+	public static void dropItems(Collection<ItemStack> drops, Location loc) {
 		for(ItemStack drop: drops) {
-			dropItem(drop, loc, dropNaturally);
+			dropItem(drop, loc);
 		}
 	}
 
-	public static void dropItem(ItemStack item, Location loc, boolean dropNaturally) {
+	public static void dropItem(ItemStack item, Location loc) {
 		Location location = loc.clone();
-		if (!dropNaturally) {
+		if (!ConfigString.DROP_ITEMS_NATURALLY.getBoolean()) {
 			Item droppedItem = location.getWorld().dropItem(location, item);
 			droppedItem.setVelocity(new Vector(0, 0, 0));
 			droppedItem.teleport(location);
@@ -140,18 +140,20 @@ public class ItemUtils {
 			meta.setLore(new ArrayList<String>());
 			return meta;
 		}
-		List<String> enchantmentsFirst = new ArrayList<String>();
-		for(String l: lore) {
-			if (StringUtils.isEnchantment(l)) {
-				enchantmentsFirst.add(l);
+		if(ConfigString.LORE_ON_TOP.getBoolean()) {
+			List<String> enchantmentsFirst = new ArrayList<String>();
+			for(String l: lore) {
+				if (StringUtils.isEnchantment(l)) {
+					enchantmentsFirst.add(l);
+				}
 			}
-		}
-		for(String l: lore) {
-			if (!StringUtils.isEnchantment(l)) {
-				enchantmentsFirst.add(l);
+			for(String l: lore) {
+				if (!StringUtils.isEnchantment(l)) {
+					enchantmentsFirst.add(l);
+				}
 			}
+			meta.setLore(enchantmentsFirst);
 		}
-		meta.setLore(enchantmentsFirst);
 		return meta;
 	}
 
@@ -207,7 +209,7 @@ public class ItemUtils {
 			} else {
 				meta.addEnchant(level.getEnchant().getRelativeEnchantment(), level.getLevel(), true);
 			}
-			if (level.getEnchant().getRelativeEnchantment() instanceof CustomEnchantmentWrapper) {
+			if (!item.getItemMeta().hasItemFlag(ItemFlag.HIDE_ENCHANTS) && level.getEnchant().getRelativeEnchantment() instanceof CustomEnchantmentWrapper) {
 				previousLore = StringUtils.removeEnchantment(level.getEnchant(), level.getLevel(), previousLore);
 				lore.add(StringUtils.getEnchantmentString(level));
 			}

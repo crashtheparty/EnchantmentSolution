@@ -2,7 +2,7 @@ package org.ctp.enchantmentsolution.enchantments.generate;
 
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.ctp.enchantmentsolution.utils.ConfigUtils;
+import org.ctp.enchantmentsolution.utils.config.ConfigString;
 
 public class ChestEnchantments extends LootEnchantments {
 
@@ -13,7 +13,7 @@ public class ChestEnchantments extends LootEnchantments {
 	public static ChestEnchantments getChestEnchantment(Player player, ItemStack item, int minBookshelves,
 	boolean treasure) {
 		int books = 16;
-		if (ConfigUtils.isLevel50()) {
+		if (ConfigString.LEVEL_FIFTY.getBoolean()) {
 			books = 24;
 		}
 		int random = (int) (Math.random() * books) + minBookshelves;

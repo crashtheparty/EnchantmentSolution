@@ -5,9 +5,9 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.ctp.enchantmentsolution.EnchantmentSolution;
+import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enums.Language;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
-import org.ctp.enchantmentsolution.utils.ConfigUtils;
 import org.ctp.enchantmentsolution.utils.VersionUtils;
 import org.ctp.enchantmentsolution.utils.yaml.YamlConfig;
 import org.ctp.enchantmentsolution.utils.yaml.YamlConfigBackup;
@@ -53,33 +53,28 @@ public class MainConfiguration extends Configuration {
 		config.addEnum("enchanting_table.enchanting_type", enchantingTypes);
 		config.addMinMax("anvil.max_repair_level", 40, 1000000);
 		if (VersionUtils.getBukkitVersionNumber() > 3) {
-			config.addDefault("loots.pillager_outpost.bookshelves", 10);
-			config.addDefault("loots.pillager_outpost.levels", 1);
-			config.addDefault("loots.pillager_outpost.treasure", true);
+			config.addDefault("loots.chests.pillager_outpost.bookshelves", 10);
+			config.addDefault("loots.chests.pillager_outpost.levels", 1);
+			config.addDefault("loots.chests.pillager_outpost.treasure", true);
+		}
+
+		for(ESAdvancement advancement: ESAdvancement.values()) {
+			if (advancement == ESAdvancement.ENCHANTMENT_SOLUTION) {
+				config.addDefault("advancements." + advancement.getNamespace().getKey() + ".enable", false);
+				config.addDefault("advancements." + advancement.getNamespace().getKey() + ".toast", false);
+				config.addDefault("advancements." + advancement.getNamespace().getKey() + ".announce", false);
+			} else if (advancement.getActivatedVersion() < EnchantmentSolution.getPlugin().getBukkitVersion()
+			.getVersionNumber()) {
+				config.addDefault("advancements." + advancement.getNamespace().getKey() + ".enable", true);
+				config.addDefault("advancements." + advancement.getNamespace().getKey() + ".toast", true);
+				config.addDefault("advancements." + advancement.getNamespace().getKey() + ".announce", true);
+			}
 		}
 
 		if (EnchantmentSolution.getPlugin().isInitializing()) {
 			ChatUtils.sendInfo("Main configuration initialized!");
 		}
 
-		// for(ESAdvancement advancement : ESAdvancement.values()) {
-		// if(advancement == ESAdvancement.ENCHANTMENT_SOLUTION) {
-		// config.addDefault("advancements." + advancement.getNamespace().getKey() +
-		// ".enable", false);
-		// config.addDefault("advancements." + advancement.getNamespace().getKey() +
-		// ".toast", false);
-		// config.addDefault("advancements." + advancement.getNamespace().getKey() +
-		// ".announce", false);
-		// } else if(advancement.getActivatedVersion() <
-		// EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber()) {
-		// config.addDefault("advancements." + advancement.getNamespace().getKey() +
-		// ".enable", true);
-		// config.addDefault("advancements." + advancement.getNamespace().getKey() +
-		// ".toast", true);
-		// config.addDefault("advancements." + advancement.getNamespace().getKey() +
-		// ".announce", true);
-		// }
-		// }
 		file.delete();
 	}
 
@@ -111,10 +106,6 @@ public class MainConfiguration extends Configuration {
 			config.set("enchanting_table.lapis_in_table", config.getBoolean("lapis_in_table"));
 			config.removeKey("lapis_in_table");
 		}
-		if (config.getBooleanValue("use_enchanted_books") != null) {
-			config.set("enchanting_table.use_enchanted_books", config.getBoolean("use_enchanted_books"));
-			config.removeKey("use_enchanted_books");
-		}
 		if (config.getBooleanValue("enchantability_decay") != null) {
 			config.set("enchanting_table.decay", config.getBoolean("enchantability_decay"));
 			config.removeKey("enchantability_decay");
@@ -128,8 +119,48 @@ public class MainConfiguration extends Configuration {
 			config.removeKey("get_latest_version");
 		}
 		String setType = config.getString("enchanting_table.enchanting_type");
-		if (!enchantingTypes.contains(setType)) {
+		if (setType != null && !enchantingTypes.contains(setType)) {
 			config.set("enchanting_table.enchanting_type", "enhanced_50");
+			setType = "enhanced_50";
+		}
+
+		if (setType != null) {
+			config.set("enchanting_table.custom_gui", setType.contains("enhanced"));
+			config.set("enchanting_table.level_fifty", setType.contains("50"));
+			config.set("anvil.custom_gui", setType.contains("enhanced"));
+			config.set("grindstone.custom_gui", setType.contains("enhanced"));
+		}
+
+		if (config.getBooleanValue("enchanting_table.use_enchanted_books") != null) {
+			config.set("use_enchanted_books", config.getBoolean("enchanting_table.use_enchanted_books"));
+			config.removeKey("enchanting_table.use_enchanted_books");
+		}
+
+		if (config.getBooleanValue("mob_loot") != null) {
+			config.set("loots.mobs.use", config.getBoolean("mob_loot"));
+			config.removeKey("mob_loot");
+		}
+
+		if (config.getBooleanValue("chest_loot") != null) {
+			config.set("loots.chests.use", config.getBoolean("chest_loot"));
+			config.removeKey("chest_loot");
+		}
+
+		if (config.getBooleanValue("fishing_loot") != null) {
+			config.set("loots.fishing.use", config.getBoolean("fishing_loot"));
+			config.removeKey("fishing_loot");
+		}
+
+		for(String s : config.getLevelEntryKeys("loots")) {
+			if(!Arrays.asList("fishing", "mobs", "chests").contains(s.split("\\.")[1])) {
+				for(String t : config.getLevelEntryKeys(s)) {
+					if(config.get(t) != null) {
+						config.set("loots.chests." + t.substring(6), config.get(t));
+						config.removeKey(t);
+					}
+				}
+				config.removeKey(s);
+			}
 		}
 	}
 

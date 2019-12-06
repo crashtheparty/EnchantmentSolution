@@ -8,13 +8,14 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.inventory.Grindstone;
 import org.ctp.enchantmentsolution.inventory.InventoryData;
+import org.ctp.enchantmentsolution.utils.config.ConfigString;
 
 public class PlayerInteract_v1_14 {
 
 	@SuppressWarnings("deprecation")
 	public static void onPlayerInteract(PlayerInteractEvent event) {
 		Block block = event.getClickedBlock();
-		if (block.getType().equals(Material.GRINDSTONE)) {
+		if (block.getType() == Material.GRINDSTONE && ConfigString.CUSTOM_GRINDSTONE.getBoolean()) {
 			Bukkit.getScheduler().scheduleSyncDelayedTask(EnchantmentSolution.getPlugin(), () -> {
 				if (event.isCancelled()) {
 					return;

@@ -17,8 +17,9 @@ import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.enums.ItemType;
-import org.ctp.enchantmentsolution.utils.ConfigUtils;
-import org.ctp.enchantmentsolution.utils.config.MainConfiguration;
+import org.ctp.enchantmentsolution.nms.AnvilNMS;
+import org.ctp.enchantmentsolution.utils.config.ConfigString;
+import org.ctp.enchantmentsolution.utils.config.ConfigUtils;
 import org.ctp.enchantmentsolution.utils.items.DamageUtils;
 import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 
@@ -44,9 +45,8 @@ public class GrindstoneEnchantments extends GenerateEnchantments {
 		}
 	}
 
-	public static GrindstoneEnchantments getGrindstoneEnchantments(Player player, ItemStack first, ItemStack second,
-	boolean grindstoneTakeEnchantments) {
-		return new GrindstoneEnchantments(player, first, second, grindstoneTakeEnchantments);
+	public static GrindstoneEnchantments getGrindstoneEnchantments(Player player, ItemStack first, ItemStack second) {
+		return new GrindstoneEnchantments(player, first, second, ConfigString.TAKE_ENCHANTMENTS.getBoolean());
 	}
 
 	private void setCanCombine() {
@@ -82,7 +82,7 @@ public class GrindstoneEnchantments extends GenerateEnchantments {
 
 	private void takeEnchantments() {
 		takenItem = new ItemStack(itemTwo.getType());
-		boolean book = ConfigUtils.getBoolean(MainConfiguration.class, "use_enchanted_books");
+		boolean book = ConfigString.USE_ENCHANTED_BOOKS.getBoolean();
 		if (takenItem.getType() == Material.BOOK && book) {
 			takenItem = ItemUtils.convertToEnchantedBook(takenItem);
 		} else if (takenItem.getType() == Material.ENCHANTED_BOOK && !book) {
@@ -97,6 +97,14 @@ public class GrindstoneEnchantments extends GenerateEnchantments {
 				if (ench.getRelativeEnchantment().equals(e.getKey())) {
 					enchantments.add(new EnchantmentLevel(ench, e.getValue()));
 				}
+			}
+		}
+
+		if (combinedItem != null) {
+			if (ConfigString.SET_REPAIR_COST.getBoolean()) {
+				combinedItem = AnvilNMS.setRepairCost(combinedItem, AnvilNMS.getRepairCost(getItem()));
+			} else {
+				combinedItem = AnvilNMS.setRepairCost(combinedItem, 0);
 			}
 		}
 
@@ -120,7 +128,7 @@ public class GrindstoneEnchantments extends GenerateEnchantments {
 				}
 			}
 		}
-		takeCost = Math.max(cost / ConfigUtils.getInt(MainConfiguration.class, "anvil.get_level_divisor"), 1);
+		takeCost = Math.max(cost / ConfigString.LEVEL_DIVISOR.getInt(), 1);
 	}
 
 	public int getExperience() {
@@ -191,6 +199,10 @@ public class GrindstoneEnchantments extends GenerateEnchantments {
 			}
 		} else {
 			DamageUtils.setDamage(combinedItem, DamageUtils.getDamage(item.getItemMeta()));
+		}
+
+		if (combinedItem != null) {
+			combinedItem = AnvilNMS.setRepairCost(combinedItem, 0);
 		}
 
 		combinedItem = ItemUtils.addEnchantmentsToItem(combinedItem, combineEnchants());
@@ -279,14 +291,6 @@ public class GrindstoneEnchantments extends GenerateEnchantments {
 
 	public ItemStack getCombinedItem() {
 		return combinedItem;
-	}
-
-	public boolean isCanCombine() {
-		return canCombine;
-	}
-
-	public boolean isTakeEnchantments() {
-		return takeEnchantments;
 	}
 
 }

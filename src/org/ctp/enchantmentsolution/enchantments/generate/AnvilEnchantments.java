@@ -16,9 +16,9 @@ import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.enums.ItemRepairType;
 import org.ctp.enchantmentsolution.nms.AnvilNMS;
-import org.ctp.enchantmentsolution.utils.ConfigUtils;
 import org.ctp.enchantmentsolution.utils.ESArrays;
-import org.ctp.enchantmentsolution.utils.config.MainConfiguration;
+import org.ctp.enchantmentsolution.utils.config.ConfigString;
+import org.ctp.enchantmentsolution.utils.config.ConfigUtils;
 import org.ctp.enchantmentsolution.utils.items.DamageUtils;
 import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 
@@ -127,7 +127,7 @@ public class AnvilEnchantments extends GenerateEnchantments {
 		combinedItem = itemOne.clone();
 		combinedItem = ItemUtils.removeAllEnchantments(combinedItem);
 		if (itemOne.getType() == Material.BOOK || itemOne.getType() == Material.ENCHANTED_BOOK) {
-			if (ConfigUtils.getBoolean(MainConfiguration.class, "use_enchanted_books")) {
+			if (ConfigString.USE_ENCHANTED_BOOKS.getBoolean()) {
 				combinedItem = new ItemStack(Material.ENCHANTED_BOOK);
 			} else {
 				combinedItem = new ItemStack(Material.BOOK);
@@ -181,7 +181,7 @@ public class AnvilEnchantments extends GenerateEnchantments {
 		}
 		repairCost += itemOneRepair + itemTwoRepair;
 
-		repairCost = Math.max(repairCost / ConfigUtils.getInt(MainConfiguration.class, "anvil.level_divisor"), 1);
+		repairCost = Math.max(repairCost / ConfigString.LEVEL_DIVISOR.getInt(), 1);
 	}
 
 	public ItemStack getCombinedItem() {
@@ -355,7 +355,7 @@ public class AnvilEnchantments extends GenerateEnchantments {
 				enchantments.add(enchantOne);
 			}
 		}
-		int maxEnchants = ConfigUtils.getMaxEnchantments();
+		int maxEnchants = ConfigString.MAX_ENCHANTMENTS.getInt();
 		if (maxEnchants > 0) {
 			for(int i = enchantments.size() - 1; i > maxEnchants; i--) {
 				enchantments.remove(i);

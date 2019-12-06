@@ -133,8 +133,7 @@ public class BlockListener extends Enchantmentable {
 						if (!goldDiggerEvent.isCancelled()) {
 							AbilityUtils.dropExperience(goldDiggerEvent.getBlock().getLocation(),
 							goldDiggerEvent.getExpToDrop());
-							ItemUtils.dropItem(goldDiggerEvent.getGoldItem(), goldDiggerEvent.getBlock().getLocation(),
-							true);
+							ItemUtils.dropItem(goldDiggerEvent.getGoldItem(), goldDiggerEvent.getBlock().getLocation());
 							AdvancementUtils.awardCriteria(player, ESAdvancement.FOURTY_NINERS, "goldblock",
 							goldDigger.getAmount());
 							player.incrementStatistic(Statistic.USE_ITEM, item.getType());
@@ -319,7 +318,7 @@ public class BlockListener extends Enchantmentable {
 							AdvancementUtils.awardCriteria(player, ESAdvancement.FAST_AND_FURIOUS, "diamond_pickaxe");
 							if(newEvent.getBlock().getType().equals(Material.SNOW) && ItemBreakType.getType(item.getType()).getBreakTypes().contains(Material.SNOW)) {
 								int num = ((Snow) newEvent.getBlock().getBlockData()).getLayers();
-								ItemUtils.dropItem(new ItemStack(Material.SNOWBALL, num), newEvent.getBlock().getLocation(), true);
+								ItemUtils.dropItem(new ItemStack(Material.SNOWBALL, num), newEvent.getBlock().getLocation());
 							}
 							blocksBroken ++;
 							player.incrementStatistic(Statistic.MINE_BLOCK, event.getBlock().getType());
@@ -461,7 +460,7 @@ public class BlockListener extends Enchantmentable {
 							remove(player, offhand);
 							block.setBlockData(newEvent.getBlockReplacedState().getBlockData());
 							for(ItemStack drop : drops) {
-								ItemUtils.dropItem(drop, newEvent.getBlock().getLocation(), true);
+								ItemUtils.dropItem(drop, newEvent.getBlock().getLocation());
 							}
 						} else {
 							AbilityUtils.removeWandBlock(block);

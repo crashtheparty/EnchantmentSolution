@@ -7,9 +7,8 @@ import org.bukkit.craftbukkit.v1_13_R1.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_13_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.ctp.enchantmentsolution.utils.ConfigUtils;
 import org.ctp.enchantmentsolution.utils.GenerateUtils;
-import org.ctp.enchantmentsolution.utils.config.MainConfiguration;
+import org.ctp.enchantmentsolution.utils.config.ConfigString;
 
 import net.minecraft.server.v1_13_R1.BlockPosition;
 import net.minecraft.server.v1_13_R1.EntityHuman;
@@ -35,7 +34,7 @@ public class ChestPopulate_v1_13_R1 {
 			for(int i = 0; i < te.getSize(); i++) {
 				ItemStack item = te.getItem(i);
 				CraftItemStack cItem = CraftItemStack.asCraftMirror(item);
-				if (!ConfigUtils.getBoolean(MainConfiguration.class, "use_enchanted_books")
+				if (!ConfigString.USE_ENCHANTED_BOOKS.getBoolean()
 				&& cItem.getType() == Material.ENCHANTED_BOOK) {
 					cItem.setType(Material.BOOK);
 				}
@@ -66,7 +65,7 @@ public class ChestPopulate_v1_13_R1 {
 				for(int i = 0; i < c.getSize(); i++) {
 					ItemStack item = c.getItem(i);
 					CraftItemStack cItem = CraftItemStack.asCraftMirror(item);
-					if (!ConfigUtils.getBoolean(MainConfiguration.class, "use_enchanted_books")
+					if (!ConfigString.USE_ENCHANTED_BOOKS.getBoolean()
 					&& cItem.getType() == Material.ENCHANTED_BOOK) {
 						cItem.setType(Material.BOOK);
 					}

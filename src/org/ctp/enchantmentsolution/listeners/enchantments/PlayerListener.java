@@ -105,7 +105,7 @@ public class PlayerListener extends Enchantmentable {
 							} else {
 								player.getWorld().spawnParticle(Particle.VILLAGER_ANGRY, loc, 30, 0.2, 0.5, 0.2);
 							}
-							ItemUtils.dropItem(flowerGiftEvent.getFlower(), flowerGiftEvent.getDropLocation(), true);
+							ItemUtils.dropItem(flowerGiftEvent.getFlower(), flowerGiftEvent.getDropLocation());
 							player.incrementStatistic(Statistic.USE_ITEM, item.getType());
 							DamageUtils.damageItem(player, item);
 						}

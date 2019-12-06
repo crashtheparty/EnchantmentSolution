@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
+import org.ctp.enchantmentsolution.enchantments.generate.TableEnchantments;
 import org.ctp.enchantmentsolution.enums.Language;
 import org.ctp.enchantmentsolution.utils.config.*;
 import org.ctp.enchantmentsolution.utils.files.*;
@@ -92,17 +93,17 @@ public class Configurations {
 	}
 
 	public static void save() {
-		CONFIG.setComments(CONFIG.getBoolean("use_comments"));
-		FISHING.setComments(CONFIG.getBoolean("use_comments"));
-		LANGUAGE.setComments(CONFIG.getBoolean("use_comments"));
-		ENCHANTMENTS.setComments(CONFIG.getBoolean("use_comments"));
+		CONFIG.setComments(ConfigString.USE_COMMENTS.getBoolean());
+		FISHING.setComments(ConfigString.USE_COMMENTS.getBoolean());
+		LANGUAGE.setComments(ConfigString.USE_COMMENTS.getBoolean());
+		ENCHANTMENTS.setComments(ConfigString.USE_COMMENTS.getBoolean());
 
 		CONFIG.save();
 		FISHING.save();
 		LANGUAGE.save();
 		ENCHANTMENTS.save();
 
-		// PlayerLevels.resetPlayerLevels();
+		TableEnchantments.removeAllTableEnchantments();
 		RegisterEnchantments.setEnchantments();
 
 		DBUtils.updateConfig(CONFIG);
@@ -110,11 +111,11 @@ public class Configurations {
 		DBUtils.updateConfig(LANGUAGE);
 		DBUtils.updateConfig(ENCHANTMENTS);
 
-		// if(!EnchantmentSolution.getPlugin().isInitializing()) {
-		// EnchantmentSolution.getPlugin().setVersionCheck(config.getBoolean("version.get_latest"),
-		// config.getBoolean("version.get_experimental"));
-		// AdvancementUtils.createAdvancements();
-		// }
+		if(!EnchantmentSolution.getPlugin().isInitializing()) {
+			EnchantmentSolution.getPlugin().setVersionCheck(ConfigString.LATEST_VERSION.getBoolean(),
+			ConfigString.EXPERIMENTAL_VERSION.getBoolean());
+			AdvancementUtils.createAdvancements();
+		}
 	}
 
 	public static void generateDebug() {

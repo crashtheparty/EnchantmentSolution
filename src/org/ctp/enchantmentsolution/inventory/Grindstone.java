@@ -18,9 +18,9 @@ import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.generate.GrindstoneEnchantments;
 import org.ctp.enchantmentsolution.nms.AnvilNMS;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
-import org.ctp.enchantmentsolution.utils.ConfigUtils;
 import org.ctp.enchantmentsolution.utils.LocationUtils;
-import org.ctp.enchantmentsolution.utils.config.MainConfiguration;
+import org.ctp.enchantmentsolution.utils.config.ConfigString;
+import org.ctp.enchantmentsolution.utils.config.ConfigUtils;
 import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 
 public class Grindstone implements InventoryData {
@@ -45,8 +45,7 @@ public class Grindstone implements InventoryData {
 	public void setInventory(List<ItemStack> items) {
 		try {
 			takeEnchantments = false;
-			boolean grindstoneTakeEnchantments = ConfigUtils.getBoolean(MainConfiguration.class,
-			"grindstone.take_enchantments");
+			boolean grindstoneTakeEnchantments = ConfigString.TAKE_ENCHANTMENTS.getBoolean();
 			int size = 27;
 			if (ConfigUtils.useLegacyGrindstone()) {
 				size = 36;
@@ -89,8 +88,7 @@ public class Grindstone implements InventoryData {
 				first = playerItems.get(0);
 			}
 
-			grindstone = GrindstoneEnchantments.getGrindstoneEnchantments(player, first, second,
-			grindstoneTakeEnchantments);
+			grindstone = GrindstoneEnchantments.getGrindstoneEnchantments(player, first, second);
 
 			if (playerItems.size() == 2) {
 				if (grindstone.canCombine()) {
@@ -172,7 +170,7 @@ public class Grindstone implements InventoryData {
 				if (!takeEnchantments) {
 					combinedItem = AnvilNMS.setRepairCost(combinedItem, 0);
 				} else {
-					if (ConfigUtils.getBoolean(MainConfiguration.class, "grindstone.set_repair_cost")) {
+					if (ConfigString.SET_REPAIR_COST.getBoolean()) {
 						combinedItem = AnvilNMS.setRepairCost(combinedItem, AnvilNMS.getRepairCost(playerItems.get(0)));
 					} else {
 						combinedItem = AnvilNMS.setRepairCost(combinedItem, 0);
@@ -234,7 +232,7 @@ public class Grindstone implements InventoryData {
 				ItemUtils.giveItemToPlayer(player, grindstone.getTakenItem(), player.getLocation(), false);
 				grindstone = null;
 				playerItems.remove(1);
-				if (ConfigUtils.getBoolean(MainConfiguration.class, "grindstone.destroy_take_item")) {
+				if (ConfigString.DESTROY_TAKE_ITEM.getBoolean()) {
 					playerItems.remove(0);
 				} else {
 					playerItems.set(0, ItemUtils.removeAllEnchantments(playerItems.get(0)));

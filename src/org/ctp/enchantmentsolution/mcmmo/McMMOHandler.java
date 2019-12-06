@@ -1,9 +1,14 @@
 package org.ctp.enchantmentsolution.mcmmo;
 
+import java.util.List;
+
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
+import org.ctp.enchantmentsolution.enchantments.generate.FishingEnchantments;
+import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.utils.VersionUtils;
 
 import com.gmail.nossr50.mcMMO;
@@ -98,5 +103,13 @@ public class McMMOHandler {
 			boolean oldNameVisible = e.getMetadata(mcMMO.customVisibleKey).get(0).asBoolean();
 			e.setCustomNameVisible(oldNameVisible);
 		}
+	}
+
+	public static List<EnchantmentLevel> getEnchants(Player player, ItemStack treasure) {
+		FishingEnchantments ench = FishingEnchantments.getFishingEnchantments(player, treasure);
+		if(ench != null) {
+			return ench.getEnchantmentList().getEnchantments();
+		}
+		return null;
 	}
 }

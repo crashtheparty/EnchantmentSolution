@@ -1,4 +1,4 @@
-package org.ctp.enchantmentsolution.utils;
+package org.ctp.enchantmentsolution.utils.config;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -10,7 +10,8 @@ import java.util.List;
 
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enums.Language;
-import org.ctp.enchantmentsolution.utils.config.*;
+import org.ctp.enchantmentsolution.utils.Configurations;
+import org.ctp.enchantmentsolution.utils.VersionUtils;
 
 public class ConfigUtils {
 
@@ -18,25 +19,9 @@ public class ConfigUtils {
 
 	}
 
-	public static int getMaxEnchantments() {
-		return Configurations.getConfig().getInt("max_enchantments");
-	}
-
-	public static boolean isLevel50() {
-		return Configurations.getConfig().getString("enchanting_table.enchanting_type").contains("50");
-	}
-
-	public static boolean useESGUI() {
-		return Configurations.getConfig().getString("enchanting_table.enchanting_type").contains("enhanced");
-	}
-
-	public static boolean useAdvancedFile() {
-		return Configurations.getConfig().getString("enchanting_table.enchanting_type").contains("custom");
-	}
-
 	public static boolean useLegacyGrindstone() {
 		if (VersionUtils.getBukkitVersionNumber() < 4) {
-			return Configurations.getConfig().getBoolean("grindstone.use_legacy");
+			return ConfigString.LEGACY_GRINDSTONE.getBoolean();
 		}
 		return false;
 	}
@@ -53,49 +38,34 @@ public class ConfigUtils {
 		return false;
 	}
 
-	public static boolean getBoolean(Class<? extends Configuration> clazz, String s) {
-		Configuration config = getConfiguration(clazz);
+	public static boolean getBoolean(Type type, String s) {
+		Configuration config = type.getConfig();
 		if (config != null) {
 			return config.getBoolean(s);
 		}
 		return false;
 	}
 
-	public static int getInt(Class<? extends Configuration> clazz, String s) {
-		Configuration config = getConfiguration(clazz);
+	public static int getInt(Type type, String s) {
+		Configuration config = type.getConfig();
 		if (config != null) {
 			return config.getInt(s);
 		}
 		return 0;
 	}
 
-	public static double getDouble(Class<? extends Configuration> clazz, String s) {
-		Configuration config = getConfiguration(clazz);
+	public static double getDouble(Type type, String s) {
+		Configuration config = type.getConfig();
 		if (config != null) {
 			return config.getDouble(s);
 		}
 		return 0;
 	}
 
-	public static String getString(Class<? extends Configuration> clazz, String s) {
-		Configuration config = getConfiguration(clazz);
+	public static String getString(Type type, String s) {
+		Configuration config = type.getConfig();
 		if (config != null) {
 			return config.getString(s);
-		}
-		return null;
-	}
-
-	private static Configuration getConfiguration(Class<? extends Configuration> clazz) {
-		String clazzName = clazz.getName().substring(clazz.getName().lastIndexOf('.') + 1);
-		switch (clazzName) {
-			case "MainConfiguration":
-				return Configurations.getConfig();
-			case "FishingConfiguration":
-				return Configurations.getFishing();
-			case "LanguageConfiguration":
-				return Configurations.getLanguage();
-			case "EnchantmentsConfiguration":
-				return Configurations.getEnchantments();
 		}
 		return null;
 	}
@@ -104,8 +74,8 @@ public class ConfigUtils {
 		return Configurations.getLanguage().getLanguage();
 	}
 
-	public static List<String> getStringList(Class<? extends Configuration> clazz, String s) {
-		Configuration config = getConfiguration(clazz);
+	public static List<String> getStringList(Type type, String s) {
+		Configuration config = type.getConfig();
 		if (config != null) {
 			return config.getStringList(s);
 		}
@@ -130,6 +100,39 @@ public class ConfigUtils {
 
 	public static String getAdvancementDescription(String string) {
 		return Configurations.getLanguage().getString("advancements." + string + ".description");
+	}
+
+	public static boolean getAdvancedBoolean(ConfigString string, boolean defVal) {
+		if(string.getLocation().contains("advanced")) {
+			if(ConfigString.ADVANCED_OPTIONS.getBoolean()) {
+				return string.getBoolean();
+			}
+			return defVal;
+		} else {
+			throw new IllegalArgumentException("ConfigString must be an advanced option!");
+		}
+	}
+
+	public static int getAdvancedInt(ConfigString string, int defVal) {
+		if(string.getLocation().contains("advanced")) {
+			if(ConfigString.ADVANCED_OPTIONS.getBoolean()) {
+				return string.getInt();
+			}
+			return defVal;
+		} else {
+			throw new IllegalArgumentException("ConfigString must be an advanced option!");
+		}
+	}
+
+	public static double getAdvancedDouble(ConfigString string, double defVal) {
+		if(string.getLocation().contains("advanced")) {
+			if(ConfigString.ADVANCED_OPTIONS.getBoolean()) {
+				return string.getDouble();
+			}
+			return defVal;
+		} else {
+			throw new IllegalArgumentException("ConfigString must be an advanced option!");
+		}
 	}
 
 	public static File getTempFile(String resource) {
@@ -176,10 +179,5 @@ public class ConfigUtils {
 		}
 		file.deleteOnExit();
 		return file;
-	}
-
-	public static boolean dropNaturally() {
-		// TODO Auto-generated method stub
-		return false;
 	}
 }

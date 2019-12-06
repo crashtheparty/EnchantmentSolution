@@ -8,9 +8,8 @@ import org.bukkit.entity.Player;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enums.ItemType;
-import org.ctp.enchantmentsolution.utils.ConfigUtils;
-import org.ctp.enchantmentsolution.utils.config.Configuration;
-import org.ctp.enchantmentsolution.utils.config.EnchantmentsConfiguration;
+import org.ctp.enchantmentsolution.utils.config.ConfigString;
+import org.ctp.enchantmentsolution.utils.config.ConfigUtils;
 
 public class EnchantmentList {
 
@@ -20,7 +19,6 @@ public class EnchantmentList {
 	private int enchantability;
 	private List<EnchantmentLevel> enchantments;
 	private boolean treasure;
-	private final Class<? extends Configuration> enchantmentsClazz = EnchantmentsConfiguration.class;
 
 	public EnchantmentList(Player player, Level level, Material material, boolean treasure) {
 		this.level = level;
@@ -68,10 +66,12 @@ public class EnchantmentList {
 		int enchantability_2 = enchantability / 2;
 		int rand_enchantability = 1 + randomInt(enchantability_2 / 2 + 1) + randomInt(enchantability_2 / 2 + 1);
 
-		if (ConfigUtils.getBoolean(enchantmentsClazz, "use_lapis_modifier")) {
-			rand_enchantability += (level.getSlot()
-			- ConfigUtils.getDouble(enchantmentsClazz, "lapis_modifiers.constant"))
-			* ConfigUtils.getDouble(enchantmentsClazz, "lapis_modifiers.modifier");
+		if (ConfigUtils.getAdvancedBoolean(ConfigString.USE_LAPIS_MODIFIERS, ConfigString.LEVEL_FIFTY.getBoolean())) {
+			double lapisConstant = ConfigUtils.getAdvancedDouble(ConfigString.LAPIS_CONSTANT,
+			ConfigString.LEVEL_FIFTY.getBoolean() ? -1 : 0);
+			double lapisMultiplier = ConfigUtils.getAdvancedDouble(ConfigString.LAPIS_MULTIPLIER,
+			ConfigString.LEVEL_FIFTY.getBoolean() ? 2 : 0);
+			rand_enchantability += (level.getSlot() + lapisConstant) * lapisMultiplier;
 		}
 
 		int k = level.getLevel() + rand_enchantability;
@@ -90,7 +90,8 @@ public class EnchantmentList {
 	}
 
 	public void generate() {
-		double multiEnchantDivisor = ConfigUtils.getDouble(enchantmentsClazz, "multi_enchant_divisor");
+		double multiEnchantDivisor = ConfigUtils.getAdvancedDouble(ConfigString.MULTI_ENCHANT_DIVISOR,
+		ConfigString.LEVEL_FIFTY.getBoolean() ? 75 : 50);
 		List<EnchantmentLevel> enchants = new ArrayList<EnchantmentLevel>();
 		CustomEnchantment enchantment = getEnchantment(enchants);
 		if (enchantment == null) {
@@ -100,19 +101,19 @@ public class EnchantmentList {
 		int enchantability = this.enchantability;
 		int finalEnchantability = enchantability / 2;
 		while ((finalEnchantability + 1) / multiEnchantDivisor > Math.random()
-		&& (ConfigUtils.getMaxEnchantments() == 0 ? true
-		: enchants.size() < ConfigUtils.getMaxEnchantments())) {
+		&& (ConfigString.MAX_ENCHANTMENTS.getInt() == 0 ? true
+		: enchants.size() < ConfigString.MAX_ENCHANTMENTS.getInt())) {
 			enchantment = getEnchantment(enchants);
 			if (enchantment == null) {
 				break;
 			}
-			if (ConfigUtils.getBoolean(enchantmentsClazz, "enchantability_decay")) {
-				enchants.add(
-				new EnchantmentLevel(enchantment, enchantment.getEnchantLevel(player, finalEnchantability)));
+			if (ConfigUtils.getAdvancedBoolean(ConfigString.DECAY, false)) {
+				enchants
+				.add(new EnchantmentLevel(enchantment, enchantment.getEnchantLevel(player, finalEnchantability)));
 			} else {
 				enchants.add(new EnchantmentLevel(enchantment, enchantment.getEnchantLevel(player, enchantability)));
 			}
-			finalEnchantability = finalEnchantability / 2;
+			finalEnchantability /= 2;
 		}
 
 		setEnchantments(enchants);
@@ -123,22 +124,17 @@ public class EnchantmentList {
 		EnchantmentLevel enchantment = getPreselectedEnchantment(enchants, selections);
 		if (enchantment == null) {
 			setEnchantments(enchants);
+			return;
 		}
 		enchants.add(enchantment);
-		int finalEnchantability = enchantability / 2;
-		while ((finalEnchantability + 1) / multiEnchantDivisor > Math.random()
-		&& (ConfigUtils.getMaxEnchantments() == 0 ? true
-		: enchants.size() < ConfigUtils.getMaxEnchantments())) {
+		while (multiEnchantDivisor > Math.random() && (ConfigString.MAX_ENCHANTMENTS.getInt() == 0 ? true
+		: enchants.size() < ConfigString.MAX_ENCHANTMENTS.getInt())) {
 			enchantment = getPreselectedEnchantment(enchants, selections);
 			if (enchantment == null) {
 				break;
 			}
-			if (ConfigUtils.getBoolean(enchantmentsClazz, "enchantability_decay")) {
-				enchants.add(enchantment);
-			} else {
-				enchants.add(enchantment);
-			}
-			finalEnchantability = finalEnchantability / 2;
+			enchants.add(enchantment);
+			multiEnchantDivisor /= 2;
 		}
 
 		setEnchantments(enchants);
@@ -149,7 +145,7 @@ public class EnchantmentList {
 		int totalWeight = 0;
 		List<EnchantmentLevel> customEnchants = new ArrayList<EnchantmentLevel>();
 		for(EnchantmentLevel enchantment: selections) {
-			if (canAddEnchantment(previousLevels, enchantment.getEnchant())) {
+			if (enchantment.getEnchant() != null && canAddEnchantment(previousLevels, enchantment.getEnchant())) {
 				totalWeight += enchantment.getEnchant().getWeight();
 				customEnchants.add(enchantment);
 			}

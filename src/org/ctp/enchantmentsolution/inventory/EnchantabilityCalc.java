@@ -17,9 +17,8 @@ import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.nms.Anvil_GUI_NMS;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
-import org.ctp.enchantmentsolution.utils.ConfigUtils;
-import org.ctp.enchantmentsolution.utils.config.Configuration;
-import org.ctp.enchantmentsolution.utils.config.EnchantmentsConfiguration;
+import org.ctp.enchantmentsolution.utils.config.ConfigString;
+import org.ctp.enchantmentsolution.utils.config.ConfigUtils;
 
 public class EnchantabilityCalc implements InventoryData {
 
@@ -123,7 +122,7 @@ public class EnchantabilityCalc implements InventoryData {
 				itemMeta.setLore(Arrays.asList(
 				ChatColor.GOLD + "Resource Enchantability: " + ChatColor.DARK_AQUA + value.getEnchantability(),
 				ChatColor.GOLD + "Max Level From Enchantability: " + ChatColor.DARK_AQUA + enchantability[0],
-				ChatColor.GOLD + "Max Enchantability at Level " + (ConfigUtils.isLevel50() ? "50: " : "30: ")
+				ChatColor.GOLD + "Max Enchantability at Level " + (ConfigString.LEVEL_FIFTY.getBoolean() ? "50: " : "30: ")
 				+ ChatColor.DARK_AQUA + enchantability[1]));
 				item.setItemMeta(itemMeta);
 				inv.setItem(slots[slot], item);
@@ -382,12 +381,11 @@ public class EnchantabilityCalc implements InventoryData {
 
 		int level = 1;
 
-		int max = (ConfigUtils.isLevel50() ? 50 : 30) + rand_enchantability;
-		Class<? extends Configuration> enchantmentsClazz = EnchantmentsConfiguration.class;
-		if (ConfigUtils.getBoolean(enchantmentsClazz, "use_lapis_modifier")) {
-			rand_enchantability += ((ConfigUtils.isLevel50() ? 6 : 3)
-			- ConfigUtils.getDouble(enchantmentsClazz, "lapis_modifiers.constant"))
-			* ConfigUtils.getDouble(enchantmentsClazz, "lapis_modifiers.modifier");
+		int max = (ConfigString.LEVEL_FIFTY.getBoolean() ? 50 : 30) + rand_enchantability;
+		if (ConfigUtils.getAdvancedBoolean(ConfigString.USE_LAPIS_MODIFIERS, ConfigString.LEVEL_FIFTY.getBoolean())) {
+			double lapisConstant = ConfigUtils.getAdvancedDouble(ConfigString.LAPIS_CONSTANT, ConfigString.LEVEL_FIFTY.getBoolean() ? -1 : 0);
+			double lapisMultiplier = ConfigUtils.getAdvancedDouble(ConfigString.LAPIS_MULTIPLIER, ConfigString.LEVEL_FIFTY.getBoolean() ? 2 : 0);
+			rand_enchantability += ((ConfigString.LEVEL_FIFTY.getBoolean() ? 6 : 3) + lapisConstant) * lapisMultiplier;
 		}
 		max = (int) (max * 1.15 + 0.5);
 

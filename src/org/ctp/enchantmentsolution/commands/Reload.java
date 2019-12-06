@@ -6,6 +6,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.ctp.enchantmentsolution.listeners.VanishListener;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.Configurations;
 
@@ -18,14 +19,14 @@ public class Reload implements CommandExecutor {
 			player = (Player) sender;
 			if (player.hasPermission("enchantmentsolution.command.reload")) {
 				Configurations.reload();
-				// VanishListener.reload();
+				VanishListener.reload();
 				ChatUtils.sendMessage(player, ChatUtils.getMessage(ChatUtils.getCodes(), "commands.reload"));
 			} else {
 				ChatUtils.sendMessage(player, ChatUtils.getMessage(ChatUtils.getCodes(), "commands.no-permission"));
 			}
 		} else {
 			Configurations.reload();
-			// VanishListener.reload();
+			VanishListener.reload();
 			ChatUtils.sendToConsole(Level.INFO, ChatUtils.getMessage(ChatUtils.getCodes(), "commands.reload"));
 		}
 		return true;

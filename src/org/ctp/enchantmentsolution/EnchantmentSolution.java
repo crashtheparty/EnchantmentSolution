@@ -19,7 +19,10 @@ import org.ctp.enchantmentsolution.database.SQLite;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.inventory.InventoryData;
 import org.ctp.enchantmentsolution.listeners.*;
+import org.ctp.enchantmentsolution.listeners.advancements.AdvancementEntityDeath;
+import org.ctp.enchantmentsolution.listeners.advancements.AdvancementPlayerEvent;
 import org.ctp.enchantmentsolution.listeners.enchantments.*;
+import org.ctp.enchantmentsolution.listeners.fishing.McMMOFishingListener;
 import org.ctp.enchantmentsolution.listeners.inventory.*;
 import org.ctp.enchantmentsolution.mcmmo.McMMOAbility;
 import org.ctp.enchantmentsolution.nms.animalmob.AnimalMob;
@@ -28,7 +31,7 @@ import org.ctp.enchantmentsolution.utils.*;
 import org.ctp.enchantmentsolution.utils.abillityhelpers.DrownedEntity;
 import org.ctp.enchantmentsolution.utils.abillityhelpers.EntityAccuracy;
 import org.ctp.enchantmentsolution.utils.compatibility.AuctionHouseUtils;
-import org.ctp.enchantmentsolution.utils.config.MainConfiguration;
+import org.ctp.enchantmentsolution.utils.config.ConfigString;
 import org.ctp.enchantmentsolution.utils.files.SaveUtils;
 import org.ctp.enchantmentsolution.version.*;
 
@@ -86,6 +89,9 @@ public class EnchantmentSolution extends JavaPlugin {
 		registerEvent(new ProjectileListener());
 		registerEvent(new BlockListener());
 
+		registerEvent(new AdvancementEntityDeath());
+		registerEvent(new AdvancementPlayerEvent());
+
 		if (Bukkit.getPluginManager().isPluginEnabled("mcMMO")) {
 			mcmmoVersion = Bukkit.getPluginManager().getPlugin("mcMMO").getDescription().getVersion();
 			ChatUtils.sendToConsole(Level.INFO, "mcMMO Version: " + mcmmoVersion);
@@ -119,6 +125,7 @@ public class EnchantmentSolution extends JavaPlugin {
 				ChatUtils.sendToConsole(Level.INFO, "Using the Classic Version! Compatibility should be intact.");
 				mcmmoType = "Classic";
 			}
+			registerEvent(new McMMOFishingListener());
 		} else {
 			mcmmoType = "Disabled";
 		}
@@ -130,16 +137,9 @@ public class EnchantmentSolution extends JavaPlugin {
 		if (Bukkit.getPluginManager().isPluginEnabled("AuctionHouse")) {
 			Bukkit.getScheduler().runTaskLater(this, (Runnable) () -> AuctionHouseUtils.resetAuctionHouse(), 20l);
 		}
-		if(Bukkit.getPluginManager().isPluginEnabled("AuctionHouse")) {
-			Bukkit.getScheduler().runTaskLater(this, new Runnable() {
-				@Override
-				public void run() {
-					AuctionHouseUtils.resetAuctionHouse();
-				}
-			}, 20l);
-		}
 
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN, new AbilityRunnable(), 80l, 80l);
+		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN, new AdvancementThread(), 1l, 1l);
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN, new ElytraRunnable(), 1l, 1l);
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN, new ExhaustionRunnable(), 4l, 4l);
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN, new MiscRunnable(), 1l, 1l);
@@ -163,12 +163,12 @@ public class EnchantmentSolution extends JavaPlugin {
 		check = new VersionCheck(pluginVersion,
 		"https://raw.githubusercontent.com/crashtheparty/EnchantmentSolution/master/VersionHistory",
 		"https://www.spigotmc.org/resources/enchantment-solution.59556/",
-		"https://github.com/crashtheparty/EnchantmentSolution",
-		ConfigUtils.getBoolean(MainConfiguration.class, "version.get_latest"),
-		ConfigUtils.getBoolean(MainConfiguration.class, "version.get_experimental"));
+		"https://github.com/crashtheparty/EnchantmentSolution", ConfigString.LATEST_VERSION.getBoolean(),
+		ConfigString.EXPERIMENTAL_VERSION.getBoolean());
 		registerEvent(check);
 		checkVersion();
 		MetricsUtils.init();
+		initialization = false;
 	}
 
 	public void onDisable() {

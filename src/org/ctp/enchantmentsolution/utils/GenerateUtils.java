@@ -8,7 +8,7 @@ import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.enchantments.generate.ChestEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentList;
-import org.ctp.enchantmentsolution.utils.config.MainConfiguration;
+import org.ctp.enchantmentsolution.utils.config.ConfigString;
 import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 
 public class GenerateUtils {
@@ -24,8 +24,8 @@ public class GenerateUtils {
 	}
 
 	public static ItemStack generateChestLoot(Player player, ItemStack item, String lootType) {
-		int minBookshelves = ConfigUtils.getInt(MainConfiguration.class, "loots." + lootType + ".bookshelves");
-		boolean treasure = ConfigUtils.getBoolean(MainConfiguration.class, "loots." + lootType + ".treasure");
+		int minBookshelves = ConfigString.LOOT_BOOKSHELVES.getInt("loots.chests." + lootType + ".bookshelves");
+		boolean treasure = ConfigString.LOOT_TREASURE.getBoolean("loots.chests." + lootType + ".treasure");
 
 		ChestEnchantments enchantments = ChestEnchantments.getChestEnchantment(player, item, minBookshelves, treasure);
 

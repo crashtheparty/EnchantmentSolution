@@ -429,6 +429,9 @@ public class YamlConfig {
 	}
 
 	public void getFromConfig() {
+		if (file != null) {
+			config = YamlConfiguration.loadConfiguration(file);
+		}
 		info = new LinkedHashMap<String, YamlInfo>();
 		for(String key: config.getKeys(true)) {
 			if (!(config.get(key) instanceof MemorySection)) {

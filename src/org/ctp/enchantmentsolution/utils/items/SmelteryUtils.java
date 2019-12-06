@@ -40,7 +40,7 @@ public class SmelteryUtils {
 				player.incrementStatistic(Statistic.USE_ITEM, item.getType());
 				McMMOHandler.handleMcMMO(event, item);
 				DamageUtils.damageItem(player, item);
-				ItemUtils.dropItem(smelteryEvent.getDrop(), smelteryEvent.getBlock().getLocation(), true);
+				ItemUtils.dropItem(smelteryEvent.getDrop(), smelteryEvent.getBlock().getLocation());
 				AbilityUtils.dropExperience(smelteryEvent.getBlock().getLocation().add(0.5, 0.5, 0.5), experience);
 				event.getBlock().setType(Material.AIR);
 			}

@@ -7,6 +7,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.ExperienceOrb;
 import org.bukkit.entity.Player;
+import org.ctp.enchantmentsolution.utils.config.ConfigString;
 
 public class LocationUtils {
 
@@ -103,7 +104,7 @@ public class LocationUtils {
 				}
 			}
 		}
-		if (ConfigUtils.isLevel50()) {
+		if (ConfigString.LEVEL_FIFTY.getBoolean()) {
 			if (bookshelves > 23) {
 				bookshelves = 23;
 			}

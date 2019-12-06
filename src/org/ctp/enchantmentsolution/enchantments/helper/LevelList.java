@@ -1,6 +1,6 @@
 package org.ctp.enchantmentsolution.enchantments.helper;
 
-import org.ctp.enchantmentsolution.utils.ConfigUtils;
+import org.ctp.enchantmentsolution.utils.config.ConfigString;
 
 public class LevelList {
 
@@ -13,7 +13,7 @@ public class LevelList {
 		int bookFifty = bookshelves - 8;
 		int addFifty = bookFifty - 7;
 
-		boolean isLevelFifty = ConfigUtils.isLevel50();
+		boolean isLevelFifty = ConfigString.LEVEL_FIFTY.getBoolean();
 
 		for(int i = 1; i <= 6; i++) {
 			int x = (int) (Math.random() * 8 + 1);

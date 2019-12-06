@@ -7,8 +7,7 @@ import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.ctp.enchantmentsolution.inventory.snapshot.SnapshotInventory;
-//import org.ctp.enchantmentsolution.utils.ConfigUtils;
-//import org.ctp.enchantmentsolution.utils.config.MainConfiguration;
+import org.ctp.enchantmentsolution.utils.config.ConfigString;
 
 public class SnapshotRunnable implements Runnable {
 
@@ -21,8 +20,7 @@ public class SnapshotRunnable implements Runnable {
 	}
 
 	private void setRunnable() {
-		// runnable = ConfigUtils.getInt(MainConfiguration.class, "enchantment_check");
-		runnable = 300;
+		runnable = ConfigString.ENCHANTMENT_CHECK.getInt() * 20;
 	}
 
 	@Override
