@@ -21,6 +21,7 @@ public class Configurations {
 	private static FishingConfiguration FISHING;
 	private static LanguageConfiguration LANGUAGE;
 	private static EnchantmentsConfiguration ENCHANTMENTS;
+	private static AdvancementsConfiguration ADVANCEMENTS;
 
 	private static List<LanguageFile> LANGUAGE_FILES = new ArrayList<LanguageFile>();
 	private static DataFile DATA_FILE;
@@ -43,6 +44,7 @@ public class Configurations {
 		CONFIG = new MainConfiguration(dataFolder);
 		FISHING = new FishingConfiguration(dataFolder);
 		ENCHANTMENTS = new EnchantmentsConfiguration(dataFolder);
+		ADVANCEMENTS = new AdvancementsConfiguration(dataFolder);
 
 		String languageFile = CONFIG.getString("language_file");
 		Language lang = Language.getLanguage(CONFIG.getString("language"));
@@ -86,6 +88,7 @@ public class Configurations {
 		FISHING.revert();
 		LANGUAGE.revert();
 		ENCHANTMENTS.revert();
+		ADVANCEMENTS.revert();
 	}
 
 	public static void revert(Configuration config, int backup) {
@@ -97,11 +100,13 @@ public class Configurations {
 		FISHING.setComments(ConfigString.USE_COMMENTS.getBoolean());
 		LANGUAGE.setComments(ConfigString.USE_COMMENTS.getBoolean());
 		ENCHANTMENTS.setComments(ConfigString.USE_COMMENTS.getBoolean());
+		ADVANCEMENTS.setComments(ConfigString.USE_COMMENTS.getBoolean());
 
 		CONFIG.save();
 		FISHING.save();
 		LANGUAGE.save();
 		ENCHANTMENTS.save();
+		ADVANCEMENTS.save();
 
 		TableEnchantments.removeAllTableEnchantments();
 		RegisterEnchantments.setEnchantments();
@@ -110,6 +115,7 @@ public class Configurations {
 		DBUtils.updateConfig(FISHING);
 		DBUtils.updateConfig(LANGUAGE);
 		DBUtils.updateConfig(ENCHANTMENTS);
+		DBUtils.updateConfig(ADVANCEMENTS);
 
 		if(!EnchantmentSolution.getPlugin().isInitializing()) {
 			EnchantmentSolution.getPlugin().setVersionCheck(ConfigString.LATEST_VERSION.getBoolean(),
@@ -136,6 +142,7 @@ public class Configurations {
 		YamlConfigBackup fishing = FISHING.getConfig();
 		YamlConfigBackup language = LANGUAGE.getConfig();
 		YamlConfigBackup enchantments = ENCHANTMENTS.getConfig();
+		YamlConfigBackup advancements = ADVANCEMENTS.getConfig();
 
 		for(String s: config.getAllEntryKeys()) {
 			if (config.contains(s)) {
@@ -155,6 +162,12 @@ public class Configurations {
 			}
 		}
 
+		for(String s: advancements.getAllEntryKeys()) {
+			if (advancements.contains(s)) {
+				backup.set("advancements." + s, advancements.get(s));
+			}
+		}
+
 		for(String s: enchantments.getAllEntryKeys()) {
 			if (enchantments.contains(s)) {
 				backup.set("enchantment." + s, enchantments.get(s));
@@ -169,6 +182,7 @@ public class Configurations {
 		FISHING.reload();
 		LANGUAGE.reload();
 		ENCHANTMENTS.reload();
+		ADVANCEMENTS.reload();
 
 		save();
 	}
@@ -187,6 +201,10 @@ public class Configurations {
 
 	public static EnchantmentsConfiguration getEnchantments() {
 		return ENCHANTMENTS;
+	}
+
+	public static AdvancementsConfiguration getAdvancements() {
+		return ADVANCEMENTS;
 	}
 
 	public static List<LanguageFile> getLanguageFiles() {

@@ -30,6 +30,7 @@ public class AdvancementUtils {
 					if (root.activate(false).isChanged()) {
 						reload = true;
 					}
+					advancement.setEnabled(true);
 				} else {
 					root = null;
 					advancement.setEnabled(false);
@@ -61,7 +62,6 @@ public class AdvancementUtils {
 					if (last.activate(false).isChanged()) {
 						reload = true;
 					}
-
 					advancement.setEnabled(true);
 				} else {
 					advancement.setEnabled(false);

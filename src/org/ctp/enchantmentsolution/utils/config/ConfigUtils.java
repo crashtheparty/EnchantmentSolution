@@ -83,15 +83,15 @@ public class ConfigUtils {
 	}
 
 	public static boolean isAdvancementActive(String string) {
-		return Configurations.getConfig().getBoolean("advancements." + string + ".enable");
+		return Configurations.getAdvancements().getBoolean("advancements." + string + ".enable");
 	}
 
 	public static boolean toastAdvancement(String string) {
-		return Configurations.getConfig().getBoolean("advancements." + string + ".toast");
+		return Configurations.getAdvancements().getBoolean("advancements." + string + ".toast");
 	}
 
 	public static boolean announceAdvancement(String string) {
-		return Configurations.getConfig().getBoolean("advancements." + string + ".announce");
+		return Configurations.getAdvancements().getBoolean("advancements." + string + ".announce");
 	}
 
 	public static String getAdvancementName(String string) {

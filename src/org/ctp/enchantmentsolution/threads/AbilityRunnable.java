@@ -4,9 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Statistic;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
-import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.Reflectionable;
 import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 
@@ -26,10 +24,6 @@ public class AbilityRunnable implements Runnable, Reflectionable {
 		for(Player player: Bukkit.getOnlinePlayers()) {
 			ItemStack helmet = player.getInventory().getHelmet();
 			if (helmet != null && ItemUtils.hasEnchantment(helmet, RegisterEnchantments.NO_REST)) {
-				if (player.getStatistic(Statistic.TIME_SINCE_REST) > 72000 && player.getWorld().getTime() > 12540
-				&& player.getWorld().getTime() < 23459) {
-					AdvancementUtils.awardCriteria(player, ESAdvancement.COFFEE_BREAK, "coffee");
-				}
 				player.setStatistic(Statistic.TIME_SINCE_REST, 0);
 			}
 		}

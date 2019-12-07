@@ -16,6 +16,15 @@ public class StringUtils {
 
 	private static final String[] NUMERALS = { "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X" };
 
+	public static String returnEnchantmentName(CustomEnchantment ench) {
+		String displayName = ench.getDisplayName();
+		if (ench.isCurse()) {
+			displayName = ChatColor.RED + displayName;
+		}
+
+		return displayName;
+	}
+
 	public static String returnEnchantmentName(CustomEnchantment ench, int enchLevel) {
 		String displayName = ench.getDisplayName();
 		if (ench.isCurse()) {
@@ -207,6 +216,20 @@ public class StringUtils {
 		}
 		meta.setLore(lore);
 		item.setItemMeta(meta);
+	}
+
+	public static List<String> removeEnchantment(CustomEnchantment enchantment, List<String> lore) {
+		if(lore == null) {
+			return lore;
+		}
+		Iterator<String> iterator = lore.iterator();
+		while (iterator.hasNext()) {
+			String l = iterator.next();
+			if (l.contains(returnEnchantmentName(enchantment))) {
+				iterator.remove();
+			}
+		}
+		return lore;
 	}
 
 	public static List<String> removeEnchantment(CustomEnchantment enchantment, int level, List<String> lore) {

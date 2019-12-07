@@ -34,10 +34,8 @@ public class EnchantmentsConfiguration extends Configuration {
 		}
 
 		YamlConfigBackup config = getConfig();
-		ChatUtils.sendInfo("Current advanced options: " + config.getBoolean("advanced_options.use"));
 
 		config.getFromConfig();
-		ChatUtils.sendInfo("After reload advanced options: " + config.getBoolean("advanced_options.use"));
 
 		config.addDefault("advanced_options.use", false,
 		new String[] { "Use the advanced customization options for the plugin",

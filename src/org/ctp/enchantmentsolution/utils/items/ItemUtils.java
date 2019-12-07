@@ -140,7 +140,7 @@ public class ItemUtils {
 			meta.setLore(new ArrayList<String>());
 			return meta;
 		}
-		if(ConfigString.LORE_ON_TOP.getBoolean()) {
+		if (ConfigString.LORE_ON_TOP.getBoolean()) {
 			List<String> enchantmentsFirst = new ArrayList<String>();
 			for(String l: lore) {
 				if (StringUtils.isEnchantment(l)) {
@@ -209,8 +209,9 @@ public class ItemUtils {
 			} else {
 				meta.addEnchant(level.getEnchant().getRelativeEnchantment(), level.getLevel(), true);
 			}
-			if (!item.getItemMeta().hasItemFlag(ItemFlag.HIDE_ENCHANTS) && level.getEnchant().getRelativeEnchantment() instanceof CustomEnchantmentWrapper) {
-				previousLore = StringUtils.removeEnchantment(level.getEnchant(), level.getLevel(), previousLore);
+			if (!item.getItemMeta().hasItemFlag(ItemFlag.HIDE_ENCHANTS)
+			&& level.getEnchant().getRelativeEnchantment() instanceof CustomEnchantmentWrapper) {
+				previousLore = StringUtils.removeEnchantment(level.getEnchant(), previousLore);
 				lore.add(StringUtils.getEnchantmentString(level));
 			}
 		}
@@ -340,24 +341,25 @@ public class ItemUtils {
 		return true;
 	}
 
-	public static Collection<ItemStack> getSoulboundShulkerBox(Player player, Block block, Collection<ItemStack> drops) {
+	public static Collection<ItemStack> getSoulboundShulkerBox(Player player, Block block,
+	Collection<ItemStack> drops) {
 		Iterator<ItemStack> i = drops.iterator();
 		Collection<ItemStack> items = new ArrayList<ItemStack>();
-		while(i.hasNext()) {
+		while (i.hasNext()) {
 			ItemStack drop = i.next();
-			if(ESArrays.getShulkerBoxes().contains(drop.getType())) {
+			if (ESArrays.getShulkerBoxes().contains(drop.getType())) {
 				BlockStateMeta im = (BlockStateMeta) drop.getItemMeta();
 				Container container = (Container) block.getState();
 				im.setBlockState(container);
-				if(block.getMetadata("shulker_name") != null) {
-					for(MetadataValue value : block.getMetadata("shulker_name")) {
+				if (block.getMetadata("shulker_name") != null) {
+					for(MetadataValue value: block.getMetadata("shulker_name")) {
 						im.setDisplayName(value.asString());
 					}
 				}
 				drop.setItemMeta(im);
-				if(block.getMetadata("soulbound").size() > 0) {
-					drop = ItemUtils.addEnchantmentsToItem(drop, Arrays.asList(
-					new EnchantmentLevel(RegisterEnchantments.getCustomEnchantment(RegisterEnchantments.SOULBOUND), 1)));
+				if (block.getMetadata("soulbound").size() > 0) {
+					drop = ItemUtils.addEnchantmentsToItem(drop, Arrays.asList(new EnchantmentLevel(
+					RegisterEnchantments.getCustomEnchantment(RegisterEnchantments.SOULBOUND), 1)));
 				}
 				items.add(drop);
 			}

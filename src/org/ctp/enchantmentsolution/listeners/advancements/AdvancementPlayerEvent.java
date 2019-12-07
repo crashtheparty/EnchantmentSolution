@@ -52,7 +52,7 @@ public class AdvancementPlayerEvent implements Listener{
 			if(event.getItem().hasMetadata("exp_share") && event.getItem().getMetadata("exp_share").size() > 0) {
 				for(MetadataValue meta : event.getItem().getMetadata("exp_share")) {
 					OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(UUID.fromString(meta.asString()));
-					if(offlinePlayer.getPlayer() != null) {
+					if(offlinePlayer.getPlayer() != null && !offlinePlayer.getPlayer().equals(entity)) {
 						AdvancementUtils.awardCriteria(offlinePlayer.getPlayer(), ESAdvancement.SHARING_IS_CARING, "player");
 					}
 				}

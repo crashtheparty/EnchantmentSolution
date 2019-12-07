@@ -43,7 +43,7 @@ public class AdvancementEntityDeath implements Listener{
 				if(killed instanceof Player && ItemUtils.hasEnchantment(mainHand, RegisterEnchantments.QUICK_STRIKE)) {
 					AdvancementUtils.awardCriteria(killer, ESAdvancement.PRE_COMBAT_UPDATE, "combat_update");
 				}
-				if(ItemUtils.hasEnchantment(mainHand, RegisterEnchantments.BRINE)) {
+				if(ItemUtils.hasEnchantment(mainHand, RegisterEnchantments.BRINE) && mainHand.getType().name().endsWith("SWORD")) {
 					if(killed.getType() == EntityType.DROWNED) {
 						AdvancementUtils.awardCriteria(killer, ESAdvancement.NOT_VERY_EFFECTIVE, killed.getType().name().toLowerCase());
 					} else if(killed.getType() == EntityType.ENDER_DRAGON || killed.getType() == EntityType.WITHER

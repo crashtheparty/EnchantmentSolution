@@ -26,6 +26,7 @@ language_file: 'language.yml'
 villager_trades: false
 use_comments: true
 protection_conflicts: true
+lore_on_top: true
 version:
     get_latest: true
     get_experimental: false
@@ -175,6 +176,9 @@ config_comments:
 
     protection_conflicts: 
     - 'All protection types conflict with each other'
+
+    lore_on_top: 
+    - 'Custom enchantment lore will always be at the top of the lore'
 
     version: 
         get_latest: 

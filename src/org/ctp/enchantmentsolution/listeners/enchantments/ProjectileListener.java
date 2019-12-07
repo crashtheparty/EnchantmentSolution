@@ -27,6 +27,7 @@ import org.ctp.enchantmentsolution.events.modify.LagEvent;
 import org.ctp.enchantmentsolution.events.modify.SniperLaunchEvent;
 import org.ctp.enchantmentsolution.listeners.Enchantmentable;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
+import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.LocationUtils;
 import org.ctp.enchantmentsolution.utils.abillityhelpers.ParticleEffect;
 import org.ctp.enchantmentsolution.utils.items.AbilityUtils;
@@ -47,6 +48,7 @@ public class ProjectileListener extends Enchantmentable {
 	public void onProjectileHit(ProjectileHitEvent event) {
 		runMethod(this, "hardBounce", event, ProjectileHitEvent.class);
 		runMethod(this, "splatterFest", event, ProjectileHitEvent.class);
+		runMethod(this, "stickyHold", event, ProjectileHitEvent.class);
 	}
 
 	@EventHandler
@@ -171,6 +173,19 @@ public class ProjectileListener extends Enchantmentable {
 						p.setVelocity(v);
 					}, 1l);
 				}
+			}
+		}
+	}
+
+	private void stickyHold(ProjectileHitEvent event) {
+		if (!canRun(RegisterEnchantments.HARD_BOUNCE, event)) {
+			return;
+		}
+		ChatUtils.sendInfo("Entity: " + event.getEntityType());
+		if(event.getHitEntity() != null) {
+			ChatUtils.sendInfo("Hit Entity: " + event.getHitEntity().getType());
+			if(event.getHitEntity().getType() == EntityType.ENDERMAN || event.getHitEntity().getType() == EntityType.WITHER) {
+				event.getEntity().remove();
 			}
 		}
 	}

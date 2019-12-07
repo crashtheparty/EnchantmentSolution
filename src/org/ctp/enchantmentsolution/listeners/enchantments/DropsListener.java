@@ -1,6 +1,7 @@
 package org.ctp.enchantmentsolution.listeners.enchantments;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.bukkit.Bukkit;
@@ -30,6 +31,7 @@ import org.ctp.enchantmentsolution.events.drops.BeheadingEvent;
 import org.ctp.enchantmentsolution.events.drops.TransmutationEvent;
 import org.ctp.enchantmentsolution.listeners.Enchantmentable;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
+import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.abillityhelpers.TransmutationLoot;
 import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 
@@ -67,8 +69,9 @@ public class DropsListener extends Enchantmentable {
 						ItemStack skull = new ItemStack(Material.PLAYER_HEAD);
 						SkullMeta skullMeta = (SkullMeta) skull.getItemMeta();
 						skullMeta.setOwningPlayer((Player) entity);
-						// TODO: move this text to language.yml
-						skullMeta.setDisplayName(ChatColor.DARK_RED + ((Player) entity).getName() + "'s Skull");
+						HashMap<String, Object> codes = ChatUtils.getCodes();
+						codes.put("%player%", ((Player) entity).getName());
+						skullMeta.setDisplayName(ChatUtils.getMessage(codes, "misc.beheading_skull"));
 						skull.setItemMeta(skullMeta);
 						skulls.add(skull);
 					} else if (entity instanceof EnderDragon) {

@@ -88,6 +88,7 @@ public class EnchantmentSolution extends JavaPlugin {
 		registerEvent(new AttributeListener());
 		registerEvent(new ProjectileListener());
 		registerEvent(new BlockListener());
+		registerEvent(new PotionEffectListener());
 
 		registerEvent(new AdvancementEntityDeath());
 		registerEvent(new AdvancementPlayerEvent());
@@ -168,6 +169,7 @@ public class EnchantmentSolution extends JavaPlugin {
 		registerEvent(check);
 		checkVersion();
 		MetricsUtils.init();
+		AdvancementUtils.createAdvancements();
 		initialization = false;
 	}
 

@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.ctp.enchantmentsolution.EnchantmentSolution;
-import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enums.Language;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.VersionUtils;
@@ -58,22 +57,11 @@ public class MainConfiguration extends Configuration {
 			config.addDefault("loots.chests.pillager_outpost.treasure", true);
 		}
 
-		for(ESAdvancement advancement: ESAdvancement.values()) {
-			if (advancement == ESAdvancement.ENCHANTMENT_SOLUTION) {
-				config.addDefault("advancements." + advancement.getNamespace().getKey() + ".enable", false);
-				config.addDefault("advancements." + advancement.getNamespace().getKey() + ".toast", false);
-				config.addDefault("advancements." + advancement.getNamespace().getKey() + ".announce", false);
-			} else if (advancement.getActivatedVersion() < EnchantmentSolution.getPlugin().getBukkitVersion()
-			.getVersionNumber()) {
-				config.addDefault("advancements." + advancement.getNamespace().getKey() + ".enable", true);
-				config.addDefault("advancements." + advancement.getNamespace().getKey() + ".toast", true);
-				config.addDefault("advancements." + advancement.getNamespace().getKey() + ".announce", true);
-			}
-		}
-
 		if (EnchantmentSolution.getPlugin().isInitializing()) {
 			ChatUtils.sendInfo("Main configuration initialized!");
 		}
+		
+		config.saveConfig();
 
 		file.delete();
 	}

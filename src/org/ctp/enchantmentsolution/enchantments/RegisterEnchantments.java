@@ -127,7 +127,7 @@ public class RegisterEnchantments {
 		}
 	}
 
-	private static void addDefaultEnchantment(CustomEnchantment enchant) {
+	public static void addDefaultEnchantment(CustomEnchantment enchant) {
 		ENCHANTMENTS.add(enchant);
 	}
 

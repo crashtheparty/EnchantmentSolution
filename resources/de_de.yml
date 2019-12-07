@@ -343,6 +343,7 @@ misc:
     no_disabled_items: "Keiner"
     true: "Wahr"
     false: "Falsch"
+    beheading_skull: "&7Schädel des %player%"
 
 advancements: 
     enchantments/enchantment_solution: 
