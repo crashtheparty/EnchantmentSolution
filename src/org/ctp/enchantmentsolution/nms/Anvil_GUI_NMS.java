@@ -3,9 +3,7 @@ package org.ctp.enchantmentsolution.nms;
 import org.bukkit.entity.Player;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.inventory.InventoryData;
-import org.ctp.enchantmentsolution.nms.anvil.AnvilGUI_v1_13_R2;
-import org.ctp.enchantmentsolution.nms.anvil.AnvilGUI_v1_14_R1;
-import org.ctp.enchantmentsolution.nms.anvil.AnvilGUI_v1_13_R1;
+import org.ctp.enchantmentsolution.nms.anvil.*;
 
 public class Anvil_GUI_NMS {
 
@@ -24,6 +22,9 @@ public class Anvil_GUI_NMS {
 			case 7:
 			case 8:
 				AnvilGUI_v1_14_R1.createAnvil(player, data);
+				break;
+			case 9:
+				AnvilGUI_v1_15_R1.createAnvil(player, data);
 				break;
 		}
 	}

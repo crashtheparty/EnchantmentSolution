@@ -66,6 +66,7 @@ public class DamageListener extends Enchantmentable {
 		runMethod(this, "shockAspect", event, EntityDamageByEntityEvent.class);
 		runMethod(this, "stoneThrow", event, EntityDamageByEntityEvent.class);
 		runMethod(this, "warp", event, EntityDamageByEntityEvent.class);
+		runMethod(this, "test", event, EntityDamageByEntityEvent.class);
 	}
 
 	@EventHandler
@@ -208,10 +209,10 @@ public class DamageListener extends Enchantmentable {
 			Player player = (Player) attacker;
 			Animals animals = (Animals) attacked;
 			ItemStack attackItem = player.getInventory().getItemInMainHand();
-			if(AnimalMobNMS.getMob(animals, attackItem) == null) {
-				return;
-			}
 			if (attackItem != null && ItemUtils.hasEnchantment(attackItem, RegisterEnchantments.IRENES_LASSO)) {
+				if(!AnimalMobNMS.canAddMob()) {
+					return;
+				}
 				event.setCancelled(true);
 				int max = ItemUtils.getLevel(attackItem, RegisterEnchantments.IRENES_LASSO);
 				int current = 0;
@@ -243,6 +244,11 @@ public class DamageListener extends Enchantmentable {
 				}
 			}
 		}
+	}
+	
+	private void test(EntityDamageByEntityEvent event) {
+		ChatUtils.sendInfo("Entity: " + event.getEntityType());
+		ChatUtils.sendInfo("Entity: " + event.getEntity().getType());
 	}
 
 	private void ironDefense(EntityDamageByEntityEvent event) {

@@ -4,11 +4,7 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enums.Language;
-import org.ctp.enchantmentsolution.nms.itemname.ChinaSimplified;
-import org.ctp.enchantmentsolution.nms.itemname.GermanNames;
-import org.ctp.enchantmentsolution.nms.itemname.ItemName_v1_13_R1;
-import org.ctp.enchantmentsolution.nms.itemname.ItemName_v1_13_R2;
-import org.ctp.enchantmentsolution.nms.itemname.ItemName_v1_14_R1;
+import org.ctp.enchantmentsolution.nms.itemname.*;
 
 public class ItemNameNMS {
 
@@ -31,6 +27,8 @@ public class ItemNameNMS {
 					case 7:
 					case 8:
 						return ItemName_v1_14_R1.returnLocalizedItemName(item);
+					case 9:
+						return ItemName_v1_15_R1.returnLocalizedItemName(item);
 				}
 				break;
 			default:

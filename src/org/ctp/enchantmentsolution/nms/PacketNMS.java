@@ -2,9 +2,7 @@ package org.ctp.enchantmentsolution.nms;
 
 import org.bukkit.block.Block;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
-import org.ctp.enchantmentsolution.nms.packet.Packet_v1_13_R1;
-import org.ctp.enchantmentsolution.nms.packet.Packet_v1_13_R2;
-import org.ctp.enchantmentsolution.nms.packet.Packet_v1_14_R1;
+import org.ctp.enchantmentsolution.nms.packet.*;
 
 public class PacketNMS {
 
@@ -21,6 +19,8 @@ public class PacketNMS {
 			case 7:
 			case 8:
 				return Packet_v1_14_R1.addParticle(block, stage);
+			case 9:
+				return Packet_v1_15_R1.addParticle(block, stage);
 		}
 		return 0;
 	}
@@ -38,6 +38,8 @@ public class PacketNMS {
 			case 7:
 			case 8:
 				return Packet_v1_14_R1.updateParticle(block, stage, id);
+			case 9:
+				return Packet_v1_15_R1.updateParticle(block, stage, id);
 		}
 		return 0;
 	}
