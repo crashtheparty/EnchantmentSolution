@@ -12,7 +12,7 @@ import org.bukkit.block.data.Directional;
 import org.bukkit.entity.Player;
 import org.ctp.enchantmentsolution.inventory.Anvil;
 import org.ctp.enchantmentsolution.inventory.LegacyAnvil;
-import org.ctp.enchantmentsolution.utils.config.MainConfiguration;
+import org.ctp.enchantmentsolution.utils.config.ConfigString;
 
 public class AnvilUtils {
 
@@ -36,7 +36,7 @@ public class AnvilUtils {
 	}
 
 	public static void checkAnvilBreak(Player player, Block block, Anvil anvil) {
-		if(ConfigUtils.getBoolean(MainConfiguration.class, "anvil.custom_take_damage") || player.getGameMode().equals(GameMode.CREATIVE)) {
+		if (!ConfigString.DAMAGE_ANVIL.getBoolean() || player.getGameMode().equals(GameMode.CREATIVE)) {
 			block.getWorld().playSound(block.getLocation(), Sound.BLOCK_ANVIL_USE, 1, 1);
 			return;
 		}

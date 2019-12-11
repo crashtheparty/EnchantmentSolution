@@ -4,7 +4,6 @@ import java.io.File;
 
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
-import org.ctp.enchantmentsolution.utils.ConfigUtils;
 import org.ctp.enchantmentsolution.utils.yaml.YamlConfig;
 import org.ctp.enchantmentsolution.utils.yaml.YamlConfigBackup;
 
@@ -51,8 +50,6 @@ public class FishingConfiguration extends Configuration {
 
 	@Override
 	public void migrateVersion() {
-		// TODO Auto-generated method stub
-
 	}
 
 }

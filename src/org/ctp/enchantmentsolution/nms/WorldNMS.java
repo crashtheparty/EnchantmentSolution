@@ -2,9 +2,7 @@ package org.ctp.enchantmentsolution.nms;
 
 import org.bukkit.block.Block;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
-import org.ctp.enchantmentsolution.nms.world.World_v1_13_R1;
-import org.ctp.enchantmentsolution.nms.world.World_v1_13_R2;
-import org.ctp.enchantmentsolution.nms.world.World_v1_14_R1;
+import org.ctp.enchantmentsolution.nms.world.*;
 
 public class WorldNMS {
 
@@ -21,6 +19,8 @@ public class WorldNMS {
 			case 7:
 			case 8:
 				return World_v1_14_R1.getRegionalDifficulty(block);
+			case 9:
+				return World_v1_15_R1.getRegionalDifficulty(block);
 		}
 		return new float[2];
 	}

@@ -18,7 +18,9 @@ import org.ctp.enchantmentsolution.enchantments.helper.*;
 import org.ctp.enchantmentsolution.enums.ItemType;
 import org.ctp.enchantmentsolution.utils.*;
 import org.ctp.enchantmentsolution.utils.compatibility.JobsUtils;
-import org.ctp.enchantmentsolution.utils.config.*;
+import org.ctp.enchantmentsolution.utils.config.ConfigString;
+import org.ctp.enchantmentsolution.utils.config.ConfigUtils;
+import org.ctp.enchantmentsolution.utils.config.Type;
 import org.ctp.enchantmentsolution.utils.items.ItemSerialization;
 import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 
@@ -45,7 +47,7 @@ public class EnchantmentTable implements InventoryData {
 		try {
 			Inventory inv = Bukkit.createInventory(null, 54, ChatUtils.getMessage(getCodes(), "table.name"));
 			inv = open(inv);
-			boolean useLapis = ConfigUtils.getBoolean(MainConfiguration.class, "enchanting_table.use_lapis_in_table");
+			boolean useLapis = ConfigString.LAPIS_IN_TABLE.getBoolean();
 
 			ItemStack topLeft = new ItemStack(Material.BOOK);
 			ItemMeta topLeftMeta = topLeft.getItemMeta();
@@ -121,7 +123,7 @@ public class EnchantmentTable implements InventoryData {
 							ItemMeta bookMeta = book.getItemMeta();
 							String name = item.getItemMeta().getDisplayName();
 							if (name == null || name.equals("")) {
-								name = ConfigUtils.getString(LanguageConfiguration.class,
+								name = ConfigUtils.getString(Type.LANGUAGE,
 								"vanilla." + ItemType.getUnlocalizedName(item.getType()));
 							}
 							HashMap<String, Object> loreCodes = getCodes();
@@ -217,7 +219,7 @@ public class EnchantmentTable implements InventoryData {
 	}
 
 	public ItemStack addToLapisStack(ItemStack item) {
-		if (ConfigUtils.getBoolean(MainConfiguration.class, "enchanting_table.use_lapis_in_table")) {
+		if (ConfigString.LAPIS_IN_TABLE.getBoolean()) {
 			ItemStack clone = item.clone();
 			if (lapisStack == null) {
 				lapisStack = item;
@@ -296,13 +298,13 @@ public class EnchantmentTable implements InventoryData {
 
 		TableEnchantments table = TableEnchantments.getTableEnchantments(player, null, getBooks(), false);
 		if (playerItems.get(slot).getType() == Material.BOOK
-		&& ConfigUtils.getBoolean(MainConfiguration.class, "use_enchanted_books")) {
+		&& ConfigString.USE_ENCHANTED_BOOKS.getBoolean()) {
 			enchantableItem = ItemUtils.convertToEnchantedBook(enchantableItem);
 		}
 		if (player.getGameMode().equals(GameMode.SURVIVAL) || player.getGameMode().equals(GameMode.ADVENTURE)) {
 			player.setLevel(player.getLevel() - level - 1);
 			int remove = level + 1;
-			if (ConfigUtils.getBoolean(MainConfiguration.class, "enchanting_table.use_lapis_in_table")) {
+			if (ConfigString.LAPIS_IN_TABLE.getBoolean()) {
 				removeFromLapisStack(remove);
 			} else {
 				for(int i = 0; i < player.getInventory().getSize(); i++) {
@@ -331,7 +333,9 @@ public class EnchantmentTable implements InventoryData {
 		setInventory(playerItems);
 		player.setStatistic(Statistic.ITEM_ENCHANTED, player.getStatistic(Statistic.ITEM_ENCHANTED) + 1);
 		Advancement enchanted = Bukkit.getAdvancement(NamespacedKey.minecraft("story/enchant_item"));
-		player.getAdvancementProgress(enchanted).awardCriteria("enchanted_item");
+		if(enchanted != null) {
+			player.getAdvancementProgress(enchanted).awardCriteria("enchanted_item");
+		}
 		if (EnchantmentSolution.getPlugin().isJobsEnabled()) {
 			JobsUtils.sendEnchantAction(player, enchantItem, enchantableItem, enchLevels);
 		}

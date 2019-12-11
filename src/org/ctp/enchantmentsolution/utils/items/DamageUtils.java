@@ -102,7 +102,7 @@ public class DamageUtils {
 					PlayerItemBreakEvent event = new PlayerItemBreakEvent((Player) player, item);
 					Bukkit.getPluginManager().callEvent(event);
 					player.getInventory().setItemInMainHand(new ItemStack(Material.AIR));
-					player.getWorld().spawnParticle(Particle.ITEM_CRACK, player.getEyeLocation(), 1, item.getType());
+					player.getWorld().spawnParticle(Particle.ITEM_CRACK, player.getEyeLocation(), 1, item);
 					player.getWorld().playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 1, 1);
 					if (player instanceof Player) {
 						Player p = (Player) player;

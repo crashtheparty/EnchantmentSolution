@@ -40,13 +40,6 @@ public class ExtraBlockListener implements Listener {
 		if (ESArrays.getShulkerBoxes().contains(event.getBlock().getType())) {
 			if (!ItemUtils.hasEnchantment(event.getPlayer().getInventory().getItemInMainHand(),
 			RegisterEnchantments.TELEPATHY)) {
-
-			}
-		}
-
-		if (ESArrays.getShulkerBoxes().contains(event.getBlock().getType())) {
-			if (!ItemUtils.hasEnchantment(event.getPlayer().getInventory().getItemInMainHand(),
-			RegisterEnchantments.TELEPATHY)) {
 				Player player = event.getPlayer();
 				ItemStack item = player.getInventory().getItemInMainHand();
 				Block block = event.getBlock();
@@ -60,9 +53,11 @@ public class ExtraBlockListener implements Listener {
 					player.incrementStatistic(Statistic.USE_ITEM, item.getType());
 					DamageUtils.damageItem(player, item);
 					McMMOHandler.handleMcMMO(event, item);
-					JobsUtils.sendBlockBreakAction(event);
+					if (EnchantmentSolution.getPlugin().isJobsEnabled()) {
+						JobsUtils.sendBlockBreakAction(event);
+					}
 					event.getBlock().setType(Material.AIR);
-					ItemUtils.dropItems(drops, block.getLocation(), true);
+					ItemUtils.dropItems(drops, block.getLocation());
 					block.setType(Material.AIR);
 				}
 			}
@@ -88,64 +83,4 @@ public class ExtraBlockListener implements Listener {
 			}
 		}
 	}
-
-	// private void damageItem(BlockBreakEvent event) {
-	// Player player = event.getPlayer();
-	// ItemStack item = player.getInventory().getItemInMainHand();
-	// if (player.getGameMode().equals(GameMode.CREATIVE) ||
-	// player.getGameMode().equals(GameMode.SPECTATOR))
-	// return;
-	// int numBreaks = 0;
-	// int unbreaking = ItemUtils.getLevel(item, Enchantment.DURABILITY);
-	// for(int i = 0; i < 1; i++) {
-	// double chance = (1.0D) / (unbreaking);
-	// double random = Math.random();
-	// if(chance > random) {
-	// numBreaks ++;
-	// }
-	// };
-	// if (numBreaks > 0) {
-	// DamageUtils.setDamage(item, DamageUtils.getDamage(item.getItemMeta()) +
-	// numBreaks);
-	// if (DamageUtils.getDamage(item.getItemMeta()) >
-	// item.getType().getMaxDurability()) {
-	// player.getInventory().setItemInMainHand(new ItemStack(Material.AIR));
-	// player.getWorld().playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 1,
-	// 1);
-	// player.incrementStatistic(Statistic.BREAK_ITEM, item.getType());
-	// }
-	// }
-	// }
-
-	// private void giveItems(Player player, ItemStack item, Block block,
-	// Collection<ItemStack> drops) {
-	// if (ItemUtils.hasEnchantment(item, Enchantment.LOOT_BONUS_BLOCKS)) {
-	// Collection<ItemStack> fortuneItems = AbilityUtils.getFortuneItems(item,
-	// block,
-	// drops);
-	// for(ItemStack drop: fortuneItems) {
-	// ItemUtils.giveItemToPlayer(player, drop, player.getLocation(), true);
-	// }
-	// } else if (Enchantments.hasEnchantment(item, Enchantment.SILK_TOUCH)
-	// && AbilityUtils.getSilkTouchItem(block, item) != null) {
-	// ItemUtils.giveItemToPlayer(player, AbilityUtils.getSilkTouchItem(block,
-	// item),
-	// player.getLocation(), true);
-	// } else {
-	// if (Enchantments.hasEnchantment(item, DefaultEnchantments.SMELTERY)) {
-	// ItemStack smelted = AbilityUtils.getSmelteryItem(block, item);
-	// if (smelted != null) {
-	// ItemUtils.giveItemToPlayer(player, smelted, player.getLocation(), true);
-	// } else {
-	// for(ItemStack drop: drops) {
-	// ItemUtils.giveItemToPlayer(player, drop, player.getLocation(), true);
-	// }
-	// }
-	// } else {
-	// for(ItemStack drop: drops) {
-	// ItemUtils.giveItemToPlayer(player, drop, player.getLocation(), true);
-	// }
-	// }
-	// }
-	// }
 }

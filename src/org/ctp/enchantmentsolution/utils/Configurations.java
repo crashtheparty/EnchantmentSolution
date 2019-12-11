@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
+import org.ctp.enchantmentsolution.enchantments.generate.TableEnchantments;
 import org.ctp.enchantmentsolution.enums.Language;
 import org.ctp.enchantmentsolution.utils.config.*;
 import org.ctp.enchantmentsolution.utils.files.*;
@@ -20,6 +21,7 @@ public class Configurations {
 	private static FishingConfiguration FISHING;
 	private static LanguageConfiguration LANGUAGE;
 	private static EnchantmentsConfiguration ENCHANTMENTS;
+	private static AdvancementsConfiguration ADVANCEMENTS;
 
 	private static List<LanguageFile> LANGUAGE_FILES = new ArrayList<LanguageFile>();
 	private static DataFile DATA_FILE;
@@ -42,6 +44,7 @@ public class Configurations {
 		CONFIG = new MainConfiguration(dataFolder);
 		FISHING = new FishingConfiguration(dataFolder);
 		ENCHANTMENTS = new EnchantmentsConfiguration(dataFolder);
+		ADVANCEMENTS = new AdvancementsConfiguration(dataFolder);
 
 		String languageFile = CONFIG.getString("language_file");
 		Language lang = Language.getLanguage(CONFIG.getString("language"));
@@ -85,6 +88,7 @@ public class Configurations {
 		FISHING.revert();
 		LANGUAGE.revert();
 		ENCHANTMENTS.revert();
+		ADVANCEMENTS.revert();
 	}
 
 	public static void revert(Configuration config, int backup) {
@@ -92,29 +96,32 @@ public class Configurations {
 	}
 
 	public static void save() {
-		CONFIG.setComments(CONFIG.getBoolean("use_comments"));
-		FISHING.setComments(CONFIG.getBoolean("use_comments"));
-		LANGUAGE.setComments(CONFIG.getBoolean("use_comments"));
-		ENCHANTMENTS.setComments(CONFIG.getBoolean("use_comments"));
+		CONFIG.setComments(ConfigString.USE_COMMENTS.getBoolean());
+		FISHING.setComments(ConfigString.USE_COMMENTS.getBoolean());
+		LANGUAGE.setComments(ConfigString.USE_COMMENTS.getBoolean());
+		ENCHANTMENTS.setComments(ConfigString.USE_COMMENTS.getBoolean());
+		ADVANCEMENTS.setComments(ConfigString.USE_COMMENTS.getBoolean());
 
 		CONFIG.save();
 		FISHING.save();
 		LANGUAGE.save();
 		ENCHANTMENTS.save();
+		ADVANCEMENTS.save();
 
-		// PlayerLevels.resetPlayerLevels();
+		TableEnchantments.removeAllTableEnchantments();
 		RegisterEnchantments.setEnchantments();
 
 		DBUtils.updateConfig(CONFIG);
 		DBUtils.updateConfig(FISHING);
 		DBUtils.updateConfig(LANGUAGE);
 		DBUtils.updateConfig(ENCHANTMENTS);
+		DBUtils.updateConfig(ADVANCEMENTS);
 
-		// if(!EnchantmentSolution.getPlugin().isInitializing()) {
-		// EnchantmentSolution.getPlugin().setVersionCheck(config.getBoolean("version.get_latest"),
-		// config.getBoolean("version.get_experimental"));
-		// AdvancementUtils.createAdvancements();
-		// }
+		if(!EnchantmentSolution.getPlugin().isInitializing()) {
+			EnchantmentSolution.getPlugin().setVersionCheck(ConfigString.LATEST_VERSION.getBoolean(),
+			ConfigString.EXPERIMENTAL_VERSION.getBoolean());
+			AdvancementUtils.createAdvancements();
+		}
 	}
 
 	public static void generateDebug() {
@@ -135,6 +142,7 @@ public class Configurations {
 		YamlConfigBackup fishing = FISHING.getConfig();
 		YamlConfigBackup language = LANGUAGE.getConfig();
 		YamlConfigBackup enchantments = ENCHANTMENTS.getConfig();
+		YamlConfigBackup advancements = ADVANCEMENTS.getConfig();
 
 		for(String s: config.getAllEntryKeys()) {
 			if (config.contains(s)) {
@@ -154,6 +162,12 @@ public class Configurations {
 			}
 		}
 
+		for(String s: advancements.getAllEntryKeys()) {
+			if (advancements.contains(s)) {
+				backup.set("advancements." + s, advancements.get(s));
+			}
+		}
+
 		for(String s: enchantments.getAllEntryKeys()) {
 			if (enchantments.contains(s)) {
 				backup.set("enchantment." + s, enchantments.get(s));
@@ -168,6 +182,7 @@ public class Configurations {
 		FISHING.reload();
 		LANGUAGE.reload();
 		ENCHANTMENTS.reload();
+		ADVANCEMENTS.reload();
 
 		save();
 	}
@@ -186,6 +201,10 @@ public class Configurations {
 
 	public static EnchantmentsConfiguration getEnchantments() {
 		return ENCHANTMENTS;
+	}
+
+	public static AdvancementsConfiguration getAdvancements() {
+		return ADVANCEMENTS;
 	}
 
 	public static List<LanguageFile> getLanguageFiles() {

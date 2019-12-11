@@ -66,6 +66,7 @@ public class DamageListener extends Enchantmentable {
 		runMethod(this, "shockAspect", event, EntityDamageByEntityEvent.class);
 		runMethod(this, "stoneThrow", event, EntityDamageByEntityEvent.class);
 		runMethod(this, "warp", event, EntityDamageByEntityEvent.class);
+		runMethod(this, "test", event, EntityDamageByEntityEvent.class);
 	}
 
 	@EventHandler
@@ -208,10 +209,10 @@ public class DamageListener extends Enchantmentable {
 			Player player = (Player) attacker;
 			Animals animals = (Animals) attacked;
 			ItemStack attackItem = player.getInventory().getItemInMainHand();
-			if(AnimalMobNMS.getMob(animals, attackItem) == null) {
-				return;
-			}
 			if (attackItem != null && ItemUtils.hasEnchantment(attackItem, RegisterEnchantments.IRENES_LASSO)) {
+				if(!AnimalMobNMS.canAddMob()) {
+					return;
+				}
 				event.setCancelled(true);
 				int max = ItemUtils.getLevel(attackItem, RegisterEnchantments.IRENES_LASSO);
 				int current = 0;
@@ -243,6 +244,11 @@ public class DamageListener extends Enchantmentable {
 				}
 			}
 		}
+	}
+
+	private void test(EntityDamageByEntityEvent event) {
+		ChatUtils.sendInfo("Entity: " + event.getEntityType());
+		ChatUtils.sendInfo("Entity: " + event.getEntity().getType());
 	}
 
 	private void ironDefense(EntityDamageByEntityEvent event) {
@@ -573,6 +579,7 @@ public class DamageListener extends Enchantmentable {
 							continue;
 						}
 						for(int z = - (level + 4); z <= level + 5; z++){
+							ChatUtils.sendInfo(x + " " + y + " " + z);
 							if(x == y && x == 0 && z == 0){
 								continue;
 							}
@@ -583,9 +590,9 @@ public class DamageListener extends Enchantmentable {
 							int blockX = tp.getBlockX();
 							int blockY = tp.getBlockY();
 							int blockZ = tp.getBlockZ();
-							if(playerWorld.getBlockAt(new Location(tpWorld, blockX, blockY + 1, blockZ)).getType().isSolid()
-							&& player.getWorld().getBlockAt(new Location(tpWorld, blockX, blockY, blockZ)).getType().isSolid()
-							&& !player.getWorld().getBlockAt(new Location(tpWorld, blockX, blockY - 1, blockZ)).getType().isSolid()){
+							if(!playerWorld.getBlockAt(new Location(tpWorld, blockX, blockY + 1, blockZ)).getType().isSolid()
+							&& !player.getWorld().getBlockAt(new Location(tpWorld, blockX, blockY, blockZ)).getType().isSolid()
+							&& player.getWorld().getBlockAt(new Location(tpWorld, blockX, blockY - 1, blockZ)).getType().isSolid()){
 								locsToTp.add(tp);
 							}
 
@@ -594,6 +601,7 @@ public class DamageListener extends Enchantmentable {
 				}
 				double chance = .25;
 				double random = Math.random();
+				ChatUtils.sendInfo(chance + " " + random + " " + locsToTp.size());
 				if(chance > random && locsToTp.size() > 0){
 					int randomLoc = (int) (Math.random() * locsToTp.size());
 					Location toTeleport = locsToTp.get(randomLoc);

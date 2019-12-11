@@ -180,6 +180,9 @@ public class InventoryClickUtils {
 						case 3:
 							configInv.listConfigDetails(Configurations.getFishing().getConfig(), null);
 							break;
+						case 4:
+							configInv.listConfigDetails(Configurations.getAdvancements().getConfig(), null);
+							break;
 						case 5:
 							configInv.listConfigDetails(Configurations.getLanguage().getConfig(), null);
 							break;

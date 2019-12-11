@@ -10,8 +10,7 @@ import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
-import org.ctp.enchantmentsolution.utils.ConfigUtils;
-import org.ctp.enchantmentsolution.utils.config.MainConfiguration;
+import org.ctp.enchantmentsolution.utils.config.ConfigString;
 import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 
 import java.util.HashMap;
@@ -29,8 +28,7 @@ public class RemoveEnchant implements CommandExecutor {
 						if (enchant.getName().equalsIgnoreCase(enchantmentName)) {
 							ItemStack itemToEnchant = player.getInventory().getItemInMainHand();
 							if (itemToEnchant != null) {
-								boolean useBooks = ConfigUtils.getBoolean(MainConfiguration.class,
-								"use_enchanted_books");
+								boolean useBooks = ConfigString.USE_ENCHANTED_BOOKS.getBoolean();
 								if (itemToEnchant.getType() == Material.BOOK && useBooks) {
 									itemToEnchant = ItemUtils.convertToEnchantedBook(itemToEnchant);
 								} else if (itemToEnchant.getType() == Material.ENCHANTED_BOOK && !useBooks) {

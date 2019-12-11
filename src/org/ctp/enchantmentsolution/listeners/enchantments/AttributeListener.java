@@ -7,6 +7,7 @@ import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Statistic;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -14,6 +15,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.Attributable;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
@@ -24,6 +26,7 @@ import org.ctp.enchantmentsolution.events.potion.MagicGuardPotionEvent;
 import org.ctp.enchantmentsolution.events.potion.PotionEventType;
 import org.ctp.enchantmentsolution.events.potion.UnrestPotionEvent;
 import org.ctp.enchantmentsolution.listeners.Enchantmentable;
+import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.ESArrays;
 import org.ctp.enchantmentsolution.utils.ItemSlotType;
 
@@ -63,13 +66,17 @@ public class AttributeListener extends Enchantmentable {
 						if (a.getType() == type) {
 							AttributeEvent attrEvent = new AttributeEvent(player,
 							new EnchantmentLevel(RegisterEnchantments.getCustomEnchantment(entry.getKey()),
-							entry.getValue()),
-							equip ? null : a.getAttrName(), equip ? a.getAttrName() : null);
+							entry.getValue()), equip ? null : a.getAttrName(), equip ? a.getAttrName() : null);
 							Bukkit.getPluginManager().callEvent(attrEvent);
 
 							if (!attrEvent.isCancelled()) {
 								if (equip) {
 									a.addModifier(player, entry.getValue());
+									if (a.getEnchantment() == RegisterEnchantments.TOUGHNESS
+									&& player.getAttribute(Attribute.GENERIC_ARMOR_TOUGHNESS).getValue() >= 20) {
+										AdvancementUtils.awardCriteria(attrEvent.getPlayer(),
+										ESAdvancement.GRAPHENE_ARMOR, "toughness");
+									}
 								} else {
 									a.removeModifier(player);
 								}
@@ -90,8 +97,7 @@ public class AttributeListener extends Enchantmentable {
 									player.setStatistic(Statistic.TIME_SINCE_REST, 96000);
 								}
 								player.addPotionEffect(
-								new PotionEffect(PotionEffectType.NIGHT_VISION, 1000000000, 0, false, false),
-								true);
+								new PotionEffect(PotionEffectType.NIGHT_VISION, 1000000000, 0, false, false), true);
 							} else {
 								player.addPotionEffect(
 								new PotionEffect(PotionEffectType.NIGHT_VISION, 160, 0, false, false), true);
@@ -101,6 +107,10 @@ public class AttributeListener extends Enchantmentable {
 				} else if (entry.getKey() == RegisterEnchantments.NO_REST) {
 					if (type == ItemSlotType.HELMET) {
 						if (equip) {
+							if (player.getStatistic(Statistic.TIME_SINCE_REST) > 72000
+							&& player.getWorld().getTime() > 12540 && player.getWorld().getTime() < 23459) {
+								AdvancementUtils.awardCriteria(player, ESAdvancement.COFFEE_BREAK, "coffee");
+							}
 							if (player.getStatistic(Statistic.TIME_SINCE_REST) > 0) {
 								player.setStatistic(Statistic.TIME_SINCE_REST, 0);
 							}

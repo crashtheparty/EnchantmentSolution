@@ -9,9 +9,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.MerchantRecipe;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentList;
-import org.ctp.enchantmentsolution.utils.ConfigUtils;
 import org.ctp.enchantmentsolution.utils.VersionUtils;
-import org.ctp.enchantmentsolution.utils.config.MainConfiguration;
+import org.ctp.enchantmentsolution.utils.config.ConfigString;
 import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 
 public class VillagerEnchantments extends LootEnchantments {
@@ -53,8 +52,10 @@ public class VillagerEnchantments extends LootEnchantments {
 			throw new NullPointerException("enchantmentLevel cannot be null.");
 		}
 		Material mat = original.getResult().getType();
-		if (!ConfigUtils.getBoolean(MainConfiguration.class, "use_enchanted_books") && mat == Material.ENCHANTED_BOOK) {
+		if (!ConfigString.USE_ENCHANTED_BOOKS.getBoolean() && mat == Material.ENCHANTED_BOOK) {
 			mat = Material.BOOK;
+		} else if (ConfigString.USE_ENCHANTED_BOOKS.getBoolean() && mat == Material.BOOK) {
+			mat = Material.ENCHANTED_BOOK;
 		}
 
 		List<ItemStack> ingredients = new ArrayList<ItemStack>();
@@ -67,7 +68,7 @@ public class VillagerEnchantments extends LootEnchantments {
 				levelPrice[1] = 64;
 			}
 			ItemStack priceItem = new ItemStack(Material.EMERALD, levelPrice[1]);
-			ingredients.add(new ItemStack(Material.BOOK));
+			ingredients.add(new ItemStack(mat));
 			ingredients.add(priceItem);
 		} else {
 			ItemStack priceItem = new ItemStack(Material.EMERALD, levelPrice[1]);
@@ -86,23 +87,22 @@ public class VillagerEnchantments extends LootEnchantments {
 		}
 	}
 
-	public static VillagerEnchantments getVillagerEnchantments(Player player, ItemStack item, int minBookshelves,
-	boolean treasure, MerchantRecipe original) {
+	public static VillagerEnchantments getVillagerEnchantments(ItemStack result, MerchantRecipe original) {
 		int books = 16;
-		if (ConfigUtils.isLevel50()) {
+		if (ConfigString.LEVEL_FIFTY.getBoolean()) {
 			books = 24;
 		}
-		int random = (int) (Math.random() * books) + minBookshelves;
-		if (random >= books) {
+		int random = bellCurve(0, books, 4);
+		if(random >= books) {
 			random = books - 1;
 		}
 
-		return null;
+		return new VillagerEnchantments(null, result, random, true, original);
 	}
 
 	private int[] getLevelPrice(Material type) {
 		int level = 0;
-		if (ConfigUtils.isLevel50()) {
+		if (ConfigString.LEVEL_FIFTY.getBoolean()) {
 			if (type == Material.ENCHANTED_BOOK) {
 				level = bellCurve(0, 6, 4);
 			} else {
@@ -121,7 +121,7 @@ public class VillagerEnchantments extends LootEnchantments {
 	private int[] getLevelPrice(Material type, int level) {
 		int price = 0;
 		if (type == Material.ENCHANTED_BOOK) {
-			if (ConfigUtils.isLevel50()) {
+			if (ConfigString.LEVEL_FIFTY.getBoolean()) {
 				price = level * 2 * level + (int) (Math.random() * (level * 3 + 7) + 3);
 			} else {
 				price = (level + 1) * level * 2 * level + (int) (Math.random() * (level * 3 + 15) + 3);
@@ -166,3 +166,5 @@ public class VillagerEnchantments extends LootEnchantments {
 		return (int) num;
 	}
 }
+
+

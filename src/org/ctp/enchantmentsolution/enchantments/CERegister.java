@@ -380,7 +380,7 @@ public class CERegister extends CustomEnchantment {
 	new EnchantmentDescription(Language.CHINA_SIMPLE, "在击杀怪物时有几率获得怪物的头.")),
 	Arrays.asList(ItemType.SWORDS), Arrays.asList(ItemType.SWORDS, ItemType.AXES), Arrays.asList());
 	public static CERegister BRINE = new CERegister("brine", "Brine",
-	"Doubles damage if opposting mob is below 50% health.", RegisterEnchantments.BRINE,
+	"Doubles damage if opposing mob is below 50% health.", RegisterEnchantments.BRINE,
 	new int[] { 30, 25, 0, 0, 25, 1, 1, 1 }, Weight.RARE,
 	Arrays.asList(new EnchantmentDisplayName(Language.GERMAN, "Salzlake"),
 	new EnchantmentDisplayName(Language.CHINA_SIMPLE, "撒盐")),
@@ -399,7 +399,7 @@ public class CERegister extends CustomEnchantment {
 	new EnchantmentDescription(Language.CHINA_SIMPLE, "穿戴装备时使你感到浑身无力.")),
 	Arrays.asList(ItemType.ENCHANTABLE), Arrays.asList(ItemType.ALL), Arrays.asList(), true, true, true);
 	public static CERegister CURSE_OF_LAG = new CERegister("lagging_curse", "Curse of Lag", "Ah, fireworks!",
-	RegisterEnchantments.CURSE_OF_LAG, new int[] { 25, 25, 0, 0, 1, 1, 1, 1 }, Weight.RARE,
+	RegisterEnchantments.CURSE_OF_LAG, new int[] { 25, 25, 0, 0, 1, 1, 1, 1 }, Weight.VERY_RARE,
 	Arrays.asList(new EnchantmentDisplayName(Language.GERMAN, "Fluch der Verzögerung"),
 	new EnchantmentDisplayName(Language.CHINA_SIMPLE, "卡顿诅咒")),
 	Arrays.asList(new EnchantmentDescription(Language.GERMAN, "Ah, Feuerwerk!"),

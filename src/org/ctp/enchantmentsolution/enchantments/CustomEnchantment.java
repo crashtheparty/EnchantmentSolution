@@ -11,11 +11,11 @@ import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentDisplayName;
 import org.ctp.enchantmentsolution.enchantments.helper.Weight;
 import org.ctp.enchantmentsolution.enums.Language;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
-import org.ctp.enchantmentsolution.utils.ConfigUtils;
 import org.ctp.enchantmentsolution.utils.PermissionUtils;
 import org.ctp.enchantmentsolution.utils.StringUtils;
-import org.ctp.enchantmentsolution.utils.config.EnchantmentsConfiguration;
-import org.ctp.enchantmentsolution.utils.config.LanguageConfiguration;
+import org.ctp.enchantmentsolution.utils.config.ConfigString;
+import org.ctp.enchantmentsolution.utils.config.ConfigUtils;
+import org.ctp.enchantmentsolution.utils.config.Type;
 import org.ctp.enchantmentsolution.enums.ItemType;
 
 public abstract class CustomEnchantment {
@@ -33,6 +33,7 @@ public abstract class CustomEnchantment {
 	protected boolean maxLevelOne = false, curse = false;
 	protected List<Enchantment> conflictingEnchantments = null;
 	protected List<Material> disabledItems = new ArrayList<Material>();
+	private final Type lang;
 
 	public CustomEnchantment(String englishUSDisplayName, int fiftyConstant, int thirtyConstant, int fiftyModifier,
 	int thirtyModifier, int fiftyStartLevel, int thirtyStartLevel, int fiftyMaxLevel, int thirtyMaxLevel,
@@ -48,6 +49,7 @@ public abstract class CustomEnchantment {
 		setDefaultThirtyMaxLevel(thirtyMaxLevel);
 		setDefaultWeight(weight);
 		addDefaultDescription(englishUSDescription);
+		lang = Type.LANGUAGE;
 	}
 
 	public abstract Enchantment getRelativeEnchantment();
@@ -165,12 +167,12 @@ public abstract class CustomEnchantment {
 			}
 
 			if (names.isEmpty()) {
-				page += ConfigUtils.getString(LanguageConfiguration.class, "misc.no_disabled_items") + ".\n";
+				page += ConfigUtils.getString(lang, "misc.no_disabled_items") + ".\n";
 			} else {
 				page += StringUtils.join(names, ",") + ".\n";
 			}
 		} else {
-			page += ConfigUtils.getString(LanguageConfiguration.class, "misc.no_disabled_items") + ".\n";
+			page += ConfigUtils.getString(lang, "misc.no_disabled_items") + ".\n";
 		}
 		page += ChatUtils.getMessage(ChatUtils.getCodes(), "enchantment.conflicting-enchantments");
 		if (getConflictingEnchantments().size() > 0) {
@@ -184,18 +186,18 @@ public abstract class CustomEnchantment {
 			}
 
 			if (names.isEmpty()) {
-				page += ConfigUtils.getString(LanguageConfiguration.class, "misc.no_conflicting_enchantments");
+				page += ConfigUtils.getString(lang, "misc.no_conflicting_enchantments");
 			} else {
 				page += StringUtils.join(names, ", ");
 			}
 			page += ".\n";
 		} else {
-			page += ConfigUtils.getString(LanguageConfiguration.class, "misc.no_conflicting_enchantments") + ".\n";
+			page += ConfigUtils.getString(lang, "misc.no_conflicting_enchantments") + ".\n";
 		}
 		page += ChatUtils.getMessage(ChatUtils.getCodes(), "enchantment.enabled")
-		+ ConfigUtils.getString(LanguageConfiguration.class, "misc." + isEnabled()) + ".\n";
+		+ ConfigUtils.getString(lang, "misc." + isEnabled()) + ".\n";
 		page += ChatUtils.getMessage(ChatUtils.getCodes(), "enchantment.treasure")
-		+ ConfigUtils.getString(LanguageConfiguration.class, "misc." + isTreasure()) + ".\n";
+		+ ConfigUtils.getString(lang, "misc." + isTreasure()) + ".\n";
 		return page;
 	}
 
@@ -281,7 +283,7 @@ public abstract class CustomEnchantment {
 	}
 
 	public boolean canEnchant(Player player, int enchantability, int level) {
-		if (ConfigUtils.getBoolean(EnchantmentsConfiguration.class, "use_starting_level") && level < getStartLevel()) {
+		if (ConfigUtils.getAdvancedBoolean(ConfigString.STARTING_LEVEL, ConfigString.LEVEL_FIFTY.getBoolean()) && level < getStartLevel()) {
 			return false;
 		}
 		if (getEnchantLevel(player, enchantability) > 0) {
@@ -355,7 +357,7 @@ public abstract class CustomEnchantment {
 	}
 
 	public int getDefaultConstant() {
-		if (ConfigUtils.isLevel50()) {
+		if (ConfigString.LEVEL_FIFTY.getBoolean()) {
 			return defaultFiftyConstant;
 		}
 		return defaultThirtyConstant;
@@ -382,7 +384,7 @@ public abstract class CustomEnchantment {
 	}
 
 	public int getDefaultModifier() {
-		if (ConfigUtils.isLevel50()) {
+		if (ConfigString.LEVEL_FIFTY.getBoolean()) {
 			return defaultFiftyModifier;
 		}
 		return defaultThirtyModifier;
@@ -409,7 +411,7 @@ public abstract class CustomEnchantment {
 	}
 
 	public int getDefaultStartLevel() {
-		if (ConfigUtils.isLevel50()) {
+		if (ConfigString.LEVEL_FIFTY.getBoolean()) {
 			return defaultFiftyStartLevel;
 		}
 		return defaultThirtyStartLevel;
@@ -436,7 +438,7 @@ public abstract class CustomEnchantment {
 	}
 
 	public int getDefaultMaxLevel() {
-		if (ConfigUtils.isLevel50()) {
+		if (ConfigString.LEVEL_FIFTY.getBoolean()) {
 			return defaultFiftyMaxLevel;
 		}
 		return defaultThirtyMaxLevel;

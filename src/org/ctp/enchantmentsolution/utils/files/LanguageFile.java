@@ -1,11 +1,21 @@
 package org.ctp.enchantmentsolution.utils.files;
 
 import java.io.File;
+import java.util.Iterator;
+import java.util.logging.Level;
 
+import org.bukkit.Material;
+import org.bukkit.plugin.java.JavaPlugin;
+import org.ctp.enchantmentsolution.api.ApiEnchantmentWrapper;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
+import org.ctp.enchantmentsolution.enchantments.CustomEnchantmentWrapper;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
+import org.ctp.enchantmentsolution.enums.ItemType;
 import org.ctp.enchantmentsolution.enums.Language;
-import org.ctp.enchantmentsolution.utils.ConfigUtils;
+import org.ctp.enchantmentsolution.nms.ItemNameNMS;
+import org.ctp.enchantmentsolution.utils.ChatUtils;
+import org.ctp.enchantmentsolution.utils.StringUtils;
+import org.ctp.enchantmentsolution.utils.config.ConfigUtils;
 import org.ctp.enchantmentsolution.utils.yaml.YamlConfig;
 
 public class LanguageFile {
@@ -50,39 +60,31 @@ public class LanguageFile {
 						break;
 				}
 			}
-			// if (enchant.getRelativeEnchantment() instanceof ApiEnchantmentWrapper) {
-			// JavaPlugin plugin = ((ApiEnchantmentWrapper)
-			// enchant.getRelativeEnchantment()).getPlugin();
-			// if (plugin == null) {
-			// ChatUtils.sendToConsole(Level.WARNING,
-			// "Enchantment " + enchant.getName() + " (Display Name " +
-			// enchant.getDisplayName() + ")"
-			// + " does not have a JavaPlugin set. Refusing to set language defaults.");
-			// continue;
-			// }
-			// config.addDefault(
-			// "enchantment.descriptions." + plugin.getName().toLowerCase() + "." +
-			// enchant.getName(),
-			// StringUtils.encodeString(enchantmentDescription));
-			// } else if (enchant.getRelativeEnchantment() instanceof
-			// CustomEnchantmentWrapper) {
-			// config.addDefault("enchantment.descriptions." + "custom_enchantments." +
-			// enchant.getName(),
-			// StringUtils.encodeString(enchantmentDescription));
-			// } else {
-			// config.addDefault("enchantment.descriptions." + "default_enchantments." +
-			// enchant.getName(),
-			// StringUtils.encodeString(enchantmentDescription));
-			// }
+			if (enchant.getRelativeEnchantment() instanceof ApiEnchantmentWrapper) {
+				JavaPlugin plugin = ((ApiEnchantmentWrapper) enchant.getRelativeEnchantment()).getPlugin();
+				if (plugin == null) {
+					ChatUtils.sendToConsole(Level.WARNING,
+					"Enchantment " + enchant.getName() + " (Display Name " + enchant.getDisplayName() + ")"
+					+ " does not have a JavaPlugin set. Refusing to set language defaults.");
+					continue;
+				}
+				config
+				.addDefault("enchantment.descriptions." + plugin.getName().toLowerCase() + "." + enchant.getName(),
+				StringUtils.encodeString(enchantmentDescription));
+			} else if (enchant.getRelativeEnchantment() instanceof CustomEnchantmentWrapper) {
+				config.addDefault("enchantment.descriptions." + "custom_enchantments." + enchant.getName(),
+				StringUtils.encodeString(enchantmentDescription));
+			} else {
+				config.addDefault("enchantment.descriptions." + "default_enchantments." + enchant.getName(),
+				StringUtils.encodeString(enchantmentDescription));
+			}
 		}
 
-		// for(Iterator<java.util.Map.Entry<Material, String>> it =
-		// ItemType.ALL.getUnlocalizedNames().entrySet()
-		// .iterator(); it.hasNext();) {
-		// java.util.Map.Entry<Material, String> e = it.next();
-		// englishUS.addDefault("vanilla." + e.getValue(),
-		// ItemNameNMS.returnLocalizedItemName(Language.US, e.getKey()));
-		// }
+		for(Iterator<java.util.Map.Entry<Material, String>> it = ItemType.ALL.getUnlocalizedNames().entrySet()
+		.iterator(); it.hasNext();) {
+			java.util.Map.Entry<Material, String> e = it.next();
+			config.addDefault("vanilla." + e.getValue(), ItemNameNMS.returnLocalizedItemName(language, e.getKey()));
+		}
 
 		config.saveConfig();
 	}

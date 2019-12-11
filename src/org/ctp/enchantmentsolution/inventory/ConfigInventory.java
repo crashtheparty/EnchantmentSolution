@@ -48,6 +48,7 @@ public class ConfigInventory implements InventoryData {
 		isChanged.putAll(DBUtils.getDifferent(Configurations.getFishing()));
 		isChanged.putAll(DBUtils.getDifferent(Configurations.getLanguage()));
 		isChanged.putAll(DBUtils.getDifferent(Configurations.getEnchantments()));
+		isChanged.putAll(DBUtils.getDifferent(Configurations.getAdvancements()));
 
 		hasChanged = isChanged.containsValue(true);
 	}
@@ -106,6 +107,12 @@ public class ConfigInventory implements InventoryData {
 		fishingFileMeta.setDisplayName(ChatColor.GOLD + Configurations.getFishing().getConfig().getFileName());
 		fishingFile.setItemMeta(fishingFileMeta);
 		inv.setItem(3, fishingFile);
+
+		ItemStack advancementsFile = new ItemStack(Material.KNOWLEDGE_BOOK);
+		ItemMeta advancementsFileMeta = advancementsFile.getItemMeta();
+		advancementsFileMeta.setDisplayName(ChatColor.GOLD + Configurations.getAdvancements().getConfig().getFileName());
+		advancementsFile.setItemMeta(advancementsFileMeta);
+		inv.setItem(4, advancementsFile);
 
 		ItemStack languageFile = new ItemStack(Material.BOOK);
 		ItemMeta languageFileMeta = languageFile.getItemMeta();

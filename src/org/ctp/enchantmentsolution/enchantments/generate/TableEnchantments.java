@@ -41,6 +41,14 @@ public class TableEnchantments extends GenerateEnchantments {
 		return enchantments;
 	}
 
+	public static void removeAllTableEnchantments() {
+		Iterator<TableEnchantments> iterator = TABLES.iterator();
+		while (iterator.hasNext()) {
+			iterator.next();
+			iterator.remove();
+		}
+	}
+
 	public static void removeTableEnchantments(Player player) {
 		Iterator<TableEnchantments> iterator = TABLES.iterator();
 		while (iterator.hasNext()) {

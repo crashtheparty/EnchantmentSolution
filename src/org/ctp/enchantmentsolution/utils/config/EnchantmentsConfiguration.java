@@ -12,6 +12,7 @@ import org.ctp.enchantmentsolution.enchantments.CustomEnchantmentWrapper;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.Weight;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
+import org.ctp.enchantmentsolution.utils.Configurations;
 import org.ctp.enchantmentsolution.utils.ESArrays;
 import org.ctp.enchantmentsolution.utils.yaml.YamlConfigBackup;
 
@@ -34,31 +35,28 @@ public class EnchantmentsConfiguration extends Configuration {
 
 		YamlConfigBackup config = getConfig();
 
-		if (!config.getBoolean("enchanting_table.reset_enchantments_advanced")) {
-			config.getFromConfig();
-		} else {
-			config.resetInfo();
-		}
+		config.getFromConfig();
 
-		config.addDefault("use_starting_level", true, new String[] {
-		"Enchantments will not be available unless the enchanting level is the set value or above" });
-		config.addDefault("use_lapis_modifier", true,
+		config.addDefault("advanced_options.use", false,
+		new String[] { "Use the advanced customization options for the plugin",
+		"** Only modify if you understand what you're doing! **" });
+		config.addDefault("advanced_options.enchantability_decay", false,
+		new String[] { "Adds the 1.14-1.14.2 feature of additional enchantments getting lower levels" });
+		config.addDefault("advanced_options.starting_level", true,
+		new String[] { "Enchantments will not be available unless the enchanting level is the set value or above" });
+		config.addDefault("advanced_options.lapis_modifiers.use", true,
 		new String[] { "Enchanting with higher amounts of lapis give higher enchantability" });
-		config.addDefault("lapis_modifiers.constant", -1,
-		new String[] { "Extra enchantability: (lapis + constant) * modifier" });
-		config.addDefault("lapis_modifiers.modifier", 2);
-		config.addDefault("multi_enchant_divisor", 75.0D,
+		config.addDefault("advanced_options.lapis_modifiers.constant", -1,
+		new String[] { "Extra enchantability: (lapis + constant) * multiplier" });
+		config.addDefault("advanced_options.lapis_modifiers.multiplier", 2);
+		config.addDefault("advanced_options.multi_enchant_divisor", 75.0D,
 		new String[] { "Chance of multiple enchantments on one item. Lower value = more enchantments." });
-		config.addDefault("use_permissions", false,
+		config.addDefault("advanced_options.use_permissions", false,
 		new String[] { "Use the permission system per player for all enchantments.",
 		"Permissions use the system \"enchantmentsolution.<enchant_name>.<type>.level<int>\"",
 		"enchant_name: Enchantment name as used below",
-		"type: either table (for enchanting items) or anvil (for combining items)",
-		"int: the enchantment level", "Override permission: enchantmentsolution.permissions.ignore" });
-		config.addDefault("advanced_settings", false, new String[] {
-		"Shows the Weight, Enchantability Values, Conflicting Enchantments, Permissions, etc." });
-
-		config.writeDefaults();
+		"type: either table (for enchanting items) or anvil (for combining items)", "int: the enchantment level",
+		"Override permission: enchantmentsolution.permissions.ignore" });
 
 		for(CustomEnchantment enchant: RegisterEnchantments.getEnchantments()) {
 			String namespace = "default_enchantments";
@@ -77,20 +75,25 @@ public class EnchantmentsConfiguration extends Configuration {
 			String start = namespace + "." + enchant.getName();
 			config.addDefault(start + ".enabled", true);
 			config.addDefault(start + ".treasure", enchant.isTreasure());
-			if (config.getBoolean("advanced_settings")) {
-				config.addDefault(start + ".weight", enchant.getDefaultWeightName());
-				config.addEnum(start + ".weight", Arrays.asList(Weight.VERY_RARE.getName(), Weight.RARE.getName(),
-				Weight.UNCOMMON.getName(), Weight.COMMON.getName(), Weight.NULL.getName()));
-				config.addDefault(start + ".enchantability_constant", enchant.getDefaultConstant());
-				config.addDefault(start + ".enchantability_modifier", enchant.getDefaultModifier());
-				config.addDefault(start + ".enchantability_start_level", enchant.getDefaultStartLevel());
-				config.addDefault(start + ".enchantability_max_level", enchant.getDefaultMaxLevel());
-				config.addDefault(start + ".conflicting_enchantments", enchant.conflictingDefaultList());
-				config.addEnum(start + ".conflicting_enchantments", RegisterEnchantments.getEnchantmentNames());
-				config.addDefault(start + ".disabled_items", enchant.getDisabledItemsStrings());
-				config.addEnum(start + ".disabled_items", ESArrays.getRepairMaterialsStrings());
+			start += ".advanced";
+			config.addDefault(start + ".weight", enchant.getDefaultWeightName());
+			config.addEnum(start + ".weight", Arrays.asList(Weight.VERY_RARE.getName(), Weight.RARE.getName(),
+			Weight.UNCOMMON.getName(), Weight.COMMON.getName(), Weight.NULL.getName()));
+			config.addDefault(start + ".enchantability_constant", enchant.getDefaultConstant());
+			config.addDefault(start + ".enchantability_modifier", enchant.getDefaultModifier());
+			config.addDefault(start + ".enchantability_start_level", enchant.getDefaultStartLevel());
+			config.addDefault(start + ".enchantability_max_level", enchant.getDefaultMaxLevel());
+			config.addDefault(start + ".conflicting_enchantments", enchant.conflictingDefaultList());
+			config.addEnum(start + ".conflicting_enchantments", RegisterEnchantments.getEnchantmentNames());
+			config.addDefault(start + ".disabled_items", enchant.getDisabledItemsStrings());
+			config.addEnum(start + ".disabled_items", ESArrays.getRepairMaterialsStrings());
+			for(int i = 0; i < enchant.getMaxLevel(); i++) {
+				config.addDefault(start + ".permissions.table.level" + (i + 1), false);
+				config.addDefault(start + ".permissions.anvil.level" + (i + 1), false);
 			}
 		}
+
+		config.writeDefaults();
 
 		if (EnchantmentSolution.getPlugin().isInitializing()) {
 			ChatUtils.sendInfo("Enchantment configuration initialized!");
@@ -105,21 +108,18 @@ public class EnchantmentsConfiguration extends Configuration {
 					String namespace = plugin.getName().toLowerCase() + "." + enchant.getName().toLowerCase();
 					config.addDefault(namespace + "." + enchant.getName() + ".enabled", true);
 					config.addDefault(namespace + "." + enchant.getName() + ".treasure", enchant.isTreasure());
-					if (config.getBoolean("advanced_settings")) {
-						config.addDefault(namespace + ".weight", enchant.getDefaultWeightName());
-						config.addEnum(namespace + ".weight",
-						Arrays.asList(Weight.VERY_RARE.getName(), Weight.RARE.getName(),
-						Weight.UNCOMMON.getName(), Weight.COMMON.getName(), Weight.NULL.getName()));
-						config.addDefault(namespace + ".enchantability_constant", enchant.getDefaultConstant());
-						config.addDefault(namespace + ".enchantability_modifier", enchant.getDefaultModifier());
-						config.addDefault(namespace + ".enchantability_start_level", enchant.getDefaultStartLevel());
-						config.addDefault(namespace + ".enchantability_max_level", enchant.getDefaultMaxLevel());
-						config.addDefault(namespace + ".conflicting_enchantments", enchant.conflictingDefaultList());
-						config.addEnum(namespace + ".conflicting_enchantments",
-						RegisterEnchantments.getEnchantmentNames());
-						config.addDefault(namespace + ".disabled_items", enchant.getDisabledItemsStrings());
-						config.addEnum(namespace + ".disabled_items", ESArrays.getRepairMaterialsStrings());
-					}
+					namespace += ".advanced";
+					config.addDefault(namespace + ".weight", enchant.getDefaultWeightName());
+					config.addEnum(namespace + ".weight", Arrays.asList(Weight.VERY_RARE.getName(),
+					Weight.RARE.getName(), Weight.UNCOMMON.getName(), Weight.COMMON.getName(), Weight.NULL.getName()));
+					config.addDefault(namespace + ".enchantability_constant", enchant.getDefaultConstant());
+					config.addDefault(namespace + ".enchantability_modifier", enchant.getDefaultModifier());
+					config.addDefault(namespace + ".enchantability_start_level", enchant.getDefaultStartLevel());
+					config.addDefault(namespace + ".enchantability_max_level", enchant.getDefaultMaxLevel());
+					config.addDefault(namespace + ".conflicting_enchantments", enchant.conflictingDefaultList());
+					config.addEnum(namespace + ".conflicting_enchantments", RegisterEnchantments.getEnchantmentNames());
+					config.addDefault(namespace + ".disabled_items", enchant.getDisabledItemsStrings());
+					config.addEnum(namespace + ".disabled_items", ESArrays.getRepairMaterialsStrings());
 				}
 			}
 		}
@@ -127,6 +127,11 @@ public class EnchantmentsConfiguration extends Configuration {
 
 	@Override
 	public void migrateVersion() {
+		if(Configurations.getConfig().getString("enchanting_table.enchanting_type") != null) {
+			getConfig().set("advanced_options.use", Configurations.getConfig().getString("enchanting_table.enchanting_type").contains("custom"));
+			Configurations.getConfig().getConfig().removeKey("enchanting_table.enchanting_type");
+			Configurations.getConfig().save();
+		}
 	}
 
 }

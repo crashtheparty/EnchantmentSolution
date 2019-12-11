@@ -105,7 +105,7 @@ public class PlayerListener extends Enchantmentable {
 							} else {
 								player.getWorld().spawnParticle(Particle.VILLAGER_ANGRY, loc, 30, 0.2, 0.5, 0.2);
 							}
-							ItemUtils.dropItem(flowerGiftEvent.getFlower(), flowerGiftEvent.getDropLocation(), true);
+							ItemUtils.dropItem(flowerGiftEvent.getFlower(), flowerGiftEvent.getDropLocation());
 							player.incrementStatistic(Statistic.USE_ITEM, item.getType());
 							DamageUtils.damageItem(player, item);
 						}
@@ -301,12 +301,12 @@ public class PlayerListener extends Enchantmentable {
 				Bukkit.getPluginManager().callEvent(splatterFest);
 
 				if(!splatterFest.isCancelled()) {
-					if(splatterFest.takeEgg()) {
+					if(splatterFest.takeEgg() && splatterFest.hasEgg()) {
 						ItemStack[] contents = splatterFest.getPlayer().getInventory().getContents();
 						ItemStack[] extraContents = splatterFest.getPlayer().getInventory().getExtraContents();
 						ItemStack[] allContents = Arrays.copyOf(contents, contents.length + extraContents.length);
 						System.arraycopy(extraContents, 0, allContents, contents.length, extraContents.length);
-						for(int i = 0; i < extraContents.length; i++) {
+						for(int i = 0; i < allContents.length; i++) {
 							ItemStack removeItem = player.getInventory().getItem(i);
 							if(removeItem != null && removeItem.getType().equals(Material.EGG)) {
 								if(removeItem.getAmount() - 1 <= 0) {
@@ -318,6 +318,8 @@ public class PlayerListener extends Enchantmentable {
 								}
 							}
 						}
+					} else if (splatterFest.takeEgg() && !splatterFest.hasEgg()) {
+						return;
 					}
 					player.incrementStatistic(Statistic.USE_ITEM, item.getType());
 					player.incrementStatistic(Statistic.USE_ITEM, Material.EGG);

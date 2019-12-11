@@ -344,6 +344,7 @@ misc:
     no_disabled_items: "None"
     true: "True"
     false: "False"
+    beheading_skull: "&7%player%'s Skull"
 
 advancements: 
     enchantments/enchantment_solution: 

@@ -14,15 +14,14 @@ import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.inventory.InventoryData;
-import org.ctp.enchantmentsolution.utils.ConfigUtils;
-import org.ctp.enchantmentsolution.utils.config.MainConfiguration;
+import org.ctp.enchantmentsolution.utils.config.ConfigString;
 import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 
 public class VanishListener implements Listener {
 
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent event) {
-		if (ConfigUtils.getString(MainConfiguration.class, "disable_enchant_method").equals("vanish")) {
+		if (ConfigString.DISABLE_ENCHANT_METHOD.getString().equals("vanish")) {
 			Player player = event.getPlayer();
 
 			PlayerInventory inv = player.getInventory();
@@ -57,7 +56,7 @@ public class VanishListener implements Listener {
 
 	@EventHandler
 	public void onInventoryOpen(InventoryOpenEvent event) {
-		if (ConfigUtils.getString(MainConfiguration.class, "disable_enchant_method").equals("vanish")) {
+		if (ConfigString.DISABLE_ENCHANT_METHOD.getString().equals("vanish")) {
 			boolean shouldCheck = true;
 			if (event.getPlayer() instanceof Player) {
 				Player player = (Player) event.getPlayer();
@@ -78,14 +77,14 @@ public class VanishListener implements Listener {
 
 	@EventHandler
 	public void onEntityPickupItem(EntityPickupItemEvent event) {
-		if (ConfigUtils.getString(MainConfiguration.class, "disable_enchant_method").equals("vanish")) {
+		if (ConfigString.DISABLE_ENCHANT_METHOD.getString().equals("vanish")) {
 			ItemStack item = event.getItem().getItemStack();
 			event.getItem().setItemStack(removeEnchants(item));
 		}
 	}
 
 	public static void reload() {
-		if (ConfigUtils.getString(MainConfiguration.class, "disable_enchant_method").equals("vanish")) {
+		if (ConfigString.DISABLE_ENCHANT_METHOD.getString().equals("vanish")) {
 			for(Player player: Bukkit.getOnlinePlayers()) {
 				Bukkit.getScheduler().scheduleSyncDelayedTask(EnchantmentSolution.getPlugin(), () -> {
 					if (player.getOpenInventory() != null) {

@@ -7,6 +7,7 @@ import org.bukkit.advancement.AdvancementProgress;
 import org.bukkit.entity.Player;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.*;
+import org.ctp.enchantmentsolution.utils.config.ConfigUtils;
 
 public class AdvancementUtils {
 
@@ -29,6 +30,7 @@ public class AdvancementUtils {
 					if (root.activate(false).isChanged()) {
 						reload = true;
 					}
+					advancement.setEnabled(true);
 				} else {
 					root = null;
 					advancement.setEnabled(false);
@@ -60,7 +62,6 @@ public class AdvancementUtils {
 					if (last.activate(false).isChanged()) {
 						reload = true;
 					}
-
 					advancement.setEnabled(true);
 				} else {
 					advancement.setEnabled(false);

@@ -127,12 +127,12 @@ public class RegisterEnchantments {
 		}
 	}
 
-	private static void addDefaultEnchantment(CustomEnchantment enchant) {
+	public static void addDefaultEnchantment(CustomEnchantment enchant) {
 		ENCHANTMENTS.add(enchant);
 	}
 
 	public static void setEnchantments() {
-		boolean levelFifty = ConfigUtils.isLevel50();
+		boolean levelFifty = ConfigString.LEVEL_FIFTY.getBoolean();
 		for(int i = 0; i < ENCHANTMENTS.size(); i++) {
 			CustomEnchantment enchantment = ENCHANTMENTS.get(i);
 			LanguageConfiguration language = Configurations.getLanguage();

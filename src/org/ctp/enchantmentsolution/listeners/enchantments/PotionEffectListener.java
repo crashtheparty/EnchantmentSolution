@@ -10,6 +10,7 @@ import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.listeners.Enchantmentable;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
+import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.ESArrays;
 import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 
@@ -24,8 +25,9 @@ public class PotionEffectListener extends Enchantmentable {
 				if (event.getAction() == Action.ADDED || event.getAction() == Action.CHANGED) {
 					if (ESArrays.getBadPotions().contains(event.getModifiedType())) {
 						event.setCancelled(true);
+						ChatUtils.sendInfo("Cause: " + event.getCause());
 						if (event.getCause() == Cause.FOOD) {
-							AdvancementUtils.awardCriteria(player, ESAdvancement.THAT_FOOD_IS_FINE, "food");
+							AdvancementUtils.awardCriteria(player, ESAdvancement.THAT_FOOD_IS_FINE, "shield");
 						}
 					}
 				}

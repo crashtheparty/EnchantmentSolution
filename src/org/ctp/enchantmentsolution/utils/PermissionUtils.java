@@ -7,7 +7,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.ctp.enchantmentsolution.api.ApiEnchantmentWrapper;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantmentWrapper;
-import org.ctp.enchantmentsolution.utils.config.EnchantmentsConfiguration;
+import org.ctp.enchantmentsolution.utils.config.ConfigString;
+import org.ctp.enchantmentsolution.utils.config.ConfigUtils;
 
 public class PermissionUtils {
 
@@ -15,7 +16,7 @@ public class PermissionUtils {
 		if (player == null) {
 			return true;
 		}
-		if (ConfigUtils.getBoolean(EnchantmentsConfiguration.class, "use_permissions")) {
+		if (usePermissions()) {
 			if (player.hasPermission("enchantmentsolution.permissions.ignore")) {
 				return true;
 			}
@@ -32,7 +33,7 @@ public class PermissionUtils {
 		if (player == null) {
 			return true;
 		}
-		if (ConfigUtils.getBoolean(EnchantmentsConfiguration.class, "use_permissions")) {
+		if (usePermissions()) {
 			if (player.hasPermission("enchantmentsolution.permissions.ignore")) {
 				return true;
 			}
@@ -71,5 +72,9 @@ public class PermissionUtils {
 			}
 		}
 		return true;
+	}
+
+	private static boolean usePermissions() {
+		return ConfigUtils.getAdvancedBoolean(ConfigString.USE_PERMISSIONS, false);
 	}
 }

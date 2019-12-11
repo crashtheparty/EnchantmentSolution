@@ -14,8 +14,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
-import org.ctp.enchantmentsolution.utils.config.LanguageConfiguration;
-import org.ctp.enchantmentsolution.utils.config.MainConfiguration;
+import org.ctp.enchantmentsolution.utils.config.ConfigUtils;
+import org.ctp.enchantmentsolution.utils.config.Type;
 
 public class ChatUtils {
 
@@ -43,7 +43,7 @@ public class ChatUtils {
 	}
 
 	private static String getStarter() {
-		String config = ConfigUtils.getString(MainConfiguration.class, "starter");
+		String config = ConfigUtils.getString(Type.LANGUAGE, "starter");
 		String starter = null;
 		if (config != null) {
 			starter = ChatColor.translateAlternateColorCodes('&', config);
@@ -74,7 +74,7 @@ public class ChatUtils {
 		String s = "";
 		try {
 			s = translateCodes(codes, ChatColor.translateAlternateColorCodes('&',
-			ConfigUtils.getString(LanguageConfiguration.class, location)));
+			ConfigUtils.getString(Type.LANGUAGE, location)));
 		} catch (Exception e) {
 
 		}
@@ -85,10 +85,10 @@ public class ChatUtils {
 	}
 
 	public static List<String> getMessages(HashMap<String, Object> codes, String location) {
-		List<String> messages = ConfigUtils.getStringList(LanguageConfiguration.class, location);
+		List<String> messages = ConfigUtils.getStringList(Type.LANGUAGE, location);
 		if (messages == null) {
 			messages = new ArrayList<String>();
-			messages.add(ConfigUtils.getString(LanguageConfiguration.class, location));
+			messages.add(ConfigUtils.getString(Type.LANGUAGE, location));
 		}
 		for(int i = 0; i < messages.size(); i++) {
 			if (messages.get(i) != null) {

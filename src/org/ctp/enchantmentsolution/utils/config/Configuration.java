@@ -79,7 +79,7 @@ public abstract class Configuration implements Configurable, Revertable {
 
 	@Override
 	public void reload() {
-		revert();
+		config.getFromConfig();
 		setDefaults();
 		save();
 	}

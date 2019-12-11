@@ -67,7 +67,6 @@ public class McMMOAbility implements Listener {
 							}
 						} catch (NoSuchMethodException | SecurityException | IllegalAccessException
 						| IllegalArgumentException | InvocationTargetException e) {
-							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
 					}

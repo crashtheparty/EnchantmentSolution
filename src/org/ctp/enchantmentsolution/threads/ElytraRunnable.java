@@ -14,6 +14,7 @@ import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.utils.Reflectionable;
 import org.ctp.enchantmentsolution.utils.abillityhelpers.FrequentFlyerPlayer;
@@ -47,9 +48,11 @@ public class ElytraRunnable implements Runnable, Reflectionable {
 						elytra = null;
 					}
 					FrequentFlyerPlayer ffPlayer = new FrequentFlyerPlayer(player, elytra);
-					if(ffPlayer.canFly() && !player.isOnGround() && player.getGameMode() != GameMode.CREATIVE && player.getGameMode() != GameMode.SPECTATOR) {
-						player.setFlying(true);
-					}
+					Bukkit.getScheduler().runTaskLater(EnchantmentSolution.getPlugin(), () -> {
+						if(ffPlayer.canFly() && !player.isOnGround() && player.getGameMode() != GameMode.CREATIVE && player.getGameMode() != GameMode.SPECTATOR) {
+							player.setFlying(true);
+						}
+					}, 1l);
 					PLAYERS.put(player.getUniqueId(), ffPlayer);
 				}
 			} catch (Exception ex) {
