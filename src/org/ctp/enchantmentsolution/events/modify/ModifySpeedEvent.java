@@ -1,14 +1,15 @@
 package org.ctp.enchantmentsolution.events.modify;
 
 import org.bukkit.entity.Player;
-import org.ctp.enchantmentsolution.events.ModifyActionEvent;
+import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
+import org.ctp.enchantmentsolution.events.player.ModifyActionEvent;
 
 public abstract class ModifySpeedEvent extends ModifyActionEvent {
 
 	private double speed;
 
-	public ModifySpeedEvent(Player who, double speed) {
-		super(who);
+	public ModifySpeedEvent(Player who, EnchantmentLevel enchantment, double speed) {
+		super(who, enchantment);
 		setSpeed(speed);
 	}
 

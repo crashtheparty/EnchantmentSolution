@@ -32,13 +32,15 @@ import org.ctp.enchantmentsolution.utils.abillityhelpers.GoldDiggerCrop;
 import org.ctp.enchantmentsolution.utils.compatibility.JobsUtils;
 
 public class TelepathyUtils {
-	
-	public static Collection<ItemStack> handleTelepathyBonus(BlockBreakEvent event, Player player, ItemStack item, Block block) {
-		if(block.getRelative(BlockFace.DOWN).getType() == Material.LAVA) {
+
+	public static Collection<ItemStack> handleTelepathyBonus(BlockBreakEvent event, Player player, ItemStack item,
+	Block block) {
+		if (block.getRelative(BlockFace.DOWN).getType() == Material.LAVA) {
 			AdvancementUtils.awardCriteria(player, ESAdvancement.NO_PANIC, "lava");
 		}
 		Collection<ItemStack> drops = block.getDrops(item);
-		if(block.getType().equals(Material.SNOW) && ItemBreakType.getType(item.getType()).getBreakTypes().contains(Material.SNOW)) {
+		if (block.getType().equals(Material.SNOW)
+		&& ItemBreakType.getType(item.getType()).getBreakTypes().contains(Material.SNOW)) {
 			int num = ((Snow) block.getBlockData()).getLayers();
 			drops.add(new ItemStack(Material.SNOWBALL, num));
 		}
@@ -46,9 +48,9 @@ public class TelepathyUtils {
 		if (ItemUtils.hasEnchantment(item, RegisterEnchantments.GOLD_DIGGER)) {
 			ItemStack goldDigger = AbilityUtils.getGoldDiggerItems(item, block);
 			if (goldDigger != null) {
-				GoldDiggerEvent goldDiggerEvent = new GoldDiggerEvent(player, event.getBlock(), goldDigger,
-				GoldDiggerCrop.getExp(event.getBlock().getType(),
-				ItemUtils.getLevel(item, RegisterEnchantments.GOLD_DIGGER)));
+				int gdLevel = ItemUtils.getLevel(item, RegisterEnchantments.GOLD_DIGGER);
+				GoldDiggerEvent goldDiggerEvent = new GoldDiggerEvent(player, gdLevel, event.getBlock(), goldDigger,
+				GoldDiggerCrop.getExp(event.getBlock().getType(), gdLevel));
 				Bukkit.getPluginManager().callEvent(goldDiggerEvent);
 
 				if (!goldDiggerEvent.isCancelled()) {
@@ -64,7 +66,7 @@ public class TelepathyUtils {
 	}
 
 	public static void handleTelepathy(BlockBreakEvent event, Player player, ItemStack item, Block block) {
-		if(block.getRelative(BlockFace.DOWN).getType() == Material.LAVA) {
+		if (block.getRelative(BlockFace.DOWN).getType() == Material.LAVA) {
 			AdvancementUtils.awardCriteria(player, ESAdvancement.NO_PANIC, "lava");
 		}
 		Collection<ItemStack> drops = block.getDrops(item);
@@ -77,18 +79,18 @@ public class TelepathyUtils {
 		} else if (block.getState() instanceof Container) {
 			Iterator<ItemStack> i = drops.iterator();
 			Collection<ItemStack> newDrops = new ArrayList<ItemStack>();
-			while(i.hasNext()) {
+			while (i.hasNext()) {
 				ItemStack drop = i.next();
 				newDrops.add(drop);
 			}
 			Container container = (Container) block.getState();
-			if(container.getInventory().getHolder() instanceof DoubleChest) {
+			if (container.getInventory().getHolder() instanceof DoubleChest) {
 				DoubleChest doubleChest = (DoubleChest) container.getInventory().getHolder();
 				if (doubleChest.getLeftSide().getInventory().getLocation().equals(container.getLocation())) {
 					Inventory inv = doubleChest.getLeftSide().getInventory();
 					for(int j = 0; j < 27; j++) {
 						ItemStack drop = inv.getItem(j);
-						if(drop != null) {
+						if (drop != null) {
 							newDrops.add(drop);
 						}
 					}
@@ -96,21 +98,21 @@ public class TelepathyUtils {
 					Inventory inv = doubleChest.getRightSide().getInventory();
 					for(int j = 27; j < 54; j++) {
 						ItemStack drop = inv.getItem(j);
-						if(drop != null) {
+						if (drop != null) {
 							newDrops.add(drop);
 						}
 					}
 				}
 			} else {
-				for(ItemStack drop : container.getInventory().getContents()) {
-					if(drop != null) {
+				for(ItemStack drop: container.getInventory().getContents()) {
+					if (drop != null) {
 						newDrops.add(drop);
 					}
 				}
 			}
 			TelepathyEvent telepathy = callTelepathy(event, block, player, newDrops, TelepathyType.CONTAINER, false);
-			if(!telepathy.isCancelled()) {
-				if(container.getInventory().getHolder() instanceof DoubleChest) {
+			if (!telepathy.isCancelled()) {
+				if (container.getInventory().getHolder() instanceof DoubleChest) {
 					DoubleChest doubleChest = (DoubleChest) container.getInventory().getHolder();
 					if (doubleChest.getLeftSide().getInventory().getLocation().equals(container.getLocation())) {
 						Inventory inv = doubleChest.getLeftSide().getInventory();
@@ -123,11 +125,13 @@ public class TelepathyUtils {
 					container.getInventory().clear();
 				}
 				damageItem(event);
-				ItemUtils.giveItemsToPlayer(telepathy.getPlayer(), telepathy.getDrops(), telepathy.getPlayer().getLocation(), true);
+				ItemUtils.giveItemsToPlayer(telepathy.getPlayer(), telepathy.getDrops(),
+				telepathy.getPlayer().getLocation(), true);
 			}
 			return;
 		}
-		if(block.getType().equals(Material.SNOW) && ItemBreakType.getType(item.getType()).getBreakTypes().contains(Material.SNOW)) {
+		if (block.getType().equals(Material.SNOW)
+		&& ItemBreakType.getType(item.getType()).getBreakTypes().contains(Material.SNOW)) {
 			int num = ((Snow) block.getBlockData()).getLayers();
 			drops.add(new ItemStack(Material.SNOWBALL, num));
 		}
@@ -135,9 +139,9 @@ public class TelepathyUtils {
 		if (ItemUtils.hasEnchantment(item, RegisterEnchantments.GOLD_DIGGER)) {
 			ItemStack goldDigger = AbilityUtils.getGoldDiggerItems(item, block);
 			if (goldDigger != null) {
-				GoldDiggerEvent goldDiggerEvent = new GoldDiggerEvent(player, event.getBlock(), goldDigger,
-				GoldDiggerCrop.getExp(event.getBlock().getType(),
-				ItemUtils.getLevel(item, RegisterEnchantments.GOLD_DIGGER)));
+				int gdLevel = ItemUtils.getLevel(item, RegisterEnchantments.GOLD_DIGGER);
+				GoldDiggerEvent goldDiggerEvent = new GoldDiggerEvent(player, gdLevel, event.getBlock(), goldDigger,
+				GoldDiggerCrop.getExp(event.getBlock().getType(), gdLevel));
 				Bukkit.getPluginManager().callEvent(goldDiggerEvent);
 
 				if (!goldDiggerEvent.isCancelled()) {
@@ -152,13 +156,14 @@ public class TelepathyUtils {
 		callTelepathy(event, block, player, drops, TelepathyType.NORMAL, true);
 	}
 
-	private static Collection<ItemStack> giveItems(Player player, ItemStack item, Block block, Collection<ItemStack> drops) {
+	private static Collection<ItemStack> giveItems(Player player, ItemStack item, Block block,
+	Collection<ItemStack> drops) {
 		if (ItemUtils.hasEnchantment(item, RegisterEnchantments.SMELTERY)) {
 			SmelteryEvent smeltery = SmelteryUtils.handleSmelteryTelepathy(player, block, item);
-			if(smeltery != null) {
+			if (smeltery != null) {
 				Bukkit.getPluginManager().callEvent(smeltery);
 
-				if(!smeltery.isCancelled()) {
+				if (!smeltery.isCancelled()) {
 					AbilityUtils.giveExperience(player, smeltery.getExp());
 					if (smeltery.getDrop() != null) {
 						return Arrays.asList(smeltery.getDrop());
@@ -166,8 +171,7 @@ public class TelepathyUtils {
 				}
 			}
 		} else if (ItemUtils.hasEnchantment(item, Enchantment.LOOT_BONUS_BLOCKS)) {
-			Collection<ItemStack> fortuneItems = FortuneUtils.getFortuneItems(item, block,
-			drops);
+			Collection<ItemStack> fortuneItems = FortuneUtils.getFortuneItems(item, block, drops);
 			return fortuneItems;
 		} else if (ItemUtils.hasEnchantment(item, Enchantment.SILK_TOUCH)
 		&& SilkTouchUtils.getSilkTouchItem(block, item) != null) {
@@ -176,20 +180,22 @@ public class TelepathyUtils {
 		return drops;
 	}
 
-	private static TelepathyEvent callTelepathy(BlockBreakEvent event, Block block, Player player, Collection<ItemStack> drops, TelepathyType type, boolean damageItems) {
+	private static TelepathyEvent callTelepathy(BlockBreakEvent event, Block block, Player player,
+	Collection<ItemStack> drops, TelepathyType type, boolean damageItems) {
 		TelepathyEvent telepathy = new TelepathyEvent(block, player, drops, type);
 		Bukkit.getPluginManager().callEvent(telepathy);
 
-		if(!telepathy.isCancelled() && damageItems) {
+		if (!telepathy.isCancelled() && damageItems) {
 			damageItem(event);
-			if(AbilityUtils.getHeightWidthBlocks().contains(block)){
+			if (AbilityUtils.getHeightWidthBlocks().contains(block)) {
 				AdvancementUtils.awardCriteria(player, ESAdvancement.FAST_AND_FURIOUS, "diamond_pickaxe");
 				AdvancementUtils.awardCriteria(player, ESAdvancement.OVER_9000, "stone", 1);
 			}
-			if(telepathy.getType() == TelepathyType.SHULKER_BOX) {
+			if (telepathy.getType() == TelepathyType.SHULKER_BOX) {
 				AdvancementUtils.awardCriteria(player, ESAdvancement.HEY_IT_WORKS, "shulker_box");
 			}
-			ItemUtils.giveItemsToPlayer(telepathy.getPlayer(), telepathy.getDrops(), telepathy.getPlayer().getLocation(), true);
+			ItemUtils.giveItemsToPlayer(telepathy.getPlayer(), telepathy.getDrops(),
+			telepathy.getPlayer().getLocation(), true);
 		}
 		return telepathy;
 	}

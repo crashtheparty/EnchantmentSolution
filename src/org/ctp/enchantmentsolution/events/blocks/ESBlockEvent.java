@@ -4,6 +4,7 @@ import org.bukkit.block.Block;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.block.BlockEvent;
+import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 
 public class ESBlockEvent extends BlockEvent implements Cancellable {
 
@@ -17,10 +18,13 @@ public class ESBlockEvent extends BlockEvent implements Cancellable {
 	public HandlerList getHandlers() {
 		return handlers;
 	}
+	
 	private boolean cancelled;
+	private final EnchantmentLevel enchantment;
 
-	public ESBlockEvent(Block theBlock) {
+	public ESBlockEvent(Block theBlock, EnchantmentLevel enchantment) {
 		super(theBlock);
+		this.enchantment = enchantment;
 	}
 
 	@Override
@@ -31,6 +35,10 @@ public class ESBlockEvent extends BlockEvent implements Cancellable {
 	@Override
 	public void setCancelled(boolean cancelled) {
 		this.cancelled = cancelled;
+	}
+
+	public EnchantmentLevel getEnchantment() {
+		return enchantment;
 	}
 
 }

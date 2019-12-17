@@ -1,29 +1,18 @@
-package org.ctp.enchantmentsolution.events;
+package org.ctp.enchantmentsolution.events.player;
 
 import org.bukkit.entity.Player;
-import org.bukkit.event.Cancellable;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.player.PlayerEvent;
+import org.ctp.enchantmentsolution.enchantments.CERegister;
+import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
+import org.ctp.enchantmentsolution.events.ESPlayerEvent;
 
-public class ExperienceEvent extends PlayerEvent implements Cancellable {
-
-	private static final HandlerList handlers = new HandlerList();
-
-	public static HandlerList getHandlerList() {
-		return handlers;
-	}
-
-	@Override
-	public HandlerList getHandlers() {
-		return handlers;
-	}
+public class ExperienceEvent extends ESPlayerEvent {
 
 	private boolean cancelled = false;
 	private final ExpShareType type;
 	private int oldExp, newExp;
 
-	public ExperienceEvent(Player who, final ExpShareType type, int oldExp, int newExp) {
-		super(who);
+	public ExperienceEvent(Player who, int level, final ExpShareType type, int oldExp, int newExp) {
+		super(who, new EnchantmentLevel(CERegister.EXP_SHARE, level));
 		this.type = type;
 		setOldExp(oldExp);
 		setNewExp(newExp);

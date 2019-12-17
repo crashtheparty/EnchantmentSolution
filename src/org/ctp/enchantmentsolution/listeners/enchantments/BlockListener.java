@@ -26,12 +26,12 @@ import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enums.ItemBreakType;
 import org.ctp.enchantmentsolution.enums.ItemPlaceType;
-import org.ctp.enchantmentsolution.events.ExperienceEvent;
-import org.ctp.enchantmentsolution.events.ExperienceEvent.ExpShareType;
 import org.ctp.enchantmentsolution.events.blocks.GoldDiggerEvent;
 import org.ctp.enchantmentsolution.events.blocks.HeightWidthEvent;
 import org.ctp.enchantmentsolution.events.blocks.WandEvent;
 import org.ctp.enchantmentsolution.events.modify.LagEvent;
+import org.ctp.enchantmentsolution.events.player.ExperienceEvent;
+import org.ctp.enchantmentsolution.events.player.ExperienceEvent.ExpShareType;
 import org.ctp.enchantmentsolution.listeners.Enchantmentable;
 import org.ctp.enchantmentsolution.listeners.VeinMinerListener;
 import org.ctp.enchantmentsolution.mcmmo.McMMOAbility;
@@ -100,7 +100,7 @@ public class BlockListener extends Enchantmentable {
 			if (exp > 0) {
 				int level = ItemUtils.getLevel(killItem, RegisterEnchantments.EXP_SHARE);
 
-				ExperienceEvent experienceEvent = new ExperienceEvent(player, ExpShareType.BLOCK, exp,
+				ExperienceEvent experienceEvent = new ExperienceEvent(player, level, ExpShareType.BLOCK, exp,
 				AbilityUtils.setExp(exp, level));
 				Bukkit.getPluginManager().callEvent(experienceEvent);
 
@@ -125,9 +125,10 @@ public class BlockListener extends Enchantmentable {
 				if (ItemUtils.hasEnchantment(item, RegisterEnchantments.GOLD_DIGGER)) {
 					ItemStack goldDigger = AbilityUtils.getGoldDiggerItems(item, event.getBlock());
 					if (goldDigger != null) {
-						GoldDiggerEvent goldDiggerEvent = new GoldDiggerEvent(player, event.getBlock(), goldDigger,
-						GoldDiggerCrop.getExp(event.getBlock().getType(),
-						ItemUtils.getLevel(item, RegisterEnchantments.GOLD_DIGGER)));
+						int level = ItemUtils.getLevel(item, RegisterEnchantments.GOLD_DIGGER);
+						GoldDiggerEvent goldDiggerEvent = new GoldDiggerEvent(player, level, event.getBlock(), goldDigger,
+						GoldDiggerCrop.getExp(event.getBlock().getType(), level
+						));
 						Bukkit.getPluginManager().callEvent(goldDiggerEvent);
 
 						if (!goldDiggerEvent.isCancelled()) {
@@ -201,6 +202,8 @@ public class BlockListener extends Enchantmentable {
 			int xt = 0;
 			int yt = 0;
 			int zt = 0;
+			int heightPlusPlus = ItemUtils.getLevel(item, RegisterEnchantments.HEIGHT_PLUS_PLUS);
+			int widthPlusPlus = ItemUtils.getLevel(item, RegisterEnchantments.WIDTH_PLUS_PLUS);
 			boolean hasWidthHeight = false;
 			if (RegisterEnchantments.isEnabled(RegisterEnchantments.WIDTH_PLUS_PLUS) && ItemUtils
 			.hasEnchantment(item, RegisterEnchantments.WIDTH_PLUS_PLUS)) {
@@ -210,9 +213,9 @@ public class BlockListener extends Enchantmentable {
 					yaw += 360;
 				}
 				if(yaw <= 45 || yaw > 135 && yaw <= 225 || yaw > 315) {
-					xt = ItemUtils.getLevel(item, RegisterEnchantments.WIDTH_PLUS_PLUS);
+					xt = widthPlusPlus;
 				} else {
-					zt = ItemUtils.getLevel(item, RegisterEnchantments.WIDTH_PLUS_PLUS);
+					zt = widthPlusPlus;
 				}
 
 			}
@@ -226,12 +229,12 @@ public class BlockListener extends Enchantmentable {
 				}
 				if(pitch > 53 || pitch <= -53) {
 					if(yaw <= 45 || yaw > 135 && yaw <= 225 || yaw > 315) {
-						zt = ItemUtils.getLevel(item, RegisterEnchantments.HEIGHT_PLUS_PLUS);
+						zt = heightPlusPlus;
 					} else {
-						xt = ItemUtils.getLevel(item, RegisterEnchantments.HEIGHT_PLUS_PLUS);
+						xt = heightPlusPlus;
 					}
 				} else {
-					yt = ItemUtils.getLevel(item, RegisterEnchantments.HEIGHT_PLUS_PLUS);
+					yt = heightPlusPlus;
 				}
 
 			}
@@ -282,7 +285,7 @@ public class BlockListener extends Enchantmentable {
 					start ++;
 				}
 
-				HeightWidthEvent heightWidth = new HeightWidthEvent(blocks, player);
+				HeightWidthEvent heightWidth = new HeightWidthEvent(blocks, player, heightPlusPlus, widthPlusPlus);
 				Bukkit.getPluginManager().callEvent(heightWidth);
 
 				if(!heightWidth.isCancelled()) {
@@ -359,16 +362,17 @@ public class BlockListener extends Enchantmentable {
 				while(yaw < 0) {
 					yaw += 360;
 				}
+				int level = ItemUtils.getLevel(item, RegisterEnchantments.WAND);
 				Block clickedBlock = event.getBlock();
 				if(pitch > 53 || pitch <= -53) {
-					xt = ItemUtils.getLevel(item, RegisterEnchantments.WAND);
-					zt = ItemUtils.getLevel(item, RegisterEnchantments.WAND);
+					xt = level;
+					zt = level;
 				} else {
-					yt = ItemUtils.getLevel(item, RegisterEnchantments.WAND);
+					yt = level;
 					if(yaw <= 45 || yaw > 135 && yaw <= 225 || yaw > 315) {
-						xt = ItemUtils.getLevel(item, RegisterEnchantments.WAND);
+						xt = level;
 					} else {
-						zt = ItemUtils.getLevel(item, RegisterEnchantments.WAND);
+						zt = level;
 					}
 				}
 				Location rangeOne = new Location(clickedBlock.getWorld(), clickedBlock.getX() - xt, clickedBlock.getY() - yt, clickedBlock.getZ() - zt);
@@ -416,7 +420,7 @@ public class BlockListener extends Enchantmentable {
 					}
 					start ++;
 				}
-				WandEvent wand = new WandEvent(blocks, player);
+				WandEvent wand = new WandEvent(blocks, player, level);
 				Bukkit.getPluginManager().callEvent(wand);
 
 				if(!hasItem(player, offhand)) {

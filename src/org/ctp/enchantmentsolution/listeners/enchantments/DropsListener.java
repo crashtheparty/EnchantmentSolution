@@ -52,8 +52,9 @@ public class DropsListener extends Enchantmentable {
 		Player killer = event.getEntity().getKiller();
 		if (killer != null) {
 			if (ItemUtils.hasEnchantment(killer.getInventory().getItemInMainHand(), RegisterEnchantments.BEHEADING)) {
-				double chance = ItemUtils.getLevel(killer.getInventory().getItemInMainHand(),
-				RegisterEnchantments.BEHEADING) * .05;
+				int level = ItemUtils.getLevel(killer.getInventory().getItemInMainHand(),
+				RegisterEnchantments.BEHEADING);
+				double chance = level * .05;
 				double random = Math.random();
 				if (chance > random) {
 					List<ItemStack> skulls = new ArrayList<ItemStack>();
@@ -78,7 +79,7 @@ public class DropsListener extends Enchantmentable {
 						skulls.add(new ItemStack(Material.DRAGON_HEAD));
 					}
 
-					BeheadingEvent beheading = new BeheadingEvent(killer, skulls, event.getDrops(), false, true);
+					BeheadingEvent beheading = new BeheadingEvent(killer, level, skulls, event.getDrops(), false, true);
 					Bukkit.getPluginManager().callEvent(beheading);
 
 					if (!beheading.isCancelled()) {

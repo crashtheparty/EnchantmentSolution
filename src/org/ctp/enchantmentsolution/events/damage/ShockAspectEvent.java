@@ -2,16 +2,18 @@ package org.ctp.enchantmentsolution.events.damage;
 
 import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
-import org.ctp.enchantmentsolution.events.ESEntityDamageEntityEvent;
+import org.ctp.enchantmentsolution.enchantments.CERegister;
+import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
+import org.ctp.enchantmentsolution.events.entity.ESEntityDamageEntityEvent;
 
 public class ShockAspectEvent extends ESEntityDamageEntityEvent {
 
 	private double chance;
 	private Location location;
 
-	public ShockAspectEvent(LivingEntity damaged, LivingEntity damager, double damage, double newDamage, double chance,
+	public ShockAspectEvent(LivingEntity damaged, int level, LivingEntity damager, double damage, double newDamage, double chance,
 	Location location) {
-		super(damaged, damager, damage, newDamage);
+		super(damaged, new EnchantmentLevel(CERegister.SHOCK_ASPECT, level), damager, damage, newDamage);
 		setChance(chance);
 		setLocation(location);
 	}

@@ -72,16 +72,21 @@ public class FrequentFlyerPlayer {
 		boolean modifyCanFly = canFly || player.getGameMode().equals(GameMode.CREATIVE)
 		|| player.getGameMode().equals(GameMode.SPECTATOR);
 		FrequentFlyerEvent event = null;
+		int level = 0;
+		if(elytra != null) {
+			level = ItemUtils.getLevel(elytra, RegisterEnchantments.FREQUENT_FLYER);
+		}
 		if (this.canFly && !modifyCanFly) {
 			if (elytra != null && elytra.toString().equalsIgnoreCase(previousElytra.toString())
 			&& DamageUtils.getDamage(elytra.getItemMeta()) >= 400) {
-				event = new FrequentFlyerEvent(player, FFType.BREAK_ELYTRA);
+				event = new FrequentFlyerEvent(player, level, FFType.BREAK_ELYTRA);
 			} else if (!player.hasPermission("enchantmentsolution.enable-flight")) {
-				event = new FrequentFlyerEvent(player, FFType.REMOVE_FLIGHT);
+				event = new FrequentFlyerEvent(player, level, FFType.REMOVE_FLIGHT);
 			}
 		} else if (!this.canFly && modifyCanFly) {
-			event = new FrequentFlyerEvent(player, FFType.ALLOW_FLIGHT);
+			event = new FrequentFlyerEvent(player, level, FFType.ALLOW_FLIGHT);
 		}
+		
 		if (event != null) {
 			Bukkit.getPluginManager().callEvent(event);
 			if (!event.isCancelled()) {

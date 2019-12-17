@@ -27,10 +27,10 @@ import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
-import org.ctp.enchantmentsolution.events.ExperienceEvent;
-import org.ctp.enchantmentsolution.events.ExperienceEvent.ExpShareType;
 import org.ctp.enchantmentsolution.events.damage.SacrificeEvent;
+import org.ctp.enchantmentsolution.events.player.ExperienceEvent;
 import org.ctp.enchantmentsolution.events.player.PillageEvent;
+import org.ctp.enchantmentsolution.events.player.ExperienceEvent.ExpShareType;
 import org.ctp.enchantmentsolution.listeners.Enchantmentable;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.abillityhelpers.DrownedEntity;
@@ -44,7 +44,6 @@ public class AfterEffectsListener extends Enchantmentable {
 
 	@EventHandler
 	public void onEntityDeath(EntityDeathEvent event) {
-		runMethod(this, "drowned", event, EntityDeathEvent.class);
 		runMethod(this, "expShare", event, EntityDeathEvent.class);
 		runMethod(this, "pillage", event, EntityDeathEvent.class);
 	}
@@ -57,20 +56,6 @@ public class AfterEffectsListener extends Enchantmentable {
 	@EventHandler
 	public void onPlayerRespawn(PlayerRespawnEvent event) {
 		runMethod(this, "sacrifice", event, PlayerRespawnEvent.class);
-	}
-
-	private void drowned(EntityDeathEvent event) {
-		if (!canRun(RegisterEnchantments.DROWNED, event)) {
-			return;
-		}
-		Iterator<DrownedEntity> entities = EnchantmentSolution.getDrowned().iterator();
-		while (entities.hasNext()) {
-			DrownedEntity entity = entities.next();
-			if (entity.getHurtEntity().equals(event.getEntity())) {
-				entities.remove();
-				break;
-			}
-		}
 	}
 
 	private void expShare(EntityDeathEvent event) {
@@ -89,7 +74,7 @@ public class AfterEffectsListener extends Enchantmentable {
 				if (exp > 0) {
 					int level = ItemUtils.getLevel(killItem, RegisterEnchantments.EXP_SHARE);
 
-					ExperienceEvent experienceEvent = new ExperienceEvent(player, ExpShareType.BLOCK, exp,
+					ExperienceEvent experienceEvent = new ExperienceEvent(player, level, ExpShareType.BLOCK, exp,
 					AbilityUtils.setExp(exp, level));
 					Bukkit.getPluginManager().callEvent(experienceEvent);
 
@@ -116,12 +101,12 @@ public class AfterEffectsListener extends Enchantmentable {
 					}
 				}
 				if(ItemUtils.hasEnchantment(item, RegisterEnchantments.PILLAGE)) {
-					PillageEvent pillage = new PillageEvent(player);
+					int level = ItemUtils.getLevel(item, RegisterEnchantments.PILLAGE);
+					PillageEvent pillage = new PillageEvent(player, level);
 					Bukkit.getPluginManager().callEvent(pillage);
 
 					if(!pillage.isCancelled()) {
 						event.getDrops().clear();
-						int level = ItemUtils.getLevel(item, RegisterEnchantments.PILLAGE);
 						List<EnchantmentLevel> levels = ItemUtils.getEnchantmentLevels(item);
 						ItemUtils.addEnchantmentToItem(item, RegisterEnchantments.getCustomEnchantment(Enchantment.LOOT_BONUS_MOBS), level);
 						LootContext.Builder contextBuilder = new LootContext.Builder(event.getEntity().getLocation());

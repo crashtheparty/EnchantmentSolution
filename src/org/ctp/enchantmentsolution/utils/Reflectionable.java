@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.event.Event;
+import org.bukkit.potion.PotionEffectType;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 
 public interface Reflectionable {
@@ -39,6 +40,38 @@ public interface Reflectionable {
 			Method superMethod = superClass.getClass().getDeclaredMethod(name, clazzes.toArray(new Class<?>[] {}));
 			superMethod.setAccessible(true);
 			superMethod.invoke(superClass, event, enchantment);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+	}
+
+	default void runMethod(Reflectionable superClass, String name, Event event, Enchantment enchantment, PotionEffectType type) {
+		try {
+			List<Class<?>> clazzes = new ArrayList<Class<?>>();
+			clazzes.add(event.getClass());
+			clazzes.add(Enchantment.class);
+			clazzes.add(PotionEffectType.class);
+
+			Method superMethod = superClass.getClass().getDeclaredMethod(name, clazzes.toArray(new Class<?>[] {}));
+			superMethod.setAccessible(true);
+			superMethod.invoke(superClass, event, enchantment, type);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+	}
+
+	default void runMethod(Reflectionable superClass, String name, Event event, Enchantment enchantment, Object... objs) {
+		try {
+			List<Class<?>> clazzes = new ArrayList<Class<?>>();
+			clazzes.add(event.getClass());
+			clazzes.add(Enchantment.class);
+			for(Object obj : objs) {
+				clazzes.add(obj.getClass());
+			}
+
+			Method superMethod = superClass.getClass().getDeclaredMethod(name, clazzes.toArray(new Class<?>[] {}));
+			superMethod.setAccessible(true);
+			superMethod.invoke(superClass, event, enchantment, objs);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}

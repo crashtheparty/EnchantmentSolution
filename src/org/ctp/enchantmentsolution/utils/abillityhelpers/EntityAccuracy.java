@@ -10,13 +10,14 @@ public class EntityAccuracy {
 	private UUID attacker;
 	private UUID entity;
 	private double accuracy;
-	private int ticks;
+	private int ticks, level;
 
-	public EntityAccuracy(Player attacker, LivingEntity entity, double accuracy, int ticks) {
+	public EntityAccuracy(Player attacker, LivingEntity entity, double accuracy, int ticks, int level) {
 		setAttacker(attacker);
 		setEntity(entity);
 		setAccuracy(accuracy);
 		setTicks(ticks);
+		this.setLevel(level);
 	}
 
 	public LivingEntity getEntity() {
@@ -55,5 +56,13 @@ public class EntityAccuracy {
 
 	public void minus() {
 		ticks -= 1;
+	}
+
+	public int getLevel() {
+		return level;
+	}
+
+	public void setLevel(int level) {
+		this.level = level;
 	}
 }

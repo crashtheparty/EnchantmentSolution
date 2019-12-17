@@ -390,6 +390,14 @@ public class CERegister extends CustomEnchantment {
 	new EnchantmentDescription(Language.CHINA_SIMPLE, "当怪物血量低于一半时对怪物造成双倍伤害.")),
 	Arrays.asList(ItemType.SWORDS), Arrays.asList(ItemType.SWORDS, ItemType.AXES), Arrays.asList(), false, true,
 	false);
+	public static CERegister CURSE_OF_CONTAGION = new CERegister("contagion_curse", "Curse of Contagion",
+	"Spreads curses to items in your inventory.", RegisterEnchantments.CURSE_OF_CONTAGION,
+	new int[] { 25, 25, 0, 0, 1, 1, 1, 1 }, Weight.VERY_RARE,
+	Arrays.asList(new EnchantmentDisplayName(Language.GERMAN, "Fluch der Ansteckung"),
+	new EnchantmentDisplayName(Language.CHINA_SIMPLE, "Curse of Contagion")),
+	Arrays.asList(new EnchantmentDescription(Language.GERMAN, "Verteilt Flüche auf Gegenstände in Ihrem Inventar."),
+	new EnchantmentDescription(Language.CHINA_SIMPLE, "Spreads curses to items in your inventory.")),
+	Arrays.asList(ItemType.ENCHANTABLE), Arrays.asList(ItemType.ALL), Arrays.asList(), true, true, true);
 	public static CERegister CURSE_OF_EXHAUSTION = new CERegister("exhaustion_curse", "Curse of Exhaustion",
 	"Increases exhaustion when equipped.", RegisterEnchantments.CURSE_OF_EXHAUSTION,
 	new int[] { 25, 25, 0, 0, 1, 1, 1, 1 }, Weight.VERY_RARE,
@@ -406,6 +414,13 @@ public class CERegister extends CustomEnchantment {
 	new EnchantmentDescription(Language.CHINA_SIMPLE, "啊啊啊!是烟花")),
 	Arrays.asList(ItemType.TOOLS, ItemType.MELEE, ItemType.RANGED),
 	Arrays.asList(ItemType.TOOLS, ItemType.MELEE, ItemType.RANGED), Arrays.asList(), true, true, true);
+	public static CERegister DETONATOR = new CERegister("detonator", "Detonator", "Ignites creepers. Triggers an explosion based on the enchantment level.",
+	RegisterEnchantments.DETONATOR, new int[] { 4, 7, 13, 9, 1, 1, 5, 3 }, Weight.RARE,
+	Arrays.asList(new EnchantmentDisplayName(Language.GERMAN, "Zünder"),
+	new EnchantmentDisplayName(Language.CHINA_SIMPLE, "Detonator")),
+	Arrays.asList(new EnchantmentDescription(Language.GERMAN, "Zündet Creeper. Löst eine Explosion basierend auf der Verzauberungsstufe aus."),
+	new EnchantmentDescription(Language.CHINA_SIMPLE, "Ignites creepers. Triggers an explosion based on the enchantment level.")),
+	Arrays.asList(ItemType.BOW, ItemType.CROSSBOW), Arrays.asList(ItemType.BOW, ItemType.CROSSBOW), Arrays.asList(RegisterEnchantments.HOLLOW_POINT));
 	public static CERegister DROWNED = new CERegister("drowned", "Drowned", "Drown non-water mobs for a short time.",
 	RegisterEnchantments.DROWNED, new int[] { 10, 0, 20, 12, 20, 1, 3, 3 }, Weight.RARE,
 	Arrays.asList(new EnchantmentDisplayName(Language.GERMAN, "Ertrinken"),
@@ -492,6 +507,17 @@ public class CERegister extends CustomEnchantment {
 	"Erhöhen Sie den Aufwärts- / Abwärtsbruch-Radius um 1 pro Ebene."),
 	new EnchantmentDescription(Language.CHINA_SIMPLE, "增加纵向挖掘范围.")),
 	Arrays.asList(ItemType.TOOLS), Arrays.asList(ItemType.TOOLS), Arrays.asList());
+	public static CERegister HOLLOW_POINT = new CERegister("hollow_point", "Hollow Point",
+	"Increases damage to armored mobs. Allows projectile damage against enderman and armored wither.", RegisterEnchantments.HOLLOW_POINT,
+	new int[] { 40, 30, 0, 0, 30, 1, 1, 1 }, Weight.RARE,
+	Arrays.asList(new EnchantmentDisplayName(Language.GERMAN, "Hohlpunkt"),
+	new EnchantmentDisplayName(Language.CHINA_SIMPLE, "Hollow Point")),
+	Arrays.asList(
+	new EnchantmentDescription(Language.GERMAN,
+	"Erhöht den Schaden von gepanzerten Mobs. Ermöglicht Projektilschaden gegen Enderman und gepanzerten Widerrist."),
+	new EnchantmentDescription(Language.CHINA_SIMPLE, "Increases damage to armored mobs. Allows projectile damage against enderman and armored wither.")),
+	Arrays.asList(ItemType.BOW, ItemType.CROSSBOW), Arrays.asList(ItemType.BOW, ItemType.CROSSBOW),
+	Arrays.asList(RegisterEnchantments.DETONATOR));
 	public static CERegister ICARUS = new CERegister("icarus", "Icarus",
 	"Flying upwards will occassionally increase velocity.", RegisterEnchantments.ICARUS,
 	new int[] { 8, 5, 12, 10, 20, 1, 5, 3 }, Weight.VERY_RARE,
@@ -578,6 +604,17 @@ public class CERegister extends CustomEnchantment {
 	new EnchantmentDescription(Language.CHINA_SIMPLE, "你附近不会生成幻翼.")),
 	Arrays.asList(ItemType.HELMETS), Arrays.asList(ItemType.HELMETS),
 	Arrays.asList(RegisterEnchantments.UNREST, Enchantment.WATER_WORKER), false, true, false);
+	public static CERegister OVERKILL = new CERegister("overkill", "Overkill",
+	"Shoot arrows by left-clicking.", RegisterEnchantments.OVERKILL,
+	new int[] { 35, 15, 0, 0, 20, 1, 1, 1 }, Weight.VERY_RARE,
+	Arrays.asList(new EnchantmentDisplayName(Language.GERMAN, "Overkill"),
+	new EnchantmentDisplayName(Language.CHINA_SIMPLE, "Overkill")),
+	Arrays.asList(
+	new EnchantmentDescription(Language.GERMAN,
+	"Schieße mit der linken Maustaste auf die Pfeile."),
+	new EnchantmentDescription(Language.CHINA_SIMPLE, "Shoot arrows by left-clicking.")),
+	Arrays.asList(ItemType.BOW), Arrays.asList(ItemType.BOW),
+	Arrays.asList(RegisterEnchantments.DETONATOR), false, true, false);
 	public static CERegister PILLAGE = new CERegister("pillage", "Pillage", "Increases mob drops.",
 	RegisterEnchantments.PILLAGE, new int[] { 7, 6, 11, 9, 1, 1, 5, 3 }, Weight.RARE,
 	Arrays.asList(new EnchantmentDisplayName(Language.GERMAN, "Plündern"),
@@ -758,7 +795,7 @@ public class CERegister extends CustomEnchantment {
 	new EnchantmentDescription(Language.CHINA_SIMPLE, "每级增加1格横向挖掘范围.")),
 	Arrays.asList(ItemType.TOOLS), Arrays.asList(ItemType.TOOLS), Arrays.asList());
 
-	private Enchantment relative;
+	private final Enchantment relative;
 	private List<ItemType> enchantmentItems, anvilItems;
 	private List<Enchantment> conflictingEnchantments;
 	private String name;

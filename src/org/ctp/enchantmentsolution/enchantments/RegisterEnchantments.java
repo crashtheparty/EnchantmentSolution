@@ -65,6 +65,10 @@ public class RegisterEnchantments {
 	public static final Enchantment QUICK_STRIKE = new CustomEnchantmentWrapper("quick_strike", "QUICK_STRIKE");
 	public static final Enchantment TOUGHNESS = new CustomEnchantmentWrapper("toughness", "TOUGHNESS");
 	public static final Enchantment ARMORED = new CustomEnchantmentWrapper("armored", "ARMORED");
+	public static final Enchantment HOLLOW_POINT = new CustomEnchantmentWrapper("hollow_point", "HOLLOW_POINT");
+	public static final Enchantment DETONATOR = new CustomEnchantmentWrapper("detonator", "DETONATOR");
+	public static final Enchantment OVERKILL = new CustomEnchantmentWrapper("overkill", "OVERKILL");
+	public static final Enchantment CURSE_OF_CONTAGION = new CustomEnchantmentWrapper("contagion_curse", "CONTAGION_CURSE");
 
 	private RegisterEnchantments() {
 	}
@@ -292,8 +296,10 @@ public class RegisterEnchantments {
 		addDefaultEnchantment(CERegister.ARMORED);
 		addDefaultEnchantment(CERegister.BEHEADING);
 		addDefaultEnchantment(CERegister.BRINE);
+		addDefaultEnchantment(CERegister.CURSE_OF_CONTAGION);
 		addDefaultEnchantment(CERegister.CURSE_OF_EXHAUSTION);
 		addDefaultEnchantment(CERegister.CURSE_OF_LAG);
+		addDefaultEnchantment(CERegister.DETONATOR);
 		addDefaultEnchantment(CERegister.DROWNED);
 		addDefaultEnchantment(CERegister.EXP_SHARE);
 		addDefaultEnchantment(CERegister.FLOWER_GIFT);
@@ -303,6 +309,7 @@ public class RegisterEnchantments {
 		addDefaultEnchantment(CERegister.GUNG_HO);
 		addDefaultEnchantment(CERegister.HARD_BOUNCE);
 		addDefaultEnchantment(CERegister.HEIGHT_PLUS_PLUS);
+		addDefaultEnchantment(CERegister.HOLLOW_POINT);
 		addDefaultEnchantment(CERegister.ICARUS);
 		addDefaultEnchantment(CERegister.IRENES_LASSO);
 		addDefaultEnchantment(CERegister.IRON_DEFENSE);
@@ -312,6 +319,7 @@ public class RegisterEnchantments {
 		addDefaultEnchantment(CERegister.MAGMA_WALKER);
 		addDefaultEnchantment(CERegister.MOISTURIZE);
 		addDefaultEnchantment(CERegister.NO_REST);
+		addDefaultEnchantment(CERegister.OVERKILL);
 		if (VersionUtils.getBukkitVersionNumber() > 3) {
 			addDefaultEnchantment(CERegister.PILLAGE);
 		}

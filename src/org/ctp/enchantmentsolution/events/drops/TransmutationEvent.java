@@ -4,12 +4,14 @@ import java.util.List;
 
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.ctp.enchantmentsolution.events.DropEvent;
+import org.ctp.enchantmentsolution.enchantments.CERegister;
+import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
+import org.ctp.enchantmentsolution.events.player.DropEvent;
 
 public class TransmutationEvent extends DropEvent {
 
 	public TransmutationEvent(Player who, List<ItemStack> newDrops, List<ItemStack> originalDrops, boolean override) {
-		super(who, newDrops, originalDrops, override);
+		super(who, new EnchantmentLevel(CERegister.TRANSMUTATION, 1), newDrops, originalDrops, override);
 	}
 
 }

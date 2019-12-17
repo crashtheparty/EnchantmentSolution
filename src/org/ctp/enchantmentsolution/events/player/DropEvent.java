@@ -1,32 +1,21 @@
-package org.ctp.enchantmentsolution.events;
+package org.ctp.enchantmentsolution.events.player;
 
 import java.util.List;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.inventory.ItemStack;
+import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
+import org.ctp.enchantmentsolution.events.ESPlayerEvent;
 
-public abstract class DropEvent extends PlayerEvent implements Cancellable {
-
-	private static final HandlerList handlers = new HandlerList();
-
-	public static HandlerList getHandlerList() {
-		return handlers;
-	}
-
-	@Override
-	public HandlerList getHandlers() {
-		return handlers;
-	}
+public abstract class DropEvent extends ESPlayerEvent implements Cancellable {
 
 	private final List<ItemStack> originalDrops;
 	private List<ItemStack> newDrops;
 	private boolean override, cancelled;
 
-	public DropEvent(Player who, List<ItemStack> newDrops, List<ItemStack> originalDrops, boolean override) {
-		super(who);
+	public DropEvent(Player who, EnchantmentLevel enchantment, List<ItemStack> newDrops, List<ItemStack> originalDrops, boolean override) {
+		super(who, enchantment);
 		this.originalDrops = originalDrops;
 		setNewDrops(newDrops);
 		setOverride(override);

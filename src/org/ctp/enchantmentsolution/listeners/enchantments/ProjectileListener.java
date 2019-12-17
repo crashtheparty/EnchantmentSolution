@@ -6,15 +6,21 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.HumanEntity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.entity.Trident;
+import org.bukkit.entity.Wither;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.player.PlayerEggThrowEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
@@ -23,9 +29,13 @@ import org.bukkit.util.Vector;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
+import org.ctp.enchantmentsolution.events.blocks.DetonatorExplosionEvent;
+import org.ctp.enchantmentsolution.events.damage.HollowPointDamageEvent;
+import org.ctp.enchantmentsolution.events.modify.HardBounceEvent;
 import org.ctp.enchantmentsolution.events.modify.LagEvent;
 import org.ctp.enchantmentsolution.events.modify.SniperLaunchEvent;
 import org.ctp.enchantmentsolution.listeners.Enchantmentable;
+import org.ctp.enchantmentsolution.nms.DamageEvent;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.LocationUtils;
@@ -39,16 +49,19 @@ public class ProjectileListener extends Enchantmentable {
 	@EventHandler
 	public void onProjectileLaunch(ProjectileLaunchEvent event) {
 		runMethod(this, "curseOfLag", event, ProjectileLaunchEvent.class);
+		runMethod(this, "detonator", event, ProjectileLaunchEvent.class);
 		runMethod(this, "drowned", event, ProjectileLaunchEvent.class);
+		runMethod(this, "hollowPoint", event, ProjectileLaunchEvent.class);
 		runMethod(this, "sniper", event, ProjectileLaunchEvent.class);
 		runMethod(this, "transmutation", event, ProjectileLaunchEvent.class);
 	}
 
 	@EventHandler
 	public void onProjectileHit(ProjectileHitEvent event) {
+		runMethod(this, "detonator", event, ProjectileHitEvent.class);
 		runMethod(this, "hardBounce", event, ProjectileHitEvent.class);
+		runMethod(this, "hollowPoint", event, ProjectileHitEvent.class);
 		runMethod(this, "splatterFest", event, ProjectileHitEvent.class);
-		runMethod(this, "stickyHold", event, ProjectileHitEvent.class);
 	}
 
 	@EventHandler
@@ -83,6 +96,22 @@ public class ProjectileListener extends Enchantmentable {
 		}
 	}
 
+	private void detonator(ProjectileLaunchEvent event) {
+		if (!canRun(RegisterEnchantments.DETONATOR, event)) {
+			return;
+		}
+
+		HumanEntity entity = null;
+		if (event.getEntity().getShooter() instanceof HumanEntity) {
+			entity = (HumanEntity) event.getEntity().getShooter();
+			ItemStack item = entity.getInventory().getItemInMainHand();
+			if (ItemUtils.hasEnchantment(item, RegisterEnchantments.DETONATOR)) {
+				event.getEntity().setMetadata("detonator", new FixedMetadataValue(EnchantmentSolution.getPlugin(),
+				ItemUtils.getLevel(item, RegisterEnchantments.DETONATOR)));
+			}
+		}
+	}
+
 	private void drowned(ProjectileLaunchEvent event) {
 		if (!canRun(RegisterEnchantments.DROWNED, event)) {
 			return;
@@ -101,6 +130,22 @@ public class ProjectileListener extends Enchantmentable {
 		}
 	}
 
+	private void hollowPoint(ProjectileLaunchEvent event) {
+		if (!canRun(RegisterEnchantments.HOLLOW_POINT, event)) {
+			return;
+		}
+
+		HumanEntity entity = null;
+		if (event.getEntity().getShooter() instanceof HumanEntity) {
+			entity = (HumanEntity) event.getEntity().getShooter();
+			if (ItemUtils.hasEnchantment(entity.getInventory().getItemInMainHand(),
+			RegisterEnchantments.HOLLOW_POINT)) {
+				event.getEntity().setMetadata("hollow_point",
+				new FixedMetadataValue(EnchantmentSolution.getPlugin(), 1));
+			}
+		}
+	}
+
 	private void sniper(ProjectileLaunchEvent event) {
 		if (!canRun(RegisterEnchantments.SNIPER, event)) {
 			return;
@@ -115,13 +160,14 @@ public class ProjectileListener extends Enchantmentable {
 					int level = ItemUtils.getLevel(bow, RegisterEnchantments.SNIPER);
 					double speed = 1 + 0.1 * level * level;
 
-					SniperLaunchEvent sniper = new SniperLaunchEvent(player, speed);
+					SniperLaunchEvent sniper = new SniperLaunchEvent(player, level, speed);
 					Bukkit.getPluginManager().callEvent(sniper);
 
 					if (!sniper.isCancelled() && sniper.getSpeed() > 0) {
 						arrow.setMetadata("sniper", new FixedMetadataValue(EnchantmentSolution.getPlugin(),
 						LocationUtils.locationToString(player.getLocation())));
-						Bukkit.getScheduler().runTaskLater(EnchantmentSolution.getPlugin(), (Runnable) () -> arrow.setVelocity(arrow.getVelocity().multiply(sniper.getSpeed())), 0l);
+						Bukkit.getScheduler().runTaskLater(EnchantmentSolution.getPlugin(),
+						(Runnable) () -> arrow.setVelocity(arrow.getVelocity().multiply(sniper.getSpeed())), 0l);
 					}
 				}
 			}
@@ -145,6 +191,38 @@ public class ProjectileListener extends Enchantmentable {
 		}
 	}
 
+	private void detonator(ProjectileHitEvent event) {
+		if (!canRun(RegisterEnchantments.DETONATOR, event)) {
+			return;
+		}
+		if(event.getEntity().getShooter() instanceof LivingEntity) {
+			LivingEntity entity = (LivingEntity) event.getEntity().getShooter();
+			if (event.getHitEntity() != null && event.getHitEntity().getType() == EntityType.CREEPER)
+				return;
+			if (event.getEntity().hasMetadata("detonator")) {
+				Location loc = event.getEntity().getLocation();
+				int level = event.getEntity().getMetadata("detonator").get(0).asInt();
+				
+				DetonatorExplosionEvent detonator = new DetonatorExplosionEvent(entity, level, loc, (float) (0.5 + 0.5 * level), true, true, false);
+				Bukkit.getPluginManager().callEvent(detonator);
+				
+				if(!detonator.isCancelled()) {
+					if(detonator.willDelayExplosion()) {
+						Bukkit.getScheduler().runTaskLater(EnchantmentSolution.getPlugin(), () -> {
+							loc.getWorld().createExplosion(detonator.getLoc(), detonator.getSize(), detonator.willSetFire(), detonator.willSetBlocks());
+							if(event.getEntity() != null) {
+								event.getEntity().remove();
+							}
+						}, 1l);
+					} else {
+						loc.getWorld().createExplosion(detonator.getLoc(), detonator.getSize(), detonator.willSetFire(), detonator.willSetBlocks());
+						event.getEntity().remove();
+					}
+				}
+			}
+		}
+	}
+
 	private void hardBounce(ProjectileHitEvent event) {
 		if (!canRun(RegisterEnchantments.HARD_BOUNCE, event)) {
 			return;
@@ -160,32 +238,52 @@ public class ProjectileListener extends Enchantmentable {
 				}
 				if (shield != null && ItemUtils.hasEnchantment(shield, RegisterEnchantments.HARD_BOUNCE)) {
 					int level = ItemUtils.getLevel(shield, RegisterEnchantments.HARD_BOUNCE);
-					p.setMetadata("deflection",
-					new FixedMetadataValue(EnchantmentSolution.getPlugin(), player.getUniqueId().toString()));
-					Bukkit.getScheduler().runTaskLater(EnchantmentSolution.getPlugin(), (Runnable) () -> {
-						Vector v = p.getVelocity().clone();
-						if (v.getY() < 0) {
-							v.setY(-v.getY());
-						} else if (v.getY() == 0) {
-							v.setY(0.1);
-						}
-						v.multiply(2 + 2 * level);
-						p.setVelocity(v);
-					}, 1l);
+					
+					HardBounceEvent hardBounce = new HardBounceEvent(player, level, 2 + 2 * level);
+					Bukkit.getPluginManager().callEvent(hardBounce);
+					
+					if(!hardBounce.isCancelled()) {
+						p.setMetadata("deflection",
+						new FixedMetadataValue(EnchantmentSolution.getPlugin(), player.getUniqueId().toString()));
+						Bukkit.getScheduler().runTaskLater(EnchantmentSolution.getPlugin(), (Runnable) () -> {
+							Vector v = p.getVelocity().clone();
+							if (v.getY() < 0) {
+								v.setY(-v.getY());
+							} else if (v.getY() == 0) {
+								v.setY(0.1);
+							}
+							v.multiply(hardBounce.getSpeed());
+							p.setVelocity(v);
+						}, 1l);
+					}
 				}
 			}
 		}
 	}
 
-	private void stickyHold(ProjectileHitEvent event) {
-		if (!canRun(RegisterEnchantments.HARD_BOUNCE, event)) {
+	private void hollowPoint(ProjectileHitEvent event) {
+		if (!canRun(RegisterEnchantments.HOLLOW_POINT, event)) {
 			return;
 		}
-		ChatUtils.sendInfo("Entity: " + event.getEntityType());
-		if(event.getHitEntity() != null) {
-			ChatUtils.sendInfo("Hit Entity: " + event.getHitEntity().getType());
-			if(event.getHitEntity().getType() == EntityType.ENDERMAN || event.getHitEntity().getType() == EntityType.WITHER) {
-				event.getEntity().remove();
+		if (event.getHitEntity() != null && event.getEntity().hasMetadata("hollow_point")) {
+			if (event.getEntity() instanceof Arrow && event.getEntity().getShooter() instanceof LivingEntity) {
+				Arrow arrow = (Arrow) (event.getEntity());
+				LivingEntity entity = (LivingEntity) (arrow.getShooter());
+				if (event.getHitEntity().getType() == EntityType.ENDERMAN
+				|| (event.getHitEntity().getType() == EntityType.WITHER && ((Wither) event.getHitEntity())
+				.getHealth() <= ((Wither) event.getHitEntity()).getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()
+				/ 2)) {
+					double damage = DamageEvent.getArrowDamage(entity, arrow);
+					HollowPointDamageEvent hollowPoint = new HollowPointDamageEvent(event.getEntity(),
+					event.getHitEntity(), DamageCause.PROJECTILE, damage);
+					Bukkit.getPluginManager().callEvent(hollowPoint);
+					if (!hollowPoint.isCancelled()) {
+						DamageEvent.damageEntity((LivingEntity) hollowPoint.getEntity(),
+						(Player) ((Projectile) hollowPoint.getDamager()).getShooter(), "arrow",
+						(float) hollowPoint.getDamage());
+						event.getEntity().remove();
+					}
+				}
 			}
 		}
 	}
@@ -218,10 +316,10 @@ public class ProjectileListener extends Enchantmentable {
 	}
 
 	private void splatterFest(PlayerEggThrowEvent event) {
-		if(!canRun(RegisterEnchantments.SPLATTER_FEST, event)) {
+		if (!canRun(RegisterEnchantments.SPLATTER_FEST, event)) {
 			return;
 		}
-		if(event.getEgg().hasMetadata("hatch_egg")) {
+		if (event.getEgg().hasMetadata("hatch_egg")) {
 			event.setHatching(false);
 		}
 	}

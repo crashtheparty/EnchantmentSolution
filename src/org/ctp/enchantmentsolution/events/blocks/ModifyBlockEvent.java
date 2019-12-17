@@ -1,23 +1,12 @@
 package org.ctp.enchantmentsolution.events.blocks;
 
 import org.bukkit.entity.Player;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.player.PlayerEvent;
+import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
+import org.ctp.enchantmentsolution.events.ESPlayerEvent;
 
-public class ModifyBlockEvent extends PlayerEvent {
+public abstract class ModifyBlockEvent extends ESPlayerEvent {
 
-	private static final HandlerList handlers = new HandlerList();
-
-	@Override
-	public final HandlerList getHandlers() {
-		return handlers;
-	}
-
-	public final static HandlerList getHandlerList() {
-		return handlers;
-	}
-
-	public ModifyBlockEvent(Player who) {
-		super(who);
+	public ModifyBlockEvent(Player who, EnchantmentLevel enchantment) {
+		super(who, enchantment);
 	}
 }

@@ -43,7 +43,8 @@ public class WalkerUtils {
 
 	public static void updateBlocks(Player player, ItemStack boots, Location loc, Enchantment enchantment,
 	List<Material> checkMaterial, Material replaceMaterial, String metadata) {
-		int radius = 1 + ItemUtils.getLevel(boots, enchantment);
+		int level = ItemUtils.getLevel(boots, enchantment);
+		int radius = 1 + level;
 		for(int x = -radius; x <= radius; x++) {
 			for(int z = -radius; z <= radius; z++) {
 				if (Math.abs(x) + Math.abs(z) > radius + 1) {
@@ -54,8 +55,8 @@ public class WalkerUtils {
 				Block block = blockLoc.getBlock();
 				if (checkMaterial.contains(block.getType())) {
 					if (block.getBlockData() instanceof Levelled) {
-						Levelled level = (Levelled) block.getBlockData();
-						if (level.getLevel() != 0) {
+						Levelled levelled = (Levelled) block.getBlockData();
+						if (levelled.getLevel() != 0) {
 							continue;
 						}
 					}
@@ -63,7 +64,7 @@ public class WalkerUtils {
 						if(enchantment == RegisterEnchantments.MAGMA_WALKER) {
 							block.setType(replaceMaterial);
 							WalkerBlock walker = new WalkerBlock(enchantment, block, checkMaterial.get(0), TICK);
-							MagmaWalkerBlockEvent magmaWalker = new MagmaWalkerBlockEvent(block, block.getState(), player);
+							MagmaWalkerBlockEvent magmaWalker = new MagmaWalkerBlockEvent(block, block.getState(), player, level);
 							Bukkit.getPluginManager().callEvent(magmaWalker);
 
 							if(!magmaWalker.isCancelled()) {
@@ -78,7 +79,7 @@ public class WalkerUtils {
 						} else if(enchantment == RegisterEnchantments.VOID_WALKER) {
 							block.setType(replaceMaterial);
 							WalkerBlock walker = new WalkerBlock(enchantment, block, checkMaterial.get(0), TICK);
-							VoidWalkerBlockEvent voidWalker = new VoidWalkerBlockEvent(block, block.getState(), player);
+							VoidWalkerBlockEvent voidWalker = new VoidWalkerBlockEvent(block, block.getState(), player, level);
 							Bukkit.getPluginManager().callEvent(voidWalker);
 
 							if(!voidWalker.isCancelled()) {

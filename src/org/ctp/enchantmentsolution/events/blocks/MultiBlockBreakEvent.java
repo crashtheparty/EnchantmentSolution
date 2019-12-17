@@ -4,11 +4,12 @@ import java.util.Collection;
 
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 
 public abstract class MultiBlockBreakEvent extends MultiBlockEvent {
 
-	public MultiBlockBreakEvent(Collection<Block> blocks, Player player) {
-		super(blocks, player);
+	public MultiBlockBreakEvent(Collection<Block> blocks, Player player, EnchantmentLevel enchantment) {
+		super(blocks, player, enchantment);
 	}
 
 }

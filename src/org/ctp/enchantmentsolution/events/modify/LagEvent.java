@@ -5,7 +5,9 @@ import java.util.List;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
-import org.ctp.enchantmentsolution.events.ModifyActionEvent;
+import org.ctp.enchantmentsolution.enchantments.CERegister;
+import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
+import org.ctp.enchantmentsolution.events.player.ModifyActionEvent;
 import org.ctp.enchantmentsolution.utils.abillityhelpers.ParticleEffect;
 
 public class LagEvent extends ModifyActionEvent {
@@ -25,7 +27,7 @@ public class LagEvent extends ModifyActionEvent {
 
 	public LagEvent(Player player, Location location, List<ParticleEffect> effects, Sound sound, float volume,
 	float pitch) {
-		super(player);
+		super(player, new EnchantmentLevel(CERegister.CURSE_OF_LAG, 1));
 		setLocation(location);
 		setEffects(effects);
 		setSound(sound);

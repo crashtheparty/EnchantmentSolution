@@ -5,6 +5,8 @@ import org.ctp.enchantmentsolution.enchantments.helper.Weight;
 
 public abstract class ApiEnchantment extends CustomEnchantment{
 	
+	private final ApiEnchantmentWrapper relative;
+	
 	/**
 	 * Constructor for ApiEnchantment
 	 * @param englishUSDisplayName - the name that shows on items for the enchantment - default language of Language.US
@@ -21,12 +23,21 @@ public abstract class ApiEnchantment extends CustomEnchantment{
 	 * 
 	 * Set curses using the setCurse() method, and set if max level is 1 using the setMaxLevelOne() method
 	 */
-	public ApiEnchantment(String englishUSDisplayName, int fiftyConstant, int thirtyConstant, int fiftyModifier, int thirtyModifier, 
+	public ApiEnchantment(ApiEnchantmentWrapper relative, String englishUSDisplayName, int fiftyConstant, int thirtyConstant, int fiftyModifier, int thirtyModifier, 
 			int fiftyStartLevel, int thirtyStartLevel, int fiftyMaxLevel, int thirtyMaxLevel, 
 			Weight weight, String englishUSDescription) {
 		super(englishUSDisplayName, fiftyConstant, thirtyConstant, fiftyModifier, thirtyModifier, 
 				fiftyStartLevel, thirtyStartLevel, fiftyMaxLevel, thirtyMaxLevel, 
 				weight, englishUSDescription);
+		this.relative = relative;
+	}
+
+	/**
+	 * Get the relative enchantment for this custom enchantment
+	 * @return - the relative enchantment
+	 */
+	public ApiEnchantmentWrapper getRelative() {
+		return relative;
 	}
 	
 }

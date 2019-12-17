@@ -4,6 +4,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerEvent;
+import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 
 public abstract class ESPlayerEvent extends PlayerEvent implements Cancellable {
 
@@ -19,9 +20,11 @@ public abstract class ESPlayerEvent extends PlayerEvent implements Cancellable {
 	}
 
 	private boolean cancelled;
+	private final EnchantmentLevel enchantment;
 
-	public ESPlayerEvent(Player who) {
+	public ESPlayerEvent(Player who, EnchantmentLevel enchantment) {
 		super(who);
+		this.enchantment = enchantment;
 	}
 
 	@Override
@@ -32,6 +35,10 @@ public abstract class ESPlayerEvent extends PlayerEvent implements Cancellable {
 	@Override
 	public void setCancelled(boolean cancelled) {
 		this.cancelled = cancelled;
+	}
+
+	public EnchantmentLevel getEnchantment() {
+		return enchantment;
 	}
 
 }

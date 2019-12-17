@@ -4,6 +4,8 @@ import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.ctp.enchantmentsolution.enchantments.CERegister;
+import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.events.player.InteractEvent;
 
 public class FlowerGiftEvent extends InteractEvent {
@@ -12,7 +14,7 @@ public class FlowerGiftEvent extends InteractEvent {
 	private Location dropLocation;
 
 	public FlowerGiftEvent(Player who, ItemStack item, Block block, ItemStack flower, Location dropLocation) {
-		super(who, item, block);
+		super(who, new EnchantmentLevel(CERegister.FLOWER_GIFT, 1), item, block);
 		setFlower(flower);
 		setDropLocation(dropLocation);
 	}

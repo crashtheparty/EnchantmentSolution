@@ -85,7 +85,7 @@ public class SoulListener extends Enchantmentable {
 				}
 
 				if (soulReaper.size() > 0) {
-					SoulReaperEvent soulReaperEvent = new SoulReaperEvent(player, soulReaper);
+					SoulReaperEvent soulReaperEvent = new SoulReaperEvent(player, level, soulReaper);
 					Bukkit.getPluginManager().callEvent(soulReaperEvent);
 
 					if (!soulReaperEvent.isCancelled()) {

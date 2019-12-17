@@ -4,6 +4,8 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.ctp.enchantmentsolution.enchantments.CERegister;
+import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 
 public class SmelteryEvent extends ESBlockBreakEvent {
 
@@ -13,7 +15,7 @@ public class SmelteryEvent extends ESBlockBreakEvent {
 	private int exp;
 
 	public SmelteryEvent(Block block, Player player, ItemStack drop, Material changeTo, int exp) {
-		super(block, player);
+		super(block, player, new EnchantmentLevel(CERegister.SMELTERY, 1));
 		setDrop(drop);
 		setChangeTo(changeTo);
 		setExp(exp);
