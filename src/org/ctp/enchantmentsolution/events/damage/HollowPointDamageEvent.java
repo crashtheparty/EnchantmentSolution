@@ -8,10 +8,10 @@ import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 public class HollowPointDamageEvent extends EntityDamageByEntityEvent {
 
 	private final EnchantmentLevel enchantment;
-	
+
 	public HollowPointDamageEvent(Entity damager, Entity damagee, DamageCause cause, double damage) {
 		super(damager, damagee, cause, damage);
-		this.enchantment = new EnchantmentLevel(CERegister.HOLLOW_POINT, 1);
+		enchantment = new EnchantmentLevel(CERegister.HOLLOW_POINT, 1);
 	}
 
 	public EnchantmentLevel getEnchantment() {

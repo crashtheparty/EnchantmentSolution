@@ -8,10 +8,10 @@ import org.ctp.enchantmentsolution.events.ESEntityEvent;
 public class DetonateCreeperEvent extends ESEntityEvent {
 
 	private int detonateTicks;
-	
+
 	public DetonateCreeperEvent(Creeper who, int level, int detonateTicks) {
 		super(who, new EnchantmentLevel(CERegister.DETONATOR, level));
-		this.setDetonateTicks(detonateTicks);
+		setDetonateTicks(detonateTicks);
 	}
 
 	public int getDetonateTicks() {

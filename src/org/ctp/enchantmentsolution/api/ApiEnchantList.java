@@ -17,14 +17,16 @@ import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 public class ApiEnchantList {
 
 	private static Map<JavaPlugin, List<ApiEnchantment>> ENCHANTMENTS = new LinkedHashMap<JavaPlugin, List<ApiEnchantment>>();
-	
+
 	/**
 	 * Adds an enchantment to EnchantmentSolution's registry
 	 * @param plugin - the plugin of the api enchantment
 	 * @param enchant - the enchantment
 	 */
 	public static void addEnchantment(JavaPlugin plugin, ApiEnchantment enchant) {
-		if(plugin == null) throw new NullPointerException("Plugin cannot be null.");
+		if(plugin == null) {
+			throw new NullPointerException("Plugin cannot be null.");
+		}
 		List<ApiEnchantment> enchantments = ENCHANTMENTS.get(plugin);
 		if (enchantments == null) {
 			enchantments = new ArrayList<ApiEnchantment>();
@@ -34,28 +36,30 @@ public class ApiEnchantList {
 		}
 		ENCHANTMENTS.put(plugin, enchantments);
 	}
-	
+
 	/**
 	 * Adds all enchantments in the plugin's registry to the game.
 	 * @param plugin
 	 */
 	public static void setEnchantments(JavaPlugin plugin) {
-		if(plugin == null) throw new NullPointerException("Plugin cannot be null.");
+		if(plugin == null) {
+			throw new NullPointerException("Plugin cannot be null.");
+		}
 		List<ApiEnchantment> enchantments = ENCHANTMENTS.get(plugin);
 		if(enchantments == null) {
 			throw new NullPointerException("Enchantments for this plugin are null: " + plugin.getName() + ".");
 		}
-		
+
 		for(ApiEnchantment enchant : enchantments) {
 			RegisterEnchantments.addDefaultEnchantment(enchant);
 			RegisterEnchantments.registerEnchantment(enchant);
 		}
-		
+
 		Configurations.getEnchantments().updateExternal(plugin);
 		RegisterEnchantments.setEnchantments();
 		Configurations.save();
 	}
-	
+
 	/**
 	 * Returns whether the enchantment is enabled
 	 * @param enchant - the enchantment to check
@@ -64,7 +68,7 @@ public class ApiEnchantList {
 	public static boolean isEnabled(Enchantment enchant) {
 		return RegisterEnchantments.isEnabled(enchant);
 	}
-	
+
 	/**
 	 * Gets the plugin's registry of an enchantment using Minecraft's wrapper
 	 * @param enchant - the enchantment to check for
@@ -73,7 +77,7 @@ public class ApiEnchantList {
 	public static CustomEnchantment getCustomEnchantment(Enchantment enchant) {
 		return RegisterEnchantments.getCustomEnchantment(enchant);
 	}
-	
+
 	/**
 	 * Returns if an item has the specified enchantment
 	 * @param item - the item to check
@@ -83,7 +87,7 @@ public class ApiEnchantList {
 	public static boolean hasEnchantment(ItemStack item, Enchantment enchant) {
 		return ItemUtils.hasEnchantment(item, enchant);
 	}
-	
+
 	/**
 	 * Get the level of an enchantment on an item
 	 * @param item - the item to check
@@ -93,7 +97,7 @@ public class ApiEnchantList {
 	public static int getLevel(ItemStack item, Enchantment enchant) {
 		return ItemUtils.getLevel(item, enchant);
 	}
-	
+
 	/**
 	 * Adds enchantments to an item
 	 * @param item - the item to enchant
@@ -103,5 +107,5 @@ public class ApiEnchantList {
 	public static ItemStack addEnchantmentsToItem(ItemStack item, List<EnchantmentLevel> levels) {
 		return ItemUtils.addEnchantmentsToItem(item, levels);
 	}
-	
+
 }

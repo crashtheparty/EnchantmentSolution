@@ -20,14 +20,14 @@ public abstract class BonusDropsEvent extends ESPlayerEvent {
 	public final HandlerList getHandlers() {
 		return handlers;
 	}
-	
+
 	private Collection<ItemStack> drops;
 	private int multiplyAmount;
 
 	public BonusDropsEvent(Player who, EnchantmentLevel enchantment, Collection<ItemStack> drops, int multiplyAmount) {
 		super(who, enchantment);
-		this.setDrops(drops);
-		this.setMultiplyAmount(multiplyAmount);
+		setDrops(drops);
+		setMultiplyAmount(multiplyAmount);
 	}
 
 	public Collection<ItemStack> getDrops() {

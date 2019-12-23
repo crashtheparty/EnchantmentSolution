@@ -13,6 +13,7 @@ import javax.annotation.Nonnull;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.utils.config.ConfigUtils;
 import org.ctp.enchantmentsolution.utils.config.Type;
@@ -20,8 +21,12 @@ import org.ctp.enchantmentsolution.utils.config.Type;
 public class ChatUtils {
 
 	public static void sendMessage(Player player, String message) {
+		sendMessage(getStarter(), player, message);
+	}
+
+	public static void sendMessage(String starter, Player player, String message) {
 		if (message != null && !message.trim().equals("")) {
-			player.sendMessage(getStarter() + message);
+			player.sendMessage(starter + message);
 		}
 	}
 
@@ -55,7 +60,11 @@ public class ChatUtils {
 	}
 
 	public static void sendToConsole(Level level, String message) {
-		EnchantmentSolution.getPlugin().getLogger().log(level, message);
+		sendToConsole(EnchantmentSolution.getPlugin(), level, message);
+	}
+
+	public static void sendToConsole(JavaPlugin plugin, Level level, String message) {
+		plugin.getLogger().log(level, message);
 	}
 
 	public static void sendWarning(String message) {
@@ -68,6 +77,18 @@ public class ChatUtils {
 
 	public static void sendSevere(String message) {
 		sendToConsole(Level.SEVERE, message);
+	}
+
+	public static void sendWarning(JavaPlugin plugin, String message) {
+		sendToConsole(plugin, Level.WARNING, message);
+	}
+
+	public static void sendInfo(JavaPlugin plugin, String message) {
+		sendToConsole(plugin, Level.INFO, message);
+	}
+
+	public static void sendSevere(JavaPlugin plugin, String message) {
+		sendToConsole(plugin, Level.SEVERE, message);
 	}
 
 	public static String getMessage(HashMap<String, Object> codes, String location) {

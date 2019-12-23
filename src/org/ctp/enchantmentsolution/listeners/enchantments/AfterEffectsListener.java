@@ -2,7 +2,6 @@ package org.ctp.enchantmentsolution.listeners.enchantments;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
@@ -33,7 +32,6 @@ import org.ctp.enchantmentsolution.events.player.PillageEvent;
 import org.ctp.enchantmentsolution.events.player.ExperienceEvent.ExpShareType;
 import org.ctp.enchantmentsolution.listeners.Enchantmentable;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
-import org.ctp.enchantmentsolution.utils.abillityhelpers.DrownedEntity;
 import org.ctp.enchantmentsolution.utils.items.AbilityUtils;
 import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 

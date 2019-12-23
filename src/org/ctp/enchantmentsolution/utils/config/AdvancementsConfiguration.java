@@ -12,7 +12,7 @@ public class AdvancementsConfiguration extends Configuration {
 
 	public AdvancementsConfiguration(File dataFolder) {
 		super(new File(dataFolder + "/advancements.yml"), true);
-		
+
 		migrateVersion();
 		save();
 	}
@@ -23,7 +23,7 @@ public class AdvancementsConfiguration extends Configuration {
 			ChatUtils.sendInfo("Loading advancements configuration...");
 		}
 		YamlConfigBackup config = getConfig();
-				
+
 		for(ESAdvancement advancement: ESAdvancement.values()) {
 			if (advancement == ESAdvancement.ENCHANTMENT_SOLUTION) {
 				config.addDefault("advancements." + advancement.getNamespace().getKey() + ".enable", false);

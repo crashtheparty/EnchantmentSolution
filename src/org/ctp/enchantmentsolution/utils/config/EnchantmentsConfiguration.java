@@ -72,7 +72,7 @@ public class EnchantmentsConfiguration extends Configuration {
 			} else if (enchant.getRelativeEnchantment() instanceof CustomEnchantmentWrapper) {
 				namespace = "custom_enchantments";
 			}
-			String start = namespace + "." + enchant.getName();
+			String start = namespace + "." + enchant.getName().toLowerCase();
 			config.addDefault(start + ".enabled", true);
 			config.addDefault(start + ".treasure", enchant.isTreasure());
 			start += ".advanced";
@@ -106,8 +106,8 @@ public class EnchantmentsConfiguration extends Configuration {
 			if (enchant.getRelativeEnchantment() instanceof ApiEnchantmentWrapper) {
 				if (plugin.equals(((ApiEnchantmentWrapper) enchant.getRelativeEnchantment()).getPlugin())) {
 					String namespace = plugin.getName().toLowerCase() + "." + enchant.getName().toLowerCase();
-					config.addDefault(namespace + "." + enchant.getName() + ".enabled", true);
-					config.addDefault(namespace + "." + enchant.getName() + ".treasure", enchant.isTreasure());
+					config.addDefault(namespace + ".enabled", true);
+					config.addDefault(namespace + ".treasure", enchant.isTreasure());
 					namespace += ".advanced";
 					config.addDefault(namespace + ".weight", enchant.getDefaultWeightName());
 					config.addEnum(namespace + ".weight", Arrays.asList(Weight.VERY_RARE.getName(),
@@ -123,6 +123,8 @@ public class EnchantmentsConfiguration extends Configuration {
 				}
 			}
 		}
+
+		config.writeDefaults();
 	}
 
 	@Override

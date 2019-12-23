@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Creeper;
 import org.bukkit.entity.EnderDragon;
@@ -183,7 +182,7 @@ public class DropsListener extends Enchantmentable {
 			return;
 		}
 
-		TransmutationEvent transmutation = new TransmutationEvent(event.getEntity().getKiller(), drops,
+		TransmutationEvent transmutation = new TransmutationEvent(event.getEntity().getKiller(), event.getEntity(), drops,
 		event.getDrops(), override);
 		Bukkit.getPluginManager().callEvent(transmutation);
 

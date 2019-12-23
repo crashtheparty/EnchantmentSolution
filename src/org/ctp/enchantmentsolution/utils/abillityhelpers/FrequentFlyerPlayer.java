@@ -86,7 +86,7 @@ public class FrequentFlyerPlayer {
 		} else if (!this.canFly && modifyCanFly) {
 			event = new FrequentFlyerEvent(player, level, FFType.ALLOW_FLIGHT);
 		}
-		
+
 		if (event != null) {
 			Bukkit.getPluginManager().callEvent(event);
 			if (!event.isCancelled()) {

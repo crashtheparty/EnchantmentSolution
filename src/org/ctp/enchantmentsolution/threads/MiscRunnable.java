@@ -1,7 +1,6 @@
 package org.ctp.enchantmentsolution.threads;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -11,7 +10,6 @@ import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
@@ -39,13 +37,17 @@ public class MiscRunnable implements Runnable, Reflectionable {
 		runMethod(this, "magicGuard");
 		runMethod(this, "sandVeil");
 	}
-	
+
 	private void contagionCurse() {
 		double chance = 0.0005;
 		List<CustomEnchantment> enchantments = new ArrayList<CustomEnchantment>();
 		for(CustomEnchantment enchantment : RegisterEnchantments.getRegisteredEnchantments()) {
-			if(enchantment.getRelativeEnchantment() == RegisterEnchantments.CURSE_OF_CONTAGION) continue;
-			if(enchantment.isCurse()) enchantments.add(enchantment);
+			if(enchantment.getRelativeEnchantment() == RegisterEnchantments.CURSE_OF_CONTAGION) {
+				continue;
+			}
+			if(enchantment.isCurse()) {
+				enchantments.add(enchantment);
+			}
 		}
 		if(enchantments.size() > 0) {
 			for(Player player : Bukkit.getOnlinePlayers()) {
@@ -154,14 +156,14 @@ public class MiscRunnable implements Runnable, Reflectionable {
 			}
 		}
 	}
-	
+
 	private void callContagionCurse(Player player, ItemStack item, CustomEnchantment curse) {
 		List<Sound> sounds = new ArrayList<Sound>();
 		sounds.add(Sound.ENTITY_ELDER_GUARDIAN_AMBIENT);
 		sounds.add(Sound.BLOCK_ENCHANTMENT_TABLE_USE);
 		ContagionEvent event = new ContagionEvent(player, item, curse, 1, sounds);
 		Bukkit.getPluginManager().callEvent(event);
-		
+
 		if(!event.isCancelled()) {
 			ItemUtils.addEnchantmentToItem(event.getItem(), event.getCurse(), event.getLevel());
 			for(Sound s : event.getSounds()) {

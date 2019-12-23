@@ -139,14 +139,22 @@ public class ConfigUtils {
 		return new ConfigUtils().getFile(resource);
 	}
 
+	public static File getTempFile(Class<?> clazz, String resource) {
+		return new ConfigUtils().getFile(clazz, resource);
+	}
+
 	public File getFile(String resource) {
+		return getFile(getClass(), resource);
+	}
+
+	public File getFile(Class<?> clazz, String resource) {
 		File file = null;
-		URL res = getClass().getResource(resource);
+		URL res = clazz.getResource(resource);
 		if (res.getProtocol().equals("jar")) {
 			InputStream input = null;
 			OutputStream out = null;
 			try {
-				input = getClass().getResourceAsStream(resource);
+				input = clazz.getResourceAsStream(resource);
 				file = File.createTempFile("/tempfile", ".tmp");
 				out = new FileOutputStream(file);
 				int read;

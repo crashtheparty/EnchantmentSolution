@@ -1,7 +1,6 @@
 package org.ctp.enchantmentsolution.listeners.enchantments;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -148,12 +147,12 @@ public class DamageListener extends Enchantmentable {
 			Creeper creeper = (Creeper) entity;
 			int level = damager.getMetadata("detonator").get(0).asInt();
 			DetonateCreeperEvent detonator = new DetonateCreeperEvent(creeper, level, creeper.getMaxFuseTicks() - (level - 1) * 5);
-			
+
 			if(!detonator.isCancelled()) {
 				creeper.setMaxFuseTicks(detonator.getDetonateTicks());
 				creeper.ignite();
 			}
-			
+
 		}
 	}
 
@@ -237,11 +236,11 @@ public class DamageListener extends Enchantmentable {
 				if(s.endsWith("BOOTS") || s.endsWith("CHESTPLATE") || s.endsWith("HELMET") || s.endsWith("LEGGINGS") || s.endsWith("ELYTRA")) {
 					HollowPointEvent hollowPoint = new HollowPointEvent(livingEntity, living, event.getDamage(), event.getDamage() * 1.5);
 					Bukkit.getPluginManager().callEvent(hollowPoint);
-					
+
 					if(!hollowPoint.isCancelled()) {
 						event.setDamage(hollowPoint.getNewDamage());
 					}
-					
+
 					break;
 				}
 			}

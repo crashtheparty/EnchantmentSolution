@@ -9,5 +9,5 @@ public class ApiEnchantmentDescription extends EnchantmentDescription{
 		super(lang, desc);
 	}
 
-	
+
 }

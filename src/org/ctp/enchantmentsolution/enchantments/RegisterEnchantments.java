@@ -9,6 +9,7 @@ import java.util.logging.Level;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.api.ApiEnchantmentWrapper;
 import org.ctp.enchantmentsolution.enchantments.helper.Weight;
 import org.ctp.enchantmentsolution.utils.*;
@@ -107,6 +108,10 @@ public class RegisterEnchantments {
 			return true;
 		}
 		REGISTERED_ENCHANTMENTS.add(enchantment);
+		JavaPlugin plugin = EnchantmentSolution.getPlugin();
+		if(enchantment.getRelativeEnchantment() instanceof ApiEnchantmentWrapper) {
+			plugin = ((ApiEnchantmentWrapper) enchantment.getRelativeEnchantment()).getPlugin();
+		}
 		boolean custom = enchantment.getRelativeEnchantment() instanceof CustomEnchantmentWrapper;
 		String error_message = "Trouble adding the " + enchantment.getName() + (custom ? " custom" : "")
 		+ " enchantment: ";
@@ -120,12 +125,12 @@ public class RegisterEnchantments {
 			f.setAccessible(true);
 			f.set(null, true);
 			Enchantment.registerEnchantment(enchantment.getRelativeEnchantment());
-			ChatUtils.sendToConsole(Level.INFO, success_message);
+			ChatUtils.sendToConsole(plugin, Level.INFO, success_message);
 			return true;
 		} catch (Exception e) {
 			REGISTERED_ENCHANTMENTS.remove(enchantment);
 
-			ChatUtils.sendToConsole(Level.WARNING, error_message);
+			ChatUtils.sendToConsole(plugin, Level.WARNING, error_message);
 			e.printStackTrace();
 			return false;
 		}

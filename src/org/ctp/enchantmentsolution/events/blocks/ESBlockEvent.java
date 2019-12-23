@@ -18,7 +18,7 @@ public class ESBlockEvent extends BlockEvent implements Cancellable {
 	public HandlerList getHandlers() {
 		return handlers;
 	}
-	
+
 	private boolean cancelled;
 	private final EnchantmentLevel enchantment;
 

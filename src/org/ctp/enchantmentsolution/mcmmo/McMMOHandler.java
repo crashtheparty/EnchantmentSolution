@@ -46,14 +46,15 @@ public class McMMOHandler {
 			if (ItemUtils.hasEnchantment(item, RegisterEnchantments.TELEPATHY)) {
 				if (!Config.getInstance().getDoubleDropsEnabled(PrimarySkillType.MINING, block.getType())
 				&& !Config.getInstance().getDoubleDropsEnabled(PrimarySkillType.HERBALISM, block.getType())
-				&& !Config.getInstance().getDoubleDropsEnabled(PrimarySkillType.WOODCUTTING, block.getType()))
+				&& !Config.getInstance().getDoubleDropsEnabled(PrimarySkillType.WOODCUTTING, block.getType())) {
 					return;
+				}
 				Collection<ItemStack> drops = TelepathyUtils.handleTelepathyBonus(event, event.getPlayer(), item, block);
 				if (state.getMetadata(mcMMO.BONUS_DROPS_METAKEY).size() > 0) {
 					for(MetadataValue value: state.getMetadata(mcMMO.BONUS_DROPS_METAKEY)) {
 						TelepathyBonusDropsEvent telepathyBonus = new TelepathyBonusDropsEvent(event.getPlayer(), drops, value.asInt());
 						Bukkit.getPluginManager().callEvent(telepathyBonus);
-						
+
 						if(!telepathyBonus.isCancelled()) {
 							int num = telepathyBonus.getMultiplyAmount();
 							while (num > 0) {
@@ -61,21 +62,22 @@ public class McMMOHandler {
 								num--;
 							}
 						}
-						
+
 						event.getBlock().getState().removeMetadata(mcMMO.BONUS_DROPS_METAKEY, mcMMO.p);
 					}
 				}
 			} else if (ItemUtils.hasEnchantment(item, RegisterEnchantments.SMELTERY)) {
 				if (!Config.getInstance().getDoubleDropsEnabled(PrimarySkillType.MINING, block.getType())
 				&& !Config.getInstance().getDoubleDropsEnabled(PrimarySkillType.HERBALISM, block.getType())
-				&& !Config.getInstance().getDoubleDropsEnabled(PrimarySkillType.WOODCUTTING, block.getType()))
+				&& !Config.getInstance().getDoubleDropsEnabled(PrimarySkillType.WOODCUTTING, block.getType())) {
 					return;
+				}
 				if (state.getMetadata(mcMMO.BONUS_DROPS_METAKEY).size() > 0) {
 					for(MetadataValue value: state.getMetadata(mcMMO.BONUS_DROPS_METAKEY)) {
 						SmelteryMaterial smelted = SmelteryUtils.getSmelteryItem(block, item);
 						SmelteryBonusDropsEvent smelteryBonus = new SmelteryBonusDropsEvent(event.getPlayer(), Arrays.asList(smelted.getSmelted()), value.asInt());
 						Bukkit.getPluginManager().callEvent(smelteryBonus);
-						
+
 						if(!smelteryBonus.isCancelled()) {
 							int num = smelteryBonus.getMultiplyAmount();
 							while (num > 0) {
@@ -90,8 +92,9 @@ public class McMMOHandler {
 				for(ItemStack drop: event.getBlock().getDrops(item)) {
 					if (!Config.getInstance().getDoubleDropsEnabled(PrimarySkillType.MINING, drop.getType())
 					&& !Config.getInstance().getDoubleDropsEnabled(PrimarySkillType.HERBALISM, drop.getType())
-					&& !Config.getInstance().getDoubleDropsEnabled(PrimarySkillType.WOODCUTTING, drop.getType()))
+					&& !Config.getInstance().getDoubleDropsEnabled(PrimarySkillType.WOODCUTTING, drop.getType())) {
 						continue;
+					}
 					if (state.getMetadata(mcMMO.BONUS_DROPS_METAKEY).size() > 0) {
 						for(MetadataValue value: state.getMetadata(mcMMO.BONUS_DROPS_METAKEY)) {
 							int num = value.asInt();

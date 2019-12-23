@@ -60,7 +60,7 @@ public class MainConfiguration extends Configuration {
 		if (EnchantmentSolution.getPlugin().isInitializing()) {
 			ChatUtils.sendInfo("Main configuration initialized!");
 		}
-		
+
 		config.saveConfig();
 
 		file.delete();

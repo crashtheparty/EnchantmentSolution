@@ -15,7 +15,7 @@ public class WarpEvent extends EntityTeleportEvent {
 
 	public WarpEvent(LivingEntity player, Location from, Location to, List<Location> otherLocations, int level) {
 		super(player, from, to);
-		this.enchantment = new EnchantmentLevel(RegisterEnchantments.getCustomEnchantment(RegisterEnchantments.WARP), level);
+		enchantment = new EnchantmentLevel(RegisterEnchantments.getCustomEnchantment(RegisterEnchantments.WARP), level);
 		setOtherLocations(otherLocations);
 	}
 

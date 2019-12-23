@@ -7,7 +7,7 @@ import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 public class IcarusLaunchEvent extends ModifySpeedEvent {
 
 	private int secondDelay;
-	
+
 	public IcarusLaunchEvent(Player who, int level, double speed, int secondDelay) {
 		super(who, new EnchantmentLevel(CERegister.ICARUS, level), speed);
 		setSecondDelay(secondDelay);

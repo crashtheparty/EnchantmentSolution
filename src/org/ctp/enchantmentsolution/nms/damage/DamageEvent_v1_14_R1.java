@@ -25,24 +25,24 @@ public class DamageEvent_v1_14_R1 {
 		}
 		((CraftEntity) e).getHandle().damageEntity(source, damage);
 	}
-	
+
 	public static void damageEntity(LivingEntity e, Player p, String cause, float damage) {
 		DamageSource source = DamageSource.GENERIC;
 		Entity entity = ((CraftEntity) e).getHandle();
-		EntityPlayer player = (EntityPlayer) ((CraftPlayer) p).getHandle();
+		EntityPlayer player = ((CraftPlayer) p).getHandle();
 		switch (cause) {
 			case "arrow":
 				source = DamageSource.playerAttack(player);
 		}
-		
+
 		entity.damageEntity(source, damage);
 	}
 
 	public static double getArrowDamage(LivingEntity le, Arrow a) {
 		EntityArrow arrow = ((CraftArrow) a).getHandle();
 		EntityLiving entity = ((CraftLivingEntity) le).getHandle();
-        float f = (float) arrow.getMot().f();
-        int i = MathHelper.f(Math.max((double) f * arrow.getDamage(), 0.0D));
+		float f = (float) arrow.getMot().f();
+		int i = MathHelper.f(Math.max(f * arrow.getDamage(), 0.0D));
 		arrow.a(entity, i);
 		return (int) arrow.getDamage() / 2;
 	}

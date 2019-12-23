@@ -178,7 +178,8 @@ public class PlayerListener extends Enchantmentable {
 				while (iterator.hasNext()) {
 					AnimalMob animal = iterator.next();
 					if (animal.inItem(item, entityID)) {
-						LassoInteractEvent lasso = new LassoInteractEvent(player, ItemUtils.getLevel(item, RegisterEnchantments.IRENES_LASSO), item, event.getClickedBlock(),
+						LassoInteractEvent lasso = new LassoInteractEvent(player,
+						ItemUtils.getLevel(item, RegisterEnchantments.IRENES_LASSO), item, event.getClickedBlock(),
 						event.getBlockFace(), animal);
 						if (!lasso.isCancelled()) {
 							event.setCancelled(true);
@@ -334,8 +335,14 @@ public class PlayerListener extends Enchantmentable {
 					Arrow arrow = player.launchProjectile(Arrow.class);
 					arrow.setMetadata("overkill",
 					new FixedMetadataValue(EnchantmentSolution.getPlugin(), player.getUniqueId().toString()));
-					Bukkit.getScheduler().runTaskLater(EnchantmentSolution.getPlugin(),
-					(Runnable) () -> arrow.setVelocity(arrow.getVelocity().multiply(overkill.getSpeed())), 0l);
+					if (!overkill.takeArrow()) {
+						arrow.setMetadata("no_pickup", new FixedMetadataValue(EnchantmentSolution.getPlugin(), true));
+						ChatUtils.sendInfo("Adding metadata 'no_pickup'");
+					}
+					Bukkit.getScheduler().runTaskLater(EnchantmentSolution.getPlugin(), (Runnable) () -> {
+						arrow.setVelocity(arrow.getVelocity().multiply(overkill.getSpeed()));
+						player.getWorld().playSound(player.getLocation(), Sound.ENTITY_ARROW_SHOOT, 1, 1);
+					}, 0l);
 					DamageUtils.damageItem(player, item);
 				}
 			}
@@ -385,6 +392,7 @@ public class PlayerListener extends Enchantmentable {
 						egg.setMetadata("hatch_egg",
 						new FixedMetadataValue(EnchantmentSolution.getPlugin(), player.getUniqueId().toString()));
 					}
+					player.getWorld().playSound(player.getLocation(), Sound.ENTITY_EGG_THROW, 1, 1);
 					DamageUtils.damageItem(player, item);
 				}
 			}

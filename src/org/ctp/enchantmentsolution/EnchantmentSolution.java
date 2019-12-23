@@ -340,6 +340,6 @@ public class EnchantmentSolution extends JavaPlugin {
 	}
 
 	private void checkVersion() {
-		Bukkit.getScheduler().runTaskTimerAsynchronously(PLUGIN, check, 20l, 20 * 60 * 60 * 4l);
+		Bukkit.getScheduler().runTaskTimerAsynchronously(PLUGIN, check, 20 * 60 * 60 * 4l, 20 * 60 * 60 * 4l);
 	}
 }

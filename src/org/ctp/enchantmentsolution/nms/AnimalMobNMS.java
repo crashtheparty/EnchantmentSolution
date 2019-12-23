@@ -26,7 +26,7 @@ public class AnimalMobNMS {
 		}
 		return null;
 	}
-	
+
 	public static boolean canAddMob() {
 		switch (EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber()) {
 			case 1:

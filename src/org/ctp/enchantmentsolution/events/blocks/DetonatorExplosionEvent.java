@@ -11,14 +11,14 @@ public class DetonatorExplosionEvent extends ESEntityEvent {
 	private final Location loc;
 	private float size;
 	private boolean setFire, setBlocks, delayExplosion;
-	
+
 	public DetonatorExplosionEvent(LivingEntity entity, int level, Location loc, float size, boolean setFire, boolean setBlocks, boolean delayExplosion) {
 		super(entity, new EnchantmentLevel(CERegister.DETONATOR, level));
 		this.loc = loc;
-		this.setSize(size);
-		this.setSetFire(setFire);
-		this.setSetBlocks(setBlocks);
-		this.setDelayExplosion(delayExplosion);
+		setSize(size);
+		setSetFire(setFire);
+		setSetBlocks(setBlocks);
+		setDelayExplosion(delayExplosion);
 	}
 
 	public Location getLoc() {

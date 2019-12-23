@@ -7,6 +7,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.entity.AbstractArrow.PickupStatus;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -17,7 +18,6 @@ import org.bukkit.entity.Projectile;
 import org.bukkit.entity.Trident;
 import org.bukkit.entity.Wither;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
@@ -37,7 +37,6 @@ import org.ctp.enchantmentsolution.events.modify.SniperLaunchEvent;
 import org.ctp.enchantmentsolution.listeners.Enchantmentable;
 import org.ctp.enchantmentsolution.nms.DamageEvent;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
-import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.LocationUtils;
 import org.ctp.enchantmentsolution.utils.abillityhelpers.ParticleEffect;
 import org.ctp.enchantmentsolution.utils.items.AbilityUtils;
@@ -61,6 +60,7 @@ public class ProjectileListener extends Enchantmentable {
 		runMethod(this, "detonator", event, ProjectileHitEvent.class);
 		runMethod(this, "hardBounce", event, ProjectileHitEvent.class);
 		runMethod(this, "hollowPoint", event, ProjectileHitEvent.class);
+		runMethod(this, "overkill", event, ProjectileHitEvent.class);
 		runMethod(this, "splatterFest", event, ProjectileHitEvent.class);
 	}
 
@@ -197,15 +197,16 @@ public class ProjectileListener extends Enchantmentable {
 		}
 		if(event.getEntity().getShooter() instanceof LivingEntity) {
 			LivingEntity entity = (LivingEntity) event.getEntity().getShooter();
-			if (event.getHitEntity() != null && event.getHitEntity().getType() == EntityType.CREEPER)
+			if (event.getHitEntity() != null && event.getHitEntity().getType() == EntityType.CREEPER) {
 				return;
+			}
 			if (event.getEntity().hasMetadata("detonator")) {
 				Location loc = event.getEntity().getLocation();
 				int level = event.getEntity().getMetadata("detonator").get(0).asInt();
-				
+
 				DetonatorExplosionEvent detonator = new DetonatorExplosionEvent(entity, level, loc, (float) (0.5 + 0.5 * level), true, true, false);
 				Bukkit.getPluginManager().callEvent(detonator);
-				
+
 				if(!detonator.isCancelled()) {
 					if(detonator.willDelayExplosion()) {
 						Bukkit.getScheduler().runTaskLater(EnchantmentSolution.getPlugin(), () -> {
@@ -238,10 +239,10 @@ public class ProjectileListener extends Enchantmentable {
 				}
 				if (shield != null && ItemUtils.hasEnchantment(shield, RegisterEnchantments.HARD_BOUNCE)) {
 					int level = ItemUtils.getLevel(shield, RegisterEnchantments.HARD_BOUNCE);
-					
+
 					HardBounceEvent hardBounce = new HardBounceEvent(player, level, 2 + 2 * level);
 					Bukkit.getPluginManager().callEvent(hardBounce);
-					
+
 					if(!hardBounce.isCancelled()) {
 						p.setMetadata("deflection",
 						new FixedMetadataValue(EnchantmentSolution.getPlugin(), player.getUniqueId().toString()));
@@ -267,12 +268,12 @@ public class ProjectileListener extends Enchantmentable {
 		}
 		if (event.getHitEntity() != null && event.getEntity().hasMetadata("hollow_point")) {
 			if (event.getEntity() instanceof Arrow && event.getEntity().getShooter() instanceof LivingEntity) {
-				Arrow arrow = (Arrow) (event.getEntity());
-				LivingEntity entity = (LivingEntity) (arrow.getShooter());
+				Arrow arrow = (Arrow) event.getEntity();
+				LivingEntity entity = (LivingEntity) arrow.getShooter();
 				if (event.getHitEntity().getType() == EntityType.ENDERMAN
-				|| (event.getHitEntity().getType() == EntityType.WITHER && ((Wither) event.getHitEntity())
+				|| event.getHitEntity().getType() == EntityType.WITHER && ((Wither) event.getHitEntity())
 				.getHealth() <= ((Wither) event.getHitEntity()).getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()
-				/ 2)) {
+				/ 2) {
 					double damage = DamageEvent.getArrowDamage(entity, arrow);
 					HollowPointDamageEvent hollowPoint = new HollowPointDamageEvent(event.getEntity(),
 					event.getHitEntity(), DamageCause.PROJECTILE, damage);
@@ -285,6 +286,16 @@ public class ProjectileListener extends Enchantmentable {
 					}
 				}
 			}
+		}
+	}
+
+	private void overkill(ProjectileHitEvent event) {
+		if (!canRun(RegisterEnchantments.OVERKILL, event)) {
+			return;
+		}
+		if (event.getEntity() instanceof Arrow && event.getEntity().hasMetadata("no_pickup")) {
+			Arrow arrow = (Arrow) event.getEntity();
+			arrow.setPickupStatus(PickupStatus.DISALLOWED);
 		}
 	}
 

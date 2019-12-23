@@ -25,7 +25,7 @@ public class DrownedEntity {
 		this.hurtEntity = hurtEntity.getUniqueId();
 		this.attackerEntity = attackerEntity.getUniqueId();
 		damageTime = ticks;
-		this.setLevel(level);
+		setLevel(level);
 	}
 
 	public LivingEntity getHurtEntity() {

@@ -6,7 +6,7 @@ import org.bukkit.Material;
 import org.ctp.enchantmentsolution.enums.ItemType;
 
 public class ApiItemType {
-	
+
 	private ItemType itemType;
 
 	/**
@@ -14,9 +14,9 @@ public class ApiItemType {
 	 * @param type - the type of items
 	 */
 	public ApiItemType(String type) {
-		itemType = (ItemType.valueOf(type));
+		itemType = ItemType.valueOf(type);
 	}
-	
+
 	/**
 	 * Constructor for ApiItemType
 	 * @param type - the type of items
@@ -24,7 +24,7 @@ public class ApiItemType {
 	public ApiItemType(ItemType type) {
 		itemType = type;
 	}
-	
+
 	/**
 	 * Returns the type of items
 	 * @return String - the type of items
@@ -40,7 +40,7 @@ public class ApiItemType {
 	public List<Material> getItemTypes() {
 		return itemType.getItemTypes();
 	}
-	
+
 	/**
 	 * Returns the display name to be used in /enchantinfo
 	 * @return String - the display name

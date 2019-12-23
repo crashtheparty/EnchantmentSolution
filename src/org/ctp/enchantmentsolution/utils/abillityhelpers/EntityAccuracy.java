@@ -17,7 +17,7 @@ public class EntityAccuracy {
 		setEntity(entity);
 		setAccuracy(accuracy);
 		setTicks(ticks);
-		this.setLevel(level);
+		setLevel(level);
 	}
 
 	public LivingEntity getEntity() {
