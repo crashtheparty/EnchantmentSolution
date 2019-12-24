@@ -21,27 +21,23 @@ public class ChatMessage implements Listener {
 			if (configInv.isChat()) {
 				event.setCancelled(true);
 				String chat = event.getMessage();
-				if (configInv.getType().equals("list")) {
-					configInv.addToList(chat);
-				} else {
+				if (configInv.getType().equals("list")) configInv.addToList(chat);
+				else
 					configInv.setPath(configInv.getLevel(), chat);
-				}
 				configInv.setChat(false);
 				Bukkit.getScheduler().runTask(EnchantmentSolution.getPlugin(), (Runnable) () -> configInv.reopenFromAnvil(true));
-			} else {
+			} else
 				EnchantmentSolution.getPlugin().removeInventory(configInv);
-			}
 		} else if (inv != null && inv instanceof EnchantabilityCalc) {
 			EnchantabilityCalc enchantabilityCalc = (EnchantabilityCalc) inv;
-			if(enchantabilityCalc.isChat()) {
+			if (enchantabilityCalc.isChat()) {
 				event.setCancelled(true);
 				String chat = event.getMessage();
 				enchantabilityCalc.setItemName(chat);
 				enchantabilityCalc.setChat(false);
 				Bukkit.getScheduler().runTask(EnchantmentSolution.getPlugin(), (Runnable) () -> enchantabilityCalc.setInventory());
-			} else {
+			} else
 				EnchantmentSolution.getPlugin().removeInventory(enchantabilityCalc);
-			}
 		}
 	}
 

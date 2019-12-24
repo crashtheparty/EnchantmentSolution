@@ -27,7 +27,7 @@ public class TelepathyEvent extends ESBlockBreakEvent {
 		return type;
 	}
 
-	public enum TelepathyType{
+	public enum TelepathyType {
 		SHULKER_BOX(), CONTAINER(), NORMAL();
 	}
 

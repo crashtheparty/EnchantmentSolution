@@ -30,38 +30,26 @@ public class EnchantmentLevel {
 				return;
 			}
 			enchant = getEnchantFromString(split[0]);
-		} else {
-			ChatUtils.sendToConsole(Level.WARNING,
-			"Bad enchantment in fishing config: " + configString + ". No chance to get this enchantment.");
-		}
+		} else
+			ChatUtils.sendToConsole(Level.WARNING, "Bad enchantment in fishing config: " + configString + ". No chance to get this enchantment.");
 	}
 
 	private CustomEnchantment getEnchantFromString(String str) {
 		NamespacedKey key = null;
 		String[] enchString = str.split("\\+");
-		if (enchString[0].equalsIgnoreCase("minecraft")) {
-			key = NamespacedKey.minecraft(enchString[1]);
-		} else {
+		if (enchString[0].equalsIgnoreCase("minecraft")) key = NamespacedKey.minecraft(enchString[1]);
+		else {
 			Plugin plugin = null;
-			for(Plugin pl: Bukkit.getPluginManager().getPlugins()) {
+			for(Plugin pl: Bukkit.getPluginManager().getPlugins())
 				if (pl.getName().equalsIgnoreCase(enchString[0])) {
 					plugin = pl;
 					break;
 				}
-			}
-			if (plugin != null) {
-				key = new NamespacedKey(plugin, enchString[1]);
-			}
+			if (plugin != null) key = new NamespacedKey(plugin, enchString[1]);
 		}
-		if (Enchantment.getByKey(key) != null) {
-			for(CustomEnchantment enchantment: RegisterEnchantments.getEnchantments()) {
-				if (enchantment.getRelativeEnchantment().equals(Enchantment.getByKey(key))) {
-					return enchantment;
-				}
-			}
-		}
-		ChatUtils.sendToConsole(Level.WARNING,
-		"Bad enchantment in fishing config: " + str + ". No chance to get this enchantment.");
+		if (Enchantment.getByKey(key) != null) for(CustomEnchantment enchantment: RegisterEnchantments.getEnchantments())
+			if (enchantment.getRelativeEnchantment().equals(Enchantment.getByKey(key))) return enchantment;
+		ChatUtils.sendToConsole(Level.WARNING, "Bad enchantment in fishing config: " + str + ". No chance to get this enchantment.");
 		return null;
 	}
 

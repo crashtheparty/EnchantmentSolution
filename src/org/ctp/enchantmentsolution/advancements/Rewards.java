@@ -16,8 +16,7 @@ import java.util.Set;
  * Specifies rewards which are given when the advancement is completed.
  */
 public class Rewards {
-	private static final Type NAMESPACED_KEY_SET_TYPE = new TypeToken<Set<NamespacedKey>>() {
-	}.getType();
+	private static final Type NAMESPACED_KEY_SET_TYPE = new TypeToken<Set<NamespacedKey>>() {}.getType();
 	private @Nullable Set<NamespacedKey> recipes = null;
 	private @Nullable Set<NamespacedKey> loots = null;
 	private int experience = 0;
@@ -71,9 +70,7 @@ public class Rewards {
 	 * @return the JSON representation of the reward object
 	 */
 	JsonObject toJson() {
-		return new JsonBuilder().add("recipes", recipes, NAMESPACED_KEY_SET_TYPE)
-		.add("loot", loots, NAMESPACED_KEY_SET_TYPE).addPositive("experience", experience)
-		.add("function", function).build();
+		return new JsonBuilder().add("recipes", recipes, NAMESPACED_KEY_SET_TYPE).add("loot", loots, NAMESPACED_KEY_SET_TYPE).addPositive("experience", experience).add("function", function).build();
 	}
 
 	/**
@@ -91,12 +88,9 @@ public class Rewards {
 	 */
 	@Override
 	public boolean equals(Object object) {
-		if (!(object instanceof Rewards)) {
-			return false;
-		}
+		if (!(object instanceof Rewards)) return false;
 
 		Rewards rew = (Rewards) object;
-		return Objects.equals(rew.recipes, recipes) && Objects.equals(rew.loots, loots)
-		&& Objects.equals(rew.experience, experience) && Objects.equals(rew.function, function);
+		return Objects.equals(rew.recipes, recipes) && Objects.equals(rew.loots, loots) && Objects.equals(rew.experience, experience) && Objects.equals(rew.function, function);
 	}
 }

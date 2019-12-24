@@ -32,9 +32,7 @@ import com.gmail.nossr50.listeners.BlockListener;
 public class McMMOHandler {
 
 	public static void handleMcMMO(BlockBreakEvent event, ItemStack item) {
-		if(EnchantmentSolution.getPlugin().getMcMMOType().equals("Disabled")) {
-			return;
-		}
+		if (EnchantmentSolution.getPlugin().getMcMMOType().equals("Disabled")) return;
 		BlockListener listener = new BlockListener(mcMMO.p);
 		listener.onBlockBreakHigher(event);
 		listener.onBlockBreak(event);
@@ -44,70 +42,50 @@ public class McMMOHandler {
 			BlockState state = event.getBlock().getState();
 
 			if (ItemUtils.hasEnchantment(item, RegisterEnchantments.TELEPATHY)) {
-				if (!Config.getInstance().getDoubleDropsEnabled(PrimarySkillType.MINING, block.getType())
-				&& !Config.getInstance().getDoubleDropsEnabled(PrimarySkillType.HERBALISM, block.getType())
-				&& !Config.getInstance().getDoubleDropsEnabled(PrimarySkillType.WOODCUTTING, block.getType())) {
-					return;
-				}
+				if (!Config.getInstance().getDoubleDropsEnabled(PrimarySkillType.MINING, block.getType()) && !Config.getInstance().getDoubleDropsEnabled(PrimarySkillType.HERBALISM, block.getType()) && !Config.getInstance().getDoubleDropsEnabled(PrimarySkillType.WOODCUTTING, block.getType())) return;
 				Collection<ItemStack> drops = TelepathyUtils.handleTelepathyBonus(event, event.getPlayer(), item, block);
-				if (state.getMetadata(mcMMO.BONUS_DROPS_METAKEY).size() > 0) {
-					for(MetadataValue value: state.getMetadata(mcMMO.BONUS_DROPS_METAKEY)) {
-						TelepathyBonusDropsEvent telepathyBonus = new TelepathyBonusDropsEvent(event.getPlayer(), drops, value.asInt());
-						Bukkit.getPluginManager().callEvent(telepathyBonus);
+				if (state.getMetadata(mcMMO.BONUS_DROPS_METAKEY).size() > 0) for(MetadataValue value: state.getMetadata(mcMMO.BONUS_DROPS_METAKEY)) {
+					TelepathyBonusDropsEvent telepathyBonus = new TelepathyBonusDropsEvent(event.getPlayer(), drops, value.asInt());
+					Bukkit.getPluginManager().callEvent(telepathyBonus);
 
-						if(!telepathyBonus.isCancelled()) {
-							int num = telepathyBonus.getMultiplyAmount();
-							while (num > 0) {
-								ItemUtils.giveItemsToPlayer(telepathyBonus.getPlayer(), telepathyBonus.getDrops(), telepathyBonus.getPlayer().getLocation(), true);
-								num--;
-							}
+					if (!telepathyBonus.isCancelled()) {
+						int num = telepathyBonus.getMultiplyAmount();
+						while (num > 0) {
+							ItemUtils.giveItemsToPlayer(telepathyBonus.getPlayer(), telepathyBonus.getDrops(), telepathyBonus.getPlayer().getLocation(), true);
+							num--;
 						}
-
-						event.getBlock().getState().removeMetadata(mcMMO.BONUS_DROPS_METAKEY, mcMMO.p);
 					}
+
+					event.getBlock().getState().removeMetadata(mcMMO.BONUS_DROPS_METAKEY, mcMMO.p);
 				}
 			} else if (ItemUtils.hasEnchantment(item, RegisterEnchantments.SMELTERY)) {
-				if (!Config.getInstance().getDoubleDropsEnabled(PrimarySkillType.MINING, block.getType())
-				&& !Config.getInstance().getDoubleDropsEnabled(PrimarySkillType.HERBALISM, block.getType())
-				&& !Config.getInstance().getDoubleDropsEnabled(PrimarySkillType.WOODCUTTING, block.getType())) {
-					return;
-				}
-				if (state.getMetadata(mcMMO.BONUS_DROPS_METAKEY).size() > 0) {
-					for(MetadataValue value: state.getMetadata(mcMMO.BONUS_DROPS_METAKEY)) {
-						SmelteryMaterial smelted = SmelteryUtils.getSmelteryItem(block, item);
-						SmelteryBonusDropsEvent smelteryBonus = new SmelteryBonusDropsEvent(event.getPlayer(), Arrays.asList(smelted.getSmelted()), value.asInt());
-						Bukkit.getPluginManager().callEvent(smelteryBonus);
+				if (!Config.getInstance().getDoubleDropsEnabled(PrimarySkillType.MINING, block.getType()) && !Config.getInstance().getDoubleDropsEnabled(PrimarySkillType.HERBALISM, block.getType()) && !Config.getInstance().getDoubleDropsEnabled(PrimarySkillType.WOODCUTTING, block.getType())) return;
+				if (state.getMetadata(mcMMO.BONUS_DROPS_METAKEY).size() > 0) for(MetadataValue value: state.getMetadata(mcMMO.BONUS_DROPS_METAKEY)) {
+					SmelteryMaterial smelted = SmelteryUtils.getSmelteryItem(block, item);
+					SmelteryBonusDropsEvent smelteryBonus = new SmelteryBonusDropsEvent(event.getPlayer(), Arrays.asList(smelted.getSmelted()), value.asInt());
+					Bukkit.getPluginManager().callEvent(smelteryBonus);
 
-						if(!smelteryBonus.isCancelled()) {
-							int num = smelteryBonus.getMultiplyAmount();
-							while (num > 0) {
-								ItemUtils.dropItems(smelteryBonus.getDrops(), event.getBlock().getLocation());
-								num--;
-							}
+					if (!smelteryBonus.isCancelled()) {
+						int num = smelteryBonus.getMultiplyAmount();
+						while (num > 0) {
+							ItemUtils.dropItems(smelteryBonus.getDrops(), event.getBlock().getLocation());
+							num--;
+						}
+					}
+					event.getBlock().getState().removeMetadata(mcMMO.BONUS_DROPS_METAKEY, mcMMO.p);
+				}
+			} else
+				for(ItemStack drop: event.getBlock().getDrops(item)) {
+					if (!Config.getInstance().getDoubleDropsEnabled(PrimarySkillType.MINING, drop.getType()) && !Config.getInstance().getDoubleDropsEnabled(PrimarySkillType.HERBALISM, drop.getType()) && !Config.getInstance().getDoubleDropsEnabled(PrimarySkillType.WOODCUTTING, drop.getType())) continue;
+					if (state.getMetadata(mcMMO.BONUS_DROPS_METAKEY).size() > 0) for(MetadataValue value: state.getMetadata(mcMMO.BONUS_DROPS_METAKEY)) {
+						int num = value.asInt();
+						while (num > 0) {
+							event.getBlock().getState().getWorld().dropItemNaturally(block.getState().getLocation(), drop);
+							num--;
 						}
 						event.getBlock().getState().removeMetadata(mcMMO.BONUS_DROPS_METAKEY, mcMMO.p);
 					}
 				}
-			} else {
-				for(ItemStack drop: event.getBlock().getDrops(item)) {
-					if (!Config.getInstance().getDoubleDropsEnabled(PrimarySkillType.MINING, drop.getType())
-					&& !Config.getInstance().getDoubleDropsEnabled(PrimarySkillType.HERBALISM, drop.getType())
-					&& !Config.getInstance().getDoubleDropsEnabled(PrimarySkillType.WOODCUTTING, drop.getType())) {
-						continue;
-					}
-					if (state.getMetadata(mcMMO.BONUS_DROPS_METAKEY).size() > 0) {
-						for(MetadataValue value: state.getMetadata(mcMMO.BONUS_DROPS_METAKEY)) {
-							int num = value.asInt();
-							while (num > 0) {
-								event.getBlock().getState().getWorld().dropItemNaturally(block.getState().getLocation(),
-								drop);
-								num--;
-							}
-							event.getBlock().getState().removeMetadata(mcMMO.BONUS_DROPS_METAKEY, mcMMO.p);
-						}
-					}
-				}
-			}
 		}
 	}
 
@@ -124,9 +102,7 @@ public class McMMOHandler {
 
 	public static List<EnchantmentLevel> getEnchants(Player player, ItemStack treasure) {
 		FishingEnchantments ench = FishingEnchantments.getFishingEnchantments(player, treasure);
-		if(ench != null) {
-			return ench.getEnchantmentList().getEnchantments();
-		}
+		if (ench != null) return ench.getEnchantmentList().getEnchantments();
 		return null;
 	}
 }

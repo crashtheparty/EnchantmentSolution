@@ -47,24 +47,16 @@ public class SnapshotInventory {
 
 	private ItemStack checkItem(ItemStack item, ItemStack previous) {
 		if (item != null) {
-			if (previous == null || !previous.equals(item)) {
-				if (item.hasItemMeta() && item.getItemMeta().hasLore()) {
-					List<EnchantmentLevel> enchants = new ArrayList<EnchantmentLevel>();
-					for(String s: item.getItemMeta().getLore()) {
-						if (StringUtils.isEnchantment(s)) {
-							EnchantmentLevel enchant = StringUtils.getEnchantment(s);
-							if (enchant != null
-							&& !ItemUtils.hasEnchantment(item, enchant.getEnchant().getRelativeEnchantment())) {
-								enchants.add(enchant);
-							}
-						}
+			if (previous == null || !previous.equals(item)) if (item.hasItemMeta() && item.getItemMeta().hasLore()) {
+				List<EnchantmentLevel> enchants = new ArrayList<EnchantmentLevel>();
+				for(String s: item.getItemMeta().getLore())
+					if (StringUtils.isEnchantment(s)) {
+						EnchantmentLevel enchant = StringUtils.getEnchantment(s);
+						if (enchant != null && !ItemUtils.hasEnchantment(item, enchant.getEnchant().getRelativeEnchantment())) enchants.add(enchant);
 					}
-					for(EnchantmentLevel ench: enchants) {
-						ItemUtils.removeEnchantmentFromItem(item, ench.getEnchant());
-						if (ench.getLevel() > 0) {
-							ItemUtils.addEnchantmentToItem(item, ench.getEnchant(), ench.getLevel());
-						}
-					}
+				for(EnchantmentLevel ench: enchants) {
+					ItemUtils.removeEnchantmentFromItem(item, ench.getEnchant());
+					if (ench.getLevel() > 0) ItemUtils.addEnchantmentToItem(item, ench.getEnchant(), ench.getLevel());
 				}
 			}
 			return item.clone();

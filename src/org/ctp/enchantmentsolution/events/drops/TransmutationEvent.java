@@ -13,7 +13,8 @@ public class TransmutationEvent extends DropEvent {
 
 	private final LivingEntity killed;
 
-	public TransmutationEvent(Player who, LivingEntity killed, List<ItemStack> newDrops, List<ItemStack> originalDrops, boolean override) {
+	public TransmutationEvent(Player who, LivingEntity killed, List<ItemStack> newDrops, List<ItemStack> originalDrops,
+	boolean override) {
 		super(who, new EnchantmentLevel(CERegister.TRANSMUTATION, 1), newDrops, originalDrops, override);
 		this.killed = killed;
 	}

@@ -11,8 +11,7 @@ public class MatData {
 		materialName = name.toUpperCase();
 		try {
 			material = Material.valueOf(materialName);
-		} catch (Exception ex) {
-		}
+		} catch (Exception ex) {}
 	}
 
 	public Material getMaterial() {

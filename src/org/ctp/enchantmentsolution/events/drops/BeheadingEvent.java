@@ -12,8 +12,8 @@ public class BeheadingEvent extends DropEvent {
 
 	private boolean keepInventoryOverride;
 
-	public BeheadingEvent(Player who, int level, List<ItemStack> newDrops, List<ItemStack> originalDrops, boolean override,
-	boolean keepInventoryOverride) {
+	public BeheadingEvent(Player who, int level, List<ItemStack> newDrops, List<ItemStack> originalDrops,
+	boolean override, boolean keepInventoryOverride) {
 		super(who, new EnchantmentLevel(CERegister.BEHEADING, level), newDrops, originalDrops, override);
 		setKeepInventoryOverride(keepInventoryOverride);
 	}

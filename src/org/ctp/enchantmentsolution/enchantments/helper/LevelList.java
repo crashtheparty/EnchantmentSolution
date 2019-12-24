@@ -35,30 +35,22 @@ public class LevelList {
 					list[2] = new Level(2, Math.max(base, bookThirty * 2));
 					break;
 				case 4:
-					if (isLevelFifty && bookThirty == 15) {
-						list[3] = new Level(3, base * 2 / 3 + 1 + (int) (addFifty * .75) + 20);
-					} else {
+					if (isLevelFifty && bookThirty == 15) list[3] = new Level(3, base * 2 / 3 + 1 + (int) (addFifty * .75) + 20);
+					else
 						list[3] = new Level(3, -1);
-					}
 					break;
 				case 5:
-					if (isLevelFifty && bookThirty == 15) {
-						list[4] = new Level(4, base * 2 / 3 + 1 + (int) (addFifty * .75) + 20);
-					} else {
+					if (isLevelFifty && bookThirty == 15) list[4] = new Level(4, base * 2 / 3 + 1 + (int) (addFifty * .75) + 20);
+					else
 						list[4] = new Level(4, -1);
-					}
 					break;
 				case 6:
-					if (isLevelFifty && bookThirty == 15) {
-						list[5] = new Level(5, Math.max(base, bookFifty * 2) + 20);
-					} else {
+					if (isLevelFifty && bookThirty == 15) list[5] = new Level(5, Math.max(base, bookFifty * 2) + 20);
+					else
 						list[5] = new Level(5, -1);
-					}
 					break;
 			}
-			if (!isLevelFifty && i >= 4) {
-				list[i - 1] = null;
-			}
+			if (!isLevelFifty && i >= 4) list[i - 1] = null;
 		}
 	}
 

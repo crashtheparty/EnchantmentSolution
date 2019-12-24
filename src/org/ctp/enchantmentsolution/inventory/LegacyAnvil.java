@@ -38,9 +38,7 @@ public class LegacyAnvil implements InventoryData {
 			ChatUtils.sendMessage(player, ChatUtils.getMessage(ChatUtils.getCodes(), "anvil.legacy-gui-close"));
 			AnvilUtils.removeLegacyAnvil(this);
 			EnchantmentSolution.getPlugin().removeInventory(this);
-			if (!external) {
-				player.closeInventory();
-			}
+			if (!external) player.closeInventory();
 		}
 	}
 
@@ -50,8 +48,7 @@ public class LegacyAnvil implements InventoryData {
 	}
 
 	@Override
-	public void setInventory(List<ItemStack> items) {
-	}
+	public void setInventory(List<ItemStack> items) {}
 
 	@Override
 	public void setItemName(String name) {

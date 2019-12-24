@@ -48,9 +48,7 @@ public class DamageUtils {
 	public static ItemStack setDamage(ItemStack item, int damage) {
 		DamageUtils utils = new DamageUtils(item.getItemMeta());
 		if (utils.isDamageable()) {
-			if (damage < 0) {
-				damage = 0;
-			}
+			if (damage < 0) damage = 0;
 			utils.setDamage(damage);
 		}
 		item.setItemMeta(utils.getItemMeta());
@@ -59,9 +57,7 @@ public class DamageUtils {
 
 	public static int getDamage(ItemMeta meta) {
 		DamageUtils utils = new DamageUtils(meta);
-		if (utils.isDamageable()) {
-			return utils.getDamage();
-		}
+		if (utils.isDamageable()) return utils.getDamage();
 		return 0;
 	}
 
@@ -79,26 +75,20 @@ public class DamageUtils {
 
 	public static int damageItem(HumanEntity player, ItemStack item, double damage, double extraChance,
 	boolean breakItem) {
-		if (player.getGameMode().equals(GameMode.CREATIVE) || player.getGameMode().equals(GameMode.SPECTATOR)) {
-			return 0;
-		}
-		int originalDamage = DamageUtils.getDamage(item.getItemMeta());
-		;
+		if (player.getGameMode().equals(GameMode.CREATIVE) || player.getGameMode().equals(GameMode.SPECTATOR)) return 0;
+		int originalDamage = DamageUtils.getDamage(item.getItemMeta());;
 		int numBreaks = 0;
 		int unbreaking = ItemUtils.getLevel(item, Enchantment.DURABILITY);
 		for(int i = 0; i < damage; i++) {
 			double chance = 1.0D / (unbreaking + extraChance);
 			double random = Math.random();
-			if (chance > random) {
-				numBreaks++;
-			}
+			if (chance > random) numBreaks++;
 		}
 
 		if (numBreaks > 0) {
 			if (breakItem) {
 				DamageUtils.setDamage(item, DamageUtils.getDamage(item.getItemMeta()) + numBreaks);
-				if (DamageUtils.getDamage(item.getItemMeta()) > item.getType().getMaxDurability()
-				&& item.getType() != Material.ELYTRA) {
+				if (DamageUtils.getDamage(item.getItemMeta()) > item.getType().getMaxDurability() && item.getType() != Material.ELYTRA) {
 					PlayerItemBreakEvent event = new PlayerItemBreakEvent((Player) player, item);
 					Bukkit.getPluginManager().callEvent(event);
 					event.getBrokenItem().setAmount(0);
@@ -110,9 +100,7 @@ public class DamageUtils {
 						p.incrementStatistic(Statistic.BREAK_ITEM, item.getType());
 					}
 					return item.getType().getMaxDurability() - originalDamage;
-				} else if (item.getType() == Material.ELYTRA) {
-					return item.getType().getMaxDurability() - originalDamage;
-				}
+				} else if (item.getType() == Material.ELYTRA) return item.getType().getMaxDurability() - originalDamage;
 			}
 			return numBreaks;
 		}

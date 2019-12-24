@@ -120,9 +120,7 @@ public class ItemObject extends SharedObject {
 	 */
 	public ItemObject addEnchant(EnchantObject enchant) {
 		Validate.notNull(enchant);
-		if (enchants == null) {
-			enchants = new HashSet<>();
-		}
+		if (enchants == null) enchants = new HashSet<>();
 		enchants.add(enchant);
 		return this;
 	}
@@ -135,9 +133,7 @@ public class ItemObject extends SharedObject {
 	 */
 	public ItemObject removeEnchant(EnchantObject enchant) {
 		Validate.notNull(enchant);
-		if (enchants != null) {
-			enchants.remove(enchant);
-		}
+		if (enchants != null) enchants.remove(enchant);
 		return this;
 	}
 
@@ -158,13 +154,11 @@ public class ItemObject extends SharedObject {
 	 */
 	@Override
 	public JsonObject toJson() {
-		JsonBuilder builder = new JsonBuilder().add("item", item.name().toLowerCase()).add("durability", durability)
-		.add("count", count).add("nbt", nbt).add("potion", potion);
+		JsonBuilder builder = new JsonBuilder().add("item", item.name().toLowerCase()).add("durability", durability).add("count", count).add("nbt", nbt).add("potion", potion);
 		if (enchants != null) {
 			JsonArray enchants = new JsonArray();
-			for(EnchantObject enchant: this.enchants) {
+			for(EnchantObject enchant: this.enchants)
 				enchants.add(enchant.toJson());
-			}
 			builder.add("enchantments", enchants);
 		}
 		return builder.build();

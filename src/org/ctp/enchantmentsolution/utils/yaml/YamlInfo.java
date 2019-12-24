@@ -45,12 +45,8 @@ public class YamlInfo {
 		this.value = value;
 
 		if (!(min == -1 && max == -1) && getInteger() != null) {
-			if (getInteger() < min) {
-				setValue(min);
-			}
-			if (getInteger() > max) {
-				setValue(max);
-			}
+			if (getInteger() < min) setValue(min);
+			if (getInteger() > max) setValue(max);
 		}
 	}
 
@@ -63,51 +59,37 @@ public class YamlInfo {
 	}
 
 	public String getString() {
-		if (value instanceof String) {
-			return (String) value;
-		}
+		if (value instanceof String) return (String) value;
 		return null;
 	}
 
 	public int getInt() {
-		if (value instanceof Number) {
-			return ((Number) value).intValue();
-		}
+		if (value instanceof Number) return ((Number) value).intValue();
 		return 0;
 	}
 
 	public Integer getInteger() {
-		if (value instanceof Integer) {
-			return ((Integer) value).intValue();
-		}
+		if (value instanceof Integer) return ((Integer) value).intValue();
 		return null;
 	}
 
 	public boolean getBoolean() {
-		if (value instanceof Boolean) {
-			return ((Boolean) value).booleanValue();
-		}
+		if (value instanceof Boolean) return ((Boolean) value).booleanValue();
 		return false;
 	}
 
 	public Boolean getBooleanValue() {
-		if (value instanceof Boolean) {
-			return ((Boolean) value).booleanValue();
-		}
+		if (value instanceof Boolean) return ((Boolean) value).booleanValue();
 		return null;
 	}
 
 	public double getDouble() {
-		if (value instanceof Number) {
-			return ((Number) value).doubleValue();
-		}
+		if (value instanceof Number) return ((Number) value).doubleValue();
 		return 0;
 	}
 
 	public Double getDoubleValue() {
-		if (value instanceof Double) {
-			return ((Double) value).doubleValue();
-		}
+		if (value instanceof Double) return ((Double) value).doubleValue();
 		return null;
 	}
 
@@ -115,9 +97,8 @@ public class YamlInfo {
 		if (value instanceof List<?>) {
 			List<?> values = (List<?>) value;
 			List<String> strings = new ArrayList<>(values.size());
-			for(Object object: values) {
+			for(Object object: values)
 				strings.add(Objects.toString(object, null));
-			}
 			return strings;
 		}
 		return null;
@@ -127,12 +108,8 @@ public class YamlInfo {
 		min = i;
 		max = j;
 		if (getInteger() != null) {
-			if (getInteger() < min) {
-				setValue(min);
-			}
-			if (getInteger() > max) {
-				setValue(max);
-			}
+			if (getInteger() < min) setValue(min);
+			if (getInteger() > max) setValue(max);
 		}
 	}
 

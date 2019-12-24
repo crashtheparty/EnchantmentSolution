@@ -47,9 +47,8 @@ public class AnvilGUI_v1_13_R2 extends AnvilGUI {
 		// Set the items to the items from the inventory given
 		Inventory inv = container.getBukkitView().getTopInventory();
 
-		for(AnvilSlot slot: items.keySet()) {
+		for(AnvilSlot slot: items.keySet())
 			inv.setItem(slot.getSlot(), items.get(slot));
-		}
 
 		inv.setItem(0, new ItemStack(Material.NAME_TAG));
 
@@ -59,8 +58,7 @@ public class AnvilGUI_v1_13_R2 extends AnvilGUI {
 		int c = p.nextContainerCounter();
 
 		// Send the packet
-		p.playerConnection
-		.sendPacket(new PacketPlayOutOpenWindow(c, "minecraft:anvil", new ChatMessage("Repairing"), 0));
+		p.playerConnection.sendPacket(new PacketPlayOutOpenWindow(c, "minecraft:anvil", new ChatMessage("Repairing"), 0));
 		// Set their active container to the container
 		p.activeContainer = container;
 
@@ -73,9 +71,7 @@ public class AnvilGUI_v1_13_R2 extends AnvilGUI {
 
 	public static void createAnvil(Player player, InventoryData data) {
 		AnvilClickEventHandler handler = AnvilClickEventHandler.getHandler(player, data);
-		if (data instanceof Anvil) {
-			((Anvil) data).setInLegacy(true);
-		}
+		if (data instanceof Anvil) ((Anvil) data).setInLegacy(true);
 		AnvilGUI_v1_13_R2 gui = new AnvilGUI_v1_13_R2(player, handler, data);
 		gui.open();
 	}

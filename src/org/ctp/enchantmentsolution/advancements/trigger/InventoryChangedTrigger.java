@@ -55,36 +55,26 @@ public class InventoryChangedTrigger extends Trigger {
 
 	public InventoryChangedTrigger addItem(ItemObject item) {
 		Validate.notNull(item);
-		if (items == null) {
-			items = new HashSet<>();
-		}
+		if (items == null) items = new HashSet<>();
 		items.add(item);
 		return this;
 	}
 
 	public InventoryChangedTrigger removeItem(ItemObject item) {
 		Validate.notNull(item);
-		if (items != null) {
-			items.remove(item);
-		}
+		if (items != null) items.remove(item);
 		return this;
 	}
 
 	@Override
 	protected JsonObject getConditions() {
-		if (occupied == null && full == null && empty == null && (items == null || items.isEmpty())) {
-			return null;
-		}
+		if (occupied == null && full == null && empty == null && (items == null || items.isEmpty())) return null;
 		JsonObject json = new JsonObject();
-		if (occupied != null || full != null || empty != null) {
-			json.add("slots",
-			new JsonBuilder().add("occupied", occupied).add("full", full).add("empty", empty).build());
-		}
+		if (occupied != null || full != null || empty != null) json.add("slots", new JsonBuilder().add("occupied", occupied).add("full", full).add("empty", empty).build());
 		if (items != null && !items.isEmpty()) {
 			JsonArray items = new JsonArray();
-			for(ItemObject item: this.items) {
+			for(ItemObject item: this.items)
 				items.add(item.toJson());
-			}
 			json.add("items", items);
 		}
 		return json;

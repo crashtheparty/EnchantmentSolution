@@ -29,8 +29,6 @@ public class IcarusDelay {
 	}
 
 	public void minusDelay() {
-		if (delay > 0) {
-			delay--;
-		}
+		if (delay > 0) delay--;
 	}
 }

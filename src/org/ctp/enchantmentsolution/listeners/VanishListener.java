@@ -36,21 +36,11 @@ public class VanishListener implements Listener {
 			ItemStack boots = inv.getBoots();
 			ItemStack offhand = inv.getItemInOffHand();
 
-			if (helmet != null) {
-				inv.setHelmet(removeEnchants(helmet));
-			}
-			if (chest != null) {
-				inv.setChestplate(removeEnchants(chest));
-			}
-			if (legs != null) {
-				inv.setLeggings(removeEnchants(legs));
-			}
-			if (boots != null) {
-				inv.setBoots(removeEnchants(boots));
-			}
-			if (offhand != null) {
-				inv.setItemInOffHand(removeEnchants(offhand));
-			}
+			if (helmet != null) inv.setHelmet(removeEnchants(helmet));
+			if (chest != null) inv.setChestplate(removeEnchants(chest));
+			if (legs != null) inv.setLeggings(removeEnchants(legs));
+			if (boots != null) inv.setBoots(removeEnchants(boots));
+			if (offhand != null) inv.setItemInOffHand(removeEnchants(offhand));
 		}
 	}
 
@@ -61,9 +51,7 @@ public class VanishListener implements Listener {
 			if (event.getPlayer() instanceof Player) {
 				Player player = (Player) event.getPlayer();
 				InventoryData invData = EnchantmentSolution.getPlugin().getInventory(player);
-				if (invData != null) {
-					shouldCheck = false;
-				}
+				if (invData != null) shouldCheck = false;
 			}
 			if (shouldCheck) {
 				Inventory inv = event.getInventory();
@@ -84,60 +72,40 @@ public class VanishListener implements Listener {
 	}
 
 	public static void reload() {
-		if (ConfigString.DISABLE_ENCHANT_METHOD.getString().equals("vanish")) {
-			for(Player player: Bukkit.getOnlinePlayers()) {
-				Bukkit.getScheduler().scheduleSyncDelayedTask(EnchantmentSolution.getPlugin(), () -> {
-					if (player.getOpenInventory() != null) {
-						Inventory inv1 = player.getOpenInventory().getTopInventory();
-						InventoryData invData = EnchantmentSolution.getPlugin().getInventory(player);
-						if (invData == null) {
-							for(int i1 = 0; i1 < inv1.getSize(); i1++) {
-								ItemStack item1 = inv1.getItem(i1);
-								inv1.setItem(i1, removeEnchants(item1));
-							}
-						}
+		if (ConfigString.DISABLE_ENCHANT_METHOD.getString().equals("vanish")) for(Player player: Bukkit.getOnlinePlayers())
+			Bukkit.getScheduler().scheduleSyncDelayedTask(EnchantmentSolution.getPlugin(), () -> {
+				if (player.getOpenInventory() != null) {
+					Inventory inv1 = player.getOpenInventory().getTopInventory();
+					InventoryData invData = EnchantmentSolution.getPlugin().getInventory(player);
+					if (invData == null) for(int i1 = 0; i1 < inv1.getSize(); i1++) {
+						ItemStack item1 = inv1.getItem(i1);
+						inv1.setItem(i1, removeEnchants(item1));
 					}
-					PlayerInventory inv2 = player.getInventory();
+				}
+				PlayerInventory inv2 = player.getInventory();
 
-					for(int i2 = 0; i2 < 36; i2++) {
-						ItemStack item2 = inv2.getItem(i2);
-						inv2.setItem(i2, removeEnchants(item2));
-					}
-					ItemStack helmet = inv2.getHelmet();
-					ItemStack chest = inv2.getChestplate();
-					ItemStack legs = inv2.getLeggings();
-					ItemStack boots = inv2.getBoots();
-					ItemStack offhand = inv2.getItemInOffHand();
+				for(int i2 = 0; i2 < 36; i2++) {
+					ItemStack item2 = inv2.getItem(i2);
+					inv2.setItem(i2, removeEnchants(item2));
+				}
+				ItemStack helmet = inv2.getHelmet();
+				ItemStack chest = inv2.getChestplate();
+				ItemStack legs = inv2.getLeggings();
+				ItemStack boots = inv2.getBoots();
+				ItemStack offhand = inv2.getItemInOffHand();
 
-					if (helmet != null) {
-						inv2.setHelmet(removeEnchants(helmet));
-					}
-					if (chest != null) {
-						inv2.setChestplate(removeEnchants(chest));
-					}
-					if (legs != null) {
-						inv2.setLeggings(removeEnchants(legs));
-					}
-					if (boots != null) {
-						inv2.setBoots(removeEnchants(boots));
-					}
-					if (offhand != null) {
-						inv2.setItemInOffHand(removeEnchants(offhand));
-					}
-				}, 1l);
-			}
-		}
+				if (helmet != null) inv2.setHelmet(removeEnchants(helmet));
+				if (chest != null) inv2.setChestplate(removeEnchants(chest));
+				if (legs != null) inv2.setLeggings(removeEnchants(legs));
+				if (boots != null) inv2.setBoots(removeEnchants(boots));
+				if (offhand != null) inv2.setItemInOffHand(removeEnchants(offhand));
+			}, 1l);
 	}
 
 	private static ItemStack removeEnchants(ItemStack item) {
-		if (item == null || item.getItemMeta() == null) {
-			return item;
-		}
-		for(CustomEnchantment enchant: RegisterEnchantments.getEnchantments()) {
-			if (!enchant.isEnabled()) {
-				item = ItemUtils.removeEnchantmentFromItem(item, enchant);
-			}
-		}
+		if (item == null || item.getItemMeta() == null) return item;
+		for(CustomEnchantment enchant: RegisterEnchantments.getEnchantments())
+			if (!enchant.isEnabled()) item = ItemUtils.removeEnchantmentFromItem(item, enchant);
 		return item;
 	}
 

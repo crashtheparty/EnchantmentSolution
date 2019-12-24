@@ -22,7 +22,8 @@ public class ContagionEvent extends ESPlayerEvent {
 		this(who, item, curse, level, sounds, 1, 1);
 	}
 
-	public ContagionEvent(Player who, ItemStack item, CustomEnchantment curse, int level, Collection<Sound> sounds, float volume, float pitch) {
+	public ContagionEvent(Player who, ItemStack item, CustomEnchantment curse, int level, Collection<Sound> sounds,
+	float volume, float pitch) {
 		super(who, new EnchantmentLevel(CERegister.CURSE_OF_CONTAGION, 1));
 		setItem(item);
 		setCurse(curse);

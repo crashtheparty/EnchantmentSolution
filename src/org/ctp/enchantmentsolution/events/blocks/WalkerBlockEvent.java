@@ -8,7 +8,8 @@ import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 
 public abstract class WalkerBlockEvent extends ESBlockPlaceEvent {
 
-	public WalkerBlockEvent(Block placedBlock, BlockState replacedBlockState, Player thePlayer, EnchantmentLevel enchantment) {
+	public WalkerBlockEvent(Block placedBlock, BlockState replacedBlockState, Player thePlayer,
+	EnchantmentLevel enchantment) {
 		super(placedBlock, replacedBlockState, null, null, thePlayer, true, EquipmentSlot.FEET, enchantment);
 	}
 

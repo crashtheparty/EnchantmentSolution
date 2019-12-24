@@ -27,8 +27,7 @@ public class AdvancementFactory {
 	public Advancement getSimple(String id, @Nullable Advancement parent, String title, String description,
 	Material icon, String triggerId, Trigger trigger) {
 		validate(id, title, description, icon);
-		Advancement advancement = new Advancement(new NamespacedKey(plugin, id), new ItemObject().setItem(icon),
-		new TextComponent(title), new TextComponent(description)).addTrigger(triggerId, trigger);
+		Advancement advancement = new Advancement(new NamespacedKey(plugin, id), new ItemObject().setItem(icon), new TextComponent(title), new TextComponent(description)).addTrigger(triggerId, trigger);
 		finalize(advancement, parent);
 		return advancement;
 	}
@@ -36,11 +35,9 @@ public class AdvancementFactory {
 	public <T> Advancement getAll(String id, @Nullable Advancement parent, String title, String description,
 	Material icon, T[] contents, Function<T, Trigger> triggerCreator) {
 		validate(id, title, description, icon);
-		Advancement advancement = new Advancement(new NamespacedKey(plugin, id), new ItemObject().setItem(icon),
-		new TextComponent(title), new TextComponent(description));
-		for(int i = 0; i < contents.length; i++) {
+		Advancement advancement = new Advancement(new NamespacedKey(plugin, id), new ItemObject().setItem(icon), new TextComponent(title), new TextComponent(description));
+		for(int i = 0; i < contents.length; i++)
 			advancement.addTrigger(String.valueOf(i), triggerCreator.apply(contents[i]));
-		}
 		finalize(advancement, parent);
 		return advancement;
 	}
@@ -48,8 +45,7 @@ public class AdvancementFactory {
 	public <T> Advancement getAny(String id, @Nullable Advancement parent, String title, String description,
 	Material icon, T[] contents, Function<T, Trigger> triggerCreator) {
 		validate(id, title, description, icon);
-		Advancement advancement = new Advancement(new NamespacedKey(plugin, id), new ItemObject().setItem(icon),
-		new TextComponent(title), new TextComponent(description));
+		Advancement advancement = new Advancement(new NamespacedKey(plugin, id), new ItemObject().setItem(icon), new TextComponent(title), new TextComponent(description));
 		String[] requirements = new String[contents.length];
 		for(int i = 0; i < contents.length; i++) {
 			String index = String.valueOf(i);
@@ -63,10 +59,7 @@ public class AdvancementFactory {
 
 	public Advancement getRoot(String id, String title, String description, Material icon, String background) {
 		validate(id, title, description, icon);
-		Advancement advancement = new Advancement(new NamespacedKey(plugin, id), new ItemObject().setItem(icon),
-		new TextComponent(title), new TextComponent(description)).makeRoot(background, true)
-		.addTrigger("item", new InventoryChangedTrigger().addItem(new ItemObject().setItem(Material.ENCHANTING_TABLE)))
-		.addTrigger("enchant", new EnchantedItemTrigger()).removeTrigger("auto").addRequirement("item", "enchant");
+		Advancement advancement = new Advancement(new NamespacedKey(plugin, id), new ItemObject().setItem(icon), new TextComponent(title), new TextComponent(description)).makeRoot(background, true).addTrigger("item", new InventoryChangedTrigger().addItem(new ItemObject().setItem(Material.ENCHANTING_TABLE))).addTrigger("enchant", new EnchantedItemTrigger()).removeTrigger("auto").addRequirement("item", "enchant");
 		finalize(advancement, null);
 		return advancement;
 	}
@@ -76,11 +69,9 @@ public class AdvancementFactory {
 		validate(id, title, description, icon);
 		Validate.notNull(triggers);
 		Validate.isTrue(triggers.length > 0, "At least one trigger must be specified.");
-		Advancement advancement = new Advancement(new NamespacedKey(plugin, id), new ItemObject().setItem(icon),
-		new TextComponent(title), new TextComponent(description));
-		for(String trigger: triggers) {
+		Advancement advancement = new Advancement(new NamespacedKey(plugin, id), new ItemObject().setItem(icon), new TextComponent(title), new TextComponent(description));
+		for(String trigger: triggers)
 			advancement.addTrigger(trigger, new ImpossibleTrigger());
-		}
 		finalize(advancement, parent);
 		return advancement;
 	}
@@ -94,11 +85,9 @@ public class AdvancementFactory {
 	Material icon, int triggerCount) {
 		validate(id, title, description, icon);
 		Validate.isTrue(triggerCount > 0, "There must be at least one trigger.");
-		Advancement advancement = new Advancement(new NamespacedKey(plugin, id), new ItemObject().setItem(icon),
-		new TextComponent(title), new TextComponent(description));
-		for(int i = 0; i < triggerCount; i++) {
+		Advancement advancement = new Advancement(new NamespacedKey(plugin, id), new ItemObject().setItem(icon), new TextComponent(title), new TextComponent(description));
+		for(int i = 0; i < triggerCount; i++)
 			advancement.addTrigger(String.valueOf(i), new ImpossibleTrigger());
-		}
 		finalize(advancement, parent);
 		return advancement;
 	}
@@ -111,11 +100,7 @@ public class AdvancementFactory {
 	}
 
 	private void finalize(Advancement advancement, @Nullable Advancement parent) {
-		if (parent != null) {
-			advancement.makeChild(parent.getId());
-		}
-		if (autoActivate) {
-			advancement.activate(autoReload);
-		}
+		if (parent != null) advancement.makeChild(parent.getId());
+		if (autoActivate) advancement.activate(autoReload);
 	}
 }

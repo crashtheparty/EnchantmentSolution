@@ -7,7 +7,8 @@ public abstract class ESEntityDamageEntityEvent extends ESDamageEntityEvent {
 
 	private final LivingEntity damager;
 
-	public ESEntityDamageEntityEvent(LivingEntity damaged, EnchantmentLevel enchantment, LivingEntity damager, double damage, double newDamage) {
+	public ESEntityDamageEntityEvent(LivingEntity damaged, EnchantmentLevel enchantment, LivingEntity damager,
+	double damage, double newDamage) {
 		super(damaged, enchantment, damage, newDamage);
 		this.damager = damager;
 	}

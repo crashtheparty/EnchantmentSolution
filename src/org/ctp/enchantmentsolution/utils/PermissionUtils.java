@@ -13,13 +13,9 @@ import org.ctp.enchantmentsolution.utils.config.ConfigUtils;
 public class PermissionUtils {
 
 	public static boolean canEnchant(Player player, CustomEnchantment enchant, int level) {
-		if (player == null) {
-			return true;
-		}
+		if (player == null) return true;
 		if (usePermissions()) {
-			if (player.hasPermission("enchantmentsolution.permissions.ignore")) {
-				return true;
-			}
+			if (player.hasPermission("enchantmentsolution.permissions.ignore")) return true;
 			String namespace = getNamespace(enchant);
 			String path = namespace + "." + enchant.getName().toLowerCase() + ".permissions.table.level";
 			String permission = namespace + "." + enchant.getName().toLowerCase() + ".table.level";
@@ -30,13 +26,9 @@ public class PermissionUtils {
 	}
 
 	public static boolean canAnvil(Player player, CustomEnchantment enchant, int level) {
-		if (player == null) {
-			return true;
-		}
+		if (player == null) return true;
 		if (usePermissions()) {
-			if (player.hasPermission("enchantmentsolution.permissions.ignore")) {
-				return true;
-			}
+			if (player.hasPermission("enchantmentsolution.permissions.ignore")) return true;
 			String namespace = getNamespace(enchant);
 			String path = namespace + "." + enchant.getName().toLowerCase() + ".permissions.anvil.level";
 			String permission = namespace + "." + enchant.getName().toLowerCase() + ".anvil.level";
@@ -50,27 +42,18 @@ public class PermissionUtils {
 		if (enchant.getRelativeEnchantment() instanceof ApiEnchantmentWrapper) {
 			JavaPlugin plugin = ((ApiEnchantmentWrapper) enchant.getRelativeEnchantment()).getPlugin();
 			if (plugin == null) {
-				ChatUtils.sendToConsole(Level.WARNING,
-				"Enchantment " + enchant.getName() + " (Display Name " + enchant.getDisplayName() + ")"
-				+ " does not have a JavaPlugin set. Refusing to check permissions.");
+				ChatUtils.sendToConsole(Level.WARNING, "Enchantment " + enchant.getName() + " (Display Name " + enchant.getDisplayName() + ")" + " does not have a JavaPlugin set. Refusing to check permissions.");
 				return null;
 			}
 			return plugin.getName().toLowerCase();
-		} else if (enchant.getRelativeEnchantment() instanceof CustomEnchantmentWrapper) {
-			return "custom_enchantments";
-		} else {
+		} else if (enchant.getRelativeEnchantment() instanceof CustomEnchantmentWrapper) return "custom_enchantments";
+		else
 			return "default_enchantments";
-		}
 	}
 
 	private static boolean checkPermission(Player player, int level, String path, String permission) {
-		for(int i = 0; i < level; i++) {
-			if (Configurations.getEnchantments().getBoolean(path + (i + 1))) {
-				if (!player.hasPermission(permission + (i + 1))) {
-					return false;
-				}
-			}
-		}
+		for(int i = 0; i < level; i++)
+			if (Configurations.getEnchantments().getBoolean(path + (i + 1))) if (!player.hasPermission(permission + (i + 1))) return false;
 		return true;
 	}
 

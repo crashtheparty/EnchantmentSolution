@@ -23,46 +23,28 @@ public class AdvancementThread implements Runnable {
 	public void run() {
 		for(Player player: Bukkit.getOnlinePlayers()) {
 			boolean hasTank = true;
-			for(ItemStack item: player.getInventory().getArmorContents()) {
-				if (item == null || !(ItemUtils.hasEnchantment(item, RegisterEnchantments.TANK)
-				&& ItemUtils.getLevel(item, RegisterEnchantments.TANK) == RegisterEnchantments
-				.getCustomEnchantment(RegisterEnchantments.TANK).getMaxLevel())) {
-					hasTank = false;
-				}
-			}
-			if (hasTank) {
-				AdvancementUtils.awardCriteria(player, ESAdvancement.PANZER_SOLDIER, "tank");
-			}
+			for(ItemStack item: player.getInventory().getArmorContents())
+				if (item == null || !(ItemUtils.hasEnchantment(item, RegisterEnchantments.TANK) && ItemUtils.getLevel(item, RegisterEnchantments.TANK) == RegisterEnchantments.getCustomEnchantment(RegisterEnchantments.TANK).getMaxLevel())) hasTank = false;
+			if (hasTank) AdvancementUtils.awardCriteria(player, ESAdvancement.PANZER_SOLDIER, "tank");
 			Block block = player.getLocation().getBlock().getRelative(BlockFace.DOWN);
 			WalkerBlock walkerBlock = WalkerUtils.getWalker(block);
 			if (player.getInventory().getBoots() != null) {
 				ItemStack boots = player.getInventory().getBoots();
-				if (ItemUtils.hasEnchantment(boots, RegisterEnchantments.MAGMA_WALKER) && walkerBlock != null
-				&& walkerBlock.getEnchantment() == RegisterEnchantments.MAGMA_WALKER && player.getFireTicks() > 0) {
-					AdvancementUtils.awardCriteria(player, ESAdvancement.THIS_GIRL_IS_ON_FIRE, "lava");
-				}
+				if (ItemUtils.hasEnchantment(boots, RegisterEnchantments.MAGMA_WALKER) && walkerBlock != null && walkerBlock.getEnchantment() == RegisterEnchantments.MAGMA_WALKER && player.getFireTicks() > 0) AdvancementUtils.awardCriteria(player, ESAdvancement.THIS_GIRL_IS_ON_FIRE, "lava");
 
-				if (ItemUtils.hasEnchantment(boots, RegisterEnchantments.VOID_WALKER) && walkerBlock != null
-				&& walkerBlock.getEnchantment() == RegisterEnchantments.VOID_WALKER
-				&& !LocationUtils.hasBlockBelow(block.getRelative(BlockFace.DOWN).getLocation())) {
-					AdvancementUtils.awardCriteria(player, ESAdvancement.MADE_FOR_WALKING, "boots");
-				}
+				if (ItemUtils.hasEnchantment(boots, RegisterEnchantments.VOID_WALKER) && walkerBlock != null && walkerBlock.getEnchantment() == RegisterEnchantments.VOID_WALKER && !LocationUtils.hasBlockBelow(block.getRelative(BlockFace.DOWN).getLocation())) AdvancementUtils.awardCriteria(player, ESAdvancement.MADE_FOR_WALKING, "boots");
 			}
-			if(OverkillDeath.getDeaths(player.getUniqueId()) != null) {
+			if (OverkillDeath.getDeaths(player.getUniqueId()) != null) {
 				Iterator<OverkillDeath> iter = OverkillDeath.getDeaths(player.getUniqueId()).iterator();
-				if(iter != null) {
-					while(iter.hasNext()) {
+				if (iter != null) {
+					while (iter.hasNext()) {
 						OverkillDeath death = iter.next();
 						death.minus();
-						if(death.getTicks() <= 0) {
-							iter.remove();
-						}
+						if (death.getTicks() <= 0) iter.remove();
 					}
-					
+
 					List<OverkillDeath> deaths = OverkillDeath.getDeaths(player.getUniqueId());
-					if(deaths.size() >= 10) {
-						AdvancementUtils.awardCriteria(player, ESAdvancement.KILIMANJARO, "kills");
-					}
+					if (deaths.size() >= 10) AdvancementUtils.awardCriteria(player, ESAdvancement.KILIMANJARO, "kills");
 				}
 			}
 		}

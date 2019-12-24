@@ -34,11 +34,8 @@ public abstract class AnvilGUI {
 		}
 
 		public static AnvilSlot bySlot(int slot) {
-			for(AnvilSlot anvilSlot: values()) {
-				if (anvilSlot.getSlot() == slot) {
-					return anvilSlot;
-				}
-			}
+			for(AnvilSlot anvilSlot: values())
+				if (anvilSlot.getSlot() == slot) return anvilSlot;
 
 			return null;
 		}
@@ -109,95 +106,76 @@ public abstract class AnvilGUI {
 		listener = new Listener() {
 			@EventHandler
 			public void onInventoryClick(InventoryClickEvent event) {
-				if (event.getWhoClicked() instanceof Player) {
+				if (event.getWhoClicked() instanceof Player) if (event.getInventory().equals(inv)) {
+					event.setCancelled(true);
+					if (data instanceof Anvil) {
+						Anvil anvil = (Anvil) data;
+						ItemStack item = event.getCurrentItem();
+						int slot = event.getRawSlot();
+						String name = "";
 
-					if (event.getInventory().equals(inv)) {
-						event.setCancelled(true);
-						if (data instanceof Anvil) {
-							Anvil anvil = (Anvil) data;
-							ItemStack item = event.getCurrentItem();
-							int slot = event.getRawSlot();
-							String name = "";
+						if (item != null) if (item.hasItemMeta()) {
+							ItemMeta meta = item.getItemMeta();
 
-							if (item != null) {
-								if (item.hasItemMeta()) {
-									ItemMeta meta = item.getItemMeta();
-
-									if (meta.hasDisplayName()) {
-										name = meta.getDisplayName();
-									}
-								}
-							}
-
-							AnvilClickEvent clickEvent = new AnvilClickEvent(AnvilSlot.bySlot(slot), name, anvil);
-
-							handler.onAnvilClick(clickEvent);
-
-							if (clickEvent.getWillClose()) {
-								event.getWhoClicked().closeInventory();
-								anvil.setInventory();
-							}
-
-							if (clickEvent.getWillDestroy()) {
-								AnvilUtils.checkAnvilBreak(player, anvil.getBlock(), anvil);
-								destroy();
-							}
-						} else if (data instanceof ConfigInventory) {
-							ConfigInventory configInv = (ConfigInventory) data;
-							ItemStack item = event.getCurrentItem();
-							int slot = event.getRawSlot();
-							String name = "";
-
-							if (item != null) {
-								if (item.hasItemMeta()) {
-									ItemMeta meta = item.getItemMeta();
-
-									if (meta.hasDisplayName()) {
-										name = meta.getDisplayName();
-									}
-								}
-							}
-
-							AnvilClickEvent clickEvent = new AnvilClickEvent(AnvilSlot.bySlot(slot), name, configInv);
-
-							handler.onAnvilClick(clickEvent);
-
-							if (clickEvent.getWillClose()) {
-								event.getWhoClicked().closeInventory();
-								configInv.reopenFromAnvil(false);
-							}
-
-							if (clickEvent.getWillDestroy()) {
-								destroy();
-							}
-						} else {
-							ItemStack item = event.getCurrentItem();
-							int slot = event.getRawSlot();
-							String name = "";
-
-							if (item != null) {
-								if (item.hasItemMeta()) {
-									ItemMeta meta = item.getItemMeta();
-
-									if (meta.hasDisplayName()) {
-										name = meta.getDisplayName();
-									}
-								}
-							}
-
-							AnvilClickEvent clickEvent = new AnvilClickEvent(AnvilSlot.bySlot(slot), name, data);
-
-							handler.onAnvilClick(clickEvent);
-
-							if (clickEvent.getWillClose()) {
-								event.getWhoClicked().closeInventory();
-								data.setInventory(data.getItems());
-							}
-
-							if (clickEvent.getWillDestroy()) {
-								destroy();
-							}
+							if (meta.hasDisplayName()) name = meta.getDisplayName();
 						}
+
+						AnvilClickEvent clickEvent = new AnvilClickEvent(AnvilSlot.bySlot(slot), name, anvil);
+
+						handler.onAnvilClick(clickEvent);
+
+						if (clickEvent.getWillClose()) {
+							event.getWhoClicked().closeInventory();
+							anvil.setInventory();
+						}
+
+						if (clickEvent.getWillDestroy()) {
+							AnvilUtils.checkAnvilBreak(player, anvil.getBlock(), anvil);
+							destroy();
+						}
+					} else if (data instanceof ConfigInventory) {
+						ConfigInventory configInv = (ConfigInventory) data;
+						ItemStack item = event.getCurrentItem();
+						int slot = event.getRawSlot();
+						String name = "";
+
+						if (item != null) if (item.hasItemMeta()) {
+							ItemMeta meta = item.getItemMeta();
+
+							if (meta.hasDisplayName()) name = meta.getDisplayName();
+						}
+
+						AnvilClickEvent clickEvent = new AnvilClickEvent(AnvilSlot.bySlot(slot), name, configInv);
+
+						handler.onAnvilClick(clickEvent);
+
+						if (clickEvent.getWillClose()) {
+							event.getWhoClicked().closeInventory();
+							configInv.reopenFromAnvil(false);
+						}
+
+						if (clickEvent.getWillDestroy()) destroy();
+					} else {
+						ItemStack item = event.getCurrentItem();
+						int slot = event.getRawSlot();
+						String name = "";
+
+						if (item != null) if (item.hasItemMeta()) {
+							ItemMeta meta = item.getItemMeta();
+
+							if (meta.hasDisplayName()) name = meta.getDisplayName();
+						}
+
+						AnvilClickEvent clickEvent = new AnvilClickEvent(AnvilSlot.bySlot(slot), name, data);
+
+						handler.onAnvilClick(clickEvent);
+
+						if (clickEvent.getWillClose()) {
+							event.getWhoClicked().closeInventory();
+							data.setInventory(data.getItems());
+						}
+
+						if (clickEvent.getWillDestroy()) destroy();
 					}
 				}
 			}
@@ -210,25 +188,17 @@ public abstract class AnvilGUI {
 					if (inv.equals(AnvilGUI.this.inv)) {
 						inv.clear();
 						destroy();
-						if (data instanceof Anvil) {
-							Bukkit.getScheduler().scheduleSyncDelayedTask(EnchantmentSolution.getPlugin(),
-							() -> ((Anvil) data).setInventory(), 2l);
-						} else if (data instanceof ConfigInventory) {
-							Bukkit.getScheduler().scheduleSyncDelayedTask(EnchantmentSolution.getPlugin(),
-							() -> ((ConfigInventory) data).reopenFromAnvil(true), 2l);
-						} else {
-							Bukkit.getScheduler().scheduleSyncDelayedTask(EnchantmentSolution.getPlugin(),
-							() -> data.setInventory(data.getItems()), 2l);
-						}
+						if (data instanceof Anvil) Bukkit.getScheduler().scheduleSyncDelayedTask(EnchantmentSolution.getPlugin(), () -> ((Anvil) data).setInventory(), 2l);
+						else if (data instanceof ConfigInventory) Bukkit.getScheduler().scheduleSyncDelayedTask(EnchantmentSolution.getPlugin(), () -> ((ConfigInventory) data).reopenFromAnvil(true), 2l);
+						else
+							Bukkit.getScheduler().scheduleSyncDelayedTask(EnchantmentSolution.getPlugin(), () -> data.setInventory(data.getItems()), 2l);
 					}
 				}
 			}
 
 			@EventHandler
 			public void onPlayerQuit(PlayerQuitEvent event) {
-				if (event.getPlayer().equals(getPlayer())) {
-					destroy();
-				}
+				if (event.getPlayer().equals(getPlayer())) destroy();
 			}
 		};
 

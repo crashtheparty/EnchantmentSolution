@@ -66,14 +66,9 @@ public enum Weight {
 	}
 
 	public static Weight getWeight(String name) {
-		if (name == null) {
-			return NULL;
-		}
-		for(Weight weight: Weight.values()) {
-			if (name.toLowerCase().equals(weight.getName())) {
-				return weight;
-			}
-		}
+		if (name == null) return NULL;
+		for(Weight weight: Weight.values())
+			if (name.toLowerCase().equals(weight.getName())) return weight;
 		return NULL;
 	}
 

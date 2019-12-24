@@ -39,9 +39,7 @@ public class DrownedEntity {
 	public void inflictDamage() {
 		LivingEntity hurtEntity = getHurtEntity();
 		if (hurtEntity instanceof Player) {
-			if (!((Player) hurtEntity).isOnline() || hurtEntity == null) {
-				return;
-			}
+			if (!((Player) hurtEntity).isOnline() || hurtEntity == null) return;
 		} else if (hurtEntity == null || hurtEntity.isDead()) {
 			damageTime = 0;
 			return;
@@ -53,9 +51,7 @@ public class DrownedEntity {
 				HumanEntity hEntity = (HumanEntity) hurtEntity;
 				ItemStack helmet = hEntity.getInventory().getHelmet();
 
-				if (helmet != null) {
-					level = ItemUtils.getLevel(helmet, Enchantment.OXYGEN);
-				}
+				if (helmet != null) level = ItemUtils.getLevel(helmet, Enchantment.OXYGEN);
 			}
 			double chance = level / ((double) level + 1);
 			double random = Math.random();
@@ -63,14 +59,11 @@ public class DrownedEntity {
 			Bukkit.getPluginManager().callEvent(event);
 			if (!event.isCancelled() && event.getNewDamage() > 0) {
 				DamageEvent.damageEntity(hurtEntity, "drown", (float) event.getNewDamage());
-				if (hurtEntity.isDead() && hurtEntity instanceof Player && getAttackerEntity() instanceof Player) {
-					AdvancementUtils.awardCriteria((Player) getAttackerEntity(), ESAdvancement.HEX_BAG, "player");
-				}
+				if (hurtEntity.isDead() && hurtEntity instanceof Player && getAttackerEntity() instanceof Player) AdvancementUtils.awardCriteria((Player) getAttackerEntity(), ESAdvancement.HEX_BAG, "player");
 			}
 			ticksLastDamage = 1;
-		} else {
+		} else
 			ticksLastDamage++;
-		}
 		damageTime--;
 	}
 

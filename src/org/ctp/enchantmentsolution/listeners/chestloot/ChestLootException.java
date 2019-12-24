@@ -1,6 +1,6 @@
 package org.ctp.enchantmentsolution.listeners.chestloot;
 
-public class ChestLootException extends RuntimeException{
+public class ChestLootException extends RuntimeException {
 
 	public ChestLootException(String string, Throwable throwable) {
 		super(string, throwable);

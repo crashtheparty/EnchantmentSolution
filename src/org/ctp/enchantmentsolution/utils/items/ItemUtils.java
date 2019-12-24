@@ -37,9 +37,8 @@ public class ItemUtils {
 
 	public static void giveItemsToPlayer(Player player, Collection<ItemStack> drops, Location fallback,
 	boolean statistic) {
-		for(ItemStack drop: drops) {
+		for(ItemStack drop: drops)
 			giveItemToPlayer(player, drop, fallback, statistic);
-		}
 	}
 
 	public static void giveItemToPlayer(Player player, ItemStack item, Location fallback, boolean statistic) {
@@ -48,28 +47,22 @@ public class ItemUtils {
 		leftOver.putAll(player.getInventory().addItem(item));
 		Location fallbackClone = fallback.clone();
 		boolean dropNaturally = ConfigString.DROP_ITEMS_NATURALLY.getBoolean();
-		if (!leftOver.isEmpty()) {
-			for(Iterator<Entry<Integer, ItemStack>> it = leftOver.entrySet().iterator(); it.hasNext();) {
-				Entry<Integer, ItemStack> e = it.next();
-				amount -= e.getValue().getAmount();
-				if (!dropNaturally) {
-					Item droppedItem = fallbackClone.getWorld().dropItem(fallbackClone, e.getValue());
-					droppedItem.setVelocity(new Vector(0, 0, 0));
-					droppedItem.teleport(fallbackClone);
-				} else {
-					fallbackClone.getWorld().dropItemNaturally(fallbackClone, item);
-				}
-			}
+		if (!leftOver.isEmpty()) for(Iterator<Entry<Integer, ItemStack>> it = leftOver.entrySet().iterator(); it.hasNext();) {
+			Entry<Integer, ItemStack> e = it.next();
+			amount -= e.getValue().getAmount();
+			if (!dropNaturally) {
+				Item droppedItem = fallbackClone.getWorld().dropItem(fallbackClone, e.getValue());
+				droppedItem.setVelocity(new Vector(0, 0, 0));
+				droppedItem.teleport(fallbackClone);
+			} else
+				fallbackClone.getWorld().dropItemNaturally(fallbackClone, item);
 		}
-		if (amount > 0 && statistic) {
-			player.incrementStatistic(Statistic.PICKUP, item.getType(), amount);
-		}
+		if (amount > 0 && statistic) player.incrementStatistic(Statistic.PICKUP, item.getType(), amount);
 	}
 
 	public static void dropItems(Collection<ItemStack> drops, Location loc) {
-		for(ItemStack drop: drops) {
+		for(ItemStack drop: drops)
 			dropItem(drop, loc);
-		}
 	}
 
 	public static void dropItem(ItemStack item, Location loc) {
@@ -78,9 +71,8 @@ public class ItemUtils {
 			Item droppedItem = location.getWorld().dropItem(location, item);
 			droppedItem.setVelocity(new Vector(0, 0, 0));
 			droppedItem.teleport(location);
-		} else {
+		} else
 			location.getWorld().dropItemNaturally(location, item);
-		}
 	}
 
 	public static ItemStack convertToEnchantedBook(ItemStack item) {
@@ -96,10 +88,7 @@ public class ItemUtils {
 				Enchantment enchant = e.getKey();
 				int level = e.getValue();
 				enchantmentStorage.addStoredEnchant(enchant, level, true);
-				if (enchant instanceof CustomEnchantmentWrapper) {
-					lore.add(StringUtils.getEnchantmentString(
-					new EnchantmentLevel(RegisterEnchantments.getCustomEnchantment(enchant), level)));
-				}
+				if (enchant instanceof CustomEnchantmentWrapper) lore.add(StringUtils.getEnchantmentString(new EnchantmentLevel(RegisterEnchantments.getCustomEnchantment(enchant), level)));
 				meta.removeEnchant(enchant);
 			}
 			meta = enchantmentStorage;
@@ -117,16 +106,12 @@ public class ItemUtils {
 
 		if (enchantmentStorage != null && enchantmentStorage.getStoredEnchants().size() > 0) {
 			List<String> lore = new ArrayList<String>();
-			for(Iterator<Entry<Enchantment, Integer>> it = enchantmentStorage.getStoredEnchants().entrySet()
-			.iterator(); it.hasNext();) {
+			for(Iterator<Entry<Enchantment, Integer>> it = enchantmentStorage.getStoredEnchants().entrySet().iterator(); it.hasNext();) {
 				Entry<Enchantment, Integer> e = it.next();
 				Enchantment enchant = e.getKey();
 				int level = e.getValue();
 				meta.addEnchant(enchant, level, true);
-				if (enchant instanceof CustomEnchantmentWrapper) {
-					lore.add(StringUtils.getEnchantmentString(
-					new EnchantmentLevel(RegisterEnchantments.getCustomEnchantment(enchant), level)));
-				}
+				if (enchant instanceof CustomEnchantmentWrapper) lore.add(StringUtils.getEnchantmentString(new EnchantmentLevel(RegisterEnchantments.getCustomEnchantment(enchant), level)));
 				enchantmentStorage.removeStoredEnchant(enchant);
 			}
 			meta = setLore(meta, lore);
@@ -142,16 +127,10 @@ public class ItemUtils {
 		}
 		if (ConfigString.LORE_ON_TOP.getBoolean()) {
 			List<String> enchantmentsFirst = new ArrayList<String>();
-			for(String l: lore) {
-				if (StringUtils.isEnchantment(l)) {
-					enchantmentsFirst.add(l);
-				}
-			}
-			for(String l: lore) {
-				if (!StringUtils.isEnchantment(l)) {
-					enchantmentsFirst.add(l);
-				}
-			}
+			for(String l: lore)
+				if (StringUtils.isEnchantment(l)) enchantmentsFirst.add(l);
+			for(String l: lore)
+				if (!StringUtils.isEnchantment(l)) enchantmentsFirst.add(l);
 			meta.setLore(enchantmentsFirst);
 		}
 		return meta;
@@ -162,9 +141,7 @@ public class ItemUtils {
 		if (item.getItemMeta() != null) {
 			ItemMeta meta = item.getItemMeta();
 			Map<Enchantment, Integer> enchantments = meta.getEnchants();
-			if (item.getType() == Material.ENCHANTED_BOOK) {
-				enchantments = ((EnchantmentStorageMeta) meta).getStoredEnchants();
-			}
+			if (item.getType() == Material.ENCHANTED_BOOK) enchantments = ((EnchantmentStorageMeta) meta).getStoredEnchants();
 			for(Iterator<Entry<Enchantment, Integer>> it = enchantments.entrySet().iterator(); it.hasNext();) {
 				Entry<Enchantment, Integer> e = it.next();
 				levels.add(new EnchantmentLevel(RegisterEnchantments.getCustomEnchantment(e.getKey()), e.getValue()));
@@ -174,24 +151,13 @@ public class ItemUtils {
 	}
 
 	public static boolean isEnchantable(ItemStack item) {
-		if (item == null) {
-			return false;
-		}
+		if (item == null) return false;
 		ItemMeta meta = item.getItemMeta();
-		for(CustomEnchantment enchant: RegisterEnchantments.getRegisteredEnchantments()) {
-			if (item.getType() == Material.ENCHANTED_BOOK
-			&& ((EnchantmentStorageMeta) meta).hasStoredEnchant(enchant.getRelativeEnchantment())) {
-				return false;
-			} else if (meta.hasEnchant(enchant.getRelativeEnchantment())) {
-				return false;
-			}
-		}
-		if (ItemType.ALL.getItemTypes().contains(item.getType())) {
-			return true;
-		}
-		if (item.getType().equals(Material.BOOK)) {
-			return true;
-		}
+		for(CustomEnchantment enchant: RegisterEnchantments.getRegisteredEnchantments())
+			if (item.getType() == Material.ENCHANTED_BOOK && ((EnchantmentStorageMeta) meta).hasStoredEnchant(enchant.getRelativeEnchantment())) return false;
+			else if (meta.hasEnchant(enchant.getRelativeEnchantment())) return false;
+		if (ItemType.ALL.getItemTypes().contains(item.getType())) return true;
+		if (item.getType().equals(Material.BOOK)) return true;
 		return false;
 	}
 
@@ -199,27 +165,18 @@ public class ItemUtils {
 		ItemMeta meta = item.getItemMeta();
 		List<String> lore = new ArrayList<String>();
 		List<String> previousLore = meta.getLore();
-		if (levels == null) {
-			return item;
-		}
+		if (levels == null) return item;
 		for(EnchantmentLevel level: levels) {
-			if (item.getType() == Material.ENCHANTED_BOOK) {
-				((EnchantmentStorageMeta) meta).addStoredEnchant(level.getEnchant().getRelativeEnchantment(),
-				level.getLevel(), true);
-			} else {
+			if (item.getType() == Material.ENCHANTED_BOOK) ((EnchantmentStorageMeta) meta).addStoredEnchant(level.getEnchant().getRelativeEnchantment(), level.getLevel(), true);
+			else
 				meta.addEnchant(level.getEnchant().getRelativeEnchantment(), level.getLevel(), true);
-			}
-			if (!item.getItemMeta().hasItemFlag(ItemFlag.HIDE_ENCHANTS)
-			&& level.getEnchant().getRelativeEnchantment() instanceof CustomEnchantmentWrapper) {
+			if (!item.getItemMeta().hasItemFlag(ItemFlag.HIDE_ENCHANTS) && level.getEnchant().getRelativeEnchantment() instanceof CustomEnchantmentWrapper) {
 				previousLore = StringUtils.removeEnchantment(level.getEnchant(), previousLore);
 				lore.add(StringUtils.getEnchantmentString(level));
 			}
 		}
-		if (previousLore != null) {
-			for(String l: previousLore) {
-				lore.add(l);
-			}
-		}
+		if (previousLore != null) for(String l: previousLore)
+			lore.add(l);
 		meta = ItemUtils.setLore(meta, lore);
 		item.setItemMeta(meta);
 		return item;
@@ -232,52 +189,35 @@ public class ItemUtils {
 	public static ItemStack removeEnchantmentFromItem(ItemStack item, CustomEnchantment enchantment) {
 		ItemMeta meta = item.getItemMeta();
 		List<String> lore = meta.getLore();
-		if (lore == null) {
-			lore = new ArrayList<String>();
-		}
-		if (enchantment.getRelativeEnchantment() instanceof CustomEnchantmentWrapper) {
-			lore = StringUtils.removeEnchantment(enchantment,
-			meta.getEnchantLevel(enchantment.getRelativeEnchantment()), lore);
-		}
-		if (hasEnchantment(item, enchantment.getRelativeEnchantment())) {
-			if (meta instanceof EnchantmentStorageMeta) {
-				((EnchantmentStorageMeta) meta).removeStoredEnchant(enchantment.getRelativeEnchantment());
-			} else {
-				meta.removeEnchant(enchantment.getRelativeEnchantment());
-			}
-		}
+		if (lore == null) lore = new ArrayList<String>();
+		if (enchantment.getRelativeEnchantment() instanceof CustomEnchantmentWrapper) lore = StringUtils.removeEnchantment(enchantment, meta.getEnchantLevel(enchantment.getRelativeEnchantment()), lore);
+		if (hasEnchantment(item, enchantment.getRelativeEnchantment())) if (meta instanceof EnchantmentStorageMeta) ((EnchantmentStorageMeta) meta).removeStoredEnchant(enchantment.getRelativeEnchantment());
+		else
+			meta.removeEnchant(enchantment.getRelativeEnchantment());
 		meta = ItemUtils.setLore(meta, lore);
 		item.setItemMeta(meta);
 		return item;
 	}
 
 	public static ItemStack removeAllEnchantments(ItemStack item) {
-		for(CustomEnchantment enchantment: RegisterEnchantments.getEnchantments()) {
+		for(CustomEnchantment enchantment: RegisterEnchantments.getEnchantments())
 			item = removeEnchantmentFromItem(item, enchantment);
-		}
 		return item;
 	}
 
 	public static ItemStack removeAllEnchantments(ItemStack item, boolean removeCurses) {
-		for(CustomEnchantment enchantment: RegisterEnchantments.getEnchantments()) {
-			if (!removeCurses || !enchantment.isCurse()) {
-				item = removeEnchantmentFromItem(item, enchantment);
-			}
-		}
+		for(CustomEnchantment enchantment: RegisterEnchantments.getEnchantments())
+			if (!removeCurses || !enchantment.isCurse()) item = removeEnchantmentFromItem(item, enchantment);
 		return item;
 	}
 
 	public static boolean hasEnchantment(ItemStack item, Enchantment enchant) {
 		if (item.getItemMeta() != null) {
 			Map<Enchantment, Integer> enchantments = item.getItemMeta().getEnchants();
-			if (item.getType() == Material.ENCHANTED_BOOK) {
-				enchantments = ((EnchantmentStorageMeta) item.getItemMeta()).getStoredEnchants();
-			}
+			if (item.getType() == Material.ENCHANTED_BOOK) enchantments = ((EnchantmentStorageMeta) item.getItemMeta()).getStoredEnchants();
 			for(Iterator<Entry<Enchantment, Integer>> it = enchantments.entrySet().iterator(); it.hasNext();) {
 				Entry<Enchantment, Integer> e = it.next();
-				if (e.getKey().equals(enchant)) {
-					return true;
-				}
+				if (e.getKey().equals(enchant)) return true;
 			}
 		}
 		return false;
@@ -287,12 +227,8 @@ public class ItemUtils {
 		if (item.getItemMeta() != null) {
 			ItemMeta meta = item.getItemMeta();
 			Map<Enchantment, Integer> enchantments = meta.getEnchants();
-			if (item.getType() == Material.ENCHANTED_BOOK) {
-				enchantments = ((EnchantmentStorageMeta) meta).getStoredEnchants();
-			}
-			if (enchantments == null) {
-				return 0;
-			}
+			if (item.getType() == Material.ENCHANTED_BOOK) enchantments = ((EnchantmentStorageMeta) meta).getStoredEnchants();
+			if (enchantments == null) return 0;
 			return enchantments.size();
 		}
 		return 0;
@@ -302,14 +238,10 @@ public class ItemUtils {
 		if (item.getItemMeta() != null) {
 			ItemMeta meta = item.getItemMeta();
 			Map<Enchantment, Integer> enchantments = meta.getEnchants();
-			if (item.getType() == Material.ENCHANTED_BOOK) {
-				enchantments = ((EnchantmentStorageMeta) meta).getStoredEnchants();
-			}
+			if (item.getType() == Material.ENCHANTED_BOOK) enchantments = ((EnchantmentStorageMeta) meta).getStoredEnchants();
 			for(Iterator<Entry<Enchantment, Integer>> it = enchantments.entrySet().iterator(); it.hasNext();) {
 				Entry<Enchantment, Integer> e = it.next();
-				if (e.getKey().equals(enchant)) {
-					return e.getValue();
-				}
+				if (e.getKey().equals(enchant)) return e.getValue();
 			}
 		}
 		return 0;
@@ -318,24 +250,14 @@ public class ItemUtils {
 	public static boolean canAddEnchantment(CustomEnchantment customEnchant, ItemStack item) {
 		ItemMeta meta = item.clone().getItemMeta();
 		Map<Enchantment, Integer> enchants = meta.getEnchants();
-		if (customEnchant.getDisabledItems().contains(item.getType())) {
-			return false;
-		}
-		if (item.getType().equals(Material.ENCHANTED_BOOK)) {
-			enchants = ((EnchantmentStorageMeta) meta).getStoredEnchants();
-		} else if (!customEnchant.canAnvilItem(item.getType())) {
-			return false;
-		}
+		if (customEnchant.getDisabledItems().contains(item.getType())) return false;
+		if (item.getType().equals(Material.ENCHANTED_BOOK)) enchants = ((EnchantmentStorageMeta) meta).getStoredEnchants();
+		else if (!customEnchant.canAnvilItem(item.getType())) return false;
 		for(Iterator<Entry<Enchantment, Integer>> it = enchants.entrySet().iterator(); it.hasNext();) {
 			Entry<Enchantment, Integer> e = it.next();
 			Enchantment enchant = e.getKey();
-			for(CustomEnchantment custom: RegisterEnchantments.getRegisteredEnchantments()) {
-				if (custom.getRelativeEnchantment().equals(enchant)) {
-					if (CustomEnchantment.conflictsWith(customEnchant, custom) && !customEnchant.equals(custom)) {
-						return false;
-					}
-				}
-			}
+			for(CustomEnchantment custom: RegisterEnchantments.getRegisteredEnchantments())
+				if (custom.getRelativeEnchantment().equals(enchant)) if (CustomEnchantment.conflictsWith(customEnchant, custom) && !customEnchant.equals(custom)) return false;
 		}
 		return true;
 	}
@@ -350,16 +272,10 @@ public class ItemUtils {
 				BlockStateMeta im = (BlockStateMeta) drop.getItemMeta();
 				Container container = (Container) block.getState();
 				im.setBlockState(container);
-				if (block.getMetadata("shulker_name") != null) {
-					for(MetadataValue value: block.getMetadata("shulker_name")) {
-						im.setDisplayName(value.asString());
-					}
-				}
+				if (block.getMetadata("shulker_name") != null) for(MetadataValue value: block.getMetadata("shulker_name"))
+					im.setDisplayName(value.asString());
 				drop.setItemMeta(im);
-				if (block.getMetadata("soulbound").size() > 0) {
-					drop = ItemUtils.addEnchantmentsToItem(drop, Arrays.asList(new EnchantmentLevel(
-					RegisterEnchantments.getCustomEnchantment(RegisterEnchantments.SOULBOUND), 1)));
-				}
+				if (block.getMetadata("soulbound").size() > 0) drop = ItemUtils.addEnchantmentsToItem(drop, Arrays.asList(new EnchantmentLevel(RegisterEnchantments.getCustomEnchantment(RegisterEnchantments.SOULBOUND), 1)));
 				items.add(drop);
 			}
 		}

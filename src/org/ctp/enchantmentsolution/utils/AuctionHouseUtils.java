@@ -17,22 +17,19 @@ public class AuctionHouseUtils {
 
 	public static void resetAuctionHouse() {
 		Iterator<Entry<Long, Listing>> iterator = AuctionHouse.listings.getListings().entrySet().iterator();
-		while(iterator.hasNext()) {
+		while (iterator.hasNext()) {
 			Entry<Long, Listing> entry = iterator.next();
 			Listing l = entry.getValue();
 			ItemStack item = l.getItemStack();
-			if(item.hasItemMeta()) {
+			if (item.hasItemMeta()) {
 				List<EnchantmentLevel> levels = new ArrayList<EnchantmentLevel>();
-				for(String lore : item.getItemMeta().getLore()) {
-					if(lore != null && StringUtils.isEnchantment(lore)) {
+				for(String lore: item.getItemMeta().getLore())
+					if (lore != null && StringUtils.isEnchantment(lore)) {
 						lore = ChatColor.stripColor(lore);
 						EnchantmentLevel level = StringUtils.returnEnchantmentLevel(lore, item.getItemMeta());
-						if(level != null) {
-							levels.add(level);
-						}
+						if (level != null) levels.add(level);
 					}
-				}
-				for(EnchantmentLevel level : levels) {
+				for(EnchantmentLevel level: levels) {
 					item = ItemUtils.removeEnchantmentFromItem(item, level.getEnchant());
 					item = ItemUtils.addEnchantmentToItem(item, level.getEnchant(), level.getLevel());
 				}

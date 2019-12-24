@@ -41,36 +41,23 @@ public class EnchantmentList {
 
 	public void setEnchantability() {
 		int enchantability = 1;
-		if (ItemType.WOODEN_TOOLS.getItemTypes().contains(material)) {
-			enchantability = 15;
-		} else if (ItemType.STONE_TOOLS.getItemTypes().contains(material)) {
-			enchantability = 5;
-		} else if (ItemType.GOLDEN_TOOLS.getItemTypes().contains(material)) {
-			enchantability = 22;
-		} else if (ItemType.IRON_TOOLS.getItemTypes().contains(material)) {
-			enchantability = 14;
-		} else if (ItemType.DIAMOND_TOOLS.getItemTypes().contains(material)) {
-			enchantability = 10;
-		} else if (ItemType.LEATHER_ARMOR.getItemTypes().contains(material)) {
-			enchantability = 15;
-		} else if (ItemType.GOLDEN_ARMOR.getItemTypes().contains(material)) {
-			enchantability = 25;
-		} else if (ItemType.CHAINMAIL_ARMOR.getItemTypes().contains(material)) {
-			enchantability = 12;
-		} else if (ItemType.IRON_ARMOR.getItemTypes().contains(material)) {
-			enchantability = 9;
-		} else if (ItemType.DIAMOND_ARMOR.getItemTypes().contains(material)) {
-			enchantability = 10;
-		}
+		if (ItemType.WOODEN_TOOLS.getItemTypes().contains(material)) enchantability = 15;
+		else if (ItemType.STONE_TOOLS.getItemTypes().contains(material)) enchantability = 5;
+		else if (ItemType.GOLDEN_TOOLS.getItemTypes().contains(material)) enchantability = 22;
+		else if (ItemType.IRON_TOOLS.getItemTypes().contains(material)) enchantability = 14;
+		else if (ItemType.DIAMOND_TOOLS.getItemTypes().contains(material)) enchantability = 10;
+		else if (ItemType.LEATHER_ARMOR.getItemTypes().contains(material)) enchantability = 15;
+		else if (ItemType.GOLDEN_ARMOR.getItemTypes().contains(material)) enchantability = 25;
+		else if (ItemType.CHAINMAIL_ARMOR.getItemTypes().contains(material)) enchantability = 12;
+		else if (ItemType.IRON_ARMOR.getItemTypes().contains(material)) enchantability = 9;
+		else if (ItemType.DIAMOND_ARMOR.getItemTypes().contains(material)) enchantability = 10;
 
 		int enchantability_2 = enchantability / 2;
 		int rand_enchantability = 1 + randomInt(enchantability_2 / 2 + 1) + randomInt(enchantability_2 / 2 + 1);
 
 		if (ConfigUtils.getAdvancedBoolean(ConfigString.USE_LAPIS_MODIFIERS, ConfigString.LEVEL_FIFTY.getBoolean())) {
-			double lapisConstant = ConfigUtils.getAdvancedDouble(ConfigString.LAPIS_CONSTANT,
-			ConfigString.LEVEL_FIFTY.getBoolean() ? -1 : 0);
-			double lapisMultiplier = ConfigUtils.getAdvancedDouble(ConfigString.LAPIS_MULTIPLIER,
-			ConfigString.LEVEL_FIFTY.getBoolean() ? 2 : 0);
+			double lapisConstant = ConfigUtils.getAdvancedDouble(ConfigString.LAPIS_CONSTANT, ConfigString.LEVEL_FIFTY.getBoolean() ? -1 : 0);
+			double lapisMultiplier = ConfigUtils.getAdvancedDouble(ConfigString.LAPIS_MULTIPLIER, ConfigString.LEVEL_FIFTY.getBoolean() ? 2 : 0);
 			rand_enchantability += (level.getSlot() + lapisConstant) * lapisMultiplier;
 		}
 
@@ -90,8 +77,7 @@ public class EnchantmentList {
 	}
 
 	public void generate() {
-		double multiEnchantDivisor = ConfigUtils.getAdvancedDouble(ConfigString.MULTI_ENCHANT_DIVISOR,
-		ConfigString.LEVEL_FIFTY.getBoolean() ? 75 : 50);
+		double multiEnchantDivisor = ConfigUtils.getAdvancedDouble(ConfigString.MULTI_ENCHANT_DIVISOR, ConfigString.LEVEL_FIFTY.getBoolean() ? 75 : 50);
 		List<EnchantmentLevel> enchants = new ArrayList<EnchantmentLevel>();
 		CustomEnchantment enchantment = getEnchantment(enchants);
 		if (enchantment == null) {
@@ -101,19 +87,12 @@ public class EnchantmentList {
 		enchants.add(new EnchantmentLevel(enchantment, enchantment.getEnchantLevel(player, enchantability)));
 		int enchantability = this.enchantability;
 		int finalEnchantability = enchantability / 2;
-		while ((finalEnchantability + 1) / multiEnchantDivisor > Math.random()
-		&& (ConfigString.MAX_ENCHANTMENTS.getInt() == 0 ? true
-		: enchants.size() < ConfigString.MAX_ENCHANTMENTS.getInt())) {
+		while ((finalEnchantability + 1) / multiEnchantDivisor > Math.random() && (ConfigString.MAX_ENCHANTMENTS.getInt() == 0 ? true : enchants.size() < ConfigString.MAX_ENCHANTMENTS.getInt())) {
 			enchantment = getEnchantment(enchants);
-			if (enchantment == null) {
-				break;
-			}
-			if (ConfigUtils.getAdvancedBoolean(ConfigString.DECAY, false)) {
-				enchants
-				.add(new EnchantmentLevel(enchantment, enchantment.getEnchantLevel(player, finalEnchantability)));
-			} else {
+			if (enchantment == null) break;
+			if (ConfigUtils.getAdvancedBoolean(ConfigString.DECAY, false)) enchants.add(new EnchantmentLevel(enchantment, enchantment.getEnchantLevel(player, finalEnchantability)));
+			else
 				enchants.add(new EnchantmentLevel(enchantment, enchantment.getEnchantLevel(player, enchantability)));
-			}
 			finalEnchantability /= 2;
 		}
 
@@ -128,12 +107,9 @@ public class EnchantmentList {
 			return;
 		}
 		enchants.add(enchantment);
-		while (multiEnchantDivisor > Math.random() && (ConfigString.MAX_ENCHANTMENTS.getInt() == 0 ? true
-		: enchants.size() < ConfigString.MAX_ENCHANTMENTS.getInt())) {
+		while (multiEnchantDivisor > Math.random() && (ConfigString.MAX_ENCHANTMENTS.getInt() == 0 ? true : enchants.size() < ConfigString.MAX_ENCHANTMENTS.getInt())) {
 			enchantment = getPreselectedEnchantment(enchants, selections);
-			if (enchantment == null) {
-				break;
-			}
+			if (enchantment == null) break;
 			enchants.add(enchantment);
 			multiEnchantDivisor /= 2;
 		}
@@ -145,21 +121,16 @@ public class EnchantmentList {
 	List<EnchantmentLevel> selections) {
 		int totalWeight = 0;
 		List<EnchantmentLevel> customEnchants = new ArrayList<EnchantmentLevel>();
-		for(EnchantmentLevel enchantment: selections) {
+		for(EnchantmentLevel enchantment: selections)
 			if (enchantment.getEnchant() != null && canAddEnchantment(previousLevels, enchantment.getEnchant())) {
 				totalWeight += enchantment.getEnchant().getWeight();
 				customEnchants.add(enchantment);
 			}
-		}
-		if (totalWeight == 0) {
-			return null;
-		}
+		if (totalWeight == 0) return null;
 		int getWeight = (int) (Math.random() * totalWeight);
 		for(EnchantmentLevel customEnchant: customEnchants) {
 			getWeight -= customEnchant.getEnchant().getWeight();
-			if (getWeight <= 0) {
-				return customEnchant;
-			}
+			if (getWeight <= 0) return customEnchant;
 		}
 		return null;
 	}
@@ -168,46 +139,30 @@ public class EnchantmentList {
 		int totalWeight = 0;
 		List<CustomEnchantment> customEnchants = new ArrayList<CustomEnchantment>();
 		List<CustomEnchantment> registeredEnchantments = RegisterEnchantments.getEnchantments();
-		for(CustomEnchantment enchantment: registeredEnchantments) {
+		for(CustomEnchantment enchantment: registeredEnchantments)
 			if (canAddEnchantment(previousLevels, enchantment)) {
 				totalWeight += enchantment.getWeight();
 				customEnchants.add(enchantment);
 			}
-		}
-		if (totalWeight == 0) {
-			return null;
-		}
+		if (totalWeight == 0) return null;
 		int getWeight = (int) (Math.random() * totalWeight);
 		for(CustomEnchantment customEnchant: customEnchants) {
 			getWeight -= customEnchant.getWeight();
-			if (getWeight <= 0) {
-				return customEnchant;
-			}
+			if (getWeight <= 0) return customEnchant;
 		}
 		return null;
 	}
 
 	private boolean canAddEnchantment(List<EnchantmentLevel> levels, CustomEnchantment enchantment) {
-		if (levels != null) {
-			for(EnchantmentLevel level: levels) {
-				if (CustomEnchantment.conflictsWith(level.getEnchant(), enchantment)) {
-					return false;
-				}
-			}
-		}
+		if (levels != null) for(EnchantmentLevel level: levels)
+			if (CustomEnchantment.conflictsWith(level.getEnchant(), enchantment)) return false;
 
 		if (level == null) {
-			if (enchantment.isEnabled() && enchantment.canEnchantItem(material)
-			&& (treasure || !enchantment.isTreasure())) {
-				return true;
-			}
+			if (enchantment.isEnabled() && enchantment.canEnchantItem(material) && (treasure || !enchantment.isTreasure())) return true;
 			return false;
 		}
 
-		if (enchantment.isEnabled() && enchantment.canEnchantItem(material) && (treasure || !enchantment.isTreasure())
-		&& enchantment.canEnchant(player, enchantability, level.getLevel())) {
-			return true;
-		}
+		if (enchantment.isEnabled() && enchantment.canEnchantItem(material) && (treasure || !enchantment.isTreasure()) && enchantment.canEnchant(player, enchantability, level.getLevel())) return true;
 		return false;
 	}
 

@@ -10,8 +10,8 @@ public class SandVeilEvent extends ESEntityDamageEntityEvent {
 	private int ticks;
 	private double accuracy;
 
-	public SandVeilEvent(LivingEntity damaged, int level, LivingEntity damager, double damage, double newDamage, int ticks,
-	double accuracy) {
+	public SandVeilEvent(LivingEntity damaged, int level, LivingEntity damager, double damage, double newDamage,
+	int ticks, double accuracy) {
 		super(damaged, new EnchantmentLevel(CERegister.SAND_VEIL, level), damager, damage, newDamage);
 		setTicks(ticks);
 		setAccuracy(accuracy);

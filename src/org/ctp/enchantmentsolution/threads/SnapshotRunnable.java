@@ -38,16 +38,12 @@ public class SnapshotRunnable implements Runnable {
 			int index = current;
 			for(int i = index; i < index + 10; i++) {
 				current = i;
-				if (players.length <= current) {
-					return;
-				}
+				if (players.length <= current) return;
 				Player player = players[i];
 				SnapshotInventory inv = INVENTORIES.get(player.getUniqueId());
-				if (inv == null) {
-					inv = new SnapshotInventory(player);
-				} else {
+				if (inv == null) inv = new SnapshotInventory(player);
+				else
 					inv.setInventory();
-				}
 				INVENTORIES.put(player.getUniqueId(), inv);
 			}
 		} else {

@@ -19,9 +19,8 @@ public class ConfigEdit implements CommandExecutor {
 				ConfigInventory inv = new ConfigInventory(player);
 				EnchantmentSolution.getPlugin().addInventory(inv);
 				inv.setInventory();
-			} else {
+			} else
 				ChatUtils.sendMessage(player, ChatUtils.getMessage(ChatUtils.getCodes(), "commands.no-permission"));
-			}
 		}
 		return true;
 	}

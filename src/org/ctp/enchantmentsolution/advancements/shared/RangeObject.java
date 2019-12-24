@@ -96,9 +96,7 @@ public class RangeObject extends SharedObject {
 	 */
 	@Override
 	public JsonElement toJson() {
-		if (min != null && min.equals(max)) {
-			return new JsonPrimitive(min);
-		}
+		if (min != null && min.equals(max)) return new JsonPrimitive(min);
 		return new JsonBuilder().add("min", min).add("max", max).build();
 	}
 }

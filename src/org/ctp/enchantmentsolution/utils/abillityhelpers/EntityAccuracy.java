@@ -37,9 +37,7 @@ public class EntityAccuracy {
 	}
 
 	public void setTicks(int ticks) {
-		if (ticks > this.ticks) {
-			this.ticks = ticks;
-		}
+		if (ticks > this.ticks) this.ticks = ticks;
 	}
 
 	public Player getAttacker() {

@@ -2,14 +2,13 @@ package org.ctp.enchantmentsolution.utils.config;
 
 import org.ctp.enchantmentsolution.utils.Configurations;
 
-public enum Type{
+public enum Type {
 	MAIN(), FISHING(), ENCHANTMENTS(), LANGUAGE();
 
-	Type(){
-	}
+	Type() {}
 
 	public Configuration getConfig() {
-		switch(name()) {
+		switch (name()) {
 			case "MAIN":
 				return Configurations.getConfig();
 			case "FISHING":

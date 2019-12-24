@@ -66,9 +66,7 @@ public class EnchantmentSolution extends JavaPlugin {
 		bukkitVersion = new BukkitVersion();
 		pluginVersion = new PluginVersion(this, getDescription().getVersion());
 
-		if (!getDataFolder().exists()) {
-			getDataFolder().mkdirs();
-		}
+		if (!getDataFolder().exists()) getDataFolder().mkdirs();
 
 		db = new SQLite(this);
 		db.load();
@@ -97,11 +95,11 @@ public class EnchantmentSolution extends JavaPlugin {
 		registerEvent(new ProjectileListener());
 		registerEvent(new BlockListener());
 		registerEvent(new PotionEffectListener());
-		
+
 		registerEvent(new AnvilListener());
 		registerEvent(new EnchantmentListener());
 		registerEvent(new GrindstoneListener());
-		
+
 		registerEvent(new MobSpawning());
 		registerEvent(new Villagers());
 		registerEvent(new UpdateEnchantments());
@@ -117,25 +115,18 @@ public class EnchantmentSolution extends JavaPlugin {
 				ChatUtils.sendToConsole(Level.INFO, "Using the Overhaul Version!");
 				String[] mcVersion = mcmmoVersion.split("\\.");
 				boolean warning = false;
-				for(int i = 0; i < mcVersion.length; i++) {
+				for(int i = 0; i < mcVersion.length; i++)
 					try {
 						int num = Integer.parseInt(mcVersion[i]);
-						if (i == 0 && num > 2) {
-							warning = true;
-						} else if (i == 1 && num > 1) {
-							warning = true;
-						} else if (i == 2 && num > 111) {
-							warning = true;
-						}
+						if (i == 0 && num > 2) warning = true;
+						else if (i == 1 && num > 1) warning = true;
+						else if (i == 2 && num > 111) warning = true;
 					} catch (NumberFormatException ex) {
 						warning = true;
 					}
-				}
 				if (warning) {
-					ChatUtils.sendToConsole(Level.WARNING,
-					"McMMO Overhaul updates sporidically. Compatibility may break between versions.");
-					ChatUtils.sendToConsole(Level.WARNING,
-					"If there are any compatibility issues, please notify the plugin author immediately.");
+					ChatUtils.sendToConsole(Level.WARNING, "McMMO Overhaul updates sporidically. Compatibility may break between versions.");
+					ChatUtils.sendToConsole(Level.WARNING, "If there are any compatibility issues, please notify the plugin author immediately.");
 					ChatUtils.sendToConsole(Level.WARNING, "Current Working Version: 2.1.111");
 				}
 				mcmmoType = "Overhaul";
@@ -149,13 +140,9 @@ public class EnchantmentSolution extends JavaPlugin {
 			registerEvent(new EnchantsFishingListener());
 		}
 
-		if (!mcmmoType.equals("Disabled")) {
-			registerEvent(new McMMOAbility());
-		}
+		if (!mcmmoType.equals("Disabled")) registerEvent(new McMMOAbility());
 
-		if (Bukkit.getPluginManager().isPluginEnabled("AuctionHouse")) {
-			Bukkit.getScheduler().runTaskLater(this, (Runnable) () -> AuctionHouseUtils.resetAuctionHouse(), 20l);
-		}
+		if (Bukkit.getPluginManager().isPluginEnabled("AuctionHouse")) Bukkit.getScheduler().runTaskLater(this, (Runnable) () -> AuctionHouseUtils.resetAuctionHouse(), 20l);
 
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN, new AbilityRunnable(), 80l, 80l);
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN, new AdvancementThread(), 1l, 1l);
@@ -179,11 +166,7 @@ public class EnchantmentSolution extends JavaPlugin {
 		getCommand("RemoveEnchant").setTabCompleter(new PlayerChatTabComplete());
 		getCommand("EnchantUnsafe").setTabCompleter(new PlayerChatTabComplete());
 
-		check = new VersionCheck(pluginVersion,
-		"https://raw.githubusercontent.com/crashtheparty/EnchantmentSolution/master/VersionHistory",
-		"https://www.spigotmc.org/resources/enchantment-solution.59556/",
-		"https://github.com/crashtheparty/EnchantmentSolution", ConfigString.LATEST_VERSION.getBoolean(),
-		ConfigString.EXPERIMENTAL_VERSION.getBoolean());
+		check = new VersionCheck(pluginVersion, "https://raw.githubusercontent.com/crashtheparty/EnchantmentSolution/master/VersionHistory", "https://www.spigotmc.org/resources/enchantment-solution.59556/", "https://github.com/crashtheparty/EnchantmentSolution", ConfigString.LATEST_VERSION.getBoolean(), ConfigString.EXPERIMENTAL_VERSION.getBoolean());
 		registerEvent(check);
 		checkVersion();
 		MetricsUtils.init();
@@ -227,11 +210,8 @@ public class EnchantmentSolution extends JavaPlugin {
 	}
 
 	public InventoryData getInventory(Player player) {
-		for(InventoryData inv: inventories) {
-			if (inv.getPlayer().getUniqueId().equals(player.getUniqueId())) {
-				return inv;
-			}
-		}
+		for(InventoryData inv: inventories)
+			if (inv.getPlayer().getUniqueId().equals(player.getUniqueId())) return inv;
 
 		return null;
 	}
@@ -258,12 +238,8 @@ public class EnchantmentSolution extends JavaPlugin {
 
 	public static ESAdvancementProgress getAdvancementProgress(OfflinePlayer player, ESAdvancement advancement,
 	String criteria) {
-		for(ESAdvancementProgress progress: EnchantmentSolution.getProgress()) {
-			if (progress.getPlayer().equals(player) && progress.getAdvancement() == advancement
-			&& progress.getCriteria().equals(criteria)) {
-				return progress;
-			}
-		}
+		for(ESAdvancementProgress progress: EnchantmentSolution.getProgress())
+			if (progress.getPlayer().equals(player) && progress.getAdvancement() == advancement && progress.getCriteria().equals(criteria)) return progress;
 		ESAdvancementProgress progress = new ESAdvancementProgress(advancement, criteria, 0, player);
 		EnchantmentSolution.addProgress(progress);
 		return progress;
@@ -271,9 +247,8 @@ public class EnchantmentSolution extends JavaPlugin {
 
 	public static List<ESAdvancementProgress> getAdvancementProgress() {
 		List<ESAdvancementProgress> progress = new ArrayList<ESAdvancementProgress>();
-		for(ESAdvancementProgress pr: PROGRESS) {
+		for(ESAdvancementProgress pr: PROGRESS)
 			progress.add(pr);
-		}
 		return progress;
 	}
 
@@ -282,12 +257,8 @@ public class EnchantmentSolution extends JavaPlugin {
 	}
 
 	public static boolean exists(Player player, ESAdvancement advancement, String criteria) {
-		for(ESAdvancementProgress progress: PROGRESS) {
-			if (progress.getPlayer().equals(player) && progress.getAdvancement() == advancement
-			&& progress.getCriteria().equals(criteria)) {
-				return true;
-			}
-		}
+		for(ESAdvancementProgress progress: PROGRESS)
+			if (progress.getPlayer().equals(player) && progress.getAdvancement() == advancement && progress.getCriteria().equals(criteria)) return true;
 		return false;
 	}
 

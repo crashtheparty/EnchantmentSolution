@@ -69,72 +69,52 @@ public enum ConfigString {
 	}
 
 	public String getString() {
-		if (!complete && value.isAssignableFrom(String.class)) {
-			return type.getConfig().getString(location);
-		}
+		if (!complete && value.isAssignableFrom(String.class)) return type.getConfig().getString(location);
 		return null;
 	}
 
 	public boolean getBoolean() {
-		if (!complete && value.isAssignableFrom(boolean.class)) {
-			return type.getConfig().getBoolean(location);
-		}
+		if (!complete && value.isAssignableFrom(boolean.class)) return type.getConfig().getBoolean(location);
 		return false;
 	}
 
 	public int getInt() {
-		if (!complete && value.isAssignableFrom(int.class)) {
-			return type.getConfig().getInt(location);
-		}
+		if (!complete && value.isAssignableFrom(int.class)) return type.getConfig().getInt(location);
 		return 0;
 	}
 
 	public double getDouble() {
-		if (!complete && value.isAssignableFrom(double.class)) {
-			return type.getConfig().getDouble(location);
-		}
+		if (!complete && value.isAssignableFrom(double.class)) return type.getConfig().getDouble(location);
 		return 0;
 	}
 
 	public List<String> getStringList() {
-		if (!complete && value.isAssignableFrom(List.class)) {
-			return type.getConfig().getStringList(location);
-		}
+		if (!complete && value.isAssignableFrom(List.class)) return type.getConfig().getStringList(location);
 		return null;
 	}
 
 	public String getString(String addedLocation) {
-		if (complete && value.isAssignableFrom(String.class)) {
-			return type.getConfig().getString(location + addedLocation);
-		}
+		if (complete && value.isAssignableFrom(String.class)) return type.getConfig().getString(location + addedLocation);
 		return null;
 	}
 
 	public boolean getBoolean(String addedLocation) {
-		if (complete && value.isAssignableFrom(boolean.class)) {
-			return type.getConfig().getBoolean(location + addedLocation);
-		}
+		if (complete && value.isAssignableFrom(boolean.class)) return type.getConfig().getBoolean(location + addedLocation);
 		return false;
 	}
 
 	public int getInt(String addedLocation) {
-		if (complete && value.isAssignableFrom(int.class)) {
-			return type.getConfig().getInt(location + addedLocation);
-		}
+		if (complete && value.isAssignableFrom(int.class)) return type.getConfig().getInt(location + addedLocation);
 		return 0;
 	}
 
 	public double getDouble(String addedLocation) {
-		if (complete && value.isAssignableFrom(double.class)) {
-			return type.getConfig().getDouble(location + addedLocation);
-		}
+		if (complete && value.isAssignableFrom(double.class)) return type.getConfig().getDouble(location + addedLocation);
 		return 0;
 	}
 
 	public List<String> getStringList(String addedLocation) {
-		if (complete && value.isAssignableFrom(List.class)) {
-			return type.getConfig().getStringList(location + addedLocation);
-		}
+		if (complete && value.isAssignableFrom(List.class)) return type.getConfig().getStringList(location + addedLocation);
 		return null;
 	}
 }

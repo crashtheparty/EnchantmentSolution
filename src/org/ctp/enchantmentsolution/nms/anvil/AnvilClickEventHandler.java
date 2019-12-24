@@ -27,11 +27,7 @@ public interface AnvilClickEventHandler {
 				if (data instanceof Anvil) {
 					Anvil anvil = (Anvil) data;
 					item = anvil.getItems().get(0);
-					if (item != null) {
-						if (!item.getItemMeta().hasDisplayName()) {
-							item = null;
-						}
-					}
+					if (item != null) if (!item.getItemMeta().hasDisplayName()) item = null;
 				}
 				if (item == null) {
 					event.setWillClose(false);
@@ -41,9 +37,7 @@ public interface AnvilClickEventHandler {
 			}
 
 			event.getData().setItemName(event.getName());
-			if (player.getGameMode() != GameMode.CREATIVE && data instanceof Anvil) {
-				player.setLevel(player.getLevel() - 1);
-			}
+			if (player.getGameMode() != GameMode.CREATIVE && data instanceof Anvil) player.setLevel(player.getLevel() - 1);
 		};
 	}
 }

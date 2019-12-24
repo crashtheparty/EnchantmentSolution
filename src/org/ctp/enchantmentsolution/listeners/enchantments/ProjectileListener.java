@@ -70,9 +70,7 @@ public class ProjectileListener extends Enchantmentable {
 	}
 
 	private void curseOfLag(ProjectileLaunchEvent event) {
-		if (!canRun(RegisterEnchantments.CURSE_OF_LAG, event)) {
-			return;
-		}
+		if (!canRun(RegisterEnchantments.CURSE_OF_LAG, event)) return;
 		Projectile proj = event.getEntity();
 		if (proj.getShooter() instanceof Player) {
 			Player player = (Player) proj.getShooter();
@@ -83,13 +81,9 @@ public class ProjectileListener extends Enchantmentable {
 				Bukkit.getPluginManager().callEvent(lag);
 				if (!lag.isCancelled() && lag.getEffects().size() > 0) {
 					Location loc = lag.getLocation();
-					for(ParticleEffect effect: lag.getEffects()) {
-						loc.getWorld().spawnParticle(effect.getParticle(), loc, effect.getNum(), effect.getVarX(),
-						effect.getVarY(), effect.getVarZ());
-					}
-					if (lag.getSound() != null) {
-						loc.getWorld().playSound(loc, lag.getSound(), lag.getVolume(), lag.getPitch());
-					}
+					for(ParticleEffect effect: lag.getEffects())
+						loc.getWorld().spawnParticle(effect.getParticle(), loc, effect.getNum(), effect.getVarX(), effect.getVarY(), effect.getVarZ());
+					if (lag.getSound() != null) loc.getWorld().playSound(loc, lag.getSound(), lag.getVolume(), lag.getPitch());
 					AdvancementUtils.awardCriteria(player, ESAdvancement.LAAAGGGGGG, "lag");
 				}
 			}
@@ -97,59 +91,41 @@ public class ProjectileListener extends Enchantmentable {
 	}
 
 	private void detonator(ProjectileLaunchEvent event) {
-		if (!canRun(RegisterEnchantments.DETONATOR, event)) {
-			return;
-		}
+		if (!canRun(RegisterEnchantments.DETONATOR, event)) return;
 
 		HumanEntity entity = null;
 		if (event.getEntity().getShooter() instanceof HumanEntity) {
 			entity = (HumanEntity) event.getEntity().getShooter();
 			ItemStack item = entity.getInventory().getItemInMainHand();
-			if (ItemUtils.hasEnchantment(item, RegisterEnchantments.DETONATOR)) {
-				event.getEntity().setMetadata("detonator", new FixedMetadataValue(EnchantmentSolution.getPlugin(),
-				ItemUtils.getLevel(item, RegisterEnchantments.DETONATOR)));
-			}
+			if (ItemUtils.hasEnchantment(item, RegisterEnchantments.DETONATOR)) event.getEntity().setMetadata("detonator", new FixedMetadataValue(EnchantmentSolution.getPlugin(), ItemUtils.getLevel(item, RegisterEnchantments.DETONATOR)));
 		}
 	}
 
 	private void drowned(ProjectileLaunchEvent event) {
-		if (!canRun(RegisterEnchantments.DROWNED, event)) {
-			return;
-		}
+		if (!canRun(RegisterEnchantments.DROWNED, event)) return;
 		Projectile proj = event.getEntity();
 		if (proj instanceof Trident) {
 			Trident trident = (Trident) proj;
 			if (trident.getShooter() instanceof Player) {
 				Player player = (Player) trident.getShooter();
 				ItemStack tridentItem = player.getInventory().getItemInMainHand();
-				if (tridentItem != null && ItemUtils.hasEnchantment(tridentItem, RegisterEnchantments.DROWNED)) {
-					trident.setMetadata("drowned", new FixedMetadataValue(EnchantmentSolution.getPlugin(),
-					ItemUtils.getLevel(tridentItem, RegisterEnchantments.DROWNED)));
-				}
+				if (tridentItem != null && ItemUtils.hasEnchantment(tridentItem, RegisterEnchantments.DROWNED)) trident.setMetadata("drowned", new FixedMetadataValue(EnchantmentSolution.getPlugin(), ItemUtils.getLevel(tridentItem, RegisterEnchantments.DROWNED)));
 			}
 		}
 	}
 
 	private void hollowPoint(ProjectileLaunchEvent event) {
-		if (!canRun(RegisterEnchantments.HOLLOW_POINT, event)) {
-			return;
-		}
+		if (!canRun(RegisterEnchantments.HOLLOW_POINT, event)) return;
 
 		HumanEntity entity = null;
 		if (event.getEntity().getShooter() instanceof HumanEntity) {
 			entity = (HumanEntity) event.getEntity().getShooter();
-			if (ItemUtils.hasEnchantment(entity.getInventory().getItemInMainHand(),
-			RegisterEnchantments.HOLLOW_POINT)) {
-				event.getEntity().setMetadata("hollow_point",
-				new FixedMetadataValue(EnchantmentSolution.getPlugin(), 1));
-			}
+			if (ItemUtils.hasEnchantment(entity.getInventory().getItemInMainHand(), RegisterEnchantments.HOLLOW_POINT)) event.getEntity().setMetadata("hollow_point", new FixedMetadataValue(EnchantmentSolution.getPlugin(), 1));
 		}
 	}
 
 	private void sniper(ProjectileLaunchEvent event) {
-		if (!canRun(RegisterEnchantments.SNIPER, event)) {
-			return;
-		}
+		if (!canRun(RegisterEnchantments.SNIPER, event)) return;
 		Projectile proj = event.getEntity();
 		if (proj instanceof Arrow) {
 			Arrow arrow = (Arrow) proj;
@@ -164,10 +140,8 @@ public class ProjectileListener extends Enchantmentable {
 					Bukkit.getPluginManager().callEvent(sniper);
 
 					if (!sniper.isCancelled() && sniper.getSpeed() > 0) {
-						arrow.setMetadata("sniper", new FixedMetadataValue(EnchantmentSolution.getPlugin(),
-						LocationUtils.locationToString(player.getLocation())));
-						Bukkit.getScheduler().runTaskLater(EnchantmentSolution.getPlugin(),
-						(Runnable) () -> arrow.setVelocity(arrow.getVelocity().multiply(sniper.getSpeed())), 0l);
+						arrow.setMetadata("sniper", new FixedMetadataValue(EnchantmentSolution.getPlugin(), LocationUtils.locationToString(player.getLocation())));
+						Bukkit.getScheduler().runTaskLater(EnchantmentSolution.getPlugin(), (Runnable) () -> arrow.setVelocity(arrow.getVelocity().multiply(sniper.getSpeed())), 0l);
 					}
 				}
 			}
@@ -175,77 +149,57 @@ public class ProjectileListener extends Enchantmentable {
 	}
 
 	private void transmutation(ProjectileLaunchEvent event) {
-		if (!canRun(RegisterEnchantments.TRANSMUTATION, event)) {
-			return;
-		}
+		if (!canRun(RegisterEnchantments.TRANSMUTATION, event)) return;
 		Projectile proj = event.getEntity();
 		if (proj instanceof Trident) {
 			Trident trident = (Trident) proj;
 			if (trident.getShooter() instanceof Player) {
 				Player player = (Player) trident.getShooter();
 				ItemStack tridentItem = player.getInventory().getItemInMainHand();
-				if (tridentItem != null && ItemUtils.hasEnchantment(tridentItem, RegisterEnchantments.TRANSMUTATION)) {
-					trident.setMetadata("transmutation", new FixedMetadataValue(EnchantmentSolution.getPlugin(), 1));
-				}
+				if (tridentItem != null && ItemUtils.hasEnchantment(tridentItem, RegisterEnchantments.TRANSMUTATION)) trident.setMetadata("transmutation", new FixedMetadataValue(EnchantmentSolution.getPlugin(), 1));
 			}
 		}
 	}
 
 	private void detonator(ProjectileHitEvent event) {
-		if (!canRun(RegisterEnchantments.DETONATOR, event)) {
-			return;
-		}
+		if (!canRun(RegisterEnchantments.DETONATOR, event)) return;
 		if (event.getEntity().getShooter() instanceof LivingEntity) {
 			LivingEntity entity = (LivingEntity) event.getEntity().getShooter();
-			if (event.getHitEntity() != null && event.getHitEntity().getType() == EntityType.CREEPER) {
-				return;
-			}
+			if (event.getHitEntity() != null && event.getHitEntity().getType() == EntityType.CREEPER) return;
 			if (event.getEntity().hasMetadata("detonator")) {
 				Location loc = event.getEntity().getLocation();
 				int level = event.getEntity().getMetadata("detonator").get(0).asInt();
 
-				DetonatorExplosionEvent detonator = new DetonatorExplosionEvent(entity, level, loc,
-				(float) (0.5 + 0.5 * level), true, true, false);
+				DetonatorExplosionEvent detonator = new DetonatorExplosionEvent(entity, level, loc, (float) (0.5 + 0.5 * level), true, true, false);
 				Bukkit.getPluginManager().callEvent(detonator);
 
-				if (!detonator.isCancelled()) {
-					if (detonator.willDelayExplosion()) {
-						Bukkit.getScheduler().runTaskLater(EnchantmentSolution.getPlugin(), () -> {
-							handleDetonatorExplosion(event, detonator, loc);
-						}, 1l);
-					} else {
-						handleDetonatorExplosion(event, detonator, loc);
-					}
-				}
+				if (!detonator.isCancelled()) if (detonator.willDelayExplosion()) Bukkit.getScheduler().runTaskLater(EnchantmentSolution.getPlugin(), () -> {
+					handleDetonatorExplosion(event, detonator, loc);
+				}, 1l);
+				else
+					handleDetonatorExplosion(event, detonator, loc);
 			}
 		}
 	}
-	
+
 	private void handleDetonatorExplosion(ProjectileHitEvent event, DetonatorExplosionEvent detonator, Location loc) {
-		loc.getWorld().createExplosion(detonator.getLoc(), detonator.getSize(), detonator.willSetFire(),
-		detonator.willSetBlocks());
-		if (event.getEntity() != null) {
-			event.getEntity().remove();
-		}
-		if(detonator.getEntity() instanceof Player) {
+		loc.getWorld().createExplosion(detonator.getLoc(), detonator.getSize(), detonator.willSetFire(), detonator.willSetBlocks());
+		if (event.getEntity() != null) event.getEntity().remove();
+		if (detonator.getEntity() instanceof Player) {
 			Player player = (Player) detonator.getEntity();
 			AdvancementUtils.awardCriteria(player, ESAdvancement.CARPET_BOMBS, "explosion", 1);
 		}
 	}
 
 	private void hardBounce(ProjectileHitEvent event) {
-		if (!canRun(RegisterEnchantments.HARD_BOUNCE, event)) {
-			return;
-		}
+		if (!canRun(RegisterEnchantments.HARD_BOUNCE, event)) return;
 		Entity e = event.getHitEntity();
 		Projectile p = event.getEntity();
 		if (e != null && e instanceof Player) {
 			Player player = (Player) e;
 			if (player.isBlocking()) {
 				ItemStack shield = player.getInventory().getItemInMainHand();
-				if (shield.getType() != Material.SHIELD) {
-					shield = player.getInventory().getItemInOffHand();
-				}
+				if (shield.getType() != Material.SHIELD) shield = player.getInventory().getItemInOffHand();
 				if (shield != null && ItemUtils.hasEnchantment(shield, RegisterEnchantments.HARD_BOUNCE)) {
 					int level = ItemUtils.getLevel(shield, RegisterEnchantments.HARD_BOUNCE);
 
@@ -253,15 +207,11 @@ public class ProjectileListener extends Enchantmentable {
 					Bukkit.getPluginManager().callEvent(hardBounce);
 
 					if (!hardBounce.isCancelled()) {
-						p.setMetadata("deflection",
-						new FixedMetadataValue(EnchantmentSolution.getPlugin(), player.getUniqueId().toString()));
+						p.setMetadata("deflection", new FixedMetadataValue(EnchantmentSolution.getPlugin(), player.getUniqueId().toString()));
 						Bukkit.getScheduler().runTaskLater(EnchantmentSolution.getPlugin(), (Runnable) () -> {
 							Vector v = p.getVelocity().clone();
-							if (v.getY() < 0) {
-								v.setY(-v.getY());
-							} else if (v.getY() == 0) {
-								v.setY(0.1);
-							}
+							if (v.getY() < 0) v.setY(-v.getY());
+							else if (v.getY() == 0) v.setY(0.1);
 							v.multiply(hardBounce.getSpeed());
 							p.setVelocity(v);
 						}, 1l);
@@ -272,37 +222,26 @@ public class ProjectileListener extends Enchantmentable {
 	}
 
 	private void hollowPoint(ProjectileHitEvent event) {
-		if (!canRun(RegisterEnchantments.HOLLOW_POINT, event)) {
-			return;
-		}
-		if (event.getHitEntity() != null && event.getEntity().hasMetadata("hollow_point")) {
-			if (event.getEntity() instanceof Arrow && event.getEntity().getShooter() instanceof LivingEntity) {
-				Arrow arrow = (Arrow) event.getEntity();
-				LivingEntity entity = (LivingEntity) arrow.getShooter();
-				if (event.getHitEntity().getType() == EntityType.ENDERMAN
-				|| event.getHitEntity().getType() == EntityType.WITHER && ((Wither) event.getHitEntity())
-				.getHealth() <= ((Wither) event.getHitEntity()).getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()
-				/ 2) {
-					double damage = DamageEvent.getArrowDamage(entity, arrow);
-					HollowPointDamageEvent hollowPoint = new HollowPointDamageEvent(event.getEntity(),
-					event.getHitEntity(), DamageCause.PROJECTILE, damage);
-					Bukkit.getPluginManager().callEvent(hollowPoint);
-					if (!hollowPoint.isCancelled()) {
-						Player player = (Player) ((Projectile) hollowPoint.getDamager()).getShooter();
-						DamageEvent.damageEntity((LivingEntity) hollowPoint.getEntity(), player, "arrow",
-						(float) hollowPoint.getDamage());
-						event.getEntity().remove();
-						AdvancementUtils.awardCriteria(player, ESAdvancement.PENETRATION, "arrow");
-					}
+		if (!canRun(RegisterEnchantments.HOLLOW_POINT, event)) return;
+		if (event.getHitEntity() != null && event.getEntity().hasMetadata("hollow_point")) if (event.getEntity() instanceof Arrow && event.getEntity().getShooter() instanceof LivingEntity) {
+			Arrow arrow = (Arrow) event.getEntity();
+			LivingEntity entity = (LivingEntity) arrow.getShooter();
+			if (event.getHitEntity().getType() == EntityType.ENDERMAN || event.getHitEntity().getType() == EntityType.WITHER && ((Wither) event.getHitEntity()).getHealth() <= ((Wither) event.getHitEntity()).getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() / 2) {
+				double damage = DamageEvent.getArrowDamage(entity, arrow);
+				HollowPointDamageEvent hollowPoint = new HollowPointDamageEvent(event.getEntity(), event.getHitEntity(), DamageCause.PROJECTILE, damage);
+				Bukkit.getPluginManager().callEvent(hollowPoint);
+				if (!hollowPoint.isCancelled()) {
+					Player player = (Player) ((Projectile) hollowPoint.getDamager()).getShooter();
+					DamageEvent.damageEntity((LivingEntity) hollowPoint.getEntity(), player, "arrow", (float) hollowPoint.getDamage());
+					event.getEntity().remove();
+					AdvancementUtils.awardCriteria(player, ESAdvancement.PENETRATION, "arrow");
 				}
 			}
 		}
 	}
 
 	private void overkill(ProjectileHitEvent event) {
-		if (!canRun(RegisterEnchantments.OVERKILL, event)) {
-			return;
-		}
+		if (!canRun(RegisterEnchantments.OVERKILL, event)) return;
 		if (event.getEntity() instanceof Arrow && event.getEntity().hasMetadata("no_pickup")) {
 			Arrow arrow = (Arrow) event.getEntity();
 			arrow.setPickupStatus(PickupStatus.DISALLOWED);
@@ -310,38 +249,21 @@ public class ProjectileListener extends Enchantmentable {
 	}
 
 	private void splatterFest(ProjectileHitEvent event) {
-		if (!canRun(RegisterEnchantments.SPLATTER_FEST, event)) {
-			return;
-		}
+		if (!canRun(RegisterEnchantments.SPLATTER_FEST, event)) return;
 		if (event.getHitEntity() != null && event.getEntityType() == EntityType.EGG) {
 			Projectile entity = event.getEntity();
-			if (entity.hasMetadata("splatter_fest")) {
-				for(MetadataValue meta: entity.getMetadata("splatter_fest")) {
-					OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(UUID.fromString(meta.asString()));
-					if (offlinePlayer != null) {
-						if (event.getHitEntity() instanceof Player) {
-							Player player = (Player) event.getHitEntity();
-							if (player.getUniqueId().toString().equals(offlinePlayer.getUniqueId().toString())) {
-								AdvancementUtils.awardCriteria(player, ESAdvancement.EGGED_BY_MYSELF, "egg");
-							}
-						} else if (event.getHitEntity().getType() == EntityType.CHICKEN) {
-							if (offlinePlayer.getPlayer() != null) {
-								AdvancementUtils.awardCriteria(offlinePlayer.getPlayer(),
-								ESAdvancement.CHICKEN_OR_THE_EGG, "egg");
-							}
-						}
-					}
-				}
+			if (entity.hasMetadata("splatter_fest")) for(MetadataValue meta: entity.getMetadata("splatter_fest")) {
+				OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(UUID.fromString(meta.asString()));
+				if (offlinePlayer != null) if (event.getHitEntity() instanceof Player) {
+					Player player = (Player) event.getHitEntity();
+					if (player.getUniqueId().toString().equals(offlinePlayer.getUniqueId().toString())) AdvancementUtils.awardCriteria(player, ESAdvancement.EGGED_BY_MYSELF, "egg");
+				} else if (event.getHitEntity().getType() == EntityType.CHICKEN) if (offlinePlayer.getPlayer() != null) AdvancementUtils.awardCriteria(offlinePlayer.getPlayer(), ESAdvancement.CHICKEN_OR_THE_EGG, "egg");
 			}
 		}
 	}
 
 	private void splatterFest(PlayerEggThrowEvent event) {
-		if (!canRun(RegisterEnchantments.SPLATTER_FEST, event)) {
-			return;
-		}
-		if (event.getEgg().hasMetadata("hatch_egg")) {
-			event.setHatching(false);
-		}
+		if (!canRun(RegisterEnchantments.SPLATTER_FEST, event)) return;
+		if (event.getEgg().hasMetadata("hatch_egg")) event.setHatching(false);
 	}
 }

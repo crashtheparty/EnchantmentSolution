@@ -60,7 +60,7 @@ public class BukkitVersion {
 				versionNumber = 9;
 				break;
 		}
-		if(versionNumber > 0) {
+		if (versionNumber > 0) {
 			ChatUtils.sendInfo("Found version " + version + ". Setting version number to " + versionNumber + ".");
 			return true;
 		}
@@ -84,12 +84,11 @@ public class BukkitVersion {
 				versionNumber = 9;
 				break;
 		}
-		if(versionNumber > 0) {
+		if (versionNumber > 0) {
 			ChatUtils.sendInfo("Found version " + apiVersion + ". Setting version number to " + versionNumber + ".");
 			return true;
 		}
-		ChatUtils.sendSevere("This version is not defined! Features that require NMS have been disabled, and issues may arise with certain features. "
-		+ "Please wait for an update for this version.");
+		ChatUtils.sendSevere("This version is not defined! Features that require NMS have been disabled, and issues may arise with certain features. " + "Please wait for an update for this version.");
 		return false;
 	}
 

@@ -23,62 +23,42 @@ public class AbilityUtils {
 
 	private static List<Block> WAND_BLOCKS = new ArrayList<Block>();
 	private static List<Block> HEIGHT_WIDTH_BLOCKS = new ArrayList<Block>();
-	private static List<Material> CROPS = Arrays.asList(Material.WHEAT, Material.CARROTS, Material.POTATOES,
-	Material.NETHER_WART, Material.BEETROOTS, Material.COCOA_BEANS);
+	private static List<Material> CROPS = Arrays.asList(Material.WHEAT, Material.CARROTS, Material.POTATOES, Material.NETHER_WART, Material.BEETROOTS, Material.COCOA_BEANS);
 
 	public static ItemStack getGoldDiggerItems(ItemStack item, Block brokenBlock) {
 
 		if (brokenBlock.getBlockData() instanceof Ageable) {
 			Ageable age = (Ageable) brokenBlock.getBlockData();
 			if (CROPS.contains(brokenBlock.getType())) {
-				if (age.getAge() != age.getMaximumAge()) {
-					return null;
-				}
-			} else {
+				if (age.getAge() != age.getMaximumAge()) return null;
+			} else
 				return null;
-			}
-		} else {
+		} else
 			return null;
-		}
 		int level = ItemUtils.getLevel(item, RegisterEnchantments.GOLD_DIGGER);
 		int amount = 0;
 		while (level > 0) {
 			double random = Math.random();
 			double chance = 1.0 / 6.0;
-			if (chance > random) {
-				amount++;
-			}
+			if (chance > random) amount++;
 			level--;
 		}
-		if (amount > 0) {
-			return new ItemStack(Material.GOLD_NUGGET, amount);
-		}
+		if (amount > 0) return new ItemStack(Material.GOLD_NUGGET, amount);
 
 		return null;
 	}
 
 	public static void dropExperience(Location loc, int amount) {
-		if (amount > 0) {
-			loc.getWorld().spawn(loc, ExperienceOrb.class).setExperience(amount);
-		}
+		if (amount > 0) loc.getWorld().spawn(loc, ExperienceOrb.class).setExperience(amount);
 	}
 
 	public static void giveExperience(Player player, int amount) {
 		List<ItemStack> items = new ArrayList<ItemStack>();
 		PlayerInventory playerInv = player.getInventory();
-		for(ItemStack i: playerInv.getArmorContents()) {
-			if (i != null && ItemUtils.hasEnchantment(i, Enchantment.MENDING)) {
-				items.add(i);
-			}
-		}
-		if (playerInv.getItemInMainHand() != null
-		&& ItemUtils.hasEnchantment(playerInv.getItemInMainHand(), Enchantment.MENDING)) {
-			items.add(playerInv.getItemInMainHand());
-		}
-		if (playerInv.getItemInOffHand() != null
-		&& ItemUtils.hasEnchantment(playerInv.getItemInOffHand(), Enchantment.MENDING)) {
-			items.add(playerInv.getItemInOffHand());
-		}
+		for(ItemStack i: playerInv.getArmorContents())
+			if (i != null && ItemUtils.hasEnchantment(i, Enchantment.MENDING)) items.add(i);
+		if (playerInv.getItemInMainHand() != null && ItemUtils.hasEnchantment(playerInv.getItemInMainHand(), Enchantment.MENDING)) items.add(playerInv.getItemInMainHand());
+		if (playerInv.getItemInOffHand() != null && ItemUtils.hasEnchantment(playerInv.getItemInOffHand(), Enchantment.MENDING)) items.add(playerInv.getItemInOffHand());
 
 		if (items.size() > 0) {
 			Collections.shuffle(items);
@@ -88,28 +68,19 @@ public class AbilityUtils {
 				durability -= 2;
 				amount--;
 			}
-			if (durability < 0) {
-				durability = 0;
-			}
+			if (durability < 0) durability = 0;
 			DamageUtils.setDamage(item, durability);
-			if (amount > 0) {
-				player.giveExp(amount);
-			}
-		} else {
+			if (amount > 0) player.giveExp(amount);
+		} else
 			player.giveExp(amount);
-		}
 	}
 
 	public static int setExp(int exp, int level) {
 		int totalExp = exp;
-		if (exp > 0) {
-			for(int i = 0; i < exp * level; i++) {
-				double chance = .50;
-				double random = Math.random();
-				if (chance > random) {
-					totalExp++;
-				}
-			}
+		if (exp > 0) for(int i = 0; i < exp * level; i++) {
+			double chance = .50;
+			double random = Math.random();
+			if (chance > random) totalExp++;
 		}
 		return totalExp;
 	}
@@ -117,9 +88,8 @@ public class AbilityUtils {
 	public static List<ParticleEffect> createEffects(Player player) {
 		int random = (int) (Math.random() * 5 + 2);
 		List<ParticleEffect> particles = new ArrayList<ParticleEffect>();
-		for(int i = 0; i < random; i++) {
+		for(int i = 0; i < random; i++)
 			particles.add(generateParticle());
-		}
 		return particles;
 	}
 
@@ -130,36 +100,25 @@ public class AbilityUtils {
 		while (particle == null && tries < 10) {
 			int particleType = (int) (Math.random() * Particle.values().length);
 			particle = Particle.values()[particleType];
-			if (!particle.getDataType().isAssignableFrom(Void.class)) {
-				particle = null;
-			}
+			if (!particle.getDataType().isAssignableFrom(Void.class)) particle = null;
 
 		}
 		return new ParticleEffect(particle, numParticles);
 	}
 
 	public static List<DamageCause> getContactCauses() {
-		return Arrays.asList(DamageCause.BLOCK_EXPLOSION, DamageCause.CONTACT, DamageCause.CUSTOM,
-		DamageCause.ENTITY_ATTACK, DamageCause.ENTITY_EXPLOSION, DamageCause.ENTITY_SWEEP_ATTACK,
-		DamageCause.LIGHTNING, DamageCause.PROJECTILE, DamageCause.THORNS);
+		return Arrays.asList(DamageCause.BLOCK_EXPLOSION, DamageCause.CONTACT, DamageCause.CUSTOM, DamageCause.ENTITY_ATTACK, DamageCause.ENTITY_EXPLOSION, DamageCause.ENTITY_SWEEP_ATTACK, DamageCause.LIGHTNING, DamageCause.PROJECTILE, DamageCause.THORNS);
 	}
 
 	public static int getExhaustionCurse(Player player) {
 		Enchantment curse = RegisterEnchantments.CURSE_OF_EXHAUSTION;
 		int exhaustionCurse = 0;
-		for(ItemStack item: player.getInventory().getArmorContents()) {
-			if (item != null && ItemUtils.hasEnchantment(item, curse)) {
-				exhaustionCurse += ItemUtils.getLevel(item, curse);
-			}
-		}
+		for(ItemStack item: player.getInventory().getArmorContents())
+			if (item != null && ItemUtils.hasEnchantment(item, curse)) exhaustionCurse += ItemUtils.getLevel(item, curse);
 		ItemStack mainHand = player.getInventory().getItemInMainHand();
-		if (mainHand != null && ItemUtils.hasEnchantment(mainHand, curse)) {
-			exhaustionCurse += ItemUtils.getLevel(mainHand, curse);
-		}
+		if (mainHand != null && ItemUtils.hasEnchantment(mainHand, curse)) exhaustionCurse += ItemUtils.getLevel(mainHand, curse);
 		ItemStack offHand = player.getInventory().getItemInOffHand();
-		if (offHand != null && ItemUtils.hasEnchantment(offHand, curse)) {
-			exhaustionCurse += ItemUtils.getLevel(offHand, curse);
-		}
+		if (offHand != null && ItemUtils.hasEnchantment(offHand, curse)) exhaustionCurse += ItemUtils.getLevel(offHand, curse);
 		return exhaustionCurse;
 	}
 

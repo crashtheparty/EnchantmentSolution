@@ -48,7 +48,8 @@ public interface Reflectionable {
 		}
 	}
 
-	default void runMethod(Reflectionable superClass, String name, Event event, Enchantment enchantment, PotionEffectType type) {
+	default void runMethod(Reflectionable superClass, String name, Event event, Enchantment enchantment,
+	PotionEffectType type) {
 		try {
 			List<Class<?>> clazzes = new ArrayList<Class<?>>();
 			clazzes.add(event.getClass());
@@ -63,14 +64,14 @@ public interface Reflectionable {
 		}
 	}
 
-	default void runMethod(Reflectionable superClass, String name, Event event, Enchantment enchantment, Object... objs) {
+	default void runMethod(Reflectionable superClass, String name, Event event, Enchantment enchantment,
+	Object... objs) {
 		try {
 			List<Class<?>> clazzes = new ArrayList<Class<?>>();
 			clazzes.add(event.getClass());
 			clazzes.add(Enchantment.class);
-			for(Object obj : objs) {
+			for(Object obj: objs)
 				clazzes.add(obj.getClass());
-			}
 
 			Method superMethod = superClass.getClass().getDeclaredMethod(name, clazzes.toArray(new Class<?>[] {}));
 			superMethod.setAccessible(true);
@@ -85,16 +86,16 @@ public interface Reflectionable {
 			List<Class<?>> clazzes = new ArrayList<Class<?>>();
 			List<Object> objs = new ArrayList<Object>();
 			Iterator<Entry<Class<?>, Object>> iterator = map.entrySet().iterator();
-			while(iterator.hasNext()) {
+			while (iterator.hasNext()) {
 				Entry<Class<?>, Object> entry = iterator.next();
-				if(entry.getKey().isAssignableFrom(entry.getValue().getClass())) {
+				if (entry.getKey().isAssignableFrom(entry.getValue().getClass())) {
 					clazzes.add(entry.getKey());
 					objs.add(entry.getValue());
 				}
 			}
 			Method superMethod = superClass.getClass().getDeclaredMethod(name, clazzes.toArray(new Class<?>[] {}));
 			superMethod.setAccessible(true);
-			superMethod.invoke(superClass, objs.toArray() );
+			superMethod.invoke(superClass, objs.toArray());
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -106,18 +107,12 @@ public interface Reflectionable {
 
 	default boolean canRun(boolean all, Enchantment... enchantments) {
 		if (all) {
-			for(Enchantment enchantment: enchantments) {
-				if (!RegisterEnchantments.isEnabled(enchantment)) {
-					all = false;
-				}
-			}
+			for(Enchantment enchantment: enchantments)
+				if (!RegisterEnchantments.isEnabled(enchantment)) all = false;
 			return all;
 		} else {
-			for(Enchantment enchantment: enchantments) {
-				if (RegisterEnchantments.isEnabled(enchantment)) {
-					return true;
-				}
-			}
+			for(Enchantment enchantment: enchantments)
+				if (RegisterEnchantments.isEnabled(enchantment)) return true;
 			return false;
 		}
 	}

@@ -44,117 +44,74 @@ public class DropsListener extends Enchantmentable {
 	}
 
 	private void beheading(EntityDeathEvent event) {
-		if (!canRun(RegisterEnchantments.BEHEADING, event)) {
-			return;
-		}
+		if (!canRun(RegisterEnchantments.BEHEADING, event)) return;
 		Entity entity = event.getEntity();
 		Player killer = event.getEntity().getKiller();
-		if (killer != null) {
-			if (ItemUtils.hasEnchantment(killer.getInventory().getItemInMainHand(), RegisterEnchantments.BEHEADING)) {
-				int level = ItemUtils.getLevel(killer.getInventory().getItemInMainHand(),
-				RegisterEnchantments.BEHEADING);
-				double chance = level * .05;
-				double random = Math.random();
-				if (chance > random) {
-					List<ItemStack> skulls = new ArrayList<ItemStack>();
-					if (entity instanceof WitherSkeleton) {
-						skulls.add(new ItemStack(Material.WITHER_SKELETON_SKULL));
-					} else if (entity instanceof Skeleton) {
-						skulls.add(new ItemStack(Material.SKELETON_SKULL));
-					} else if (entity instanceof Zombie) {
-						skulls.add(new ItemStack(Material.ZOMBIE_HEAD));
-					} else if (entity instanceof Creeper) {
-						skulls.add(new ItemStack(Material.CREEPER_HEAD));
-					} else if (entity instanceof Player) {
-						ItemStack skull = new ItemStack(Material.PLAYER_HEAD);
-						SkullMeta skullMeta = (SkullMeta) skull.getItemMeta();
-						skullMeta.setOwningPlayer((Player) entity);
-						HashMap<String, Object> codes = ChatUtils.getCodes();
-						codes.put("%player%", ((Player) entity).getName());
-						skullMeta.setDisplayName(ChatUtils.getMessage(codes, "misc.beheading_skull"));
-						skull.setItemMeta(skullMeta);
-						skulls.add(skull);
-					} else if (entity instanceof EnderDragon) {
-						skulls.add(new ItemStack(Material.DRAGON_HEAD));
+		if (killer != null) if (ItemUtils.hasEnchantment(killer.getInventory().getItemInMainHand(), RegisterEnchantments.BEHEADING)) {
+			int level = ItemUtils.getLevel(killer.getInventory().getItemInMainHand(), RegisterEnchantments.BEHEADING);
+			double chance = level * .05;
+			double random = Math.random();
+			if (chance > random) {
+				List<ItemStack> skulls = new ArrayList<ItemStack>();
+				if (entity instanceof WitherSkeleton) skulls.add(new ItemStack(Material.WITHER_SKELETON_SKULL));
+				else if (entity instanceof Skeleton) skulls.add(new ItemStack(Material.SKELETON_SKULL));
+				else if (entity instanceof Zombie) skulls.add(new ItemStack(Material.ZOMBIE_HEAD));
+				else if (entity instanceof Creeper) skulls.add(new ItemStack(Material.CREEPER_HEAD));
+				else if (entity instanceof Player) {
+					ItemStack skull = new ItemStack(Material.PLAYER_HEAD);
+					SkullMeta skullMeta = (SkullMeta) skull.getItemMeta();
+					skullMeta.setOwningPlayer((Player) entity);
+					HashMap<String, Object> codes = ChatUtils.getCodes();
+					codes.put("%player%", ((Player) entity).getName());
+					skullMeta.setDisplayName(ChatUtils.getMessage(codes, "misc.beheading_skull"));
+					skull.setItemMeta(skullMeta);
+					skulls.add(skull);
+				} else if (entity instanceof EnderDragon) skulls.add(new ItemStack(Material.DRAGON_HEAD));
+
+				BeheadingEvent beheading = new BeheadingEvent(killer, level, skulls, event.getDrops(), false, true);
+				Bukkit.getPluginManager().callEvent(beheading);
+
+				if (!beheading.isCancelled()) {
+					List<ItemStack> newDrops = new ArrayList<ItemStack>();
+					if (!beheading.isOverride()) {
+						newDrops.addAll(beheading.getOriginalDrops());
+						if (heads(Material.WITHER_SKELETON_SKULL, beheading.getOriginalDrops(), beheading.getNewDrops()) >= 2) AdvancementUtils.awardCriteria(killer, ESAdvancement.DOUBLE_HEADER, "wither_skull");
 					}
+					newDrops.addAll(beheading.getNewDrops());
+					if (event instanceof PlayerDeathEvent) if (((PlayerDeathEvent) event).getKeepInventory() && !beheading.isKeepInventoryOverride()) return;
+					if (heads(Material.PLAYER_HEAD, newDrops, null) > 0) AdvancementUtils.awardCriteria(killer, ESAdvancement.HEADHUNTER, "player_head");
 
-					BeheadingEvent beheading = new BeheadingEvent(killer, level, skulls, event.getDrops(), false, true);
-					Bukkit.getPluginManager().callEvent(beheading);
-
-					if (!beheading.isCancelled()) {
-						List<ItemStack> newDrops = new ArrayList<ItemStack>();
-						if (!beheading.isOverride()) {
-							newDrops.addAll(beheading.getOriginalDrops());
-							if (heads(Material.WITHER_SKELETON_SKULL, beheading.getOriginalDrops(),
-							beheading.getNewDrops()) >= 2) {
-								AdvancementUtils.awardCriteria(killer, ESAdvancement.DOUBLE_HEADER, "wither_skull");
-							}
-						}
-						newDrops.addAll(beheading.getNewDrops());
-						if (event instanceof PlayerDeathEvent) {
-							if (((PlayerDeathEvent) event).getKeepInventory() && !beheading.isKeepInventoryOverride()) {
-								return;
-							}
-						}
-						if (heads(Material.PLAYER_HEAD, newDrops, null) > 0) {
-							AdvancementUtils.awardCriteria(killer, ESAdvancement.HEADHUNTER, "player_head");
-						}
-
-						event.getDrops().clear();
-						for(ItemStack drop: newDrops) {
-							event.getDrops().add(drop);
-						}
-					}
+					event.getDrops().clear();
+					for(ItemStack drop: newDrops)
+						event.getDrops().add(drop);
 				}
 			}
 		}
 	}
 
 	private void transmutation(EntityDeathEvent event) {
-		if (!canRun(RegisterEnchantments.TRANSMUTATION, event)) {
-			return;
-		}
-		if (event.getEntity() instanceof Player) {
-			return;
-		}
+		if (!canRun(RegisterEnchantments.TRANSMUTATION, event)) return;
+		if (event.getEntity() instanceof Player) return;
 		EntityDamageEvent e = event.getEntity().getLastDamageCause();
 		if (e instanceof EntityDamageByEntityEvent) {
 			EntityDamageByEntityEvent entityDamage = (EntityDamageByEntityEvent) e;
 			if (entityDamage.getDamager() instanceof Projectile) {
 				Projectile p = (Projectile) entityDamage.getDamager();
-				if (p.hasMetadata("transmutation")) {
-					for(MetadataValue meta: p.getMetadata("transmutation")) {
-						if (meta.getOwningPlugin().equals(EnchantmentSolution.getPlugin())) {
-							handleTransmutation(event);
-						}
-					}
-				}
+				if (p.hasMetadata("transmutation")) for(MetadataValue meta: p.getMetadata("transmutation"))
+					if (meta.getOwningPlugin().equals(EnchantmentSolution.getPlugin())) handleTransmutation(event);
 			} else if (event.getEntity().getKiller() != null) {
 				Player killer = event.getEntity().getKiller();
-				if (ItemUtils.hasEnchantment(killer.getInventory().getItemInMainHand(),
-				RegisterEnchantments.TRANSMUTATION)) {
-					handleTransmutation(event);
-				}
+				if (ItemUtils.hasEnchantment(killer.getInventory().getItemInMainHand(), RegisterEnchantments.TRANSMUTATION)) handleTransmutation(event);
 			}
 		}
 	}
 
 	private int heads(Material type, List<ItemStack> original, List<ItemStack> newDrops) {
 		int skulls = 0;
-		if (original != null) {
-			for(ItemStack i: original) {
-				if (i.getType() == type) {
-					skulls += i.getAmount();
-				}
-			}
-		}
-		if (newDrops != null) {
-			for(ItemStack i: newDrops) {
-				if (i.getType() == type) {
-					skulls += i.getAmount();
-				}
-			}
-		}
+		if (original != null) for(ItemStack i: original)
+			if (i.getType() == type) skulls += i.getAmount();
+		if (newDrops != null) for(ItemStack i: newDrops)
+			if (i.getType() == type) skulls += i.getAmount();
 		return skulls;
 	}
 
@@ -165,40 +122,31 @@ public class DropsListener extends Enchantmentable {
 		if (event.getEntity() instanceof Wither) {
 			override = false;
 			changedLoot = true;
-			for(int i = 0; i < 64; i++) {
+			for(int i = 0; i < 64; i++)
 				drops.add(TransmutationLoot.getLoot(event.getEntity().getKiller()));
-			}
-		} else {
-			for(ItemStack item: event.getDrops()) {
+		} else
+			for(ItemStack item: event.getDrops())
 				if (!TransmutationLoot.isTransmutatedLoot(item)) {
 					changedLoot = true;
 					drops.add(TransmutationLoot.getLoot(event.getEntity().getKiller()));
 				}
-			}
-		}
 
 		if (!changedLoot) {
 			AdvancementUtils.awardCriteria(event.getEntity().getKiller(), ESAdvancement.POSEIDONS_DAY_OFF, "day_off");
 			return;
 		}
 
-		TransmutationEvent transmutation = new TransmutationEvent(event.getEntity().getKiller(), event.getEntity(), drops,
-		event.getDrops(), override);
+		TransmutationEvent transmutation = new TransmutationEvent(event.getEntity().getKiller(), event.getEntity(), drops, event.getDrops(), override);
 		Bukkit.getPluginManager().callEvent(transmutation);
 
 		if (!transmutation.isCancelled()) {
 			List<ItemStack> newDrops = new ArrayList<ItemStack>();
-			if (!transmutation.isOverride()) {
-				newDrops.addAll(transmutation.getOriginalDrops());
-			}
+			if (!transmutation.isOverride()) newDrops.addAll(transmutation.getOriginalDrops());
 			newDrops.addAll(transmutation.getNewDrops());
-			if (!override) {
-				AdvancementUtils.awardCriteria(event.getEntity().getKiller(), ESAdvancement.CERBERUS, "obsidian");
-			}
+			if (!override) AdvancementUtils.awardCriteria(event.getEntity().getKiller(), ESAdvancement.CERBERUS, "obsidian");
 			event.getDrops().clear();
-			for(ItemStack drop: newDrops) {
+			for(ItemStack drop: newDrops)
 				event.getDrops().add(drop);
-			}
 		}
 	}
 }

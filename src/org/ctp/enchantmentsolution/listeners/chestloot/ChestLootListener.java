@@ -22,22 +22,19 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.ctp.enchantmentsolution.nms.ChestPopulateNMS;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 
-public class ChestLootListener implements Listener{
+public class ChestLootListener implements Listener {
 
 	@EventHandler
 	public void onBlockPlace(BlockPlaceEvent event) {
-		if(!shouldPopulate()) {
-			return;
-		}
+		if (!shouldPopulate()) return;
 		Block block = event.getBlock();
-		if(block.getType() == Material.HOPPER) {
+		if (block.getType() == Material.HOPPER) {
 			ChestLoot loot = new ChestLoot(block);
 			loot.checkBlocks();
 			try {
 				List<Block> blockLoot = loot.getLootToCheck();
-				for(Block bLoot : blockLoot) {
+				for(Block bLoot: blockLoot)
 					ChestPopulateNMS.populateChest(event.getPlayer(), bLoot);
-				}
 			} catch (ChestLootException e) {
 				e.printStackTrace();
 			}
@@ -46,90 +43,49 @@ public class ChestLootListener implements Listener{
 
 	@EventHandler
 	public void onBlockBreak(BlockBreakEvent event) {
-		if(!shouldPopulate()) {
-			return;
-		}
+		if (!shouldPopulate()) return;
 		Block block = event.getBlock();
-		if(block.getType() == Material.CHEST) {
-			if(ChestPopulateNMS.isLootChest(block)) {
-				ChestPopulateNMS.populateChest(event.getPlayer(), block);
-			}
-		}
+		if (block.getType() == Material.CHEST) if (ChestPopulateNMS.isLootChest(block)) ChestPopulateNMS.populateChest(event.getPlayer(), block);
 	}
 
 	@EventHandler
 	public void onEntityExplosion(EntityExplodeEvent event) {
-		if(!shouldPopulate()) {
-			return;
-		}
-		for(Block block : event.blockList()) {
-			if(block.getType() == Material.CHEST) {
-				if(ChestPopulateNMS.isLootChest(block)) {
-					ChestPopulateNMS.populateChest(event.getEntity() instanceof Player ? (Player) event.getEntity() : null, block);
-				}
-			}
-		}
+		if (!shouldPopulate()) return;
+		for(Block block: event.blockList())
+			if (block.getType() == Material.CHEST) if (ChestPopulateNMS.isLootChest(block)) ChestPopulateNMS.populateChest(event.getEntity() instanceof Player ? (Player) event.getEntity() : null, block);
 	}
 
 	@EventHandler
 	public void onVehicleMove(VehicleMoveEvent event) {
-		if(!shouldPopulate()) {
-			return;
-		}
+		if (!shouldPopulate()) return;
 		Vehicle vehicle = event.getVehicle();
-		if(vehicle.getType().equals(EntityType.MINECART_CHEST)){
-			if(ChestPopulateNMS.isLootCart(vehicle)) {
-				ChestPopulateNMS.populateCart(null, vehicle);
-			}
-		}
+		if (vehicle.getType().equals(EntityType.MINECART_CHEST)) if (ChestPopulateNMS.isLootCart(vehicle)) ChestPopulateNMS.populateCart(null, vehicle);
 	}
 
 	@EventHandler
 	public void onVehicleDestroy(VehicleDestroyEvent event) {
-		if(!shouldPopulate()) {
-			return;
-		}
+		if (!shouldPopulate()) return;
 		Vehicle vehicle = event.getVehicle();
-		if(vehicle.getType().equals(EntityType.MINECART_CHEST)){
-			if(ChestPopulateNMS.isLootCart(vehicle)) {
-				ChestPopulateNMS.populateCart(event.getAttacker() instanceof Player ? (Player) event.getAttacker() : null, vehicle);
-			}
-		}
+		if (vehicle.getType().equals(EntityType.MINECART_CHEST)) if (ChestPopulateNMS.isLootCart(vehicle)) ChestPopulateNMS.populateCart(event.getAttacker() instanceof Player ? (Player) event.getAttacker() : null, vehicle);
 	}
 
 	@EventHandler
 	public void onPlayerInteract(PlayerInteractEvent event) {
-		if(!shouldPopulate()) {
-			return;
-		}
+		if (!shouldPopulate()) return;
 		if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
-			if (event.getHand() == EquipmentSlot.OFF_HAND) {
-				return; // off hand packet, ignore.
-			}
+			if (event.getHand() == EquipmentSlot.OFF_HAND) return; // off hand packet, ignore.
 			Block block = event.getClickedBlock();
-			if(block != null) {
-				if(block.getType() == Material.CHEST) {
-					if(ChestPopulateNMS.isLootChest(block)) {
-						ChestPopulateNMS.populateChest(event.getPlayer(), block);
-					}
-				}
-			}
+			if (block != null) if (block.getType() == Material.CHEST) if (ChestPopulateNMS.isLootChest(block)) ChestPopulateNMS.populateChest(event.getPlayer(), block);
 		}
 	}
 
 	@EventHandler
 	public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
-		if(!shouldPopulate()) {
-			return;
-		}
+		if (!shouldPopulate()) return;
 		Entity entity = event.getRightClicked();
-		if(entity instanceof Vehicle) {
+		if (entity instanceof Vehicle) {
 			Vehicle vehicle = (Vehicle) entity;
-			if(vehicle.getType().equals(EntityType.MINECART_CHEST)){
-				if(ChestPopulateNMS.isLootCart(vehicle)) {
-					ChestPopulateNMS.populateCart(event.getPlayer(), vehicle);
-				}
-			}
+			if (vehicle.getType().equals(EntityType.MINECART_CHEST)) if (ChestPopulateNMS.isLootCart(vehicle)) ChestPopulateNMS.populateCart(event.getPlayer(), vehicle);
 		}
 	}
 

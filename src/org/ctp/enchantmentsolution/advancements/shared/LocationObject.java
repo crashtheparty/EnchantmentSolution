@@ -125,12 +125,8 @@ public class LocationObject extends SharedObject {
 	@Override
 	public JsonObject toJson() {
 		JsonBuilder builder = new JsonBuilder();
-		if (x != null || y != null || z != null) {
-			builder.add("position", new JsonBuilder().add("x", x).add("y", y).add("z", z).build());
-		}
-		if (biome != null) {
-			builder.add("biome", "minecraft:" + biome.name().toLowerCase());
-		}
+		if (x != null || y != null || z != null) builder.add("position", new JsonBuilder().add("x", x).add("y", y).add("z", z).build());
+		if (biome != null) builder.add("biome", "minecraft:" + biome.name().toLowerCase());
 		builder.add("feature", feature);
 		builder.add("dimension", dimension);
 		return builder.build();

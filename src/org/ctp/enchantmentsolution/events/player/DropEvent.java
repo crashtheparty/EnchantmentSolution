@@ -14,7 +14,8 @@ public abstract class DropEvent extends ESPlayerEvent implements Cancellable {
 	private List<ItemStack> newDrops;
 	private boolean override, cancelled;
 
-	public DropEvent(Player who, EnchantmentLevel enchantment, List<ItemStack> newDrops, List<ItemStack> originalDrops, boolean override) {
+	public DropEvent(Player who, EnchantmentLevel enchantment, List<ItemStack> newDrops, List<ItemStack> originalDrops,
+	boolean override) {
 		super(who, enchantment);
 		this.originalDrops = originalDrops;
 		setNewDrops(newDrops);

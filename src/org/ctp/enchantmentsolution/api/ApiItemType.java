@@ -11,7 +11,9 @@ public class ApiItemType {
 
 	/**
 	 * Constructor for ApiItemType
-	 * @param type - the type of items
+	 * 
+	 * @param type
+	 *            - the type of items
 	 */
 	public ApiItemType(String type) {
 		itemType = ItemType.valueOf(type);
@@ -19,7 +21,9 @@ public class ApiItemType {
 
 	/**
 	 * Constructor for ApiItemType
-	 * @param type - the type of items
+	 * 
+	 * @param type
+	 *            - the type of items
 	 */
 	public ApiItemType(ItemType type) {
 		itemType = type;
@@ -27,6 +31,7 @@ public class ApiItemType {
 
 	/**
 	 * Returns the type of items
+	 * 
 	 * @return String - the type of items
 	 */
 	public final String getType() {
@@ -35,6 +40,7 @@ public class ApiItemType {
 
 	/**
 	 * Returns the list of items that comes with the type
+	 * 
 	 * @return List<Material> - the list of items
 	 */
 	public List<Material> getItemTypes() {
@@ -43,6 +49,7 @@ public class ApiItemType {
 
 	/**
 	 * Returns the display name to be used in /enchantinfo
+	 * 
 	 * @return String - the display name
 	 */
 	public String getDisplayName() {

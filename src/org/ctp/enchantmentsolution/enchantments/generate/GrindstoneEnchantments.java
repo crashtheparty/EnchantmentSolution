@@ -34,14 +34,10 @@ public class GrindstoneEnchantments extends GenerateEnchantments {
 		this.itemTwo = itemTwo;
 
 		setCanCombine();
-		if (canCombine) {
-			combineItems();
-		}
+		if (canCombine) combineItems();
 		if (takeEnchantments) {
 			setTakeEnchantments();
-			if (canTakeEnchantments()) {
-				takeEnchantments();
-			}
+			if (canTakeEnchantments()) takeEnchantments();
 		}
 	}
 
@@ -66,13 +62,7 @@ public class GrindstoneEnchantments extends GenerateEnchantments {
 
 	private void setTakeEnchantments() {
 		ItemStack item = getItem();
-		if (item.getType() != Material.BOOK && item.getType() != Material.ENCHANTED_BOOK && item.hasItemMeta()
-		&& item.getItemMeta().hasEnchants()) {
-			if (itemTwo.getType() == Material.BOOK && itemTwo.hasItemMeta() && !itemTwo.getItemMeta().hasEnchants()
-			|| !itemTwo.hasItemMeta()) {
-				takeEnchantments = true;
-			}
-		}
+		if (item.getType() != Material.BOOK && item.getType() != Material.ENCHANTED_BOOK && item.hasItemMeta() && item.getItemMeta().hasEnchants()) if (itemTwo.getType() == Material.BOOK && itemTwo.hasItemMeta() && !itemTwo.getItemMeta().hasEnchants() || !itemTwo.hasItemMeta()) takeEnchantments = true;
 		takeEnchantments = false;
 	}
 
@@ -83,30 +73,19 @@ public class GrindstoneEnchantments extends GenerateEnchantments {
 	private void takeEnchantments() {
 		takenItem = new ItemStack(itemTwo.getType());
 		boolean book = ConfigString.USE_ENCHANTED_BOOKS.getBoolean();
-		if (takenItem.getType() == Material.BOOK && book) {
-			takenItem = ItemUtils.convertToEnchantedBook(takenItem);
-		} else if (takenItem.getType() == Material.ENCHANTED_BOOK && !book) {
-			takenItem = ItemUtils.convertToRegularBook(takenItem);
-		}
+		if (takenItem.getType() == Material.BOOK && book) takenItem = ItemUtils.convertToEnchantedBook(takenItem);
+		else if (takenItem.getType() == Material.ENCHANTED_BOOK && !book) takenItem = ItemUtils.convertToRegularBook(takenItem);
 
 		List<EnchantmentLevel> enchantments = new ArrayList<EnchantmentLevel>();
-		for(Iterator<java.util.Map.Entry<Enchantment, Integer>> it = getItem().getEnchantments().entrySet()
-		.iterator(); it.hasNext();) {
+		for(Iterator<java.util.Map.Entry<Enchantment, Integer>> it = getItem().getEnchantments().entrySet().iterator(); it.hasNext();) {
 			java.util.Map.Entry<Enchantment, Integer> e = it.next();
-			for(CustomEnchantment ench: RegisterEnchantments.getEnchantments()) {
-				if (ench.getRelativeEnchantment().equals(e.getKey())) {
-					enchantments.add(new EnchantmentLevel(ench, e.getValue()));
-				}
-			}
+			for(CustomEnchantment ench: RegisterEnchantments.getEnchantments())
+				if (ench.getRelativeEnchantment().equals(e.getKey())) enchantments.add(new EnchantmentLevel(ench, e.getValue()));
 		}
 
-		if (combinedItem != null) {
-			if (ConfigString.SET_REPAIR_COST.getBoolean()) {
-				combinedItem = AnvilNMS.setRepairCost(combinedItem, AnvilNMS.getRepairCost(getItem()));
-			} else {
-				combinedItem = AnvilNMS.setRepairCost(combinedItem, 0);
-			}
-		}
+		if (combinedItem != null) if (ConfigString.SET_REPAIR_COST.getBoolean()) combinedItem = AnvilNMS.setRepairCost(combinedItem, AnvilNMS.getRepairCost(getItem()));
+		else
+			combinedItem = AnvilNMS.setRepairCost(combinedItem, 0);
 
 		takenItem = ItemUtils.addEnchantmentsToItem(takenItem, enchantments);
 
@@ -122,11 +101,8 @@ public class GrindstoneEnchantments extends GenerateEnchantments {
 			java.util.Map.Entry<Enchantment, Integer> e = it.next();
 			Enchantment enchant = e.getKey();
 			int level = e.getValue();
-			for(CustomEnchantment customEnchant: RegisterEnchantments.getEnchantments()) {
-				if (ConfigUtils.isRepairable(customEnchant) && customEnchant.getRelativeEnchantment().equals(enchant)) {
-					cost += level * customEnchant.multiplier(item.getType());
-				}
-			}
+			for(CustomEnchantment customEnchant: RegisterEnchantments.getEnchantments())
+				if (ConfigUtils.isRepairable(customEnchant) && customEnchant.getRelativeEnchantment().equals(enchant)) cost += level * customEnchant.multiplier(item.getType());
 		}
 		takeCost = Math.max(cost / ConfigString.LEVEL_DIVISOR.getInt(), 1);
 	}
@@ -136,19 +112,14 @@ public class GrindstoneEnchantments extends GenerateEnchantments {
 		byte b0 = 0;
 		int j = b0;
 
-		if (getItem() != null) {
-			j += getEnchantmentExperience(getItem());
-		}
-		if (itemTwo != null) {
-			j += getEnchantmentExperience(itemTwo);
-		}
+		if (getItem() != null) j += getEnchantmentExperience(getItem());
+		if (itemTwo != null) j += getEnchantmentExperience(itemTwo);
 
 		if (j > 0) {
 			int k = (int) Math.ceil(j / 2.0D);
 			return k + random.nextInt(k);
-		} else {
+		} else
 			return 0;
-		}
 	}
 
 	private int getEnchantmentExperience(ItemStack itemstack) {
@@ -167,9 +138,7 @@ public class GrindstoneEnchantments extends GenerateEnchantments {
 
 			CustomEnchantment custom = RegisterEnchantments.getCustomEnchantment(enchantment);
 
-			if (!RegisterEnchantments.getCustomEnchantment(enchantment).isCurse()) {
-				j += custom.enchantability(integer);
-			}
+			if (!RegisterEnchantments.getCustomEnchantment(enchantment).isCurse()) j += custom.enchantability(integer);
 		}
 
 		return j;
@@ -178,32 +147,21 @@ public class GrindstoneEnchantments extends GenerateEnchantments {
 	private void combineItems() {
 		ItemStack item = getItem();
 		combinedItem = item.clone();
-		if (item.getType().equals(Material.ENCHANTED_BOOK)) {
-			combinedItem = new ItemStack(Material.BOOK);
-		}
+		if (item.getType().equals(Material.ENCHANTED_BOOK)) combinedItem = new ItemStack(Material.BOOK);
 		combinedItem = ItemUtils.removeAllEnchantments(combinedItem);
 
 		if (itemTwo != null) {
-			if (item.getType() != Material.BOOK && item.getType() != Material.ENCHANTED_BOOK
-			&& ItemType.hasItemType(item.getType())) {
+			if (item.getType() != Material.BOOK && item.getType() != Material.ENCHANTED_BOOK && ItemType.hasItemType(item.getType())) {
 				DamageUtils.setDamage(combinedItem, DamageUtils.getDamage(item.getItemMeta()));
-				int extraDurability = itemTwo.getType().getMaxDurability()
-				- DamageUtils.getDamage(itemTwo.getItemMeta())
-				+ (int) (itemTwo.getType().getMaxDurability() * .05);
+				int extraDurability = itemTwo.getType().getMaxDurability() - DamageUtils.getDamage(itemTwo.getItemMeta()) + (int) (itemTwo.getType().getMaxDurability() * .05);
 				DamageUtils.setDamage(combinedItem, DamageUtils.getDamage(item.getItemMeta()) - extraDurability);
-				if (DamageUtils.getDamage(combinedItem.getItemMeta()) < 0) {
-					DamageUtils.setDamage(combinedItem, 0);
-				}
-			} else {
+				if (DamageUtils.getDamage(combinedItem.getItemMeta()) < 0) DamageUtils.setDamage(combinedItem, 0);
+			} else
 				combinedItem.setAmount(1);
-			}
-		} else {
+		} else
 			DamageUtils.setDamage(combinedItem, DamageUtils.getDamage(item.getItemMeta()));
-		}
 
-		if (combinedItem != null) {
-			combinedItem = AnvilNMS.setRepairCost(combinedItem, 0);
-		}
+		if (combinedItem != null) combinedItem = AnvilNMS.setRepairCost(combinedItem, 0);
 
 		combinedItem = ItemUtils.addEnchantmentsToItem(combinedItem, combineEnchants());
 	}
@@ -224,15 +182,12 @@ public class GrindstoneEnchantments extends GenerateEnchantments {
 			CustomEnchantment custom = RegisterEnchantments.getCustomEnchantment(entry.getKey());
 			if (custom.isCurse()) {
 				boolean contains = false;
-				for(EnchantmentLevel enchantment: enchantments) {
+				for(EnchantmentLevel enchantment: enchantments)
 					if (enchantment.getEnchant().getRelativeEnchantment().equals(entry.getKey())) {
 						contains = true;
 						break;
 					}
-				}
-				if (!contains) {
-					enchantments.add(new EnchantmentLevel(custom, entry.getValue()));
-				}
+				if (!contains) enchantments.add(new EnchantmentLevel(custom, entry.getValue()));
 			}
 		}
 
@@ -249,15 +204,12 @@ public class GrindstoneEnchantments extends GenerateEnchantments {
 				CustomEnchantment custom = RegisterEnchantments.getCustomEnchantment(entry.getKey());
 				if (custom.isCurse()) {
 					boolean contains = false;
-					for(EnchantmentLevel enchantment: enchantments) {
+					for(EnchantmentLevel enchantment: enchantments)
 						if (enchantment.getEnchant().getRelativeEnchantment().equals(entry.getKey())) {
 							contains = true;
 							break;
 						}
-					}
-					if (!contains) {
-						enchantments.add(new EnchantmentLevel(custom, entry.getValue()));
-					}
+					if (!contains) enchantments.add(new EnchantmentLevel(custom, entry.getValue()));
 				}
 			}
 		}
@@ -266,11 +218,9 @@ public class GrindstoneEnchantments extends GenerateEnchantments {
 			EnchantmentLevel enchant = enchantments.get(i);
 			if (!enchant.getEnchant().canAnvil(getPlayer(), enchant.getLevel())) {
 				int level = enchant.getEnchant().getAnvilLevel(getPlayer(), enchant.getLevel());
-				if (level > 0) {
-					enchantments.get(i).setLevel(level);
-				} else {
+				if (level > 0) enchantments.get(i).setLevel(level);
+				else
 					enchantments.remove(i);
-				}
 			}
 		}
 

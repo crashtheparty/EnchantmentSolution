@@ -11,8 +11,7 @@ import net.minecraft.server.v1_13_R2.WorldServer;
 public class World_v1_13_R2 {
 	public static float[] getRegionalDifficulty(Block block) {
 		WorldServer server = ((CraftWorld) block.getWorld()).getHandle();
-		DifficultyDamageScaler scalar = server
-		.getDamageScaler(new BlockPosition(block.getX(), block.getY(), block.getZ()));
+		DifficultyDamageScaler scalar = server.getDamageScaler(new BlockPosition(block.getX(), block.getY(), block.getZ()));
 		return new float[] { scalar.b(), scalar.d() };
 	}
 }

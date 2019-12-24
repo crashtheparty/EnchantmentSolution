@@ -11,12 +11,12 @@ import org.ctp.enchantmentsolution.EnchantmentSolution;
 
 import wtf.choco.veinminer.api.event.PlayerVeinMineEvent;
 
-public class VeinMinerListener implements Listener{
+public class VeinMinerListener implements Listener {
 
 	private static List<Player> VEIN_MINERS = new ArrayList<Player>();
 
 	@EventHandler
-	public void onVeinMine(PlayerVeinMineEvent event){
+	public void onVeinMine(PlayerVeinMineEvent event) {
 		VEIN_MINERS.add(event.getPlayer());
 		Bukkit.getScheduler().runTaskLater(EnchantmentSolution.getPlugin(), (Runnable) () -> VEIN_MINERS.remove(event.getPlayer()), 1l);
 	}

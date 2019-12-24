@@ -21,17 +21,14 @@ import com.gmail.nossr50.skills.fishing.FishingManager;
 import com.gmail.nossr50.util.Permissions;
 import com.gmail.nossr50.util.player.UserManager;
 
-public class McMMOOverhaulFishing extends McMMOFishing{
+public class McMMOOverhaulFishing extends McMMOFishing {
 
 	public void onMcMMOPlayerFishingTreasure(McMMOPlayerFishingTreasureEvent event) {
-		if(!ConfigString.USE_LOOT.getBoolean("fishing.use")) {
-			return;
-		}
+		if (!ConfigString.USE_LOOT.getBoolean("fishing.use")) return;
 		Player player = event.getPlayer();
 		ItemStack treasure = event.getTreasure();
 
-		if (Permissions.isSubSkillEnabled(player, SubSkillType.FISHING_MAGIC_HUNTER)
-		&& ItemUtils.isEnchantable(treasure)) {
+		if (Permissions.isSubSkillEnabled(player, SubSkillType.FISHING_MAGIC_HUNTER) && ItemUtils.isEnchantable(treasure)) {
 			List<EnchantmentLevel> enchantments = McMMOHandler.getEnchants(player, treasure);
 			event.setCancelled(true);
 			treasure = event.getTreasure();
@@ -45,9 +42,7 @@ public class McMMOOverhaulFishing extends McMMOFishing{
 					enchanted = true;
 				}
 
-				if (enchanted) {
-					player.sendMessage(LocaleLoader.getString("Fishing.Ability.TH.MagicFound"));
-				}
+				if (enchanted) player.sendMessage(LocaleLoader.getString("Fishing.Ability.TH.MagicFound"));
 				add(player, treasure, treasureXp);
 			}
 		}
@@ -59,8 +54,8 @@ public class McMMOOverhaulFishing extends McMMOFishing{
 				// TODO Update to new API once available! Waiting for case CAUGHT_TREASURE:
 				Item fishingCatch = (Item) event.getCaught();
 				McMMOFishingThread thread = null;
-				for(McMMOFishingThread t : getPlayerItems()) {
-					if(t.getPlayer().equals(event.getPlayer())) {
+				for(McMMOFishingThread t: getPlayerItems())
+					if (t.getPlayer().equals(event.getPlayer())) {
 						int fishXp = ExperienceConfig.getInstance().getXp(PrimarySkillType.FISHING, fishingCatch.getItemStack().getType());
 						fishingCatch.setItemStack(t.getItem());
 						thread = t;
@@ -68,10 +63,7 @@ public class McMMOOverhaulFishing extends McMMOFishing{
 						FishingManager manager = UserManager.getPlayer(event.getPlayer()).getFishingManager();
 						manager.applyXpGain(t.getXp() + fishXp, XPGainReason.PVE, XPGainSource.SELF);
 					}
-				}
-				if(thread != null) {
-					remove(thread);
-				}
+				if (thread != null) remove(thread);
 				return;
 			default:
 				return;

@@ -17,7 +17,7 @@ import org.ctp.enchantmentsolution.utils.StringUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 
-public class UpdateEnchantments implements Listener{
+public class UpdateEnchantments implements Listener {
 
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent event) {
@@ -27,36 +27,29 @@ public class UpdateEnchantments implements Listener{
 
 	@EventHandler
 	public void onInventoryClose(InventoryCloseEvent event) {
-		if(event.getPlayer() instanceof Player) {
+		if (event.getPlayer() instanceof Player) {
 			Player player = (Player) event.getPlayer();
 			updateEnchantments(player.getInventory());
 		}
 	}
 
 	public void updateEnchantments(PlayerInventory inv) {
-		if(ConfigString.UPDATE_LEGACY_ENCHANTMENTS.getBoolean()) {
-			for(int i = 0; i < 36; i++) {
-				ItemStack item = inv.getItem(i);
-				if(item != null) {
-					if(item.getItemMeta() != null) {
-						ItemMeta meta = item.getItemMeta();
-						List<String> lore = meta.getLore();
-						if(lore != null) {
-							List<EnchantmentLevel> levels = new ArrayList<EnchantmentLevel>();
-							for(String s : lore) {
-								if(StringUtils.isLegacyEnchantment(s)) {
-									String enchantment = ChatColor.stripColor(s);
-									EnchantmentLevel level = StringUtils.returnEnchantmentLevel(enchantment, meta);
-									if(level != null) {
-										levels.add(level);
-									}
-								}
-							}
-							if(levels.size() > 0) {
-								item = ItemUtils.removeAllEnchantments(item, true);
-								ItemUtils.addEnchantmentsToItem(item, levels);
-							}
+		if (ConfigString.UPDATE_LEGACY_ENCHANTMENTS.getBoolean()) for(int i = 0; i < 36; i++) {
+			ItemStack item = inv.getItem(i);
+			if (item != null) if (item.getItemMeta() != null) {
+				ItemMeta meta = item.getItemMeta();
+				List<String> lore = meta.getLore();
+				if (lore != null) {
+					List<EnchantmentLevel> levels = new ArrayList<EnchantmentLevel>();
+					for(String s: lore)
+						if (StringUtils.isLegacyEnchantment(s)) {
+							String enchantment = ChatColor.stripColor(s);
+							EnchantmentLevel level = StringUtils.returnEnchantmentLevel(enchantment, meta);
+							if (level != null) levels.add(level);
 						}
+					if (levels.size() > 0) {
+						item = ItemUtils.removeAllEnchantments(item, true);
+						ItemUtils.addEnchantmentsToItem(item, levels);
 					}
 				}
 			}

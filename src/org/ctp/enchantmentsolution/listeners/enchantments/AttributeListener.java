@@ -39,8 +39,7 @@ public class AttributeListener extends Enchantmentable {
 		attributes.put(RegisterEnchantments.QUICK_STRIKE, new Attributable[] { Attributable.QUICK_STRIKE });
 		attributes.put(RegisterEnchantments.LIFE, new Attributable[] { Attributable.LIFE });
 		attributes.put(RegisterEnchantments.GUNG_HO, new Attributable[] { Attributable.GUNG_HO });
-		attributes.put(RegisterEnchantments.TOUGHNESS, new Attributable[] { Attributable.TOUGHNESS_HELMET,
-		Attributable.TOUGHNESS_CHESTPLATE, Attributable.TOUGHNESS_LEGGINGS, Attributable.TOUGHNESS_BOOTS });
+		attributes.put(RegisterEnchantments.TOUGHNESS, new Attributable[] { Attributable.TOUGHNESS_HELMET, Attributable.TOUGHNESS_CHESTPLATE, Attributable.TOUGHNESS_LEGGINGS, Attributable.TOUGHNESS_BOOTS });
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST)
@@ -62,76 +61,42 @@ public class AttributeListener extends Enchantmentable {
 			while (iterator.hasNext()) {
 				Entry<Enchantment, Integer> entry = iterator.next();
 				if (attributes.containsKey(entry.getKey())) {
-					for(Attributable a: attributes.get(entry.getKey())) {
+					for(Attributable a: attributes.get(entry.getKey()))
 						if (a.getType() == type) {
-							AttributeEvent attrEvent = new AttributeEvent(player,
-							new EnchantmentLevel(RegisterEnchantments.getCustomEnchantment(entry.getKey()),
-							entry.getValue()), equip ? null : a.getAttrName(), equip ? a.getAttrName() : null);
+							AttributeEvent attrEvent = new AttributeEvent(player, new EnchantmentLevel(RegisterEnchantments.getCustomEnchantment(entry.getKey()), entry.getValue()), equip ? null : a.getAttrName(), equip ? a.getAttrName() : null);
 							Bukkit.getPluginManager().callEvent(attrEvent);
 
-							if (!attrEvent.isCancelled()) {
-								if (equip) {
-									a.addModifier(player, entry.getValue());
-									if (a.getEnchantment() == RegisterEnchantments.TOUGHNESS
-									&& player.getAttribute(Attribute.GENERIC_ARMOR_TOUGHNESS).getValue() >= 20) {
-										AdvancementUtils.awardCriteria(attrEvent.getPlayer(),
-										ESAdvancement.GRAPHENE_ARMOR, "toughness");
-									}
-								} else {
-									a.removeModifier(player);
-								}
-							}
+							if (!attrEvent.isCancelled()) if (equip) {
+								a.addModifier(player, entry.getValue());
+								if (a.getEnchantment() == RegisterEnchantments.TOUGHNESS && player.getAttribute(Attribute.GENERIC_ARMOR_TOUGHNESS).getValue() >= 20) AdvancementUtils.awardCriteria(attrEvent.getPlayer(), ESAdvancement.GRAPHENE_ARMOR, "toughness");
+							} else
+								a.removeModifier(player);
 
 							break;
 						}
-					}
 				} else if (entry.getKey() == RegisterEnchantments.UNREST) {
 					if (type == ItemSlotType.HELMET) {
-						UnrestPotionEvent event = new UnrestPotionEvent(player,
-						equip ? PotionEventType.ADD : PotionEventType.REMOVE);
+						UnrestPotionEvent event = new UnrestPotionEvent(player, equip ? PotionEventType.ADD : PotionEventType.REMOVE);
 						Bukkit.getPluginManager().callEvent(event);
 
-						if (!event.isCancelled()) {
-							if (equip) {
-								if (player.getStatistic(Statistic.TIME_SINCE_REST) < 96000) {
-									player.setStatistic(Statistic.TIME_SINCE_REST, 96000);
-								}
-								player.addPotionEffect(
-								new PotionEffect(PotionEffectType.NIGHT_VISION, 1000000000, 0, false, false), true);
-							} else {
-								player.addPotionEffect(
-								new PotionEffect(PotionEffectType.NIGHT_VISION, 160, 0, false, false), true);
-							}
-						}
+						if (!event.isCancelled()) if (equip) {
+							if (player.getStatistic(Statistic.TIME_SINCE_REST) < 96000) player.setStatistic(Statistic.TIME_SINCE_REST, 96000);
+							player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 1000000000, 0, false, false), true);
+						} else
+							player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 160, 0, false, false), true);
 					}
 				} else if (entry.getKey() == RegisterEnchantments.NO_REST) {
-					if (type == ItemSlotType.HELMET) {
-						if (equip) {
-							if (player.getStatistic(Statistic.TIME_SINCE_REST) > 72000
-							&& player.getWorld().getTime() > 12540 && player.getWorld().getTime() < 23459) {
-								AdvancementUtils.awardCriteria(player, ESAdvancement.COFFEE_BREAK, "coffee");
-							}
-							if (player.getStatistic(Statistic.TIME_SINCE_REST) > 0) {
-								player.setStatistic(Statistic.TIME_SINCE_REST, 0);
-							}
-						}
+					if (type == ItemSlotType.HELMET) if (equip) {
+						if (player.getStatistic(Statistic.TIME_SINCE_REST) > 72000 && player.getWorld().getTime() > 12540 && player.getWorld().getTime() < 23459) AdvancementUtils.awardCriteria(player, ESAdvancement.COFFEE_BREAK, "coffee");
+						if (player.getStatistic(Statistic.TIME_SINCE_REST) > 0) player.setStatistic(Statistic.TIME_SINCE_REST, 0);
 					}
-				} else if (entry.getKey() == RegisterEnchantments.MAGIC_GUARD) {
-					if (type == ItemSlotType.OFF_HAND) {
-						if (equip) {
-							for(PotionEffectType potionEffect: ESArrays.getBadPotions()) {
-								if (player.hasPotionEffect(potionEffect)) {
-									MagicGuardPotionEvent event = new MagicGuardPotionEvent(player, potionEffect);
-									Bukkit.getPluginManager().callEvent(event);
+				} else if (entry.getKey() == RegisterEnchantments.MAGIC_GUARD) if (type == ItemSlotType.OFF_HAND) if (equip) for(PotionEffectType potionEffect: ESArrays.getBadPotions())
+					if (player.hasPotionEffect(potionEffect)) {
+						MagicGuardPotionEvent event = new MagicGuardPotionEvent(player, potionEffect);
+						Bukkit.getPluginManager().callEvent(event);
 
-									if (!event.isCancelled()) {
-										player.removePotionEffect(potionEffect);
-									}
-								}
-							}
-						}
+						if (!event.isCancelled()) player.removePotionEffect(potionEffect);
 					}
-				}
 			}
 		}
 	}

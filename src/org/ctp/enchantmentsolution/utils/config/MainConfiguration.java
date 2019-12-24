@@ -13,23 +13,18 @@ import org.ctp.enchantmentsolution.utils.yaml.YamlConfigBackup;
 
 public class MainConfiguration extends Configuration {
 
-	private List<String> enchantingTypes = Arrays.asList("vanilla_30", "vanilla_30_custom", "enhanced_30",
-	"enhanced_30_custom", "enhanced_50", "enhanced_50_custom");
+	private List<String> enchantingTypes = Arrays.asList("vanilla_30", "vanilla_30_custom", "enhanced_30", "enhanced_30_custom", "enhanced_50", "enhanced_50_custom");
 
 	public MainConfiguration(File dataFolder) {
 		super(new File(dataFolder + "/config.yml"));
 
 		migrateVersion();
-		if (getConfig() != null) {
-			getConfig().writeDefaults();
-		}
+		if (getConfig() != null) getConfig().writeDefaults();
 	}
 
 	@Override
 	public void setDefaults() {
-		if (EnchantmentSolution.getPlugin().isInitializing()) {
-			ChatUtils.sendInfo("Loading main configuration...");
-		}
+		if (EnchantmentSolution.getPlugin().isInitializing()) ChatUtils.sendInfo("Loading main configuration...");
 
 		YamlConfigBackup config = getConfig();
 
@@ -37,15 +32,10 @@ public class MainConfiguration extends Configuration {
 
 		YamlConfig defaultConfig = new YamlConfig(file, new String[] {});
 		defaultConfig.getFromConfig();
-		for(String str: defaultConfig.getAllEntryKeys()) {
-			if (defaultConfig.get(str) != null) {
-				if (str.startsWith("config_comments.")) {
-					config.addComments(str, defaultConfig.getStringList(str).toArray(new String[] {}));
-				} else {
-					config.addDefault(str, defaultConfig.get(str));
-				}
-			}
-		}
+		for(String str: defaultConfig.getAllEntryKeys())
+			if (defaultConfig.get(str) != null) if (str.startsWith("config_comments.")) config.addComments(str, defaultConfig.getStringList(str).toArray(new String[] {}));
+			else
+				config.addDefault(str, defaultConfig.get(str));
 
 		config.addEnum("language", Language.getValues());
 		config.addEnum("disable_enchant_method", Arrays.asList("vanish", "visible", "repairable"));
@@ -57,9 +47,7 @@ public class MainConfiguration extends Configuration {
 			config.addDefault("loots.chests.pillager_outpost.treasure", true);
 		}
 
-		if (EnchantmentSolution.getPlugin().isInitializing()) {
-			ChatUtils.sendInfo("Main configuration initialized!");
-		}
+		if (EnchantmentSolution.getPlugin().isInitializing()) ChatUtils.sendInfo("Main configuration initialized!");
 
 		config.saveConfig();
 
@@ -70,23 +58,17 @@ public class MainConfiguration extends Configuration {
 	public void migrateVersion() {
 		YamlConfigBackup config = getConfig();
 
-		if (config.getInt("anvil.level_divisor") <= 0) {
-			config.set("anvil.level_divisor", 4);
-		}
+		if (config.getInt("anvil.level_divisor") <= 0) config.set("anvil.level_divisor", 4);
 		if (config.getBoolean("level_50_enchants")) {
-			if (config.getBoolean("use_advanced_file")) {
-				config.set("enchanting_table.enchanting_type", "enhanced_50_custom");
-			} else {
+			if (config.getBoolean("use_advanced_file")) config.set("enchanting_table.enchanting_type", "enhanced_50_custom");
+			else
 				config.set("enchanting_table.enchanting_type", "enhanced_50");
-			}
 			config.removeKey("level_50_enchants");
 			config.removeKey("use_advanced_file");
 		} else if (config.getBooleanValue("level_50_enchants") != null) {
-			if (config.getBoolean("use_advanced_file")) {
-				config.set("enchanting_table.enchanting_type", "enhanced_30_custom");
-			} else {
+			if (config.getBoolean("use_advanced_file")) config.set("enchanting_table.enchanting_type", "enhanced_30_custom");
+			else
 				config.set("enchanting_table.enchanting_type", "enhanced_30");
-			}
 			config.removeKey("level_50_enchants");
 			config.removeKey("use_advanced_file");
 		}
@@ -139,17 +121,15 @@ public class MainConfiguration extends Configuration {
 			config.removeKey("fishing_loot");
 		}
 
-		for(String s : config.getLevelEntryKeys("loots")) {
-			if(!Arrays.asList("fishing", "mobs", "chests").contains(s.split("\\.")[1])) {
-				for(String t : config.getLevelEntryKeys(s)) {
-					if(config.get(t) != null) {
+		for(String s: config.getLevelEntryKeys("loots"))
+			if (!Arrays.asList("fishing", "mobs", "chests").contains(s.split("\\.")[1])) {
+				for(String t: config.getLevelEntryKeys(s))
+					if (config.get(t) != null) {
 						config.set("loots.chests." + t.substring(6), config.get(t));
 						config.removeKey(t);
 					}
-				}
 				config.removeKey(s);
 			}
-		}
 	}
 
 }

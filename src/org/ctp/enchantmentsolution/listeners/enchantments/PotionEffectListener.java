@@ -20,15 +20,9 @@ public class PotionEffectListener extends Enchantmentable {
 		if (event.getEntity() instanceof Player) {
 			Player player = (Player) event.getEntity();
 			ItemStack shield = player.getInventory().getItemInOffHand();
-			if (shield != null && ItemUtils.hasEnchantment(shield, RegisterEnchantments.MAGIC_GUARD)) {
-				if (event.getAction() == Action.ADDED || event.getAction() == Action.CHANGED) {
-					if (ESArrays.getBadPotions().contains(event.getModifiedType())) {
-						event.setCancelled(true);
-						if (event.getCause() == Cause.FOOD) {
-							AdvancementUtils.awardCriteria(player, ESAdvancement.THAT_FOOD_IS_FINE, "shield");
-						}
-					}
-				}
+			if (shield != null && ItemUtils.hasEnchantment(shield, RegisterEnchantments.MAGIC_GUARD)) if (event.getAction() == Action.ADDED || event.getAction() == Action.CHANGED) if (ESArrays.getBadPotions().contains(event.getModifiedType())) {
+				event.setCancelled(true);
+				if (event.getCause() == Cause.FOOD) AdvancementUtils.awardCriteria(player, ESAdvancement.THAT_FOOD_IS_FINE, "shield");
 			}
 		}
 	}

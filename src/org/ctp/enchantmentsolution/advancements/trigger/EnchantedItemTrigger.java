@@ -34,7 +34,6 @@ public class EnchantedItemTrigger extends Trigger {
 
 	@Override
 	protected JsonObject getConditions() {
-		return item == null && levels == null ? null
-		: new JsonBuilder().add("item", item).add("levels", levels).build();
+		return item == null && levels == null ? null : new JsonBuilder().add("item", item).add("levels", levels).build();
 	}
 }

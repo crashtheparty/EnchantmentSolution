@@ -23,11 +23,8 @@ public class AnvilUtils {
 	}
 
 	public static boolean hasLegacyAnvil(Player player) {
-		for(Player p: OPEN_LEGACY) {
-			if (p.equals(player)) {
-				return true;
-			}
-		}
+		for(Player p: OPEN_LEGACY)
+			if (p.equals(player)) return true;
 		return false;
 	}
 
@@ -56,9 +53,7 @@ public class AnvilUtils {
 			}
 			if (material == Material.AIR) {
 				block.getWorld().playSound(block.getLocation(), Sound.BLOCK_ANVIL_DESTROY, 1, 1);
-				if (anvil != null) {
-					anvil.close(false);
-				}
+				if (anvil != null) anvil.close(false);
 				block.setType(material);
 			} else {
 				block.getWorld().playSound(block.getLocation(), Sound.BLOCK_ANVIL_BREAK, 1, 1);
@@ -69,8 +64,7 @@ public class AnvilUtils {
 				d.setFacing(facing);
 				block.setBlockData(d);
 			}
-		} else {
+		} else
 			block.getWorld().playSound(block.getLocation(), Sound.BLOCK_ANVIL_USE, 1, 1);
-		}
 	}
 }

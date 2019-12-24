@@ -14,14 +14,11 @@ public class EnchantsFishingListener implements Listener {
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onPlayerFishMonitor(PlayerFishEvent event) {
-		if (!ConfigString.USE_LOOT.getBoolean("fishing.use")) {
-			return;
-		}
+		if (!ConfigString.USE_LOOT.getBoolean("fishing.use")) return;
 		switch (event.getState()) {
 			case CAUGHT_FISH:
 				handleFishing((Item) event.getCaught(), event.getPlayer());
 				return;
-
 			default:
 				return;
 		}
@@ -29,9 +26,7 @@ public class EnchantsFishingListener implements Listener {
 
 	private void handleFishing(Item item, Player player) {
 		ItemStack itemStack = item.getItemStack().clone();
-		itemStack = FishingEnchantments
-		.getFishingEnchantments(player, itemStack, ConfigString.LOOT_BOOKSHELVES.getInt("fishing.bookshelves"),
-		ConfigString.LOOT_TREASURE.getBoolean("fishing.treasure")).getItem();
+		itemStack = FishingEnchantments.getFishingEnchantments(player, itemStack, ConfigString.LOOT_BOOKSHELVES.getInt("fishing.bookshelves"), ConfigString.LOOT_TREASURE.getBoolean("fishing.treasure")).getItem();
 
 		item.setItemStack(itemStack);
 	}

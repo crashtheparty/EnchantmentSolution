@@ -20,9 +20,7 @@ public class ApiEnchantmentWrapper extends CustomEnchantmentWrapper {
 	public ApiEnchantmentWrapper(JavaPlugin plugin, String namespace, String name) {
 		super(plugin, namespace, name);
 
-		if (name == null || name == "") {
-			throw new NullPointerException("An enchantment's name may not be set to null or an empty string!");
-		}
+		if (name == null || name == "") throw new NullPointerException("An enchantment's name may not be set to null or an empty string!");
 		this.plugin = plugin;
 	}
 

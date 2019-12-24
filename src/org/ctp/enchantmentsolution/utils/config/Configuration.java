@@ -26,9 +26,7 @@ public abstract class Configuration implements Configurable, Revertable {
 			String[] header = { "Enchantment Solution", "Plugin by", "crashtheparty" };
 			config = new YamlConfigBackup(file, header);
 			config.getFromConfig();
-			if (setDefault) {
-				setDefaults();
-			}
+			if (setDefault) setDefaults();
 		} catch (final Exception e) {
 			e.printStackTrace();
 		}
@@ -68,11 +66,8 @@ public abstract class Configuration implements Configurable, Revertable {
 
 		List<YamlInfo> info = DBUtils.getBackup(this, backup);
 
-		for(YamlInfo i: info) {
-			if (i.getValue() != null) {
-				config.set(i.getPath(), i.getValue());
-			}
-		}
+		for(YamlInfo i: info)
+			if (i.getValue() != null) config.set(i.getPath(), i.getValue());
 
 		save();
 	}

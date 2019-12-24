@@ -24,15 +24,12 @@ public class AuctionHouseUtils {
 			ItemStack item = l.getItemStack();
 			if (item.hasItemMeta()) {
 				List<EnchantmentLevel> levels = new ArrayList<EnchantmentLevel>();
-				for(String lore: item.getItemMeta().getLore()) {
+				for(String lore: item.getItemMeta().getLore())
 					if (lore != null && StringUtils.isEnchantment(lore)) {
 						lore = ChatColor.stripColor(lore);
 						EnchantmentLevel level = StringUtils.returnEnchantmentLevel(lore, item.getItemMeta());
-						if (level != null) {
-							levels.add(level);
-						}
+						if (level != null) levels.add(level);
 					}
-				}
 				for(EnchantmentLevel level: levels) {
 					item = ItemUtils.removeEnchantmentFromItem(item, level.getEnchant());
 					item = ItemUtils.addEnchantmentToItem(item, level.getEnchant(), level.getLevel());

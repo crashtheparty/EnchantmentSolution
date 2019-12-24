@@ -25,16 +25,12 @@ public class BadAttributesListener implements Listener {
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onInventoryClick(InventoryClickEvent event) {
-		if (event.getWhoClicked() instanceof Player) {
-			checkAttributes((Player) event.getWhoClicked());
-		}
+		if (event.getWhoClicked() instanceof Player) checkAttributes((Player) event.getWhoClicked());
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onInventoryClose(InventoryCloseEvent event) {
-		if (event.getPlayer() instanceof Player) {
-			checkAttributes((Player) event.getPlayer());
-		}
+		if (event.getPlayer() instanceof Player) checkAttributes((Player) event.getPlayer());
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
@@ -43,7 +39,7 @@ public class BadAttributesListener implements Listener {
 	}
 
 	private void checkAttributes(Player player) {
-		for(Attributable a: Attributable.values()) {
+		for(Attributable a: Attributable.values())
 			if (a.hasAttribute(player)) {
 				ItemStack check = null;
 				switch (a.getType()) {
@@ -67,21 +63,12 @@ public class BadAttributesListener implements Listener {
 						break;
 
 				}
-				if (check != null) {
-					if (ItemUtils.hasEnchantment(check, a.getEnchantment())) {
-						continue;
-					}
-				}
+				if (check != null) if (ItemUtils.hasEnchantment(check, a.getEnchantment())) continue;
 
-				AttributeEvent event = new AttributeEvent(player,
-				new EnchantmentLevel(RegisterEnchantments.getCustomEnchantment(a.getEnchantment()), 0),
-				a.getAttrName(), null);
+				AttributeEvent event = new AttributeEvent(player, new EnchantmentLevel(RegisterEnchantments.getCustomEnchantment(a.getEnchantment()), 0), a.getAttrName(), null);
 				Bukkit.getPluginManager().callEvent(event);
 
-				if (!event.isCancelled()) {
-					a.removeModifier(player);
-				}
+				if (!event.isCancelled()) a.removeModifier(player);
 			}
-		}
 	}
 }

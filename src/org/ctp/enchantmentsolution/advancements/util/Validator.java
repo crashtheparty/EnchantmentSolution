@@ -16,19 +16,14 @@ public class Validator {
 	public static void texture(String texture) {
 		Validate.notNull(texture);
 		Validate.isTrue(!texture.contains(":"), "Texture parameter must not contain namespace: ", texture);
-		Validate.isTrue(!texture.startsWith("textures/"),
-		"Texture parameter must not include root directory (/textures): ", texture);
+		Validate.isTrue(!texture.startsWith("textures/"), "Texture parameter must not include root directory (/textures): ", texture);
 		Validate.isTrue(!texture.contains("."), "Texture parameter must not specify file extension: ", texture);
-		Validate.isTrue(texture.contains("/"), "Texture parameter must specify subdirectory using slash (/): ",
-		texture);
+		Validate.isTrue(texture.contains("/"), "Texture parameter must specify subdirectory using slash (/): ", texture);
 		Validate.isTrue(!texture.endsWith("/"), "Texture parameter must specify a file in the directory: ", texture);
 	}
 
 	public static void nbt(@Nullable String nbt) {
-		if (nbt != null) {
-			Validate.isTrue(nbt.startsWith("{") && nbt.endsWith("}"),
-			"NBT string must start and end with curly braces: ", nbt);
-		}
+		if (nbt != null) Validate.isTrue(nbt.startsWith("{") && nbt.endsWith("}"), "NBT string must start and end with curly braces: ", nbt);
 	}
 
 	public static void minusToDisable(int value) {
