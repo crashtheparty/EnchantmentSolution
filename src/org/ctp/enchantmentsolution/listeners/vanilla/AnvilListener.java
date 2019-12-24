@@ -13,6 +13,7 @@ import org.bukkit.event.inventory.PrepareAnvilEvent;
 import org.bukkit.inventory.AnvilInventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.generate.AnvilEnchantments;
 import org.ctp.enchantmentsolution.enchantments.generate.AnvilEnchantments.RepairType;
 import org.ctp.enchantmentsolution.utils.AnvilUtils;
@@ -50,6 +51,7 @@ public class AnvilListener implements Listener{
 			ItemStack second = inv.getItem(1);
 			if(event.getWhoClicked() instanceof Player) {
 				Player player = (Player) event.getWhoClicked();
+				if(EnchantmentSolution.getPlugin().getInventory(player) != null) return;
 				AnvilEnchantments anvil = AnvilEnchantments.getAnvilEnchantments(player, first, second);
 				if((anvil.getRepairType() == RepairType.COMBINE || anvil.getRepairType() == RepairType.REPAIR) && anvil.canCombine()
 				&& event.getSlot() == 2 && (event.getCursor() == null

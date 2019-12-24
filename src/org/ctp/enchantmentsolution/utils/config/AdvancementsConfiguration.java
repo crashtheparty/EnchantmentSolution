@@ -25,7 +25,7 @@ public class AdvancementsConfiguration extends Configuration {
 		YamlConfigBackup config = getConfig();
 
 		for(ESAdvancement advancement: ESAdvancement.values()) {
-			if (advancement == ESAdvancement.ENCHANTMENT_SOLUTION) {
+			if (advancement.getParent() == null) {
 				config.addDefault("advancements." + advancement.getNamespace().getKey() + ".enable", false);
 				config.addDefault("advancements." + advancement.getNamespace().getKey() + ".toast", false);
 				config.addDefault("advancements." + advancement.getNamespace().getKey() + ".announce", false);

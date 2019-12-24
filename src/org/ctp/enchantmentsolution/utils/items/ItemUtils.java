@@ -331,8 +331,7 @@ public class ItemUtils {
 			Enchantment enchant = e.getKey();
 			for(CustomEnchantment custom: RegisterEnchantments.getRegisteredEnchantments()) {
 				if (custom.getRelativeEnchantment().equals(enchant)) {
-					if (CustomEnchantment.conflictsWith(customEnchant, custom)
-					&& !customEnchant.getName().equals(custom.getName())) {
+					if (CustomEnchantment.conflictsWith(customEnchant, custom) && !customEnchant.equals(custom)) {
 						return false;
 					}
 				}

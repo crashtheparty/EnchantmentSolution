@@ -143,12 +143,19 @@ public class DamageListener extends Enchantmentable {
 		}
 		Entity damager = event.getDamager();
 		Entity entity = event.getEntity();
-		if(damager instanceof Projectile && damager.hasMetadata("detonator") && entity instanceof Creeper) {
+		if (damager instanceof Projectile && damager.hasMetadata("detonator") && entity instanceof Creeper) {
 			Creeper creeper = (Creeper) entity;
 			int level = damager.getMetadata("detonator").get(0).asInt();
-			DetonateCreeperEvent detonator = new DetonateCreeperEvent(creeper, level, creeper.getMaxFuseTicks() - (level - 1) * 5);
+			DetonateCreeperEvent detonator = new DetonateCreeperEvent(creeper, level,
+			creeper.getMaxFuseTicks() - (level - 1) * 5);
 
-			if(!detonator.isCancelled()) {
+			if (!detonator.isCancelled()) {
+				if (((Projectile) damager).getShooter() instanceof Player) {
+					Player player = (Player) ((Projectile) damager).getShooter();
+					if (creeper.getMaxFuseTicks() > detonator.getDetonateTicks()) {
+						AdvancementUtils.awardCriteria(player, ESAdvancement.BLAST_OFF, "creeper");
+					}
+				}
 				creeper.setMaxFuseTicks(detonator.getDetonateTicks());
 				creeper.ignite();
 			}
@@ -227,17 +234,20 @@ public class DamageListener extends Enchantmentable {
 		}
 		Entity damager = event.getDamager();
 		Entity entity = event.getEntity();
-		if (damager instanceof Projectile && ((Projectile) damager).getShooter() instanceof LivingEntity && entity instanceof LivingEntity && damager.hasMetadata("hollow_point")) {
+		if (damager instanceof Projectile && ((Projectile) damager).getShooter() instanceof LivingEntity
+		&& entity instanceof LivingEntity && damager.hasMetadata("hollow_point")) {
 			LivingEntity livingEntity = (LivingEntity) entity;
 			LivingEntity living = (LivingEntity) ((Projectile) damager).getShooter();
-			for(ItemStack i : livingEntity.getEquipment().getArmorContents()) {
+			for(ItemStack i: livingEntity.getEquipment().getArmorContents()) {
 				String[] split = i.getType().name().split("_");
 				String s = split[split.length - 1];
-				if(s.endsWith("BOOTS") || s.endsWith("CHESTPLATE") || s.endsWith("HELMET") || s.endsWith("LEGGINGS") || s.endsWith("ELYTRA")) {
-					HollowPointEvent hollowPoint = new HollowPointEvent(livingEntity, living, event.getDamage(), event.getDamage() * 1.5);
+				if (s.endsWith("BOOTS") || s.endsWith("CHESTPLATE") || s.endsWith("HELMET") || s.endsWith("LEGGINGS")
+				|| s.endsWith("ELYTRA")) {
+					HollowPointEvent hollowPoint = new HollowPointEvent(livingEntity, living, event.getDamage(),
+					event.getDamage() * 1.5);
 					Bukkit.getPluginManager().callEvent(hollowPoint);
 
-					if(!hollowPoint.isCancelled()) {
+					if (!hollowPoint.isCancelled()) {
 						event.setDamage(hollowPoint.getNewDamage());
 					}
 
@@ -258,7 +268,7 @@ public class DamageListener extends Enchantmentable {
 			Animals animals = (Animals) attacked;
 			ItemStack attackItem = player.getInventory().getItemInMainHand();
 			if (attackItem != null && ItemUtils.hasEnchantment(attackItem, RegisterEnchantments.IRENES_LASSO)) {
-				if(!AnimalMobNMS.canAddMob()) {
+				if (!AnimalMobNMS.canAddMob()) {
 					return;
 				}
 				event.setCancelled(true);
@@ -340,7 +350,8 @@ public class DamageListener extends Enchantmentable {
 							((Player) player).incrementStatistic(Statistic.DAMAGE_BLOCKED_BY_SHIELD,
 							(int) (ironDefense.getNewDamage() * 10));
 						}
-						if (player.getHealth() <= ironDefense.getDamage() && player.getHealth() > ironDefense.getNewDamage()) {
+						if (player.getHealth() <= ironDefense.getDamage()
+						&& player.getHealth() > ironDefense.getNewDamage()) {
 							AdvancementUtils.awardCriteria((Player) player, ESAdvancement.IRON_MAN, "blocked");
 						}
 					}
@@ -371,8 +382,8 @@ public class DamageListener extends Enchantmentable {
 						if (attacked.isDead()) {
 							knockup /= 1.5;
 						}
-						attacked.setVelocity(
-						new Vector(attacked.getVelocity().getX(), knockup, attacked.getVelocity().getZ()));
+						attacked
+						.setVelocity(new Vector(attacked.getVelocity().getX(), knockup, attacked.getVelocity().getZ()));
 					}, 0l);
 				}
 			}
@@ -430,8 +441,8 @@ public class DamageListener extends Enchantmentable {
 			double accuracy = ea.getAccuracy();
 			double random = Math.random();
 
-			SandVeilMissEvent sandVeil = new SandVeilMissEvent((LivingEntity) event.getEntity(), ea.getLevel(), (LivingEntity) damager,
-			event.getDamage(), true, accuracy);
+			SandVeilMissEvent sandVeil = new SandVeilMissEvent((LivingEntity) event.getEntity(), ea.getLevel(),
+			(LivingEntity) damager, event.getDamage(), true, accuracy);
 			Bukkit.getPluginManager().callEvent(sandVeil);
 
 			if (!sandVeil.isCancelled()) {
@@ -469,8 +480,8 @@ public class DamageListener extends Enchantmentable {
 						accuracy = ea.getAccuracy();
 					}
 
-					SandVeilEvent sandVeil = new SandVeilEvent(entity, level, player, event.getDamage(), event.getDamage(),
-					160, accuracy);
+					SandVeilEvent sandVeil = new SandVeilEvent(entity, level, player, event.getDamage(),
+					event.getDamage(), 160, accuracy);
 					Bukkit.getPluginManager().callEvent(sandVeil);
 
 					if (!sandVeil.isCancelled()) {
@@ -505,8 +516,8 @@ public class DamageListener extends Enchantmentable {
 				double chance = .05 + 0.1 * level;
 				double random = Math.random();
 
-				ShockAspectEvent shockAspect = new ShockAspectEvent((LivingEntity) damaged, level, player, event.getDamage(),
-				event.getDamage(), chance, damaged.getLocation().clone());
+				ShockAspectEvent shockAspect = new ShockAspectEvent((LivingEntity) damaged, level, player,
+				event.getDamage(), event.getDamage(), chance, damaged.getLocation().clone());
 				Bukkit.getPluginManager().callEvent(shockAspect);
 
 				if (!shockAspect.isCancelled() && shockAspect.getChance() > random) {
@@ -550,8 +561,8 @@ public class DamageListener extends Enchantmentable {
 								double percentage = .4 * level + 1.2;
 								int extraDamage = (int) (percentage * event.getDamage() + .5);
 
-								StoneThrowEvent stoneThrow = new StoneThrowEvent(entity, level, human, event.getDamage(),
-								extraDamage);
+								StoneThrowEvent stoneThrow = new StoneThrowEvent(entity, level, human,
+								event.getDamage(), extraDamage);
 								Bukkit.getPluginManager().callEvent(stoneThrow);
 								if (!stoneThrow.isCancelled()) {
 									event.setDamage(stoneThrow.getNewDamage());
@@ -604,41 +615,44 @@ public class DamageListener extends Enchantmentable {
 	}
 
 	private void warp(EntityDamageByEntityEvent event) {
-		if(!canRun(RegisterEnchantments.WARP, event)) {
+		if (!canRun(RegisterEnchantments.WARP, event)) {
 			return;
 		}
-		if(event.getDamage() == 0) {
+		if (event.getDamage() == 0) {
 			return;
 		}
 		Entity attacked = event.getEntity();
-		if(attacked instanceof LivingEntity){
+		if (attacked instanceof LivingEntity) {
 			LivingEntity player = (LivingEntity) attacked;
 			ItemStack leggings = player.getEquipment().getLeggings();
-			if(leggings == null) {
+			if (leggings == null) {
 				return;
 			}
-			if(ItemUtils.hasEnchantment(leggings, RegisterEnchantments.WARP)){
+			if (ItemUtils.hasEnchantment(leggings, RegisterEnchantments.WARP)) {
 				int level = ItemUtils.getLevel(leggings, RegisterEnchantments.WARP);
 				List<Location> locsToTp = new ArrayList<Location>();
-				for(int x = - (level + 4); x <= level + 5; x++){
-					for(int y = - (level + 4); y <= level + 5; y++){
-						if(y < 1) {
+				for(int x = -(level + 4); x <= level + 5; x++) {
+					for(int y = -(level + 4); y <= level + 5; y++) {
+						if (y < 1) {
 							continue;
 						}
-						for(int z = - (level + 4); z <= level + 5; z++){
-							if(x == y && x == 0 && z == 0){
+						for(int z = -(level + 4); z <= level + 5; z++) {
+							if (x == y && x == 0 && z == 0) {
 								continue;
 							}
-							Location tp = new Location(player.getWorld(), player.getLocation().getBlockX() + x, player.getLocation().getBlockY() + y,
-							player.getLocation().getBlockZ() + z);
+							Location tp = new Location(player.getWorld(), player.getLocation().getBlockX() + x,
+							player.getLocation().getBlockY() + y, player.getLocation().getBlockZ() + z);
 							World playerWorld = player.getWorld();
 							World tpWorld = tp.getWorld();
 							int blockX = tp.getBlockX();
 							int blockY = tp.getBlockY();
 							int blockZ = tp.getBlockZ();
-							if(!playerWorld.getBlockAt(new Location(tpWorld, blockX, blockY + 1, blockZ)).getType().isSolid()
-							&& !player.getWorld().getBlockAt(new Location(tpWorld, blockX, blockY, blockZ)).getType().isSolid()
-							&& player.getWorld().getBlockAt(new Location(tpWorld, blockX, blockY - 1, blockZ)).getType().isSolid()){
+							if (!playerWorld.getBlockAt(new Location(tpWorld, blockX, blockY + 1, blockZ)).getType()
+							.isSolid()
+							&& !player.getWorld().getBlockAt(new Location(tpWorld, blockX, blockY, blockZ)).getType()
+							.isSolid()
+							&& player.getWorld().getBlockAt(new Location(tpWorld, blockX, blockY - 1, blockZ)).getType()
+							.isSolid()) {
 								locsToTp.add(tp);
 							}
 
@@ -647,14 +661,14 @@ public class DamageListener extends Enchantmentable {
 				}
 				double chance = .25;
 				double random = Math.random();
-				if(chance > random && locsToTp.size() > 0){
+				if (chance > random && locsToTp.size() > 0) {
 					int randomLoc = (int) (Math.random() * locsToTp.size());
 					Location toTeleport = locsToTp.get(randomLoc);
 
 					WarpEvent warp = new WarpEvent(player, player.getLocation(), toTeleport, locsToTp, level);
 					Bukkit.getPluginManager().callEvent(warp);
 
-					if(!warp.isCancelled()) {
+					if (!warp.isCancelled()) {
 						World world = warp.getTo().getWorld();
 						world.spawnParticle(Particle.PORTAL, warp.getTo(), 50, 0.2, 2, 0.2);
 						world.spawnParticle(Particle.PORTAL, warp.getFrom(), 50, 0.2, 2, 0.2);
@@ -663,8 +677,9 @@ public class DamageListener extends Enchantmentable {
 						warp.getTo().setYaw(warp.getEntity().getLocation().getYaw());
 						warp.getTo().setPitch(warp.getEntity().getLocation().getPitch());
 						warp.getEntity().teleport(warp.getTo());
-						if(warp.getEntity() instanceof Player && event.getDamager() instanceof Enderman) {
-							AdvancementUtils.awardCriteria((Player) warp.getEntity(), ESAdvancement.IM_YOU_BUT_SHORTER, "enderpearl");
+						if (warp.getEntity() instanceof Player && event.getDamager() instanceof Enderman) {
+							AdvancementUtils.awardCriteria((Player) warp.getEntity(), ESAdvancement.IM_YOU_BUT_SHORTER,
+							"enderpearl");
 						}
 					}
 				}
@@ -700,8 +715,7 @@ public class DamageListener extends Enchantmentable {
 				if (shield.getType().equals(Material.SHIELD)) {
 					if (ItemUtils.hasEnchantment(shield, RegisterEnchantments.MAGIC_GUARD)) {
 						MagicGuardPotionEvent magicGuard = new MagicGuardPotionEvent(player,
-						event.getCause() == DamageCause.POISON ? PotionEffectType.POISON
-						: PotionEffectType.HARM);
+						event.getCause() == DamageCause.POISON ? PotionEffectType.POISON : PotionEffectType.HARM);
 						Bukkit.getPluginManager().callEvent(magicGuard);
 
 						if (!magicGuard.isCancelled()) {

@@ -96,6 +96,7 @@ public class EnchantmentList {
 		CustomEnchantment enchantment = getEnchantment(enchants);
 		if (enchantment == null) {
 			setEnchantments(enchants);
+			return;
 		}
 		enchants.add(new EnchantmentLevel(enchantment, enchantment.getEnchantLevel(player, enchantability)));
 		int enchantability = this.enchantability;

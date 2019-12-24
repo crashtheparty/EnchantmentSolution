@@ -15,6 +15,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
+import org.ctp.enchantmentsolution.enchantments.CERegister;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enums.ItemType;
@@ -166,9 +167,26 @@ public class MiscRunnable implements Runnable, Reflectionable {
 
 		if(!event.isCancelled()) {
 			ItemUtils.addEnchantmentToItem(event.getItem(), event.getCurse(), event.getLevel());
+			if(event.getCurse() == CERegister.CURSE_OF_CONTAGION) {
+				AdvancementUtils.awardCriteria(player, ESAdvancement.PLAGUE_INC, "contagion");
+			}
+			if(hasAllCurses(item)) {
+				AdvancementUtils.awardCriteria(player, ESAdvancement.EXTERMINATION, "contagion");
+			}
 			for(Sound s : event.getSounds()) {
 				player.getWorld().playSound(player.getLocation(), s, event.getVolume(), event.getPitch());
 			}
 		}
+	}
+	
+	private boolean hasAllCurses(ItemStack item) {
+		boolean noCurse = true;
+		for(CustomEnchantment enchantment : RegisterEnchantments.getEnchantments()) {
+			if(enchantment.isCurse() && ItemUtils.canAddEnchantment(enchantment, item) && !ItemUtils.hasEnchantment(item, enchantment.getRelativeEnchantment())) {
+				noCurse = false;
+				break;
+			}
+		}
+		return noCurse;
 	}
 }

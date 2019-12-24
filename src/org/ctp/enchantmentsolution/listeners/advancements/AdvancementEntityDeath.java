@@ -25,9 +25,10 @@ import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.LocationUtils;
+import org.ctp.enchantmentsolution.utils.abillityhelpers.OverkillDeath;
 import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 
-public class AdvancementEntityDeath implements Listener{
+public class AdvancementEntityDeath implements Listener {
 
 	@EventHandler(priority=EventPriority.HIGHEST)
 	public void onEntityDeath(EntityDeathEvent event) {
@@ -90,6 +91,14 @@ public class AdvancementEntityDeath implements Listener{
 							}
 						}
 					}
+					if(arrow.getMetadata("overkill") != null && arrow.getMetadata("overkill").size() > 0) {
+						for(MetadataValue meta : arrow.getMetadata("overkill")) {
+							UUID uuid = UUID.fromString(meta.asString());
+							OverkillDeath.addDeath(uuid);
+							break;
+						}
+					}
+					
 				}
 			}
 		}

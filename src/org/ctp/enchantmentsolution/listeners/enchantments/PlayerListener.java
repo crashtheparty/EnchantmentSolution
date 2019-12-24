@@ -96,7 +96,6 @@ public class PlayerListener extends Enchantmentable {
 
 						if (!flowerGiftEvent.isCancelled()) {
 							Location loc = flowerGiftEvent.getDropLocation();
-							ChatUtils.sendInfo("Location: " + loc);
 							ItemStack flowerGift = flowerGiftEvent.getFlower();
 							if (flowerGiftEvent.getFlower() != null) {
 								player.getWorld().spawnParticle(Particle.VILLAGER_HAPPY, loc, 30, 0.2, 0.5, 0.2);
@@ -337,7 +336,6 @@ public class PlayerListener extends Enchantmentable {
 					new FixedMetadataValue(EnchantmentSolution.getPlugin(), player.getUniqueId().toString()));
 					if (!overkill.takeArrow()) {
 						arrow.setMetadata("no_pickup", new FixedMetadataValue(EnchantmentSolution.getPlugin(), true));
-						ChatUtils.sendInfo("Adding metadata 'no_pickup'");
 					}
 					Bukkit.getScheduler().runTaskLater(EnchantmentSolution.getPlugin(), (Runnable) () -> {
 						arrow.setVelocity(arrow.getVelocity().multiply(overkill.getSpeed()));

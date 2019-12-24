@@ -2,7 +2,10 @@ package org.ctp.enchantmentsolution.utils;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map.Entry;
 
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.event.Event;
@@ -72,6 +75,26 @@ public interface Reflectionable {
 			Method superMethod = superClass.getClass().getDeclaredMethod(name, clazzes.toArray(new Class<?>[] {}));
 			superMethod.setAccessible(true);
 			superMethod.invoke(superClass, event, enchantment, objs);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+	}
+
+	default void runMethod(Reflectionable superClass, String name, LinkedHashMap<Class<?>, Object> map) {
+		try {
+			List<Class<?>> clazzes = new ArrayList<Class<?>>();
+			List<Object> objs = new ArrayList<Object>();
+			Iterator<Entry<Class<?>, Object>> iterator = map.entrySet().iterator();
+			while(iterator.hasNext()) {
+				Entry<Class<?>, Object> entry = iterator.next();
+				if(entry.getKey().isAssignableFrom(entry.getValue().getClass())) {
+					clazzes.add(entry.getKey());
+					objs.add(entry.getValue());
+				}
+			}
+			Method superMethod = superClass.getClass().getDeclaredMethod(name, clazzes.toArray(new Class<?>[] {}));
+			superMethod.setAccessible(true);
+			superMethod.invoke(superClass, objs.toArray() );
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}

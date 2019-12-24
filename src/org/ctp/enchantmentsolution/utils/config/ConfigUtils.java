@@ -95,11 +95,17 @@ public class ConfigUtils {
 	}
 
 	public static String getAdvancementName(String string) {
-		return Configurations.getLanguage().getString("advancements." + string + ".name");
+		String name = Configurations.getLanguage().getString("advancements." + string + ".name");
+		if(name == null) name = Configurations.getLanguage().getString("misc.null_advancement_name");
+		if(name == null) name = "No Name";
+		return name;
 	}
 
 	public static String getAdvancementDescription(String string) {
-		return Configurations.getLanguage().getString("advancements." + string + ".description");
+		String desc = Configurations.getLanguage().getString("advancements." + string + ".description");
+		if(desc == null) desc = Configurations.getLanguage().getString("misc.null_advancement_description");
+		if(desc == null) desc = "No Description";
+		return desc;
 	}
 
 	public static boolean getAdvancedBoolean(ConfigString string, boolean defVal) {

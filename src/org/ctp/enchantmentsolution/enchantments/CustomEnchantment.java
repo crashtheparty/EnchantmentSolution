@@ -1,6 +1,7 @@
 package org.ctp.enchantmentsolution.enchantments;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.Material;
@@ -36,8 +37,8 @@ public abstract class CustomEnchantment {
 	private final Type lang;
 
 	public CustomEnchantment(String englishUSDisplayName, int fiftyConstant, int thirtyConstant, int fiftyModifier,
-	int thirtyModifier, int fiftyStartLevel, int thirtyStartLevel, int fiftyMaxLevel, int thirtyMaxLevel,
-	Weight weight, String englishUSDescription) {
+	int thirtyModifier, int fiftyStartLevel, int thirtyStartLevel, int fiftyMaxLevel, int thirtyMaxLevel, Weight weight,
+	String englishUSDescription) {
 		addDefaultDisplayName(englishUSDisplayName);
 		setDefaultFiftyConstant(fiftyConstant);
 		setDefaultThirtyConstant(thirtyConstant);
@@ -56,6 +57,12 @@ public abstract class CustomEnchantment {
 
 	public static boolean conflictsWith(CustomEnchantment enchOne, CustomEnchantment enchTwo) {
 		if (enchOne.conflictsWith(enchTwo) || enchTwo.conflictsWith(enchOne)) {
+			return true;
+		}
+		List<CustomEnchantment> protection = Arrays.asList(CERegister.PROJECTILE_PROTECTION, CERegister.PROTECTION,
+		CERegister.FIRE_PROTECTION, CERegister.BLAST_PROTECTION);
+		if (protection.contains(enchOne) && protection.contains(enchTwo)
+		&& ConfigString.PROTECTION_CONFLICTS.getBoolean() && !ConfigString.ADVANCED_OPTIONS.getBoolean()) {
 			return true;
 		}
 		return false;
@@ -283,7 +290,8 @@ public abstract class CustomEnchantment {
 	}
 
 	public boolean canEnchant(Player player, int enchantability, int level) {
-		if (ConfigUtils.getAdvancedBoolean(ConfigString.STARTING_LEVEL, ConfigString.LEVEL_FIFTY.getBoolean()) && level < getStartLevel()) {
+		if (ConfigUtils.getAdvancedBoolean(ConfigString.STARTING_LEVEL, ConfigString.LEVEL_FIFTY.getBoolean())
+		&& level < getStartLevel()) {
 			return false;
 		}
 		if (getEnchantLevel(player, enchantability) > 0) {

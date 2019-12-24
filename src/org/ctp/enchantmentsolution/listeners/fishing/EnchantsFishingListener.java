@@ -10,11 +10,11 @@ import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.enchantments.generate.FishingEnchantments;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 
-public class EnchantsFishingListener implements Listener{
+public class EnchantsFishingListener implements Listener {
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onPlayerFishMonitor(PlayerFishEvent event) {
-		if(!ConfigString.USE_LOOT.getBoolean("fishing.use")) {
+		if (!ConfigString.USE_LOOT.getBoolean("fishing.use")) {
 			return;
 		}
 		switch (event.getState()) {
@@ -29,8 +29,9 @@ public class EnchantsFishingListener implements Listener{
 
 	private void handleFishing(Item item, Player player) {
 		ItemStack itemStack = item.getItemStack().clone();
-
-		itemStack = FishingEnchantments.getFishingEnchantments(player, itemStack).getItem();
+		itemStack = FishingEnchantments
+		.getFishingEnchantments(player, itemStack, ConfigString.LOOT_BOOKSHELVES.getInt("fishing.bookshelves"),
+		ConfigString.LOOT_TREASURE.getBoolean("fishing.treasure")).getItem();
 
 		item.setItemStack(itemStack);
 	}

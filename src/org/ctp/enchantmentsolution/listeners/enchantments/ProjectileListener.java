@@ -195,7 +195,7 @@ public class ProjectileListener extends Enchantmentable {
 		if (!canRun(RegisterEnchantments.DETONATOR, event)) {
 			return;
 		}
-		if(event.getEntity().getShooter() instanceof LivingEntity) {
+		if (event.getEntity().getShooter() instanceof LivingEntity) {
 			LivingEntity entity = (LivingEntity) event.getEntity().getShooter();
 			if (event.getHitEntity() != null && event.getHitEntity().getType() == EntityType.CREEPER) {
 				return;
@@ -204,23 +204,32 @@ public class ProjectileListener extends Enchantmentable {
 				Location loc = event.getEntity().getLocation();
 				int level = event.getEntity().getMetadata("detonator").get(0).asInt();
 
-				DetonatorExplosionEvent detonator = new DetonatorExplosionEvent(entity, level, loc, (float) (0.5 + 0.5 * level), true, true, false);
+				DetonatorExplosionEvent detonator = new DetonatorExplosionEvent(entity, level, loc,
+				(float) (0.5 + 0.5 * level), true, true, false);
 				Bukkit.getPluginManager().callEvent(detonator);
 
-				if(!detonator.isCancelled()) {
-					if(detonator.willDelayExplosion()) {
+				if (!detonator.isCancelled()) {
+					if (detonator.willDelayExplosion()) {
 						Bukkit.getScheduler().runTaskLater(EnchantmentSolution.getPlugin(), () -> {
-							loc.getWorld().createExplosion(detonator.getLoc(), detonator.getSize(), detonator.willSetFire(), detonator.willSetBlocks());
-							if(event.getEntity() != null) {
-								event.getEntity().remove();
-							}
+							handleDetonatorExplosion(event, detonator, loc);
 						}, 1l);
 					} else {
-						loc.getWorld().createExplosion(detonator.getLoc(), detonator.getSize(), detonator.willSetFire(), detonator.willSetBlocks());
-						event.getEntity().remove();
+						handleDetonatorExplosion(event, detonator, loc);
 					}
 				}
 			}
+		}
+	}
+	
+	private void handleDetonatorExplosion(ProjectileHitEvent event, DetonatorExplosionEvent detonator, Location loc) {
+		loc.getWorld().createExplosion(detonator.getLoc(), detonator.getSize(), detonator.willSetFire(),
+		detonator.willSetBlocks());
+		if (event.getEntity() != null) {
+			event.getEntity().remove();
+		}
+		if(detonator.getEntity() instanceof Player) {
+			Player player = (Player) detonator.getEntity();
+			AdvancementUtils.awardCriteria(player, ESAdvancement.CARPET_BOMBS, "explosion", 1);
 		}
 	}
 
@@ -243,7 +252,7 @@ public class ProjectileListener extends Enchantmentable {
 					HardBounceEvent hardBounce = new HardBounceEvent(player, level, 2 + 2 * level);
 					Bukkit.getPluginManager().callEvent(hardBounce);
 
-					if(!hardBounce.isCancelled()) {
+					if (!hardBounce.isCancelled()) {
 						p.setMetadata("deflection",
 						new FixedMetadataValue(EnchantmentSolution.getPlugin(), player.getUniqueId().toString()));
 						Bukkit.getScheduler().runTaskLater(EnchantmentSolution.getPlugin(), (Runnable) () -> {
@@ -279,10 +288,11 @@ public class ProjectileListener extends Enchantmentable {
 					event.getHitEntity(), DamageCause.PROJECTILE, damage);
 					Bukkit.getPluginManager().callEvent(hollowPoint);
 					if (!hollowPoint.isCancelled()) {
-						DamageEvent.damageEntity((LivingEntity) hollowPoint.getEntity(),
-						(Player) ((Projectile) hollowPoint.getDamager()).getShooter(), "arrow",
+						Player player = (Player) ((Projectile) hollowPoint.getDamager()).getShooter();
+						DamageEvent.damageEntity((LivingEntity) hollowPoint.getEntity(), player, "arrow",
 						(float) hollowPoint.getDamage());
 						event.getEntity().remove();
+						AdvancementUtils.awardCriteria(player, ESAdvancement.PENETRATION, "arrow");
 					}
 				}
 			}

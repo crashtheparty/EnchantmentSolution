@@ -21,9 +21,17 @@ import org.ctp.enchantmentsolution.inventory.InventoryData;
 import org.ctp.enchantmentsolution.listeners.*;
 import org.ctp.enchantmentsolution.listeners.advancements.AdvancementEntityDeath;
 import org.ctp.enchantmentsolution.listeners.advancements.AdvancementPlayerEvent;
+import org.ctp.enchantmentsolution.listeners.chestloot.ChestLootListener;
 import org.ctp.enchantmentsolution.listeners.enchantments.*;
+import org.ctp.enchantmentsolution.listeners.fishing.EnchantsFishingListener;
 import org.ctp.enchantmentsolution.listeners.fishing.McMMOFishingListener;
 import org.ctp.enchantmentsolution.listeners.inventory.*;
+import org.ctp.enchantmentsolution.listeners.legacy.UpdateEnchantments;
+import org.ctp.enchantmentsolution.listeners.mobs.MobSpawning;
+import org.ctp.enchantmentsolution.listeners.mobs.Villagers;
+import org.ctp.enchantmentsolution.listeners.vanilla.AnvilListener;
+import org.ctp.enchantmentsolution.listeners.vanilla.EnchantmentListener;
+import org.ctp.enchantmentsolution.listeners.vanilla.GrindstoneListener;
 import org.ctp.enchantmentsolution.mcmmo.McMMOAbility;
 import org.ctp.enchantmentsolution.nms.animalmob.AnimalMob;
 import org.ctp.enchantmentsolution.threads.*;
@@ -89,6 +97,15 @@ public class EnchantmentSolution extends JavaPlugin {
 		registerEvent(new ProjectileListener());
 		registerEvent(new BlockListener());
 		registerEvent(new PotionEffectListener());
+		
+		registerEvent(new AnvilListener());
+		registerEvent(new EnchantmentListener());
+		registerEvent(new GrindstoneListener());
+		
+		registerEvent(new MobSpawning());
+		registerEvent(new Villagers());
+		registerEvent(new UpdateEnchantments());
+		registerEvent(new ChestLootListener());
 
 		registerEvent(new AdvancementEntityDeath());
 		registerEvent(new AdvancementPlayerEvent());
@@ -107,7 +124,7 @@ public class EnchantmentSolution extends JavaPlugin {
 							warning = true;
 						} else if (i == 1 && num > 1) {
 							warning = true;
-						} else if (i == 2 && num > 99) {
+						} else if (i == 2 && num > 111) {
 							warning = true;
 						}
 					} catch (NumberFormatException ex) {
@@ -119,7 +136,7 @@ public class EnchantmentSolution extends JavaPlugin {
 					"McMMO Overhaul updates sporidically. Compatibility may break between versions.");
 					ChatUtils.sendToConsole(Level.WARNING,
 					"If there are any compatibility issues, please notify the plugin author immediately.");
-					ChatUtils.sendToConsole(Level.WARNING, "Current Working Version: 2.1.99");
+					ChatUtils.sendToConsole(Level.WARNING, "Current Working Version: 2.1.111");
 				}
 				mcmmoType = "Overhaul";
 			} else {
@@ -129,6 +146,7 @@ public class EnchantmentSolution extends JavaPlugin {
 			registerEvent(new McMMOFishingListener());
 		} else {
 			mcmmoType = "Disabled";
+			registerEvent(new EnchantsFishingListener());
 		}
 
 		if (!mcmmoType.equals("Disabled")) {

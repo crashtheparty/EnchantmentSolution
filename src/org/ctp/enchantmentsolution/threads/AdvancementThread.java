@@ -1,5 +1,8 @@
 package org.ctp.enchantmentsolution.threads;
 
+import java.util.Iterator;
+import java.util.List;
+
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -9,6 +12,7 @@ import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.LocationUtils;
+import org.ctp.enchantmentsolution.utils.abillityhelpers.OverkillDeath;
 import org.ctp.enchantmentsolution.utils.abillityhelpers.WalkerBlock;
 import org.ctp.enchantmentsolution.utils.abillityhelpers.WalkerUtils;
 import org.ctp.enchantmentsolution.utils.items.ItemUtils;
@@ -42,6 +46,23 @@ public class AdvancementThread implements Runnable {
 				&& walkerBlock.getEnchantment() == RegisterEnchantments.VOID_WALKER
 				&& !LocationUtils.hasBlockBelow(block.getRelative(BlockFace.DOWN).getLocation())) {
 					AdvancementUtils.awardCriteria(player, ESAdvancement.MADE_FOR_WALKING, "boots");
+				}
+			}
+			if(OverkillDeath.getDeaths(player.getUniqueId()) != null) {
+				Iterator<OverkillDeath> iter = OverkillDeath.getDeaths(player.getUniqueId()).iterator();
+				if(iter != null) {
+					while(iter.hasNext()) {
+						OverkillDeath death = iter.next();
+						death.minus();
+						if(death.getTicks() <= 0) {
+							iter.remove();
+						}
+					}
+					
+					List<OverkillDeath> deaths = OverkillDeath.getDeaths(player.getUniqueId());
+					if(deaths.size() >= 10) {
+						AdvancementUtils.awardCriteria(player, ESAdvancement.KILIMANJARO, "kills");
+					}
 				}
 			}
 		}

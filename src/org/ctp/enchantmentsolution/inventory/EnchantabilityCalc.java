@@ -1,11 +1,9 @@
 package org.ctp.enchantmentsolution.inventory;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -34,8 +32,7 @@ public class EnchantabilityCalc implements InventoryData {
 	}
 
 	public void setInventory() {
-		// TODO: update the inventory to use language.yml
-		Inventory inv = Bukkit.createInventory(null, 54, "Enchantability Calculator");
+		Inventory inv = Bukkit.createInventory(null, 54, ChatUtils.getMessage(getCodes(), "calc.name"));
 		inv = open(inv);
 
 		if (page < 1) {
@@ -53,25 +50,28 @@ public class EnchantabilityCalc implements InventoryData {
 
 				ItemStack enchantment = new ItemStack(Material.ENCHANTED_BOOK);
 				ItemMeta enchantmentMeta = enchantment.getItemMeta();
-				enchantmentMeta.setDisplayName(ChatColor.BLUE + enchant.getDisplayName());
-				enchantmentMeta.setLore(Arrays.asList(
-				ChatColor.GOLD + "Enchantability Constant: " + ChatColor.DARK_AQUA + enchant.enchantability(0),
-				ChatColor.GOLD + "Enchantability Modifier: " + ChatColor.DARK_AQUA
-				+ (enchant.enchantability(1) - enchant.enchantability(0))));
+				HashMap<String, Object> enchCodes = getCodes();
+				enchCodes.put("%name%", enchant.getDisplayName());
+				enchantmentMeta.setDisplayName(ChatUtils.getMessage(enchCodes, "calc.enchantments"));
+				HashMap<String, Object> enchLoreCodes = getCodes();
+				enchLoreCodes.put("%constant%", enchant.enchantability(0));
+				enchLoreCodes.put("%modifier%", enchant.enchantability(1) - enchant.enchantability(0));
+				enchantmentMeta.setLore(ChatUtils.getMessages(enchLoreCodes, "calc.enchantments_lore"));
 				enchantment.setItemMeta(enchantmentMeta);
 				inv.setItem(i, enchantment);
 			}
 
 			ItemStack goBack = new ItemStack(Material.ARROW);
 			ItemMeta goBackMeta = goBack.getItemMeta();
-			goBackMeta.setDisplayName(page == 1 ? ChatColor.BLUE + "Go Back" : ChatColor.BLUE + "Previous Page");
+			goBackMeta.setDisplayName(page == 1 ? ChatUtils.getMessage(getCodes(), "calc.pagination.go_back")
+			: ChatUtils.getMessage(getCodes(), "calc.pagination.previous_page"));
 			goBack.setItemMeta(goBackMeta);
 			inv.setItem(45, goBack);
 
 			if (PAGING * page <= enchantments.size()) {
 				ItemStack next = new ItemStack(Material.ARROW);
 				ItemMeta nextMeta = next.getItemMeta();
-				nextMeta.setDisplayName(ChatColor.BLUE + "Next Page");
+				nextMeta.setDisplayName(ChatUtils.getMessage(getCodes(), "calc.pagination.next_page"));
 				next.setItemMeta(nextMeta);
 				inv.setItem(53, next);
 			}
@@ -81,33 +81,31 @@ public class EnchantabilityCalc implements InventoryData {
 		if (page == 1) {
 			ItemStack constant = new ItemStack(Material.APPLE);
 			ItemMeta constantMeta = constant.getItemMeta();
-			constantMeta.setDisplayName(ChatColor.BLUE + "Enchantability Constant");
-			constantMeta.setLore(
-			Arrays.asList(ChatColor.GOLD + "Current Value: " + ChatColor.DARK_AQUA + enchantabilityConstant,
-			ChatColor.GRAY + "Left click to edit with anvil.",
-			ChatColor.GRAY + "Right click to edit in chat."));
+			HashMap<String, Object> constantCodes = getCodes();
+			constantCodes.put("%constant%", enchantabilityConstant);
+			constantMeta.setDisplayName(ChatUtils.getMessage(getCodes(), "calc.info.constant"));
+			constantMeta.setLore(ChatUtils.getMessages(constantCodes, "calc.info.constant_lore"));
 			constant.setItemMeta(constantMeta);
 			inv.setItem(21, constant);
 
 			ItemStack modifier = new ItemStack(Material.GOLDEN_APPLE);
 			ItemMeta modifierMeta = modifier.getItemMeta();
-			modifierMeta.setDisplayName(ChatColor.BLUE + "Enchantability Modifier");
-			modifierMeta.setLore(
-			Arrays.asList(ChatColor.GOLD + "Current Value: " + ChatColor.DARK_AQUA + enchantabilityModifier,
-			ChatColor.GRAY + "Left click to edit with anvil.",
-			ChatColor.GRAY + "Right click to edit in chat."));
+			HashMap<String, Object> modifierCodes = getCodes();
+			modifierCodes.put("%modifier%", enchantabilityModifier);
+			modifierMeta.setDisplayName(ChatUtils.getMessage(getCodes(), "calc.info.modifier"));
+			modifierMeta.setLore(ChatUtils.getMessages(modifierCodes, "calc.info.modifier_lore"));
 			modifier.setItemMeta(modifierMeta);
 			inv.setItem(22, modifier);
 
 			ItemStack enchantment = new ItemStack(Material.ENCHANTED_BOOK);
 			ItemMeta enchantmentMeta = enchantment.getItemMeta();
-			enchantmentMeta.setDisplayName(ChatColor.BLUE + "Select from Enchantment");
+			enchantmentMeta.setDisplayName(ChatUtils.getMessage(getCodes(), "calc.info.select_enchantment"));
 			enchantment.setItemMeta(enchantmentMeta);
 			inv.setItem(23, enchantment);
 
 			ItemStack next = new ItemStack(Material.ARROW);
 			ItemMeta nextMeta = next.getItemMeta();
-			nextMeta.setDisplayName(ChatColor.BLUE + "Calculate");
+			nextMeta.setDisplayName(ChatUtils.getMessage(getCodes(), "calc.info.calculate"));
 			next.setItemMeta(nextMeta);
 			inv.setItem(53, next);
 		} else if (page == 2) {
@@ -119,11 +117,12 @@ public class EnchantabilityCalc implements InventoryData {
 				ItemStack item = new ItemStack(value.getMaterial());
 				ItemMeta itemMeta = item.getItemMeta();
 				itemMeta.setDisplayName(value.getDisplay());
-				itemMeta.setLore(Arrays.asList(
-				ChatColor.GOLD + "Resource Enchantability: " + ChatColor.DARK_AQUA + value.getEnchantability(),
-				ChatColor.GOLD + "Max Level From Enchantability: " + ChatColor.DARK_AQUA + enchantability[0],
-				ChatColor.GOLD + "Max Enchantability at Level " + (ConfigString.LEVEL_FIFTY.getBoolean() ? "50: " : "30: ")
-				+ ChatColor.DARK_AQUA + enchantability[1]));
+				HashMap<String, Object> enchantabilityCodes = getCodes();
+				enchantabilityCodes.put("%resource%", value.getEnchantability());
+				enchantabilityCodes.put("%max_level%", enchantability[0]);
+				enchantabilityCodes.put("%level%", (ConfigString.LEVEL_FIFTY.getBoolean() ? "50: " : "30: "));
+				enchantabilityCodes.put("%max_enchantability%", enchantability[1]);
+				itemMeta.setLore(ChatUtils.getMessages(enchantabilityCodes, "calc.enchantability_lore"));
 				item.setItemMeta(itemMeta);
 				inv.setItem(slots[slot], item);
 				slot++;
@@ -131,13 +130,13 @@ public class EnchantabilityCalc implements InventoryData {
 
 			ItemStack goBack = new ItemStack(Material.ARROW);
 			ItemMeta goBackMeta = goBack.getItemMeta();
-			goBackMeta.setDisplayName(ChatColor.BLUE + "Go Back");
+			goBackMeta.setDisplayName(ChatUtils.getMessage(getCodes(), "calc.pagination.go_back"));
 			goBack.setItemMeta(goBackMeta);
 			inv.setItem(45, goBack);
 
 			ItemStack next = new ItemStack(Material.ARROW);
 			ItemMeta nextMeta = next.getItemMeta();
-			nextMeta.setDisplayName(ChatColor.BLUE + "View Enchantability By Level");
+			nextMeta.setDisplayName(ChatUtils.getMessage(getCodes(), "calc.pagination.enchantability_by_level"));
 			next.setItemMeta(nextMeta);
 			inv.setItem(53, next);
 		} else {
@@ -146,15 +145,18 @@ public class EnchantabilityCalc implements InventoryData {
 			if (enchantabilityModifier <= 0) {
 				ItemStack level = new ItemStack(Material.PAPER);
 				ItemMeta levelMeta = level.getItemMeta();
-				levelMeta.setDisplayName(ChatColor.BLUE + "Level 1");
-				levelMeta.setLore(Arrays.asList(ChatColor.GOLD + "Required Enchantability: " + ChatColor.DARK_AQUA
-				+ enchantabilityConstant + "+"));
+				HashMap<String, Object> levelCodes = getCodes();
+				levelCodes.put("%level%", 1);
+				levelMeta.setDisplayName(ChatUtils.getMessage(levelCodes, "calc.by_level"));
+				HashMap<String, Object> levelLoreCodes = getCodes();
+				levelLoreCodes.put("%constant%", enchantabilityConstant);
+				levelMeta.setLore(ChatUtils.getMessages(levelLoreCodes, "calc.by_level_lore"));
 				level.setItemMeta(levelMeta);
 				inv.setItem(0, level);
 
 				ItemStack goBack = new ItemStack(Material.ARROW);
 				ItemMeta goBackMeta = goBack.getItemMeta();
-				goBackMeta.setDisplayName(ChatColor.BLUE + "Go Back");
+				goBackMeta.setDisplayName(ChatUtils.getMessage(getCodes(), "calc.pagination.go_back"));
 				goBack.setItemMeta(goBackMeta);
 				inv.setItem(45, goBack);
 			} else {
@@ -162,22 +164,26 @@ public class EnchantabilityCalc implements InventoryData {
 					int level = PAGING * (page - 3) + i + 1;
 					ItemStack levelItem = new ItemStack(Material.PAPER);
 					ItemMeta levelItemMeta = levelItem.getItemMeta();
-					levelItemMeta.setDisplayName(ChatColor.BLUE + "Level " + level);
-					levelItemMeta.setLore(Arrays.asList(ChatColor.GOLD + "Required Enchantability: "
-					+ ChatColor.DARK_AQUA + (enchantabilityModifier * level + enchantabilityConstant) + "+"));
+					HashMap<String, Object> levelCodes = getCodes();
+					levelCodes.put("%level%", level);
+					levelItemMeta.setDisplayName(ChatUtils.getMessage(levelCodes, "calc.by_level"));
+					HashMap<String, Object> levelLoreCodes = getCodes();
+					levelLoreCodes.put("%constant%", (enchantabilityModifier * level + enchantabilityConstant));
+					levelItemMeta.setLore(ChatUtils.getMessages(levelLoreCodes, "calc.by_level_lore"));
 					levelItem.setItemMeta(levelItemMeta);
 					inv.setItem(i, levelItem);
 				}
 
 				ItemStack goBack = new ItemStack(Material.ARROW);
 				ItemMeta goBackMeta = goBack.getItemMeta();
-				goBackMeta.setDisplayName(page == 3 ? ChatColor.BLUE + "Go Back" : ChatColor.BLUE + "Previous Page");
+				goBackMeta.setDisplayName(page == 3 ? ChatUtils.getMessage(getCodes(), "calc.pagination.go_back")
+				: ChatUtils.getMessage(getCodes(), "calc.pagination.previous_page"));
 				goBack.setItemMeta(goBackMeta);
 				inv.setItem(45, goBack);
 
 				ItemStack next = new ItemStack(Material.ARROW);
 				ItemMeta nextMeta = next.getItemMeta();
-				nextMeta.setDisplayName(ChatColor.BLUE + "Next Page");
+				nextMeta.setDisplayName(ChatUtils.getMessage(getCodes(), "calc.pagination.next_page"));
 				next.setItemMeta(nextMeta);
 				inv.setItem(53, next);
 			}
@@ -244,7 +250,7 @@ public class EnchantabilityCalc implements InventoryData {
 		try {
 			num = Integer.parseInt(name);
 		} catch (NumberFormatException ex) {
-			ChatUtils.sendMessage(player, "Invalid number, setting to 0.");
+			ChatUtils.sendMessage(player, ChatUtils.getMessage(getCodes(), "calc.invalid_number"));
 		}
 		if (type.equals("constant")) {
 			enchantabilityConstant = num;
@@ -268,7 +274,7 @@ public class EnchantabilityCalc implements InventoryData {
 		inventory = null;
 
 		setChat(true);
-		ChatUtils.sendMessage(player, "Enter the string message into the chat.");
+		ChatUtils.sendMessage(player, ChatUtils.getMessage(getCodes(), "calc.enter_string"));
 		player.closeInventory();
 	}
 
@@ -331,26 +337,17 @@ public class EnchantabilityCalc implements InventoryData {
 	}
 
 	public static enum EnchantabilityValues {
-		WOODEN_TOOLS(15, Material.WOODEN_PICKAXE, ChatColor.BLUE + "Wooden Tools and Weapons"), STONE_TOOLS(5,
-		Material.STONE_PICKAXE, ChatColor.BLUE + "Stone Tools and Weapons"), GOLDEN_TOOLS(22,
-		Material.GOLDEN_PICKAXE, ChatColor.BLUE + "Golden Tools and Weapons"), IRON_TOOLS(10,
-		Material.IRON_PICKAXE, ChatColor.BLUE + "Iron Tools and Weapons"), DIAMOND_TOOLS(14,
-		Material.DIAMOND_PICKAXE,
-		ChatColor.BLUE + "Diamond Tools and Weapons"), LEATHER_ARMOR(15,
-		Material.LEATHER_CHESTPLATE,
-		ChatColor.BLUE + "Leather Armor"), CHAINMAIL_ARMOR(5,
-		Material.CHAINMAIL_CHESTPLATE,
-		ChatColor.BLUE + "Chainmail Armor"), GOLDEN_ARMOR(22,
-		Material.GOLDEN_CHESTPLATE,
-		ChatColor.BLUE + "Golden Armor"), IRON_ARMOR(10,
-		Material.IRON_CHESTPLATE,
-		ChatColor.BLUE + "Iron Armor"), DIAMOND_ARMOR(
-		14, Material.DIAMOND_CHESTPLATE,
-		ChatColor.BLUE
-		+ "Diamond Armor"), OTHER(1,
-		Material.BOOK,
-		ChatColor.BLUE
-		+ "Books and Other Items");
+		WOODEN_TOOLS(15, Material.WOODEN_PICKAXE, "calc.enchantability_values.wooden_tools"),
+		STONE_TOOLS(5, Material.STONE_PICKAXE, "calc.enchantability_values.stone_tools"),
+		GOLDEN_TOOLS(22, Material.GOLDEN_PICKAXE, "calc.enchantability_values.golden_tools"),
+		IRON_TOOLS(10, Material.IRON_PICKAXE, "calc.enchantability_values.iron_tools"),
+		DIAMOND_TOOLS(14, Material.DIAMOND_PICKAXE, "calc.enchantability_values.diamond_tools"),
+		LEATHER_ARMOR(15, Material.LEATHER_CHESTPLATE, "calc.enchantability_values.leather_armor"),
+		CHAINMAIL_ARMOR(5, Material.CHAINMAIL_CHESTPLATE, "calc.enchantability_values.chainmail_armor"),
+		GOLDEN_ARMOR(22, Material.GOLDEN_CHESTPLATE, "calc.enchantability_values.golden_armor"),
+		IRON_ARMOR(10, Material.IRON_CHESTPLATE, "calc.enchantability_values.iron_armor"),
+		DIAMOND_ARMOR(14, Material.DIAMOND_CHESTPLATE, "calc.enchantability_values.diamond_armor"),
+		OTHER(1, Material.BOOK, "calc.enchantability_values.other");
 
 		private int enchantability;
 		private Material material;
@@ -371,7 +368,7 @@ public class EnchantabilityCalc implements InventoryData {
 		}
 
 		public String getDisplay() {
-			return display;
+			return ChatUtils.getMessage(ChatUtils.getCodes(), display);
 		}
 	}
 
@@ -383,8 +380,10 @@ public class EnchantabilityCalc implements InventoryData {
 
 		int max = (ConfigString.LEVEL_FIFTY.getBoolean() ? 50 : 30) + rand_enchantability;
 		if (ConfigUtils.getAdvancedBoolean(ConfigString.USE_LAPIS_MODIFIERS, ConfigString.LEVEL_FIFTY.getBoolean())) {
-			double lapisConstant = ConfigUtils.getAdvancedDouble(ConfigString.LAPIS_CONSTANT, ConfigString.LEVEL_FIFTY.getBoolean() ? -1 : 0);
-			double lapisMultiplier = ConfigUtils.getAdvancedDouble(ConfigString.LAPIS_MULTIPLIER, ConfigString.LEVEL_FIFTY.getBoolean() ? 2 : 0);
+			double lapisConstant = ConfigUtils.getAdvancedDouble(ConfigString.LAPIS_CONSTANT,
+			ConfigString.LEVEL_FIFTY.getBoolean() ? -1 : 0);
+			double lapisMultiplier = ConfigUtils.getAdvancedDouble(ConfigString.LAPIS_MULTIPLIER,
+			ConfigString.LEVEL_FIFTY.getBoolean() ? 2 : 0);
 			rand_enchantability += ((ConfigString.LEVEL_FIFTY.getBoolean() ? 6 : 3) + lapisConstant) * lapisMultiplier;
 		}
 		max = (int) (max * 1.15 + 0.5);

@@ -92,6 +92,51 @@ grindstone:
     take-enchantments: '&aKosten: &9%levelCost%'
     take-enchantments-lore: 
     - '&fAlle Verzauberungen aus dem Gegenstand werden in das Buch aufgenommen'
+calc:
+    name: '&9Verzauberbarkeitsrechner'
+    enchantments: '&9%name%'
+    enchantments_lore:
+    - '&6Verzauberbarkeit Konstante: &3%constant%'
+    - '&6Verzauberbarkeit Modifikator: &3%modifier%'
+    pagination:
+        go_back: '&9Geh zurück'
+        previous_page: '&9Vorherige Seite'
+        next_page: '&9Nächste Seite'
+        enchantability_by_level: '&9Zeigen Sie die Verzauberbarkeit nach Stufe an'
+    info:
+        constant: '&9Verzauberbarkeit Konstante'
+        constant_lore:
+        - '&6Aktueller Wert: &3%constant%'
+        - '&7Linksklick zum Bearbeiten mit Amboss'
+        - '&7Rechtsklick zum Bearbeiten im Chat'
+        modifier: '&9Verzauberbarkeit Modifikator'
+        modifier_lore:
+        - '&6Aktueller Wert: &3%modifier%'
+        - '&7Linksklick zum Bearbeiten mit Amboss'
+        - '&7Rechtsklick zum Bearbeiten im Chat'
+        select_enchantment: '&9Wählen Sie aus Verzauberung'
+        calculate: '&9Berechnung'
+    enchantability_values:
+        wooden_tools: '&9Holzwerkzeuge und Waffen'
+        golden_tools: '&9Goldene Werkzeuge und Waffen'
+        stone_tools: '&9Steinwerkzeuge und Waffen'
+        iron_tools: '&9Eisenwerkzeuge und Waffen'
+        diamond_tools: '&9Diamantwerkzeuge und Waffen'
+        leather_armor: '&9Lederrüstung'
+        golden_armor: '&9Goldene Rüstung'
+        chainmail_armor: '&9Kettenrüstung'
+        iron_armor: '&9Eiserne Rüstung'
+        diamond_armor: '&9Diamant-Rüstung'
+        other: '&9Bücher und andere Gegenstände'
+    enchantability_lore:
+    - '&6Ressourcenverzauberbarkeit: &3%resource%'
+    - '&6Maximales Level von Verzauberbarkeit: &3%max_level%'
+    - '&6Maximale Verzauberbarkeit auf Stufe %level%: &3%max_enchantability%'
+    by_level: '&9Level %level%'
+    by_level_lore:
+    - '&6erforderliche Verzauberbarkeit: &3%constant%+'
+    invalid_number: 'Ungültige Nummer, Einstellung auf 0.'
+    enter_string: 'Geben Sie die Textnachricht in den Chat ein.'
 
 enchantment: 
     name: '&6Anzeigename: &f'
@@ -344,6 +389,8 @@ misc:
     true: "Wahr"
     false: "Falsch"
     beheading_skull: "&7Schädel des %player%"
+    null_advancement_name: "Kein Name"
+    null_advancement_description: "Keine Beschreibung"
 
 advancements: 
     enchantments/enchantment_solution: 
@@ -541,3 +588,21 @@ advancements:
     enchantments/over_9000: 
         name: 'Over 9000'
         description: 'Sammle 9001 zusätzliche Gegenstände mit Höhe++ oder Breite++'
+    enchantments/plague_inc: 
+        name: 'Plague Inc.'
+        description: 'Verbreite den Fluch der Ansteckungauf einen anderen Gegenstand'
+    enchantments/blast_off: 
+        name: 'Sprengen Sie ab'
+        description: 'Sprengen Sie einen Creeper schneller als gewöhnlich'
+    enchantments/extermination: 
+        name: 'Vernichtung'
+        description: 'Infiziere einen Gegenstand mit allen möglichen Flüchen'
+    enchantments/penetration: 
+        name: 'Penetration'
+        description: 'Zerstöre einen Mob mit einem Projektil, wenn es keinen Schaden anrichten soll'
+    enchantments/carpet_bombs: 
+        name: 'Teppichbomben'
+        description: 'Verursacht mit Detonator 100 Explosionen'
+    enchantments/kilimanjaro: 
+        name: 'Kilimanjaro!'
+        description: 'Töte 10 Mobs innerhalb von 4,5 Sekunden mit Overkill'

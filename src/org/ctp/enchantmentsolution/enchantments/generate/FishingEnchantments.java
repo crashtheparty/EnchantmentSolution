@@ -9,7 +9,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentList;
-import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.Configurations;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 import org.ctp.enchantmentsolution.utils.config.FishingConfiguration;
@@ -55,7 +54,6 @@ public class FishingEnchantments extends LootEnchantments {
 			String type = s.substring(s.lastIndexOf(".") + 1);
 			double d = getTierChances(manager.getLootTier(), type, ConfigString.LEVEL_FIFTY.getBoolean());
 			chanceMap.put(type, d);
-			ChatUtils.sendInfo(type + " " + d);
 		}
 
 		double random = Math.random() * 100;

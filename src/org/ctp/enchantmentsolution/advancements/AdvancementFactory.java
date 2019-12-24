@@ -64,7 +64,9 @@ public class AdvancementFactory {
 	public Advancement getRoot(String id, String title, String description, Material icon, String background) {
 		validate(id, title, description, icon);
 		Advancement advancement = new Advancement(new NamespacedKey(plugin, id), new ItemObject().setItem(icon),
-		new TextComponent(title), new TextComponent(description)).makeRoot(background, true);
+		new TextComponent(title), new TextComponent(description)).makeRoot(background, true)
+		.addTrigger("item", new InventoryChangedTrigger().addItem(new ItemObject().setItem(Material.ENCHANTING_TABLE)))
+		.addTrigger("enchant", new EnchantedItemTrigger()).removeTrigger("auto").addRequirement("item", "enchant");
 		finalize(advancement, null);
 		return advancement;
 	}
