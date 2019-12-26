@@ -5,7 +5,7 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.inventory.ItemStack;
-import org.ctp.enchantmentsolution.utils.ItemSlotType;
+import org.ctp.enchantmentsolution.utils.items.ItemSlotType;
 
 /**
  * @author Arnah
@@ -27,7 +27,7 @@ public final class ArmorEquipEvent extends PlayerEvent implements Cancellable {
 	private boolean cancel = false;
 	private final EquipMethod equipType;
 	private final ItemSlotType type;
-	private ItemStack oldArmorPiece, newArmorPiece;
+	private final ItemStack oldArmorPiece, newArmorPiece;
 
 	public ArmorEquipEvent(final Player player, final EquipMethod equipType, final ItemSlotType type,
 	final ItemStack oldArmorPiece, final ItemStack newArmorPiece) {
@@ -38,10 +38,12 @@ public final class ArmorEquipEvent extends PlayerEvent implements Cancellable {
 		this.newArmorPiece = newArmorPiece;
 	}
 
+	@Override
 	public final void setCancelled(final boolean cancel) {
 		this.cancel = cancel;
 	}
 
+	@Override
 	public final boolean isCancelled() {
 		return cancel;
 	}
@@ -54,16 +56,8 @@ public final class ArmorEquipEvent extends PlayerEvent implements Cancellable {
 		return oldArmorPiece;
 	}
 
-	public final void setOldArmorPiece(final ItemStack oldArmorPiece) {
-		this.oldArmorPiece = oldArmorPiece;
-	}
-
 	public final ItemStack getNewArmorPiece() {
 		return newArmorPiece;
-	}
-
-	public final void setNewArmorPiece(final ItemStack newArmorPiece) {
-		this.newArmorPiece = newArmorPiece;
 	}
 
 	/**

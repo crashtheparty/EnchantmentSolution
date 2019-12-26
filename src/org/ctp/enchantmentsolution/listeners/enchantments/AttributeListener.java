@@ -28,7 +28,7 @@ import org.ctp.enchantmentsolution.events.potion.UnrestPotionEvent;
 import org.ctp.enchantmentsolution.listeners.Enchantmentable;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.ESArrays;
-import org.ctp.enchantmentsolution.utils.ItemSlotType;
+import org.ctp.enchantmentsolution.utils.items.ItemSlotType;
 
 public class AttributeListener extends Enchantmentable {
 

@@ -20,8 +20,8 @@ import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.events.ArmorEquipEvent;
 import org.ctp.enchantmentsolution.events.ItemEquipEvent;
 import org.ctp.enchantmentsolution.events.ArmorEquipEvent.EquipMethod;
-import org.ctp.enchantmentsolution.utils.ItemSlotType;
 import org.ctp.enchantmentsolution.utils.items.DamageUtils;
+import org.ctp.enchantmentsolution.utils.items.ItemSlotType;
 
 /**
  * @author Arnah

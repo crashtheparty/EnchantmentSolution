@@ -1,4 +1,4 @@
-package org.ctp.enchantmentsolution.utils;
+package org.ctp.enchantmentsolution.utils.items;
 
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;

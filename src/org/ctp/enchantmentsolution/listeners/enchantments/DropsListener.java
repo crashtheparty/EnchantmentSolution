@@ -9,6 +9,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Creeper;
 import org.bukkit.entity.EnderDragon;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.entity.Skeleton;
@@ -68,7 +69,7 @@ public class DropsListener extends Enchantmentable {
 					skulls.add(skull);
 				} else if (entity instanceof EnderDragon) skulls.add(new ItemStack(Material.DRAGON_HEAD));
 
-				BeheadingEvent beheading = new BeheadingEvent(killer, level, skulls, event.getDrops(), false, true);
+				BeheadingEvent beheading = new BeheadingEvent(killer, (LivingEntity) entity, level, skulls, event.getDrops(), false, true);
 				Bukkit.getPluginManager().callEvent(beheading);
 
 				if (!beheading.isCancelled()) {

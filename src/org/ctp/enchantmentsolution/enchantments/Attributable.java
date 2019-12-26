@@ -12,7 +12,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
-import org.ctp.enchantmentsolution.utils.ItemSlotType;
+import org.ctp.enchantmentsolution.utils.items.ItemSlotType;
 
 public enum Attributable {
 	ARMORED(RegisterEnchantments.ARMORED, Attribute.GENERIC_ARMOR, ItemSlotType.CHESTPLATE, "armored_armor", UUID.fromString("cccccccc-fefe-fefe-fefe-000000000000"), Operation.ADD_NUMBER),

@@ -393,9 +393,21 @@ misc:
     null_advancement_description: "Keine Beschreibung"
 
 advancements: 
-    enchantments/enchantment_solution: 
-        name: 'Enchantment Solution'
-        description: 'Verbesserungen rund um die hinzugefügten Verzauberungen'
+    enchantments/agricultural_revolution: 
+        name: 'Landwirtschaftsrevolution'
+        description: 'Wer mag Landwirtschaft und Tiere? Wir tun!'
+    enchantments/industrial_revolution: 
+        name: 'Industrielle Revolution'
+        description: 'Vereinfachen Sie Ihr Leben auf umweltschädliche Weise.'
+    enchantments/scientific_revolution: 
+        name: 'Wissenschaftliche Revolution'
+        description: 'Wunderbare Wunder oder dystopische Alpträume? Du entscheidest.'
+    enchantments/imperial_revolution: 
+        name: 'Kaiserliche Revolution'
+        description: 'Conquer the world! Take no prisoners.'
+    enchantments/mechanical_revolution: 
+        name: 'Mechanische Revolution'
+        description: 'Hüpfe in deinen neuen Mech-Anzug und rette den Tag!'
     enchantments/fish_sticks: 
         name: 'Fischstäbchen'
         description: 'Mit Fritieren einen Fisch kochen'

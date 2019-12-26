@@ -399,6 +399,18 @@ advancements:
     enchantments/agricultural_revolution: 
         name: 'Agricultural Revolution'
         description: 'Who likes farming and animals? We do!'
+    enchantments/industrial_revolution: 
+        name: 'Industrial Revolution'
+        description: 'Simplifying your life, one environmentally-destructive way at a time.'
+    enchantments/scientific_revolution: 
+        name: 'Scientific Revolution'
+        description: 'Marvelous wonders or dystopian nightmares? You decide.'
+    enchantments/imperial_revolution: 
+        name: 'Imperial Revolution'
+        description: 'Conquer the world! Take no prisoners.'
+    enchantments/mechanical_revolution: 
+        name: 'Mechanical Revolution'
+        description: 'Hop into your new mech suit and go save the day!'
     enchantments/fish_sticks: 
         name: 'Fish Sticks'
         description: 'Cook a fish with Fried'
