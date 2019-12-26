@@ -1,13 +1,14 @@
 package org.ctp.enchantmentsolution.events.blocks;
 
 import org.bukkit.block.Block;
+import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 
-public class WalkerDamageBlockEvent extends ESBlockEvent {
+public abstract class WalkerDamageBlockEvent extends ESBlockEvent {
 
 	private final DamageState damage;
 
-	public WalkerDamageBlockEvent(Block theBlock, DamageState damage) {
-		super(theBlock);
+	public WalkerDamageBlockEvent(Block theBlock, EnchantmentLevel enchantment, DamageState damage) {
+		super(theBlock, enchantment);
 		this.damage = damage;
 	}
 

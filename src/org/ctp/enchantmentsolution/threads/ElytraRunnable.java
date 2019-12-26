@@ -37,34 +37,27 @@ public class ElytraRunnable implements Runnable, Reflectionable {
 	}
 
 	private void frequentFlyer() {
-		if(!RegisterEnchantments.isEnabled(RegisterEnchantments.FREQUENT_FLYER)) {
-			return;
-		}
-		for(Player player : Bukkit.getOnlinePlayers()) {
+		if (!RegisterEnchantments.isEnabled(RegisterEnchantments.FREQUENT_FLYER)) return;
+		for(Player player: Bukkit.getOnlinePlayers())
 			try {
-				if(!PLAYERS.containsKey(player.getUniqueId())) {
+				if (!PLAYERS.containsKey(player.getUniqueId())) {
 					ItemStack elytra = player.getInventory().getChestplate();
-					if(elytra != null && !elytra.getType().equals(Material.ELYTRA)) {
-						elytra = null;
-					}
+					if (elytra != null && !elytra.getType().equals(Material.ELYTRA)) elytra = null;
 					FrequentFlyerPlayer ffPlayer = new FrequentFlyerPlayer(player, elytra);
 					Bukkit.getScheduler().runTaskLater(EnchantmentSolution.getPlugin(), () -> {
-						if(ffPlayer.canFly() && !player.isOnGround() && player.getGameMode() != GameMode.CREATIVE && player.getGameMode() != GameMode.SPECTATOR) {
-							player.setFlying(true);
-						}
+						if (ffPlayer.canFly() && !player.isOnGround() && player.getGameMode() != GameMode.CREATIVE && player.getGameMode() != GameMode.SPECTATOR) player.setFlying(true);
 					}, 1l);
 					PLAYERS.put(player.getUniqueId(), ffPlayer);
 				}
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
-		}
 
 		Iterator<Entry<UUID, FrequentFlyerPlayer>> iterator = PLAYERS.entrySet().iterator();
-		while(iterator.hasNext()) {
+		while (iterator.hasNext()) {
 			Entry<UUID, FrequentFlyerPlayer> entry = iterator.next();
 			Player player = Bukkit.getPlayer(entry.getKey());
-			if(player == null || !player.isOnline()) {
+			if (player == null || !player.isOnline()) {
 				iterator.remove();
 				continue;
 			}
@@ -72,28 +65,21 @@ public class ElytraRunnable implements Runnable, Reflectionable {
 			ItemStack elytra = ffPlayer.getPlayer().getInventory().getChestplate();
 			if (elytra != null && elytra.getType().equals(Material.ELYTRA)) {
 				ffPlayer.setElytra(elytra);
-				if (player.isFlying() && !player.getGameMode().equals(GameMode.CREATIVE) && !player.getGameMode().equals(GameMode.SPECTATOR)) {
-					ffPlayer.minus();
-				}
-			} else {
-				if((elytra == null || !elytra.getType().equals(Material.ELYTRA)) && !player.getGameMode().equals(GameMode.CREATIVE)
-				&& !player.getGameMode().equals(GameMode.SPECTATOR)) {
-					ffPlayer.setElytra(null);
-					ffPlayer.setCanFly(false);
-				}
+				if (player.isFlying() && !player.getGameMode().equals(GameMode.CREATIVE) && !player.getGameMode().equals(GameMode.SPECTATOR)) ffPlayer.minus();
+			} else if ((elytra == null || !elytra.getType().equals(Material.ELYTRA)) && !player.getGameMode().equals(GameMode.CREATIVE) && !player.getGameMode().equals(GameMode.SPECTATOR)) {
+				ffPlayer.setElytra(null);
+				ffPlayer.setCanFly(false);
 			}
 		}
 	}
 
 	private void icarus() {
-		if(!RegisterEnchantments.isEnabled(RegisterEnchantments.ICARUS)) {
-			return;
-		}
+		if (!RegisterEnchantments.isEnabled(RegisterEnchantments.ICARUS)) return;
 		List<IcarusDelay> icarusDelay = IcarusDelay.getIcarusDelay();
 		for(int i = icarusDelay.size() - 1; i >= 0; i--) {
 			IcarusDelay icarus = icarusDelay.get(i);
 			icarus.minusDelay();
-			if(icarus.getDelay() <= 0) {
+			if (icarus.getDelay() <= 0) {
 				icarusDelay.remove(icarus);
 				Player player = icarus.getPlayer().getPlayer();
 				player.getWorld().spawnParticle(Particle.FIREWORKS_SPARK, player.getLocation(), 250, 2, 2, 2);

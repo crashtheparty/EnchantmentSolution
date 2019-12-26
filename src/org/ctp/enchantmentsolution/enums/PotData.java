@@ -10,8 +10,7 @@ public class PotData {
 		potionName = name.toUpperCase();
 		try {
 			potion = PotionEffectType.getByName(potionName);
-		} catch (Exception ex) {
-		}
+		} catch (Exception ex) {}
 	}
 
 	public PotionEffectType getPotionEffect() {

@@ -17,19 +17,15 @@ public enum Language {
 	}
 
 	public static Language getLanguage(String value) {
-		for(Language lang: values()) {
-			if (lang.getLocale().equalsIgnoreCase(value)) {
-				return lang;
-			}
-		}
+		for(Language lang: values())
+			if (lang.getLocale().equalsIgnoreCase(value)) return lang;
 		return US;
 	}
 
 	public static List<String> getValues() {
 		List<String> langs = new ArrayList<String>();
-		for(Language lang: values()) {
+		for(Language lang: values())
 			langs.add(lang.getLocale());
-		}
 		return langs;
 	}
 }

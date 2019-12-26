@@ -18,24 +18,16 @@ public class StringUtils {
 
 	public static String returnEnchantmentName(CustomEnchantment ench) {
 		String displayName = ench.getDisplayName();
-		if (ench.isCurse()) {
-			displayName = ChatColor.RED + displayName;
-		}
+		if (ench.isCurse()) displayName = ChatColor.RED + displayName;
 
 		return displayName;
 	}
 
 	public static String returnEnchantmentName(CustomEnchantment ench, int enchLevel) {
 		String displayName = ench.getDisplayName();
-		if (ench.isCurse()) {
-			displayName = ChatColor.RED + displayName;
-		}
-		if (enchLevel == 1 && ench.getMaxLevel() == 1) {
-			return displayName;
-		}
-		if (enchLevel > 10 || enchLevel <= 0) {
-			return displayName + " enchantment.level." + enchLevel;
-		}
+		if (ench.isCurse()) displayName = ChatColor.RED + displayName;
+		if (enchLevel == 1 && ench.getMaxLevel() == 1) return displayName;
+		if (enchLevel > 10 || enchLevel <= 0) return displayName + " enchantment.level." + enchLevel;
 
 		return displayName + " " + NUMERALS[enchLevel - 1];
 	}
@@ -49,64 +41,46 @@ public class StringUtils {
 			level = Integer.parseInt(enchLevel[enchLevel.length - 1]);
 			repair = pieces.length - 1;
 		} else {
-			for(int i = 0; i < NUMERALS.length; i++) {
+			for(int i = 0; i < NUMERALS.length; i++)
 				if (pieces[pieces.length - 1].equals(NUMERALS[i])) {
 					level = i + 1;
 					break;
 				}
-			}
 			if (level == 0) {
 				level = 1;
 				repair = pieces.length;
-			} else {
+			} else
 				repair = pieces.length - 1;
-			}
 		}
 		String repaired = pieces[0];
-		for(int i = 1; i < repair; i++) {
+		for(int i = 1; i < repair; i++)
 			repaired += " " + pieces[i];
-		}
 		CustomEnchantment match = null;
-		for(CustomEnchantment ench: RegisterEnchantments.getEnchantments()) {
+		for(CustomEnchantment ench: RegisterEnchantments.getEnchantments())
 			if (ench.getDisplayName().equals(repaired)) {
-				if (meta.hasEnchant(ench.getRelativeEnchantment())) {
-					// already has the enchantment, so do nothing about it
-					return null;
-				}
+				if (meta.hasEnchant(ench.getRelativeEnchantment())) // already has the enchantment, so do nothing about it
+				return null;
 				match = ench;
 			}
-		}
 
-		if (match == null) {
-			// not an enchantment, so don't add one
-			return null;
-		}
+		if (match == null) // not an enchantment, so don't add one
+		return null;
 
 		return new EnchantmentLevel(match, level);
 	}
 
 	public static boolean isRetroEnchantment(String s) {
-		if (s.startsWith(ChatUtils.hideText("legacy") + "" + ChatColor.GRAY + "" + ChatColor.BLUE)) {
-			return false;
-		}
-		if (s.startsWith(ChatUtils.hideText("legacy") + "" + ChatColor.GRAY)) {
-			return true;
-		}
+		if (s.startsWith(ChatUtils.hideText("legacy") + "" + ChatColor.GRAY + "" + ChatColor.BLUE)) return false;
+		if (s.startsWith(ChatUtils.hideText("legacy") + "" + ChatColor.GRAY)) return true;
 		return false;
 	}
 
 	public static boolean isLegacyEnchantment(String s) {
-		if (s.startsWith(ChatUtils.hideText("solution") + "" + ChatColor.GRAY + "" + ChatColor.BLUE)) {
-			return false;
-		}
-		if (s.startsWith(ChatUtils.hideText("solution") + "" + ChatColor.GRAY)) {
-			return true;
-		}
+		if (s.startsWith(ChatUtils.hideText("solution") + "" + ChatColor.GRAY + "" + ChatColor.BLUE)) return false;
+		if (s.startsWith(ChatUtils.hideText("solution") + "" + ChatColor.GRAY)) return true;
 		s = ChatColor.stripColor(s);
 		String[] pieces = s.split(" ");
-		if (pieces.length == 0) {
-			return false;
-		}
+		if (pieces.length == 0) return false;
 		int level = 0;
 		int repair = 0;
 		if (pieces[pieces.length - 1].contains("enchantment.level")) {
@@ -114,45 +88,35 @@ public class StringUtils {
 			level = Integer.parseInt(enchLevel[enchLevel.length - 1]);
 			repair = pieces.length - 1;
 		} else {
-			for(int i = 0; i < NUMERALS.length; i++) {
+			for(int i = 0; i < NUMERALS.length; i++)
 				if (pieces[pieces.length - 1].equals(NUMERALS[i])) {
 					level = i + 1;
 					break;
 				}
-			}
 			if (level == 0) {
 				level = 1;
 				repair = pieces.length;
-			} else {
+			} else
 				repair = pieces.length - 1;
-			}
 		}
 		String repaired = pieces[0];
-		for(int i = 1; i < repair; i++) {
+		for(int i = 1; i < repair; i++)
 			repaired += " " + pieces[i];
-		}
-		for(CustomEnchantment ench: RegisterEnchantments.getEnchantments()) {
-			if (ench.getDisplayName().equals(repaired)) {
-				return true;
-			}
-		}
+		for(CustomEnchantment ench: RegisterEnchantments.getEnchantments())
+			if (ench.getDisplayName().equals(repaired)) return true;
 		return false;
 	}
 
 	public static boolean isEnchantment(String s) {
 		if (s.indexOf(ChatColor.RESET + "") > -1) {
 			String enchName = ChatUtils.revealText(s.substring(0, s.indexOf(ChatColor.RESET + "")));
-			if (RegisterEnchantments.getByName(enchName) != null) {
-				return true;
-			}
+			if (RegisterEnchantments.getByName(enchName) != null) return true;
 		}
 		return isLegacyEnchantment(s);
 	}
 
 	public static String getEnchantmentString(EnchantmentLevel enchantment) {
-		return ChatUtils.hideText(enchantment.getEnchant().getName()) + ChatColor.RESET
-		+ ChatUtils.hideText(enchantment.getLevel() + "") + ChatColor.RESET + ChatColor.GRAY
-		+ returnEnchantmentName(enchantment.getEnchant(), enchantment.getLevel());
+		return ChatUtils.hideText(enchantment.getEnchant().getName()) + ChatColor.RESET + ChatUtils.hideText(enchantment.getLevel() + "") + ChatColor.RESET + ChatColor.GRAY + returnEnchantmentName(enchantment.getEnchant(), enchantment.getLevel());
 	}
 
 	public static EnchantmentLevel getEnchantment(String s) {
@@ -177,9 +141,7 @@ public class StringUtils {
 	public static void addAnimal(ItemStack item, int entityID) {
 		ItemMeta meta = item.getItemMeta();
 		List<String> lore = meta.getLore();
-		if (lore == null) {
-			lore = new ArrayList<String>();
-		}
+		if (lore == null) lore = new ArrayList<String>();
 		lore.add(ChatUtils.hideText("solution") + "" + ChatColor.GRAY + "" + ChatColor.BLUE + "Entity ID: " + entityID);
 		meta.setLore(lore);
 		item.setItemMeta(meta);
@@ -189,59 +151,40 @@ public class StringUtils {
 		ItemMeta meta = item.getItemMeta();
 		List<String> lore = meta.getLore();
 		List<Integer> ids = new ArrayList<Integer>();
-		if (lore == null) {
-			lore = new ArrayList<String>();
-		}
-		for(String l: lore) {
-			if (l.startsWith(ChatUtils.hideText("solution") + "" + ChatColor.GRAY + "" + ChatColor.BLUE)) {
-				try {
-					ids.add(Integer.parseInt(l.substring(l.indexOf("Entity ID: ") + "Entity ID: ".length())));
-				} catch (Exception ex) {
-				}
-			}
-		}
+		if (lore == null) lore = new ArrayList<String>();
+		for(String l: lore)
+			if (l.startsWith(ChatUtils.hideText("solution") + "" + ChatColor.GRAY + "" + ChatColor.BLUE)) try {
+				ids.add(Integer.parseInt(l.substring(l.indexOf("Entity ID: ") + "Entity ID: ".length())));
+			} catch (Exception ex) {}
 		return ids;
 	}
 
 	public static void removeAnimal(ItemStack item, int entityID) {
 		ItemMeta meta = item.getItemMeta();
 		List<String> lore = meta.getLore();
-		if (lore == null) {
-			lore = new ArrayList<String>();
-		}
-		while (lore.contains(ChatUtils.hideText("solution") + "" + ChatColor.GRAY + "" + ChatColor.BLUE + "Entity ID: "
-		+ entityID)) {
-			lore.remove(ChatUtils.hideText("solution") + "" + ChatColor.GRAY + "" + ChatColor.BLUE + "Entity ID: "
-			+ entityID);
-		}
+		if (lore == null) lore = new ArrayList<String>();
+		while (lore.contains(ChatUtils.hideText("solution") + "" + ChatColor.GRAY + "" + ChatColor.BLUE + "Entity ID: " + entityID))
+			lore.remove(ChatUtils.hideText("solution") + "" + ChatColor.GRAY + "" + ChatColor.BLUE + "Entity ID: " + entityID);
 		meta.setLore(lore);
 		item.setItemMeta(meta);
 	}
 
 	public static List<String> removeEnchantment(CustomEnchantment enchantment, List<String> lore) {
-		if(lore == null) {
-			return lore;
-		}
+		if (lore == null) return lore;
 		Iterator<String> iterator = lore.iterator();
 		while (iterator.hasNext()) {
 			String l = iterator.next();
-			if (l.contains(returnEnchantmentName(enchantment))) {
-				iterator.remove();
-			}
+			if (l.contains(returnEnchantmentName(enchantment))) iterator.remove();
 		}
 		return lore;
 	}
 
 	public static List<String> removeEnchantment(CustomEnchantment enchantment, int level, List<String> lore) {
-		if(lore == null) {
-			return lore;
-		}
+		if (lore == null) return lore;
 		Iterator<String> iterator = lore.iterator();
 		while (iterator.hasNext()) {
 			String l = iterator.next();
-			if (l.endsWith(returnEnchantmentName(enchantment, level))) {
-				iterator.remove();
-			}
+			if (l.endsWith(returnEnchantmentName(enchantment, level))) iterator.remove();
 		}
 		return lore;
 	}
@@ -254,9 +197,7 @@ public class StringUtils {
 	}
 
 	public static String decodeString(String st) {
-		if (st == null) {
-			return st;
-		}
+		if (st == null) return st;
 		StringBuilder sb = new StringBuilder(st.length());
 
 		for(int i = 0; i < st.length(); i++) {
@@ -316,9 +257,7 @@ public class StringUtils {
 
 		for(int i = 0; i < strings.size(); i++) {
 			sb.append(strings.get(i));
-			if (i < strings.size() - 1) {
-				sb.append(divider);
-			}
+			if (i < strings.size() - 1) sb.append(divider);
 		}
 
 		return sb.toString();

@@ -9,7 +9,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentList;
-import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.Configurations;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 import org.ctp.enchantmentsolution.utils.config.FishingConfiguration;
@@ -35,13 +34,9 @@ public class FishingEnchantments extends LootEnchantments {
 	public static FishingEnchantments getFishingEnchantments(Player player, ItemStack item, int minBookshelves,
 	boolean treasure) {
 		int books = 16;
-		if (ConfigString.LEVEL_FIFTY.getBoolean()) {
-			books = 24;
-		}
+		if (ConfigString.LEVEL_FIFTY.getBoolean()) books = 24;
 		int random = (int) (Math.random() * books) + minBookshelves;
-		if (random >= books) {
-			random = books - 1;
-		}
+		if (random >= books) random = books - 1;
 
 		return new FishingEnchantments(player, item, books, treasure);
 	}
@@ -55,7 +50,6 @@ public class FishingEnchantments extends LootEnchantments {
 			String type = s.substring(s.lastIndexOf(".") + 1);
 			double d = getTierChances(manager.getLootTier(), type, ConfigString.LEVEL_FIFTY.getBoolean());
 			chanceMap.put(type, d);
-			ChatUtils.sendInfo(type + " " + d);
 		}
 
 		double random = Math.random() * 100;
@@ -71,10 +65,7 @@ public class FishingEnchantments extends LootEnchantments {
 			}
 		}
 
-		if (fishing != null) {
-			return new FishingEnchantments(player, item, ConfigString.LOOT_TREASURE.getBoolean("fishing.treasure"), fishing,
-			config.getDouble(location + "." + tier + ".multiple_enchants_chance"));
-		}
+		if (fishing != null) return new FishingEnchantments(player, item, ConfigString.LOOT_TREASURE.getBoolean("fishing.treasure"), fishing, config.getDouble(location + "." + tier + ".multiple_enchants_chance"));
 
 		return null;
 	}
@@ -82,11 +73,9 @@ public class FishingEnchantments extends LootEnchantments {
 	private static double getTierChances(int tier, String type, boolean fifty) {
 		FishingConfiguration config = Configurations.getFishing();
 		String location = "Enchantment_Drop_Rates_";
-		if (fifty) {
-			location += "50";
-		} else {
+		if (fifty) location += "50";
+		else
 			location += "30";
-		}
 		location += ".Tier_" + tier + "." + type;
 
 		return config.getDouble(location);
@@ -94,11 +83,9 @@ public class FishingEnchantments extends LootEnchantments {
 
 	private static List<EnchantmentLevel> getFromConfig(FishingConfiguration config, String type) {
 		String location = "Enchantments_Rarity_";
-		if (ConfigString.LEVEL_FIFTY.getBoolean()) {
-			location += "50";
-		} else {
+		if (ConfigString.LEVEL_FIFTY.getBoolean()) location += "50";
+		else
 			location += "30";
-		}
 		location += "." + type;
 
 		List<String> configStrings = config.getStringList(location + ".enchants");
@@ -107,9 +94,7 @@ public class FishingEnchantments extends LootEnchantments {
 
 		for(String str: configStrings) {
 			EnchantmentLevel level = new EnchantmentLevel(str);
-			if (level != null) {
-				fishing.add(level);
-			}
+			if (level != null) fishing.add(level);
 		}
 
 		return fishing;

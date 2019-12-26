@@ -27,7 +27,7 @@ public enum DamageState {
 	}
 
 	public static DamageState getState(int asInt) {
-		switch(asInt) {
+		switch (asInt) {
 			case 4:
 				return DamageState.NORMAL;
 			case 3:

@@ -20,13 +20,10 @@ public class WalkerBlock {
 		this.enchantment = enchantment;
 		this.replaceType = replaceType;
 		damage = DamageState.NORMAL;
-		if (enchantment == RegisterEnchantments.MAGMA_WALKER) {
-			meta = "MagmaWalker";
-		} else if (enchantment == RegisterEnchantments.VOID_WALKER) {
-			meta = "VoidWalker";
-		} else {
+		if (enchantment == RegisterEnchantments.MAGMA_WALKER) meta = "MagmaWalker";
+		else if (enchantment == RegisterEnchantments.VOID_WALKER) meta = "VoidWalker";
+		else
 			meta = "";
-		}
 	}
 
 	public WalkerBlock(Enchantment enchantment, Block block, Material replaceType, int tick, DamageState damage) {

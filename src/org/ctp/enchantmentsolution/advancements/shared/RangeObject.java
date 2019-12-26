@@ -9,7 +9,7 @@ import org.ctp.enchantmentsolution.advancements.util.JsonBuilder;
  * Specifies a range of values. Both endpoints are inclusive.
  */
 
-class RangeObject extends SharedObject {
+public class RangeObject extends SharedObject {
 	private @Nullable Double min = null;
 	private @Nullable Double max = null;
 
@@ -96,9 +96,7 @@ class RangeObject extends SharedObject {
 	 */
 	@Override
 	public JsonElement toJson() {
-		if (min != null && min.equals(max)) {
-			return new JsonPrimitive(min);
-		}
+		if (min != null && min.equals(max)) return new JsonPrimitive(min);
 		return new JsonBuilder().add("min", min).add("max", max).build();
 	}
 }

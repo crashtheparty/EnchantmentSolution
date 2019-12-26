@@ -35,53 +35,37 @@ public class LanguageFile {
 
 		YamlConfig defaultConfig = new YamlConfig(tempFile, new String[] {});
 		defaultConfig.getFromConfig();
-		for(String str: defaultConfig.getAllEntryKeys()) {
-			if (defaultConfig.get(str) != null) {
-				if (str.startsWith("config_comments.")) {
-					config.addComments(str, defaultConfig.getStringList(str).toArray(new String[] {}));
-				} else {
-					config.addDefault(str, defaultConfig.get(str));
-				}
-			}
-		}
+		for(String str: defaultConfig.getAllEntryKeys())
+			if (defaultConfig.get(str) != null) if (str.startsWith("config_comments.")) config.addComments(str, defaultConfig.getStringList(str).toArray(new String[] {}));
+			else
+				config.addDefault(str, defaultConfig.get(str));
 
 		for(CustomEnchantment enchant: RegisterEnchantments.getEnchantments()) {
 			String enchantmentDescription = enchant.getDefaultDescription(Language.US);
-			if (enchantmentDescription == null) {
-				switch (language) {
-					case US:
-						enchantmentDescription = "No description specified";
-						break;
-					case GERMAN:
-						enchantmentDescription = "Keine Beschreibung angegeben";
-						break;
-					case CHINA_SIMPLE:
-						enchantmentDescription = "没有说明";
-						break;
-				}
+			if (enchantmentDescription == null) switch (language) {
+				case US:
+					enchantmentDescription = "No description specified";
+					break;
+				case GERMAN:
+					enchantmentDescription = "Keine Beschreibung angegeben";
+					break;
+				case CHINA_SIMPLE:
+					enchantmentDescription = "没有说明";
+					break;
 			}
 			if (enchant.getRelativeEnchantment() instanceof ApiEnchantmentWrapper) {
 				JavaPlugin plugin = ((ApiEnchantmentWrapper) enchant.getRelativeEnchantment()).getPlugin();
 				if (plugin == null) {
-					ChatUtils.sendToConsole(Level.WARNING,
-					"Enchantment " + enchant.getName() + " (Display Name " + enchant.getDisplayName() + ")"
-					+ " does not have a JavaPlugin set. Refusing to set language defaults.");
+					ChatUtils.sendToConsole(Level.WARNING, "Enchantment " + enchant.getName() + " (Display Name " + enchant.getDisplayName() + ")" + " does not have a JavaPlugin set. Refusing to set language defaults.");
 					continue;
 				}
-				config
-				.addDefault("enchantment.descriptions." + plugin.getName().toLowerCase() + "." + enchant.getName(),
-				StringUtils.encodeString(enchantmentDescription));
-			} else if (enchant.getRelativeEnchantment() instanceof CustomEnchantmentWrapper) {
-				config.addDefault("enchantment.descriptions." + "custom_enchantments." + enchant.getName(),
-				StringUtils.encodeString(enchantmentDescription));
-			} else {
-				config.addDefault("enchantment.descriptions." + "default_enchantments." + enchant.getName(),
-				StringUtils.encodeString(enchantmentDescription));
-			}
+				config.addDefault("enchantment.descriptions." + plugin.getName().toLowerCase() + "." + enchant.getName(), StringUtils.encodeString(enchantmentDescription));
+			} else if (enchant.getRelativeEnchantment() instanceof CustomEnchantmentWrapper) config.addDefault("enchantment.descriptions." + "custom_enchantments." + enchant.getName(), StringUtils.encodeString(enchantmentDescription));
+			else
+				config.addDefault("enchantment.descriptions." + "default_enchantments." + enchant.getName(), StringUtils.encodeString(enchantmentDescription));
 		}
 
-		for(Iterator<java.util.Map.Entry<Material, String>> it = ItemType.ALL.getUnlocalizedNames().entrySet()
-		.iterator(); it.hasNext();) {
+		for(Iterator<java.util.Map.Entry<Material, String>> it = ItemType.ALL.getUnlocalizedNames().entrySet().iterator(); it.hasNext();) {
 			java.util.Map.Entry<Material, String> e = it.next();
 			config.addDefault("vanilla." + e.getValue(), ItemNameNMS.returnLocalizedItemName(language, e.getKey()));
 		}

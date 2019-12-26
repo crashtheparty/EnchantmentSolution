@@ -23,7 +23,7 @@ public class Enchant implements CommandExecutor {
 			if (player.hasPermission("enchantmentsolution.command.enchant")) {
 				if (args.length > 0) {
 					String enchantmentName = args[0];
-					for(CustomEnchantment enchant: RegisterEnchantments.getRegisteredEnchantments()) {
+					for(CustomEnchantment enchant: RegisterEnchantments.getRegisteredEnchantments())
 						if (enchant.getName().equalsIgnoreCase(enchantmentName)) {
 							if (!enchant.isEnabled()) {
 								HashMap<String, Object> codes = ChatUtils.getCodes();
@@ -31,22 +31,18 @@ public class Enchant implements CommandExecutor {
 								return true;
 							}
 							int level = 1;
-							if (args.length > 1) {
-								try {
-									level = Integer.parseInt(args[1]);
-									if (level < 1) {
-										HashMap<String, Object> codes = ChatUtils.getCodes();
-										codes.put("%level%", level);
-										ChatUtils.sendMessage(player,
-										ChatUtils.getMessage(codes, "commands.level-too-low"));
-										level = 1;
-									}
-								} catch (NumberFormatException ex) {
+							if (args.length > 1) try {
+								level = Integer.parseInt(args[1]);
+								if (level < 1) {
 									HashMap<String, Object> codes = ChatUtils.getCodes();
-									codes.put("%level%", args[1]);
-									ChatUtils.sendMessage(player,
-									ChatUtils.getMessage(codes, "commands.invalid-level"));
+									codes.put("%level%", level);
+									ChatUtils.sendMessage(player, ChatUtils.getMessage(codes, "commands.level-too-low"));
+									level = 1;
 								}
+							} catch (NumberFormatException ex) {
+								HashMap<String, Object> codes = ChatUtils.getCodes();
+								codes.put("%level%", args[1]);
+								ChatUtils.sendMessage(player, ChatUtils.getMessage(codes, "commands.invalid-level"));
 							}
 							if (level > enchant.getMaxLevel()) {
 								HashMap<String, Object> codes = ChatUtils.getCodes();
@@ -61,51 +57,38 @@ public class Enchant implements CommandExecutor {
 								int maxEnchants = ConfigString.MAX_ENCHANTMENTS.getInt();
 								int itemEnchants = ItemUtils.getTotalEnchantments(itemToEnchant);
 								if (maxEnchants <= 0 || itemEnchants < maxEnchants && maxEnchants > 0) {
-									if (enchant.canAnvilItem(itemToEnchant.getType())
-									|| enchant.canEnchantItem(itemToEnchant.getType())) {
+									if (enchant.canAnvilItem(itemToEnchant.getType()) || enchant.canEnchantItem(itemToEnchant.getType())) {
 										boolean useBooks = ConfigString.USE_ENCHANTED_BOOKS.getBoolean();
-										if (itemToEnchant.getType() == Material.BOOK && useBooks) {
-											itemToEnchant = ItemUtils.convertToEnchantedBook(itemToEnchant);
-										} else if (itemToEnchant.getType() == Material.ENCHANTED_BOOK && !useBooks) {
-											itemToEnchant = ItemUtils.convertToRegularBook(itemToEnchant);
-										}
+										if (itemToEnchant.getType() == Material.BOOK && useBooks) itemToEnchant = ItemUtils.convertToEnchantedBook(itemToEnchant);
+										else if (itemToEnchant.getType() == Material.ENCHANTED_BOOK && !useBooks) itemToEnchant = ItemUtils.convertToRegularBook(itemToEnchant);
 										itemToEnchant = ItemUtils.addEnchantmentToItem(itemToEnchant, enchant, level);
 
 										player.getInventory().setItemInMainHand(itemToEnchant);
 										HashMap<String, Object> codes = ChatUtils.getCodes();
 										codes.put("%level%", level);
 										codes.put("%enchant%", enchant.getDisplayName());
-										ChatUtils.sendMessage(player,
-										ChatUtils.getMessage(codes, "commands.add-enchant"));
+										ChatUtils.sendMessage(player, ChatUtils.getMessage(codes, "commands.add-enchant"));
 									} else {
 										HashMap<String, Object> codes = ChatUtils.getCodes();
 										codes.put("%enchant%", enchant.getDisplayName());
-										ChatUtils.sendMessage(player,
-										ChatUtils.getMessage(codes, "commands.cannot-enchant-item"));
+										ChatUtils.sendMessage(player, ChatUtils.getMessage(codes, "commands.cannot-enchant-item"));
 									}
 								} else {
 									HashMap<String, Object> codes = ChatUtils.getCodes();
 									codes.put("%maxEnchants%", maxEnchants);
-									ChatUtils.sendMessage(player,
-									ChatUtils.getMessage(codes, "commands.too-many-enchants"));
+									ChatUtils.sendMessage(player, ChatUtils.getMessage(codes, "commands.too-many-enchants"));
 								}
-							} else {
-								ChatUtils.sendMessage(player,
-								ChatUtils.getMessage(ChatUtils.getCodes(), "commands.enchant-fail"));
-							}
+							} else
+								ChatUtils.sendMessage(player, ChatUtils.getMessage(ChatUtils.getCodes(), "commands.enchant-fail"));
 							return true;
 						}
-					}
 					HashMap<String, Object> codes = ChatUtils.getCodes();
 					codes.put("%enchant%", enchantmentName);
 					ChatUtils.sendMessage(player, ChatUtils.getMessage(codes, "commands.enchant-not-found"));
-				} else {
-					ChatUtils.sendMessage(player,
-					ChatUtils.getMessage(ChatUtils.getCodes(), "commands.enchant-not-specified"));
-				}
-			} else {
+				} else
+					ChatUtils.sendMessage(player, ChatUtils.getMessage(ChatUtils.getCodes(), "commands.enchant-not-specified"));
+			} else
 				ChatUtils.sendMessage(player, ChatUtils.getMessage(ChatUtils.getCodes(), "commands.no-permission"));
-			}
 		}
 		return true;
 	}

@@ -17,9 +17,8 @@ public class Debug implements CommandExecutor {
 			if (player.hasPermission("enchantmentsolution.command.debug")) {
 				Configurations.generateDebug();
 				player.sendMessage(ChatUtils.getMessage(ChatUtils.getCodes(), "commands.debug"));
-			} else {
+			} else
 				ChatUtils.sendMessage(player, ChatUtils.getMessage(ChatUtils.getCodes(), "commands.no-permission"));
-			}
 		} else if (sender.isOp()) {
 			Configurations.generateDebug();
 			ChatUtils.sendInfo(ChatUtils.getMessage(ChatUtils.getCodes(), "commands.debug"));

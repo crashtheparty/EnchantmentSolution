@@ -15,11 +15,8 @@ public class GenerateUtils {
 
 	private static List<EnchantmentList> getLists(EnchantmentList[] lists) {
 		List<EnchantmentList> list = new ArrayList<EnchantmentList>();
-		for(EnchantmentList l: lists) {
-			if (l != null) {
-				list.add(l);
-			}
-		}
+		for(EnchantmentList l: lists)
+			if (l != null) list.add(l);
 		return list;
 	}
 

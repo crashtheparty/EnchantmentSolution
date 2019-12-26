@@ -10,11 +10,11 @@ import org.ctp.enchantmentsolution.mcmmo.McMMOOverhaulFishing;
 
 import com.gmail.nossr50.events.skills.fishing.McMMOPlayerFishingTreasureEvent;
 
-public class McMMOFishingListener implements Listener{
+public class McMMOFishingListener implements Listener {
 
 	@EventHandler
 	public void onMcMMOPlayerFishingTreasure(McMMOPlayerFishingTreasureEvent event) {
-		switch(EnchantmentSolution.getPlugin().getMcMMOType()) {
+		switch (EnchantmentSolution.getPlugin().getMcMMOType()) {
 			case "Overhaul":
 				McMMOOverhaulFishing overhaul = new McMMOOverhaulFishing();
 				overhaul.onMcMMOPlayerFishingTreasure(event);
@@ -30,7 +30,7 @@ public class McMMOFishingListener implements Listener{
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onPlayerFish(PlayerFishEvent event) {
-		switch(EnchantmentSolution.getPlugin().getMcMMOType()) {
+		switch (EnchantmentSolution.getPlugin().getMcMMOType()) {
 			case "Overhaul":
 				McMMOOverhaulFishing overhaul = new McMMOOverhaulFishing();
 				overhaul.onPlayerFish(event);

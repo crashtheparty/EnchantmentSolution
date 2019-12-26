@@ -11,9 +11,9 @@ public class IcarusDelay {
 	private OfflinePlayer player;
 	private int delay;
 
-	public IcarusDelay(OfflinePlayer player) {
+	public IcarusDelay(OfflinePlayer player, int delay) {
 		this.player = player;
-		delay = 30;
+		this.delay = delay;
 	}
 
 	public static List<IcarusDelay> getIcarusDelay() {
@@ -29,8 +29,6 @@ public class IcarusDelay {
 	}
 
 	public void minusDelay() {
-		if (delay > 0) {
-			delay--;
-		}
+		if (delay > 0) delay--;
 	}
 }

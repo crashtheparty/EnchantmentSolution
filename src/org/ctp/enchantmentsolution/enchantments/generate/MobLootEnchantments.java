@@ -12,15 +12,11 @@ public class MobLootEnchantments extends LootEnchantments {
 
 	public static MobLootEnchantments generateMobLoot(ItemStack item) {
 		int books = 16;
-		if (ConfigString.LEVEL_FIFTY.getBoolean()) {
-			books = 24;
-		}
+		if (ConfigString.LEVEL_FIFTY.getBoolean()) books = 24;
 		int minBookshelves = ConfigString.LOOT_BOOKSHELVES.getInt("mobs.bookshelves");
 		boolean treasure = ConfigString.LOOT_TREASURE.getBoolean("mobs.treasure");
 		int random = (int) (Math.random() * books) + minBookshelves;
-		if (random >= books) {
-			random = books - 1;
-		}
+		if (random >= books) random = books - 1;
 
 		return new MobLootEnchantments(null, item, books, treasure);
 	}

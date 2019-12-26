@@ -1,12 +1,12 @@
 package org.ctp.enchantmentsolution.events;
 
-import org.bukkit.Material;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.Entity;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
-import org.bukkit.event.player.PlayerEvent;
+import org.bukkit.event.entity.EntityEvent;
+import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 
-public abstract class FishingEvent extends PlayerEvent implements Cancellable {
+public abstract class ESEntityEvent extends EntityEvent implements Cancellable {
 
 	private static final HandlerList handlers = new HandlerList();
 
@@ -19,20 +19,12 @@ public abstract class FishingEvent extends PlayerEvent implements Cancellable {
 		return handlers;
 	}
 
-	private boolean cancelled = false;
-	private Material fish;
+	private boolean cancelled;
+	private final EnchantmentLevel enchantment;
 
-	public FishingEvent(Player who, Material fish) {
+	public ESEntityEvent(Entity who, EnchantmentLevel enchantment) {
 		super(who);
-		this.fish = fish;
-	}
-
-	public Material getFish() {
-		return fish;
-	}
-
-	public void setFish(Material fish) {
-		this.fish = fish;
+		this.enchantment = enchantment;
 	}
 
 	@Override
@@ -43,6 +35,10 @@ public abstract class FishingEvent extends PlayerEvent implements Cancellable {
 	@Override
 	public void setCancelled(boolean cancelled) {
 		this.cancelled = cancelled;
+	}
+
+	public EnchantmentLevel getEnchantment() {
+		return enchantment;
 	}
 
 }

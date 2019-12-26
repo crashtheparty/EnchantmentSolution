@@ -27,12 +27,10 @@ public class GrindstoneListener implements Listener {
 			if (event.getWhoClicked() instanceof Player) {
 				Player player = (Player) event.getWhoClicked();
 				GrindstoneEnchantments ench = GrindstoneEnchantments.getGrindstoneEnchantments(player, first, second);
-				if (ench.canCombine() && event.getSlot() == 2
-				&& (event.getCursor() == null || event.getCursor().getType() == Material.AIR)) {
+				if (ench.canCombine() && event.getSlot() == 2 && (event.getCursor() == null || event.getCursor().getType() == Material.AIR)) {
 					event.setCancelled(true);
 					combine(ench, event.getClick(), inv);
-				} else if (ench.canTakeEnchantments() && event.getSlot() == 2
-				&& (event.getCursor() == null || event.getCursor().getType() == Material.AIR)) {
+				} else if (ench.canTakeEnchantments() && event.getSlot() == 2 && (event.getCursor() == null || event.getCursor().getType() == Material.AIR)) {
 					event.setCancelled(true);
 					combine(ench, event.getClick(), inv);
 				}
@@ -57,19 +55,13 @@ public class GrindstoneListener implements Listener {
 			case SHIFT_RIGHT:
 				ench.getPlayer().setItemOnCursor(ench.getCombinedItem());
 				inv.setContents(new ItemStack[3]);
-				AbilityUtils.dropExperience(
-				inv.getLocation().clone().add(new Location(inv.getLocation().getWorld(), 0.5, 0.5, 0.5)),
-				ench.getExperience());
+				AbilityUtils.dropExperience(inv.getLocation().clone().add(new Location(inv.getLocation().getWorld(), 0.5, 0.5, 0.5)), ench.getExperience());
 				break;
 			case SHIFT_LEFT:
 				HashMap<Integer, ItemStack> items = ench.getPlayer().getInventory().addItem(ench.getCombinedItem());
-				if (!items.isEmpty()) {
-					return;
-				}
+				if (!items.isEmpty()) return;
 				inv.setContents(new ItemStack[3]);
-				AbilityUtils.dropExperience(
-				inv.getLocation().clone().add(new Location(inv.getLocation().getWorld(), 0.5, 0.5, 0.5)),
-				ench.getExperience());
+				AbilityUtils.dropExperience(inv.getLocation().clone().add(new Location(inv.getLocation().getWorld(), 0.5, 0.5, 0.5)), ench.getExperience());
 				break;
 			default:
 				break;

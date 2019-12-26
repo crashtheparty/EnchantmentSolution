@@ -1,14 +1,14 @@
-package org.ctp.enchantmentsolution.events;
+package org.ctp.enchantmentsolution.events.player;
 
 import java.util.Collection;
 
 import org.bukkit.entity.Player;
-import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
-import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.inventory.ItemStack;
+import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
+import org.ctp.enchantmentsolution.events.ESPlayerEvent;
 
-public abstract class BonusDropsEvent extends PlayerEvent implements Cancellable {
+public abstract class BonusDropsEvent extends ESPlayerEvent {
 
 	private static final HandlerList handlers = new HandlerList();
 
@@ -21,24 +21,13 @@ public abstract class BonusDropsEvent extends PlayerEvent implements Cancellable
 		return handlers;
 	}
 
-	private boolean cancelled;
 	private Collection<ItemStack> drops;
 	private int multiplyAmount;
 
-	public BonusDropsEvent(Player who, Collection<ItemStack> drops, int multiplyAmount) {
-		super(who);
+	public BonusDropsEvent(Player who, EnchantmentLevel enchantment, Collection<ItemStack> drops, int multiplyAmount) {
+		super(who, enchantment);
 		setDrops(drops);
 		setMultiplyAmount(multiplyAmount);
-	}
-
-	@Override
-	public boolean isCancelled() {
-		return cancelled;
-	}
-
-	@Override
-	public void setCancelled(boolean cancelled) {
-		this.cancelled = cancelled;
 	}
 
 	public Collection<ItemStack> getDrops() {

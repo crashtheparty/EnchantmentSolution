@@ -3,7 +3,7 @@ package org.ctp.enchantmentsolution.mcmmo;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-public class McMMOFishingThread implements Runnable{
+public class McMMOFishingThread implements Runnable {
 
 	private Player player;
 	private ItemStack item;
@@ -19,10 +19,8 @@ public class McMMOFishingThread implements Runnable{
 
 	@Override
 	public void run() {
-		if(run <= 0) {
-			fishing.remove(this);
-		}
-		run --;
+		if (run <= 0) fishing.remove(this);
+		run--;
 	}
 
 	public int getScheduler() {

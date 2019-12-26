@@ -47,9 +47,7 @@ public class Grindstone implements InventoryData {
 			takeEnchantments = false;
 			boolean grindstoneTakeEnchantments = ConfigString.TAKE_ENCHANTMENTS.getBoolean();
 			int size = 27;
-			if (ConfigUtils.useLegacyGrindstone()) {
-				size = 36;
-			}
+			if (ConfigUtils.useLegacyGrindstone()) size = 36;
 			Inventory inv = Bukkit.createInventory(null, size, ChatUtils.getMessage(getCodes(), "grindstone.name"));
 			inv = open(inv);
 
@@ -57,7 +55,7 @@ public class Grindstone implements InventoryData {
 			ItemMeta mirrorMeta = mirror.getItemMeta();
 			mirrorMeta.setDisplayName(ChatUtils.getMessage(getCodes(), "grindstone.mirror"));
 			mirror.setItemMeta(mirrorMeta);
-			for(int i = 0; i < 27; i++) {
+			for(int i = 0; i < 27; i++)
 				switch (i) {
 					case 2:
 					case 7:
@@ -65,17 +63,14 @@ public class Grindstone implements InventoryData {
 						inv.setItem(i, new ItemStack(Material.AIR));
 						break;
 					case 16:
-						if (grindstoneTakeEnchantments) {
-							inv.setItem(i, new ItemStack(Material.AIR));
-						} else {
+						if (grindstoneTakeEnchantments) inv.setItem(i, new ItemStack(Material.AIR));
+						else
 							inv.setItem(i, mirror);
-						}
 						break;
 					default:
 						inv.setItem(i, mirror);
 						break;
 				}
-			}
 
 			ItemStack combine = null;
 			ItemStack combinedItem = null;
@@ -84,9 +79,7 @@ public class Grindstone implements InventoryData {
 			if (playerItems.size() == 2) {
 				first = playerItems.get(0);
 				second = playerItems.get(1);
-			} else if (playerItems.size() == 1) {
-				first = playerItems.get(0);
-			}
+			} else if (playerItems.size() == 1) first = playerItems.get(0);
 
 			grindstone = GrindstoneEnchantments.getGrindstoneEnchantments(player, first, second);
 
@@ -130,8 +123,7 @@ public class Grindstone implements InventoryData {
 					combine.setItemMeta(combineMeta);
 				}
 			} else if (playerItems.size() == 1) {
-				if (playerItems.get(0).getItemMeta().hasEnchants()
-				|| playerItems.get(0).getType() == Material.ENCHANTED_BOOK) {
+				if (playerItems.get(0).getItemMeta().hasEnchants() || playerItems.get(0).getType() == Material.ENCHANTED_BOOK) {
 					combinedItem = grindstone.getCombinedItem();
 					combine = new ItemStack(Material.LIME_STAINED_GLASS_PANE);
 					ItemMeta combineMeta = combine.getItemMeta();
@@ -158,32 +150,22 @@ public class Grindstone implements InventoryData {
 				combine.setItemMeta(combineMeta);
 			}
 
-			for(int i = 0; i < playerItems.size(); i++) {
-				if (i == 0) {
-					inv.setItem(2, playerItems.get(i));
-				} else if (i == 1) {
-					inv.setItem(11, playerItems.get(i));
-				}
-			}
+			for(int i = 0; i < playerItems.size(); i++)
+				if (i == 0) inv.setItem(2, playerItems.get(i));
+				else if (i == 1) inv.setItem(11, playerItems.get(i));
 
 			if (combinedItem != null) {
-				if (!takeEnchantments) {
+				if (!takeEnchantments) combinedItem = AnvilNMS.setRepairCost(combinedItem, 0);
+				else if (ConfigString.SET_REPAIR_COST.getBoolean()) combinedItem = AnvilNMS.setRepairCost(combinedItem, AnvilNMS.getRepairCost(playerItems.get(0)));
+				else
 					combinedItem = AnvilNMS.setRepairCost(combinedItem, 0);
-				} else {
-					if (ConfigString.SET_REPAIR_COST.getBoolean()) {
-						combinedItem = AnvilNMS.setRepairCost(combinedItem, AnvilNMS.getRepairCost(playerItems.get(0)));
-					} else {
-						combinedItem = AnvilNMS.setRepairCost(combinedItem, 0);
-					}
-				}
 				inv.setItem(7, combinedItem);
 			}
 			inv.setItem(5, combine);
 
 			if (ConfigUtils.useLegacyGrindstone()) {
-				for(int i = 27; i < 36; i++) {
+				for(int i = 27; i < 36; i++)
 					inv.setItem(i, mirror);
-				}
 				ItemStack anvil = new ItemStack(Material.ANVIL);
 				ItemMeta anvilMeta = anvil.getItemMeta();
 				anvilMeta.setDisplayName(ChatUtils.getMessage(getCodes(), "grindstone.anvil"));
@@ -195,9 +177,7 @@ public class Grindstone implements InventoryData {
 			ex.printStackTrace();
 			if (playerItems.size() - 1 >= 0) {
 				ItemStack item = playerItems.get(playerItems.size() - 1);
-				if (removeItem(playerItems.size() - 1)) {
-					ItemUtils.giveItemToPlayer(player, item, player.getLocation(), false);
-				}
+				if (removeItem(playerItems.size() - 1)) ItemUtils.giveItemToPlayer(player, item, player.getLocation(), false);
 			}
 		}
 	}
@@ -220,43 +200,31 @@ public class Grindstone implements InventoryData {
 				int levelCost = grindstone.getTakeCost();
 				if (player.getGameMode() != GameMode.CREATIVE) {
 					if (levelCost > player.getLevel()) {
-						ChatUtils.sendMessage(player,
-						ChatUtils.getMessage(getCodes(), "grindstone.message-cannot-combine"));
+						ChatUtils.sendMessage(player, ChatUtils.getMessage(getCodes(), "grindstone.message-cannot-combine"));
 						return;
 					}
 					player.setLevel(player.getLevel() - levelCost);
 				}
-				if (player.getGameMode() != GameMode.CREATIVE) {
-					player.setLevel(player.getLevel() - levelCost);
-				}
+				if (player.getGameMode() != GameMode.CREATIVE) player.setLevel(player.getLevel() - levelCost);
 				ItemUtils.giveItemToPlayer(player, grindstone.getTakenItem(), player.getLocation(), false);
 				grindstone = null;
 				playerItems.remove(1);
-				if (ConfigString.DESTROY_TAKE_ITEM.getBoolean()) {
-					playerItems.remove(0);
-				} else {
+				if (ConfigString.DESTROY_TAKE_ITEM.getBoolean()) playerItems.remove(0);
+				else
 					playerItems.set(0, ItemUtils.removeAllEnchantments(playerItems.get(0)));
-				}
 			} else {
 				ItemUtils.giveItemToPlayer(player, grindstone.getCombinedItem(), player.getLocation(), false);
 				LocationUtils.dropExperience(block.getLocation(), grindstone.getExperience(), true);
 				grindstone = null;
 				playerItems.clear();
 			}
-		} else {
-			if (takeEnchantments) {
-				ChatUtils.sendMessage(player,
-				ChatUtils.getMessage(getCodes(), "grindstone.message-cannot-take-enchantments"));
-			} else {
-				ChatUtils.sendMessage(player, ChatUtils.getMessage(getCodes(), "grindstone.message-cannot-combine"));
-			}
-		}
+		} else if (takeEnchantments) ChatUtils.sendMessage(player, ChatUtils.getMessage(getCodes(), "grindstone.message-cannot-take-enchantments"));
+		else
+			ChatUtils.sendMessage(player, ChatUtils.getMessage(getCodes(), "grindstone.message-cannot-combine"));
 	}
 
 	public boolean addItem(ItemStack item) {
-		if (playerItems.size() >= 2) {
-			return false;
-		}
+		if (playerItems.size() >= 2) return false;
 		if (item.getItemMeta() instanceof Damageable || item.getItemMeta().hasEnchants()) {
 			playerItems.add(item);
 			return true;
@@ -265,11 +233,8 @@ public class Grindstone implements InventoryData {
 	}
 
 	public boolean removeItem(int slot) {
-		if (slot == 2) {
-			slot = 0;
-		} else if (slot == 11) {
-			slot = 1;
-		}
+		if (slot == 2) slot = 0;
+		else if (slot == 11) slot = 1;
 		return playerItems.remove(slot) != null;
 	}
 
@@ -291,13 +256,10 @@ public class Grindstone implements InventoryData {
 
 	public void close(boolean external) {
 		if (EnchantmentSolution.getPlugin().hasInventory(this)) {
-			for(ItemStack item: getItems()) {
+			for(ItemStack item: getItems())
 				ItemUtils.giveItemToPlayer(player, item, player.getLocation(), false);
-			}
 			EnchantmentSolution.getPlugin().removeInventory(this);
-			if (!external) {
-				player.closeInventory();
-			}
+			if (!external) player.closeInventory();
 		}
 	}
 
@@ -313,21 +275,16 @@ public class Grindstone implements InventoryData {
 		if (inventory == null) {
 			inventory = inv;
 			player.openInventory(inv);
+		} else if (inv.getSize() == inventory.getSize()) {
+			inv = player.getOpenInventory().getTopInventory();
+			inventory = inv;
 		} else {
-			if (inv.getSize() == inventory.getSize()) {
-				inv = player.getOpenInventory().getTopInventory();
-				inventory = inv;
-			} else {
-				inventory = inv;
-				player.openInventory(inv);
-			}
+			inventory = inv;
+			player.openInventory(inv);
 		}
-		for(int i = 0; i < inventory.getSize(); i++) {
+		for(int i = 0; i < inventory.getSize(); i++)
 			inventory.setItem(i, new ItemStack(Material.AIR));
-		}
-		if (opening) {
-			opening = false;
-		}
+		if (opening) opening = false;
 		return inv;
 	}
 }

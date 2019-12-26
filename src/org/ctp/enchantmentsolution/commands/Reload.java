@@ -21,9 +21,8 @@ public class Reload implements CommandExecutor {
 				Configurations.reload();
 				VanishListener.reload();
 				ChatUtils.sendMessage(player, ChatUtils.getMessage(ChatUtils.getCodes(), "commands.reload"));
-			} else {
+			} else
 				ChatUtils.sendMessage(player, ChatUtils.getMessage(ChatUtils.getCodes(), "commands.no-permission"));
-			}
 		} else {
 			Configurations.reload();
 			VanishListener.reload();

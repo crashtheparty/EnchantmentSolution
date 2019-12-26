@@ -27,14 +27,11 @@ import com.gmail.nossr50.util.player.UserManager;
 public class McMMOClassicFishing extends McMMOFishing {
 
 	public void onMcMMOPlayerFishingTreasure(McMMOPlayerFishingTreasureEvent event) {
-		if(!ConfigString.USE_LOOT.getBoolean("fishing.use")) {
-			return;
-		}
+		if (!ConfigString.USE_LOOT.getBoolean("fishing.use")) return;
 		Player player = event.getPlayer();
 		ItemStack treasure = event.getTreasure();
 
-		if (getSecondaryAbility(player, treasure, SecondaryAbility.MAGIC_HUNTER)
-		&& com.gmail.nossr50.util.ItemUtils.isEnchantable(treasure)) {
+		if (getSecondaryAbility(player, treasure, SecondaryAbility.MAGIC_HUNTER) && com.gmail.nossr50.util.ItemUtils.isEnchantable(treasure)) {
 			List<EnchantmentLevel> enchantments = McMMOHandler.getEnchants(player, treasure);
 			event.setCancelled(true);
 			treasure = event.getTreasure();
@@ -48,9 +45,7 @@ public class McMMOClassicFishing extends McMMOFishing {
 					enchanted = true;
 				}
 
-				if (enchanted) {
-					player.sendMessage(LocaleLoader.getString("Fishing.Ability.TH.MagicFound"));
-				}
+				if (enchanted) player.sendMessage(LocaleLoader.getString("Fishing.Ability.TH.MagicFound"));
 				add(player, treasure, treasureXp);
 			}
 		}
@@ -62,18 +57,15 @@ public class McMMOClassicFishing extends McMMOFishing {
 				// TODO Update to new API once available! Waiting for case CAUGHT_TREASURE:
 				Item fishingCatch = (Item) event.getCaught();
 				McMMOFishingThread thread = null;
-				for(McMMOFishingThread t : getPlayerItems()) {
-					if(t.getPlayer().equals(event.getPlayer())) {
+				for(McMMOFishingThread t: getPlayerItems())
+					if (t.getPlayer().equals(event.getPlayer())) {
 						int fishXp = getExperience(SkillType.FISHING, fishingCatch.getItemStack().getType());
 						fishingCatch.setItemStack(t.getItem());
 						thread = t;
 
 						applyXp(event.getPlayer(), t.getXp() + fishXp);
 					}
-				}
-				if(thread != null) {
-					remove(thread);
-				}
+				if (thread != null) remove(thread);
 				return;
 			default:
 				return;
@@ -87,15 +79,12 @@ public class McMMOClassicFishing extends McMMOFishing {
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
-		if (permissions != null) {
-			try {
-				Method method = permissions.getDeclaredMethod("secondaryAbilityEnabled", Permissible.class, SecondaryAbility.class);
-				Object returnType = method.invoke(null, player, ability);
-				return returnType instanceof Boolean && ((Boolean) returnType).booleanValue();
-			} catch (NoSuchMethodException | SecurityException | IllegalAccessException
-			| IllegalArgumentException | InvocationTargetException e) {
-				e.printStackTrace();
-			}
+		if (permissions != null) try {
+			Method method = permissions.getDeclaredMethod("secondaryAbilityEnabled", Permissible.class, SecondaryAbility.class);
+			Object returnType = method.invoke(null, player, ability);
+			return returnType instanceof Boolean && ((Boolean) returnType).booleanValue();
+		} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+			e.printStackTrace();
 		}
 
 		return false;
@@ -108,17 +97,12 @@ public class McMMOClassicFishing extends McMMOFishing {
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
-		if (expConfig != null) {
-			try {
-				Method method = expConfig.getDeclaredMethod("getXp", SkillType.class, Material.class);
-				Object returnType = method.invoke(ExperienceConfig.getInstance(), type, material);
-				if(returnType instanceof Integer) {
-					return ((Integer) returnType).intValue();
-				}
-			} catch (NoSuchMethodException | SecurityException | IllegalAccessException
-			| IllegalArgumentException | InvocationTargetException e) {
-				e.printStackTrace();
-			}
+		if (expConfig != null) try {
+			Method method = expConfig.getDeclaredMethod("getXp", SkillType.class, Material.class);
+			Object returnType = method.invoke(ExperienceConfig.getInstance(), type, material);
+			if (returnType instanceof Integer) return ((Integer) returnType).intValue();
+		} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+			e.printStackTrace();
 		}
 
 		return 0;
@@ -129,8 +113,7 @@ public class McMMOClassicFishing extends McMMOFishing {
 		try {
 			Method method = SkillManager.class.getDeclaredMethod("applyXpGain", float.class, XPGainReason.class);
 			method.invoke(manager, exp, XPGainReason.PVE);
-		} catch (NoSuchMethodException | SecurityException | IllegalAccessException
-		| IllegalArgumentException | InvocationTargetException e) {
+		} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 			e.printStackTrace();
 		}
 	}

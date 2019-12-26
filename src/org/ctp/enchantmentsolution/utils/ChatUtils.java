@@ -13,6 +13,7 @@ import javax.annotation.Nonnull;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.utils.config.ConfigUtils;
 import org.ctp.enchantmentsolution.utils.config.Type;
@@ -20,22 +21,20 @@ import org.ctp.enchantmentsolution.utils.config.Type;
 public class ChatUtils {
 
 	public static void sendMessage(Player player, String message) {
-		if (message != null && !message.trim().equals("")) {
-			player.sendMessage(getStarter() + message);
-		}
+		sendMessage(getStarter(), player, message);
+	}
+
+	public static void sendMessage(String starter, Player player, String message) {
+		if (message != null && !message.trim().equals("")) player.sendMessage(starter + message);
 	}
 
 	public static void sendMessage(Player player, String message, String url) {
-		Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "tellraw " + player.getName() + " [{\"text\":\""
-		+ getStarter() + message + "\"},{\"text\":\"" + url
-		+ "\", \"italic\": true, \"color\": \"green\", \"clickEvent\":{\"action\":\"open_url\",\"value\":\""
-		+ url + "\"}}]");
+		Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "tellraw " + player.getName() + " [{\"text\":\"" + getStarter() + message + "\"},{\"text\":\"" + url + "\", \"italic\": true, \"color\": \"green\", \"clickEvent\":{\"action\":\"open_url\",\"value\":\"" + url + "\"}}]");
 	}
 
 	public static void sendMessage(Player player, String[] messages) {
-		for(String s: messages) {
+		for(String s: messages)
 			sendMessage(player, s);
-		}
 	}
 
 	public static void sendRawMessage(Player player, String json) {
@@ -45,17 +44,17 @@ public class ChatUtils {
 	private static String getStarter() {
 		String config = ConfigUtils.getString(Type.LANGUAGE, "starter");
 		String starter = null;
-		if (config != null) {
-			starter = ChatColor.translateAlternateColorCodes('&', config);
-		}
-		if (starter != null) {
-			return starter + ChatColor.WHITE + " ";
-		}
+		if (config != null) starter = ChatColor.translateAlternateColorCodes('&', config);
+		if (starter != null) return starter + ChatColor.WHITE + " ";
 		return "";
 	}
 
 	public static void sendToConsole(Level level, String message) {
-		EnchantmentSolution.getPlugin().getLogger().log(level, message);
+		sendToConsole(EnchantmentSolution.getPlugin(), level, message);
+	}
+
+	public static void sendToConsole(JavaPlugin plugin, Level level, String message) {
+		plugin.getLogger().log(level, message);
 	}
 
 	public static void sendWarning(String message) {
@@ -70,17 +69,26 @@ public class ChatUtils {
 		sendToConsole(Level.SEVERE, message);
 	}
 
+	public static void sendWarning(JavaPlugin plugin, String message) {
+		sendToConsole(plugin, Level.WARNING, message);
+	}
+
+	public static void sendInfo(JavaPlugin plugin, String message) {
+		sendToConsole(plugin, Level.INFO, message);
+	}
+
+	public static void sendSevere(JavaPlugin plugin, String message) {
+		sendToConsole(plugin, Level.SEVERE, message);
+	}
+
 	public static String getMessage(HashMap<String, Object> codes, String location) {
 		String s = "";
 		try {
-			s = translateCodes(codes, ChatColor.translateAlternateColorCodes('&',
-			ConfigUtils.getString(Type.LANGUAGE, location)));
+			s = translateCodes(codes, ChatColor.translateAlternateColorCodes('&', ConfigUtils.getString(Type.LANGUAGE, location)));
 		} catch (Exception e) {
 
 		}
-		if (s.isEmpty()) {
-			return location + " must be a string.";
-		}
+		if (s.isEmpty()) return location + " must be a string.";
 		return s;
 	}
 
@@ -90,23 +98,16 @@ public class ChatUtils {
 			messages = new ArrayList<String>();
 			messages.add(ConfigUtils.getString(Type.LANGUAGE, location));
 		}
-		for(int i = 0; i < messages.size(); i++) {
-			if (messages.get(i) != null) {
-				messages.set(i, translateCodes(codes, ChatColor.translateAlternateColorCodes('&', messages.get(i))));
-			}
-		}
-		if (messages.size() == 0) {
-			messages.add(location + " must be a list or a string.");
-		}
+		for(int i = 0; i < messages.size(); i++)
+			if (messages.get(i) != null) messages.set(i, translateCodes(codes, ChatColor.translateAlternateColorCodes('&', messages.get(i))));
+		if (messages.size() == 0) messages.add(location + " must be a list or a string.");
 		return messages;
 	}
 
 	private static String translateCodes(HashMap<String, Object> codes, String str) {
 		for(Iterator<java.util.Map.Entry<String, Object>> it = codes.entrySet().iterator(); it.hasNext();) {
 			java.util.Map.Entry<String, Object> e = it.next();
-			if (e.getValue() != null) {
-				str = str.replaceAll(e.getKey(), e.getValue().toString());
-			}
+			if (e.getValue() != null) str = str.replaceAll(e.getKey(), e.getValue().toString());
 		}
 		return str;
 	}
@@ -123,9 +124,8 @@ public class ChatUtils {
 
 		String hex = asciiToHex(text);
 
-		for(char c: hex.toCharArray()) {
+		for(char c: hex.toCharArray())
 			output.append(ChatColor.COLOR_CHAR).append(c);
-		}
 
 		return output.toString();
 	}
@@ -134,21 +134,17 @@ public class ChatUtils {
 	public static String revealText(@Nonnull String text) {
 		Objects.requireNonNull(text, "text can not be null!");
 
-		if (text.isEmpty()) {
-			return text;
-		}
+		if (text.isEmpty()) return text;
 
 		char[] chars = text.toCharArray();
 
 		char[] hexChars = new char[chars.length / 2];
 
-		IntStream.range(0, chars.length).filter(value -> value % 2 != 0)
-		.forEach(value -> hexChars[value / 2] = chars[value]);
+		IntStream.range(0, chars.length).filter(value -> value % 2 != 0).forEach(value -> hexChars[value / 2] = chars[value]);
 
 		String newChars = "";
-		for(char c: hexChars) {
+		for(char c: hexChars)
 			newChars += c;
-		}
 
 		return new String(hexToASCII(newChars));
 	}
@@ -156,9 +152,8 @@ public class ChatUtils {
 	private static String asciiToHex(String asciiValue) {
 		char[] chars = asciiValue.toCharArray();
 		StringBuffer hex = new StringBuffer();
-		for(int i = 0; i < chars.length; i++) {
+		for(int i = 0; i < chars.length; i++)
 			hex.append(Integer.toHexString(chars[i]));
-		}
 		return hex.toString();
 	}
 

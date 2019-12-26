@@ -27,14 +27,9 @@ public class YamlChild {
 
 	public boolean addChild(String path) {
 		if (path.startsWith(getPath())) {
-			if (path.equals(getPath())) {
-				return true;
-			}
-			for(YamlChild child: children) {
-				if (child.addChild(path)) {
-					return true;
-				}
-			}
+			if (path.equals(getPath())) return true;
+			for(YamlChild child: children)
+				if (child.addChild(path)) return true;
 			children.add(new YamlChild(path));
 			return true;
 		}
@@ -48,9 +43,8 @@ public class YamlChild {
 
 		if (children.size() > 0) {
 			ret += " children[";
-			for(YamlChild child: children) {
+			for(YamlChild child: children)
 				ret += child.toString();
-			}
 			ret += "]";
 		}
 

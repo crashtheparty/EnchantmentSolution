@@ -36,10 +36,7 @@ public class FrequentFlyerPlayer {
 	public void setElytra(ItemStack elytra) {
 		boolean reset = false;
 
-		if (elytra != null && previousElytra != null
-		&& !elytra.toString().equalsIgnoreCase(previousElytra.toString())) {
-			reset = true;
-		}
+		if (elytra != null && previousElytra != null && !elytra.toString().equalsIgnoreCase(previousElytra.toString())) reset = true;
 		setElytra(elytra, reset);
 	}
 
@@ -53,9 +50,7 @@ public class FrequentFlyerPlayer {
 			int level = ItemUtils.getLevel(elytra, RegisterEnchantments.FREQUENT_FLYER);
 			underLimit = level * 4 * 20;
 			aboveLimit = level * 20;
-			if (DamageUtils.getDamage(elytra.getItemMeta()) < 400) {
-				fly = true;
-			}
+			if (DamageUtils.getDamage(elytra.getItemMeta()) < 400) fly = true;
 		}
 		setCanFly(fly);
 		if (reset) {
@@ -69,28 +64,22 @@ public class FrequentFlyerPlayer {
 	}
 
 	public void setCanFly(boolean canFly) {
-		boolean modifyCanFly = canFly || player.getGameMode().equals(GameMode.CREATIVE)
-		|| player.getGameMode().equals(GameMode.SPECTATOR);
+		boolean modifyCanFly = canFly || player.getGameMode().equals(GameMode.CREATIVE) || player.getGameMode().equals(GameMode.SPECTATOR);
 		FrequentFlyerEvent event = null;
+		int level = 0;
+		if (elytra != null) level = ItemUtils.getLevel(elytra, RegisterEnchantments.FREQUENT_FLYER);
 		if (this.canFly && !modifyCanFly) {
-			if (elytra != null && elytra.toString().equalsIgnoreCase(previousElytra.toString())
-			&& DamageUtils.getDamage(elytra.getItemMeta()) >= 400) {
-				event = new FrequentFlyerEvent(player, FFType.BREAK_ELYTRA);
-			} else if (!player.hasPermission("enchantmentsolution.enable-flight")) {
-				event = new FrequentFlyerEvent(player, FFType.REMOVE_FLIGHT);
-			}
-		} else if (!this.canFly && modifyCanFly) {
-			event = new FrequentFlyerEvent(player, FFType.ALLOW_FLIGHT);
-		}
+			if (elytra != null && elytra.toString().equalsIgnoreCase(previousElytra.toString()) && DamageUtils.getDamage(elytra.getItemMeta()) >= 400) event = new FrequentFlyerEvent(player, level, FFType.BREAK_ELYTRA);
+			else if (!player.hasPermission("enchantmentsolution.enable-flight")) event = new FrequentFlyerEvent(player, level, FFType.REMOVE_FLIGHT);
+		} else if (!this.canFly && modifyCanFly) event = new FrequentFlyerEvent(player, level, FFType.ALLOW_FLIGHT);
+
 		if (event != null) {
 			Bukkit.getPluginManager().callEvent(event);
 			if (!event.isCancelled()) {
 				this.canFly = modifyCanFly;
 				if (this.canFly || !player.hasPermission("enchantmentsolution.enable-flight")) {
 					player.setAllowFlight(this.canFly);
-					if (player.isFlying() && !this.canFly) {
-						player.setFlying(false);
-					}
+					if (player.isFlying() && !this.canFly) player.setFlying(false);
 				}
 			}
 		}
@@ -101,16 +90,12 @@ public class FrequentFlyerPlayer {
 	}
 
 	public void minus() {
-		if (player.getLocation().getY() >= 12000) {
-			AdvancementUtils.awardCriteria(player, ESAdvancement.CRUISING_ALTITUDE, "elytra");
-		}
+		if (player.getLocation().getY() >= 12000) AdvancementUtils.awardCriteria(player, ESAdvancement.CRUISING_ALTITUDE, "elytra");
 		if (player.getLocation().getY() > 255) {
 			above = above - 1;
 			if (above <= 0) {
 				DamageUtils.damageItem(player, elytra);
-				if (DamageUtils.getDamage(elytra.getItemMeta()) >= 400) {
-					setCanFly(false);
-				}
+				if (DamageUtils.getDamage(elytra.getItemMeta()) >= 400) setCanFly(false);
 				above = aboveLimit;
 				player.getInventory().setChestplate(elytra);
 			}
@@ -118,9 +103,7 @@ public class FrequentFlyerPlayer {
 			under = under - 1;
 			if (under <= 0) {
 				DamageUtils.damageItem(player, elytra);
-				if (DamageUtils.getDamage(elytra.getItemMeta()) >= 400) {
-					setCanFly(false);
-				}
+				if (DamageUtils.getDamage(elytra.getItemMeta()) >= 400) setCanFly(false);
 				player.getInventory().setChestplate(elytra);
 				under = underLimit;
 			}

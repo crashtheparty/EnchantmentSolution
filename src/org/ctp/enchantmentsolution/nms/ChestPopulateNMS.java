@@ -3,8 +3,11 @@ package org.ctp.enchantmentsolution.nms;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.ctp.enchantmentsolution.nms.chest.*;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
+import org.ctp.enchantmentsolution.nms.chest.ChestPopulate_v1_13_R1;
+import org.ctp.enchantmentsolution.nms.chest.ChestPopulate_v1_13_R2;
+import org.ctp.enchantmentsolution.nms.chest.ChestPopulate_v1_14_R1;
+import org.ctp.enchantmentsolution.nms.chest.ChestPopulate_v1_15_R1;
 
 public class ChestPopulateNMS {
 	public static void populateChest(Player player, Block block) {
@@ -24,6 +27,7 @@ public class ChestPopulateNMS {
 				ChestPopulate_v1_14_R1.populateChest(player, block);
 				break;
 			case 9:
+			case 10:
 				ChestPopulate_v1_15_R1.populateChest(player, block);
 				break;
 		}
@@ -42,6 +46,9 @@ public class ChestPopulateNMS {
 			case 7:
 			case 8:
 				return ChestPopulate_v1_14_R1.isLootChest(block);
+			case 9:
+			case 10:
+				return ChestPopulate_v1_15_R1.isLootChest(block);
 		}
 		return false;
 	}
@@ -62,6 +69,10 @@ public class ChestPopulateNMS {
 			case 8:
 				ChestPopulate_v1_14_R1.populateCart(player, e);
 				break;
+			case 9:
+			case 10:
+				ChestPopulate_v1_15_R1.populateCart(player, e);
+				break;
 		}
 	}
 
@@ -78,6 +89,9 @@ public class ChestPopulateNMS {
 			case 7:
 			case 8:
 				return ChestPopulate_v1_14_R1.isLootCart(e);
+			case 9:
+			case 10:
+				return ChestPopulate_v1_15_R1.isLootCart(e);
 		}
 		return false;
 	}

@@ -14,13 +14,9 @@ public class PlayerChatTabComplete implements TabCompleter {
 	@Override
 	public List<String> onTabComplete(CommandSender sender, Command cmd, String arg, String[] args) {
 		List<String> autoComplete = new ArrayList<String>();
-		if (args.length == 1) {
-			for(CustomEnchantment enchantment: RegisterEnchantments.getEnchantments()) {
-				String argument = args[0];
-				if (argument.trim().equals("") || enchantment.getName().startsWith(argument)) {
-					autoComplete.add(enchantment.getName());
-				}
-			}
+		if (args.length == 1) for(CustomEnchantment enchantment: RegisterEnchantments.getEnchantments()) {
+			String argument = args[0];
+			if (argument.trim().equals("") || enchantment.getName().startsWith(argument)) autoComplete.add(enchantment.getName());
 		}
 		return autoComplete;
 	}

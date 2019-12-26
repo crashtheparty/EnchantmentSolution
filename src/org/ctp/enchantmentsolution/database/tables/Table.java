@@ -66,14 +66,9 @@ public class Table {
 	private boolean hasPrimaryKeys() {
 		for(String s: primary) {
 			boolean hasKey = false;
-			for(Column c: getColumns()) {
-				if (s.equals(c.getName())) {
-					hasKey = true;
-				}
-			}
-			if (!hasKey) {
-				return false;
-			}
+			for(Column c: getColumns())
+				if (s.equals(c.getName())) hasKey = true;
+			if (!hasKey) return false;
 		}
 		return true;
 	}
@@ -85,18 +80,14 @@ public class Table {
 			DatabaseMetaData md = connection.getMetaData();
 			rs = md.getTables(null, null, name, null);
 			if (rs.next()) {
-				if (rs != null) {
-					rs.close();
-				}
+				if (rs != null) rs.close();
 				exists = true;
 			}
 		} catch (SQLException ex) {
 
 		} finally {
 			try {
-				if (rs != null) {
-					rs.close();
-				}
+				if (rs != null) rs.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
@@ -112,21 +103,15 @@ public class Table {
 			rs = ps.executeQuery();
 			ArrayList<String> columnsInTable = new ArrayList<String>();
 			boolean has_table = tableExists(connection);
-			while (rs.next()) {
-				for(Column column: columns) {
-					if (column.getName().equalsIgnoreCase(rs.getString(2))) {
-						columnsInTable.add(rs.getString(2));
-					}
-				}
-			}
+			while (rs.next())
+				for(Column column: columns)
+					if (column.getName().equalsIgnoreCase(rs.getString(2))) columnsInTable.add(rs.getString(2));
 			if (has_table) {
-				for(Column column: columns) {
+				for(Column column: columns)
 					if (!columnsInTable.contains(column.getName())) {
-						String statement = "ALTER TABLE " + name + " ADD COLUMN `" + column.getName() + "` "
-						+ conversions.get(column.getType()) + " DEFAULT " + column.getDefaultValue();
+						String statement = "ALTER TABLE " + name + " ADD COLUMN `" + column.getName() + "` " + conversions.get(column.getType()) + " DEFAULT " + column.getDefaultValue();
 						if (column.getType().equals("autoint")) {
-							ChatUtils.sendToConsole(Level.INFO,
-							"Can't add auto increment value to existing table: skipping.");
+							ChatUtils.sendToConsole(Level.INFO, "Can't add auto increment value to existing table: skipping.");
 							continue;
 						}
 						ChatUtils.sendToConsole(Level.INFO, statement);
@@ -134,58 +119,42 @@ public class Table {
 						st.executeUpdate(statement);
 						st.close();
 					}
+			} else if (hasPrimaryKeys()) {
+				String statement = "CREATE TABLE IF NOT EXISTS " + name + " (";
+				for(Column column: columns)
+					statement += "`" + column.getName() + "` " + conversions.get(column.getType()) + " DEFAULT " + column.getDefaultValue() + ",";
+				String primaryString = "";
+				for(int i = 0; i < primary.size(); i++) {
+					primaryString += "`" + primary.get(i) + "`";
+					if (i != primary.size() - 1) primaryString += ", ";
 				}
-			} else {
-				if (hasPrimaryKeys()) {
-					String statement = "CREATE TABLE IF NOT EXISTS " + name + " (";
-					for(Column column: columns) {
-						statement += "`" + column.getName() + "` " + conversions.get(column.getType()) + " DEFAULT "
-						+ column.getDefaultValue() + ",";
-					}
-					String primaryString = "";
-					for(int i = 0; i < primary.size(); i++) {
-						primaryString += "`" + primary.get(i) + "`";
-						if (i != primary.size() - 1) {
-							primaryString += ", ";
-						}
-					}
-					if (primaryString.length() > 0) {
-						statement += "PRIMARY KEY (" + primaryString + "))";
-					} else {
-						statement = statement.substring(0, statement.length() - 1) + ")";
-					}
-					ChatUtils.sendToConsole(Level.INFO, statement);
-					try {
-						Statement st = connection.createStatement();
-						st.executeUpdate(statement);
-						st.close();
-					} catch (SQLException e) {
-						e.printStackTrace();
-					}
-				} else {
-					ChatUtils.sendToConsole(Level.WARNING, "Failed to add table " + name + ": primary keys undefined.");
+				if (primaryString.length() > 0) statement += "PRIMARY KEY (" + primaryString + "))";
+				else
+					statement = statement.substring(0, statement.length() - 1) + ")";
+				ChatUtils.sendToConsole(Level.INFO, statement);
+				try {
+					Statement st = connection.createStatement();
+					st.executeUpdate(statement);
+					st.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
 				}
-			}
+			} else
+				ChatUtils.sendToConsole(Level.WARNING, "Failed to add table " + name + ": primary keys undefined.");
 		} catch (SQLException ex) {
 			if (ex.getMessage().equalsIgnoreCase("query does not return results")) {
 				if (hasPrimaryKeys()) {
 					String statement = "CREATE TABLE IF NOT EXISTS " + name + " (";
-					for(Column column: columns) {
-						statement += "`" + column.getName() + "` " + conversions.get(column.getType()) + " DEFAULT "
-						+ column.getDefaultValue() + ",";
-					}
+					for(Column column: columns)
+						statement += "`" + column.getName() + "` " + conversions.get(column.getType()) + " DEFAULT " + column.getDefaultValue() + ",";
 					String primaryString = "";
 					for(int i = 0; i < primary.size(); i++) {
 						primaryString += "`" + primary.get(i) + "`";
-						if (i != primary.size() - 1) {
-							primaryString += ", ";
-						}
+						if (i != primary.size() - 1) primaryString += ", ";
 					}
-					if (primaryString.length() > 0) {
-						statement += "PRIMARY KEY (" + primaryString + "))";
-					} else {
+					if (primaryString.length() > 0) statement += "PRIMARY KEY (" + primaryString + "))";
+					else
 						statement = statement.substring(0, statement.length() - 1) + ")";
-					}
 					ChatUtils.sendToConsole(Level.INFO, statement);
 					try {
 						Statement st = connection.createStatement();
@@ -194,20 +163,14 @@ public class Table {
 					} catch (SQLException e) {
 						e.printStackTrace();
 					}
-				} else {
+				} else
 					ChatUtils.sendToConsole(Level.WARNING, "Failed to add table " + name + ": primary keys undefined.");
-				}
-			} else {
+			} else
 				ex.printStackTrace();
-			}
 		} finally {
 			try {
-				if (ps != null) {
-					ps.close();
-				}
-				if (rs != null) {
-					rs.close();
-				}
+				if (ps != null) ps.close();
+				if (rs != null) rs.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}

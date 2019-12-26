@@ -183,36 +183,23 @@ public class ConfigInventory implements InventoryData {
 
 		for(int i = 0; i < PAGING; i++) {
 			int index = i + PAGING * (page - 1);
-			if (keys.size() <= index) {
-				break;
-			}
+			if (keys.size() <= index) break;
 			String key = keys.get(index);
 
 			ItemStack keyItem = new ItemStack(Material.PAPER);
 			ItemMeta keyItemMeta = keyItem.getItemMeta();
 			keyItemMeta.setDisplayName(ChatColor.GOLD + "Config Value");
 			List<String> names = new ArrayList<String>();
-			if (backup != null) {
-				names.addAll(Arrays.asList(ChatColor.GRAY + "Path: " + ChatColor.WHITE + key,
-				ChatColor.GRAY + "Type: " + ChatColor.WHITE + backup.getType(key),
-				ChatColor.GRAY + "Value: " + ChatColor.WHITE + backup.getStringValue(key)));
-			} else {
+			if (backup != null) names.addAll(Arrays.asList(ChatColor.GRAY + "Path: " + ChatColor.WHITE + key, ChatColor.GRAY + "Type: " + ChatColor.WHITE + backup.getType(key), ChatColor.GRAY + "Value: " + ChatColor.WHITE + backup.getStringValue(key)));
+			else {
 				String leftClick = null;
-				if (config.getType(key) == "boolean") {
-					leftClick = ChatColor.WHITE + "Left click to toggle boolean.";
-				} else if (config.getType(key) == "enum") {
-					leftClick = ChatColor.WHITE + "Left click to edit enum.";
-				} else {
+				if (config.getType(key) == "boolean") leftClick = ChatColor.WHITE + "Left click to toggle boolean.";
+				else if (config.getType(key) == "enum") leftClick = ChatColor.WHITE + "Left click to edit enum.";
+				else
 					leftClick = ChatColor.WHITE + "Left click to edit with anvil.";
-				}
-				names.addAll(Arrays.asList(ChatColor.GRAY + "Path: " + ChatColor.WHITE + key,
-				ChatColor.GRAY + "Type: " + ChatColor.WHITE + config.getType(key),
-				ChatColor.GRAY + "Value: " + ChatColor.WHITE + config.getStringValue(key), leftClick));
-				String rightClick = config.getType(key) == "string" ? ChatColor.WHITE + "Right click to edit in chat."
-				: "";
-				if (rightClick != "") {
-					names.add(rightClick);
-				}
+				names.addAll(Arrays.asList(ChatColor.GRAY + "Path: " + ChatColor.WHITE + key, ChatColor.GRAY + "Type: " + ChatColor.WHITE + config.getType(key), ChatColor.GRAY + "Value: " + ChatColor.WHITE + config.getStringValue(key), leftClick));
+				String rightClick = config.getType(key) == "string" ? ChatColor.WHITE + "Right click to edit in chat." : "";
+				if (rightClick != "") names.add(rightClick);
 			}
 			keyItemMeta.setLore(names);
 			keyItem.setItemMeta(keyItemMeta);
@@ -227,12 +214,8 @@ public class ConfigInventory implements InventoryData {
 
 		inv.setItem(48, goBack());
 
-		if (keys.size() > PAGING * page) {
-			inv.setItem(53, nextPage());
-		}
-		if (page != 1) {
-			inv.setItem(45, previousPage());
-		}
+		if (keys.size() > PAGING * page) inv.setItem(53, nextPage());
+		if (page != 1) inv.setItem(45, previousPage());
 	}
 
 	public void listDetails(YamlConfigBackup config, YamlConfigBackup backup, String level, String type, int page) {
@@ -252,9 +235,7 @@ public class ConfigInventory implements InventoryData {
 			title = "Backup Config List Details";
 		}
 
-		if (keys == null) {
-			return;
-		}
+		if (keys == null) return;
 
 		if (PAGING * (page - 1) >= keys.size() && page != 1) {
 			listDetails(config, backup, level, type, page - 1);
@@ -266,9 +247,7 @@ public class ConfigInventory implements InventoryData {
 
 		for(int i = 0; i < PAGING; i++) {
 			int index = i + PAGING * (page - 1);
-			if (keys.size() <= index) {
-				break;
-			}
+			if (keys.size() <= index) break;
 			String key = keys.get(index);
 
 			ItemStack keyItem = new ItemStack(Material.PAPER);
@@ -276,9 +255,7 @@ public class ConfigInventory implements InventoryData {
 			keyItemMeta.setDisplayName(ChatColor.GOLD + "List Value");
 			List<String> lore = new ArrayList<String>();
 			lore.add(ChatColor.GRAY + "Value: " + ChatColor.WHITE + key);
-			if (backup == null) {
-				lore.add(ChatColor.GRAY + "Left Click to Delete");
-			}
+			if (backup == null) lore.add(ChatColor.GRAY + "Left Click to Delete");
 			keyItemMeta.setLore(lore);
 			keyItem.setItemMeta(keyItemMeta);
 			inv.setItem(i, keyItem);
@@ -290,20 +267,15 @@ public class ConfigInventory implements InventoryData {
 			ItemStack add = new ItemStack(Material.NAME_TAG);
 			ItemMeta addMeta = add.getItemMeta();
 			addMeta.setDisplayName(ChatColor.GOLD + "Add New Value");
-			addMeta.setLore(Arrays.asList(ChatColor.WHITE + "Left Click to Open Anvil",
-			ChatColor.WHITE + "Right Click to Open Chat"));
+			addMeta.setLore(Arrays.asList(ChatColor.WHITE + "Left Click to Open Anvil", ChatColor.WHITE + "Right Click to Open Chat"));
 			add.setItemMeta(addMeta);
 			inv.setItem(50, add);
 		}
 
 		inv.setItem(goBackSlot, goBack());
 
-		if (keys.size() > PAGING * page) {
-			inv.setItem(53, nextPage());
-		}
-		if (page != 1) {
-			inv.setItem(45, previousPage());
-		}
+		if (keys.size() > PAGING * page) inv.setItem(53, nextPage());
+		if (page != 1) inv.setItem(45, previousPage());
 	}
 
 	public void listEnumDetails(YamlConfigBackup config, String level, String type, int page) {
@@ -314,9 +286,7 @@ public class ConfigInventory implements InventoryData {
 		this.type = type;
 
 		List<String> enums = config.getEnums(level);
-		if (enums == null) {
-			return;
-		}
+		if (enums == null) return;
 
 		if (PAGING * (page - 1) >= enums.size() && page != 1) {
 			listEnumDetails(config, level, type, page - 1);
@@ -328,9 +298,7 @@ public class ConfigInventory implements InventoryData {
 
 		for(int i = 0; i < PAGING; i++) {
 			int index = i + PAGING * (page - 1);
-			if (enums.size() <= index) {
-				break;
-			}
+			if (enums.size() <= index) break;
 			String key = enums.get(index);
 
 			ItemStack keyItem = new ItemStack(Material.GOLDEN_APPLE);
@@ -339,9 +307,8 @@ public class ConfigInventory implements InventoryData {
 			if (key.equals(config.getStringValue(level))) {
 				keyItem.setType(Material.ENCHANTED_GOLDEN_APPLE);
 				lore.add(ChatColor.GRAY + "Selected: " + ChatColor.WHITE + "true");
-			} else {
+			} else
 				lore.add(ChatColor.GRAY + "Selected: " + ChatColor.WHITE + "false");
-			}
 			lore.add(ChatColor.WHITE + "Left Click to Select");
 			ItemMeta keyItemMeta = keyItem.getItemMeta();
 			keyItemMeta.setDisplayName(ChatColor.GOLD + "Enum Value");
@@ -352,12 +319,8 @@ public class ConfigInventory implements InventoryData {
 
 		inv.setItem(49, goBack());
 
-		if (enums.size() > PAGING * page) {
-			inv.setItem(53, nextPage());
-		}
-		if (page != 1) {
-			inv.setItem(45, previousPage());
-		}
+		if (enums.size() > PAGING * page) inv.setItem(53, nextPage());
+		if (page != 1) inv.setItem(45, previousPage());
 	}
 
 	public void listEnumListShow(YamlConfigBackup config, String level, String type, int page) {
@@ -368,9 +331,7 @@ public class ConfigInventory implements InventoryData {
 		this.type = type;
 
 		List<String> enums = config.getStringListCombined(level);
-		if (enums == null) {
-			return;
-		}
+		if (enums == null) return;
 
 		if (PAGING * (page - 1) >= enums.size() && page != 1) {
 			listEnumListShow(config, level, type, page - 1);
@@ -382,9 +343,7 @@ public class ConfigInventory implements InventoryData {
 
 		for(int i = 0; i < PAGING; i++) {
 			int index = i + PAGING * (page - 1);
-			if (enums.size() <= index) {
-				break;
-			}
+			if (enums.size() <= index) break;
 			String key = enums.get(index);
 
 			ItemStack keyItem = new ItemStack(Material.PAPER);
@@ -400,12 +359,8 @@ public class ConfigInventory implements InventoryData {
 
 		inv.setItem(48, goBack());
 
-		if (enums.size() > PAGING * page) {
-			inv.setItem(53, nextPage());
-		}
-		if (page != 1) {
-			inv.setItem(45, previousPage());
-		}
+		if (enums.size() > PAGING * page) inv.setItem(53, nextPage());
+		if (page != 1) inv.setItem(45, previousPage());
 
 		ItemStack add = new ItemStack(Material.NAME_TAG);
 		ItemMeta addMeta = add.getItemMeta();
@@ -422,13 +377,10 @@ public class ConfigInventory implements InventoryData {
 		this.type = type;
 
 		List<String> enums = config.getEnums(level);
-		if (enums == null) {
-			return;
-		}
+		if (enums == null) return;
 
-		for(String s: config.getStringListCombined(level)) {
+		for(String s: config.getStringListCombined(level))
 			enums.remove(s);
-		}
 
 		if (PAGING * (page - 1) >= enums.size() && page != 1) {
 			listEnumListEdit(config, level, type, page - 1);
@@ -440,9 +392,7 @@ public class ConfigInventory implements InventoryData {
 
 		for(int i = 0; i < PAGING; i++) {
 			int index = i + PAGING * (page - 1);
-			if (enums.size() <= index) {
-				break;
-			}
+			if (enums.size() <= index) break;
 			String key = enums.get(index);
 
 			ItemStack keyItem = new ItemStack(Material.GOLDEN_APPLE);
@@ -458,12 +408,8 @@ public class ConfigInventory implements InventoryData {
 
 		inv.setItem(49, goBack());
 
-		if (enums.size() > PAGING * page) {
-			inv.setItem(53, nextPage());
-		}
-		if (page != 1) {
-			inv.setItem(45, previousPage());
-		}
+		if (enums.size() > PAGING * page) inv.setItem(53, nextPage());
+		if (page != 1) inv.setItem(45, previousPage());
 	}
 
 	public void listBackup(YamlConfigBackup config, int page) {
@@ -474,9 +420,7 @@ public class ConfigInventory implements InventoryData {
 		level = null;
 
 		List<Integer> backups = EnchantmentSolution.getPlugin().getDb().getBackups(config);
-		if (backups == null) {
-			return;
-		}
+		if (backups == null) return;
 
 		if (PAGING * (page - 1) >= backups.size() && page != 1) {
 			listEnumDetails(config, level, type, page - 1);
@@ -488,9 +432,7 @@ public class ConfigInventory implements InventoryData {
 
 		for(int i = 0; i < PAGING; i++) {
 			int index = i + PAGING * (page - 1);
-			if (backups.size() <= index) {
-				break;
-			}
+			if (backups.size() <= index) break;
 			int key = backups.get(index);
 
 			ItemStack keyItem = new ItemStack(Material.FIREWORK_STAR);
@@ -503,19 +445,13 @@ public class ConfigInventory implements InventoryData {
 
 		inv.setItem(49, goBack());
 
-		if (backups.size() > PAGING * page) {
-			inv.setItem(53, nextPage());
-		}
-		if (page != 1) {
-			inv.setItem(45, previousPage());
-		}
+		if (backups.size() > PAGING * page) inv.setItem(53, nextPage());
+		if (page != 1) inv.setItem(45, previousPage());
 	}
 
 	public void removeFromList(int num) {
 		List<String> keys = config.getStringListCombined(level);
-		if (keys == null) {
-			return;
-		}
+		if (keys == null) return;
 
 		num += PAGING * (page - 1);
 
@@ -525,9 +461,7 @@ public class ConfigInventory implements InventoryData {
 
 	public void addToList(String value) {
 		List<String> keys = config.getStringListCombined(level);
-		if (keys == null) {
-			return;
-		}
+		if (keys == null) return;
 		keys.add(value);
 		setPath(level, keys);
 	}
@@ -569,9 +503,7 @@ public class ConfigInventory implements InventoryData {
 
 	@Override
 	public void close(boolean external) {
-		if (!external) {
-			player.closeInventory();
-		}
+		if (!external) player.closeInventory();
 		EnchantmentSolution.getPlugin().removeInventory(this);
 	}
 
@@ -581,8 +513,7 @@ public class ConfigInventory implements InventoryData {
 	}
 
 	@Override
-	public void setInventory(List<ItemStack> items) {
-	}
+	public void setInventory(List<ItemStack> items) {}
 
 	public HashMap<String, Object> getCodes() {
 		HashMap<String, Object> codes = new HashMap<String, Object>();
@@ -647,7 +578,8 @@ public class ConfigInventory implements InventoryData {
 	}
 
 	public enum Screen {
-		LIST_FILES(), LIST_DETAILS(), LIST_EDIT(), LIST_ENUM(), LIST_BACKUP(), LIST_BACKUP_DETAILS(), LIST_BACKUP_LIST(), LIST_ENUM_LIST_SHOW(), LIST_ENUM_LIST_EDIT();
+		LIST_FILES(), LIST_DETAILS(), LIST_EDIT(), LIST_ENUM(), LIST_BACKUP(), LIST_BACKUP_DETAILS(),
+		LIST_BACKUP_LIST(), LIST_ENUM_LIST_SHOW(), LIST_ENUM_LIST_EDIT();
 	}
 
 	@Override
@@ -687,23 +619,15 @@ public class ConfigInventory implements InventoryData {
 	}
 
 	public void reopenFromAnvil(boolean limitLevel) {
-		if (type.equals("list")) {
-			listDetails(getConfig(), null, level, type, page);
-		} else if (level == null) {
-			listConfigDetails(getConfig(), null);
-		} else if (level.indexOf(".") > -1) {
-			if (limitLevel) {
-				listConfigDetails(getConfig(), null, level.substring(0, level.lastIndexOf(".")));
-			} else {
+		if (type.equals("list")) listDetails(getConfig(), null, level, type, page);
+		else if (level == null) listConfigDetails(getConfig(), null);
+		else if (level.indexOf(".") > -1) {
+			if (limitLevel) listConfigDetails(getConfig(), null, level.substring(0, level.lastIndexOf(".")));
+			else
 				listConfigDetails(getConfig(), null, level);
-			}
-		} else {
-			if (limitLevel) {
-				listConfigDetails(getConfig(), null, null);
-			} else {
-				listConfigDetails(getConfig(), null, level);
-			}
-		}
+		} else if (limitLevel) listConfigDetails(getConfig(), null, null);
+		else
+			listConfigDetails(getConfig(), null, level);
 	}
 
 	public boolean isChat() {
@@ -728,21 +652,16 @@ public class ConfigInventory implements InventoryData {
 		if (inventory == null) {
 			inventory = inv;
 			player.openInventory(inv);
+		} else if (inv.getSize() == inventory.getSize()) {
+			inv = player.getOpenInventory().getTopInventory();
+			inventory = inv;
 		} else {
-			if (inv.getSize() == inventory.getSize()) {
-				inv = player.getOpenInventory().getTopInventory();
-				inventory = inv;
-			} else {
-				inventory = inv;
-				player.openInventory(inv);
-			}
+			inventory = inv;
+			player.openInventory(inv);
 		}
-		for(int i = 0; i < inventory.getSize(); i++) {
+		for(int i = 0; i < inventory.getSize(); i++)
 			inventory.setItem(i, new ItemStack(Material.AIR));
-		}
-		if (opening) {
-			opening = false;
-		}
+		if (opening) opening = false;
 		return inv;
 	}
 

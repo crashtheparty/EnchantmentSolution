@@ -20,17 +20,11 @@ public class ExhaustionRunnable implements Runnable {
 
 	@Override
 	public void run() {
-		if (!RegisterEnchantments.isEnabled(RegisterEnchantments.CURSE_OF_EXHAUSTION)) {
-			return;
-		}
-		for(Player player: Bukkit.getOnlinePlayers()) {
-			if (!EXHAUSTION.containsKey(player.getUniqueId())) {
-				try {
-					EXHAUSTION.put(player.getUniqueId(), AbilityUtils.getExhaustion(player));
-				} catch (Exception ex) {
-				}
-			}
-		}
+		if (!RegisterEnchantments.isEnabled(RegisterEnchantments.CURSE_OF_EXHAUSTION)) return;
+		for(Player player: Bukkit.getOnlinePlayers())
+			if (!EXHAUSTION.containsKey(player.getUniqueId())) try {
+				EXHAUSTION.put(player.getUniqueId(), AbilityUtils.getExhaustion(player));
+			} catch (Exception ex) {}
 		Iterator<Entry<UUID, Float>> iterator = EXHAUSTION.entrySet().iterator();
 		while (iterator.hasNext()) {
 			Entry<UUID, Float> entry = iterator.next();
@@ -43,17 +37,13 @@ public class ExhaustionRunnable implements Runnable {
 					Bukkit.getPluginManager().callEvent(event);
 
 					if (!event.isCancelled() && event.getCurseLevel() > 0 && event.getExhaustionTick() > 0) {
-						player.setExhaustion(
-						player.getExhaustion() + event.getExhaustionTick() * event.getCurseLevel());
-						if (event.getExhaustionTick() * event.getCurseLevel() / 3.9F > change) {
-							AdvancementUtils.awardCriteria(player, ESAdvancement.HIGH_METABOLISM, "exhaustion");
-						}
+						player.setExhaustion(player.getExhaustion() + event.getExhaustionTick() * event.getCurseLevel());
+						if (event.getExhaustionTick() * event.getCurseLevel() / 3.9F > change) AdvancementUtils.awardCriteria(player, ESAdvancement.HIGH_METABOLISM, "exhaustion");
 					}
 					EXHAUSTION.put(player.getUniqueId(), AbilityUtils.getExhaustion(player));
 				}
-			} else {
+			} else
 				iterator.remove();
-			}
 		}
 	}
 }

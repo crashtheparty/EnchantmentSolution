@@ -30,11 +30,8 @@ public class SQLite extends Database {
 	}
 
 	private <T> Table getTable(Class<T> cls) {
-		for(Table table: tables) {
-			if (table.getClass().equals(cls)) {
-				return table;
-			}
-		}
+		for(Table table: tables)
+			if (table.getClass().equals(cls)) return table;
 		return null;
 	}
 
@@ -61,9 +58,8 @@ public class SQLite extends Database {
 			BackupTable bTable = (BackupTable) table;
 			int backup = bTable.getBackupNum(config);
 			List<Integer> backups = new ArrayList<Integer>();
-			for(int i = 1; i < backup; i++) {
+			for(int i = 1; i < backup; i++)
 				backups.add(i);
-			}
 			return backups;
 		}
 		return null;
@@ -81,17 +77,13 @@ public class SQLite extends Database {
 	// SQL creation stuff, You can leave the blow stuff untouched.
 	public Connection getSQLConnection() {
 		File dataFolder = new File(plugin.getDataFolder(), dbname + ".db");
-		if (!dataFolder.exists()) {
-			try {
-				dataFolder.createNewFile();
-			} catch (IOException e) {
-				plugin.getLogger().log(Level.SEVERE, "File write error: " + dbname + ".db");
-			}
+		if (!dataFolder.exists()) try {
+			dataFolder.createNewFile();
+		} catch (IOException e) {
+			plugin.getLogger().log(Level.SEVERE, "File write error: " + dbname + ".db");
 		}
 		try {
-			if (connection != null && !connection.isClosed()) {
-				return connection;
-			}
+			if (connection != null && !connection.isClosed()) return connection;
 			Class.forName("org.sqlite.JDBC");
 			connection = DriverManager.getConnection("jdbc:sqlite:" + dataFolder);
 			return connection;
@@ -105,9 +97,8 @@ public class SQLite extends Database {
 
 	public void load() {
 		connection = getSQLConnection();
-		for(Table t: tables) {
+		for(Table t: tables)
 			t.createTable(connection);
-		}
 		initialize();
 	}
 

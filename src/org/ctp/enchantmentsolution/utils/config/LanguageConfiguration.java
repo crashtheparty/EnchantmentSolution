@@ -33,7 +33,7 @@ public class LanguageConfiguration extends Configuration {
 
 	@Override
 	public void migrateVersion() {
-		if(Configurations.getConfig().getString("starter") != null) {
+		if (Configurations.getConfig().getString("starter") != null) {
 			getConfig().set("starter", Configurations.getConfig().getString("starter"));
 			Configurations.getConfig().getConfig().removeKey("starter");
 			Configurations.getConfig().save();

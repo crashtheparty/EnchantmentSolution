@@ -22,21 +22,14 @@ public class TableEnchantments extends GenerateEnchantments {
 
 	public static TableEnchantments getTableEnchantments(Player player, ItemStack item, int bookshelves,
 	boolean treasure) {
-		for(TableEnchantments enchantments: TABLES) {
+		for(TableEnchantments enchantments: TABLES)
 			if (enchantments.isSimilar(player, bookshelves)) {
-				if (item != null) {
-					if (!enchantments.hasEnchantments(item.getType())) {
-						enchantments.generateEnchantments(item.getType());
-					}
-				}
+				if (item != null) if (!enchantments.hasEnchantments(item.getType())) enchantments.generateEnchantments(item.getType());
 				return enchantments;
 			}
-		}
 
 		TableEnchantments enchantments = new TableEnchantments(player, bookshelves, treasure);
-		if (item != null) {
-			enchantments.generateEnchantments(item.getType());
-		}
+		if (item != null) enchantments.generateEnchantments(item.getType());
 		TABLES.add(enchantments);
 		return enchantments;
 	}
@@ -53,9 +46,7 @@ public class TableEnchantments extends GenerateEnchantments {
 		Iterator<TableEnchantments> iterator = TABLES.iterator();
 		while (iterator.hasNext()) {
 			TableEnchantments enchantments = iterator.next();
-			if (enchantments.getPlayer().getUniqueId().toString().equals(player.getUniqueId().toString())) {
-				iterator.remove();
-			}
+			if (enchantments.getPlayer().getUniqueId().equals(player.getUniqueId())) iterator.remove();
 		}
 	}
 
@@ -74,9 +65,7 @@ public class TableEnchantments extends GenerateEnchantments {
 			EnchantmentList[] list = new EnchantmentList[levelList.getList().length];
 			for(int i = 0; i < list.length; i++) {
 				Level level = levelList.getList()[i];
-				if (level != null && level.getLevel() > -1) {
-					list[i] = new EnchantmentList(getPlayer(), level, m, isTreasure());
-				}
+				if (level != null && level.getLevel() > -1) list[i] = new EnchantmentList(getPlayer(), level, m, isTreasure());
 			}
 
 			enchantmentList.put(m, list);
@@ -84,9 +73,7 @@ public class TableEnchantments extends GenerateEnchantments {
 	}
 
 	public EnchantmentList[] getEnchantments(Material m) {
-		if (!hasEnchantments(m)) {
-			generateEnchantments(m);
-		}
+		if (!hasEnchantments(m)) generateEnchantments(m);
 		return enchantmentList.get(m);
 	}
 

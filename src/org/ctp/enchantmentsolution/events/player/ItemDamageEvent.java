@@ -1,31 +1,19 @@
-package org.ctp.enchantmentsolution.events;
+package org.ctp.enchantmentsolution.events.player;
 
 import org.bukkit.entity.Player;
-import org.bukkit.event.Cancellable;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.inventory.ItemStack;
+import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
+import org.ctp.enchantmentsolution.events.ESPlayerEvent;
 
-public abstract class ItemDamageEvent extends PlayerEvent implements Cancellable {
-
-	private static final HandlerList handlers = new HandlerList();
-
-	public static HandlerList getHandlerList() {
-		return handlers;
-	}
-
-	@Override
-	public HandlerList getHandlers() {
-		return handlers;
-	}
+public abstract class ItemDamageEvent extends ESPlayerEvent {
 
 	private boolean cancelled;
 	private final ItemStack item;
 	private final int oldDamage;
 	private int newDamage;
 
-	public ItemDamageEvent(Player who, ItemStack item, int oldDamage, int newDamage) {
-		super(who);
+	public ItemDamageEvent(Player who, EnchantmentLevel enchantment, ItemStack item, int oldDamage, int newDamage) {
+		super(who, enchantment);
 		this.item = item;
 		this.oldDamage = oldDamage;
 		setNewDamage(newDamage);

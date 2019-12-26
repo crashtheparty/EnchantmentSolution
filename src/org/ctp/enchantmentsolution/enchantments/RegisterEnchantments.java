@@ -9,6 +9,7 @@ import java.util.logging.Level;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.api.ApiEnchantmentWrapper;
 import org.ctp.enchantmentsolution.enchantments.helper.Weight;
 import org.ctp.enchantmentsolution.utils.*;
@@ -39,10 +40,8 @@ public class RegisterEnchantments {
 	public static final Enchantment DROWNED = new CustomEnchantmentWrapper("drowned", "DROWNED");
 	public static final Enchantment UNREST = new CustomEnchantmentWrapper("unrest", "UNREST");
 	public static final Enchantment NO_REST = new CustomEnchantmentWrapper("no_rest", "NO_REST");
-	public static final Enchantment WIDTH_PLUS_PLUS = new CustomEnchantmentWrapper("width_plus_plus",
-	"WIDTH_PLUS_PLUS");
-	public static final Enchantment HEIGHT_PLUS_PLUS = new CustomEnchantmentWrapper("height_plus_plus",
-	"HEIGHT_PLUS_PLUS");
+	public static final Enchantment WIDTH_PLUS_PLUS = new CustomEnchantmentWrapper("width_plus_plus", "WIDTH_PLUS_PLUS");
+	public static final Enchantment HEIGHT_PLUS_PLUS = new CustomEnchantmentWrapper("height_plus_plus", "HEIGHT_PLUS_PLUS");
 	public static final Enchantment VOID_WALKER = new CustomEnchantmentWrapper("void_walker", "VOID_WALKER");
 	public static final Enchantment ICARUS = new CustomEnchantmentWrapper("icarus", "ICARUS");
 	public static final Enchantment IRON_DEFENSE = new CustomEnchantmentWrapper("iron_defense", "IRON_DEFENSE");
@@ -60,14 +59,16 @@ public class RegisterEnchantments {
 	public static final Enchantment MOISTURIZE = new CustomEnchantmentWrapper("moisturize", "MOISTURIZE");
 	public static final Enchantment IRENES_LASSO = new CustomEnchantmentWrapper("irenes_lasso", "LASSO_OF_IRENE");
 	public static final Enchantment CURSE_OF_LAG = new CustomEnchantmentWrapper("lagging_curse", "LAGGING_CURSE");
-	public static final Enchantment CURSE_OF_EXHAUSTION = new CustomEnchantmentWrapper("exhaustion_curse",
-	"EXHAUSTION_CURSE");
+	public static final Enchantment CURSE_OF_EXHAUSTION = new CustomEnchantmentWrapper("exhaustion_curse", "EXHAUSTION_CURSE");
 	public static final Enchantment QUICK_STRIKE = new CustomEnchantmentWrapper("quick_strike", "QUICK_STRIKE");
 	public static final Enchantment TOUGHNESS = new CustomEnchantmentWrapper("toughness", "TOUGHNESS");
 	public static final Enchantment ARMORED = new CustomEnchantmentWrapper("armored", "ARMORED");
+	public static final Enchantment HOLLOW_POINT = new CustomEnchantmentWrapper("hollow_point", "HOLLOW_POINT");
+	public static final Enchantment DETONATOR = new CustomEnchantmentWrapper("detonator", "DETONATOR");
+	public static final Enchantment OVERKILL = new CustomEnchantmentWrapper("overkill", "OVERKILL");
+	public static final Enchantment CURSE_OF_CONTAGION = new CustomEnchantmentWrapper("contagion_curse", "CONTAGION_CURSE");
 
-	private RegisterEnchantments() {
-	}
+	private RegisterEnchantments() {}
 
 	public static List<CustomEnchantment> getEnchantments() {
 		return ENCHANTMENTS;
@@ -79,33 +80,28 @@ public class RegisterEnchantments {
 
 	public static List<CustomEnchantment> getRegisteredEnchantmentsAlphabetical() {
 		List<CustomEnchantment> alphabetical = new ArrayList<CustomEnchantment>();
-		for(CustomEnchantment enchantment: REGISTERED_ENCHANTMENTS) {
+		for(CustomEnchantment enchantment: REGISTERED_ENCHANTMENTS)
 			alphabetical.add(enchantment);
-		}
 		Collections.sort(alphabetical, (o1, o2) -> o1.getDisplayName().compareTo(o2.getDisplayName()));
 		return alphabetical;
 	}
 
 	public static CustomEnchantment getCustomEnchantment(Enchantment enchant) {
-		for(CustomEnchantment enchantment: ENCHANTMENTS) {
+		for(CustomEnchantment enchantment: ENCHANTMENTS)
 			if (enchant.equals(enchantment.getRelativeEnchantment())) {
-				if (!enchantment.isEnabled()) {
-					return null;
-				}
+				if (!enchantment.isEnabled()) return null;
 				return enchantment;
 			}
-		}
 		return null;
 	}
 
 	public static boolean registerEnchantment(CustomEnchantment enchantment) {
-		if (REGISTERED_ENCHANTMENTS.contains(enchantment)) {
-			return true;
-		}
+		if (REGISTERED_ENCHANTMENTS.contains(enchantment)) return true;
 		REGISTERED_ENCHANTMENTS.add(enchantment);
+		JavaPlugin plugin = EnchantmentSolution.getPlugin();
+		if (enchantment.getRelativeEnchantment() instanceof ApiEnchantmentWrapper) plugin = ((ApiEnchantmentWrapper) enchantment.getRelativeEnchantment()).getPlugin();
 		boolean custom = enchantment.getRelativeEnchantment() instanceof CustomEnchantmentWrapper;
-		String error_message = "Trouble adding the " + enchantment.getName() + (custom ? " custom" : "")
-		+ " enchantment: ";
+		String error_message = "Trouble adding the " + enchantment.getName() + (custom ? " custom" : "") + " enchantment: ";
 		String success_message = "Added the " + enchantment.getName() + (custom ? " custom" : "") + " enchantment.";
 		if (!custom) {
 			ChatUtils.sendToConsole(Level.INFO, success_message);
@@ -116,12 +112,12 @@ public class RegisterEnchantments {
 			f.setAccessible(true);
 			f.set(null, true);
 			Enchantment.registerEnchantment(enchantment.getRelativeEnchantment());
-			ChatUtils.sendToConsole(Level.INFO, success_message);
+			ChatUtils.sendToConsole(plugin, Level.INFO, success_message);
 			return true;
 		} catch (Exception e) {
 			REGISTERED_ENCHANTMENTS.remove(enchantment);
 
-			ChatUtils.sendToConsole(Level.WARNING, error_message);
+			ChatUtils.sendToConsole(plugin, Level.WARNING, error_message);
 			e.printStackTrace();
 			return false;
 		}
@@ -143,109 +139,73 @@ public class RegisterEnchantments {
 			if (enchantment.getRelativeEnchantment() instanceof ApiEnchantmentWrapper) {
 				JavaPlugin plugin = ((ApiEnchantmentWrapper) enchantment.getRelativeEnchantment()).getPlugin();
 				if (plugin == null) {
-					ChatUtils.sendToConsole(Level.WARNING, "Enchantment " + enchantment.getName() + " (Display Name "
-					+ enchantment.getDisplayName() + ")" + " does not have a JavaPlugin set. Refusing to set.");
+					ChatUtils.sendToConsole(Level.WARNING, "Enchantment " + enchantment.getName() + " (Display Name " + enchantment.getDisplayName() + ")" + " does not have a JavaPlugin set. Refusing to set.");
 					continue;
 				}
 				namespace = plugin.getName().toLowerCase();
-			} else if (enchantment.getRelativeEnchantment() instanceof CustomEnchantmentWrapper) {
-				namespace = "custom_enchantments";
-			}
+			} else if (enchantment.getRelativeEnchantment() instanceof CustomEnchantmentWrapper) namespace = "custom_enchantments";
 			if (!advanced && !(enchantment.getRelativeEnchantment() instanceof CustomEnchantmentWrapper)) {
-				if (registerEnchantment(enchantment)) {
-					enchantment.setEnabled(true);
-				} else {
+				if (registerEnchantment(enchantment)) enchantment.setEnabled(true);
+				else
 					enchantment.setEnabled(false);
-				}
-				String description = StringUtils.decodeString(
-				language.getString("enchantment.descriptions.default_enchantments." + enchantment.getName()));
+				String description = StringUtils.decodeString(language.getString("enchantment.descriptions.default_enchantments." + enchantment.getName()));
 				enchantment.setDescription(description);
-				if (levelFifty) {
-					enchantment.setLevelFifty();
-				} else {
+				if (levelFifty) enchantment.setLevelFifty();
+				else
 					enchantment.setLevelThirty();
-				}
 				continue;
 			}
 
 			if (registerEnchantment(enchantment)) {
-				if (config.getBoolean(namespace + "." + enchantment.getName() + ".enabled")) {
-					enchantment.setEnabled(true);
-				} else {
+				if (config.getBoolean(namespace + "." + enchantment.getName() + ".enabled")) enchantment.setEnabled(true);
+				else
 					enchantment.setEnabled(false);
-				}
-			} else {
+			} else
 				enchantment.setEnabled(false);
-			}
-			if (config.getBoolean(namespace + "." + enchantment.getName() + ".treasure")) {
-				enchantment.setTreasure(true);
-			} else {
+			if (config.getBoolean(namespace + "." + enchantment.getName() + ".treasure")) enchantment.setTreasure(true);
+			else
 				enchantment.setTreasure(false);
-			}
-			String displayName = StringUtils.decodeString(
-			language.getString("enchantment.display_names." + namespace + "." + enchantment.getName()));
-			String description = StringUtils.decodeString(
-			language.getString("enchantment.descriptions." + namespace + "." + enchantment.getName()));
+			String displayName = StringUtils.decodeString(language.getString("enchantment.display_names." + namespace + "." + enchantment.getName()));
+			String description = StringUtils.decodeString(language.getString("enchantment.descriptions." + namespace + "." + enchantment.getName()));
 			if (advanced) {
 				int constant = config.getInt(namespace + "." + enchantment.getName() + ".enchantability_constant");
 				int modifier = config.getInt(namespace + "." + enchantment.getName() + ".enchantability_modifier");
 				int startLevel = config.getInt(namespace + "." + enchantment.getName() + ".enchantability_start_level");
 				int maxLevel = config.getInt(namespace + "." + enchantment.getName() + ".enchantability_max_level");
 				Weight weight = Weight.getWeight(config.getString(namespace + "." + enchantment.getName() + ".weight"));
-				List<String> conflictingEnchantmentsString = config
-				.getStringList(namespace + "." + enchantment.getName() + ".conflicting_enchantments");
+				List<String> conflictingEnchantmentsString = config.getStringList(namespace + "." + enchantment.getName() + ".conflicting_enchantments");
 				List<Enchantment> conflictingEnchantments = new ArrayList<Enchantment>();
-				if (conflictingEnchantmentsString != null) {
-					for(String s: conflictingEnchantmentsString) {
-						CustomEnchantment enchant = getByName(s);
-						if (enchant != null) {
-							conflictingEnchantments.add(enchant.getRelativeEnchantment());
-						}
-					}
+				if (conflictingEnchantmentsString != null) for(String s: conflictingEnchantmentsString) {
+					CustomEnchantment enchant = getByName(s);
+					if (enchant != null) conflictingEnchantments.add(enchant.getRelativeEnchantment());
 				}
-				List<String> disabledItemsString = config
-				.getStringList(namespace + "." + enchantment.getName() + ".disabled_items");
+				List<String> disabledItemsString = config.getStringList(namespace + "." + enchantment.getName() + ".disabled_items");
 				List<Material> disabledItems = new ArrayList<Material>();
-				if (disabledItemsString != null) {
-					for(String s: disabledItemsString) {
-						Material mat = Material.getMaterial(s);
-						if (mat != null) {
-							disabledItems.add(mat);
-						}
-					}
+				if (disabledItemsString != null) for(String s: disabledItemsString) {
+					Material mat = Material.getMaterial(s);
+					if (mat != null) disabledItems.add(mat);
 				}
 				enchantment.setCustom(constant, modifier, startLevel, maxLevel, weight);
 				enchantment.setConflictingEnchantments(conflictingEnchantments);
 				enchantment.setDisabledItems(disabledItems);
-			} else {
-				if (levelFifty) {
-					enchantment.setLevelFifty();
-				} else {
-					enchantment.setLevelThirty();
-				}
-			}
-			if (!namespace.equals("default_enchantments")) {
-				enchantment.setDisplayName(displayName);
-			} else {
+			} else if (levelFifty) enchantment.setLevelFifty();
+			else
+				enchantment.setLevelThirty();
+			if (!namespace.equals("default_enchantments")) enchantment.setDisplayName(displayName);
+			else
 				enchantment.setDisplayName(ConfigUtils.getLanguage());
-			}
 			enchantment.setDescription(description);
 		}
 	}
 
 	public static boolean isEnabled(Enchantment enchant) {
-		for(CustomEnchantment enchantment: ENCHANTMENTS) {
-			if (enchant.equals(enchantment.getRelativeEnchantment())) {
-				return enchantment.isEnabled();
-			}
-		}
+		for(CustomEnchantment enchantment: ENCHANTMENTS)
+			if (enchant.equals(enchantment.getRelativeEnchantment())) return enchantment.isEnabled();
 		return false;
 	}
 
 	public static void addRegisterEnchantments() {
-		if (getEnchantments().size() > 0) {
-			return;
-		}
+		if (getEnchantments().size() > 0) return;
 		addDefaultEnchantment(CERegister.AQUA_AFFINITY);
 		addDefaultEnchantment(CERegister.BANE_OF_ARTHROPODS);
 		addDefaultEnchantment(CERegister.BLAST_PROTECTION);
@@ -276,9 +236,7 @@ public class RegisterEnchantments {
 		addDefaultEnchantment(CERegister.PROJECTILE_PROTECTION);
 		addDefaultEnchantment(CERegister.PROTECTION);
 		addDefaultEnchantment(CERegister.PUNCH);
-		if (VersionUtils.getBukkitVersionNumber() > 3) {
-			addDefaultEnchantment(CERegister.QUICK_CHARGE);
-		}
+		if (VersionUtils.getBukkitVersionNumber() > 3) addDefaultEnchantment(CERegister.QUICK_CHARGE);
 		addDefaultEnchantment(CERegister.RESPIRATION);
 		addDefaultEnchantment(CERegister.RIPTIDE);
 		addDefaultEnchantment(CERegister.SHARPNESS);
@@ -292,8 +250,10 @@ public class RegisterEnchantments {
 		addDefaultEnchantment(CERegister.ARMORED);
 		addDefaultEnchantment(CERegister.BEHEADING);
 		addDefaultEnchantment(CERegister.BRINE);
+		addDefaultEnchantment(CERegister.CURSE_OF_CONTAGION);
 		addDefaultEnchantment(CERegister.CURSE_OF_EXHAUSTION);
 		addDefaultEnchantment(CERegister.CURSE_OF_LAG);
+		addDefaultEnchantment(CERegister.DETONATOR);
 		addDefaultEnchantment(CERegister.DROWNED);
 		addDefaultEnchantment(CERegister.EXP_SHARE);
 		addDefaultEnchantment(CERegister.FLOWER_GIFT);
@@ -303,6 +263,7 @@ public class RegisterEnchantments {
 		addDefaultEnchantment(CERegister.GUNG_HO);
 		addDefaultEnchantment(CERegister.HARD_BOUNCE);
 		addDefaultEnchantment(CERegister.HEIGHT_PLUS_PLUS);
+		addDefaultEnchantment(CERegister.HOLLOW_POINT);
 		addDefaultEnchantment(CERegister.ICARUS);
 		addDefaultEnchantment(CERegister.IRENES_LASSO);
 		addDefaultEnchantment(CERegister.IRON_DEFENSE);
@@ -312,9 +273,8 @@ public class RegisterEnchantments {
 		addDefaultEnchantment(CERegister.MAGMA_WALKER);
 		addDefaultEnchantment(CERegister.MOISTURIZE);
 		addDefaultEnchantment(CERegister.NO_REST);
-		if (VersionUtils.getBukkitVersionNumber() > 3) {
-			addDefaultEnchantment(CERegister.PILLAGE);
-		}
+		addDefaultEnchantment(CERegister.OVERKILL);
+		if (VersionUtils.getBukkitVersionNumber() > 3) addDefaultEnchantment(CERegister.PILLAGE);
 		addDefaultEnchantment(CERegister.QUICK_STRIKE);
 		addDefaultEnchantment(CERegister.SACRIFICE);
 		addDefaultEnchantment(CERegister.SAND_VEIL);
@@ -324,9 +284,7 @@ public class RegisterEnchantments {
 		addDefaultEnchantment(CERegister.SOULBOUND);
 		addDefaultEnchantment(CERegister.SOUL_REAPER);
 		addDefaultEnchantment(CERegister.SPLATTER_FEST);
-		if (VersionUtils.getBukkitVersionNumber() > 3) {
-			addDefaultEnchantment(CERegister.STONE_THROW);
-		}
+		if (VersionUtils.getBukkitVersionNumber() > 3) addDefaultEnchantment(CERegister.STONE_THROW);
 		addDefaultEnchantment(CERegister.TANK);
 		addDefaultEnchantment(CERegister.TELEPATHY);
 		addDefaultEnchantment(CERegister.TOUGHNESS);
@@ -340,18 +298,14 @@ public class RegisterEnchantments {
 
 	public static List<String> getEnchantmentNames() {
 		List<String> names = new ArrayList<String>();
-		for(CustomEnchantment enchant: getEnchantments()) {
+		for(CustomEnchantment enchant: getEnchantments())
 			names.add(enchant.getName());
-		}
 		return names;
 	}
 
 	public static CustomEnchantment getByName(String name) {
-		for(CustomEnchantment enchant: getEnchantments()) {
-			if (enchant.getName().equalsIgnoreCase(name)) {
-				return enchant;
-			}
-		}
+		for(CustomEnchantment enchant: getEnchantments())
+			if (enchant.getName().equalsIgnoreCase(name)) return enchant;
 		return null;
 	}
 }

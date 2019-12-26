@@ -21,12 +21,9 @@ public class EnchantInfo implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		Player player = null;
-		if (sender instanceof Player) {
-			player = (Player) sender;
-		}
-		if (args.length == 0) {
-			sendEnchantInfo(sender, 1);
-		} else if (args.length == 1) {
+		if (sender instanceof Player) player = (Player) sender;
+		if (args.length == 0) sendEnchantInfo(sender, 1);
+		else if (args.length == 1) {
 			try {
 				int page = Integer.parseInt(args[0]);
 				sendEnchantInfo(sender, page);
@@ -35,12 +32,11 @@ public class EnchantInfo implements CommandExecutor {
 
 			}
 			CustomEnchantment enchantment = null;
-			for(CustomEnchantment enchant: RegisterEnchantments.getRegisteredEnchantments()) {
+			for(CustomEnchantment enchant: RegisterEnchantments.getRegisteredEnchantments())
 				if (enchant.getName().equalsIgnoreCase(args[0])) {
 					enchantment = enchant;
 					break;
 				}
-			}
 			if (enchantment == null) {
 				if (player != null) {
 					HashMap<String, Object> codes = ChatUtils.getCodes();
@@ -53,11 +49,9 @@ public class EnchantInfo implements CommandExecutor {
 				}
 			} else {
 				String page = enchantment.getDetails();
-				if (player != null) {
-					ChatUtils.sendMessage(player, page);
-				} else {
+				if (player != null) ChatUtils.sendMessage(player, page);
+				else
 					sender.sendMessage(page);
-				}
 			}
 		}
 		return true;
@@ -66,17 +60,11 @@ public class EnchantInfo implements CommandExecutor {
 	@SuppressWarnings("unchecked")
 	private void sendEnchantInfo(CommandSender sender, int page) {
 		Player player = null;
-		if (sender instanceof Player) {
-			player = (Player) sender;
-		}
-		if (page < 1) {
-			page = 1;
-		}
+		if (sender instanceof Player) player = (Player) sender;
+		if (page < 1) page = 1;
 		List<CustomEnchantment> registered = RegisterEnchantments.getRegisteredEnchantments();
 		while (registered.size() < (page - 1) * 10) {
-			if (page == 1) {
-				break;
-			}
+			if (page == 1) break;
 			page -= 1;
 		}
 		if (player != null) {
@@ -90,12 +78,10 @@ public class EnchantInfo implements CommandExecutor {
 				action.put("action", "run_command");
 				action.put("value", "/enchantinfo " + (page - 1));
 				second.put("clickEvent", action);
-			} else {
+			} else
 				second.put("text", ChatColor.DARK_BLUE + "***");
-			}
 			JSONObject third = new JSONObject();
-			third.put("text", ChatColor.DARK_BLUE + "******" + ChatColor.AQUA + " Enchantments Page " + page
-			+ ChatColor.DARK_BLUE + " ******");
+			third.put("text", ChatColor.DARK_BLUE + "******" + ChatColor.AQUA + " Enchantments Page " + page + ChatColor.DARK_BLUE + " ******");
 			JSONObject fourth = new JSONObject();
 			if (registered.size() > page * 10) {
 				fourth.put("text", ChatColor.GREEN + ">>>");
@@ -103,9 +89,8 @@ public class EnchantInfo implements CommandExecutor {
 				action.put("action", "run_command");
 				action.put("value", "/enchantinfo " + (page + 1));
 				fourth.put("clickEvent", action);
-			} else {
+			} else
 				fourth.put("text", ChatColor.DARK_BLUE + "***");
-			}
 			JSONObject fifth = new JSONObject();
 			fifth.put("text", ChatColor.DARK_BLUE + "******" + "\n");
 			json.add(first);
@@ -116,9 +101,7 @@ public class EnchantInfo implements CommandExecutor {
 			List<CustomEnchantment> alphabetical = RegisterEnchantments.getRegisteredEnchantmentsAlphabetical();
 			for(int i = 0; i < 10; i++) {
 				int num = i + (page - 1) * 10;
-				if (num >= registered.size()) {
-					break;
-				}
+				if (num >= registered.size()) break;
 				CustomEnchantment enchant = alphabetical.get(num);
 				JSONObject name = new JSONObject();
 				JSONObject desc = new JSONObject();
@@ -128,11 +111,7 @@ public class EnchantInfo implements CommandExecutor {
 				name.put("text", shrink(ChatColor.GOLD + enchant.getDisplayName()));
 				name.put("clickEvent", action);
 				json.add(name);
-				desc.put("text",
-				shrink(ChatColor.GOLD + enchant.getDisplayName() + ChatColor.WHITE + ": " + ChatColor.WHITE
-				+ enchant.getDescription())
-				.substring((ChatColor.GOLD + enchant.getDisplayName()).length())
-				+ "\n");
+				desc.put("text", shrink(ChatColor.GOLD + enchant.getDisplayName() + ChatColor.WHITE + ": " + ChatColor.WHITE + enchant.getDescription()).substring((ChatColor.GOLD + enchant.getDisplayName()).length()) + "\n");
 				json.add(desc);
 			}
 			json.add(first);
@@ -142,30 +121,20 @@ public class EnchantInfo implements CommandExecutor {
 			json.add(fifth);
 			ChatUtils.sendRawMessage(player, json.toJSONString());
 		} else {
-			String message = "\n" + ChatColor.DARK_BLUE + "******" + (page > 1 ? "<<<" : "***") + "******"
-			+ ChatColor.AQUA + " Enchantments Page " + page + ChatColor.DARK_BLUE + " ******"
-			+ (registered.size() < (page - 1) * 10 ? ">>>" : "***") + "******" + "\n";
+			String message = "\n" + ChatColor.DARK_BLUE + "******" + (page > 1 ? "<<<" : "***") + "******" + ChatColor.AQUA + " Enchantments Page " + page + ChatColor.DARK_BLUE + " ******" + (registered.size() < (page - 1) * 10 ? ">>>" : "***") + "******" + "\n";
 			for(int i = 0; i < 10; i++) {
 				int num = i + (page - 1) * 10;
-				if (num >= registered.size()) {
-					break;
-				}
+				if (num >= registered.size()) break;
 				CustomEnchantment enchant = registered.get(num);
-				message += shrink(
-				ChatColor.GOLD + enchant.getDisplayName() + ": " + ChatColor.WHITE + enchant.getDescription())
-				+ "\n";
+				message += shrink(ChatColor.GOLD + enchant.getDisplayName() + ": " + ChatColor.WHITE + enchant.getDescription()) + "\n";
 			}
-			message += "\n" + ChatColor.DARK_BLUE + "******" + (page > 1 ? "<<<" : "***") + "******" + ChatColor.AQUA
-			+ " Enchantments Page " + page + ChatColor.DARK_BLUE + " ******"
-			+ (registered.size() < (page - 1) * 10 ? ">>>" : "***") + "******" + "\n";
+			message += "\n" + ChatColor.DARK_BLUE + "******" + (page > 1 ? "<<<" : "***") + "******" + ChatColor.AQUA + " Enchantments Page " + page + ChatColor.DARK_BLUE + " ******" + (registered.size() < (page - 1) * 10 ? ">>>" : "***") + "******" + "\n";
 			ChatUtils.sendToConsole(Level.INFO, message);
 		}
 	}
 
 	private String shrink(String s) {
-		if (s.length() > 60) {
-			return s.substring(0, 58) + "...";
-		}
+		if (s.length() > 60) return s.substring(0, 58) + "...";
 		return s;
 	}
 

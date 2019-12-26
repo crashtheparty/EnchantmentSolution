@@ -22,20 +22,18 @@ public class SmelteryUtils {
 
 	public static void handleSmeltery(BlockBreakEvent event, Player player, Block blockBroken, ItemStack item) {
 		SmelteryMaterial smeltery = SmelteryUtils.getSmelteryItem(blockBroken, item);
-		if(smeltery != null) {
+		if (smeltery != null) {
 			ItemStack smelted = smeltery.getSmelted();
 			int experience = 0;
-			if(blockBroken.getType() == Material.IRON_ORE || blockBroken.getType() == Material.GOLD_ORE) {
+			if (blockBroken.getType() == Material.IRON_ORE || blockBroken.getType() == Material.GOLD_ORE) {
 				smelted = FortuneUtils.getFortuneForSmeltery(smelted, item);
-				if(smelted.getAmount() > 1 && smelted.getType() == Material.IRON_INGOT) {
-					AdvancementUtils.awardCriteria(player, ESAdvancement.IRONT_YOU_GLAD, "iron");
-				}
+				if (smelted.getAmount() > 1 && smelted.getType() == Material.IRON_INGOT) AdvancementUtils.awardCriteria(player, ESAdvancement.IRONT_YOU_GLAD, "iron");
 				experience = (int) (Math.random() * 3) + 1;
 			}
 			SmelteryEvent smelteryEvent = new SmelteryEvent(blockBroken, player, smelted, smeltery.getToMaterial(), experience);
 			Bukkit.getPluginManager().callEvent(smelteryEvent);
 
-			if(!smelteryEvent.isCancelled()) {
+			if (!smelteryEvent.isCancelled()) {
 				player.incrementStatistic(Statistic.MINE_BLOCK, smelteryEvent.getBlock().getType());
 				player.incrementStatistic(Statistic.USE_ITEM, item.getType());
 				McMMOHandler.handleMcMMO(event, item);
@@ -49,14 +47,12 @@ public class SmelteryUtils {
 
 	public static SmelteryEvent handleSmelteryTelepathy(Player player, Block blockBroken, ItemStack item) {
 		SmelteryMaterial smeltery = SmelteryUtils.getSmelteryItem(blockBroken, item);
-		if(smeltery != null) {
+		if (smeltery != null) {
 			ItemStack smelted = smeltery.getSmelted();
 			int experience = 0;
-			if(blockBroken.getType() == Material.IRON_ORE || blockBroken.getType() == Material.GOLD_ORE) {
+			if (blockBroken.getType() == Material.IRON_ORE || blockBroken.getType() == Material.GOLD_ORE) {
 				smelted = FortuneUtils.getFortuneForSmeltery(smelted, item);
-				if(smelted.getAmount() > 1 && smelted.getType() == Material.IRON_INGOT) {
-					AdvancementUtils.awardCriteria(player, ESAdvancement.IRONT_YOU_GLAD, "iron");
-				}
+				if (smelted.getAmount() > 1 && smelted.getType() == Material.IRON_INGOT) AdvancementUtils.awardCriteria(player, ESAdvancement.IRONT_YOU_GLAD, "iron");
 				experience = (int) (Math.random() * 3) + 1;
 			}
 			return new SmelteryEvent(blockBroken, player, smelted, smeltery.getToMaterial(), experience);
@@ -67,49 +63,35 @@ public class SmelteryUtils {
 	public static SmelteryMaterial getSmelteryItem(Block block, ItemStack item) {
 		String material = null;
 		ItemBreakType type = ItemBreakType.getType(item.getType());
-		switch(block.getType().name()) {
+		switch (block.getType().name()) {
 			case "IRON_ORE":
-				if(type != null && type.getBreakTypes().contains(block.getType())) {
-					material = "IRON_INGOT";
-				}
+				if (type != null && type.getBreakTypes().contains(block.getType())) material = "IRON_INGOT";
 				break;
 			case "GOLD_ORE":
-				if(type != null && type.getBreakTypes().contains(block.getType())) {
-					material = "GOLD_INGOT";
-				}
+				if (type != null && type.getBreakTypes().contains(block.getType())) material = "GOLD_INGOT";
 				break;
 			case "SAND":
 				material = "GLASS";
 				break;
 			case "COBBLESTONE":
-				if(type != null && type.getBreakTypes().contains(block.getType())) {
-					material = "STONE";
-				}
+				if (type != null && type.getBreakTypes().contains(block.getType())) material = "STONE";
 				break;
 			case "STONE":
-				if(type != null && type.getBreakTypes().contains(block.getType())) {
-					material = "SMOOTH_STONE";
-				}
+				if (type != null && type.getBreakTypes().contains(block.getType())) material = "SMOOTH_STONE";
 				break;
 			case "STONE_BRICKS":
-				if(type != null && type.getBreakTypes().contains(block.getType())) {
-					material = "CRACKED_STONE_BRICKS";
-				}
+				if (type != null && type.getBreakTypes().contains(block.getType())) material = "CRACKED_STONE_BRICKS";
 				break;
 			case "NETHERRACK":
-				if(type != null && type.getBreakTypes().contains(block.getType())) {
-					material = "NETHER_BRICK";
-				}
+				if (type != null && type.getBreakTypes().contains(block.getType())) material = "NETHER_BRICK";
 				break;
 			case "CLAY":
 				material = "TERRACOTTA";
 				break;
 			case "CACTUS":
-				if(VersionUtils.getBukkitVersionNumber() > 3) {
-					material = "GREEN_DYE";
-				} else {
+				if (VersionUtils.getBukkitVersionNumber() > 3) material = "GREEN_DYE";
+				else
 					material = "CACTUS_GREEN";
-				}
 				break;
 			case "SEA_PICKLE":
 				material = "LIME_DYE";
@@ -162,12 +144,11 @@ public class SmelteryUtils {
 			case "RED_TERRACOTTA":
 			case "WHITE_TERRACOTTA":
 			case "YELLOW_TERRACOTTA":
-				if(type != null && type.getBreakTypes().contains(block.getType())) {
+				if (type != null && type.getBreakTypes().contains(block.getType())) {
 					String[] terra = block.getType().name().split("_");
 					String[] newTerra = new String[terra.length + 1];
-					for(int i = 0; i < terra.length - 1; i++) {
+					for(int i = 0; i < terra.length - 1; i++)
 						newTerra[i] = terra[i];
-					}
 					newTerra[terra.length - 1] = "GLAZED";
 					newTerra[terra.length] = terra[terra.length - 1];
 					material = Strings.join(newTerra, "_");
@@ -175,28 +156,20 @@ public class SmelteryUtils {
 				}
 				break;
 			case "QUARTZ_BLOCK":
-				if(type != null && type.getBreakTypes().contains(block.getType())) {
-					material = "SMOOTH_QUARTZ";
-				}
+				if (type != null && type.getBreakTypes().contains(block.getType())) material = "SMOOTH_QUARTZ";
 				break;
 			case "SANDSTONE":
-				if(type != null && type.getBreakTypes().contains(block.getType())) {
-					material = "SMOOTH_SANDSTONE";
-				}
+				if (type != null && type.getBreakTypes().contains(block.getType())) material = "SMOOTH_SANDSTONE";
 				break;
 			case "RED_SANDSTONE":
-				if(type != null && type.getBreakTypes().contains(block.getType())) {
-					material = "SMOOTH_RED_SANDSTONE";
-				}
+				if (type != null && type.getBreakTypes().contains(block.getType())) material = "SMOOTH_RED_SANDSTONE";
 				break;
 			default:
 
 		}
-		if(material != null) {
+		if (material != null) {
 			MatData data = new MatData(material);
-			if(data.getMaterial() != null) {
-				return new SmelteryMaterial(new ItemStack(data.getMaterial()), block.getType(), data.getMaterial());
-			}
+			if (data.getMaterial() != null) return new SmelteryMaterial(new ItemStack(data.getMaterial()), block.getType(), data.getMaterial());
 		}
 		return null;
 	}

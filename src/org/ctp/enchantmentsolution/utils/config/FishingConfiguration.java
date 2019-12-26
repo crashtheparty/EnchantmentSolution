@@ -13,16 +13,12 @@ public class FishingConfiguration extends Configuration {
 		super(new File(dataFolder + "/fishing.yml"));
 
 		migrateVersion();
-		if (getConfig() != null) {
-			getConfig().writeDefaults();
-		}
+		if (getConfig() != null) getConfig().writeDefaults();
 	}
 
 	@Override
 	public void setDefaults() {
-		if (EnchantmentSolution.getPlugin().isInitializing()) {
-			ChatUtils.sendInfo("Loading fishing config...");
-		}
+		if (EnchantmentSolution.getPlugin().isInitializing()) ChatUtils.sendInfo("Loading fishing config...");
 
 		YamlConfigBackup config = getConfig();
 
@@ -30,26 +26,18 @@ public class FishingConfiguration extends Configuration {
 
 		YamlConfig defaultConfig = new YamlConfig(file, new String[] {});
 		defaultConfig.getFromConfig();
-		for(String str: defaultConfig.getAllEntryKeys()) {
-			if (defaultConfig.get(str) != null) {
-				if (str.startsWith("config_comments.")) {
-					config.addComments(str, defaultConfig.getStringList(str).toArray(new String[] {}));
-				} else {
-					config.addDefault(str, defaultConfig.get(str));
-				}
-			}
-		}
+		for(String str: defaultConfig.getAllEntryKeys())
+			if (defaultConfig.get(str) != null) if (str.startsWith("config_comments.")) config.addComments(str, defaultConfig.getStringList(str).toArray(new String[] {}));
+			else
+				config.addDefault(str, defaultConfig.get(str));
 
 		config.writeDefaults();
 
-		if (EnchantmentSolution.getPlugin().isInitializing()) {
-			ChatUtils.sendInfo("Fishing config initialized!");
-		}
+		if (EnchantmentSolution.getPlugin().isInitializing()) ChatUtils.sendInfo("Fishing config initialized!");
 		file.delete();
 	}
 
 	@Override
-	public void migrateVersion() {
-	}
+	public void migrateVersion() {}
 
 }

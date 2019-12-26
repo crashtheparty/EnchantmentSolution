@@ -36,62 +36,41 @@ public class BackupTable extends Table {
 		ResultSet rs = null;
 
 		LinkedHashMap<String, Boolean> keySame = new LinkedHashMap<String, Boolean>();
-		if (!includeConfigInv) {
-			for(String key: config.getAllEntryKeys()) {
+		if (!includeConfigInv) for(String key: config.getAllEntryKeys())
+			keySame.put(key, false);
+		else
+			for(String key: config.getConfigInventoryEntryKeys())
 				keySame.put(key, false);
-			}
-		} else {
-			for(String key: config.getConfigInventoryEntryKeys()) {
-				keySame.put(key, false);
-			}
-		}
 
 		try {
 			conn = getDb().getSQLConnection();
-			ps = conn.prepareStatement("SELECT * FROM " + getName() + " WHERE file_name = '" + config.getFileName()
-			+ "' AND backup_num = " + backupNum + " ORDER BY created_at asc;");
+			ps = conn.prepareStatement("SELECT * FROM " + getName() + " WHERE file_name = '" + config.getFileName() + "' AND backup_num = " + backupNum + " ORDER BY created_at asc;");
 
 			rs = ps.executeQuery();
 			while (rs.next()) {
 				String field = rs.getString("field");
 				if (includeConfigInv) {
-					if (config.matchConfig(field, rs.getObject("value"))) {
-						keySame.put(field, true);
-					} else {
+					if (config.matchConfig(field, rs.getObject("value"))) keySame.put(field, true);
+					else
 						keySame.put(field, false);
-					}
-				} else {
-					if (keySame.containsKey(field)) {
-						if (config.match(field, rs.getObject("value"))) {
-							keySame.put(field, true);
-						}
-					} else {
-						keySame.put(field, false);
-					}
-				}
+				} else if (keySame.containsKey(field)) {
+					if (config.match(field, rs.getObject("value"))) keySame.put(field, true);
+				} else
+					keySame.put(field, false);
 			}
 		} catch (SQLException ex) {
-			ChatUtils.sendSevere("ISSUE in \"SELECT * FROM " + getName() + " WHERE file_name = '" + config.getFileName()
-			+ "' AND backup_num = " + backupNum + " ORDER BY created_at asc;\"");
+			ChatUtils.sendSevere("ISSUE in \"SELECT * FROM " + getName() + " WHERE file_name = '" + config.getFileName() + "' AND backup_num = " + backupNum + " ORDER BY created_at asc;\"");
 			getDb().getPlugin().getLogger().log(Level.SEVERE, Errors.sqlConnectionExecute(), ex);
 		} finally {
 			try {
-				if (ps != null) {
-					ps.close();
-				}
-				if (rs != null) {
-					rs.close();
-				}
-				if (conn != null) {
-					conn.close();
-				}
+				if (ps != null) ps.close();
+				if (rs != null) rs.close();
+				if (conn != null) conn.close();
 			} catch (SQLException ex) {
 				getDb().getPlugin().getLogger().log(Level.SEVERE, Errors.sqlConnectionClose(), ex);
 			}
 		}
-		if (keySame.containsValue(false)) {
-			return true;
-		}
+		if (keySame.containsValue(false)) return true;
 		return false;
 	}
 
@@ -104,28 +83,19 @@ public class BackupTable extends Table {
 
 		try {
 			conn = getDb().getSQLConnection();
-			ps = conn.prepareStatement("SELECT * FROM " + getName() + " WHERE file_name = '" + config.getFileName()
-			+ "' ORDER BY backup_num desc LIMIT 0,1;");
+			ps = conn.prepareStatement("SELECT * FROM " + getName() + " WHERE file_name = '" + config.getFileName() + "' ORDER BY backup_num desc LIMIT 0,1;");
 
 			rs = ps.executeQuery();
-			while (rs.next()) {
+			while (rs.next())
 				backupNum = rs.getInt("backup_num");
-			}
 		} catch (SQLException ex) {
-			ChatUtils.sendSevere("ISSUE in \"SELECT * FROM " + getName() + " WHERE file_name = '" + config.getFileName()
-			+ "' ORDER BY backup_num desc LIMIT 0,1;\"");
+			ChatUtils.sendSevere("ISSUE in \"SELECT * FROM " + getName() + " WHERE file_name = '" + config.getFileName() + "' ORDER BY backup_num desc LIMIT 0,1;\"");
 			getDb().getPlugin().getLogger().log(Level.SEVERE, Errors.sqlConnectionExecute(), ex);
 		} finally {
 			try {
-				if (ps != null) {
-					ps.close();
-				}
-				if (rs != null) {
-					rs.close();
-				}
-				if (conn != null) {
-					conn.close();
-				}
+				if (ps != null) ps.close();
+				if (rs != null) rs.close();
+				if (conn != null) conn.close();
 			} catch (SQLException ex) {
 				getDb().getPlugin().getLogger().log(Level.SEVERE, Errors.sqlConnectionClose(), ex);
 			}
@@ -138,45 +108,35 @@ public class BackupTable extends Table {
 		PreparedStatement ps = null;
 		int backupNum = getBackupNum(config);
 		boolean isDifferent = isConfigDifferent(config, backupNum - 1, false);
-		if (isDifferent) {
+		if (isDifferent) try {
+			LocalDateTime date = LocalDateTime.now();
+			String dateString = date.toString();
+			conn = getDb().getSQLConnection();
+			conn.setAutoCommit(false);
+			ps = conn.prepareStatement("INSERT INTO " + getName() + " (info, file_name, backup_num, field, value, type, created_at) " + "VALUES (?, ?, ?, ?, ?, ?, ?)");
+			for(String key: config.getAllEntryKeys()) {
+				ps.setString(1, backupNum + " " + config.getFileName() + " " + key);
+				ps.setString(2, config.getFileName());
+				ps.setInt(3, backupNum);
+				ps.setString(4, key);
+				if (config.getBooleanValue(key) != null) ps.setString(5, Boolean.toString(config.getBoolean(key)));
+				else
+					ps.setObject(5, config.get(key));
+				ps.setString(6, config.getType(key));
+				ps.setString(7, dateString);
+				ps.addBatch();
+			}
+			ps.executeBatch();
+			conn.commit();
+		} catch (SQLException ex) {
+			ChatUtils.sendSevere("ISSUE on inserting multiple strings into " + config.getFileName());
+			getDb().getPlugin().getLogger().log(Level.SEVERE, Errors.sqlConnectionExecute(), ex);
+		} finally {
 			try {
-				LocalDateTime date = LocalDateTime.now();
-				String dateString = date.toString();
-				conn = getDb().getSQLConnection();
-				conn.setAutoCommit(false);
-				ps = conn.prepareStatement(
-				"INSERT INTO " + getName() + " (info, file_name, backup_num, field, value, type, created_at) "
-				+ "VALUES (?, ?, ?, ?, ?, ?, ?)");
-				for(String key: config.getAllEntryKeys()) {
-					ps.setString(1, backupNum + " " + config.getFileName() + " " + key);
-					ps.setString(2, config.getFileName());
-					ps.setInt(3, backupNum);
-					ps.setString(4, key);
-					if (config.getBooleanValue(key) != null) {
-						ps.setString(5, Boolean.toString(config.getBoolean(key)));
-					} else {
-						ps.setObject(5, config.get(key));
-					}
-					ps.setString(6, config.getType(key));
-					ps.setString(7, dateString);
-					ps.addBatch();
-				}
-				ps.executeBatch();
-				conn.commit();
-			} catch (SQLException ex) {
-				ChatUtils.sendSevere("ISSUE on inserting multiple strings into " + config.getFileName());
-				getDb().getPlugin().getLogger().log(Level.SEVERE, Errors.sqlConnectionExecute(), ex);
-			} finally {
-				try {
-					if (ps != null) {
-						ps.close();
-					}
-					if (conn != null) {
-						conn.close();
-					}
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
+				if (ps != null) ps.close();
+				if (conn != null) conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
 			}
 		}
 		return;
@@ -224,8 +184,7 @@ public class BackupTable extends Table {
 						break;
 					case "enum_list":
 					case "list":
-						String[] values = config.replaceLast(rs.getString("value").replaceFirst("\\[", ""), "]", "")
-						.split(", ");
+						String[] values = config.replaceLast(rs.getString("value").replaceFirst("\\[", ""), "]", "").split(", ");
 						obj = Arrays.asList(values);
 						break;
 				}
@@ -237,15 +196,9 @@ public class BackupTable extends Table {
 			getDb().getPlugin().getLogger().log(Level.SEVERE, Errors.sqlConnectionExecute(), ex);
 		} finally {
 			try {
-				if (ps != null) {
-					ps.close();
-				}
-				if (rs != null) {
-					rs.close();
-				}
-				if (conn != null) {
-					conn.close();
-				}
+				if (ps != null) ps.close();
+				if (rs != null) rs.close();
+				if (conn != null) conn.close();
 			} catch (SQLException ex) {
 				getDb().getPlugin().getLogger().log(Level.SEVERE, Errors.sqlConnectionClose(), ex);
 			}

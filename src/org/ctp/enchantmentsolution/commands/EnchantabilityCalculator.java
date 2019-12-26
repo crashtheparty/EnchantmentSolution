@@ -18,9 +18,8 @@ public class EnchantabilityCalculator implements CommandExecutor {
 				EnchantabilityCalc inv = new EnchantabilityCalc(player);
 				EnchantmentSolution.getPlugin().addInventory(inv);
 				inv.setInventory();
-			} else {
+			} else
 				ChatUtils.sendMessage(player, ChatUtils.getMessage(ChatUtils.getCodes(), "commands.no-permission"));
-			}
 		}
 		return true;
 	}

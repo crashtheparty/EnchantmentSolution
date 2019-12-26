@@ -8,9 +8,9 @@ import org.ctp.enchantmentsolution.enums.ItemBreakType;
 
 public class SilkTouchUtils {
 
-	public static ItemStack getSilkTouchItem(Block block, ItemStack item){
+	public static ItemStack getSilkTouchItem(Block block, ItemStack item) {
 		ItemBreakType type = ItemBreakType.getType(item.getType());
-		switch(block.getType().name()) {
+		switch (block.getType().name()) {
 			case "COAL_ORE":
 			case "NETHER_QUARTZ_ORE":
 			case "STONE":
@@ -18,46 +18,32 @@ public class SilkTouchUtils {
 			case "EMERALD_ORE":
 			case "DIAMOND_ORE":
 			case "REDSTONE_ORE":
-				if(type != null && type.getBreakTypes().contains(block.getType())) {
-					return new ItemStack(block.getType());
-				}
+				if (type != null && type.getBreakTypes().contains(block.getType())) return new ItemStack(block.getType());
 				break;
 			case "INFESTED_STONE":
-				if(type != null && type.getBreakTypes().contains(block.getType())) {
-					return new ItemStack(Material.STONE);
-				}
+				if (type != null && type.getBreakTypes().contains(block.getType())) return new ItemStack(Material.STONE);
 				return null;
 			case "INFESTED_COBBLESTONE":
-				if(type != null && type.getBreakTypes().contains(block.getType())) {
-					if(ItemUtils.hasEnchantment(item, RegisterEnchantments.SMELTERY)) {
-						return new ItemStack(Material.STONE);
-					}
+				if (type != null && type.getBreakTypes().contains(block.getType())) {
+					if (ItemUtils.hasEnchantment(item, RegisterEnchantments.SMELTERY)) return new ItemStack(Material.STONE);
 					return new ItemStack(Material.COBBLESTONE);
 				}
 				return null;
 			case "INFESTED_STONE_BRICKS":
-				if(type != null && type.getBreakTypes().contains(block.getType())) {
-					if(ItemUtils.hasEnchantment(item, RegisterEnchantments.SMELTERY)) {
-						return new ItemStack(Material.CRACKED_STONE_BRICKS);
-					}
+				if (type != null && type.getBreakTypes().contains(block.getType())) {
+					if (ItemUtils.hasEnchantment(item, RegisterEnchantments.SMELTERY)) return new ItemStack(Material.CRACKED_STONE_BRICKS);
 					return new ItemStack(Material.STONE_BRICKS);
 				}
 				return null;
 			case "INFESTED_CRACKED_STONE_BRICKS":
-				if(type != null && type.getBreakTypes().contains(block.getType())) {
-					return new ItemStack(Material.CRACKED_STONE_BRICKS);
-				}
+				if (type != null && type.getBreakTypes().contains(block.getType())) return new ItemStack(Material.CRACKED_STONE_BRICKS);
 				return null;
 			case "SNOW_BLOCK":
 			case "SNOW":
-				if(type != null && type.getBreakTypes().contains(block.getType())) {
-					return new ItemStack(block.getType());
-				}
+				if (type != null && type.getBreakTypes().contains(block.getType())) return new ItemStack(block.getType());
 				return null;
 			case "CAMPFIRE":
-				if(type != null && type.getBreakTypes().contains(block.getType())) {
-					return new ItemStack(Material.CAMPFIRE);
-				}
+				if (type != null && type.getBreakTypes().contains(block.getType())) return new ItemStack(Material.CAMPFIRE);
 				return null;
 			case "BOOKSHELF":
 			case "CLAY":
@@ -140,9 +126,7 @@ public class SilkTouchUtils {
 			case "FIRE_CORAL_BLOCK":
 			case "HORN_CORAL_BLOCK":
 			case "TUBE_CORAL_BLOCK":
-				if(type != null && type.getBreakTypes().contains(block.getType())) {
-					return new ItemStack(block.getType());
-				}
+				if (type != null && type.getBreakTypes().contains(block.getType())) return new ItemStack(block.getType());
 				break;
 			default:
 				break;

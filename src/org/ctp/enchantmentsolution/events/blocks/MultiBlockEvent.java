@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 
 public abstract class MultiBlockEvent extends Event implements Cancellable {
 
@@ -24,10 +25,12 @@ public abstract class MultiBlockEvent extends Event implements Cancellable {
 	private Collection<Block> blocks;
 	private final Player player;
 	private boolean cancelled;
+	private final EnchantmentLevel enchantment;
 
-	public MultiBlockEvent(Collection<Block> blocks, Player player) {
+	public MultiBlockEvent(Collection<Block> blocks, Player player, EnchantmentLevel enchantment) {
 		this.blocks = blocks;
 		this.player = player;
+		this.enchantment = enchantment;
 	}
 
 	public Collection<Block> getBlocks() {
@@ -44,5 +47,9 @@ public abstract class MultiBlockEvent extends Event implements Cancellable {
 
 	public void setCancelled(boolean cancelled) {
 		this.cancelled = cancelled;
+	}
+
+	public EnchantmentLevel getEnchantment() {
+		return enchantment;
 	}
 }

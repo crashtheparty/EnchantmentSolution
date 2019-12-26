@@ -20,13 +20,13 @@ public class McMMOFishing {
 	}
 
 	public void remove(McMMOFishingThread thread) {
-		if(PLAYER_ITEMS.contains(thread)) {
+		if (PLAYER_ITEMS.contains(thread)) {
 			Bukkit.getScheduler().cancelTask(thread.getScheduler());
 			PLAYER_ITEMS.remove(thread);
 		}
 	}
 
-	public List<McMMOFishingThread> getPlayerItems(){
+	public List<McMMOFishingThread> getPlayerItems() {
 		return PLAYER_ITEMS;
 	}
 }

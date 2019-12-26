@@ -2,18 +2,18 @@ package org.ctp.enchantmentsolution.events.blocks;
 
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Cancellable;
 import org.bukkit.inventory.ItemStack;
+import org.ctp.enchantmentsolution.enchantments.CERegister;
+import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 
-public class GoldDiggerEvent extends ModifyBlockEvent implements Cancellable {
+public class GoldDiggerEvent extends ModifyBlockEvent {
 
 	private Block block;
 	private ItemStack goldItem;
 	private int expToDrop;
-	private boolean cancelled;
 
-	public GoldDiggerEvent(Player player, Block block, ItemStack goldItem, int expToDrop) {
-		super(player);
+	public GoldDiggerEvent(Player player, int level, Block block, ItemStack goldItem, int expToDrop) {
+		super(player, new EnchantmentLevel(CERegister.GOLD_DIGGER, level));
 		setBlock(block);
 		setGoldItem(goldItem);
 		setExpToDrop(expToDrop);
@@ -41,15 +41,5 @@ public class GoldDiggerEvent extends ModifyBlockEvent implements Cancellable {
 
 	public void setExpToDrop(int expToDrop) {
 		this.expToDrop = expToDrop;
-	}
-
-	@Override
-	public boolean isCancelled() {
-		return cancelled;
-	}
-
-	@Override
-	public void setCancelled(boolean cancelled) {
-		this.cancelled = cancelled;
 	}
 }

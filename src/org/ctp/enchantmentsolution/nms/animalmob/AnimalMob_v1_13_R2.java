@@ -77,48 +77,37 @@ public class AnimalMob_v1_13_R2 extends AnimalMob {
 
 		try {
 			mob.setMob(EntityType.valueOf(config.getString("animals." + i + ".entity_type")));
-		} catch (Exception ex) {
-		}
+		} catch (Exception ex) {}
 		try {
 			mob.setSheepColor(DyeColor.valueOf(config.getString("animals." + i + ".sheep_color")));
-		} catch (Exception ex) {
-		}
+		} catch (Exception ex) {}
 		try {
 			mob.setWolfCollar(DyeColor.valueOf(config.getString("animals." + i + ".wolf_collar")));
-		} catch (Exception ex) {
-		}
+		} catch (Exception ex) {}
 		try {
 			mob.setHorseStyle(Style.valueOf(config.getString("animals." + i + ".horse_style")));
-		} catch (Exception ex) {
-		}
+		} catch (Exception ex) {}
 		try {
 			mob.setHorseColor(Color.valueOf(config.getString("animals." + i + ".horse_color")));
-		} catch (Exception ex) {
-		}
+		} catch (Exception ex) {}
 		try {
 			mob.setLlamaColor(org.bukkit.entity.Llama.Color.valueOf(config.getString("animals." + i + ".llama_color")));
-		} catch (Exception ex) {
-		}
+		} catch (Exception ex) {}
 		try {
 			mob.setParrotVariant(Variant.valueOf(config.getString("animals." + i + ".parrot_variant")));
-		} catch (Exception ex) {
-		}
+		} catch (Exception ex) {}
 		try {
 			((AnimalMob_v1_13_R2) mob).setOcelotType(Type.valueOf(config.getString("animals." + i + ".ocelot_type")));
-		} catch (Exception ex) {
-		}
+		} catch (Exception ex) {}
 		try {
 			mob.setRabbitType(org.bukkit.entity.Rabbit.Type.valueOf(config.getString("animals." + i + ".rabbit_type")));
-		} catch (Exception ex) {
-		}
+		} catch (Exception ex) {}
 		try {
 			mob.setSaddle(ItemSerialization.stringToItem(config.getString("animals." + i + ".saddle")));
-		} catch (Exception ex) {
-		}
+		} catch (Exception ex) {}
 		try {
 			mob.setArmor(ItemSerialization.stringToItem(config.getString("animals." + i + ".armor")));
-		} catch (Exception ex) {
-		}
+		} catch (Exception ex) {}
 
 		Map<Integer, ItemStack> inventoryItems = new HashMap<Integer, ItemStack>();
 		List<String> inventoryKeys = config.getConfigurationInfo("animals." + i + ".inventory_items");
@@ -128,14 +117,12 @@ public class AnimalMob_v1_13_R2 extends AnimalMob {
 				int num = Integer.parseInt(keyNum);
 				inventoryItems.put(num, ItemSerialization.stringToItem(config.getString(key)));
 				config.removeKey(key);
-			} catch (Exception ex) {
-			}
+			} catch (Exception ex) {}
 		}
 		mob.setInventoryItems(inventoryItems);
 
-		for(String key: config.getConfigurationInfo("animals." + i)) {
+		for(String key: config.getConfigurationInfo("animals." + i))
 			config.removeKey(key);
-		}
 		EnchantmentSolution.addAnimals(mob);
 		return mob;
 	}

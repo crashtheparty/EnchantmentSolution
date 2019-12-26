@@ -36,16 +36,12 @@ public class McMMOAbility implements Listener {
 
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onMcMMOAbilityActivated(McMMOPlayerAbilityActivateEvent event) {
-		if (isTreeFeller(event) && !IGNORE_PLAYERS.contains(event.getPlayer())) {
-			IGNORE_PLAYERS.add(event.getPlayer());
-		}
+		if (isTreeFeller(event) && !IGNORE_PLAYERS.contains(event.getPlayer())) IGNORE_PLAYERS.add(event.getPlayer());
 	}
 
 	private boolean isTreeFeller(McMMOPlayerAbilityEvent event) {
 		if (VersionUtils.getMcMMOType().equals("Overhaul")) {
-			if (event.getAbility().equals(SuperAbilityType.TREE_FELLER)) {
-				return true;
-			}
+			if (event.getAbility().equals(SuperAbilityType.TREE_FELLER)) return true;
 		} else {
 			Class<?> clazz = null;
 			Class<?> abilityClazz = null;
@@ -55,21 +51,14 @@ public class McMMOAbility implements Listener {
 			} catch (ClassNotFoundException e) {
 				e.printStackTrace();
 			}
-			if (clazz != null && abilityClazz != null) {
-				for(Object obj: clazz.getEnumConstants()) {
-					String name = obj.toString().toUpperCase();
-					if (name.equals("TREE_FELLER")) {
-						try {
-							Method method = abilityClazz.getDeclaredMethod("getAbility");
-							Object returnType = method.invoke(event);
-							if (returnType.toString().toUpperCase().equals(name)) {
-								return true;
-							}
-						} catch (NoSuchMethodException | SecurityException | IllegalAccessException
-						| IllegalArgumentException | InvocationTargetException e) {
-							e.printStackTrace();
-						}
-					}
+			if (clazz != null && abilityClazz != null) for(Object obj: clazz.getEnumConstants()) {
+				String name = obj.toString().toUpperCase();
+				if (name.equals("TREE_FELLER")) try {
+					Method method = abilityClazz.getDeclaredMethod("getAbility");
+					Object returnType = method.invoke(event);
+					if (returnType.toString().toUpperCase().equals(name)) return true;
+				} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+					e.printStackTrace();
 				}
 			}
 		}
@@ -85,21 +74,13 @@ public class McMMOAbility implements Listener {
 				if (meta != null) {
 					List<String> lore = new ArrayList<String>();
 					List<String> previousLore = meta.getLore();
-					if (previousLore != null) {
-						for(String l: previousLore) {
-							if (!StringUtils.isEnchantment(l)) {
-								lore.add(l);
-							}
-						}
-					}
-					Iterator<Entry<Enchantment, Integer>> enchantmentLevels = meta.getEnchants().entrySet()
-					.iterator();
+					if (previousLore != null) for(String l: previousLore)
+						if (!StringUtils.isEnchantment(l)) lore.add(l);
+					Iterator<Entry<Enchantment, Integer>> enchantmentLevels = meta.getEnchants().entrySet().iterator();
 					while (enchantmentLevels.hasNext()) {
 						Entry<Enchantment, Integer> entry = enchantmentLevels.next();
 						CustomEnchantment custom = RegisterEnchantments.getCustomEnchantment(entry.getKey());
-						if (custom != null && entry.getKey() instanceof CustomEnchantmentWrapper) {
-							lore.add(ChatUtils.hideText("solution") + "" + ChatColor.GRAY + custom.getName());
-						}
+						if (custom != null && entry.getKey() instanceof CustomEnchantmentWrapper) lore.add(ChatUtils.hideText("solution") + "" + ChatColor.GRAY + custom.getName());
 					}
 					meta = ItemUtils.setLore(meta, lore);
 					item.setItemMeta(meta);
@@ -110,9 +91,7 @@ public class McMMOAbility implements Listener {
 
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onMcMMOAbilityDeactivated(McMMOPlayerAbilityDeactivateEvent event) {
-		if (isTreeFeller(event)) {
-			IGNORE_PLAYERS.remove(event.getPlayer());
-		}
+		if (isTreeFeller(event)) IGNORE_PLAYERS.remove(event.getPlayer());
 	}
 
 	public static List<Player> getIgnored() {

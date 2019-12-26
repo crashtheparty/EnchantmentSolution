@@ -34,9 +34,7 @@ public class Configurations {
 		File dataFolder = EnchantmentSolution.getPlugin().getDataFolder();
 
 		try {
-			if (!dataFolder.exists()) {
-				dataFolder.mkdirs();
-			}
+			if (!dataFolder.exists()) dataFolder.mkdirs();
 		} catch (final Exception e) {
 			e.printStackTrace();
 		}
@@ -48,35 +46,24 @@ public class Configurations {
 
 		String languageFile = CONFIG.getString("language_file");
 		Language lang = Language.getLanguage(CONFIG.getString("language"));
-		if (!lang.getLocale().equals(CONFIG.getString("language"))) {
-			CONFIG.updatePath("language", lang.getLocale());
-		}
+		if (!lang.getLocale().equals(CONFIG.getString("language"))) CONFIG.updatePath("language", lang.getLocale());
 
 		File languages = new File(dataFolder + "/language");
 
-		if (!languages.exists()) {
-			languages.mkdirs();
-		}
+		if (!languages.exists()) languages.mkdirs();
 
 		LANGUAGE_FILES.add(new LanguageFile(dataFolder, Language.US));
 		LANGUAGE_FILES.add(new LanguageFile(dataFolder, Language.GERMAN));
 		LANGUAGE_FILES.add(new LanguageFile(dataFolder, Language.CHINA_SIMPLE));
 
-		for(LanguageFile file: LANGUAGE_FILES) {
-			if (file.getLanguage() == lang) {
-				LANGUAGE = new LanguageConfiguration(dataFolder, languageFile, file);
-			}
-		}
+		for(LanguageFile file: LANGUAGE_FILES)
+			if (file.getLanguage() == lang) LANGUAGE = new LanguageConfiguration(dataFolder, languageFile, file);
 
-		if (LANGUAGE == null) {
-			LANGUAGE = new LanguageConfiguration(dataFolder, languageFile, LANGUAGE_FILES.get(0));
-		}
+		if (LANGUAGE == null) LANGUAGE = new LanguageConfiguration(dataFolder, languageFile, LANGUAGE_FILES.get(0));
 
 		File extras = new File(dataFolder + "/extras");
 
-		if (!extras.exists()) {
-			extras.mkdirs();
-		}
+		if (!extras.exists()) extras.mkdirs();
 
 		DATA_FILE = new DataFile(dataFolder, "data.yml");
 
@@ -117,9 +104,8 @@ public class Configurations {
 		DBUtils.updateConfig(ENCHANTMENTS);
 		DBUtils.updateConfig(ADVANCEMENTS);
 
-		if(!EnchantmentSolution.getPlugin().isInitializing()) {
-			EnchantmentSolution.getPlugin().setVersionCheck(ConfigString.LATEST_VERSION.getBoolean(),
-			ConfigString.EXPERIMENTAL_VERSION.getBoolean());
+		if (!EnchantmentSolution.getPlugin().isInitializing()) {
+			EnchantmentSolution.getPlugin().setVersionCheck(ConfigString.LATEST_VERSION.getBoolean(), ConfigString.EXPERIMENTAL_VERSION.getBoolean());
 			AdvancementUtils.createAdvancements();
 		}
 	}
@@ -144,35 +130,20 @@ public class Configurations {
 		YamlConfigBackup enchantments = ENCHANTMENTS.getConfig();
 		YamlConfigBackup advancements = ADVANCEMENTS.getConfig();
 
-		for(String s: config.getAllEntryKeys()) {
-			if (config.contains(s)) {
-				backup.set("config." + s, config.get(s));
-			}
-		}
+		for(String s: config.getAllEntryKeys())
+			if (config.contains(s)) backup.set("config." + s, config.get(s));
 
-		for(String s: fishing.getAllEntryKeys()) {
-			if (fishing.contains(s)) {
-				backup.set("fishing." + s, fishing.get(s));
-			}
-		}
+		for(String s: fishing.getAllEntryKeys())
+			if (fishing.contains(s)) backup.set("fishing." + s, fishing.get(s));
 
-		for(String s: language.getAllEntryKeys()) {
-			if (language.contains(s)) {
-				backup.set("language." + s, language.get(s));
-			}
-		}
+		for(String s: language.getAllEntryKeys())
+			if (language.contains(s)) backup.set("language." + s, language.get(s));
 
-		for(String s: advancements.getAllEntryKeys()) {
-			if (advancements.contains(s)) {
-				backup.set("advancements." + s, advancements.get(s));
-			}
-		}
+		for(String s: advancements.getAllEntryKeys())
+			if (advancements.contains(s)) backup.set("advancements." + s, advancements.get(s));
 
-		for(String s: enchantments.getAllEntryKeys()) {
-			if (enchantments.contains(s)) {
-				backup.set("enchantment." + s, enchantments.get(s));
-			}
-		}
+		for(String s: enchantments.getAllEntryKeys())
+			if (enchantments.contains(s)) backup.set("enchantment." + s, enchantments.get(s));
 
 		backup.saveConfig();
 	}

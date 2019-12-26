@@ -19,27 +19,21 @@ public class AdvancementsConfiguration extends Configuration {
 
 	@Override
 	public void setDefaults() {
-		if (EnchantmentSolution.getPlugin().isInitializing()) {
-			ChatUtils.sendInfo("Loading advancements configuration...");
-		}
+		if (EnchantmentSolution.getPlugin().isInitializing()) ChatUtils.sendInfo("Loading advancements configuration...");
 		YamlConfigBackup config = getConfig();
 
-		for(ESAdvancement advancement: ESAdvancement.values()) {
-			if (advancement == ESAdvancement.ENCHANTMENT_SOLUTION) {
+		for(ESAdvancement advancement: ESAdvancement.values())
+			if (advancement.getParent() == null) {
 				config.addDefault("advancements." + advancement.getNamespace().getKey() + ".enable", false);
 				config.addDefault("advancements." + advancement.getNamespace().getKey() + ".toast", false);
 				config.addDefault("advancements." + advancement.getNamespace().getKey() + ".announce", false);
-			} else if (advancement.getActivatedVersion() < EnchantmentSolution.getPlugin().getBukkitVersion()
-			.getVersionNumber()) {
+			} else if (advancement.getActivatedVersion() < EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber()) {
 				config.addDefault("advancements." + advancement.getNamespace().getKey() + ".enable", true);
 				config.addDefault("advancements." + advancement.getNamespace().getKey() + ".toast", true);
 				config.addDefault("advancements." + advancement.getNamespace().getKey() + ".announce", true);
 			}
-		}
 
-		if (EnchantmentSolution.getPlugin().isInitializing()) {
-			ChatUtils.sendInfo("Advancements configuration initialized!");
-		}
+		if (EnchantmentSolution.getPlugin().isInitializing()) ChatUtils.sendInfo("Advancements configuration initialized!");
 	}
 
 	@Override
@@ -47,13 +41,12 @@ public class AdvancementsConfiguration extends Configuration {
 		YamlConfigBackup config = getConfig();
 		YamlConfigBackup main = Configurations.getConfig().getConfig();
 
-		for(String s : main.getLevelEntryKeys("advancements")) {
-			for(String t : main.getLevelEntryKeys(s)) {
-				if(main.get(t) != null) {
+		for(String s: main.getLevelEntryKeys("advancements")) {
+			for(String t: main.getLevelEntryKeys(s))
+				if (main.get(t) != null) {
 					config.set(t, main.get(t));
 					main.removeKey(t);
 				}
-			}
 			main.removeKey(s);
 		}
 		main.saveConfig();

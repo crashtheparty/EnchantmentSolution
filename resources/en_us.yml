@@ -95,6 +95,51 @@ grindstone:
     take-enchantments: '&aLevel Cost: &9%levelCost%'
     take-enchantments-lore: 
     - '&fAll enchantments from the item will go into the book'
+calc:
+    name: '&9Enchantability Calculator'
+    enchantments: '&9%name%'
+    enchantments_lore:
+    - '&6Enchantability Constant: &3%constant%'
+    - '&6Enchantability Modifier: &3%modifier%'
+    pagination:
+        go_back: '&9Go Back'
+        previous_page: '&9Previous Page'
+        next_page: '&9Next Page'
+        enchantability_by_level: '&9View Enchantability by Level'
+    info:
+        constant: '&9Enchantability Constant'
+        constant_lore:
+        - '&6Current Value: &3%constant%'
+        - '&7Left click to edit with anvil'
+        - '&7Right click to edit in chat'
+        modifier: '&9Enchantability Modifier'
+        modifier_lore:
+        - '&6Current Value: &3%modifier%'
+        - '&7Left click to edit with anvil'
+        - '&7Right click to edit in chat'
+        select_enchantment: '&9Select from Enchantment'
+        calculate: '&9Calculate'
+    enchantability_values:
+        wooden_tools: '&9Wooden Tools and Weapons'
+        golden_tools: '&9Golden Tools and Weapons'
+        stone_tools: '&9Stone Tools and Weapons'
+        iron_tools: '&9Iron Tools and Weapons'
+        diamond_tools: '&9Diamond Tools and Weapons'
+        leather_armor: '&9Leather Armor'
+        golden_armor: '&9Golden Armor'
+        chainmail_armor: '&9Chainmail Armor'
+        iron_armor: '&9Iron Armor'
+        diamond_armor: '&9Diamond Armor'
+        other: '&9Books and Other Items'
+    enchantability_lore:
+    - '&6Resource Enchantability: &3%resource%'
+    - '&6Max Level from Enchantability: &3%max_level%'
+    - '&6Max Enchantability at Level %level%: &3%max_enchantability%'
+    by_level: '&9Level %level%'
+    by_level_lore:
+    - '&6Required Enchantability: &3%constant%+'
+    invalid_number: 'Invalid number, setting to 0.'
+    enter_string: 'Enter the string message into the chat.'
 
 enchantment: 
     name: '&6Display Name: &f'
@@ -347,11 +392,25 @@ misc:
     true: "True"
     false: "False"
     beheading_skull: "&7%player%'s Skull"
+    null_advancement_name: "No Name"
+    null_advancement_description: "No Description"
 
 advancements: 
-    enchantments/enchantment_solution: 
-        name: 'Enchantment Solution'
-        description: 'Advancements surrounding the added enchantments'
+    enchantments/agricultural_revolution: 
+        name: 'Agricultural Revolution'
+        description: 'Who likes farming and animals? We do!'
+    enchantments/industrial_revolution: 
+        name: 'Industrial Revolution'
+        description: 'Simplifying your life, one environmentally-destructive way at a time.'
+    enchantments/scientific_revolution: 
+        name: 'Scientific Revolution'
+        description: 'Marvelous wonders or dystopian nightmares? You decide.'
+    enchantments/imperial_revolution: 
+        name: 'Imperial Revolution'
+        description: 'Conquer the world! Take no prisoners.'
+    enchantments/mechanical_revolution: 
+        name: 'Mechanical Revolution'
+        description: 'Hop into your new mech suit and go save the day!'
     enchantments/fish_sticks: 
         name: 'Fish Sticks'
         description: 'Cook a fish with Fried'
@@ -544,3 +603,21 @@ advancements:
     enchantments/over_9000: 
         name: 'Over 9000'
         description: 'Collect 9001 extra items with Height++ or Width++'
+    enchantments/plague_inc: 
+        name: 'Plague Inc.'
+        description: 'Spread the Contagion Curse to another item'
+    enchantments/blast_off: 
+        name: 'Blast Off'
+        description: 'Detonate a creeper faster than usual'
+    enchantments/extermination: 
+        name: 'Extermination'
+        description: 'Infect an item with all possible curses'
+    enchantments/penetration: 
+        name: 'Penetration'
+        description: 'Damage a mob with a projectile when it shouldn''t do damage'
+    enchantments/carpet_bombs: 
+        name: 'Carpet Bombs'
+        description: 'Cause 100 explosions with Detonator'
+    enchantments/kilimanjaro: 
+        name: 'Kilimanjaro!'
+        description: 'Kill 10 mobs within 4.5 seconds with Overkill'
