@@ -3,7 +3,11 @@ package org.ctp.enchantmentsolution.nms;
 import org.bukkit.entity.Animals;
 import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
-import org.ctp.enchantmentsolution.nms.animalmob.*;
+import org.ctp.enchantmentsolution.nms.animalmob.AnimalMob;
+import org.ctp.enchantmentsolution.nms.animalmob.AnimalMob_v1_13_R1;
+import org.ctp.enchantmentsolution.nms.animalmob.AnimalMob_v1_13_R2;
+import org.ctp.enchantmentsolution.nms.animalmob.AnimalMob_v1_14_R1;
+import org.ctp.enchantmentsolution.nms.animalmob.AnimalMob_v1_15_R1;
 import org.ctp.enchantmentsolution.utils.yaml.YamlConfig;
 
 public class AnimalMobNMS {
@@ -22,6 +26,7 @@ public class AnimalMobNMS {
 			case 8:
 				return new AnimalMob_v1_14_R1(animal, item);
 			case 9:
+			case 10:
 				return new AnimalMob_v1_15_R1(animal, item);
 		}
 		return null;
@@ -37,6 +42,8 @@ public class AnimalMobNMS {
 			case 6:
 			case 7:
 			case 8:
+			case 9:
+			case 10:
 				return true;
 		}
 		return false;
@@ -56,6 +63,7 @@ public class AnimalMobNMS {
 			case 8:
 				return AnimalMob_v1_14_R1.createFromConfig(config, i);
 			case 9:
+			case 10:
 				return AnimalMob_v1_15_R1.createFromConfig(config, i);
 		}
 		return null;
