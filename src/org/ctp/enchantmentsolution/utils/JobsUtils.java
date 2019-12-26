@@ -20,7 +20,7 @@ import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 
 import com.gamingmesh.jobs.Jobs;
 import com.gamingmesh.jobs.CMILib.CMIEnchantment;
-import com.gamingmesh.jobs.CMILib.ItemManager.CMIMaterial;
+import com.gamingmesh.jobs.CMILib.CMIMaterial;
 import com.gamingmesh.jobs.actions.BlockActionInfo;
 import com.gamingmesh.jobs.actions.EnchantActionInfo;
 import com.gamingmesh.jobs.actions.ItemActionInfo;
@@ -202,12 +202,10 @@ public class JobsUtils {
 
 		FastPayment fp = Jobs.FastPayment.get(player.getUniqueId());
 		if (fp != null) {
-			if (fp.getTime() > System.currentTimeMillis()) {
-				if (fp.getInfo().getName().equalsIgnoreCase(bInfo.getName())
-						|| fp.getInfo().getNameWithSub().equalsIgnoreCase(bInfo.getNameWithSub())) {
-					Jobs.perform(fp.getPlayer(), fp.getInfo(), fp.getPayment(), fp.getJob());
-					return;
-				}
+			if (fp.getTime() > System.currentTimeMillis()) if (fp.getInfo().getName().equalsIgnoreCase(bInfo.getName())
+					|| fp.getInfo().getNameWithSub().equalsIgnoreCase(bInfo.getNameWithSub())) {
+				Jobs.perform(fp.getPlayer(), fp.getInfo(), fp.getPayment(), fp.getJob());
+				return;
 			}
 			Jobs.FastPayment.remove(player.getUniqueId());
 		}
@@ -219,17 +217,10 @@ public class JobsUtils {
 
 		// Item in hand
 		ItemStack item = Jobs.getNms().getItemInMainHand(player);
-		if (item != null && !item.getType().equals(Material.AIR)) {
-			// Protection for block break with silktouch
-			if (Jobs.getGCManager().useSilkTouchProtection) {
-				for(Entry<Enchantment, Integer> one: item.getEnchantments().entrySet()) {
-					if (CMIEnchantment.get(one.getKey()) == CMIEnchantment.SILK_TOUCH) {
-						if (Jobs.getBpManager().isInBp(block))
-							return;
-					}
-				}
-			}
-		}
+		if (item != null && !item.getType().equals(Material.AIR)) // Protection for block break with silktouch
+		if (Jobs.getGCManager().useSilkTouchProtection) for(Entry<Enchantment, Integer> one: item.getEnchantments().entrySet())
+			if (CMIEnchantment.get(one.getKey()) == CMIEnchantment.SILK_TOUCH) if (Jobs.getBpManager().isInBp(block))
+				return;
 
 		JobsPlayer jPlayer = Jobs.getPlayerManager().getJobsPlayer(player);
 		if (jPlayer == null)
@@ -329,14 +320,10 @@ public class JobsUtils {
 						.getMaxDurability()) {
 			for(String whiteList: Jobs.getGCManager().WhiteListedItems) {
 				String item = whiteList.contains("=") ? whiteList.split("=")[0] : whiteList;
-				if (item.contains("-")) {
-					item = item.split("-")[0];
-				}
+				if (item.contains("-")) item = item.split("-")[0];
 
 				CMIMaterial mat = CMIMaterial.get(item);
-				if (mat == null) {
-					mat = CMIMaterial.get(item.replace(" ", "_").toUpperCase());
-				}
+				if (mat == null) mat = CMIMaterial.get(item.replace(" ", "_").toUpperCase());
 
 				if (mat == null) {
 					// try integer method
@@ -345,20 +332,12 @@ public class JobsUtils {
 						matId = Integer.valueOf(item);
 					} catch (NumberFormatException e) {
 					}
-					if (matId != null) {
-						mat = CMIMaterial.get(matId);
-					}
+					if (matId != null) mat = CMIMaterial.get(matId);
 				}
 
-				if (whiteList.contains("=") && whiteList.split("=").length == 2) {
-					if (!hand.getEnchantments().containsKey(CMIEnchantment.getEnchantment(whiteList.split("=")[1]))) {
-						return false;
-					}
-				}
+				if (whiteList.contains("=") && whiteList.split("=").length == 2) if (!hand.getEnchantments().containsKey(CMIEnchantment.getEnchantment(whiteList.split("=")[1]))) return false;
 
-				if (mat != null && hand.getType().equals(mat.getMaterial())) {
-					return true;
-				}
+				if (mat != null && hand.getType().equals(mat.getMaterial())) return true;
 			}
 			return false;
 		}

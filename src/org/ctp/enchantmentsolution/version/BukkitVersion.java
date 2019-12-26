@@ -53,6 +53,9 @@ public class BukkitVersion {
 			case "1.15":
 				versionNumber = 9;
 				return true;
+			case "1.15.1":
+				versionNumber = 10;
+				return true;
 		}
 		return false;
 	}
