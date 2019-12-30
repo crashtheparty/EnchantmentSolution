@@ -1,18 +1,10 @@
 package org.ctp.enchantmentsolution.listeners.enchantments;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 
 import org.bukkit.Bukkit;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Projectile;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -28,8 +20,8 @@ import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.events.damage.SacrificeEvent;
 import org.ctp.enchantmentsolution.events.player.ExperienceEvent;
-import org.ctp.enchantmentsolution.events.player.PillageEvent;
 import org.ctp.enchantmentsolution.events.player.ExperienceEvent.ExpShareType;
+import org.ctp.enchantmentsolution.events.player.PillageEvent;
 import org.ctp.enchantmentsolution.listeners.Enchantmentable;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.items.AbilityUtils;
@@ -137,7 +129,10 @@ public class AfterEffectsListener extends Enchantmentable {
 
 			if (!sacrifice.isCancelled()) {
 				((LivingEntity) sacrifice.getEntity()).damage(sacrifice.getNewDamage(), sacrifice.getDamager());
-				if (((LivingEntity) sacrifice.getEntity()).getHealth() <= 0) SACRIFICE_ADVANCEMENT.add(player.getUniqueId());
+				if (sacrifice.getEntity() instanceof Player) {
+					Player dead = (Player) sacrifice.getEntity();
+					if(dead.getHealth() <= 0) SACRIFICE_ADVANCEMENT.add(player.getUniqueId());
+				}
 			}
 		}
 	}

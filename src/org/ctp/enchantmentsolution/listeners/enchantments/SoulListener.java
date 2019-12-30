@@ -4,10 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.Particle;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.PlayerDeathEvent;
@@ -51,7 +48,7 @@ public class SoulListener extends Enchantmentable {
 
 		if (!soulboundEvent.isCancelled()) {
 			ItemStack killItem = null;
-			if (player.getKiller() != null) if (player.getKiller() instanceof Player) killItem = player.getKiller().getInventory().getItemInMainHand();
+			if (player.getKiller() != null) killItem = player.getKiller().getInventory().getItemInMainHand();
 
 			List<ItemStack> savedItems = new ArrayList<ItemStack>();
 			savedItems.addAll(soulboundEvent.getSavedItems());
@@ -70,7 +67,7 @@ public class SoulListener extends Enchantmentable {
 				}
 
 				if (soulReaper.size() > 0) {
-					SoulReaperEvent soulReaperEvent = new SoulReaperEvent(player, level, soulReaper);
+					SoulReaperEvent soulReaperEvent = new SoulReaperEvent(player, player.getKiller(), level, soulReaper);
 					Bukkit.getPluginManager().callEvent(soulReaperEvent);
 
 					if (!soulReaperEvent.isCancelled()) {

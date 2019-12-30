@@ -1,17 +1,11 @@
 package org.ctp.enchantmentsolution.utils.items;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Iterator;
+import java.util.*;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Statistic;
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
-import org.bukkit.block.Container;
-import org.bukkit.block.DoubleChest;
+import org.bukkit.block.*;
 import org.bukkit.block.data.type.Snow;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -144,8 +138,14 @@ public class TelepathyUtils {
 				Bukkit.getPluginManager().callEvent(smeltery);
 
 				if (!smeltery.isCancelled()) {
+					ItemStack afterSmeltery = smeltery.getDrop();
+					afterSmeltery.setType(smeltery.getChangeTo());
+					if(smeltery.willFortune()) {
+						afterSmeltery = FortuneUtils.getFortuneForSmeltery(afterSmeltery, item);
+						if (afterSmeltery.getAmount() > 1 && afterSmeltery.getType() == Material.IRON_INGOT) AdvancementUtils.awardCriteria(player, ESAdvancement.IRONT_YOU_GLAD, "iron");
+					}
 					AbilityUtils.giveExperience(player, smeltery.getExp());
-					if (smeltery.getDrop() != null) return Arrays.asList(smeltery.getDrop());
+					return Arrays.asList(afterSmeltery);
 				}
 			}
 		} else if (ItemUtils.hasEnchantment(item, Enchantment.LOOT_BONUS_BLOCKS)) {
@@ -162,7 +162,7 @@ public class TelepathyUtils {
 
 		if (!telepathy.isCancelled() && damageItems) {
 			damageItem(event);
-			if (AbilityUtils.getHeightWidthBlocks().contains(block)) {
+			if (AbilityUtils.getHeightWidthBlocks().contains(block.getLocation())) {
 				AdvancementUtils.awardCriteria(player, ESAdvancement.FAST_AND_FURIOUS, "diamond_pickaxe");
 				AdvancementUtils.awardCriteria(player, ESAdvancement.OVER_9000, "stone", 1);
 			}

@@ -29,6 +29,7 @@ import org.ctp.enchantmentsolution.listeners.Enchantmentable;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.ESArrays;
 import org.ctp.enchantmentsolution.utils.items.ItemSlotType;
+import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 
 public class AttributeListener extends Enchantmentable {
 
@@ -63,6 +64,7 @@ public class AttributeListener extends Enchantmentable {
 				if (attributes.containsKey(entry.getKey())) {
 					for(Attributable a: attributes.get(entry.getKey()))
 						if (a.getType() == type) {
+							if(equip && a.getEnchantment() == RegisterEnchantments.LIFE && ItemUtils.hasEnchantment(item, RegisterEnchantments.GUNG_HO)) break;
 							AttributeEvent attrEvent = new AttributeEvent(player, new EnchantmentLevel(RegisterEnchantments.getCustomEnchantment(entry.getKey()), entry.getValue()), equip ? null : a.getAttrName(), equip ? a.getAttrName() : null);
 							Bukkit.getPluginManager().callEvent(attrEvent);
 
@@ -86,7 +88,7 @@ public class AttributeListener extends Enchantmentable {
 							player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 160, 0, false, false), true);
 					}
 				} else if (entry.getKey() == RegisterEnchantments.NO_REST) {
-					if (type == ItemSlotType.HELMET) if (equip) {
+					if (type == ItemSlotType.HELMET && equip) {
 						if (player.getStatistic(Statistic.TIME_SINCE_REST) > 72000 && player.getWorld().getTime() > 12540 && player.getWorld().getTime() < 23459) AdvancementUtils.awardCriteria(player, ESAdvancement.COFFEE_BREAK, "coffee");
 						if (player.getStatistic(Statistic.TIME_SINCE_REST) > 0) player.setStatistic(Statistic.TIME_SINCE_REST, 0);
 					}

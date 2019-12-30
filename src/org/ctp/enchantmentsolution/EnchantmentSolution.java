@@ -41,7 +41,9 @@ import org.ctp.enchantmentsolution.utils.abillityhelpers.EntityAccuracy;
 import org.ctp.enchantmentsolution.utils.compatibility.AuctionHouseUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 import org.ctp.enchantmentsolution.utils.files.SaveUtils;
-import org.ctp.enchantmentsolution.version.*;
+import org.ctp.enchantmentsolution.version.BukkitVersion;
+import org.ctp.enchantmentsolution.version.PluginVersion;
+import org.ctp.enchantmentsolution.version.VersionCheck;
 
 public class EnchantmentSolution extends JavaPlugin {
 
@@ -61,6 +63,7 @@ public class EnchantmentSolution extends JavaPlugin {
 	private String mcmmoVersion, mcmmoType;
 	private Plugin veinMiner;
 
+	@Override
 	public void onEnable() {
 		PLUGIN = this;
 		bukkitVersion = new BukkitVersion();
@@ -174,7 +177,12 @@ public class EnchantmentSolution extends JavaPlugin {
 		initialization = false;
 	}
 
+	@Override
 	public void onDisable() {
+		List<InventoryData> data = new ArrayList<InventoryData>();
+		data.addAll(inventories);
+		for(InventoryData inv: data)
+			inv.close(true);
 		SaveUtils.setData();
 	}
 

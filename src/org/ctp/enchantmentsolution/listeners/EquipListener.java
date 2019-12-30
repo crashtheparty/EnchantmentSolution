@@ -83,8 +83,8 @@ public class EquipListener implements Listener {
 		if (e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK) {
 			final Player player = e.getPlayer();
 			if (e.getClickedBlock() != null && e.getAction() == Action.RIGHT_CLICK_BLOCK) // checks is useless, might
-			// as well do it though.
-			if (e.getClickedBlock().getType().isInteractable()) return;
+				// as well do it though.
+				if (e.getClickedBlock().getType().isInteractable()) return;
 			ItemSlotType newItemSlotType = ItemSlotType.matchArmorType(e.getItem());
 			if (newItemSlotType != null) if (newItemSlotType.equals(ItemSlotType.HELMET) && isAirOrNull(e.getPlayer().getInventory().getHelmet()) || newItemSlotType.equals(ItemSlotType.CHESTPLATE) && isAirOrNull(e.getPlayer().getInventory().getChestplate()) || newItemSlotType.equals(ItemSlotType.LEGGINGS) && isAirOrNull(e.getPlayer().getInventory().getLeggings()) || newItemSlotType.equals(ItemSlotType.BOOTS) && isAirOrNull(e.getPlayer().getInventory().getBoots())) {
 				ArmorEquipEvent armorEquipEvent = new ArmorEquipEvent(e.getPlayer(), EquipMethod.HOTBAR, ItemSlotType.matchArmorType(e.getItem()), null, e.getItem());

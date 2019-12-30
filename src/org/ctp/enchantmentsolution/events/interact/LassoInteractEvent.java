@@ -11,21 +11,17 @@ import org.ctp.enchantmentsolution.nms.animalmob.AnimalMob;
 
 public class LassoInteractEvent extends InteractEvent {
 
-	private AnimalMob animal;
+	private final AnimalMob animal;
 	private BlockFace face;
 
 	public LassoInteractEvent(Player who, int level, ItemStack item, Block block, BlockFace face, AnimalMob animal) {
 		super(who, new EnchantmentLevel(CERegister.IRENES_LASSO, level), item, block);
-		setAnimal(animal);
+		this.animal = animal;
 		setFace(face);
 	}
 
 	public AnimalMob getAnimal() {
 		return animal;
-	}
-
-	public void setAnimal(AnimalMob animal) {
-		this.animal = animal;
 	}
 
 	public BlockFace getFace() {

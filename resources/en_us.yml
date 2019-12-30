@@ -1,3 +1,4 @@
+starter: '&8[&dEnchantment Solution&8]'
 anvil: 
     name: '&9Anvil'
     mirror: '&f'
@@ -216,7 +217,7 @@ enchantment:
             smeltery: 'Smelts blocks while mining.'
             sniper: 'Increases speed of projectiles.'
             soulbound: 'Keep item on death.'
-            soul_reaper: 'Has a chance of stealing soulbounded items from the killed player.'
+            soul_reaper: 'Steals one item enchanted with Soulbound per level when killing players.'
             splatter_fest: 'Shoots eggs out of hoe on left click.'
             stone_throw: 'Increases ranged damage against flying mobs.\nAdds 40% * level + 20% damage against flying mobs.'
             tank: 'Gives additional unbreaking protection to armor.'

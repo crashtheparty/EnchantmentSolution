@@ -11,14 +11,19 @@ import org.ctp.enchantmentsolution.events.player.SoulEvent;
 public class SoulReaperEvent extends SoulEvent {
 
 	private final List<ItemStack> reapedItems;
+	private final Player killer;
 
-	public SoulReaperEvent(Player who, int level, List<ItemStack> reapedItems) {
+	public SoulReaperEvent(Player who, Player killer, int level, List<ItemStack> reapedItems) {
 		super(who, new EnchantmentLevel(CERegister.SOUL_REAPER, level));
-
+		this.killer = killer;
 		this.reapedItems = reapedItems;
 	}
 
 	public List<ItemStack> getReapedItems() {
 		return reapedItems;
+	}
+
+	public Player getKiller() {
+		return killer;
 	}
 }

@@ -9,15 +9,16 @@ import org.ctp.enchantmentsolution.events.entity.ESDamageEntityEvent;
 public class IronDefenseEvent extends ESDamageEntityEvent {
 
 	private int shieldDamage;
-	private ItemStack shield;
+	private final ItemStack shield;
 
 	public IronDefenseEvent(LivingEntity damaged, int level, double damage, double newDamage, ItemStack shield,
 	int shieldDamage) {
 		super(damaged, new EnchantmentLevel(CERegister.IRON_DEFENSE, level), damage, newDamage);
-		setShield(shield);
+		this.shield = shield;
 		setShieldDamage(shieldDamage);
 	}
 
+	@Override
 	public void setNewDamage(double newDamage) {
 		if (newDamage > getDamage()) super.setNewDamage(getDamage());
 		else
@@ -34,10 +35,6 @@ public class IronDefenseEvent extends ESDamageEntityEvent {
 
 	public ItemStack getShield() {
 		return shield;
-	}
-
-	public void setShield(ItemStack shield) {
-		this.shield = shield;
 	}
 
 }

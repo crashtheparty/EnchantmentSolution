@@ -29,7 +29,7 @@ public class LagEvent extends ModifyActionEvent {
 	float pitch) {
 		super(player, new EnchantmentLevel(CERegister.CURSE_OF_LAG, 1));
 		setLocation(location);
-		setEffects(effects);
+		this.effects = effects;
 		setSound(sound);
 		setVolume(volume);
 		setPitch(pitch);
@@ -45,10 +45,6 @@ public class LagEvent extends ModifyActionEvent {
 
 	public List<ParticleEffect> getEffects() {
 		return effects;
-	}
-
-	public void setEffects(List<ParticleEffect> effects) {
-		this.effects = effects;
 	}
 
 	public Sound getSound() {

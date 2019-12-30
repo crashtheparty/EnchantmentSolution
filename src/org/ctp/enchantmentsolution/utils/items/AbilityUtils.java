@@ -1,9 +1,6 @@
 package org.ctp.enchantmentsolution.utils.items;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -22,7 +19,7 @@ import org.ctp.enchantmentsolution.utils.abillityhelpers.ParticleEffect;
 public class AbilityUtils {
 
 	private static List<Block> WAND_BLOCKS = new ArrayList<Block>();
-	private static List<Block> HEIGHT_WIDTH_BLOCKS = new ArrayList<Block>();
+	private static List<Location> HEIGHT_WIDTH_BLOCKS = new ArrayList<Location>();
 	private static List<Material> CROPS = Arrays.asList(Material.WHEAT, Material.CARROTS, Material.POTATOES, Material.NETHER_WART, Material.BEETROOTS, Material.COCOA_BEANS);
 
 	public static ItemStack getGoldDiggerItems(ItemStack item, Block brokenBlock) {
@@ -138,15 +135,15 @@ public class AbilityUtils {
 		WAND_BLOCKS.remove(block);
 	}
 
-	public static List<Block> getHeightWidthBlocks() {
+	public static List<Location> getHeightWidthBlocks() {
 		return HEIGHT_WIDTH_BLOCKS;
 	}
 
-	public static void addHeightWidthBlock(Block block) {
-		HEIGHT_WIDTH_BLOCKS.add(block);
+	public static void addHeightWidthBlock(Location loc) {
+		HEIGHT_WIDTH_BLOCKS.add(loc);
 	}
 
-	public static void removeHeightWidthBlock(Block block) {
-		HEIGHT_WIDTH_BLOCKS.remove(block);
+	public static void removeHeightWidthBlock(Location loc) {
+		HEIGHT_WIDTH_BLOCKS.remove(loc);
 	}
 }

@@ -8,7 +8,6 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.Advancement.Frame;
-import org.ctp.enchantmentsolution.advancements.Rewards;
 
 public enum ESAdvancement {
 
@@ -19,14 +18,14 @@ public enum ESAdvancement {
 	NEMO_ENIM_COQUIT(FISH_STICKS, "nemo_enim_coquit", "TROPICAL_FISH", Arrays.asList(new ESTrigger("tropical_fish")), 25),
 	BONEMEAL_PLUS(AGRICULTURAL_REVOLUTION, "bonemeal_plus", "BONE_MEAL", Arrays.asList(new ESTrigger("bonemeal")), 10),
 	JUST_AS_SWEET(BONEMEAL_PLUS, "just_as_sweet", "WITHER_ROSE", Arrays.asList(new ESTrigger("wither_rose")), 100, Frame.GOAL, 4),
-	NOT_THAT_KIND(AGRICULTURAL_REVOLUTION, "not_that_kind", "DIAMOND_SWORD", Arrays.asList(new ESTrigger("chicken"), new ESTrigger("cat", 0, 4, 0), new ESTrigger("cow"), new ESTrigger("fox", 0, 4, 0), new ESTrigger("horse"), new ESTrigger("llama"), new ESTrigger("mushroom_cow"), new ESTrigger("ocelot", 0, 0, 3), new ESTrigger("panda", 0, 4, 0), new ESTrigger("pig"), new ESTrigger("rabbit"), new ESTrigger("sheep"), new ESTrigger("wolf"), new ESTrigger("turtle")), 25),
+	NOT_THAT_KIND(AGRICULTURAL_REVOLUTION, "not_that_kind", "DIAMOND_SWORD", Arrays.asList(new ESTrigger("chicken"), new ESTrigger("cat", 0, 4, 0), new ESTrigger("cow"), new ESTrigger("fox", 0, 4, 0), new ESTrigger("horse"), new ESTrigger("mule"), new ESTrigger("donkey"), new ESTrigger("llama"), new ESTrigger("mushroom_cow"), new ESTrigger("ocelot", 0, 0, 3), new ESTrigger("panda", 0, 4, 0), new ESTrigger("bee", 0, 9, 0), new ESTrigger("pig"), new ESTrigger("rabbit"), new ESTrigger("sheep"), new ESTrigger("wolf"), new ESTrigger("turtle")), 25),
 	HIGH_METABOLISM(NOT_THAT_KIND, "high_metabolism", "GOLDEN_CARROT", Arrays.asList(new ESTrigger("exhaustion")), 200, Frame.GOAL),
 	FOURTY_NINERS(BONEMEAL_PLUS, "fourty_niners", "GOLD_BLOCK", Arrays.asList(new ESTrigger("goldblock", 81)), 20),
 	THAT_FOOD_IS_FINE(AGRICULTURAL_REVOLUTION, "that_food_is_fine", "POISONOUS_POTATO", Arrays.asList(new ESTrigger("food")), 25),
 	CHICKEN_OR_THE_EGG(AGRICULTURAL_REVOLUTION, "chicken_or_the_egg", "EGG", Arrays.asList(new ESTrigger("egg")), 25),
 	EGGED_BY_MYSELF(CHICKEN_OR_THE_EGG, "egged_by_myself", "EGG", Arrays.asList(new ESTrigger("egg")), 40),
 	THORGY(AGRICULTURAL_REVOLUTION, "thorgy", "WOLF_SPAWN_EGG", Arrays.asList(new ESTrigger("wolf")), 50),
-	FREE_PETS(THORGY, "free_pets", "CARROT_ON_A_STICK", Arrays.asList(new ESTrigger("wolf"), new ESTrigger("ocelot", 0, 0, 3), new ESTrigger("cat", 0, 4, 0), new ESTrigger("horse"), new ESTrigger("donkey"), new ESTrigger("mule"), new ESTrigger("parrot"), new ESTrigger("llama")), 500, Frame.CHALLENGE),
+	FREE_PETS(THORGY, "free_pets", "CARROT_ON_A_STICK", Arrays.asList(new ESTrigger("wolf"), new ESTrigger("ocelot", 0, 0, 3), new ESTrigger("cat", 0, 4, 0), new ESTrigger("horse"), new ESTrigger("donkey"), new ESTrigger("mule"), new ESTrigger("parrot"), new ESTrigger("llama"), new ESTrigger("bee", 0, 9, 0)), 500, Frame.CHALLENGE),
 
 	INDUSTRIAL_REVOLUTION("industrial_revolution", "DIAMOND_PICKAXE", Arrays.asList(), 0),
 	EASY_OUT(INDUSTRIAL_REVOLUTION, "easy_out", "CAMPFIRE", Arrays.asList(new ESTrigger("campfire")), 20, Frame.TASK, 4),

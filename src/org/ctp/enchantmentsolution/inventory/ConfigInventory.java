@@ -619,6 +619,7 @@ public class ConfigInventory implements InventoryData {
 	}
 
 	public void reopenFromAnvil(boolean limitLevel) {
+		inventory = null;
 		if (type.equals("list")) listDetails(getConfig(), null, level, type, page);
 		else if (level == null) listConfigDetails(getConfig(), null);
 		else if (level.indexOf(".") > -1) {

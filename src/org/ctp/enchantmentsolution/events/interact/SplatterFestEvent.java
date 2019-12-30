@@ -7,12 +7,13 @@ import org.ctp.enchantmentsolution.events.ESPlayerEvent;
 
 public class SplatterFestEvent extends ESPlayerEvent {
 
-	private boolean takeEgg, hasEgg;
+	private boolean takeEgg;
+	private final boolean hasEgg;
 
 	public SplatterFestEvent(Player who, boolean takeEgg, boolean hasEgg) {
 		super(who, new EnchantmentLevel(CERegister.SPLATTER_FEST, 1));
 		setTakeEgg(takeEgg);
-		setHasEgg(hasEgg);
+		this.hasEgg = hasEgg;
 	}
 
 	public boolean takeEgg() {
@@ -25,10 +26,6 @@ public class SplatterFestEvent extends ESPlayerEvent {
 
 	public boolean hasEgg() {
 		return hasEgg;
-	}
-
-	public void setHasEgg(boolean hasEgg) {
-		this.hasEgg = hasEgg;
 	}
 
 }

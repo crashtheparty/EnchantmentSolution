@@ -32,5 +32,4 @@ public class DrownedEvent extends ESEntityDamageEntityEvent {
 	public void setTicks(int ticks) {
 		this.ticks = ticks;
 	}
-
 }

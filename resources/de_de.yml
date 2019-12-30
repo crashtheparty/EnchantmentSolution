@@ -1,3 +1,4 @@
+starter: '&8[&dEnchantment Solution&8]'
 anvil: 
     name: '&9Amboss'
     mirror: '&f'
@@ -213,7 +214,7 @@ enchantment:
             smeltery: 'Schmelzen Blöcke während des Bergbaus.'
             sniper: 'Erhöht die Geschwindigkeit von Geschossen.'
             soulbound: 'Behalte den Gegenstand auf dem Tod.'
-            soul_reaper: 'Hat eine Chance, vom getöteten Spieler seelengebundene Gegenstände zu stehlen.'
+            soul_reaper: 'Stiehlt einen seelengebundenen Gegenstand pro Stufe, wenn Spieler getötet werden.'
             splatter_fest: 'Schießt mit dem Linksklick Eier aus der Hacke.'
             stone_throw: 'Erhöht den Distanzschaden gegen fliegende Mobs.\nFügt 40% * Level + 20% Schaden gegen fliegende Mobs hinzu.'
             tank: 'Verleiht der Rüstung zusätzlichen Schutz.'

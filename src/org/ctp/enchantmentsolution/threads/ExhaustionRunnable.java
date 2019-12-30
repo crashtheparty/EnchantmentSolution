@@ -3,8 +3,8 @@ package org.ctp.enchantmentsolution.threads;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.UUID;
 import java.util.Map.Entry;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -36,9 +36,9 @@ public class ExhaustionRunnable implements Runnable {
 					ExhaustionEvent event = new ExhaustionEvent(player, exhaustionCurse, change);
 					Bukkit.getPluginManager().callEvent(event);
 
-					if (!event.isCancelled() && event.getCurseLevel() > 0 && event.getExhaustionTick() > 0) {
-						player.setExhaustion(player.getExhaustion() + event.getExhaustionTick() * event.getCurseLevel());
-						if (event.getExhaustionTick() * event.getCurseLevel() / 3.9F > change) AdvancementUtils.awardCriteria(player, ESAdvancement.HIGH_METABOLISM, "exhaustion");
+					if (!event.isCancelled() && event.getMultiplier() > 0) {
+						player.setExhaustion((float) (player.getExhaustion() + event.getExhaustionTick() * event.getMultiplier()));
+						if (event.getMultiplier() >= 3.0D) AdvancementUtils.awardCriteria(player, ESAdvancement.HIGH_METABOLISM, "exhaustion");
 					}
 					EXHAUSTION.put(player.getUniqueId(), AbilityUtils.getExhaustion(player));
 				}

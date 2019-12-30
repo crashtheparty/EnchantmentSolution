@@ -25,20 +25,26 @@ public class SmelteryUtils {
 		if (smeltery != null) {
 			ItemStack smelted = smeltery.getSmelted();
 			int experience = 0;
+			boolean fortune = false;
 			if (blockBroken.getType() == Material.IRON_ORE || blockBroken.getType() == Material.GOLD_ORE) {
-				smelted = FortuneUtils.getFortuneForSmeltery(smelted, item);
-				if (smelted.getAmount() > 1 && smelted.getType() == Material.IRON_INGOT) AdvancementUtils.awardCriteria(player, ESAdvancement.IRONT_YOU_GLAD, "iron");
 				experience = (int) (Math.random() * 3) + 1;
+				fortune = true;
 			}
-			SmelteryEvent smelteryEvent = new SmelteryEvent(blockBroken, player, smelted, smeltery.getToMaterial(), experience);
+			SmelteryEvent smelteryEvent = new SmelteryEvent(blockBroken, player, smelted, smeltery.getToMaterial(), experience, fortune);
 			Bukkit.getPluginManager().callEvent(smelteryEvent);
 
 			if (!smelteryEvent.isCancelled()) {
+				ItemStack afterSmeltery = smelteryEvent.getDrop();
+				afterSmeltery.setType(smelteryEvent.getChangeTo());
+				if(smelteryEvent.willFortune()) {
+					afterSmeltery = FortuneUtils.getFortuneForSmeltery(afterSmeltery, item);
+					if (afterSmeltery.getAmount() > 1 && afterSmeltery.getType() == Material.IRON_INGOT) AdvancementUtils.awardCriteria(player, ESAdvancement.IRONT_YOU_GLAD, "iron");
+				}
 				player.incrementStatistic(Statistic.MINE_BLOCK, smelteryEvent.getBlock().getType());
 				player.incrementStatistic(Statistic.USE_ITEM, item.getType());
 				McMMOHandler.handleMcMMO(event, item);
 				DamageUtils.damageItem(player, item);
-				ItemUtils.dropItem(smelteryEvent.getDrop(), smelteryEvent.getBlock().getLocation());
+				ItemUtils.dropItem(afterSmeltery, smelteryEvent.getBlock().getLocation());
 				AbilityUtils.dropExperience(smelteryEvent.getBlock().getLocation().add(0.5, 0.5, 0.5), experience);
 				event.getBlock().setType(Material.AIR);
 			}
@@ -50,12 +56,12 @@ public class SmelteryUtils {
 		if (smeltery != null) {
 			ItemStack smelted = smeltery.getSmelted();
 			int experience = 0;
+			boolean fortune = false;
 			if (blockBroken.getType() == Material.IRON_ORE || blockBroken.getType() == Material.GOLD_ORE) {
-				smelted = FortuneUtils.getFortuneForSmeltery(smelted, item);
-				if (smelted.getAmount() > 1 && smelted.getType() == Material.IRON_INGOT) AdvancementUtils.awardCriteria(player, ESAdvancement.IRONT_YOU_GLAD, "iron");
 				experience = (int) (Math.random() * 3) + 1;
+				fortune = true;
 			}
-			return new SmelteryEvent(blockBroken, player, smelted, smeltery.getToMaterial(), experience);
+			return new SmelteryEvent(blockBroken, player, smelted, smeltery.getToMaterial(), experience, fortune);
 		}
 		return null;
 	}

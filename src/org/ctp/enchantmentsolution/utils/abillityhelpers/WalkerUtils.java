@@ -61,9 +61,9 @@ public class WalkerUtils {
 						if (!magmaWalker.isCancelled()) {
 							BLOCKS.add(walker);
 							setBlockMeta(walker);
+							if (block.getWorld().getEnvironment() == Environment.THE_END) AdvancementUtils.awardCriteria(player, ESAdvancement.FLAME_KEEPER, "flame");
 						} else
 							block.setType(checkMaterial.get(0));
-						if (block.getWorld().getEnvironment() == Environment.THE_END) AdvancementUtils.awardCriteria(player, ESAdvancement.FLAME_KEEPER, "flame");
 					} else if (enchantment == RegisterEnchantments.VOID_WALKER) {
 						block.setType(replaceMaterial);
 						WalkerBlock walker = new WalkerBlock(enchantment, block, checkMaterial.get(0), TICK);

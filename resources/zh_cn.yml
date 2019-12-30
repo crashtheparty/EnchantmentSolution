@@ -1,3 +1,4 @@
+starter: '&8[&dEnchantment Solution&8]'
 anvil: 
     name: '&9铁砧'
     mirror: '&f'
@@ -216,7 +217,7 @@ enchantment:
             smeltery: '挖掘方块的同时进行熔炼.'
             sniper: '增加弹射物速度.'
             soulbound: '死亡保留物品.'
-            soul_reaper: '有几率在击杀玩家时偷走该玩家的灵魂绑定物品.'
+            soul_reaper: '杀死玩家时，为每个级别窃取一个灵魂绑定项目.'
             splatter_fest: '左击发射鸡蛋.'
             stone_throw: '增加对飞行怪物的范围伤害.\n增加40% * 附魔等级 + 20% 点伤害.'
             tank: '给予装备额外的耐久保护.'

@@ -109,7 +109,7 @@ public class AnvilEnchantments extends GenerateEnchantments {
 	private void setCombinedItem() {
 		ItemStack itemOne = getItem();
 		combinedItem = itemOne.clone();
-		combinedItem = ItemUtils.removeAllEnchantments(combinedItem);
+		combinedItem = ItemUtils.removeAllEnchantments(combinedItem, true);
 		if (itemOne.getType() == Material.BOOK || itemOne.getType() == Material.ENCHANTED_BOOK) if (ConfigString.USE_ENCHANTED_BOOKS.getBoolean()) combinedItem = new ItemStack(Material.ENCHANTED_BOOK);
 		else
 			combinedItem = new ItemStack(Material.BOOK);
