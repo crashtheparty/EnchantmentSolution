@@ -36,7 +36,7 @@ public class SmelteryUtils {
 			if (!smelteryEvent.isCancelled()) {
 				ItemStack afterSmeltery = smelteryEvent.getDrop();
 				afterSmeltery.setType(smelteryEvent.getChangeTo());
-				if(smelteryEvent.willFortune()) {
+				if (smelteryEvent.willFortune()) {
 					afterSmeltery = FortuneUtils.getFortuneForSmeltery(afterSmeltery, item);
 					if (afterSmeltery.getAmount() > 1 && afterSmeltery.getType() == Material.IRON_INGOT) AdvancementUtils.awardCriteria(player, ESAdvancement.IRONT_YOU_GLAD, "iron");
 				}

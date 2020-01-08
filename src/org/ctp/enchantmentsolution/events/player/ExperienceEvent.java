@@ -31,7 +31,7 @@ public class ExperienceEvent extends ESPlayerEvent {
 
 	public int getOldExp() {
 		return oldExp;
-	}		
+	}
 
 	public int getNewExp() {
 		return newExp;

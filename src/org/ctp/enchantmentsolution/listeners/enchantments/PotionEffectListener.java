@@ -25,8 +25,8 @@ public class PotionEffectListener extends Enchantmentable {
 			if (shield != null && ItemUtils.hasEnchantment(shield, RegisterEnchantments.MAGIC_GUARD) && (event.getAction() == Action.ADDED || event.getAction() == Action.CHANGED) && ESArrays.getBadPotions().contains(event.getModifiedType())) {
 				MagicGuardPotionEvent magicGuard = new MagicGuardPotionEvent(player, event.getModifiedType());
 				Bukkit.getPluginManager().callEvent(magicGuard);
-				
-				if(!magicGuard.isCancelled()) {
+
+				if (!magicGuard.isCancelled()) {
 					event.setCancelled(true);
 					if (event.getCause() == Cause.FOOD) AdvancementUtils.awardCriteria(player, ESAdvancement.THAT_FOOD_IS_FINE, "shield");
 				}

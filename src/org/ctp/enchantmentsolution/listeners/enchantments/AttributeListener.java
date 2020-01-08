@@ -64,7 +64,7 @@ public class AttributeListener extends Enchantmentable {
 				if (attributes.containsKey(entry.getKey())) {
 					for(Attributable a: attributes.get(entry.getKey()))
 						if (a.getType() == type) {
-							if(equip && a.getEnchantment() == RegisterEnchantments.LIFE && ItemUtils.hasEnchantment(item, RegisterEnchantments.GUNG_HO)) break;
+							if (equip && a.getEnchantment() == RegisterEnchantments.LIFE && ItemUtils.hasEnchantment(item, RegisterEnchantments.GUNG_HO)) break;
 							AttributeEvent attrEvent = new AttributeEvent(player, new EnchantmentLevel(RegisterEnchantments.getCustomEnchantment(entry.getKey()), entry.getValue()), equip ? null : a.getAttrName(), equip ? a.getAttrName() : null);
 							Bukkit.getPluginManager().callEvent(attrEvent);
 
