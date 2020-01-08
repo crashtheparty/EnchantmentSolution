@@ -1,4 +1,4 @@
-package org.ctp.enchantmentsolution.events.blocks;
+package org.ctp.enchantmentsolution.events.modify;
 
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;

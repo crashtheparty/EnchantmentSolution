@@ -12,7 +12,7 @@ import org.ctp.enchantmentsolution.events.ESPlayerEvent;
 
 public class ContagionEvent extends ESPlayerEvent {
 
-	private ItemStack item;
+	private final ItemStack item;
 	private CustomEnchantment curse;
 	private int level;
 	private Collection<Sound> sounds;
@@ -25,7 +25,7 @@ public class ContagionEvent extends ESPlayerEvent {
 	public ContagionEvent(Player who, ItemStack item, CustomEnchantment curse, int level, Collection<Sound> sounds,
 	float volume, float pitch) {
 		super(who, new EnchantmentLevel(CERegister.CURSE_OF_CONTAGION, 1));
-		setItem(item);
+		this.item = item;
 		setCurse(curse);
 		setLevel(level);
 		this.sounds = sounds;
@@ -37,16 +37,12 @@ public class ContagionEvent extends ESPlayerEvent {
 		return item;
 	}
 
-	public void setItem(ItemStack item) {
-		this.item = item;
-	}
-
 	public CustomEnchantment getCurse() {
 		return curse;
 	}
 
 	public void setCurse(CustomEnchantment curse) {
-		this.curse = curse;
+		if(curse.isCurse()) this.curse = curse;
 	}
 
 	public int getLevel() {

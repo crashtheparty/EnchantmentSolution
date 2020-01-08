@@ -3,7 +3,6 @@ package org.ctp.enchantmentsolution.events.modify;
 import org.bukkit.entity.Player;
 import org.ctp.enchantmentsolution.enchantments.CERegister;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
-import org.ctp.enchantmentsolution.events.player.ModifyActionEvent;
 
 public class ExhaustionEvent extends ModifyActionEvent {
 

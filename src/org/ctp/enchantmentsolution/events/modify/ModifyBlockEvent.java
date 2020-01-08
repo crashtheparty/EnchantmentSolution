@@ -1,23 +1,19 @@
-package org.ctp.enchantmentsolution.events.blocks;
+package org.ctp.enchantmentsolution.events.modify;
 
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
-import org.ctp.enchantmentsolution.events.ESPlayerEvent;
 
-public abstract class ModifyBlockEvent extends ESPlayerEvent {
+public abstract class ModifyBlockEvent extends ModifyActionEvent {
 
-	private Block block;
+	private final Block block;
 	
 	public ModifyBlockEvent(Player who, EnchantmentLevel enchantment, Block block) {
 		super(who, enchantment);
+		this.block = block;
 	}
 
 	public Block getBlock() {
 		return block;
-	}
-
-	public void setBlock(Block block) {
-		this.block = block;
 	}
 }

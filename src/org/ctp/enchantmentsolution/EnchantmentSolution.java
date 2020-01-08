@@ -60,6 +60,7 @@ public class EnchantmentSolution extends JavaPlugin {
 	private SQLite db;
 	private Plugin jobsReborn;
 	private VersionCheck check;
+	private WikiThread wiki;
 	private String mcmmoVersion, mcmmoType;
 	private Plugin veinMiner;
 
@@ -174,6 +175,10 @@ public class EnchantmentSolution extends JavaPlugin {
 		checkVersion();
 		MetricsUtils.init();
 		AdvancementUtils.createAdvancements();
+		
+		registerEvent(new WikiListener());
+		wiki = new WikiThread();
+		Bukkit.getScheduler().runTaskTimerAsynchronously(PLUGIN, wiki, 20l, 20l);
 		initialization = false;
 	}
 
@@ -338,5 +343,9 @@ public class EnchantmentSolution extends JavaPlugin {
 
 	private void checkVersion() {
 		Bukkit.getScheduler().runTaskTimerAsynchronously(PLUGIN, check, 20 * 60 * 60 * 4l, 20 * 60 * 60 * 4l);
+	}
+
+	public WikiThread getWiki() {
+		return wiki;
 	}
 }

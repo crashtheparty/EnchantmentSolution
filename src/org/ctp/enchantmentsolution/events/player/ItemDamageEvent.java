@@ -7,7 +7,6 @@ import org.ctp.enchantmentsolution.events.ESPlayerEvent;
 
 public abstract class ItemDamageEvent extends ESPlayerEvent {
 
-	private boolean cancelled;
 	private final ItemStack item;
 	private final int oldDamage;
 	private int newDamage;
@@ -17,16 +16,6 @@ public abstract class ItemDamageEvent extends ESPlayerEvent {
 		this.item = item;
 		this.oldDamage = oldDamage;
 		setNewDamage(newDamage);
-	}
-
-	@Override
-	public boolean isCancelled() {
-		return cancelled;
-	}
-
-	@Override
-	public void setCancelled(boolean cancelled) {
-		this.cancelled = cancelled;
 	}
 
 	public ItemStack getItem() {

@@ -1,4 +1,4 @@
-package org.ctp.enchantmentsolution.events.entity;
+package org.ctp.enchantmentsolution.events.potion;
 
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.potion.PotionEffectType;
@@ -7,22 +7,11 @@ import org.ctp.enchantmentsolution.events.ESEntityEvent;
 
 public abstract class PotionEffectEvent extends ESEntityEvent {
 
-	private boolean cancelled;
 	private PotionEffectType type;
 
 	public PotionEffectEvent(LivingEntity who, EnchantmentLevel enchantment, PotionEffectType type) {
 		super(who, enchantment);
 		setType(type);
-	}
-
-	@Override
-	public boolean isCancelled() {
-		return cancelled;
-	}
-
-	@Override
-	public void setCancelled(boolean cancelled) {
-		this.cancelled = cancelled;
 	}
 
 	public PotionEffectType getType() {

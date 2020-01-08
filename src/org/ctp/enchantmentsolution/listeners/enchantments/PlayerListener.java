@@ -185,7 +185,7 @@ public class PlayerListener extends Enchantmentable {
 							break;
 					}
 					if (sound != null) {
-						MoisturizeEvent moisturize = new MoisturizeEvent(event.getPlayer(), block, type, sound);
+						MoisturizeEvent moisturize = new MoisturizeEvent(event.getPlayer(), item, block, type, sound);
 						Bukkit.getPluginManager().callEvent(moisturize);
 
 						if (!moisturize.isCancelled()) {
@@ -241,7 +241,7 @@ public class PlayerListener extends Enchantmentable {
 				event.setCancelled(false);
 				if (!canRun(RegisterEnchantments.OVERKILL, event)) return;
 				boolean takeArrow = player.getGameMode() != GameMode.CREATIVE && !ItemUtils.hasEnchantment(item, Enchantment.ARROW_INFINITE);
-				OverkillEvent overkill = new OverkillEvent(player, takeArrow, player.getInventory().all(Material.ARROW).size() > 0, 0.4);
+				OverkillEvent overkill = new OverkillEvent(player, item, takeArrow, player.getInventory().all(Material.ARROW).size() > 0, 0.4);
 				Bukkit.getPluginManager().callEvent(overkill);
 
 				if (!overkill.isCancelled()) {
@@ -282,7 +282,7 @@ public class PlayerListener extends Enchantmentable {
 			if (ItemUtils.hasEnchantment(item, RegisterEnchantments.SPLATTER_FEST)) {
 				event.setCancelled(false);
 				if (!canRun(RegisterEnchantments.SPLATTER_FEST, event)) return;
-				SplatterFestEvent splatterFest = new SplatterFestEvent(player, player.getGameMode() != GameMode.CREATIVE, player.getInventory().all(Material.EGG).size() > 0);
+				SplatterFestEvent splatterFest = new SplatterFestEvent(player, item, player.getGameMode() != GameMode.CREATIVE, player.getInventory().all(Material.EGG).size() > 0);
 				Bukkit.getPluginManager().callEvent(splatterFest);
 
 				if (!splatterFest.isCancelled()) {

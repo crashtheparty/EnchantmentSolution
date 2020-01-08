@@ -18,7 +18,7 @@ import org.ctp.enchantmentsolution.utils.abillityhelpers.ParticleEffect;
 
 public class AbilityUtils {
 
-	private static List<Block> WAND_BLOCKS = new ArrayList<Block>();
+	private static List<Location> WAND_BLOCKS = new ArrayList<Location>();
 	private static List<Location> HEIGHT_WIDTH_BLOCKS = new ArrayList<Location>();
 	private static List<Material> CROPS = Arrays.asList(Material.WHEAT, Material.CARROTS, Material.POTATOES, Material.NETHER_WART, Material.BEETROOTS, Material.COCOA_BEANS);
 
@@ -123,16 +123,16 @@ public class AbilityUtils {
 		return player.getFoodLevel() * 4 + player.getSaturation() * 4 - player.getExhaustion();
 	}
 
-	public static List<Block> getWandBlocks() {
+	public static List<Location> getWandBlocks() {
 		return WAND_BLOCKS;
 	}
 
-	public static void addWandBlock(Block block) {
-		WAND_BLOCKS.add(block);
+	public static void addWandBlock(Location location) {
+		WAND_BLOCKS.add(location);
 	}
 
-	public static void removeWandBlock(Block block) {
-		WAND_BLOCKS.remove(block);
+	public static void removeWandBlock(Location location) {
+		WAND_BLOCKS.remove(location);
 	}
 
 	public static List<Location> getHeightWidthBlocks() {

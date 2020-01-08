@@ -6,7 +6,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.enchantments.CERegister;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
-import org.ctp.enchantmentsolution.events.player.InteractEvent;
 import org.ctp.enchantmentsolution.nms.animalmob.AnimalMob;
 
 public class LassoInteractEvent extends InteractEvent {

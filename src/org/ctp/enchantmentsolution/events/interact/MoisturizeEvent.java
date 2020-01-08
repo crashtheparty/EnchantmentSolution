@@ -3,29 +3,23 @@ package org.ctp.enchantmentsolution.events.interact;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.enchantments.CERegister;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.enums.ItemMoisturizeType;
-import org.ctp.enchantmentsolution.events.ESPlayerEvent;
 
-public class MoisturizeEvent extends ESPlayerEvent {
+public class MoisturizeEvent extends InteractEvent {
 
-	private final Block block;
 	private final ItemMoisturizeType type;
 	private Sound sound;
 
-	public MoisturizeEvent(Player who, Block block, ItemMoisturizeType type, Sound sound) {
-		super(who, new EnchantmentLevel(CERegister.MOISTURIZE, 1));
-		this.block = block;
+	public MoisturizeEvent(Player who, ItemStack item, Block block, ItemMoisturizeType type, Sound sound) {
+		super(who, new EnchantmentLevel(CERegister.MOISTURIZE, 1), item, block);
 		this.type = type;
 		setSound(sound);
 	}
 
-	public Block getBlock() {
-		return block;
-	}
-
-	public ItemMoisturizeType getType() {
+	public ItemMoisturizeType getMoisturizeType() {
 		return type;
 	}
 

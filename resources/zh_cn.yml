@@ -1,4 +1,6 @@
 starter: '&8[&dEnchantment Solution&8]'
+wiki:
+    message: '&fLook for more information on &dEnchantment Solution&f at: '
 anvil: 
     name: '&9铁砧'
     mirror: '&f'
