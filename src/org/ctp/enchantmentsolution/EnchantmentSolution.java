@@ -175,7 +175,7 @@ public class EnchantmentSolution extends JavaPlugin {
 		checkVersion();
 		MetricsUtils.init();
 		AdvancementUtils.createAdvancements();
-		
+
 		registerEvent(new WikiListener());
 		wiki = new WikiThread();
 		Bukkit.getScheduler().runTaskTimerAsynchronously(PLUGIN, wiki, 20l, 20l);

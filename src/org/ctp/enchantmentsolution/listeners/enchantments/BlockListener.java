@@ -360,8 +360,7 @@ public class BlockListener extends Enchantmentable {
 				if (left == 0) {
 					removeItem.setAmount(0);
 					removeItem.setType(Material.AIR);
-				}
-				else
+				} else
 					removeItem.setAmount(left);
 				return;
 			}
@@ -372,15 +371,15 @@ public class BlockListener extends Enchantmentable {
 		Block block = relative.getRelative(x, y, z);
 		if (original != Material.OBSIDIAN && block.getType() == Material.OBSIDIAN) return blocks;
 
-		if(blocks.contains(block.getLocation())) return blocks;
-		
+		if (blocks.contains(block.getLocation())) return blocks;
+
 		if (ItemBreakType.getType(tool.getType()).getBreakTypes().contains(block.getType())) blocks.add(block.getLocation());
 		return blocks;
 	}
 
 	private Collection<Location> addWandBlock(Collection<Location> blocks, ItemStack tool, Block relative, int x, int y, int z) {
 		Block block = relative.getRelative(x, y, z);
-		if(blocks.contains(block.getLocation())) return blocks;
+		if (blocks.contains(block.getLocation())) return blocks;
 		if (!block.getType().isSolid()) blocks.add(block.getLocation());
 		return blocks;
 	}

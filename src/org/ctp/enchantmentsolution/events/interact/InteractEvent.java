@@ -17,25 +17,25 @@ public abstract class InteractEvent extends ESPlayerEvent {
 	public InteractEvent(Player who, EnchantmentLevel enchantment, ItemStack item) {
 		super(who, enchantment);
 		this.item = item;
-		this.type = Type.AIR;
-		this.block = null;
-		this.entity = null;
+		type = Type.AIR;
+		block = null;
+		entity = null;
 	}
 
 	public InteractEvent(Player who, EnchantmentLevel enchantment, ItemStack item, Block block) {
 		super(who, enchantment);
 		this.item = item;
 		this.block = block;
-		this.entity = null;
-		this.type = Type.BLOCK;
+		entity = null;
+		type = Type.BLOCK;
 	}
 
 	public InteractEvent(Player who, EnchantmentLevel enchantment, ItemStack item, Entity entity) {
 		super(who, enchantment);
 		this.item = item;
-		this.block = null;
+		block = null;
 		this.entity = entity;
-		this.type = Type.ENTITY;
+		type = Type.ENTITY;
 	}
 
 	public ItemStack getItem() {

@@ -502,8 +502,8 @@ public class DamageListener extends Enchantmentable {
 				if (chance > random && locsToTp.size() > 0) {
 					int randomLoc = (int) (Math.random() * locsToTp.size());
 					Location toTeleport = locsToTp.get(randomLoc);
-					
-					if(entity instanceof Player) {
+
+					if (entity instanceof Player) {
 						Player player = (Player) entity;
 						WarpPlayerEvent warp = new WarpPlayerEvent(player, player.getLocation(), toTeleport, locsToTp, level);
 						Bukkit.getPluginManager().callEvent(warp);

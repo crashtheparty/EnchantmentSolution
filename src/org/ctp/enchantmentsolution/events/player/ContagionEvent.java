@@ -42,7 +42,7 @@ public class ContagionEvent extends ESPlayerEvent {
 	}
 
 	public void setCurse(CustomEnchantment curse) {
-		if(curse.isCurse()) this.curse = curse;
+		if (curse.isCurse()) this.curse = curse;
 	}
 
 	public int getLevel() {

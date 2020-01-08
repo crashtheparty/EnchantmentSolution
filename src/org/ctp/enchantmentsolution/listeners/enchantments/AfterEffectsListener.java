@@ -131,7 +131,7 @@ public class AfterEffectsListener extends Enchantmentable {
 				((LivingEntity) sacrifice.getEntity()).damage(sacrifice.getNewDamage(), sacrifice.getDamager());
 				if (sacrifice.getEntity() instanceof Player) {
 					Player dead = (Player) sacrifice.getEntity();
-					if(dead.getHealth() <= 0) SACRIFICE_ADVANCEMENT.add(player.getUniqueId());
+					if (dead.getHealth() <= 0) SACRIFICE_ADVANCEMENT.add(player.getUniqueId());
 				}
 			}
 		}
