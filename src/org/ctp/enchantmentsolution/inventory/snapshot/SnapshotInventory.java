@@ -52,7 +52,7 @@ public class SnapshotInventory {
 				for(String s: item.getItemMeta().getLore())
 					if (StringUtils.isEnchantment(s)) {
 						EnchantmentLevel enchant = StringUtils.getEnchantment(s);
-						if (enchant != null && !ItemUtils.hasEnchantment(item, enchant.getEnchant().getRelativeEnchantment())) enchants.add(enchant);
+						if (enchant != null) enchants.add(enchant);
 					}
 				for(EnchantmentLevel ench: enchants) {
 					ItemUtils.removeEnchantmentFromItem(item, ench.getEnchant());

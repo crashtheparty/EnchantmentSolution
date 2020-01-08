@@ -6,7 +6,7 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.block.BlockEvent;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 
-public class ESBlockEvent extends BlockEvent implements Cancellable {
+public abstract class ESBlockEvent extends BlockEvent implements Cancellable {
 
 	private static final HandlerList handlers = new HandlerList();
 

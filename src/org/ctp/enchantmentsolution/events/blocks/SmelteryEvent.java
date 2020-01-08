@@ -9,16 +9,17 @@ import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 
 public class SmelteryEvent extends ESBlockBreakEvent {
 
-	private ItemStack drop;
+	private final ItemStack drop;
 	private Material changeTo;
-	private boolean fortune = true;
+	private boolean fortune;
 	private int exp;
 
-	public SmelteryEvent(Block block, Player player, ItemStack drop, Material changeTo, int exp) {
+	public SmelteryEvent(Block block, Player player, ItemStack drop, Material changeTo, int exp, boolean fortune) {
 		super(block, player, new EnchantmentLevel(CERegister.SMELTERY, 1));
-		setDrop(drop);
+		this.drop = drop;
 		setChangeTo(changeTo);
 		setExp(exp);
+		setFortune(fortune);
 	}
 
 	public Material getChangeTo() {
@@ -48,9 +49,4 @@ public class SmelteryEvent extends ESBlockBreakEvent {
 	public ItemStack getDrop() {
 		return drop;
 	}
-
-	public void setDrop(ItemStack drop) {
-		this.drop = drop;
-	}
-
 }

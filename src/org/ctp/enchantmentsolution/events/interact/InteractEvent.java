@@ -1,4 +1,4 @@
-package org.ctp.enchantmentsolution.events.player;
+package org.ctp.enchantmentsolution.events.interact;
 
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
@@ -10,28 +10,32 @@ import org.ctp.enchantmentsolution.events.ESPlayerEvent;
 public abstract class InteractEvent extends ESPlayerEvent {
 
 	private final ItemStack item;
-	private Block block;
-	private Entity entity;
-	private Type type;
+	private final Block block;
+	private final Entity entity;
+	private final Type type;
 
 	public InteractEvent(Player who, EnchantmentLevel enchantment, ItemStack item) {
 		super(who, enchantment);
 		this.item = item;
-		setType(Type.AIR);
+		this.type = Type.AIR;
+		this.block = null;
+		this.entity = null;
 	}
 
 	public InteractEvent(Player who, EnchantmentLevel enchantment, ItemStack item, Block block) {
 		super(who, enchantment);
 		this.item = item;
-		setBlock(block);
-		setType(Type.BLOCK);
+		this.block = block;
+		this.entity = null;
+		this.type = Type.BLOCK;
 	}
 
 	public InteractEvent(Player who, EnchantmentLevel enchantment, ItemStack item, Entity entity) {
 		super(who, enchantment);
 		this.item = item;
-		setEntity(entity);
-		setType(Type.ENTITY);
+		this.block = null;
+		this.entity = entity;
+		this.type = Type.ENTITY;
 	}
 
 	public ItemStack getItem() {
@@ -42,24 +46,12 @@ public abstract class InteractEvent extends ESPlayerEvent {
 		return block;
 	}
 
-	public void setBlock(Block block) {
-		this.block = block;
-	}
-
 	public Entity getEntity() {
 		return entity;
 	}
 
-	public void setEntity(Entity entity) {
-		this.entity = entity;
-	}
-
 	public Type getType() {
 		return type;
-	}
-
-	public void setType(Type type) {
-		this.type = type;
 	}
 
 	public enum Type {

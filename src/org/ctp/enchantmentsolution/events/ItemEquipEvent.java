@@ -22,8 +22,8 @@ public final class ItemEquipEvent extends PlayerEvent implements Cancellable {
 
 	private boolean cancel = false;
 	private final HandMethod equipType;
-	private ItemStack oldItem, newItem;
-	private ItemSlotType slot;
+	private final ItemStack oldItem, newItem;
+	private final ItemSlotType slot;
 
 	/**
 	 * Constructor for the ItemEquipEvent.
@@ -44,10 +44,12 @@ public final class ItemEquipEvent extends PlayerEvent implements Cancellable {
 		this.oldItem = oldItem;
 	}
 
+	@Override
 	public final void setCancelled(final boolean cancel) {
 		this.cancel = cancel;
 	}
 
+	@Override
 	public final boolean isCancelled() {
 		return cancel;
 	}
@@ -56,16 +58,8 @@ public final class ItemEquipEvent extends PlayerEvent implements Cancellable {
 		return oldItem;
 	}
 
-	public final void setOldItem(final ItemStack oldArmorPiece) {
-		oldItem = oldArmorPiece;
-	}
-
 	public final ItemStack getNewItem() {
 		return newItem;
-	}
-
-	public final void setNewItem(final ItemStack newArmorPiece) {
-		newItem = newArmorPiece;
 	}
 
 	public HandMethod getMethod() {
@@ -76,23 +70,16 @@ public final class ItemEquipEvent extends PlayerEvent implements Cancellable {
 		return slot;
 	}
 
-	public void setSlot(ItemSlotType slot) {
-		this.slot = slot;
-	}
-
 	public enum HandMethod {
 		HELD_SWITCH, CRAFTED, PICK_UP, DROP, HOT_BAR, HELD_SWAP,
 		/**
-		 * When in range of a dispenser that shoots an armor piece to equip.
-		 */
-		DISPENSER,
-		/**
-		 * When an armor piece breaks to unequip
+		 * When an item piece breaks to unequip
 		 */
 		BROKE,
 		/**
-		 * When you die causing all armor to unequip
+		 * When you die causing all items to unequip
 		 */
-		DEATH,;
+		DEATH,
+		JOIN;
 	}
 }

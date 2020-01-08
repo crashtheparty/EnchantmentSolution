@@ -59,12 +59,12 @@ public class StringUtils {
 		for(CustomEnchantment ench: RegisterEnchantments.getEnchantments())
 			if (ench.getDisplayName().equals(repaired)) {
 				if (meta.hasEnchant(ench.getRelativeEnchantment())) // already has the enchantment, so do nothing about it
-				return null;
+					return null;
 				match = ench;
 			}
 
 		if (match == null) // not an enchantment, so don't add one
-		return null;
+			return null;
 
 		return new EnchantmentLevel(match, level);
 	}
@@ -174,7 +174,8 @@ public class StringUtils {
 		Iterator<String> iterator = lore.iterator();
 		while (iterator.hasNext()) {
 			String l = iterator.next();
-			if (l.contains(returnEnchantmentName(enchantment))) iterator.remove();
+			EnchantmentLevel level = getEnchantment(l);
+			if (level != null && level.getEnchant().equals(enchantment)) iterator.remove();
 		}
 		return lore;
 	}

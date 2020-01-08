@@ -1,4 +1,4 @@
-package org.ctp.enchantmentsolution.events.player;
+package org.ctp.enchantmentsolution.events.fishing;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Player;

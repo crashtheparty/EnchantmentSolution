@@ -18,7 +18,7 @@ public enum Attributable {
 	ARMORED(RegisterEnchantments.ARMORED, Attribute.GENERIC_ARMOR, ItemSlotType.CHESTPLATE, "armored_armor", UUID.fromString("cccccccc-fefe-fefe-fefe-000000000000"), Operation.ADD_NUMBER),
 	GUNG_HO(RegisterEnchantments.GUNG_HO, Attribute.GENERIC_MAX_HEALTH, ItemSlotType.CHESTPLATE, "gung_ho_health", UUID.fromString("eeeeeeee-ffff-ffff-ffff-000000000000"), Operation.ADD_NUMBER, "generic.maxHealth"),
 	LIFE(RegisterEnchantments.LIFE, Attribute.GENERIC_MAX_HEALTH, ItemSlotType.CHESTPLATE, "life_health", UUID.fromString("eeeeeeee-fefe-fefe-fefe-000000000000"), Operation.ADD_NUMBER, "generic.maxHealth"),
-	QUICK_STRIKE(RegisterEnchantments.QUICK_STRIKE, Attribute.GENERIC_ATTACK_SPEED, ItemSlotType.MAIN_HAND, "quick_strike_armor", UUID.fromString("dddddddd-fefe-fefe-fefe-000000000000"), Operation.ADD_SCALAR),
+	QUICK_STRIKE(RegisterEnchantments.QUICK_STRIKE, Attribute.GENERIC_ATTACK_SPEED, ItemSlotType.MAIN_HAND, "quick_strike_speed", UUID.fromString("dddddddd-fefe-fefe-fefe-000000000000"), Operation.ADD_SCALAR, "quick_strike_armor"),
 	TOUGHNESS_HELMET(RegisterEnchantments.TOUGHNESS, Attribute.GENERIC_ARMOR_TOUGHNESS, ItemSlotType.HELMET, "helmet_toughness", UUID.fromString("bbbbbbbb-fefe-fefe-fefe-000000001000"), Operation.ADD_NUMBER),
 	TOUGHNESS_CHESTPLATE(RegisterEnchantments.TOUGHNESS, Attribute.GENERIC_ARMOR_TOUGHNESS, ItemSlotType.CHESTPLATE, "chestplate_toughness", UUID.fromString("bbbbbbbb-fefe-fefe-fefe-000000001100"), Operation.ADD_NUMBER),
 	TOUGHNESS_LEGGINGS(RegisterEnchantments.TOUGHNESS, Attribute.GENERIC_ARMOR_TOUGHNESS, ItemSlotType.LEGGINGS, "leggings_toughness", UUID.fromString("bbbbbbbb-fefe-fefe-fefe-000000001110"), Operation.ADD_NUMBER),

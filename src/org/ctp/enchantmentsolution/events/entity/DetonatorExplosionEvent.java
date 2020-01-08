@@ -1,4 +1,4 @@
-package org.ctp.enchantmentsolution.events.blocks;
+package org.ctp.enchantmentsolution.events.entity;
 
 import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
@@ -17,8 +17,8 @@ public class DetonatorExplosionEvent extends ESEntityEvent {
 		super(entity, new EnchantmentLevel(CERegister.DETONATOR, level));
 		this.loc = loc;
 		setSize(size);
-		setSetFire(setFire);
-		setSetBlocks(setBlocks);
+		setFire(setFire);
+		setBlocks(setBlocks);
 		setDelayExplosion(delayExplosion);
 	}
 
@@ -38,7 +38,7 @@ public class DetonatorExplosionEvent extends ESEntityEvent {
 		return setFire;
 	}
 
-	public void setSetFire(boolean setFire) {
+	public void setFire(boolean setFire) {
 		this.setFire = setFire;
 	}
 
@@ -46,7 +46,7 @@ public class DetonatorExplosionEvent extends ESEntityEvent {
 		return setBlocks;
 	}
 
-	public void setSetBlocks(boolean setBlocks) {
+	public void setBlocks(boolean setBlocks) {
 		this.setBlocks = setBlocks;
 	}
 

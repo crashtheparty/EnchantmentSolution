@@ -4,21 +4,12 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
-import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Particle;
-import org.bukkit.Sound;
-import org.bukkit.Statistic;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.Waterlogged;
 import org.bukkit.block.data.type.Campfire;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Arrow;
-import org.bukkit.entity.Egg;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
@@ -32,11 +23,7 @@ import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enums.ItemMoisturizeType;
-import org.ctp.enchantmentsolution.events.interact.FlowerGiftEvent;
-import org.ctp.enchantmentsolution.events.interact.LassoInteractEvent;
-import org.ctp.enchantmentsolution.events.interact.MoisturizeEvent;
-import org.ctp.enchantmentsolution.events.interact.OverkillEvent;
-import org.ctp.enchantmentsolution.events.interact.SplatterFestEvent;
+import org.ctp.enchantmentsolution.events.interact.*;
 import org.ctp.enchantmentsolution.events.modify.IcarusLaunchEvent;
 import org.ctp.enchantmentsolution.listeners.Enchantmentable;
 import org.ctp.enchantmentsolution.nms.FlowerGiftNMS;
@@ -80,7 +67,7 @@ public class PlayerListener extends Enchantmentable {
 			if (player.getGameMode().equals(GameMode.CREATIVE) || player.getGameMode().equals(GameMode.SPECTATOR)) return;
 			ItemStack item = player.getInventory().getItemInMainHand();
 			Block block = event.getClickedBlock();
-			if (block != null && item != null) if (ItemUtils.hasEnchantment(item, RegisterEnchantments.FLOWER_GIFT)) if (FlowerGiftNMS.isItem(block.getType())) {
+			if (block != null && item != null && ItemUtils.hasEnchantment(item, RegisterEnchantments.FLOWER_GIFT) && FlowerGiftNMS.isItem(block.getType())) {
 				FlowerGiftEvent flowerGiftEvent = new FlowerGiftEvent(player, item, block, FlowerGiftNMS.getItem(block.getType()), block.getLocation());
 				Bukkit.getPluginManager().callEvent(flowerGiftEvent);
 
@@ -198,7 +185,7 @@ public class PlayerListener extends Enchantmentable {
 							break;
 					}
 					if (sound != null) {
-						MoisturizeEvent moisturize = new MoisturizeEvent(event.getPlayer(), block, type, sound);
+						MoisturizeEvent moisturize = new MoisturizeEvent(event.getPlayer(), item, block, type, sound);
 						Bukkit.getPluginManager().callEvent(moisturize);
 
 						if (!moisturize.isCancelled()) {
@@ -254,7 +241,7 @@ public class PlayerListener extends Enchantmentable {
 				event.setCancelled(false);
 				if (!canRun(RegisterEnchantments.OVERKILL, event)) return;
 				boolean takeArrow = player.getGameMode() != GameMode.CREATIVE && !ItemUtils.hasEnchantment(item, Enchantment.ARROW_INFINITE);
-				OverkillEvent overkill = new OverkillEvent(player, takeArrow, player.getInventory().all(Material.ARROW).size() > 0, 0.4);
+				OverkillEvent overkill = new OverkillEvent(player, item, takeArrow, player.getInventory().all(Material.ARROW).size() > 0, 0.4);
 				Bukkit.getPluginManager().callEvent(overkill);
 
 				if (!overkill.isCancelled()) {
@@ -295,7 +282,7 @@ public class PlayerListener extends Enchantmentable {
 			if (ItemUtils.hasEnchantment(item, RegisterEnchantments.SPLATTER_FEST)) {
 				event.setCancelled(false);
 				if (!canRun(RegisterEnchantments.SPLATTER_FEST, event)) return;
-				SplatterFestEvent splatterFest = new SplatterFestEvent(player, player.getGameMode() != GameMode.CREATIVE, player.getInventory().all(Material.EGG).size() > 0);
+				SplatterFestEvent splatterFest = new SplatterFestEvent(player, item, player.getGameMode() != GameMode.CREATIVE, player.getInventory().all(Material.EGG).size() > 0);
 				Bukkit.getPluginManager().callEvent(splatterFest);
 
 				if (!splatterFest.isCancelled()) {

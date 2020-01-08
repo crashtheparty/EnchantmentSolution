@@ -191,17 +191,10 @@ public class ItemUtils {
 		List<String> lore = meta.getLore();
 		if (lore == null) lore = new ArrayList<String>();
 		if (enchantment.getRelativeEnchantment() instanceof CustomEnchantmentWrapper) lore = StringUtils.removeEnchantment(enchantment, meta.getEnchantLevel(enchantment.getRelativeEnchantment()), lore);
-		if (hasEnchantment(item, enchantment.getRelativeEnchantment())) if (meta instanceof EnchantmentStorageMeta) ((EnchantmentStorageMeta) meta).removeStoredEnchant(enchantment.getRelativeEnchantment());
-		else
-			meta.removeEnchant(enchantment.getRelativeEnchantment());
+		if (hasEnchantment(item, enchantment.getRelativeEnchantment()) && meta instanceof EnchantmentStorageMeta) ((EnchantmentStorageMeta) meta).removeStoredEnchant(enchantment.getRelativeEnchantment());
+		else if (hasEnchantment(item, enchantment.getRelativeEnchantment())) meta.removeEnchant(enchantment.getRelativeEnchantment());
 		meta = ItemUtils.setLore(meta, lore);
 		item.setItemMeta(meta);
-		return item;
-	}
-
-	public static ItemStack removeAllEnchantments(ItemStack item) {
-		for(CustomEnchantment enchantment: RegisterEnchantments.getEnchantments())
-			item = removeEnchantmentFromItem(item, enchantment);
 		return item;
 	}
 

@@ -24,7 +24,7 @@ public class AdvancementThread implements Runnable {
 		for(Player player: Bukkit.getOnlinePlayers()) {
 			boolean hasTank = true;
 			for(ItemStack item: player.getInventory().getArmorContents())
-				if (item == null || !(ItemUtils.hasEnchantment(item, RegisterEnchantments.TANK) && ItemUtils.getLevel(item, RegisterEnchantments.TANK) == RegisterEnchantments.getCustomEnchantment(RegisterEnchantments.TANK).getMaxLevel())) hasTank = false;
+				if (item == null || !(ItemUtils.hasEnchantment(item, RegisterEnchantments.TANK) && ItemUtils.getLevel(item, RegisterEnchantments.TANK) >= RegisterEnchantments.getCustomEnchantment(RegisterEnchantments.TANK).getMaxLevel())) hasTank = false;
 			if (hasTank) AdvancementUtils.awardCriteria(player, ESAdvancement.PANZER_SOLDIER, "tank");
 			Block block = player.getLocation().getBlock().getRelative(BlockFace.DOWN);
 			WalkerBlock walkerBlock = WalkerUtils.getWalker(block);

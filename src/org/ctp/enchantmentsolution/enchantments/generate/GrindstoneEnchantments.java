@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import java.util.Map.Entry;
+import java.util.Random;
 
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -46,14 +46,10 @@ public class GrindstoneEnchantments extends GenerateEnchantments {
 	}
 
 	private void setCanCombine() {
-		if (getItemTwo() != null && getItem().getType() == getItemTwo().getType()) {
-			canCombine = true;
-			return;
-		} else if (getItem() != null) {
-			canCombine = true;
-			return;
-		}
-		canCombine = false;
+		if (getItem() != null && getItemTwo() != null && getItem().getType() == getItemTwo().getType()) canCombine = true;
+		else if (getItem() != null && getItemTwo() == null) canCombine = true;
+		else
+			canCombine = false;
 	}
 
 	public boolean canCombine() {
@@ -62,8 +58,14 @@ public class GrindstoneEnchantments extends GenerateEnchantments {
 
 	private void setTakeEnchantments() {
 		ItemStack item = getItem();
-		if (item.getType() != Material.BOOK && item.getType() != Material.ENCHANTED_BOOK && item.hasItemMeta() && item.getItemMeta().hasEnchants()) if (itemTwo.getType() == Material.BOOK && itemTwo.hasItemMeta() && !itemTwo.getItemMeta().hasEnchants() || !itemTwo.hasItemMeta()) takeEnchantments = true;
-		takeEnchantments = false;
+		ItemStack itemTwo = getItemTwo();
+		if (item == null || itemTwo == null) {
+			takeEnchantments = false;
+			return;
+		}
+		if (item.getType() != Material.BOOK && item.getType() != Material.ENCHANTED_BOOK && item.hasItemMeta() && item.getItemMeta().hasEnchants() && itemTwo.getType() == Material.BOOK && (itemTwo.hasItemMeta() && !itemTwo.getItemMeta().hasEnchants() || !itemTwo.hasItemMeta())) takeEnchantments = true;
+		else
+			takeEnchantments = false;
 	}
 
 	public boolean canTakeEnchantments() {
@@ -148,7 +150,7 @@ public class GrindstoneEnchantments extends GenerateEnchantments {
 		ItemStack item = getItem();
 		combinedItem = item.clone();
 		if (item.getType().equals(Material.ENCHANTED_BOOK)) combinedItem = new ItemStack(Material.BOOK);
-		combinedItem = ItemUtils.removeAllEnchantments(combinedItem);
+		combinedItem = ItemUtils.removeAllEnchantments(combinedItem, false);
 
 		if (itemTwo != null) {
 			if (item.getType() != Material.BOOK && item.getType() != Material.ENCHANTED_BOOK && ItemType.hasItemType(item.getType())) {

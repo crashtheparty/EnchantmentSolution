@@ -30,7 +30,11 @@ lore_on_top: true
 version:
     get_latest: true
     get_experimental: false
-
+wiki:
+    on_login: true
+    on_timer: false
+    timer_seconds: 14400
+    url: 'https://bit.ly/2N54NzC'
 loots:
     mobs:
         use: true
@@ -186,6 +190,19 @@ config_comments:
 
         get_experimental: 
         - 'Check github for plugin experimental versions (available only on github)'
+
+    wiki: 
+        on_login: 
+        - 'Shows the wikipedia page to the user on login'
+
+        on_timer: 
+        - 'Shows the wikipedia page to the user on a timer'
+
+        timer_seconds: 
+        - 'The number of seconds between when users should be alerted to the wiki'
+
+        url: 
+        - 'The URL to the wiki - the default is the normal EnchantmentSolution wiki'
 
     loots: 
         mobs: 

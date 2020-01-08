@@ -2,16 +2,10 @@ package org.ctp.enchantmentsolution.listeners.enchantments;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Statistic;
+
+import org.bukkit.*;
 import org.bukkit.block.Block;
-import org.bukkit.block.data.BlockData;
-import org.bukkit.block.data.Directional;
-import org.bukkit.block.data.Orientable;
-import org.bukkit.block.data.Rotatable;
+import org.bukkit.block.data.*;
 import org.bukkit.block.data.type.Snow;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -26,9 +20,9 @@ import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enums.ItemBreakType;
 import org.ctp.enchantmentsolution.enums.ItemPlaceType;
-import org.ctp.enchantmentsolution.events.blocks.GoldDiggerEvent;
 import org.ctp.enchantmentsolution.events.blocks.HeightWidthEvent;
 import org.ctp.enchantmentsolution.events.blocks.WandEvent;
+import org.ctp.enchantmentsolution.events.modify.GoldDiggerEvent;
 import org.ctp.enchantmentsolution.events.modify.LagEvent;
 import org.ctp.enchantmentsolution.events.player.ExperienceEvent;
 import org.ctp.enchantmentsolution.events.player.ExperienceEvent.ExpShareType;
@@ -144,7 +138,7 @@ public class BlockListener extends Enchantmentable {
 	private void heightWidth(BlockBreakEvent event) {
 		Player player = event.getPlayer();
 		if (!canRun(event, false, RegisterEnchantments.WIDTH_PLUS_PLUS, RegisterEnchantments.HEIGHT_PLUS_PLUS)) return;
-		if (AbilityUtils.getHeightWidthBlocks().contains(event.getBlock())) return;
+		if (AbilityUtils.getHeightWidthBlocks().contains(event.getBlock().getLocation())) return;
 		if (!EnchantmentSolution.getPlugin().getMcMMOType().equals("Disabled") && McMMOAbility.getIgnored() != null && McMMOAbility.getIgnored().contains(player)) return;
 		if (EnchantmentSolution.getPlugin().getVeinMiner() != null && VeinMinerListener.hasVeinMiner(player)) return;
 		if (player.getGameMode().equals(GameMode.CREATIVE) || player.getGameMode().equals(GameMode.SPECTATOR)) return;
@@ -182,37 +176,31 @@ public class BlockListener extends Enchantmentable {
 			}
 			Material original = event.getBlock().getType();
 			if (hasWidthHeight && ItemBreakType.getType(item.getType()) != null && ItemBreakType.getType(item.getType()).getBreakTypes() != null && ItemBreakType.getType(item.getType()).getBreakTypes().contains(original)) {
-				int start = 1;
 				int blocksBroken = 0;
-				Collection<Block> blocks = new ArrayList<Block>();
-				while (start <= xt || start <= yt || start <= zt) {
-					int xBegin = start;
-					int yBegin = start;
-					int zBegin = start;
-					if (xBegin > xt) xBegin = xt;
-					if (yBegin > yt) yBegin = yt;
-					if (zBegin > zt) zBegin = zt;
-					for(int x = -xBegin; x <= xBegin; x++)
-						for(int y = -yBegin; y <= yBegin; y++)
-							for(int z = -zBegin; z <= zBegin; z++)
-								if (Math.abs(x) == xBegin && Math.abs(y) == yBegin || Math.abs(x) == xBegin && Math.abs(z) == zBegin || Math.abs(y) == yBegin && Math.abs(z) == zBegin) {
-									item = player.getInventory().getItemInMainHand();
-									if (item == null || item.getType() == Material.AIR) return;
-									if (x == 0 && y == 0 && z == 0) continue;
-									Block block = event.getBlock().getRelative(x, y, z);
-									if (original != Material.OBSIDIAN && block.getType() == Material.OBSIDIAN) continue;
-
-									if (ItemBreakType.getType(item.getType()).getBreakTypes().contains(block.getType())) blocks.add(block);
-								}
-					start++;
-				}
+				Collection<Location> blocks = new ArrayList<Location>();
+				Block block = event.getBlock();
+				item = player.getInventory().getItemInMainHand();
+				if (item == null || item.getType() == Material.AIR) return;
+				for(int x = 0; x <= xt; x++)
+					for(int y = 0; y <= yt; y++)
+						for(int z = 0; z <= zt; z++) {
+							if (x == 0 && y == 0 && z == 0) continue;
+							addHeightWidthBlock(blocks, item, original, block, x, y, z);
+							addHeightWidthBlock(blocks, item, original, block, -x, y, z);
+							addHeightWidthBlock(blocks, item, original, block, x, -y, z);
+							addHeightWidthBlock(blocks, item, original, block, x, y, -z);
+							addHeightWidthBlock(blocks, item, original, block, -x, -y, z);
+							addHeightWidthBlock(blocks, item, original, block, -x, y, -z);
+							addHeightWidthBlock(blocks, item, original, block, x, -y, -z);
+							addHeightWidthBlock(blocks, item, original, block, -x, -y, -z);
+						}
 
 				HeightWidthEvent heightWidth = new HeightWidthEvent(blocks, player, heightPlusPlus, widthPlusPlus);
 				Bukkit.getPluginManager().callEvent(heightWidth);
 
-				if (!heightWidth.isCancelled()) for(Block block: heightWidth.getBlocks()) {
-					AbilityUtils.addHeightWidthBlock(block);
-					BlockBreakEvent newEvent = new BlockBreakEvent(block, player);
+				if (!heightWidth.isCancelled()) for(Location b: heightWidth.getBlocks()) {
+					AbilityUtils.addHeightWidthBlock(b);
+					BlockBreakEvent newEvent = new BlockBreakEvent(b.getBlock(), player);
 					int exp = 0;
 					if (!ItemUtils.hasEnchantment(item, Enchantment.SILK_TOUCH)) switch (newEvent.getBlock().getType().name()) {
 						case "COAL_ORE":
@@ -235,7 +223,7 @@ public class BlockListener extends Enchantmentable {
 					}
 					newEvent.setExpToDrop(exp);
 					Bukkit.getServer().getPluginManager().callEvent(newEvent);
-					if (item != null && newEvent.getBlock().getType() != Material.AIR && !newEvent.isCancelled()) {
+					if (item != null && item.getType() != Material.AIR && newEvent.getBlock().getType() != Material.AIR && !newEvent.isCancelled()) {
 						AdvancementUtils.awardCriteria(player, ESAdvancement.FAST_AND_FURIOUS, "diamond_pickaxe");
 						if (newEvent.getBlock().getType().equals(Material.SNOW) && ItemBreakType.getType(item.getType()).getBreakTypes().contains(Material.SNOW)) {
 							int num = ((Snow) newEvent.getBlock().getBlockData()).getLayers();
@@ -248,7 +236,7 @@ public class BlockListener extends Enchantmentable {
 						AbilityUtils.dropExperience(newEvent.getBlock().getLocation().add(0.5, 0.5, 0.5), newEvent.getExpToDrop());
 						DamageUtils.damageItem(player, item);
 					}
-					AbilityUtils.removeHeightWidthBlock(event.getBlock());
+					AbilityUtils.removeHeightWidthBlock(b);
 				}
 
 				AdvancementUtils.awardCriteria(player, ESAdvancement.OVER_9000, "stone", blocksBroken);
@@ -259,10 +247,7 @@ public class BlockListener extends Enchantmentable {
 	private void wand(BlockPlaceEvent event) {
 		Player player = event.getPlayer();
 		if (!canRun(RegisterEnchantments.WAND, event)) return;
-		if (AbilityUtils.getWandBlocks().contains(event.getBlock())) {
-			AbilityUtils.removeWandBlock(event.getBlock());
-			return;
-		}
+		if (AbilityUtils.getWandBlocks().contains(event.getBlock().getLocation())) return;
 		ItemStack item = player.getInventory().getItemInMainHand();
 		if (item != null) {
 			int xt = 0;
@@ -290,37 +275,32 @@ public class BlockListener extends Enchantmentable {
 				Location rangeTwo = new Location(clickedBlock.getWorld(), clickedBlock.getX() + xt, clickedBlock.getY() + yt, clickedBlock.getZ() + zt);
 
 				if (LocationUtils.getIntersecting(rangeOne, rangeTwo, player.getLocation(), player.getEyeLocation())) return;
-				int start = 0;
-				Collection<Block> blocks = new ArrayList<Block>();
+				Collection<Location> blocks = new ArrayList<Location>();
 
-				while (start <= xt || start <= yt || start <= zt) {
-					int xBegin = start;
-					int yBegin = start;
-					int zBegin = start;
-					if (xBegin > xt) xBegin = xt;
-					if (yBegin > yt) yBegin = yt;
-					if (zBegin > zt) zBegin = zt;
-					for(int x = -xBegin; x <= xBegin; x++)
-						for(int y = -yBegin; y <= yBegin; y++)
-							for(int z = -zBegin; z <= zBegin; z++)
-								if (Math.abs(x) == xBegin && Math.abs(y) == yBegin || Math.abs(x) == xBegin && Math.abs(z) == zBegin || Math.abs(y) == yBegin && Math.abs(z) == zBegin) {
-									offhand = player.getInventory().getItemInOffHand();
-									if (x == 0 && y == 0 && z == 0) continue;
-									if (offhand == null || offhand.getType() == Material.AIR) continue;
-									Block block = clickedBlock.getRelative(x, y, z);
-									if (!block.getType().isSolid()) blocks.add(block);
-								}
-					start++;
-				}
+				for(int x = 0; x <= xt; x++)
+					for(int y = 0; y <= yt; y++)
+						for(int z = 0; z <= zt; z++) {
+							if (x == 0 && y == 0 && z == 0) continue;
+							addWandBlock(blocks, item, clickedBlock, x, y, z);
+							addWandBlock(blocks, item, clickedBlock, -x, y, z);
+							addWandBlock(blocks, item, clickedBlock, x, -y, z);
+							addWandBlock(blocks, item, clickedBlock, x, y, -z);
+							addWandBlock(blocks, item, clickedBlock, -x, -y, z);
+							addWandBlock(blocks, item, clickedBlock, -x, y, -z);
+							addWandBlock(blocks, item, clickedBlock, x, -y, -z);
+							addWandBlock(blocks, item, clickedBlock, -x, -y, -z);
+						}
+
 				WandEvent wand = new WandEvent(blocks, player, level);
 				Bukkit.getPluginManager().callEvent(wand);
 
 				if (!hasItem(player, offhand)) return;
 				if (!wand.isCancelled()) {
-					for(Block block: wand.getBlocks()) {
+					for(Location loc: wand.getBlocks()) {
+						Block block = loc.getBlock();
 						offhand = player.getInventory().getItemInOffHand();
 						if (!hasItem(player, offhand)) return;
-						AbilityUtils.addWandBlock(block);
+						AbilityUtils.addWandBlock(loc);
 						if (block.getType() == Material.TORCH) AdvancementUtils.awardCriteria(player, ESAdvancement.BREAKER_BREAKER, "torch");
 						Collection<ItemStack> drops = block.getDrops();
 						BlockData oldData = block.getBlockData();
@@ -343,18 +323,17 @@ public class BlockListener extends Enchantmentable {
 						}
 						BlockPlaceEvent newEvent = new BlockPlaceEvent(block, block.getState(), clickedBlock, item, player, true, EquipmentSlot.OFF_HAND);
 						Bukkit.getServer().getPluginManager().callEvent(newEvent);
-						if (item != null && !newEvent.isCancelled()) {
+						if (!newEvent.isCancelled()) {
 							player.incrementStatistic(Statistic.USE_ITEM, item.getType());
 							remove(player, offhand);
 							block.setBlockData(newEvent.getBlockReplacedState().getBlockData());
 							for(ItemStack drop: drops)
 								ItemUtils.dropItem(drop, newEvent.getBlock().getLocation());
 						} else {
-							AbilityUtils.removeWandBlock(block);
 							block.setType(oldType);
 							block.setBlockData(oldData);
 						}
-						if (player.getGameMode().equals(GameMode.CREATIVE) || player.getGameMode().equals(GameMode.SPECTATOR)) return;
+						AbilityUtils.removeWandBlock(loc);
 					}
 					DamageUtils.damageItem(player, item, 1, 2);
 					if (item == null || item.getType() == Material.AIR) AdvancementUtils.awardCriteria(player, ESAdvancement.DID_YOU_REALLY_WAND_TO_DO_THAT, "break");
@@ -367,7 +346,7 @@ public class BlockListener extends Enchantmentable {
 		if (player.getGameMode() == GameMode.CREATIVE) return true;
 		for(int i = 0; i < 36; i++) {
 			ItemStack removeItem = player.getInventory().getItem(i);
-			if (removeItem != null) if (removeItem.getType() == item.getType() && ItemSerialization.itemToData(removeItem).equals(ItemSerialization.itemToData(item))) return true;
+			if (removeItem != null && ItemSerialization.itemToData(removeItem).equals(ItemSerialization.itemToData(item))) return true;
 		}
 		return false;
 	}
@@ -376,15 +355,33 @@ public class BlockListener extends Enchantmentable {
 		if (player.getGameMode() == GameMode.CREATIVE) return;
 		for(int i = 0; i < 36; i++) {
 			ItemStack removeItem = player.getInventory().getItem(i);
-			if (removeItem != null) if (removeItem.getType() == item.getType() && ItemSerialization.itemToData(removeItem).equals(ItemSerialization.itemToData(item))) {
+			if (removeItem != null && ItemSerialization.itemToData(removeItem).equals(ItemSerialization.itemToData(item))) {
 				int left = removeItem.getAmount() - 1;
-				if (left == 0) player.getInventory().setItem(i, new ItemStack(Material.AIR));
-				else {
-					removeItem.setAmount(left);
-					player.getInventory().setItem(i, removeItem);
+				if (left == 0) {
+					removeItem.setAmount(0);
+					removeItem.setType(Material.AIR);
 				}
+				else
+					removeItem.setAmount(left);
 				return;
 			}
 		}
+	}
+
+	private Collection<Location> addHeightWidthBlock(Collection<Location> blocks, ItemStack tool, Material original, Block relative, int x, int y, int z) {
+		Block block = relative.getRelative(x, y, z);
+		if (original != Material.OBSIDIAN && block.getType() == Material.OBSIDIAN) return blocks;
+
+		if(blocks.contains(block.getLocation())) return blocks;
+		
+		if (ItemBreakType.getType(tool.getType()).getBreakTypes().contains(block.getType())) blocks.add(block.getLocation());
+		return blocks;
+	}
+
+	private Collection<Location> addWandBlock(Collection<Location> blocks, ItemStack tool, Block relative, int x, int y, int z) {
+		Block block = relative.getRelative(x, y, z);
+		if(blocks.contains(block.getLocation())) return blocks;
+		if (!block.getType().isSolid()) blocks.add(block.getLocation());
+		return blocks;
 	}
 }

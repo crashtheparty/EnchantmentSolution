@@ -8,6 +8,7 @@ import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -42,6 +43,7 @@ public class Grindstone implements InventoryData {
 		setInventory(playerItems);
 	}
 
+	@Override
 	public void setInventory(List<ItemStack> items) {
 		try {
 			takeEnchantments = false;
@@ -182,6 +184,7 @@ public class Grindstone implements InventoryData {
 		}
 	}
 
+	@Override
 	public Player getPlayer() {
 		return player;
 	}
@@ -190,6 +193,7 @@ public class Grindstone implements InventoryData {
 		this.player = player;
 	}
 
+	@Override
 	public Inventory getInventory() {
 		return inventory;
 	}
@@ -207,13 +211,15 @@ public class Grindstone implements InventoryData {
 				}
 				if (player.getGameMode() != GameMode.CREATIVE) player.setLevel(player.getLevel() - levelCost);
 				ItemUtils.giveItemToPlayer(player, grindstone.getTakenItem(), player.getLocation(), false);
+				playGrindstoneSound();
 				grindstone = null;
 				playerItems.remove(1);
 				if (ConfigString.DESTROY_TAKE_ITEM.getBoolean()) playerItems.remove(0);
 				else
-					playerItems.set(0, ItemUtils.removeAllEnchantments(playerItems.get(0)));
+					playerItems.set(0, ItemUtils.removeAllEnchantments(playerItems.get(0), true));
 			} else {
 				ItemUtils.giveItemToPlayer(player, grindstone.getCombinedItem(), player.getLocation(), false);
+				playGrindstoneSound();
 				LocationUtils.dropExperience(block.getLocation(), grindstone.getExperience(), true);
 				grindstone = null;
 				playerItems.clear();
@@ -238,10 +244,12 @@ public class Grindstone implements InventoryData {
 		return playerItems.remove(slot) != null;
 	}
 
+	@Override
 	public List<ItemStack> getItems() {
 		return playerItems;
 	}
 
+	@Override
 	public Block getBlock() {
 		return block;
 	}
@@ -250,10 +258,12 @@ public class Grindstone implements InventoryData {
 		this.block = block;
 	}
 
+	@Override
 	public void setItemName(String name) {
 
 	}
 
+	@Override
 	public void close(boolean external) {
 		if (EnchantmentSolution.getPlugin().hasInventory(this)) {
 			for(ItemStack item: getItems())
@@ -286,5 +296,13 @@ public class Grindstone implements InventoryData {
 			inventory.setItem(i, new ItemStack(Material.AIR));
 		if (opening) opening = false;
 		return inv;
+	}
+
+	private void playGrindstoneSound() {
+		Sound sound = Sound.BLOCK_ANVIL_USE;
+		try {
+			sound = Sound.valueOf("BLOCK_GRINDSTONE_USE");
+		} catch (Exception ex) {}
+		block.getWorld().playSound(block.getLocation(), sound, 1, 1);
 	}
 }

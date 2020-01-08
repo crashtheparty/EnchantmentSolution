@@ -2,7 +2,7 @@ package org.ctp.enchantmentsolution.events.blocks;
 
 import java.util.Collection;
 
-import org.bukkit.block.Block;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
@@ -22,18 +22,18 @@ public abstract class MultiBlockEvent extends Event implements Cancellable {
 		return handlers;
 	}
 
-	private Collection<Block> blocks;
+	private Collection<Location> blocks;
 	private final Player player;
 	private boolean cancelled;
 	private final EnchantmentLevel enchantment;
 
-	public MultiBlockEvent(Collection<Block> blocks, Player player, EnchantmentLevel enchantment) {
+	public MultiBlockEvent(Collection<Location> blocks, Player player, EnchantmentLevel enchantment) {
 		this.blocks = blocks;
 		this.player = player;
 		this.enchantment = enchantment;
 	}
 
-	public Collection<Block> getBlocks() {
+	public Collection<Location> getBlocks() {
 		return blocks;
 	}
 
@@ -41,15 +41,17 @@ public abstract class MultiBlockEvent extends Event implements Cancellable {
 		return player;
 	}
 
+	public EnchantmentLevel getEnchantment() {
+		return enchantment;
+	}
+
+	@Override
 	public boolean isCancelled() {
 		return cancelled;
 	}
 
+	@Override
 	public void setCancelled(boolean cancelled) {
 		this.cancelled = cancelled;
-	}
-
-	public EnchantmentLevel getEnchantment() {
-		return enchantment;
 	}
 }

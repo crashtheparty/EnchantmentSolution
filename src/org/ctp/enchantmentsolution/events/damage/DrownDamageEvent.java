@@ -7,8 +7,8 @@ import org.ctp.enchantmentsolution.events.entity.ESDamageEntityEvent;
 
 public class DrownDamageEvent extends ESDamageEntityEvent {
 
-	public DrownDamageEvent(LivingEntity damager, int level, double damage, double newDamage) {
-		super(damager, new EnchantmentLevel(CERegister.DROWNED, level), damage, newDamage);
+	public DrownDamageEvent(LivingEntity damaged, int level, double damage, double newDamage) {
+		super(damaged, new EnchantmentLevel(CERegister.DROWNED, level), damage, newDamage);
 	}
 
 }

@@ -103,7 +103,7 @@ public class YamlConfigBackup extends YamlConfig {
 		YamlInfo info = configInventoryData.get(path);
 		if (value == null && info == null) return true;
 		else if (info == null) // no changes to info, so return true
-		return true;
+			return true;
 		else if (value == null && info.getValue() == null) return true;
 		else if (value == null) return false;
 

@@ -11,7 +11,8 @@ import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enchantments.generate.TableEnchantments;
 import org.ctp.enchantmentsolution.enums.Language;
 import org.ctp.enchantmentsolution.utils.config.*;
-import org.ctp.enchantmentsolution.utils.files.*;
+import org.ctp.enchantmentsolution.utils.files.DataFile;
+import org.ctp.enchantmentsolution.utils.files.LanguageFile;
 import org.ctp.enchantmentsolution.utils.yaml.YamlConfig;
 import org.ctp.enchantmentsolution.utils.yaml.YamlConfigBackup;
 
@@ -107,6 +108,7 @@ public class Configurations {
 		if (!EnchantmentSolution.getPlugin().isInitializing()) {
 			EnchantmentSolution.getPlugin().setVersionCheck(ConfigString.LATEST_VERSION.getBoolean(), ConfigString.EXPERIMENTAL_VERSION.getBoolean());
 			AdvancementUtils.createAdvancements();
+			EnchantmentSolution.getPlugin().getWiki().resetRunner();
 		}
 	}
 

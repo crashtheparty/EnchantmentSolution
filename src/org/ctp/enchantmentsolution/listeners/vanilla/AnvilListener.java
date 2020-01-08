@@ -31,6 +31,7 @@ public class AnvilListener implements Listener {
 			if ((anvil.getRepairType() == RepairType.COMBINE || anvil.getRepairType() == RepairType.REPAIR) && anvil.canCombine()) event.setResult(anvil.getCombinedItem());
 			else if (anvil.getRepairType() == RepairType.RENAME) {
 				ItemStack newFirst = anvil.getCombinedItem();
+				if (newFirst == null) return;
 				ItemMeta firstMeta = newFirst.getItemMeta();
 				if (firstMeta.hasDisplayName() && !firstMeta.getDisplayName().equals(event.getInventory().getRenameText()) || !firstMeta.hasDisplayName() && event.getInventory().getRenameText() != null && !event.getInventory().getRenameText().equals("")) {
 					firstMeta.setDisplayName(event.getInventory().getRenameText());
