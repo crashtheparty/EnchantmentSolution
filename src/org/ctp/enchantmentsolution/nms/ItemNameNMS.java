@@ -28,6 +28,7 @@ public class ItemNameNMS {
 					case 8:
 						return ItemName_v1_14_R1.returnLocalizedItemName(item);
 					case 9:
+					case 10:
 						return ItemName_v1_15_R1.returnLocalizedItemName(item);
 				}
 				break;

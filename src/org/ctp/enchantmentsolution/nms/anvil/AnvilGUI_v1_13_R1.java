@@ -10,12 +10,7 @@ import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.inventory.Anvil;
 import org.ctp.enchantmentsolution.inventory.InventoryData;
 
-import net.minecraft.server.v1_13_R1.BlockPosition;
-import net.minecraft.server.v1_13_R1.ChatMessage;
-import net.minecraft.server.v1_13_R1.ContainerAnvil;
-import net.minecraft.server.v1_13_R1.EntityHuman;
-import net.minecraft.server.v1_13_R1.EntityPlayer;
-import net.minecraft.server.v1_13_R1.PacketPlayOutOpenWindow;
+import net.minecraft.server.v1_13_R1.*;
 
 public class AnvilGUI_v1_13_R1 extends AnvilGUI {
 	private class AnvilContainer extends ContainerAnvil {
@@ -35,10 +30,12 @@ public class AnvilGUI_v1_13_R1 extends AnvilGUI {
 		super(player, handler, data);
 	}
 
+	@Override
 	public void setSlot(AnvilSlot slot, ItemStack item) {
 		items.put(slot, item);
 	}
 
+	@Override
 	public void open() {
 		EntityPlayer p = ((CraftPlayer) getPlayer()).getHandle();
 
@@ -51,8 +48,6 @@ public class AnvilGUI_v1_13_R1 extends AnvilGUI {
 			inv.setItem(slot.getSlot(), items.get(slot));
 
 		inv.setItem(0, new ItemStack(Material.NAME_TAG));
-
-		setInventory(inv);
 
 		setInventory(inv);
 

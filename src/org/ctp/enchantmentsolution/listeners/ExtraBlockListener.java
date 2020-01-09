@@ -36,10 +36,6 @@ public class ExtraBlockListener implements Listener {
 		}
 
 		if (ESArrays.getShulkerBoxes().contains(event.getBlock().getType())) if (!ItemUtils.hasEnchantment(event.getPlayer().getInventory().getItemInMainHand(), RegisterEnchantments.TELEPATHY)) {
-
-		}
-
-		if (ESArrays.getShulkerBoxes().contains(event.getBlock().getType())) if (!ItemUtils.hasEnchantment(event.getPlayer().getInventory().getItemInMainHand(), RegisterEnchantments.TELEPATHY)) {
 			Player player = event.getPlayer();
 			ItemStack item = player.getInventory().getItemInMainHand();
 			Block block = event.getBlock();
@@ -53,7 +49,7 @@ public class ExtraBlockListener implements Listener {
 				player.incrementStatistic(Statistic.USE_ITEM, item.getType());
 				DamageUtils.damageItem(player, item);
 				McMMOHandler.handleMcMMO(event, item);
-				JobsUtils.sendBlockBreakAction(event);
+				if (EnchantmentSolution.getPlugin().isJobsEnabled()) JobsUtils.sendBlockBreakAction(event);
 				event.getBlock().setType(Material.AIR);
 				ItemUtils.dropItems(drops, block.getLocation());
 				block.setType(Material.AIR);
