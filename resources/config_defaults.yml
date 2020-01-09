@@ -2,7 +2,6 @@ enchanting_table:
     custom_gui: true
     level_fifty: true
     lapis_in_table: true
-    decay: false
 anvil:
     custom_gui: true
     level_divisor: 4

@@ -76,10 +76,6 @@ public class MainConfiguration extends Configuration {
 			config.set("enchanting_table.lapis_in_table", config.getBoolean("lapis_in_table"));
 			config.removeKey("lapis_in_table");
 		}
-		if (config.getBooleanValue("enchantability_decay") != null) {
-			config.set("enchanting_table.decay", config.getBoolean("enchantability_decay"));
-			config.removeKey("enchantability_decay");
-		}
 		if (config.getInteger("max_repair_level") != null) {
 			config.set("anvil.max_repair_level", config.getInt("max_repair_level"));
 			config.removeKey("max_repair_level");
