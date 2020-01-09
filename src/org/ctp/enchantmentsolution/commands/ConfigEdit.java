@@ -8,20 +8,19 @@ import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.inventory.ConfigInventory;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
 
-public class ConfigEdit implements CommandExecutor{
+public class ConfigEdit implements CommandExecutor {
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		Player player = null;
-		if(sender instanceof Player) {
+		if (sender instanceof Player) {
 			player = (Player) sender;
-			if(player.hasPermission("enchantmentsolution.command.edit")) {
+			if (player.hasPermission("enchantmentsolution.command.edit")) {
 				ConfigInventory inv = new ConfigInventory(player);
 				EnchantmentSolution.getPlugin().addInventory(inv);
 				inv.setInventory();
-			} else {
+			} else
 				ChatUtils.sendMessage(player, ChatUtils.getMessage(ChatUtils.getCodes(), "commands.no-permission"));
-			}
 		}
 		return true;
 	}

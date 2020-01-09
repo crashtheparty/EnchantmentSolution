@@ -25,7 +25,7 @@ public class FlowerGiftNMS {
 		}
 		return false;
 	}
-	
+
 	public static ItemStack getItem(Material material) {
 		switch (EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber()) {
 			case 1:
@@ -43,7 +43,7 @@ public class FlowerGiftNMS {
 		}
 		return null;
 	}
-	
+
 	public static boolean isDoubleFlower(Material material) {
 		switch (EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber()) {
 			case 1:
@@ -61,7 +61,7 @@ public class FlowerGiftNMS {
 		}
 		return false;
 	}
-	
+
 	public static boolean isWitherRose(Material material) {
 		switch (EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber()) {
 			case 1:

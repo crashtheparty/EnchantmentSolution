@@ -1,12 +1,12 @@
 package org.ctp.enchantmentsolution.enchantments.helper;
 
-import org.ctp.enchantmentsolution.api.Language;
+import org.ctp.enchantmentsolution.enums.Language;
 
 public class EnchantmentDisplayName {
-	
+
 	private Language language;
 	private String displayName;
-	
+
 	public EnchantmentDisplayName(Language lang, String displayName) {
 		setLanguage(lang);
 		setDescription(displayName);

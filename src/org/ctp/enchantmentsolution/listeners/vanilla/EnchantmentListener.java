@@ -18,68 +18,57 @@ import org.bukkit.event.enchantment.PrepareItemEnchantEvent;
 import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantmentWrapper;
-import org.ctp.enchantmentsolution.enchantments.Enchantments;
+import org.ctp.enchantmentsolution.enchantments.generate.TableEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
-import org.ctp.enchantmentsolution.enchantments.helper.PlayerLevels;
-import org.ctp.enchantmentsolution.utils.ConfigUtils;
-import org.ctp.enchantmentsolution.utils.JobsUtils;
+import org.ctp.enchantmentsolution.utils.LocationUtils;
+import org.ctp.enchantmentsolution.utils.compatibility.JobsUtils;
+import org.ctp.enchantmentsolution.utils.config.ConfigString;
+import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 
-public class EnchantmentListener implements Listener{
+public class EnchantmentListener implements Listener {
 
-	@EventHandler(priority=EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPrepareEnchant(PrepareItemEnchantEvent event) {
 		Player player = event.getEnchanter();
-		int bookshelves = Enchantments.getBookshelves(event.getEnchantBlock().getLocation());
+		int bookshelves = LocationUtils.getBookshelves(event.getEnchantBlock().getLocation());
 		ItemStack item = event.getItem();
-		PlayerLevels levels = PlayerLevels.getPlayerLevels(bookshelves, player, item.getType());
-		if(levels == null) {
-			levels = new PlayerLevels(bookshelves, player, item.getType());
-		}
-		if(event.getOffers()[0] == null) return;
-		for(int i = 0; i < event.getOffers().length; i++) {
-			for(EnchantmentLevel ench : levels.getEnchants().get(i)) {
-				event.getOffers()[i].setCost(PlayerLevels.getIntList(player, bookshelves).get(i));
-				if(!(ench.getEnchant().getRelativeEnchantment() instanceof CustomEnchantmentWrapper)) {
+		TableEnchantments table = TableEnchantments.getTableEnchantments(player, item, bookshelves, false);
+		if (event.getOffers()[0] == null) return;
+		for(int i = 0; i < event.getOffers().length; i++)
+			for(EnchantmentLevel ench: table.getEnchantments(item.getType())[i].getEnchantments()) {
+				event.getOffers()[i].setCost(table.getLevelList().getList()[i].getLevel());
+				if (!(ench.getEnchant().getRelativeEnchantment() instanceof CustomEnchantmentWrapper)) {
 					event.getOffers()[i].setEnchantment(ench.getEnchant().getRelativeEnchantment());
 					event.getOffers()[i].setEnchantmentLevel(ench.getLevel());
 				}
 			}
-		}
 	}
-	
-	@EventHandler(priority=EventPriority.HIGHEST)
+
+	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onEnchantItem(EnchantItemEvent event) {
 		Player player = event.getEnchanter();
-		int bookshelves = Enchantments.getBookshelves(event.getEnchantBlock().getLocation());
+		int bookshelves = LocationUtils.getBookshelves(event.getEnchantBlock().getLocation());
 		ItemStack item = event.getItem();
-		PlayerLevels levels = PlayerLevels.getPlayerLevels(bookshelves, player, item.getType());
-		for(int i = 0; i < PlayerLevels.getIntList(player, bookshelves).size(); i++){
-			Integer integer = PlayerLevels.getIntList(player, bookshelves).get(i);
-			if(integer == event.getExpLevelCost()) {
-				List<EnchantmentLevel> enchantments = levels.getEnchants().get(i);
+		TableEnchantments table = TableEnchantments.getTableEnchantments(player, item, bookshelves, false);
+		for(int i = 0; i < table.getLevelList().getList().length; i++) {
+			Integer integer = table.getLevelList().getList()[i].getLevel();
+			if (integer == event.getExpLevelCost()) {
+				List<EnchantmentLevel> enchantments = table.getEnchantments(item.getType())[i].getEnchantments();
 				event.getEnchantsToAdd().clear();
-				item = Enchantments.addEnchantmentsToItem(item, enchantments);
-				if(item.getType() == Material.BOOK && ConfigUtils.getEnchantedBook()) {
-					item = Enchantments.convertToEnchantedBook(item);
-				}
-				if(player.getGameMode() != GameMode.CREATIVE) {
-					player.setLevel(player.getLevel() - i - 1);
-				}
+				item = ItemUtils.addEnchantmentsToItem(item, enchantments);
+				if (item.getType() == Material.BOOK && ConfigString.USE_ENCHANTED_BOOKS.getBoolean()) item = ItemUtils.convertToEnchantedBook(item);
+				if (player.getGameMode() != GameMode.CREATIVE) player.setLevel(player.getLevel() - i - 1);
 				event.getInventory().setItem(0, item);
 				event.getInventory().removeItem(new ItemStack(Material.LAPIS_LAZULI, i + 1));
 				player.playSound(player.getLocation(), Sound.BLOCK_ENCHANTMENT_TABLE_USE, 1, 1);
 				player.setStatistic(Statistic.ITEM_ENCHANTED, player.getStatistic(Statistic.ITEM_ENCHANTED) + 1);
 				Advancement enchanted = Bukkit.getAdvancement(NamespacedKey.minecraft("story/enchant_item"));
-				if(enchanted != null) {
-					player.getAdvancementProgress(enchanted).awardCriteria("enchanted_item");
-				}
-				if(EnchantmentSolution.getPlugin().isJobsEnabled()) {
-					JobsUtils.sendEnchantAction(player, item, item, enchantments);
-				}
+				if (enchanted != null) player.getAdvancementProgress(enchanted).awardCriteria("enchanted_item");
+				if (EnchantmentSolution.getPlugin().isJobsEnabled()) JobsUtils.sendEnchantAction(player, item, item, enchantments);
 				break;
 			}
 		}
-		PlayerLevels.removePlayerLevels(player);
+		TableEnchantments.removeTableEnchantments(player);
 	}
-	
+
 }

@@ -7,9 +7,9 @@ public class Column {
 	private String defaultValue;
 
 	public Column(String name, String type, String defaultValue) {
-		this.setName(name);
-		this.setType(type);
-		this.setDefaultValue(defaultValue);
+		setName(name);
+		setType(type);
+		setDefaultValue(defaultValue);
 	}
 
 	public String getType() {

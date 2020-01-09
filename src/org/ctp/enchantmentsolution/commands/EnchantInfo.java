@@ -9,41 +9,36 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
-import org.ctp.enchantmentsolution.enchantments.Enchantments;
+import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-
 import org.bukkit.ChatColor;
 
-public class EnchantInfo implements CommandExecutor{
+public class EnchantInfo implements CommandExecutor {
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		Player player = null;
-		if(sender instanceof Player) {
-			player = (Player) sender;
-		}
-		if(args.length == 0) {
-			sendEnchantInfo(sender, 1);
-		}else if(args.length == 1) {
+		if (sender instanceof Player) player = (Player) sender;
+		if (args.length == 0) sendEnchantInfo(sender, 1);
+		else if (args.length == 1) {
 			try {
 				int page = Integer.parseInt(args[0]);
 				sendEnchantInfo(sender, page);
 				return true;
 			} catch (NumberFormatException e) {
-				
+
 			}
 			CustomEnchantment enchantment = null;
-			for(CustomEnchantment enchant : Enchantments.getEnchantments()) {
-				if(enchant.getName().equalsIgnoreCase(args[0])) {
+			for(CustomEnchantment enchant: RegisterEnchantments.getRegisteredEnchantments())
+				if (enchant.getName().equalsIgnoreCase(args[0])) {
 					enchantment = enchant;
 					break;
 				}
-			}
-			if(enchantment == null) {
-				if(player != null) {
+			if (enchantment == null) {
+				if (player != null) {
 					HashMap<String, Object> codes = ChatUtils.getCodes();
 					codes.put("%enchant%", args[0]);
 					ChatUtils.sendMessage(player, ChatUtils.getMessage(codes, "commands.enchant-not-found"));
@@ -54,55 +49,48 @@ public class EnchantInfo implements CommandExecutor{
 				}
 			} else {
 				String page = enchantment.getDetails();
-				if(player != null) {
-					ChatUtils.sendMessage(player, page);
-				} else {
+				if (player != null) ChatUtils.sendMessage(player, page);
+				else
 					sender.sendMessage(page);
-				}
 			}
 		}
 		return true;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	private void sendEnchantInfo(CommandSender sender, int page) {
 		Player player = null;
-		if(sender instanceof Player) {
-			player = (Player) sender;
-		}
-		if(page < 1) {
-			page = 1;
-		}
-		while(Enchantments.getEnchantments().size() < ((page - 1) * 10)) {
-			if(page == 1) break;
+		if (sender instanceof Player) player = (Player) sender;
+		if (page < 1) page = 1;
+		List<CustomEnchantment> registered = RegisterEnchantments.getRegisteredEnchantments();
+		while (registered.size() < (page - 1) * 10) {
+			if (page == 1) break;
 			page -= 1;
 		}
-		if(player != null) {
+		if (player != null) {
 			JSONArray json = new JSONArray();
 			JSONObject first = new JSONObject();
 			first.put("text", "\n" + ChatColor.DARK_BLUE + "******");
 			JSONObject second = new JSONObject();
-			if(page > 1) {
+			if (page > 1) {
 				second.put("text", ChatColor.GREEN + "<<<");
 				HashMap<Object, Object> action = new HashMap<Object, Object>();
 				action.put("action", "run_command");
 				action.put("value", "/enchantinfo " + (page - 1));
 				second.put("clickEvent", action);
-			} else {
+			} else
 				second.put("text", ChatColor.DARK_BLUE + "***");
-			}
 			JSONObject third = new JSONObject();
 			third.put("text", ChatColor.DARK_BLUE + "******" + ChatColor.AQUA + " Enchantments Page " + page + ChatColor.DARK_BLUE + " ******");
 			JSONObject fourth = new JSONObject();
-			if(Enchantments.getEnchantments().size() > (page * 10)) {
+			if (registered.size() > page * 10) {
 				fourth.put("text", ChatColor.GREEN + ">>>");
 				HashMap<Object, Object> action = new HashMap<Object, Object>();
 				action.put("action", "run_command");
 				action.put("value", "/enchantinfo " + (page + 1));
 				fourth.put("clickEvent", action);
-			} else {
+			} else
 				fourth.put("text", ChatColor.DARK_BLUE + "***");
-			}
 			JSONObject fifth = new JSONObject();
 			fifth.put("text", ChatColor.DARK_BLUE + "******" + "\n");
 			json.add(first);
@@ -110,12 +98,10 @@ public class EnchantInfo implements CommandExecutor{
 			json.add(third);
 			json.add(fourth);
 			json.add(fifth);
-			List<CustomEnchantment> alphabetical = Enchantments.getEnchantmentsAlphabetical();
+			List<CustomEnchantment> alphabetical = RegisterEnchantments.getRegisteredEnchantmentsAlphabetical();
 			for(int i = 0; i < 10; i++) {
 				int num = i + (page - 1) * 10;
-				if(num >= Enchantments.getEnchantments().size()) {
-					break;
-				}
+				if (num >= registered.size()) break;
 				CustomEnchantment enchant = alphabetical.get(num);
 				JSONObject name = new JSONObject();
 				JSONObject desc = new JSONObject();
@@ -125,8 +111,7 @@ public class EnchantInfo implements CommandExecutor{
 				name.put("text", shrink(ChatColor.GOLD + enchant.getDisplayName()));
 				name.put("clickEvent", action);
 				json.add(name);
-				desc.put("text", shrink(ChatColor.GOLD + enchant.getDisplayName() + ChatColor.WHITE + ": " + ChatColor.WHITE + 
-						enchant.getDescription()).substring((ChatColor.GOLD + enchant.getDisplayName()).length()) + "\n");
+				desc.put("text", shrink(ChatColor.GOLD + enchant.getDisplayName() + ChatColor.WHITE + ": " + ChatColor.WHITE + enchant.getDescription()).substring((ChatColor.GOLD + enchant.getDisplayName()).length()) + "\n");
 				json.add(desc);
 			}
 			json.add(first);
@@ -136,28 +121,20 @@ public class EnchantInfo implements CommandExecutor{
 			json.add(fifth);
 			ChatUtils.sendRawMessage(player, json.toJSONString());
 		} else {
-			String message = "\n" + ChatColor.DARK_BLUE + "******" + (page > 1 ? "<<<" : "***") + "******"
-					+ ChatColor.AQUA + " Enchantments Page " + page + ChatColor.DARK_BLUE + " ******" 
-					+ (Enchantments.getEnchantments().size() < ((page - 1) * 10) ? ">>>" : "***") + "******" + "\n";
+			String message = "\n" + ChatColor.DARK_BLUE + "******" + (page > 1 ? "<<<" : "***") + "******" + ChatColor.AQUA + " Enchantments Page " + page + ChatColor.DARK_BLUE + " ******" + (registered.size() < (page - 1) * 10 ? ">>>" : "***") + "******" + "\n";
 			for(int i = 0; i < 10; i++) {
 				int num = i + (page - 1) * 10;
-				if(num >= Enchantments.getEnchantments().size()) {
-					break;
-				}
-				CustomEnchantment enchant = Enchantments.getEnchantments().get(num);
+				if (num >= registered.size()) break;
+				CustomEnchantment enchant = registered.get(num);
 				message += shrink(ChatColor.GOLD + enchant.getDisplayName() + ": " + ChatColor.WHITE + enchant.getDescription()) + "\n";
 			}
-			message += "\n" + ChatColor.DARK_BLUE + "******" + (page > 1 ? "<<<" : "***") + "******"
-					+ ChatColor.AQUA + " Enchantments Page " + page + ChatColor.DARK_BLUE + " ******" 
-					+ (Enchantments.getEnchantments().size() < ((page - 1) * 10) ? ">>>" : "***") + "******" + "\n";
+			message += "\n" + ChatColor.DARK_BLUE + "******" + (page > 1 ? "<<<" : "***") + "******" + ChatColor.AQUA + " Enchantments Page " + page + ChatColor.DARK_BLUE + " ******" + (registered.size() < (page - 1) * 10 ? ">>>" : "***") + "******" + "\n";
 			ChatUtils.sendToConsole(Level.INFO, message);
 		}
 	}
-	
+
 	private String shrink(String s) {
-		if(s.length() > 60) {
-			return s.substring(0, 58) + "...";
-		}
+		if (s.length() > 60) return s.substring(0, 58) + "...";
 		return s;
 	}
 

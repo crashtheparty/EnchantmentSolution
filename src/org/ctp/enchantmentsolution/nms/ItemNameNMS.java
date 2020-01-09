@@ -3,11 +3,11 @@ package org.ctp.enchantmentsolution.nms;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
-import org.ctp.enchantmentsolution.api.Language;
+import org.ctp.enchantmentsolution.enums.Language;
 import org.ctp.enchantmentsolution.nms.itemname.*;
 
 public class ItemNameNMS {
-	
+
 	public static String returnLocalizedItemName(Language language, ItemStack item) {
 		switch (language) {
 			case GERMAN:
@@ -28,6 +28,7 @@ public class ItemNameNMS {
 					case 8:
 						return ItemName_v1_14_R1.returnLocalizedItemName(item);
 					case 9:
+					case 10:
 						return ItemName_v1_15_R1.returnLocalizedItemName(item);
 				}
 				break;
@@ -36,7 +37,7 @@ public class ItemNameNMS {
 		}
 		return item.toString();
 	}
-	
+
 	public static String returnLocalizedItemName(Language language, Material material) {
 		ItemStack item = new ItemStack(material);
 		return returnLocalizedItemName(language, item);

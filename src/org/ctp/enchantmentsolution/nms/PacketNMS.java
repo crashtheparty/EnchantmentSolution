@@ -20,11 +20,12 @@ public class PacketNMS {
 			case 8:
 				return Packet_v1_14_R1.addParticle(block, stage);
 			case 9:
+			case 10:
 				return Packet_v1_15_R1.addParticle(block, stage);
 		}
 		return 0;
 	}
-	
+
 	public static int updateParticle(Block block, int stage, int id) {
 		switch (EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber()) {
 			case 1:
@@ -39,6 +40,7 @@ public class PacketNMS {
 			case 8:
 				return Packet_v1_14_R1.updateParticle(block, stage, id);
 			case 9:
+			case 10:
 				return Packet_v1_15_R1.updateParticle(block, stage, id);
 		}
 		return 0;

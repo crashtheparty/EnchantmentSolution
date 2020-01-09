@@ -8,7 +8,7 @@ import org.ctp.enchantmentsolution.nms.animalmob.AnimalMob_v1_13_R1;
 import org.ctp.enchantmentsolution.nms.animalmob.AnimalMob_v1_13_R2;
 import org.ctp.enchantmentsolution.nms.animalmob.AnimalMob_v1_14_R1;
 import org.ctp.enchantmentsolution.nms.animalmob.AnimalMob_v1_15_R1;
-import org.ctp.enchantmentsolution.utils.config.YamlConfig;
+import org.ctp.enchantmentsolution.utils.yaml.YamlConfig;
 
 public class AnimalMobNMS {
 
@@ -30,6 +30,23 @@ public class AnimalMobNMS {
 				return new AnimalMob_v1_15_R1(animal, item);
 		}
 		return null;
+	}
+
+	public static boolean canAddMob() {
+		switch (EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber()) {
+			case 1:
+			case 2:
+			case 3:
+			case 4:
+			case 5:
+			case 6:
+			case 7:
+			case 8:
+			case 9:
+			case 10:
+				return true;
+		}
+		return false;
 	}
 
 	public static AnimalMob getFromConfig(YamlConfig config, int i) {
