@@ -39,7 +39,7 @@ public class VillagerEnchantments extends LootEnchantments {
 		for(int i = 0; i < getList().length; i++)
 			if (getList()[i] != null) enchantmentLists.add(getList()[i]);
 
-		if (enchantmentLists.size() > levelPrice[0]) levelPrice[0] = enchantmentLists.size() - 1;
+		if (enchantmentLists.size() >= levelPrice[0]) levelPrice[0] = enchantmentLists.size() - 1;
 
 		enchantments = enchantmentLists.get(levelPrice[0]).getEnchantments();
 

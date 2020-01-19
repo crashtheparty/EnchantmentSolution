@@ -21,7 +21,7 @@ public class AuctionHouseUtils {
 		while (iterator.hasNext()) {
 			Entry<Long, Listing> entry = iterator.next();
 			Listing l = entry.getValue();
-			ItemStack item = l.getItemStack();
+			ItemStack item = l.getItem();
 			if (item.hasItemMeta()) {
 				List<EnchantmentLevel> levels = new ArrayList<EnchantmentLevel>();
 				for(String lore: item.getItemMeta().getLore())
@@ -35,7 +35,7 @@ public class AuctionHouseUtils {
 					item = ItemUtils.addEnchantmentToItem(item, level.getEnchant(), level.getLevel());
 				}
 			}
-			l.setItemStack(item);
+			l.setItem(item);
 		}
 	}
 }

@@ -125,12 +125,15 @@ public class StringUtils {
 			String enchName = ChatUtils.revealText(enchHidden);
 			CustomEnchantment enchant = RegisterEnchantments.getByName(enchName);
 			s = s.substring(s.indexOf(ChatColor.RESET + "") + 2);
-			String levelHidden = s.substring(0, s.indexOf(ChatColor.RESET + ""));
 			int level = 0;
-			try {
-				level = Integer.parseInt(ChatUtils.revealText(levelHidden));
-			} catch (NumberFormatException ex) {
+			if (s.indexOf(ChatColor.RESET + "") == -1) level = 0;
+			else {
+				String levelHidden = s.substring(0, s.indexOf(ChatColor.RESET + ""));
+				try {
+					level = Integer.parseInt(ChatUtils.revealText(levelHidden));
+				} catch (NumberFormatException ex) {
 
+				}
 			}
 
 			return level > 0 && enchant != null ? new EnchantmentLevel(enchant, level) : null;
