@@ -1,12 +1,6 @@
 package org.ctp.enchantmentsolution.utils.items;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
 
 import org.bukkit.Location;
@@ -162,10 +156,13 @@ public class ItemUtils {
 	}
 
 	public static ItemStack addEnchantmentsToItem(ItemStack item, List<EnchantmentLevel> levels) {
+		if (levels == null) return item;
 		ItemMeta meta = item.getItemMeta();
 		List<String> lore = new ArrayList<String>();
-		List<String> previousLore = meta.getLore();
-		if (levels == null) return item;
+		List<String> previousLore = null;
+		if (meta == null) new ArrayList<String>();
+		else
+			previousLore = meta.getLore();
 		for(EnchantmentLevel level: levels) {
 			if (item.getType() == Material.ENCHANTED_BOOK) ((EnchantmentStorageMeta) meta).addStoredEnchant(level.getEnchant().getRelativeEnchantment(), level.getLevel(), true);
 			else

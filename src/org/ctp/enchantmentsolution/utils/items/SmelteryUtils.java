@@ -4,7 +4,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Statistic;
 import org.bukkit.block.Block;
-import org.bukkit.craftbukkit.libs.joptsimple.internal.Strings;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
@@ -157,7 +156,7 @@ public class SmelteryUtils {
 						newTerra[i] = terra[i];
 					newTerra[terra.length - 1] = "GLAZED";
 					newTerra[terra.length] = terra[terra.length - 1];
-					material = Strings.join(newTerra, "_");
+					material = String.join("_", newTerra);
 					ChatUtils.sendInfo(material);
 				}
 				break;
