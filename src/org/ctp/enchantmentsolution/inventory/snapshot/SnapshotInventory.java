@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
+import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.StringUtils;
 import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 
@@ -33,13 +34,28 @@ public class SnapshotInventory {
 			PlayerInventory inv = p.getInventory();
 			for(int i = 0; i < 36; i++) {
 				ItemStack item = inv.getItem(i);
-				items[i] = checkItem(item, items[i]);
+				try {
+					items[i] = checkItem(item, items[i]);
+				} catch (Exception ex) {
+					ChatUtils.sendWarning("There was a problem trying to save item " + item + " in slot " + i + ": ");
+					ex.printStackTrace();
+				}
 			}
 			ItemStack offhand = inv.getItemInOffHand();
-			items[36] = checkItem(offhand, items[36]);
+			try {
+				items[36] = checkItem(offhand, items[36]);
+			} catch (Exception ex) {
+				ChatUtils.sendWarning("There was a problem trying to save item " + offhand + " in offhand slot: ");
+				ex.printStackTrace();
+			}
 			for(int i = 0; i < 4; i++) {
 				ItemStack item = inv.getArmorContents()[i];
-				armor[i] = checkItem(item, armor[i]);
+				try {
+					armor[i] = checkItem(item, armor[i]);
+				} catch (Exception ex) {
+					ChatUtils.sendWarning("There was a problem trying to save item " + item + " in armor slot " + i + ": ");
+					ex.printStackTrace();
+				}
 			}
 
 		}
