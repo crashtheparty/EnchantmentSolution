@@ -133,7 +133,7 @@ public class RegisterEnchantments {
 			CustomEnchantment enchantment = ENCHANTMENTS.get(i);
 			LanguageConfiguration language = Configurations.getLanguage();
 			EnchantmentsConfiguration config = Configurations.getEnchantments();
-			boolean advanced = config.getBoolean("advanced_features");
+			boolean advanced = ConfigString.ADVANCED_OPTIONS.getBoolean();
 
 			String namespace = "default_enchantments";
 			if (enchantment.getRelativeEnchantment() instanceof ApiEnchantmentWrapper) {
@@ -168,18 +168,18 @@ public class RegisterEnchantments {
 			String displayName = StringUtils.decodeString(language.getString("enchantment.display_names." + namespace + "." + enchantment.getName()));
 			String description = StringUtils.decodeString(language.getString("enchantment.descriptions." + namespace + "." + enchantment.getName()));
 			if (advanced) {
-				int constant = config.getInt(namespace + "." + enchantment.getName() + ".enchantability_constant");
-				int modifier = config.getInt(namespace + "." + enchantment.getName() + ".enchantability_modifier");
-				int startLevel = config.getInt(namespace + "." + enchantment.getName() + ".enchantability_start_level");
-				int maxLevel = config.getInt(namespace + "." + enchantment.getName() + ".enchantability_max_level");
-				Weight weight = Weight.getWeight(config.getString(namespace + "." + enchantment.getName() + ".weight"));
-				List<String> conflictingEnchantmentsString = config.getStringList(namespace + "." + enchantment.getName() + ".conflicting_enchantments");
+				int constant = config.getInt(namespace + "." + enchantment.getName() + ".advanced.enchantability_constant");
+				int modifier = config.getInt(namespace + "." + enchantment.getName() + ".advanced.enchantability_modifier");
+				int startLevel = config.getInt(namespace + "." + enchantment.getName() + ".advanced.enchantability_start_level");
+				int maxLevel = config.getInt(namespace + "." + enchantment.getName() + ".advanced.enchantability_max_level");
+				Weight weight = Weight.getWeight(config.getString(namespace + "." + enchantment.getName() + ".advanced.weight"));
+				List<String> conflictingEnchantmentsString = config.getStringList(namespace + "." + enchantment.getName() + ".advanced.conflicting_enchantments");
 				List<Enchantment> conflictingEnchantments = new ArrayList<Enchantment>();
 				if (conflictingEnchantmentsString != null) for(String s: conflictingEnchantmentsString) {
 					CustomEnchantment enchant = getByName(s);
 					if (enchant != null) conflictingEnchantments.add(enchant.getRelativeEnchantment());
 				}
-				List<String> disabledItemsString = config.getStringList(namespace + "." + enchantment.getName() + ".disabled_items");
+				List<String> disabledItemsString = config.getStringList(namespace + "." + enchantment.getName() + ".advanced.disabled_items");
 				List<Material> disabledItems = new ArrayList<Material>();
 				if (disabledItemsString != null) for(String s: disabledItemsString) {
 					Material mat = Material.getMaterial(s);

@@ -99,9 +99,6 @@ config_comments:
         
         lapis_in_table: 
         - 'If players need to insert lapis into the custom table for it to work'
-
-        decay: 
-        - 'Multiple enchantments generated on items will have lower levels'
     anvil: 
         custom_gui: 
         - 'Whether to use the custom anvil gui'

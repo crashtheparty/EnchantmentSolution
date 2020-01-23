@@ -115,6 +115,7 @@ public class ItemUtils {
 	}
 
 	public static ItemMeta setLore(ItemMeta meta, List<String> lore) {
+		if (meta == null) return null;
 		if (lore == null) {
 			meta.setLore(new ArrayList<String>());
 			return meta;
