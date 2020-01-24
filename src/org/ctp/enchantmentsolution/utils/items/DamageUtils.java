@@ -1,15 +1,11 @@
 package org.ctp.enchantmentsolution.utils.items;
 
-import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
-import org.bukkit.Material;
-import org.bukkit.Particle;
-import org.bukkit.Sound;
-import org.bukkit.Statistic;
+import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerItemBreakEvent;
+import org.bukkit.event.player.PlayerItemDamageEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -45,6 +41,11 @@ public class DamageUtils {
 		return meta;
 	}
 
+	private static boolean isDamageable(ItemMeta itemMeta) {
+		DamageUtils utils = new DamageUtils(itemMeta);
+		return utils.isDamageable();
+	}
+
 	public static ItemStack setDamage(ItemStack item, int damage) {
 		DamageUtils utils = new DamageUtils(item.getItemMeta());
 		if (utils.isDamageable()) {
@@ -75,7 +76,7 @@ public class DamageUtils {
 
 	public static int damageItem(HumanEntity player, ItemStack item, double damage, double extraChance,
 	boolean breakItem) {
-		if (player.getGameMode().equals(GameMode.CREATIVE) || player.getGameMode().equals(GameMode.SPECTATOR)) return 0;
+		if (player.getGameMode().equals(GameMode.CREATIVE) || player.getGameMode().equals(GameMode.SPECTATOR) || DamageUtils.isDamageable(item.getItemMeta())) return 0;
 		int originalDamage = DamageUtils.getDamage(item.getItemMeta());;
 		int numBreaks = 0;
 		int unbreaking = ItemUtils.getLevel(item, Enchantment.DURABILITY);
@@ -87,6 +88,13 @@ public class DamageUtils {
 
 		if (numBreaks > 0) {
 			if (breakItem) {
+				if(player instanceof Player) {
+					PlayerItemDamageEvent event = new PlayerItemDamageEvent((Player) player, item, numBreaks);
+					Bukkit.getPluginManager().callEvent(event);
+					
+					if(event.isCancelled()) return 0;
+					numBreaks = event.getDamage();
+				}
 				DamageUtils.setDamage(item, DamageUtils.getDamage(item.getItemMeta()) + numBreaks);
 				if (DamageUtils.getDamage(item.getItemMeta()) > item.getType().getMaxDurability() && item.getType() != Material.ELYTRA) {
 					PlayerItemBreakEvent event = new PlayerItemBreakEvent((Player) player, item);

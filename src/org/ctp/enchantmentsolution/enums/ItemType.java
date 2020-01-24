@@ -1,10 +1,6 @@
 package org.ctp.enchantmentsolution.enums;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.bukkit.Material;
 import org.ctp.enchantmentsolution.utils.config.ConfigUtils;
@@ -19,7 +15,7 @@ public enum ItemType {
 	IRON_TOOLS("iron_tools"), GOLDEN_TOOLS("golden_tools"), DIAMOND_TOOLS("diamond_tools"),
 	LEATHER_ARMOR("leather_armor"), GOLDEN_ARMOR("golden_armor"), CHAINMAIL_ARMOR("chainmail_armor"),
 	IRON_ARMOR("iron_armor"), DIAMOND_ARMOR("diamond_armor"), CROSSBOW("crossbow"), BOOK("book"), ALL("all"),
-	ENCHANTABLE("enchantable"), TURTLE_HELMET("turtle_helmet"), SHULKER_BOXES("shulker_boxes"), NONE("none");
+	ENCHANTABLE("enchantable"), TURTLE_HELMET("turtle_helmet"), SHULKER_BOXES("shulker_boxes"), NONE("none"), OTHER("other");
 
 	private String type, display;
 	private List<Material> itemTypes;
@@ -162,6 +158,12 @@ public enum ItemType {
 			itemTypes.addAll(getItemStrings(ELYTRA.getType()));
 			itemTypes.addAll(getItemStrings(SHEARS.getType()));
 			itemTypes.addAll(getItemStrings(HOES.getType()));
+			return itemTypes;
+		} else if (OTHER.getType().equals(type)) {
+			itemTypes.addAll(getItemStrings(ALL.getType()));
+			itemTypes.removeAll(getItemStrings(ARMOR.getType()));
+			itemTypes.removeAll(getItemStrings(TOOLS.getType()));
+			itemTypes.removeAll(getItemStrings(SWORDS.getType()));
 			return itemTypes;
 		} else if (PICKAXES.getType().equals(type)) {
 			itemTypes.addAll(Arrays.asList("DIAMOND_PICKAXE", "GOLDEN_PICKAXE", "IRON_PICKAXE", "STONE_PICKAXE", "WOODEN_PICKAXE"));

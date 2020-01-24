@@ -12,6 +12,7 @@ public class ChestEnchantments extends LootEnchantments {
 
 	public static ChestEnchantments getChestEnchantment(Player player, ItemStack item, int minBookshelves,
 	boolean treasure) {
+		if(item == null) return null;
 		int books = 16;
 		if (ConfigString.LEVEL_FIFTY.getBoolean()) books = 24;
 		int random = (int) (Math.random() * books) + minBookshelves;

@@ -4,10 +4,7 @@ import org.bukkit.entity.Arrow;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
-import org.ctp.enchantmentsolution.nms.damage.DamageEvent_v1_13_R1;
-import org.ctp.enchantmentsolution.nms.damage.DamageEvent_v1_13_R2;
-import org.ctp.enchantmentsolution.nms.damage.DamageEvent_v1_14_R1;
-import org.ctp.enchantmentsolution.nms.damage.DamageEvent_v1_15_R1;
+import org.ctp.enchantmentsolution.nms.damage.*;
 
 public class DamageEvent {
 
@@ -29,6 +26,7 @@ public class DamageEvent {
 				break;
 			case 9:
 			case 10:
+			case 11:
 				DamageEvent_v1_15_R1.damageEntity(entity, cause, damage);
 				break;
 		}
@@ -52,6 +50,7 @@ public class DamageEvent {
 				break;
 			case 9:
 			case 10:
+			case 11:
 				DamageEvent_v1_15_R1.damageEntity(entity, player, cause, damage);
 				break;
 		}
@@ -75,6 +74,7 @@ public class DamageEvent {
 				break;
 			case 9:
 			case 10:
+			case 11:
 				DamageEvent_v1_15_R1.getArrowDamage(entity, arrow);
 				break;
 		}

@@ -13,6 +13,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
+import org.ctp.enchantmentsolution.enchantments.helper.EnchantabilityMaterial;
 import org.ctp.enchantmentsolution.nms.Anvil_GUI_NMS;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
@@ -106,7 +107,7 @@ public class EnchantabilityCalc implements InventoryData {
 		} else if (page == 2) {
 			int[] slots = new int[] { 11, 12, 13, 14, 15, 20, 21, 22, 23, 24, 31 };
 			int slot = 0;
-			for(EnchantabilityValues value: EnchantabilityValues.values()) {
+			for(EnchantabilityMaterial value: EnchantabilityMaterial.values()) {
 				int[] enchantability = getEnchantabilityCalc(value.getEnchantability(), enchantabilityConstant, enchantabilityModifier);
 				ItemStack item = new ItemStack(value.getMaterial());
 				ItemMeta itemMeta = item.getItemMeta();
@@ -315,54 +316,18 @@ public class EnchantabilityCalc implements InventoryData {
 		return null;
 	}
 
-	public static enum EnchantabilityValues {
-		WOODEN_TOOLS(15, Material.WOODEN_PICKAXE, "calc.enchantability_values.wooden_tools"),
-		STONE_TOOLS(5, Material.STONE_PICKAXE, "calc.enchantability_values.stone_tools"),
-		GOLDEN_TOOLS(22, Material.GOLDEN_PICKAXE, "calc.enchantability_values.golden_tools"),
-		IRON_TOOLS(10, Material.IRON_PICKAXE, "calc.enchantability_values.iron_tools"),
-		DIAMOND_TOOLS(14, Material.DIAMOND_PICKAXE, "calc.enchantability_values.diamond_tools"),
-		LEATHER_ARMOR(15, Material.LEATHER_CHESTPLATE, "calc.enchantability_values.leather_armor"),
-		CHAINMAIL_ARMOR(5, Material.CHAINMAIL_CHESTPLATE, "calc.enchantability_values.chainmail_armor"),
-		GOLDEN_ARMOR(22, Material.GOLDEN_CHESTPLATE, "calc.enchantability_values.golden_armor"),
-		IRON_ARMOR(10, Material.IRON_CHESTPLATE, "calc.enchantability_values.iron_armor"),
-		DIAMOND_ARMOR(14, Material.DIAMOND_CHESTPLATE, "calc.enchantability_values.diamond_armor"),
-		OTHER(1, Material.BOOK, "calc.enchantability_values.other");
-
-		private int enchantability;
-		private Material material;
-		private String display;
-
-		EnchantabilityValues(int enchantability, Material material, String display) {
-			this.enchantability = enchantability;
-			this.material = material;
-			this.display = display;
-		}
-
-		public int getEnchantability() {
-			return enchantability;
-		}
-
-		public Material getMaterial() {
-			return material;
-		}
-
-		public String getDisplay() {
-			return ChatUtils.getMessage(ChatUtils.getCodes(), display);
-		}
-	}
-
 	public int[] getEnchantabilityCalc(int enchantability, int constant, int modifier) {
 		int enchantability_2 = enchantability / 2;
 		int rand_enchantability = 1 + enchantability_2;
 
 		int level = 1;
 
-		int max = (ConfigString.LEVEL_FIFTY.getBoolean() ? 50 : 30) + rand_enchantability;
 		if (ConfigUtils.getAdvancedBoolean(ConfigString.USE_LAPIS_MODIFIERS, ConfigString.LEVEL_FIFTY.getBoolean())) {
 			double lapisConstant = ConfigUtils.getAdvancedDouble(ConfigString.LAPIS_CONSTANT, ConfigString.LEVEL_FIFTY.getBoolean() ? -1 : 0);
 			double lapisMultiplier = ConfigUtils.getAdvancedDouble(ConfigString.LAPIS_MULTIPLIER, ConfigString.LEVEL_FIFTY.getBoolean() ? 2 : 0);
 			rand_enchantability += ((ConfigString.LEVEL_FIFTY.getBoolean() ? 6 : 3) + lapisConstant) * lapisMultiplier;
 		}
+		int max = (ConfigString.LEVEL_FIFTY.getBoolean() ? 50 : 30) + rand_enchantability;
 		max = (int) (max * 1.15 + 0.5);
 
 		if (modifier <= 0) return new int[] { 1, max };

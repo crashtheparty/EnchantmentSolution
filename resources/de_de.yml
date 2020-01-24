@@ -381,6 +381,7 @@ item_display_types:
     leggings: "Gamaschen"
     melee: "Nahkampfwaffen"
     misc: "Sonstiges"
+    other: "Andere"
     pickaxes: "Spitzhacken"
     ranged: "Fernkampfwaffen"
     shears: "Schere"

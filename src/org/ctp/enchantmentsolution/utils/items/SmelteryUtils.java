@@ -13,7 +13,6 @@ import org.ctp.enchantmentsolution.enums.MatData;
 import org.ctp.enchantmentsolution.events.blocks.SmelteryEvent;
 import org.ctp.enchantmentsolution.mcmmo.McMMOHandler;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
-import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.VersionUtils;
 import org.ctp.enchantmentsolution.utils.abillityhelpers.SmelteryMaterial;
 
@@ -157,7 +156,6 @@ public class SmelteryUtils {
 					newTerra[terra.length - 1] = "GLAZED";
 					newTerra[terra.length] = terra[terra.length - 1];
 					material = String.join("_", newTerra);
-					ChatUtils.sendInfo(material);
 				}
 				break;
 			case "QUARTZ_BLOCK":
