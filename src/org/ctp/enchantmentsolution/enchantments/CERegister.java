@@ -1,5 +1,6 @@
 package org.ctp.enchantmentsolution.enchantments;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -34,13 +35,13 @@ public class CERegister extends CustomEnchantment {
 	public static CERegister LUCK_OF_THE_SEA = new CERegister("luck_of_the_sea", "Luck of the Sea", "Increases luck while fishing.", Enchantment.LUCK, new int[] { 7, 5, 11, 10, 1, 1, 4, 3 }, Weight.RARE, Arrays.asList(new EnchantmentDisplayName(Language.GERMAN, "Glück des Meeres"), new EnchantmentDisplayName(Language.CHINA_SIMPLE, "海之眷顾")), Arrays.asList(new EnchantmentDescription(Language.GERMAN, "Erhöht das Glück beim Fischen."), new EnchantmentDescription(Language.CHINA_SIMPLE, "增加钓鱼的幸运值.")), Arrays.asList(ItemType.FISHING_ROD), Arrays.asList(ItemType.FISHING_ROD), Arrays.asList());
 	public static CERegister LURE = new CERegister("lure", "Lure", "Increases rate of fish biting your hook while fishing.", Enchantment.LURE, new int[] { 7, 5, 11, 10, 1, 1, 4, 3 }, Weight.RARE, Arrays.asList(new EnchantmentDisplayName(Language.GERMAN, "Köder"), new EnchantmentDisplayName(Language.CHINA_SIMPLE, "饵钓")), Arrays.asList(new EnchantmentDescription(Language.GERMAN, "Erhöht die Rate der Fische, die sich beim Angeln an den Haken beißen."), new EnchantmentDescription(Language.CHINA_SIMPLE, "增加鱼咬钩的几率.")), Arrays.asList(ItemType.FISHING_ROD), Arrays.asList(ItemType.FISHING_ROD), Arrays.asList());
 	public static CERegister MENDING = new CERegister("mending", "Mending", "Repair durability with experience.", Enchantment.MENDING, new int[] { 25, 25, 0, 0, 20, 1, 1, 1 }, Weight.RARE, Arrays.asList(new EnchantmentDisplayName(Language.GERMAN, "Reparatur"), new EnchantmentDisplayName(Language.CHINA_SIMPLE, "经验修补")), Arrays.asList(new EnchantmentDescription(Language.GERMAN, "Haltbarkeit mit Erfahrung reparieren."), new EnchantmentDescription(Language.CHINA_SIMPLE, "使用经验修复物品.")), Arrays.asList(ItemType.ENCHANTABLE), Arrays.asList(ItemType.ALL), Arrays.asList(Enchantment.ARROW_INFINITE), false, true, true);
-	public static CERegister MULTISHOT = new CERegister("multishot", "Multishot", "Shoot multiple arrows at once.", Enchantment.MULTISHOT, new int[] { 35, 20, 0, 0, 20, 1, 1, 1 }, Weight.RARE, Arrays.asList(new EnchantmentDisplayName(Language.GERMAN, "Mehrfachschuss"), new EnchantmentDisplayName(Language.CHINA_SIMPLE, "多重射击")), Arrays.asList(new EnchantmentDescription(Language.GERMAN, "Schießen Sie mehrere Pfeile gleichzeitig."), new EnchantmentDescription(Language.CHINA_SIMPLE, "一次射出多枝箭.")), Arrays.asList(ItemType.CROSSBOW), Arrays.asList(ItemType.CROSSBOW), Arrays.asList(Enchantment.PIERCING), false, true, false);
-	public static CERegister PIERCING = new CERegister("piercing", "Piercing", "Arrows go through and attack multiple mobs.", Enchantment.PIERCING, new int[] { -14, -9, 15, 10, 1, 1, 5, 4 }, Weight.COMMON, Arrays.asList(new EnchantmentDisplayName(Language.GERMAN, "Durchschuss"), new EnchantmentDisplayName(Language.CHINA_SIMPLE, "穿透")), Arrays.asList(new EnchantmentDescription(Language.GERMAN, "Pfeile gehen durch und greifen mehrere Mobs an."), new EnchantmentDescription(Language.CHINA_SIMPLE, "弓箭可造成穿透伤害.")), Arrays.asList(ItemType.CROSSBOW), Arrays.asList(ItemType.CROSSBOW), Arrays.asList(Enchantment.MULTISHOT));
+	public static CERegister MULTISHOT = new CERegister("multishot", "Multishot", "Shoot multiple arrows at once.", "MULTISHOT", new int[] { 35, 20, 0, 0, 20, 1, 1, 1 }, Weight.RARE, Arrays.asList(new EnchantmentDisplayName(Language.GERMAN, "Mehrfachschuss"), new EnchantmentDisplayName(Language.CHINA_SIMPLE, "多重射击")), Arrays.asList(new EnchantmentDescription(Language.GERMAN, "Schießen Sie mehrere Pfeile gleichzeitig."), new EnchantmentDescription(Language.CHINA_SIMPLE, "一次射出多枝箭.")), Arrays.asList(ItemType.CROSSBOW), Arrays.asList(ItemType.CROSSBOW), Arrays.asList("PIERCING"), false, true, false);
+	public static CERegister PIERCING = new CERegister("piercing", "Piercing", "Arrows go through and attack multiple mobs.", "PIERCING", new int[] { -14, -9, 15, 10, 1, 1, 5, 4 }, Weight.COMMON, Arrays.asList(new EnchantmentDisplayName(Language.GERMAN, "Durchschuss"), new EnchantmentDisplayName(Language.CHINA_SIMPLE, "穿透")), Arrays.asList(new EnchantmentDescription(Language.GERMAN, "Pfeile gehen durch und greifen mehrere Mobs an."), new EnchantmentDescription(Language.CHINA_SIMPLE, "弓箭可造成穿透伤害.")), Arrays.asList(ItemType.CROSSBOW), Arrays.asList(ItemType.CROSSBOW), Arrays.asList("MULTISHOT"));
 	public static CERegister POWER = new CERegister("power", "Power", "Increases arrow damage by 25% * (level + 1), rounded up to nearest half-heart.", Enchantment.ARROW_DAMAGE, new int[] { -10, -9, 11, 10, 1, 1, 6, 5 }, Weight.COMMON, Arrays.asList(new EnchantmentDisplayName(Language.GERMAN, "Stärke"), new EnchantmentDisplayName(Language.CHINA_SIMPLE, "力量")), Arrays.asList(new EnchantmentDescription(Language.GERMAN, "Erhöht den Pfeilschaden um 25% * (Stufe + 1), aufgerundet auf das nächste Herz."), new EnchantmentDescription(Language.CHINA_SIMPLE, "增加弓箭伤害： 25% * (附魔等级 + 1).")), Arrays.asList(ItemType.BOW), Arrays.asList(ItemType.BOW), Arrays.asList());
 	public static CERegister PROJECTILE_PROTECTION = new CERegister("projectile_protection", "Projectile Protection", "Reduces projectile damage (arrows, ghast/blaze fire charges, etc.).", Enchantment.PROTECTION_PROJECTILE, new int[] { -9, -3, 13, 6, 1, 1, 4, 4 }, Weight.UNCOMMON, Arrays.asList(new EnchantmentDisplayName(Language.GERMAN, "Schusssicher"), new EnchantmentDisplayName(Language.CHINA_SIMPLE, "弹射物保护")), Arrays.asList(new EnchantmentDescription(Language.GERMAN, "Reduziert Projektilbeschädigungen (Pfeile, Feuerschläge usw.)."), new EnchantmentDescription(Language.CHINA_SIMPLE, "减少受到的弹射物伤害 (弓箭、火球等).")), Arrays.asList(ItemType.ARMOR), Arrays.asList(ItemType.ARMOR), Arrays.asList());
 	public static CERegister PROTECTION = new CERegister("protection", "Protection", "Reduces all damage, except damage from the Void, the /kill command, or hunger damage.", Enchantment.PROTECTION_ENVIRONMENTAL, new int[] { -15, -10, 16, 11, 1, 1, 4, 4 }, Weight.COMMON, Arrays.asList(new EnchantmentDisplayName(Language.GERMAN, "Schutz"), new EnchantmentDisplayName(Language.CHINA_SIMPLE, "保护")), Arrays.asList(new EnchantmentDescription(Language.GERMAN, "Reduziert jeglichen Schaden, mit Ausnahme des Schadens durch die Leere, den Befehl / kill oder den Hunger-Schaden."), new EnchantmentDescription(Language.CHINA_SIMPLE, "减少受到的所有伤害, 除了虚空伤害、/kill 自杀和饥饿伤害.")), Arrays.asList(ItemType.ARMOR), Arrays.asList(ItemType.ARMOR), Arrays.asList());
 	public static CERegister PUNCH = new CERegister("punch", "Punch", "Increases knockback on bows.", Enchantment.ARROW_KNOCKBACK, new int[] { -8, -8, 20, 20, 1, 1, 3, 2 }, Weight.RARE, Arrays.asList(new EnchantmentDisplayName(Language.GERMAN, "Schlag"), new EnchantmentDisplayName(Language.CHINA_SIMPLE, "冲击")), Arrays.asList(new EnchantmentDescription(Language.GERMAN, "Erhöht den Rückstoß an den Bögen."), new EnchantmentDescription(Language.CHINA_SIMPLE, "增加弓箭击退距离.")), Arrays.asList(ItemType.BOW), Arrays.asList(ItemType.BOW), Arrays.asList());
-	public static CERegister QUICK_CHARGE = new CERegister("quick_charge", "Quick Charge", "Places arrows in the crossbow faster.", Enchantment.QUICK_CHARGE, new int[] { -15, -8, 25, 20, 1, 1, 4, 3 }, Weight.UNCOMMON, Arrays.asList(new EnchantmentDisplayName(Language.GERMAN, "Schnellladen"), new EnchantmentDisplayName(Language.CHINA_SIMPLE, "快速装填")), Arrays.asList(new EnchantmentDescription(Language.GERMAN, "Setzen Sie die Pfeile schneller in die Armbrust."), new EnchantmentDescription(Language.CHINA_SIMPLE, "增加十字弓装填速度.")), Arrays.asList(ItemType.CROSSBOW), Arrays.asList(ItemType.CROSSBOW), Arrays.asList());
+	public static CERegister QUICK_CHARGE = new CERegister("quick_charge", "Quick Charge", "Places arrows in the crossbow faster.", "QUICK_CHARGE", new int[] { -15, -8, 25, 20, 1, 1, 4, 3 }, Weight.UNCOMMON, Arrays.asList(new EnchantmentDisplayName(Language.GERMAN, "Schnellladen"), new EnchantmentDisplayName(Language.CHINA_SIMPLE, "快速装填")), Arrays.asList(new EnchantmentDescription(Language.GERMAN, "Setzen Sie die Pfeile schneller in die Armbrust."), new EnchantmentDescription(Language.CHINA_SIMPLE, "增加十字弓装填速度.")), Arrays.asList(ItemType.CROSSBOW), Arrays.asList(ItemType.CROSSBOW), Arrays.asList());
 	public static CERegister RESPIRATION = new CERegister("respiration", "Respiration", "Extends underwater breathing time.", Enchantment.OXYGEN, new int[] { -5, 0, 15, 10, 1, 1, 3, 3 }, Weight.RARE, Arrays.asList(new EnchantmentDisplayName(Language.GERMAN, "Atmung"), new EnchantmentDisplayName(Language.CHINA_SIMPLE, "水下呼吸")), Arrays.asList(new EnchantmentDescription(Language.GERMAN, "Verlängert die Atmungszeit unter Wasser."), new EnchantmentDescription(Language.CHINA_SIMPLE, "增加水下呼吸时间.")), Arrays.asList(ItemType.HELMETS), Arrays.asList(ItemType.HELMETS), Arrays.asList());
 	public static CERegister RIPTIDE = new CERegister("riptide", "Riptide", "Allows the trident to be used as a means of fast transportation.", Enchantment.RIPTIDE, new int[] { 6, 10, 11, 7, 1, 1, 5, 3 }, Weight.RARE, Arrays.asList(new EnchantmentDisplayName(Language.GERMAN, "Sog"), new EnchantmentDisplayName(Language.CHINA_SIMPLE, "激流")), Arrays.asList(new EnchantmentDescription(Language.GERMAN, "Ermöglicht die Verwendung des Dreizackes als schnelles Transportmittel."), new EnchantmentDescription(Language.CHINA_SIMPLE, "可用三叉戟进行快速传送.")), Arrays.asList(ItemType.TRIDENT), Arrays.asList(ItemType.TRIDENT), Arrays.asList(Enchantment.CHANNELING, Enchantment.LOYALTY));
 	public static CERegister SHARPNESS = new CERegister("sharpness", "Sharpness", "Increases melee damage.\nAdds 1 (half heart) extra damage for the first level, and 0.5 (half heart) for each additional level.", Enchantment.DAMAGE_ALL, new int[] { -12, -10, 13, 11, 1, 1, 6, 5 }, Weight.COMMON, Arrays.asList(new EnchantmentDisplayName(Language.GERMAN, "Schärfe"), new EnchantmentDisplayName(Language.CHINA_SIMPLE, "锋利")), Arrays.asList(new EnchantmentDescription(Language.GERMAN, "Erhöht Nahkampfschaden.\nFügt 1 (halbes Herz) zusätzlichen Schaden für die erste Stufe und 0,5 (halbes Herz) für jede zusätzliche Stufe hinzu."), new EnchantmentDescription(Language.CHINA_SIMPLE, "增加近战伤害.\n1级增加1点伤害,每级增加0.5点（半颗心）伤害.")), Arrays.asList(ItemType.SWORDS), Arrays.asList(ItemType.SWORDS, ItemType.AXES), Arrays.asList(Enchantment.DAMAGE_ARTHROPODS, Enchantment.DAMAGE_UNDEAD, RegisterEnchantments.QUICK_STRIKE));
@@ -102,6 +103,44 @@ public class CERegister extends CustomEnchantment {
 	private List<ItemType> enchantmentItems, anvilItems;
 	private List<Enchantment> conflictingEnchantments;
 	private String name;
+
+	private CERegister(String name, String englishDisplay, String englishDescription, String relative,
+	int[] enchantability, Weight weight, List<EnchantmentDisplayName> names, List<EnchantmentDescription> descriptions,
+	List<ItemType> enchantmentItems, List<ItemType> anvilItems, List<String> conflictingEnchantments) {
+		this(name, englishDisplay, englishDescription, relative, enchantability, weight, names, descriptions, enchantmentItems, anvilItems, conflictingEnchantments, false, false, false);
+	}
+
+	@SuppressWarnings("deprecation")
+	private CERegister(String name, String englishDisplay, String englishDescription, String relative,
+	int[] enchantability, Weight weight, List<EnchantmentDisplayName> names, List<EnchantmentDescription> descriptions,
+	List<ItemType> enchantmentItems, List<ItemType> anvilItems, List<String> conflictingEnchantments,
+	boolean curse, boolean maxLevelOne, boolean treasure) {
+		super(englishDisplay, enchantability[0], enchantability[1], enchantability[2], enchantability[3], enchantability[4], enchantability[5], enchantability[6], enchantability[7], weight, englishDescription);
+		this.name = name;
+		Enchantment enchantment = null;
+		try {
+			enchantment = Enchantment.getByName(relative);
+		} catch (Exception ex) {}
+		this.relative = enchantment;
+		this.enchantmentItems = enchantmentItems;
+		this.anvilItems = anvilItems;
+		List<Enchantment> conflicts = new ArrayList<Enchantment>();
+		for(String c : conflictingEnchantments) {
+			Enchantment ench = null;
+			try {
+				ench = Enchantment.getByName(c);
+			} catch (Exception ex) {}
+			if(ench != null) conflicts.add(ench);
+		}
+		this.conflictingEnchantments = conflicts;
+		for(EnchantmentDisplayName n: names)
+			addDefaultDisplayName(n);
+		for(EnchantmentDescription d: descriptions)
+			addDefaultDescription(d);
+		setCurse(curse);
+		setMaxLevelOne(maxLevelOne);
+		setTreasure(treasure);
+	}
 
 	private CERegister(String name, String englishDisplay, String englishDescription, Enchantment relative,
 	int[] enchantability, Weight weight, List<EnchantmentDisplayName> names, List<EnchantmentDescription> descriptions,

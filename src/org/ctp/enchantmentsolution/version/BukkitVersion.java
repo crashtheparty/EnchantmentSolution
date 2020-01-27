@@ -109,4 +109,8 @@ public class BukkitVersion {
 	public String getVersion() {
 		return version;
 	}
+
+	public String getAPIVersion() {
+		return apiVersion;
+	}
 }
