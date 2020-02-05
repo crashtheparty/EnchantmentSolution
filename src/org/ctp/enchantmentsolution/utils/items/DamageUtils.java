@@ -63,11 +63,11 @@ public class DamageUtils {
 	}
 
 	public static int damageItem(HumanEntity player, ItemStack item) {
-		return damageItem(player, item, 1.0D, 1.0D);
+		return damageItem(player, item, 1.0D, 1.0D, true);
 	}
 
 	public static int damageItem(HumanEntity player, ItemStack item, double damage) {
-		return damageItem(player, item, damage, 1.0D);
+		return damageItem(player, item, damage, 1.0D, true);
 	}
 
 	public static int damageItem(HumanEntity player, ItemStack item, double damage, double extraChance) {
@@ -76,7 +76,7 @@ public class DamageUtils {
 
 	public static int damageItem(HumanEntity player, ItemStack item, double damage, double extraChance,
 	boolean breakItem) {
-		if (player.getGameMode().equals(GameMode.CREATIVE) || player.getGameMode().equals(GameMode.SPECTATOR) || DamageUtils.isDamageable(item.getItemMeta())) return 0;
+		if (player.getGameMode().equals(GameMode.CREATIVE) || player.getGameMode().equals(GameMode.SPECTATOR) || !DamageUtils.isDamageable(item.getItemMeta())) return 0;
 		int originalDamage = DamageUtils.getDamage(item.getItemMeta());;
 		int numBreaks = 0;
 		int unbreaking = ItemUtils.getLevel(item, Enchantment.DURABILITY);
@@ -88,11 +88,10 @@ public class DamageUtils {
 
 		if (numBreaks > 0) {
 			if (breakItem) {
-				if(player instanceof Player) {
+				if (player instanceof Player) {
 					PlayerItemDamageEvent event = new PlayerItemDamageEvent((Player) player, item, numBreaks);
 					Bukkit.getPluginManager().callEvent(event);
-					
-					if(event.isCancelled()) return 0;
+					if (event.isCancelled()) return 0;
 					numBreaks = event.getDamage();
 				}
 				DamageUtils.setDamage(item, DamageUtils.getDamage(item.getItemMeta()) + numBreaks);

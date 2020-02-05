@@ -2,10 +2,7 @@ package org.ctp.enchantmentsolution.listeners.vanilla;
 
 import java.util.HashMap;
 
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -25,22 +22,27 @@ public class GrindstoneListener implements Listener {
 	public void onInventoryClick(InventoryClickEvent event) {
 		if (event.getClickedInventory() != null && event.getInventory().getType() == InventoryType.GRINDSTONE) {
 			GrindstoneInventory inv = (GrindstoneInventory) event.getInventory();
-			Bukkit.getScheduler().runTaskLater(EnchantmentSolution.getPlugin(), () -> {
-				ItemStack first = inv.getItem(0);
-				ItemStack second = inv.getItem(1);
-				if (event.getWhoClicked() instanceof Player) {
-					Player player = (Player) event.getWhoClicked();
-					GrindstoneEnchantments ench = GrindstoneEnchantments.getGrindstoneEnchantments(player, first, second);
-					if (ench.canCombine() && event.getSlot() == 2 && (event.getCursor() == null || event.getCursor().getType() == Material.AIR)) {
-						event.setCancelled(true);
-						combine(ench, event.getClick(), inv);
-					} else if (ench.canTakeEnchantments() && event.getSlot() == 2 && (event.getCursor() == null || event.getCursor().getType() == Material.AIR)) {
-						event.setCancelled(true);
-						combine(ench, event.getClick(), inv);
-					}
+			ItemStack first = inv.getItem(0);
+			ItemStack second = inv.getItem(1);
+			if (event.getWhoClicked() instanceof Player) {
+				Player player = (Player) event.getWhoClicked();
+				GrindstoneEnchantments ench = GrindstoneEnchantments.getGrindstoneEnchantments(player, first, second);
+				if (ench.canCombine() && event.getSlot() == 2 && (event.getCursor() == null || event.getCursor().getType() == Material.AIR)) {
+					event.setCancelled(true);
+					combine(ench, event.getClick(), inv);
+				} else if (ench.canTakeEnchantments() && event.getSlot() == 2 && (event.getCursor() == null || event.getCursor().getType() == Material.AIR)) {
+					event.setCancelled(true);
+					combine(ench, event.getClick(), inv);
+				} else
 					inv.setItem(2, ench.getCombinedItem());
-				}
-			}, 0l);
+					Bukkit.getScheduler().runTaskLater(EnchantmentSolution.getPlugin(), () -> {
+						ItemStack newFirst = inv.getItem(0);
+						ItemStack newSecond = inv.getItem(1);
+						GrindstoneEnchantments gEnch = GrindstoneEnchantments.getGrindstoneEnchantments(player, newFirst, newSecond);
+						
+						inv.setItem(2, gEnch.getCombinedItem());
+					}, 2l);
+			}
 		}
 	}
 

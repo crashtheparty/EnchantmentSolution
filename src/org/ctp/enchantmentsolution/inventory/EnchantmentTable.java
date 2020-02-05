@@ -253,7 +253,6 @@ public class EnchantmentTable implements InventoryData {
 			}
 
 		TableEnchantments table = TableEnchantments.getTableEnchantments(player, null, getBooks(), false);
-		if (playerItems.get(slot).getType() == Material.BOOK && ConfigString.USE_ENCHANTED_BOOKS.getBoolean()) enchantableItem = ItemUtils.convertToEnchantedBook(enchantableItem);
 		if (player.getGameMode().equals(GameMode.SURVIVAL) || player.getGameMode().equals(GameMode.ADVENTURE)) {
 			player.setLevel(player.getLevel() - level - 1);
 			int remove = level + 1;
@@ -272,6 +271,7 @@ public class EnchantmentTable implements InventoryData {
 				}
 		}
 		List<EnchantmentLevel> enchLevels = table.getEnchantments(enchantableItem.getType())[level].getEnchantments();
+		if (playerItems.get(slot).getType() == Material.BOOK && ConfigString.USE_ENCHANTED_BOOKS.getBoolean()) enchantableItem = ItemUtils.convertToEnchantedBook(enchantableItem);
 		player.playSound(player.getLocation(), Sound.BLOCK_ENCHANTMENT_TABLE_USE, 1, 1);
 		enchantableItem = ItemUtils.addEnchantmentsToItem(enchantableItem, enchLevels);
 		playerItems.set(slot, enchantableItem);

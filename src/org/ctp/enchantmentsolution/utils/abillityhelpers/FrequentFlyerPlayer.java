@@ -60,9 +60,9 @@ public class FrequentFlyerPlayer {
 	}
 
 	public boolean canFly() {
-		if(canFly && !player.getAllowFlight()) {
+		if (canFly && !player.getAllowFlight()) {
 			setCanFly(canFly);
-			if(!player.getAllowFlight()) return false;
+			if (!player.getAllowFlight()) return false;
 		}
 		return canFly;
 	}

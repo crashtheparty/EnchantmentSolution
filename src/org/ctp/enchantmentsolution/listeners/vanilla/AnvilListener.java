@@ -94,7 +94,7 @@ public class AnvilListener implements Listener {
 				}
 
 				if (anvil.getRepairType() == RepairType.RENAME && event.getSlot() == 2 && (event.getCursor() == null || event.getCursor().getType() == Material.AIR)) {
-					if(first == null) return;
+					if (first == null) return;
 					ItemMeta firstMeta = first.getItemMeta();
 					if (firstMeta.hasDisplayName() && !firstMeta.getDisplayName().equals(inv.getRenameText()) || !firstMeta.hasDisplayName() && inv.getRenameText() != null && !inv.getRenameText().equals("")) {
 						event.setCancelled(true);

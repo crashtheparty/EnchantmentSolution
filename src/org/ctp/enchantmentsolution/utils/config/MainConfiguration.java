@@ -33,12 +33,11 @@ public class MainConfiguration extends Configuration {
 		YamlConfig defaultConfig = new YamlConfig(file, new String[] {});
 		defaultConfig.getFromConfig();
 		for(String str: defaultConfig.getAllEntryKeys())
-			if (defaultConfig.get(str) != null) if (str.startsWith("config_comments.")) 
-				try{
-					config.addComments(str, defaultConfig.getStringList(str).toArray(new String[] {}));
-				} catch (Exception ex) {
-					ChatUtils.sendWarning("Config key " + str.replaceFirst("config_comments.", "") + " does not exist in the defaults file!");
-				}
+			if (defaultConfig.get(str) != null) if (str.startsWith("config_comments.")) try {
+				config.addComments(str, defaultConfig.getStringList(str).toArray(new String[] {}));
+			} catch (Exception ex) {
+				ChatUtils.sendWarning("Config key " + str.replaceFirst("config_comments.", "") + " does not exist in the defaults file!");
+			}
 			else
 				config.addDefault(str, defaultConfig.get(str));
 		config.addEnum("language", Language.getValues());

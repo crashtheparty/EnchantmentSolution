@@ -28,7 +28,7 @@ public class EnchantItemCriterion {
 		} catch (ClassNotFoundException | NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e1) {
 			e1.printStackTrace();
 		}
-		if(entityPlayer != null && itemStack != null) try {
+		if (entityPlayer != null && itemStack != null) try {
 			Class<?> clazz = Class.forName(packageName + ".CriterionTriggers");
 			Object f = clazz.getDeclaredField("i").get(null);
 			f.getClass().getDeclaredMethod("a", entityPlayer.getClass(), itemStack.getClass(), int.class).invoke(f, entityPlayer, itemStack, 1);

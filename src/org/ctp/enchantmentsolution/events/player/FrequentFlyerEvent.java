@@ -20,13 +20,13 @@ public class FrequentFlyerEvent extends ESPlayerToggleFlightEvent {
 
 	public enum FFType {
 		ALLOW_FLIGHT(true), BREAK_ELYTRA(false), REMOVE_FLIGHT(false);
-		
+
 		private final boolean changeFlight;
-		
-		FFType(boolean changeFlight){
+
+		FFType(boolean changeFlight) {
 			this.changeFlight = changeFlight;
 		}
-		
+
 		public boolean getChangeFlight() {
 			return changeFlight;
 		}

@@ -40,10 +40,10 @@ public class EnchantmentList {
 
 	public void setEnchantability() {
 		int enchantability = 1;
-		for(EnchantabilityMaterial eMaterial : EnchantabilityMaterial.values())
-			if(eMaterial.containsType(material)) { 
-				enchantability = eMaterial.getEnchantability(); 
-				break; 
+		for(EnchantabilityMaterial eMaterial: EnchantabilityMaterial.values())
+			if (eMaterial.containsType(material)) {
+				enchantability = eMaterial.getEnchantability();
+				break;
 			}
 
 		int enchantability_2 = enchantability / 2;
