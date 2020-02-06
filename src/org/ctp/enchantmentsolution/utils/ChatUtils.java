@@ -12,6 +12,8 @@ import javax.annotation.Nonnull;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
@@ -19,6 +21,16 @@ import org.ctp.enchantmentsolution.utils.config.ConfigUtils;
 import org.ctp.enchantmentsolution.utils.config.Type;
 
 public class ChatUtils {
+
+	public static void sendMessage(CommandSender sender, String message) {
+		if (sender instanceof Player) {
+			Player player = (Player) sender;
+			sendMessage(player, message);
+		}
+		if (sender instanceof ConsoleCommandSender) {
+			sendToConsole(Level.INFO, message);
+		}
+	}
 
 	public static void sendMessage(Player player, String message) {
 		sendMessage(getStarter(), player, message);

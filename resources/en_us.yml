@@ -74,6 +74,11 @@ commands:
     enchant-disabled: 'Cannot enchant item with a disabled enchantment.'
     reset-inventory: 'Closed all custom inventories.'
     debug: 'Debug information stored in debug.yml'
+    receive-book: 'You have received an enchantment book with name %enchant% with level %level%.'
+    receive-book-multiple: 'You have received %amount% enchantment books with name %enchant% with level %level%.'
+    give-book: '%player% has been given an enchantment book with name %enchant% with level %level%.'
+    give-book-multiple: '%player% has been given %amount% enchantment books with name %enchant% with level %level%.'
+    player-not-found: 'That player was not found.'
 grindstone: 
     legacy-open: '&aOpen the Grindstone'
     name: '&9Grindstone'

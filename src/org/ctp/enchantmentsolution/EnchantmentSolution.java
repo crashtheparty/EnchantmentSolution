@@ -179,10 +179,12 @@ public class EnchantmentSolution extends JavaPlugin {
 		getCommand("ESReset").setExecutor(new Reset());
 		getCommand("ESDebug").setExecutor(new Debug());
 		getCommand("ESCalc").setExecutor(new EnchantabilityCalculator());
+		getCommand("ESBook").setExecutor(new Book());
 		getCommand("Enchant").setTabCompleter(new PlayerChatTabComplete());
 		getCommand("Info").setTabCompleter(new PlayerChatTabComplete());
 		getCommand("RemoveEnchant").setTabCompleter(new PlayerChatTabComplete());
 		getCommand("EnchantUnsafe").setTabCompleter(new PlayerChatTabComplete());
+		getCommand("ESBook").setTabCompleter(new PlayerChatTabComplete());
 
 		check = new VersionCheck(pluginVersion, "https://raw.githubusercontent.com/crashtheparty/EnchantmentSolution/master/VersionHistory", "https://www.spigotmc.org/resources/enchantment-solution.59556/", "https://github.com/crashtheparty/EnchantmentSolution", ConfigString.LATEST_VERSION.getBoolean(), ConfigString.EXPERIMENTAL_VERSION.getBoolean());
 		registerEvent(check);
