@@ -108,7 +108,7 @@ public class EnchantmentsConfiguration extends Configuration {
 			Configurations.getConfig().save();
 		}
 		if (Configurations.getConfig().getConfig().getBooleanValue("enchantability_decay") != null) {
-			getConfig().set("advanced_options.decay",  Configurations.getConfig().getBoolean("enchantability_decay"));
+			getConfig().set("advanced_options.decay", Configurations.getConfig().getBoolean("enchantability_decay"));
 			Configurations.getConfig().getConfig().removeKey("enchantability_decay");
 			Configurations.getConfig().save();
 		}

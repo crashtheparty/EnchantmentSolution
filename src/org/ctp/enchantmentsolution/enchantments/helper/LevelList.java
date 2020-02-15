@@ -50,7 +50,7 @@ public class LevelList {
 						list[5] = new Level(5, -1);
 					break;
 			}
-			if (!isLevelFifty && i >= 4) list[i - 1] = null;
+			if (!isLevelFifty && i >= 4) list[i - 1] = new Level(i - 1, -1);
 		}
 	}
 

@@ -10,14 +10,7 @@ import org.bukkit.entity.Player;
 import org.ctp.enchantmentsolution.utils.GenerateUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 
-import net.minecraft.server.v1_13_R2.MinecraftKey;
-import net.minecraft.server.v1_13_R2.BlockPosition;
-import net.minecraft.server.v1_13_R2.EntityHuman;
-import net.minecraft.server.v1_13_R2.EntityLiving;
-import net.minecraft.server.v1_13_R2.EntityMinecartContainer;
-import net.minecraft.server.v1_13_R2.ItemStack;
-import net.minecraft.server.v1_13_R2.TileEntityLootable;
-import net.minecraft.server.v1_13_R2.World;
+import net.minecraft.server.v1_13_R2.*;
 
 @SuppressWarnings("resource")
 public class ChestPopulate_v1_13_R2 {
@@ -33,9 +26,12 @@ public class ChestPopulate_v1_13_R2 {
 			for(int i = 0; i < te.getSize(); i++) {
 				ItemStack item = te.getItem(i);
 				CraftItemStack cItem = CraftItemStack.asCraftMirror(item);
-				if (!ConfigString.USE_ENCHANTED_BOOKS.getBoolean() && cItem.getType() == Material.ENCHANTED_BOOK) cItem.setType(Material.BOOK);
-				ItemStack newItem = CraftItemStack.asNMSCopy(GenerateUtils.generateChestLoot(player, cItem, loot));
-
+				ItemStack newItem = null;
+				if (!ConfigString.USE_ENCHANTED_BOOKS.getBoolean() && cItem.getType() == Material.ENCHANTED_BOOK) {
+					cItem.setType(Material.BOOK);
+					newItem = CraftItemStack.asNMSCopy(GenerateUtils.generateChestLoot(player, cItem, loot));
+				}
+				if (item.hasEnchantments()) newItem = CraftItemStack.asNMSCopy(GenerateUtils.generateChestLoot(player, cItem, loot));
 				if (newItem != null) te.setItem(i, newItem);
 			}
 		}
@@ -58,9 +54,12 @@ public class ChestPopulate_v1_13_R2 {
 				for(int i = 0; i < c.getSize(); i++) {
 					ItemStack item = c.getItem(i);
 					CraftItemStack cItem = CraftItemStack.asCraftMirror(item);
-					if (!ConfigString.USE_ENCHANTED_BOOKS.getBoolean() && cItem.getType() == Material.ENCHANTED_BOOK) cItem.setType(Material.BOOK);
-					ItemStack newItem = CraftItemStack.asNMSCopy(GenerateUtils.generateChestLoot(player, cItem, loot));
-
+					ItemStack newItem = null;
+					if (!ConfigString.USE_ENCHANTED_BOOKS.getBoolean() && cItem.getType() == Material.ENCHANTED_BOOK) {
+						cItem.setType(Material.BOOK);
+						newItem = CraftItemStack.asNMSCopy(GenerateUtils.generateChestLoot(player, cItem, loot));
+					}
+					if (item.hasEnchantments()) newItem = CraftItemStack.asNMSCopy(GenerateUtils.generateChestLoot(player, cItem, loot));
 					if (newItem != null) c.setItem(i, newItem);
 				}
 			}

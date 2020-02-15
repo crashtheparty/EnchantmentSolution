@@ -384,6 +384,7 @@ item_display_types:
     leggings: "Leggings"
     melee: "Melee Weapons"
     misc: "Misc"
+    other: "Other"
     pickaxes: "Pickaxes"
     ranged: "Ranged Weapons"
     shears: "Shears"

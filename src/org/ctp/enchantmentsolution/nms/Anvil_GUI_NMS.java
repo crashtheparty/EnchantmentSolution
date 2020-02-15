@@ -25,6 +25,7 @@ public class Anvil_GUI_NMS {
 				break;
 			case 9:
 			case 10:
+			case 11:
 				AnvilGUI_v1_15_R1.createAnvil(player, data);
 				break;
 		}

@@ -1,12 +1,8 @@
 package org.ctp.enchantmentsolution.inventory;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 import org.bukkit.*;
-import org.bukkit.advancement.Advancement;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -14,9 +10,14 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.generate.TableEnchantments;
-import org.ctp.enchantmentsolution.enchantments.helper.*;
+import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
+import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentList;
+import org.ctp.enchantmentsolution.enchantments.helper.LevelList;
 import org.ctp.enchantmentsolution.enums.ItemType;
-import org.ctp.enchantmentsolution.utils.*;
+import org.ctp.enchantmentsolution.nms.EnchantItemCriterion;
+import org.ctp.enchantmentsolution.utils.ChatUtils;
+import org.ctp.enchantmentsolution.utils.LocationUtils;
+import org.ctp.enchantmentsolution.utils.StringUtils;
 import org.ctp.enchantmentsolution.utils.compatibility.JobsUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 import org.ctp.enchantmentsolution.utils.config.ConfigUtils;
@@ -43,6 +44,7 @@ public class EnchantmentTable implements InventoryData {
 		setInventory(playerItems);
 	}
 
+	@Override
 	public void setInventory(List<ItemStack> items) {
 		try {
 			Inventory inv = Bukkit.createInventory(null, 54, ChatUtils.getMessage(getCodes(), "table.name"));
@@ -173,6 +175,7 @@ public class EnchantmentTable implements InventoryData {
 		}
 	}
 
+	@Override
 	public Player getPlayer() {
 		return player;
 	}
@@ -181,6 +184,7 @@ public class EnchantmentTable implements InventoryData {
 		this.player = player;
 	}
 
+	@Override
 	public Inventory getInventory() {
 		return inventory;
 	}
@@ -232,6 +236,7 @@ public class EnchantmentTable implements InventoryData {
 		return false;
 	}
 
+	@Override
 	public List<ItemStack> getItems() {
 		return playerItems;
 	}
@@ -248,7 +253,6 @@ public class EnchantmentTable implements InventoryData {
 			}
 
 		TableEnchantments table = TableEnchantments.getTableEnchantments(player, null, getBooks(), false);
-		if (playerItems.get(slot).getType() == Material.BOOK && ConfigString.USE_ENCHANTED_BOOKS.getBoolean()) enchantableItem = ItemUtils.convertToEnchantedBook(enchantableItem);
 		if (player.getGameMode().equals(GameMode.SURVIVAL) || player.getGameMode().equals(GameMode.ADVENTURE)) {
 			player.setLevel(player.getLevel() - level - 1);
 			int remove = level + 1;
@@ -267,6 +271,7 @@ public class EnchantmentTable implements InventoryData {
 				}
 		}
 		List<EnchantmentLevel> enchLevels = table.getEnchantments(enchantableItem.getType())[level].getEnchantments();
+		if (playerItems.get(slot).getType() == Material.BOOK && ConfigString.USE_ENCHANTED_BOOKS.getBoolean()) enchantableItem = ItemUtils.convertToEnchantedBook(enchantableItem);
 		player.playSound(player.getLocation(), Sound.BLOCK_ENCHANTMENT_TABLE_USE, 1, 1);
 		enchantableItem = ItemUtils.addEnchantmentsToItem(enchantableItem, enchLevels);
 		playerItems.set(slot, enchantableItem);
@@ -274,8 +279,7 @@ public class EnchantmentTable implements InventoryData {
 		TableEnchantments.removeTableEnchantments(player);
 		setInventory(playerItems);
 		player.setStatistic(Statistic.ITEM_ENCHANTED, player.getStatistic(Statistic.ITEM_ENCHANTED) + 1);
-		Advancement enchanted = Bukkit.getAdvancement(NamespacedKey.minecraft("story/enchant_item"));
-		if (enchanted != null) player.getAdvancementProgress(enchanted).awardCriteria("enchanted_item");
+		EnchantItemCriterion.enchantItemTrigger(player, enchantableItem);
 		if (EnchantmentSolution.getPlugin().isJobsEnabled()) JobsUtils.sendEnchantAction(player, enchantItem, enchantableItem, enchLevels);
 	}
 

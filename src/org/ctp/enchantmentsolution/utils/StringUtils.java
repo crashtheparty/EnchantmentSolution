@@ -109,8 +109,11 @@ public class StringUtils {
 
 	public static boolean isEnchantment(String s) {
 		if (s.indexOf(ChatColor.RESET + "") > -1) {
-			String enchName = ChatUtils.revealText(s.substring(0, s.indexOf(ChatColor.RESET + "")));
-			if (RegisterEnchantments.getByName(enchName) != null) return true;
+			String name = s.substring(0, s.indexOf(ChatColor.RESET + ""));
+			if (ChatColor.stripColor(name).equals("")) {
+				String enchName = ChatUtils.revealText(name);
+				if (RegisterEnchantments.getByName(enchName) != null) return true;
+			}
 		}
 		return isLegacyEnchantment(s);
 	}

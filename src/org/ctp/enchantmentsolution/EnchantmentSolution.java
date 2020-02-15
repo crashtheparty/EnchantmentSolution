@@ -146,7 +146,21 @@ public class EnchantmentSolution extends JavaPlugin {
 
 		if (!mcmmoType.equals("Disabled")) registerEvent(new McMMOAbility());
 
-		if (Bukkit.getPluginManager().isPluginEnabled("AuctionHouse")) Bukkit.getScheduler().runTaskLater(this, (Runnable) () -> AuctionHouseUtils.resetAuctionHouse(), 20l);
+		if (Bukkit.getPluginManager().isPluginEnabled("Jobs")) {
+			jobsReborn = Bukkit.getPluginManager().getPlugin("Jobs");
+			ChatUtils.sendInfo("Jobs Reborn compatibility enabled!");
+		}
+
+		if (Bukkit.getPluginManager().isPluginEnabled("VeinMiner")) {
+			veinMiner = Bukkit.getPluginManager().getPlugin("VeinMiner");
+			ChatUtils.sendInfo("Vein Miner compatibility enabled!");
+			registerEvent(new VeinMinerListener());
+		}
+
+		if (Bukkit.getPluginManager().isPluginEnabled("AuctionHouse")) {
+			Bukkit.getScheduler().runTaskLater(this, (Runnable) () -> AuctionHouseUtils.resetAuctionHouse(), 20l);
+			ChatUtils.sendInfo("Auction House compatibility enabled!");
+		}
 
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN, new AbilityRunnable(), 80l, 80l);
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN, new AdvancementThread(), 1l, 1l);
