@@ -87,6 +87,9 @@ loots:
             bookshelves: 10
             levels: 1
             treasure: true
+
+gametype: 'survival'
+
 config_comments: 
 
     enchanting_table: 
@@ -226,3 +229,5 @@ config_comments:
             use:
             - 'Allow custom and/or high level enchants to spawn in chests'
             
+    gametype: 
+    - 'What does this option possibly mean? It seems to do nothing at the moment.'
