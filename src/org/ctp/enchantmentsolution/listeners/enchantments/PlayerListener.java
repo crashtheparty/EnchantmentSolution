@@ -78,9 +78,9 @@ public class PlayerListener extends Enchantmentable {
 						player.getWorld().spawnParticle(Particle.VILLAGER_HAPPY, loc, 30, 0.2, 0.5, 0.2);
 						if (FlowerGiftNMS.isDoubleFlower(flowerGift.getType())) AdvancementUtils.awardCriteria(player, ESAdvancement.BONEMEAL_PLUS, "bonemeal");
 						else if (FlowerGiftNMS.isWitherRose(flowerGift.getType())) AdvancementUtils.awardCriteria(player, ESAdvancement.JUST_AS_SWEET, "wither_rose");
+						ItemUtils.dropItem(flowerGift, flowerGiftEvent.getDropLocation());
 					} else
 						player.getWorld().spawnParticle(Particle.VILLAGER_ANGRY, loc, 30, 0.2, 0.5, 0.2);
-					ItemUtils.dropItem(flowerGiftEvent.getFlower(), flowerGiftEvent.getDropLocation());
 					player.incrementStatistic(Statistic.USE_ITEM, item.getType());
 					DamageUtils.damageItem(player, item);
 				}

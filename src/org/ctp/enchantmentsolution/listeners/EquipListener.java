@@ -4,11 +4,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.*;
 import org.bukkit.event.Event.Result;
-import org.bukkit.event.Event;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockDispenseArmorEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
@@ -18,8 +15,8 @@ import org.bukkit.event.inventory.InventoryType.SlotType;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.events.ArmorEquipEvent;
-import org.ctp.enchantmentsolution.events.ItemEquipEvent;
 import org.ctp.enchantmentsolution.events.ArmorEquipEvent.EquipMethod;
+import org.ctp.enchantmentsolution.events.ItemEquipEvent;
 import org.ctp.enchantmentsolution.utils.items.DamageUtils;
 import org.ctp.enchantmentsolution.utils.items.ItemSlotType;
 
@@ -221,7 +218,7 @@ public class EquipListener implements Listener {
 
 					if (event.isCancelled()) e.setCancelled(true);
 					return;
-				} else if (currentItem.getType() == Material.SHIELD && isAirOrNull(e.getWhoClicked().getInventory().getItemInOffHand())) {
+				} else if (currentItem != null && currentItem.getType() == Material.SHIELD && isAirOrNull(e.getWhoClicked().getInventory().getItemInOffHand())) {
 					ItemEquipEvent event = new ItemEquipEvent((Player) e.getWhoClicked(), ItemEquipEvent.HandMethod.DROP, ItemSlotType.OFF_HAND, null, e.getCurrentItem());
 
 					Bukkit.getServer().getPluginManager().callEvent(event);

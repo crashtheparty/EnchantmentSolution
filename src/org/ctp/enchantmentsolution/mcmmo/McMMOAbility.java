@@ -8,20 +8,18 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
-import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
-import org.ctp.enchantmentsolution.enchantments.CustomEnchantmentWrapper;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
-import org.ctp.enchantmentsolution.utils.ChatUtils;
-import org.ctp.enchantmentsolution.utils.StringUtils;
+import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.utils.VersionUtils;
 import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 
@@ -30,6 +28,7 @@ import com.gmail.nossr50.events.skills.abilities.McMMOPlayerAbilityActivateEvent
 import com.gmail.nossr50.events.skills.abilities.McMMOPlayerAbilityDeactivateEvent;
 import com.gmail.nossr50.events.skills.abilities.McMMOPlayerAbilityEvent;
 import com.gmail.nossr50.events.skills.repair.McMMOPlayerRepairCheckEvent;
+import com.gmail.nossr50.events.skills.salvage.McMMOPlayerSalvageCheckEvent;
 
 public class McMMOAbility implements Listener {
 	private static List<Player> IGNORE_PLAYERS = new ArrayList<Player>();
@@ -69,24 +68,40 @@ public class McMMOAbility implements Listener {
 	public void onMcMMOPlayerRepairCheck(McMMOPlayerRepairCheckEvent event) {
 		ItemStack item = event.getRepairedObject();
 		Bukkit.getScheduler().runTaskLater(EnchantmentSolution.getPlugin(), (Runnable) () -> {
-			if (!event.isCancelled()) {
+			if (!event.isCancelled() && item != null) {
 				ItemMeta meta = item.getItemMeta();
 				if (meta != null) {
-					List<String> lore = new ArrayList<String>();
-					List<String> previousLore = meta.getLore();
-					if (previousLore != null) for(String l: previousLore)
-						if (!StringUtils.isEnchantment(l)) lore.add(l);
 					Iterator<Entry<Enchantment, Integer>> enchantmentLevels = meta.getEnchants().entrySet().iterator();
+					if (item.getType() == Material.ENCHANTED_BOOK) enchantmentLevels = ((EnchantmentStorageMeta) meta).getStoredEnchants().entrySet().iterator();
+					List<EnchantmentLevel> levels = new ArrayList<EnchantmentLevel>();
 					while (enchantmentLevels.hasNext()) {
 						Entry<Enchantment, Integer> entry = enchantmentLevels.next();
-						CustomEnchantment custom = RegisterEnchantments.getCustomEnchantment(entry.getKey());
-						if (custom != null && entry.getKey() instanceof CustomEnchantmentWrapper) lore.add(ChatUtils.hideText("solution") + "" + ChatColor.GRAY + custom.getName());
+						levels.add(new EnchantmentLevel(RegisterEnchantments.getCustomEnchantment(entry.getKey()), entry.getValue()));
+						enchantmentLevels.remove();
 					}
-					meta = ItemUtils.setLore(meta, lore);
-					item.setItemMeta(meta);
+					ItemUtils.addEnchantmentsToItem(item, levels);
 				}
 			}
 		}, 1l);
+	}
+
+	@EventHandler(priority = EventPriority.MONITOR)
+	public void onMcMMOPlayerSalvageCheck(McMMOPlayerSalvageCheckEvent event) {
+		ItemStack item = event.getEnchantedBook();
+		if (!event.isCancelled() && item != null) {
+			ItemMeta meta = item.getItemMeta();
+			if (meta != null) {
+				Iterator<Entry<Enchantment, Integer>> enchantmentLevels = meta.getEnchants().entrySet().iterator();
+				if (item.getType() == Material.ENCHANTED_BOOK) enchantmentLevels = ((EnchantmentStorageMeta) meta).getStoredEnchants().entrySet().iterator();
+				List<EnchantmentLevel> levels = new ArrayList<EnchantmentLevel>();
+				while (enchantmentLevels.hasNext()) {
+					Entry<Enchantment, Integer> entry = enchantmentLevels.next();
+					levels.add(new EnchantmentLevel(RegisterEnchantments.getCustomEnchantment(entry.getKey()), entry.getValue()));
+					ItemUtils.removeEnchantmentFromItem(item, RegisterEnchantments.getCustomEnchantment(entry.getKey()));
+				}
+				ItemUtils.addEnchantmentsToItem(item, levels);
+			}
+		}
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR)

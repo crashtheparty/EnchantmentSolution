@@ -1,8 +1,6 @@
 package org.ctp.enchantmentsolution.mcmmo;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
@@ -103,6 +101,6 @@ public class McMMOHandler {
 	public static List<EnchantmentLevel> getEnchants(Player player, ItemStack treasure) {
 		FishingEnchantments ench = FishingEnchantments.getFishingEnchantments(player, treasure);
 		if (ench != null) return ench.getEnchantmentList().getEnchantments();
-		return null;
+		return new ArrayList<EnchantmentLevel>();
 	}
 }

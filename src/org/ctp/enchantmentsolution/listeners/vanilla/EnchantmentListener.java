@@ -2,13 +2,7 @@ package org.ctp.enchantmentsolution.listeners.vanilla;
 
 import java.util.List;
 
-import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
-import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
-import org.bukkit.Sound;
-import org.bukkit.Statistic;
-import org.bukkit.advancement.Advancement;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -20,6 +14,7 @@ import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantmentWrapper;
 import org.ctp.enchantmentsolution.enchantments.generate.TableEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
+import org.ctp.enchantmentsolution.nms.EnchantItemCriterion;
 import org.ctp.enchantmentsolution.utils.LocationUtils;
 import org.ctp.enchantmentsolution.utils.compatibility.JobsUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
@@ -62,8 +57,7 @@ public class EnchantmentListener implements Listener {
 				event.getInventory().removeItem(new ItemStack(Material.LAPIS_LAZULI, i + 1));
 				player.playSound(player.getLocation(), Sound.BLOCK_ENCHANTMENT_TABLE_USE, 1, 1);
 				player.setStatistic(Statistic.ITEM_ENCHANTED, player.getStatistic(Statistic.ITEM_ENCHANTED) + 1);
-				Advancement enchanted = Bukkit.getAdvancement(NamespacedKey.minecraft("story/enchant_item"));
-				if (enchanted != null) player.getAdvancementProgress(enchanted).awardCriteria("enchanted_item");
+				EnchantItemCriterion.enchantItemTrigger(player, item);
 				if (EnchantmentSolution.getPlugin().isJobsEnabled()) JobsUtils.sendEnchantAction(player, item, item, enchantments);
 				break;
 			}

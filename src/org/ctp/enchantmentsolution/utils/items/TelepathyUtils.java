@@ -181,9 +181,7 @@ public class TelepathyUtils {
 		player.incrementStatistic(Statistic.USE_ITEM, item.getType());
 		DamageUtils.damageItem(player, item);
 		McMMOHandler.handleMcMMO(event, item);
-		if(EnchantmentSolution.getPlugin().isJobsEnabled()){
-			JobsUtils.sendBlockBreakAction(event);
-		}
+		if (EnchantmentSolution.getPlugin().isJobsEnabled()) JobsUtils.sendBlockBreakAction(event);
 		event.getBlock().setType(Material.AIR);
 	}
 }

@@ -6,12 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.advancement.AdvancementProgress;
 import org.bukkit.entity.Player;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
-import org.ctp.enchantmentsolution.advancements.Advancement;
-import org.ctp.enchantmentsolution.advancements.AdvancementFactory;
-import org.ctp.enchantmentsolution.advancements.ESAdvancement;
-import org.ctp.enchantmentsolution.advancements.ESAdvancementProgress;
-import org.ctp.enchantmentsolution.advancements.ESAdvancementTab;
-import org.ctp.enchantmentsolution.advancements.ESTrigger;
+import org.ctp.enchantmentsolution.advancements.*;
 import org.ctp.enchantmentsolution.utils.config.ConfigUtils;
 
 public class AdvancementUtils {

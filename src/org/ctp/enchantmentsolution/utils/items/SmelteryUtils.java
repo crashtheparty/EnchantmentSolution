@@ -7,15 +7,16 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
+import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enums.ItemBreakType;
 import org.ctp.enchantmentsolution.enums.MatData;
 import org.ctp.enchantmentsolution.events.blocks.SmelteryEvent;
 import org.ctp.enchantmentsolution.mcmmo.McMMOHandler;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
-import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.VersionUtils;
 import org.ctp.enchantmentsolution.utils.abillityhelpers.SmelteryMaterial;
+import org.ctp.enchantmentsolution.utils.compatibility.JobsUtils;
 
 public class SmelteryUtils {
 
@@ -42,6 +43,7 @@ public class SmelteryUtils {
 				player.incrementStatistic(Statistic.MINE_BLOCK, smelteryEvent.getBlock().getType());
 				player.incrementStatistic(Statistic.USE_ITEM, item.getType());
 				McMMOHandler.handleMcMMO(event, item);
+				if (EnchantmentSolution.getPlugin().isJobsEnabled()) JobsUtils.sendBlockBreakAction(event);
 				DamageUtils.damageItem(player, item);
 				ItemUtils.dropItem(afterSmeltery, smelteryEvent.getBlock().getLocation());
 				AbilityUtils.dropExperience(smelteryEvent.getBlock().getLocation().add(0.5, 0.5, 0.5), experience);
@@ -157,7 +159,6 @@ public class SmelteryUtils {
 					newTerra[terra.length - 1] = "GLAZED";
 					newTerra[terra.length] = terra[terra.length - 1];
 					material = String.join("_", newTerra);
-					ChatUtils.sendInfo(material);
 				}
 				break;
 			case "QUARTZ_BLOCK":

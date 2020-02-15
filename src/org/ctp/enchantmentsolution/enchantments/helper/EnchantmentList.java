@@ -7,7 +7,6 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
-import org.ctp.enchantmentsolution.enums.ItemType;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 import org.ctp.enchantmentsolution.utils.config.ConfigUtils;
 
@@ -41,16 +40,11 @@ public class EnchantmentList {
 
 	public void setEnchantability() {
 		int enchantability = 1;
-		if (ItemType.WOODEN_TOOLS.getItemTypes().contains(material)) enchantability = 15;
-		else if (ItemType.STONE_TOOLS.getItemTypes().contains(material)) enchantability = 5;
-		else if (ItemType.GOLDEN_TOOLS.getItemTypes().contains(material)) enchantability = 22;
-		else if (ItemType.IRON_TOOLS.getItemTypes().contains(material)) enchantability = 14;
-		else if (ItemType.DIAMOND_TOOLS.getItemTypes().contains(material)) enchantability = 10;
-		else if (ItemType.LEATHER_ARMOR.getItemTypes().contains(material)) enchantability = 15;
-		else if (ItemType.GOLDEN_ARMOR.getItemTypes().contains(material)) enchantability = 25;
-		else if (ItemType.CHAINMAIL_ARMOR.getItemTypes().contains(material)) enchantability = 12;
-		else if (ItemType.IRON_ARMOR.getItemTypes().contains(material)) enchantability = 9;
-		else if (ItemType.DIAMOND_ARMOR.getItemTypes().contains(material)) enchantability = 10;
+		for(EnchantabilityMaterial eMaterial: EnchantabilityMaterial.values())
+			if (eMaterial.containsType(material)) {
+				enchantability = eMaterial.getEnchantability();
+				break;
+			}
 
 		int enchantability_2 = enchantability / 2;
 		int rand_enchantability = 1 + randomInt(enchantability_2 / 2 + 1) + randomInt(enchantability_2 / 2 + 1);

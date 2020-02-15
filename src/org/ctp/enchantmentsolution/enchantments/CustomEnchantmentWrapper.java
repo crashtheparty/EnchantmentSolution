@@ -9,16 +9,23 @@ import org.ctp.enchantmentsolution.EnchantmentSolution;
 
 public class CustomEnchantmentWrapper extends Enchantment {
 
-	private String name;
+	private final String name;
+	private final int maxLevel;
 
-	CustomEnchantmentWrapper(String namespace, String name) {
+	CustomEnchantmentWrapper(String namespace, String name, int maxLevel) {
 		super(new NamespacedKey(EnchantmentSolution.getPlugin(), namespace));
 		this.name = name;
+		this.maxLevel = maxLevel;
 	}
 
 	public CustomEnchantmentWrapper(JavaPlugin plugin, String namespace, String name) {
+		this(plugin, namespace, name, 0);
+	}
+
+	public CustomEnchantmentWrapper(JavaPlugin plugin, String namespace, String name, int maxLevel) {
 		super(new NamespacedKey(plugin, namespace));
 		this.name = name;
+		this.maxLevel = maxLevel;
 	}
 
 	@Override
@@ -38,7 +45,7 @@ public class CustomEnchantmentWrapper extends Enchantment {
 
 	@Override
 	public int getMaxLevel() {
-		return 0;
+		return maxLevel;
 	}
 
 	@Override
@@ -46,10 +53,12 @@ public class CustomEnchantmentWrapper extends Enchantment {
 		return 0;
 	}
 
+	@Override
 	public boolean isCursed() {
 		return false;
 	}
 
+	@Override
 	public boolean isTreasure() {
 		return false;
 	}
