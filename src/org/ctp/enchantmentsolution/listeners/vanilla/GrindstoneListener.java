@@ -35,13 +35,13 @@ public class GrindstoneListener implements Listener {
 					combine(ench, event.getClick(), inv);
 				} else
 					inv.setItem(2, ench.getCombinedItem());
-					Bukkit.getScheduler().runTaskLater(EnchantmentSolution.getPlugin(), () -> {
-						ItemStack newFirst = inv.getItem(0);
-						ItemStack newSecond = inv.getItem(1);
-						GrindstoneEnchantments gEnch = GrindstoneEnchantments.getGrindstoneEnchantments(player, newFirst, newSecond);
-						
-						inv.setItem(2, gEnch.getCombinedItem());
-					}, 2l);
+				Bukkit.getScheduler().runTaskLater(EnchantmentSolution.getPlugin(), () -> {
+					ItemStack newFirst = inv.getItem(0);
+					ItemStack newSecond = inv.getItem(1);
+					GrindstoneEnchantments gEnch = GrindstoneEnchantments.getGrindstoneEnchantments(player, newFirst, newSecond);
+
+					inv.setItem(2, gEnch.getCombinedItem());
+				}, 2l);
 			}
 		}
 	}

@@ -23,6 +23,7 @@ import org.ctp.enchantmentsolution.events.player.ExperienceEvent;
 import org.ctp.enchantmentsolution.events.player.ExperienceEvent.ExpShareType;
 import org.ctp.enchantmentsolution.events.player.PillageEvent;
 import org.ctp.enchantmentsolution.listeners.Enchantmentable;
+import org.ctp.enchantmentsolution.threads.MiscRunnable;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.items.AbilityUtils;
 import org.ctp.enchantmentsolution.utils.items.ItemUtils;
@@ -45,7 +46,12 @@ public class AfterEffectsListener extends Enchantmentable {
 
 	@EventHandler
 	public void onPlayerRespawn(PlayerRespawnEvent event) {
+		runMethod(this, "contagionCurse", event, PlayerRespawnEvent.class);
 		runMethod(this, "sacrifice", event, PlayerRespawnEvent.class);
+	}
+
+	private void contagionCurse(PlayerRespawnEvent event) {
+		MiscRunnable.addContagion(event.getPlayer());
 	}
 
 	private void expShare(EntityDeathEvent event) {
