@@ -1,5 +1,7 @@
 package org.ctp.enchantmentsolution.commands;
 
+import java.util.HashMap;
+
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -9,10 +11,9 @@ import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
+import org.ctp.enchantmentsolution.utils.MiscUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 import org.ctp.enchantmentsolution.utils.items.ItemUtils;
-
-import java.util.HashMap;
 
 public class Enchant implements CommandExecutor {
 
@@ -64,6 +65,7 @@ public class Enchant implements CommandExecutor {
 										itemToEnchant = ItemUtils.addEnchantmentToItem(itemToEnchant, enchant, level);
 
 										player.getInventory().setItemInMainHand(itemToEnchant);
+										MiscUtils.updateAbilities(player);
 										HashMap<String, Object> codes = ChatUtils.getCodes();
 										codes.put("%level%", level);
 										codes.put("%enchant%", enchant.getDisplayName());

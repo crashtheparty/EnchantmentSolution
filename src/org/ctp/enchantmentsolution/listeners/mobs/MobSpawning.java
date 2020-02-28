@@ -7,7 +7,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
 import org.bukkit.inventory.ItemStack;
-import org.ctp.enchantmentsolution.enchantments.generate.MobLootEnchantments;
+import org.ctp.enchantmentsolution.utils.GenerateUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 
 public class MobSpawning implements Listener {
@@ -23,9 +23,9 @@ public class MobSpawning implements Listener {
 			ItemStack holding = entity.getEquipment().getItemInMainHand();
 
 			for(int i = 0; i < armor.length; i++)
-				if (armor[i] != null && armor[i].getItemMeta() != null && armor[i].getItemMeta().hasEnchants()) armor[i] = MobLootEnchantments.generateMobLoot(armor[i]).getItem();
+				if (armor[i] != null && armor[i].getItemMeta() != null && armor[i].getItemMeta().hasEnchants()) armor[i] = GenerateUtils.generateMobSpawnLoot(armor[i]);
 
-			if (holding != null && holding.getItemMeta() != null && holding.getItemMeta().hasEnchants()) holding = MobLootEnchantments.generateMobLoot(holding).getItem();
+			if (holding != null && holding.getItemMeta() != null && holding.getItemMeta().hasEnchants()) holding = GenerateUtils.generateMobSpawnLoot(holding);
 			entity.getEquipment().setArmorContents(armor);
 			entity.getEquipment().setItemInMainHand(holding);
 		}

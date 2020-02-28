@@ -26,6 +26,7 @@ import org.ctp.enchantmentsolution.events.potion.MagicGuardPotionEvent;
 import org.ctp.enchantmentsolution.events.potion.PotionEventType;
 import org.ctp.enchantmentsolution.events.potion.UnrestPotionEvent;
 import org.ctp.enchantmentsolution.listeners.Enchantmentable;
+import org.ctp.enchantmentsolution.threads.MiscRunnable;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.ESArrays;
 import org.ctp.enchantmentsolution.utils.items.ItemSlotType;
@@ -92,13 +93,14 @@ public class AttributeListener extends Enchantmentable {
 						if (player.getStatistic(Statistic.TIME_SINCE_REST) > 72000 && player.getWorld().getTime() > 12540 && player.getWorld().getTime() < 23459) AdvancementUtils.awardCriteria(player, ESAdvancement.COFFEE_BREAK, "coffee");
 						if (player.getStatistic(Statistic.TIME_SINCE_REST) > 0) player.setStatistic(Statistic.TIME_SINCE_REST, 0);
 					}
-				} else if (entry.getKey() == RegisterEnchantments.MAGIC_GUARD) if (type == ItemSlotType.OFF_HAND) if (equip) for(PotionEffectType potionEffect: ESArrays.getBadPotions())
+				} else if (entry.getKey() == RegisterEnchantments.MAGIC_GUARD && type == ItemSlotType.OFF_HAND && equip) for(PotionEffectType potionEffect: ESArrays.getBadPotions())
 					if (player.hasPotionEffect(potionEffect)) {
 						MagicGuardPotionEvent event = new MagicGuardPotionEvent(player, potionEffect);
 						Bukkit.getPluginManager().callEvent(event);
 
 						if (!event.isCancelled()) player.removePotionEffect(potionEffect);
-					}
+					} else { /* placeholder */ }
+				else if (entry.getKey() == RegisterEnchantments.CURSE_OF_EXHAUSTION && equip) MiscRunnable.addExhaustion(player);
 			}
 		}
 	}
