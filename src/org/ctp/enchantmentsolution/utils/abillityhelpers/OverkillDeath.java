@@ -1,9 +1,7 @@
 package org.ctp.enchantmentsolution.utils.abillityhelpers;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
+import java.util.Map.Entry;
 
 public class OverkillDeath {
 
@@ -32,5 +30,9 @@ public class OverkillDeath {
 
 	public void minus() {
 		ticks--;
+	}
+
+	public static Iterator<Entry<UUID, List<OverkillDeath>>> getIterator() {
+		return DEATHS.entrySet().iterator();
 	}
 }
