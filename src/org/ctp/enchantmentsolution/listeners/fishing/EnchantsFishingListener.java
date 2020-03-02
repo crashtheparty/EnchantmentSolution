@@ -7,7 +7,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.inventory.ItemStack;
-import org.ctp.enchantmentsolution.enchantments.generate.FishingEnchantments;
+import org.ctp.enchantmentsolution.utils.GenerateUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 
 public class EnchantsFishingListener implements Listener {
@@ -26,7 +26,7 @@ public class EnchantsFishingListener implements Listener {
 
 	private void handleFishing(Item item, Player player) {
 		ItemStack itemStack = item.getItemStack().clone();
-		itemStack = FishingEnchantments.getFishingEnchantments(player, itemStack, ConfigString.LOOT_BOOKSHELVES.getInt("fishing.bookshelves"), ConfigString.LOOT_TREASURE.getBoolean("fishing.treasure")).getItem();
+		itemStack = GenerateUtils.generateFishingLoot(player, itemStack, ConfigString.LOOT_BOOKSHELVES.getInt("fishing.bookshelves"), ConfigString.LOOT_TREASURE.getBoolean("fishing.treasure"));
 
 		item.setItemStack(itemStack);
 	}

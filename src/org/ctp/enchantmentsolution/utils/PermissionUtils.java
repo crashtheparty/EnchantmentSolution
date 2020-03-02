@@ -17,7 +17,7 @@ public class PermissionUtils {
 		if (usePermissions()) {
 			if (player.hasPermission("enchantmentsolution.permissions.ignore")) return true;
 			String namespace = getNamespace(enchant);
-			String path = namespace + "." + enchant.getName().toLowerCase() + ".permissions.table.level";
+			String path = namespace + "." + enchant.getName().toLowerCase() + ".advanced.permissions.table.level";
 			String permission = namespace + "." + enchant.getName().toLowerCase() + ".table.level";
 			return checkPermission(player, level, path, permission);
 		}
@@ -30,7 +30,7 @@ public class PermissionUtils {
 		if (usePermissions()) {
 			if (player.hasPermission("enchantmentsolution.permissions.ignore")) return true;
 			String namespace = getNamespace(enchant);
-			String path = namespace + "." + enchant.getName().toLowerCase() + ".permissions.anvil.level";
+			String path = namespace + "." + enchant.getName().toLowerCase() + ".advanced.permissions.anvil.level";
 			String permission = namespace + "." + enchant.getName().toLowerCase() + ".anvil.level";
 			return checkPermission(player, level, path, permission);
 		}

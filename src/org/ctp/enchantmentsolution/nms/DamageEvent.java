@@ -59,24 +59,20 @@ public class DamageEvent {
 	public static double getArrowDamage(LivingEntity entity, Arrow arrow) {
 		switch (EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber()) {
 			case 1:
-				DamageEvent_v1_13_R1.getArrowDamage(entity, arrow);
-				break;
+				return DamageEvent_v1_13_R1.getArrowDamage(entity, arrow);
 			case 2:
 			case 3:
-				DamageEvent_v1_13_R2.getArrowDamage(entity, arrow);
-				break;
+				return DamageEvent_v1_13_R2.getArrowDamage(entity, arrow);
 			case 4:
 			case 5:
 			case 6:
 			case 7:
 			case 8:
-				DamageEvent_v1_14_R1.getArrowDamage(entity, arrow);
-				break;
+				return DamageEvent_v1_14_R1.getArrowDamage(entity, arrow);
 			case 9:
 			case 10:
 			case 11:
-				DamageEvent_v1_15_R1.getArrowDamage(entity, arrow);
-				break;
+				return DamageEvent_v1_15_R1.getArrowDamage(entity, arrow);
 		}
 		return 0;
 	}

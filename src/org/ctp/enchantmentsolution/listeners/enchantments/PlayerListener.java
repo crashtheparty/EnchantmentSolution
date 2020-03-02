@@ -14,6 +14,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
@@ -28,6 +29,7 @@ import org.ctp.enchantmentsolution.events.modify.IcarusLaunchEvent;
 import org.ctp.enchantmentsolution.listeners.Enchantmentable;
 import org.ctp.enchantmentsolution.nms.FlowerGiftNMS;
 import org.ctp.enchantmentsolution.nms.animalmob.AnimalMob;
+import org.ctp.enchantmentsolution.threads.MiscRunnable;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.LocationUtils;
 import org.ctp.enchantmentsolution.utils.StringUtils;
@@ -57,6 +59,15 @@ public class PlayerListener extends Enchantmentable {
 		runMethod(this, "icarus", event, PlayerMoveEvent.class);
 		runMethod(this, "movementListener", event, RegisterEnchantments.MAGMA_WALKER);
 		runMethod(this, "movementListener", event, RegisterEnchantments.VOID_WALKER);
+	}
+
+	@EventHandler
+	public void onPlayerJoin(PlayerJoinEvent event) {
+		runMethod(this, "contagionCurse", event, PlayerJoinEvent.class);
+	}
+
+	private void contagionCurse(PlayerJoinEvent event) {
+		MiscRunnable.addContagion(event.getPlayer());
 	}
 
 	private void flowerGift(PlayerInteractEvent event) {

@@ -12,12 +12,14 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.api.ApiEnchantmentWrapper;
 import org.ctp.enchantmentsolution.enchantments.helper.Weight;
+import org.ctp.enchantmentsolution.enums.MatData;
 import org.ctp.enchantmentsolution.utils.*;
 import org.ctp.enchantmentsolution.utils.config.*;
 
 public class RegisterEnchantments {
 	private static List<CustomEnchantment> ENCHANTMENTS = new ArrayList<CustomEnchantment>();
 	private static List<CustomEnchantment> REGISTERED_ENCHANTMENTS = new ArrayList<CustomEnchantment>();
+	private static List<CustomEnchantment> CURSE_ENCHANTMENTS = new ArrayList<CustomEnchantment>();
 
 	public static final Enchantment SOULBOUND = new CustomEnchantmentWrapper("soulbound", "SOULBOUND", 1);
 	public static final Enchantment SOUL_REAPER = new CustomEnchantmentWrapper("soul_reaper", "SOUL_REAPER", 2);
@@ -95,6 +97,16 @@ public class RegisterEnchantments {
 		return null;
 	}
 
+	public static List<CustomEnchantment> getCurseEnchantments() {
+		if (CURSE_ENCHANTMENTS != null) return CURSE_ENCHANTMENTS;
+		CURSE_ENCHANTMENTS = new ArrayList<CustomEnchantment>();
+		for(CustomEnchantment enchantment: getRegisteredEnchantments()) {
+			if (enchantment.getRelativeEnchantment() == RegisterEnchantments.CURSE_OF_CONTAGION) continue;
+			if (enchantment.isCurse()) CURSE_ENCHANTMENTS.add(enchantment);
+		}
+		return CURSE_ENCHANTMENTS;
+	}
+
 	public static boolean registerEnchantment(CustomEnchantment enchantment) {
 		if (REGISTERED_ENCHANTMENTS.contains(enchantment)) return true;
 		REGISTERED_ENCHANTMENTS.add(enchantment);
@@ -128,6 +140,7 @@ public class RegisterEnchantments {
 	}
 
 	public static void setEnchantments() {
+		CURSE_ENCHANTMENTS = null;
 		boolean levelFifty = ConfigString.LEVEL_FIFTY.getBoolean();
 		for(int i = 0; i < ENCHANTMENTS.size(); i++) {
 			CustomEnchantment enchantment = ENCHANTMENTS.get(i);
@@ -182,8 +195,8 @@ public class RegisterEnchantments {
 				List<String> disabledItemsString = config.getStringList(namespace + "." + enchantment.getName() + ".advanced.disabled_items");
 				List<Material> disabledItems = new ArrayList<Material>();
 				if (disabledItemsString != null) for(String s: disabledItemsString) {
-					Material mat = Material.getMaterial(s);
-					if (mat != null) disabledItems.add(mat);
+					MatData mat = new MatData(s);
+					if (mat != null && mat.getMaterial() != null) disabledItems.add(mat.getMaterial());
 				}
 				enchantment.setCustom(constant, modifier, startLevel, maxLevel, weight);
 				enchantment.setConflictingEnchantments(conflictingEnchantments);

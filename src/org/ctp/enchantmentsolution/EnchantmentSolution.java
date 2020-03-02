@@ -99,6 +99,7 @@ public class EnchantmentSolution extends JavaPlugin {
 		registerEvent(new ProjectileListener());
 		registerEvent(new BlockListener());
 		registerEvent(new PotionEffectListener());
+		registerEvent(new InventoryListener());
 
 		registerEvent(new AnvilListener());
 		registerEvent(new EnchantmentListener());
@@ -165,7 +166,6 @@ public class EnchantmentSolution extends JavaPlugin {
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN, new AbilityRunnable(), 80l, 80l);
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN, new AdvancementThread(), 1l, 1l);
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN, new ElytraRunnable(), 1l, 1l);
-		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN, new ExhaustionRunnable(), 4l, 4l);
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN, new MiscRunnable(), 1l, 1l);
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN, new SnapshotRunnable(), 1l, 1l);
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN, new WalkerRunnable(), 1l, 1l);

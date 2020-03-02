@@ -77,8 +77,8 @@ public class McMMOAbility implements Listener {
 					while (enchantmentLevels.hasNext()) {
 						Entry<Enchantment, Integer> entry = enchantmentLevels.next();
 						levels.add(new EnchantmentLevel(RegisterEnchantments.getCustomEnchantment(entry.getKey()), entry.getValue()));
-						enchantmentLevels.remove();
 					}
+					ItemUtils.removeAllEnchantments(item, true);
 					ItemUtils.addEnchantmentsToItem(item, levels);
 				}
 			}
@@ -97,8 +97,8 @@ public class McMMOAbility implements Listener {
 				while (enchantmentLevels.hasNext()) {
 					Entry<Enchantment, Integer> entry = enchantmentLevels.next();
 					levels.add(new EnchantmentLevel(RegisterEnchantments.getCustomEnchantment(entry.getKey()), entry.getValue()));
-					ItemUtils.removeEnchantmentFromItem(item, RegisterEnchantments.getCustomEnchantment(entry.getKey()));
 				}
+				ItemUtils.removeAllEnchantments(item, true);
 				ItemUtils.addEnchantmentsToItem(item, levels);
 			}
 		}
