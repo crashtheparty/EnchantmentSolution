@@ -23,7 +23,7 @@ public abstract class LootEnchantments extends GenerateEnchantments {
 		list = new EnchantmentList[levelList.getList().length];
 		for(int i = 0; i < list.length; i++) {
 			Level level = levelList.getList()[i];
-			if (level.getLevel() > -1) list[i] = new EnchantmentList(getPlayer(), level, item.getType(), isTreasure());
+			if (level.getLevel() > -1) list[i] = new EnchantmentList(getPlayer().getPlayer(), level, item.getType(), isTreasure());
 		}
 	}
 

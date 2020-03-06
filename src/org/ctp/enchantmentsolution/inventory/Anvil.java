@@ -15,12 +15,12 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.generate.AnvilEnchantments;
 import org.ctp.enchantmentsolution.enchantments.generate.AnvilEnchantments.RepairType;
-import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 import org.ctp.enchantmentsolution.utils.AnvilUtils;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.compatibility.JobsUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 import org.ctp.enchantmentsolution.utils.config.ConfigUtils;
+import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 
 public class Anvil implements InventoryData {
 
@@ -42,8 +42,9 @@ public class Anvil implements InventoryData {
 		setInventory(playerItems);
 	}
 
+	@Override
 	public void setInventory(List<ItemStack> items) {
-		if (block.getType() == Material.AIR) return;
+		if (block != null && block.getType() == Material.AIR) return;
 		boolean useAnvil = ConfigString.DEFAULT_ANVIL.getBoolean();
 		int maxRepairLevel = ConfigString.MAX_REPAIR_LEVEL.getInt();
 		boolean useLegacyGrindstone = ConfigUtils.useLegacyGrindstone();
@@ -172,6 +173,7 @@ public class Anvil implements InventoryData {
 		}
 	}
 
+	@Override
 	public Player getPlayer() {
 		return player;
 	}
@@ -180,6 +182,7 @@ public class Anvil implements InventoryData {
 		this.player = player;
 	}
 
+	@Override
 	public Inventory getInventory() {
 		return inventory;
 	}
@@ -196,6 +199,7 @@ public class Anvil implements InventoryData {
 		return playerItems.remove(slot) != null;
 	}
 
+	@Override
 	public List<ItemStack> getItems() {
 		return playerItems;
 	}
@@ -220,6 +224,7 @@ public class Anvil implements InventoryData {
 			ChatUtils.sendMessage(player, ChatUtils.getMessage(getCodes(), "anvil.message-cannot-combine"));
 	}
 
+	@Override
 	public Block getBlock() {
 		return block;
 	}
@@ -228,6 +233,7 @@ public class Anvil implements InventoryData {
 		this.block = block;
 	}
 
+	@Override
 	public void setItemName(String name) {
 		if (playerItems.size() == 1) {
 			ItemStack item = playerItems.remove(0);
@@ -238,6 +244,7 @@ public class Anvil implements InventoryData {
 		}
 	}
 
+	@Override
 	public void close(boolean external) {
 		if (EnchantmentSolution.getPlugin().hasInventory(this)) {
 			for(ItemStack item: getItems())

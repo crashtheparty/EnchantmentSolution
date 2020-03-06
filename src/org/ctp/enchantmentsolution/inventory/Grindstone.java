@@ -1,14 +1,8 @@
 package org.ctp.enchantmentsolution.inventory;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
-import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
-import org.bukkit.Material;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -220,7 +214,9 @@ public class Grindstone implements InventoryData {
 			} else {
 				ItemUtils.giveItemToPlayer(player, grindstone.getCombinedItem(), player.getLocation(), false);
 				playGrindstoneSound();
-				LocationUtils.dropExperience(block.getLocation(), grindstone.getExperience(), true);
+				if(block == null) LocationUtils.dropExperience(player.getLocation(), grindstone.getExperience(), true);
+				else
+					LocationUtils.dropExperience(block.getLocation(), grindstone.getExperience(), true);
 				grindstone = null;
 				playerItems.clear();
 			}
@@ -303,6 +299,7 @@ public class Grindstone implements InventoryData {
 		try {
 			sound = Sound.valueOf("BLOCK_GRINDSTONE_USE");
 		} catch (Exception ex) {}
+		if(block == null) player.getWorld().playSound(player.getLocation(), sound, 1, 1);
 		block.getWorld().playSound(block.getLocation(), sound, 1, 1);
 	}
 }

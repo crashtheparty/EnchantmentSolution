@@ -1,17 +1,8 @@
 package org.ctp.enchantmentsolution.utils.yaml;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
@@ -80,7 +71,7 @@ public class YamlConfig {
 			java.util.Map.Entry<String, YamlInfo> e = it.next();
 			List<String> entryKeys = getEntryKeys(e.getKey());
 			for(String key: entryKeys)
-				if (!keys.contains(key)) if (key.startsWith(path)) if (StringUtils.countMatches(path, ".") + 1 == StringUtils.countMatches(key, ".")) keys.add(key);
+				if (!keys.contains(key)) if (key.startsWith(path) && StringUtils.countMatches(path, ".") + 1 == StringUtils.countMatches(key, ".")) keys.add(key);
 		}
 
 		return keys;

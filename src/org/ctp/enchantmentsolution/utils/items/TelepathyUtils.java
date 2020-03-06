@@ -56,7 +56,6 @@ public class TelepathyUtils {
 	}
 
 	public static void handleTelepathy(BlockBreakEvent event, Player player, ItemStack item, Block block) {
-		if (block.getRelative(BlockFace.DOWN).getType() == Material.LAVA) AdvancementUtils.awardCriteria(player, ESAdvancement.NO_PANIC, "lava");
 		Collection<ItemStack> drops = block.getDrops(item);
 		if (ESArrays.getShulkerBoxes().contains(block.getType())) {
 			drops = ItemUtils.getSoulboundShulkerBox(player, block, drops);
@@ -92,6 +91,7 @@ public class TelepathyUtils {
 					if (drop != null) newDrops.add(drop);
 			TelepathyEvent telepathy = callTelepathy(event, block, player, newDrops, TelepathyType.CONTAINER, false);
 			if (!telepathy.isCancelled()) {
+				if (block.getRelative(BlockFace.DOWN).getType() == Material.LAVA) AdvancementUtils.awardCriteria(player, ESAdvancement.NO_PANIC, "lava");
 				if (container.getInventory().getHolder() instanceof DoubleChest) {
 					DoubleChest doubleChest = (DoubleChest) container.getInventory().getHolder();
 					if (doubleChest.getLeftSide().getInventory().getLocation().equals(container.getLocation())) {

@@ -95,8 +95,8 @@ public class Configurations {
 		LANGUAGE.save();
 		ENCHANTMENTS.save();
 		ADVANCEMENTS.save();
-
-		TableEnchantments.removeAllTableEnchantments();
+		
+		if (ConfigString.RESET_ON_RELOAD.getBoolean()) TableEnchantments.removeAllTableEnchantments();
 		RegisterEnchantments.setEnchantments();
 
 		DBUtils.updateConfig(CONFIG);

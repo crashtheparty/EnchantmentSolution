@@ -1,21 +1,22 @@
 package org.ctp.enchantmentsolution.enchantments.generate;
 
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 public abstract class GenerateEnchantments {
 
-	private Player player;
+	private OfflinePlayer player;
 	private ItemStack item;
 	private boolean treasure;
 
-	public GenerateEnchantments(Player player, ItemStack item, boolean treasure) {
+	public GenerateEnchantments(OfflinePlayer player, ItemStack item, boolean treasure) {
 		this.player = player;
 		this.item = item;
 		this.treasure = treasure;
 	}
 
-	public Player getPlayer() {
+	public OfflinePlayer getPlayer() {
 		return player;
 	}
 

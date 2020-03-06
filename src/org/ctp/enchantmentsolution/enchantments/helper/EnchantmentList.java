@@ -4,22 +4,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 import org.ctp.enchantmentsolution.utils.config.ConfigUtils;
+import org.ctp.enchantmentsolution.utils.yaml.YamlConfig;
 
 public class EnchantmentList {
 
 	private Level level;
-	private Player player;
+	private OfflinePlayer player;
 	private Material material;
 	private int enchantability;
 	private List<EnchantmentLevel> enchantments;
 	private boolean treasure;
 
-	public EnchantmentList(Player player, Level level, Material material, boolean treasure) {
+	public EnchantmentList(OfflinePlayer player, Level level, Material material, boolean treasure) {
 		this.level = level;
 		this.player = player;
 		this.material = material;
@@ -29,7 +31,16 @@ public class EnchantmentList {
 		generate();
 	}
 
-	public EnchantmentList(Player player, Material material, boolean treasure, List<EnchantmentLevel> fishing,
+	private EnchantmentList(OfflinePlayer player, Level level, Material material, boolean treasure, int enchantability, List<EnchantmentLevel> generated) {
+		this.level = level;
+		this.player = player;
+		this.material = material;
+		this.treasure = treasure;
+		this.enchantability = enchantability;
+		this.enchantments = generated;
+	}
+
+	public EnchantmentList(OfflinePlayer player, Material material, boolean treasure, List<EnchantmentLevel> fishing,
 	double multiEnchant) {
 		this.player = player;
 		this.material = material;
@@ -78,15 +89,16 @@ public class EnchantmentList {
 			setEnchantments(enchants);
 			return;
 		}
-		enchants.add(new EnchantmentLevel(enchantment, enchantment.getEnchantLevel(player, enchantability)));
+		Player p = player.getPlayer();
+		enchants.add(new EnchantmentLevel(enchantment, enchantment.getEnchantLevel(p, enchantability)));
 		int enchantability = this.enchantability;
 		int finalEnchantability = enchantability / 2;
 		while ((finalEnchantability + 1) / multiEnchantDivisor > Math.random() && (ConfigString.MAX_ENCHANTMENTS.getInt() == 0 ? true : enchants.size() < ConfigString.MAX_ENCHANTMENTS.getInt())) {
 			enchantment = getEnchantment(enchants);
 			if (enchantment == null) break;
-			if (ConfigUtils.getAdvancedBoolean(ConfigString.DECAY, false)) enchants.add(new EnchantmentLevel(enchantment, enchantment.getEnchantLevel(player, finalEnchantability)));
+			if (ConfigUtils.getAdvancedBoolean(ConfigString.DECAY, false)) enchants.add(new EnchantmentLevel(enchantment, enchantment.getEnchantLevel(p, finalEnchantability)));
 			else
-				enchants.add(new EnchantmentLevel(enchantment, enchantment.getEnchantLevel(player, enchantability)));
+				enchants.add(new EnchantmentLevel(enchantment, enchantment.getEnchantLevel(p, enchantability)));
 			finalEnchantability /= 2;
 		}
 
@@ -156,7 +168,7 @@ public class EnchantmentList {
 			return false;
 		}
 
-		if (enchantment.isEnabled() && enchantment.canEnchantItem(material) && (treasure || !enchantment.isTreasure()) && enchantment.canEnchant(player, enchantability, level.getLevel())) return true;
+		if (enchantment.isEnabled() && enchantment.canEnchantItem(material) && (treasure || !enchantment.isTreasure()) && enchantment.canEnchant(player.getPlayer(), enchantability, level.getLevel())) return true;
 		return false;
 	}
 
@@ -166,5 +178,24 @@ public class EnchantmentList {
 
 	public void setEnchantments(List<EnchantmentLevel> enchantments) {
 		this.enchantments = enchantments;
+	}
+
+	public static EnchantmentList fromConfig(YamlConfig config, int i, String key, int k, OfflinePlayer player, Level level, Material m, boolean treasure) {
+		List<String> enchants = config.getStringList("enchanting_table." + i + ".enchantmentList." + key + "." + k + ".enchants");
+		List<EnchantmentLevel> levels = new ArrayList<EnchantmentLevel>();
+		for(String enchant : enchants)
+			levels.add(new EnchantmentLevel(enchant));
+		int enchantability = config.getInt("enchanting_table." + i + ".enchantmentList." + key + "." + k + ".enchantability");
+		
+		return new EnchantmentList(player, level, m, treasure, enchantability, levels);
+	}
+
+	public void setConfig(YamlConfig config, int i, Material m) {
+		String path = "enchanting_table." + i + ".enchantmentList." + m.name() + "." + level.getSlot() + ".";
+		List<String> enchants = new ArrayList<String>();
+		for(EnchantmentLevel level : getEnchantments())
+			enchants.add(level.toString());
+		config.set(path + "enchants", enchants);
+		config.set(path + "enchantability", enchantability);
 	}
 }

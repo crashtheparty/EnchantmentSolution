@@ -1,10 +1,6 @@
 package org.ctp.enchantmentsolution.utils;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.stream.IntStream;
 
@@ -12,6 +8,7 @@ import javax.annotation.Nonnull;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
@@ -35,6 +32,12 @@ public class ChatUtils {
 	public static void sendMessage(Player player, String[] messages) {
 		for(String s: messages)
 			sendMessage(player, s);
+	}
+
+	public static void sendMessage(CommandSender sender, Player player, String message, Level level) {
+		if (player == null) ChatUtils.sendToConsole(level, message);
+		else
+			ChatUtils.sendMessage(player, message);
 	}
 
 	public static void sendRawMessage(Player player, String json) {

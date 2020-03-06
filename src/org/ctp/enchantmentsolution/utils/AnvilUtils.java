@@ -37,6 +37,10 @@ public class AnvilUtils {
 			block.getWorld().playSound(block.getLocation(), Sound.BLOCK_ANVIL_USE, 1, 1);
 			return;
 		}
+		if (block == null) {
+			player.getWorld().playSound(player.getLocation(), Sound.BLOCK_ANVIL_USE, 1, 1);
+			return;
+		}
 		double chance = .12;
 		double roll = Math.random();
 		if (chance > roll) {
