@@ -2,10 +2,9 @@ package org.ctp.enchantmentsolution.utils.items;
 
 import java.util.*;
 
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.Statistic;
+import org.bukkit.*;
 import org.bukkit.block.*;
+import org.bukkit.block.data.type.Chest;
 import org.bukkit.block.data.type.Snow;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -23,6 +22,7 @@ import org.ctp.enchantmentsolution.events.modify.GoldDiggerEvent;
 import org.ctp.enchantmentsolution.mcmmo.McMMOHandler;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.ESArrays;
+import org.ctp.enchantmentsolution.utils.LocationUtils;
 import org.ctp.enchantmentsolution.utils.abillityhelpers.GoldDiggerCrop;
 import org.ctp.enchantmentsolution.utils.compatibility.JobsUtils;
 
@@ -71,20 +71,40 @@ public class TelepathyUtils {
 				newDrops.add(drop);
 			}
 			Container container = (Container) block.getState();
+			int lowBound = 0;
+			int highBound = 27;
 			if (container.getInventory().getHolder() instanceof DoubleChest) {
+				Chest chest = (Chest) block.getBlockData();
 				DoubleChest doubleChest = (DoubleChest) container.getInventory().getHolder();
-				if (doubleChest.getLeftSide().getInventory().getLocation().equals(container.getLocation())) {
-					Inventory inv = doubleChest.getLeftSide().getInventory();
-					for(int j = 0; j < 27; j++) {
-						ItemStack drop = inv.getItem(j);
-						if (drop != null) newDrops.add(drop);
-					}
+				Location one = doubleChest.getLocation().clone();
+				Location two = one.clone();
+				if(doubleChest.getLocation().getX() % 1 != 0) {
+					one.add(-0.5, 0, 0);
+					two.add(0.5, 0, 0);
 				} else {
-					Inventory inv = doubleChest.getRightSide().getInventory();
-					for(int j = 27; j < 54; j++) {
-						ItemStack drop = inv.getItem(j);
-						if (drop != null) newDrops.add(drop);
-					}
+					one.add(0, 0, -0.5);
+					two.add(0, 0, 0.5);
+				}
+				switch(chest.getFacing().name()) {
+					case "WEST":
+					case "SOUTH":
+						if (!LocationUtils.isLocationSame(one, event.getBlock().getLocation(), true)) {
+							lowBound = 27;
+							highBound = 54;
+						}
+						break;
+					case "EAST":
+					case "NORTH":
+						if (LocationUtils.isLocationSame(one, event.getBlock().getLocation(), true)) {
+							lowBound = 27;
+							highBound = 54;
+						}
+						break;
+				}
+				Inventory inv = container.getInventory();
+				for(int j = lowBound; j < highBound; j++) {
+					ItemStack drop = inv.getItem(j);
+					if (drop != null) newDrops.add(drop);
 				}
 			} else
 				for(ItemStack drop: container.getInventory().getContents())
@@ -92,17 +112,9 @@ public class TelepathyUtils {
 			TelepathyEvent telepathy = callTelepathy(event, block, player, newDrops, TelepathyType.CONTAINER, false);
 			if (!telepathy.isCancelled()) {
 				if (block.getRelative(BlockFace.DOWN).getType() == Material.LAVA) AdvancementUtils.awardCriteria(player, ESAdvancement.NO_PANIC, "lava");
-				if (container.getInventory().getHolder() instanceof DoubleChest) {
-					DoubleChest doubleChest = (DoubleChest) container.getInventory().getHolder();
-					if (doubleChest.getLeftSide().getInventory().getLocation().equals(container.getLocation())) {
-						Inventory inv = doubleChest.getLeftSide().getInventory();
-						inv.clear();
-					} else {
-						Inventory inv = doubleChest.getRightSide().getInventory();
-						inv.clear();
-					}
-				} else
-					container.getInventory().clear();
+				Inventory inv = container.getInventory();
+				for(int j = lowBound; j < highBound; j++)
+					inv.clear(j);
 				damageItem(event);
 				ItemUtils.giveItemsToPlayer(telepathy.getPlayer(), telepathy.getDrops(), telepathy.getPlayer().getLocation(), true);
 			}

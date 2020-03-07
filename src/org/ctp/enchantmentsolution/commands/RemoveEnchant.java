@@ -85,7 +85,7 @@ public class RemoveEnchant implements CommandExecutor {
 							HashMap<String, Object> codes = ChatUtils.getCodes();
 							codes.put("%enchant%", enchant.getDisplayName());
 							codes.put("%player%", sender.getName());
-							if(player != null) codes.put("%player%", player.getDisplayName());
+							if (player != null) codes.put("%player%", player.getDisplayName());
 							else
 								codes.put("%player%", ChatUtils.getMessage(codes, "commands.console-player"));
 							codes.put("%slot%", slot);

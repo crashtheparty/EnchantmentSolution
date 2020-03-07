@@ -64,7 +64,7 @@ public class EnchantmentLevel {
 	public void setLevel(int level) {
 		this.level = level;
 	}
-	
+
 	@Override
 	public String toString() {
 		NamespacedKey key = enchant.getRelativeEnchantment().getKey();

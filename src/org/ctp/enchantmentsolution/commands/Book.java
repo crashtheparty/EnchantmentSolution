@@ -71,7 +71,7 @@ public class Book implements CommandExecutor {
 					levels.remove(i);
 			} else
 				for(CustomEnchantment enchant: RegisterEnchantments.getRegisteredEnchantments())
-					if (enchant.getName().equalsIgnoreCase(args[1])) { 
+					if (enchant.getName().equalsIgnoreCase(args[1])) {
 						if (!enchant.isEnabled()) {
 							HashMap<String, Object> codes = ChatUtils.getCodes();
 							ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(codes, "commands.enchant-disabled"), Level.WARNING);
@@ -131,13 +131,13 @@ public class Book implements CommandExecutor {
 			ItemUtils.giveItemToPlayer(givePlayer, book, givePlayer.getLocation(), false);
 
 		HashMap<String, Object> codes = ChatUtils.getCodes();
-		if(player != null) codes.put("%player%", player.getDisplayName());
+		if (player != null) codes.put("%player%", player.getDisplayName());
 		else
 			codes.put("%player%", ChatUtils.getMessage(codes, "commands.console-player"));
 		codes.put("%give_player%", givePlayer.getDisplayName());
-		
-		if(amount == 1) {
-			if(sender.equals(givePlayer)) ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(codes, "commands.give-book"), Level.INFO);
+
+		if (amount == 1) {
+			if (sender.equals(givePlayer)) ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(codes, "commands.give-book"), Level.INFO);
 			else {
 				ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(codes, "commands.give-book-other"), Level.INFO);
 				ChatUtils.sendMessage(sender, givePlayer, ChatUtils.getMessage(codes, "commands.receive-book"), Level.INFO);
@@ -145,7 +145,7 @@ public class Book implements CommandExecutor {
 			return true;
 		} else {
 			codes.put("%amount%", amount);
-			if(sender.equals(givePlayer)) ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(codes, "commands.give-book-multiple"), Level.INFO);
+			if (sender.equals(givePlayer)) ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(codes, "commands.give-book-multiple"), Level.INFO);
 			else {
 				ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(codes, "commands.give-book-other-multiple"), Level.INFO);
 				ChatUtils.sendMessage(sender, givePlayer, ChatUtils.getMessage(codes, "commands.receive-book-multiple"), Level.INFO);

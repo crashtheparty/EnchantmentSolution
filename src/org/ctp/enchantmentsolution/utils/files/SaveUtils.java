@@ -70,7 +70,7 @@ public class SaveUtils {
 			}
 			config.removeKeys("animals");
 		}
-		
+
 		if (!ConfigString.RESET_ON_RELOAD.getBoolean() && config.containsElements("enchanting_table")) {
 			int i = 0;
 			while (config.getString("enchanting_table." + i + ".player") != null) {
@@ -110,11 +110,11 @@ public class SaveUtils {
 		} catch (NoClassDefFoundError ex) {
 			ex.printStackTrace();
 		}
-		
+
 		if (!ConfigString.RESET_ON_RELOAD.getBoolean()) {
 			i = 0;
 			try {
-				for(TableEnchantments table : TableEnchantments.getAllTableEnchantments()) {
+				for(TableEnchantments table: TableEnchantments.getAllTableEnchantments()) {
 					table.setConfig(config, i);
 					i++;
 				}
@@ -122,7 +122,7 @@ public class SaveUtils {
 				ex.printStackTrace();
 			}
 		}
-		
+
 		Configurations.getDataFile().save();
 	}
 }

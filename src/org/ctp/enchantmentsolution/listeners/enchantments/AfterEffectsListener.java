@@ -78,8 +78,9 @@ public class AfterEffectsListener extends Enchantmentable {
 	private void pillage(EntityDeathEvent event) {
 		if (EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber() > 3) {
 			if (!canRun(RegisterEnchantments.PILLAGE, event)) return;
-			if (event.getEntity().getKiller() != null) {
-				Player player = event.getEntity().getKiller();
+			LivingEntity entity = event.getEntity();
+			if ((entity instanceof Lootable) && entity.getKiller() != null) {
+				Player player = entity.getKiller();
 				ItemStack item = player.getInventory().getItemInOffHand();
 				if (item == null || !ItemUtils.hasEnchantment(item, RegisterEnchantments.PILLAGE)) {
 					item = player.getInventory().getItemInMainHand();
@@ -99,7 +100,7 @@ public class AfterEffectsListener extends Enchantmentable {
 						contextBuilder.lootedEntity(event.getEntity());
 						contextBuilder.lootingModifier(level);
 						LootContext context = contextBuilder.build();
-						Collection<ItemStack> items = ((Lootable) event.getEntity()).getLootTable().populateLoot(new Random(), context);
+						Collection<ItemStack> items = ((Lootable) entity).getLootTable().populateLoot(new Random(), context);
 						event.getDrops().addAll(items);
 						ItemUtils.removeAllEnchantments(item, true);
 						ItemUtils.addEnchantmentsToItem(item, levels);

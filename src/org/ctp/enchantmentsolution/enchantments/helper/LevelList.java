@@ -65,15 +65,15 @@ public class LevelList {
 
 	public static LevelList fromConfig(YamlConfig config, int i, int bookshelves) {
 		LevelList l = new LevelList(bookshelves);
-		
+
 		for(int k = 0; k < 6; k++)
 			l.getList()[k].setLevel(config.getInt("enchanting_table." + i + ".levelList." + k + ".level"));
-		
+
 		return l;
 	}
 
 	public void setConfig(YamlConfig config, int i) {
-		for(Level level : getList())
+		for(Level level: getList())
 			config.set("enchanting_table." + i + ".levelList." + level.getSlot() + ".level", level.getLevel());
 	}
 }

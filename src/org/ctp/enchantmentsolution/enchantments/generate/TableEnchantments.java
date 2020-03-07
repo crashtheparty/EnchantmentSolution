@@ -56,8 +56,9 @@ public class TableEnchantments extends GenerateEnchantments {
 		this.bookshelves = bookshelves;
 		levelList = new LevelList(bookshelves);
 	}
-	
-	private TableEnchantments(OfflinePlayer player, int bookshelves, boolean treasure, LevelList levelList, HashMap<Material, EnchantmentList[]> enchantmentList) {
+
+	private TableEnchantments(OfflinePlayer player, int bookshelves, boolean treasure, LevelList levelList,
+	HashMap<Material, EnchantmentList[]> enchantmentList) {
 		super(player, null, treasure);
 		this.bookshelves = bookshelves;
 		this.levelList = levelList;
@@ -105,18 +106,18 @@ public class TableEnchantments extends GenerateEnchantments {
 		OfflinePlayer player = Bukkit.getOfflinePlayer(UUID.fromString(config.getString("enchanting_table." + i + ".player")));
 		int bookshelves = config.getInt("enchanting_table." + i + ".bookshelves");
 		boolean treasure = config.getBoolean("enchanting_table." + i + ".treasure");
-		
+
 		LevelList levelList = LevelList.fromConfig(config, i, bookshelves);
-		
+
 		HashMap<Material, EnchantmentList[]> enchantmentList = new HashMap<Material, EnchantmentList[]>();
 		List<String> keys = config.getLevelEntryKeys("enchanting_table." + i + ".enchantmentList");
-		for(String key : keys) {
+		for(String key: keys) {
 			String mat = key.replace("enchanting_table." + i + ".enchantmentList.", "");
 			EnchantmentList[] list = new EnchantmentList[6];
 			MatData data = new MatData(mat);
 			Material m = data.getMaterial();
-			if(m != null) {
-				for(Level level : levelList.getList())
+			if (m != null) {
+				for(Level level: levelList.getList())
 					list[level.getSlot()] = EnchantmentList.fromConfig(config, i, mat, level.getSlot(), player, level, m, treasure);
 				enchantmentList.put(m, list);
 			}
@@ -133,14 +134,14 @@ public class TableEnchantments extends GenerateEnchantments {
 		config.set("enchanting_table." + i + ".player", getPlayer().getUniqueId().toString());
 		config.set("enchanting_table." + i + ".bookshelves", getBookshelves());
 		config.set("enchanting_table." + i + ".treasure", isTreasure());
-		
+
 		getLevelList().setConfig(config, i);
-		
+
 		Iterator<Entry<Material, EnchantmentList[]>> iterator = enchantmentList.entrySet().iterator();
-		while(iterator.hasNext()) {
+		while (iterator.hasNext()) {
 			Entry<Material, EnchantmentList[]> entry = iterator.next();
 			Material m = entry.getKey();
-			for(EnchantmentList l : entry.getValue())
+			for(EnchantmentList l: entry.getValue())
 				l.setConfig(config, i, m);
 		}
 	}

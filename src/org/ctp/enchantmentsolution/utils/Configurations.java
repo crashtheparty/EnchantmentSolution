@@ -95,7 +95,7 @@ public class Configurations {
 		LANGUAGE.save();
 		ENCHANTMENTS.save();
 		ADVANCEMENTS.save();
-		
+
 		if (ConfigString.RESET_ON_RELOAD.getBoolean()) TableEnchantments.removeAllTableEnchantments();
 		RegisterEnchantments.setEnchantments();
 

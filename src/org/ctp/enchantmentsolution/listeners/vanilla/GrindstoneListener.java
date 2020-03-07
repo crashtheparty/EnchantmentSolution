@@ -48,7 +48,7 @@ public class GrindstoneListener implements Listener {
 
 	private void combine(GrindstoneEnchantments ench, ClickType click, GrindstoneInventory inv) {
 		Player player = ench.getPlayer().getPlayer();
-		if(player == null) return;
+		if (player == null) return;
 		switch (click) {
 			case LEFT:
 			case RIGHT:

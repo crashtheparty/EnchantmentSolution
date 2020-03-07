@@ -105,7 +105,7 @@ public class UnsafeEnchant implements CommandExecutor {
 							codes.put("%level%", level);
 							codes.put("%slot%", slot);
 							codes.put("%enchant%", enchant.getDisplayName());
-							if(player != null) codes.put("%player%", player.getDisplayName());
+							if (player != null) codes.put("%player%", player.getDisplayName());
 							else
 								codes.put("%player%", ChatUtils.getMessage(codes, "commands.console-player"));
 							codes.put("%give_player%", givePlayer.getName());

@@ -44,7 +44,7 @@ public class ChatUtils {
 		Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "tellraw " + player.getName() + " " + json);
 	}
 
-	private static String getStarter() {
+	public static String getStarter() {
 		String config = ConfigUtils.getString(Type.LANGUAGE, "starter");
 		String starter = null;
 		if (config != null) starter = ChatColor.translateAlternateColorCodes('&', config);

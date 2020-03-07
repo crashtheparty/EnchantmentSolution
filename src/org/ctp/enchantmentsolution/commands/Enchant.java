@@ -27,7 +27,7 @@ public class Enchant implements CommandExecutor {
 			player = (Player) sender;
 			givePlayer = player;
 		}
-		
+
 		if (sender.hasPermission("enchantmentsolution.command.enchant")) {
 			if (args.length > 0) {
 				String enchantmentName = args[0];
@@ -64,7 +64,7 @@ public class Enchant implements CommandExecutor {
 							String arg = args[2];
 							if (!arg.equals("@p")) {
 								givePlayer = Bukkit.getPlayer(arg);
-								if(givePlayer == null) {
+								if (givePlayer == null) {
 									HashMap<String, Object> codes = ChatUtils.getCodes();
 									codes.put("%invalid_player%", args[2]);
 									ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(codes, "commands.invalid-player"), Level.WARNING);
@@ -118,7 +118,7 @@ public class Enchant implements CommandExecutor {
 									codes.put("%level%", level);
 									codes.put("%slot%", slot);
 									codes.put("%enchant%", enchant.getDisplayName());
-									if(player != null) codes.put("%player%", player.getDisplayName());
+									if (player != null) codes.put("%player%", player.getDisplayName());
 									else
 										codes.put("%player%", ChatUtils.getMessage(codes, "commands.console-player"));
 									codes.put("%give_player%", givePlayer.getName());

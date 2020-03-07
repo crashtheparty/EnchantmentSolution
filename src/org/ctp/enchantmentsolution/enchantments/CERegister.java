@@ -10,6 +10,7 @@ import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentDisplayName;
 import org.ctp.enchantmentsolution.enchantments.helper.Weight;
 import org.ctp.enchantmentsolution.enums.ItemType;
 import org.ctp.enchantmentsolution.enums.Language;
+import org.ctp.enchantmentsolution.utils.config.ConfigString;
 
 public class CERegister extends CustomEnchantment {
 
@@ -184,6 +185,17 @@ public class CERegister extends CustomEnchantment {
 
 	@Override
 	protected List<Enchantment> getDefaultConflictingEnchantments() {
+		if (ConfigString.PROTECTION_CONFLICTS.getBoolean()) {
+			List<Enchantment> enchants = RegisterEnchantments.getProtectionEnchantments();
+			List<Enchantment> enchantments = new ArrayList<Enchantment>();
+			if (enchants.contains(getRelativeEnchantment())) {
+				for(Enchantment enchant: conflictingEnchantments)
+					if (!enchantments.contains(enchant)) enchantments.add(enchant);
+				for(Enchantment enchant: enchants)
+					if (!enchantments.contains(enchant)) enchantments.add(enchant);
+				return enchants;
+			}
+		}
 		return conflictingEnchantments;
 	}
 

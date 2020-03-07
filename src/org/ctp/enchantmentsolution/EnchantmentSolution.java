@@ -131,6 +131,7 @@ public class EnchantmentSolution extends JavaPlugin {
 		getCommand("ESBook").setExecutor(new Book());
 		getCommand("ESAnvil").setExecutor(new AnvilCommand());
 		getCommand("ESGrindstone").setExecutor(new GrindstoneCommand());
+		getCommand("ConfigLore").setExecutor(new ConfigLore());
 		getCommand("Enchant").setTabCompleter(new PlayerChatTabComplete());
 		getCommand("Info").setTabCompleter(new PlayerChatTabComplete());
 		getCommand("RemoveEnchant").setTabCompleter(new PlayerChatTabComplete());
@@ -146,7 +147,7 @@ public class EnchantmentSolution extends JavaPlugin {
 		wiki = new WikiThread();
 		Bukkit.getScheduler().runTaskTimerAsynchronously(PLUGIN, wiki, 20l, 20l);
 		initialization = false;
-		
+
 		Bukkit.getScheduler().runTaskLater(this, () -> {
 			SaveUtils.getData();
 			addCompatibility();
@@ -319,7 +320,7 @@ public class EnchantmentSolution extends JavaPlugin {
 	public WikiThread getWiki() {
 		return wiki;
 	}
-	
+
 	public void addCompatibility() {
 		if (Bukkit.getPluginManager().isPluginEnabled("mcMMO")) {
 			mcmmoVersion = Bukkit.getPluginManager().getPlugin("mcMMO").getDescription().getVersion();

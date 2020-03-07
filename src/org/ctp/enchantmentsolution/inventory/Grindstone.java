@@ -214,7 +214,7 @@ public class Grindstone implements InventoryData {
 			} else {
 				ItemUtils.giveItemToPlayer(player, grindstone.getCombinedItem(), player.getLocation(), false);
 				playGrindstoneSound();
-				if(block == null) LocationUtils.dropExperience(player.getLocation(), grindstone.getExperience(), true);
+				if (block == null) LocationUtils.dropExperience(player.getLocation(), grindstone.getExperience(), true);
 				else
 					LocationUtils.dropExperience(block.getLocation(), grindstone.getExperience(), true);
 				grindstone = null;
@@ -299,7 +299,7 @@ public class Grindstone implements InventoryData {
 		try {
 			sound = Sound.valueOf("BLOCK_GRINDSTONE_USE");
 		} catch (Exception ex) {}
-		if(block == null) player.getWorld().playSound(player.getLocation(), sound, 1, 1);
+		if (block == null) player.getWorld().playSound(player.getLocation(), sound, 1, 1);
 		block.getWorld().playSound(block.getLocation(), sound, 1, 1);
 	}
 }

@@ -37,7 +37,7 @@ public class EnchantmentList {
 		this.material = material;
 		this.treasure = treasure;
 		this.enchantability = enchantability;
-		this.enchantments = generated;
+		enchantments = generated;
 	}
 
 	public EnchantmentList(OfflinePlayer player, Material material, boolean treasure, List<EnchantmentLevel> fishing,
@@ -183,17 +183,17 @@ public class EnchantmentList {
 	public static EnchantmentList fromConfig(YamlConfig config, int i, String key, int k, OfflinePlayer player, Level level, Material m, boolean treasure) {
 		List<String> enchants = config.getStringList("enchanting_table." + i + ".enchantmentList." + key + "." + k + ".enchants");
 		List<EnchantmentLevel> levels = new ArrayList<EnchantmentLevel>();
-		for(String enchant : enchants)
+		for(String enchant: enchants)
 			levels.add(new EnchantmentLevel(enchant));
 		int enchantability = config.getInt("enchanting_table." + i + ".enchantmentList." + key + "." + k + ".enchantability");
-		
+
 		return new EnchantmentList(player, level, m, treasure, enchantability, levels);
 	}
 
 	public void setConfig(YamlConfig config, int i, Material m) {
 		String path = "enchanting_table." + i + ".enchantmentList." + m.name() + "." + level.getSlot() + ".";
 		List<String> enchants = new ArrayList<String>();
-		for(EnchantmentLevel level : getEnchantments())
+		for(EnchantmentLevel level: getEnchantments())
 			enchants.add(level.toString());
 		config.set(path + "enchants", enchants);
 		config.set(path + "enchantability", enchantability);
