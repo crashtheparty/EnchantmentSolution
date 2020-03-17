@@ -106,9 +106,14 @@ public class TelepathyUtils {
 					ItemStack drop = inv.getItem(j);
 					if (drop != null) newDrops.add(drop);
 				}
-			} else
+			} else if (container.getInventory().getHolder() instanceof Chest) {
 				for(ItemStack drop: container.getInventory().getContents())
 					if (drop != null) newDrops.add(drop);
+			} else {
+				highBound = container.getInventory().getSize();
+				for(ItemStack drop: container.getInventory().getContents())
+					if (drop != null) newDrops.add(drop);
+			}
 			TelepathyEvent telepathy = callTelepathy(event, block, player, newDrops, TelepathyType.CONTAINER, false);
 			if (!telepathy.isCancelled()) {
 				if (block.getRelative(BlockFace.DOWN).getType() == Material.LAVA) AdvancementUtils.awardCriteria(player, ESAdvancement.NO_PANIC, "lava");

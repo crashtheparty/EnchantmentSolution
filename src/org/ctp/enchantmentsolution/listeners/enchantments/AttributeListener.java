@@ -26,6 +26,7 @@ import org.ctp.enchantmentsolution.events.potion.MagicGuardPotionEvent;
 import org.ctp.enchantmentsolution.events.potion.PotionEventType;
 import org.ctp.enchantmentsolution.events.potion.UnrestPotionEvent;
 import org.ctp.enchantmentsolution.listeners.Enchantmentable;
+import org.ctp.enchantmentsolution.threads.ElytraRunnable;
 import org.ctp.enchantmentsolution.threads.MiscRunnable;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.ESArrays;
@@ -101,6 +102,7 @@ public class AttributeListener extends Enchantmentable {
 						if (!event.isCancelled()) player.removePotionEffect(potionEffect);
 					} else { /* placeholder */ }
 				else if (entry.getKey() == RegisterEnchantments.CURSE_OF_EXHAUSTION && equip) MiscRunnable.addExhaustion(player);
+				else if (entry.getKey() == RegisterEnchantments.FREQUENT_FLYER && equip) ElytraRunnable.addFlyer(player, item);
 			}
 		}
 	}

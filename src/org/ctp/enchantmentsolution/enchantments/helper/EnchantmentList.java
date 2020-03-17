@@ -89,7 +89,7 @@ public class EnchantmentList {
 			setEnchantments(enchants);
 			return;
 		}
-		Player p = player.getPlayer();
+		Player p = player == null ? null : player.getPlayer();
 		enchants.add(new EnchantmentLevel(enchantment, enchantment.getEnchantLevel(p, enchantability)));
 		int enchantability = this.enchantability;
 		int finalEnchantability = enchantability / 2;
@@ -168,7 +168,7 @@ public class EnchantmentList {
 			return false;
 		}
 
-		if (enchantment.isEnabled() && enchantment.canEnchantItem(material) && (treasure || !enchantment.isTreasure()) && enchantment.canEnchant(player.getPlayer(), enchantability, level.getLevel())) return true;
+		if (enchantment.isEnabled() && enchantment.canEnchantItem(material) && (treasure || !enchantment.isTreasure()) && (player == null || player.getPlayer() == null || enchantment.canEnchant(player.getPlayer(), enchantability, level.getLevel()))) return true;
 		return false;
 	}
 
