@@ -1,11 +1,7 @@
 package org.ctp.enchantmentsolution.enchantments.generate;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Random;
 
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -218,8 +214,8 @@ public class GrindstoneEnchantments extends GenerateEnchantments {
 
 		for(int i = enchantments.size() - 1; i >= 0; i--) {
 			EnchantmentLevel enchant = enchantments.get(i);
-			if (!enchant.getEnchant().canAnvil(getPlayer(), enchant.getLevel())) {
-				int level = enchant.getEnchant().getAnvilLevel(getPlayer(), enchant.getLevel());
+			if (!enchant.getEnchant().canAnvil(getPlayer().getPlayer(), enchant.getLevel())) {
+				int level = enchant.getEnchant().getAnvilLevel(getPlayer().getPlayer(), enchant.getLevel());
 				if (level > 0) enchantments.get(i).setLevel(level);
 				else
 					enchantments.remove(i);

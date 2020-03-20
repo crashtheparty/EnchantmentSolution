@@ -77,7 +77,6 @@ public class EnchantmentSolution extends JavaPlugin {
 		RegisterEnchantments.addRegisterEnchantments();
 
 		Configurations.onEnable();
-		SaveUtils.getData();
 
 		registerEvent(new InventoryClick());
 		registerEvent(new InventoryClose());
@@ -113,56 +112,6 @@ public class EnchantmentSolution extends JavaPlugin {
 		registerEvent(new AdvancementEntityDeath());
 		registerEvent(new AdvancementPlayerEvent());
 
-		if (Bukkit.getPluginManager().isPluginEnabled("mcMMO")) {
-			mcmmoVersion = Bukkit.getPluginManager().getPlugin("mcMMO").getDescription().getVersion();
-			ChatUtils.sendToConsole(Level.INFO, "mcMMO Version: " + mcmmoVersion);
-			if (mcmmoVersion.substring(0, mcmmoVersion.indexOf(".")).equals("2")) {
-				ChatUtils.sendToConsole(Level.INFO, "Using the Overhaul Version!");
-				String[] mcVersion = mcmmoVersion.split("\\.");
-				boolean warning = false;
-				for(int i = 0; i < mcVersion.length; i++)
-					try {
-						int num = Integer.parseInt(mcVersion[i]);
-						if (i == 0 && num > 2) warning = true;
-						else if (i == 1 && num > 1) warning = true;
-						else if (i == 2 && num > 111) warning = true;
-					} catch (NumberFormatException ex) {
-						warning = true;
-					}
-				if (warning) {
-					ChatUtils.sendToConsole(Level.WARNING, "McMMO Overhaul updates sporidically. Compatibility may break between versions.");
-					ChatUtils.sendToConsole(Level.WARNING, "If there are any compatibility issues, please notify the plugin author immediately.");
-					ChatUtils.sendToConsole(Level.WARNING, "Current Working Version: 2.1.111");
-				}
-				mcmmoType = "Overhaul";
-			} else {
-				ChatUtils.sendToConsole(Level.INFO, "Using the Classic Version! Compatibility should be intact.");
-				mcmmoType = "Classic";
-			}
-			registerEvent(new McMMOFishingListener());
-		} else {
-			mcmmoType = "Disabled";
-			registerEvent(new EnchantsFishingListener());
-		}
-
-		if (!mcmmoType.equals("Disabled")) registerEvent(new McMMOAbility());
-
-		if (Bukkit.getPluginManager().isPluginEnabled("Jobs")) {
-			jobsReborn = Bukkit.getPluginManager().getPlugin("Jobs");
-			ChatUtils.sendInfo("Jobs Reborn compatibility enabled!");
-		}
-
-		if (Bukkit.getPluginManager().isPluginEnabled("VeinMiner")) {
-			veinMiner = Bukkit.getPluginManager().getPlugin("VeinMiner");
-			ChatUtils.sendInfo("Vein Miner compatibility enabled!");
-			registerEvent(new VeinMinerListener());
-		}
-
-		if (Bukkit.getPluginManager().isPluginEnabled("AuctionHouse")) {
-			Bukkit.getScheduler().runTaskLater(this, (Runnable) () -> AuctionHouseUtils.resetAuctionHouse(), 20l);
-			ChatUtils.sendInfo("Auction House compatibility enabled!");
-		}
-
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN, new AbilityRunnable(), 80l, 80l);
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN, new AdvancementThread(), 1l, 1l);
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN, new ElytraRunnable(), 1l, 1l);
@@ -179,6 +128,10 @@ public class EnchantmentSolution extends JavaPlugin {
 		getCommand("ESReset").setExecutor(new Reset());
 		getCommand("ESDebug").setExecutor(new Debug());
 		getCommand("ESCalc").setExecutor(new EnchantabilityCalculator());
+		getCommand("ESBook").setExecutor(new Book());
+		getCommand("ESAnvil").setExecutor(new AnvilCommand());
+		getCommand("ESGrindstone").setExecutor(new GrindstoneCommand());
+		getCommand("ConfigLore").setExecutor(new ConfigLore());
 		getCommand("Enchant").setTabCompleter(new PlayerChatTabComplete());
 		getCommand("Info").setTabCompleter(new PlayerChatTabComplete());
 		getCommand("RemoveEnchant").setTabCompleter(new PlayerChatTabComplete());
@@ -194,6 +147,11 @@ public class EnchantmentSolution extends JavaPlugin {
 		wiki = new WikiThread();
 		Bukkit.getScheduler().runTaskTimerAsynchronously(PLUGIN, wiki, 20l, 20l);
 		initialization = false;
+
+		Bukkit.getScheduler().runTaskLater(this, () -> {
+			SaveUtils.getData();
+			addCompatibility();
+		}, 1l);
 	}
 
 	@Override
@@ -361,5 +319,57 @@ public class EnchantmentSolution extends JavaPlugin {
 
 	public WikiThread getWiki() {
 		return wiki;
+	}
+
+	public void addCompatibility() {
+		if (Bukkit.getPluginManager().isPluginEnabled("mcMMO")) {
+			mcmmoVersion = Bukkit.getPluginManager().getPlugin("mcMMO").getDescription().getVersion();
+			ChatUtils.sendToConsole(Level.INFO, "mcMMO Version: " + mcmmoVersion);
+			if (mcmmoVersion.substring(0, mcmmoVersion.indexOf(".")).equals("2")) {
+				ChatUtils.sendToConsole(Level.INFO, "Using the Overhaul Version!");
+				String[] mcVersion = mcmmoVersion.split("\\.");
+				boolean warning = false;
+				for(int i = 0; i < mcVersion.length; i++)
+					try {
+						int num = Integer.parseInt(mcVersion[i]);
+						if (i == 0 && num > 2) warning = true;
+						else if (i == 1 && num > 1) warning = true;
+						else if (i == 2 && num > 111) warning = true;
+					} catch (NumberFormatException ex) {
+						warning = true;
+					}
+				if (warning) {
+					ChatUtils.sendToConsole(Level.WARNING, "McMMO Overhaul updates sporidically. Compatibility may break between versions.");
+					ChatUtils.sendToConsole(Level.WARNING, "If there are any compatibility issues, please notify the plugin author immediately.");
+					ChatUtils.sendToConsole(Level.WARNING, "Current Working Version: 2.1.111");
+				}
+				mcmmoType = "Overhaul";
+			} else {
+				ChatUtils.sendToConsole(Level.INFO, "Using the Classic Version! Compatibility should be intact.");
+				mcmmoType = "Classic";
+			}
+			registerEvent(new McMMOFishingListener());
+		} else {
+			mcmmoType = "Disabled";
+			registerEvent(new EnchantsFishingListener());
+		}
+
+		if (!mcmmoType.equals("Disabled")) registerEvent(new McMMOAbility());
+
+		if (Bukkit.getPluginManager().isPluginEnabled("Jobs")) {
+			jobsReborn = Bukkit.getPluginManager().getPlugin("Jobs");
+			ChatUtils.sendInfo("Jobs Reborn compatibility enabled!");
+		}
+
+		if (Bukkit.getPluginManager().isPluginEnabled("VeinMiner")) {
+			veinMiner = Bukkit.getPluginManager().getPlugin("VeinMiner");
+			ChatUtils.sendInfo("Vein Miner compatibility enabled!");
+			registerEvent(new VeinMinerListener());
+		}
+
+		if (Bukkit.getPluginManager().isPluginEnabled("AuctionHouse")) {
+			AuctionHouseUtils.resetAuctionHouse();
+			ChatUtils.sendInfo("Auction House compatibility enabled!");
+		}
 	}
 }

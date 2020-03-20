@@ -7,6 +7,7 @@ public enum ConfigString {
 	LEVEL_FIFTY(Type.MAIN, "enchanting_table.level_fifty", boolean.class),
 	CUSTOM_TABLE(Type.MAIN, "enchanting_table.custom_gui", boolean.class),
 	LAPIS_IN_TABLE(Type.MAIN, "enchanting_table.lapis_in_table", boolean.class),
+	RESET_ON_RELOAD(Type.MAIN, "enchanting_table.reset_on_reload", boolean.class),
 	CUSTOM_ANVIL(Type.MAIN, "anvil.custom_gui", boolean.class),
 	LEVEL_DIVISOR(Type.MAIN, "anvil.level_divisor", int.class),
 	DEFAULT_ANVIL(Type.MAIN, "anvil.default_use", boolean.class),

@@ -7,6 +7,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
+import org.ctp.enchantmentsolution.enchantments.generate.TableEnchantments;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
 
 public class Reset implements CommandExecutor {
@@ -18,11 +19,13 @@ public class Reset implements CommandExecutor {
 			player = (Player) sender;
 			if (player.hasPermission("enchantmentsolution.command.reset")) {
 				EnchantmentSolution.getPlugin().resetInventories();
+				TableEnchantments.removeAllTableEnchantments();
 				ChatUtils.sendMessage(player, ChatUtils.getMessage(ChatUtils.getCodes(), "commands.reset-inventory"));
 			} else
 				ChatUtils.sendMessage(player, ChatUtils.getMessage(ChatUtils.getCodes(), "commands.no-permission"));
 		} else {
 			EnchantmentSolution.getPlugin().resetInventories();
+			TableEnchantments.removeAllTableEnchantments();
 			ChatUtils.sendToConsole(Level.INFO, ChatUtils.getMessage(ChatUtils.getCodes(), "commands.reset-inventory"));
 		}
 		return true;

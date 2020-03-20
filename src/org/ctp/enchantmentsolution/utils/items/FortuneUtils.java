@@ -1,10 +1,6 @@
 package org.ctp.enchantmentsolution.utils.items;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -90,30 +86,35 @@ public class FortuneUtils {
 					min = 0;
 					max = 3 + level;
 				}
+				minMax = true;
 			case "BEETROOTS":
 				if (!minMax) {
 					breakBlock = Material.BEETROOT_SEEDS;
 					min = 0;
 					max = 3 + level;
 				}
+				minMax = true;
 			case "CARROTS":
 				if (!minMax) {
 					breakBlock = Material.CARROT;
 					min = 1;
 					max = 4 + level;
 				}
+				minMax = true;
 			case "POTATOES":
 				if (!minMax) {
 					breakBlock = Material.POTATO;
 					min = 1;
 					max = 4 + level;
 				}
+				minMax = true;
 			case "NETHER_WART":
 				if (!minMax) {
 					breakBlock = Material.NETHER_WART;
 					min = 2;
 					max = 4 + level;
 				}
+				minMax = true;
 			case "SEA_LANTERN":
 				if (!minMax) {
 					breakBlock = Material.PRISMARINE_CRYSTALS;
@@ -121,6 +122,7 @@ public class FortuneUtils {
 					max = 3 + level;
 					actualMax = 5;
 				}
+				minMax = true;
 			case "MELON":
 				if (!minMax) {
 					breakBlock = Material.MELON_SLICE;
@@ -128,6 +130,7 @@ public class FortuneUtils {
 					max = 7 + level;
 					actualMax = 9;
 				}
+				minMax = true;
 			case "GLOWSTONE":
 				if (!minMax) {
 					breakBlock = Material.GLOWSTONE_DUST;
@@ -135,6 +138,7 @@ public class FortuneUtils {
 					max = 4 + level;
 					actualMax = 4;
 				}
+				minMax = true;
 			case "GRASS":
 				if (!minMax) {
 					for(ItemStack priorItem: priorItems)

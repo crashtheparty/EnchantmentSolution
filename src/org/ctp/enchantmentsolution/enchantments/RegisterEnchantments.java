@@ -1,9 +1,7 @@
 package org.ctp.enchantmentsolution.enchantments;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.logging.Level;
 
 import org.bukkit.Material;
@@ -105,6 +103,10 @@ public class RegisterEnchantments {
 			if (enchantment.isCurse()) CURSE_ENCHANTMENTS.add(enchantment);
 		}
 		return CURSE_ENCHANTMENTS;
+	}
+
+	public static List<Enchantment> getProtectionEnchantments() {
+		return Arrays.asList(Enchantment.PROTECTION_ENVIRONMENTAL, Enchantment.PROTECTION_EXPLOSIONS, Enchantment.PROTECTION_FIRE, Enchantment.PROTECTION_PROJECTILE);
 	}
 
 	public static boolean registerEnchantment(CustomEnchantment enchantment) {

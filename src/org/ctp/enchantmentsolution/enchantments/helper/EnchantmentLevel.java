@@ -31,7 +31,7 @@ public class EnchantmentLevel {
 			}
 			enchant = getEnchantFromString(split[0]);
 		} else
-			ChatUtils.sendToConsole(Level.WARNING, "Bad enchantment in fishing config: " + configString + ". No chance to get this enchantment.");
+			ChatUtils.sendToConsole(Level.WARNING, "Bad enchantment in config: " + configString + ".");
 	}
 
 	private CustomEnchantment getEnchantFromString(String str) {
@@ -63,5 +63,11 @@ public class EnchantmentLevel {
 
 	public void setLevel(int level) {
 		this.level = level;
+	}
+
+	@Override
+	public String toString() {
+		NamespacedKey key = enchant.getRelativeEnchantment().getKey();
+		return key.getNamespace() + "+" + key.getKey() + " " + level;
 	}
 }

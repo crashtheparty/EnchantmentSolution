@@ -1,9 +1,6 @@
 package org.ctp.enchantmentsolution.enchantments.generate;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -169,7 +166,7 @@ public class AnvilEnchantments extends GenerateEnchantments {
 	private int setEnchantments() {
 		int cost = 0;
 		ItemStack item = getItem();
-		Player player = getPlayer();
+		Player player = getPlayer().getPlayer();
 
 		ItemMeta firstMeta = item.clone().getItemMeta();
 		Map<Enchantment, Integer> firstEnchants = firstMeta.getEnchants();

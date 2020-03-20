@@ -36,6 +36,15 @@ public class GenerateUtils {
 		return ItemUtils.addEnchantmentsToItem(item, levels);
 	}
 
+	public static List<EnchantmentLevel> generateBookLoot(Player player, ItemStack item, boolean treasure) {
+		ChestEnchantments enchantments = ChestEnchantments.getChestEnchantment(player, item, 0, treasure);
+
+		List<EnchantmentList> lists = getLists(enchantments.getList());
+		int random = (int) (Math.random() * lists.size());
+
+		return lists.get(random).getEnchantments();
+	}
+
 	public static ItemStack generateFishingLoot(Player player, ItemStack item, int minBookshelves, boolean treasure) {
 		FishingEnchantments enchantments = FishingEnchantments.getFishingEnchantments(player, item, minBookshelves, treasure);
 
