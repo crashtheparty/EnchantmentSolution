@@ -1,7 +1,6 @@
 package org.ctp.enchantmentsolution.enchantments;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.Material;
@@ -10,6 +9,7 @@ import org.bukkit.entity.Player;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentDescription;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentDisplayName;
 import org.ctp.enchantmentsolution.enchantments.helper.Weight;
+import org.ctp.enchantmentsolution.enums.ItemType;
 import org.ctp.enchantmentsolution.enums.Language;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.PermissionUtils;
@@ -17,7 +17,6 @@ import org.ctp.enchantmentsolution.utils.StringUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 import org.ctp.enchantmentsolution.utils.config.ConfigUtils;
 import org.ctp.enchantmentsolution.utils.config.Type;
-import org.ctp.enchantmentsolution.enums.ItemType;
 
 public abstract class CustomEnchantment {
 
@@ -57,8 +56,6 @@ public abstract class CustomEnchantment {
 
 	public static boolean conflictsWith(CustomEnchantment enchOne, CustomEnchantment enchTwo) {
 		if (enchOne.conflictsWith(enchTwo) || enchTwo.conflictsWith(enchOne)) return true;
-		List<CustomEnchantment> protection = Arrays.asList(CERegister.PROJECTILE_PROTECTION, CERegister.PROTECTION, CERegister.FIRE_PROTECTION, CERegister.BLAST_PROTECTION);
-		if (protection.contains(enchOne) && protection.contains(enchTwo) && ConfigString.PROTECTION_CONFLICTS.getBoolean() && !ConfigString.ADVANCED_OPTIONS.getBoolean()) return true;
 		return false;
 	}
 

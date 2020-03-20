@@ -2,6 +2,7 @@ enchanting_table:
     custom_gui: true
     level_fifty: true
     lapis_in_table: true
+    reset_on_reload: true
 anvil:
     custom_gui: true
     level_divisor: 4
@@ -102,6 +103,10 @@ config_comments:
         
         lapis_in_table: 
         - 'If players need to insert lapis into the custom table for it to work'
+        
+        reset_on_reload: 
+        - 'Resets enchantments in enchanting table whenever the server is reloaded'
+        - 'Setting this to false means the only ways to reset enchantments are through /esreset and enchanting an item'
     anvil: 
         custom_gui: 
         - 'Whether to use the custom anvil gui'

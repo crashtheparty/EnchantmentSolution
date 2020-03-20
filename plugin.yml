@@ -1,5 +1,5 @@
 name: EnchantmentSolution
-version: 2.2.7
+version: 2.2.10
 main: org.ctp.enchantmentsolution.EnchantmentSolution
 api-version: 1.13
 softdepend: [mcMMO, Jobs, VeinMiner, AuctionHouse]
@@ -36,6 +36,21 @@ commands:
     aliases: [enchantabilitycalc,enchantabilitycalculator,escalculator]
     description: Calculate the levels that would be possible with certain enchantabilities
     usage: /escalc
+  esbook:
+    aliases: [book]
+    description: Gives the player a book with specified enchantment; use RandomEnchant or RandomMultiEnchant for random enchantments
+    usage: /esbook
+  esanvil:
+    aliases: [anvil]
+    description: Opens the ES custom inventory anvil
+    usage: /esanvil
+  esgrindstone:
+    aliases: [grindstone]
+    description: Opens the ES custom inventory grindstone
+    usage: /esgrindstone
+  configlore:
+    description: Gets the hidden chat color value for strings to be used in ES enchantments
+    usage: /configlore
 permissions:
   enchantmentsolution.command.edit: 
     description: Gives access to the /esconfig command. 
@@ -43,17 +58,26 @@ permissions:
   enchantmentsolution.command.enchant: 
     description: Gives access to the /enchant command. 
     default: op
+  enchantmentsolution.command.enchant.others: 
+    description: Gives access to the /enchant command for use on other people. 
+    default: op
   enchantmentsolution.command.reload: 
     description: Gives access to the /esreload command. 
     default: op
   enchantmentsolution.command.enchantremove: 
     description: Gives access to the /removeenchant command. 
     default: op
+  enchantmentsolution.command.enchantremove.others: 
+    description: Gives access to the /removeenchant command for use on other people. 
+    default: op
   enchantmentsolution.command.reset: 
     description: Gives access to the /esreset command. 
     default: op
   enchantmentsolution.command.enchantunsafe: 
     description: Gives access to the /enchantunsafe command.
+    default: op
+  enchantmentsolution.command.enchantunsafe.others: 
+    description: Gives access to the /enchantunsafe command for use on other people. 
     default: op
   enchantmentsolution.command.calculator:
     description: Allows players to use the /escalc command
@@ -73,6 +97,18 @@ permissions:
   enchantmentsolution.god-anvil:
     description: Allows players to combine items higher than their max levels
     default: false
-  enchantmentsolution.debug:
+  enchantmentsolution.command.debug:
     description: Allows players to use the /esdebug command
+    default: op
+  enchantmentsolution.command.book:
+    description: Allows players to use the /esbook command
+    default: op
+  enchantmentsolution.command.anvil:
+    description: Allows players to use the /esanvil command
+    default: op
+  enchantmentsolution.command.grindstone:
+    description: Allows players to use the /esgrindstone command
+    default: op
+  enchantmentsolution.command.configlore:
+    description: Allows players to use the /configlore command
     default: op

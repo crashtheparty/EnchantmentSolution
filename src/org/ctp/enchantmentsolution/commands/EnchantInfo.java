@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -13,8 +14,6 @@ import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-
-import org.bukkit.ChatColor;
 
 public class EnchantInfo implements CommandExecutor {
 
@@ -38,20 +37,12 @@ public class EnchantInfo implements CommandExecutor {
 					break;
 				}
 			if (enchantment == null) {
-				if (player != null) {
-					HashMap<String, Object> codes = ChatUtils.getCodes();
-					codes.put("%enchant%", args[0]);
-					ChatUtils.sendMessage(player, ChatUtils.getMessage(codes, "commands.enchant-not-found"));
-				} else {
-					HashMap<String, Object> codes = ChatUtils.getCodes();
-					codes.put("%enchant%", args[0]);
-					ChatUtils.sendToConsole(Level.WARNING, ChatUtils.getMessage(codes, "commands.enchant-not-found"));
-				}
+				HashMap<String, Object> codes = ChatUtils.getCodes();
+				codes.put("%enchant%", args[0]);
+				ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(codes, "commands.enchant-not-found"), Level.WARNING);
 			} else {
 				String page = enchantment.getDetails();
-				if (player != null) ChatUtils.sendMessage(player, page);
-				else
-					sender.sendMessage(page);
+				ChatUtils.sendMessage(sender, player, page, Level.INFO);
 			}
 		}
 		return true;

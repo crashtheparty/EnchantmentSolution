@@ -47,18 +47,20 @@ public class GrindstoneListener implements Listener {
 	}
 
 	private void combine(GrindstoneEnchantments ench, ClickType click, GrindstoneInventory inv) {
+		Player player = ench.getPlayer().getPlayer();
+		if (player == null) return;
 		switch (click) {
 			case LEFT:
 			case RIGHT:
 			case SHIFT_RIGHT:
 				inv.getLocation().getWorld().playSound(inv.getLocation(), Sound.BLOCK_GRINDSTONE_USE, 1, 1);
-				ench.getPlayer().setItemOnCursor(ench.getCombinedItem());
+				player.setItemOnCursor(ench.getCombinedItem());
 				inv.setContents(new ItemStack[3]);
 				AbilityUtils.dropExperience(inv.getLocation().clone().add(new Location(inv.getLocation().getWorld(), 0.5, 0.5, 0.5)), ench.getExperience());
 				break;
 			case SHIFT_LEFT:
 				inv.getLocation().getWorld().playSound(inv.getLocation(), Sound.BLOCK_GRINDSTONE_USE, 1, 1);
-				HashMap<Integer, ItemStack> items = ench.getPlayer().getInventory().addItem(ench.getCombinedItem());
+				HashMap<Integer, ItemStack> items = player.getInventory().addItem(ench.getCombinedItem());
 				if (!items.isEmpty()) return;
 				inv.setContents(new ItemStack[3]);
 				AbilityUtils.dropExperience(inv.getLocation().clone().add(new Location(inv.getLocation().getWorld(), 0.5, 0.5, 0.5)), ench.getExperience());

@@ -14,12 +14,14 @@ import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.advancements.ESAdvancementProgress;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
+import org.ctp.enchantmentsolution.enchantments.generate.TableEnchantments;
 import org.ctp.enchantmentsolution.events.blocks.DamageState;
 import org.ctp.enchantmentsolution.nms.AnimalMobNMS;
 import org.ctp.enchantmentsolution.nms.animalmob.AnimalMob;
 import org.ctp.enchantmentsolution.utils.Configurations;
 import org.ctp.enchantmentsolution.utils.abillityhelpers.WalkerBlock;
 import org.ctp.enchantmentsolution.utils.abillityhelpers.WalkerUtils;
+import org.ctp.enchantmentsolution.utils.config.ConfigString;
 import org.ctp.enchantmentsolution.utils.yaml.YamlConfig;
 
 public class SaveUtils {
@@ -68,6 +70,15 @@ public class SaveUtils {
 			}
 			config.removeKeys("animals");
 		}
+
+		if (!ConfigString.RESET_ON_RELOAD.getBoolean() && config.containsElements("enchanting_table")) {
+			int i = 0;
+			while (config.getString("enchanting_table." + i + ".player") != null) {
+				TableEnchantments.getFromConfig(config, i);
+				i++;
+			}
+		}
+		config.removeKeys("enchanting_table");
 		Configurations.getDataFile().save();
 	}
 
@@ -99,6 +110,19 @@ public class SaveUtils {
 		} catch (NoClassDefFoundError ex) {
 			ex.printStackTrace();
 		}
+
+		if (!ConfigString.RESET_ON_RELOAD.getBoolean()) {
+			i = 0;
+			try {
+				for(TableEnchantments table: TableEnchantments.getAllTableEnchantments()) {
+					table.setConfig(config, i);
+					i++;
+				}
+			} catch (NoClassDefFoundError ex) {
+				ex.printStackTrace();
+			}
+		}
+
 		Configurations.getDataFile().save();
 	}
 }
