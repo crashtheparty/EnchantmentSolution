@@ -13,6 +13,7 @@ import org.ctp.enchantmentsolution.enchantments.generate.TableEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentList;
 import org.ctp.enchantmentsolution.enchantments.helper.LevelList;
+import org.ctp.enchantmentsolution.enums.ItemData;
 import org.ctp.enchantmentsolution.enums.ItemType;
 import org.ctp.enchantmentsolution.nms.EnchantItemCriterion;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
@@ -106,7 +107,7 @@ public class EnchantmentTable implements InventoryData {
 				inv.setItem(start, item);
 
 				if (ItemUtils.isEnchantable(item)) {
-					EnchantmentList[] enchantmentLists = table.getEnchantments(item.getType());
+					EnchantmentList[] enchantmentLists = table.getEnchantments(new ItemData(item));
 
 					int extra = 3;
 					for(EnchantmentList enchantmentList: enchantmentLists) {
@@ -270,7 +271,7 @@ public class EnchantmentTable implements InventoryData {
 					}
 				}
 		}
-		List<EnchantmentLevel> enchLevels = table.getEnchantments(enchantableItem.getType())[level].getEnchantments();
+		List<EnchantmentLevel> enchLevels = table.getEnchantments(new ItemData(enchantableItem))[level].getEnchantments();
 		if (playerItems.get(slot).getType() == Material.BOOK && ConfigString.USE_ENCHANTED_BOOKS.getBoolean()) enchantableItem = ItemUtils.convertToEnchantedBook(enchantableItem);
 		player.playSound(player.getLocation(), Sound.BLOCK_ENCHANTMENT_TABLE_USE, 1, 1);
 		enchantableItem = ItemUtils.addEnchantmentsToItem(enchantableItem, enchLevels);

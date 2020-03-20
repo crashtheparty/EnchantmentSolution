@@ -4,14 +4,14 @@ import java.lang.reflect.Field;
 import java.util.*;
 import java.util.logging.Level;
 
-import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.api.ApiEnchantmentWrapper;
 import org.ctp.enchantmentsolution.enchantments.helper.Weight;
-import org.ctp.enchantmentsolution.enums.MatData;
+import org.ctp.enchantmentsolution.enums.ItemType;
 import org.ctp.enchantmentsolution.utils.*;
+import org.ctp.enchantmentsolution.utils.compatibility.MMOUtils.MMOType;
 import org.ctp.enchantmentsolution.utils.config.*;
 
 public class RegisterEnchantments {
@@ -194,15 +194,35 @@ public class RegisterEnchantments {
 					CustomEnchantment enchant = getByName(s);
 					if (enchant != null) conflictingEnchantments.add(enchant.getRelativeEnchantment());
 				}
-				List<String> disabledItemsString = config.getStringList(namespace + "." + enchantment.getName() + ".advanced.disabled_items");
-				List<Material> disabledItems = new ArrayList<Material>();
-				if (disabledItemsString != null) for(String s: disabledItemsString) {
-					MatData mat = new MatData(s);
-					if (mat != null && mat.getMaterial() != null) disabledItems.add(mat.getMaterial());
+//				List<String> disabledItemsString = config.getStringList(namespace + "." + enchantment.getName() + ".advanced.disabled_items");
+//				List<Material> disabledItems = new ArrayList<Material>();
+//				if (disabledItemsString != null) for(String s: disabledItemsString) {
+//					MatData mat = new MatData(s);
+//					if (mat != null && mat.getMaterial() != null) disabledItems.add(mat.getMaterial());
+//				}
+				
+				List<String> enchantmentItemTypes = config.getStringList(namespace + "." + enchantment.getName() + ".advanced.enchantment_item_types");
+				List<ItemType> enchantmentTypes = new ArrayList<ItemType>();
+				if (enchantmentItemTypes != null) for(String s : enchantmentItemTypes) {
+					ItemType type = null;
+					if(s.startsWith("mmoitems:")) type = ItemType.CUSTOM.setCustomType(MMOType.get(s.toUpperCase())).setCustomString(s.toUpperCase());
+					else
+						type = ItemType.valueOf(s.toUpperCase());
+					if(type != null) enchantmentTypes.add(type);
 				}
-				enchantment.setCustom(constant, modifier, startLevel, maxLevel, weight);
+				List<String> anvilItemTypes = config.getStringList(namespace + "." + enchantment.getName() + ".advanced.anvil_item_types");
+				List<ItemType> anvilTypes = new ArrayList<ItemType>();
+				if (anvilItemTypes != null) for(String s : anvilItemTypes) {
+					ItemType type = null;
+					if(s.startsWith("mmoitems:")) type = ItemType.CUSTOM.setCustomType(MMOType.get(s.toUpperCase())).setCustomString(s.toUpperCase());
+					else
+						type = ItemType.valueOf(s.toUpperCase());
+					if(type != null) anvilTypes.add(type);
+				}
+				
+				enchantment.setCustom(constant, modifier, startLevel, maxLevel, weight, enchantmentTypes, anvilTypes);
 				enchantment.setConflictingEnchantments(conflictingEnchantments);
-				enchantment.setDisabledItems(disabledItems);
+//				enchantment.setDisabledItems(disabledItems);
 			} else if (levelFifty) enchantment.setLevelFifty();
 			else
 				enchantment.setLevelThirty();

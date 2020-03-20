@@ -174,12 +174,12 @@ public class CERegister extends CustomEnchantment {
 	}
 
 	@Override
-	protected List<ItemType> getEnchantmentItemTypes() {
+	public List<ItemType> getDefaultEnchantmentItemTypes() {
 		return enchantmentItems;
 	}
 
 	@Override
-	protected List<ItemType> getAnvilItemTypes() {
+	public List<ItemType> getDefaultAnvilItemTypes() {
 		return anvilItems;
 	}
 

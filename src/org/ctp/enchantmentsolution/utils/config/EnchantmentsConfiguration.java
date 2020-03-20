@@ -11,6 +11,7 @@ import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantmentWrapper;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.Weight;
+import org.ctp.enchantmentsolution.enums.ItemType;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.Configurations;
 import org.ctp.enchantmentsolution.utils.ESArrays;
@@ -66,6 +67,8 @@ public class EnchantmentsConfiguration extends Configuration {
 			config.addEnum(start + ".conflicting_enchantments", RegisterEnchantments.getEnchantmentNames());
 			config.addDefault(start + ".disabled_items", enchant.getDisabledItemsStrings());
 			config.addEnum(start + ".disabled_items", ESArrays.getRepairMaterialsStrings());
+			config.addDefault(start + ".enchantment_item_types", ItemType.itemTypesToStrings(enchant.getDefaultEnchantmentItemTypes()));
+			config.addDefault(start + ".anvil_item_types", ItemType.itemTypesToStrings(enchant.getDefaultAnvilItemTypes()));
 			for(int i = 0; i < enchant.getMaxLevel(); i++) {
 				config.addDefault(start + ".permissions.table.level" + (i + 1), false);
 				config.addDefault(start + ".permissions.anvil.level" + (i + 1), false);

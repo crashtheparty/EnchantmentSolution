@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
+import org.ctp.enchantmentsolution.enums.ItemData;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.MiscUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
@@ -106,7 +107,7 @@ public class Enchant implements CommandExecutor {
 							int maxEnchants = ConfigString.MAX_ENCHANTMENTS.getInt();
 							int itemEnchants = ItemUtils.getTotalEnchantments(itemToEnchant);
 							if (maxEnchants <= 0 || itemEnchants < maxEnchants && maxEnchants > 0) {
-								if (enchant.canAnvilItem(itemToEnchant.getType()) || enchant.canEnchantItem(itemToEnchant.getType())) {
+								if (enchant.canAnvilItem(new ItemData(itemToEnchant)) || enchant.canEnchantItem(new ItemData(itemToEnchant))) {
 									boolean useBooks = ConfigString.USE_ENCHANTED_BOOKS.getBoolean();
 									if (itemToEnchant.getType() == Material.BOOK && useBooks) itemToEnchant = ItemUtils.convertToEnchantedBook(itemToEnchant);
 									else if (itemToEnchant.getType() == Material.ENCHANTED_BOOK && !useBooks) itemToEnchant = ItemUtils.convertToRegularBook(itemToEnchant);

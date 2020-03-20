@@ -1,14 +1,12 @@
 package org.ctp.enchantmentsolution.enchantments.generate;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentList;
+import org.ctp.enchantmentsolution.enums.ItemData;
 import org.ctp.enchantmentsolution.utils.Configurations;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 import org.ctp.enchantmentsolution.utils.config.FishingConfiguration;
@@ -24,7 +22,7 @@ public class FishingEnchantments extends LootEnchantments {
 	double multiEnchant) {
 		super(player, item, treasure);
 
-		setEnchantmentList(new EnchantmentList(player, item.getType(), true, fishing, multiEnchant));
+		setEnchantmentList(new EnchantmentList(player, new ItemData(item), true, fishing, multiEnchant));
 	}
 
 	private FishingEnchantments(Player player, ItemStack item, int bookshelves, boolean treasure) {

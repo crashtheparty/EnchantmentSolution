@@ -4,19 +4,19 @@ import java.util.*;
 import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentList;
 import org.ctp.enchantmentsolution.enchantments.helper.Level;
 import org.ctp.enchantmentsolution.enchantments.helper.LevelList;
+import org.ctp.enchantmentsolution.enums.ItemData;
 import org.ctp.enchantmentsolution.enums.MatData;
 import org.ctp.enchantmentsolution.utils.yaml.YamlConfig;
 
 public class TableEnchantments extends GenerateEnchantments {
 
-	private Map<Material, EnchantmentList[]> enchantmentList = new HashMap<Material, EnchantmentList[]>();
+	private Map<ItemData, EnchantmentList[]> enchantmentList = new HashMap<ItemData, EnchantmentList[]>();
 	private LevelList levelList;
 	private int bookshelves;
 	private static List<TableEnchantments> TABLES = new ArrayList<TableEnchantments>();
@@ -25,12 +25,12 @@ public class TableEnchantments extends GenerateEnchantments {
 	boolean treasure) {
 		for(TableEnchantments enchantments: TABLES)
 			if (enchantments.isSimilar(player, bookshelves)) {
-				if (item != null) enchantments.generateEnchantments(item.getType());
+				if (item != null) enchantments.generateEnchantments(new ItemData(item));
 				return enchantments;
 			}
 
 		TableEnchantments enchantments = new TableEnchantments(player, bookshelves, treasure);
-		if (item != null) enchantments.generateEnchantments(item.getType());
+		if (item != null) enchantments.generateEnchantments(new ItemData(item));
 		TABLES.add(enchantments);
 		return enchantments;
 	}
@@ -58,32 +58,42 @@ public class TableEnchantments extends GenerateEnchantments {
 	}
 
 	private TableEnchantments(OfflinePlayer player, int bookshelves, boolean treasure, LevelList levelList,
-	HashMap<Material, EnchantmentList[]> enchantmentList) {
+	HashMap<ItemData, EnchantmentList[]> enchantmentList) {
 		super(player, null, treasure);
 		this.bookshelves = bookshelves;
 		this.levelList = levelList;
 		this.enchantmentList = enchantmentList;
 	}
 
-	public boolean hasEnchantments(Material m) {
-		return enchantmentList.containsKey(m);
+	public boolean hasEnchantments(ItemData item) {
+		Iterator<Entry<ItemData, EnchantmentList[]>> iterator = enchantmentList.entrySet().iterator();
+		while(iterator.hasNext()) {
+			Entry<ItemData, EnchantmentList[]> entry = iterator.next();
+			if(entry.getKey().equals(item)) return true;
+		}
+		return false;
 	}
 
-	public void generateEnchantments(Material m) {
-		if (!hasEnchantments(m)) {
+	public void generateEnchantments(ItemData item) {
+		if (!hasEnchantments(item)) {
 			EnchantmentList[] list = new EnchantmentList[levelList.getList().length];
 			for(int i = 0; i < list.length; i++) {
 				Level level = levelList.getList()[i];
-				if (level != null && level.getLevel() > -1) list[i] = new EnchantmentList(getPlayer().getPlayer(), level, m, isTreasure());
+				if (level != null && level.getLevel() > -1) list[i] = new EnchantmentList(getPlayer().getPlayer(), level, item, isTreasure());
 			}
 
-			enchantmentList.put(m, list);
+			enchantmentList.put(item, list);
 		}
 	}
 
-	public EnchantmentList[] getEnchantments(Material m) {
-		if (!hasEnchantments(m)) generateEnchantments(m);
-		return enchantmentList.get(m);
+	public EnchantmentList[] getEnchantments(ItemData item) {
+		if (!hasEnchantments(item)) generateEnchantments(item);
+		Iterator<Entry<ItemData, EnchantmentList[]>> iterator = enchantmentList.entrySet().iterator();
+		while(iterator.hasNext()) {
+			Entry<ItemData, EnchantmentList[]> entry = iterator.next();
+			if(entry.getKey().equals(item)) return entry.getValue();
+		}
+		return new EnchantmentList[0];
 	}
 
 	public int getBookshelves() {
@@ -109,18 +119,18 @@ public class TableEnchantments extends GenerateEnchantments {
 
 		LevelList levelList = LevelList.fromConfig(config, i, bookshelves);
 
-		HashMap<Material, EnchantmentList[]> enchantmentList = new HashMap<Material, EnchantmentList[]>();
-		List<String> keys = config.getLevelEntryKeys("enchanting_table." + i + ".enchantmentList");
-		for(String key: keys) {
-			String mat = key.replace("enchanting_table." + i + ".enchantmentList.", "");
+		HashMap<ItemData, EnchantmentList[]> enchantmentList = new HashMap<ItemData, EnchantmentList[]>();
+		int j = 0;
+		while (config.containsElements("enchanting_table." + i + ".enchantmentList." + j)) {
 			EnchantmentList[] list = new EnchantmentList[6];
-			MatData data = new MatData(mat);
-			Material m = data.getMaterial();
-			if (m != null) {
+			String[] itemData = config.getString("enchanting_table." + i + ".enchantmentList." + j + ".itemdata").split(" ");
+			ItemData item = new ItemData(new MatData(itemData[0]).getMaterial(), itemData[1], itemData[2]);
+			if (item != null && item.getMaterial() != null) {
 				for(Level level: levelList.getList())
-					list[level.getSlot()] = EnchantmentList.fromConfig(config, i, mat, level.getSlot(), player, level, m, treasure);
-				enchantmentList.put(m, list);
+					list[level.getSlot()] = EnchantmentList.fromConfig(config, i, j, level.getSlot(), player, level, item, treasure);
+				enchantmentList.put(item, list);
 			}
+			j++;
 		}
 		TableEnchantments enchantments = new TableEnchantments(player, bookshelves, treasure, levelList, enchantmentList);
 		TABLES.add(enchantments);
@@ -137,12 +147,14 @@ public class TableEnchantments extends GenerateEnchantments {
 
 		getLevelList().setConfig(config, i);
 
-		Iterator<Entry<Material, EnchantmentList[]>> iterator = enchantmentList.entrySet().iterator();
+		Iterator<Entry<ItemData, EnchantmentList[]>> iterator = enchantmentList.entrySet().iterator();
+		int j = 0;
 		while (iterator.hasNext()) {
-			Entry<Material, EnchantmentList[]> entry = iterator.next();
-			Material m = entry.getKey();
+			Entry<ItemData, EnchantmentList[]> entry = iterator.next();
+			ItemData item = entry.getKey();
 			for(EnchantmentList l: entry.getValue())
-				l.setConfig(config, i, m);
+				l.setConfig(config, i, j, item);
+			j++;
 		}
 	}
 }

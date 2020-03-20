@@ -14,6 +14,7 @@ import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantmentWrapper;
 import org.ctp.enchantmentsolution.enchantments.generate.TableEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
+import org.ctp.enchantmentsolution.enums.ItemData;
 import org.ctp.enchantmentsolution.nms.EnchantItemCriterion;
 import org.ctp.enchantmentsolution.utils.LocationUtils;
 import org.ctp.enchantmentsolution.utils.compatibility.JobsUtils;
@@ -30,7 +31,7 @@ public class EnchantmentListener implements Listener {
 		TableEnchantments table = TableEnchantments.getTableEnchantments(player, item, bookshelves, false);
 		if (event.getOffers()[0] == null) return;
 		for(int i = 0; i < event.getOffers().length; i++)
-			for(EnchantmentLevel ench: table.getEnchantments(item.getType())[i].getEnchantments()) {
+			for(EnchantmentLevel ench: table.getEnchantments(new ItemData(item))[i].getEnchantments()) {
 				event.getOffers()[i].setCost(table.getLevelList().getList()[i].getLevel());
 				if (!(ench.getEnchant().getRelativeEnchantment() instanceof CustomEnchantmentWrapper)) {
 					event.getOffers()[i].setEnchantment(ench.getEnchant().getRelativeEnchantment());
@@ -48,7 +49,7 @@ public class EnchantmentListener implements Listener {
 		for(int i = 0; i < table.getLevelList().getList().length; i++) {
 			Integer integer = table.getLevelList().getList()[i].getLevel();
 			if (integer == event.getExpLevelCost()) {
-				List<EnchantmentLevel> enchantments = table.getEnchantments(item.getType())[i].getEnchantments();
+				List<EnchantmentLevel> enchantments = table.getEnchantments(new ItemData(item))[i].getEnchantments();
 				event.getEnchantsToAdd().clear();
 				item = ItemUtils.addEnchantmentsToItem(item, enchantments);
 				if (item.getType() == Material.BOOK && ConfigString.USE_ENCHANTED_BOOKS.getBoolean()) item = ItemUtils.convertToEnchantedBook(item);

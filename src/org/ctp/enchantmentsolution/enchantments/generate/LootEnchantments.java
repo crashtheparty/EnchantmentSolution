@@ -5,6 +5,7 @@ import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentList;
 import org.ctp.enchantmentsolution.enchantments.helper.Level;
 import org.ctp.enchantmentsolution.enchantments.helper.LevelList;
+import org.ctp.enchantmentsolution.enums.ItemData;
 
 public abstract class LootEnchantments extends GenerateEnchantments {
 
@@ -25,7 +26,7 @@ public abstract class LootEnchantments extends GenerateEnchantments {
 		if (getPlayer() != null) p = getPlayer().getPlayer();
 		for(int i = 0; i < list.length; i++) {
 			Level level = levelList.getList()[i];
-			if (level.getLevel() > -1) list[i] = new EnchantmentList(p, level, item.getType(), isTreasure());
+			if (level.getLevel() > -1) list[i] = new EnchantmentList(p, level, new ItemData(item), isTreasure());
 		}
 	}
 

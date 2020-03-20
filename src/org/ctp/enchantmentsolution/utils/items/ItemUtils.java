@@ -22,6 +22,7 @@ import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantmentWrapper;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
+import org.ctp.enchantmentsolution.enums.ItemData;
 import org.ctp.enchantmentsolution.enums.ItemType;
 import org.ctp.enchantmentsolution.utils.ESArrays;
 import org.ctp.enchantmentsolution.utils.StringUtils;
@@ -243,7 +244,7 @@ public class ItemUtils {
 		Map<Enchantment, Integer> enchants = meta.getEnchants();
 		if (customEnchant.getDisabledItems().contains(item.getType())) return false;
 		if (item.getType().equals(Material.ENCHANTED_BOOK)) enchants = ((EnchantmentStorageMeta) meta).getStoredEnchants();
-		else if (!customEnchant.canAnvilItem(item.getType())) return false;
+		else if (!customEnchant.canAnvilItem(new ItemData(item))) return false;
 		for(Iterator<Entry<Enchantment, Integer>> it = enchants.entrySet().iterator(); it.hasNext();) {
 			Entry<Enchantment, Integer> e = it.next();
 			Enchantment enchant = e.getKey();

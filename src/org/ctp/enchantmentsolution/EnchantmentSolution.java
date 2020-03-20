@@ -63,6 +63,7 @@ public class EnchantmentSolution extends JavaPlugin {
 	private WikiThread wiki;
 	private String mcmmoVersion, mcmmoType;
 	private Plugin veinMiner;
+	private boolean mmoItems = false;
 
 	@Override
 	public void onEnable() {
@@ -371,5 +372,14 @@ public class EnchantmentSolution extends JavaPlugin {
 			AuctionHouseUtils.resetAuctionHouse();
 			ChatUtils.sendInfo("Auction House compatibility enabled!");
 		}
+
+		if (Bukkit.getPluginManager().isPluginEnabled("MMOItems")) {
+			mmoItems = true;
+			ChatUtils.sendInfo("MMOItems compatibility enabled!");
+		}
+	}
+
+	public boolean getMMOItems() {
+		return mmoItems;
 	}
 }

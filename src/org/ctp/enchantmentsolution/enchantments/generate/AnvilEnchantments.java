@@ -11,6 +11,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
+import org.ctp.enchantmentsolution.enums.ItemData;
 import org.ctp.enchantmentsolution.enums.ItemRepairType;
 import org.ctp.enchantmentsolution.nms.AnvilNMS;
 import org.ctp.enchantmentsolution.utils.ESArrays;
@@ -246,7 +247,7 @@ public class AnvilEnchantments extends GenerateEnchantments {
 			}
 
 			if (canAdd && (same || !conflict)) {
-				if (enchantTwo.getEnchant().canAnvilItem(item.getType()) || godAnvil) {
+				if (enchantTwo.getEnchant().canAnvilItem(new ItemData(item)) || godAnvil) {
 					enchantments.add(new EnchantmentLevel(enchantTwo.getEnchant(), levelCost));
 					cost += levelCost * enchantTwo.getEnchant().multiplier(itemTwo.getType());
 				} else
@@ -265,7 +266,7 @@ public class AnvilEnchantments extends GenerateEnchantments {
 					added = true;
 					break;
 				}
-			if (!added && (enchantOne.getEnchant().canAnvilItem(item.getType()) || godAnvil)) {
+			if (!added && (enchantOne.getEnchant().canAnvilItem(new ItemData(item)) || godAnvil)) {
 				if (demiGodAnvil) {
 					if (!godAnvil) if (enchantOne.getLevel() > enchantOne.getEnchant().getMaxLevel()) enchantOne.setLevel(enchantOne.getEnchant().getMaxLevel());
 				} else if (!enchantOne.getEnchant().canAnvil(player, enchantOne.getLevel())) {

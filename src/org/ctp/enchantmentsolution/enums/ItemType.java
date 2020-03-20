@@ -4,6 +4,7 @@ import java.util.*;
 
 import org.bukkit.Material;
 import org.ctp.enchantmentsolution.utils.ESArrays;
+import org.ctp.enchantmentsolution.utils.compatibility.MMOUtils.MMOType;
 import org.ctp.enchantmentsolution.utils.config.ConfigUtils;
 import org.ctp.enchantmentsolution.utils.config.Type;
 
@@ -17,10 +18,11 @@ public enum ItemType {
 	LEATHER_ARMOR("leather_armor"), GOLDEN_ARMOR("golden_armor"), CHAINMAIL_ARMOR("chainmail_armor"),
 	IRON_ARMOR("iron_armor"), DIAMOND_ARMOR("diamond_armor"), CROSSBOW("crossbow"), BOOK("book"), ALL("all"),
 	ENCHANTABLE("enchantable"), TURTLE_HELMET("turtle_helmet"), SHULKER_BOXES("shulker_boxes"), NONE("none"), OTHER("other"),
-	NETHERITE_TOOLS("netherite_tools"), NETHERITE_ARMOR("netherite_armor");
+	NETHERITE_TOOLS("netherite_tools"), NETHERITE_ARMOR("netherite_armor"), CUSTOM("custom");
 
-	private String type, display;
+	private String type, display, mmo;
 	private List<Material> itemTypes;
+	private MMOType mmoType = null;
 
 	ItemType(String type) {
 		this.type = type;
@@ -145,6 +147,7 @@ public enum ItemType {
 		} else if (TRIDENT.getType().equals(type)) itemTypes.add("TRIDENT");
 		else if (TURTLE_HELMET.getType().equals(type)) itemTypes.add("TURTLE_HELMET");
 		else if (WOODEN_TOOLS.getType().equals(type)) itemTypes.addAll(Arrays.asList("WOODEN_AXE", "WOODEN_SWORD", "WOODEN_SHOVEL", "WOODEN_PICKAXE", "WOODEN_HOE"));
+		else if (CUSTOM.getType().equals(type)) return Arrays.asList();
 		return itemTypes;
 	}
 
@@ -159,6 +162,34 @@ public enum ItemType {
 			}
 
 		return materials;
+	}
+
+	public ItemType setCustomType(MMOType mmoType) {
+		this.mmoType = mmoType;
+		return this;
+	}
+
+	public ItemType setCustomString(String mmo) {
+		this.mmo = mmo;
+		return this;
+	}
+	
+	public MMOType getCustomType() {
+		return mmoType;
+	}
+	
+	public String getCustomString() {
+		return mmo;
+	}
+	
+	public static List<String> itemTypesToStrings(List<ItemType> types){
+		List<String> typeStrings = new ArrayList<String>();
+		
+		for(ItemType type: types)
+			if(type.getCustomType() == null) typeStrings.add(type.getType());
+			else
+				typeStrings.add("mmoitems:" + type.getCustomType().name().toLowerCase() + ":" + type.getCustomString());
+		return typeStrings;
 	}
 
 }
