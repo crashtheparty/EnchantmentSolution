@@ -21,10 +21,12 @@ public class GrindstoneCommand implements CommandExecutor {
 				if (inv == null) {
 					inv = new Grindstone(player, null);
 					EnchantmentSolution.getPlugin().addInventory(inv);
+					inv.setInventory();
 				} else if (!(inv instanceof Grindstone)) {
 					inv.close(true);
 					inv = new Grindstone(player, null);
 					EnchantmentSolution.getPlugin().addInventory(inv);
+					inv.setInventory();
 				}
 			} else
 				ChatUtils.sendMessage(player, ChatUtils.getMessage(ChatUtils.getCodes(), "commands.no-permission"));

@@ -21,10 +21,12 @@ public class AnvilCommand implements CommandExecutor {
 				if (inv == null) {
 					inv = new Anvil(player, null);
 					EnchantmentSolution.getPlugin().addInventory(inv);
+					inv.setInventory();
 				} else if (!(inv instanceof Anvil)) {
 					inv.close(true);
 					inv = new Anvil(player, null);
 					EnchantmentSolution.getPlugin().addInventory(inv);
+					inv.setInventory();
 				}
 			} else
 				ChatUtils.sendMessage(player, ChatUtils.getMessage(ChatUtils.getCodes(), "commands.no-permission"));

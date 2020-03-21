@@ -85,21 +85,19 @@ public class EnchantmentList {
 		double multiEnchantDivisor = ConfigUtils.getAdvancedDouble(ConfigString.MULTI_ENCHANT_DIVISOR, ConfigString.LEVEL_FIFTY.getBoolean() ? 75 : 50);
 		List<EnchantmentLevel> enchants = new ArrayList<EnchantmentLevel>();
 		CustomEnchantment enchantment = getEnchantment(enchants);
-		if (enchantment == null) {
-			setEnchantments(enchants);
-			return;
-		}
-		Player p = player == null ? null : player.getPlayer();
-		enchants.add(new EnchantmentLevel(enchantment, enchantment.getEnchantLevel(p, enchantability)));
-		int enchantability = this.enchantability;
-		int finalEnchantability = enchantability / 2;
-		while ((finalEnchantability + 1) / multiEnchantDivisor > Math.random() && (ConfigString.MAX_ENCHANTMENTS.getInt() == 0 ? true : enchants.size() < ConfigString.MAX_ENCHANTMENTS.getInt())) {
-			enchantment = getEnchantment(enchants);
-			if (enchantment == null) break;
-			if (ConfigUtils.getAdvancedBoolean(ConfigString.DECAY, false)) enchants.add(new EnchantmentLevel(enchantment, enchantment.getEnchantLevel(p, finalEnchantability)));
-			else
-				enchants.add(new EnchantmentLevel(enchantment, enchantment.getEnchantLevel(p, enchantability)));
-			finalEnchantability /= 2;
+		if (enchantment != null) {
+			Player p = player == null ? null : player.getPlayer();
+			enchants.add(new EnchantmentLevel(enchantment, enchantment.getEnchantLevel(p, enchantability)));
+			int enchantability = this.enchantability;
+			int finalEnchantability = enchantability / 2;
+			while ((finalEnchantability + 1) / multiEnchantDivisor > Math.random() && (ConfigString.MAX_ENCHANTMENTS.getInt() == 0 ? true : enchants.size() < ConfigString.MAX_ENCHANTMENTS.getInt())) {
+				enchantment = getEnchantment(enchants);
+				if (enchantment == null) break;
+				if (ConfigUtils.getAdvancedBoolean(ConfigString.DECAY, false)) enchants.add(new EnchantmentLevel(enchantment, enchantment.getEnchantLevel(p, finalEnchantability)));
+				else
+					enchants.add(new EnchantmentLevel(enchantment, enchantment.getEnchantLevel(p, enchantability)));
+				finalEnchantability /= 2;
+			}
 		}
 
 		setEnchantments(enchants);
@@ -108,16 +106,14 @@ public class EnchantmentList {
 	public void generatePreselected(List<EnchantmentLevel> selections, double multiEnchantDivisor) {
 		List<EnchantmentLevel> enchants = new ArrayList<EnchantmentLevel>();
 		EnchantmentLevel enchantment = getPreselectedEnchantment(enchants, selections);
-		if (enchantment == null) {
-			setEnchantments(enchants);
-			return;
-		}
-		enchants.add(enchantment);
-		while (multiEnchantDivisor > Math.random() && (ConfigString.MAX_ENCHANTMENTS.getInt() == 0 ? true : enchants.size() < ConfigString.MAX_ENCHANTMENTS.getInt())) {
-			enchantment = getPreselectedEnchantment(enchants, selections);
-			if (enchantment == null) break;
+		if (enchantment != null) {
 			enchants.add(enchantment);
-			multiEnchantDivisor /= 2;
+			while (multiEnchantDivisor > Math.random() && (ConfigString.MAX_ENCHANTMENTS.getInt() == 0 ? true : enchants.size() < ConfigString.MAX_ENCHANTMENTS.getInt())) {
+				enchantment = getPreselectedEnchantment(enchants, selections);
+				if (enchantment == null) break;
+				enchants.add(enchantment);
+				multiEnchantDivisor /= 2;
+			}
 		}
 
 		setEnchantments(enchants);
@@ -143,10 +139,11 @@ public class EnchantmentList {
 
 	private CustomEnchantment getEnchantment(List<EnchantmentLevel> previousLevels) {
 		int totalWeight = 0;
+		Player p = player == null ? null : player.getPlayer();
 		List<CustomEnchantment> customEnchants = new ArrayList<CustomEnchantment>();
 		List<CustomEnchantment> registeredEnchantments = RegisterEnchantments.getEnchantments();
 		for(CustomEnchantment enchantment: registeredEnchantments)
-			if (canAddEnchantment(previousLevels, enchantment)) {
+			if (canAddEnchantment(previousLevels, enchantment) && enchantment.getEnchantLevel(p, enchantability) > 0) {
 				totalWeight += enchantment.getWeight();
 				customEnchants.add(enchantment);
 			}
