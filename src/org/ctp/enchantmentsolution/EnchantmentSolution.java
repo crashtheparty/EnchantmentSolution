@@ -34,6 +34,7 @@ import org.ctp.enchantmentsolution.listeners.vanilla.EnchantmentListener;
 import org.ctp.enchantmentsolution.listeners.vanilla.GrindstoneListener;
 import org.ctp.enchantmentsolution.mcmmo.McMMOAbility;
 import org.ctp.enchantmentsolution.nms.animalmob.AnimalMob;
+import org.ctp.enchantmentsolution.rpg.listener.RPGBlockListener;
 import org.ctp.enchantmentsolution.threads.*;
 import org.ctp.enchantmentsolution.utils.*;
 import org.ctp.enchantmentsolution.utils.abillityhelpers.DrownedEntity;
@@ -112,6 +113,8 @@ public class EnchantmentSolution extends JavaPlugin {
 
 		registerEvent(new AdvancementEntityDeath());
 		registerEvent(new AdvancementPlayerEvent());
+
+		registerEvent(new RPGBlockListener());
 
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN, new AbilityRunnable(), 80l, 80l);
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN, new AdvancementThread(), 1l, 1l);

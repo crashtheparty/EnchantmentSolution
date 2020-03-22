@@ -2,6 +2,7 @@ package org.ctp.enchantmentsolution.listeners.enchantments;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -369,7 +370,8 @@ public class BlockListener extends Enchantmentable {
 
 	private Collection<Location> addHeightWidthBlock(Collection<Location> blocks, ItemStack tool, Material original, Block relative, int x, int y, int z) {
 		Block block = relative.getRelative(x, y, z);
-		if (original != Material.OBSIDIAN && block.getType() == Material.OBSIDIAN) return blocks;
+		List<String> pickBlocks = ItemBreakType.WOODEN_PICKAXE.getDiamondPickaxeBlocks();
+		if (!pickBlocks.contains(original.name()) && pickBlocks.contains(block.getType().name())) return blocks;
 
 		if (blocks.contains(block.getLocation())) return blocks;
 

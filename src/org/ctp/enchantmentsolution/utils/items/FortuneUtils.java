@@ -54,6 +54,7 @@ public class FortuneUtils {
 			case "EMERALD_ORE":
 			case "COAL_ORE":
 			case "NETHER_QUARTZ_ORE":
+			case "NETHER_GOLD_ORE":
 			case "LAPIS_ORE":
 				itemBreak = ItemBreakType.getType(item.getType());
 				if (itemBreak != null && itemBreak.getBreakTypes().contains(brokenBlock.getType())) {
@@ -80,6 +81,17 @@ public class FortuneUtils {
 					max = 5 + level;
 					breakBlock = Material.REDSTONE;
 				}
+			case "WEEPING_VINES":
+			case "TWISTING_VINES":
+				if(!minMax) {
+					chance = 2.0d/3.0d;
+					random = Math.random();
+					if(chance < random) {
+						min = 1;
+						max = level + 1;
+					}
+				}
+				minMax = true;
 			case "WHEAT":
 				if (!minMax) {
 					breakBlock = Material.WHEAT_SEEDS;
