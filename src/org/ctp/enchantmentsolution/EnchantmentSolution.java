@@ -14,7 +14,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.advancements.ESAdvancementProgress;
-import org.ctp.enchantmentsolution.commands.*;
+import org.ctp.enchantmentsolution.commands.EnchantmentSolutionCommand;
 import org.ctp.enchantmentsolution.database.SQLite;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.inventory.InventoryData;
@@ -120,23 +120,8 @@ public class EnchantmentSolution extends JavaPlugin {
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN, new SnapshotRunnable(), 1l, 1l);
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN, new WalkerRunnable(), 1l, 1l);
 
-		getCommand("Enchant").setExecutor(new Enchant());
-		getCommand("Info").setExecutor(new EnchantInfo());
-		getCommand("RemoveEnchant").setExecutor(new RemoveEnchant());
-		getCommand("EnchantUnsafe").setExecutor(new UnsafeEnchant());
-		getCommand("ESReload").setExecutor(new Reload());
-		getCommand("ESConfig").setExecutor(new ConfigEdit());
-		getCommand("ESReset").setExecutor(new Reset());
-		getCommand("ESDebug").setExecutor(new Debug());
-		getCommand("ESCalc").setExecutor(new EnchantabilityCalculator());
-		getCommand("ESBook").setExecutor(new Book());
-		getCommand("ESAnvil").setExecutor(new AnvilCommand());
-		getCommand("ESGrindstone").setExecutor(new GrindstoneCommand());
-		getCommand("ConfigLore").setExecutor(new ConfigLore());
-		getCommand("Enchant").setTabCompleter(new PlayerChatTabComplete());
-		getCommand("Info").setTabCompleter(new PlayerChatTabComplete());
-		getCommand("RemoveEnchant").setTabCompleter(new PlayerChatTabComplete());
-		getCommand("EnchantUnsafe").setTabCompleter(new PlayerChatTabComplete());
+		getCommand("EnchantmentSolution").setExecutor(new EnchantmentSolutionCommand());
+		getCommand("EnchantmentSolution").setTabCompleter(new EnchantmentSolutionCommand());
 
 		check = new VersionCheck(pluginVersion, "https://raw.githubusercontent.com/crashtheparty/EnchantmentSolution/master/VersionHistory", "https://www.spigotmc.org/resources/enchantment-solution.59556/", "https://github.com/crashtheparty/EnchantmentSolution", ConfigString.LATEST_VERSION.getBoolean(), ConfigString.EXPERIMENTAL_VERSION.getBoolean());
 		registerEvent(check);

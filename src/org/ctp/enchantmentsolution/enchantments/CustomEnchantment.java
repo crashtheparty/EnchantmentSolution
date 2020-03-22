@@ -178,7 +178,6 @@ public abstract class CustomEnchantment {
 	}
 
 	public boolean canEnchantItem(ItemData item) {
-//		if (disabledItems.contains(item)) return false;
 		for(ItemType type: getEnchantmentItemTypes()) {
 			if (type.getType().equals("custom") && MMOUtils.check(item, type, MMOUtils.MMOType.get(type.getCustomString()))) return true;
 			if (type.getItemTypes() != null) if (type.getItemTypes().contains(item.getMaterial())) return true;
@@ -187,7 +186,6 @@ public abstract class CustomEnchantment {
 	}
 
 	public boolean canAnvilItem(ItemData item) {
-//		if (disabledItems.contains(item)) return false;
 		if (item.getMaterial() == Material.ENCHANTED_BOOK) return true;
 		for(ItemType type: getAnvilItemTypes())
 			if (type.getItemTypes().contains(item.getMaterial())) return true;

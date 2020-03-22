@@ -58,6 +58,7 @@ table:
     lack-reqs: 'You do not meet the requirements to enchant this item.'
     lack-enchants: 'This item does not have enchantments generated.'
 commands: 
+    no-command: '&cThe subcommand %command% does not exist!'
     no-permission: '&cYou do not have permission to use this command!'
     no-permission-other: '&cYou do not have permission to use this command on another player!'
     invalid-level: '%level% is not a valid level. Setting level to 1.'
@@ -95,6 +96,116 @@ commands:
     invalid:
         console: 'Console Sender'
         null-player: '**null**'
+    aliases:
+        enchant:
+        - 'e'
+        - 'es'
+        - 'customenchant'
+        - 'ce'
+        - 'esce'
+        enchantunsafe:
+        - 'eu'
+        - 'customenchantunsafe'
+        - 'esu'
+        - 'ceu'
+        - 'esceu'
+        removeenchant:
+        - 'esr'
+        - 'customenchantremove'
+        - 'er'
+        - 'cer'
+        - 'escer'
+        anvil:
+        - 'esanvil'
+        grindstone:
+        - 'esgrindstone'
+        debug:
+        - 'esdebug'
+        book:
+        - 'esbook'
+        - 'custombook'
+        - 'cb'
+        - 'escb'
+        info:
+        - 'einfo'
+        - 'enchantinfo'
+        reload:
+        - 'esreload'
+        reset:
+        - 'esreset'
+        config:
+        - 'esconfig'
+        - 'esedit'
+        - 'ed'
+        lore:
+        - 'configlore'
+        - 'clore'
+        - 'cl'
+        calc:
+        - 'escalc'
+        - 'calculator'
+        - 'esc'
+        help:
+        - 'eshelp'
+        - 'h'
+    descriptions:
+        enchant: 'Enchants an item for a given player in the given slot.'
+        enchantunsafe: 'Enchants an item for a given player in the given slot. May enchant any item with any level of enchantment.'
+        removeenchant: 'Removes an enchant from item for a given player in the given slot.'
+        anvil: 'Opens the ES Anvil GUI for yourself.'
+        grindstone: 'Opens the ES Grindstone GUI for yourself.'
+        debug: 'Generates a debug.yml file to help the developer debug issues.'
+        book: 'Gives a book with a specified enchantment or random enchantments to a given player.'
+        info: 'Gets the information for a specified enchantment, or a list of enchantments.'
+        reload: 'Reloads the server configuration files.'
+        reset: 'Resets the inventories and enchantment table data for all players.'
+        edit: 'Modifies the configuration files in game.'
+        lore: 'Returns a chat color-formatted string to allow compatibility with other plugins.'
+        calc: 'Shows the values of enchantability for certain items and enchantments or potential enchantments.'
+        help: 'Shows description and usage of specified command or commands.'
+    usage:
+        enchant: 
+            main: 'Usage: %usage%\nAliases: %aliases%'
+            string: 'enchant <enchantment> <level> [player] [slot]'
+        enchantunsafe: 
+            main: 'Usage: %usage%\nAliases: %aliases%'
+            string: 'enchantunsafe <enchantment> <level> [player] [slot]'
+        removeenchant: 
+            main: 'Usage: %usage%\nAliases: %aliases%'
+            string: 'removeenchant <enchantment> [player] [slot]'
+        anvil: 
+            main: 'Usage: %usage%\nAliases: %aliases%'
+            string: 'anvil'
+        grindstone: 
+            main: 'Usage: %usage%\nAliases: %aliases%'
+            string: 'grindstone'
+        debug: 
+            main: 'Usage: %usage%\nAliases: %aliases%'
+            string: 'debug'
+        book: 
+            main: 'Usage: %usage%\nAliases: %aliases%'
+            string: 'book <enchantment> <level> [amount] OR book <RandomEnchant/RandomMultiEnchant> [treasure] [amount]'
+        info: 
+            main: 'Usage: %usage%\nAliases: %aliases%'
+            string: 'info [enchantment/page]'
+        reload: 
+            main: 'Usage: %usage%\nAliases: %aliases%'
+            string: 'reload'
+        reset: 
+            main: 'Usage: %usage%\nAliases: %aliases%'
+            string: 'reset'
+        edit: 
+            main: 'Usage: %usage%\nAliases: %aliases%'
+            string: 'edit'
+        lore: 
+            main: 'Usage: %usage%\nAliases: %aliases%'
+            string: 'lore enchantment/enchant <enchantment> [level] OR lore string <string...>'
+        calc: 
+            main: 'Usage: %usage%\nAliases: %aliases%'
+            string: 'calc'
+        help: 
+            main: 'Usage: %usage%\nAliases: %aliases%'
+            string: 'help [command]'
 grindstone: 
     legacy-open: '&aOpen the Grindstone'
     name: '&9Grindstone'
