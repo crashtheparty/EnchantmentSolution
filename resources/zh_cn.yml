@@ -1,6 +1,6 @@
 starter: '&8[&dEnchantment Solution&8]'
 wiki:
-    message: '&fLook for more information on &dEnchantment Solution&f at: '
+    message: '&f前往wiki查看更多有关&dEnchantment Solution&f的信息: '
 anvil: 
     name: '&9铁砧'
     mirror: '&f'
@@ -59,38 +59,38 @@ table:
     lack-enchants: '该物品没有附魔.'
 commands: 
     no-permission: '&c你没有权限使用这个指令!'
-    no-permission-other: '&cYou do not have permission to use this command on another player!'
+    no-permission-other: '&c你没有权限对其他玩家使用这个指令!'
     invalid-level: '%level%不是一个有效的等级. 已将等级设置为1.'
     level-too-low: '请设置正整数的附魔. 已将等级设置为1.'
     level-too-high: '%level%级太高了. 已将等级设置为%maxLevel%.'
-    invalid-slot: '%slot% is not a valid slot. Setting slot to player''s main hand.'
-    slot-too-low: 'Cannot set a negative slot. Setting slot to player''s main hand.'
-    slot-too-high: '%slot% is too high of a slot. Setting slot to player''s main hand.'
-    invalid-player: '%player% is not a valid player.'
-    add-enchant: 'Enchantment with name %enchant% with level %level% has been added to the item in slot %slot%.'
-    add-enchant-other: 'Enchantment with name %enchant% with level %level% has been added to %give_player%''s item in slot %slot%.'
-    other-added-enchant: 'Player %player% has given the enchantment %enchant% with level %level% to the item in slot %slot%.'
+    invalid-slot: '%slot%不是有效的格子序数. 已将格子序数设置为玩家右手的格子序数.'
+    slot-too-low: '无法将格子序数设置为负数. 已将格子序数设置为玩家右手的格子序数.'
+    slot-too-high: '%slot%超过了有效的格子序数. 已将格子序数设置为玩家右手的格子序数.'
+    invalid-player: '%player%不是活人.'
+    add-enchant: '已将%level%级的%enchant%附魔的添加到第%slot%格的物品上.'
+    add-enchant-other: '%level%级的%enchant%附魔添加到%give_player%的第%slot%格的物品上.'
+    other-added-enchant: '%player%将%level%级的%enchant%附魔添加到了第%slot%格的物品上.'
     cannot-enchant-item: '附魔在这件物品上无效.'
     too-many-enchants: '这件物品附魔过多.'
     enchant-fail: '你必须尝试附魔一件物品.'
     enchant-not-found: '找不到%enchant%这个附魔.'
     enchant-not-specified: '请指定附魔名.'
-    enchant-removed: 'Enchantment with name %enchant% has been removed from the item in slot %slot%.'
-    enchant-removed-other: 'Enchantment with name %enchant% has been removed from %remove_player%''s item in slot %slot%.'
-    other-removed-enchant: 'Player %player% has removed the enchantment %enchant% from the item in slot %slot%.'
+    enchant-removed: '已移除第%slot%格的物品上的%enchant%附魔.'
+    enchant-removed-other: '已从%remove_player%的第%slot%格的物品上移除%enchant%附魔.'
+    other-removed-enchant: '%player% 移除了第%slot%格的物品上的%enchant%附魔.'
     enchant-remove-from-item: '你必须指定附魔名.'
     reload: '已重载配置.'
     enchant-disabled: '该附魔已禁用，无法给物品附魔.'
-    reset-inventory: 'Closed all custom inventories and reset enchanting table enchantments.'
+    reset-inventory: '已关闭所有自定义背包并重置附魔台附魔.'
     debug: '调试信息已存储到debug.yml'
-    invalid-amount: '%amount% is not a valid amount. Setting amount to 1.'
-    give-book: 'You gave yourself an enchanted book.'
-    give-book-other: 'You gave %give_player% an enchanted book.'
-    receive-book: '%player% has given you an enchanted book.'
-    give-book-multiple: 'You gave yourself %amount% enchanted books.'
-    give-book-other-multiple: 'You gave %give_player% %amount% enchanted books.'
-    receive-book-multiple: '%player% has given you %amount% enchanted books.'
-    give-book-console: 'Console must specify a valid player to give the book to.'
+    invalid-amount: '%amount%不是有效的数量.已设置为1.'
+    give-book: '你给了自己一本附魔书.'
+    give-book-other: '你给了%give_player%一本附魔书.'
+    receive-book: '%player%给了你一本附魔书.'
+    give-book-multiple: '你给了自己%amount%本附魔书.'
+    give-book-other-multiple: '你给了%give_player%%amount%本附魔书.'
+    receive-book-multiple: '%player%给了你%amount%本附魔书.'
+    give-book-console: '你必须在控制台指定有效的玩家名.'
     console-player: 'Console'
     invalid:
         console: 'Console Sender'
@@ -120,50 +120,50 @@ grindstone:
     take-enchantments-lore: 
     - '&f所有该物品的附魔会被还原到附魔书上'
 calc:
-    name: '&9Enchantability Calculator'
+    name: '&9可附魔性计算器'
     enchantments: '&9%name%'
     enchantments_lore:
-    - '&6Enchantability Constant: &3%constant%'
-    - '&6Enchantability Modifier: &3%modifier%'
+    - '&6可附魔性常数: &3%constant%'
+    - '&6可附魔性倍数: &3%modifier%'
     pagination:
-        go_back: '&9Go Back'
-        previous_page: '&9Previous Page'
-        next_page: '&9Next Page'
-        enchantability_by_level: '&9View Enchantability by Level'
+        go_back: '&9返回'
+        previous_page: '&9上一页'
+        next_page: '&9下一页'
+        enchantability_by_level: '&9根据等级查看可附魔性'
     info:
-        constant: '&9Enchantability Constant'
+        constant: '&9可附魔性常数'
         constant_lore:
-        - '&6Current Value: &3%constant%'
-        - '&7Left click to edit with anvil'
-        - '&7Right click to edit in chat'
-        modifier: '&9Enchantability Modifier'
+        - '&6当前数值: &3%constant%'
+        - '&7左击铁砧进行编辑'
+        - '&7右击在聊天框内进行编辑'
+        modifier: '&9可附魔性Modifier'
         modifier_lore:
-        - '&6Current Value: &3%modifier%'
-        - '&7Left click to edit with anvil'
-        - '&7Right click to edit in chat'
-        select_enchantment: '&9Select from Enchantment'
-        calculate: '&9Calculate'
+        - '&6当前数值: &3%modifier%'
+        - '&7左击铁砧进行编辑'
+        - '&7右击在聊天框内进行编辑'
+        select_enchantment: '&9选择附魔'
+        calculate: '&9计算'
     enchantability_values:
-        wooden_tools: '&9Wooden Tools and Weapons'
-        golden_tools: '&9Golden Tools and Weapons'
-        stone_tools: '&9Stone Tools and Weapons'
-        iron_tools: '&9Iron Tools and Weapons'
-        diamond_tools: '&9Diamond Tools and Weapons'
-        leather_armor: '&9Leather Armor'
-        golden_armor: '&9Golden Armor'
-        chainmail_armor: '&9Chainmail Armor'
-        iron_armor: '&9Iron Armor'
-        diamond_armor: '&9Diamond Armor'
-        other: '&9Books and Other Items'
+        wooden_tools: '&9木制工具和武器'
+        golden_tools: '&9金制工具和武器'
+        stone_tools: '&9石制工具和武器'
+        iron_tools: '&9铁制工具和武器'
+        diamond_tools: '&9钻石工具和武器'
+        leather_armor: '&9皮革护甲'
+        golden_armor: '&9金制护甲'
+        chainmail_armor: '&9锁链护甲'
+        iron_armor: '&9铁制护甲'
+        diamond_armor: '&9钻石护甲'
+        other: '&9书和其它物品'
     enchantability_lore:
-    - '&6Resource Enchantability: &3%resource%'
-    - '&6Max Level from Enchantability: &3%max_level%'
-    - '&6Max Enchantability at Level %level%: &3%max_enchantability%'
-    by_level: '&9Level %level%'
+    - '&6资源可附魔性: &3%resource%'
+    - '&6可附魔性最高等级: &3%max_level%'
+    - '&6%level%级可附魔性上限: &3%max_enchantability%'
+    by_level: '&9%level%级'
     by_level_lore:
-    - '&6Required Enchantability: &3%constant%+'
-    invalid_number: 'Invalid number, setting to 0.'
-    enter_string: 'Enter the string message into the chat.'
+    - '&6所需可附魔性: &3%constant%+'
+    invalid_number: '数字无效,已设置为0.'
+    enter_string: '请在聊天框处输入消息.'
 
 enchantment: 
     name: '&6展示名: &f'
@@ -198,7 +198,7 @@ enchantment:
             projectile_protection: '减少受到的弹射物伤害 (弓箭、火球等).'
             protection: '减少受到的所有伤害, 除了虚空伤害、/kill 自杀和饥饿伤害.'
             punch: '增加弓箭击退距离.'
-            quick_charge: '增加十字弓装填速度.'
+            quick_charge: '增加弩装填速度.'
             respiration: '增加水下呼吸时间.'
             riptide: '可用三叉戟进行快速传送.'
             sharpness: '增加近战伤害.\n1级增加1点伤害,每级增加0.5点（半颗心）伤害.'
@@ -366,74 +366,74 @@ vanilla:
             iron_sword: '铁剑'
             diamond_leggings: '钻石护腿'
             golden_leggings: '金护腿'
-            crossbow: '十字弓'
+            crossbow: '弩'
             
 item_display_types:
-    all: "All Normal Items"
-    armor: "Armor"
-    axes: "Axes"
-    book: "Books"
-    boots: "Boots"
-    bow: "Bow"
-    carrot_on_a_stick: "Carrot on a Stick"
-    chainmail_armor: "Chainmail Armor"
-    chestplates: "Chestplates"
-    crossbow: "Crossbow"
-    diamond_armor: "Diamond Armor"
-    diamond_tools: "Diamond Tools"
-    elytra: "Elytra"
-    enchantable: "Enchantable"
-    fishing_rod: "Fishing Rod"
-    flint_and_steel: "Flint and Steel"
-    golden_armor: "Golden Armor"
-    golden_tools: "Golden Tools"
-    helmets: "Helmets"
+    all: "所有正常物品"
+    armor: "护甲"
+    axes: "斧头"
+    book: "书"
+    boots: "鞋子"
+    bow: "弓"
+    carrot_on_a_stick: "萝卜钓竿"
+    chainmail_armor: "锁链护甲"
+    chestplates: "胸甲"
+    crossbow: "弩"
+    diamond_armor: "钻石护甲"
+    diamond_tools: "钻石工具"
+    elytra: "鞘翅"
+    enchantable: "可附魔"
+    fishing_rod: "钓鱼竿"
+    flint_and_steel: "打火石"
+    golden_armor: "金制护甲"
+    golden_tools: "金制工具"
+    helmets: "头盔"
     hoes: "Hoes"
-    iron_armor: "Iron Armor"
-    iron_tools: "Iron Tools"
-    leather_armor: "Leather Armor"
-    leggings: "Leggings"
-    melee: "Melee Weapons"
-    misc: "Misc"
-    other: "Other"
-    pickaxes: "Pickaxes"
-    ranged: "Ranged Weapons"
-    shears: "Shears"
-    shield: "Shield"
-    shovels: "Shovels"
-    shulker_boxes: "Shulker Boxes"
-    stone_tools: "Stone Tools"
-    swords: "Swords"
-    tools: "Tools"
-    trident: "Trident"
-    turtle_helmet: "Turtle Helmet"
-    wooden_tools: "Wooden Tools"
-    none: "None"
+    iron_armor: "铁制护甲"
+    iron_tools: "铁制工具"
+    leather_armor: "皮革护甲"
+    leggings: "护腿"
+    melee: "近战武器"
+    misc: "杂项"
+    other: "其它"
+    pickaxes: "镐"
+    ranged: "远程武器"
+    shears: "剪刀"
+    shield: "盾牌"
+    shovels: "铲"
+    shulker_boxes: "潜影盒"
+    stone_tools: "石制工具"
+    swords: "剑"
+    tools: "工具"
+    trident: "三叉戟"
+    turtle_helmet: "海龟壳"
+    wooden_tools: "木制工具"
+    none: "无"
 misc:
-    no_conflicting_enchantments: "None"
-    no_disabled_items: "None"
+    no_conflicting_enchantments: "无"
+    no_disabled_items: "无"
     true: "True"
     false: "False"
-    beheading_skull: "&7%player%'s Skull"
-    null_advancement_name: "No Name"
-    null_advancement_description: "No Description"
+    beheading_skull: "&7%player%的头"
+    null_advancement_name: "未命名"
+    null_advancement_description: "无描述"
 
 advancements: 
     enchantments/agricultural_revolution: 
-        name: 'Agricultural Revolution'
-        description: 'Who likes farming and animals? We do!'
+        name: '农业革命'
+        description: '谁会喜欢耕种和畜牧? 我们喜欢!'
     enchantments/industrial_revolution: 
-        name: 'Industrial Revolution'
-        description: 'Simplifying your life, one environmentally-destructive way at a time.'
+        name: '工业革命'
+        description: '简化你的生活,虽然这会破坏环境.'
     enchantments/scientific_revolution: 
-        name: 'Scientific Revolution'
-        description: 'Marvelous wonders or dystopian nightmares? You decide.'
+        name: '科技革命'
+        description: '这是丰功伟业还是反乌托邦的噩梦?这由你来决定.'
     enchantments/imperial_revolution: 
-        name: 'Imperial Revolution'
-        description: 'Conquer the world! Take no prisoners.'
+        name: '帝国革命'
+        description: '征服世界! 为达目的,不择手段.'
     enchantments/mechanical_revolution: 
-        name: 'Mechanical Revolution'
-        description: 'Hop into your new mech suit and go save the day!'
+        name: '机械革命'
+        description: '穿上你的机械战甲拯救世界吧!'
     enchantments/enchantment_solution: 
         name: '更多的附魔'
         description: '更多附魔的进度'
@@ -595,7 +595,7 @@ advancements:
         description: '使用牺牲附魔的胸甲杀死玩家'
     enchantments/look_what_you_made_me_do: 
         name: '自食其果'
-        description: '使用劫掠附魔的十字弓杀死刌民'
+        description: '使用劫掠附魔的弩杀死刌民'
     enchantments/just_die_already: 
         name: '你已经死了!'
         description: '使用投石附魔秒杀幻翼'
@@ -630,20 +630,20 @@ advancements:
         name: '超过9000'
         description: '使用横掘千古或纵毁八荒附魔获得9001件物品'
     enchantments/plague_inc: 
-        name: 'Plague Inc.'
-        description: 'Spread the Contagion Curse to another item'
+        name: '瘟疫公司'
+        description: '将诅咒附魔传染到其他物品上'
     enchantments/blast_off: 
-        name: 'Blast Off'
-        description: 'Detonate a creeper faster than usual'
+        name: '点火起飞'
+        description: '比以往更快地引爆苦力怕'
     enchantments/extermination: 
-        name: 'Extermination'
-        description: 'Infect an item with all possible curses'
+        name: '片甲不留'
+        description: '给物品染上所有类型的附魔'
     enchantments/penetration: 
-        name: 'Penetration'
-        description: 'Damage a mob with a projectile when it shouldn''t do damage'
+        name: '弱点击破'
+        description: '使用弹射物对原本不应造成伤害的怪物造成伤害'
     enchantments/carpet_bombs: 
-        name: 'Carpet Bombs'
-        description: 'Cause 100 explosions with Detonator'
+        name: '地毯式轰炸'
+        description: '使用炸药引发100场爆炸'
     enchantments/kilimanjaro: 
-        name: 'Kilimanjaro!'
-        description: 'Kill 10 mobs within 4.5 seconds with Overkill'
+        name: '乞力马扎罗!'
+        description: '在4.5秒内使用Overkill杀死10只怪物'

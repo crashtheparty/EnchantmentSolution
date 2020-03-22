@@ -48,6 +48,9 @@ public class LegacyAnvil implements InventoryData {
 	}
 
 	@Override
+	public void setInventory() {}
+
+	@Override
 	public void setInventory(List<ItemStack> items) {}
 
 	@Override
