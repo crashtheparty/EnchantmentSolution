@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
+import org.ctp.enchantmentsolution.enchantments.generate.TableEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.inventory.*;
 import org.ctp.enchantmentsolution.listeners.VanishListener;
@@ -197,23 +198,13 @@ public class CommandUtils {
 	
 	public static boolean reset(CommandSender sender, ESCommand details, String[] args) {
 		Player player = null;
-		if (sender instanceof Player) {
-			player = (Player) sender;
-			if (player.hasPermission(details.getPermission())) {
-				InventoryData inv = EnchantmentSolution.getPlugin().getInventory(player);
-				if (inv == null) {
-					inv = new Grindstone(player, null);
-					EnchantmentSolution.getPlugin().addInventory(inv);
-					inv.setInventory();
-				} else if (!(inv instanceof Grindstone)) {
-					inv.close(true);
-					inv = new Grindstone(player, null);
-					EnchantmentSolution.getPlugin().addInventory(inv);
-					inv.setInventory();
-				}
-			} else
-				ChatUtils.sendMessage(player, ChatUtils.getMessage(ChatUtils.getCodes(), "commands.no-permission"));
-		}
+		if (sender instanceof Player) player = (Player) sender; 
+		if (sender.hasPermission(details.getPermission())) {
+			EnchantmentSolution.getPlugin().resetInventories();
+			TableEnchantments.removeAllTableEnchantments();
+			ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(ChatUtils.getCodes(), "commands.reset-inventory"), Level.INFO);
+		} else
+			ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(ChatUtils.getCodes(), "commands.no-permission"), Level.WARNING);
 		return true;
 	}
 
