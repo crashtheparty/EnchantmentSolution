@@ -36,6 +36,7 @@ public enum ConfigString {
 	WIKI_ON_TIMER(Type.MAIN, "wiki.on_timer", boolean.class),
 	WIKI_TIMER(Type.MAIN, "wiki.timer_seconds", int.class),
 	WIKI_URL(Type.MAIN, "wiki.url", String.class),
+	RPG(Type.MAIN, "rpg", boolean.class),
 	ADVANCED_OPTIONS(Type.ENCHANTMENTS, "advanced_options.use", boolean.class),
 	DECAY(Type.ENCHANTMENTS, "advanced_options.enchantability_decay", boolean.class),
 	STARTING_LEVEL(Type.ENCHANTMENTS, "advanced_options.starting_level", boolean.class),

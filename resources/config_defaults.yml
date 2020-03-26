@@ -90,6 +90,7 @@ loots:
             treasure: true
 
 gametype: 'survival'
+rpg: false
 
 config_comments: 
 

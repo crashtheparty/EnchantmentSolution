@@ -1,11 +1,14 @@
 package org.ctp.enchantmentsolution.rpg;
 
 import java.math.*;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.boss.*;
+import org.bukkit.enchantments.Enchantment;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.rpg.threads.RPGThread;
 
@@ -16,17 +19,20 @@ public class RPGPlayer {
 	private BigInteger experience;
 	private BossBar bar;
 	private RPGThread run;
+	private Map<Enchantment, Integer> enchantmentList;
 	
 	public RPGPlayer(OfflinePlayer player) {
 		this.player = player;
 		this.level = 0;
 		this.experience = new BigInteger("0");
+		enchantmentList = new HashMap<Enchantment, Integer>();
 	}
 	
 	public RPGPlayer(OfflinePlayer player, int level, String experience) {
 		this.player = player;
 		this.level = level;
 		this.experience = new BigInteger(experience);
+		enchantmentList = new HashMap<Enchantment, Integer>();
 	}
 	
 	public void addExperience(int exp) {
@@ -75,6 +81,10 @@ public class RPGPlayer {
 		Bukkit.getScheduler().cancelTask(run.getId());
 		bar.setVisible(false);
 		run = null;
+	}
+	
+	public boolean hasEnchantment(Enchantment enchantment, int i) {
+		return enchantmentList.containsKey(enchantment) && enchantmentList.get(enchantment).intValue() >= i;
 	}
 	
 }

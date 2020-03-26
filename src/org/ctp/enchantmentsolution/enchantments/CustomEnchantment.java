@@ -12,6 +12,7 @@ import org.ctp.enchantmentsolution.enchantments.helper.Weight;
 import org.ctp.enchantmentsolution.enums.ItemData;
 import org.ctp.enchantmentsolution.enums.ItemType;
 import org.ctp.enchantmentsolution.enums.Language;
+import org.ctp.enchantmentsolution.rpg.RPGUtils;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.PermissionUtils;
 import org.ctp.enchantmentsolution.utils.StringUtils;
@@ -245,7 +246,8 @@ public abstract class CustomEnchantment {
 	public int getEnchantLevel(Player player, int enchantability) {
 		for(int i = getMaxLevel(); i > 0; i--) {
 			int level = enchantability(i);
-			if (PermissionUtils.canEnchant(player, this, i)) if (enchantability >= level) return i;
+			ChatUtils.sendInfo("Is trying to get enchantability: " + this.getName() + " " + i);
+			if (PermissionUtils.canEnchant(player, this, i) && RPGUtils.canEnchant(player, this, i) && enchantability >= level) return i;
 		}
 		return 0;
 	}
