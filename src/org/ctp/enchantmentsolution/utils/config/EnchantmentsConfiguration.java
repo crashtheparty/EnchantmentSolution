@@ -55,7 +55,7 @@ public class EnchantmentsConfiguration extends Configuration {
 			} else if (enchant.getRelativeEnchantment() instanceof CustomEnchantmentWrapper) namespace = "custom_enchantments";
 			String start = namespace + "." + enchant.getName().toLowerCase();
 			config.addDefault(start + ".enabled", true);
-			config.addDefault(start + ".treasure", enchant.isTreasure());
+			config.addDefault(start + ".enchantment_locations", enchant.getDefaultEnchantmentLocations());
 			start += ".advanced";
 			config.addDefault(start + ".weight", enchant.getDefaultWeightName());
 			config.addEnum(start + ".weight", Arrays.asList(Weight.VERY_RARE.getName(), Weight.RARE.getName(), Weight.UNCOMMON.getName(), Weight.COMMON.getName(), Weight.NULL.getName()));
@@ -86,7 +86,7 @@ public class EnchantmentsConfiguration extends Configuration {
 			if (enchant.getRelativeEnchantment() instanceof ApiEnchantmentWrapper) if (plugin.equals(((ApiEnchantmentWrapper) enchant.getRelativeEnchantment()).getPlugin())) {
 				String namespace = plugin.getName().toLowerCase() + "." + enchant.getName().toLowerCase();
 				config.addDefault(namespace + ".enabled", true);
-				config.addDefault(namespace + ".treasure", enchant.isTreasure());
+				config.addDefault(namespace + ".enchantment_locations", enchant.getDefaultEnchantmentLocations());
 				namespace += ".advanced";
 				config.addDefault(namespace + ".weight", enchant.getDefaultWeightName());
 				config.addEnum(namespace + ".weight", Arrays.asList(Weight.VERY_RARE.getName(), Weight.RARE.getName(), Weight.UNCOMMON.getName(), Weight.COMMON.getName(), Weight.NULL.getName()));

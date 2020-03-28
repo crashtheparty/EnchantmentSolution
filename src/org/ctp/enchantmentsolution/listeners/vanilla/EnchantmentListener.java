@@ -28,7 +28,7 @@ public class EnchantmentListener implements Listener {
 		Player player = event.getEnchanter();
 		int bookshelves = LocationUtils.getBookshelves(event.getEnchantBlock().getLocation());
 		ItemStack item = event.getItem();
-		TableEnchantments table = TableEnchantments.getTableEnchantments(player, item, bookshelves, false);
+		TableEnchantments table = TableEnchantments.getTableEnchantments(player, item, bookshelves);
 		if (event.getOffers()[0] == null) return;
 		for(int i = 0; i < event.getOffers().length; i++)
 			for(EnchantmentLevel ench: table.getEnchantments(new ItemData(item))[i].getEnchantments()) {
@@ -45,7 +45,7 @@ public class EnchantmentListener implements Listener {
 		Player player = event.getEnchanter();
 		int bookshelves = LocationUtils.getBookshelves(event.getEnchantBlock().getLocation());
 		ItemStack item = event.getItem();
-		TableEnchantments table = TableEnchantments.getTableEnchantments(player, item, bookshelves, false);
+		TableEnchantments table = TableEnchantments.getTableEnchantments(player, item, bookshelves);
 		for(int i = 0; i < table.getLevelList().getList().length; i++) {
 			Integer integer = table.getLevelList().getList()[i].getLevel();
 			if (integer == event.getExpLevelCost()) {

@@ -10,6 +10,7 @@ import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentList;
 import org.ctp.enchantmentsolution.enchantments.helper.Level;
 import org.ctp.enchantmentsolution.enchantments.helper.LevelList;
+import org.ctp.enchantmentsolution.enums.EnchantmentLocation;
 import org.ctp.enchantmentsolution.enums.ItemData;
 import org.ctp.enchantmentsolution.enums.MatData;
 import org.ctp.enchantmentsolution.utils.yaml.YamlConfig;
@@ -21,15 +22,14 @@ public class TableEnchantments extends GenerateEnchantments {
 	private int bookshelves;
 	private static List<TableEnchantments> TABLES = new ArrayList<TableEnchantments>();
 
-	public static TableEnchantments getTableEnchantments(Player player, ItemStack item, int bookshelves,
-	boolean treasure) {
+	public static TableEnchantments getTableEnchantments(Player player, ItemStack item, int bookshelves) {
 		for(TableEnchantments enchantments: TABLES)
 			if (enchantments.isSimilar(player, bookshelves)) {
 				if (item != null) enchantments.generateEnchantments(new ItemData(item));
 				return enchantments;
 			}
 
-		TableEnchantments enchantments = new TableEnchantments(player, bookshelves, treasure);
+		TableEnchantments enchantments = new TableEnchantments(player, bookshelves);
 		if (item != null) enchantments.generateEnchantments(new ItemData(item));
 		TABLES.add(enchantments);
 		return enchantments;
@@ -51,15 +51,15 @@ public class TableEnchantments extends GenerateEnchantments {
 		}
 	}
 
-	private TableEnchantments(Player player, int bookshelves, boolean treasure) {
-		super(player, null, treasure);
+	private TableEnchantments(Player player, int bookshelves) {
+		super(player, null, EnchantmentLocation.TABLE);
 		this.bookshelves = bookshelves;
 		levelList = new LevelList(bookshelves);
 	}
 
 	private TableEnchantments(OfflinePlayer player, int bookshelves, boolean treasure, LevelList levelList,
 	HashMap<ItemData, EnchantmentList[]> enchantmentList) {
-		super(player, null, treasure);
+		super(player, null, EnchantmentLocation.TABLE);
 		this.bookshelves = bookshelves;
 		this.levelList = levelList;
 		this.enchantmentList = enchantmentList;
@@ -79,7 +79,7 @@ public class TableEnchantments extends GenerateEnchantments {
 			EnchantmentList[] list = new EnchantmentList[levelList.getList().length];
 			for(int i = 0; i < list.length; i++) {
 				Level level = levelList.getList()[i];
-				if (level != null && level.getLevel() > -1) list[i] = new EnchantmentList(getPlayer().getPlayer(), level, item, isTreasure());
+				if (level != null && level.getLevel() > -1) list[i] = new EnchantmentList(getPlayer().getPlayer(), level, item, getLocation());
 			}
 
 			enchantmentList.put(item, list);
@@ -127,7 +127,7 @@ public class TableEnchantments extends GenerateEnchantments {
 			ItemData item = new ItemData(new MatData(itemData[0]).getMaterial(), itemData[1], itemData[2]);
 			if (item != null && item.getMaterial() != null) {
 				for(Level level: levelList.getList())
-					list[level.getSlot()] = EnchantmentList.fromConfig(config, i, j, level.getSlot(), player, level, item, treasure);
+					list[level.getSlot()] = EnchantmentList.fromConfig(config, i, j, level.getSlot(), player, level, item);
 				enchantmentList.put(item, list);
 			}
 			j++;
@@ -143,7 +143,6 @@ public class TableEnchantments extends GenerateEnchantments {
 	public void setConfig(YamlConfig config, int i) {
 		config.set("enchanting_table." + i + ".player", getPlayer().getUniqueId().toString());
 		config.set("enchanting_table." + i + ".bookshelves", getBookshelves());
-		config.set("enchanting_table." + i + ".treasure", isTreasure());
 
 		getLevelList().setConfig(config, i);
 

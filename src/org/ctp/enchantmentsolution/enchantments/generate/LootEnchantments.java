@@ -5,6 +5,7 @@ import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentList;
 import org.ctp.enchantmentsolution.enchantments.helper.Level;
 import org.ctp.enchantmentsolution.enchantments.helper.LevelList;
+import org.ctp.enchantmentsolution.enums.EnchantmentLocation;
 import org.ctp.enchantmentsolution.enums.ItemData;
 
 public abstract class LootEnchantments extends GenerateEnchantments {
@@ -12,12 +13,12 @@ public abstract class LootEnchantments extends GenerateEnchantments {
 	private LevelList levelList;
 	private EnchantmentList[] list;
 
-	public LootEnchantments(Player player, ItemStack item, boolean treasure) {
-		super(player, item, treasure);
+	public LootEnchantments(Player player, ItemStack item, EnchantmentLocation location) {
+		super(player, item, location);
 	}
 
-	public LootEnchantments(Player player, ItemStack item, int bookshelves, boolean treasure) {
-		super(player, item, treasure);
+	public LootEnchantments(Player player, ItemStack item, int bookshelves, EnchantmentLocation location) {
+		super(player, item, location);
 
 		levelList = new LevelList(bookshelves);
 
@@ -26,7 +27,7 @@ public abstract class LootEnchantments extends GenerateEnchantments {
 		if (getPlayer() != null) p = getPlayer().getPlayer();
 		for(int i = 0; i < list.length; i++) {
 			Level level = levelList.getList()[i];
-			if (level.getLevel() > -1) list[i] = new EnchantmentList(p, level, new ItemData(item), isTreasure());
+			if (level.getLevel() > -1) list[i] = new EnchantmentList(p, level, new ItemData(item), location);
 		}
 	}
 

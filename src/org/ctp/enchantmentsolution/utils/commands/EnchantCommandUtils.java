@@ -288,9 +288,7 @@ public class EnchantCommandUtils {
 		if (args.length > 2) {
 			String arg = args[2];
 			if (arg.equals("RandomEnchant") || arg.equals("RandomMultiEnchant")) {
-				boolean treasure = false;
-				if (args.length > 2) treasure = Boolean.valueOf(args[2]);
-				levels = GenerateUtils.generateBookLoot(givePlayer, new ItemStack(Material.BOOK), treasure);
+				levels = GenerateUtils.generateBookLoot(givePlayer, new ItemStack(Material.BOOK));
 				if (arg.equals("RandomEnchant")) for(int i = levels.size() - 1; i > 0; i--)
 					levels.remove(i);
 			} else

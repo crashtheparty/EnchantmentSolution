@@ -10,7 +10,6 @@ import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
-import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 
 public class RPGUtils {
@@ -54,7 +53,6 @@ public class RPGUtils {
 	}
 
 	public static boolean canEnchant(Player player, CustomEnchantment customEnchantment, int i) {
-		ChatUtils.sendInfo("Can Enchant: " + !ConfigString.RPG.getBoolean());
 		if (!ConfigString.RPG.getBoolean()) return true;
 		
 		RPGPlayer rpg = getPlayer(player);

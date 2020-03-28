@@ -426,6 +426,16 @@ enchantment:
             wand: 'Wand'
             warp: 'Warp'
             width_plus_plus: 'Width++'
+    locations:
+        none: 'None'
+        table: 'Enchanting Table'
+        non_book: 'Tools/Weapons/Armor'
+        chest_loot: 'Chest Loot'
+        mob_loot: 'Mob Loot'
+        fishing_loot: 'Fishing Loot'
+        villager_trades: 'Villager Trades'
+        piglin_trades: 'Piglin Trades'
+    locations_string: '&6Enchantment Locations: &f'
 irenes_lasso: 
     error: 'This animal does not belong to you!'
 vanilla: 
@@ -538,6 +548,7 @@ misc:
     beheading_skull: "&7%player%'s Skull"
     null_advancement_name: "No Name"
     null_advancement_description: "No Description"
+    no_enchantment_locations: 'No Enchantment Locations'
 
 advancements: 
     enchantments/agricultural_revolution: 

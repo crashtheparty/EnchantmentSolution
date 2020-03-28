@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentList;
+import org.ctp.enchantmentsolution.enums.EnchantmentLocation;
 import org.ctp.enchantmentsolution.enums.ItemData;
 import org.ctp.enchantmentsolution.utils.Configurations;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
@@ -18,25 +19,24 @@ public class FishingEnchantments extends LootEnchantments {
 
 	private EnchantmentList enchantmentList;
 
-	private FishingEnchantments(Player player, ItemStack item, boolean treasure, List<EnchantmentLevel> fishing,
+	private FishingEnchantments(Player player, ItemStack item, List<EnchantmentLevel> fishing,
 	double multiEnchant) {
-		super(player, item, treasure);
+		super(player, item, EnchantmentLocation.FISHING_LOOT);
 
-		setEnchantmentList(new EnchantmentList(player, new ItemData(item), true, fishing, multiEnchant));
+		setEnchantmentList(new EnchantmentList(player, new ItemData(item), EnchantmentLocation.FISHING_LOOT, fishing, multiEnchant));
 	}
 
-	private FishingEnchantments(Player player, ItemStack item, int bookshelves, boolean treasure) {
-		super(player, item, bookshelves, treasure);
+	private FishingEnchantments(Player player, ItemStack item, int bookshelves) {
+		super(player, item, bookshelves, EnchantmentLocation.FISHING_LOOT);
 	}
 
-	public static FishingEnchantments getFishingEnchantments(Player player, ItemStack item, int minBookshelves,
-	boolean treasure) {
+	public static FishingEnchantments getFishingEnchantments(Player player, ItemStack item, int minBookshelves) {
 		int books = 16;
 		if (ConfigString.LEVEL_FIFTY.getBoolean()) books = 24;
 		int random = (int) (Math.random() * books) + minBookshelves;
 		if (random >= books) random = books - 1;
 
-		return new FishingEnchantments(player, item, books, treasure);
+		return new FishingEnchantments(player, item, books);
 	}
 
 	public static FishingEnchantments getFishingEnchantments(Player player, ItemStack item) {
@@ -63,7 +63,7 @@ public class FishingEnchantments extends LootEnchantments {
 			}
 		}
 
-		if (fishing != null) return new FishingEnchantments(player, item, ConfigString.LOOT_TREASURE.getBoolean("fishing.treasure"), fishing, config.getDouble(location + "." + tier + ".multiple_enchants_chance"));
+		if (fishing != null) return new FishingEnchantments(player, item, fishing, config.getDouble(location + "." + tier + ".multiple_enchants_chance"));
 
 		return null;
 	}

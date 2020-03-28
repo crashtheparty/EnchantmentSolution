@@ -9,6 +9,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.MerchantRecipe;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentList;
+import org.ctp.enchantmentsolution.enums.EnchantmentLocation;
 import org.ctp.enchantmentsolution.utils.VersionUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 import org.ctp.enchantmentsolution.utils.items.ItemUtils;
@@ -20,7 +21,7 @@ public class VillagerEnchantments extends LootEnchantments {
 
 	private VillagerEnchantments(Player player, ItemStack item, int bookshelves, boolean treasure,
 	MerchantRecipe original) {
-		super(player, item, bookshelves, treasure);
+		super(player, item, bookshelves, EnchantmentLocation.VILLAGER_TRADES);
 
 		setMerchantRecipe(original);
 	}
@@ -51,7 +52,7 @@ public class VillagerEnchantments extends LootEnchantments {
 		List<ItemStack> ingredients = new ArrayList<ItemStack>();
 		EnchantmentLevel enchant = enchantments.get(0);
 		if (mat == Material.BOOK || mat == Material.ENCHANTED_BOOK) {
-			if (enchant.getEnchant().isTreasure()) levelPrice[1] *= 2;
+			if (!enchant.getEnchant().getEnchantmentLocations().contains(EnchantmentLocation.TABLE)) levelPrice[1] *= 2;
 			if (levelPrice[1] > 64) levelPrice[1] = 64;
 			ItemStack priceItem = new ItemStack(Material.EMERALD, levelPrice[1]);
 			ingredients.add(new ItemStack(mat));

@@ -41,6 +41,7 @@ public class EnchantmentTable implements InventoryData {
 		this.block = block;
 	}
 
+	@Override
 	public void setInventory() {
 		setInventory(playerItems);
 	}
@@ -67,7 +68,7 @@ public class EnchantmentTable implements InventoryData {
 			for(int i = 0; i < 54; i++)
 				if (i % 9 == 1 || i % 9 == 2 || i / 9 == 1) inv.setItem(i, mirror);
 
-			TableEnchantments table = TableEnchantments.getTableEnchantments(player, null, getBooks(), false);
+			TableEnchantments table = TableEnchantments.getTableEnchantments(player, null, getBooks());
 			LevelList list = table.getLevelList();
 
 			for(int i = 1; i <= 6; i++) {
@@ -253,7 +254,7 @@ public class EnchantmentTable implements InventoryData {
 				return;
 			}
 
-		TableEnchantments table = TableEnchantments.getTableEnchantments(player, null, getBooks(), false);
+		TableEnchantments table = TableEnchantments.getTableEnchantments(player, null, getBooks());
 		if (player.getGameMode().equals(GameMode.SURVIVAL) || player.getGameMode().equals(GameMode.ADVENTURE)) {
 			player.setLevel(player.getLevel() - level - 1);
 			int remove = level + 1;

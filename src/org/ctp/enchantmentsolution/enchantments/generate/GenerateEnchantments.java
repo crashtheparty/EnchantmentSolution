@@ -3,17 +3,18 @@ package org.ctp.enchantmentsolution.enchantments.generate;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.ctp.enchantmentsolution.enums.EnchantmentLocation;
 
 public abstract class GenerateEnchantments {
 
 	private OfflinePlayer player;
 	private ItemStack item;
-	private boolean treasure;
+	private EnchantmentLocation location;
 
-	public GenerateEnchantments(OfflinePlayer player, ItemStack item, boolean treasure) {
+	public GenerateEnchantments(OfflinePlayer player, ItemStack item, EnchantmentLocation location) {
 		this.player = player;
 		this.item = item;
-		this.treasure = treasure;
+		this.location = location;
 	}
 
 	public OfflinePlayer getPlayer() {
@@ -32,12 +33,12 @@ public abstract class GenerateEnchantments {
 		this.item = item;
 	}
 
-	public boolean isTreasure() {
-		return treasure;
+	public EnchantmentLocation getLocation() {
+		return location;
 	}
 
-	public void setTreasure(boolean treasure) {
-		this.treasure = treasure;
+	public void setLocation(EnchantmentLocation location) {
+		this.location = location;
 	}
 
 }

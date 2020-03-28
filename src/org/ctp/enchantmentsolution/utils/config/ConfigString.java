@@ -28,7 +28,7 @@ public enum ConfigString {
 	PROTECTION_CONFLICTS(Type.MAIN, "protection_conflicts", boolean.class),
 	LANGUAGE_FILE(Type.MAIN, "language_file", String.class), LANGUAGE(Type.MAIN, "language", String.class),
 	VILLAGER_TRADES(Type.MAIN, "villager_trades", boolean.class), LORE_ON_TOP(Type.MAIN, "lore_on_top", boolean.class),
-	LOOT_BOOKSHELVES(Type.MAIN, "loots.", int.class, true), LOOT_TREASURE(Type.MAIN, "loots.", boolean.class, true),
+	LOOT_BOOKSHELVES(Type.MAIN, "loots.", int.class, true),
 	LOOT_LEVELS(Type.MAIN, "loots.", int.class, true), USE_LOOT(Type.MAIN, "loots.", boolean.class, true),
 	LATEST_VERSION(Type.MAIN, "version.get_latest", boolean.class),
 	EXPERIMENTAL_VERSION(Type.MAIN, "version.get_experimental", boolean.class),

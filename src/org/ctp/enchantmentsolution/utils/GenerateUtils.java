@@ -24,9 +24,8 @@ public class GenerateUtils {
 
 	public static ItemStack generateChestLoot(Player player, ItemStack item, String lootType) {
 		int minBookshelves = ConfigString.LOOT_BOOKSHELVES.getInt("loots.chests." + lootType + ".bookshelves");
-		boolean treasure = ConfigString.LOOT_TREASURE.getBoolean("loots.chests." + lootType + ".treasure");
 
-		ChestEnchantments enchantments = ChestEnchantments.getChestEnchantment(player, item, minBookshelves, treasure);
+		ChestEnchantments enchantments = ChestEnchantments.getChestEnchantment(player, item, minBookshelves);
 
 		List<EnchantmentList> lists = getLists(enchantments.getList());
 		int random = (int) (Math.random() * lists.size());
@@ -36,8 +35,8 @@ public class GenerateUtils {
 		return ItemUtils.addEnchantmentsToItem(item, levels);
 	}
 
-	public static List<EnchantmentLevel> generateBookLoot(Player player, ItemStack item, boolean treasure) {
-		ChestEnchantments enchantments = ChestEnchantments.getChestEnchantment(player, item, 0, treasure);
+	public static List<EnchantmentLevel> generateBookLoot(Player player, ItemStack item) {
+		ChestEnchantments enchantments = ChestEnchantments.getChestEnchantment(player, item, 0);
 
 		List<EnchantmentList> lists = getLists(enchantments.getList());
 		int random = (int) (Math.random() * lists.size());
@@ -45,8 +44,8 @@ public class GenerateUtils {
 		return lists.get(random).getEnchantments();
 	}
 
-	public static ItemStack generateFishingLoot(Player player, ItemStack item, int minBookshelves, boolean treasure) {
-		FishingEnchantments enchantments = FishingEnchantments.getFishingEnchantments(player, item, minBookshelves, treasure);
+	public static ItemStack generateFishingLoot(Player player, ItemStack item, int minBookshelves) {
+		FishingEnchantments enchantments = FishingEnchantments.getFishingEnchantments(player, item, minBookshelves);
 
 		List<EnchantmentList> lists = getLists(enchantments.getList());
 		int random = (int) (Math.random() * lists.size());

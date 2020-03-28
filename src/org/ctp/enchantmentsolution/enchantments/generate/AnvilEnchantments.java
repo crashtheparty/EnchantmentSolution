@@ -11,6 +11,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
+import org.ctp.enchantmentsolution.enums.EnchantmentLocation;
 import org.ctp.enchantmentsolution.enums.ItemData;
 import org.ctp.enchantmentsolution.enums.ItemRepairType;
 import org.ctp.enchantmentsolution.nms.AnvilNMS;
@@ -28,7 +29,7 @@ public class AnvilEnchantments extends GenerateEnchantments {
 	private boolean canCombine;
 
 	public AnvilEnchantments(Player player, ItemStack item, ItemStack itemTwo) {
-		super(player, item, true);
+		super(player, item, EnchantmentLocation.NONE);
 		this.itemTwo = itemTwo;
 
 		setCanCombine();

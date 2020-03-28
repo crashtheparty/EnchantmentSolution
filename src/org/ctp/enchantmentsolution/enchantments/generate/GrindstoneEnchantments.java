@@ -12,6 +12,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
+import org.ctp.enchantmentsolution.enums.EnchantmentLocation;
 import org.ctp.enchantmentsolution.enums.ItemType;
 import org.ctp.enchantmentsolution.nms.AnvilNMS;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
@@ -26,7 +27,7 @@ public class GrindstoneEnchantments extends GenerateEnchantments {
 	private boolean canCombine, takeEnchantments;
 
 	private GrindstoneEnchantments(Player player, ItemStack item, ItemStack itemTwo, boolean takeEnchantments) {
-		super(player, item, false);
+		super(player, item, EnchantmentLocation.NONE);
 		this.itemTwo = itemTwo;
 
 		setCanCombine();
