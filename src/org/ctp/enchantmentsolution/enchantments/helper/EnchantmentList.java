@@ -167,10 +167,9 @@ public class EnchantmentList {
 			if (enchantment.isEnabled() && enchantment.canEnchantItem(item) && (locations.contains(location))) return true;
 			return false;
 		}
-		
-		if (!(locations.contains(EnchantmentLocation.NON_BOOK) || item.getMaterial() == Material.BOOK)) return false;
+		if (location != EnchantmentLocation.NONE && !(locations.contains(EnchantmentLocation.NON_BOOK) || item.getMaterial() == Material.BOOK)) return false;
 
-		if (enchantment.isEnabled() && enchantment.canEnchantItem(item) && (locations.contains(location)) && (player == null || player.getPlayer() == null || enchantment.canEnchant(player.getPlayer(), enchantability, level.getLevel()))) return true;
+		if (enchantment.isEnabled() && enchantment.canEnchantItem(item) && (locations.contains(location) || location == EnchantmentLocation.NONE) && (player == null || player.getPlayer() == null || enchantment.canEnchant(player.getPlayer(), enchantability, level.getLevel()))) return true;
 		return false;
 	}
 

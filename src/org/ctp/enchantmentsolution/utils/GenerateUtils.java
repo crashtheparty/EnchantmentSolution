@@ -10,6 +10,7 @@ import org.ctp.enchantmentsolution.enchantments.generate.FishingEnchantments;
 import org.ctp.enchantmentsolution.enchantments.generate.MobLootEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentList;
+import org.ctp.enchantmentsolution.enums.EnchantmentLocation;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 
@@ -37,6 +38,15 @@ public class GenerateUtils {
 
 	public static List<EnchantmentLevel> generateBookLoot(Player player, ItemStack item) {
 		ChestEnchantments enchantments = ChestEnchantments.getChestEnchantment(player, item, 0);
+
+		List<EnchantmentList> lists = getLists(enchantments.getList());
+		int random = (int) (Math.random() * lists.size());
+
+		return lists.get(random).getEnchantments();
+	}
+
+	public static List<EnchantmentLevel> generateBookLoot(Player player, ItemStack item, EnchantmentLocation location) {
+		ChestEnchantments enchantments = ChestEnchantments.getChestEnchantment(player, item, 0, location);
 
 		List<EnchantmentList> lists = getLists(enchantments.getList());
 		int random = (int) (Math.random() * lists.size());

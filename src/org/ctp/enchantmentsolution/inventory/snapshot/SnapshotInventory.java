@@ -1,6 +1,5 @@
 package org.ctp.enchantmentsolution.inventory.snapshot;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.OfflinePlayer;
@@ -63,9 +62,9 @@ public class SnapshotInventory {
 
 	private ItemStack checkItem(ItemStack item, ItemStack previous) {
 		if (item != null) {
-			if (previous == null || !previous.equals(item)) if (item.hasItemMeta() && item.getItemMeta().hasLore()) {
-				List<EnchantmentLevel> enchants = new ArrayList<EnchantmentLevel>();
-				for(String s: item.getItemMeta().getLore())
+			List<EnchantmentLevel> enchants = ItemUtils.getEnchantmentLevels(item);
+			if (enchants.size() > 0) {
+				if (item.hasItemMeta() && item.getItemMeta().hasLore()) for(String s: item.getItemMeta().getLore())
 					if (StringUtils.isEnchantment(s)) {
 						EnchantmentLevel enchant = StringUtils.getEnchantment(s);
 						if (enchant != null) enchants.add(enchant);

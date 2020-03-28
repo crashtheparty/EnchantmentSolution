@@ -20,6 +20,7 @@ public class EnchantmentSolutionCommand implements CommandExecutor, TabCompleter
 	private final ESCommand calc = new ESCommand("calc", "commands.aliases.calc", "commands.descriptions.calc", "commands.usage.calc", "enchantmentsolution.command.calc");
 	private final ESCommand config = new ESCommand("config", "commands.aliases.config", "commands.descriptions.config", "commands.usage.config", "enchantmentsolution.command.config");
 	private final ESCommand debug = new ESCommand("debug", "commands.aliases.debug", "commands.descriptions.debug", "commands.usage.debug", "enchantmentsolution.command.debug");
+	private final ESCommand fix = new ESCommand("fix", "commands.aliases.fix", "commands.descriptions.fix", "commands.usage.fix", "enchantmentsolution.command.fix");
 	private final ESCommand grindstone = new ESCommand("grindstone", "commands.aliases.grindstone", "commands.descriptions.grindstone", "commands.usage.grindstone", "enchantmentsolution.command.grindstone");
 	private final ESCommand help = new ESCommand("help", "commands.aliases.help", "commands.descriptions.help", "commands.usage.help", "enchantmentsolution.command.help");
 	private final ESCommand lore = new ESCommand("lore", "commands.aliases.lore", "commands.descriptions.lore", "commands.usage.lore", "enchantmentsolution.command.lore");
@@ -37,6 +38,7 @@ public class EnchantmentSolutionCommand implements CommandExecutor, TabCompleter
 		commands.add(calc);
 		commands.add(config);
 		commands.add(debug);
+		commands.add(fix);
 		commands.add(grindstone);
 		commands.add(help);
 		commands.add(lore);
@@ -58,6 +60,7 @@ public class EnchantmentSolutionCommand implements CommandExecutor, TabCompleter
 		if (containsCommand(calc, args[0])) return CommandUtils.calc(sender, calc, args);
 		if (containsCommand(config, args[0])) return CommandUtils.config(sender, config, args);
 		if (containsCommand(debug, args[0])) return CommandUtils.debug(sender, debug, args);
+		if (containsCommand(fix, args[0])) return CommandUtils.fix(sender, fix, args);
 		if (containsCommand(grindstone, args[0])) return CommandUtils.grindstone(sender, grindstone, args);
 		if (containsCommand(lore, args[0])) return CommandUtils.lore(sender, lore, args);
 		if (containsCommand(reload, args[0])) return CommandUtils.reload(sender, reload, args);

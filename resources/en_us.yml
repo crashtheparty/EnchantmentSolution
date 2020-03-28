@@ -92,6 +92,9 @@ commands:
     give-book-other-multiple: 'You gave %give_player% %amount% enchanted books.'
     receive-book-multiple: '%player% has given you %amount% enchanted books.'
     give-book-console: 'Console must specify a valid player to give the book to.'
+    fix-enchants: 'You have fixed your enchanted items.'
+    fix-enchants-other: 'You have fixed %fix_player%''s enchanted items.'
+    other-fixed-enchants: 'Player %player% has fixed your enchanted items.'
     console-player: 'Console'
     invalid:
         console: 'Console Sender'
@@ -148,6 +151,9 @@ commands:
         help:
         - 'eshelp'
         - 'h'
+        fix:
+        - 'esfix'
+        - 'f'
     descriptions:
         enchant: 'Enchants an item for a given player in the given slot.'
         enchantunsafe: 'Enchants an item for a given player in the given slot. May enchant any item with any level of enchantment.'
@@ -155,7 +161,7 @@ commands:
         anvil: 'Opens the ES Anvil GUI for yourself.'
         grindstone: 'Opens the ES Grindstone GUI for yourself.'
         debug: 'Generates a debug.yml file to help the developer debug issues.'
-        book: 'Gives a book with a specified enchantment or random enchantments to a given player.'
+        book: 'Gives a book with a specified enchantment or random enchantments to a given player. ignoreLimits in random enchantments means to not limit to chest enchantments.'
         info: 'Gets the information for a specified enchantment, or a list of enchantments.'
         reload: 'Reloads the server configuration files.'
         reset: 'Resets the inventories and enchantment table data for all players.'
@@ -163,6 +169,7 @@ commands:
         lore: 'Returns a chat color-formatted string to allow compatibility with other plugins.'
         calc: 'Shows the values of enchantability for certain items and enchantments or potential enchantments.'
         help: 'Shows description and usage of specified command or commands.'
+        fix: 'Fixes enchantments on items.'
     usage:
         enchant: 
             main: 'Usage: %usage%\nAliases: %aliases%'
@@ -184,7 +191,7 @@ commands:
             string: 'debug'
         book: 
             main: 'Usage: %usage%\nAliases: %aliases%'
-            string: 'book <enchantment> <level> [amount] OR book <RandomEnchant/RandomMultiEnchant> [treasure] [amount]'
+            string: 'book <enchantment> <level> [amount] OR book <RandomEnchant/RandomMultiEnchant> [ignoreLimits] [amount]'
         info: 
             main: 'Usage: %usage%\nAliases: %aliases%'
             string: 'info [enchantment/page]'
@@ -206,6 +213,9 @@ commands:
         help: 
             main: 'Usage: %usage%\nAliases: %aliases%'
             string: 'help [command]'
+        fix: 
+            main: 'Usage: %usage%\nAliases: %aliases%'
+            string: 'fix [player]'
 grindstone: 
     legacy-open: '&aOpen the Grindstone'
     name: '&9Grindstone'

@@ -75,3 +75,9 @@ permissions:
   enchantmentsolution.command.info:
     description: Allows players to use the /es info command
     default: true
+  enchantmentsolution.command.fix:
+    description: Allows players to use the /es fix command
+    default: op
+  enchantmentsolution.command.fix.others:
+    description: Allows players to use the /es fix command on others
+    default: op

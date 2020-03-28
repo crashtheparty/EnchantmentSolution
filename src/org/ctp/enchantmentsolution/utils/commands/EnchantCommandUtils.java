@@ -15,6 +15,7 @@ import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
+import org.ctp.enchantmentsolution.enums.EnchantmentLocation;
 import org.ctp.enchantmentsolution.enums.ItemData;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.GenerateUtils;
@@ -75,7 +76,7 @@ public class EnchantCommandUtils {
 									codes.put("%invalid_player%", args[3]);
 									ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(codes, "commands.invalid-player"), Level.WARNING);
 									return false;
-								} else if (givePlayer != null && !givePlayer.equals(sender) && !sender.hasPermission("enchantmentsolution.command.enchant.others")) {
+								} else if (givePlayer != null && !givePlayer.equals(sender) && !sender.hasPermission(details.getPermission() + ".others")) {
 									ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(ChatUtils.getCodes(), "commands.no-permission-other"), Level.WARNING);
 									return false;
 								}
@@ -288,7 +289,9 @@ public class EnchantCommandUtils {
 		if (args.length > 2) {
 			String arg = args[2];
 			if (arg.equals("RandomEnchant") || arg.equals("RandomMultiEnchant")) {
-				levels = GenerateUtils.generateBookLoot(givePlayer, new ItemStack(Material.BOOK));
+				boolean ignoreLimits = false;
+				if (args.length > 3) ignoreLimits = Boolean.valueOf(args[3]);
+				levels = GenerateUtils.generateBookLoot(givePlayer, new ItemStack(Material.BOOK), ignoreLimits ? EnchantmentLocation.NONE : EnchantmentLocation.CHEST_LOOT);
 				if (arg.equals("RandomEnchant")) for(int i = levels.size() - 1; i > 0; i--)
 					levels.remove(i);
 			} else

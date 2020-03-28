@@ -3,6 +3,7 @@ package org.ctp.enchantmentsolution.utils.commands;
 import java.util.HashMap;
 import java.util.logging.Level;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -13,6 +14,7 @@ import org.ctp.enchantmentsolution.enchantments.generate.TableEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.inventory.*;
 import org.ctp.enchantmentsolution.listeners.VanishListener;
+import org.ctp.enchantmentsolution.threads.SnapshotRunnable;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.Configurations;
 import org.ctp.enchantmentsolution.utils.StringUtils;
@@ -86,6 +88,43 @@ public class CommandUtils {
 		if (sender.hasPermission(details.getPermission())) {
 			Configurations.generateDebug();
 			ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(ChatUtils.getCodes(), "commands.debug"), Level.INFO);
+		} else
+			ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(ChatUtils.getCodes(), "commands.no-permission"), Level.WARNING);
+		return true;
+	}
+
+	public static boolean fix(CommandSender sender, ESCommand details, String[] args) {
+		Player player = null;
+		Player fixPlayer = null;
+		if (sender instanceof Player) player = (Player) sender;
+		
+		if (sender.hasPermission(details.getPermission())) {
+			fixPlayer = player;
+			if(args.length > 1) {
+				String arg = args[3];
+				if (!arg.equals("@p")) {
+					fixPlayer = Bukkit.getPlayer(arg);
+					if (fixPlayer == null) {
+						HashMap<String, Object> codes = ChatUtils.getCodes();
+						codes.put("%invalid_player%", args[3]);
+						ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(codes, "commands.invalid-player"), Level.WARNING);
+						return false;
+					} else if (fixPlayer != null && !fixPlayer.equals(sender) && !sender.hasPermission(details.getPermission() + ".others")) {
+						ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(ChatUtils.getCodes(), "commands.no-permission-other"), Level.WARNING);
+						return false;
+					}
+				}
+			}
+			
+			SnapshotRunnable.updateInventory(fixPlayer);
+			HashMap<String, Object> codes = ChatUtils.getCodes();
+			codes.put("%player%", player.getName());
+			codes.put("%fix_player%", fixPlayer.getName());
+			if (fixPlayer.equals(player)) ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(codes, "commands.fix-enchants"), Level.INFO);
+			else {
+				ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(codes, "commands.fix-enchants-other"), Level.INFO);
+				ChatUtils.sendMessage(sender, fixPlayer, ChatUtils.getMessage(codes, "commands.other-fixed-enchants"), Level.INFO);
+			}
 		} else
 			ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(ChatUtils.getCodes(), "commands.no-permission"), Level.WARNING);
 		return true;
