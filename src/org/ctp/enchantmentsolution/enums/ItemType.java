@@ -12,7 +12,7 @@ public enum ItemType {
 	HELMETS("helmets"), CHESTPLATES("chestplates"), LEGGINGS("leggings"), BOOTS("boots"), SWORDS("swords"),
 	PICKAXES("pickaxes"), SHOVELS("shovels"), AXES("axes"), HOES("hoes"), BOW("bow"), SHIELD("shield"),
 	FISHING_ROD("fishing_rod"), SHEARS("shears"), FLINT_AND_STEEL("flint_and_steel"),
-	CARROT_ON_A_STICK("carrot_on_a_stick"), ELYTRA("elytra"), TRIDENT("trident"), RANGED("ranged"), ARMOR("armor"),
+	FISHING_STICK("fishing_stick"), ELYTRA("elytra"), TRIDENT("trident"), RANGED("ranged"), ARMOR("armor"),
 	TOOLS("tools"), MELEE("melee"), MISC("misc"), WOODEN_TOOLS("wooden_tools"), STONE_TOOLS("stone_tools"),
 	IRON_TOOLS("iron_tools"), GOLDEN_TOOLS("golden_tools"), DIAMOND_TOOLS("diamond_tools"),
 	LEATHER_ARMOR("leather_armor"), GOLDEN_ARMOR("golden_armor"), CHAINMAIL_ARMOR("chainmail_armor"),
@@ -81,7 +81,6 @@ public enum ItemType {
 		else if (BOOK.getType().equals(type)) return itemTypes;
 		else if (BOOTS.getType().equals(type)) itemTypes.addAll(Arrays.asList("NETHERITE_BOOTS", "DIAMOND_BOOTS", "CHAINMAIL_BOOTS", "GOLDEN_BOOTS", "IRON_BOOTS", "LEATHER_BOOTS"));
 		else if (BOW.getType().equals(type)) itemTypes.add("BOW");
-		else if (CARROT_ON_A_STICK.getType().equals(type)) itemTypes.add("CARROT_ON_A_STICK");
 		else if (CHAINMAIL_ARMOR.getType().equals(type)) {
 			itemTypes.addAll(Arrays.asList("CHAINMAIL_HELMET", "CHAINMAIL_CHESTPLATE", "CHAINMAIL_LEGGINGS", "CHAINMAIL_BOOTS"));
 			return itemTypes;
@@ -100,6 +99,10 @@ public enum ItemType {
 			itemTypes.addAll(getItemStrings(ELYTRA.getType()));
 			itemTypes.addAll(getItemStrings(HOES.getType()));
 		} else if (FISHING_ROD.getType().equals(type)) itemTypes.add("FISHING_ROD");
+		else if (FISHING_STICK.getType().equals(type)) {
+			itemTypes.add("CARROT_ON_A_STICK");
+			itemTypes.add("WARPED_FUNGUS_ON_A_STICK");
+		}
 		else if (FLINT_AND_STEEL.getType().equals(type)) itemTypes.add("FLINT_AND_STEEL");
 		else if (GOLDEN_ARMOR.getType().equals(type)) itemTypes.addAll(Arrays.asList("GOLDEN_HELMET", "GOLDEN_CHESTPLATE", "GOLDEN_LEGGINGS", "GOLDEN_BOOTS"));
 		else if (GOLDEN_TOOLS.getType().equals(type)) itemTypes.addAll(Arrays.asList("GOLDEN_AXE", "GOLDEN_SWORD", "GOLDEN_SHOVEL", "GOLDEN_PICKAXE", "GOLDEN_HOE"));
@@ -116,7 +119,7 @@ public enum ItemType {
 			itemTypes.addAll(getItemStrings(SHIELD.getType()));
 			itemTypes.addAll(getItemStrings(FISHING_ROD.getType()));
 			itemTypes.addAll(getItemStrings(FLINT_AND_STEEL.getType()));
-			itemTypes.addAll(getItemStrings(CARROT_ON_A_STICK.getType()));
+			itemTypes.addAll(getItemStrings(FISHING_STICK.getType()));
 			itemTypes.addAll(getItemStrings(ELYTRA.getType()));
 			itemTypes.addAll(getItemStrings(SHEARS.getType()));
 			itemTypes.addAll(getItemStrings(HOES.getType()));
