@@ -282,6 +282,7 @@ public class RegisterEnchantments {
 		addDefaultEnchantment(CERegister.SHARPNESS);
 		addDefaultEnchantment(CERegister.SILK_TOUCH);
 		addDefaultEnchantment(CERegister.SMITE);
+		if (VersionUtils.getBukkitVersionNumber() > 11) addDefaultEnchantment(CERegister.SOUL_SPEED);
 		addDefaultEnchantment(CERegister.SWEEPING_EDGE);
 		addDefaultEnchantment(CERegister.THORNS);
 		addDefaultEnchantment(CERegister.UNBREAKING);

@@ -23,6 +23,7 @@ public class Configurations {
 	private static LanguageConfiguration LANGUAGE;
 	private static EnchantmentsConfiguration ENCHANTMENTS;
 	private static AdvancementsConfiguration ADVANCEMENTS;
+	private static RPGConfiguration RPG;
 
 	private static List<LanguageFile> LANGUAGE_FILES = new ArrayList<LanguageFile>();
 	private static DataFile DATA_FILE;
@@ -44,6 +45,7 @@ public class Configurations {
 		FISHING = new FishingConfiguration(dataFolder);
 		ENCHANTMENTS = new EnchantmentsConfiguration(dataFolder);
 		ADVANCEMENTS = new AdvancementsConfiguration(dataFolder);
+		RPG = new RPGConfiguration(dataFolder);
 
 		String languageFile = CONFIG.getString("language_file");
 		Language lang = Language.getLanguage(CONFIG.getString("language"));
@@ -77,6 +79,7 @@ public class Configurations {
 		LANGUAGE.revert();
 		ENCHANTMENTS.revert();
 		ADVANCEMENTS.revert();
+		RPG.revert();
 	}
 
 	public static void revert(Configuration config, int backup) {
@@ -89,12 +92,14 @@ public class Configurations {
 		LANGUAGE.setComments(ConfigString.USE_COMMENTS.getBoolean());
 		ENCHANTMENTS.setComments(ConfigString.USE_COMMENTS.getBoolean());
 		ADVANCEMENTS.setComments(ConfigString.USE_COMMENTS.getBoolean());
+		RPG.setComments(ConfigString.USE_COMMENTS.getBoolean());
 
 		CONFIG.save();
 		FISHING.save();
 		LANGUAGE.save();
 		ENCHANTMENTS.save();
 		ADVANCEMENTS.save();
+		RPG.save();
 
 		if (ConfigString.RESET_ON_RELOAD.getBoolean()) TableEnchantments.removeAllTableEnchantments();
 		RegisterEnchantments.setEnchantments();
@@ -104,6 +109,7 @@ public class Configurations {
 		DBUtils.updateConfig(LANGUAGE);
 		DBUtils.updateConfig(ENCHANTMENTS);
 		DBUtils.updateConfig(ADVANCEMENTS);
+		DBUtils.updateConfig(RPG);
 
 		if (!EnchantmentSolution.getPlugin().isInitializing()) {
 			EnchantmentSolution.getPlugin().setVersionCheck(ConfigString.LATEST_VERSION.getBoolean(), ConfigString.EXPERIMENTAL_VERSION.getBoolean());
@@ -131,6 +137,7 @@ public class Configurations {
 		YamlConfigBackup language = LANGUAGE.getConfig();
 		YamlConfigBackup enchantments = ENCHANTMENTS.getConfig();
 		YamlConfigBackup advancements = ADVANCEMENTS.getConfig();
+		YamlConfigBackup rpg = RPG.getConfig();
 
 		for(String s: config.getAllEntryKeys())
 			if (config.contains(s)) backup.set("config." + s, config.get(s));
@@ -147,6 +154,9 @@ public class Configurations {
 		for(String s: enchantments.getAllEntryKeys())
 			if (enchantments.contains(s)) backup.set("enchantment." + s, enchantments.get(s));
 
+		for(String s: rpg.getAllEntryKeys())
+			if (enchantments.contains(s)) backup.set("enchantment." + s, rpg.get(s));
+
 		backup.saveConfig();
 	}
 
@@ -156,6 +166,7 @@ public class Configurations {
 		LANGUAGE.reload();
 		ENCHANTMENTS.reload();
 		ADVANCEMENTS.reload();
+		RPG.reload();
 
 		save();
 	}
@@ -178,6 +189,10 @@ public class Configurations {
 
 	public static AdvancementsConfiguration getAdvancements() {
 		return ADVANCEMENTS;
+	}
+
+	public static RPGConfiguration getRPG() {
+		return RPG;
 	}
 
 	public static List<LanguageFile> getLanguageFiles() {

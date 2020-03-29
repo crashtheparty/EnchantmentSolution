@@ -2,7 +2,9 @@ package org.ctp.enchantmentsolution.rpg;
 
 import java.math.*;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -84,7 +86,18 @@ public class RPGPlayer {
 	}
 	
 	public boolean hasEnchantment(Enchantment enchantment, int i) {
-		return enchantmentList.containsKey(enchantment) && enchantmentList.get(enchantment).intValue() >= i;
+		Map<Enchantment, Integer> enchantments = new HashMap<Enchantment, Integer>();
+		Iterator<Entry<Enchantment, Integer>> iter2 = RPGUtils.getFreeEnchantments().entrySet().iterator();
+		while(iter2.hasNext()) {
+			Entry<Enchantment, Integer> entry = iter2.next();
+			enchantments.put(entry.getKey(), entry.getValue());
+		}
+		Iterator<Entry<Enchantment, Integer>> iter = enchantmentList.entrySet().iterator();
+		while(iter.hasNext()) {
+			Entry<Enchantment, Integer> entry = iter.next();
+			enchantments.put(entry.getKey(), entry.getValue());
+		}
+		return enchantments.containsKey(enchantment) && enchantments.get(enchantment).intValue() >= i;
 	}
 	
 }
