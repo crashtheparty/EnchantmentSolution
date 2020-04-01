@@ -103,14 +103,11 @@ public class Configurations {
 
 		if (ConfigString.RESET_ON_RELOAD.getBoolean()) TableEnchantments.removeAllTableEnchantments();
 		RegisterEnchantments.setEnchantments();
-
-		DBUtils.updateConfig(CONFIG);
-		DBUtils.updateConfig(FISHING);
-		DBUtils.updateConfig(LANGUAGE);
-		DBUtils.updateConfig(ENCHANTMENTS);
-		DBUtils.updateConfig(ADVANCEMENTS);
-		DBUtils.updateConfig(RPG);
-
+		if(!EnchantmentSolution.getPlugin().isInitializing()) {
+			ENCHANTMENTS.setEnchantmentInformation();
+			ENCHANTMENTS.save();
+		}
+		
 		if (!EnchantmentSolution.getPlugin().isInitializing()) {
 			EnchantmentSolution.getPlugin().setVersionCheck(ConfigString.LATEST_VERSION.getBoolean(), ConfigString.EXPERIMENTAL_VERSION.getBoolean());
 			AdvancementUtils.createAdvancements();
@@ -131,6 +128,8 @@ public class Configurations {
 		backup.set("plugins.jobs_reborn", EnchantmentSolution.getPlugin().isJobsEnabled());
 		backup.set("plugins.mcmmo", EnchantmentSolution.getPlugin().getMcMMOType());
 		backup.set("plugins.mcmmo_version", EnchantmentSolution.getPlugin().getMcMMOVersion());
+		backup.set("plugins.mmo_items", EnchantmentSolution.getPlugin().getMMOItems());
+		backup.set("plugins.vein_miner", EnchantmentSolution.getPlugin().getVeinMiner());
 
 		YamlConfigBackup config = CONFIG.getConfig();
 		YamlConfigBackup fishing = FISHING.getConfig();

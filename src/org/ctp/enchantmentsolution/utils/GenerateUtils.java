@@ -29,9 +29,13 @@ public class GenerateUtils {
 		ChestEnchantments enchantments = ChestEnchantments.getChestEnchantment(player, item, minBookshelves);
 
 		List<EnchantmentList> lists = getLists(enchantments.getList());
-		int random = (int) (Math.random() * lists.size());
-
-		List<EnchantmentLevel> levels = lists.get(random).getEnchantments();
+		List<EnchantmentLevel> levels = getEnchantments(lists);
+		if (levels == null || levels.size() == 0) {
+			ChatUtils.sendWarning("Item couldn't find EnchantmentSolution enchantments. Keeping default enchantments on the item.");
+			ChatUtils.sendWarning("This occurs when items do not have valid enchantments based on the item being spawned (as well as the player spawning them, if applicable). THIS IS ONLY A BUG IF THE ITEM HAS VALID ENCHANTMENTS SPECIFIED FOR IT.");
+			ChatUtils.sendWarning("Item: " + item.toString() + " Type: ChestLoot");
+			return item;
+		}
 
 		return ItemUtils.addEnchantmentsToItem(item, levels);
 	}
@@ -58,9 +62,13 @@ public class GenerateUtils {
 		FishingEnchantments enchantments = FishingEnchantments.getFishingEnchantments(player, item, minBookshelves);
 
 		List<EnchantmentList> lists = getLists(enchantments.getList());
-		int random = (int) (Math.random() * lists.size());
-
-		List<EnchantmentLevel> levels = lists.get(random).getEnchantments();
+		List<EnchantmentLevel> levels = getEnchantments(lists);
+		if (levels == null || levels.size() == 0) {
+			ChatUtils.sendWarning("Item couldn't find EnchantmentSolution enchantments. Keeping default enchantments on the item.");
+			ChatUtils.sendWarning("This occurs when items do not have valid enchantments based on the item being spawned (as well as the player spawning them, if applicable). THIS IS ONLY A BUG IF THE ITEM HAS VALID ENCHANTMENTS SPECIFIED FOR IT.");
+			ChatUtils.sendWarning("Item: " + item.toString() + " Type: FishingLoot");
+			return item;
+		}
 
 		item = ItemUtils.removeAllEnchantments(item, true);
 
@@ -71,12 +79,30 @@ public class GenerateUtils {
 		MobLootEnchantments enchantments = MobLootEnchantments.generateMobLoot(item);
 
 		List<EnchantmentList> lists = getLists(enchantments.getList());
-		int random = (int) (Math.random() * lists.size());
-
-		List<EnchantmentLevel> levels = lists.get(random).getEnchantments();
+		List<EnchantmentLevel> levels = getEnchantments(lists);
+		if (levels == null || levels.size() == 0) {
+			ChatUtils.sendWarning("Item couldn't find EnchantmentSolution enchantments. Keeping default enchantments on the item.");
+			ChatUtils.sendWarning("This occurs when items do not have valid enchantments based on the item being spawned (as well as the player spawning them, if applicable). THIS IS ONLY A BUG IF THE ITEM HAS VALID ENCHANTMENTS SPECIFIED FOR IT.");
+			ChatUtils.sendWarning("Item: " + item.toString() + " Type: MobLoot");
+			return item;
+		}
 
 		item = ItemUtils.removeAllEnchantments(item, true);
 
 		return ItemUtils.addEnchantmentsToItem(item, levels);
+	}
+
+	private static List<EnchantmentLevel> getEnchantments(List<EnchantmentList> lists) {
+		int random = (int) (Math.random() * lists.size());
+
+		List<EnchantmentLevel> levels = lists.get(random).getEnchantments();
+
+		while (lists.size() > 0 && (levels == null || levels.size() == 0)) {
+			lists.remove(random);
+			random = (int) (Math.random() * lists.size());
+
+			levels = lists.get(random).getEnchantments();
+		}
+		return levels;
 	}
 }

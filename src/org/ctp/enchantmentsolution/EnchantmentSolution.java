@@ -74,7 +74,7 @@ public class EnchantmentSolution extends JavaPlugin {
 
 		db = new SQLite(this);
 		db.load();
-		RegisterEnchantments.addRegisterEnchantments();
+		RegisterEnchantments.addEnchantments();
 
 		Configurations.onEnable();
 
@@ -120,7 +120,6 @@ public class EnchantmentSolution extends JavaPlugin {
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN, new MiscRunnable(), 1l, 1l);
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN, new SnapshotRunnable(), 1l, 1l);
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN, new WalkerRunnable(), 1l, 1l);
-
 		
 		EnchantmentSolutionCommand c = new EnchantmentSolutionCommand();
 		for (String s : Arrays.asList("EnchantmentSolution", "Enchant", "Info", "RemoveEnchant", "EnchantUnsafe", "ESReload", "ESConfig", "ESReset", "ESDebug", "ESCalc", "ESBook", "ESAnvil", "ESGrindstone", "ConfigLore")) {
@@ -141,6 +140,8 @@ public class EnchantmentSolution extends JavaPlugin {
 
 		Bukkit.getScheduler().runTaskLater(this, () -> {
 			SaveUtils.getData();
+			Configurations.getEnchantments().setEnchantmentInformation();
+			Configurations.getEnchantments().save();
 			addCompatibility();
 		}, 1l);
 	}

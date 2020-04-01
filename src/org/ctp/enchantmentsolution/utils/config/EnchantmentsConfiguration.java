@@ -10,11 +10,10 @@ import org.ctp.enchantmentsolution.api.ApiEnchantmentWrapper;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantmentWrapper;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
+import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.enchantments.helper.Weight;
 import org.ctp.enchantmentsolution.enums.ItemType;
-import org.ctp.enchantmentsolution.utils.ChatUtils;
-import org.ctp.enchantmentsolution.utils.Configurations;
-import org.ctp.enchantmentsolution.utils.ESArrays;
+import org.ctp.enchantmentsolution.utils.*;
 import org.ctp.enchantmentsolution.utils.yaml.YamlConfigBackup;
 
 public class EnchantmentsConfiguration extends Configuration {
@@ -43,6 +42,13 @@ public class EnchantmentsConfiguration extends Configuration {
 		config.addDefault("advanced_options.multi_enchant_divisor", 75.0D, new String[] { "Chance of multiple enchantments on one item. Lower value = more enchantments." });
 		config.addDefault("advanced_options.use_permissions", false, new String[] { "Use the permission system per player for all enchantments.", "Permissions use the system \"enchantmentsolution.<enchant_name>.<type>.level<int>\"", "enchant_name: Enchantment name as used below", "type: either table (for enchanting items) or anvil (for combining items)", "int: the enchantment level", "Override permission: enchantmentsolution.permissions.ignore" });
 
+		config.writeDefaults();
+
+		if (EnchantmentSolution.getPlugin().isInitializing()) ChatUtils.sendInfo("Enchantment configuration initialized!");
+	}
+	
+	public void setEnchantmentInformation() {
+		YamlConfigBackup config = getConfig();
 		for(CustomEnchantment enchant: RegisterEnchantments.getEnchantments()) {
 			String namespace = "default_enchantments";
 			if (enchant.getRelativeEnchantment() instanceof ApiEnchantmentWrapper) {
@@ -58,7 +64,7 @@ public class EnchantmentsConfiguration extends Configuration {
 			config.addDefault(start + ".enchantment_locations", enchant.getDefaultEnchantmentLocations());
 			start += ".advanced";
 			config.addDefault(start + ".weight", enchant.getDefaultWeightName());
-			config.addEnum(start + ".weight", Arrays.asList(Weight.VERY_RARE.getName(), Weight.RARE.getName(), Weight.UNCOMMON.getName(), Weight.COMMON.getName(), Weight.NULL.getName()));
+			config.addEnum(start + ".weight", Arrays.asList(Weight.LEGENDARY.getName(), Weight.EPIC.getName(), Weight.VERY_RARE.getName(), Weight.RARE.getName(), Weight.UNCOMMON.getName(), Weight.COMMON.getName(), Weight.NULL.getName()));
 			config.addDefault(start + ".enchantability_constant", enchant.getDefaultConstant());
 			config.addDefault(start + ".enchantability_modifier", enchant.getDefaultModifier());
 			config.addDefault(start + ".enchantability_start_level", enchant.getDefaultStartLevel());
@@ -69,15 +75,13 @@ public class EnchantmentsConfiguration extends Configuration {
 			config.addEnum(start + ".disabled_items", ESArrays.getRepairMaterialsStrings());
 			config.addDefault(start + ".enchantment_item_types", ItemType.itemTypesToStrings(enchant.getDefaultEnchantmentItemTypes()));
 			config.addDefault(start + ".anvil_item_types", ItemType.itemTypesToStrings(enchant.getDefaultAnvilItemTypes()));
-			for(int i = 0; i < enchant.getMaxLevel(); i++) {
-				config.addDefault(start + ".permissions.table.level" + (i + 1), false);
-				config.addDefault(start + ".permissions.anvil.level" + (i + 1), false);
+			for(int i = 1; i <= enchant.getMaxLevel(); i++) {
+				PermissionUtils.removePermissions(new EnchantmentLevel(enchant, i));
+				config.addDefault(start + ".permissions.table.level" + i, false);
+				config.addDefault(start + ".permissions.anvil.level" + i, false);
+				PermissionUtils.addPermissions(new EnchantmentLevel(enchant, i));
 			}
 		}
-
-		config.writeDefaults();
-
-		if (EnchantmentSolution.getPlugin().isInitializing()) ChatUtils.sendInfo("Enchantment configuration initialized!");
 	}
 
 	public void updateExternal(JavaPlugin plugin) {
