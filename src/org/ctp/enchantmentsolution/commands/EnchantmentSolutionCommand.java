@@ -53,8 +53,6 @@ public class EnchantmentSolutionCommand implements CommandExecutor, TabCompleter
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-		if (args.length == 0 || (args.length == 1 && args[0].equals("help"))) return printHelp(sender);
-
 		for (ESCommand c : commands) {
 			String[] check;
 			if(containsCommand(c, label)) {
@@ -66,6 +64,7 @@ public class EnchantmentSolutionCommand implements CommandExecutor, TabCompleter
 				break;
 			}
 		}
+		if (args.length == 0 || (args.length == 1 && args[0].equals("help"))) return printHelp(sender);
 		
 		if (containsCommand(help, args[0]) && args.length > 0) return printHelp(sender, args[1]);
 		if (containsCommand(anvil, args[0])) return CommandUtils.anvil(sender, anvil, args);

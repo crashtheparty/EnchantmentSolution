@@ -102,7 +102,6 @@ commands:
     aliases:
         enchant:
         - 'e'
-        - 'es'
         - 'customenchant'
         - 'ce'
         - 'esce'
