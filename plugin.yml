@@ -8,6 +8,52 @@ commands:
     aliases: [es]
     description: All commands for EnchantmentSolution
     usage: /enchantmentsolution
+  enchant:
+    aliases: [customenchant]
+    description: Add enchantments to items.
+    usage: /enchant <enchant_name> [level]
+  enchantunsafe:
+    aliases: [customenchantunsafe]
+    description: Displays commands
+    usage: /enchantunsafe <enchant_name> [level]
+  info:
+    aliases: [enchantinfo]
+    description: Gives player information on an enchantment.
+    usage: /info [enchant_name]
+  removeenchant:
+    aliases: [eremove]
+    description: Remove enchantment from item.
+    usage: /removeenchant <enchant_name>
+  esreload:
+    description: Reload config files
+    usage: /esreload
+  esconfig:
+    description: Edit config files
+    usage: /esconfig
+  esreset:
+    description: Reset all custom inventories
+    usage: /esreset
+  esdebug:
+    description: Generates a debug file for debugging and testing
+    usage: /esdebug
+  escalc:
+    description: Calculate the levels that would be possible with certain enchantabilities
+    usage: /escalc
+  esbook:
+    aliases: [book]
+    description: Gives the player a book with specified enchantment; use RandomEnchant or RandomMultiEnchant for random enchantments
+    usage: /esbook
+  esanvil:
+    aliases: [anvil]
+    description: Opens the ES custom inventory anvil
+    usage: /esanvil
+  esgrindstone:
+    aliases: [grindstone]
+    description: Opens the ES custom inventory grindstone
+    usage: /esgrindstone
+  configlore:
+    description: Gets the hidden chat color value for strings to be used in ES enchantments
+    usage: /configlore
 permissions:
   enchantmentsolution.command.edit: 
     description: Gives access to the /es config command. 

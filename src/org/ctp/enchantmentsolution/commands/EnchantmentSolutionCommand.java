@@ -55,6 +55,18 @@ public class EnchantmentSolutionCommand implements CommandExecutor, TabCompleter
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		if (args.length == 0 || (args.length == 1 && args[0].equals("help"))) return printHelp(sender);
 
+		for (ESCommand c : commands) {
+			String[] check;
+			if(containsCommand(c, label)) {
+				check = new String[args.length + 1];
+				check[0] = label;
+				for(int i = 0; i < args.length; i++)
+					check[i + 1] = args[i];
+				args = check;
+				break;
+			}
+		}
+		
 		if (containsCommand(help, args[0]) && args.length > 0) return printHelp(sender, args[1]);
 		if (containsCommand(anvil, args[0])) return CommandUtils.anvil(sender, anvil, args);
 		if (containsCommand(calc, args[0])) return CommandUtils.calc(sender, calc, args);
@@ -113,6 +125,17 @@ public class EnchantmentSolutionCommand implements CommandExecutor, TabCompleter
 	public List<String> onTabComplete(CommandSender sender, Command cmd, String label, String[] args) {
 		List<String> all = new ArrayList<String>();
 
+		for (ESCommand c : commands) {
+			String[] check;
+			if(containsCommand(c, label)) {
+				check = new String[args.length + 1];
+				check[0] = label;
+				for(int i = 0; i < args.length; i++)
+					check[i + 1] = args[i];
+				args = check;
+				break;
+			}
+		}
 		int i = args.length - 1;
 
 		if (i == 0) all.addAll(help(sender, args[i]));

@@ -1,8 +1,6 @@
 package org.ctp.enchantmentsolution;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
@@ -123,8 +121,12 @@ public class EnchantmentSolution extends JavaPlugin {
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN, new SnapshotRunnable(), 1l, 1l);
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN, new WalkerRunnable(), 1l, 1l);
 
-		getCommand("EnchantmentSolution").setExecutor(new EnchantmentSolutionCommand());
-		getCommand("EnchantmentSolution").setTabCompleter(new EnchantmentSolutionCommand());
+		
+		EnchantmentSolutionCommand c = new EnchantmentSolutionCommand();
+		for (String s : Arrays.asList("EnchantmentSolution", "Enchant", "Info", "RemoveEnchant", "EnchantUnsafe", "ESReload", "ESConfig", "ESReset", "ESDebug", "ESCalc", "ESBook", "ESAnvil", "ESGrindstone", "ConfigLore")) {
+			getCommand(s).setExecutor(c);
+			getCommand(s).setTabCompleter(c);
+		}
 
 		check = new VersionCheck(pluginVersion, "https://raw.githubusercontent.com/crashtheparty/EnchantmentSolution/master/VersionHistory", "https://www.spigotmc.org/resources/enchantment-solution.59556/", "https://github.com/crashtheparty/EnchantmentSolution", ConfigString.LATEST_VERSION.getBoolean(), ConfigString.EXPERIMENTAL_VERSION.getBoolean());
 		registerEvent(check);
