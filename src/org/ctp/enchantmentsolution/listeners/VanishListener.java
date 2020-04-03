@@ -67,6 +67,7 @@ public class VanishListener implements Listener {
 	public void onEntityPickupItem(EntityPickupItemEvent event) {
 		if (ConfigString.DISABLE_ENCHANT_METHOD.getString().equals("vanish")) {
 			ItemStack item = event.getItem().getItemStack();
+			if(item == null || item.getType().isAir()) return;
 			event.getItem().setItemStack(removeEnchants(item));
 		}
 	}

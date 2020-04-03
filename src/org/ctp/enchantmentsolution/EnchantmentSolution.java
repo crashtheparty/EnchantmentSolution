@@ -74,7 +74,7 @@ public class EnchantmentSolution extends JavaPlugin {
 
 		db = new SQLite(this);
 		db.load();
-		RegisterEnchantments.addRegisterEnchantments();
+		RegisterEnchantments.addEnchantments();
 
 		Configurations.onEnable();
 
@@ -150,6 +150,8 @@ public class EnchantmentSolution extends JavaPlugin {
 
 		Bukkit.getScheduler().runTaskLater(this, () -> {
 			SaveUtils.getData();
+			Configurations.getEnchantments().setEnchantmentInformation();
+			Configurations.getEnchantments().save();
 			addCompatibility();
 		}, 1l);
 	}
