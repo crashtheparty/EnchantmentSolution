@@ -161,10 +161,11 @@ public class ItemUtils {
 		ItemMeta meta = item.getItemMeta();
 		List<String> lore = new ArrayList<String>();
 		List<String> previousLore = null;
-		if (meta == null) new ArrayList<String>();
+		if (meta == null) return item;
 		else
 			previousLore = meta.getLore();
 		for(EnchantmentLevel level: levels) {
+			if (level == null || level.getEnchant() == null) continue;
 			if (item.getType() == Material.ENCHANTED_BOOK) ((EnchantmentStorageMeta) meta).addStoredEnchant(level.getEnchant().getRelativeEnchantment(), level.getLevel(), true);
 			else
 				meta.addEnchant(level.getEnchant().getRelativeEnchantment(), level.getLevel(), true);
@@ -188,6 +189,7 @@ public class ItemUtils {
 		ItemMeta meta = item.getItemMeta();
 		List<String> lore = meta.getLore();
 		if (lore == null) lore = new ArrayList<String>();
+		if (enchantment == null) return item;
 		if (enchantment.getRelativeEnchantment() instanceof CustomEnchantmentWrapper) lore = StringUtils.removeEnchantment(enchantment, meta.getEnchantLevel(enchantment.getRelativeEnchantment()), lore);
 		if (hasEnchantment(item, enchantment.getRelativeEnchantment()) && meta instanceof EnchantmentStorageMeta) ((EnchantmentStorageMeta) meta).removeStoredEnchant(enchantment.getRelativeEnchantment());
 		else if (hasEnchantment(item, enchantment.getRelativeEnchantment())) meta.removeEnchant(enchantment.getRelativeEnchantment());
