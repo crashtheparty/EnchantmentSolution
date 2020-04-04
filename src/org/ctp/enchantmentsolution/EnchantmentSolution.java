@@ -65,7 +65,7 @@ public class EnchantmentSolution extends JavaPlugin {
 	private boolean mmoItems = false;
 
 	@Override
-	public void onEnable() {
+	public void onLoad() {
 		PLUGIN = this;
 		bukkitVersion = new BukkitVersion();
 		pluginVersion = new PluginVersion(this, getDescription().getVersion());
@@ -77,7 +77,10 @@ public class EnchantmentSolution extends JavaPlugin {
 		RegisterEnchantments.addEnchantments();
 
 		Configurations.onEnable();
-
+	}
+	
+	@Override
+	public void onEnable() {
 		registerEvent(new InventoryClick());
 		registerEvent(new InventoryClose());
 		registerEvent(new PlayerInteract());
