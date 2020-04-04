@@ -356,7 +356,7 @@ public class BlockListener extends Enchantmentable {
 		if (player.getGameMode() == GameMode.CREATIVE) return;
 		for(int i = 0; i < 36; i++) {
 			ItemStack removeItem = player.getInventory().getItem(i);
-			if (removeItem != null && ItemSerialization.itemToData(removeItem).equals(ItemSerialization.itemToData(item))) {
+			if (removeItem != null && removeItem.getType() == item.getType() && ItemSerialization.itemToData(removeItem).equals(ItemSerialization.itemToData(item))) {
 				int left = removeItem.getAmount() - 1;
 				if (left == 0) {
 					removeItem.setAmount(0);
