@@ -38,6 +38,7 @@ public class Anvil implements InventoryData {
 		playerItems = new ArrayList<ItemStack>();
 	}
 
+	@Override
 	public void setInventory() {
 		setInventory(playerItems);
 	}
@@ -212,6 +213,11 @@ public class Anvil implements InventoryData {
 					return;
 				}
 				player.setLevel(player.getLevel() - anvil.getRepairCost());
+			}
+			if(anvil.getCombinedItem().getAmount() > 1) {
+				anvil.getItem().setAmount(anvil.getItem().getAmount() - 1);
+				ItemUtils.giveItemToPlayer(player, anvil.getItem(), player.getLocation(), false);
+				anvil.getCombinedItem().setAmount(1);
 			}
 			ItemUtils.giveItemToPlayer(player, anvil.getCombinedItem(), player.getLocation(), false);
 			if (anvil.getRepairType().equals(RepairType.REPAIR)) ItemUtils.giveItemToPlayer(player, anvil.getItemLeftover(), player.getLocation(), false);

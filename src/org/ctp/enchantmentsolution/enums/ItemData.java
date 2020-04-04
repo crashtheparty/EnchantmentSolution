@@ -1,5 +1,7 @@
 package org.ctp.enchantmentsolution.enums;
 
+import java.util.List;
+
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.utils.compatibility.MMOUtils;
@@ -12,9 +14,15 @@ public class ItemData {
 	
 	public ItemData(ItemStack item) {
 		this.item = item;
-		this.material = item.getType();
-		mmoType = MMOUtils.getMMOTypeString(item);
-		mmoTypeSet = MMOUtils.getMMOTypeSetString(item);
+		if(item != null) {
+			this.material = item.getType();
+			mmoType = MMOUtils.getMMOTypeString(item);
+			mmoTypeSet = MMOUtils.getMMOTypeSetString(item);
+		} else {
+			this.material = Material.AIR;
+			mmoType = null;
+			mmoTypeSet = null;
+		}
 	}
 	
 	public ItemData(Material material, String mmoType, String mmoTypeSet) {
@@ -58,6 +66,12 @@ public class ItemData {
 			
 			return data.getMaterial() == getMaterial() && data.getMMOType().equals(mmoType) && data.getMMOTypeSet().equals(mmoTypeSet);
 		}
+		return false;
+	}
+
+	public static boolean contains(List<ItemData> data, Material material) {
+		for(ItemData d : data)
+			if(d.getMaterial() == material) return true;
 		return false;
 	}
 }

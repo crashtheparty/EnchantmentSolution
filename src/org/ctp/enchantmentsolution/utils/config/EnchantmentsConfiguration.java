@@ -13,7 +13,9 @@ import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.enchantments.helper.Weight;
 import org.ctp.enchantmentsolution.enums.ItemType;
-import org.ctp.enchantmentsolution.utils.*;
+import org.ctp.enchantmentsolution.utils.ChatUtils;
+import org.ctp.enchantmentsolution.utils.Configurations;
+import org.ctp.enchantmentsolution.utils.PermissionUtils;
 import org.ctp.enchantmentsolution.utils.yaml.YamlConfigBackup;
 
 public class EnchantmentsConfiguration extends Configuration {
@@ -72,7 +74,7 @@ public class EnchantmentsConfiguration extends Configuration {
 			config.addDefault(start + ".conflicting_enchantments", enchant.conflictingDefaultList());
 			config.addEnum(start + ".conflicting_enchantments", RegisterEnchantments.getEnchantmentNames());
 			config.addDefault(start + ".disabled_items", enchant.getDisabledItemsStrings());
-			config.addEnum(start + ".disabled_items", ESArrays.getRepairMaterialsStrings());
+			config.addEnum(start + ".disabled_items", ItemType.getRepairMaterialsStrings());
 			config.addDefault(start + ".enchantment_item_types", ItemType.itemTypesToStrings(enchant.getDefaultEnchantmentItemTypes()));
 			config.addDefault(start + ".anvil_item_types", ItemType.itemTypesToStrings(enchant.getDefaultAnvilItemTypes()));
 			for(int i = 1; i <= enchant.getMaxLevel(); i++) {
@@ -101,7 +103,7 @@ public class EnchantmentsConfiguration extends Configuration {
 				config.addDefault(namespace + ".conflicting_enchantments", enchant.conflictingDefaultList());
 				config.addEnum(namespace + ".conflicting_enchantments", RegisterEnchantments.getEnchantmentNames());
 				config.addDefault(namespace + ".disabled_items", enchant.getDisabledItemsStrings());
-				config.addEnum(namespace + ".disabled_items", ESArrays.getRepairMaterialsStrings());
+				config.addEnum(namespace + ".disabled_items", ItemType.getRepairMaterialsStrings());
 			}
 
 		config.writeDefaults();

@@ -9,10 +9,10 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.api.ApiEnchantmentWrapper;
 import org.ctp.enchantmentsolution.enchantments.helper.Weight;
+import org.ctp.enchantmentsolution.enums.CustomItemType;
 import org.ctp.enchantmentsolution.enums.EnchantmentLocation;
 import org.ctp.enchantmentsolution.enums.ItemType;
 import org.ctp.enchantmentsolution.utils.*;
-import org.ctp.enchantmentsolution.utils.compatibility.MMOUtils.MMOType;
 import org.ctp.enchantmentsolution.utils.config.*;
 
 public class RegisterEnchantments {
@@ -211,7 +211,7 @@ public class RegisterEnchantments {
 				List<ItemType> enchantmentTypes = new ArrayList<ItemType>();
 				if (enchantmentItemTypes != null) for(String s: enchantmentItemTypes) {
 					ItemType type = null;
-					if (s.startsWith("mmoitems:")) type = ItemType.CUSTOM.setCustomType(MMOType.get(s.toUpperCase())).setCustomString(s.toUpperCase());
+					if (s.contains(":")) type = ItemType.CUSTOM.setCustomType(CustomItemType.get(s.toUpperCase())).setCustomString(s.toUpperCase());
 					else
 						type = ItemType.valueOf(s.toUpperCase());
 					if (type != null) enchantmentTypes.add(type);
@@ -220,7 +220,7 @@ public class RegisterEnchantments {
 				List<ItemType> anvilTypes = new ArrayList<ItemType>();
 				if (anvilItemTypes != null) for(String s: anvilItemTypes) {
 					ItemType type = null;
-					if (s.startsWith("mmoitems:")) type = ItemType.CUSTOM.setCustomType(MMOType.get(s.toUpperCase())).setCustomString(s.toUpperCase());
+					if (s.contains(":")) type = ItemType.CUSTOM.setCustomType(CustomItemType.get(s.toUpperCase())).setCustomString(s.toUpperCase());
 					else
 						type = ItemType.valueOf(s.toUpperCase());
 					if (type != null) anvilTypes.add(type);

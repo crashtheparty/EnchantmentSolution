@@ -14,10 +14,10 @@ import org.ctp.enchantmentsolution.rpg.RPGUtils;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.PermissionUtils;
 import org.ctp.enchantmentsolution.utils.StringUtils;
-import org.ctp.enchantmentsolution.utils.compatibility.MMOUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 import org.ctp.enchantmentsolution.utils.config.ConfigUtils;
 import org.ctp.enchantmentsolution.utils.config.Type;
+import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 
 public abstract class CustomEnchantment {
 
@@ -190,16 +190,18 @@ public abstract class CustomEnchantment {
 
 	public boolean canEnchantItem(ItemData item) {
 		for(ItemType type: getEnchantmentItemTypes()) {
-			if (type.getType().equals("custom") && MMOUtils.check(item, type, MMOUtils.MMOType.get(type.getCustomString()))) return true;
-			if (type.getItemTypes() != null) if (type.getItemTypes().contains(item.getMaterial())) return true;
+			if (type.getType().equals("custom") && ItemUtils.checkItemType(item, type, CustomItemType.get(ItemType.itemTypeToString(type)))) return true;
+			if (type.getEnchantMaterials() != null && ItemData.contains(type.getEnchantMaterials(), item.getMaterial())) return true;
 		}
 		return false;
 	}
 
 	public boolean canAnvilItem(ItemData item) {
 		if (item.getMaterial() == Material.ENCHANTED_BOOK) return true;
-		for(ItemType type: getAnvilItemTypes())
-			if (type.getItemTypes().contains(item.getMaterial())) return true;
+		for(ItemType type: getAnvilItemTypes()) {
+			if (type.getType().equals("custom") && ItemUtils.checkItemType(item, type, CustomItemType.get(ItemType.itemTypeToString(type)))) return true;
+			if (type.getEnchantMaterials() != null && ItemData.contains(type.getEnchantMaterials(), item.getMaterial())) return true;
+		}
 		return false;
 	}
 

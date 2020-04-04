@@ -22,10 +22,10 @@ import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantmentWrapper;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
-import org.ctp.enchantmentsolution.enums.ItemData;
-import org.ctp.enchantmentsolution.enums.ItemType;
+import org.ctp.enchantmentsolution.enums.*;
 import org.ctp.enchantmentsolution.utils.ESArrays;
 import org.ctp.enchantmentsolution.utils.StringUtils;
+import org.ctp.enchantmentsolution.utils.compatibility.MMOUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 
 public class ItemUtils {
@@ -149,10 +149,8 @@ public class ItemUtils {
 	public static boolean isEnchantable(ItemStack item) {
 		if (item == null) return false;
 		ItemMeta meta = item.getItemMeta();
-		for(CustomEnchantment enchant: RegisterEnchantments.getRegisteredEnchantments())
-			if (item.getType() == Material.ENCHANTED_BOOK && ((EnchantmentStorageMeta) meta).hasStoredEnchant(enchant.getRelativeEnchantment())) return false;
-			else if (meta.hasEnchant(enchant.getRelativeEnchantment())) return false;
-		if (ItemType.ALL.getItemTypes().contains(item.getType())) return true;
+		if(meta.hasEnchants() || (item.getType() == Material.ENCHANTED_BOOK && ((EnchantmentStorageMeta) meta).hasStoredEnchants())) return false;
+		if (ItemData.contains(ItemType.ALL.getEnchantMaterials(), item.getType())) return true;
 		if (item.getType().equals(Material.BOOK)) return true;
 		return false;
 	}
@@ -274,5 +272,10 @@ public class ItemUtils {
 			}
 		}
 		return items;
+	}
+	
+	public static boolean checkItemType(ItemData item, ItemType itemType, CustomItemType type) {
+		if (type == CustomItemType.VANILLA) return ((new MatData(itemType.getCustomString().split(":")[1]).hasMaterial()));
+		return MMOUtils.check(item, itemType, type);
 	}
 }

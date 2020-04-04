@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
+import org.ctp.enchantmentsolution.enums.ItemData;
 import org.ctp.enchantmentsolution.enums.ItemType;
 import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 
@@ -33,9 +34,9 @@ public class ContagionPlayer {
 	public List<ItemStack> getCurseableItems() {
 		List<ItemStack> items = new ArrayList<ItemStack>();
 		for(ItemStack item: player.getInventory().getContents())
-			if (item != null && ItemType.hasItemType(item.getType()) && canAddCurse(item) && !hasAllCurses(item)) items.add(item);
+			if (item != null && ItemType.hasEnchantMaterial(new ItemData(item)) && canAddCurse(item) && !hasAllCurses(item)) items.add(item);
 		for(ItemStack item: player.getInventory().getExtraContents())
-			if (item != null && ItemType.hasItemType(item.getType()) && canAddCurse(item) && !hasAllCurses(item)) items.add(item);
+			if (item != null && ItemType.hasEnchantMaterial(new ItemData(item)) && canAddCurse(item) && !hasAllCurses(item)) items.add(item);
 		return items;
 	}
 

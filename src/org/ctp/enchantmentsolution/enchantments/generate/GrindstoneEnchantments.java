@@ -13,6 +13,7 @@ import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.enums.EnchantmentLocation;
+import org.ctp.enchantmentsolution.enums.ItemData;
 import org.ctp.enchantmentsolution.enums.ItemType;
 import org.ctp.enchantmentsolution.nms.AnvilNMS;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
@@ -150,7 +151,7 @@ public class GrindstoneEnchantments extends GenerateEnchantments {
 		combinedItem = ItemUtils.removeAllEnchantments(combinedItem, false);
 
 		if (itemTwo != null) {
-			if (item.getType() != Material.BOOK && item.getType() != Material.ENCHANTED_BOOK && ItemType.hasItemType(item.getType())) {
+			if (item.getType() != Material.BOOK && item.getType() != Material.ENCHANTED_BOOK && ItemType.hasEnchantMaterial(new ItemData(item))) {
 				DamageUtils.setDamage(combinedItem, DamageUtils.getDamage(item.getItemMeta()));
 				int extraDurability = itemTwo.getType().getMaxDurability() - DamageUtils.getDamage(itemTwo.getItemMeta()) + (int) (itemTwo.getType().getMaxDurability() * .05);
 				DamageUtils.setDamage(combinedItem, DamageUtils.getDamage(item.getItemMeta()) - extraDurability);
