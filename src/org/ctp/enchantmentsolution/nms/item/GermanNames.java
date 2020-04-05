@@ -1,4 +1,4 @@
-package org.ctp.enchantmentsolution.nms.itemname;
+package org.ctp.enchantmentsolution.nms.item;
 
 import org.bukkit.Material;
 

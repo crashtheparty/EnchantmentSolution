@@ -44,7 +44,13 @@ public enum ConfigString {
 	LAPIS_CONSTANT(Type.ENCHANTMENTS, "advanced_options.lapis_modifiers.constant", double.class),
 	LAPIS_MULTIPLIER(Type.ENCHANTMENTS, "advanced_options.lapis_modifiers.multiplier", double.class),
 	MULTI_ENCHANT_DIVISOR(Type.ENCHANTMENTS, "advanced_options.multi_enchant_divisor", double.class),
-	USE_PERMISSIONS(Type.ENCHANTMENTS, "advanced_options.use_permissions", boolean.class);
+	USE_PERMISSIONS(Type.ENCHANTMENTS, "advanced_options.use_permissions", boolean.class),
+	RPG_BASE(Type.RPG, "experience.base", double.class),
+	RPG_MULTIPLY(Type.RPG, "experience.multiply", double.class),
+	RPG_LEVELS_0(Type.RPG, "levels.points.level_0", double.class),
+	RPG_LEVELS_BASE(Type.RPG, "levels.points.base", double.class),
+	RPG_LEVELS_ADD(Type.RPG, "levels.points.add_per_level", double.class),
+	RPG_LEVELS_POWER(Type.RPG, "levels.points.add_power", double.class);
 
 	private final Type type;
 	private final String location;

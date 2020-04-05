@@ -4,6 +4,7 @@ import java.lang.reflect.Field;
 import java.util.*;
 import java.util.logging.Level;
 
+import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
@@ -347,6 +348,12 @@ public class RegisterEnchantments {
 	public static CustomEnchantment getByName(String name) {
 		for(CustomEnchantment enchant: getEnchantments())
 			if (enchant.getName().equalsIgnoreCase(name)) return enchant;
+		return null;
+	}
+	
+	public static Enchantment getByKey(NamespacedKey key){
+		for(CustomEnchantment enchant : getEnchantments())
+			if(enchant.getRelativeEnchantment().getKey().equals(key)) return enchant.getRelativeEnchantment();
 		return null;
 	}
 }

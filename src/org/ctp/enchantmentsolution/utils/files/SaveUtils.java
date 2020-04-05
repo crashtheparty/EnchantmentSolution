@@ -1,8 +1,7 @@
 package org.ctp.enchantmentsolution.utils.files;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
+import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -18,6 +17,9 @@ import org.ctp.enchantmentsolution.enchantments.generate.TableEnchantments;
 import org.ctp.enchantmentsolution.events.blocks.DamageState;
 import org.ctp.enchantmentsolution.nms.AnimalMobNMS;
 import org.ctp.enchantmentsolution.nms.animalmob.AnimalMob;
+import org.ctp.enchantmentsolution.rpg.RPGPlayer;
+import org.ctp.enchantmentsolution.rpg.RPGUtils;
+import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.Configurations;
 import org.ctp.enchantmentsolution.utils.abillityhelpers.WalkerBlock;
 import org.ctp.enchantmentsolution.utils.abillityhelpers.WalkerUtils;
@@ -55,7 +57,7 @@ public class SaveUtils {
 					WalkerBlock walkerBlock = new WalkerBlock(enchantment, block, Material.valueOf(arrayBlock[5]), Integer.parseInt(arrayBlock[6]), DamageState.valueOf(arrayBlock[7]));
 					blocks.add(walkerBlock);
 				} catch (Exception ex) {
-					Bukkit.getLogger().info("Block at position " + i + " was invalid, skipping.");
+					ChatUtils.sendInfo("Block at position " + i + " was invalid, skipping.");
 				}
 				i++;
 			}
@@ -79,6 +81,21 @@ public class SaveUtils {
 			}
 		}
 		config.removeKeys("enchanting_table");
+		if (config.containsElements("rpg")) {
+			int i = 0;
+			while (config.getString("rpg." + i + ".player") != null) {
+				String uuid = config.getString("rpg." + i + ".player");
+				int level = config.getInt("rpg." + i + ".level");
+				String experience = config.getString("rpg." + i + ".experience");
+				RPGPlayer player = RPGUtils.addRPGPlayer(uuid, level, experience);
+				List<String> data = config.getStringList("rpg." + i + ".enchants");
+				if (data != null) for(String s: config.getStringList("rpg." + i + ".enchants"))
+					player.giveEnchantment(s);
+				i++;
+			}
+			config.removeKeys("rpg");
+		}
+
 		Configurations.getDataFile().save();
 	}
 
@@ -121,6 +138,22 @@ public class SaveUtils {
 			} catch (NoClassDefFoundError ex) {
 				ex.printStackTrace();
 			}
+		}
+		i = 0;
+		List<RPGPlayer> players = RPGUtils.getPlayers();
+		if (players != null) for(RPGPlayer player: players) {
+			config.set("rpg." + i + ".player", player.getPlayer().getUniqueId().toString());
+			config.set("rpg." + i + ".level", player.getLevel());
+			config.set("rpg." + i + ".experience", player.getExperience().toString());
+			List<String> enchants = new ArrayList<String>();
+			Iterator<Entry<Enchantment, Integer>> iterator = player.getEnchantmentList().entrySet().iterator();
+			while (iterator.hasNext()) {
+				Entry<Enchantment, Integer> entry = iterator.next();
+				Enchantment ench = entry.getKey();
+				enchants.add(ench.getKey().getNamespace() + "+" + ench.getKey().getKey() + "@" + entry.getValue());
+			}
+			config.set("rpg." + i + ".enchants", enchants);
+			i++;
 		}
 
 		Configurations.getDataFile().save();

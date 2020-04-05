@@ -1,3 +1,14 @@
+experience:
+    base: 500
+    multiply: 50
+
+levels:
+    points:
+        level_0: 5
+        base: 1
+        add_per_level: 1
+        add_power: 0.3
+
 free_enchantments:
 - minecraft+efficiency@1
 - minecraft+sharpness@1

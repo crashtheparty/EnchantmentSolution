@@ -11,12 +11,13 @@ public enum ItemBreakType {
 	IRON_AXE(), IRON_SHOVEL(), IRON_PICKAXE(), IRON_HOE(), GOLDEN_AXE(), GOLDEN_SHOVEL(), GOLDEN_PICKAXE(), GOLDEN_HOE(), STONE_AXE(), STONE_SHOVEL(),
 	STONE_PICKAXE(), STONE_HOE(), WOODEN_AXE(), WOODEN_SHOVEL(), WOODEN_PICKAXE(), WOODEN_HOE();
 
-	private List<Material> breakTypes, silkBreakTypes;
+	private List<Material> breakTypes, silkBreakTypes, fortuneBreakTypes;
 	private final List<String> DIAMOND_PICKAXE_BLOCKS = Arrays.asList("OBSIDIAN", "CRYING_OBSIDIAN", "RESPAWN_ANCHOR", "ANCIENT_DEBRIS", "NETHERITE_BLOCK");
 
 	ItemBreakType() {
-		breakTypes = getItemBreakMaterials(false);
-		silkBreakTypes = getItemBreakMaterials(true);
+		breakTypes = getItemBreakMaterials("");
+		silkBreakTypes = getItemBreakMaterials("silk");
+		fortuneBreakTypes = getItemBreakMaterials("fortune");
 	}
 
 	public List<String> getDiamondPickaxeBlocks(){
@@ -29,6 +30,10 @@ public enum ItemBreakType {
 
 	public List<Material> getSilkBreakTypes() {
 		return silkBreakTypes;
+	}
+
+	public List<Material> getFortuneBreakTypes() {
+		return fortuneBreakTypes;
 	}
 
 	public static ItemBreakType getType(Material type) {
@@ -44,9 +49,9 @@ public enum ItemBreakType {
 		return itemTypes;
 	}
 
-	private List<Material> getItemBreakMaterials(boolean silk) {
+	private List<Material> getItemBreakMaterials(String type) {
 		List<Material> materials = new ArrayList<Material>();
-		List<String> strings = silk ? getSilkTouchStrings() : getItemBreakStrings();
+		List<String> strings = type.equals("silk") ? getSilkTouchStrings() : type.equals("fortune") ? getFortuneStrings() : getItemBreakStrings();
 		for(String s: strings)
 			try {
 				materials.add(Material.valueOf(s));
@@ -130,6 +135,47 @@ public enum ItemBreakType {
 			case "WOODEN_SHOVEL":
 				itemTypes.addAll(Arrays.asList("SNOW", "SNOW_BLOCK"));
 				return itemTypes;
+			case "NETHERITE_HOE":
+			case "DIAMOND_HOE":
+			case "IRON_HOE":
+			case "GOLDEN_HOE":
+			case "STONE_HOE":
+			case "WOODEN_HOE":
+				return itemTypes;
+			default:
+				break;
+		}
+		return itemTypes;
+	}
+
+	public List<String> getFortuneStrings() {
+		List<String> itemTypes = new ArrayList<String>();
+		itemTypes.addAll(Arrays.asList("WEEPING_VINES", "TWISTING_VINES", "WHEAT", "BEETROOTS", "CARROTS", "POTATOES", "NETHER_WART", "SEA_LANTERN", "MELON", 
+			"GLOWSTONE", "GRASS", "GRAVEL", "ACACIA_LEAVES", "BIRCH_LEAVES", "DARK_OAK_LEAVES", "JUNGLE_LEAVES", "OAK_LEAVES", "SPRUCE_LEAVES"));
+
+		switch (name()) {
+			case "NETHERITE_PICKAXE":
+			case "DIAMOND_PICKAXE":
+			case "IRON_PICKAXE":
+				itemTypes.addAll(Arrays.asList("DIAMOND_ORE", "EMERALD_ORE", "REDSTONE_ORE"));
+			case "STONE_PICKAXE":
+				itemTypes.addAll(Arrays.asList("LAPIS_ORE"));
+			case "GOLDEN_PICKAXE":
+			case "WOODEN_PICKAXE":
+				itemTypes.addAll(Arrays.asList("NETHER_GOLD_ORE", "COAL_ORE", "NETHER_QUARTZ_ORE"));
+				return itemTypes;
+			case "NETHERITE_AXE":
+			case "DIAMOND_AXE":
+			case "GOLDEN_AXE":
+			case "IRON_AXE":
+			case "STONE_AXE":
+			case "WOODEN_AXE":
+			case "NETHERITE_SHOVEL":
+			case "DIAMOND_SHOVEL":
+			case "IRON_SHOVEL":
+			case "GOLDEN_SHOVEL":
+			case "STONE_SHOVEL":
+			case "WOODEN_SHOVEL":
 			case "NETHERITE_HOE":
 			case "DIAMOND_HOE":
 			case "IRON_HOE":

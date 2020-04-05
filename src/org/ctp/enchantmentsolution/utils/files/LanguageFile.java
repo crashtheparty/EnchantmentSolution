@@ -12,7 +12,7 @@ import org.ctp.enchantmentsolution.enchantments.CustomEnchantmentWrapper;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enums.ItemType;
 import org.ctp.enchantmentsolution.enums.Language;
-import org.ctp.enchantmentsolution.nms.ItemNameNMS;
+import org.ctp.enchantmentsolution.nms.ItemNMS;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.StringUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigUtils;
@@ -67,7 +67,7 @@ public class LanguageFile {
 
 		for(Iterator<java.util.Map.Entry<Material, String>> it = ItemType.ALL.getUnlocalizedNames().entrySet().iterator(); it.hasNext();) {
 			java.util.Map.Entry<Material, String> e = it.next();
-			config.addDefault("vanilla." + e.getValue(), ItemNameNMS.returnLocalizedItemName(language, e.getKey()));
+			config.addDefault("vanilla." + e.getValue(), ItemNMS.returnLocalizedItemName(language, e.getKey()));
 		}
 
 		config.saveConfig();

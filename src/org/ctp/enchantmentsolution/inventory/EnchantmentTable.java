@@ -253,7 +253,7 @@ public class EnchantmentTable implements InventoryData {
 				ChatUtils.sendMessage(player, ChatUtils.getMessage(getCodes(), "table.lack-reqs"));
 				return;
 			}
-
+ 
 		TableEnchantments table = TableEnchantments.getTableEnchantments(player, null, getBooks());
 		if (player.getGameMode().equals(GameMode.SURVIVAL) || player.getGameMode().equals(GameMode.ADVENTURE)) {
 			player.setLevel(player.getLevel() - level - 1);
