@@ -1,6 +1,6 @@
 package org.ctp.enchantmentsolution.nms;
 
-import org.bukkit.entity.Animals;
+import org.bukkit.entity.Creature;
 import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.nms.animalmob.*;
@@ -8,7 +8,7 @@ import org.ctp.enchantmentsolution.utils.yaml.YamlConfig;
 
 public class AnimalMobNMS {
 
-	public static AnimalMob getMob(Animals animal, ItemStack item) {
+	public static AnimalMob getMob(Creature animal, ItemStack item) {
 		switch (EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber()) {
 			case 1:
 				return new AnimalMob_v1_13_R1(animal, item);

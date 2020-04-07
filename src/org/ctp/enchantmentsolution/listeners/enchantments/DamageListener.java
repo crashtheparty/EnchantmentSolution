@@ -214,9 +214,9 @@ public class DamageListener extends Enchantmentable {
 		if (!canRun(RegisterEnchantments.IRENES_LASSO, event)) return;
 		Entity attacker = event.getDamager();
 		Entity attacked = event.getEntity();
-		if (attacker instanceof Player && attacked instanceof Animals) {
+		if (attacker instanceof Player && (attacked instanceof Animals || attacked instanceof WaterMob)) {
 			Player player = (Player) attacker;
-			Animals animals = (Animals) attacked;
+			Creature animals = (Creature) attacked;
 			ItemStack attackItem = player.getInventory().getItemInMainHand();
 			if (attackItem != null && ItemUtils.hasEnchantment(attackItem, RegisterEnchantments.IRENES_LASSO)) {
 				if (!AnimalMobNMS.canAddMob()) return;
