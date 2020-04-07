@@ -172,9 +172,9 @@ public class ProjectileListener extends Enchantmentable {
 	}
 
 	private void handleDetonatorExplosion(ProjectileHitEvent event, DetonatorExplosionEvent detonator, Location loc) {
-		loc.getWorld().createExplosion(detonator.getLoc(), detonator.getSize(), detonator.willSetFire(), detonator.willSetBlocks());
+		boolean explode = loc.getWorld().createExplosion(detonator.getLoc(), detonator.getSize(), detonator.willSetFire(), detonator.willSetBlocks());
 		if (event.getEntity() != null) event.getEntity().remove();
-		if (detonator.getEntity() instanceof Player) {
+		if (explode && detonator.getEntity() instanceof Player) {
 			Player player = (Player) detonator.getEntity();
 			AdvancementUtils.awardCriteria(player, ESAdvancement.CARPET_BOMBS, "explosion", 1);
 		}

@@ -7,23 +7,11 @@ import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
 import org.bukkit.attribute.Attribute;
-import org.bukkit.entity.AbstractHorse;
-import org.bukkit.entity.AnimalTamer;
-import org.bukkit.entity.Animals;
-import org.bukkit.entity.ChestedHorse;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Horse;
-import org.bukkit.entity.Llama;
-import org.bukkit.entity.Parrot;
-import org.bukkit.entity.Pig;
-import org.bukkit.entity.Rabbit;
-import org.bukkit.entity.Sheep;
-import org.bukkit.entity.Tameable;
-import org.bukkit.entity.Wolf;
+import org.bukkit.entity.*;
 import org.bukkit.entity.Horse.Color;
 import org.bukkit.entity.Horse.Style;
 import org.bukkit.entity.Parrot.Variant;
+import org.bukkit.entity.TropicalFish.Pattern;
 import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.utils.StringUtils;
@@ -36,24 +24,34 @@ public class AnimalMob {
 	private String name, owner;
 	private double health, jumpStrength, movementSpeed, maxHealth;
 	private ItemStack item;
-	private int age, entityID, domestication, maxDomestication, llamaStrength;
-	private DyeColor sheepColor, wolfCollar;
+	private int age, entityID, domestication, maxDomestication, llamaStrength, puffState;
+	private DyeColor sheepColor, wolfCollar, tropicalBodyColor, tropicalPatternColor;
 	private boolean isHorse, carryingChest, pigSaddle, sheared, angry;
 	private Map<Integer, ItemStack> inventoryItems;
-	private ItemStack saddle;
-	private ItemStack armor;
+	private ItemStack saddle,  armor;
 	private Color horseColor;
 	private org.bukkit.entity.Llama.Color llamaColor;
 	private Style horseStyle;
 	private Variant parrotVariant;
 	private org.bukkit.entity.Rabbit.Type rabbitType;
+	private Pattern tropicalPattern;
 
-	public AnimalMob(Animals mob, ItemStack item) {
+	public AnimalMob(Creature mob, ItemStack item) {
 		setMob(mob.getType());
 		setName(mob.getCustomName());
 		setHealth(mob.getHealth());
 		setItem(item);
-		setAge(mob.getAge());
+		if(mob instanceof Animals) setAge(((Animals) mob).getAge());
+		if (mob instanceof PufferFish) {
+			PufferFish pufferFish = (PufferFish) mob;
+			setPuffState(pufferFish.getPuffState());
+		}
+		if (mob instanceof TropicalFish) {
+			TropicalFish tropicalFish = (TropicalFish) mob;
+			setTropicalBodyColor(tropicalFish.getBodyColor());
+			setTropicalPatternColor(tropicalFish.getPatternColor());
+			setTropicalPattern(tropicalFish.getPattern());
+		}
 		if (mob instanceof Sheep) {
 			Sheep sheep = (Sheep) mob;
 			setSheepColor(sheep.getColor());
@@ -131,12 +129,16 @@ public class AnimalMob {
 		config.set("animals." + i + ".llama_strength", getLlamaStrength());
 		config.set("animals." + i + ".pig_saddle", hasPigSaddle());
 		config.set("animals." + i + ".sheared", isSheared());
+		config.set("animals." + i + ".puff_state", getPuffState());
 		config.set("animals." + i + ".sheep_color", getSheepColor() != null ? getSheepColor().name() : null);
 		config.set("animals." + i + ".wolf_collar", getWolfCollar() != null ? getWolfCollar().name() : null);
 		config.set("animals." + i + ".horse_style", getHorseStyle() != null ? getHorseStyle().name() : null);
 		config.set("animals." + i + ".horse_color", getHorseColor() != null ? getHorseColor().name() : null);
 		config.set("animals." + i + ".llama_color", getLlamaColor() != null ? getLlamaColor().name() : null);
 		config.set("animals." + i + ".rabbit_type", getRabbitType() != null ? getRabbitType().name() : null);
+		config.set("animals." + i + ".tropical_body_color", getTropicalBodyColor() != null ? getTropicalBodyColor().name() : null);
+		config.set("animals." + i + ".tropical_pattern_color", getTropicalPatternColor() != null ? getTropicalPatternColor().name() : null);
+		config.set("animals." + i + ".tropical_pattern", getTropicalPattern() != null ? getTropicalPattern().name() : null);
 		config.set("animals." + i + ".parrot_variant", getParrotVariant() != null ? getParrotVariant().name() : null);
 		config.set("animals." + i + ".saddle", getSaddle() != null ? ItemSerialization.itemToString(getSaddle()) : null);
 		config.set("animals." + i + ".armor", getArmor() != null ? ItemSerialization.itemToString(getArmor()) : null);
@@ -148,48 +150,57 @@ public class AnimalMob {
 	public void editProperties(Entity e) {
 		try {
 			e.setCustomName(getName());
-			if (e instanceof Animals) {
-				Animals animal = (Animals) e;
-				if (animal instanceof Sheep) {
+			if (e instanceof Creature) {
+				Creature creature = (Creature) e;
+				if (creature instanceof PufferFish) ((PufferFish) creature).setPuffState(puffState);
+				if (creature instanceof TropicalFish) {
+					if (tropicalBodyColor == null) tropicalBodyColor = DyeColor.WHITE;
+					if (tropicalPatternColor == null) tropicalPatternColor = DyeColor.WHITE;
+					if (tropicalPattern == null) tropicalPattern = Pattern.SUNSTREAK;
+					((TropicalFish) creature).setBodyColor(tropicalBodyColor);
+					((TropicalFish) creature).setPatternColor(tropicalPatternColor);
+					((TropicalFish) creature).setPattern(tropicalPattern);
+				}
+				if (creature instanceof Sheep) {
 					if (sheepColor == null) sheepColor = DyeColor.WHITE;
-					((Sheep) animal).setColor(sheepColor);
-					((Sheep) animal).setSheared(isSheared());
+					((Sheep) creature).setColor(sheepColor);
+					((Sheep) creature).setSheared(isSheared());
 				}
-				if (animal instanceof Parrot) {
+				if (creature instanceof Parrot) {
 					if (parrotVariant == null) parrotVariant = Variant.RED;
-					((Parrot) animal).setVariant(parrotVariant);
+					((Parrot) creature).setVariant(parrotVariant);
 				}
-				if (animal instanceof Tameable) {
-					Tameable tameable = (Tameable) animal;
+				if (creature instanceof Tameable) {
+					Tameable tameable = (Tameable) creature;
 					if (owner != null) {
 						Entity eOwner = Bukkit.getEntity(UUID.fromString(owner));
 						if (eOwner != null && eOwner instanceof AnimalTamer) tameable.setOwner((AnimalTamer) eOwner);
 					}
 				}
-				if (animal instanceof Pig) {
-					Pig pig = (Pig) animal;
+				if (creature instanceof Pig) {
+					Pig pig = (Pig) creature;
 					pig.setSaddle(hasPigSaddle());
 				}
-				if (animal instanceof Wolf) {
-					Wolf wolf = (Wolf) animal;
+				if (creature instanceof Wolf) {
+					Wolf wolf = (Wolf) creature;
 					wolf.setCollarColor(getWolfCollar());
 					wolf.setAngry(isAngry());
 				}
-				if (animal instanceof Rabbit) {
-					Rabbit rabbit = (Rabbit) animal;
+				if (creature instanceof Rabbit) {
+					Rabbit rabbit = (Rabbit) creature;
 					rabbit.setRabbitType(getRabbitType());
 				}
-				if (animal instanceof AbstractHorse) {
-					AbstractHorse aHorse = (AbstractHorse) animal;
+				if (creature instanceof AbstractHorse) {
+					AbstractHorse aHorse = (AbstractHorse) creature;
 					aHorse.getInventory().setSaddle(getSaddle());
-					if (animal instanceof Horse) {
-						Horse horse = (Horse) animal;
+					if (creature instanceof Horse) {
+						Horse horse = (Horse) creature;
 						horse.setColor(getHorseColor());
 						horse.setStyle(getHorseStyle());
 						horse.getInventory().setArmor(getArmor());
 					}
-					if (animal instanceof Llama) {
-						Llama llama = (Llama) animal;
+					if (creature instanceof Llama) {
+						Llama llama = (Llama) creature;
 						llama.setColor(getLlamaColor());
 						llama.setStrength(getLlamaStrength());
 					}
@@ -205,8 +216,8 @@ public class AnimalMob {
 							cHorse.getInventory().setItem(i, inventoryItems.get(i));
 					}
 				}
-				animal.setAge(getAge());
-				animal.setHealth(getHealth());
+				creature.setHealth(getHealth());
+				if(creature instanceof Animals) ((Animals) creature).setAge(getAge());
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -452,5 +463,37 @@ public class AnimalMob {
 
 	public boolean inItem(ItemStack item, int entityID) {
 		return getItem() != null && item.equals(getItem()) || entityID == getEntityID();
+	}
+
+	public int getPuffState() {
+		return puffState;
+	}
+
+	public void setPuffState(int puffState) {
+		this.puffState = puffState;
+	}
+
+	public DyeColor getTropicalBodyColor() {
+		return tropicalBodyColor;
+	}
+
+	public void setTropicalBodyColor(DyeColor tropicalBodyColor) {
+		this.tropicalBodyColor = tropicalBodyColor;
+	}
+
+	public DyeColor getTropicalPatternColor() {
+		return tropicalPatternColor;
+	}
+
+	public void setTropicalPatternColor(DyeColor tropicalPatternColor) {
+		this.tropicalPatternColor = tropicalPatternColor;
+	}
+
+	public Pattern getTropicalPattern() {
+		return tropicalPattern;
+	}
+
+	public void setTropicalPattern(Pattern tropicalPattern) {
+		this.tropicalPattern = tropicalPattern;
 	}
 }

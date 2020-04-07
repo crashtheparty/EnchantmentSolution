@@ -5,14 +5,12 @@ import java.util.List;
 import java.util.Map;
 
 import org.bukkit.DyeColor;
-import org.bukkit.entity.Animals;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Ocelot;
+import org.bukkit.entity.*;
 import org.bukkit.entity.Horse.Color;
 import org.bukkit.entity.Horse.Style;
 import org.bukkit.entity.Ocelot.Type;
 import org.bukkit.entity.Parrot.Variant;
+import org.bukkit.entity.TropicalFish.Pattern;
 import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.utils.items.ItemSerialization;
@@ -23,7 +21,7 @@ public class AnimalMob_v1_13_R2 extends AnimalMob {
 
 	private Type ocelotType;
 
-	public AnimalMob_v1_13_R2(Animals mob, ItemStack item) {
+	public AnimalMob_v1_13_R2(Creature mob, ItemStack item) {
 		super(mob, item);
 		if (mob instanceof Ocelot) {
 			Ocelot ocelot = (Ocelot) mob;
@@ -39,6 +37,7 @@ public class AnimalMob_v1_13_R2 extends AnimalMob {
 		this.ocelotType = ocelotType;
 	}
 
+	@Override
 	public void editProperties(Entity e) {
 		super.editProperties(e);
 		try {
@@ -51,6 +50,7 @@ public class AnimalMob_v1_13_R2 extends AnimalMob {
 		}
 	}
 
+	@Override
 	public void setConfig(YamlConfig config, int i) {
 		super.setConfig(config, i);
 
@@ -74,6 +74,7 @@ public class AnimalMob_v1_13_R2 extends AnimalMob {
 		mob.setLlamaStrength(config.getInt("animals." + i + ".llama_strength"));
 		mob.setPigSaddle(config.getBoolean("animals." + i + ".pig_saddle"));
 		mob.setSheared(config.getBoolean("animals." + i + ".sheared"));
+		mob.setPuffState(config.getInt("animals." + i + ".puff_state"));
 
 		try {
 			mob.setMob(EntityType.valueOf(config.getString("animals." + i + ".entity_type")));
@@ -107,6 +108,15 @@ public class AnimalMob_v1_13_R2 extends AnimalMob {
 		} catch (Exception ex) {}
 		try {
 			mob.setArmor(ItemSerialization.stringToItem(config.getString("animals." + i + ".armor")));
+		} catch (Exception ex) {}
+		try {
+			mob.setTropicalBodyColor(DyeColor.valueOf(config.getString("animals." + i + ".tropical_body_color")));
+		} catch (Exception ex) {}
+		try {
+			mob.setTropicalPatternColor(DyeColor.valueOf(config.getString("animals." + i + ".tropical_pattern_color")));
+		} catch (Exception ex) {}
+		try {
+			mob.setTropicalPattern(Pattern.valueOf(config.getString("animals." + i + ".tropical_pattern")));
 		} catch (Exception ex) {}
 
 		Map<Integer, ItemStack> inventoryItems = new HashMap<Integer, ItemStack>();
