@@ -155,7 +155,7 @@ public class EnchantmentSolutionCommand implements CommandExecutor, TabCompleter
 		if (i == 2 && (containsCommand(enchantUnsafe, args[0])) && sender.hasPermission(enchantUnsafe.getPermission())) all.addAll(level());
 		if (i == 3 && (containsCommand(enchantUnsafe, args[0])) && sender.hasPermission(enchantUnsafe.getPermission())) all.addAll(players(args[i]));
 		if (i == 4 && (containsCommand(enchantUnsafe, args[0])) && sender.hasPermission(enchantUnsafe.getPermission())) all.addAll(slots(args[i]));
-		if (i == 1 && (containsCommand(removeEnchant, args[0])) && sender.hasPermission(removeEnchant.getPermission())) all.addAll(enchant(args[i]));
+		if (i == 1 && (containsCommand(removeEnchant, args[0])) && sender.hasPermission(removeEnchant.getPermission())) all.addAll(enchantAll(args[i]));
 		if (i == 2 && (containsCommand(removeEnchant, args[0])) && sender.hasPermission(removeEnchant.getPermission())) all.addAll(players(args[i]));
 		if (i == 3 && (containsCommand(removeEnchant, args[0])) && sender.hasPermission(removeEnchant.getPermission())) all.addAll(slots(args[i]));
 		if (i == 1 && (containsCommand(enchantInfo, args[0])) && sender.hasPermission(enchantInfo.getPermission())) all.addAll(enchant(args[i]));
@@ -175,6 +175,13 @@ public class EnchantmentSolutionCommand implements CommandExecutor, TabCompleter
 	private List<String> enchant(String startsWith) {
 		List<String> strings = new ArrayList<String>();
 		strings.addAll(RegisterEnchantments.getEnchantmentNames());
+		return removeComplete(strings, startsWith);
+	}
+
+	private List<String> enchantAll(String startsWith) {
+		List<String> strings = new ArrayList<String>();
+		strings.addAll(RegisterEnchantments.getEnchantmentNames());
+		strings.add("All");
 		return removeComplete(strings, startsWith);
 	}
 

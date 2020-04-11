@@ -171,11 +171,15 @@ public class EnchantCommandUtils {
 		if (sender.hasPermission(details.getPermission())) {
 			if (args.length > 1) {
 				String enchantmentName = args[1];
-				for(CustomEnchantment enchant: RegisterEnchantments.getRegisteredEnchantments())
-					if (enchant.getName().equalsIgnoreCase(enchantmentName)) {
+				boolean all = false;
+				boolean includeCurse = false;
+				for(CustomEnchantment enchant: RegisterEnchantments.getRegisteredEnchantments()) {
+					if (enchantmentName.equals("All")) all = true;
+					if (all || enchant.getName().equalsIgnoreCase(enchantmentName)) {
 						if (args.length > 2) {
 							String arg = args[2];
-							if (!arg.equals("@p")) {
+							if (all) includeCurse = Boolean.valueOf(arg);
+							else if (!arg.equals("@p")) {
 								removePlayer = Bukkit.getPlayer(arg);
 								if (removePlayer == null) {
 									HashMap<String, Object> codes = ChatUtils.getCodes();
@@ -219,12 +223,17 @@ public class EnchantCommandUtils {
 							boolean useBooks = ConfigString.USE_ENCHANTED_BOOKS.getBoolean();
 							if (itemToEnchant.getType() == Material.BOOK && useBooks) itemToEnchant = ItemUtils.convertToEnchantedBook(itemToEnchant);
 							else if (itemToEnchant.getType() == Material.ENCHANTED_BOOK && !useBooks) itemToEnchant = ItemUtils.convertToRegularBook(itemToEnchant);
-							itemToEnchant = ItemUtils.removeEnchantmentFromItem(itemToEnchant, enchant);
+							HashMap<String, Object> codes = ChatUtils.getCodes();
+							if (all) {
+								itemToEnchant = ItemUtils.removeAllEnchantments(itemToEnchant, includeCurse);
+								codes.put("%enchant%", "All");
+							} else {
+								itemToEnchant = ItemUtils.removeEnchantmentFromItem(itemToEnchant, enchant);
+								codes.put("%enchant%", enchant.getDisplayName());
+							}
 							if (itemToEnchant.getType() == Material.ENCHANTED_BOOK && !((EnchantmentStorageMeta) itemToEnchant.getItemMeta()).hasStoredEnchants()) itemToEnchant.setType(Material.BOOK);
 
 							removePlayer.getInventory().setItem(slot, itemToEnchant);
-							HashMap<String, Object> codes = ChatUtils.getCodes();
-							codes.put("%enchant%", enchant.getDisplayName());
 							codes.put("%player%", sender.getName());
 							if (player != null) codes.put("%player%", player.getDisplayName());
 							else
@@ -240,9 +249,10 @@ public class EnchantCommandUtils {
 							ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(ChatUtils.getCodes(), "commands.enchant-remove-from-item"), Level.WARNING);
 						return true;
 					}
-				HashMap<String, Object> codes = ChatUtils.getCodes();
-				codes.put("%enchant%", enchantmentName);
-				ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(codes, "commands.enchant-not-found"), Level.WARNING);
+					HashMap<String, Object> codes = ChatUtils.getCodes();
+					codes.put("%enchant%", enchantmentName);
+					ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(codes, "commands.enchant-not-found"), Level.WARNING);
+				}
 			} else
 				ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(ChatUtils.getCodes(), "commands.enchant-not-specified"), Level.WARNING);
 		} else
@@ -378,7 +388,7 @@ public class EnchantCommandUtils {
 			return true;
 		}
 	}
-	
+
 	public static boolean enchantInfo(CommandSender sender, ESCommand details, String[] args) {
 		Player player = null;
 		if (sender instanceof Player) player = (Player) sender;
