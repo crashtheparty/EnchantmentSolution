@@ -28,7 +28,6 @@ public class LanguageConfiguration extends Configuration {
 		config.copyDefaults(language.getConfig());
 
 		config.writeDefaults();
-
 	}
 
 	@Override
