@@ -7,6 +7,7 @@ import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Statistic;
+import org.bukkit.World.Environment;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -91,7 +92,7 @@ public class AttributeListener extends Enchantmentable {
 					}
 				} else if (entry.getKey() == RegisterEnchantments.NO_REST) {
 					if (type == ItemSlotType.HELMET && equip) {
-						if (player.getStatistic(Statistic.TIME_SINCE_REST) > 72000 && player.getWorld().getTime() > 12540 && player.getWorld().getTime() < 23459) AdvancementUtils.awardCriteria(player, ESAdvancement.COFFEE_BREAK, "coffee");
+						if (player.getStatistic(Statistic.TIME_SINCE_REST) > 72000 && player.getWorld().getEnvironment() == Environment.NORMAL && player.getWorld().getTime() > 12540 && player.getWorld().getTime() < 23459) AdvancementUtils.awardCriteria(player, ESAdvancement.COFFEE_BREAK, "coffee");
 						if (player.getStatistic(Statistic.TIME_SINCE_REST) > 0) player.setStatistic(Statistic.TIME_SINCE_REST, 0);
 					}
 				} else if (entry.getKey() == RegisterEnchantments.MAGIC_GUARD && type == ItemSlotType.OFF_HAND && equip) for(PotionEffectType potionEffect: ESArrays.getBadPotions())
