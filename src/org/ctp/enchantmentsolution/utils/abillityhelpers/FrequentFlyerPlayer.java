@@ -17,7 +17,7 @@ public class FrequentFlyerPlayer {
 	private Player player;
 	private ItemStack elytra;
 	private ItemStack previousElytra;
-	private boolean canFly;
+	private boolean canFly, didTick;
 	private int underLimit, aboveLimit, under, above;
 
 	public FrequentFlyerPlayer(Player player, ItemStack elytra) {
@@ -112,10 +112,19 @@ public class FrequentFlyerPlayer {
 				under = underLimit;
 			}
 		}
+		setDidTick(true);
 	}
 
 	public int getAbove() {
 		return above;
+	}
+
+	public void setDidTick(boolean b) {
+		didTick = b;
+	}
+	
+	public boolean didTick() {
+		return didTick;
 	}
 
 }
