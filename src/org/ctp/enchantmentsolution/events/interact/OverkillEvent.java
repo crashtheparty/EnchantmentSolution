@@ -5,7 +5,7 @@ import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.enchantments.CERegister;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 
-public class OverkillEvent extends InteractEvent {
+public class OverkillEvent extends ProjectileSpawnEvent {
 
 	private boolean takeArrow;
 	private final boolean hasArrow;
@@ -36,6 +36,11 @@ public class OverkillEvent extends InteractEvent {
 
 	public void setSpeed(double speed) {
 		this.speed = speed;
+	}
+	
+	@Override
+	public boolean willCancel() {
+		return !hasArrow && takeArrow;
 	}
 
 }

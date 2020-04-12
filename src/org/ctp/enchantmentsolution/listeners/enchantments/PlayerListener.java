@@ -256,7 +256,7 @@ public class PlayerListener extends Enchantmentable {
 				OverkillEvent overkill = new OverkillEvent(player, item, takeArrow, player.getInventory().all(Material.ARROW).size() > 0, 0.4);
 				Bukkit.getPluginManager().callEvent(overkill);
 
-				if (!overkill.isCancelled()) {
+				if (!overkill.isCancelled() && !overkill.willCancel()) {
 					if (overkill.takeArrow() && overkill.hasArrow()) {
 						ItemStack[] contents = overkill.getPlayer().getInventory().getContents();
 						ItemStack[] extraContents = overkill.getPlayer().getInventory().getExtraContents();
@@ -272,7 +272,7 @@ public class PlayerListener extends Enchantmentable {
 								break;
 							}
 						}
-					} else if (overkill.takeArrow() && !overkill.hasArrow()) return;
+					}
 					player.incrementStatistic(Statistic.USE_ITEM, item.getType());
 					Arrow arrow = player.launchProjectile(Arrow.class);
 					arrow.setMetadata("overkill", new FixedMetadataValue(EnchantmentSolution.getPlugin(), player.getUniqueId().toString()));
@@ -297,7 +297,7 @@ public class PlayerListener extends Enchantmentable {
 				SplatterFestEvent splatterFest = new SplatterFestEvent(player, item, player.getGameMode() != GameMode.CREATIVE, player.getInventory().all(Material.EGG).size() > 0);
 				Bukkit.getPluginManager().callEvent(splatterFest);
 
-				if (!splatterFest.isCancelled()) {
+				if (!splatterFest.isCancelled() && !splatterFest.willCancel()) {
 					if (splatterFest.takeEgg() && splatterFest.hasEgg()) {
 						ItemStack[] contents = splatterFest.getPlayer().getInventory().getContents();
 						ItemStack[] extraContents = splatterFest.getPlayer().getInventory().getExtraContents();
@@ -313,7 +313,7 @@ public class PlayerListener extends Enchantmentable {
 								break;
 							}
 						}
-					} else if (splatterFest.takeEgg() && !splatterFest.hasEgg()) return;
+					}
 					player.incrementStatistic(Statistic.USE_ITEM, item.getType());
 					player.incrementStatistic(Statistic.USE_ITEM, Material.EGG);
 					Egg egg = player.launchProjectile(Egg.class);

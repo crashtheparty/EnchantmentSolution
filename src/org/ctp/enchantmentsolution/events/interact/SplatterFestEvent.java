@@ -5,7 +5,7 @@ import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.enchantments.CERegister;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 
-public class SplatterFestEvent extends InteractEvent {
+public class SplatterFestEvent extends ProjectileSpawnEvent {
 
 	private boolean takeEgg;
 	private final boolean hasEgg;
@@ -26,6 +26,11 @@ public class SplatterFestEvent extends InteractEvent {
 
 	public boolean hasEgg() {
 		return hasEgg;
+	}
+	
+	@Override
+	public boolean willCancel() {
+		return !hasEgg && takeEgg;
 	}
 
 }
