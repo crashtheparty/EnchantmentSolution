@@ -134,6 +134,8 @@ public enum ItemType {
 	private List<String> getEnchantables(String type) {
 		List<String> i = new ArrayList<String>();
 
+		i.addAll(Arrays.asList("BOOK", "ENCHANTED_BOOK"));
+		
 		switch (type.toUpperCase()) {
 			case "BOOK":
 			case "BOW":
