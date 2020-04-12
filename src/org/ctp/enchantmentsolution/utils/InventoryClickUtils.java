@@ -10,12 +10,9 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
-import org.ctp.enchantmentsolution.inventory.Anvil;
-import org.ctp.enchantmentsolution.inventory.ConfigInventory;
-import org.ctp.enchantmentsolution.inventory.EnchantmentTable;
-import org.ctp.enchantmentsolution.inventory.Grindstone;
+import org.ctp.enchantmentsolution.inventory.*;
 import org.ctp.enchantmentsolution.inventory.ConfigInventory.Screen;
-import org.ctp.enchantmentsolution.inventory.EnchantabilityCalc;
+import org.ctp.enchantmentsolution.inventory.rpg.RPGInventory;
 import org.ctp.enchantmentsolution.nms.Anvil_GUI_NMS;
 import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 import org.ctp.enchantmentsolution.utils.yaml.YamlConfigBackup;
@@ -454,6 +451,37 @@ public class InventoryClickUtils {
 					}
 					break;
 			}
+		}
+	}
+
+	public static void setRPGInventory(RPGInventory rpgInventory, Player player, Inventory inv, Inventory clickedInv, int slot, ClickType click) {
+		ItemStack item = clickedInv.getItem(slot);
+		if(item == null) return;
+		switch (slot) {
+			case 53:
+				if (checkPagination(item)) {
+					rpgInventory.setPage(rpgInventory.getPage() + 1);
+					rpgInventory.setInventory();
+				}
+				break;
+			case 45:
+				if (checkPagination(item)) {
+					if (rpgInventory.getPage() > 1) rpgInventory.setPage(rpgInventory.getPage() - 1);
+					rpgInventory.setInventory();
+				}
+				break;
+		}
+		switch(rpgInventory.getScreen()) {
+			case LIST:
+				if(rpgInventory.isEnchantment(slot)) rpgInventory.setEnchantment(slot);
+				break;
+			case ENCHANTMENT:
+				if(slot == 0) rpgInventory.setList();
+				if(rpgInventory.isEnchantment(slot) && item.getType() == Material.BOOK) {
+					rpgInventory.buyEnchantmentLevel(slot);
+					rpgInventory.setInventory();
+				}
+				break;
 		}
 	}
 

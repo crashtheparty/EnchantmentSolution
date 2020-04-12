@@ -2,8 +2,10 @@ package org.ctp.enchantmentsolution.rpg.listener;
 
 import java.util.*;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World.Environment;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
@@ -16,16 +18,30 @@ import org.bukkit.event.player.*;
 import org.bukkit.event.player.PlayerFishEvent.State;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.projectiles.ProjectileSource;
+import org.ctp.enchantmentsolution.api.ApiEnchantmentWrapper;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.enums.ItemBreakType;
 import org.ctp.enchantmentsolution.enums.VanillaEnchantment;
+import org.ctp.enchantmentsolution.events.AttributeEvent;
+import org.ctp.enchantmentsolution.events.ESPlayerEvent;
+import org.ctp.enchantmentsolution.events.blocks.*;
+import org.ctp.enchantmentsolution.events.damage.*;
+import org.ctp.enchantmentsolution.events.entity.*;
+import org.ctp.enchantmentsolution.events.interact.ProjectileSpawnEvent;
+import org.ctp.enchantmentsolution.events.player.BonusDropsEvent;
+import org.ctp.enchantmentsolution.events.player.IcarusRefreshEvent;
+import org.ctp.enchantmentsolution.events.potion.MagicGuardPotionEvent;
+import org.ctp.enchantmentsolution.events.potion.PotionEffectEvent;
+import org.ctp.enchantmentsolution.events.soul.SoulReaperEvent;
+import org.ctp.enchantmentsolution.events.teleport.WarpPlayerEvent;
 import org.ctp.enchantmentsolution.listeners.Enchantmentable;
 import org.ctp.enchantmentsolution.nms.ItemNMS;
 import org.ctp.enchantmentsolution.rpg.RPGUtils;
+import org.ctp.enchantmentsolution.threads.ElytraRunnable;
 import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 
-public class RPGListener extends Enchantmentable {
+public class RPGListener extends Enchantmentable implements Runnable {
 
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onBlockBreak(BlockBreakEvent event) {
@@ -88,7 +104,7 @@ public class RPGListener extends Enchantmentable {
 		if (event.isCancelled()) return;
 		Player player = event.getPlayer();
 		ItemStack item = event.getPlayer().getInventory().getBoots();
-		if(player.getLocation().getBlock().getType() == Material.WATER && item != null && ItemUtils.hasEnchantment(item, Enchantment.DEPTH_STRIDER)) {
+		if (player.getLocation().getBlock().getType() == Material.WATER && item != null && ItemUtils.hasEnchantment(item, Enchantment.DEPTH_STRIDER)) {
 			Location locTo = event.getTo();
 			Location locFrom = event.getFrom();
 			if (locTo.getX() != locFrom.getX() || locTo.getZ() != locFrom.getZ()) giveExperience(player, Enchantment.DEPTH_STRIDER, ItemUtils.getLevel(item, Enchantment.DEPTH_STRIDER));
@@ -111,6 +127,11 @@ public class RPGListener extends Enchantmentable {
 			Player player = (Player) killer;
 			ItemStack item = player.getInventory().getItemInMainHand();
 			if (item != null && ItemUtils.hasEnchantment(item, Enchantment.LOOT_BONUS_MOBS)) giveExperience(player, Enchantment.LOOT_BONUS_MOBS, ItemUtils.getLevel(item, Enchantment.LOOT_BONUS_MOBS));
+			for(ItemStack i: player.getInventory().getArmorContents())
+				if (i != null && ItemUtils.hasEnchantment(i, RegisterEnchantments.UNREST)) {
+					giveExperience(player, RegisterEnchantments.UNREST, ItemUtils.getLevel(i, RegisterEnchantments.UNREST));
+					return;
+				}
 		}
 	}
 
@@ -155,8 +176,12 @@ public class RPGListener extends Enchantmentable {
 			}
 			if (DamageCause.PROJECTILE == event.getCause()) for(ItemStack item: player.getInventory().getArmorContents())
 				if (item != null && ItemUtils.hasEnchantment(item, Enchantment.PROTECTION_PROJECTILE)) giveExperience(player, Enchantment.PROTECTION_PROJECTILE, ItemUtils.getLevel(item, Enchantment.PROTECTION_PROJECTILE));
-			if (!(Arrays.asList(DamageCause.CUSTOM, DamageCause.MAGIC, DamageCause.STARVATION, DamageCause.VOID, DamageCause.SUICIDE).contains(event.getCause()))) for(ItemStack item: player.getInventory().getArmorContents())
+			if (!(Arrays.asList(DamageCause.CUSTOM, DamageCause.MAGIC, DamageCause.STARVATION, DamageCause.VOID, DamageCause.SUICIDE).contains(event.getCause()))) for(ItemStack item: player.getInventory().getArmorContents()) {
 				if (item != null && ItemUtils.hasEnchantment(item, Enchantment.PROTECTION_ENVIRONMENTAL)) giveExperience(player, Enchantment.PROTECTION_ENVIRONMENTAL, ItemUtils.getLevel(item, Enchantment.PROTECTION_ENVIRONMENTAL));
+				if (item != null && ItemUtils.hasEnchantment(item, RegisterEnchantments.ARMORED)) giveExperience(player, RegisterEnchantments.ARMORED, ItemUtils.getLevel(item, RegisterEnchantments.ARMORED));
+				if (item != null && ItemUtils.hasEnchantment(item, RegisterEnchantments.LIFE)) giveExperience(player, RegisterEnchantments.LIFE, ItemUtils.getLevel(item, RegisterEnchantments.LIFE));
+				if (item != null && ItemUtils.hasEnchantment(item, RegisterEnchantments.TOUGHNESS)) giveExperience(player, RegisterEnchantments.TOUGHNESS, ItemUtils.getLevel(item, RegisterEnchantments.TOUGHNESS));
+			}
 		}
 
 		if (event instanceof EntityDamageByEntityEvent) {
@@ -173,6 +198,7 @@ public class RPGListener extends Enchantmentable {
 					if (ItemUtils.hasEnchantment(item, Enchantment.KNOCKBACK)) giveExperience(player, Enchantment.KNOCKBACK, ItemUtils.getLevel(item, Enchantment.KNOCKBACK));
 					if (!(Arrays.asList("BLAZE", "ZOMBIE_PIGMAN", "ZOMBIE_PIGLIN", "ZOGLIN", "WITHER_SKELETON", "STRIDER").contains(entity.getType().name())) && ItemUtils.hasEnchantment(item, Enchantment.FIRE_ASPECT)) giveExperience(player, Enchantment.FIRE_ASPECT, ItemUtils.getLevel(item, Enchantment.FIRE_ASPECT));
 					if (Arrays.asList("DOLPHIN", "GUARDIAN", "ELDER_GUARDIAN", "SQUID", "TURTLE", "COD", "SALMON", "PUFFERFISH", "TROPICAL_FISH").contains(entity.getType().name()) && ItemUtils.hasEnchantment(item, Enchantment.IMPALING)) giveExperience(player, Enchantment.IMPALING, ItemUtils.getLevel(item, Enchantment.IMPALING));
+					if (ItemUtils.hasEnchantment(item, RegisterEnchantments.QUICK_STRIKE)) giveExperience(player, RegisterEnchantments.QUICK_STRIKE, ItemUtils.getLevel(item, RegisterEnchantments.QUICK_STRIKE));
 				}
 			}
 			if (e2 instanceof Player && event.getCause() == DamageCause.THORNS) {
@@ -198,9 +224,116 @@ public class RPGListener extends Enchantmentable {
 		}
 	}
 
+	@EventHandler(priority = EventPriority.MONITOR)
+	public void onESPlayerEvent(ESPlayerEvent event) {
+		EnchantmentLevel level = event.getEnchantment();
+		if (level.getEnchant().getRelativeEnchantment() instanceof ApiEnchantmentWrapper) return; // other plugins need to make these events go themselves
+		if (level.getEnchant().isCurse()) return; // don't let custom curse enchantments do anything
+		if (event instanceof AttributeEvent || event instanceof BonusDropsEvent || event instanceof IcarusRefreshEvent) return; // these aren't the events we
+																																// should be looking for
+		if (event instanceof SoulReaperEvent) {
+			SoulReaperEvent soul = (SoulReaperEvent) event;
+			giveExperience(soul.getKiller(), level);
+			return;
+		}
+		if (event instanceof ProjectileSpawnEvent) {
+			ProjectileSpawnEvent spawn = (ProjectileSpawnEvent) event;
+			if (spawn.willCancel()) return;
+		}
+		giveExperience(event.getPlayer(), level);
+	}
+
+	@EventHandler(priority = EventPriority.MONITOR)
+	public void onESBlockPlaceEvent(ESBlockPlaceEvent event) {
+		EnchantmentLevel level = event.getEnchantment();
+		if (level.getEnchant().getRelativeEnchantment() instanceof ApiEnchantmentWrapper) return; // other plugins need to make these events go themselves
+		if (level.getEnchant().isCurse()) return; // don't let custom curse enchantments do anything
+		giveExperience(event.getPlayer(), level);
+	}
+
+	@EventHandler(priority = EventPriority.MONITOR)
+	public void onESBlockBreakEvent(ESBlockBreakEvent event) {
+		EnchantmentLevel level = event.getEnchantment();
+		if (level.getEnchant().getRelativeEnchantment() instanceof ApiEnchantmentWrapper) return; // other plugins need to make these events go themselves
+		if (level.getEnchant().isCurse()) return; // don't let custom curse enchantments do anything
+		giveExperience(event.getPlayer(), level);
+	}
+
+	@EventHandler(priority = EventPriority.MONITOR)
+	public void onMultiBlock(MultiBlockEvent event) {
+		EnchantmentLevel level = event.getEnchantment();
+		if (level.getEnchant().getRelativeEnchantment() instanceof ApiEnchantmentWrapper) return; // other plugins need to make these events go themselves
+		if (level.getEnchant().isCurse()) return; // don't let custom curse enchantments do anything
+		if (event instanceof HeightWidthEvent) giveExperience(event.getPlayer(), ((HeightWidthEvent) event).getEnchantmentWidth());
+		giveExperience(event.getPlayer(), level);
+	}
+
+	@EventHandler(priority = EventPriority.MONITOR)
+	public void onWarpPlayer(WarpPlayerEvent event) {
+		EnchantmentLevel level = event.getEnchantment();
+		giveExperience(event.getPlayer(), level);
+	}
+
+	@EventHandler(priority = EventPriority.MONITOR)
+	public void onDetonateCreeper(DetonateCreeperEvent event) {
+		EnchantmentLevel level = event.getEnchantment();
+		Entity entity = event.getDetonator();
+		if (entity instanceof Player) giveExperience((Player) entity, level);
+	}
+
+	@EventHandler(priority = EventPriority.MONITOR)
+	public void onDetonatorExplosion(DetonatorExplosionEvent event) {
+		EnchantmentLevel level = event.getEnchantment();
+		Entity entity = event.getDetonator();
+		if (entity instanceof Player) giveExperience((Player) entity, level);
+	}
+
+	@EventHandler(priority = EventPriority.MONITOR)
+	public void onESEntityDamageEntity(ESDamageEntityEvent event) {
+		EnchantmentLevel level = event.getEnchantment();
+		if (level.getEnchant().getRelativeEnchantment() instanceof ApiEnchantmentWrapper) return; // other plugins need to make these events go themselves
+		if (level.getEnchant().isCurse()) return; // don't let custom curse enchantments do anything
+
+		Player player = null;
+
+		if ((event instanceof StoneThrowEvent || event instanceof SandVeilEvent || event instanceof SacrificeEvent || event instanceof LassoDamageEvent || event instanceof KnockUpEvent || event instanceof ShockAspectEvent || event instanceof DrownedEvent || event instanceof BrineEvent || event instanceof GungHoEvent) && ((ESEntityDamageEntityEvent) event).getDamager() instanceof Player) player = (Player) ((ESEntityDamageEntityEvent) event).getDamager();
+		else if ((event instanceof IronDefenseEvent) && event.getEntity() instanceof Player) player = (Player) event.getEntity();
+		if (player != null) giveExperience(player, level);
+	}
+
+	@EventHandler(priority = EventPriority.MONITOR)
+	public void onPotionEffect(PotionEffectEvent event) {
+		EnchantmentLevel level = event.getEnchantment();
+		if (event.getEntity() instanceof Player) {
+			Player player = (Player) event.getEntity();
+			if (level.getEnchant().getRelativeEnchantment() instanceof ApiEnchantmentWrapper) return; // other plugins need to make these events go themselves
+			if (level.getEnchant().isCurse()) return; // don't let custom curse enchantments do anything
+			if (event instanceof MagicGuardPotionEvent) giveExperience(player, level);
+		}
+	}
+
+	@Override
+	public void run() {
+		for(Player player: Bukkit.getOnlinePlayers()) {
+			if (ElytraRunnable.didTick(player)) {
+				ItemStack item = player.getInventory().getChestplate();
+				giveExperience(player, RegisterEnchantments.FREQUENT_FLYER, ItemUtils.getLevel(item, RegisterEnchantments.FREQUENT_FLYER));
+			}
+			for(ItemStack item: player.getInventory().getArmorContents())
+				if (item != null && ItemUtils.hasEnchantment(item, RegisterEnchantments.NO_REST) && player.getWorld().getEnvironment() == Environment.NORMAL && player.getWorld().getTime() > 12540 && player.getWorld().getTime() < 23459) {
+					giveExperience(player, RegisterEnchantments.NO_REST, ItemUtils.getLevel(item, RegisterEnchantments.NO_REST));
+					break;
+				}
+		}
+	}
+
 	private void giveExperience(Player player, Enchantment enchant, int level) {
 		EnchantmentLevel enchLevel = new EnchantmentLevel(RegisterEnchantments.getCustomEnchantment(enchant), level);
 		RPGUtils.giveExperience(player, enchLevel);
+	}
+
+	private void giveExperience(Player player, EnchantmentLevel level) {
+		RPGUtils.giveExperience(player, level);
 	}
 
 }

@@ -16,21 +16,22 @@ import org.ctp.enchantmentsolution.utils.commands.EnchantCommandUtils;
 public class EnchantmentSolutionCommand implements CommandExecutor, TabCompleter {
 
 	private final List<ESCommand> commands;
-	private final ESCommand anvil = new ESCommand("anvil", "commands.aliases.anvil", "commands.descriptions.anvil", "commands.usage.anvil", "enchantmentsolution.command.anvil");
-	private final ESCommand calc = new ESCommand("calc", "commands.aliases.calc", "commands.descriptions.calc", "commands.usage.calc", "enchantmentsolution.command.calc");
-	private final ESCommand config = new ESCommand("config", "commands.aliases.config", "commands.descriptions.config", "commands.usage.config", "enchantmentsolution.command.config");
-	private final ESCommand debug = new ESCommand("debug", "commands.aliases.debug", "commands.descriptions.debug", "commands.usage.debug", "enchantmentsolution.command.debug");
-	private final ESCommand fix = new ESCommand("fix", "commands.aliases.fix", "commands.descriptions.fix", "commands.usage.fix", "enchantmentsolution.command.fix");
-	private final ESCommand grindstone = new ESCommand("grindstone", "commands.aliases.grindstone", "commands.descriptions.grindstone", "commands.usage.grindstone", "enchantmentsolution.command.grindstone");
-	private final ESCommand help = new ESCommand("help", "commands.aliases.help", "commands.descriptions.help", "commands.usage.help", "enchantmentsolution.command.help");
-	private final ESCommand lore = new ESCommand("lore", "commands.aliases.lore", "commands.descriptions.lore", "commands.usage.lore", "enchantmentsolution.command.lore");
-	private final ESCommand reload = new ESCommand("reload", "commands.aliases.reload", "commands.descriptions.reload", "commands.usage.reload", "enchantmentsolution.command.reload");
-	private final ESCommand reset = new ESCommand("reset", "commands.aliases.reset", "commands.descriptions.reset", "commands.usage.reset", "enchantmentsolution.command.reset");
-	private final ESCommand book = new ESCommand("book", "commands.aliases.book", "commands.descriptions.book", "commands.usage.book", "enchantmentsolution.commands.book");
+	private final ESCommand anvil = new ESCommand("esanvil", "commands.aliases.esanvil", "commands.descriptions.esanvil", "commands.usage.esanvil", "enchantmentsolution.command.anvil");
+	private final ESCommand calc = new ESCommand("escalc", "commands.aliases.escalc", "commands.descriptions.escalc", "commands.usage.escalc", "enchantmentsolution.command.calc");
+	private final ESCommand config = new ESCommand("esconfig", "commands.aliases.esconfig", "commands.descriptions.esconfig", "commands.usage.esconfig", "enchantmentsolution.command.config");
+	private final ESCommand debug = new ESCommand("esdebug", "commands.aliases.esdebug", "commands.descriptions.esdebug", "commands.usage.esdebug", "enchantmentsolution.command.debug");
+	private final ESCommand fix = new ESCommand("esfix", "commands.aliases.esfix", "commands.descriptions.esfix", "commands.usage.esfix", "enchantmentsolution.command.fix");
+	private final ESCommand grindstone = new ESCommand("esgrindstone", "commands.aliases.esgrindstone", "commands.descriptions.esgrindstone", "commands.usage.esgrindstone", "enchantmentsolution.command.grindstone");
+	private final ESCommand help = new ESCommand("eshelp", "commands.aliases.eshelp", "commands.descriptions.eshelp", "commands.usage.eshelp", "enchantmentsolution.command.help");
+	private final ESCommand lore = new ESCommand("configlore", "commands.aliases.configlore", "commands.descriptions.configlore", "commands.usage.configlore", "enchantmentsolution.command.lore");
+	private final ESCommand reload = new ESCommand("esreload", "commands.aliases.esreload", "commands.descriptions.esreload", "commands.usage.esreload", "enchantmentsolution.command.reload");
+	private final ESCommand reset = new ESCommand("esreset", "commands.aliases.esreset", "commands.descriptions.esreset", "commands.usage.esreset", "enchantmentsolution.command.reset");
+	private final ESCommand book = new ESCommand("esbook", "commands.aliases.esbook", "commands.descriptions.esbook", "commands.usage.esbook", "enchantmentsolution.commands.book");
 	private final ESCommand enchant = new ESCommand("enchant", "commands.aliases.enchant", "commands.descriptions.enchant", "commands.usage.enchant", "enchantmentsolution.command.enchant");
 	private final ESCommand enchantUnsafe = new ESCommand("enchantunsafe", "commands.aliases.enchantunsafe", "commands.descriptions.enchantunsafe", "commands.usage.enchantunsafe", "enchantmentsolution.command.enchantunsafe");
 	private final ESCommand enchantInfo = new ESCommand("info", "commands.aliases.info", "commands.descriptions.info", "commands.usage.info", "enchantmentsolution.command.info");
 	private final ESCommand removeEnchant = new ESCommand("removeenchant", "commands.aliases.removeenchant", "commands.descriptions.removeenchant", "commands.usage.removeenchant", "enchantmentsolution.command.removeenchant");
+	private final ESCommand rpg = new ESCommand("esrpg", "commands.aliases.esrpg", "commands.descriptions.esrpg", "commands.usage.esrpg", "enchantmentsolution.command.rpg");
 
 	public EnchantmentSolutionCommand() {
 		commands = new ArrayList<ESCommand>();
@@ -44,6 +45,7 @@ public class EnchantmentSolutionCommand implements CommandExecutor, TabCompleter
 		commands.add(lore);
 		commands.add(reload);
 		commands.add(reset);
+		commands.add(rpg);
 		commands.add(book);
 		commands.add(enchant);
 		commands.add(enchantInfo);
@@ -76,6 +78,7 @@ public class EnchantmentSolutionCommand implements CommandExecutor, TabCompleter
 		if (containsCommand(lore, args[0])) return CommandUtils.lore(sender, lore, args);
 		if (containsCommand(reload, args[0])) return CommandUtils.reload(sender, reload, args);
 		if (containsCommand(reset, args[0])) return CommandUtils.reset(sender, reset, args);
+		if (containsCommand(rpg, args[0])) return CommandUtils.rpg(sender, rpg, args);
 		if (containsCommand(book, args[0])) return EnchantCommandUtils.book(sender, book, args);
 		if (containsCommand(enchant, args[0])) return EnchantCommandUtils.enchant(sender, enchant, args, false);
 		if (containsCommand(enchantInfo, args[0])) return EnchantCommandUtils.enchantInfo(sender, enchantInfo, args);
@@ -290,5 +293,9 @@ public class EnchantmentSolutionCommand implements CommandExecutor, TabCompleter
 			strings.addAll(reset.getAliases());
 		}
 		return strings;
+	}
+
+	public List<ESCommand> getCommands() {
+		return commands;
 	}
 }

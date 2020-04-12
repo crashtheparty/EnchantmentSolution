@@ -33,7 +33,8 @@ public class EnchantmentList {
 		generate();
 	}
 
-	private EnchantmentList(OfflinePlayer player, Level level, ItemData item, EnchantmentLocation location, int enchantability, List<EnchantmentLevel> generated) {
+	private EnchantmentList(OfflinePlayer player, Level level, ItemData item, EnchantmentLocation location, int enchantability,
+	List<EnchantmentLevel> generated) {
 		this.level = level;
 		this.player = player;
 		this.item = item;
@@ -167,8 +168,7 @@ public class EnchantmentList {
 			if (enchantment.isEnabled() && enchantment.canEnchantItem(item) && (locations.contains(location))) return true;
 			return false;
 		}
-		if (location != EnchantmentLocation.NONE && !(locations.contains(EnchantmentLocation.NON_BOOK) || item.getMaterial() == Material.BOOK)) return false;
-
+		if (location != EnchantmentLocation.NONE && !locations.contains(EnchantmentLocation.NON_BOOK) && Material.BOOK != item.getMaterial()) return false;
 		if (enchantment.isEnabled() && enchantment.canEnchantItem(item) && (locations.contains(location) || location == EnchantmentLocation.NONE) && (player == null || player.getPlayer() == null || enchantment.canEnchant(player.getPlayer(), enchantability, level.getLevel()))) return true;
 		return false;
 	}

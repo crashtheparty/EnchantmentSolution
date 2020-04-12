@@ -6,13 +6,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
-import org.ctp.enchantmentsolution.inventory.Anvil;
-import org.ctp.enchantmentsolution.inventory.ConfigInventory;
-import org.ctp.enchantmentsolution.inventory.EnchantabilityCalc;
-import org.ctp.enchantmentsolution.inventory.EnchantmentTable;
-import org.ctp.enchantmentsolution.inventory.Grindstone;
-import org.ctp.enchantmentsolution.inventory.InventoryData;
-import org.ctp.enchantmentsolution.inventory.LegacyAnvil;
+import org.ctp.enchantmentsolution.inventory.*;
+import org.ctp.enchantmentsolution.inventory.rpg.RPGInventory;
 import org.ctp.enchantmentsolution.utils.InventoryClickUtils;
 
 public class InventoryClick implements Listener {
@@ -49,6 +44,10 @@ public class InventoryClick implements Listener {
 				EnchantabilityCalc enchantabilityCalc = (EnchantabilityCalc) invData;
 
 				InventoryClickUtils.setEnchantabilityCalc(enchantabilityCalc, player, inv, event.getClickedInventory(), event.getSlot(), event.getClick());
+			} else if (invData instanceof RPGInventory) {
+				RPGInventory rpgInventory = (RPGInventory) invData;
+
+				InventoryClickUtils.setRPGInventory(rpgInventory, player, inv, event.getClickedInventory(), event.getSlot(), event.getClick());
 			}
 		}
 	}

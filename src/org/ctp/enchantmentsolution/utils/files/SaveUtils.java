@@ -14,6 +14,7 @@ import org.ctp.enchantmentsolution.advancements.ESAdvancementProgress;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enchantments.generate.TableEnchantments;
+import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.events.blocks.DamageState;
 import org.ctp.enchantmentsolution.nms.AnimalMobNMS;
 import org.ctp.enchantmentsolution.nms.animalmob.AnimalMob;
@@ -149,8 +150,8 @@ public class SaveUtils {
 			Iterator<Entry<Enchantment, Integer>> iterator = player.getEnchantmentList().entrySet().iterator();
 			while (iterator.hasNext()) {
 				Entry<Enchantment, Integer> entry = iterator.next();
-				Enchantment ench = entry.getKey();
-				enchants.add(ench.getKey().getNamespace() + "+" + ench.getKey().getKey() + "@" + entry.getValue());
+				EnchantmentLevel level = new EnchantmentLevel(RegisterEnchantments.getCustomEnchantment(entry.getKey()), entry.getValue());
+				enchants.add(level.toString());
 			}
 			config.set("rpg." + i + ".enchants", enchants);
 			i++;

@@ -99,77 +99,96 @@ commands:
     invalid:
         console: 'Console Sender'
         null-player: '**null**'
-    aliases:
-        enchant:
+    aliases: 
+        enchant: 
         - 'e'
         - 'customenchant'
         - 'ce'
         - 'esce'
-        enchantunsafe:
+
+        enchantunsafe: 
         - 'eu'
         - 'customenchantunsafe'
         - 'esu'
         - 'ceu'
         - 'esceu'
-        removeenchant:
+
+        removeenchant: 
         - 'esr'
         - 'customenchantremove'
         - 'er'
         - 'cer'
         - 'escer'
-        anvil:
-        - 'esanvil'
-        grindstone:
-        - 'esgrindstone'
-        debug:
-        - 'esdebug'
-        book:
-        - 'esbook'
+
+        esanvil: 
+        - 'anvil'
+
+        esgrindstone: 
+        - 'grindstone'
+
+        esdebug: 
+        - 'debug'
+
+        esbook: 
+        - 'book'
         - 'custombook'
         - 'cb'
         - 'escb'
-        info:
+
+        info: 
         - 'einfo'
         - 'enchantinfo'
-        reload:
-        - 'esreload'
-        reset:
-        - 'esreset'
-        config:
-        - 'esconfig'
+
+        esreload: 
+        - 'reload'
+
+        esreset: 
+        - 'reset'
+
+        esconfig: 
+        - 'config'
         - 'esedit'
         - 'ed'
-        lore:
-        - 'configlore'
+
+        configlore: 
+        - 'lore'
         - 'clore'
         - 'cl'
-        calc:
-        - 'escalc'
+
+        escalc: 
+        - 'calc'
         - 'calculator'
         - 'esc'
-        help:
-        - 'eshelp'
+
+        eshelp: 
+        - 'help'
         - 'h'
-        fix:
-        - 'esfix'
+
+        esfix: 
+        - 'fix'
         - 'f'
-    descriptions:
+
+        esrpg: 
+        - 'rpg'
+
+    descriptions: 
         enchant: 'Enchants an item for a given player in the given slot.'
         enchantunsafe: 'Enchants an item for a given player in the given slot. May enchant any item with any level of enchantment.'
         removeenchant: 'Removes an enchant from item for a given player in the given slot.'
-        anvil: 'Opens the ES Anvil GUI for yourself.'
-        grindstone: 'Opens the ES Grindstone GUI for yourself.'
-        debug: 'Generates a debug.yml file to help the developer debug issues.'
-        book: 'Gives a book with a specified enchantment or random enchantments to a given player. ignoreLimits in random enchantments means to not limit to chest enchantments.'
+        esanvil: 'Opens the ES Anvil GUI for yourself.'
+        esgrindstone: 'Opens the ES Grindstone GUI for yourself.'
+        esdebug: 'Generates a debug.yml file to help the developer debug issues.'
+        esbook: 'Gives a book with a specified enchantment or random enchantments to a given player. ignoreLimits in random enchantments means to not limit to chest enchantments.'
         info: 'Gets the information for a specified enchantment, or a list of enchantments.'
-        reload: 'Reloads the server configuration files.'
-        reset: 'Resets the inventories and enchantment table data for all players.'
-        edit: 'Modifies the configuration files in game.'
-        lore: 'Returns a chat color-formatted string to allow compatibility with other plugins.'
-        calc: 'Shows the values of enchantability for certain items and enchantments or potential enchantments.'
-        help: 'Shows description and usage of specified command or commands.'
-        fix: 'Fixes enchantments on items.'
-    usage:
+        esreload: 'Reloads the server configuration files.'
+        esreset: 'Resets the inventories and enchantment table data for all players.'
+        esconfig: 'Modifies the configuration files in game.'
+        configlore: 'Returns a chat color-formatted string to allow compatibility with other plugins.'
+        escalc: 'Shows the values of enchantability for certain items and enchantments or potential enchantments.'
+        eshelp: 'Shows description and usage of specified command or commands.'
+        esfix: 'Fixes enchantments on items.'
+        esrpg: 'Opens the RPG mode.'
+    usage: 
         enchant: 
             main: 'Usage: %usage%\nAliases: %aliases%'
             string: 'enchant <enchantment> <level> [player] [slot]'
@@ -179,42 +198,45 @@ commands:
         removeenchant: 
             main: 'Usage: %usage%\nAliases: %aliases%'
             string: 'removeenchant <enchantment> [player] [slot]'
-        anvil: 
+        esanvil: 
             main: 'Usage: %usage%\nAliases: %aliases%'
             string: 'anvil'
-        grindstone: 
+        esgrindstone: 
             main: 'Usage: %usage%\nAliases: %aliases%'
             string: 'grindstone'
-        debug: 
+        esdebug: 
             main: 'Usage: %usage%\nAliases: %aliases%'
             string: 'debug'
-        book: 
+        esbook: 
             main: 'Usage: %usage%\nAliases: %aliases%'
             string: 'book <enchantment> <level> [amount] OR book <RandomEnchant/RandomMultiEnchant> [ignoreLimits] [amount]'
         info: 
             main: 'Usage: %usage%\nAliases: %aliases%'
             string: 'info [enchantment/page]'
-        reload: 
+        esreload: 
             main: 'Usage: %usage%\nAliases: %aliases%'
             string: 'reload'
-        reset: 
+        esreset: 
             main: 'Usage: %usage%\nAliases: %aliases%'
             string: 'reset'
-        edit: 
+        esconfig: 
             main: 'Usage: %usage%\nAliases: %aliases%'
             string: 'edit'
-        lore: 
+        configlore: 
             main: 'Usage: %usage%\nAliases: %aliases%'
             string: 'lore enchantment/enchant <enchantment> [level] OR lore string <string...>'
-        calc: 
+        escalc: 
             main: 'Usage: %usage%\nAliases: %aliases%'
             string: 'calc'
-        help: 
+        eshelp: 
             main: 'Usage: %usage%\nAliases: %aliases%'
             string: 'help [command]'
-        fix: 
+        esfix: 
             main: 'Usage: %usage%\nAliases: %aliases%'
             string: 'fix [player]'
+        esrpg: 
+            main: 'Usage: %usage%\nAliases: %aliases%'
+            string: 'rpg'
 grindstone: 
     legacy-open: '&aOpen the Grindstone'
     name: '&9Grindstone'
@@ -284,6 +306,30 @@ calc:
     - '&6Required Enchantability: &3%constant%+'
     invalid_number: 'Invalid number, setting to 0.'
     enter_string: 'Enter the string message into the chat.'
+
+rpg:
+    name: '&9ESRPG'
+    name_enchantment: '&9ESRPG: &f%enchantment%'
+    title: '&9ESRPG Info Page &3%page%'
+    instructions: '&9Instructions'
+    instructions_lore: 
+    - '&6All of your currently owned enchantments will show up as enchanted books.'
+    - '&6To add an enchantment level, select the book,'
+    - '&6 then select the levels one at a time on the next page.'
+    info: '&9Player Info'
+    info_lore: 
+    - '&6Experience Level: &3%level%'
+    - '&6Experience: &3%experience%'
+    - '&6Points: &3%points% / %total_points%'
+    mirror: '&f'
+    enchantments: '&9%name%'
+    enchantments_lore: 
+    - '&6Max Level: &3%level%'
+    - '&6Points to Buy Level %level_plus_one%: &3%points%'
+    enchantment_levels: '&9%name%'
+    enchantment_levels_lore: 
+    - '&6Points for Level %level%: &3%points%'
+    - '&7Left click to buy a higher level.'
 
 enchantment: 
     name: '&6Display Name: &f'

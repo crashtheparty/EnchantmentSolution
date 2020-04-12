@@ -1,10 +1,13 @@
 package org.ctp.enchantmentsolution;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
@@ -37,6 +40,7 @@ import org.ctp.enchantmentsolution.threads.*;
 import org.ctp.enchantmentsolution.utils.*;
 import org.ctp.enchantmentsolution.utils.abillityhelpers.DrownedEntity;
 import org.ctp.enchantmentsolution.utils.abillityhelpers.EntityAccuracy;
+import org.ctp.enchantmentsolution.utils.commands.ESCommand;
 import org.ctp.enchantmentsolution.utils.compatibility.AuctionHouseUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 import org.ctp.enchantmentsolution.utils.files.SaveUtils;
@@ -63,6 +67,7 @@ public class EnchantmentSolution extends JavaPlugin {
 	private String mcmmoVersion, mcmmoType;
 	private Plugin veinMiner;
 	private boolean mmoItems = false;
+	private RPGListener rpg;
 
 	@Override
 	public void onLoad() {
@@ -115,7 +120,9 @@ public class EnchantmentSolution extends JavaPlugin {
 		registerEvent(new AdvancementEntityDeath());
 		registerEvent(new AdvancementPlayerEvent());
 
-		registerEvent(new RPGListener());
+		rpg = new RPGListener();
+		registerEvent(rpg);
+		Bukkit.getScheduler().runTaskTimer(PLUGIN, rpg, 1l, 1l);
 
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN, new AbilityRunnable(), 80l, 80l);
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN, new AdvancementThread(), 1l, 1l);
@@ -125,9 +132,16 @@ public class EnchantmentSolution extends JavaPlugin {
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN, new WalkerRunnable(), 1l, 1l);
 		
 		EnchantmentSolutionCommand c = new EnchantmentSolutionCommand();
-		for (String s : Arrays.asList("EnchantmentSolution", "Enchant", "Info", "RemoveEnchant", "EnchantUnsafe", "ESReload", "ESConfig", "ESReset", "ESDebug", "ESCalc", "ESBook", "ESAnvil", "ESGrindstone", "ConfigLore")) {
-			getCommand(s).setExecutor(c);
-			getCommand(s).setTabCompleter(c);
+		getCommand("EnchantmentSolution").setExecutor(c);
+		getCommand("EnchantmentSolution").setTabCompleter(c);
+		for (ESCommand s : c.getCommands()) {
+			PluginCommand command = getCommand(s.getCommand());
+			if(command != null) {
+				command.setExecutor(c);
+				command.setTabCompleter(c);
+				command.setAliases(s.getAliases());
+			} else
+				ChatUtils.sendWarning("Couldn't find command '" + s.getCommand() + ".'");
 		}
 
 		check = new VersionCheck(pluginVersion, "https://raw.githubusercontent.com/crashtheparty/EnchantmentSolution/master/VersionHistory", "https://www.spigotmc.org/resources/enchantment-solution.59556/", "https://github.com/crashtheparty/EnchantmentSolution", ConfigString.LATEST_VERSION.getBoolean(), ConfigString.EXPERIMENTAL_VERSION.getBoolean());

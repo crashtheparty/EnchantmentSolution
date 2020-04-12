@@ -13,6 +13,7 @@ import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enchantments.generate.TableEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.inventory.*;
+import org.ctp.enchantmentsolution.inventory.rpg.RPGInventory;
 import org.ctp.enchantmentsolution.listeners.VanishListener;
 import org.ctp.enchantmentsolution.threads.SnapshotRunnable;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
@@ -242,6 +243,18 @@ public class CommandUtils {
 			EnchantmentSolution.getPlugin().resetInventories();
 			TableEnchantments.removeAllTableEnchantments();
 			ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(ChatUtils.getCodes(), "commands.reset-inventory"), Level.INFO);
+		} else
+			ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(ChatUtils.getCodes(), "commands.no-permission"), Level.WARNING);
+		return true;
+	}
+
+	public static boolean rpg(CommandSender sender, ESCommand details, String[] args) {
+		Player player = null;
+		if (sender instanceof Player && sender.hasPermission(details.getPermission())) {
+			player = (Player) sender; 
+			RPGInventory rpg = new RPGInventory(player);
+			EnchantmentSolution.getPlugin().addInventory(rpg);
+			rpg.setInventory();
 		} else
 			ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(ChatUtils.getCodes(), "commands.no-permission"), Level.WARNING);
 		return true;

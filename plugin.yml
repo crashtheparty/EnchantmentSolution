@@ -54,6 +54,15 @@ commands:
   configlore:
     description: Gets the hidden chat color value for strings to be used in ES enchantments
     usage: /configlore
+  esrpg:
+    description: Gets the ES RPG information if the RPG mode is enabled
+    usage: /esrpg
+  eshelp:
+    description: Gets a list of commands and their usages
+    usage: /eshelp
+  esfix:
+    description: Fixes items to make their enchantments work
+    usage: /esfix
 permissions:
   enchantmentsolution.command.edit: 
     description: Gives access to the /es config command. 
@@ -126,4 +135,7 @@ permissions:
     default: op
   enchantmentsolution.command.fix.others:
     description: Allows players to use the /es fix command on others
+    default: op
+  enchantmentsolution.command.rpg:
+    description: Allows players to use the /es rpg command
     default: op

@@ -34,7 +34,30 @@ public class RPGUtils {
 		Double base = ConfigString.RPG_LEVELS_BASE.getDouble();
 		Double add = ConfigString.RPG_LEVELS_ADD.getDouble();
 		Double addPower = ConfigString.RPG_LEVELS_POWER.getDouble();
-		return new BigInteger((int) ((levelZero + base * level + Math.pow(add * level, addPower))) + "");
+		Double divisor = ConfigString.RPG_LEVELS_DIVISOR.getDouble();
+		if(divisor == 0) divisor = 1.0;
+		return new BigInteger((int) ((levelZero + base * level + Math.pow(add * level, addPower) / divisor)) + "");
+	}
+
+	public static BigInteger getPointsForEnchantment(Enchantment key, int value) {
+		CustomEnchantment enchant = RegisterEnchantments.getCustomEnchantment(key);
+		String namespace = "default_enchantments";
+		if (enchant.getRelativeEnchantment() instanceof ApiEnchantmentWrapper) {
+			JavaPlugin plugin = ((ApiEnchantmentWrapper) enchant.getRelativeEnchantment()).getPlugin();
+			if (plugin == null) {
+				ChatUtils.sendToConsole(Level.WARNING, "Enchantment " + enchant.getName() + " (Display Name " + enchant.getDisplayName() + ")" + " does not have a JavaPlugin set. Refusing to set config defaults.");
+				return new BigInteger("0");
+			}
+			namespace = plugin.getName().toLowerCase();
+		} else if (enchant.getRelativeEnchantment() instanceof CustomEnchantmentWrapper) namespace = "custom_enchantments";
+		int pointsLevelOne = ConfigString.RPG_ENCHANTMENT_LEVELONE.getInt(namespace + "." + enchant.getName() + ".points_level_one");
+		int pointsIncrease = ConfigString.RPG_ENCHANTMENT_INCREASE.getInt(namespace + "." + enchant.getName() + ".points_increase");
+		
+		BigInteger integer = new BigInteger("0");
+		if(getFreeEnchantments().containsKey(key) && getFreeEnchantments().get(key) >= value) return integer;
+		else
+			integer = integer.add(new BigInteger((pointsLevelOne + pointsIncrease * (value - 1)) + ""));
+		return integer;
 	}
 	
 	public static Map<Enchantment, Integer> getFreeEnchantments(){
@@ -42,15 +65,9 @@ public class RPGUtils {
 		
 		List<String> freeStrings = Configurations.getRPG().getStringList("free_enchantments");
 		for(String s : freeStrings) {
-			String[] split = s.split("@");
-			String[] key = split[0].split("\\+");
-			try {
-				free.put(RegisterEnchantments.getByName(key[1]).getRelativeEnchantment(), Integer.parseInt(split[1]));
-			} catch (Exception ex) {
-				ex.printStackTrace();
-			}
+			EnchantmentLevel level = new EnchantmentLevel(s);
+			if(level.getEnchant() != null && level.getLevel() > 0) free.put(level.getEnchant().getRelativeEnchantment(), level.getLevel());
 		}
-		
 		return free;
 	}
 
@@ -72,7 +89,7 @@ public class RPGUtils {
 	private static double getExperience(EnchantmentLevel enchantment) {
 		RPGConfiguration config = Configurations.getRPG();
 		CustomEnchantment enchant = enchantment.getEnchant();
-		String path = "experience.enchantments.";
+		String path = "enchantments.";
 		String namespace = "default_enchantments";
 		if (enchant.getRelativeEnchantment() instanceof ApiEnchantmentWrapper) {
 			JavaPlugin plugin = ((ApiEnchantmentWrapper) enchant.getRelativeEnchantment()).getPlugin();
@@ -82,7 +99,7 @@ public class RPGUtils {
 			}
 			namespace = plugin.getName().toLowerCase();
 		} else if (enchant.getRelativeEnchantment() instanceof CustomEnchantmentWrapper) namespace = "custom_enchantments";
-		return config.getDouble(path + namespace + "." + enchant.getName()) * (enchantment.getEnchant().isMaxLevelOne() ? 1 : enchantment.getLevel());
+		return config.getDouble(path + namespace + "." + enchant.getName() + ".experience") * (enchantment.getEnchant().isMaxLevelOne() ? 1 : enchantment.getLevel());
 	}
 	
 	public static RPGPlayer addRPGPlayer(Player player) {
@@ -104,7 +121,7 @@ public class RPGUtils {
 	public static RPGPlayer getPlayer(Player player) {
 		for (RPGPlayer rpg : PLAYERS)
 			if(rpg.getPlayer().getUniqueId().toString().equals(player.getUniqueId().toString())) return rpg;
-		return null;
+		return addRPGPlayer(player);
 	}
 
 	public static boolean canEnchant(Player player, CustomEnchantment customEnchantment, int i) {

@@ -50,7 +50,10 @@ public enum ConfigString {
 	RPG_LEVELS_0(Type.RPG, "levels.points.level_0", double.class),
 	RPG_LEVELS_BASE(Type.RPG, "levels.points.base", double.class),
 	RPG_LEVELS_ADD(Type.RPG, "levels.points.add_per_level", double.class),
-	RPG_LEVELS_POWER(Type.RPG, "levels.points.add_power", double.class);
+	RPG_LEVELS_POWER(Type.RPG, "levels.points.add_power", double.class), 
+	RPG_LEVELS_DIVISOR(Type.RPG, "levels.points.divisor", double.class), 
+	RPG_ENCHANTMENT_LEVELONE(Type.RPG, "enchantments.", int.class, true), 
+	RPG_ENCHANTMENT_INCREASE(Type.RPG, "enchantments.", int.class, true);
 
 	private final Type type;
 	private final String location;
