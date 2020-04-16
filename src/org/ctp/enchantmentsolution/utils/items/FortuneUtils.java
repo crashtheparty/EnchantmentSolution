@@ -83,10 +83,10 @@ public class FortuneUtils {
 				}
 			case "WEEPING_VINES":
 			case "TWISTING_VINES":
-				if(!minMax) {
-					chance = 2.0d/3.0d;
+				if (!minMax) {
+					chance = 2.0d / 3.0d;
 					random = Math.random();
-					if(chance < random) {
+					if (chance < random) {
 						min = 1;
 						max = level + 1;
 					}

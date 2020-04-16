@@ -16,14 +16,14 @@ public class Item_v1_13_R1 {
 		net.minecraft.server.v1_13_R1.ItemStack nmsItem = CraftItemStack.asNMSCopy(item);
 		return nmsItem.getName().getText();
 	}
-	
+
 	public static ItemStack getTrident(Trident trident) {
 		EntityThrownTrident t = ((CraftTrident) trident).getHandle();
 		try {
 			Class<?> tridentClass = t.getClass();
 			Method getHandle = tridentClass.getMethod("getItemStack");
 			net.minecraft.server.v1_13_R1.ItemStack a = (net.minecraft.server.v1_13_R1.ItemStack) getHandle.invoke(t);
-	        return CraftItemStack.asBukkitCopy(a);
+			return CraftItemStack.asBukkitCopy(a);
 		} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e1) {
 			e1.printStackTrace();
 		}

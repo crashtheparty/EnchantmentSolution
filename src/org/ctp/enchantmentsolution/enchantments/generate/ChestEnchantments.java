@@ -10,7 +10,7 @@ public class ChestEnchantments extends LootEnchantments {
 	private ChestEnchantments(Player player, ItemStack item, int bookshelves) {
 		super(player, item, bookshelves, EnchantmentLocation.CHEST_LOOT);
 	}
-	
+
 	private ChestEnchantments(Player player, ItemStack item, int bookshelves, EnchantmentLocation location) {
 		super(player, item, bookshelves, location);
 	}

@@ -29,8 +29,8 @@ public class RPGPlayer {
 
 	public RPGPlayer(OfflinePlayer player) {
 		this.player = player;
-		this.level = 0;
-		this.experience = new BigDecimal("0");
+		level = 0;
+		experience = new BigDecimal("0");
 		enchantmentList = new HashMap<Enchantment, Integer>();
 		getEnchantmentLevels();
 	}
@@ -44,7 +44,7 @@ public class RPGPlayer {
 	}
 
 	public void addExperience(double exp) {
-		if(exp > 0) {
+		if (exp > 0) {
 			experience = experience.add(BigDecimal.valueOf(exp));
 			while (RPGUtils.getExperienceNextLevel(level + 1).compareTo(experience) <= 0) {
 				level++;
@@ -98,12 +98,12 @@ public class RPGPlayer {
 	}
 
 	public int getMaxLevel(Enchantment enchantment) {
-		if(enchantments.containsKey(enchantment)) return enchantments.get(enchantment);
+		if (enchantments.containsKey(enchantment)) return enchantments.get(enchantment);
 		return 0;
 	}
-	
-	private Map<Enchantment, Integer> getEnchantmentLevels(){
-		if(enchantments == null) {
+
+	private Map<Enchantment, Integer> getEnchantmentLevels() {
+		if (enchantments == null) {
 			enchantments = new HashMap<Enchantment, Integer>();
 			Iterator<Entry<Enchantment, Integer>> iter2 = RPGUtils.getFreeEnchantments().entrySet().iterator();
 			while (iter2.hasNext()) {
@@ -138,32 +138,32 @@ public class RPGPlayer {
 		getEnchantmentLevels();
 		return true;
 	}
-	
+
 	public int getPoints() {
 		BigInteger points = RPGUtils.getPointsForLevel(level);
 		Iterator<Entry<Enchantment, Integer>> iterator = enchantmentList.entrySet().iterator();
 		while (iterator.hasNext()) {
 			Entry<Enchantment, Integer> entry = iterator.next();
 			int level = entry.getValue();
-			while(level > 0) {
+			while (level > 0) {
 				points = points.subtract(RPGUtils.getPointsForEnchantment(entry.getKey(), level));
 				level--;
 			}
 		}
 		return points.intValue();
 	}
-	
+
 	public int pointsToBuy(Enchantment key, int value) {
 		if (RPGUtils.getFreeEnchantments().containsKey(key) && RPGUtils.getFreeEnchantments().get(key) <= value) return -1;
 		Map<Enchantment, Integer> enchantments = getEnchantmentLevels();
 		int minLevel = 0;
-		if(enchantments.containsKey(key)) minLevel = enchantments.get(key);
+		if (enchantments.containsKey(key)) minLevel = enchantments.get(key);
 		int points = 0;
 		for(int i = minLevel + 1; i <= value; i++)
 			points += RPGUtils.getPointsForEnchantment(key, i).intValue();
 		return points;
 	}
-	
+
 	public boolean canBuy(Enchantment key, int value) {
 		CustomEnchantment enchant = RegisterEnchantments.getCustomEnchantment(key);
 		return getPoints() - pointsToBuy(key, value) >= 0 && enchant.isEnabled() && PermissionUtils.canEnchant(player.getPlayer(), enchant, value);

@@ -214,7 +214,7 @@ public class Anvil implements InventoryData {
 				}
 				player.setLevel(player.getLevel() - anvil.getRepairCost());
 			}
-			if(anvil.getCombinedItem().getAmount() > 1) {
+			if (anvil.getCombinedItem().getAmount() > 1) {
 				anvil.getItem().setAmount(anvil.getItem().getAmount() - 1);
 				ItemUtils.giveItemToPlayer(player, anvil.getItem(), player.getLocation(), false);
 				anvil.getCombinedItem().setAmount(1);

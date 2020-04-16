@@ -34,7 +34,7 @@ public class RPGConfiguration extends Configuration {
 			}
 			else
 				config.addDefault(str, defaultConfig.get(str));
-		
+
 		if (EnchantmentSolution.getPlugin().isInitializing()) ChatUtils.sendInfo("RPG configuration initialized!");
 
 		config.saveConfig();
@@ -43,6 +43,5 @@ public class RPGConfiguration extends Configuration {
 	}
 
 	@Override
-	public void migrateVersion() {
-	}
+	public void migrateVersion() {}
 }

@@ -13,10 +13,10 @@ public class Item_v1_13_R2 {
 		net.minecraft.server.v1_13_R2.ItemStack nmsItem = CraftItemStack.asNMSCopy(item);
 		return nmsItem.getName().getText();
 	}
-	
+
 	public static ItemStack getTrident(Trident trident) {
 		EntityThrownTrident t = ((CraftTrident) trident).getHandle();
-        net.minecraft.server.v1_13_R2.ItemStack a = t.trident;
-        return CraftItemStack.asBukkitCopy(a);
+		net.minecraft.server.v1_13_R2.ItemStack a = t.trident;
+		return CraftItemStack.asBukkitCopy(a);
 	}
 }

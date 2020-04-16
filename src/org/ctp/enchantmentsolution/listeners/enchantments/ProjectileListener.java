@@ -160,7 +160,7 @@ public class ProjectileListener extends Enchantmentable {
 				int level = event.getEntity().getMetadata("detonator").get(0).asInt();
 
 				Entity e = null;
-				if(event.getEntity().getShooter() instanceof Entity) e = (Entity) event.getEntity().getShooter();
+				if (event.getEntity().getShooter() instanceof Entity) e = (Entity) event.getEntity().getShooter();
 				DetonatorExplosionEvent detonator = new DetonatorExplosionEvent(entity, level, loc, e, (float) (0.5 + 0.5 * level), true, true, false);
 				Bukkit.getPluginManager().callEvent(detonator);
 

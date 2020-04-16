@@ -55,9 +55,9 @@ public class EnchantmentSolutionCommand implements CommandExecutor, TabCompleter
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-		for (ESCommand c : commands) {
+		for(ESCommand c: commands) {
 			String[] check;
-			if(containsCommand(c, label)) {
+			if (containsCommand(c, label)) {
 				check = new String[args.length + 1];
 				check[0] = label;
 				for(int i = 0; i < args.length; i++)
@@ -66,8 +66,8 @@ public class EnchantmentSolutionCommand implements CommandExecutor, TabCompleter
 				break;
 			}
 		}
-		if (args.length == 0 || (args.length == 1 && args[0].equals("help"))) return printHelp(sender);
-		
+		if (args.length == 0 || args.length == 1 && args[0].equals("help")) return printHelp(sender);
+
 		if (containsCommand(help, args[0]) && args.length > 0) return printHelp(sender, args[1]);
 		if (containsCommand(anvil, args[0])) return CommandUtils.anvil(sender, anvil, args);
 		if (containsCommand(calc, args[0])) return CommandUtils.calc(sender, calc, args);
@@ -127,9 +127,9 @@ public class EnchantmentSolutionCommand implements CommandExecutor, TabCompleter
 	public List<String> onTabComplete(CommandSender sender, Command cmd, String label, String[] args) {
 		List<String> all = new ArrayList<String>();
 
-		for (ESCommand c : commands) {
+		for(ESCommand c: commands) {
 			String[] check;
-			if(containsCommand(c, label)) {
+			if (containsCommand(c, label)) {
 				check = new String[args.length + 1];
 				check[0] = label;
 				for(int i = 0; i < args.length; i++)
@@ -142,26 +142,26 @@ public class EnchantmentSolutionCommand implements CommandExecutor, TabCompleter
 
 		if (i == 0) all.addAll(help(sender, args[i]));
 		if (i > 0 && noArgCommands(0).contains(args[0])) return all;
-		if (i == 1 && (containsCommand(help, args[0])) && sender.hasPermission(help.getPermission())) all.addAll(help(sender, args[i]));
-		if (i == 1 && (containsCommand(lore, args[0])) && sender.hasPermission(lore.getPermission())) all.addAll(lore(args[i]));
-		if (i == 2 && (containsCommand(lore, args[0])) && sender.hasPermission(lore.getPermission())) all.addAll(lore(args[i], args[1]));
-		if (i == 3 && (containsCommand(lore, args[0])) && sender.hasPermission(lore.getPermission())) all.addAll(lore(args[i], args[1], args[2]));
-		if (i == 1 && (containsCommand(book, args[0])) && sender.hasPermission(book.getPermission())) all.addAll(players(args[i]));
-		if (i == 2 && (containsCommand(book, args[0])) && sender.hasPermission(book.getPermission())) all.addAll(book(args[i]));
-		if (i == 3 && (containsCommand(book, args[0])) && sender.hasPermission(book.getPermission())) all.addAll(book(args[i], args[2]));
-		if (i == 4 && (containsCommand(book, args[0])) && sender.hasPermission(book.getPermission())) all.addAll(level());
-		if (i == 1 && (containsCommand(enchant, args[0])) && sender.hasPermission(enchant.getPermission())) all.addAll(enchant(args[i]));
-		if (i == 2 && (containsCommand(enchant, args[0])) && sender.hasPermission(enchant.getPermission())) all.addAll(level());
-		if (i == 3 && (containsCommand(enchant, args[0])) && sender.hasPermission(enchant.getPermission())) all.addAll(players(args[i]));
-		if (i == 4 && (containsCommand(enchant, args[0])) && sender.hasPermission(enchant.getPermission())) all.addAll(slots(args[i]));
-		if (i == 1 && (containsCommand(enchantUnsafe, args[0])) && sender.hasPermission(enchantUnsafe.getPermission())) all.addAll(enchant(args[i]));
-		if (i == 2 && (containsCommand(enchantUnsafe, args[0])) && sender.hasPermission(enchantUnsafe.getPermission())) all.addAll(level());
-		if (i == 3 && (containsCommand(enchantUnsafe, args[0])) && sender.hasPermission(enchantUnsafe.getPermission())) all.addAll(players(args[i]));
-		if (i == 4 && (containsCommand(enchantUnsafe, args[0])) && sender.hasPermission(enchantUnsafe.getPermission())) all.addAll(slots(args[i]));
-		if (i == 1 && (containsCommand(removeEnchant, args[0])) && sender.hasPermission(removeEnchant.getPermission())) all.addAll(enchantAll(args[i]));
-		if (i == 2 && (containsCommand(removeEnchant, args[0])) && sender.hasPermission(removeEnchant.getPermission())) all.addAll(players(args[i]));
-		if (i == 3 && (containsCommand(removeEnchant, args[0])) && sender.hasPermission(removeEnchant.getPermission())) all.addAll(slots(args[i]));
-		if (i == 1 && (containsCommand(enchantInfo, args[0])) && sender.hasPermission(enchantInfo.getPermission())) all.addAll(enchant(args[i]));
+		if (i == 1 && containsCommand(help, args[0]) && sender.hasPermission(help.getPermission())) all.addAll(help(sender, args[i]));
+		if (i == 1 && containsCommand(lore, args[0]) && sender.hasPermission(lore.getPermission())) all.addAll(lore(args[i]));
+		if (i == 2 && containsCommand(lore, args[0]) && sender.hasPermission(lore.getPermission())) all.addAll(lore(args[i], args[1]));
+		if (i == 3 && containsCommand(lore, args[0]) && sender.hasPermission(lore.getPermission())) all.addAll(lore(args[i], args[1], args[2]));
+		if (i == 1 && containsCommand(book, args[0]) && sender.hasPermission(book.getPermission())) all.addAll(players(args[i]));
+		if (i == 2 && containsCommand(book, args[0]) && sender.hasPermission(book.getPermission())) all.addAll(book(args[i]));
+		if (i == 3 && containsCommand(book, args[0]) && sender.hasPermission(book.getPermission())) all.addAll(book(args[i], args[2]));
+		if (i == 4 && containsCommand(book, args[0]) && sender.hasPermission(book.getPermission())) all.addAll(level());
+		if (i == 1 && containsCommand(enchant, args[0]) && sender.hasPermission(enchant.getPermission())) all.addAll(enchant(args[i]));
+		if (i == 2 && containsCommand(enchant, args[0]) && sender.hasPermission(enchant.getPermission())) all.addAll(level());
+		if (i == 3 && containsCommand(enchant, args[0]) && sender.hasPermission(enchant.getPermission())) all.addAll(players(args[i]));
+		if (i == 4 && containsCommand(enchant, args[0]) && sender.hasPermission(enchant.getPermission())) all.addAll(slots(args[i]));
+		if (i == 1 && containsCommand(enchantUnsafe, args[0]) && sender.hasPermission(enchantUnsafe.getPermission())) all.addAll(enchant(args[i]));
+		if (i == 2 && containsCommand(enchantUnsafe, args[0]) && sender.hasPermission(enchantUnsafe.getPermission())) all.addAll(level());
+		if (i == 3 && containsCommand(enchantUnsafe, args[0]) && sender.hasPermission(enchantUnsafe.getPermission())) all.addAll(players(args[i]));
+		if (i == 4 && containsCommand(enchantUnsafe, args[0]) && sender.hasPermission(enchantUnsafe.getPermission())) all.addAll(slots(args[i]));
+		if (i == 1 && containsCommand(removeEnchant, args[0]) && sender.hasPermission(removeEnchant.getPermission())) all.addAll(enchantAll(args[i]));
+		if (i == 2 && containsCommand(removeEnchant, args[0]) && sender.hasPermission(removeEnchant.getPermission())) all.addAll(players(args[i]));
+		if (i == 3 && containsCommand(removeEnchant, args[0]) && sender.hasPermission(removeEnchant.getPermission())) all.addAll(slots(args[i]));
+		if (i == 1 && containsCommand(enchantInfo, args[0]) && sender.hasPermission(enchantInfo.getPermission())) all.addAll(enchant(args[i]));
 
 		return all;
 	}

@@ -67,9 +67,9 @@ public class TableEnchantments extends GenerateEnchantments {
 
 	public boolean hasEnchantments(ItemData item) {
 		Iterator<Entry<ItemData, EnchantmentList[]>> iterator = enchantmentList.entrySet().iterator();
-		while(iterator.hasNext()) {
+		while (iterator.hasNext()) {
 			Entry<ItemData, EnchantmentList[]> entry = iterator.next();
-			if(entry.getKey().equals(item)) return true;
+			if (entry.getKey().equals(item)) return true;
 		}
 		return false;
 	}
@@ -89,9 +89,9 @@ public class TableEnchantments extends GenerateEnchantments {
 	public EnchantmentList[] getEnchantments(ItemData item) {
 		if (!hasEnchantments(item)) generateEnchantments(item);
 		Iterator<Entry<ItemData, EnchantmentList[]>> iterator = enchantmentList.entrySet().iterator();
-		while(iterator.hasNext()) {
+		while (iterator.hasNext()) {
 			Entry<ItemData, EnchantmentList[]> entry = iterator.next();
-			if(entry.getKey().equals(item)) return entry.getValue();
+			if (entry.getKey().equals(item)) return entry.getValue();
 		}
 		return new EnchantmentList[0];
 	}

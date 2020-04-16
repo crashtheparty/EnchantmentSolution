@@ -27,7 +27,7 @@ public class SplatterFestEvent extends ProjectileSpawnEvent {
 	public boolean hasEgg() {
 		return hasEgg;
 	}
-	
+
 	@Override
 	public boolean willCancel() {
 		return !hasEgg && takeEgg;

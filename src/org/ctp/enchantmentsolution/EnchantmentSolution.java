@@ -83,7 +83,7 @@ public class EnchantmentSolution extends JavaPlugin {
 
 		Configurations.onEnable();
 	}
-	
+
 	@Override
 	public void onEnable() {
 		registerEvent(new InventoryClick());
@@ -130,13 +130,13 @@ public class EnchantmentSolution extends JavaPlugin {
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN, new MiscRunnable(), 1l, 1l);
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN, new SnapshotRunnable(), 1l, 1l);
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN, new WalkerRunnable(), 1l, 1l);
-		
+
 		EnchantmentSolutionCommand c = new EnchantmentSolutionCommand();
 		getCommand("EnchantmentSolution").setExecutor(c);
 		getCommand("EnchantmentSolution").setTabCompleter(c);
-		for (ESCommand s : c.getCommands()) {
+		for(ESCommand s: c.getCommands()) {
 			PluginCommand command = getCommand(s.getCommand());
-			if(command != null) {
+			if (command != null) {
 				command.setExecutor(c);
 				command.setTabCompleter(c);
 				command.setAliases(s.getAliases());

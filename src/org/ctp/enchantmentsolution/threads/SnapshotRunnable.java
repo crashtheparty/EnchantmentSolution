@@ -52,7 +52,7 @@ public class SnapshotRunnable implements Runnable {
 			setRunnable();
 		}
 	}
-	
+
 	public static void updateInventory(Player player) {
 		SnapshotInventory inv = INVENTORIES.get(player.getUniqueId());
 		if (inv == null) inv = new SnapshotInventory(player);

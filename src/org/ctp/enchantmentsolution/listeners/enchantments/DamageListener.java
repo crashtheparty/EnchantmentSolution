@@ -130,7 +130,7 @@ public class DamageListener extends Enchantmentable {
 			Creeper creeper = (Creeper) entity;
 			int level = damager.getMetadata("detonator").get(0).asInt();
 			Entity e = null;
-			if(((Projectile) damager).getShooter() instanceof Entity) e = (Entity) ((Projectile) damager).getShooter();
+			if (((Projectile) damager).getShooter() instanceof Entity) e = (Entity) ((Projectile) damager).getShooter();
 			DetonateCreeperEvent detonator = new DetonateCreeperEvent(creeper, level, creeper.getMaxFuseTicks() - (level - 1) * 5, e);
 
 			if (!detonator.isCancelled()) {

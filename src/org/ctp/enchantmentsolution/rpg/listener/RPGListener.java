@@ -176,7 +176,7 @@ public class RPGListener extends Enchantmentable implements Runnable {
 			}
 			if (DamageCause.PROJECTILE == event.getCause()) for(ItemStack item: player.getInventory().getArmorContents())
 				if (item != null && ItemUtils.hasEnchantment(item, Enchantment.PROTECTION_PROJECTILE)) giveExperience(player, Enchantment.PROTECTION_PROJECTILE, ItemUtils.getLevel(item, Enchantment.PROTECTION_PROJECTILE));
-			if (!(Arrays.asList(DamageCause.CUSTOM, DamageCause.MAGIC, DamageCause.STARVATION, DamageCause.VOID, DamageCause.SUICIDE).contains(event.getCause()))) for(ItemStack item: player.getInventory().getArmorContents()) {
+			if (!Arrays.asList(DamageCause.CUSTOM, DamageCause.MAGIC, DamageCause.STARVATION, DamageCause.VOID, DamageCause.SUICIDE).contains(event.getCause())) for(ItemStack item: player.getInventory().getArmorContents()) {
 				if (item != null && ItemUtils.hasEnchantment(item, Enchantment.PROTECTION_ENVIRONMENTAL)) giveExperience(player, Enchantment.PROTECTION_ENVIRONMENTAL, ItemUtils.getLevel(item, Enchantment.PROTECTION_ENVIRONMENTAL));
 				if (item != null && ItemUtils.hasEnchantment(item, RegisterEnchantments.ARMORED)) giveExperience(player, RegisterEnchantments.ARMORED, ItemUtils.getLevel(item, RegisterEnchantments.ARMORED));
 				if (item != null && ItemUtils.hasEnchantment(item, RegisterEnchantments.LIFE)) giveExperience(player, RegisterEnchantments.LIFE, ItemUtils.getLevel(item, RegisterEnchantments.LIFE));
@@ -196,7 +196,7 @@ public class RPGListener extends Enchantmentable implements Runnable {
 					if (ItemUtils.hasEnchantment(item, Enchantment.DAMAGE_ALL)) giveExperience(player, Enchantment.DAMAGE_ALL, ItemUtils.getLevel(item, Enchantment.DAMAGE_ALL));
 					if (e.getCause() == DamageCause.ENTITY_SWEEP_ATTACK && ItemUtils.hasEnchantment(item, Enchantment.SWEEPING_EDGE)) giveExperience(player, Enchantment.SWEEPING_EDGE, ItemUtils.getLevel(item, Enchantment.SWEEPING_EDGE));
 					if (ItemUtils.hasEnchantment(item, Enchantment.KNOCKBACK)) giveExperience(player, Enchantment.KNOCKBACK, ItemUtils.getLevel(item, Enchantment.KNOCKBACK));
-					if (!(Arrays.asList("BLAZE", "ZOMBIE_PIGMAN", "ZOMBIE_PIGLIN", "ZOGLIN", "WITHER_SKELETON", "STRIDER").contains(entity.getType().name())) && ItemUtils.hasEnchantment(item, Enchantment.FIRE_ASPECT)) giveExperience(player, Enchantment.FIRE_ASPECT, ItemUtils.getLevel(item, Enchantment.FIRE_ASPECT));
+					if (!Arrays.asList("BLAZE", "ZOMBIE_PIGMAN", "ZOMBIE_PIGLIN", "ZOGLIN", "WITHER_SKELETON", "STRIDER").contains(entity.getType().name()) && ItemUtils.hasEnchantment(item, Enchantment.FIRE_ASPECT)) giveExperience(player, Enchantment.FIRE_ASPECT, ItemUtils.getLevel(item, Enchantment.FIRE_ASPECT));
 					if (Arrays.asList("DOLPHIN", "GUARDIAN", "ELDER_GUARDIAN", "SQUID", "TURTLE", "COD", "SALMON", "PUFFERFISH", "TROPICAL_FISH").contains(entity.getType().name()) && ItemUtils.hasEnchantment(item, Enchantment.IMPALING)) giveExperience(player, Enchantment.IMPALING, ItemUtils.getLevel(item, Enchantment.IMPALING));
 					if (ItemUtils.hasEnchantment(item, RegisterEnchantments.QUICK_STRIKE)) giveExperience(player, RegisterEnchantments.QUICK_STRIKE, ItemUtils.getLevel(item, RegisterEnchantments.QUICK_STRIKE));
 				}
@@ -210,7 +210,7 @@ public class RPGListener extends Enchantmentable implements Runnable {
 				Player player = (Player) ((Projectile) e2).getShooter();
 				ItemStack item = player.getInventory().getItemInMainHand();
 				if (entity.getType().isAlive() && item != null) {
-					if (!(Arrays.asList("BLAZE", "ZOMBIE_PIGMAN", "ZOMBIE_PIGLIN", "ZOGLIN", "WITHER_SKELETON", "STRIDER").contains(entity.getType().name())) && ItemUtils.hasEnchantment(item, Enchantment.ARROW_FIRE)) giveExperience(player, Enchantment.ARROW_FIRE, ItemUtils.getLevel(item, Enchantment.ARROW_FIRE));
+					if (!Arrays.asList("BLAZE", "ZOMBIE_PIGMAN", "ZOMBIE_PIGLIN", "ZOGLIN", "WITHER_SKELETON", "STRIDER").contains(entity.getType().name()) && ItemUtils.hasEnchantment(item, Enchantment.ARROW_FIRE)) giveExperience(player, Enchantment.ARROW_FIRE, ItemUtils.getLevel(item, Enchantment.ARROW_FIRE));
 					if (ItemUtils.hasEnchantment(item, Enchantment.ARROW_DAMAGE)) giveExperience(player, Enchantment.ARROW_DAMAGE, ItemUtils.getLevel(item, Enchantment.ARROW_DAMAGE));
 					if (ItemUtils.hasEnchantment(item, Enchantment.ARROW_KNOCKBACK)) giveExperience(player, Enchantment.ARROW_KNOCKBACK, ItemUtils.getLevel(item, Enchantment.ARROW_KNOCKBACK));
 					if (ItemUtils.hasEnchantment(item, VanillaEnchantment.PIERCING.getEnchantment())) giveExperience(player, VanillaEnchantment.PIERCING.getEnchantment(), ItemUtils.getLevel(item, VanillaEnchantment.PIERCING.getEnchantment()));
@@ -230,7 +230,7 @@ public class RPGListener extends Enchantmentable implements Runnable {
 		if (level.getEnchant().getRelativeEnchantment() instanceof ApiEnchantmentWrapper) return; // other plugins need to make these events go themselves
 		if (level.getEnchant().isCurse()) return; // don't let custom curse enchantments do anything
 		if (event instanceof AttributeEvent || event instanceof BonusDropsEvent || event instanceof IcarusRefreshEvent) return; // these aren't the events we
-																																// should be looking for
+		// should be looking for
 		if (event instanceof SoulReaperEvent) {
 			SoulReaperEvent soul = (SoulReaperEvent) event;
 			giveExperience(soul.getKiller(), level);
@@ -297,7 +297,7 @@ public class RPGListener extends Enchantmentable implements Runnable {
 		Player player = null;
 
 		if ((event instanceof StoneThrowEvent || event instanceof SandVeilEvent || event instanceof SacrificeEvent || event instanceof LassoDamageEvent || event instanceof KnockUpEvent || event instanceof ShockAspectEvent || event instanceof DrownedEvent || event instanceof BrineEvent || event instanceof GungHoEvent) && ((ESEntityDamageEntityEvent) event).getDamager() instanceof Player) player = (Player) ((ESEntityDamageEntityEvent) event).getDamager();
-		else if ((event instanceof IronDefenseEvent) && event.getEntity() instanceof Player) player = (Player) event.getEntity();
+		else if (event instanceof IronDefenseEvent && event.getEntity() instanceof Player) player = (Player) event.getEntity();
 		if (player != null) giveExperience(player, level);
 	}
 

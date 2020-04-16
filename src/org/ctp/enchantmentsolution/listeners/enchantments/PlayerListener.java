@@ -152,7 +152,7 @@ public class PlayerListener extends Enchantmentable {
 							Location loc = lasso.getBlock().getRelative(lasso.getFace()).getLocation().clone().add(0.5, 0, 0.5);
 							if (loc.getBlock().isPassable()) {
 								Entity e = loc.getWorld().spawnEntity(loc, fromLasso.getMob());
-								if(e == null) return;
+								if (e == null) return;
 								fromLasso.editProperties(e);
 								DamageUtils.damageItem(player, item, 1, 2);
 								player.incrementStatistic(Statistic.USE_ITEM, item.getType());

@@ -12,7 +12,7 @@ public enum FlowerGiftDrop {
 	private double chance;
 
 	private FlowerGiftDrop(double chance) {
-		this.material = new MatData(this.name());
+		material = new MatData(name());
 		this.chance = chance;
 	}
 

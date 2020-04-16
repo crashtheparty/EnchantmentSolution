@@ -6,7 +6,7 @@ import org.bukkit.enchantments.Enchantment;
 public enum VanillaEnchantment {
 
 	MULTISHOT("multishot"), PIERCING("piercing"), QUICK_CHARGE("quick_charge"), SOUL_SPEED("soul_speed");
-	
+
 	private final NamespacedKey key;
 	private final Enchantment enchantment;
 
@@ -15,7 +15,9 @@ public enum VanillaEnchantment {
 		Enchantment ench = null;
 		try {
 			ench = Enchantment.getByKey(key);
-		} catch (Exception ex) {ex.printStackTrace();}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
 		enchantment = ench;
 	}
 

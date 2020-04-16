@@ -17,35 +17,35 @@ import org.ctp.enchantmentsolution.utils.config.ConfigString;
 import org.ctp.enchantmentsolution.utils.config.ConfigUtils;
 
 public class PermissionUtils {
-	
+
 	private static Map<EnchantmentLevel, List<Permission>> PERMISSIONS = new HashMap<EnchantmentLevel, List<Permission>>();
 
 	public static void addPermissions(EnchantmentLevel level) {
 		List<Permission> permissions = getPermissions(level);
 		permissions.add(new Permission("enchantmentsolution." + level.getEnchant().getName() + ".table.level" + level.getLevel(), PermissionDefault.FALSE));
 		permissions.add(new Permission("enchantmentsolution." + level.getEnchant().getName() + ".anvil.level" + level.getLevel(), PermissionDefault.FALSE));
-		for(Permission p : permissions)
-			if(Bukkit.getPluginManager().getPermission(p.getName()) == null) Bukkit.getPluginManager().addPermission(p);
+		for(Permission p: permissions)
+			if (Bukkit.getPluginManager().getPermission(p.getName()) == null) Bukkit.getPluginManager().addPermission(p);
 		PERMISSIONS.put(level, permissions);
 	}
-	
+
 	public static void removePermissions(EnchantmentLevel level) {
 		List<Permission> permissions = getPermissions(level);
-		for(Permission p : permissions)
+		for(Permission p: permissions)
 			Bukkit.getPluginManager().removePermission(p);
 		PERMISSIONS.put(level, new ArrayList<Permission>());
 	}
-	
-	private static List<Permission> getPermissions(EnchantmentLevel level){
+
+	private static List<Permission> getPermissions(EnchantmentLevel level) {
 		Iterator<Entry<EnchantmentLevel, List<Permission>>> iterator = PERMISSIONS.entrySet().iterator();
-		
-		while(iterator.hasNext()) {
+
+		while (iterator.hasNext()) {
 			Entry<EnchantmentLevel, List<Permission>> entry = iterator.next();
-			if(entry.getKey().getEnchant().getRelativeEnchantment() == level.getEnchant().getRelativeEnchantment() && entry.getKey().getLevel() == level.getLevel()) return entry.getValue();
+			if (entry.getKey().getEnchant().getRelativeEnchantment() == level.getEnchant().getRelativeEnchantment() && entry.getKey().getLevel() == level.getLevel()) return entry.getValue();
 		}
 		return new ArrayList<Permission>();
 	}
-	
+
 	public static boolean canEnchant(Player player, CustomEnchantment enchant, int level) {
 		if (player == null) return true;
 		if (usePermissions()) {

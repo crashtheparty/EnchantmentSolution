@@ -31,7 +31,7 @@ public enum ItemType {
 	private CustomItemType customType = null;
 
 	ItemType() {
-		this.type = name().toLowerCase();
+		type = name().toLowerCase();
 	}
 
 	private static ItemType getType(Material type) {
@@ -41,7 +41,7 @@ public enum ItemType {
 		} catch (Exception ex) {
 
 		}
-		if(type == null || type.isAir()) return null;
+		if (type == null || type.isAir()) return null;
 		return ItemType.CUSTOM.setCustomType(CustomItemType.VANILLA).setCustomString("minecraft:" + type.name().toLowerCase());
 	}
 
@@ -53,11 +53,11 @@ public enum ItemType {
 	}
 
 	public static ItemType mmoRepairType(ItemData data, CustomItemType custom) {
-		if(custom == CustomItemType.TYPE) return ItemType.CUSTOM.setCustomType(custom).setCustomString("mmoitems:type:" + data.getMMOType());
-		if(custom == CustomItemType.TYPE) return ItemType.CUSTOM.setCustomType(custom).setCustomString("mmoitems:type_set:" + data.getMMOTypeSet());
+		if (custom == CustomItemType.TYPE) return ItemType.CUSTOM.setCustomType(custom).setCustomString("mmoitems:type:" + data.getMMOType());
+		if (custom == CustomItemType.TYPE) return ItemType.CUSTOM.setCustomType(custom).setCustomString("mmoitems:type_set:" + data.getMMOTypeSet());
 		return null;
 	}
-	
+
 	public String getType() {
 		return type;
 	}
@@ -135,7 +135,7 @@ public enum ItemType {
 		List<String> i = new ArrayList<String>();
 
 		i.addAll(Arrays.asList("BOOK", "ENCHANTED_BOOK"));
-		
+
 		switch (type.toUpperCase()) {
 			case "BOOK":
 			case "BOW":

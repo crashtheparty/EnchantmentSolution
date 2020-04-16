@@ -78,7 +78,7 @@ public class AnvilEnchantments extends GenerateEnchantments {
 			return;
 		}
 		Map<Enchantment, Integer> enchantments = itemTwo.getItemMeta().getEnchants();
-		if(itemTwo.getType() == Material.ENCHANTED_BOOK) enchantments = ((EnchantmentStorageMeta) itemTwo.getItemMeta()).getStoredEnchants();
+		if (itemTwo.getType() == Material.ENCHANTED_BOOK) enchantments = ((EnchantmentStorageMeta) itemTwo.getItemMeta()).getStoredEnchants();
 
 		if (enchantments.size() > 0 || DamageUtils.getDamage(item.getItemMeta()) > 0) {
 			boolean willRepair = false;

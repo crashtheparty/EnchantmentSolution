@@ -456,7 +456,7 @@ public class InventoryClickUtils {
 
 	public static void setRPGInventory(RPGInventory rpgInventory, Player player, Inventory inv, Inventory clickedInv, int slot, ClickType click) {
 		ItemStack item = clickedInv.getItem(slot);
-		if(item == null) return;
+		if (item == null) return;
 		switch (slot) {
 			case 53:
 				if (checkPagination(item)) {
@@ -471,13 +471,13 @@ public class InventoryClickUtils {
 				}
 				break;
 		}
-		switch(rpgInventory.getScreen()) {
+		switch (rpgInventory.getScreen()) {
 			case LIST:
-				if(rpgInventory.isEnchantment(slot)) rpgInventory.setEnchantment(slot);
+				if (rpgInventory.isEnchantment(slot)) rpgInventory.setEnchantment(slot);
 				break;
 			case ENCHANTMENT:
-				if(slot == 0) rpgInventory.setList();
-				if(rpgInventory.isEnchantment(slot) && item.getType() == Material.BOOK) {
+				if (slot == 0) rpgInventory.setList();
+				if (rpgInventory.isEnchantment(slot) && item.getType() == Material.BOOK) {
 					rpgInventory.buyEnchantmentLevel(slot);
 					rpgInventory.setInventory();
 				}

@@ -128,7 +128,7 @@ public class CERegister extends CustomEnchantment {
 			addDefaultDescription(d);
 		setCurse(curse);
 		setMaxLevelOne(maxLevelOne);
-		this.defaultEnchantmentLocations = locations;
+		defaultEnchantmentLocations = locations;
 	}
 
 	@Override

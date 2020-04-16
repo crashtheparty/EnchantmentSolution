@@ -165,7 +165,7 @@ public class EnchantmentList {
 			if (CustomEnchantment.conflictsWith(level.getEnchant(), enchantment)) return false;
 
 		if (level == null) {
-			if (enchantment.isEnabled() && enchantment.canEnchantItem(item) && (locations.contains(location))) return true;
+			if (enchantment.isEnabled() && enchantment.canEnchantItem(item) && locations.contains(location)) return true;
 			return false;
 		}
 		if (location != EnchantmentLocation.NONE && !locations.contains(EnchantmentLocation.NON_BOOK) && Material.BOOK != item.getMaterial()) return false;

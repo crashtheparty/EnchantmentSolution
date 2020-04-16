@@ -352,10 +352,10 @@ public class RegisterEnchantments {
 			if (enchant.getName().equalsIgnoreCase(name)) return enchant;
 		return null;
 	}
-	
-	public static Enchantment getByKey(NamespacedKey key){
-		for(CustomEnchantment enchant : getEnchantments())
-			if(enchant.getRelativeEnchantment().getKey().equals(key)) return enchant.getRelativeEnchantment();
+
+	public static Enchantment getByKey(NamespacedKey key) {
+		for(CustomEnchantment enchant: getEnchantments())
+			if (enchant.getRelativeEnchantment().getKey().equals(key)) return enchant.getRelativeEnchantment();
 		return null;
 	}
 }

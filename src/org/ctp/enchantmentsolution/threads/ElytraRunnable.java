@@ -70,25 +70,25 @@ public class ElytraRunnable implements Runnable, Reflectionable {
 	}
 
 	public static void addFlyer(@NotNull Player player, ItemStack elytra) {
-		if (!contains(player) && elytra != null && ItemUtils.hasEnchantment(elytra, RegisterEnchantments.FREQUENT_FLYER)) { 
+		if (!contains(player) && elytra != null && ItemUtils.hasEnchantment(elytra, RegisterEnchantments.FREQUENT_FLYER)) {
 			FrequentFlyerPlayer ffPlayer = new FrequentFlyerPlayer(player, elytra);
 			Bukkit.getScheduler().runTaskLater(EnchantmentSolution.getPlugin(), () -> {
-				if(player.isGliding() || player.isFlying() || player.isInsideVehicle() || player.isRiptiding() || player.isSleeping() || player.isSwimming() || player.getLocation().getBlock().getType() == Material.WATER || !Arrays.asList(Material.LAVA, Material.WATER, Material.AIR, Material.VOID_AIR, Material.CAVE_AIR).contains(player.getLocation().getBlock().getRelative(BlockFace.DOWN).getType())) return;
-				
+				if (player.isGliding() || player.isFlying() || player.isInsideVehicle() || player.isRiptiding() || player.isSleeping() || player.isSwimming() || player.getLocation().getBlock().getType() == Material.WATER || !Arrays.asList(Material.LAVA, Material.WATER, Material.AIR, Material.VOID_AIR, Material.CAVE_AIR).contains(player.getLocation().getBlock().getRelative(BlockFace.DOWN).getType())) return;
+
 				if (ffPlayer.canFly() && player.getGameMode() != GameMode.CREATIVE && player.getGameMode() != GameMode.SPECTATOR) player.setFlying(true);
 			}, 4l);
 			PLAYERS.add(ffPlayer);
 		}
 	}
-	
+
 	private static boolean contains(Player player) {
-		for(FrequentFlyerPlayer ffPlayer : PLAYERS)
+		for(FrequentFlyerPlayer ffPlayer: PLAYERS)
 			if (ffPlayer.getPlayer().getUniqueId().equals(player.getUniqueId())) return true;
 		return false;
 	}
-	
+
 	public static boolean didTick(Player player) {
-		for(FrequentFlyerPlayer ffPlayer : PLAYERS)
+		for(FrequentFlyerPlayer ffPlayer: PLAYERS)
 			if (ffPlayer.getPlayer().getUniqueId().equals(player.getUniqueId())) return ffPlayer.didTick();
 		return false;
 	}

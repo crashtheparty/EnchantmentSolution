@@ -12,7 +12,7 @@ public enum TransmutationLoot {
 	SALMON(1200, 1, 2), COD(1200, 1, 2), TROPICAL_FISH(750, 1, 1), PUFFERFISH(400, 1, 1), KELP(400, 1, 4), TRIDENT(8, 1, 1), SCUTE(300, 1, 2),
 	TURTLE_EGG(50, 1, 1), INK_SAC(1000, 1, 4), PRISMARINE_SHARD(750, 1, 3), PRISMARINE_CRYSTALS(500, 1, 3), NAUTILUS_SHELL(140, 1, 1),
 	HEART_OF_THE_SEA(2, 1, 1), BRAIN_CORAL(100, 1, 4), BUBBLE_CORAL(100, 1, 4), FIRE_CORAL(100, 1, 4), HORN_CORAL(100, 1, 4), TUBE_CORAL(100, 1, 4),
-	BRAIN_CORAL_FAN(100, 1, 4), BUBBLE_CORAL_FAN(100, 1, 4), FIRE_CORAL_FAN(100, 1, 4), HORN_CORAL_FAN(100, 1, 4), TUBE_CORAL_FAN(100, 1, 4), 
+	BRAIN_CORAL_FAN(100, 1, 4), BUBBLE_CORAL_FAN(100, 1, 4), FIRE_CORAL_FAN(100, 1, 4), HORN_CORAL_FAN(100, 1, 4), TUBE_CORAL_FAN(100, 1, 4),
 	BRAIN_CORAL_BLOCK(300, 1, 1), BUBBLE_CORAL_BLOCK(300, 1, 1), FIRE_CORAL_BLOCK(300, 1, 1), HORN_CORAL_BLOCK(300, 1, 1), TUBE_CORAL_BLOCK(300, 1, 1),
 	SPONGE(400, 1, 1), SEA_PICKLE(400, 1, 4);
 
@@ -20,7 +20,7 @@ public enum TransmutationLoot {
 	private int chance, min, max;
 
 	TransmutationLoot(int chance, int min, int max) {
-		setMaterial(new MatData(this.name()));
+		setMaterial(new MatData(name()));
 		setChance(chance);
 		setMin(min);
 		setMax(max);

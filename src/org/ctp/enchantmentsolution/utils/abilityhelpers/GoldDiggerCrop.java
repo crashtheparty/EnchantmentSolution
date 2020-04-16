@@ -10,7 +10,7 @@ public enum GoldDiggerCrop {
 	private int exp;
 
 	private GoldDiggerCrop(int exp) {
-		this.material = new MatData(this.name());
+		material = new MatData(name());
 		this.exp = exp;
 	}
 

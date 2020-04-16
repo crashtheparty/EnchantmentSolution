@@ -122,7 +122,7 @@ public class FrequentFlyerPlayer {
 	public void setDidTick(boolean b) {
 		didTick = b;
 	}
-	
+
 	public boolean didTick() {
 		return didTick;
 	}

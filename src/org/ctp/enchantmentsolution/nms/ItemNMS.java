@@ -44,7 +44,7 @@ public class ItemNMS {
 		ItemStack item = new ItemStack(material);
 		return returnLocalizedItemName(language, item);
 	}
-	
+
 	public static ItemStack getTrident(Trident trident) {
 		switch (EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber()) {
 			case 1:

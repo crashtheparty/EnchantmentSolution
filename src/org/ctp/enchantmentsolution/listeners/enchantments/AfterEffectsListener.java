@@ -82,7 +82,7 @@ public class AfterEffectsListener extends Enchantmentable {
 		if (EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber() > 3) {
 			if (!canRun(RegisterEnchantments.PILLAGE, event)) return;
 			LivingEntity entity = event.getEntity();
-			if ((entity instanceof Lootable) && entity.getKiller() != null) {
+			if (entity instanceof Lootable && entity.getKiller() != null) {
 				Player player = entity.getKiller();
 				ItemStack item = player.getInventory().getItemInOffHand();
 				if (item == null || !ItemUtils.hasEnchantment(item, RegisterEnchantments.PILLAGE)) {

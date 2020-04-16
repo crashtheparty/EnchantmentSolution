@@ -35,15 +35,15 @@ public class RPGInventory implements InventoryData {
 	private final List<Integer> pagination = Arrays.asList(45, 53);
 	private List<Integer> allLocations = new ArrayList<Integer>();
 
-	public RPGInventory(Player player){
+	public RPGInventory(Player player) {
 		this.player = player;
-		this.rpg = RPGUtils.getPlayer(player);
+		rpg = RPGUtils.getPlayer(player);
 
 		allLocations.addAll(titleLocs);
 		allLocations.addAll(locations);
 		allLocations.addAll(pagination);
 	}
-	
+
 	@Override
 	public Player getPlayer() {
 		return player;
@@ -86,7 +86,7 @@ public class RPGInventory implements InventoryData {
 				instructionsMeta.setLore(ChatUtils.getMessages(getCodes(), "rpg.instructions_lore"));
 				instructions.setItemMeta(instructionsMeta);
 				inv.setItem(3, instructions);
-				
+
 				ItemStack info = new ItemStack(Material.SUNFLOWER);
 				ItemMeta infoMeta = info.getItemMeta();
 				HashMap<String, Object> infoCodes = getCodes();
@@ -98,26 +98,26 @@ public class RPGInventory implements InventoryData {
 				infoMeta.setLore(ChatUtils.getMessages(infoCodes, "rpg.info_lore"));
 				info.setItemMeta(infoMeta);
 				inv.setItem(5, info);
-				
+
 				ItemStack mirror = new ItemStack(Material.BLACK_STAINED_GLASS_PANE);
 				ItemMeta mirrorMeta = mirror.getItemMeta();
 				mirrorMeta.setDisplayName(ChatUtils.getMessage(getCodes(), "rpg.mirror"));
 				mirror.setItemMeta(mirrorMeta);
-	
+
 				for(int i = 0; i < 54; i++)
-					if(!allLocations.contains(i)) inv.setItem(i, mirror);
-	
+					if (!allLocations.contains(i)) inv.setItem(i, mirror);
+
 				List<CustomEnchantment> enchantments = RegisterEnchantments.getRegisteredEnchantmentsAlphabetical();
-				
+
 				for(int i = 0; i < PAGING; i++) {
 					int num = PAGING * (page - 1) + i;
 					if (enchantments.size() <= num) continue;
 					CustomEnchantment enchant = enchantments.get(num);
 					Enchantment ench = enchant.getRelativeEnchantment();
-	
+
 					ItemStack enchantment = new ItemStack(Material.BOOK);
 					ItemMeta enchantmentMeta = enchantment.getItemMeta();
-					if(rpg.hasEnchantment(ench, 1)) enchantment.setType(Material.ENCHANTED_BOOK);
+					if (rpg.hasEnchantment(ench, 1)) enchantment.setType(Material.ENCHANTED_BOOK);
 					HashMap<String, Object> enchCodes = getCodes();
 					enchCodes.put("%name%", enchant.getDisplayName());
 					enchantmentMeta.setDisplayName(ChatUtils.getMessage(enchCodes, "rpg.enchantments"));
@@ -128,11 +128,11 @@ public class RPGInventory implements InventoryData {
 					enchLoreCodes.put("%points%", RPGUtils.getPointsForEnchantment(ench, levelPlusOne));
 					enchantmentMeta.setLore(ChatUtils.getMessages(enchLoreCodes, "rpg.enchantments_lore"));
 					enchantment.setItemMeta(enchantmentMeta);
-					
-					int loc = ((int) (i / 7.0D)) * 2 + 19 + i;
+
+					int loc = (int) (i / 7.0D) * 2 + 19 + i;
 					inv.setItem(loc, enchantment);
 				}
-	
+
 				if (enchantments.size() > PAGING * page) inv.setItem(53, nextPage());
 				if (page != 1) inv.setItem(45, previousPage());
 			} else if (screen == Screen.ENCHANTMENT) {
@@ -155,7 +155,7 @@ public class RPGInventory implements InventoryData {
 				instructionsMeta.setLore(ChatUtils.getMessages(getCodes(), "rpg.instructions_lore"));
 				instructions.setItemMeta(instructionsMeta);
 				inv.setItem(3, instructions);
-				
+
 				ItemStack info = new ItemStack(Material.SUNFLOWER);
 				ItemMeta infoMeta = info.getItemMeta();
 				HashMap<String, Object> infoCodes = getCodes();
@@ -167,27 +167,27 @@ public class RPGInventory implements InventoryData {
 				infoMeta.setLore(ChatUtils.getMessages(infoCodes, "rpg.info_lore"));
 				info.setItemMeta(infoMeta);
 				inv.setItem(5, info);
-	
+
 				ItemStack mirror = new ItemStack(Material.BLACK_STAINED_GLASS_PANE);
 				ItemMeta mirrorMeta = mirror.getItemMeta();
 				mirrorMeta.setDisplayName(ChatUtils.getMessage(getCodes(), "rpg.mirror"));
 				mirror.setItemMeta(mirrorMeta);
 
 				for(int i = 0; i < 54; i++)
-					if(!allLocations.contains(i)) inv.setItem(i, mirror);
-				
+					if (!allLocations.contains(i)) inv.setItem(i, mirror);
+
 				List<Integer> levels = new ArrayList<Integer>();
 				for(int i = 1; i <= enchant.getMaxLevel(); i++)
 					levels.add(i);
-				
+
 				for(int i = 0; i < PAGING; i++) {
 					int num = PAGING * (enchPage - 1) + i;
 					if (levels.size() <= num) continue;
 					int level = levels.get(i);
-	
+
 					ItemStack levelItem = new ItemStack(Material.BOOK);
 					ItemMeta levelItemMeta = levelItem.getItemMeta();
-					if(rpg.hasEnchantment(enchant.getRelativeEnchantment(), level)) levelItem.setType(Material.ENCHANTED_BOOK);
+					if (rpg.hasEnchantment(enchant.getRelativeEnchantment(), level)) levelItem.setType(Material.ENCHANTED_BOOK);
 					HashMap<String, Object> enchCodes = getCodes();
 					enchCodes.put("%name%", enchant.getDisplayName());
 					levelItemMeta.setDisplayName(ChatUtils.getMessage(enchCodes, "rpg.enchantment_levels"));
@@ -196,11 +196,11 @@ public class RPGInventory implements InventoryData {
 					enchLoreCodes.put("%level%", level);
 					levelItemMeta.setLore(ChatUtils.getMessages(enchLoreCodes, "rpg.enchantment_levels_lore"));
 					levelItem.setItemMeta(levelItemMeta);
-					
-					int loc = ((int) (i / 7.0D)) * 2 + 19 + i;
+
+					int loc = (int) (i / 7.0D) * 2 + 19 + i;
 					inv.setItem(loc, levelItem);
 				}
-	
+
 				if (levels.size() > PAGING * enchPage) inv.setItem(53, nextPage());
 				if (enchPage != 1) inv.setItem(45, previousPage());
 				inv.setItem(0, goBack());
@@ -217,7 +217,7 @@ public class RPGInventory implements InventoryData {
 
 	@Override
 	public void setItemName(String name) {}
-	
+
 	public void setEnchantment(int slot) {
 		int loc = locations.indexOf(slot);
 		int num = PAGING * (page - 1) + loc;
@@ -232,20 +232,20 @@ public class RPGInventory implements InventoryData {
 		enchPage = 1;
 		setInventory();
 	}
-	
+
 	public boolean isEnchantment(int slot) {
 		return locations.contains(slot);
 	}
-	
+
 	public void buyEnchantmentLevel(int slot) {
 		List<Integer> levels = new ArrayList<Integer>();
 		for(int i = 1; i <= enchant.getMaxLevel(); i++)
 			levels.add(i);
 		int loc = locations.indexOf(slot);
 		int num = PAGING * (enchPage - 1) + loc;
-		if(levels.size() >= num) {
+		if (levels.size() >= num) {
 			int level = levels.get(num);
-			if(rpg.canBuy(enchant.getRelativeEnchantment(), level)) rpg.giveEnchantment(new EnchantmentLevel(enchant, level));
+			if (rpg.canBuy(enchant.getRelativeEnchantment(), level)) rpg.giveEnchantment(new EnchantmentLevel(enchant, level));
 		}
 	}
 
@@ -318,6 +318,5 @@ public class RPGInventory implements InventoryData {
 	public Screen getScreen() {
 		return screen;
 	}
-
 
 }

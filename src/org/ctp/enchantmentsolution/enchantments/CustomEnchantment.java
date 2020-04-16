@@ -65,11 +65,11 @@ public abstract class CustomEnchantment {
 
 	public abstract List<ItemType> getDefaultAnvilItemTypes();
 
-	public List<ItemType> getEnchantmentItemTypes(){
+	public List<ItemType> getEnchantmentItemTypes() {
 		return enchantmentTypes;
 	}
 
-	public List<ItemType> getAnvilItemTypes(){
+	public List<ItemType> getAnvilItemTypes() {
 		return anvilTypes;
 	}
 
@@ -412,7 +412,8 @@ public abstract class CustomEnchantment {
 		setEnchantmentLocations(locations);
 	}
 
-	void setCustom(int constant, int modifier, int startLevel, int maxLevel, Weight weight, List<ItemType> enchantmentTypes, List<ItemType> anvilTypes, List<EnchantmentLocation> locations) {
+	void setCustom(int constant, int modifier, int startLevel, int maxLevel, Weight weight, List<ItemType> enchantmentTypes, List<ItemType> anvilTypes,
+	List<EnchantmentLocation> locations) {
 		setConstant(constant);
 		setModifier(modifier);
 		setStartLevel(startLevel);
@@ -533,23 +534,23 @@ public abstract class CustomEnchantment {
 			}
 		defaultDescriptions.add(defaultDescription);
 	}
-	
+
 	private void setEnchantmentItemTypes(List<ItemType> types) {
 		enchantmentTypes = types;
 	}
-	
+
 	private void setAnvilItemTypes(List<ItemType> types) {
 		anvilTypes = types;
 	}
-	
+
 	public List<EnchantmentLocation> getEnchantmentLocations() {
 		return enchantmentLocations;
 	}
-	
+
 	public void setEnchantmentLocations(List<EnchantmentLocation> locations) {
 		enchantmentLocations = locations;
 	}
-	
+
 	public abstract List<EnchantmentLocation> getDefaultEnchantmentLocations();
 
 }

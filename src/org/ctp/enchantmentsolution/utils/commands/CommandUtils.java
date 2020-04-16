@@ -47,7 +47,7 @@ public class CommandUtils {
 		ChatUtils.sendWarning("Console may not use this command.");
 		return true;
 	}
-	
+
 	public static boolean calc(CommandSender sender, ESCommand details, String[] args) {
 		Player player = null;
 		if (sender instanceof Player) {
@@ -62,7 +62,7 @@ public class CommandUtils {
 		ChatUtils.sendWarning("Console may not use this command.");
 		return true;
 	}
-	
+
 	public static boolean config(CommandSender sender, ESCommand details, String[] args) {
 		Player player = null;
 		if (sender instanceof Player) {
@@ -78,7 +78,7 @@ public class CommandUtils {
 		ChatUtils.sendWarning("Console may not use this command.");
 		return true;
 	}
-	
+
 	public static boolean debug(CommandSender sender, ESCommand details, String[] args) {
 		Player player = null;
 		if (sender instanceof Player) player = (Player) sender;
@@ -98,10 +98,10 @@ public class CommandUtils {
 		Player player = null;
 		Player fixPlayer = null;
 		if (sender instanceof Player) player = (Player) sender;
-		
+
 		if (sender.hasPermission(details.getPermission())) {
 			fixPlayer = player;
-			if(args.length > 1) {
+			if (args.length > 1) {
 				String arg = args[3];
 				if (!arg.equals("@p")) {
 					fixPlayer = Bukkit.getPlayer(arg);
@@ -116,7 +116,7 @@ public class CommandUtils {
 					}
 				}
 			}
-			
+
 			SnapshotRunnable.updateInventory(fixPlayer);
 			HashMap<String, Object> codes = ChatUtils.getCodes();
 			codes.put("%player%", player.getName());
@@ -130,7 +130,7 @@ public class CommandUtils {
 			ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(ChatUtils.getCodes(), "commands.no-permission"), Level.WARNING);
 		return true;
 	}
-	
+
 	public static boolean grindstone(CommandSender sender, ESCommand details, String[] args) {
 		Player player = null;
 		if (sender instanceof Player) {
@@ -154,7 +154,7 @@ public class CommandUtils {
 		ChatUtils.sendWarning("Console may not use this command.");
 		return true;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public static boolean lore(CommandSender sender, ESCommand details, String[] args) {
 		Player player = null;
@@ -223,7 +223,7 @@ public class CommandUtils {
 		}
 		return true;
 	}
-	
+
 	public static boolean reload(CommandSender sender, ESCommand details, String[] args) {
 		Player player = null;
 		if (sender instanceof Player) player = (Player) sender;
@@ -235,10 +235,10 @@ public class CommandUtils {
 			ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(ChatUtils.getCodes(), "commands.no-permission"), Level.WARNING);
 		return true;
 	}
-	
+
 	public static boolean reset(CommandSender sender, ESCommand details, String[] args) {
 		Player player = null;
-		if (sender instanceof Player) player = (Player) sender; 
+		if (sender instanceof Player) player = (Player) sender;
 		if (sender.hasPermission(details.getPermission())) {
 			EnchantmentSolution.getPlugin().resetInventories();
 			TableEnchantments.removeAllTableEnchantments();
@@ -251,7 +251,7 @@ public class CommandUtils {
 	public static boolean rpg(CommandSender sender, ESCommand details, String[] args) {
 		Player player = null;
 		if (sender instanceof Player && sender.hasPermission(details.getPermission())) {
-			player = (Player) sender; 
+			player = (Player) sender;
 			RPGInventory rpg = new RPGInventory(player);
 			EnchantmentSolution.getPlugin().addInventory(rpg);
 			rpg.setInventory();
