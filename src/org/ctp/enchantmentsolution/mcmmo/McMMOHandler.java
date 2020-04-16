@@ -17,7 +17,7 @@ import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.events.drops.SmelteryBonusDropsEvent;
 import org.ctp.enchantmentsolution.events.drops.TelepathyBonusDropsEvent;
 import org.ctp.enchantmentsolution.utils.VersionUtils;
-import org.ctp.enchantmentsolution.utils.abillityhelpers.SmelteryMaterial;
+import org.ctp.enchantmentsolution.utils.abilityhelpers.SmelteryMaterial;
 import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 import org.ctp.enchantmentsolution.utils.items.SmelteryUtils;
 import org.ctp.enchantmentsolution.utils.items.TelepathyUtils;

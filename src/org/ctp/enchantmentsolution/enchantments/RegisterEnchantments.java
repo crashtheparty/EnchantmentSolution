@@ -69,6 +69,7 @@ public class RegisterEnchantments {
 	public static final Enchantment DETONATOR = new CustomEnchantmentWrapper("detonator", "DETONATOR", 3);
 	public static final Enchantment OVERKILL = new CustomEnchantmentWrapper("overkill", "OVERKILL", 1);
 	public static final Enchantment CURSE_OF_CONTAGION = new CustomEnchantmentWrapper("contagion_curse", "CONTAGION_CURSE", 1);
+	public static final Enchantment RECYCLER = new CustomEnchantmentWrapper("recycler", "RECYCLER", 1);
 
 	private RegisterEnchantments() {}
 
@@ -318,6 +319,7 @@ public class RegisterEnchantments {
 		addDefaultEnchantment(CERegister.OVERKILL);
 		if (VersionUtils.getBukkitVersionNumber() > 3) addDefaultEnchantment(CERegister.PILLAGE);
 		addDefaultEnchantment(CERegister.QUICK_STRIKE);
+		addDefaultEnchantment(CERegister.RECYCLER);
 		addDefaultEnchantment(CERegister.SACRIFICE);
 		addDefaultEnchantment(CERegister.SAND_VEIL);
 		addDefaultEnchantment(CERegister.SHOCK_ASPECT);

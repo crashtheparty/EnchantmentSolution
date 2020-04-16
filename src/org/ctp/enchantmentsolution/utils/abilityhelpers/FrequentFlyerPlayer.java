@@ -1,4 +1,4 @@
-package org.ctp.enchantmentsolution.utils.abillityhelpers;
+package org.ctp.enchantmentsolution.utils.abilityhelpers;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;

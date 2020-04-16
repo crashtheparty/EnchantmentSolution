@@ -22,8 +22,8 @@ import org.ctp.enchantmentsolution.rpg.RPGPlayer;
 import org.ctp.enchantmentsolution.rpg.RPGUtils;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.Configurations;
-import org.ctp.enchantmentsolution.utils.abillityhelpers.WalkerBlock;
-import org.ctp.enchantmentsolution.utils.abillityhelpers.WalkerUtils;
+import org.ctp.enchantmentsolution.utils.abilityhelpers.WalkerBlock;
+import org.ctp.enchantmentsolution.utils.abilityhelpers.WalkerUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 import org.ctp.enchantmentsolution.utils.yaml.YamlConfig;
 

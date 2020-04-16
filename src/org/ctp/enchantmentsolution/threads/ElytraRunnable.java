@@ -9,8 +9,8 @@ import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.utils.Reflectionable;
-import org.ctp.enchantmentsolution.utils.abillityhelpers.FrequentFlyerPlayer;
-import org.ctp.enchantmentsolution.utils.abillityhelpers.IcarusDelay;
+import org.ctp.enchantmentsolution.utils.abilityhelpers.FrequentFlyerPlayer;
+import org.ctp.enchantmentsolution.utils.abilityhelpers.IcarusDelay;
 import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 
 import com.sun.istack.internal.NotNull;

@@ -7,7 +7,7 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.ctp.enchantmentsolution.enchantments.CERegister;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
-import org.ctp.enchantmentsolution.utils.abillityhelpers.ParticleEffect;
+import org.ctp.enchantmentsolution.utils.abilityhelpers.ParticleEffect;
 
 public class LagEvent extends ModifyActionEvent {
 

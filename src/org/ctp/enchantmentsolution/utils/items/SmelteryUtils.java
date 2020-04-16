@@ -15,7 +15,7 @@ import org.ctp.enchantmentsolution.events.blocks.SmelteryEvent;
 import org.ctp.enchantmentsolution.mcmmo.McMMOHandler;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.VersionUtils;
-import org.ctp.enchantmentsolution.utils.abillityhelpers.SmelteryMaterial;
+import org.ctp.enchantmentsolution.utils.abilityhelpers.SmelteryMaterial;
 import org.ctp.enchantmentsolution.utils.compatibility.JobsUtils;
 
 public class SmelteryUtils {

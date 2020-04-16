@@ -1,21 +1,21 @@
-package org.ctp.enchantmentsolution.utils.abillityhelpers;
+package org.ctp.enchantmentsolution.utils.abilityhelpers;
 
 import org.bukkit.Material;
+import org.ctp.enchantmentsolution.enums.MatData;
 
 public enum GoldDiggerCrop {
-	WHEAT(Material.WHEAT, 2), CARROTS(Material.CARROTS, 2), POTATOES(Material.POTATOES, 2),
-	BEETROOTS(Material.BEETROOTS, 2), NETHER_WARTS(Material.NETHER_WART, 3);
+	WHEAT(2), CARROTS(2), POTATOES(2), BEETROOTS(2), NETHER_WARTS(3);
 
-	private Material material;
+	private MatData material;
 	private int exp;
 
-	private GoldDiggerCrop(Material material, int exp) {
-		this.material = material;
+	private GoldDiggerCrop(int exp) {
+		this.material = new MatData(this.name());
 		this.exp = exp;
 	}
 
 	public Material getMaterial() {
-		return material;
+		return material.getMaterial();
 	}
 
 	public int getExp() {

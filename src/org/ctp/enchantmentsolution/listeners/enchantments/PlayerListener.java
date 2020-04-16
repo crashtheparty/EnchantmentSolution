@@ -27,14 +27,14 @@ import org.ctp.enchantmentsolution.enums.ItemMoisturizeType;
 import org.ctp.enchantmentsolution.events.interact.*;
 import org.ctp.enchantmentsolution.events.modify.IcarusLaunchEvent;
 import org.ctp.enchantmentsolution.listeners.Enchantmentable;
-import org.ctp.enchantmentsolution.nms.FlowerGiftNMS;
 import org.ctp.enchantmentsolution.nms.animalmob.AnimalMob;
 import org.ctp.enchantmentsolution.threads.MiscRunnable;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.LocationUtils;
 import org.ctp.enchantmentsolution.utils.StringUtils;
-import org.ctp.enchantmentsolution.utils.abillityhelpers.IcarusDelay;
-import org.ctp.enchantmentsolution.utils.abillityhelpers.WalkerUtils;
+import org.ctp.enchantmentsolution.utils.abilityhelpers.FlowerGiftDrop;
+import org.ctp.enchantmentsolution.utils.abilityhelpers.IcarusDelay;
+import org.ctp.enchantmentsolution.utils.abilityhelpers.WalkerUtils;
 import org.ctp.enchantmentsolution.utils.items.DamageUtils;
 import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 
@@ -78,8 +78,8 @@ public class PlayerListener extends Enchantmentable {
 			if (player.getGameMode().equals(GameMode.CREATIVE) || player.getGameMode().equals(GameMode.SPECTATOR)) return;
 			ItemStack item = player.getInventory().getItemInMainHand();
 			Block block = event.getClickedBlock();
-			if (block != null && item != null && ItemUtils.hasEnchantment(item, RegisterEnchantments.FLOWER_GIFT) && FlowerGiftNMS.isItem(block.getType())) {
-				FlowerGiftEvent flowerGiftEvent = new FlowerGiftEvent(player, item, block, FlowerGiftNMS.getItem(block.getType()), block.getLocation());
+			if (block != null && item != null && ItemUtils.hasEnchantment(item, RegisterEnchantments.FLOWER_GIFT) && FlowerGiftDrop.isItem(block.getType())) {
+				FlowerGiftEvent flowerGiftEvent = new FlowerGiftEvent(player, item, block, FlowerGiftDrop.getItem(block.getType()), block.getLocation());
 				Bukkit.getPluginManager().callEvent(flowerGiftEvent);
 
 				if (!flowerGiftEvent.isCancelled()) {
@@ -87,8 +87,8 @@ public class PlayerListener extends Enchantmentable {
 					ItemStack flowerGift = flowerGiftEvent.getFlower();
 					if (flowerGiftEvent.getFlower() != null) {
 						player.getWorld().spawnParticle(Particle.VILLAGER_HAPPY, loc, 30, 0.2, 0.5, 0.2);
-						if (FlowerGiftNMS.isDoubleFlower(flowerGift.getType())) AdvancementUtils.awardCriteria(player, ESAdvancement.BONEMEAL_PLUS, "bonemeal");
-						else if (FlowerGiftNMS.isWitherRose(flowerGift.getType())) AdvancementUtils.awardCriteria(player, ESAdvancement.JUST_AS_SWEET, "wither_rose");
+						if (FlowerGiftDrop.isDoubleFlower(flowerGift.getType())) AdvancementUtils.awardCriteria(player, ESAdvancement.BONEMEAL_PLUS, "bonemeal");
+						else if (FlowerGiftDrop.isWitherRose(flowerGift.getType())) AdvancementUtils.awardCriteria(player, ESAdvancement.JUST_AS_SWEET, "wither_rose");
 						ItemUtils.dropItem(flowerGift, flowerGiftEvent.getDropLocation());
 					} else
 						player.getWorld().spawnParticle(Particle.VILLAGER_ANGRY, loc, 30, 0.2, 0.5, 0.2);

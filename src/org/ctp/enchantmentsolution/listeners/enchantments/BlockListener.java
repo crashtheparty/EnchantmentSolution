@@ -25,15 +25,15 @@ import org.ctp.enchantmentsolution.events.blocks.HeightWidthEvent;
 import org.ctp.enchantmentsolution.events.blocks.WandEvent;
 import org.ctp.enchantmentsolution.events.modify.GoldDiggerEvent;
 import org.ctp.enchantmentsolution.events.modify.LagEvent;
-import org.ctp.enchantmentsolution.events.player.ExperienceEvent;
-import org.ctp.enchantmentsolution.events.player.ExperienceEvent.ExpShareType;
+import org.ctp.enchantmentsolution.events.player.ExpShareEvent;
+import org.ctp.enchantmentsolution.events.player.ExpShareEvent.ExpShareType;
 import org.ctp.enchantmentsolution.listeners.Enchantmentable;
 import org.ctp.enchantmentsolution.listeners.VeinMinerListener;
 import org.ctp.enchantmentsolution.mcmmo.McMMOAbility;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.LocationUtils;
-import org.ctp.enchantmentsolution.utils.abillityhelpers.GoldDiggerCrop;
-import org.ctp.enchantmentsolution.utils.abillityhelpers.ParticleEffect;
+import org.ctp.enchantmentsolution.utils.abilityhelpers.GoldDiggerCrop;
+import org.ctp.enchantmentsolution.utils.abilityhelpers.ParticleEffect;
 import org.ctp.enchantmentsolution.utils.items.*;
 
 @SuppressWarnings("unused")
@@ -87,7 +87,7 @@ public class BlockListener extends Enchantmentable {
 			if (exp > 0) {
 				int level = ItemUtils.getLevel(killItem, RegisterEnchantments.EXP_SHARE);
 
-				ExperienceEvent experienceEvent = new ExperienceEvent(player, level, ExpShareType.BLOCK, exp, AbilityUtils.setExp(exp, level));
+				ExpShareEvent experienceEvent = new ExpShareEvent(player, level, ExpShareType.BLOCK, exp, AbilityUtils.setExp(exp, level));
 				Bukkit.getPluginManager().callEvent(experienceEvent);
 
 				if (!experienceEvent.isCancelled() && experienceEvent.getNewExp() >= 0) event.setExpToDrop(experienceEvent.getNewExp());

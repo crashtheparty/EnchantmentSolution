@@ -9,7 +9,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
-import org.ctp.enchantmentsolution.utils.abillityhelpers.OverkillDeath;
+import org.ctp.enchantmentsolution.utils.abilityhelpers.OverkillDeath;
 
 public class AdvancementThread implements Runnable {
 

@@ -45,11 +45,11 @@ public class AnvilUtils {
 		double roll = Math.random();
 		if (chance > roll) {
 			Material material = Material.AIR;
-			switch (block.getType()) {
-				case ANVIL:
+			switch (block.getType().name()) {
+				case "ANVIL":
 					material = Material.CHIPPED_ANVIL;
 					break;
-				case CHIPPED_ANVIL:
+				case "CHIPPED_ANVIL":
 					material = Material.DAMAGED_ANVIL;
 					break;
 				default:
