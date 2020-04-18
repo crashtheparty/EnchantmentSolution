@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.logging.Level;
 
 import org.bukkit.Material;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.ctp.enchantmentsolution.api.ApiEnchantmentWrapper;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
@@ -31,7 +32,9 @@ public class LanguageFile {
 
 		file = new File(dataFolder + "/language/" + language.getLocale() + ".yml");
 
+		YamlConfiguration.loadConfiguration(file);
 		config = new YamlConfig(file, new String[] {});
+		config.getFromConfig();
 
 		YamlConfig defaultConfig = new YamlConfig(tempFile, new String[] {});
 		defaultConfig.getFromConfig();

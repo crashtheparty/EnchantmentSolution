@@ -7,6 +7,7 @@ import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Statistic;
+import org.bukkit.World.Environment;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -26,6 +27,7 @@ import org.ctp.enchantmentsolution.events.potion.MagicGuardPotionEvent;
 import org.ctp.enchantmentsolution.events.potion.PotionEventType;
 import org.ctp.enchantmentsolution.events.potion.UnrestPotionEvent;
 import org.ctp.enchantmentsolution.listeners.Enchantmentable;
+import org.ctp.enchantmentsolution.nms.DamageEvent;
 import org.ctp.enchantmentsolution.threads.ElytraRunnable;
 import org.ctp.enchantmentsolution.threads.MiscRunnable;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
@@ -70,11 +72,14 @@ public class AttributeListener extends Enchantmentable {
 							AttributeEvent attrEvent = new AttributeEvent(player, new EnchantmentLevel(RegisterEnchantments.getCustomEnchantment(entry.getKey()), entry.getValue()), equip ? null : a.getAttrName(), equip ? a.getAttrName() : null);
 							Bukkit.getPluginManager().callEvent(attrEvent);
 
-							if (!attrEvent.isCancelled()) if (equip) {
-								a.addModifier(player, entry.getValue());
-								if (a.getEnchantment() == RegisterEnchantments.TOUGHNESS && player.getAttribute(Attribute.GENERIC_ARMOR_TOUGHNESS).getValue() >= 20) AdvancementUtils.awardCriteria(attrEvent.getPlayer(), ESAdvancement.GRAPHENE_ARMOR, "toughness");
-							} else
-								a.removeModifier(player);
+							if (!attrEvent.isCancelled()) {
+								if (equip) {
+									a.addModifier(player, entry.getValue());
+									if (a.getEnchantment() == RegisterEnchantments.TOUGHNESS && player.getAttribute(Attribute.GENERIC_ARMOR_TOUGHNESS).getValue() >= 20) AdvancementUtils.awardCriteria(attrEvent.getPlayer(), ESAdvancement.GRAPHENE_ARMOR, "toughness");
+								} else
+									a.removeModifier(player);
+								if (a.getEnchantment() == RegisterEnchantments.LIFE || a.getEnchantment() == RegisterEnchantments.GUNG_HO) DamageEvent.updateHealth(player);
+							}
 
 							break;
 						}
@@ -91,7 +96,7 @@ public class AttributeListener extends Enchantmentable {
 					}
 				} else if (entry.getKey() == RegisterEnchantments.NO_REST) {
 					if (type == ItemSlotType.HELMET && equip) {
-						if (player.getStatistic(Statistic.TIME_SINCE_REST) > 72000 && player.getWorld().getTime() > 12540 && player.getWorld().getTime() < 23459) AdvancementUtils.awardCriteria(player, ESAdvancement.COFFEE_BREAK, "coffee");
+						if (player.getStatistic(Statistic.TIME_SINCE_REST) > 72000 && player.getWorld().getEnvironment() == Environment.NORMAL && player.getWorld().getTime() > 12540 && player.getWorld().getTime() < 23459) AdvancementUtils.awardCriteria(player, ESAdvancement.COFFEE_BREAK, "coffee");
 						if (player.getStatistic(Statistic.TIME_SINCE_REST) > 0) player.setStatistic(Statistic.TIME_SINCE_REST, 0);
 					}
 				} else if (entry.getKey() == RegisterEnchantments.MAGIC_GUARD && type == ItemSlotType.OFF_HAND && equip) for(PotionEffectType potionEffect: ESArrays.getBadPotions())

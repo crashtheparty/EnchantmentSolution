@@ -77,4 +77,28 @@ public class DamageEvent {
 		return 0;
 	}
 
+	public static void updateHealth(LivingEntity entity) {
+		switch (EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber()) {
+			case 1:
+				DamageEvent_v1_13_R1.updateHealth(entity);
+				break;
+			case 2:
+			case 3:
+				DamageEvent_v1_13_R2.updateHealth(entity);
+				break;
+			case 4:
+			case 5:
+			case 6:
+			case 7:
+			case 8:
+				DamageEvent_v1_14_R1.updateHealth(entity);
+				break;
+			case 9:
+			case 10:
+			case 11:
+				DamageEvent_v1_15_R1.updateHealth(entity);
+				break;
+		}
+	}
+
 }

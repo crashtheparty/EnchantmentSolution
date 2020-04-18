@@ -1,20 +1,11 @@
 package org.ctp.enchantmentsolution.nms.damage;
 
-import org.bukkit.craftbukkit.v1_13_R2.entity.CraftEntity;
-import org.bukkit.craftbukkit.v1_13_R2.entity.CraftArrow;
-import org.bukkit.craftbukkit.v1_13_R2.entity.CraftLivingEntity;
-import org.bukkit.craftbukkit.v1_13_R2.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_13_R2.entity.*;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
-import net.minecraft.server.v1_13_R2.DamageSource;
-import net.minecraft.server.v1_13_R2.Entity;
-import net.minecraft.server.v1_13_R2.EntityArrow;
-import net.minecraft.server.v1_13_R2.EntityLiving;
-import net.minecraft.server.v1_13_R2.EntityPlayer;
-import net.minecraft.server.v1_13_R2.MathHelper;
-import net.minecraft.server.v1_13_R2.Vec3D;
+import net.minecraft.server.v1_13_R2.*;
 
 public class DamageEvent_v1_13_R2 {
 
@@ -47,6 +38,14 @@ public class DamageEvent_v1_13_R2 {
 		int i = MathHelper.f(Math.max(f * arrow.getDamage(), 0.0D));
 		arrow.a(entity, i);
 		return (int) arrow.getDamage() / 2;
+	}
+	
+	public static void updateHealth(LivingEntity le) {
+		Entity entity = ((CraftEntity) le).getHandle();
+		if (entity instanceof EntityLiving) {
+			EntityLiving living = (EntityLiving) entity;
+			living.setHealth(living.getHealth());
+		}
 	}
 
 }
