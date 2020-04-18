@@ -22,11 +22,16 @@ public class MatData {
 		return materialName;
 	}
 
+	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof MatData) {
 			MatData data = (MatData) obj;
 			return data.material != null && data.material == material;
 		}
 		return false;
+	}
+
+	public boolean hasMaterial() {
+		return material != null;
 	}
 }

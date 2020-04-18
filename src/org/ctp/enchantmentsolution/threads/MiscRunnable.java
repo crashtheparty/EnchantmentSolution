@@ -19,7 +19,7 @@ import org.ctp.enchantmentsolution.events.potion.MagicGuardPotionEvent;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.ESArrays;
 import org.ctp.enchantmentsolution.utils.Reflectionable;
-import org.ctp.enchantmentsolution.utils.abillityhelpers.*;
+import org.ctp.enchantmentsolution.utils.abilityhelpers.*;
 import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 
 @SuppressWarnings("unused")

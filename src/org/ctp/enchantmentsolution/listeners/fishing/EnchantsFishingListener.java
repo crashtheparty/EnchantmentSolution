@@ -26,7 +26,7 @@ public class EnchantsFishingListener implements Listener {
 
 	private void handleFishing(Item item, Player player) {
 		ItemStack itemStack = item.getItemStack().clone();
-		itemStack = GenerateUtils.generateFishingLoot(player, itemStack, ConfigString.LOOT_BOOKSHELVES.getInt("fishing.bookshelves"), ConfigString.LOOT_TREASURE.getBoolean("fishing.treasure"));
+		itemStack = GenerateUtils.generateFishingLoot(player, itemStack, ConfigString.LOOT_BOOKSHELVES.getInt("fishing.bookshelves"));
 
 		item.setItemStack(itemStack);
 	}

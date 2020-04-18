@@ -59,6 +59,8 @@ public enum ItemMoisturizeType {
 				return Material.valueOf("STONE");
 			case "TERRACOTTA":
 				return Material.valueOf("CLAY");
+			case "POLISHED_BASALT":
+				return Material.valueOf("BASALT");
 			default:
 				break;
 

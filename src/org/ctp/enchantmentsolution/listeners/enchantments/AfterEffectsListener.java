@@ -19,12 +19,14 @@ import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.events.damage.SacrificeEvent;
-import org.ctp.enchantmentsolution.events.player.ExperienceEvent;
-import org.ctp.enchantmentsolution.events.player.ExperienceEvent.ExpShareType;
+import org.ctp.enchantmentsolution.events.player.ExpShareEvent;
+import org.ctp.enchantmentsolution.events.player.ExpShareEvent.ExpShareType;
 import org.ctp.enchantmentsolution.events.player.PillageEvent;
+import org.ctp.enchantmentsolution.events.player.RecyclerEvent;
 import org.ctp.enchantmentsolution.listeners.Enchantmentable;
 import org.ctp.enchantmentsolution.threads.MiscRunnable;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
+import org.ctp.enchantmentsolution.utils.abilityhelpers.RecyclerDrops;
 import org.ctp.enchantmentsolution.utils.items.AbilityUtils;
 import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 
@@ -35,8 +37,9 @@ public class AfterEffectsListener extends Enchantmentable {
 
 	@EventHandler
 	public void onEntityDeath(EntityDeathEvent event) {
-		runMethod(this, "expShare", event, EntityDeathEvent.class);
 		runMethod(this, "pillage", event, EntityDeathEvent.class);
+		runMethod(this, "recycler", event, EntityDeathEvent.class);
+		runMethod(this, "expShare", event, EntityDeathEvent.class);
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST)
@@ -66,7 +69,7 @@ public class AfterEffectsListener extends Enchantmentable {
 				if (exp > 0) {
 					int level = ItemUtils.getLevel(killItem, RegisterEnchantments.EXP_SHARE);
 
-					ExperienceEvent experienceEvent = new ExperienceEvent(player, level, ExpShareType.BLOCK, exp, AbilityUtils.setExp(exp, level));
+					ExpShareEvent experienceEvent = new ExpShareEvent(player, level, ExpShareType.MOB, exp, AbilityUtils.setExp(exp, level));
 					Bukkit.getPluginManager().callEvent(experienceEvent);
 
 					if (!experienceEvent.isCancelled() && experienceEvent.getNewExp() >= 0) event.setDroppedExp(experienceEvent.getNewExp());
@@ -79,7 +82,7 @@ public class AfterEffectsListener extends Enchantmentable {
 		if (EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber() > 3) {
 			if (!canRun(RegisterEnchantments.PILLAGE, event)) return;
 			LivingEntity entity = event.getEntity();
-			if ((entity instanceof Lootable) && entity.getKiller() != null) {
+			if (entity instanceof Lootable && entity.getKiller() != null) {
 				Player player = entity.getKiller();
 				ItemStack item = player.getInventory().getItemInOffHand();
 				if (item == null || !ItemUtils.hasEnchantment(item, RegisterEnchantments.PILLAGE)) {
@@ -105,6 +108,40 @@ public class AfterEffectsListener extends Enchantmentable {
 						ItemUtils.removeAllEnchantments(item, true);
 						ItemUtils.addEnchantmentsToItem(item, levels);
 						if (event.getEntity().getType() == EntityType.PILLAGER) AdvancementUtils.awardCriteria(player, ESAdvancement.LOOK_WHAT_YOU_MADE_ME_DO, "pillage");
+					}
+				}
+			}
+		}
+	}
+
+	private void recycler(EntityDeathEvent event) {
+		if (!canRun(RegisterEnchantments.RECYCLER, event)) return;
+		if (event.getEntity() instanceof Player) return;
+		Entity killer = event.getEntity().getKiller();
+		if (killer instanceof Player) {
+			Player player = (Player) killer;
+			ItemStack killItem = player.getInventory().getItemInMainHand();
+			if (killItem != null && ItemUtils.hasEnchantment(killItem, RegisterEnchantments.RECYCLER)) {
+				int exp = event.getDroppedExp();
+				int recyclerExp = 0;
+				boolean willRecycle = false;
+
+				for(ItemStack item: event.getDrops())
+					if (RecyclerDrops.isRecycleable(item.getType())) for(int i = 1; i <= item.getAmount(); i++) {
+						willRecycle = true;
+						recyclerExp = RecyclerDrops.getExperience(item.getType());
+					}
+				if (willRecycle) {
+					RecyclerEvent recyclerEvent = new RecyclerEvent(player, exp, exp + recyclerExp);
+					Bukkit.getPluginManager().callEvent(recyclerEvent);
+
+					if (!recyclerEvent.isCancelled() && recyclerEvent.getNewExp() >= 0) {
+						event.setDroppedExp(recyclerEvent.getNewExp());
+						Iterator<ItemStack> items = event.getDrops().iterator();
+						while (items.hasNext()) {
+							ItemStack item = items.next();
+							if (RecyclerDrops.isRecycleable(item.getType())) items.remove();
+						}
 					}
 				}
 			}

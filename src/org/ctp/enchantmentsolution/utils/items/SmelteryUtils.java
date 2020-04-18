@@ -15,7 +15,7 @@ import org.ctp.enchantmentsolution.events.blocks.SmelteryEvent;
 import org.ctp.enchantmentsolution.mcmmo.McMMOHandler;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.VersionUtils;
-import org.ctp.enchantmentsolution.utils.abillityhelpers.SmelteryMaterial;
+import org.ctp.enchantmentsolution.utils.abilityhelpers.SmelteryMaterial;
 import org.ctp.enchantmentsolution.utils.compatibility.JobsUtils;
 
 public class SmelteryUtils {
@@ -71,6 +71,9 @@ public class SmelteryUtils {
 		String material = null;
 		ItemBreakType type = ItemBreakType.getType(item.getType());
 		switch (block.getType().name()) {
+			case "BASALT":
+				if (type != null && type.getBreakTypes().contains(block.getType())) material = "POLISHED_BASALT";
+				break;
 			case "IRON_ORE":
 				if (type != null && type.getBreakTypes().contains(block.getType())) material = "IRON_INGOT";
 				break;

@@ -23,7 +23,7 @@ import org.ctp.enchantmentsolution.mcmmo.McMMOHandler;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.ESArrays;
 import org.ctp.enchantmentsolution.utils.LocationUtils;
-import org.ctp.enchantmentsolution.utils.abillityhelpers.GoldDiggerCrop;
+import org.ctp.enchantmentsolution.utils.abilityhelpers.GoldDiggerCrop;
 import org.ctp.enchantmentsolution.utils.compatibility.JobsUtils;
 
 public class TelepathyUtils {
@@ -78,14 +78,14 @@ public class TelepathyUtils {
 				DoubleChest doubleChest = (DoubleChest) container.getInventory().getHolder();
 				Location one = doubleChest.getLocation().clone();
 				Location two = one.clone();
-				if(doubleChest.getLocation().getX() % 1 != 0) {
+				if (doubleChest.getLocation().getX() % 1 != 0) {
 					one.add(-0.5, 0, 0);
 					two.add(0.5, 0, 0);
 				} else {
 					one.add(0, 0, -0.5);
 					two.add(0, 0, 0.5);
 				}
-				switch(chest.getFacing().name()) {
+				switch (chest.getFacing().name()) {
 					case "WEST":
 					case "SOUTH":
 						if (!LocationUtils.isLocationSame(one, event.getBlock().getLocation(), true)) {

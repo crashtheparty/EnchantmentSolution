@@ -32,7 +32,7 @@ import org.ctp.enchantmentsolution.events.drops.TransmutationEvent;
 import org.ctp.enchantmentsolution.listeners.Enchantmentable;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
-import org.ctp.enchantmentsolution.utils.abillityhelpers.TransmutationLoot;
+import org.ctp.enchantmentsolution.utils.abilityhelpers.TransmutationLoot;
 import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 
 @SuppressWarnings("unused")

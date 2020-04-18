@@ -22,9 +22,10 @@ import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantmentWrapper;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
-import org.ctp.enchantmentsolution.enums.ItemType;
+import org.ctp.enchantmentsolution.enums.*;
 import org.ctp.enchantmentsolution.utils.ESArrays;
 import org.ctp.enchantmentsolution.utils.StringUtils;
+import org.ctp.enchantmentsolution.utils.compatibility.MMOUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 
 public class ItemUtils {
@@ -148,10 +149,8 @@ public class ItemUtils {
 	public static boolean isEnchantable(ItemStack item) {
 		if (item == null) return false;
 		ItemMeta meta = item.getItemMeta();
-		for(CustomEnchantment enchant: RegisterEnchantments.getRegisteredEnchantments())
-			if (item.getType() == Material.ENCHANTED_BOOK && ((EnchantmentStorageMeta) meta).hasStoredEnchant(enchant.getRelativeEnchantment())) return false;
-			else if (meta.hasEnchant(enchant.getRelativeEnchantment())) return false;
-		if (ItemType.ALL.getItemTypes().contains(item.getType())) return true;
+		if (meta.hasEnchants() || item.getType() == Material.ENCHANTED_BOOK && ((EnchantmentStorageMeta) meta).hasStoredEnchants()) return false;
+		if (ItemData.contains(ItemType.ALL.getEnchantMaterials(), item.getType())) return true;
 		if (item.getType().equals(Material.BOOK)) return true;
 		return false;
 	}
@@ -243,9 +242,8 @@ public class ItemUtils {
 	public static boolean canAddEnchantment(CustomEnchantment customEnchant, ItemStack item) {
 		ItemMeta meta = item.clone().getItemMeta();
 		Map<Enchantment, Integer> enchants = meta.getEnchants();
-		if (customEnchant.getDisabledItems().contains(item.getType())) return false;
 		if (item.getType().equals(Material.ENCHANTED_BOOK)) enchants = ((EnchantmentStorageMeta) meta).getStoredEnchants();
-		else if (!customEnchant.canAnvilItem(item.getType())) return false;
+		else if (!customEnchant.canAnvilItem(new ItemData(item))) return false;
 		for(Iterator<Entry<Enchantment, Integer>> it = enchants.entrySet().iterator(); it.hasNext();) {
 			Entry<Enchantment, Integer> e = it.next();
 			Enchantment enchant = e.getKey();
@@ -273,5 +271,10 @@ public class ItemUtils {
 			}
 		}
 		return items;
+	}
+
+	public static boolean checkItemType(ItemData item, ItemType itemType, CustomItemType type) {
+		if (type == CustomItemType.VANILLA) return new MatData(itemType.getCustomString().split(":")[1]).hasMaterial();
+		return MMOUtils.check(item, itemType, type);
 	}
 }

@@ -14,7 +14,7 @@ public class LocationUtils {
 	public static boolean isLocationDifferent(Location locOne, Location locTwo, boolean includeY) {
 		return locOne.getX() != locTwo.getX() || locOne.getZ() != locTwo.getZ() || includeY && locTwo.getY() != locOne.getY();
 	}
-	
+
 	public static boolean isLocationSame(Location locOne, Location locTwo, boolean includeY) {
 		return locOne.getX() == locTwo.getX() && locOne.getZ() == locTwo.getZ() && (!includeY || locTwo.getY() == locOne.getY());
 	}

@@ -27,14 +27,14 @@ import org.ctp.enchantmentsolution.enums.ItemMoisturizeType;
 import org.ctp.enchantmentsolution.events.interact.*;
 import org.ctp.enchantmentsolution.events.modify.IcarusLaunchEvent;
 import org.ctp.enchantmentsolution.listeners.Enchantmentable;
-import org.ctp.enchantmentsolution.nms.FlowerGiftNMS;
 import org.ctp.enchantmentsolution.nms.animalmob.AnimalMob;
 import org.ctp.enchantmentsolution.threads.MiscRunnable;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.LocationUtils;
 import org.ctp.enchantmentsolution.utils.StringUtils;
-import org.ctp.enchantmentsolution.utils.abillityhelpers.IcarusDelay;
-import org.ctp.enchantmentsolution.utils.abillityhelpers.WalkerUtils;
+import org.ctp.enchantmentsolution.utils.abilityhelpers.FlowerGiftDrop;
+import org.ctp.enchantmentsolution.utils.abilityhelpers.IcarusDelay;
+import org.ctp.enchantmentsolution.utils.abilityhelpers.WalkerUtils;
 import org.ctp.enchantmentsolution.utils.items.DamageUtils;
 import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 
@@ -78,8 +78,8 @@ public class PlayerListener extends Enchantmentable {
 			if (player.getGameMode().equals(GameMode.CREATIVE) || player.getGameMode().equals(GameMode.SPECTATOR)) return;
 			ItemStack item = player.getInventory().getItemInMainHand();
 			Block block = event.getClickedBlock();
-			if (block != null && item != null && ItemUtils.hasEnchantment(item, RegisterEnchantments.FLOWER_GIFT) && FlowerGiftNMS.isItem(block.getType())) {
-				FlowerGiftEvent flowerGiftEvent = new FlowerGiftEvent(player, item, block, FlowerGiftNMS.getItem(block.getType()), block.getLocation());
+			if (block != null && item != null && ItemUtils.hasEnchantment(item, RegisterEnchantments.FLOWER_GIFT) && FlowerGiftDrop.isItem(block.getType())) {
+				FlowerGiftEvent flowerGiftEvent = new FlowerGiftEvent(player, item, block, FlowerGiftDrop.getItem(block.getType()), block.getLocation());
 				Bukkit.getPluginManager().callEvent(flowerGiftEvent);
 
 				if (!flowerGiftEvent.isCancelled()) {
@@ -87,8 +87,8 @@ public class PlayerListener extends Enchantmentable {
 					ItemStack flowerGift = flowerGiftEvent.getFlower();
 					if (flowerGiftEvent.getFlower() != null) {
 						player.getWorld().spawnParticle(Particle.VILLAGER_HAPPY, loc, 30, 0.2, 0.5, 0.2);
-						if (FlowerGiftNMS.isDoubleFlower(flowerGift.getType())) AdvancementUtils.awardCriteria(player, ESAdvancement.BONEMEAL_PLUS, "bonemeal");
-						else if (FlowerGiftNMS.isWitherRose(flowerGift.getType())) AdvancementUtils.awardCriteria(player, ESAdvancement.JUST_AS_SWEET, "wither_rose");
+						if (FlowerGiftDrop.isDoubleFlower(flowerGift.getType())) AdvancementUtils.awardCriteria(player, ESAdvancement.BONEMEAL_PLUS, "bonemeal");
+						else if (FlowerGiftDrop.isWitherRose(flowerGift.getType())) AdvancementUtils.awardCriteria(player, ESAdvancement.JUST_AS_SWEET, "wither_rose");
 						ItemUtils.dropItem(flowerGift, flowerGiftEvent.getDropLocation());
 					} else
 						player.getWorld().spawnParticle(Particle.VILLAGER_ANGRY, loc, 30, 0.2, 0.5, 0.2);
@@ -152,7 +152,7 @@ public class PlayerListener extends Enchantmentable {
 							Location loc = lasso.getBlock().getRelative(lasso.getFace()).getLocation().clone().add(0.5, 0, 0.5);
 							if (loc.getBlock().isPassable()) {
 								Entity e = loc.getWorld().spawnEntity(loc, fromLasso.getMob());
-								if(e == null) return;
+								if (e == null) return;
 								fromLasso.editProperties(e);
 								DamageUtils.damageItem(player, item, 1, 2);
 								player.incrementStatistic(Statistic.USE_ITEM, item.getType());
@@ -256,7 +256,7 @@ public class PlayerListener extends Enchantmentable {
 				OverkillEvent overkill = new OverkillEvent(player, item, takeArrow, player.getInventory().all(Material.ARROW).size() > 0, 0.4);
 				Bukkit.getPluginManager().callEvent(overkill);
 
-				if (!overkill.isCancelled()) {
+				if (!overkill.isCancelled() && !overkill.willCancel()) {
 					if (overkill.takeArrow() && overkill.hasArrow()) {
 						ItemStack[] contents = overkill.getPlayer().getInventory().getContents();
 						ItemStack[] extraContents = overkill.getPlayer().getInventory().getExtraContents();
@@ -272,7 +272,7 @@ public class PlayerListener extends Enchantmentable {
 								break;
 							}
 						}
-					} else if (overkill.takeArrow() && !overkill.hasArrow()) return;
+					}
 					player.incrementStatistic(Statistic.USE_ITEM, item.getType());
 					Arrow arrow = player.launchProjectile(Arrow.class);
 					arrow.setMetadata("overkill", new FixedMetadataValue(EnchantmentSolution.getPlugin(), player.getUniqueId().toString()));
@@ -297,7 +297,7 @@ public class PlayerListener extends Enchantmentable {
 				SplatterFestEvent splatterFest = new SplatterFestEvent(player, item, player.getGameMode() != GameMode.CREATIVE, player.getInventory().all(Material.EGG).size() > 0);
 				Bukkit.getPluginManager().callEvent(splatterFest);
 
-				if (!splatterFest.isCancelled()) {
+				if (!splatterFest.isCancelled() && !splatterFest.willCancel()) {
 					if (splatterFest.takeEgg() && splatterFest.hasEgg()) {
 						ItemStack[] contents = splatterFest.getPlayer().getInventory().getContents();
 						ItemStack[] extraContents = splatterFest.getPlayer().getInventory().getExtraContents();
@@ -313,7 +313,7 @@ public class PlayerListener extends Enchantmentable {
 								break;
 							}
 						}
-					} else if (splatterFest.takeEgg() && !splatterFest.hasEgg()) return;
+					}
 					player.incrementStatistic(Statistic.USE_ITEM, item.getType());
 					player.incrementStatistic(Statistic.USE_ITEM, Material.EGG);
 					Egg egg = player.launchProjectile(Egg.class);

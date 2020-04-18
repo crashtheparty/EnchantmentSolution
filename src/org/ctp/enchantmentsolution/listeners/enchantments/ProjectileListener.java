@@ -27,7 +27,7 @@ import org.ctp.enchantmentsolution.listeners.Enchantmentable;
 import org.ctp.enchantmentsolution.nms.DamageEvent;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.LocationUtils;
-import org.ctp.enchantmentsolution.utils.abillityhelpers.ParticleEffect;
+import org.ctp.enchantmentsolution.utils.abilityhelpers.ParticleEffect;
 import org.ctp.enchantmentsolution.utils.items.AbilityUtils;
 import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 
@@ -159,7 +159,9 @@ public class ProjectileListener extends Enchantmentable {
 				Location loc = event.getEntity().getLocation();
 				int level = event.getEntity().getMetadata("detonator").get(0).asInt();
 
-				DetonatorExplosionEvent detonator = new DetonatorExplosionEvent(entity, level, loc, (float) (0.5 + 0.5 * level), true, true, false);
+				Entity e = null;
+				if (event.getEntity().getShooter() instanceof Entity) e = (Entity) event.getEntity().getShooter();
+				DetonatorExplosionEvent detonator = new DetonatorExplosionEvent(entity, level, loc, e, (float) (0.5 + 0.5 * level), true, true, false);
 				Bukkit.getPluginManager().callEvent(detonator);
 
 				if (!detonator.isCancelled()) if (detonator.willDelayExplosion()) Bukkit.getScheduler().runTaskLater(EnchantmentSolution.getPlugin(), () -> {

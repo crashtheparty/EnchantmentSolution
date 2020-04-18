@@ -28,7 +28,7 @@ public class AnimalMob {
 	private DyeColor sheepColor, wolfCollar, tropicalBodyColor, tropicalPatternColor;
 	private boolean isHorse, carryingChest, pigSaddle, sheared, angry;
 	private Map<Integer, ItemStack> inventoryItems;
-	private ItemStack saddle,  armor;
+	private ItemStack saddle, armor;
 	private Color horseColor;
 	private org.bukkit.entity.Llama.Color llamaColor;
 	private Style horseStyle;
@@ -41,7 +41,7 @@ public class AnimalMob {
 		setName(mob.getCustomName());
 		setHealth(mob.getHealth());
 		setItem(item);
-		if(mob instanceof Animals) setAge(((Animals) mob).getAge());
+		if (mob instanceof Animals) setAge(((Animals) mob).getAge());
 		if (mob instanceof PufferFish) {
 			PufferFish pufferFish = (PufferFish) mob;
 			setPuffState(pufferFish.getPuffState());
@@ -217,7 +217,7 @@ public class AnimalMob {
 					}
 				}
 				creature.setHealth(getHealth());
-				if(creature instanceof Animals) ((Animals) creature).setAge(getAge());
+				if (creature instanceof Animals) ((Animals) creature).setAge(getAge());
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
