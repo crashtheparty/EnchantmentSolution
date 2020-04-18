@@ -14,7 +14,7 @@ public abstract class LootEnchantments extends GenerateEnchantments {
 	private EnchantmentList[] list;
 
 	public LootEnchantments(Player player, ItemStack item, EnchantmentLocation location) {
-		super(player, item, location);
+		this(player, item, 0, location);
 	}
 
 	public LootEnchantments(Player player, ItemStack item, int bookshelves, EnchantmentLocation location) {

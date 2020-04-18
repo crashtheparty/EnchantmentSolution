@@ -76,9 +76,23 @@ loots:
         pillager_outpost: 
             bookshelves: 10
             levels: 1
+        bastion_bridge: 
+            bookshelves: 10
+            levels: 2
+        bastion_hoglin_stable: 
+            bookshelves: 10
+            levels: 2
+        bastion_other: 
+            bookshelves: 10
+            levels: 2
+        bastion_treasure: 
+            bookshelves: 12
+            levels: 3
+        ruined_portal: 
+            bookshelves: 6
+            levels: 1
 
-gametype: 'survival'
-rpg: false
+gametypes: []
 
 config_comments: 
 
@@ -218,5 +232,11 @@ config_comments:
             use:
             - 'Allow custom and/or high level enchants to spawn in chests'
             
-    gametype: 
-    - 'What does this option possibly mean? It seems to do nothing at the moment.'
+    gametypes: 
+    - 'What extra gametypes should be applied to the plugin.'
+    - 'MINIGAME: Enchantments are given through a special inventory. Customize with minigame.yml.'
+    - '    Clicking books over enchantable items will anvil them.'
+    - 'RPG: Only certain enchantments are enabled by default.'
+    - '    Using enchantments will increase your level to buy new enchantments and levels.'
+    - 'HARD: Not implemented fully. A certain percentage of mobs will spawn with increased health.'
+

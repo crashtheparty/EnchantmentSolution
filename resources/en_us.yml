@@ -268,9 +268,6 @@ calc:
     - '&6Enchantability Constant: &3%constant%'
     - '&6Enchantability Modifier: &3%modifier%'
     pagination:
-        go_back: '&9Go Back'
-        previous_page: '&9Previous Page'
-        next_page: '&9Next Page'
         enchantability_by_level: '&9View Enchantability by Level'
     info:
         constant: '&9Enchantability Constant'
@@ -330,6 +327,27 @@ rpg:
     enchantment_levels_lore: 
     - '&6Points for Level %level%: &3%points%'
     - '&7Left click to buy a higher level.'
+
+minigame:
+    fast:
+        item: '&9%name%'
+        item_lore:
+        - '&7Left click to get an enchanted book of this kind.'
+    mondays:
+        item: '&9%name%'
+        item_lore:
+        - '&4Cost: &6%cost%'
+        - '&7Left click to get an enchanted book'
+        - '&7 with this enchantment at level 1.'
+    mirror: '&f'
+    invalid_enchant_name: '&cInvalid enchantment name %name%!'
+    invalid_random_enchant: '&cCould not generate a random enchantment this time!'
+    not_enough_levels: '&cYou need more levels to get this enchantment!'
+
+pagination:
+    go_back: '&9Go Back'
+    previous_page: '&9Previous Page'
+    next_page: '&9Next Page'
 
 enchantment: 
     name: '&6Display Name: &f'
@@ -491,6 +509,7 @@ enchantment:
         villager_trades: 'Villager Trades'
         piglin_trades: 'Piglin Trades'
     locations_string: '&6Enchantment Locations: &f'
+    random: 'Random'
 irenes_lasso: 
     error: 'This animal does not belong to you!'
 vanilla: 

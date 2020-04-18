@@ -36,7 +36,7 @@ public enum ConfigString {
 	WIKI_ON_TIMER(Type.MAIN, "wiki.on_timer", boolean.class),
 	WIKI_TIMER(Type.MAIN, "wiki.timer_seconds", int.class),
 	WIKI_URL(Type.MAIN, "wiki.url", String.class),
-	RPG(Type.MAIN, "rpg", boolean.class),
+	GAMETYPES(Type.MAIN, "gametypes", List.class),
 	ADVANCED_OPTIONS(Type.ENCHANTMENTS, "advanced_options.use", boolean.class),
 	DECAY(Type.ENCHANTMENTS, "advanced_options.enchantability_decay", boolean.class),
 	STARTING_LEVEL(Type.ENCHANTMENTS, "advanced_options.starting_level", boolean.class),
@@ -53,7 +53,17 @@ public enum ConfigString {
 	RPG_LEVELS_POWER(Type.RPG, "levels.points.add_power", double.class),
 	RPG_LEVELS_DIVISOR(Type.RPG, "levels.points.divisor", double.class),
 	RPG_ENCHANTMENT_LEVELONE(Type.RPG, "enchantments.", int.class, true),
-	RPG_ENCHANTMENT_INCREASE(Type.RPG, "enchantments.", int.class, true);
+	RPG_ENCHANTMENT_INCREASE(Type.RPG, "enchantments.", int.class, true),
+	MINIGAME_TYPE(Type.MINIGAME, "type", String.class),
+	MINIGAME_FAST_ENCHANTING_OVERRIDE(Type.MINIGAME, "fast.override_enchanting_cost", boolean.class),
+	MINIGAME_FAST_ENCHANTING_COST(Type.MINIGAME, "fast.enchanting_cost", int.class),
+	MINIGAME_FAST_ANVIL_OVERRIDE(Type.MINIGAME, "fast.override_anvil_cost", boolean.class),
+	MINIGAME_FAST_ANVIL_COST(Type.MINIGAME, "fast.anvil_cost", int.class), 
+	MINIGAME_FAST_RANDOM_BOOKSHELVES(Type.MINIGAME, "fast.random_bookshelves", boolean.class), 
+	MINIGAME_MONDAYS_ANVIL_OVERRIDE(Type.MINIGAME, "mondays.override_anvil_cost", boolean.class),
+	MINIGAME_MONDAYS_ANVIL_COST(Type.MINIGAME, "mondays.anvil_cost", int.class), 
+	MINIGAME_QUICK_ANVIL(Type.MINIGAME, "quick_anvil", boolean.class), 
+	HARD_HEALTH_INCREASE(Type.HARD_MODE, "increase_health", boolean.class);
 
 	private final Type type;
 	private final String location;

@@ -229,6 +229,10 @@ enchantments:
             experience: 0.7
             points_level_one: 3
             points_increase: 4
+        light_weight: 
+            experience: 0.3
+            points_level_one: 20
+            points_increase: 0
         life: 
             experience: 1
             points_level_one: 5
@@ -261,6 +265,10 @@ enchantments:
             experience: 0.8
             points_level_one: 3
             points_increase: 4
+        recycler: 
+            experience: 0.1
+            points_level_one: 20
+            points_increase: 0
         sacrifice: 
             experience: 1.6
             points_level_one: 15

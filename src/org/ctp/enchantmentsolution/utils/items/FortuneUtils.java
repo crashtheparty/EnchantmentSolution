@@ -55,6 +55,7 @@ public class FortuneUtils {
 			case "COAL_ORE":
 			case "NETHER_QUARTZ_ORE":
 			case "NETHER_GOLD_ORE":
+			case "GILDED_BLACKSTONE":
 			case "LAPIS_ORE":
 				itemBreak = ItemBreakType.getType(item.getType());
 				if (itemBreak != null && itemBreak.getBreakTypes().contains(brokenBlock.getType())) {

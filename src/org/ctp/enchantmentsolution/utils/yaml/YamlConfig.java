@@ -405,6 +405,14 @@ public class YamlConfig {
 		return values;
 	}
 
+	public List<String> getLevelEntryKeysAtLevel(String level) {
+		List<String> values = getLevelEntryKeys(level);
+		List<String> newValues = new ArrayList<String>();
+		for(String v : values)
+			newValues.add(v.substring(v.lastIndexOf('.') + 1));
+		return newValues;
+	}
+
 	public List<String> getAllEntryKeys() {
 		List<String> values = new ArrayList<String>();
 		for(Iterator<java.util.Map.Entry<String, YamlInfo>> it = info.entrySet().iterator(); it.hasNext();) {

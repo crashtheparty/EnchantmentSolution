@@ -9,11 +9,13 @@ import org.bukkit.block.Block;
 import org.bukkit.block.data.*;
 import org.bukkit.block.data.type.Snow;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
@@ -22,6 +24,7 @@ import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enums.ItemBreakType;
 import org.ctp.enchantmentsolution.enums.ItemPlaceType;
 import org.ctp.enchantmentsolution.events.blocks.HeightWidthEvent;
+import org.ctp.enchantmentsolution.events.blocks.LightWeightEvent;
 import org.ctp.enchantmentsolution.events.blocks.WandEvent;
 import org.ctp.enchantmentsolution.events.modify.GoldDiggerEvent;
 import org.ctp.enchantmentsolution.events.modify.LagEvent;
@@ -56,6 +59,11 @@ public class BlockListener extends Enchantmentable {
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onBlockPlaceHighest(BlockPlaceEvent event) {
 		runMethod(this, "wand", event, BlockPlaceEvent.class);
+	}
+	
+	@EventHandler(priority = EventPriority.HIGHEST)
+	public void onEntityChangeBlock(EntityChangeBlockEvent event) {
+		runMethod(this, "lightWeight", event, EntityChangeBlockEvent.class);
 	}
 
 	private void curseOfLag(BlockBreakEvent event) {
@@ -341,6 +349,24 @@ public class BlockListener extends Enchantmentable {
 				}
 			}
 		}
+	}
+	
+	private void lightWeight(EntityChangeBlockEvent event) {
+		if (!canRun(RegisterEnchantments.LIGHT_WEIGHT, event)) return;
+		Entity entity = event.getEntity();
+		if(entity instanceof Player) {
+			Player player = (Player) entity;
+			if(event.getBlock().getType() == Material.FARMLAND && event.getTo() == Material.DIRT) {
+				ItemStack boots = player.getInventory().getBoots();
+				if(boots != null && ItemUtils.hasEnchantment(boots, RegisterEnchantments.LIGHT_WEIGHT)) {
+					LightWeightEvent lightWeight = new LightWeightEvent(event.getBlock(), player);
+					Bukkit.getPluginManager().callEvent(lightWeight);
+					
+					if(!lightWeight.isCancelled()) event.setCancelled(true);
+				}
+			}
+		}
+		
 	}
 
 	private boolean hasItem(Player player, ItemStack item) {

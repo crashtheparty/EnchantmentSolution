@@ -120,7 +120,8 @@ public enum ItemType {
 	}
 
 	private String getDisplayType() {
-		return ConfigUtils.getString(Type.LANGUAGE, "item_display_types." + name().toLowerCase());
+		String s = ConfigUtils.getString(Type.LANGUAGE, "item_display_types." + name().toLowerCase());
+		return s == null ? getType() : s;
 	}
 
 	public static List<ItemType> getEnchantableTypes() {
@@ -129,6 +130,10 @@ public enum ItemType {
 
 	public static List<ItemType> getAnvilableTypes() {
 		return Arrays.asList(BLACK_SHULKER_BOX, BLUE_SHULKER_BOX, BOOK, BOW, BROWN_SHULKER_BOX, CARROT_ON_A_STICK, CHAINMAIL_BOOTS, CHAINMAIL_CHESTPLATE, CHAINMAIL_HELMET, CHAINMAIL_LEGGINGS, CROSSBOW, CUSTOM, CYAN_SHULKER_BOX, DIAMOND_AXE, DIAMOND_BOOTS, DIAMOND_CHESTPLATE, DIAMOND_HELMET, DIAMOND_HOE, DIAMOND_LEGGINGS, DIAMOND_PICKAXE, DIAMOND_SHOVEL, DIAMOND_SWORD, ELYTRA, ENCHANTED_BOOK, FISHING_ROD, FLINT_AND_STEEL, GOLDEN_AXE, GOLDEN_BOOTS, GOLDEN_CHESTPLATE, GOLDEN_HELMET, GOLDEN_HOE, GOLDEN_LEGGINGS, GOLDEN_PICKAXE, GOLDEN_SHOVEL, GOLDEN_SWORD, GRAY_SHULKER_BOX, GREEN_SHULKER_BOX, IRON_AXE, IRON_BOOTS, IRON_CHESTPLATE, IRON_HELMET, IRON_HOE, IRON_LEGGINGS, IRON_PICKAXE, IRON_SHOVEL, IRON_SWORD, LEATHER_BOOTS, LEATHER_CHESTPLATE, LEATHER_HELMET, LEATHER_LEGGINGS, LIGHT_BLUE_SHULKER_BOX, LIGHT_GRAY_SHULKER_BOX, LIME_SHULKER_BOX, MAGENTA_SHULKER_BOX, NETHERITE_AXE, NETHERITE_BOOTS, NETHERITE_CHESTPLATE, NETHERITE_HELMET, NETHERITE_HOE, NETHERITE_LEGGINGS, NETHERITE_PICKAXE, NETHERITE_SHOVEL, NETHERITE_SWORD, ORANGE_SHULKER_BOX, PINK_SHULKER_BOX, PURPLE_SHULKER_BOX, RED_SHULKER_BOX, SHEARS, SHIELD, STONE_AXE, STONE_HOE, STONE_PICKAXE, STONE_SHOVEL, STONE_SWORD, TRIDENT, TURTLE_HELMET, WARPED_FUNGUS_ON_A_STICK, WHITE_SHULKER_BOX, WOODEN_AXE, WOODEN_HOE, WOODEN_PICKAXE, WOODEN_SHOVEL, WOODEN_SWORD, YELLOW_SHULKER_BOX);
+	}
+	
+	public static List<ItemType> getUniqueEnchantableTypes(){
+		return Arrays.asList(HELMETS, CHESTPLATES, LEGGINGS, BOOTS, AXES, HOES, SHOVELS, PICKAXES, SWORDS, BOW, CROSSBOW, TRIDENT, SHIELD, FISHING_ROD, ELYTRA, BOOK);
 	}
 
 	private List<String> getEnchantables(String type) {
@@ -270,7 +275,6 @@ public enum ItemType {
 				i.addAll(getEnchantables(SHIELD.getType()));
 				i.addAll(getEnchantables(FISHING_ROD.getType()));
 				i.addAll(getEnchantables(ELYTRA.getType()));
-				i.addAll(getEnchantables(HOES.getType()));
 				break;
 			case "FISHING_STICK":
 				i.addAll(getEnchantables(CARROT_ON_A_STICK.getType()));
@@ -397,12 +401,10 @@ public enum ItemType {
 				i.addAll(getEnchantables(WOODEN_SWORD.getType()));
 				break;
 			case "TOOLS":
-				i.addAll(getEnchantables(DIAMOND_TOOLS.getType()));
-				i.addAll(getEnchantables(GOLDEN_TOOLS.getType()));
-				i.addAll(getEnchantables(IRON_TOOLS.getType()));
-				i.addAll(getEnchantables(NETHERITE_TOOLS.getType()));
-				i.addAll(getEnchantables(STONE_TOOLS.getType()));
-				i.addAll(getEnchantables(WOODEN_TOOLS.getType()));
+				i.addAll(getEnchantables(AXES.getType()));
+				i.addAll(getEnchantables(HOES.getType()));
+				i.addAll(getEnchantables(SHOVELS.getType()));
+				i.addAll(getEnchantables(PICKAXES.getType()));
 				break;
 			case "WOODEN_TOOLS":
 				i.addAll(getEnchantables(WOODEN_AXE.getType()));

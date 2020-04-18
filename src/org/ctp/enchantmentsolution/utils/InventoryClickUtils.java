@@ -12,6 +12,7 @@ import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.inventory.*;
 import org.ctp.enchantmentsolution.inventory.ConfigInventory.Screen;
+import org.ctp.enchantmentsolution.inventory.minigame.Minigame;
 import org.ctp.enchantmentsolution.inventory.rpg.RPGInventory;
 import org.ctp.enchantmentsolution.nms.Anvil_GUI_NMS;
 import org.ctp.enchantmentsolution.utils.items.ItemUtils;
@@ -159,6 +160,15 @@ public class InventoryClickUtils {
 							break;
 						case 6:
 							configInv.listConfigDetails(Configurations.getEnchantments().getConfig(), null);
+							break;
+						case 12:
+							configInv.listConfigDetails(Configurations.getMinigames().getConfig(), null);
+							break;
+						case 13:
+							configInv.listConfigDetails(Configurations.getRPG().getConfig(), null);
+							break;
+						case 14:
+							configInv.listConfigDetails(Configurations.getHardMode().getConfig(), null);
 							break;
 						case 21:
 							if (!item.getType().equals(Material.BARRIER)) configInv.saveAll();
@@ -455,6 +465,7 @@ public class InventoryClickUtils {
 	}
 
 	public static void setRPGInventory(RPGInventory rpgInventory, Player player, Inventory inv, Inventory clickedInv, int slot, ClickType click) {
+		if (!inv.getType().equals(InventoryType.CHEST)) return;
 		ItemStack item = clickedInv.getItem(slot);
 		if (item == null) return;
 		switch (slot) {
@@ -481,6 +492,23 @@ public class InventoryClickUtils {
 					rpgInventory.buyEnchantmentLevel(slot);
 					rpgInventory.setInventory();
 				}
+				break;
+		}
+	}
+
+	public static void setMinigameInventory(Minigame minigameInventory, Player player, Inventory inv, Inventory clickedInv, int slot, ClickType click) {
+		if (!inv.getType().equals(InventoryType.CHEST)) return;
+		ItemStack item = clickedInv.getItem(slot);
+		if (item == null) return;
+		switch (minigameInventory.getScreen()) {
+			case FAST:
+				if(item.getType() != Material.BLACK_STAINED_GLASS_PANE) minigameInventory.addFastEnchantment(slot);
+				break;
+			case MONDAYS:
+				if(slot == 45 || slot == 53) return;
+				if(item.getType() != Material.BLACK_STAINED_GLASS_PANE) minigameInventory.addMondaysEnchantment(slot);
+				break;
+			default:
 				break;
 		}
 	}

@@ -7,8 +7,10 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.inventory.*;
+import org.ctp.enchantmentsolution.inventory.minigame.Minigame;
 import org.ctp.enchantmentsolution.inventory.rpg.RPGInventory;
 import org.ctp.enchantmentsolution.utils.InventoryClickUtils;
+import org.ctp.enchantmentsolution.utils.MinigameUtils;
 
 public class InventoryClick implements Listener {
 
@@ -48,7 +50,13 @@ public class InventoryClick implements Listener {
 				RPGInventory rpgInventory = (RPGInventory) invData;
 
 				InventoryClickUtils.setRPGInventory(rpgInventory, player, inv, event.getClickedInventory(), event.getSlot(), event.getClick());
+			} else if (invData instanceof Minigame) {
+				Minigame minigameInventory = (Minigame) invData;
+
+				InventoryClickUtils.setMinigameInventory(minigameInventory, player, inv, event.getClickedInventory(), event.getSlot(), event.getClick());
 			}
 		}
+		
+		if(MinigameUtils.isEnabled() && MinigameUtils.quickAnvil()) MinigameUtils.setAnvil(event);
 	}
 }

@@ -26,6 +26,7 @@ import org.ctp.enchantmentsolution.listeners.chestloot.ChestLootListener;
 import org.ctp.enchantmentsolution.listeners.enchantments.*;
 import org.ctp.enchantmentsolution.listeners.fishing.EnchantsFishingListener;
 import org.ctp.enchantmentsolution.listeners.fishing.McMMOFishingListener;
+import org.ctp.enchantmentsolution.listeners.hard.HardModeListener;
 import org.ctp.enchantmentsolution.listeners.inventory.*;
 import org.ctp.enchantmentsolution.listeners.legacy.UpdateEnchantments;
 import org.ctp.enchantmentsolution.listeners.mobs.MobSpawning;
@@ -123,6 +124,7 @@ public class EnchantmentSolution extends JavaPlugin {
 		rpg = new RPGListener();
 		registerEvent(rpg);
 		Bukkit.getScheduler().runTaskTimer(PLUGIN, rpg, 1l, 1l);
+		registerEvent(new HardModeListener());
 
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN, new AbilityRunnable(), 80l, 80l);
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN, new AdvancementThread(), 1l, 1l);
@@ -156,6 +158,7 @@ public class EnchantmentSolution extends JavaPlugin {
 		initialization = false;
 
 		Bukkit.getScheduler().runTaskLater(this, () -> {
+			Configurations.reload();
 			SaveUtils.getData();
 			Configurations.getEnchantments().setEnchantmentInformation();
 			Configurations.getEnchantments().save();

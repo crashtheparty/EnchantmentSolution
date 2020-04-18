@@ -161,6 +161,13 @@ public class RPGListener extends Enchantmentable implements Runnable {
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR)
+	public void onLightWeight(LightWeightEvent event) {
+		if (event.isCancelled()) return;
+		Player player = event.getPlayer();
+		giveExperience(player, RegisterEnchantments.LIGHT_WEIGHT, 1);
+	}
+
+	@EventHandler(priority = EventPriority.MONITOR)
 	public void onEntityDamage(EntityDamageEvent event) {
 		if (event.isCancelled()) return;
 		Entity entity = event.getEntity();

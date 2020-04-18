@@ -10,12 +10,11 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
-import org.ctp.enchantmentsolution.inventory.Anvil;
-import org.ctp.enchantmentsolution.inventory.EnchantmentTable;
-import org.ctp.enchantmentsolution.inventory.InventoryData;
-import org.ctp.enchantmentsolution.inventory.LegacyAnvil;
+import org.ctp.enchantmentsolution.inventory.*;
+import org.ctp.enchantmentsolution.inventory.minigame.Minigame;
 import org.ctp.enchantmentsolution.nms.playerinteract.PlayerInteract_v1_14;
 import org.ctp.enchantmentsolution.utils.AnvilUtils;
+import org.ctp.enchantmentsolution.utils.MinigameUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 
 public class PlayerInteract implements Listener {
@@ -30,6 +29,18 @@ public class PlayerInteract implements Listener {
 				if (event.isCancelled()) return;
 				Player player = event.getPlayer();
 				InventoryData inv = EnchantmentSolution.getPlugin().getInventory(player);
+				if(MinigameUtils.isEnabled()) {
+					if (inv == null) {
+						inv = new Minigame(player, block);
+						EnchantmentSolution.getPlugin().addInventory(inv);
+					} else if (!(inv instanceof Minigame)) {
+						inv.close(true);
+						inv = new Minigame(player, block);
+						EnchantmentSolution.getPlugin().addInventory(inv);
+					}
+					inv.setInventory();
+					return;
+				}
 				if (inv == null) {
 					inv = new EnchantmentTable(player, block);
 					EnchantmentSolution.getPlugin().addInventory(inv);

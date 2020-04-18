@@ -140,6 +140,13 @@ public class AnvilEnchantments extends GenerateEnchantments {
 				itemTwoLeftover.setAmount(amount);
 			} else
 				itemTwoLeftover = new ItemStack(Material.AIR);
+		} else if (repairType == RepairType.COMBINE && itemTwo.getType() == Material.BOOK) {
+			int amount = itemTwo.getAmount() - 1;
+			if (amount > 0) {
+				itemTwoLeftover = itemTwo.clone();
+				itemTwoLeftover.setAmount(amount);
+			} else
+				itemTwoLeftover = new ItemStack(Material.AIR);
 		} else if (itemTwo.getType() == itemOne.getType()) {
 			int extraDurability = itemTwo.getType().getMaxDurability() - DamageUtils.getDamage(itemTwo.getItemMeta()) + (int) (itemTwo.getType().getMaxDurability() * .12);
 			DamageUtils.setDamage(combinedItem, DamageUtils.getDamage(combinedItem.getItemMeta()) - extraDurability);

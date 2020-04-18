@@ -72,6 +72,7 @@ public class RPGUtils {
 	}
 
 	public static void giveExperience(Player player, EnchantmentLevel enchantment) {
+		if (!ConfigString.GAMETYPES.getStringList().contains("RPG")) return;
 		RPGPlayer rpg = null;
 		for(RPGPlayer p: PLAYERS)
 			if (p.getPlayer().getUniqueId().toString().equals(player.getUniqueId().toString())) {
@@ -125,7 +126,7 @@ public class RPGUtils {
 	}
 
 	public static boolean canEnchant(Player player, CustomEnchantment customEnchantment, int i) {
-		if (!ConfigString.RPG.getBoolean()) return true;
+		if (!ConfigString.GAMETYPES.getStringList().contains("RPG")) return true;
 
 		RPGPlayer rpg = getPlayer(player);
 		if (rpg == null) rpg = addRPGPlayer(player);

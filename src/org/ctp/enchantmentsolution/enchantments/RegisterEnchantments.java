@@ -70,6 +70,7 @@ public class RegisterEnchantments {
 	public static final Enchantment OVERKILL = new CustomEnchantmentWrapper("overkill", "OVERKILL", 1);
 	public static final Enchantment CURSE_OF_CONTAGION = new CustomEnchantmentWrapper("contagion_curse", "CONTAGION_CURSE", 1);
 	public static final Enchantment RECYCLER = new CustomEnchantmentWrapper("recycler", "RECYCLER", 1);
+	public static final Enchantment LIGHT_WEIGHT = new CustomEnchantmentWrapper("light_weight", "LIGHT_WEIGHT", 1);
 
 	private RegisterEnchantments() {}
 
@@ -311,6 +312,7 @@ public class RegisterEnchantments {
 		addDefaultEnchantment(CERegister.IRENES_LASSO);
 		addDefaultEnchantment(CERegister.IRON_DEFENSE);
 		addDefaultEnchantment(CERegister.KNOCKUP);
+		addDefaultEnchantment(CERegister.LIGHT_WEIGHT);
 		addDefaultEnchantment(CERegister.LIFE);
 		addDefaultEnchantment(CERegister.MAGIC_GUARD);
 		addDefaultEnchantment(CERegister.MAGMA_WALKER);

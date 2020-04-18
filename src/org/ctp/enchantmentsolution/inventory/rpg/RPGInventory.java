@@ -3,7 +3,6 @@ package org.ctp.enchantmentsolution.inventory.rpg;
 import java.util.*;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
@@ -16,11 +15,12 @@ import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.inventory.InventoryData;
+import org.ctp.enchantmentsolution.inventory.Pageable;
 import org.ctp.enchantmentsolution.rpg.RPGPlayer;
 import org.ctp.enchantmentsolution.rpg.RPGUtils;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
 
-public class RPGInventory implements InventoryData {
+public class RPGInventory implements InventoryData, Pageable {
 
 	private Player player;
 	private RPGPlayer rpg;
@@ -56,8 +56,10 @@ public class RPGInventory implements InventoryData {
 
 	@Override
 	public void close(boolean external) {
-		if (!external) player.closeInventory();
-		EnchantmentSolution.getPlugin().removeInventory(this);
+		if (EnchantmentSolution.getPlugin().hasInventory(this)) {
+			EnchantmentSolution.getPlugin().removeInventory(this);
+			if (!external) player.getOpenInventory().close();
+		}
 	}
 
 	@Override
@@ -283,34 +285,12 @@ public class RPGInventory implements InventoryData {
 		return codes;
 	}
 
-	private ItemStack nextPage() {
-		ItemStack nextPage = new ItemStack(Material.ARROW);
-		ItemMeta nextPageMeta = nextPage.getItemMeta();
-		nextPageMeta.setDisplayName(ChatColor.BLUE + "Next Page");
-		nextPage.setItemMeta(nextPageMeta);
-		return nextPage;
-	}
-
-	private ItemStack previousPage() {
-		ItemStack prevPage = new ItemStack(Material.ARROW);
-		ItemMeta prevPageMeta = prevPage.getItemMeta();
-		prevPageMeta.setDisplayName(ChatColor.BLUE + "Previous Page");
-		prevPage.setItemMeta(prevPageMeta);
-		return prevPage;
-	}
-
-	private ItemStack goBack() {
-		ItemStack goBack = new ItemStack(Material.ARROW);
-		ItemMeta goBackMeta = goBack.getItemMeta();
-		goBackMeta.setDisplayName(ChatColor.GOLD + "Go Back");
-		goBack.setItemMeta(goBackMeta);
-		return goBack;
-	}
-
+	@Override
 	public int getPage() {
 		return page;
 	}
 
+	@Override
 	public void setPage(int page) {
 		this.page = page;
 	}
