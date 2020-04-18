@@ -1,32 +1,16 @@
 package org.ctp.enchantmentsolution.enums;
 
-public enum CustomItemType {
+public class CustomItemType extends ItemType {
 
-	VANILLA(false), TYPE(true), TYPE_SET(true);
-
-	private final boolean mmo;
-
-	CustomItemType(boolean mmo) {
-		this.mmo = mmo;
+	private final VanillaItemType vanilla;
+	
+	public CustomItemType(String type, VanillaItemType vanilla) {
+		super(type);
+		this.vanilla = vanilla;
 	}
 
-	public boolean isMMO() {
-		return mmo;
+	public VanillaItemType getVanilla() {
+		return vanilla;
 	}
 
-	public static CustomItemType get(String s) {
-		String[] split = s.split(":");
-		if (split[0].equalsIgnoreCase("minecraft")) return VANILLA;
-		if (split.length > 1) {
-			String type = split[1];
-			switch (type.toLowerCase()) {
-				case "type":
-					return TYPE;
-				case "type_set":
-					return TYPE_SET;
-			}
-		}
-
-		return null;
-	}
 }

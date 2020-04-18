@@ -16,7 +16,7 @@ public class ApiItemType {
 	 *            - the type of items
 	 */
 	public ApiItemType(String type) {
-		itemType = ItemType.valueOf(type);
+		itemType = ItemType.getItemType(type);
 	}
 
 	/**

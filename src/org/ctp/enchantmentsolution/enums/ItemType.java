@@ -4,34 +4,149 @@ import java.util.*;
 
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.ctp.enchantmentsolution.utils.config.ConfigString;
 import org.ctp.enchantmentsolution.utils.config.ConfigUtils;
 import org.ctp.enchantmentsolution.utils.config.Type;
 
-public enum ItemType {
-	HELMETS(), CHESTPLATES(), LEGGINGS(), BOOTS(), SWORDS(), PICKAXES(), SHOVELS(), AXES(), HOES(), BOW(), SHIELD(), FISHING_ROD(), SHEARS(),
-	FLINT_AND_STEEL(), FISHING_STICK(), ELYTRA(), TRIDENT(), RANGED(), ARMOR(), TOOLS(), MELEE(), MISC(), WOODEN_TOOLS(), STONE_TOOLS(),
-	IRON_TOOLS(), GOLDEN_TOOLS(), DIAMOND_TOOLS(), LEATHER_ARMOR(), GOLDEN_ARMOR(), CHAINMAIL_ARMOR(), IRON_ARMOR(), DIAMOND_ARMOR(),
-	CROSSBOW(), BOOK(), ALL(), ENCHANTABLE(), TURTLE_HELMET(), SHULKER_BOXES(), NONE(), OTHER(), NETHERITE_TOOLS(), NETHERITE_ARMOR(),
-	DIAMOND_AXE(), DIAMOND_SWORD(), DIAMOND_SHOVEL(), DIAMOND_PICKAXE(), DIAMOND_HOE(), DIAMOND_HELMET(), DIAMOND_CHESTPLATE(),
-	DIAMOND_LEGGINGS(), DIAMOND_BOOTS(), IRON_AXE(), IRON_SWORD(), IRON_SHOVEL(), IRON_PICKAXE(), IRON_HOE(), IRON_HELMET(),
-	IRON_CHESTPLATE(), IRON_LEGGINGS(), IRON_BOOTS(), GOLDEN_AXE(), GOLDEN_SWORD(), GOLDEN_SHOVEL(), GOLDEN_PICKAXE(), GOLDEN_HOE(),
-	GOLDEN_HELMET(), GOLDEN_CHESTPLATE(), GOLDEN_LEGGINGS(), GOLDEN_BOOTS(), STONE_AXE(), STONE_SWORD(), STONE_SHOVEL(), STONE_PICKAXE(),
-	STONE_HOE(), CHAINMAIL_HELMET(), CHAINMAIL_CHESTPLATE(), CHAINMAIL_LEGGINGS(), CHAINMAIL_BOOTS(), WOODEN_AXE(), WOODEN_SWORD(),
-	WOODEN_SHOVEL(), WOODEN_PICKAXE(), WOODEN_HOE(), LEATHER_HELMET(), LEATHER_CHESTPLATE(), LEATHER_LEGGINGS(), LEATHER_BOOTS(),
-	ENCHANTED_BOOK(), CARROT_ON_A_STICK(), WARPED_FUNGUS_ON_A_STICK(), BLACK_SHULKER_BOX(), BLUE_SHULKER_BOX(), BROWN_SHULKER_BOX(),
-	CYAN_SHULKER_BOX(), GRAY_SHULKER_BOX(), GREEN_SHULKER_BOX(), LIGHT_BLUE_SHULKER_BOX(), LIME_SHULKER_BOX(), MAGENTA_SHULKER_BOX(),
-	ORANGE_SHULKER_BOX(), PINK_SHULKER_BOX(), PURPLE_SHULKER_BOX(), RED_SHULKER_BOX(), LIGHT_GRAY_SHULKER_BOX(), WHITE_SHULKER_BOX(),
-	YELLOW_SHULKER_BOX(), SHULKER_BOX(), NETHERITE_AXE(), NETHERITE_SWORD(), NETHERITE_SHOVEL(), NETHERITE_PICKAXE(), NETHERITE_HOE(),
-	NETHERITE_HELMET(), NETHERITE_CHESTPLATE(), NETHERITE_LEGGINGS(), NETHERITE_BOOTS(), DIAMOND(), IRON_INGOT(), GOLDEN_INGOT(),
-	COBBLESTONE(), ACACIA_PLANKS(), BIRCH_PLANKS(), DARK_OAK_PLANKS(), JUNGLE_PLANKS(), OAK_PLANKS(), SPRUCE_PLANKS(), LEATHER(),
-	PHANTOM_MEMBRANE(), STRING(), NETHERITE_INGOT(), CUSTOM();
-
-	private String type, display, customTypeName;
+public class ItemType {
+	public static List<ItemType> VALUES = new ArrayList<ItemType>();
+	public final static ItemType HELMETS = new ItemType("helmets");
+	public final static ItemType CHESTPLATES = new ItemType("chestplates");
+	public final static ItemType LEGGINGS = new ItemType("leggings");
+	public final static ItemType BOOTS = new ItemType("boots");
+	public final static ItemType SWORDS = new ItemType("swords");
+	public final static ItemType PICKAXES = new ItemType("pickaxes");
+	public final static ItemType SHOVELS = new ItemType("shovels");
+	public final static ItemType AXES = new ItemType("axes");
+	public final static ItemType HOES = new ItemType("hoes");
+	public final static ItemType BOW = new ItemType("bow");
+	public final static ItemType SHIELD = new ItemType("shield");
+	public final static ItemType FISHING_ROD = new ItemType("fishing_rod");
+	public final static ItemType SHEARS = new ItemType("shears");
+	public final static ItemType FLINT_AND_STEEL = new ItemType("flint_and_steel");
+	public final static ItemType FISHING_STICK = new ItemType("fishing_stick");
+	public final static ItemType ELYTRA = new ItemType("elytra");
+	public final static ItemType TRIDENT = new ItemType("trident");
+	public final static ItemType RANGED = new ItemType("ranged");
+	public final static ItemType ARMOR = new ItemType("armor");
+	public final static ItemType TOOLS = new ItemType("tools");
+	public final static ItemType MELEE = new ItemType("melee");
+	public final static ItemType MISC = new ItemType("misc");
+	public final static ItemType WOODEN_TOOLS = new ItemType("wooden_tools");
+	public final static ItemType STONE_TOOLS = new ItemType("stone_tools");
+	public final static ItemType IRON_TOOLS = new ItemType("iron_tools");
+	public final static ItemType GOLDEN_TOOLS = new ItemType("golden_tools");
+	public final static ItemType DIAMOND_TOOLS = new ItemType("diamond_tools");
+	public final static ItemType LEATHER_ARMOR = new ItemType("leather_armor");
+	public final static ItemType GOLDEN_ARMOR = new ItemType("golden_armor");
+	public final static ItemType CHAINMAIL_ARMOR = new ItemType("chainmail_armor");
+	public final static ItemType IRON_ARMOR = new ItemType("iron_armor");
+	public final static ItemType DIAMOND_ARMOR = new ItemType("diamond_armor");
+	public final static ItemType CROSSBOW = new ItemType("crossbow");
+	public final static ItemType BOOK = new ItemType("book");
+	public final static ItemType ALL = new ItemType("all");
+	public final static ItemType ENCHANTABLE = new ItemType("enchantable");
+	public final static ItemType TURTLE_HELMET = new ItemType("turtle_helmet");
+	public final static ItemType SHULKER_BOXES = new ItemType("shulker_boxes");
+	public final static ItemType NONE = new ItemType("none");
+	public final static ItemType OTHER = new ItemType("other");
+	public final static ItemType NETHERITE_TOOLS = new ItemType("netherite_tools");
+	public final static ItemType NETHERITE_ARMOR = new ItemType("netherite_armor");
+	public final static ItemType DIAMOND_AXE = new ItemType("diamond_axe");
+	public final static ItemType DIAMOND_SWORD = new ItemType("diamond_sword");
+	public final static ItemType DIAMOND_SHOVEL = new ItemType("diamond_shovel");
+	public final static ItemType DIAMOND_PICKAXE = new ItemType("diamond_pickaxe");
+	public final static ItemType DIAMOND_HOE = new ItemType("diamond_hoe");
+	public final static ItemType DIAMOND_HELMET = new ItemType("diamond_helmet");
+	public final static ItemType DIAMOND_CHESTPLATE = new ItemType("diamond_chestplate");
+	public final static ItemType DIAMOND_LEGGINGS = new ItemType("diamond_leggings");
+	public final static ItemType DIAMOND_BOOTS = new ItemType("diamond_boots");
+	public final static ItemType IRON_AXE = new ItemType("iron_axe");
+	public final static ItemType IRON_SWORD = new ItemType("iron_sword");
+	public final static ItemType IRON_SHOVEL = new ItemType("iron_shovel");
+	public final static ItemType IRON_PICKAXE = new ItemType("iron_pickaxe");
+	public final static ItemType IRON_HOE = new ItemType("iron_hoe");
+	public final static ItemType IRON_HELMET = new ItemType("iron_helmet");
+	public final static ItemType IRON_CHESTPLATE = new ItemType("iron_chestplate");
+	public final static ItemType IRON_LEGGINGS = new ItemType("iron_leggings");
+	public final static ItemType IRON_BOOTS = new ItemType("iron_boots");
+	public final static ItemType GOLDEN_AXE = new ItemType("golden_axe");
+	public final static ItemType GOLDEN_SWORD = new ItemType("golden_sword");
+	public final static ItemType GOLDEN_SHOVEL = new ItemType("golden_shovel");
+	public final static ItemType GOLDEN_PICKAXE = new ItemType("golden_pickaxe");
+	public final static ItemType GOLDEN_HOE = new ItemType("golden_hoe");
+	public final static ItemType GOLDEN_HELMET = new ItemType("golden_helmet");
+	public final static ItemType GOLDEN_CHESTPLATE = new ItemType("golden_chestplate");
+	public final static ItemType GOLDEN_LEGGINGS = new ItemType("golden_leggings");
+	public final static ItemType GOLDEN_BOOTS = new ItemType("golden_boots");
+	public final static ItemType STONE_AXE = new ItemType("stone_axe");
+	public final static ItemType STONE_SWORD = new ItemType("stone_sword");
+	public final static ItemType STONE_SHOVEL = new ItemType("stone_shovel");
+	public final static ItemType STONE_PICKAXE = new ItemType("stone_pickaxe");
+	public final static ItemType STONE_HOE = new ItemType("stone_hoe");
+	public final static ItemType CHAINMAIL_HELMET = new ItemType("chainmail_helmet");
+	public final static ItemType CHAINMAIL_CHESTPLATE = new ItemType("chainmail_chestplate");
+	public final static ItemType CHAINMAIL_LEGGINGS = new ItemType("chainmail_leggings");
+	public final static ItemType CHAINMAIL_BOOTS = new ItemType("chainmail_boots");
+	public final static ItemType WOODEN_AXE = new ItemType("wooden_axe");
+	public final static ItemType WOODEN_SWORD = new ItemType("wooden_sword");
+	public final static ItemType WOODEN_SHOVEL = new ItemType("wooden_shovel");
+	public final static ItemType WOODEN_PICKAXE = new ItemType("wooden_pickaxe");
+	public final static ItemType WOODEN_HOE = new ItemType("wooden_hoe");
+	public final static ItemType LEATHER_HELMET = new ItemType("leather_helmet");
+	public final static ItemType LEATHER_CHESTPLATE = new ItemType("leather_chestplate");
+	public final static ItemType LEATHER_LEGGINGS = new ItemType("leather_leggings");
+	public final static ItemType LEATHER_BOOTS = new ItemType("leather_boots");
+	public final static ItemType ENCHANTED_BOOK = new ItemType("enchanted_book");
+	public final static ItemType CARROT_ON_A_STICK = new ItemType("carrot_on_a_stick");
+	public final static ItemType WARPED_FUNGUS_ON_A_STICK = new ItemType("warped_fungus_on_a_stick");
+	public final static ItemType BLACK_SHULKER_BOX = new ItemType("black_shulker_box");
+	public final static ItemType BLUE_SHULKER_BOX = new ItemType("blue_shulker_box");
+	public final static ItemType BROWN_SHULKER_BOX = new ItemType("brown_shulker_box");
+	public final static ItemType CYAN_SHULKER_BOX = new ItemType("cyan_shulker_box");
+	public final static ItemType GRAY_SHULKER_BOX = new ItemType("gray_shulker_box");
+	public final static ItemType GREEN_SHULKER_BOX = new ItemType("green_shulker_box");
+	public final static ItemType LIGHT_BLUE_SHULKER_BOX = new ItemType("light_blue_shulker_box");
+	public final static ItemType LIME_SHULKER_BOX = new ItemType("lime_shulker_box");
+	public final static ItemType MAGENTA_SHULKER_BOX = new ItemType("magenta_shulker_box");
+	public final static ItemType ORANGE_SHULKER_BOX = new ItemType("orange_shulker_box");
+	public final static ItemType PINK_SHULKER_BOX = new ItemType("pink_shulker_box");
+	public final static ItemType PURPLE_SHULKER_BOX = new ItemType("purple_shulker_box");
+	public final static ItemType RED_SHULKER_BOX = new ItemType("red_shulker_box");
+	public final static ItemType LIGHT_GRAY_SHULKER_BOX = new ItemType("light_gray_shulker_box");
+	public final static ItemType WHITE_SHULKER_BOX = new ItemType("white_shulker_box");
+	public final static ItemType YELLOW_SHULKER_BOX = new ItemType("yellow_shulker_box");
+	public final static ItemType SHULKER_BOX = new ItemType("shulker_box");
+	public final static ItemType NETHERITE_AXE = new ItemType("netherite_axe");
+	public final static ItemType NETHERITE_SWORD = new ItemType("netherite_sword");
+	public final static ItemType NETHERITE_SHOVEL = new ItemType("netherite_shovel");
+	public final static ItemType NETHERITE_PICKAXE = new ItemType("netherite_pickaxe");
+	public final static ItemType NETHERITE_HOE = new ItemType("netherite_hoe");
+	public final static ItemType NETHERITE_HELMET = new ItemType("netherite_helmet");
+	public final static ItemType NETHERITE_CHESTPLATE = new ItemType("netherite_chestplate");
+	public final static ItemType NETHERITE_LEGGINGS = new ItemType("netherite_leggings");
+	public final static ItemType NETHERITE_BOOTS = new ItemType("netherite_boots");
+	public final static ItemType DIAMOND = new ItemType("diamond");
+	public final static ItemType IRON_INGOT = new ItemType("iron_ingot");
+	public final static ItemType GOLDEN_INGOT = new ItemType("golden_ingot");
+	public final static ItemType COBBLESTONE = new ItemType("cobblestone");
+	public final static ItemType ACACIA_PLANKS = new ItemType("acacia_planks");
+	public final static ItemType BIRCH_PLANKS = new ItemType("birch_planks");
+	public final static ItemType DARK_OAK_PLANKS = new ItemType("dark_oak_planks");
+	public final static ItemType JUNGLE_PLANKS = new ItemType("jungle_planks");
+	public final static ItemType OAK_PLANKS = new ItemType("oak_planks");
+	public final static ItemType SPRUCE_PLANKS = new ItemType("spruce_planks");
+	public final static ItemType LEATHER = new ItemType("leather");
+	public final static ItemType PHANTOM_MEMBRANE = new ItemType("phantom_membrane");
+	public final static ItemType STRING = new ItemType("string");
+	public final static ItemType NETHERITE_INGOT = new ItemType("netherite_ingot");
+	
+	private String type, display;
 	private List<ItemData> enchantMaterials, anvilMaterials;
-	private CustomItemType customType = null;
 
-	ItemType() {
-		type = name().toLowerCase();
+	public ItemType(String type) {
+		this.type = type;
+		VALUES.add(this);
 	}
 
 	private static ItemType getType(Material type) {
@@ -42,20 +157,23 @@ public enum ItemType {
 
 		}
 		if (type == null || type.isAir()) return null;
-		return ItemType.CUSTOM.setCustomType(CustomItemType.VANILLA).setCustomString("minecraft:" + type.name().toLowerCase());
+		return new CustomItemType("minecraft:" + type.name().toLowerCase(), VanillaItemType.VANILLA);
 	}
 
 	private static ItemType baseRepairType(Material type) {
-		for(ItemType repair: values())
-			if (repair != ItemType.CUSTOM) for(ItemData data: repair.getAnvilMaterials())
+		for(ItemType repair: VALUES)
+			if (!(repair instanceof CustomItemType)) for(ItemData data: repair.getAnvilMaterials())
 				if (data.getMaterial() == type) return repair;
 		return null;
 	}
 
-	public static ItemType mmoRepairType(ItemData data, CustomItemType custom) {
-		if (custom == CustomItemType.TYPE) return ItemType.CUSTOM.setCustomType(custom).setCustomString("mmoitems:type:" + data.getMMOType());
-		if (custom == CustomItemType.TYPE) return ItemType.CUSTOM.setCustomType(custom).setCustomString("mmoitems:type_set:" + data.getMMOTypeSet());
-		return null;
+	public static ItemType mmoRepairType(ItemData data, VanillaItemType vanilla) {
+		for (ItemType value : VALUES)
+			if(value instanceof CustomItemType) {
+				CustomItemType custom = (CustomItemType) value;
+				if(custom.getVanilla() == vanilla && custom.getType().equals("mmoitems:" + vanilla.name().toLowerCase() + ":" + data.getMMOType())) return custom;
+			}
+		return new CustomItemType("mmoitems:" + vanilla.name().toLowerCase() + ":" + data.getMMOType(), vanilla);
 	}
 
 	public String getType() {
@@ -65,6 +183,16 @@ public enum ItemType {
 	public List<ItemData> getEnchantMaterials() {
 		if (enchantMaterials == null) enchantMaterials = getEnchantMaterials(getType());
 		return enchantMaterials;
+	}
+
+	public static List<ItemData> getAllEnchantMaterials() {
+		List<ItemData> all = new ArrayList<ItemData>();
+		all.addAll(ItemType.ALL.getEnchantMaterials());
+		for(String s: ConfigString.EXTRA_ENCHANTING_MATERIALS.getStringList()) {
+			MatData data = new MatData(s);
+			if (data.getMaterial() != null) all.add(new ItemData(data.getMaterial(), null, null));
+		}
+		return all;
 	}
 
 	public List<ItemData> getAnvilMaterials() {
@@ -106,33 +234,33 @@ public enum ItemType {
 	}
 
 	public static boolean hasEnchantMaterial(ItemData mat) {
-		for(ItemType type: values())
+		for(ItemType type: VALUES)
 			for(ItemData data: type.getEnchantMaterials())
 				if (data.equals(mat)) return true;
 		return false;
 	}
 
 	public static boolean hasAnvilMaterial(ItemData mat) {
-		for(ItemType type: values())
+		for(ItemType type: VALUES)
 			for(ItemData data: type.getAnvilMaterials())
 				if (data.equals(mat)) return true;
 		return false;
 	}
 
 	private String getDisplayType() {
-		String s = ConfigUtils.getString(Type.LANGUAGE, "item_display_types." + name().toLowerCase());
+		String s = ConfigUtils.getString(Type.LANGUAGE, "item_display_types." + getType().toLowerCase());
 		return s == null ? getType() : s;
 	}
 
 	public static List<ItemType> getEnchantableTypes() {
-		return Arrays.asList(ALL, ARMOR, AXES, BOOK, BOOTS, BOW, CARROT_ON_A_STICK, CHAINMAIL_ARMOR, CHAINMAIL_BOOTS, CHAINMAIL_CHESTPLATE, CHAINMAIL_HELMET, CHAINMAIL_LEGGINGS, CHESTPLATES, CROSSBOW, CUSTOM, DIAMOND_ARMOR, DIAMOND_AXE, DIAMOND_BOOTS, DIAMOND_CHESTPLATE, DIAMOND_HELMET, DIAMOND_HOE, DIAMOND_LEGGINGS, DIAMOND_PICKAXE, DIAMOND_SHOVEL, DIAMOND_SWORD, DIAMOND_TOOLS, ELYTRA, ENCHANTABLE, FISHING_ROD, FISHING_STICK, FLINT_AND_STEEL, GOLDEN_ARMOR, GOLDEN_AXE, GOLDEN_BOOTS, GOLDEN_CHESTPLATE, GOLDEN_HELMET, GOLDEN_HOE, GOLDEN_LEGGINGS, GOLDEN_PICKAXE, GOLDEN_SHOVEL, GOLDEN_SWORD, GOLDEN_TOOLS, HELMETS, HOES, IRON_ARMOR, IRON_AXE, IRON_BOOTS, IRON_CHESTPLATE, IRON_HELMET, IRON_HOE, IRON_LEGGINGS, IRON_PICKAXE, IRON_SHOVEL, IRON_SWORD, IRON_TOOLS, LEATHER_ARMOR, LEATHER_BOOTS, LEATHER_CHESTPLATE, LEATHER_HELMET, LEATHER_LEGGINGS, LEGGINGS, MELEE, MISC, NETHERITE_ARMOR, NETHERITE_AXE, NETHERITE_BOOTS, NETHERITE_CHESTPLATE, NETHERITE_HELMET, NETHERITE_HOE, NETHERITE_LEGGINGS, NETHERITE_PICKAXE, NETHERITE_SHOVEL, NETHERITE_SWORD, NETHERITE_TOOLS, OTHER, PICKAXES, RANGED, SHEARS, SHIELD, SHOVELS, STONE_AXE, STONE_HOE, STONE_PICKAXE, STONE_SHOVEL, STONE_SWORD, STONE_TOOLS, SWORDS, TOOLS, TRIDENT, TURTLE_HELMET, WARPED_FUNGUS_ON_A_STICK, WOODEN_AXE, WOODEN_HOE, WOODEN_PICKAXE, WOODEN_SHOVEL, WOODEN_SWORD, WOODEN_TOOLS);
+		return Arrays.asList(ALL, ARMOR, AXES, BOOK, BOOTS, BOW, CARROT_ON_A_STICK, CHAINMAIL_ARMOR, CHAINMAIL_BOOTS, CHAINMAIL_CHESTPLATE, CHAINMAIL_HELMET, CHAINMAIL_LEGGINGS, CHESTPLATES, CROSSBOW, DIAMOND_ARMOR, DIAMOND_AXE, DIAMOND_BOOTS, DIAMOND_CHESTPLATE, DIAMOND_HELMET, DIAMOND_HOE, DIAMOND_LEGGINGS, DIAMOND_PICKAXE, DIAMOND_SHOVEL, DIAMOND_SWORD, DIAMOND_TOOLS, ELYTRA, ENCHANTABLE, FISHING_ROD, FISHING_STICK, FLINT_AND_STEEL, GOLDEN_ARMOR, GOLDEN_AXE, GOLDEN_BOOTS, GOLDEN_CHESTPLATE, GOLDEN_HELMET, GOLDEN_HOE, GOLDEN_LEGGINGS, GOLDEN_PICKAXE, GOLDEN_SHOVEL, GOLDEN_SWORD, GOLDEN_TOOLS, HELMETS, HOES, IRON_ARMOR, IRON_AXE, IRON_BOOTS, IRON_CHESTPLATE, IRON_HELMET, IRON_HOE, IRON_LEGGINGS, IRON_PICKAXE, IRON_SHOVEL, IRON_SWORD, IRON_TOOLS, LEATHER_ARMOR, LEATHER_BOOTS, LEATHER_CHESTPLATE, LEATHER_HELMET, LEATHER_LEGGINGS, LEGGINGS, MELEE, MISC, NETHERITE_ARMOR, NETHERITE_AXE, NETHERITE_BOOTS, NETHERITE_CHESTPLATE, NETHERITE_HELMET, NETHERITE_HOE, NETHERITE_LEGGINGS, NETHERITE_PICKAXE, NETHERITE_SHOVEL, NETHERITE_SWORD, NETHERITE_TOOLS, OTHER, PICKAXES, RANGED, SHEARS, SHIELD, SHOVELS, STONE_AXE, STONE_HOE, STONE_PICKAXE, STONE_SHOVEL, STONE_SWORD, STONE_TOOLS, SWORDS, TOOLS, TRIDENT, TURTLE_HELMET, WARPED_FUNGUS_ON_A_STICK, WOODEN_AXE, WOODEN_HOE, WOODEN_PICKAXE, WOODEN_SHOVEL, WOODEN_SWORD, WOODEN_TOOLS);
 	}
 
 	public static List<ItemType> getAnvilableTypes() {
-		return Arrays.asList(BLACK_SHULKER_BOX, BLUE_SHULKER_BOX, BOOK, BOW, BROWN_SHULKER_BOX, CARROT_ON_A_STICK, CHAINMAIL_BOOTS, CHAINMAIL_CHESTPLATE, CHAINMAIL_HELMET, CHAINMAIL_LEGGINGS, CROSSBOW, CUSTOM, CYAN_SHULKER_BOX, DIAMOND_AXE, DIAMOND_BOOTS, DIAMOND_CHESTPLATE, DIAMOND_HELMET, DIAMOND_HOE, DIAMOND_LEGGINGS, DIAMOND_PICKAXE, DIAMOND_SHOVEL, DIAMOND_SWORD, ELYTRA, ENCHANTED_BOOK, FISHING_ROD, FLINT_AND_STEEL, GOLDEN_AXE, GOLDEN_BOOTS, GOLDEN_CHESTPLATE, GOLDEN_HELMET, GOLDEN_HOE, GOLDEN_LEGGINGS, GOLDEN_PICKAXE, GOLDEN_SHOVEL, GOLDEN_SWORD, GRAY_SHULKER_BOX, GREEN_SHULKER_BOX, IRON_AXE, IRON_BOOTS, IRON_CHESTPLATE, IRON_HELMET, IRON_HOE, IRON_LEGGINGS, IRON_PICKAXE, IRON_SHOVEL, IRON_SWORD, LEATHER_BOOTS, LEATHER_CHESTPLATE, LEATHER_HELMET, LEATHER_LEGGINGS, LIGHT_BLUE_SHULKER_BOX, LIGHT_GRAY_SHULKER_BOX, LIME_SHULKER_BOX, MAGENTA_SHULKER_BOX, NETHERITE_AXE, NETHERITE_BOOTS, NETHERITE_CHESTPLATE, NETHERITE_HELMET, NETHERITE_HOE, NETHERITE_LEGGINGS, NETHERITE_PICKAXE, NETHERITE_SHOVEL, NETHERITE_SWORD, ORANGE_SHULKER_BOX, PINK_SHULKER_BOX, PURPLE_SHULKER_BOX, RED_SHULKER_BOX, SHEARS, SHIELD, STONE_AXE, STONE_HOE, STONE_PICKAXE, STONE_SHOVEL, STONE_SWORD, TRIDENT, TURTLE_HELMET, WARPED_FUNGUS_ON_A_STICK, WHITE_SHULKER_BOX, WOODEN_AXE, WOODEN_HOE, WOODEN_PICKAXE, WOODEN_SHOVEL, WOODEN_SWORD, YELLOW_SHULKER_BOX);
+		return Arrays.asList(BLACK_SHULKER_BOX, BLUE_SHULKER_BOX, BOOK, BOW, BROWN_SHULKER_BOX, CARROT_ON_A_STICK, CHAINMAIL_BOOTS, CHAINMAIL_CHESTPLATE, CHAINMAIL_HELMET, CHAINMAIL_LEGGINGS, CROSSBOW, CYAN_SHULKER_BOX, DIAMOND_AXE, DIAMOND_BOOTS, DIAMOND_CHESTPLATE, DIAMOND_HELMET, DIAMOND_HOE, DIAMOND_LEGGINGS, DIAMOND_PICKAXE, DIAMOND_SHOVEL, DIAMOND_SWORD, ELYTRA, ENCHANTED_BOOK, FISHING_ROD, FLINT_AND_STEEL, GOLDEN_AXE, GOLDEN_BOOTS, GOLDEN_CHESTPLATE, GOLDEN_HELMET, GOLDEN_HOE, GOLDEN_LEGGINGS, GOLDEN_PICKAXE, GOLDEN_SHOVEL, GOLDEN_SWORD, GRAY_SHULKER_BOX, GREEN_SHULKER_BOX, IRON_AXE, IRON_BOOTS, IRON_CHESTPLATE, IRON_HELMET, IRON_HOE, IRON_LEGGINGS, IRON_PICKAXE, IRON_SHOVEL, IRON_SWORD, LEATHER_BOOTS, LEATHER_CHESTPLATE, LEATHER_HELMET, LEATHER_LEGGINGS, LIGHT_BLUE_SHULKER_BOX, LIGHT_GRAY_SHULKER_BOX, LIME_SHULKER_BOX, MAGENTA_SHULKER_BOX, NETHERITE_AXE, NETHERITE_BOOTS, NETHERITE_CHESTPLATE, NETHERITE_HELMET, NETHERITE_HOE, NETHERITE_LEGGINGS, NETHERITE_PICKAXE, NETHERITE_SHOVEL, NETHERITE_SWORD, ORANGE_SHULKER_BOX, PINK_SHULKER_BOX, PURPLE_SHULKER_BOX, RED_SHULKER_BOX, SHEARS, SHIELD, STONE_AXE, STONE_HOE, STONE_PICKAXE, STONE_SHOVEL, STONE_SWORD, TRIDENT, TURTLE_HELMET, WARPED_FUNGUS_ON_A_STICK, WHITE_SHULKER_BOX, WOODEN_AXE, WOODEN_HOE, WOODEN_PICKAXE, WOODEN_SHOVEL, WOODEN_SWORD, YELLOW_SHULKER_BOX);
 	}
-	
-	public static List<ItemType> getUniqueEnchantableTypes(){
+
+	public static List<ItemType> getUniqueEnchantableTypes() {
 		return Arrays.asList(HELMETS, CHESTPLATES, LEGGINGS, BOOTS, AXES, HOES, SHOVELS, PICKAXES, SWORDS, BOW, CROSSBOW, TRIDENT, SHIELD, FISHING_ROD, ELYTRA, BOOK);
 	}
 
@@ -413,6 +541,10 @@ public enum ItemType {
 				i.addAll(getEnchantables(WOODEN_SHOVEL.getType()));
 				break;
 		}
+		Set<String> set = new LinkedHashSet<>();
+		set.addAll(i);
+		i.clear();
+		i.addAll(set);
 		return i;
 	}
 
@@ -518,7 +650,7 @@ public enum ItemType {
 
 	public static ItemType getAnvilType(ItemData data) {
 		for(ItemType type: getAnvilableTypes())
-			if (type.name().equals(data.getMaterial().name())) return type;
+			if (type.getType().equals(data.getMaterial().name())) return type;
 		return getType(data.getMaterial());
 	}
 
@@ -563,29 +695,8 @@ public enum ItemType {
 		return null;
 	}
 
-	public ItemType setCustomType(CustomItemType customType) {
-		this.customType = customType;
-		return this;
-	}
-
-	public ItemType setCustomString(String customTypeName) {
-		this.customTypeName = customTypeName;
-		return this;
-	}
-
-	public CustomItemType getCustomType() {
-		return customType;
-	}
-
-	public String getCustomString() {
-		return customTypeName;
-	}
-
 	public static String itemTypeToString(ItemType type) {
-		if (type.getCustomType() == null) return type.getType();
-		else if (type.getCustomType() == CustomItemType.VANILLA) return "minecraft:" + type.getCustomString();
-		else
-			return type.getCustomString();
+		return type.getType();
 	}
 
 	public static List<String> itemTypesToStrings(List<ItemType> types) {
@@ -596,10 +707,18 @@ public enum ItemType {
 		return typeStrings;
 	}
 
-	public static ItemType createCustomType(ItemData data) {
-		String s = "minecraft:" + data.getMaterial().name();
-		if (data.getMMOType() != null && data.getMMOTypeSet() != null) s = "mmoitems:" + data.getMMOType() + ":" + data.getMMOTypeSet();
-		return ItemType.CUSTOM.setCustomType(CustomItemType.get(s.toUpperCase())).setCustomString(s.toUpperCase());
+	public static ItemType getItemType(String type) {
+		for(ItemType value : VALUES)
+			if(type.equalsIgnoreCase(value.getType())) return value;
+		return null;
 	}
 
+	public static CustomItemType getCustomType(VanillaItemType vanilla, String type) {
+		for(ItemType value : VALUES)
+			if(value instanceof CustomItemType) {
+				CustomItemType custom = (CustomItemType) value;
+				if(custom.getVanilla() == vanilla && type.equalsIgnoreCase(custom.getType())) return custom;
+			}
+		return new CustomItemType(type, vanilla);
+	}
 }

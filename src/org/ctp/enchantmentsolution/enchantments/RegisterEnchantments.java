@@ -10,9 +10,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.api.ApiEnchantmentWrapper;
 import org.ctp.enchantmentsolution.enchantments.helper.Weight;
-import org.ctp.enchantmentsolution.enums.CustomItemType;
 import org.ctp.enchantmentsolution.enums.EnchantmentLocation;
 import org.ctp.enchantmentsolution.enums.ItemType;
+import org.ctp.enchantmentsolution.enums.VanillaItemType;
 import org.ctp.enchantmentsolution.utils.*;
 import org.ctp.enchantmentsolution.utils.config.*;
 
@@ -164,22 +164,17 @@ public class RegisterEnchantments {
 				namespace = plugin.getName().toLowerCase();
 			} else if (enchantment.getRelativeEnchantment() instanceof CustomEnchantmentWrapper) namespace = "custom_enchantments";
 			if (!advanced && !(enchantment.getRelativeEnchantment() instanceof CustomEnchantmentWrapper)) {
-				List<String> enchantmentLocationsString = config.getStringList(namespace + "." + enchantment.getName() + ".enchantment_locations");
-				List<EnchantmentLocation> locations = new ArrayList<EnchantmentLocation>();
-				if (enchantmentLocationsString != null) for(String s: enchantmentLocationsString)
-					try {
-						EnchantmentLocation location = EnchantmentLocation.valueOf(s.toUpperCase());
-						if (location != null) locations.add(location);
-					} catch (Exception ex) {}
-
+				List<ItemType> enchantmentTypes = getTypes(config, namespace, enchantment, "enchantment_item_types");
+				List<ItemType> anvilTypes = getTypes(config, namespace, enchantment, "anvil_item_types");
+				List<EnchantmentLocation> locations = getEnchantmentLocations(config, namespace, enchantment);
 				if (registerEnchantment(enchantment)) enchantment.setEnabled(true);
 				else
 					enchantment.setEnabled(false);
 				String description = StringUtils.decodeString(language.getString("enchantment.descriptions.default_enchantments." + enchantment.getName()));
 				enchantment.setDescription(description);
-				if (levelFifty) enchantment.setLevelFifty(locations);
+				if (levelFifty) enchantment.setLevelFifty(enchantmentTypes, anvilTypes, locations);
 				else
-					enchantment.setLevelThirty(locations);
+					enchantment.setLevelThirty(enchantmentTypes, anvilTypes, locations);
 				continue;
 			}
 
@@ -191,13 +186,10 @@ public class RegisterEnchantments {
 				enchantment.setEnabled(false);
 			String displayName = StringUtils.decodeString(language.getString("enchantment.display_names." + namespace + "." + enchantment.getName()));
 			String description = StringUtils.decodeString(language.getString("enchantment.descriptions." + namespace + "." + enchantment.getName()));
-			List<String> enchantmentLocationsString = config.getStringList(namespace + "." + enchantment.getName() + ".enchantment_locations");
-			List<EnchantmentLocation> locations = new ArrayList<EnchantmentLocation>();
-			if (enchantmentLocationsString != null) for(String s: enchantmentLocationsString)
-				try {
-					EnchantmentLocation location = EnchantmentLocation.valueOf(s.toUpperCase());
-					if (location != null) locations.add(location);
-				} catch (Exception ex) {}
+
+			List<ItemType> enchantmentTypes = getTypes(config, namespace, enchantment, "enchantment_item_types");
+			List<ItemType> anvilTypes = getTypes(config, namespace, enchantment, "anvil_item_types");
+			List<EnchantmentLocation> locations = getEnchantmentLocations(config, namespace, enchantment);
 			if (advanced) {
 				int constant = config.getInt(namespace + "." + enchantment.getName() + ".advanced.enchantability_constant");
 				int modifier = config.getInt(namespace + "." + enchantment.getName() + ".advanced.enchantability_modifier");
@@ -210,30 +202,12 @@ public class RegisterEnchantments {
 					CustomEnchantment enchant = getByName(s);
 					if (enchant != null) conflictingEnchantments.add(enchant.getRelativeEnchantment());
 				}
-				List<String> enchantmentItemTypes = config.getStringList(namespace + "." + enchantment.getName() + ".advanced.enchantment_item_types");
-				List<ItemType> enchantmentTypes = new ArrayList<ItemType>();
-				if (enchantmentItemTypes != null) for(String s: enchantmentItemTypes) {
-					ItemType type = null;
-					if (s.contains(":")) type = ItemType.CUSTOM.setCustomType(CustomItemType.get(s.toUpperCase())).setCustomString(s.toUpperCase());
-					else
-						type = ItemType.valueOf(s.toUpperCase());
-					if (type != null) enchantmentTypes.add(type);
-				}
-				List<String> anvilItemTypes = config.getStringList(namespace + "." + enchantment.getName() + ".advanced.anvil_item_types");
-				List<ItemType> anvilTypes = new ArrayList<ItemType>();
-				if (anvilItemTypes != null) for(String s: anvilItemTypes) {
-					ItemType type = null;
-					if (s.contains(":")) type = ItemType.CUSTOM.setCustomType(CustomItemType.get(s.toUpperCase())).setCustomString(s.toUpperCase());
-					else
-						type = ItemType.valueOf(s.toUpperCase());
-					if (type != null) anvilTypes.add(type);
-				}
 
 				enchantment.setCustom(constant, modifier, startLevel, maxLevel, weight, enchantmentTypes, anvilTypes, locations);
 				enchantment.setConflictingEnchantments(conflictingEnchantments);
-			} else if (levelFifty) enchantment.setLevelFifty(locations);
+			} else if (levelFifty) enchantment.setLevelFifty(enchantmentTypes, anvilTypes, locations);
 			else
-				enchantment.setLevelThirty(locations);
+				enchantment.setLevelThirty(enchantmentTypes, anvilTypes, locations);
 			if (!namespace.equals("default_enchantments")) enchantment.setDisplayName(displayName);
 			else
 				enchantment.setDisplayName(ConfigUtils.getLanguage());
@@ -359,5 +333,29 @@ public class RegisterEnchantments {
 		for(CustomEnchantment enchant: getEnchantments())
 			if (enchant.getRelativeEnchantment().getKey().equals(key)) return enchant.getRelativeEnchantment();
 		return null;
+	}
+	
+	private static List<EnchantmentLocation> getEnchantmentLocations(Configuration config, String namespace, CustomEnchantment enchantment){
+		List<EnchantmentLocation> locations = new ArrayList<EnchantmentLocation>();
+		List<String> enchantmentLocationsString = config.getStringList(namespace + "." + enchantment.getName() + ".enchantment_locations");
+		if (enchantmentLocationsString != null) for(String s: enchantmentLocationsString)
+			try {
+				EnchantmentLocation location = EnchantmentLocation.valueOf(s.toUpperCase());
+				if (location != null) locations.add(location);
+			} catch (Exception ex) {}
+		return locations;
+	}
+	
+	private static List<ItemType> getTypes(Configuration config, String namespace, CustomEnchantment enchantment, String path){
+		List<String> itemTypes = config.getStringList(namespace + "." + enchantment.getName() + "." + path);
+		List<ItemType> types = new ArrayList<ItemType>();
+		if (itemTypes != null) for(String s: itemTypes) {
+			ItemType type = null;
+			if (s.contains(":")) type = ItemType.getCustomType(VanillaItemType.get(s.toUpperCase()), s.toUpperCase());
+			else
+				type = ItemType.getItemType(s.toUpperCase());
+			if (type != null) types.add(type);
+		}
+		return types;
 	}
 }

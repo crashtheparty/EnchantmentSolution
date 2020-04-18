@@ -177,7 +177,7 @@ public abstract class CustomEnchantment {
 
 	public boolean canEnchantItem(ItemData item) {
 		for(ItemType type: getEnchantmentItemTypes()) {
-			if (type.getType().equals("custom") && ItemUtils.checkItemType(item, type, CustomItemType.get(ItemType.itemTypeToString(type)))) return true;
+			if (type instanceof CustomItemType) if (ItemUtils.checkItemType(item, (CustomItemType) type)) return true;
 			if (type.getEnchantMaterials() != null && ItemData.contains(type.getEnchantMaterials(), item.getMaterial())) return true;
 		}
 		return false;
@@ -186,7 +186,7 @@ public abstract class CustomEnchantment {
 	public boolean canAnvilItem(ItemData item) {
 		if (item.getMaterial() == Material.ENCHANTED_BOOK) return true;
 		for(ItemType type: getAnvilItemTypes()) {
-			if (type.getType().equals("custom") && ItemUtils.checkItemType(item, type, CustomItemType.get(ItemType.itemTypeToString(type)))) return true;
+			if (type instanceof CustomItemType && ItemUtils.checkItemType(item, (CustomItemType) type)) return true;
 			if (type.getEnchantMaterials() != null && ItemData.contains(type.getEnchantMaterials(), item.getMaterial())) return true;
 		}
 		return false;
@@ -377,25 +377,25 @@ public abstract class CustomEnchantment {
 			this.maxLevel = maxLevel;
 	}
 
-	void setLevelFifty(List<EnchantmentLocation> locations) {
+	void setLevelFifty(List<ItemType> enchantmentTypes, List<ItemType> anvilTypes, List<EnchantmentLocation> locations) {
 		setConstant(getDefaultFiftyConstant());
 		setModifier(getDefaultFiftyModifier());
 		setStartLevel(getDefaultFiftyStartLevel());
 		setMaxLevel(getDefaultFiftyMaxLevel());
 		setWeight(null);
-		setEnchantmentItemTypes(getDefaultEnchantmentItemTypes());
-		setAnvilItemTypes(getDefaultAnvilItemTypes());;
+		setEnchantmentItemTypes(enchantmentTypes);
+		setAnvilItemTypes(anvilTypes);
 		setEnchantmentLocations(locations);
 	}
 
-	void setLevelThirty(List<EnchantmentLocation> locations) {
+	void setLevelThirty(List<ItemType> enchantmentTypes, List<ItemType> anvilTypes, List<EnchantmentLocation> locations) {
 		setConstant(getDefaultThirtyConstant());
 		setModifier(getDefaultThirtyModifier());
 		setStartLevel(getDefaultThirtyStartLevel());
 		setMaxLevel(getDefaultThirtyMaxLevel());
 		setWeight(null);
-		setEnchantmentItemTypes(getDefaultEnchantmentItemTypes());
-		setAnvilItemTypes(getDefaultAnvilItemTypes());;
+		setEnchantmentItemTypes(enchantmentTypes);
+		setAnvilItemTypes(anvilTypes);
 		setEnchantmentLocations(locations);
 	}
 
