@@ -73,8 +73,6 @@ public class EnchantmentsConfiguration extends Configuration {
 			config.addDefault(start + ".enchantability_max_level", enchant.getDefaultMaxLevel());
 			config.addDefault(start + ".conflicting_enchantments", enchant.conflictingDefaultList());
 			config.addEnum(start + ".conflicting_enchantments", RegisterEnchantments.getEnchantmentNames());
-			config.addDefault(start + ".disabled_items", enchant.getDisabledItemsStrings());
-			config.addEnum(start + ".disabled_items", ItemType.getRepairMaterialsStrings());
 			config.addDefault(start + ".enchantment_item_types", ItemType.itemTypesToStrings(enchant.getDefaultEnchantmentItemTypes()));
 			config.addDefault(start + ".anvil_item_types", ItemType.itemTypesToStrings(enchant.getDefaultAnvilItemTypes()));
 			for(int i = 1; i <= enchant.getMaxLevel(); i++) {
@@ -102,8 +100,6 @@ public class EnchantmentsConfiguration extends Configuration {
 				config.addDefault(namespace + ".enchantability_max_level", enchant.getDefaultMaxLevel());
 				config.addDefault(namespace + ".conflicting_enchantments", enchant.conflictingDefaultList());
 				config.addEnum(namespace + ".conflicting_enchantments", RegisterEnchantments.getEnchantmentNames());
-				config.addDefault(namespace + ".disabled_items", enchant.getDisabledItemsStrings());
-				config.addEnum(namespace + ".disabled_items", ItemType.getRepairMaterialsStrings());
 			}
 
 		config.writeDefaults();

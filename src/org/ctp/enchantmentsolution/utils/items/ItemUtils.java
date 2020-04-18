@@ -242,7 +242,6 @@ public class ItemUtils {
 	public static boolean canAddEnchantment(CustomEnchantment customEnchant, ItemStack item) {
 		ItemMeta meta = item.clone().getItemMeta();
 		Map<Enchantment, Integer> enchants = meta.getEnchants();
-		if (customEnchant.getDisabledItems().contains(item.getType())) return false;
 		if (item.getType().equals(Material.ENCHANTED_BOOK)) enchants = ((EnchantmentStorageMeta) meta).getStoredEnchants();
 		else if (!customEnchant.canAnvilItem(new ItemData(item))) return false;
 		for(Iterator<Entry<Enchantment, Integer>> it = enchants.entrySet().iterator(); it.hasNext();) {

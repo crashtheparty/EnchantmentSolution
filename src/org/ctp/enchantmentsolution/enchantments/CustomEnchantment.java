@@ -33,7 +33,6 @@ public abstract class CustomEnchantment {
 	protected Weight weight = Weight.NULL;
 	protected boolean maxLevelOne = false, curse = false;
 	protected List<Enchantment> conflictingEnchantments = null;
-	protected List<Material> disabledItems = new ArrayList<Material>();
 	protected List<ItemType> enchantmentTypes = null, anvilTypes = null;
 	private final Type lang;
 
@@ -143,19 +142,7 @@ public abstract class CustomEnchantment {
 			}
 		} else
 			page += ItemType.NONE + ".\n";
-		page += ChatUtils.getMessage(ChatUtils.getCodes(), "enchantment.disabled-items");
-		if (getDisabledItems().size() > 0) {
-			List<String> names = new ArrayList<String>();
-			for(int i = 0; i < getDisabledItems().size(); i++) {
-				Material mat = getDisabledItems().get(i);
-				names.add(mat.name());
-			}
 
-			if (names.isEmpty()) page += ConfigUtils.getString(lang, "misc.no_disabled_items") + ".\n";
-			else
-				page += StringUtils.join(names, ",") + ".\n";
-		} else
-			page += ConfigUtils.getString(lang, "misc.no_disabled_items") + ".\n";
 		page += ChatUtils.getMessage(ChatUtils.getCodes(), "enchantment.conflicting-enchantments");
 		if (getConflictingEnchantments().size() > 0) {
 			List<String> names = new ArrayList<String>();
@@ -475,21 +462,6 @@ public abstract class CustomEnchantment {
 
 	protected void addDefaultDisplayName(String name) {
 		addDefaultDisplayName(new EnchantmentDisplayName(Language.US, name));
-	}
-
-	public List<Material> getDisabledItems() {
-		return disabledItems;
-	}
-
-	public void setDisabledItems(List<Material> disabledItems) {
-		this.disabledItems = disabledItems;
-	}
-
-	public List<String> getDisabledItemsStrings() {
-		List<String> names = new ArrayList<String>();
-		for(Material item: getDisabledItems())
-			names.add(item.name());
-		return names;
 	}
 
 	public boolean isCurse() {
