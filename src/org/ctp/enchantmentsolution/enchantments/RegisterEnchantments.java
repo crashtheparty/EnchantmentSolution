@@ -71,6 +71,9 @@ public class RegisterEnchantments {
 	public static final Enchantment CURSE_OF_CONTAGION = new CustomEnchantmentWrapper("contagion_curse", "CONTAGION_CURSE", 1);
 	public static final Enchantment RECYCLER = new CustomEnchantmentWrapper("recycler", "RECYCLER", 1);
 	public static final Enchantment LIGHT_WEIGHT = new CustomEnchantmentWrapper("light_weight", "LIGHT_WEIGHT", 1);
+	public static final Enchantment HUSBANDRY = new CustomEnchantmentWrapper("husbandry", "HUSBANDRY", 1);
+	public static final Enchantment BUTCHER = new CustomEnchantmentWrapper("butcher", "BUTCHER", 1);
+	public static final Enchantment CURSE_OF_STAGNANCY = new CustomEnchantmentWrapper("stagnancy_curse", "STAGNANCY_CURSE", 1);
 
 	private RegisterEnchantments() {}
 
@@ -103,7 +106,7 @@ public class RegisterEnchantments {
 		if (CURSE_ENCHANTMENTS != null) return CURSE_ENCHANTMENTS;
 		CURSE_ENCHANTMENTS = new ArrayList<CustomEnchantment>();
 		for(CustomEnchantment enchantment: getRegisteredEnchantments()) {
-			if (enchantment.getRelativeEnchantment() == RegisterEnchantments.CURSE_OF_CONTAGION) continue;
+			if (enchantment.getRelativeEnchantment() == RegisterEnchantments.CURSE_OF_CONTAGION || enchantment.getRelativeEnchantment() == RegisterEnchantments.CURSE_OF_STAGNANCY) continue;
 			if (enchantment.isCurse()) CURSE_ENCHANTMENTS.add(enchantment);
 		}
 		return CURSE_ENCHANTMENTS;
@@ -268,9 +271,11 @@ public class RegisterEnchantments {
 		addDefaultEnchantment(CERegister.ARMORED);
 		addDefaultEnchantment(CERegister.BEHEADING);
 		addDefaultEnchantment(CERegister.BRINE);
+		addDefaultEnchantment(CERegister.BUTCHER);
 		addDefaultEnchantment(CERegister.CURSE_OF_CONTAGION);
 		addDefaultEnchantment(CERegister.CURSE_OF_EXHAUSTION);
 		addDefaultEnchantment(CERegister.CURSE_OF_LAG);
+		addDefaultEnchantment(CERegister.CURSE_OF_STAGNANCY);
 		addDefaultEnchantment(CERegister.DETONATOR);
 		addDefaultEnchantment(CERegister.DROWNED);
 		addDefaultEnchantment(CERegister.EXP_SHARE);
@@ -282,6 +287,7 @@ public class RegisterEnchantments {
 		addDefaultEnchantment(CERegister.HARD_BOUNCE);
 		addDefaultEnchantment(CERegister.HEIGHT_PLUS_PLUS);
 		addDefaultEnchantment(CERegister.HOLLOW_POINT);
+		addDefaultEnchantment(CERegister.HUSBANDRY);
 		addDefaultEnchantment(CERegister.ICARUS);
 		addDefaultEnchantment(CERegister.IRENES_LASSO);
 		addDefaultEnchantment(CERegister.IRON_DEFENSE);

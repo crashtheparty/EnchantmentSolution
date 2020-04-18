@@ -52,6 +52,7 @@ public class ContagionPlayer {
 
 	private boolean canAddCurse(ItemStack item) {
 		boolean addCurse = false;
+		if (ItemUtils.hasEnchantment(item, RegisterEnchantments.CURSE_OF_STAGNANCY)) return false;
 		for(CustomEnchantment enchantment: RegisterEnchantments.getCurseEnchantments())
 			if (enchantment.isCurse() && ItemUtils.canAddEnchantment(enchantment, item)) {
 				addCurse = true;

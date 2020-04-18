@@ -6,21 +6,9 @@ import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.entity.Creeper;
-import org.bukkit.entity.EnderDragon;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Projectile;
-import org.bukkit.entity.Skeleton;
-import org.bukkit.entity.Wither;
-import org.bukkit.entity.WitherSkeleton;
-import org.bukkit.entity.Zombie;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.entity.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.metadata.MetadataValue;
@@ -76,9 +64,9 @@ public class DropsListener extends Enchantmentable {
 					List<ItemStack> newDrops = new ArrayList<ItemStack>();
 					if (!beheading.isOverride()) {
 						newDrops.addAll(beheading.getOriginalDrops());
-						if (heads(Material.WITHER_SKELETON_SKULL, beheading.getOriginalDrops(), beheading.getNewDrops()) >= 2) AdvancementUtils.awardCriteria(killer, ESAdvancement.DOUBLE_HEADER, "wither_skull");
+						if (heads(Material.WITHER_SKELETON_SKULL, beheading.getOriginalDrops(), beheading.getDrops()) >= 2) AdvancementUtils.awardCriteria(killer, ESAdvancement.DOUBLE_HEADER, "wither_skull");
 					}
-					newDrops.addAll(beheading.getNewDrops());
+					newDrops.addAll(beheading.getDrops());
 					if (event instanceof PlayerDeathEvent) if (((PlayerDeathEvent) event).getKeepInventory() && !beheading.isKeepInventoryOverride()) return;
 					if (heads(Material.PLAYER_HEAD, newDrops, null) > 0) AdvancementUtils.awardCriteria(killer, ESAdvancement.HEADHUNTER, "player_head");
 
@@ -143,7 +131,7 @@ public class DropsListener extends Enchantmentable {
 		if (!transmutation.isCancelled()) {
 			List<ItemStack> newDrops = new ArrayList<ItemStack>();
 			if (!transmutation.isOverride()) newDrops.addAll(transmutation.getOriginalDrops());
-			newDrops.addAll(transmutation.getNewDrops());
+			newDrops.addAll(transmutation.getDrops());
 			if (!override) AdvancementUtils.awardCriteria(event.getEntity().getKiller(), ESAdvancement.CERBERUS, "obsidian");
 			event.getDrops().clear();
 			for(ItemStack drop: newDrops)

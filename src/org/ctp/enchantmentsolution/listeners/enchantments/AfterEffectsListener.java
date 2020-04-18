@@ -3,6 +3,7 @@ package org.ctp.enchantmentsolution.listeners.enchantments;
 import java.util.*;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
@@ -19,6 +20,8 @@ import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.events.damage.SacrificeEvent;
+import org.ctp.enchantmentsolution.events.drops.ButcherEvent;
+import org.ctp.enchantmentsolution.events.entity.HusbandryEvent;
 import org.ctp.enchantmentsolution.events.player.ExpShareEvent;
 import org.ctp.enchantmentsolution.events.player.ExpShareEvent.ExpShareType;
 import org.ctp.enchantmentsolution.events.player.PillageEvent;
@@ -37,6 +40,8 @@ public class AfterEffectsListener extends Enchantmentable {
 
 	@EventHandler
 	public void onEntityDeath(EntityDeathEvent event) {
+		runMethod(this, "butcher", event, EntityDeathEvent.class);
+		runMethod(this, "husbandry", event, EntityDeathEvent.class);
 		runMethod(this, "pillage", event, EntityDeathEvent.class);
 		runMethod(this, "recycler", event, EntityDeathEvent.class);
 		runMethod(this, "expShare", event, EntityDeathEvent.class);
@@ -57,6 +62,38 @@ public class AfterEffectsListener extends Enchantmentable {
 		MiscRunnable.addContagion(event.getPlayer());
 	}
 
+	private void butcher(EntityDeathEvent event) {
+		if (!canRun(RegisterEnchantments.BUTCHER, event)) return;
+		LivingEntity entity = event.getEntity();
+		if (event.getEntity() instanceof Player) return;
+		Entity killer = entity.getKiller();
+		if (killer instanceof Player && entity instanceof Ageable && ((Ageable) entity).isAdult()) {
+			Player player = (Player) killer;
+			ItemStack killItem = player.getInventory().getItemInMainHand();
+			if (killItem != null && ItemUtils.hasEnchantment(killItem, RegisterEnchantments.BUTCHER)) {
+				List<ItemStack> drops = event.getDrops();
+				int level = ItemUtils.getLevel(killItem, RegisterEnchantments.BUTCHER);
+				List<ItemStack> newDrops = new ArrayList<ItemStack>();
+				for(ItemStack drop: drops)
+					if (Arrays.asList(Material.BEEF, Material.COOKED_BEEF, Material.CHICKEN, Material.COOKED_CHICKEN, Material.COD, Material.COOKED_COD, Material.MUTTON, Material.COOKED_MUTTON, Material.PORKCHOP, Material.COOKED_PORKCHOP, Material.RABBIT, Material.COOKED_RABBIT, Material.SALMON, Material.COOKED_SALMON).contains(drop.getType())) {
+						ItemStack extraDrops = new ItemStack(drop.getType());
+						int multiply = (int) (Math.random() * 2 * level);
+						int extraNum = drop.getAmount() * (multiply - 1);
+						if (extraNum > 0) {
+							extraDrops.setAmount(extraNum);
+							ButcherEvent butcher = new ButcherEvent(player, level, Arrays.asList(extraDrops));
+
+							Bukkit.getPluginManager().callEvent(butcher);
+
+							if (!butcher.isCancelled()) newDrops.addAll(butcher.getDrops());
+						}
+					}
+				for(ItemStack drop : newDrops)
+					drops.add(drop);
+			} ;
+		}
+	}
+
 	private void expShare(EntityDeathEvent event) {
 		if (!canRun(RegisterEnchantments.EXP_SHARE, event)) return;
 		if (event.getEntity() instanceof Player) return;
@@ -73,6 +110,33 @@ public class AfterEffectsListener extends Enchantmentable {
 					Bukkit.getPluginManager().callEvent(experienceEvent);
 
 					if (!experienceEvent.isCancelled() && experienceEvent.getNewExp() >= 0) event.setDroppedExp(experienceEvent.getNewExp());
+				}
+			}
+		}
+	}
+
+	private void husbandry(EntityDeathEvent event) {
+		if (!canRun(RegisterEnchantments.HUSBANDRY, event)) return;
+		LivingEntity entity = event.getEntity();
+		if (event.getEntity() instanceof Player) return;
+		Entity killer = entity.getKiller();
+		if (killer instanceof Player && entity instanceof Ageable && ((Ageable) entity).isAdult()) {
+			Player player = (Player) killer;
+			ItemStack killItem = player.getInventory().getItemInMainHand();
+
+			if (killItem != null && ItemUtils.hasEnchantment(killItem, RegisterEnchantments.HUSBANDRY)) {
+				int level = ItemUtils.getLevel(killItem, RegisterEnchantments.HUSBANDRY);
+				double chance = 0.05 * (1 + level);
+				HusbandryEvent husbandry = new HusbandryEvent(entity, player, entity.getLocation(), level, chance);
+				Bukkit.getPluginManager().callEvent(husbandry);
+				
+				if(!husbandry.isCancelled()) {
+					double random = Math.random();
+					if(chance > random)
+						Bukkit.getScheduler().runTaskLater(EnchantmentSolution.getPlugin(), () -> {
+							Entity e = husbandry.getSpawnWorld().spawnEntity(husbandry.getSpawnLocation(), husbandry.getEntityType());
+							if (e != null && e instanceof Ageable) ((Ageable) e).setBaby();
+						}, 1l);
 				}
 			}
 		}
