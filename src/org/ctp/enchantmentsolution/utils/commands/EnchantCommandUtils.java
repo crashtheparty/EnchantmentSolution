@@ -249,10 +249,10 @@ public class EnchantCommandUtils {
 							ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(ChatUtils.getCodes(), "commands.enchant-remove-from-item"), Level.WARNING);
 						return true;
 					}
-					HashMap<String, Object> codes = ChatUtils.getCodes();
-					codes.put("%enchant%", enchantmentName);
-					ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(codes, "commands.enchant-not-found"), Level.WARNING);
 				}
+				HashMap<String, Object> codes = ChatUtils.getCodes();
+				codes.put("%enchant%", enchantmentName);
+				ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(codes, "commands.enchant-not-found"), Level.WARNING);
 			} else
 				ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(ChatUtils.getCodes(), "commands.enchant-not-specified"), Level.WARNING);
 		} else
