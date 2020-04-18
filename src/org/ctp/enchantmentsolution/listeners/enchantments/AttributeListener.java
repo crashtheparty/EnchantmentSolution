@@ -27,6 +27,7 @@ import org.ctp.enchantmentsolution.events.potion.MagicGuardPotionEvent;
 import org.ctp.enchantmentsolution.events.potion.PotionEventType;
 import org.ctp.enchantmentsolution.events.potion.UnrestPotionEvent;
 import org.ctp.enchantmentsolution.listeners.Enchantmentable;
+import org.ctp.enchantmentsolution.nms.DamageEvent;
 import org.ctp.enchantmentsolution.threads.ElytraRunnable;
 import org.ctp.enchantmentsolution.threads.MiscRunnable;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
@@ -71,11 +72,14 @@ public class AttributeListener extends Enchantmentable {
 							AttributeEvent attrEvent = new AttributeEvent(player, new EnchantmentLevel(RegisterEnchantments.getCustomEnchantment(entry.getKey()), entry.getValue()), equip ? null : a.getAttrName(), equip ? a.getAttrName() : null);
 							Bukkit.getPluginManager().callEvent(attrEvent);
 
-							if (!attrEvent.isCancelled()) if (equip) {
-								a.addModifier(player, entry.getValue());
-								if (a.getEnchantment() == RegisterEnchantments.TOUGHNESS && player.getAttribute(Attribute.GENERIC_ARMOR_TOUGHNESS).getValue() >= 20) AdvancementUtils.awardCriteria(attrEvent.getPlayer(), ESAdvancement.GRAPHENE_ARMOR, "toughness");
-							} else
-								a.removeModifier(player);
+							if (!attrEvent.isCancelled()) {
+								if (equip) {
+									a.addModifier(player, entry.getValue());
+									if (a.getEnchantment() == RegisterEnchantments.TOUGHNESS && player.getAttribute(Attribute.GENERIC_ARMOR_TOUGHNESS).getValue() >= 20) AdvancementUtils.awardCriteria(attrEvent.getPlayer(), ESAdvancement.GRAPHENE_ARMOR, "toughness");
+								} else
+									a.removeModifier(player);
+								if (a.getEnchantment() == RegisterEnchantments.LIFE || a.getEnchantment() == RegisterEnchantments.GUNG_HO) DamageEvent.updateHealth(player);
+							}
 
 							break;
 						}
