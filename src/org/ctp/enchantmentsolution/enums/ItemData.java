@@ -27,8 +27,8 @@ public class ItemData {
 
 	public ItemData(Material material, String mmoType, String mmoTypeSet) {
 		this.material = material;
-		this.mmoType = mmoType.equals("null") ? null : mmoType;
-		this.mmoTypeSet = mmoTypeSet.equals("null") ? null : mmoTypeSet;
+		this.mmoType = mmoType == null ? null : mmoType.equals("null") ? null : mmoType;
+		this.mmoTypeSet = mmoTypeSet == null ? null : mmoTypeSet.equals("null") ? null : mmoTypeSet;
 		item = null;
 	}
 
