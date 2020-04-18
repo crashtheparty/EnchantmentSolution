@@ -1,12 +1,15 @@
 package org.ctp.enchantmentsolution.inventory.snapshot;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.Map.Entry;
 
 import org.bukkit.OfflinePlayer;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
+import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.StringUtils;
@@ -63,20 +66,47 @@ public class SnapshotInventory {
 
 	private ItemStack checkItem(ItemStack item, ItemStack previous) {
 		if (item != null) {
-			if (previous == null || !previous.equals(item)) if (item.hasItemMeta() && item.getItemMeta().hasLore()) {
-				List<EnchantmentLevel> enchants = new ArrayList<EnchantmentLevel>();
-				for(String s: item.getItemMeta().getLore())
-					if (StringUtils.isEnchantment(s)) {
-						EnchantmentLevel enchant = StringUtils.getEnchantment(s);
-						if (enchant != null) enchants.add(enchant);
+			List<EnchantmentLevel> enchantMeta = ItemUtils.getEnchantmentLevels(item);
+			List<EnchantmentLevel> enchantLore = new ArrayList<EnchantmentLevel>();
+			if (item.hasItemMeta() && item.getItemMeta().hasLore()) for(String s: item.getItemMeta().getLore())
+				if (StringUtils.isEnchantment(s)) {
+					EnchantmentLevel enchant = StringUtils.getEnchantment(s);
+					if (enchant != null) enchantLore.add(enchant);
+				}
+			boolean change = checkSimilar(enchantMeta, enchantLore) || checkSimilar(enchantLore, enchantMeta);
+			if(change) {
+				Map<Enchantment, Integer> enchants = new HashMap<Enchantment, Integer>();
+				for(EnchantmentLevel enchant : enchantMeta) {
+					int level = enchant.getLevel();
+					Enchantment ench = enchant.getEnchant().getRelativeEnchantment();
+					if(enchants.containsKey(ench)) level = (level > enchants.get(ench) ? level : enchants.get(ench));
+					enchants.put(ench, level);
+				}
+				if (enchants.size() > 0) {
+					Iterator<Entry<Enchantment, Integer>> iter = enchants.entrySet().iterator();
+					while(iter.hasNext()) {
+						Entry<Enchantment, Integer> entry = iter.next();
+						CustomEnchantment custom = RegisterEnchantments.getCustomEnchantment(entry.getKey());
+						ItemUtils.removeEnchantmentFromItem(item, custom);
+						ItemUtils.addEnchantmentToItem(item, custom, entry.getValue());
 					}
-				for(EnchantmentLevel ench: enchants) {
-					ItemUtils.removeEnchantmentFromItem(item, ench.getEnchant());
-					if (ench.getLevel() > 0) ItemUtils.addEnchantmentToItem(item, ench.getEnchant(), ench.getLevel());
 				}
 			}
 			return item.clone();
 		}
 		return null;
+	}
+	
+	private boolean checkSimilar(List<EnchantmentLevel> levels, List<EnchantmentLevel> levelsTwo) {
+		for(EnchantmentLevel level : levels) {
+			EnchantmentLevel hasLevel = null;
+			for(EnchantmentLevel levelTwo : levelsTwo)
+				if(level.getEnchant().equals(levelTwo.getEnchant())) {
+					hasLevel = level;
+					break;
+				}
+			if(hasLevel == null) return true;
+		}
+		return false;
 	}
 }
