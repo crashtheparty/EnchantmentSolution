@@ -205,7 +205,7 @@ public class ItemType {
 
 		for(String s: getRepairMaterialsStrings())
 			try {
-				repair.add(Material.valueOf(s));
+				repair.add(Material.valueOf(s.toUpperCase()));
 			} catch (Exception ex) {
 
 			}

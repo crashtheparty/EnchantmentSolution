@@ -124,7 +124,7 @@ public class AnvilEnchantments extends GenerateEnchantments {
 		RepairType repairType = RepairType.getRepairType(this);
 		if (repairType == null) return;
 		if (repairType == RepairType.COMBINE && DamageUtils.getDamage(itemOne.getItemMeta()) != 0) repairCost += 2;
-
+		
 		if (repairType == RepairType.REPAIR) {
 			int amount = itemTwo.getAmount();
 			int durPerItem = combinedItem.getType().getMaxDurability() / 4;
