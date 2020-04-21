@@ -124,7 +124,7 @@ public class AnvilEnchantments extends GenerateEnchantments {
 		RepairType repairType = RepairType.getRepairType(this);
 		if (repairType == null) return;
 		if (repairType == RepairType.COMBINE && DamageUtils.getDamage(itemOne.getItemMeta()) != 0) repairCost += 2;
-
+		
 		if (repairType == RepairType.REPAIR) {
 			int amount = itemTwo.getAmount();
 			int durPerItem = combinedItem.getType().getMaxDurability() / 4;
@@ -199,6 +199,8 @@ public class AnvilEnchantments extends GenerateEnchantments {
 		}
 		List<EnchantmentLevel> secondLevels = new ArrayList<EnchantmentLevel>();
 		List<EnchantmentLevel> firstLevels = new ArrayList<EnchantmentLevel>();
+		boolean containsStagnancyOne = false;
+		boolean containsStagnancyTwo = false;
 
 		List<EnchantmentLevel> enchantments = new ArrayList<EnchantmentLevel>();
 		List<CustomEnchantment> registeredEnchantments = RegisterEnchantments.getEnchantments();
@@ -207,7 +209,10 @@ public class AnvilEnchantments extends GenerateEnchantments {
 			Enchantment enchant = e.getKey();
 			int level = e.getValue();
 			for(CustomEnchantment customEnchant: registeredEnchantments)
-				if (ConfigUtils.isRepairable(customEnchant) && customEnchant.getRelativeEnchantment().equals(enchant)) secondLevels.add(new EnchantmentLevel(customEnchant, level));
+				if (ConfigUtils.isRepairable(customEnchant) && (customEnchant.getRelativeEnchantment().equals(enchant))) {
+					if(enchant == RegisterEnchantments.CURSE_OF_STAGNANCY) containsStagnancyTwo = true;
+					secondLevels.add(new EnchantmentLevel(customEnchant, level));
+				}
 		}
 
 		for(Iterator<java.util.Map.Entry<Enchantment, Integer>> it = firstEnchants.entrySet().iterator(); it.hasNext();) {
@@ -215,7 +220,10 @@ public class AnvilEnchantments extends GenerateEnchantments {
 			Enchantment enchant = e.getKey();
 			int level = e.getValue();
 			for(CustomEnchantment customEnchant: registeredEnchantments)
-				if (ConfigUtils.isRepairable(customEnchant) && customEnchant.getRelativeEnchantment().equals(enchant)) firstLevels.add(new EnchantmentLevel(customEnchant, level));
+				if (ConfigUtils.isRepairable(customEnchant) && (customEnchant.getRelativeEnchantment().equals(enchant))) {
+					if(enchant == RegisterEnchantments.CURSE_OF_STAGNANCY) containsStagnancyOne = true;
+					firstLevels.add(new EnchantmentLevel(customEnchant, level));
+				}
 		}
 
 		boolean godAnvil = player.hasPermission("enchantmentsolution.god-anvil");
@@ -226,13 +234,17 @@ public class AnvilEnchantments extends GenerateEnchantments {
 		for(EnchantmentLevel enchantTwo: secondLevels) {
 			boolean conflict = false;
 			boolean same = false;
-			boolean canAdd = true;
+			boolean canAdd = !containsStagnancyOne;
 			int levelCost = enchantTwo.getLevel();
 			int originalLevel = -1;
 			for(EnchantmentLevel enchantOne: firstLevels)
 				if (enchantTwo.getEnchant().getRelativeEnchantment().equals(enchantOne.getEnchant().getRelativeEnchantment())) {
 					same = true;
 					originalLevel = enchantOne.getLevel();
+					if(containsStagnancyTwo) {
+						levelCost = enchantTwo.getLevel();
+						break;
+					}
 					if (!godAnvil) {
 						if (enchantOne.getLevel() > enchantOne.getEnchant().getMaxLevel()) enchantOne.setLevel(enchantOne.getEnchant().getMaxLevel());
 						if (enchantTwo.getLevel() > enchantTwo.getEnchant().getMaxLevel()) enchantTwo.setLevel(enchantTwo.getEnchant().getMaxLevel());
@@ -261,7 +273,6 @@ public class AnvilEnchantments extends GenerateEnchantments {
 				if (level <= 0) canAdd = false;
 				levelCost = level;
 			}
-
 			if (canAdd && (same || !conflict)) {
 				if (enchantTwo.getEnchant().canAnvilItem(new ItemData(item)) || godAnvil) {
 					enchantments.add(new EnchantmentLevel(enchantTwo.getEnchant(), levelCost));
@@ -282,7 +293,7 @@ public class AnvilEnchantments extends GenerateEnchantments {
 					added = true;
 					break;
 				}
-			if (!added && (enchantOne.getEnchant().canAnvilItem(new ItemData(item)) || godAnvil)) {
+			if ((!containsStagnancyTwo || godAnvil) && !added && (enchantOne.getEnchant().canAnvilItem(new ItemData(item)) || godAnvil)) {
 				if (demiGodAnvil) {
 					if (!godAnvil) if (enchantOne.getLevel() > enchantOne.getEnchant().getMaxLevel()) enchantOne.setLevel(enchantOne.getEnchant().getMaxLevel());
 				} else if (!enchantOne.getEnchant().canAnvil(player, enchantOne.getLevel())) {
@@ -293,7 +304,7 @@ public class AnvilEnchantments extends GenerateEnchantments {
 			}
 		}
 		int maxEnchants = ConfigString.MAX_ENCHANTMENTS.getInt();
-		if (maxEnchants > 0) for(int i = enchantments.size() - 1; i > maxEnchants; i--)
+		if (!containsStagnancyOne && !containsStagnancyTwo && maxEnchants > 0) for(int i = enchantments.size() - 1; i > maxEnchants; i--)
 			enchantments.remove(i);
 
 		this.enchantments = enchantments;

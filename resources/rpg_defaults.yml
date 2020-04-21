@@ -1,6 +1,9 @@
 experience:
     base: 500
     multiply: 50
+    no_exp:
+        enchantment_locked: false
+        level_locked: false
 
 levels:
     points:
@@ -225,7 +228,7 @@ enchantments:
             experience: 0.2
             points_level_one: 3
             points_increase: 4
-        knock_up: 
+        knockup: 
             experience: 0.7
             points_level_one: 3
             points_increase: 4
@@ -358,3 +361,14 @@ free_enchantments:
 - 'enchantmentsolution+lagging_curse 1'
 - 'enchantmentsolution+exhaustion_curse 1'
 - 'enchantmentsolution+contagion_curse 1'
+
+config_comments:
+    experience:
+        no_exp:
+            enchantment_locked:
+            - 'Experience will not be gained for a specific enchantment unless the player has that enchantment unlocked.'
+            level_locked:
+            - 'Experience will not be gained for a specific enchantment unless the player has that level unlocked.'
+            - 'If player has not unlocked the enchantment, the amount of experience gained will be 0.'
+            - 'If player has unlocked the enchantment, the highest level of experience gained will be the amount given.'
+            - 'E.g., Efficiency 5 will only give experience at the level of Efficiency 1 if only level 1 is unlocked.'

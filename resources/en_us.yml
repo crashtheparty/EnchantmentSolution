@@ -321,12 +321,28 @@ rpg:
     mirror: '&f'
     enchantments: '&9%name%'
     enchantments_lore: 
-    - '&6Max Level: &3%level%'
+    - '&6Player Max Level: &3%level%'
     - '&6Points to Buy Level %level_plus_one%: &3%points%'
+    enchantments_lore_unlocked: 
+    - '&6Player Max Level: &3%level%'
+    - '&7Highest level unlocked.'
     enchantment_levels: '&9%name%'
     enchantment_levels_lore: 
     - '&6Points for Level %level%: &3%points%'
     - '&7Left click to buy a higher level.'
+    enchantment_levels_lore_unlocked: 
+    - '&7Level unlocked.'
+    no-permission: '&7No permission to buy this enchantment!'
+    invalid-enchantment: '&7Invalid enchantment; please contact an administrator.'
+    unlock: 'You have unlocked %enchantment% up to level %level%.'
+    name_confirm: '&9Confirm Unlocking %enchantment% %level%'
+    cancel: '&4Cancel'
+    cancel_lore:
+    - '&7Go back to the last screen.'
+    confirm: '&aConfirm'
+    confirm_lore:
+    - '&6Required Points: &3%total_points%'
+    - '&6Will Unlock: &3%enchantment% &7at level &3%level%&7.'
 
 minigame:
     fast:

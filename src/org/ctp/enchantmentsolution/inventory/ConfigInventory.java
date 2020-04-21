@@ -141,7 +141,7 @@ public class ConfigInventory implements InventoryData, Pageable {
 
 		ItemStack hardModeFile = new ItemStack(Material.SPAWNER);
 		ItemMeta hardModeFileMeta = hardModeFile.getItemMeta();
-		hardModeFileMeta.setDisplayName(ChatColor.GOLD + Configurations.getEnchantments().getConfig().getFileName());
+		hardModeFileMeta.setDisplayName(ChatColor.GOLD + Configurations.getHardMode().getConfig().getFileName());
 		hardModeFile.setItemMeta(hardModeFileMeta);
 		inv.setItem(14, hardModeFile);
 
@@ -395,11 +395,10 @@ public class ConfigInventory implements InventoryData, Pageable {
 		setLevel(level);
 		this.type = type;
 
-		List<String> enums = config.getEnums(level);
-		if (enums == null) return;
-
-		for(String s: config.getStringListCombined(level))
-			enums.remove(s);
+		List<String> enums = new ArrayList<String>();
+		if (config.getEnums(level) == null) return;
+		for(String s : config.getEnums(level))
+			if(!config.getStringListCombined(level).contains(s)) enums.add(s);
 
 		if (PAGING * (page - 1) >= enums.size() && page != 1) {
 			listEnumListEdit(config, level, type, page - 1);

@@ -17,7 +17,6 @@ import org.ctp.enchantmentsolution.inventory.rpg.RPGInventory;
 import org.ctp.enchantmentsolution.nms.Anvil_GUI_NMS;
 import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 import org.ctp.enchantmentsolution.utils.yaml.YamlConfigBackup;
-import org.ctp.enchantmentsolution.utils.yaml.YamlInfo;
 
 public class InventoryClickUtils {
 
@@ -374,8 +373,7 @@ public class InventoryClickUtils {
 							if (s.startsWith(ChatColor.WHITE + "Num: " + ChatColor.GRAY)) num = s.replace(ChatColor.WHITE + "Num: " + ChatColor.GRAY, "");
 						if (num != null) {
 							backup = new YamlConfigBackup(null, null);
-							List<YamlInfo> backupInfo = EnchantmentSolution.getPlugin().getDb().getBackup(config, Integer.parseInt(num));
-							backup.setFromBackup(backupInfo);
+							backup.setFromBackup(EnchantmentSolution.getPlugin().getDb().getBackup(config, Integer.parseInt(num)));
 							configInv.listConfigDetails(config, backup, level, 1);
 						}
 					}
@@ -493,6 +491,9 @@ public class InventoryClickUtils {
 					rpgInventory.setInventory();
 				}
 				break;
+			case CONFIRM:
+				if(slot == 2) rpgInventory.cancel();
+				else if (slot == 6) rpgInventory.buy();
 		}
 	}
 

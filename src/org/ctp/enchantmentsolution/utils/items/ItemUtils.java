@@ -150,7 +150,7 @@ public class ItemUtils {
 		if (item == null) return false;
 		ItemMeta meta = item.getItemMeta();
 		if (meta.hasEnchants() || item.getType() == Material.ENCHANTED_BOOK && ((EnchantmentStorageMeta) meta).hasStoredEnchants()) return false;
-		if (ItemData.contains(ItemType.ALL.getEnchantMaterials(), item.getType())) return true;
+		if (ItemData.contains(ItemType.getAllEnchantMaterials(), item.getType())) return true;
 		if (item.getType().equals(Material.BOOK)) return true;
 		return false;
 	}
@@ -273,8 +273,11 @@ public class ItemUtils {
 		return items;
 	}
 
-	public static boolean checkItemType(ItemData item, ItemType itemType, CustomItemType type) {
-		if (type == CustomItemType.VANILLA) return new MatData(itemType.getCustomString().split(":")[1]).hasMaterial();
-		return MMOUtils.check(item, itemType, type);
+	public static boolean checkItemType(ItemData item, CustomItemType type) {
+		if (type.getVanilla() == VanillaItemType.VANILLA) {
+			MatData data = new MatData(type.getType().split(":")[1]);
+			return data.hasMaterial() && data.getMaterial() == item.getMaterial();
+		}
+		return MMOUtils.check(item, type);
 	}
 }

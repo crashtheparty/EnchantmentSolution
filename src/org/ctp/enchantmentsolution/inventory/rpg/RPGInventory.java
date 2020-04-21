@@ -1,5 +1,6 @@
 package org.ctp.enchantmentsolution.inventory.rpg;
 
+import java.math.BigInteger;
 import java.util.*;
 
 import org.bukkit.Bukkit;
@@ -34,6 +35,7 @@ public class RPGInventory implements InventoryData, Pageable {
 	private final List<Integer> locations = Arrays.asList(19, 20, 21, 22, 23, 24, 25, 28, 29, 30, 31, 32, 33, 34, 37, 38, 39, 40, 41, 42, 43);
 	private final List<Integer> pagination = Arrays.asList(45, 53);
 	private List<Integer> allLocations = new ArrayList<Integer>();
+	private EnchantmentLevel buying;
 
 	public RPGInventory(Player player) {
 		this.player = player;
@@ -124,11 +126,19 @@ public class RPGInventory implements InventoryData, Pageable {
 					enchCodes.put("%name%", enchant.getDisplayName());
 					enchantmentMeta.setDisplayName(ChatUtils.getMessage(enchCodes, "rpg.enchantments"));
 					HashMap<String, Object> enchLoreCodes = getCodes();
-					enchLoreCodes.put("%level%", rpg.getMaxLevel(ench));
+					String path = "rpg.enchantments_lore_unlocked";
 					int levelPlusOne = rpg.getMaxLevel(enchant.getRelativeEnchantment()) + 1;
-					enchLoreCodes.put("%level_plus_one%", levelPlusOne);
-					enchLoreCodes.put("%points%", RPGUtils.getPointsForEnchantment(ench, levelPlusOne));
-					enchantmentMeta.setLore(ChatUtils.getMessages(enchLoreCodes, "rpg.enchantments_lore"));
+					enchLoreCodes.put("%level%", rpg.getMaxLevel(enchant.getRelativeEnchantment()));
+					if (levelPlusOne - 1 < enchant.getMaxLevel()) {
+						path = "rpg.enchantments_lore";
+						BigInteger points = RPGUtils.getPointsForEnchantment(player, enchant.getRelativeEnchantment(), levelPlusOne);
+						String pointsString = points.intValue() + "";
+						if (points.intValue() == -2) pointsString = ChatUtils.getMessage(getCodes(), "rpg.no-permission");
+						else if (points.intValue() == -1) pointsString = ChatUtils.getMessage(getCodes(), "rpg.invalid-enchantment");
+						enchLoreCodes.put("%points%", pointsString);
+						enchLoreCodes.put("%level_plus_one%", levelPlusOne);
+					}
+					enchantmentMeta.setLore(ChatUtils.getMessages(enchLoreCodes, path));
 					enchantment.setItemMeta(enchantmentMeta);
 
 					int loc = (int) (i / 7.0D) * 2 + 19 + i;
@@ -194,9 +204,17 @@ public class RPGInventory implements InventoryData, Pageable {
 					enchCodes.put("%name%", enchant.getDisplayName());
 					levelItemMeta.setDisplayName(ChatUtils.getMessage(enchCodes, "rpg.enchantment_levels"));
 					HashMap<String, Object> enchLoreCodes = getCodes();
-					enchLoreCodes.put("%points%", RPGUtils.getPointsForEnchantment(enchant.getRelativeEnchantment(), level));
-					enchLoreCodes.put("%level%", level);
-					levelItemMeta.setLore(ChatUtils.getMessages(enchLoreCodes, "rpg.enchantment_levels_lore"));
+					String path = "rpg.enchantment_levels_lore_unlocked";
+					if (rpg.getMaxLevel(enchant.getRelativeEnchantment()) < level) {
+						path = "rpg.enchantment_levels_lore";
+						BigInteger points = RPGUtils.getPointsForEnchantment(player, enchant.getRelativeEnchantment(), level);
+						String pointsString = points.intValue() + "";
+						if (points.intValue() == -2) pointsString = ChatUtils.getMessage(getCodes(), "rpg.no-permission");
+						else if (points.intValue() == -1) pointsString = ChatUtils.getMessage(getCodes(), "rpg.invalid-enchantment");
+						enchLoreCodes.put("%points%", pointsString);
+						enchLoreCodes.put("%level%", level);
+					}
+					levelItemMeta.setLore(ChatUtils.getMessages(enchLoreCodes, path));
 					levelItem.setItemMeta(levelItemMeta);
 
 					int loc = (int) (i / 7.0D) * 2 + 19 + i;
@@ -206,6 +224,30 @@ public class RPGInventory implements InventoryData, Pageable {
 				if (levels.size() > PAGING * enchPage) inv.setItem(53, nextPage());
 				if (enchPage != 1) inv.setItem(45, previousPage());
 				inv.setItem(0, goBack());
+			} else if (screen == Screen.CONFIRM) {
+				HashMap<String, Object> buyingCodes = getCodes();
+				buyingCodes.put("%enchantment%", buying.getEnchant().getDisplayName());
+				buyingCodes.put("%level%", buying.getLevel());
+				Inventory inv = Bukkit.createInventory(null, 9, ChatUtils.getMessage(buyingCodes, "rpg.name_confirm"));
+				inv = open(inv);
+
+				ItemStack cancel = new ItemStack(Material.REDSTONE_BLOCK);
+				ItemMeta cancelMeta = cancel.getItemMeta();
+				cancelMeta.setDisplayName(ChatUtils.getMessage(getCodes(), "rpg.cancel"));
+				cancelMeta.setLore(ChatUtils.getMessages(getCodes(), "rpg.cancel_lore"));
+				cancel.setItemMeta(cancelMeta);
+				inv.setItem(2, cancel);
+
+				ItemStack confirm = new ItemStack(Material.EMERALD_BLOCK);
+				ItemMeta confirmMeta = confirm.getItemMeta();
+				HashMap<String, Object> confirmCodes = getCodes();
+				confirmCodes.put("%enchantment%", buying.getEnchant().getDisplayName());
+				confirmCodes.put("%level%", buying.getLevel());
+				confirmCodes.put("%total_points%", RPGUtils.getBuyPoints(rpg, buying));
+				confirmMeta.setDisplayName(ChatUtils.getMessage(getCodes(), "rpg.confirm"));
+				confirmMeta.setLore(ChatUtils.getMessages(confirmCodes, "rpg.confirm_lore"));
+				confirm.setItemMeta(confirmMeta);
+				inv.setItem(6, confirm);
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -247,8 +289,28 @@ public class RPGInventory implements InventoryData, Pageable {
 		int num = PAGING * (enchPage - 1) + loc;
 		if (levels.size() >= num) {
 			int level = levels.get(num);
-			if (rpg.canBuy(enchant.getRelativeEnchantment(), level)) rpg.giveEnchantment(new EnchantmentLevel(enchant, level));
+			if (rpg.canBuy(enchant.getRelativeEnchantment(), level)) {
+				screen = Screen.CONFIRM;
+				buying = new EnchantmentLevel(enchant, level);
+			}
 		}
+	}
+
+	public void buy() {
+		rpg.giveEnchantment(buying);
+		screen = Screen.ENCHANTMENT;
+		HashMap<String, Object> codes = getCodes();
+		codes.put("%enchantment%", buying.getEnchant().getDisplayName());
+		codes.put("%level%", buying.getLevel());
+		ChatUtils.sendMessage(player, ChatUtils.getMessage(codes, "rpg.unlock"));
+		buying = null;
+		setInventory();
+	}
+
+	public void cancel() {
+		screen = Screen.ENCHANTMENT;
+		buying = null;
+		setInventory();
 	}
 
 	@Override
@@ -276,7 +338,7 @@ public class RPGInventory implements InventoryData, Pageable {
 	}
 
 	public enum Screen {
-		LIST(), ENCHANTMENT();
+		LIST(), ENCHANTMENT(), CONFIRM();
 	}
 
 	public HashMap<String, Object> getCodes() {

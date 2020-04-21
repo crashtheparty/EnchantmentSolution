@@ -1,9 +1,6 @@
 package org.ctp.enchantmentsolution.database;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.logging.Level;
 
 import org.ctp.enchantmentsolution.EnchantmentSolution;
@@ -11,8 +8,7 @@ import org.ctp.enchantmentsolution.EnchantmentSolution;
 abstract class Database {
 	EnchantmentSolution plugin;
 	Connection connection;
-	// The name of the table we created back in SQLite class.
-	private String table = "enchantment_solution";
+	
 
 	Database(EnchantmentSolution instance) {
 		plugin = instance;
@@ -25,7 +21,7 @@ abstract class Database {
 	void initialize() {
 		connection = getSQLConnection();
 		try {
-			PreparedStatement ps = connection.prepareStatement("SELECT * FROM " + table);
+			PreparedStatement ps = connection.prepareStatement("SELECT * FROM " + getTable());
 			ResultSet rs = ps.executeQuery();
 			ps.close();
 			rs.close();
@@ -34,4 +30,6 @@ abstract class Database {
 			plugin.getLogger().log(Level.SEVERE, "Unable to retreive connection", ex);
 		}
 	}
+	
+	protected abstract String getTable();
 }
