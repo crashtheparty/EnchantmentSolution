@@ -94,10 +94,9 @@ public class SaveUtils {
 					player.giveEnchantment(s);
 				i++;
 			}
-			config.removeKeys("rpg");
 		}
 
-		Configurations.getDataFile().save();
+		Configurations.getDataFile().saveOnLoad();
 	}
 
 	public static void setData() {

@@ -107,7 +107,7 @@ public class SQLite extends Database {
 	}
 
 	@Override
-	protected String getTable() {
+	public String getTable() {
 		return dbname;
 	}
 }

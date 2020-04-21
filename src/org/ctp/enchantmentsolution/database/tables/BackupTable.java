@@ -14,7 +14,7 @@ import org.ctp.enchantmentsolution.utils.yaml.YamlConfigBackup;
 public class BackupTable extends Table {
 
 	public BackupTable(SQLite db) {
-		super(db, "enchantment_solution", Arrays.asList("info"));
+		super(db, Arrays.asList("info"));
 		addColumn("info", "varchar", "\"\"");
 		addColumn("file_name", "varchar", "\"\"");
 		addColumn("backup_num", "int", "0");
