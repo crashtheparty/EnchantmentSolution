@@ -113,10 +113,8 @@ public class Configurations {
 
 		if (ConfigString.RESET_ON_RELOAD.getBoolean()) TableEnchantments.removeAllTableEnchantments();
 		RegisterEnchantments.setEnchantments();
-		if (!EnchantmentSolution.getPlugin().isInitializing()) {
-			ENCHANTMENTS.setEnchantmentInformation();
-			ENCHANTMENTS.save();
-		}
+		ENCHANTMENTS.setEnchantmentInformation();
+		ENCHANTMENTS.save();
 
 		if (!EnchantmentSolution.getPlugin().isInitializing()) {
 			EnchantmentSolution.getPlugin().setVersionCheck(ConfigString.LATEST_VERSION.getBoolean(), ConfigString.EXPERIMENTAL_VERSION.getBoolean());

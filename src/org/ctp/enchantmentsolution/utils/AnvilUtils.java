@@ -33,12 +33,12 @@ public class AnvilUtils {
 	}
 
 	public static void checkAnvilBreak(Player player, Block block, Anvil anvil) {
-		if (!ConfigString.DAMAGE_ANVIL.getBoolean() || player.getGameMode().equals(GameMode.CREATIVE)) {
-			block.getWorld().playSound(block.getLocation(), Sound.BLOCK_ANVIL_USE, 1, 1);
-			return;
-		}
 		if (block == null) {
 			player.getWorld().playSound(player.getLocation(), Sound.BLOCK_ANVIL_USE, 1, 1);
+			return;
+		}
+		if (!ConfigString.DAMAGE_ANVIL.getBoolean() || player.getGameMode().equals(GameMode.CREATIVE)) {
+			block.getWorld().playSound(block.getLocation(), Sound.BLOCK_ANVIL_USE, 1, 1);
 			return;
 		}
 		double chance = .12;

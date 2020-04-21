@@ -7,6 +7,7 @@ import java.util.List;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
@@ -22,12 +23,12 @@ import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 @SuppressWarnings("unused")
 public class SoulListener extends Enchantmentable {
 
-	@EventHandler
+	@EventHandler(priority=EventPriority.HIGHEST)
 	public void onDeathListener(PlayerDeathEvent event) {
 		runMethod(this, "soulbound", event, PlayerDeathEvent.class);
 	}
 
-	@EventHandler
+	@EventHandler(priority=EventPriority.HIGHEST)
 	public void onPlayerRespawn(PlayerRespawnEvent event) {
 		runMethod(this, "soulbound", event, PlayerRespawnEvent.class);
 	}

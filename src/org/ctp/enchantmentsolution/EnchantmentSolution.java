@@ -158,7 +158,6 @@ public class EnchantmentSolution extends JavaPlugin {
 		initialization = false;
 
 		Bukkit.getScheduler().runTaskLater(this, () -> {
-			Configurations.reload();
 			SaveUtils.getData();
 			Configurations.getEnchantments().setEnchantmentInformation();
 			Configurations.getEnchantments().save();
