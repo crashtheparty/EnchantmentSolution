@@ -1,5 +1,6 @@
 package org.ctp.enchantmentsolution.inventory.rpg;
 
+import java.math.BigInteger;
 import java.util.*;
 
 import org.bukkit.Bukkit;
@@ -124,11 +125,19 @@ public class RPGInventory implements InventoryData, Pageable {
 					enchCodes.put("%name%", enchant.getDisplayName());
 					enchantmentMeta.setDisplayName(ChatUtils.getMessage(enchCodes, "rpg.enchantments"));
 					HashMap<String, Object> enchLoreCodes = getCodes();
-					enchLoreCodes.put("%level%", rpg.getMaxLevel(ench));
+					String path = "rpg.enchantments_lore_unlocked";
 					int levelPlusOne = rpg.getMaxLevel(enchant.getRelativeEnchantment()) + 1;
-					enchLoreCodes.put("%level_plus_one%", levelPlusOne);
-					enchLoreCodes.put("%points%", RPGUtils.getPointsForEnchantment(ench, levelPlusOne));
-					enchantmentMeta.setLore(ChatUtils.getMessages(enchLoreCodes, "rpg.enchantments_lore"));
+					enchLoreCodes.put("%level%", rpg.getMaxLevel(enchant.getRelativeEnchantment()));
+					if(levelPlusOne - 1 < enchant.getMaxLevel()) {
+						path = "rpg.enchantments_lore";
+						BigInteger points = RPGUtils.getPointsForEnchantment(player, enchant.getRelativeEnchantment(), levelPlusOne);
+						String pointsString = points.intValue() + "";
+						if(points.intValue() == -2) pointsString = ChatUtils.getMessage(getCodes(), "rpg.no-permission");
+						else if(points.intValue() == -1) pointsString = ChatUtils.getMessage(getCodes(), "rpg.invalid-enchantment");
+						enchLoreCodes.put("%points%", pointsString);
+						enchLoreCodes.put("%level_plus_one%", levelPlusOne);
+					}
+					enchantmentMeta.setLore(ChatUtils.getMessages(enchLoreCodes, path));
 					enchantment.setItemMeta(enchantmentMeta);
 
 					int loc = (int) (i / 7.0D) * 2 + 19 + i;
@@ -194,9 +203,17 @@ public class RPGInventory implements InventoryData, Pageable {
 					enchCodes.put("%name%", enchant.getDisplayName());
 					levelItemMeta.setDisplayName(ChatUtils.getMessage(enchCodes, "rpg.enchantment_levels"));
 					HashMap<String, Object> enchLoreCodes = getCodes();
-					enchLoreCodes.put("%points%", RPGUtils.getPointsForEnchantment(enchant.getRelativeEnchantment(), level));
-					enchLoreCodes.put("%level%", level);
-					levelItemMeta.setLore(ChatUtils.getMessages(enchLoreCodes, "rpg.enchantment_levels_lore"));
+					String path = "rpg.enchantment_levels_lore_unlocked";
+					if(rpg.getMaxLevel(enchant.getRelativeEnchantment()) < level) {
+						path = "rpg.enchantment_levels_lore";
+						BigInteger points = RPGUtils.getPointsForEnchantment(player, enchant.getRelativeEnchantment(), level);
+						String pointsString = points.intValue() + "";
+						if(points.intValue() == -2) pointsString = ChatUtils.getMessage(getCodes(), "rpg.no-permission");
+						else if(points.intValue() == -1) pointsString = ChatUtils.getMessage(getCodes(), "rpg.invalid-enchantment");
+						enchLoreCodes.put("%points%", pointsString);
+						enchLoreCodes.put("%level%", level);
+					}
+					levelItemMeta.setLore(ChatUtils.getMessages(enchLoreCodes, path));
 					levelItem.setItemMeta(levelItemMeta);
 
 					int loc = (int) (i / 7.0D) * 2 + 19 + i;
