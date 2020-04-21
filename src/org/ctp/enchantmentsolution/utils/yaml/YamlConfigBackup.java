@@ -1,11 +1,12 @@
 package org.ctp.enchantmentsolution.utils.yaml;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.Reader;
+import java.io.StringReader;
+import java.util.*;
+
+import org.bukkit.configuration.MemorySection;
+import org.bukkit.configuration.file.YamlConfiguration;
 
 public class YamlConfigBackup extends YamlConfig {
 
@@ -40,15 +41,15 @@ public class YamlConfigBackup extends YamlConfig {
 			if (i.getValue() != null) set(i.getPath(), i.getValue());
 	}
 
-	public void setFromBackup(List<YamlInfo> backupInfo) {
-		for(YamlInfo info: backupInfo)
-			if (info.getValue() != null) if (contains(info.getPath())) {
-				YamlInfo data = getInfo(info.getPath());
-				data.setValue(info.getValue());
-				setInfo(info.getPath(), data);
-			} else
-				setInfo(info.getPath(), info);
-
+	public void setFromBackup(String configString) {
+		Reader configReader = new StringReader(configString);
+		YamlConfiguration c = YamlConfiguration.loadConfiguration(configReader);
+		for(String s: c.getKeys(true)) {
+			Object o = c.get(s);
+			if (o instanceof MemorySection) continue;
+			YamlInfo info = new YamlInfo(s, o);
+			setInfo(info.getPath(), info);
+		}
 		saveConfig();
 	}
 
@@ -80,6 +81,7 @@ public class YamlConfigBackup extends YamlConfig {
 		configInventoryData = new LinkedHashMap<String, YamlInfo>();
 	}
 
+	@Override
 	public String getStringValue(String path) {
 		YamlInfo info = configInventoryData.get(path);
 		if (info == null) info = getInfo(path);
@@ -151,6 +153,7 @@ public class YamlConfigBackup extends YamlConfig {
 		return info.getStringList();
 	}
 
+	@Override
 	public void saveConfig() {
 		update();
 		if (getFile() == null) return;

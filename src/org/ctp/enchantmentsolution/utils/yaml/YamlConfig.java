@@ -359,11 +359,11 @@ public class YamlConfig {
 		return config.toString();
 	}
 
-	protected String prepareConfigString() {
+	public String prepareConfigString(boolean comments) {
 		StringBuilder config = new StringBuilder("");
 		ArrayList<YamlChild> keyList = new ArrayList<YamlChild>();
 
-		config.append(headerString());
+		if(comments) config.append(headerString());
 
 		writeDefaults();
 
@@ -382,7 +382,7 @@ public class YamlConfig {
 		}
 
 		for(YamlChild child: keyList)
-			config.append(getLevel(child));
+			config.append(getLevel(child, comments));
 
 		return config.toString();
 	}
@@ -435,7 +435,7 @@ public class YamlConfig {
 	}
 
 	public void saveConfig() {
-		String configuration = prepareConfigString();
+		String configuration = prepareConfigString(true);
 		try {
 			BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8));
 			writer.write(configuration);
@@ -446,11 +446,11 @@ public class YamlConfig {
 		}
 	}
 
-	private String getLevel(YamlChild child) {
+	private String getLevel(YamlChild child, boolean comments) {
 		StringBuilder config = new StringBuilder("");
 		String key = child.getPath();
 		int deep = StringUtils.countMatches(key, ".") * 4;
-		if (comments) if (contains(key)) {
+		if (comments && this.comments) if (contains(key)) {
 			YamlInfo info = getInfo(key);
 			if (info.getComments().length > 0) {
 				StringBuilder line = new StringBuilder("\n");
@@ -491,7 +491,7 @@ public class YamlConfig {
 		config.append(line);
 
 		for(YamlChild c: child.getChildren())
-			config.append(getLevel(c));
+			config.append(getLevel(c, comments));
 
 		return config.toString();
 	}
