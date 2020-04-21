@@ -491,6 +491,9 @@ public class InventoryClickUtils {
 					rpgInventory.setInventory();
 				}
 				break;
+			case CONFIRM:
+				if(slot == 2) rpgInventory.cancel();
+				else if (slot == 6) rpgInventory.buy();
 		}
 	}
 

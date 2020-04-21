@@ -334,6 +334,15 @@ rpg:
     - '&7Level unlocked.'
     no-permission: '&7No permission to buy this enchantment!'
     invalid-enchantment: '&7Invalid enchantment; please contact an administrator.'
+    unlock: 'You have unlocked %enchantment% up to level %level%.'
+    name_confirm: '&9Confirm Unlocking %enchantment% %level%'
+    cancel: '&4Cancel'
+    cancel_lore:
+    - '&7Go back to the last screen.'
+    confirm: '&aConfirm'
+    confirm_lore:
+    - '&6Required Points: &3%total_points%'
+    - '&6Will Unlock: &3%enchantment% &7at level &3%level%&7.'
 
 minigame:
     fast:

@@ -148,4 +148,16 @@ public class RPGUtils {
 		return PLAYERS;
 	}
 
+	public static int getBuyPoints(RPGPlayer rpg, EnchantmentLevel buying) {
+		int maxLevel = buying.getLevel();
+		BigInteger points = new BigInteger("0");
+		Enchantment ench = buying.getEnchant().getRelativeEnchantment();
+		while (!rpg.hasEnchantment(ench, maxLevel) && maxLevel > 0) {
+			points = points.add(getPointsForEnchantment(rpg.getPlayer().getPlayer(), ench, maxLevel));
+			maxLevel --;
+		}
+		
+		return points.intValue();
+	}
+
 }
