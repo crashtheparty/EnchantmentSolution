@@ -81,7 +81,7 @@ public class RPGPlayer {
 			run.setId(id);
 		} else
 			run.setRun();
-		BigDecimal decimal = experience.divide(RPGUtils.getExperienceNextLevel(level + 1), new MathContext(2, RoundingMode.HALF_UP)).setScale(2, RoundingMode.DOWN);
+		BigDecimal decimal = experience.divide(RPGUtils.getExperienceNextLevel(level + 1), new MathContext(2, RoundingMode.DOWN)).setScale(2, RoundingMode.DOWN);
 		bar.setProgress(decimal.doubleValue() % 1);
 		bar.addPlayer(player.getPlayer());
 		bar.setVisible(true);
