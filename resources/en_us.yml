@@ -422,7 +422,7 @@ enchantment:
             frequent_flyer: 'Allows flight. Durability damage every (3 * level) seconds when below 255 height and every (level) seconds above 255 height. Removes flight at 32 durability.'
             fried: 'Cooks fish upon catching them.'
             gold_digger: 'Earn experience and gold nuggets for breaking crops.'
-            gung_ho: 'Decreases health to 5 (hearts). All attacks do 3 times the damage.'
+            gung_ho: 'Decreases health to 50% of base value (usually 5 hearts). Melee attacks do 3 times the damage.'
             hard_bounce: 'Projectiles bounce back from the shield.'
             height_plus_plus: 'Increase up/down break radius by 1 per level.'
             hollow_point: 'Increases damage to armored mobs. Allows projectile damage against enderman and armored wither.'
