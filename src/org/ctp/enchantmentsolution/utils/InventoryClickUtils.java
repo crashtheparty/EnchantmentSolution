@@ -492,7 +492,7 @@ public class InventoryClickUtils {
 				}
 				break;
 			case CONFIRM:
-				if(slot == 2) rpgInventory.cancel();
+				if (slot == 2) rpgInventory.cancel();
 				else if (slot == 6) rpgInventory.buy();
 		}
 	}
@@ -503,11 +503,11 @@ public class InventoryClickUtils {
 		if (item == null) return;
 		switch (minigameInventory.getScreen()) {
 			case FAST:
-				if(item.getType() != Material.BLACK_STAINED_GLASS_PANE) minigameInventory.addFastEnchantment(slot);
+				if (item.getType() != Material.BLACK_STAINED_GLASS_PANE) minigameInventory.addFastEnchantment(slot);
 				break;
 			case MONDAYS:
-				if(slot == 45 || slot == 53) return;
-				if(item.getType() != Material.BLACK_STAINED_GLASS_PANE) minigameInventory.addMondaysEnchantment(slot);
+				if (slot == 45 || slot == 53) return;
+				if (item.getType() != Material.BLACK_STAINED_GLASS_PANE) minigameInventory.addMondaysEnchantment(slot);
 				break;
 			default:
 				break;

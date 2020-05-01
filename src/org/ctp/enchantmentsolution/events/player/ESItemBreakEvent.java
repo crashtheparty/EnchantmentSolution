@@ -8,7 +8,7 @@ import org.ctp.enchantmentsolution.events.ESPlayerEvent;
 public abstract class ESItemBreakEvent extends ESPlayerEvent {
 
 	private final ItemStack item;
-	
+
 	public ESItemBreakEvent(Player who, EnchantmentLevel enchantment, ItemStack item) {
 		super(who, enchantment);
 		this.item = item;

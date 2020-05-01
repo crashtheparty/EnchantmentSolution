@@ -9,11 +9,11 @@ public abstract class ItemRepairEvent extends ESPlayerEvent {
 
 	private final ItemStack item;
 	private int repair;
-	
+
 	public ItemRepairEvent(Player who, EnchantmentLevel enchantment, ItemStack item, int repair) {
 		super(who, enchantment);
 		this.item = item;
-		this.setRepair(repair);
+		setRepair(repair);
 	}
 
 	public ItemStack getItem() {

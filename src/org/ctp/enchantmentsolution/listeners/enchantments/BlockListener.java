@@ -60,7 +60,7 @@ public class BlockListener extends Enchantmentable {
 	public void onBlockPlaceHighest(BlockPlaceEvent event) {
 		runMethod(this, "wand", event, BlockPlaceEvent.class);
 	}
-	
+
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onEntityChangeBlock(EntityChangeBlockEvent event) {
 		runMethod(this, "lightWeight", event, EntityChangeBlockEvent.class);
@@ -350,23 +350,23 @@ public class BlockListener extends Enchantmentable {
 			}
 		}
 	}
-	
+
 	private void lightWeight(EntityChangeBlockEvent event) {
 		if (!canRun(RegisterEnchantments.LIGHT_WEIGHT, event)) return;
 		Entity entity = event.getEntity();
-		if(entity instanceof Player) {
+		if (entity instanceof Player) {
 			Player player = (Player) entity;
-			if(event.getBlock().getType() == Material.FARMLAND && event.getTo() == Material.DIRT) {
+			if (event.getBlock().getType() == Material.FARMLAND && event.getTo() == Material.DIRT) {
 				ItemStack boots = player.getInventory().getBoots();
-				if(boots != null && ItemUtils.hasEnchantment(boots, RegisterEnchantments.LIGHT_WEIGHT)) {
+				if (boots != null && ItemUtils.hasEnchantment(boots, RegisterEnchantments.LIGHT_WEIGHT)) {
 					LightWeightEvent lightWeight = new LightWeightEvent(event.getBlock(), player);
 					Bukkit.getPluginManager().callEvent(lightWeight);
-					
-					if(!lightWeight.isCancelled()) event.setCancelled(true);
+
+					if (!lightWeight.isCancelled()) event.setCancelled(true);
 				}
 			}
 		}
-		
+
 	}
 
 	private boolean hasItem(Player player, ItemStack item) {

@@ -8,11 +8,11 @@ public abstract class ModifyVectorEvent extends ModifyActionEvent {
 
 	private final Vector vector;
 	private Vector newVector;
-	
+
 	public ModifyVectorEvent(Player who, EnchantmentLevel enchantment, Vector vector, Vector newVector) {
 		super(who, enchantment);
 		this.vector = vector;
-		this.setNewVector(newVector);
+		setNewVector(newVector);
 	}
 
 	public Vector getVector() {

@@ -147,7 +147,7 @@ public class RPGPlayer {
 			int level = entry.getValue();
 			while (level > 0) {
 				BigInteger lowerPoints = RPGUtils.getPointsForEnchantment(player.getPlayer(), entry.getKey(), level);
-				if(lowerPoints.intValue() < 0) continue;
+				if (lowerPoints.intValue() < 0) continue;
 				points = points.subtract(lowerPoints);
 				level--;
 			}

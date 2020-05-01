@@ -140,7 +140,7 @@ public class ItemType {
 	public final static ItemType PHANTOM_MEMBRANE = new ItemType("phantom_membrane");
 	public final static ItemType STRING = new ItemType("string");
 	public final static ItemType NETHERITE_INGOT = new ItemType("netherite_ingot");
-	
+
 	private String type, display;
 	private List<ItemData> enchantMaterials, anvilMaterials;
 
@@ -168,10 +168,10 @@ public class ItemType {
 	}
 
 	public static ItemType mmoRepairType(ItemData data, VanillaItemType vanilla) {
-		for (ItemType value : VALUES)
-			if(value instanceof CustomItemType) {
+		for(ItemType value: VALUES)
+			if (value instanceof CustomItemType) {
 				CustomItemType custom = (CustomItemType) value;
-				if(custom.getVanilla() == vanilla && custom.getType().equals("mmoitems:" + vanilla.name().toLowerCase() + ":" + data.getMMOType())) return custom;
+				if (custom.getVanilla() == vanilla && custom.getType().equals("mmoitems:" + vanilla.name().toLowerCase() + ":" + data.getMMOType())) return custom;
 			}
 		return new CustomItemType("mmoitems:" + vanilla.name().toLowerCase() + ":" + data.getMMOType(), vanilla);
 	}
@@ -704,16 +704,16 @@ public class ItemType {
 	}
 
 	public static ItemType getItemType(String type) {
-		for(ItemType value : VALUES)
-			if(type.equalsIgnoreCase(value.getType())) return value;
+		for(ItemType value: VALUES)
+			if (type.equalsIgnoreCase(value.getType())) return value;
 		return null;
 	}
 
 	public static CustomItemType getCustomType(VanillaItemType vanilla, String type) {
-		for(ItemType value : VALUES)
-			if(value instanceof CustomItemType) {
+		for(ItemType value: VALUES)
+			if (value instanceof CustomItemType) {
 				CustomItemType custom = (CustomItemType) value;
-				if(custom.getVanilla() == vanilla && type.equalsIgnoreCase(custom.getType())) return custom;
+				if (custom.getVanilla() == vanilla && type.equalsIgnoreCase(custom.getType())) return custom;
 			}
 		return new CustomItemType(type, vanilla);
 	}

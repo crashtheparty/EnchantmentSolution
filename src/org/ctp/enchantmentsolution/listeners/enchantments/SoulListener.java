@@ -23,12 +23,12 @@ import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 @SuppressWarnings("unused")
 public class SoulListener extends Enchantmentable {
 
-	@EventHandler(priority=EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onDeathListener(PlayerDeathEvent event) {
 		runMethod(this, "soulbound", event, PlayerDeathEvent.class);
 	}
 
-	@EventHandler(priority=EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerRespawn(PlayerRespawnEvent event) {
 		runMethod(this, "soulbound", event, PlayerRespawnEvent.class);
 	}

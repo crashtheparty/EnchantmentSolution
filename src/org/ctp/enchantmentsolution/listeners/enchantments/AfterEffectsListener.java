@@ -88,7 +88,7 @@ public class AfterEffectsListener extends Enchantmentable {
 							if (!butcher.isCancelled()) newDrops.addAll(butcher.getDrops());
 						}
 					}
-				for(ItemStack drop : newDrops)
+				for(ItemStack drop: newDrops)
 					drops.add(drop);
 			} ;
 		}
@@ -129,14 +129,13 @@ public class AfterEffectsListener extends Enchantmentable {
 				double chance = 0.05 * (1 + level);
 				HusbandryEvent husbandry = new HusbandryEvent(entity, player, entity.getLocation(), level, chance);
 				Bukkit.getPluginManager().callEvent(husbandry);
-				
-				if(!husbandry.isCancelled()) {
+
+				if (!husbandry.isCancelled()) {
 					double random = Math.random();
-					if(chance > random)
-						Bukkit.getScheduler().runTaskLater(EnchantmentSolution.getPlugin(), () -> {
-							Entity e = husbandry.getSpawnWorld().spawnEntity(husbandry.getSpawnLocation(), husbandry.getEntityType());
-							if (e != null && e instanceof Ageable) ((Ageable) e).setBaby();
-						}, 1l);
+					if (chance > random) Bukkit.getScheduler().runTaskLater(EnchantmentSolution.getPlugin(), () -> {
+						Entity e = husbandry.getSpawnWorld().spawnEntity(husbandry.getSpawnLocation(), husbandry.getEntityType());
+						if (e != null && e instanceof Ageable) ((Ageable) e).setBaby();
+					}, 1l);
 				}
 			}
 		}

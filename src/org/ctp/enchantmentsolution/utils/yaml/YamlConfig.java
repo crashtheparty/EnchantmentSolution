@@ -363,7 +363,7 @@ public class YamlConfig {
 		StringBuilder config = new StringBuilder("");
 		ArrayList<YamlChild> keyList = new ArrayList<YamlChild>();
 
-		if(comments) config.append(headerString());
+		if (comments) config.append(headerString());
 
 		writeDefaults();
 
@@ -408,7 +408,7 @@ public class YamlConfig {
 	public List<String> getLevelEntryKeysAtLevel(String level) {
 		List<String> values = getLevelEntryKeys(level);
 		List<String> newValues = new ArrayList<String>();
-		for(String v : values)
+		for(String v: values)
 			newValues.add(v.substring(v.lastIndexOf('.') + 1));
 		return newValues;
 	}

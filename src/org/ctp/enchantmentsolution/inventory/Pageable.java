@@ -7,7 +7,6 @@ import org.ctp.enchantmentsolution.utils.ChatUtils;
 
 public interface Pageable {
 
-
 	default ItemStack nextPage() {
 		return pagination("pagination.next_page");
 	}
@@ -19,7 +18,7 @@ public interface Pageable {
 	default ItemStack goBack() {
 		return pagination("pagination.go_back");
 	}
-	
+
 	default ItemStack pagination(String path) {
 		ItemStack nextPage = new ItemStack(Material.ARROW);
 		ItemMeta nextPageMeta = nextPage.getItemMeta();

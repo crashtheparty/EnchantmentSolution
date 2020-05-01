@@ -32,25 +32,25 @@ public class StringUtils {
 
 		return displayName + " " + NUMERALS[enchLevel - 1];
 	}
-	
+
 	public static String stickyHoldItemType(ItemStack item) {
 		return ChatColor.ITALIC + "" + ChatColor.ITALIC + ChatUtils.hideText(item.getType().name()) + ChatColor.RESET + ChatColor.GRAY + item.getItemMeta().getDisplayName();
 	}
 
 	public static ItemStack stickyHoldItem(ItemMeta itemMeta) {
 		ItemStack item = null;
-		for(String l : itemMeta.getLore()) {
+		for(String l: itemMeta.getLore()) {
 			item = stickyHoldItem(l, itemMeta);
-			if(item != null) break;
+			if (item != null) break;
 		}
 		return item;
 	}
-	
+
 	public static ItemStack stickyHoldItem(String s, ItemMeta meta) {
-		if(s.startsWith(ChatColor.ITALIC + "" + ChatColor.ITALIC)) {
+		if (s.startsWith(ChatColor.ITALIC + "" + ChatColor.ITALIC)) {
 			s = s.replaceAll(ChatColor.ITALIC + "", "");
 			MatData itemType = new MatData(ChatUtils.revealText(s.substring(0, s.indexOf(ChatColor.RESET + ""))));
-			if(itemType.hasMaterial()) {
+			if (itemType.hasMaterial()) {
 				ItemStack item = new ItemStack(itemType.getMaterial());
 				item.setItemMeta(meta);
 				return item;
@@ -194,7 +194,7 @@ public class StringUtils {
 					try {
 						level = Integer.parseInt(ChatUtils.revealText(levelHidden));
 					} catch (NumberFormatException ex) {
-	
+
 					}
 				}
 

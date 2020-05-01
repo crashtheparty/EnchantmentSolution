@@ -346,8 +346,8 @@ public class RegisterEnchantments {
 			if (enchant.getRelativeEnchantment().getKey().equals(key)) return enchant.getRelativeEnchantment();
 		return null;
 	}
-	
-	private static List<EnchantmentLocation> getEnchantmentLocations(Configuration config, String namespace, CustomEnchantment enchantment){
+
+	private static List<EnchantmentLocation> getEnchantmentLocations(Configuration config, String namespace, CustomEnchantment enchantment) {
 		List<EnchantmentLocation> locations = new ArrayList<EnchantmentLocation>();
 		List<String> enchantmentLocationsString = config.getStringList(namespace + "." + enchantment.getName() + ".enchantment_locations");
 		if (enchantmentLocationsString != null) for(String s: enchantmentLocationsString)
@@ -357,8 +357,8 @@ public class RegisterEnchantments {
 			} catch (Exception ex) {}
 		return locations;
 	}
-	
-	private static List<ItemType> getTypes(Configuration config, String namespace, CustomEnchantment enchantment, String path){
+
+	private static List<ItemType> getTypes(Configuration config, String namespace, CustomEnchantment enchantment, String path) {
 		List<String> itemTypes = config.getStringList(namespace + "." + enchantment.getName() + "." + path);
 		List<ItemType> types = new ArrayList<ItemType>();
 		if (itemTypes != null) for(String s: itemTypes) {

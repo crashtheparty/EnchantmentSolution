@@ -6,15 +6,15 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 
-public class OverrideDropsEvent extends DropEvent{
+public class OverrideDropsEvent extends DropEvent {
 
 	private final List<ItemStack> originalDrops;
 	private boolean override;
-	
+
 	public OverrideDropsEvent(Player who, EnchantmentLevel enchantment, List<ItemStack> drops, List<ItemStack> originalDrops, boolean override) {
 		super(who, enchantment, drops);
 		this.originalDrops = originalDrops;
-		this.setOverride(override);
+		setOverride(override);
 	}
 
 	public List<ItemStack> getOriginalDrops() {
@@ -28,6 +28,5 @@ public class OverrideDropsEvent extends DropEvent{
 	public void setOverride(boolean override) {
 		this.override = override;
 	}
-	
-	
+
 }

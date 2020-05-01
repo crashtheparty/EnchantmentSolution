@@ -279,7 +279,7 @@ public class AnvilEnchantments extends GenerateEnchantments {
 			Enchantment enchant = e.getKey();
 			int level = e.getValue();
 			for(CustomEnchantment customEnchant: registeredEnchantments)
-				if (ConfigUtils.isRepairable(customEnchant) && (customEnchant.getRelativeEnchantment().equals(enchant))) {
+				if (ConfigUtils.isRepairable(customEnchant) && customEnchant.getRelativeEnchantment().equals(enchant)) {
 					if (enchant == RegisterEnchantments.CURSE_OF_STAGNANCY) containsStagnancyTwo = true;
 					secondLevels.add(new EnchantmentLevel(customEnchant, level));
 				}
@@ -290,7 +290,7 @@ public class AnvilEnchantments extends GenerateEnchantments {
 			Enchantment enchant = e.getKey();
 			int level = e.getValue();
 			for(CustomEnchantment customEnchant: registeredEnchantments)
-				if (ConfigUtils.isRepairable(customEnchant) && (customEnchant.getRelativeEnchantment().equals(enchant))) {
+				if (ConfigUtils.isRepairable(customEnchant) && customEnchant.getRelativeEnchantment().equals(enchant)) {
 					if (enchant == RegisterEnchantments.CURSE_OF_STAGNANCY) containsStagnancyOne = true;
 					firstLevels.add(new EnchantmentLevel(customEnchant, level));
 				}

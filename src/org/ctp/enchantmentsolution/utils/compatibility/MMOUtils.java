@@ -38,7 +38,7 @@ public class MMOUtils {
 		if (item.getMMOType() == null || !Type.isValid(item.getMMOType())) return false;
 		Type type = Type.get(item.getMMOType());
 		String customString = mmo.getType().split(":")[2];
-		
+
 		switch (mmo.getVanilla().name().toUpperCase()) {
 			case "TYPE":
 				return type.getId().equalsIgnoreCase(customString);

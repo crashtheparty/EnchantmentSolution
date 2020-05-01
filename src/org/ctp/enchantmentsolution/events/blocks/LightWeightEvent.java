@@ -8,7 +8,7 @@ import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 public class LightWeightEvent extends ESBlockEvent {
 
 	private final Player player;
-	
+
 	public LightWeightEvent(Block theBlock, Player player) {
 		super(theBlock, new EnchantmentLevel(CERegister.LIGHT_WEIGHT, 1));
 		this.player = player;

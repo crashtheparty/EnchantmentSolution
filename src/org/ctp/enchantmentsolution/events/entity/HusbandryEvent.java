@@ -12,7 +12,7 @@ public class HusbandryEvent extends ESEntitySpawnEvent {
 
 	public HusbandryEvent(Entity who, Player spawner, Location spawnLocation, int level, double chance) {
 		super(who, new EnchantmentLevel(CERegister.HUSBANDRY, level), spawner, spawnLocation);
-		this.setChance(chance);
+		setChance(chance);
 	}
 
 	public double getChance() {

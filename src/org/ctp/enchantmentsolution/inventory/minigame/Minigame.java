@@ -86,7 +86,7 @@ public class Minigame implements InventoryData, Pageable {
 
 				for(int i = 0; i < mondaysLocations.size(); i++) {
 					if (enchants.size() <= i) break;
-					int num = i + (mondaysLocations.size() * (page - 1));
+					int num = i + mondaysLocations.size() * (page - 1);
 					String name = Configurations.getMinigames().getString("mondays.enchantments." + enchants.get(num) + ".enchantment");
 					CustomEnchantment enchant = RegisterEnchantments.getByName(name);
 					int slot = mondaysLocations.get(i);
@@ -204,9 +204,9 @@ public class Minigame implements InventoryData, Pageable {
 		int random = (int) (Math.random() * lists.size());
 
 		List<EnchantmentLevel> levels = lists.get(random).getEnchantments();
-		
+
 		int i = 0;
-		
+
 		while ((levels == null || levels.size() == 0) && lists.size() > i) {
 			levels = lists.get(i).getEnchantments();
 			random = i;
@@ -222,8 +222,8 @@ public class Minigame implements InventoryData, Pageable {
 		boolean useBooks = ConfigString.USE_ENCHANTED_BOOKS.getBoolean();
 		if (item.getType() == Material.BOOK && useBooks) item = ItemUtils.convertToEnchantedBook(item);
 		int cost = MinigameUtils.getTableCost(random + 1);
-		if(cost <= player.getLevel() || player.getGameMode() == GameMode.CREATIVE) {
-			if(player.getGameMode() != GameMode.CREATIVE) player.setLevel(player.getLevel() - cost);
+		if (cost <= player.getLevel() || player.getGameMode() == GameMode.CREATIVE) {
+			if (player.getGameMode() != GameMode.CREATIVE) player.setLevel(player.getLevel() - cost);
 			ItemUtils.giveItemToPlayer(player, item, player.getLocation(), false);
 			player.getWorld().playSound(player.getLocation(), Sound.BLOCK_ENCHANTMENT_TABLE_USE, 1, 1);
 		} else
@@ -231,7 +231,7 @@ public class Minigame implements InventoryData, Pageable {
 	}
 
 	public void addMondaysEnchantment(int slot) {
-		int num = mondaysLocations.indexOf(slot) + (mondaysLocations.size() * (page - 1));
+		int num = mondaysLocations.indexOf(slot) + mondaysLocations.size() * (page - 1);
 		List<String> enchants = getEnchants();
 
 		String s = enchants.get(num);
@@ -254,12 +254,12 @@ public class Minigame implements InventoryData, Pageable {
 			if (item.getType() == Material.BOOK && useBooks) item = ItemUtils.convertToEnchantedBook(item);
 			int cost = Configurations.getMinigames().getInt("mondays.enchantments." + s + ".cost");
 			if (player.getLevel() >= cost || player.getGameMode() == GameMode.CREATIVE) {
-				if(player.getGameMode() != GameMode.CREATIVE) player.setLevel(player.getLevel() - cost);
+				if (player.getGameMode() != GameMode.CREATIVE) player.setLevel(player.getLevel() - cost);
 				ItemUtils.giveItemToPlayer(player, item, player.getLocation(), false);
 				player.getWorld().playSound(player.getLocation(), Sound.BLOCK_ENCHANTMENT_TABLE_USE, 1, 1);
 			} else
 				ChatUtils.sendMessage(player, ChatUtils.getMessage(getCodes(), "minigame.not_enough_levels"));
-		} else if(name.equalsIgnoreCase("random")) ChatUtils.sendMessage(player, ChatUtils.getMessage(getCodes(), "minigame.invalid_random_enchant"));
+		} else if (name.equalsIgnoreCase("random")) ChatUtils.sendMessage(player, ChatUtils.getMessage(getCodes(), "minigame.invalid_random_enchant"));
 		else {
 			HashMap<String, Object> codes = getCodes();
 			codes.put("%name%", name);
@@ -280,22 +280,18 @@ public class Minigame implements InventoryData, Pageable {
 	private List<String> getEnchants() {
 		YamlConfig config = Configurations.getMinigames().getConfig();
 		List<String> paths = config.getLevelEntryKeysAtLevel("mondays.enchantments");
-		paths.sort(new Comparator<String>() {
-
-			@Override
-			public int compare(String o1, String o2) {
-				Integer i1 = null, i2 = null;
-				try {
-					i1 = Integer.parseInt(o1);
-				} catch (NumberFormatException ex) {}
-				try {
-					i2 = Integer.parseInt(o2);
-				} catch (NumberFormatException ex) {}
-				if (i1 != null && i2 == null) return 1;
-				else if (i1 == null && i2 != null) return -1;
-				else if (i1 != null && i2 != null) return i1.intValue() - i2.intValue();
-				return o1.compareTo(o2);
-			}
+		paths.sort((o1, o2) -> {
+			Integer i1 = null, i2 = null;
+			try {
+				i1 = Integer.parseInt(o1);
+			} catch (NumberFormatException ex1) {}
+			try {
+				i2 = Integer.parseInt(o2);
+			} catch (NumberFormatException ex2) {}
+			if (i1 != null && i2 == null) return 1;
+			else if (i1 == null && i2 != null) return -1;
+			else if (i1 != null && i2 != null) return i1.intValue() - i2.intValue();
+			return o1.compareTo(o2);
 		});
 		return paths;
 	}

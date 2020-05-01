@@ -336,9 +336,9 @@ public class PlayerListener extends Enchantmentable {
 		if (item != null && ItemUtils.hasEnchantment(item, RegisterEnchantments.STICKY_HOLD)) {
 			List<EnchantmentLevel> levels = ItemUtils.getEnchantmentLevels(item);
 			Iterator<EnchantmentLevel> iter = levels.iterator();
-			while(iter.hasNext()) {
+			while (iter.hasNext()) {
 				EnchantmentLevel level = iter.next();
-				if(level.getEnchant() == CERegister.STICKY_HOLD) iter.remove();
+				if (level.getEnchant() == CERegister.STICKY_HOLD) iter.remove();
 				else
 					item = ItemUtils.removeEnchantmentFromItem(item, level.getEnchant());
 			}
@@ -349,7 +349,7 @@ public class PlayerListener extends Enchantmentable {
 				List<String> lore = meta.getLore();
 				if (lore == null) lore = new ArrayList<String>();
 				lore.add(itemLore);
-				for(EnchantmentLevel level : levels)
+				for(EnchantmentLevel level: levels)
 					lore.add(StringUtils.addStickyHold(level));
 				meta.setLore(lore);
 				stickItem.setItemMeta(meta);

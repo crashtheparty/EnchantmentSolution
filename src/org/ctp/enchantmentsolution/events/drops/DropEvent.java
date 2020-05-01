@@ -15,6 +15,7 @@ public abstract class DropEvent extends ESPlayerEvent {
 		super(who, enchantment);
 		this.drops = drops;
 	}
+
 	public List<ItemStack> getDrops() {
 		return drops;
 	}

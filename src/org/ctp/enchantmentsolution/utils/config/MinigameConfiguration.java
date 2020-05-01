@@ -37,7 +37,7 @@ public class MinigameConfiguration extends Configuration {
 				config.addDefault(str, defaultConfig.get(str));
 
 		config.addEnum("type", Arrays.asList("FAST", "MONDAYS", "CUSTOM"));
-		
+
 		if (EnchantmentSolution.getPlugin().isInitializing()) ChatUtils.sendInfo("Minigame configuration initialized!");
 
 		config.saveConfig();

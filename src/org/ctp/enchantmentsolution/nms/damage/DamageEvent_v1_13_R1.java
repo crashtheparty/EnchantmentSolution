@@ -39,7 +39,7 @@ public class DamageEvent_v1_13_R1 {
 		arrow.a(entity, i);
 		return (int) arrow.getDamage() / 2;
 	}
-	
+
 	public static void updateHealth(LivingEntity le) {
 		Entity entity = ((CraftEntity) le).getHandle();
 		if (entity instanceof EntityLiving) {

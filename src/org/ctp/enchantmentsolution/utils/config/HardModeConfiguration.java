@@ -34,7 +34,7 @@ public class HardModeConfiguration extends Configuration {
 			}
 			else
 				config.addDefault(str, defaultConfig.get(str));
-		
+
 		if (EnchantmentSolution.getPlugin().isInitializing()) ChatUtils.sendInfo("Hard Mode configuration initialized!");
 
 		config.saveConfig();
