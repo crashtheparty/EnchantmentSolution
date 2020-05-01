@@ -25,6 +25,7 @@ import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.events.damage.*;
 import org.ctp.enchantmentsolution.events.entity.DetonateCreeperEvent;
 import org.ctp.enchantmentsolution.events.modify.LagEvent;
+import org.ctp.enchantmentsolution.events.modify.PushbackEvent;
 import org.ctp.enchantmentsolution.events.potion.MagicGuardPotionEvent;
 import org.ctp.enchantmentsolution.events.teleport.WarpEntityEvent;
 import org.ctp.enchantmentsolution.events.teleport.WarpPlayerEvent;
@@ -318,27 +319,32 @@ public class DamageListener extends Enchantmentable {
 			}
 		}
 	}
-	
+
 	private void pushback(EntityDamageByEntityEvent event) {
-		if(!canRun(RegisterEnchantments.PUSHBACK, event)) return;
-		
+		if (!canRun(RegisterEnchantments.PUSHBACK, event)) return;
+
 		Entity damaged = event.getEntity();
 		Entity damager = event.getDamager();
-		if(damaged instanceof HumanEntity && damager instanceof LivingEntity) {
-			HumanEntity human = (HumanEntity) damaged;
+		if (damaged instanceof Player && damager instanceof LivingEntity) {
+			Player player = (Player) damaged;
 			LivingEntity living = (LivingEntity) damager;
-			ItemStack item = human.getInventory().getItemInOffHand();
-			if(item != null && ItemUtils.hasEnchantment(item, RegisterEnchantments.PUSHBACK) && human.isBlocking()) {
+			ItemStack item = player.getInventory().getItemInOffHand();
+			if (item != null && ItemUtils.hasEnchantment(item, RegisterEnchantments.PUSHBACK) && player.isBlocking()) {
 				int level = ItemUtils.getLevel(item, RegisterEnchantments.PUSHBACK);
-				double d0 = Math.sin(human.getLocation().getYaw() * 0.017453292F);
-				double d1 = -Math.cos(human.getLocation().getYaw() * 0.017453292F);
-				Vector v0 = human.getVelocity();
+				double d0 = Math.sin(player.getLocation().getYaw() * 0.017453292F);
+				double d1 = -Math.cos(player.getLocation().getYaw() * 0.017453292F);
+				Vector v0 = player.getVelocity();
 				Vector v1 = new Vector(d0, 0.0D, d1);
-		        double d2 = Math.sqrt(v1.getX() * v1.getX() + v1.getY() * v1.getY() + v1.getZ() * v1.getZ());
-		        if(d2 < 1.0E-4D) v1 = new Vector(0, 0, 0);
-		        else v1 = new Vector(v1.getX() / d2 * level * 0.5F, v1.getY() / d2 * level * 0.5F, v1.getZ() / d2 * level * 0.5F);
-		        
-		        living.setVelocity(new Vector(v0.getX() / 2.0D - v1.getX(), living.isOnGround() ? Math.min(0.4D, v0.getY() / 2.0D + level * 0.5F) : v0.getY(), v0.getZ() / 2.0D - v1.getZ()));
+				double d2 = Math.sqrt(v1.getX() * v1.getX() + v1.getY() * v1.getY() + v1.getZ() * v1.getZ());
+				if (d2 < 1.0E-4D) v1 = new Vector(0, 0, 0);
+				else
+					v1 = new Vector(v1.getX() / d2 * level * 0.5F, v1.getY() / d2 * level * 0.5F, v1.getZ() / d2 * level * 0.5F);
+
+				PushbackEvent pushback = new PushbackEvent(player, level, v0, new Vector(v0.getX() / 2.0D - v1.getX(), living.isOnGround() ? Math.min(0.4D, v0.getY() / 2.0D + level * 0.5F) : v0.getY(), v0.getZ() / 2.0D - v1.getZ()));
+				Bukkit.getPluginManager().callEvent(pushback);
+
+				if (!pushback.isCancelled()) living.setVelocity(pushback.getNewVector());
+
 			}
 		}
 	}
