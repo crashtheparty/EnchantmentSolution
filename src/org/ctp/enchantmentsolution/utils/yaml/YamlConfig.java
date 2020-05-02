@@ -446,7 +446,7 @@ public class YamlConfig {
 		}
 	}
 
-	private String getLevel(YamlChild child, boolean comments) {
+	protected String getLevel(YamlChild child, boolean comments) {
 		StringBuilder config = new StringBuilder("");
 		String key = child.getPath();
 		int deep = StringUtils.countMatches(key, ".") * 4;
@@ -527,5 +527,9 @@ public class YamlConfig {
 			} else
 				info.put(e.getKey(), e.getValue());
 		}
+	}
+	
+	protected Map<String, YamlInfo> getDefaults(){
+		return defaults;
 	}
 }
