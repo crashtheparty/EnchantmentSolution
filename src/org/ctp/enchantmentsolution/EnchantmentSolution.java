@@ -167,11 +167,15 @@ public class EnchantmentSolution extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
+		closeInventories(null);
+		SaveUtils.setData();
+	}
+	
+	public void closeInventories(Class<? extends InventoryData> clazz) {
 		List<InventoryData> data = new ArrayList<InventoryData>();
 		data.addAll(inventories);
 		for(InventoryData inv: data)
-			inv.close(true);
-		SaveUtils.setData();
+			if (clazz == null || clazz.isAssignableFrom(data.getClass())) inv.close(true);
 	}
 
 	private void registerEvent(Listener l) {
@@ -196,13 +200,6 @@ public class EnchantmentSolution extends JavaPlugin {
 
 	public PluginVersion getPluginVersion() {
 		return pluginVersion;
-	}
-
-	public void resetInventories() {
-		for(int i = inventories.size() - 1; i >= 0; i--) {
-			InventoryData inv = inventories.get(i);
-			inv.close(true);
-		}
 	}
 
 	public InventoryData getInventory(Player player) {

@@ -13,6 +13,7 @@ import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enchantments.generate.TableEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.inventory.*;
+import org.ctp.enchantmentsolution.inventory.minigame.Minigame;
 import org.ctp.enchantmentsolution.inventory.rpg.RPGInventory;
 import org.ctp.enchantmentsolution.listeners.VanishListener;
 import org.ctp.enchantmentsolution.threads.SnapshotRunnable;
@@ -230,6 +231,7 @@ public class CommandUtils {
 		if (sender.hasPermission(details.getPermission())) {
 			Configurations.reload();
 			VanishListener.reload();
+			Minigame.reset();
 			ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(ChatUtils.getCodes(), "commands.reload"), Level.INFO);
 		} else
 			ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(ChatUtils.getCodes(), "commands.no-permission"), Level.WARNING);
@@ -240,8 +242,9 @@ public class CommandUtils {
 		Player player = null;
 		if (sender instanceof Player) player = (Player) sender;
 		if (sender.hasPermission(details.getPermission())) {
-			EnchantmentSolution.getPlugin().resetInventories();
+			EnchantmentSolution.getPlugin().closeInventories(null);
 			TableEnchantments.removeAllTableEnchantments();
+			Minigame.reset();
 			ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(ChatUtils.getCodes(), "commands.reset-inventory"), Level.INFO);
 		} else
 			ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(ChatUtils.getCodes(), "commands.no-permission"), Level.WARNING);
