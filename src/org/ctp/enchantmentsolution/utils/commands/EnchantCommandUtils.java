@@ -59,7 +59,7 @@ public class EnchantCommandUtils {
 							codes.put("%level%", args[2]);
 							ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(codes, "commands.invalid-level"), Level.WARNING);
 						}
-						if (level > enchant.getMaxLevel()) {
+						if (level > enchant.getMaxLevel() && !unsafe) {
 							HashMap<String, Object> codes = ChatUtils.getCodes();
 							codes.put("%level%", level);
 							codes.put("%maxLevel%", enchant.getMaxLevel());
