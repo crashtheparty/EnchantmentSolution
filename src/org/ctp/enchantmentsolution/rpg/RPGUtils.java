@@ -27,7 +27,7 @@ public class RPGUtils {
 		Double base = ConfigString.RPG_BASE.getDouble();
 		Double multiply = ConfigString.RPG_MULTIPLY.getDouble();
 		if (base == 0 && multiply == 0) return new BigDecimal("10000000000");
-		return new BigDecimal(base + (level - 1) * multiply + "", new MathContext(2, RoundingMode.HALF_UP));
+		return new BigDecimal(base + (level - 1) * multiply + "", new MathContext(0, RoundingMode.HALF_UP));
 	}
 
 	public static BigInteger getPointsForLevel(int level) {

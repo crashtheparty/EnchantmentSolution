@@ -343,6 +343,9 @@ rpg:
     confirm_lore:
     - '&6Required Points: &3%total_points%'
     - '&6Will Unlock: &3%enchantment% &7at level &3%level%&7.'
+    top_bar:
+        title: '&aESRPG Level &f%level% &7(&f%experience%/%next_experience%&7)'
+        title_level_up: '&aESRPG &cLevel Up! &aLevel &f%level% &7(&f%experience%/%next_experience%&7)'
 
 minigame:
     fast:

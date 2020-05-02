@@ -96,7 +96,7 @@ enchantments:
             points_level_one: 40
             points_increase: 0
         multishot: 
-            experience: 1
+            experience: 1.0
             points_level_one: 1
             points_increase: 3
         piercing: 
@@ -136,7 +136,7 @@ enchantments:
             points_level_one: 1
             points_increase: 3
         silk_touch: 
-            experience: 5
+            experience: 5.0
             points_level_one: 20
             points_increase: 0
         smite: 
@@ -148,7 +148,7 @@ enchantments:
             points_level_one: 2
             points_increase: 3
         thorns: 
-            experience: 1
+            experience: 1.0
             points_level_one: 4
             points_increase: 6
         unbreaking: 
@@ -185,7 +185,7 @@ enchantments:
             points_level_one: 3
             points_increase: 4
         flower_gift: 
-            experience: 1
+            experience: 1.0
             points_level_one: 20
             points_increase: 0
         frequent_flyer: 
@@ -193,7 +193,7 @@ enchantments:
             points_level_one: 8
             points_increase: 12
         fried: 
-            experience: 4
+            experience: 4.0
             points_level_one: 15
             points_increase: 0
         gold_digger: 
@@ -237,7 +237,7 @@ enchantments:
             points_level_one: 20
             points_increase: 0
         life: 
-            experience: 1
+            experience: 1.0
             points_level_one: 5
             points_increase: 7
         magic_guard: 
@@ -285,7 +285,7 @@ enchantments:
             points_level_one: 2
             points_increase: 4
         smeltery: 
-            experience: 3
+            experience: 3.0
             points_level_one: 25
             points_increase: 0
         sniper: 
@@ -293,11 +293,11 @@ enchantments:
             points_level_one: 3
             points_increase: 4
         soulbound: 
-            experience: 5
+            experience: 5.0
             points_level_one: 15
             points_increase: 0
         soul_reaper: 
-            experience: 4
+            experience: 4.0
             points_level_one: 5
             points_increase: 10
         splatter_fest: 
@@ -313,7 +313,7 @@ enchantments:
             points_level_one: 3
             points_increase: 4
         telepathy: 
-            experience: 3
+            experience: 3.0
             points_level_one: 40
             points_increase: 0
         toughness: 
