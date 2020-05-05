@@ -35,7 +35,7 @@ public class BackupTable extends Table {
 
 			rs = ps.executeQuery();
 			while (rs.next())
-				if(rs.getString("config_string").equals(encode(config))) matches = true;
+				if (rs.getString("config_string").equals(encode(config))) matches = true;
 		} catch (SQLException ex) {
 			ChatUtils.sendSevere("ISSUE in \"SELECT * FROM " + getName() + " WHERE file_name = '" + config.getFileName() + "' AND backup_num = " + backupNum + " ORDER BY created_at asc;\"");
 			getDb().getPlugin().getLogger().log(Level.SEVERE, Errors.sqlConnectionExecute(), ex);
@@ -50,7 +50,7 @@ public class BackupTable extends Table {
 		}
 		return !matches;
 	}
-	
+
 	private String encode(YamlConfigBackup config) {
 		return new String(Base64.getEncoder().encode(config.prepareConfigString(false).getBytes()));
 	}
