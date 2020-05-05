@@ -11,7 +11,7 @@ public abstract class ESEntitySpawnEvent extends ESEntityEvent {
 
 	private final Player spawner;
 	private Location spawnLocation;
-	
+
 	public ESEntitySpawnEvent(Entity who, EnchantmentLevel enchantment, Player spawner, Location spawnLocation) {
 		super(who, enchantment);
 		this.spawner = spawner;
@@ -29,7 +29,7 @@ public abstract class ESEntitySpawnEvent extends ESEntityEvent {
 	public void setSpawnLocation(Location spawnLocation) {
 		this.spawnLocation = spawnLocation.clone();
 	}
-	
+
 	public World getSpawnWorld() {
 		return spawnLocation.getWorld();
 	}

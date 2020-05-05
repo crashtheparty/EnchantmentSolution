@@ -8,7 +8,6 @@ import org.ctp.enchantmentsolution.EnchantmentSolution;
 abstract class Database {
 	EnchantmentSolution plugin;
 	Connection connection;
-	
 
 	Database(EnchantmentSolution instance) {
 		plugin = instance;
@@ -30,6 +29,6 @@ abstract class Database {
 			plugin.getLogger().log(Level.SEVERE, "Unable to retreive connection", ex);
 		}
 	}
-	
+
 	protected abstract String getTable();
 }

@@ -54,18 +54,19 @@ public enum ConfigString {
 	RPG_LEVELS_POWER(Type.RPG, "levels.points.add_power", double.class),
 	RPG_LEVELS_DIVISOR(Type.RPG, "levels.points.divisor", double.class),
 	RPG_ENCHANTMENT_LEVELONE(Type.RPG, "enchantments.", int.class, true),
-	RPG_ENCHANTMENT_INCREASE(Type.RPG, "enchantments.", int.class, true), 
+	RPG_ENCHANTMENT_INCREASE(Type.RPG, "enchantments.", int.class, true),
 	RPG_EXPERIENCE_LOCKED_ENCHANTMENT(Type.RPG, "experience.no_exp.enchantment_locked", boolean.class),
 	RPG_EXPERIENCE_LOCKED_LEVEL(Type.RPG, "experience.no_exp.level_locked", boolean.class),
 	MINIGAME_TYPE(Type.MINIGAME, "type", String.class),
 	MINIGAME_FAST_ENCHANTING_OVERRIDE(Type.MINIGAME, "fast.override_enchanting_cost", boolean.class),
 	MINIGAME_FAST_ENCHANTING_COST(Type.MINIGAME, "fast.enchanting_cost", int.class),
 	MINIGAME_FAST_ANVIL_OVERRIDE(Type.MINIGAME, "fast.override_anvil_cost", boolean.class),
-	MINIGAME_FAST_ANVIL_COST(Type.MINIGAME, "fast.anvil_cost", int.class), 
-	MINIGAME_FAST_RANDOM_BOOKSHELVES(Type.MINIGAME, "fast.random_bookshelves", boolean.class), 
+	MINIGAME_FAST_ANVIL_COST(Type.MINIGAME, "fast.anvil_cost", int.class),
+	MINIGAME_FAST_RANDOM_BOOKSHELVES(Type.MINIGAME, "fast.random_bookshelves", boolean.class),
 	MINIGAME_MONDAYS_ANVIL_OVERRIDE(Type.MINIGAME, "mondays.override_anvil_cost", boolean.class),
-	MINIGAME_MONDAYS_ANVIL_COST(Type.MINIGAME, "mondays.anvil_cost", int.class), 
+	MINIGAME_MONDAYS_ANVIL_COST(Type.MINIGAME, "mondays.anvil_cost", int.class),
 	MINIGAME_QUICK_ANVIL(Type.MINIGAME, "quick_anvil", boolean.class), 
+	MINIGAME_CUSTOM_PAGING(Type.MINIGAME, "custom.paging", int.class),
 	HARD_HEALTH_INCREASE(Type.HARD_MODE, "increase_health", boolean.class);
 
 	private final Type type;

@@ -2,7 +2,6 @@ package org.ctp.enchantmentsolution.nms.anvil;
 
 import java.util.HashMap;
 
-import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_13_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -47,7 +46,7 @@ public class AnvilGUI_v1_13_R1 extends AnvilGUI {
 		for(AnvilSlot slot: items.keySet())
 			inv.setItem(slot.getSlot(), items.get(slot));
 
-		inv.setItem(0, new ItemStack(Material.NAME_TAG));
+		inv.setItem(0, getItemStack());
 
 		setInventory(inv);
 

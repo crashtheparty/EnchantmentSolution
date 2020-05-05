@@ -1,8 +1,6 @@
 package org.ctp.enchantmentsolution.listeners.enchantments;
 
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -13,16 +11,17 @@ import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.*;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.util.Vector;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
+import org.ctp.enchantmentsolution.enchantments.CERegister;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
+import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.enums.ItemMoisturizeType;
 import org.ctp.enchantmentsolution.events.interact.*;
 import org.ctp.enchantmentsolution.events.modify.IcarusLaunchEvent;
@@ -64,6 +63,11 @@ public class PlayerListener extends Enchantmentable {
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent event) {
 		runMethod(this, "contagionCurse", event, PlayerJoinEvent.class);
+	}
+
+	@EventHandler
+	public void onPlayerItemBreak(PlayerItemBreakEvent event) {
+		runMethod(this, "stickyHold", event, PlayerItemBreakEvent.class);
 	}
 
 	private void contagionCurse(PlayerJoinEvent event) {
@@ -323,6 +327,34 @@ public class PlayerListener extends Enchantmentable {
 					DamageUtils.damageItem(player, item);
 				}
 			}
+		}
+	}
+
+	private void stickyHold(PlayerItemBreakEvent event) {
+		Player player = event.getPlayer();
+		ItemStack item = event.getBrokenItem();
+		if (item != null && ItemUtils.hasEnchantment(item, RegisterEnchantments.STICKY_HOLD)) {
+			List<EnchantmentLevel> levels = ItemUtils.getEnchantmentLevels(item);
+			Iterator<EnchantmentLevel> iter = levels.iterator();
+			while (iter.hasNext()) {
+				EnchantmentLevel level = iter.next();
+				if (level.getEnchant() == CERegister.STICKY_HOLD) iter.remove();
+				else
+					item = ItemUtils.removeEnchantmentFromItem(item, level.getEnchant());
+			}
+			String itemLore = StringUtils.stickyHoldItemType(item);
+			ItemMeta meta = item.getItemMeta();
+			Bukkit.getScheduler().runTaskLater(EnchantmentSolution.getPlugin(), () -> {
+				ItemStack stickItem = new ItemStack(Material.STICK);
+				List<String> lore = meta.getLore();
+				if (lore == null) lore = new ArrayList<String>();
+				lore.add(itemLore);
+				for(EnchantmentLevel level: levels)
+					lore.add(StringUtils.addStickyHold(level));
+				meta.setLore(lore);
+				stickItem.setItemMeta(meta);
+				ItemUtils.giveItemToPlayer(player, stickItem, player.getLocation(), false);
+			}, 1l);
 		}
 	}
 

@@ -57,6 +57,13 @@ public class EnchantmentsConfiguration extends Configuration {
 		super.save();
 	}
 
+	@Override
+	public void save() {
+		super.save();
+		setEnchantmentInformation();
+		super.save();
+	}
+
 	public void setEnchantmentInformation() {
 		YamlConfigBackup config = getConfig();
 		for(CustomEnchantment enchant: RegisterEnchantments.getEnchantments()) {

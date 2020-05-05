@@ -74,6 +74,9 @@ public class RegisterEnchantments {
 	public static final Enchantment HUSBANDRY = new CustomEnchantmentWrapper("husbandry", "HUSBANDRY", 1);
 	public static final Enchantment BUTCHER = new CustomEnchantmentWrapper("butcher", "BUTCHER", 1);
 	public static final Enchantment CURSE_OF_STAGNANCY = new CustomEnchantmentWrapper("stagnancy_curse", "STAGNANCY_CURSE", 1);
+	public static final Enchantment STICKY_HOLD = new CustomEnchantmentWrapper("sticky_hold", "STICKY_HOLD", 1);
+	public static final Enchantment FORCE_FEED = new CustomEnchantmentWrapper("force_feed", "FORCE_FEED", 3);
+	public static final Enchantment PUSHBACK = new CustomEnchantmentWrapper("pushback", "PUSHBACK", 2);
 
 	private RegisterEnchantments() {}
 
@@ -280,6 +283,7 @@ public class RegisterEnchantments {
 		addDefaultEnchantment(CERegister.DROWNED);
 		addDefaultEnchantment(CERegister.EXP_SHARE);
 		addDefaultEnchantment(CERegister.FLOWER_GIFT);
+		addDefaultEnchantment(CERegister.FORCE_FEED);
 		addDefaultEnchantment(CERegister.FREQUENT_FLYER);
 		addDefaultEnchantment(CERegister.FRIED);
 		addDefaultEnchantment(CERegister.GOLD_DIGGER);
@@ -300,6 +304,7 @@ public class RegisterEnchantments {
 		addDefaultEnchantment(CERegister.NO_REST);
 		addDefaultEnchantment(CERegister.OVERKILL);
 		if (VersionUtils.getBukkitVersionNumber() > 3) addDefaultEnchantment(CERegister.PILLAGE);
+		addDefaultEnchantment(CERegister.PUSHBACK);
 		addDefaultEnchantment(CERegister.QUICK_STRIKE);
 		addDefaultEnchantment(CERegister.RECYCLER);
 		addDefaultEnchantment(CERegister.SACRIFICE);
@@ -310,6 +315,7 @@ public class RegisterEnchantments {
 		addDefaultEnchantment(CERegister.SOULBOUND);
 		addDefaultEnchantment(CERegister.SOUL_REAPER);
 		addDefaultEnchantment(CERegister.SPLATTER_FEST);
+		addDefaultEnchantment(CERegister.STICKY_HOLD);
 		if (VersionUtils.getBukkitVersionNumber() > 3) addDefaultEnchantment(CERegister.STONE_THROW);
 		addDefaultEnchantment(CERegister.TANK);
 		addDefaultEnchantment(CERegister.TELEPATHY);
@@ -340,8 +346,8 @@ public class RegisterEnchantments {
 			if (enchant.getRelativeEnchantment().getKey().equals(key)) return enchant.getRelativeEnchantment();
 		return null;
 	}
-	
-	private static List<EnchantmentLocation> getEnchantmentLocations(Configuration config, String namespace, CustomEnchantment enchantment){
+
+	private static List<EnchantmentLocation> getEnchantmentLocations(Configuration config, String namespace, CustomEnchantment enchantment) {
 		List<EnchantmentLocation> locations = new ArrayList<EnchantmentLocation>();
 		List<String> enchantmentLocationsString = config.getStringList(namespace + "." + enchantment.getName() + ".enchantment_locations");
 		if (enchantmentLocationsString != null) for(String s: enchantmentLocationsString)
@@ -351,8 +357,8 @@ public class RegisterEnchantments {
 			} catch (Exception ex) {}
 		return locations;
 	}
-	
-	private static List<ItemType> getTypes(Configuration config, String namespace, CustomEnchantment enchantment, String path){
+
+	private static List<ItemType> getTypes(Configuration config, String namespace, CustomEnchantment enchantment, String path) {
 		List<String> itemTypes = config.getStringList(namespace + "." + enchantment.getName() + "." + path);
 		List<ItemType> types = new ArrayList<ItemType>();
 		if (itemTypes != null) for(String s: itemTypes) {

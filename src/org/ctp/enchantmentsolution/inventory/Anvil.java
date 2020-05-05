@@ -220,7 +220,7 @@ public class Anvil implements InventoryData {
 				anvil.getCombinedItem().setAmount(1);
 			}
 			ItemUtils.giveItemToPlayer(player, anvil.getCombinedItem(), player.getLocation(), false);
-			if (anvil.getRepairType().equals(RepairType.REPAIR)) ItemUtils.giveItemToPlayer(player, anvil.getItemLeftover(), player.getLocation(), false);
+			if (anvil.getRepairType() == RepairType.REPAIR || anvil.getRepairType() == RepairType.STICKY_REPAIR) ItemUtils.giveItemToPlayer(player, anvil.getItemLeftover(), player.getLocation(), false);
 			if (EnchantmentSolution.getPlugin().isJobsEnabled()) JobsUtils.sendAnvilAction(player, playerItems.get(1), anvil.getCombinedItem());
 			anvil = null;
 			playerItems.clear();

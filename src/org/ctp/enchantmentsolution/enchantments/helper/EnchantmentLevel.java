@@ -49,7 +49,7 @@ public class EnchantmentLevel {
 		}
 		if (Enchantment.getByKey(key) != null) for(CustomEnchantment enchantment: RegisterEnchantments.getEnchantments())
 			if (enchantment.getRelativeEnchantment().equals(Enchantment.getByKey(key))) return enchantment;
-		ChatUtils.sendToConsole(Level.WARNING, "Bad enchantment in fishing config: " + str + ". No chance to get this enchantment.");
+		ChatUtils.sendToConsole(Level.WARNING, "Bad enchantment in config: " + str + ". No chance to get this enchantment.");
 		return null;
 	}
 

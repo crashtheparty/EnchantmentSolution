@@ -107,6 +107,7 @@ public class AttributeListener extends Enchantmentable {
 						if (!event.isCancelled()) player.removePotionEffect(potionEffect);
 					} else { /* placeholder */ }
 				else if (entry.getKey() == RegisterEnchantments.CURSE_OF_EXHAUSTION && equip) MiscRunnable.addExhaustion(player);
+				else if (entry.getKey() == RegisterEnchantments.FORCE_FEED && equip) MiscRunnable.addFeed(player);
 				else if (entry.getKey() == RegisterEnchantments.FREQUENT_FLYER && equip) ElytraRunnable.addFlyer(player, item);
 			}
 		}

@@ -343,8 +343,13 @@ rpg:
     confirm_lore:
     - '&6Required Points: &3%total_points%'
     - '&6Will Unlock: &3%enchantment% &7at level &3%level%&7.'
+    top_bar:
+        title: '&aESRPG Level &f%level% &7(&f%experience%/%next_experience%&7)'
+        title_level_up: '&aESRPG &6Level Up! &aLevel &f%level% &7(&f%experience%/%next_experience%&7)'
 
 minigame:
+    name: '&9Enchantment Table'
+    mirror: '&f'
     fast:
         item: '&9%name%'
         item_lore:
@@ -355,7 +360,16 @@ minigame:
         - '&4Cost: &6%cost%'
         - '&7Left click to get an enchanted book'
         - '&7 with this enchantment at level 1.'
-    mirror: '&f'
+    custom:
+        item:
+            name: '&9Enchanting Material: &3%material%'
+            enchantment: '&6Enchantment: &3%enchantment% &6Level: &3%level%'
+            enchantment_cost: '&6Cost: &3%cost%'
+            random: 
+            - '&6Random Enchantments'
+            - '&6Multiple: &3%multiple%'
+            - '&6Cost: &3%cost%'
+            
     invalid_enchant_name: '&cInvalid enchantment name %name%!'
     invalid_random_enchant: '&cCould not generate a random enchantment this time!'
     not_enough_levels: '&cYou need more levels to get this enchantment!'
@@ -422,7 +436,7 @@ enchantment:
             frequent_flyer: 'Allows flight. Durability damage every (3 * level) seconds when below 255 height and every (level) seconds above 255 height. Removes flight at 32 durability.'
             fried: 'Cooks fish upon catching them.'
             gold_digger: 'Earn experience and gold nuggets for breaking crops.'
-            gung_ho: 'Decreases health to 5 (hearts). All attacks do 3 times the damage.'
+            gung_ho: 'Decreases health to 50% of base value (usually 5 hearts). Melee attacks do 3 times the damage.'
             hard_bounce: 'Projectiles bounce back from the shield.'
             height_plus_plus: 'Increase up/down break radius by 1 per level.'
             hollow_point: 'Increases damage to armored mobs. Allows projectile damage against enderman and armored wither.'

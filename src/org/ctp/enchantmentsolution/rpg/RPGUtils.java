@@ -27,7 +27,7 @@ public class RPGUtils {
 		Double base = ConfigString.RPG_BASE.getDouble();
 		Double multiply = ConfigString.RPG_MULTIPLY.getDouble();
 		if (base == 0 && multiply == 0) return new BigDecimal("10000000000");
-		return new BigDecimal(base + (level - 1) * multiply + "", new MathContext(2, RoundingMode.HALF_UP));
+		return new BigDecimal(base + (level - 1) * multiply + "", new MathContext(0, RoundingMode.HALF_UP));
 	}
 
 	public static BigInteger getPointsForLevel(int level) {
@@ -41,7 +41,7 @@ public class RPGUtils {
 	}
 
 	public static BigInteger getPointsForEnchantment(Player player, Enchantment key, int value) {
-		if(!PermissionUtils.canEnchant(player, RegisterEnchantments.getCustomEnchantment(key), value)) return new BigInteger("-2");
+		if (!PermissionUtils.canEnchant(player, RegisterEnchantments.getCustomEnchantment(key), value)) return new BigInteger("-2");
 		CustomEnchantment enchant = RegisterEnchantments.getCustomEnchantment(key);
 		String namespace = "default_enchantments";
 		if (enchant.getRelativeEnchantment() instanceof ApiEnchantmentWrapper) {
@@ -102,15 +102,15 @@ public class RPGUtils {
 			}
 			namespace = plugin.getName().toLowerCase();
 		} else if (enchant.getRelativeEnchantment() instanceof CustomEnchantmentWrapper) namespace = "custom_enchantments";
-		
+
 		RPGPlayer p = getPlayer(player);
-		if(ConfigString.RPG_EXPERIENCE_LOCKED_ENCHANTMENT.getBoolean() && !p.hasEnchantment(enchantment.getEnchant().getRelativeEnchantment(), enchantment.getLevel())) return 0;
-		if(ConfigString.RPG_EXPERIENCE_LOCKED_LEVEL.getBoolean() && !p.hasEnchantment(enchantment.getEnchant().getRelativeEnchantment(), enchantment.getLevel())) {
+		if (ConfigString.RPG_EXPERIENCE_LOCKED_ENCHANTMENT.getBoolean() && !p.hasEnchantment(enchantment.getEnchant().getRelativeEnchantment(), enchantment.getLevel())) return 0;
+		if (ConfigString.RPG_EXPERIENCE_LOCKED_LEVEL.getBoolean() && !p.hasEnchantment(enchantment.getEnchant().getRelativeEnchantment(), enchantment.getLevel())) {
 			int newLevel = p.getMaxLevel(enchantment.getEnchant().getRelativeEnchantment());
-			if(newLevel == 0) return 0;
+			if (newLevel == 0) return 0;
 			enchantment.setLevel(newLevel);
 		}
-		
+
 		return config.getDouble(path + namespace + "." + enchant.getName() + ".experience") * (enchantment.getEnchant().isMaxLevelOne() ? 1 : enchantment.getLevel());
 	}
 
@@ -154,9 +154,9 @@ public class RPGUtils {
 		Enchantment ench = buying.getEnchant().getRelativeEnchantment();
 		while (!rpg.hasEnchantment(ench, maxLevel) && maxLevel > 0) {
 			points = points.add(getPointsForEnchantment(rpg.getPlayer().getPlayer(), ench, maxLevel));
-			maxLevel --;
+			maxLevel--;
 		}
-		
+
 		return points.intValue();
 	}
 

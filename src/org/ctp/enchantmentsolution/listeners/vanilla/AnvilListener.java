@@ -71,14 +71,14 @@ public class AnvilListener implements Listener {
 								player.setLevel(player.getLevel() - cost);
 								inv.setContents(new ItemStack[3]);
 								AnvilUtils.checkAnvilBreak(player, inv.getLocation().getBlock(), null);
-								if (anvil.getRepairType() == RepairType.REPAIR) inv.setItem(1, anvil.getItemLeftover());
+								if (anvil.getRepairType() == RepairType.REPAIR || anvil.getRepairType() == RepairType.REPAIR) inv.setItem(1, anvil.getItemLeftover());
 								break;
 							case SHIFT_LEFT:
 								HashMap<Integer, ItemStack> items = player.getInventory().addItem(combinedItem);
 								if (!items.isEmpty()) return;
 								player.setLevel(player.getLevel() - cost);
 								inv.setContents(new ItemStack[3]);
-								if (anvil.getRepairType() == RepairType.REPAIR) inv.setItem(1, anvil.getItemLeftover());
+								if (anvil.getRepairType() == RepairType.REPAIR || anvil.getRepairType() == RepairType.STICKY_REPAIR) inv.setItem(1, anvil.getItemLeftover());
 								AnvilUtils.checkAnvilBreak(player, inv.getLocation().getBlock(), null);
 								break;
 							default:

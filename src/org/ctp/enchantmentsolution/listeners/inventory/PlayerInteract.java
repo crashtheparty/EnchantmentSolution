@@ -29,7 +29,7 @@ public class PlayerInteract implements Listener {
 				if (event.isCancelled()) return;
 				Player player = event.getPlayer();
 				InventoryData inv = EnchantmentSolution.getPlugin().getInventory(player);
-				if(MinigameUtils.isEnabled()) {
+				if (MinigameUtils.isEnabled()) {
 					if (inv == null) {
 						inv = new Minigame(player, block);
 						EnchantmentSolution.getPlugin().addInventory(inv);

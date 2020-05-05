@@ -492,7 +492,7 @@ public class InventoryClickUtils {
 				}
 				break;
 			case CONFIRM:
-				if(slot == 2) rpgInventory.cancel();
+				if (slot == 2) rpgInventory.cancel();
 				else if (slot == 6) rpgInventory.buy();
 		}
 	}
@@ -501,20 +501,33 @@ public class InventoryClickUtils {
 		if (!inv.getType().equals(InventoryType.CHEST)) return;
 		ItemStack item = clickedInv.getItem(slot);
 		if (item == null) return;
+		if (slot == 45 && checkPagination(item)) {
+			minigameInventory.setPage(minigameInventory.getPage() - 1);
+			minigameInventory.setInventory();
+			return;
+		}
+		if (slot == 53 && checkPagination(item)) {
+			minigameInventory.setPage(minigameInventory.getPage() + 1);
+			minigameInventory.setInventory();
+			return;
+		}
 		switch (minigameInventory.getScreen()) {
 			case FAST:
-				if(item.getType() != Material.BLACK_STAINED_GLASS_PANE) minigameInventory.addFastEnchantment(slot);
+				if (item.getType() != Material.BLACK_STAINED_GLASS_PANE) minigameInventory.addFastEnchantment(slot);
 				break;
 			case MONDAYS:
-				if(slot == 45 || slot == 53) return;
-				if(item.getType() != Material.BLACK_STAINED_GLASS_PANE) minigameInventory.addMondaysEnchantment(slot);
+				if (item.getType() != Material.BLACK_STAINED_GLASS_PANE) minigameInventory.addMondaysEnchantment(slot);
+				break;
+			case CUSTOM:
+				if (item.getType() != Material.BLACK_STAINED_GLASS_PANE) minigameInventory.addCustomEnchantment(slot);
 				break;
 			default:
 				break;
 		}
+		minigameInventory.setInventory();
 	}
 
 	private static boolean checkPagination(ItemStack item) {
-		return item.getType().equals(Material.ARROW);
+		return item.getType() == Material.ARROW;
 	}
 }

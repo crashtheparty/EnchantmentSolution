@@ -128,7 +128,7 @@ public class ItemType {
 	public final static ItemType NETHERITE_BOOTS = new ItemType("netherite_boots");
 	public final static ItemType DIAMOND = new ItemType("diamond");
 	public final static ItemType IRON_INGOT = new ItemType("iron_ingot");
-	public final static ItemType GOLDEN_INGOT = new ItemType("golden_ingot");
+	public final static ItemType GOLD_INGOT = new ItemType("gold_ingot");
 	public final static ItemType COBBLESTONE = new ItemType("cobblestone");
 	public final static ItemType ACACIA_PLANKS = new ItemType("acacia_planks");
 	public final static ItemType BIRCH_PLANKS = new ItemType("birch_planks");
@@ -140,7 +140,7 @@ public class ItemType {
 	public final static ItemType PHANTOM_MEMBRANE = new ItemType("phantom_membrane");
 	public final static ItemType STRING = new ItemType("string");
 	public final static ItemType NETHERITE_INGOT = new ItemType("netherite_ingot");
-	
+
 	private String type, display;
 	private List<ItemData> enchantMaterials, anvilMaterials;
 
@@ -168,10 +168,10 @@ public class ItemType {
 	}
 
 	public static ItemType mmoRepairType(ItemData data, VanillaItemType vanilla) {
-		for (ItemType value : VALUES)
-			if(value instanceof CustomItemType) {
+		for(ItemType value: VALUES)
+			if (value instanceof CustomItemType) {
 				CustomItemType custom = (CustomItemType) value;
-				if(custom.getVanilla() == vanilla && custom.getType().equals("mmoitems:" + vanilla.name().toLowerCase() + ":" + data.getMMOType())) return custom;
+				if (custom.getVanilla() == vanilla && custom.getType().equals("mmoitems:" + vanilla.name().toLowerCase() + ":" + data.getMMOType())) return custom;
 			}
 		return new CustomItemType("mmoitems:" + vanilla.name().toLowerCase() + ":" + data.getMMOType(), vanilla);
 	}
@@ -214,7 +214,7 @@ public class ItemType {
 	}
 
 	public static List<String> getRepairMaterialsStrings() {
-		return Arrays.asList(DIAMOND.getType(), IRON_INGOT.getType(), COBBLESTONE.getType(), ACACIA_PLANKS.getType(), BIRCH_PLANKS.getType(), DARK_OAK_PLANKS.getType(), JUNGLE_PLANKS.getType(), OAK_PLANKS.getType(), DARK_OAK_PLANKS.getType(), LEATHER.getType(), PHANTOM_MEMBRANE.getType(), STRING.getType(), GOLDEN_INGOT.getType(), NETHERITE_INGOT.getType());
+		return Arrays.asList(DIAMOND.getType(), GOLD_INGOT.getType(), IRON_INGOT.getType(), COBBLESTONE.getType(), ACACIA_PLANKS.getType(), BIRCH_PLANKS.getType(), DARK_OAK_PLANKS.getType(), JUNGLE_PLANKS.getType(), OAK_PLANKS.getType(), DARK_OAK_PLANKS.getType(), LEATHER.getType(), PHANTOM_MEMBRANE.getType(), STRING.getType(), NETHERITE_INGOT.getType());
 	}
 
 	public String getDisplayName() {
@@ -695,29 +695,25 @@ public class ItemType {
 		return null;
 	}
 
-	public static String itemTypeToString(ItemType type) {
-		return type.getType();
-	}
-
 	public static List<String> itemTypesToStrings(List<ItemType> types) {
 		List<String> typeStrings = new ArrayList<String>();
 
 		for(ItemType type: types)
-			typeStrings.add(itemTypeToString(type));
+			typeStrings.add(type.getType());
 		return typeStrings;
 	}
 
 	public static ItemType getItemType(String type) {
-		for(ItemType value : VALUES)
-			if(type.equalsIgnoreCase(value.getType())) return value;
+		for(ItemType value: VALUES)
+			if (type.equalsIgnoreCase(value.getType())) return value;
 		return null;
 	}
 
 	public static CustomItemType getCustomType(VanillaItemType vanilla, String type) {
-		for(ItemType value : VALUES)
-			if(value instanceof CustomItemType) {
+		for(ItemType value: VALUES)
+			if (value instanceof CustomItemType) {
 				CustomItemType custom = (CustomItemType) value;
-				if(custom.getVanilla() == vanilla && type.equalsIgnoreCase(custom.getType())) return custom;
+				if (custom.getVanilla() == vanilla && type.equalsIgnoreCase(custom.getType())) return custom;
 			}
 		return new CustomItemType(type, vanilla);
 	}

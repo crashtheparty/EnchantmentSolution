@@ -397,8 +397,8 @@ public class ConfigInventory implements InventoryData, Pageable {
 
 		List<String> enums = new ArrayList<String>();
 		if (config.getEnums(level) == null) return;
-		for(String s : config.getEnums(level))
-			if(!config.getStringListCombined(level).contains(s)) enums.add(s);
+		for(String s: config.getEnums(level))
+			if (!config.getStringListCombined(level).contains(s)) enums.add(s);
 
 		if (PAGING * (page - 1) >= enums.size() && page != 1) {
 			listEnumListEdit(config, level, type, page - 1);

@@ -163,10 +163,10 @@ public class Configurations {
 
 		for(String s: rpg.getAllEntryKeys())
 			if (rpg.contains(s)) backup.set("rpg." + s, rpg.get(s));
-		
+
 		for(String s: minigame.getAllEntryKeys())
 			if (minigame.contains(s)) backup.set("minigame." + s, rpg.get(s));
-		
+
 		for(String s: hardMode.getAllEntryKeys())
 			if (hardMode.contains(s)) backup.set("hard_mode." + s, rpg.get(s));
 

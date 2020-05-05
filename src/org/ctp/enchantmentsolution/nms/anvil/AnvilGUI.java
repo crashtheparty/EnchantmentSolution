@@ -3,10 +3,9 @@ package org.ctp.enchantmentsolution.nms.anvil;
 import java.util.HashMap;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
+import org.bukkit.event.*;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -17,6 +16,7 @@ import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.inventory.Anvil;
 import org.ctp.enchantmentsolution.inventory.ConfigInventory;
 import org.ctp.enchantmentsolution.inventory.InventoryData;
+import org.ctp.enchantmentsolution.nms.AnvilNMS;
 import org.ctp.enchantmentsolution.utils.AnvilUtils;
 
 public abstract class AnvilGUI {
@@ -104,7 +104,7 @@ public abstract class AnvilGUI {
 		setData(data);
 
 		listener = new Listener() {
-			@EventHandler
+			@EventHandler(priority = EventPriority.HIGHEST)
 			public void onInventoryClick(InventoryClickEvent event) {
 				if (event.getWhoClicked() instanceof Player) if (event.getInventory().equals(inv)) {
 					event.setCancelled(true);
@@ -243,5 +243,13 @@ public abstract class AnvilGUI {
 
 	public void setInventory(Inventory inv) {
 		this.inv = inv;
+	}
+
+	protected ItemStack getItemStack() {
+		if (data instanceof Anvil) {
+			ItemStack item = data.getItems().get(0).clone();
+			return AnvilNMS.setRepairCost(item, 0);
+		}
+		return new ItemStack(Material.NAME_TAG);
 	}
 }

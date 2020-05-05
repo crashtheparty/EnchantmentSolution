@@ -6,16 +6,16 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.OfflinePlayer;
+import org.bukkit.*;
 import org.bukkit.boss.*;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Player;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.rpg.threads.RPGThread;
+import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.PermissionUtils;
 
 public class RPGPlayer {
@@ -26,6 +26,7 @@ public class RPGPlayer {
 	private BossBar bar;
 	private RPGThread run;
 	private Map<Enchantment, Integer> enchantmentList, enchantments;
+	private long lastLevelUp, lastLevelUpSound;
 
 	public RPGPlayer(OfflinePlayer player) {
 		this.player = player;
@@ -46,9 +47,20 @@ public class RPGPlayer {
 	public void addExperience(double exp) {
 		if (exp > 0) {
 			experience = experience.add(BigDecimal.valueOf(exp));
+			boolean levelUp = false;
 			while (RPGUtils.getExperienceNextLevel(level + 1).compareTo(experience) <= 0) {
 				level++;
+				levelUp = true;
 				experience = experience.subtract(RPGUtils.getExperienceNextLevel(level));
+			}
+			if (levelUp) {
+				if ((lastLevelUpSound == 0 || lastLevelUpSound + 2000 < System.currentTimeMillis()) && player.getPlayer() != null) {
+					Player p = player.getPlayer();
+					p.playSound(p.getLocation(), Sound.BLOCK_BEACON_ACTIVATE, SoundCategory.AMBIENT, 1.0F, 4.0F);
+					p.playSound(p.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, SoundCategory.AMBIENT, 1.0F, 4.0F);
+					lastLevelUpSound = System.currentTimeMillis();
+				}
+				lastLevelUp = System.currentTimeMillis();
 			}
 			addToBar();
 		}
@@ -72,16 +84,25 @@ public class RPGPlayer {
 	}
 
 	public void addToBar() {
-		if (bar == null) bar = Bukkit.createBossBar(ChatColor.GREEN + "ESRPG Level " + ChatColor.WHITE + level + ChatColor.GREEN + " Experience: " + ChatColor.WHITE + experience.toString(), BarColor.GREEN, BarStyle.SOLID, new BarFlag[0]);
+		HashMap<String, Object> codes = ChatUtils.getCodes();
+		BigDecimal nextExperience = RPGUtils.getExperienceNextLevel(level + 1);
+		codes.put("%player%", player.getName());
+		codes.put("%level%", level);
+		codes.put("%experience%", experience.setScale(2, RoundingMode.DOWN).toPlainString());
+		codes.put("%next_experience%", nextExperience.setScale(2, RoundingMode.DOWN).toPlainString());
+		String title = ChatUtils.getMessage(codes, "rpg.top_bar.title");
+
+		if (lastLevelUp + 3000 > System.currentTimeMillis()) title = ChatUtils.getMessage(codes, "rpg.top_bar.title_level_up");
+		if (bar == null) bar = Bukkit.createBossBar(title, BarColor.GREEN, BarStyle.SOLID, new BarFlag[0]);
 		else
-			bar.setTitle(ChatColor.GREEN + "ESRPG Level " + ChatColor.WHITE + level + ChatColor.GREEN + " Experience: " + ChatColor.WHITE + experience.setScale(2, RoundingMode.DOWN).toString());
+			bar.setTitle(title);
 		if (run == null) {
 			run = new RPGThread(this);
 			int id = Bukkit.getScheduler().scheduleSyncRepeatingTask(EnchantmentSolution.getPlugin(), run, 1l, 1l);
 			run.setId(id);
 		} else
 			run.setRun();
-		BigDecimal decimal = experience.divide(RPGUtils.getExperienceNextLevel(level + 1), new MathContext(2, RoundingMode.HALF_UP)).setScale(2, RoundingMode.DOWN);
+		BigDecimal decimal = experience.divide(nextExperience, new MathContext(2, RoundingMode.DOWN)).setScale(2, RoundingMode.DOWN);
 		bar.setProgress(decimal.doubleValue() % 1);
 		bar.addPlayer(player.getPlayer());
 		bar.setVisible(true);
@@ -147,7 +168,7 @@ public class RPGPlayer {
 			int level = entry.getValue();
 			while (level > 0) {
 				BigInteger lowerPoints = RPGUtils.getPointsForEnchantment(player.getPlayer(), entry.getKey(), level);
-				if(lowerPoints.intValue() < 0) continue;
+				if (lowerPoints.intValue() < 0) continue;
 				points = points.subtract(lowerPoints);
 				level--;
 			}

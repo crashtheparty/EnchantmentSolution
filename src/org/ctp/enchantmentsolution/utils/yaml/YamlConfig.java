@@ -363,7 +363,7 @@ public class YamlConfig {
 		StringBuilder config = new StringBuilder("");
 		ArrayList<YamlChild> keyList = new ArrayList<YamlChild>();
 
-		if(comments) config.append(headerString());
+		if (comments) config.append(headerString());
 
 		writeDefaults();
 
@@ -408,7 +408,7 @@ public class YamlConfig {
 	public List<String> getLevelEntryKeysAtLevel(String level) {
 		List<String> values = getLevelEntryKeys(level);
 		List<String> newValues = new ArrayList<String>();
-		for(String v : values)
+		for(String v: values)
 			newValues.add(v.substring(v.lastIndexOf('.') + 1));
 		return newValues;
 	}
@@ -446,7 +446,7 @@ public class YamlConfig {
 		}
 	}
 
-	private String getLevel(YamlChild child, boolean comments) {
+	protected String getLevel(YamlChild child, boolean comments) {
 		StringBuilder config = new StringBuilder("");
 		String key = child.getPath();
 		int deep = StringUtils.countMatches(key, ".") * 4;
@@ -527,5 +527,9 @@ public class YamlConfig {
 			} else
 				info.put(e.getKey(), e.getValue());
 		}
+	}
+	
+	protected Map<String, YamlInfo> getDefaults(){
+		return defaults;
 	}
 }

@@ -26,16 +26,18 @@ public class ChestPopulate_v1_16_R1 {
 			te.d((EntityHuman) null);
 			for(int i = 0; i < te.getSize(); i++) {
 				ItemStack item = te.getItem(i);
-//				MinecraftKey minecraftkey = IRegistry.ENCHANTMENT.getKey(Enchantments.SOUL_SPEED);
-//	            NBTTagList nbttaglist = item.getEnchantments();
-	            
-	            boolean soulSpeed = false;
-//	            for (int j = 0; j < nbttaglist.size(); ++j) {
-//	                NBTTagCompound nbttagcompound = nbttaglist.getCompound(j);
-//	                MinecraftKey minecraftkey1 = MinecraftKey.a(nbttagcompound.getString("id"));
-//
-//	                if (minecraftkey1 != null && minecraftkey1.equals(minecraftkey)) soulSpeed = true;
-//	            }
+				// MinecraftKey minecraftkey =
+				// IRegistry.ENCHANTMENT.getKey(Enchantments.SOUL_SPEED);
+				// NBTTagList nbttaglist = item.getEnchantments();
+
+				boolean soulSpeed = false;
+				// for (int j = 0; j < nbttaglist.size(); ++j) {
+				// NBTTagCompound nbttagcompound = nbttaglist.getCompound(j);
+				// MinecraftKey minecraftkey1 = MinecraftKey.a(nbttagcompound.getString("id"));
+				//
+				// if (minecraftkey1 != null && minecraftkey1.equals(minecraftkey)) soulSpeed =
+				// true;
+				// }
 				CraftItemStack cItem = CraftItemStack.asCraftMirror(item);
 				ItemStack newItem = null;
 				if (!ConfigString.USE_ENCHANTED_BOOKS.getBoolean() && cItem.getType() == Material.ENCHANTED_BOOK) {
@@ -63,16 +65,18 @@ public class ChestPopulate_v1_16_R1 {
 				c.b((EntityLiving) null);
 				for(int i = 0; i < c.getSize(); i++) {
 					ItemStack item = c.getItem(i);
-//					MinecraftKey minecraftkey = IRegistry.ENCHANTMENT.getKey(Enchantments.SOUL_SPEED);
-//		            NBTTagList nbttaglist = item.getEnchantments();
-		            
-		            boolean soulSpeed = false;
-//		            for (int j = 0; j < nbttaglist.size(); ++j) {
-//		                NBTTagCompound nbttagcompound = nbttaglist.getCompound(j);
-//		                MinecraftKey minecraftkey1 = MinecraftKey.a(nbttagcompound.getString("id"));
-//
-//		                if (minecraftkey1 != null && minecraftkey1.equals(minecraftkey)) soulSpeed = true;
-//		            }
+					// MinecraftKey minecraftkey =
+					// IRegistry.ENCHANTMENT.getKey(Enchantments.SOUL_SPEED);
+					// NBTTagList nbttaglist = item.getEnchantments();
+
+					boolean soulSpeed = false;
+					// for (int j = 0; j < nbttaglist.size(); ++j) {
+					// NBTTagCompound nbttagcompound = nbttaglist.getCompound(j);
+					// MinecraftKey minecraftkey1 = MinecraftKey.a(nbttagcompound.getString("id"));
+					//
+					// if (minecraftkey1 != null && minecraftkey1.equals(minecraftkey)) soulSpeed =
+					// true;
+					// }
 					CraftItemStack cItem = CraftItemStack.asCraftMirror(item);
 					ItemStack newItem = null;
 					if (!ConfigString.USE_ENCHANTED_BOOKS.getBoolean() && cItem.getType() == Material.ENCHANTED_BOOK) {

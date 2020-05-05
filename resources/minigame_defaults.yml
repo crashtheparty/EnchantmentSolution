@@ -47,7 +47,10 @@ mondays:
         11:
             enchantment: 'RandomEnchant'
             cost: 10
-    
+
+custom: 
+    paging: 28
+
 config_comments:
     type:
     - 'The type of GUI to use for the Minigame Enchanting Table.'
@@ -67,3 +70,7 @@ config_comments:
         - 'Override the default anvil cost to the one set by ''fast.anvil_cost''.'
         anvil_cost:
         - 'Cost to anvil any item.'
+    custom:
+        paging:
+        - 'The paging system to be used.'
+        - 'Can only be 7, 9, 14, 18, 21, 27, 28, or 36.'

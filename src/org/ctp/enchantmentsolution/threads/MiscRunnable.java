@@ -13,6 +13,7 @@ import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.CERegister;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
+import org.ctp.enchantmentsolution.events.damage.ForceFeedEvent;
 import org.ctp.enchantmentsolution.events.modify.ExhaustionEvent;
 import org.ctp.enchantmentsolution.events.player.ContagionEvent;
 import org.ctp.enchantmentsolution.events.potion.MagicGuardPotionEvent;
@@ -20,6 +21,7 @@ import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.ESArrays;
 import org.ctp.enchantmentsolution.utils.Reflectionable;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.*;
+import org.ctp.enchantmentsolution.utils.items.DamageUtils;
 import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 
 @SuppressWarnings("unused")
@@ -27,12 +29,14 @@ public class MiscRunnable implements Runnable, Reflectionable {
 
 	private static List<ContagionPlayer> CONTAGION = new ArrayList<ContagionPlayer>();
 	private static List<ExhaustionPlayer> EXHAUSTION = new ArrayList<ExhaustionPlayer>();
+	private static List<ForceFeedPlayer> FEED = new ArrayList<ForceFeedPlayer>();
 
 	@Override
 	public void run() {
 		runMethod(this, "contagionCurse");
 		runMethod(this, "drowned");
 		runMethod(this, "exhaustionCurse");
+		runMethod(this, "forceFeed");
 		runMethod(this, "magicGuard");
 		runMethod(this, "sandVeil");
 	}
@@ -119,6 +123,35 @@ public class MiscRunnable implements Runnable, Reflectionable {
 		}
 	}
 
+	private void forceFeed() {
+		Iterator<ForceFeedPlayer> iter = FEED.iterator();
+		while (iter.hasNext()) {
+			ForceFeedPlayer fPlayer = iter.next();
+			Player player = fPlayer.getPlayer();
+			List<ItemStack> items = fPlayer.getForceFeedItems();
+			if (items.size() == 0) {
+				iter.remove();
+				continue;
+			}
+			double rand = Math.random();
+			if (fPlayer.getChance() > rand) {
+				Collections.shuffle(items);
+				ItemStack item = items.get(0);
+				int damage = DamageUtils.getDamage(item.getItemMeta());
+				if (damage > 0) {
+					ForceFeedEvent forceFeed = new ForceFeedEvent(player, ItemUtils.getLevel(item, RegisterEnchantments.FORCE_FEED), item, 2);
+					Bukkit.getPluginManager().callEvent(forceFeed);
+					if (!forceFeed.isCancelled() && forceFeed.getRepair() > 0) {
+						damage -= forceFeed.getRepair();
+						if (damage < 0) damage = 0;
+						DamageUtils.setDamage(item, damage);
+						player.setExhaustion(player.getExhaustion() + forceFeed.getExhaust());
+					}
+				}
+			}
+		}
+	}
+
 	private void magicGuard() {
 		if (!RegisterEnchantments.isEnabled(RegisterEnchantments.MAGIC_GUARD)) return;
 		for(Player player: Bukkit.getOnlinePlayers()) {
@@ -159,6 +192,15 @@ public class MiscRunnable implements Runnable, Reflectionable {
 			if (eplayer.getPlayer().getUniqueId().equals(player.getUniqueId())) return;
 		}
 		EXHAUSTION.add(new ExhaustionPlayer(player));
+	}
+
+	public static void addFeed(Player player) {
+		Iterator<ForceFeedPlayer> iter = FEED.iterator();
+		while (iter.hasNext()) {
+			ForceFeedPlayer fplayer = iter.next();
+			if (fplayer.getPlayer().getUniqueId().equals(player.getUniqueId())) return;
+		}
+		FEED.add(new ForceFeedPlayer(player));
 	}
 
 	private void callContagionCurse(Player player, ItemStack item, CustomEnchantment curse) {

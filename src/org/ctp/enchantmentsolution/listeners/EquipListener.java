@@ -334,6 +334,18 @@ public class EquipListener implements Listener {
 	}
 
 	@EventHandler
+	public void onPlayerJoinHand(PlayerJoinEvent event) {
+		Player player = event.getPlayer();
+		ItemStack mainHand = player.getInventory().getItemInMainHand();
+		ItemEquipEvent e = new ItemEquipEvent(event.getPlayer(), ItemEquipEvent.HandMethod.JOIN, ItemSlotType.MAIN_HAND, null, mainHand);
+		Bukkit.getServer().getPluginManager().callEvent(e);
+
+		ItemStack offHand = player.getInventory().getItemInOffHand();
+		e = new ItemEquipEvent(event.getPlayer(), ItemEquipEvent.HandMethod.JOIN, ItemSlotType.MAIN_HAND, null, offHand);
+		Bukkit.getServer().getPluginManager().callEvent(e);
+	}
+
+	@EventHandler
 	public void onSwitchOffHandEquip(PlayerSwapHandItemsEvent e) {
 		if (e.isCancelled()) return;
 

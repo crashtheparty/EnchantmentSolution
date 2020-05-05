@@ -25,6 +25,7 @@ import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.events.damage.*;
 import org.ctp.enchantmentsolution.events.entity.DetonateCreeperEvent;
 import org.ctp.enchantmentsolution.events.modify.LagEvent;
+import org.ctp.enchantmentsolution.events.modify.PushbackEvent;
 import org.ctp.enchantmentsolution.events.potion.MagicGuardPotionEvent;
 import org.ctp.enchantmentsolution.events.teleport.WarpEntityEvent;
 import org.ctp.enchantmentsolution.events.teleport.WarpPlayerEvent;
@@ -60,6 +61,7 @@ public class DamageListener extends Enchantmentable {
 		runMethod(this, "hollowPoint", event, EntityDamageByEntityEvent.class);
 		runMethod(this, "irenesLasso", event, EntityDamageByEntityEvent.class);
 		runMethod(this, "knockUp", event, EntityDamageByEntityEvent.class);
+		runMethod(this, "pushback", event, EntityDamageByEntityEvent.class);
 		runMethod(this, "sandVeil", event, EntityDamageByEntityEvent.class);
 		runMethod(this, "shockAspect", event, EntityDamageByEntityEvent.class);
 		runMethod(this, "stoneThrow", event, EntityDamageByEntityEvent.class);
@@ -172,11 +174,7 @@ public class DamageListener extends Enchantmentable {
 		if (!canRun(RegisterEnchantments.GUNG_HO, event)) return;
 		Entity damager = event.getDamager();
 		Player player = null;
-		if (damager instanceof Projectile) {
-			Projectile projectile = (Projectile) event.getDamager();
-			if (projectile instanceof Snowball || projectile instanceof Egg) return;
-			if (projectile.getShooter() instanceof Player) player = (Player) projectile.getShooter();
-		} else if (damager instanceof Player) player = (Player) damager;
+		if (damager instanceof Player) player = (Player) damager;
 		if (player != null) {
 			ItemStack item = player.getInventory().getChestplate();
 			if (item != null && ItemUtils.hasEnchantment(item, RegisterEnchantments.GUNG_HO)) {
@@ -201,7 +199,7 @@ public class DamageListener extends Enchantmentable {
 				String[] split = i.getType().name().split("_");
 				String s = split[split.length - 1];
 				if (s.endsWith("BOOTS") || s.endsWith("CHESTPLATE") || s.endsWith("HELMET") || s.endsWith("LEGGINGS") || s.endsWith("ELYTRA")) {
-					HollowPointEvent hollowPoint = new HollowPointEvent(livingEntity, living, event.getDamage(), event.getDamage() * 1.5);
+					HollowPointEvent hollowPoint = new HollowPointEvent(livingEntity, living, event.getDamage(), event.getDamage() * 1.25);
 					Bukkit.getPluginManager().callEvent(hollowPoint);
 
 					if (!hollowPoint.isCancelled()) event.setDamage(hollowPoint.getNewDamage());
@@ -318,6 +316,35 @@ public class DamageListener extends Enchantmentable {
 				Bukkit.getPluginManager().callEvent(magicGuard);
 
 				if (!magicGuard.isCancelled()) event.setCancelled(true);
+			}
+		}
+	}
+
+	private void pushback(EntityDamageByEntityEvent event) {
+		if (!canRun(RegisterEnchantments.PUSHBACK, event)) return;
+
+		Entity damaged = event.getEntity();
+		Entity damager = event.getDamager();
+		if (damaged instanceof Player && damager instanceof LivingEntity) {
+			Player player = (Player) damaged;
+			LivingEntity living = (LivingEntity) damager;
+			ItemStack item = player.getInventory().getItemInOffHand();
+			if (item != null && ItemUtils.hasEnchantment(item, RegisterEnchantments.PUSHBACK) && player.isBlocking()) {
+				int level = ItemUtils.getLevel(item, RegisterEnchantments.PUSHBACK);
+				double d0 = Math.sin(player.getLocation().getYaw() * 0.017453292F);
+				double d1 = -Math.cos(player.getLocation().getYaw() * 0.017453292F);
+				Vector v0 = player.getVelocity();
+				Vector v1 = new Vector(d0, 0.0D, d1);
+				double d2 = Math.sqrt(v1.getX() * v1.getX() + v1.getY() * v1.getY() + v1.getZ() * v1.getZ());
+				if (d2 < 1.0E-4D) v1 = new Vector(0, 0, 0);
+				else
+					v1 = new Vector(v1.getX() / d2 * level * 0.5F, v1.getY() / d2 * level * 0.5F, v1.getZ() / d2 * level * 0.5F);
+
+				PushbackEvent pushback = new PushbackEvent(player, level, v0, new Vector(v0.getX() / 2.0D - v1.getX(), living.isOnGround() ? Math.min(0.4D, v0.getY() / 2.0D + level * 0.5F) : v0.getY(), v0.getZ() / 2.0D - v1.getZ()));
+				Bukkit.getPluginManager().callEvent(pushback);
+
+				if (!pushback.isCancelled()) living.setVelocity(pushback.getNewVector());
+
 			}
 		}
 	}

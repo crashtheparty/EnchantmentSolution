@@ -56,7 +56,7 @@ public class InventoryClick implements Listener {
 				InventoryClickUtils.setMinigameInventory(minigameInventory, player, inv, event.getClickedInventory(), event.getSlot(), event.getClick());
 			}
 		}
-		
-		if(MinigameUtils.isEnabled() && MinigameUtils.quickAnvil()) MinigameUtils.setAnvil(event);
+
+		if (MinigameUtils.isEnabled() && MinigameUtils.quickAnvil()) MinigameUtils.setAnvil(event);
 	}
 }

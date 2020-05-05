@@ -20,13 +20,13 @@ public class Table {
 
 	public Table(SQLite db) {
 		this.db = db;
-		this.name = db.getTable();
+		name = db.getTable();
 		addConversions();
 	}
 
 	public Table(SQLite db, List<String> primary) {
 		this.db = db;
-		this.name = db.getTable();
+		name = db.getTable();
 		addConversions();
 		this.primary = primary;
 	}
