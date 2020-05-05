@@ -3,14 +3,19 @@ package org.ctp.enchantmentsolution.inventory.snapshot;
 import java.util.*;
 import java.util.Map.Entry;
 
+import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.inventory.meta.EnchantmentStorageMeta;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
+import org.ctp.enchantmentsolution.enchantments.helper.Weight;
+import org.ctp.enchantmentsolution.enums.ItemType;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.StringUtils;
 import org.ctp.enchantmentsolution.utils.items.ItemUtils;
@@ -66,17 +71,23 @@ public class SnapshotInventory {
 
 	private ItemStack checkItem(ItemStack item, ItemStack previous) {
 		if (item != null) {
-			List<EnchantmentLevel> enchantMeta = ItemUtils.getEnchantmentLevels(item);
+			List<EnchantmentLevel> enchantMeta = getEnchantments(item);
 			List<EnchantmentLevel> enchantLore = new ArrayList<EnchantmentLevel>();
 			if (item.hasItemMeta() && item.getItemMeta().hasLore()) for(String s: item.getItemMeta().getLore())
 				if (StringUtils.isEnchantment(s)) {
 					EnchantmentLevel enchant = StringUtils.getEnchantment(s);
 					if (enchant != null) enchantLore.add(enchant);
 				}
-			boolean change = checkSimilar(enchantMeta, enchantLore) || checkSimilar(enchantLore, enchantMeta);
+			boolean change = !(checkSimilar(enchantMeta, enchantLore) && checkSimilar(enchantLore, enchantMeta));
 			if(change) {
 				Map<Enchantment, Integer> enchants = new HashMap<Enchantment, Integer>();
 				for(EnchantmentLevel enchant : enchantMeta) {
+					int level = enchant.getLevel();
+					Enchantment ench = enchant.getEnchant().getRelativeEnchantment();
+					if(enchants.containsKey(ench)) level = (level > enchants.get(ench) ? level : enchants.get(ench));
+					enchants.put(ench, level);
+				}
+				for(EnchantmentLevel enchant : enchantLore) {
 					int level = enchant.getLevel();
 					Enchantment ench = enchant.getEnchant().getRelativeEnchantment();
 					if(enchants.containsKey(ench)) level = (level > enchants.get(ench) ? level : enchants.get(ench));
@@ -98,15 +109,68 @@ public class SnapshotInventory {
 	}
 	
 	private boolean checkSimilar(List<EnchantmentLevel> levels, List<EnchantmentLevel> levelsTwo) {
+		boolean similar = levels.size() == levelsTwo.size();
 		for(EnchantmentLevel level : levels) {
 			EnchantmentLevel hasLevel = null;
 			for(EnchantmentLevel levelTwo : levelsTwo)
-				if(level.getEnchant().equals(levelTwo.getEnchant())) {
+				if(level.getEnchant().getName().equals(levelTwo.getEnchant().getName()) && !(level.getEnchant() instanceof SnapshotEnchantment ^ levelTwo.getEnchant() instanceof SnapshotEnchantment)) {
 					hasLevel = level;
 					break;
 				}
-			if(hasLevel == null) return true;
+			if(hasLevel == null) similar = false;
 		}
-		return false;
+		return similar;
+	}
+	
+	private List<EnchantmentLevel> getEnchantments(ItemStack item) {
+		List<EnchantmentLevel> levels = new ArrayList<EnchantmentLevel>();
+		if (item.getItemMeta() != null) {
+			ItemMeta meta = item.getItemMeta();
+			Map<Enchantment, Integer> enchantments = meta.getEnchants();
+			if (item.getType() == Material.ENCHANTED_BOOK) enchantments = ((EnchantmentStorageMeta) meta).getStoredEnchants();
+			for(Iterator<Entry<Enchantment, Integer>> it = enchantments.entrySet().iterator(); it.hasNext();) {
+				Entry<Enchantment, Integer> e = it.next();
+				CustomEnchantment ench = RegisterEnchantments.getCustomEnchantment(e.getKey());
+				if(ench == null) ench = new SnapshotEnchantment(e.getKey());
+				levels.add(new EnchantmentLevel(ench, e.getValue()));
+			}
+		}
+		return levels;
+	}
+	
+	private class SnapshotEnchantment extends CustomEnchantment{
+
+		private Enchantment relative;
+		
+		public SnapshotEnchantment(Enchantment relative) {
+			super(relative.getKey().getKey(), 0, 0, 0, 0, 0, 0, 0, 0, Weight.NULL, "");
+			this.relative = relative;
+		}
+
+		@Override
+		public Enchantment getRelativeEnchantment() {
+			return relative;
+		}
+
+		@Override
+		protected List<Enchantment> getDefaultConflictingEnchantments() {
+			return null;
+		}
+
+		@Override
+		public String getName() {
+			return relative.getKey().getKey();
+		}
+
+		@Override
+		protected List<ItemType> getEnchantmentItemTypes() {
+			return null;
+		}
+
+		@Override
+		protected List<ItemType> getAnvilItemTypes() {
+			return null;
+		}
+		
 	}
 }

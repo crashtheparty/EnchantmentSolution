@@ -46,6 +46,13 @@ public class EnchantmentsConfiguration extends Configuration {
 		if (EnchantmentSolution.getPlugin().isInitializing()) ChatUtils.sendInfo("Enchantment configuration initialized!");
 	}
 	
+	@Override
+	public void save() {
+		super.save();
+		setEnchantmentInformation();
+		super.save();
+	}
+
 	public void setEnchantmentInformation() {
 		YamlConfigBackup config = getConfig();
 		for(CustomEnchantment enchant: RegisterEnchantments.getEnchantments()) {

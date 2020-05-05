@@ -110,9 +110,13 @@ public class StringUtils {
 	public static boolean isEnchantment(String s) {
 		if (s.indexOf(ChatColor.RESET + "") > -1) {
 			String name = s.substring(0, s.indexOf(ChatColor.RESET + ""));
-			if (ChatColor.stripColor(name).equals("")) {
-				String enchName = ChatUtils.revealText(name);
-				if (RegisterEnchantments.getByName(enchName) != null) return true;
+			try {
+				if (ChatColor.stripColor(name).equals("")) {
+					String enchName = ChatUtils.revealText(name);
+					if (RegisterEnchantments.getByName(enchName) != null) return true;
+				}
+			} catch (NumberFormatException ex) {
+
 			}
 		}
 		return isLegacyEnchantment(s);
@@ -124,21 +128,25 @@ public class StringUtils {
 
 	public static EnchantmentLevel getEnchantment(String s) {
 		if (s.indexOf(ChatColor.RESET + "") > -1) {
-			String enchHidden = s.substring(0, s.indexOf(ChatColor.RESET + ""));
-			String enchName = ChatUtils.revealText(enchHidden);
-			CustomEnchantment enchant = RegisterEnchantments.getByName(enchName);
-			s = s.substring(s.indexOf(ChatColor.RESET + "") + 2);
 			int level = 0;
-			if (s.indexOf(ChatColor.RESET + "") == -1) level = 0;
-			else {
-				String levelHidden = s.substring(0, s.indexOf(ChatColor.RESET + ""));
-				try {
-					level = Integer.parseInt(ChatUtils.revealText(levelHidden));
-				} catch (NumberFormatException ex) {
+			CustomEnchantment enchant = null;
+			try {
+				String enchHidden = s.substring(0, s.indexOf(ChatColor.RESET + ""));
+				String enchName = ChatUtils.revealText(enchHidden);
+				enchant = RegisterEnchantments.getByName(enchName);
+				s = s.substring(s.indexOf(ChatColor.RESET + "") + 2);
+				level = 0;
+				if (s.indexOf(ChatColor.RESET + "") == -1) level = 0;
+				else {
+					String levelHidden = s.substring(0, s.indexOf(ChatColor.RESET + ""));
+					try {
+						level = Integer.parseInt(ChatUtils.revealText(levelHidden));
+					} catch (NumberFormatException ex) {
 
+					}
 				}
-			}
 
+			} catch (Exception ex) {}
 			return level > 0 && enchant != null ? new EnchantmentLevel(enchant, level) : null;
 		}
 		return null;

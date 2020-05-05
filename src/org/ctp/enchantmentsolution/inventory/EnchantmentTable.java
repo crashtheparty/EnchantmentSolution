@@ -144,7 +144,7 @@ public class EnchantmentTable implements InventoryData {
 							String levelsTaken = ChatUtils.getMessage(loreCodes, "table.level-taken-okay");
 							if (player.getLevel() < levelReq && player.getGameMode().equals(GameMode.SURVIVAL)) levelsTaken = ChatUtils.getMessage(loreCodes, "table.level-taken-lack");
 							loreCodes.remove("%levelsTaken%");
-							loreCodes.put("%enchant%", StringUtils.returnEnchantmentName(enchants.get(0).getEnchant(), enchants.get(0).getLevel()));
+							loreCodes.put("%enchant%", ChatColor.stripColor(StringUtils.returnEnchantmentName(enchants.get(0).getEnchant(), enchants.get(0).getLevel())));
 							bookMeta.setLore(Arrays.asList(levelReqString, lapisString, levelsTaken, ChatUtils.getMessage(loreCodes, "table.enchant-name")));
 							book.setItemMeta(bookMeta);
 							inv.setItem(start + extra, book);
