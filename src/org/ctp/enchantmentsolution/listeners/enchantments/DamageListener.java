@@ -196,6 +196,7 @@ public class DamageListener extends Enchantmentable {
 			LivingEntity livingEntity = (LivingEntity) entity;
 			LivingEntity living = (LivingEntity) ((Projectile) damager).getShooter();
 			for(ItemStack i: livingEntity.getEquipment().getArmorContents()) {
+				if (i == null) continue;
 				String[] split = i.getType().name().split("_");
 				String s = split[split.length - 1];
 				if (s.endsWith("BOOTS") || s.endsWith("CHESTPLATE") || s.endsWith("HELMET") || s.endsWith("LEGGINGS") || s.endsWith("ELYTRA")) {
