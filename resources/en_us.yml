@@ -346,6 +346,7 @@ rpg:
     top_bar:
         title: '&aESRPG Level &f%level% &7(&f%experience%/%next_experience%&7)'
         title_level_up: '&aESRPG &6Level Up! &aLevel &f%level% &7(&f%experience%/%next_experience%&7)'
+    level_up_points: '&6Gained &f%added_points% &6points! &a(New Total Points: &f%new_points%&a)'
 
 minigame:
     name: '&9Enchantment Table'
