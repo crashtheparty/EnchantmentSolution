@@ -11,5 +11,4 @@ public abstract class MultiBlockBreakEvent extends MultiBlockEvent {
 	public MultiBlockBreakEvent(Collection<Location> blocks, Player player, EnchantmentLevel enchantment) {
 		super(blocks, player, enchantment);
 	}
-
 }

@@ -21,6 +21,7 @@ import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
+import org.ctp.enchantmentsolution.enums.BlockSound;
 import org.ctp.enchantmentsolution.enums.ItemBreakType;
 import org.ctp.enchantmentsolution.enums.ItemPlaceType;
 import org.ctp.enchantmentsolution.events.blocks.HeightWidthEvent;
@@ -37,6 +38,7 @@ import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.LocationUtils;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.GoldDiggerCrop;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.ParticleEffect;
+import org.ctp.enchantmentsolution.utils.config.ConfigString;
 import org.ctp.enchantmentsolution.utils.items.*;
 
 @SuppressWarnings("unused")
@@ -204,7 +206,7 @@ public class BlockListener extends Enchantmentable {
 							addHeightWidthBlock(blocks, item, original, block, -x, -y, -z);
 						}
 
-				HeightWidthEvent heightWidth = new HeightWidthEvent(blocks, player, heightPlusPlus, widthPlusPlus);
+				HeightWidthEvent heightWidth = new HeightWidthEvent(blocks, block, player, heightPlusPlus, widthPlusPlus);
 				Bukkit.getPluginManager().callEvent(heightWidth);
 
 				if (!heightWidth.isCancelled()) for(Location b: heightWidth.getBlocks()) {
@@ -233,16 +235,23 @@ public class BlockListener extends Enchantmentable {
 					newEvent.setExpToDrop(exp);
 					Bukkit.getServer().getPluginManager().callEvent(newEvent);
 					if (item != null && item.getType() != Material.AIR && newEvent.getBlock().getType() != Material.AIR && !newEvent.isCancelled()) {
+						Block newBlock = newEvent.getBlock();
 						AdvancementUtils.awardCriteria(player, ESAdvancement.FAST_AND_FURIOUS, "diamond_pickaxe");
-						if (newEvent.getBlock().getType().equals(Material.SNOW) && ItemBreakType.getType(item.getType()).getBreakTypes().contains(Material.SNOW)) {
-							int num = ((Snow) newEvent.getBlock().getBlockData()).getLayers();
-							ItemUtils.dropItem(new ItemStack(Material.SNOWBALL, num), newEvent.getBlock().getLocation());
+						if (newBlock.getType().equals(Material.SNOW) && ItemBreakType.getType(item.getType()).getBreakTypes().contains(Material.SNOW)) {
+							int num = ((Snow) newBlock.getBlockData()).getLayers();
+							ItemUtils.dropItem(new ItemStack(Material.SNOWBALL, num), newBlock.getLocation());
 						}
 						blocksBroken++;
-						player.incrementStatistic(Statistic.MINE_BLOCK, event.getBlock().getType());
+						player.incrementStatistic(Statistic.MINE_BLOCK, newBlock.getType());
 						player.incrementStatistic(Statistic.USE_ITEM, item.getType());
-						newEvent.getBlock().breakNaturally(item);
-						AbilityUtils.dropExperience(newEvent.getBlock().getLocation().add(0.5, 0.5, 0.5), newEvent.getExpToDrop());
+						Location loc = newBlock.getLocation().clone().add(0.5, 0.5, 0.5);
+						if (ConfigString.USE_PARTICLES.getBoolean()) loc.getWorld().spawnParticle(Particle.BLOCK_CRACK, loc, 20, newBlock.getBlockData());
+						if (ConfigString.PLAY_SOUND.getBoolean()) {
+							BlockSound sound = BlockSound.getSound(newBlock.getType());
+							loc.getWorld().playSound(loc, sound.getSound(), sound.getVolume(newBlock.getType()), sound.getPitch(newBlock.getType()));
+						}
+						newBlock.breakNaturally(item);
+						AbilityUtils.dropExperience(loc, newEvent.getExpToDrop());
 						DamageUtils.damageItem(player, item);
 					}
 					AbilityUtils.removeHeightWidthBlock(b);
