@@ -14,6 +14,7 @@ import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
+import org.ctp.enchantmentsolution.enums.BlockSound;
 import org.ctp.enchantmentsolution.enums.ItemBreakType;
 import org.ctp.enchantmentsolution.events.blocks.SmelteryEvent;
 import org.ctp.enchantmentsolution.events.blocks.TelepathyEvent;
@@ -25,6 +26,7 @@ import org.ctp.enchantmentsolution.utils.ESArrays;
 import org.ctp.enchantmentsolution.utils.LocationUtils;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.GoldDiggerCrop;
 import org.ctp.enchantmentsolution.utils.compatibility.JobsUtils;
+import org.ctp.enchantmentsolution.utils.config.ConfigString;
 
 public class TelepathyUtils {
 
@@ -198,7 +200,14 @@ public class TelepathyUtils {
 		player.incrementStatistic(Statistic.USE_ITEM, item.getType());
 		DamageUtils.damageItem(player, item);
 		McMMOHandler.handleMcMMO(event, item);
+		Block newBlock = event.getBlock();
+		Location loc = newBlock.getLocation().clone().add(0.5, 0.5, 0.5);
 		if (EnchantmentSolution.getPlugin().isJobsEnabled()) JobsUtils.sendBlockBreakAction(event);
-		event.getBlock().setType(Material.AIR);
+		if (ConfigString.USE_PARTICLES.getBoolean()) loc.getWorld().spawnParticle(Particle.BLOCK_CRACK, loc, 20, newBlock.getBlockData());
+		if (ConfigString.PLAY_SOUND.getBoolean()) {
+			BlockSound sound = BlockSound.getSound(newBlock.getType());
+			loc.getWorld().playSound(loc, sound.getSound(), sound.getVolume(newBlock.getType()), sound.getPitch(newBlock.getType()));
+		}
+		newBlock.setType(Material.AIR);
 	}
 }

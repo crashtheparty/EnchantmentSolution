@@ -37,6 +37,8 @@ public enum ConfigString {
 	WIKI_TIMER(Type.MAIN, "wiki.timer_seconds", int.class),
 	WIKI_URL(Type.MAIN, "wiki.url", String.class),
 	GAMETYPES(Type.MAIN, "gametypes", List.class),
+	USE_PARTICLES(Type.MAIN, "use_particles", boolean.class),
+	PLAY_SOUND(Type.MAIN, "play_sound", boolean.class),
 	EXTRA_ENCHANTING_MATERIALS(Type.ENCHANTMENTS, "extra_enchantables", List.class),
 	ADVANCED_OPTIONS(Type.ENCHANTMENTS, "advanced_options.use", boolean.class),
 	DECAY(Type.ENCHANTMENTS, "advanced_options.enchantability_decay", boolean.class),

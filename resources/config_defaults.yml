@@ -93,6 +93,8 @@ loots:
             levels: 1
 
 gametypes: []
+use_particles: true
+play_sounds: true
 
 config_comments: 
 
@@ -239,4 +241,9 @@ config_comments:
     - 'RPG: Only certain enchantments are enabled by default.'
     - '    Using enchantments will increase your level to buy new enchantments and levels.'
     - 'HARD: Not implemented fully. A certain percentage of mobs will spawn with increased health.'
+    use_particles: 
+    - 'Whether enchantments like Telepathy and Height++ will spawn particles around broken blocks.'
+    - 'May cause large amounts of lag with heigher levels of Height++ and Width++.'
+    play_sounds: 
+    - 'Whether enchantments like Telepathy and Height++ will play sounds for broken blocks.'
 

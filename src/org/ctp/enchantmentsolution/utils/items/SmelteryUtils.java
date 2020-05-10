@@ -1,14 +1,13 @@
 package org.ctp.enchantmentsolution.utils.items;
 
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.Statistic;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
+import org.ctp.enchantmentsolution.enums.BlockSound;
 import org.ctp.enchantmentsolution.enums.ItemBreakType;
 import org.ctp.enchantmentsolution.enums.MatData;
 import org.ctp.enchantmentsolution.events.blocks.SmelteryEvent;
@@ -17,6 +16,7 @@ import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.VersionUtils;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.SmelteryMaterial;
 import org.ctp.enchantmentsolution.utils.compatibility.JobsUtils;
+import org.ctp.enchantmentsolution.utils.config.ConfigString;
 
 public class SmelteryUtils {
 
@@ -34,6 +34,7 @@ public class SmelteryUtils {
 			Bukkit.getPluginManager().callEvent(smelteryEvent);
 
 			if (!smelteryEvent.isCancelled()) {
+				Block newBlock = smelteryEvent.getBlock();
 				ItemStack afterSmeltery = smelteryEvent.getDrop();
 				afterSmeltery.setType(smelteryEvent.getChangeTo());
 				if (smelteryEvent.willFortune()) {
@@ -45,8 +46,14 @@ public class SmelteryUtils {
 				McMMOHandler.handleMcMMO(event, item);
 				if (EnchantmentSolution.getPlugin().isJobsEnabled()) JobsUtils.sendBlockBreakAction(event);
 				DamageUtils.damageItem(player, item);
-				ItemUtils.dropItem(afterSmeltery, smelteryEvent.getBlock().getLocation());
-				AbilityUtils.dropExperience(smelteryEvent.getBlock().getLocation().add(0.5, 0.5, 0.5), experience);
+				ItemUtils.dropItem(afterSmeltery, newBlock.getLocation());
+				Location loc = newBlock.getLocation().clone().add(0.5, 0.5, 0.5);
+				AbilityUtils.dropExperience(loc, experience);
+				if (ConfigString.USE_PARTICLES.getBoolean()) loc.getWorld().spawnParticle(Particle.BLOCK_CRACK, loc, 20, newBlock.getBlockData());
+				if (ConfigString.PLAY_SOUND.getBoolean()) {
+					BlockSound sound = BlockSound.getSound(newBlock.getType());
+					loc.getWorld().playSound(loc, sound.getSound(), sound.getVolume(newBlock.getType()), sound.getPitch(newBlock.getType()));
+				}
 				event.getBlock().setType(Material.AIR);
 			}
 		}
