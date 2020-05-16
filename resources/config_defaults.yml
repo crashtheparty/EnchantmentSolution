@@ -95,6 +95,7 @@ loots:
 gametypes: []
 use_particles: true
 play_sounds: true
+print_usage: true
 
 config_comments: 
 
@@ -246,4 +247,7 @@ config_comments:
     - 'May cause large amounts of lag with heigher levels of Height++ and Width++.'
     play_sounds: 
     - 'Whether enchantments like Telepathy and Height++ will play sounds for broken blocks.'
+    print_usage: 
+    - 'Print usage to player when getting a command wrong.'
+    - 'Only works for commands for which they have permission.'
 

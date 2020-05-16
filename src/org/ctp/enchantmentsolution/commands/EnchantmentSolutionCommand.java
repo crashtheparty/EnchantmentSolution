@@ -8,14 +8,13 @@ import org.bukkit.command.*;
 import org.bukkit.entity.Player;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
-import org.ctp.enchantmentsolution.utils.StringUtils;
+import org.ctp.enchantmentsolution.utils.commands.CommandCallable;
 import org.ctp.enchantmentsolution.utils.commands.CommandUtils;
 import org.ctp.enchantmentsolution.utils.commands.ESCommand;
-import org.ctp.enchantmentsolution.utils.commands.EnchantCommandUtils;
 
 public class EnchantmentSolutionCommand implements CommandExecutor, TabCompleter {
 
-	private final List<ESCommand> commands;
+	private static List<ESCommand> commands;
 	private final ESCommand anvil = new ESCommand("esanvil", "commands.aliases.esanvil", "commands.descriptions.esanvil", "commands.usage.esanvil", "enchantmentsolution.command.anvil");
 	private final ESCommand calc = new ESCommand("escalc", "commands.aliases.escalc", "commands.descriptions.escalc", "commands.usage.escalc", "enchantmentsolution.command.calc");
 	private final ESCommand config = new ESCommand("esconfig", "commands.aliases.esconfig", "commands.descriptions.esconfig", "commands.usage.esconfig", "enchantmentsolution.command.config");
@@ -66,61 +65,38 @@ public class EnchantmentSolutionCommand implements CommandExecutor, TabCompleter
 				break;
 			}
 		}
-		if (args.length == 0 || args.length == 1 && args[0].equals("help")) return printHelp(sender);
+		if (args.length == 0 || args.length == 1 && containsCommand(help, args[0])) return CommandUtils.printHelp(sender, 1);
+		else if (args.length == 2 && containsCommand(help, args[0])) {
+			int page = 0;
+			try {
+				page = Integer.parseInt(args[1]);
+			} catch (NumberFormatException ex) {
 
-		if (containsCommand(help, args[0]) && args.length > 0) return printHelp(sender, args[1]);
-		if (containsCommand(anvil, args[0])) return CommandUtils.anvil(sender, anvil, args);
-		if (containsCommand(calc, args[0])) return CommandUtils.calc(sender, calc, args);
-		if (containsCommand(config, args[0])) return CommandUtils.config(sender, config, args);
-		if (containsCommand(debug, args[0])) return CommandUtils.debug(sender, debug, args);
-		if (containsCommand(fix, args[0])) return CommandUtils.fix(sender, fix, args);
-		if (containsCommand(grindstone, args[0])) return CommandUtils.grindstone(sender, grindstone, args);
-		if (containsCommand(lore, args[0])) return CommandUtils.lore(sender, lore, args);
-		if (containsCommand(reload, args[0])) return CommandUtils.reload(sender, reload, args);
-		if (containsCommand(reset, args[0])) return CommandUtils.reset(sender, reset, args);
-		if (containsCommand(rpg, args[0])) return CommandUtils.rpg(sender, rpg, args);
-		if (containsCommand(book, args[0])) return EnchantCommandUtils.book(sender, book, args);
-		if (containsCommand(enchant, args[0])) return EnchantCommandUtils.enchant(sender, enchant, args, false);
-		if (containsCommand(enchantInfo, args[0])) return EnchantCommandUtils.enchantInfo(sender, enchantInfo, args);
-		if (containsCommand(enchantUnsafe, args[0])) return EnchantCommandUtils.enchant(sender, enchantUnsafe, args, true);
-		if (containsCommand(removeEnchant, args[0])) return EnchantCommandUtils.removeEnchant(sender, removeEnchant, args);
-
+			}
+			if (page > 0) return CommandUtils.printHelp(sender, page);
+			else
+				return CommandUtils.printHelp(sender, args[1]);
+		}
+		final String[] finalArgs = args;
 		Player player = null;
 		if (sender instanceof Player) player = (Player) sender;
+		for(ESCommand command: commands) {
+			if (command == help) continue;
+			if (containsCommand(command, args[0])) try {
+				return new CommandCallable(command, sender, finalArgs).call();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
 		HashMap<String, Object> codes = new HashMap<String, Object>();
 		codes.put("%command%", args[0]);
 		ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(codes, "commands.no-command"), Level.WARNING);
 		return true;
 	}
 
-	private boolean containsCommand(ESCommand details, String s) {
+	public static boolean containsCommand(ESCommand details, String s) {
 		return s.equals(details.getCommand()) || details.getAliases().contains(s);
-	}
-
-	public boolean printHelp(CommandSender sender, String label) {
-		Player player = null;
-		if (sender instanceof Player) player = (Player) sender;
-		for(ESCommand command: commands)
-			if (sender.hasPermission(command.getPermission()) && containsCommand(command, label)) {
-				ChatUtils.sendMessage(sender, player, StringUtils.decodeString("\n" + command.getUsage()), Level.INFO);
-				return true;
-			}
-		return printHelp(sender);
-	}
-
-	public boolean printHelp(CommandSender sender) {
-		Player player = null;
-		if (sender instanceof Player) player = (Player) sender;
-		List<String> strings = new ArrayList<String>();
-		for(ESCommand command: commands)
-			if (sender.hasPermission(command.getPermission())) strings.add(command.getUsage());
-
-		StringBuilder sb = new StringBuilder();
-		for(int i = 0; i < strings.size(); i++)
-			sb.append("\n" + strings.get(i));
-		ChatUtils.sendMessage(sender, player, StringUtils.decodeString(sb.toString()), Level.INFO);
-
-		return true;
 	}
 
 	@Override
@@ -295,7 +271,7 @@ public class EnchantmentSolutionCommand implements CommandExecutor, TabCompleter
 		return strings;
 	}
 
-	public List<ESCommand> getCommands() {
+	public static List<ESCommand> getCommands() {
 		return commands;
 	}
 }

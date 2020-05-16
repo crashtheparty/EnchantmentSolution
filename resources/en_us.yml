@@ -200,43 +200,46 @@ commands:
             string: 'removeenchant <enchantment> [player] [slot]'
         esanvil: 
             main: 'Usage: %usage%\nAliases: %aliases%'
-            string: 'anvil'
+            string: 'esanvil'
         esgrindstone: 
             main: 'Usage: %usage%\nAliases: %aliases%'
-            string: 'grindstone'
+            string: 'esgrindstone'
         esdebug: 
             main: 'Usage: %usage%\nAliases: %aliases%'
-            string: 'debug'
+            string: 'esdebug'
         esbook: 
             main: 'Usage: %usage%\nAliases: %aliases%'
-            string: 'book <enchantment> <level> [amount] OR book <RandomEnchant/RandomMultiEnchant> [ignoreLimits] [amount]'
+            string: 'esbook <enchantment> <level> [amount] OR book <RandomEnchant/RandomMultiEnchant> [ignoreLimits] [amount]'
         info: 
             main: 'Usage: %usage%\nAliases: %aliases%'
             string: 'info [enchantment/page]'
         esreload: 
             main: 'Usage: %usage%\nAliases: %aliases%'
-            string: 'reload'
+            string: 'esreload'
         esreset: 
             main: 'Usage: %usage%\nAliases: %aliases%'
-            string: 'reset'
+            string: 'esreset'
         esconfig: 
             main: 'Usage: %usage%\nAliases: %aliases%'
-            string: 'edit'
+            string: 'esconfig'
         configlore: 
             main: 'Usage: %usage%\nAliases: %aliases%'
-            string: 'lore enchantment/enchant <enchantment> [level] OR lore string <string...>'
+            string: 'configlore enchantment/enchant <enchantment> [level] OR lore string <string...>'
         escalc: 
             main: 'Usage: %usage%\nAliases: %aliases%'
-            string: 'calc'
+            string: 'escalc'
         eshelp: 
             main: 'Usage: %usage%\nAliases: %aliases%'
-            string: 'help [command]'
+            string: 'eshelp [command]'
         esfix: 
             main: 'Usage: %usage%\nAliases: %aliases%'
-            string: 'fix [player]'
+            string: 'esfix [player]'
         esrpg: 
             main: 'Usage: %usage%\nAliases: %aliases%'
-            string: 'rpg'
+            string: 'esrpg'
+    help:
+        commands_page: '&bCommands Page %page%'
+        commands_info_shrink: '&f: %description%'
 grindstone: 
     legacy-open: '&aOpen the Grindstone'
     name: '&9Grindstone'

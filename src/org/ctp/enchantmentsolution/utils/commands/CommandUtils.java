@@ -1,6 +1,8 @@
 package org.ctp.enchantmentsolution.utils.commands;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
@@ -8,6 +10,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
+import org.ctp.enchantmentsolution.commands.EnchantmentSolutionCommand;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enchantments.generate.TableEnchantments;
@@ -261,6 +264,108 @@ public class CommandUtils {
 		} else
 			ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(ChatUtils.getCodes(), "commands.no-permission"), Level.WARNING);
 		return true;
+	}
+
+	public static boolean printHelp(CommandSender sender, String label) {
+		Player player = null;
+		if (sender instanceof Player) player = (Player) sender;
+		for(ESCommand command: EnchantmentSolutionCommand.getCommands())
+			if (sender.hasPermission(command.getPermission()) && EnchantmentSolutionCommand.containsCommand(command, label)) {
+				ChatUtils.sendMessage(sender, player, StringUtils.decodeString("\n" + command.getFullUsage()), Level.INFO);
+				return true;
+			}
+		return printHelp(sender, 1);
+	}
+
+	@SuppressWarnings("unchecked")
+	public static boolean printHelp(CommandSender sender, int page) {
+		Player player = null;
+		if (sender instanceof Player) player = (Player) sender;
+		
+		List<ESCommand> playerCommands = new ArrayList<ESCommand>();
+		for(ESCommand command: EnchantmentSolutionCommand.getCommands())
+			if (sender.hasPermission(command.getPermission())) playerCommands.add(command);
+
+		if (page * 5 > playerCommands.size()) return printHelp(sender, page - 1);
+
+		HashMap<String, Object> codes = new HashMap<String, Object>();
+		codes.put("%page%", page);
+		String commandsPage = ChatUtils.getMessage(codes, "commands.help.commands_page");
+		if (player != null) {
+			JSONArray json = new JSONArray();
+			JSONObject first = new JSONObject();
+			first.put("text", "\n" + ChatColor.DARK_BLUE + "******");
+			JSONObject second = new JSONObject();
+			if (page > 1) {
+				second.put("text", ChatColor.GREEN + "<<<");
+				HashMap<Object, Object> action = new HashMap<Object, Object>();
+				action.put("action", "run_command");
+				action.put("value", "/es help " + (page - 1));
+				second.put("clickEvent", action);
+			} else
+				second.put("text", ChatColor.DARK_BLUE + "***");
+			JSONObject third = new JSONObject();
+			third.put("text", ChatColor.DARK_BLUE + "****** " + commandsPage + ChatColor.DARK_BLUE + " ******");
+			JSONObject fourth = new JSONObject();
+			if (playerCommands.size() > page * 5) {
+				fourth.put("text", ChatColor.GREEN + ">>>");
+				HashMap<Object, Object> action = new HashMap<Object, Object>();
+				action.put("action", "run_command");
+				action.put("value", "/es help " + (page + 1));
+				fourth.put("clickEvent", action);
+			} else
+				fourth.put("text", ChatColor.DARK_BLUE + "***");
+			JSONObject fifth = new JSONObject();
+			fifth.put("text", ChatColor.DARK_BLUE + "******" + "\n");
+			json.add(first);
+			json.add(second);
+			json.add(third);
+			json.add(fourth);
+			json.add(fifth);
+			for(int i = 0; i < 5; i++) {
+				int num = i + (page - 1) * 5;
+				if (num >= playerCommands.size()) break;
+				ESCommand c = playerCommands.get(num);
+				JSONObject name = new JSONObject();
+				JSONObject desc = new JSONObject();
+				JSONObject action = new JSONObject();
+				action.put("action", "run_command");
+				action.put("value", "/es help " + c.getCommand());
+				name.put("text", ChatColor.GOLD + c.getCommand());
+				name.put("clickEvent", action);
+				json.add(name);
+				HashMap<String, Object> descCodes = new HashMap<String, Object>();
+				descCodes.put("%description%", ChatUtils.getMessage(ChatUtils.getCodes(), c.getDescriptionPath()));
+				desc.put("text", shrink(ChatUtils.getMessage(descCodes, "commands.help.commands_info_shrink")) + "\n");
+				json.add(desc);
+			}
+			json.add(first);
+			json.add(second);
+			json.add(third);
+			json.add(fourth);
+			json.add(fifth);
+			ChatUtils.sendRawMessage(player, json.toJSONString());
+		} else {
+			String message = "\n" + ChatColor.DARK_BLUE + "******" + (page > 1 ? "<<<" : "***") + "****** " + commandsPage + ChatColor.DARK_BLUE + " ******" + (playerCommands.size() > page * 5 ? ">>>" : "***") + "******" + "\n";
+			for(int i = 0; i < 5; i++) {
+				int num = i + (page - 1) * 5;
+				if (num >= playerCommands.size()) break;
+				ESCommand c = playerCommands.get(num);
+				HashMap<String, Object> descCodes = new HashMap<String, Object>();
+				descCodes.put("%command%", c.getCommand());
+				descCodes.put("%description%", ChatUtils.getMessage(ChatUtils.getCodes(), c.getDescriptionPath()));
+				message += shrink(ChatUtils.getMessage(descCodes, "commands.help.commands_info_shrink")) + "\n";
+			}
+			message += "\n" + ChatColor.DARK_BLUE + "******" + (page > 1 ? "<<<" : "***") + "****** " + commandsPage + ChatColor.DARK_BLUE + " ******" + (playerCommands.size() > page * 5 ? ">>>" : "***") + "******" + "\n";
+			ChatUtils.sendToConsole(Level.INFO, message);
+		}
+
+		return true;
+	}
+
+	private static String shrink(String s) {
+		if (s.length() > 60) return s.substring(0, 58) + "...";
+		return s;
 	}
 
 }
