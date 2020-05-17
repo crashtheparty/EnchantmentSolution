@@ -5,12 +5,12 @@ import java.util.concurrent.Callable;
 import org.bukkit.command.CommandSender;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 
-public class CommandCallable implements Callable<Boolean>{
+public class CommandCallable implements Callable<Boolean> {
 
 	private final ESCommand command;
 	private final String[] args;
 	private final CommandSender sender;
-	
+
 	public CommandCallable(ESCommand command, CommandSender sender, String[] args) {
 		this.command = command;
 		this.sender = sender;
@@ -37,12 +37,12 @@ public class CommandCallable implements Callable<Boolean>{
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		if(!run && sender.hasPermission(command.getPermission()) && ConfigString.PRINT_USAGE.getBoolean()) CommandUtils.printHelp(sender, command.getCommand()); 
+		if (!run && sender.hasPermission(command.getPermission()) && ConfigString.PRINT_USAGE.getBoolean()) CommandUtils.printHelp(sender, command.getCommand());
 		return true;
 	}
-	
+
 	private Boolean fromCommand() {
-		switch(command.getCommand()) {
+		switch (command.getCommand()) {
 			case "esanvil":
 				return CommandUtils.anvil(sender, command, args);
 			case "escalc":
@@ -82,5 +82,5 @@ public class CommandCallable implements Callable<Boolean>{
 		}
 		return null;
 	}
-	
+
 }

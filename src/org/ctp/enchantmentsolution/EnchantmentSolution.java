@@ -170,7 +170,7 @@ public class EnchantmentSolution extends JavaPlugin {
 		closeInventories(null);
 		SaveUtils.setData();
 	}
-	
+
 	public void closeInventories(Class<? extends InventoryData> clazz) {
 		List<InventoryData> data = new ArrayList<InventoryData>();
 		data.addAll(inventories);

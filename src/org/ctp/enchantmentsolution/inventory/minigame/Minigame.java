@@ -124,7 +124,7 @@ public class Minigame implements InventoryData, Pageable {
 					int num = i + paging * (page - 1);
 					MinigameItem item = items.get(num);
 					if (item == null) continue;
-					int slot = (paging % 9 == 0 ? customLocationsNine.get(i) : customLocationsSeven.get(i));
+					int slot = paging % 9 == 0 ? customLocationsNine.get(i) : customLocationsSeven.get(i);
 					ItemStack show = new ItemStack(item.getShow().hasMaterial() ? item.getShow().getMaterial() : Material.ENCHANTED_BOOK);
 					ItemMeta showMeta = show.getItemMeta();
 					HashMap<String, Object> codes = getCodes();
@@ -350,16 +350,16 @@ public class Minigame implements InventoryData, Pageable {
 				if (player.getGameMode() != GameMode.CREATIVE) player.setLevel(player.getLevel() - cost);
 				ItemUtils.giveItemToPlayer(player, enchant, player.getLocation(), false);
 				player.getWorld().playSound(player.getLocation(), Sound.BLOCK_ENCHANTMENT_TABLE_USE, 1, 1);
-				if (item.willIncreaseCost()) { 
+				if (item.willIncreaseCost()) {
 					Map<MinigameItem, Integer> itemHash = new HashMap<MinigameItem, Integer>();
 					if (!TIMES_USED.containsKey(player.getUniqueId())) {
 						itemHash.put(item, 1);
 						TIMES_USED.put(player.getUniqueId(), itemHash);
 					} else {
 						itemHash = TIMES_USED.get(player.getUniqueId());
-						if(itemHash == null) itemHash = new HashMap<MinigameItem, Integer>();
+						if (itemHash == null) itemHash = new HashMap<MinigameItem, Integer>();
 						int timesUsed = 0;
-						if(itemHash.containsKey(item)) timesUsed = itemHash.get(item);
+						if (itemHash.containsKey(item)) timesUsed = itemHash.get(item);
 						itemHash.put(item, timesUsed + 1);
 						TIMES_USED.put(player.getUniqueId(), itemHash);
 					}

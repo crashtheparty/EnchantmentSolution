@@ -43,15 +43,15 @@ public class RPGConfiguration extends Configuration {
 				config.addDefault(str, defaultConfig.get(str));
 
 		config.saveConfig();
-		
+
 		if (EnchantmentSolution.getPlugin().isInitializing()) ChatUtils.sendInfo("RPG configuration initialized!");
-		
+
 		file.delete();
 	}
 
 	@Override
 	public void migrateVersion() {}
-	
+
 	public void updateExternal(JavaPlugin plugin) {
 		YamlConfigBackup config = getConfig();
 		@SuppressWarnings("unchecked")
@@ -59,12 +59,12 @@ public class RPGConfiguration extends Configuration {
 		for(CustomEnchantment enchant: RegisterEnchantments.getEnchantments())
 			if (enchant.getRelativeEnchantment() instanceof ApiEnchantmentWrapper) if (plugin.equals(((ApiEnchantmentWrapper) enchant.getRelativeEnchantment()).getPlugin())) {
 				String namespace = "enchantments." + plugin.getName().toLowerCase() + "." + enchant.getName().toLowerCase();
-				if(enchant instanceof ApiEnchantment) {
+				if (enchant instanceof ApiEnchantment) {
 					ApiEnchantment api = (ApiEnchantment) enchant;
 					config.addDefault(namespace + ".points_level_one", api.getPointsLevelOne());
 					config.addDefault(namespace + ".points_increase", api.getPointsIncrease());
 					config.addDefault(namespace + ".experience", api.getExperience());
-					if(api.isFreeEnchantment()) levels.add(new EnchantmentLevel(api, api.getFreeLevel()).toString());
+					if (api.isFreeEnchantment()) levels.add(new EnchantmentLevel(api, api.getFreeLevel()).toString());
 				}
 			}
 		config.addDefault("free_enchantments", levels);

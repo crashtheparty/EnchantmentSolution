@@ -528,13 +528,13 @@ public class YamlConfig {
 				info.put(e.getKey(), e.getValue());
 		}
 	}
-	
-	protected Map<String, YamlInfo> getDefaults(){
+
+	protected Map<String, YamlInfo> getDefaults() {
 		return defaults;
 	}
 
 	public Object getDefaults(String string) {
-		if(defaults.containsKey(string)) return defaults.get(string).getValue();
+		if (defaults.containsKey(string)) return defaults.get(string).getValue();
 		return new Object();
 	}
 }

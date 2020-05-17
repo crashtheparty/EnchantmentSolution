@@ -68,7 +68,7 @@ public enum ConfigString {
 	MINIGAME_FAST_RANDOM_BOOKSHELVES(Type.MINIGAME, "fast.random_bookshelves", boolean.class),
 	MINIGAME_MONDAYS_ANVIL_OVERRIDE(Type.MINIGAME, "mondays.override_anvil_cost", boolean.class),
 	MINIGAME_MONDAYS_ANVIL_COST(Type.MINIGAME, "mondays.anvil_cost", int.class),
-	MINIGAME_QUICK_ANVIL(Type.MINIGAME, "quick_anvil", boolean.class), 
+	MINIGAME_QUICK_ANVIL(Type.MINIGAME, "quick_anvil", boolean.class),
 	MINIGAME_CUSTOM_PAGING(Type.MINIGAME, "custom.paging", int.class),
 	HARD_HEALTH_INCREASE(Type.HARD_MODE, "increase_health", boolean.class);
 

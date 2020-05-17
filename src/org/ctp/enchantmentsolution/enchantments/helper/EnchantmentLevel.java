@@ -76,7 +76,7 @@ public class EnchantmentLevel {
 	public static List<EnchantmentLevel> fromList(Map<Enchantment, Integer> enchantmentList) {
 		Iterator<Entry<Enchantment, Integer>> iter = enchantmentList.entrySet().iterator();
 		List<EnchantmentLevel> levels = new ArrayList<EnchantmentLevel>();
-		while(iter.hasNext()) {
+		while (iter.hasNext()) {
 			Entry<Enchantment, Integer> entry = iter.next();
 			levels.add(new EnchantmentLevel(RegisterEnchantments.getCustomEnchantment(entry.getKey()), entry.getValue()));
 		}

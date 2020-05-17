@@ -316,16 +316,12 @@ public class CommandUtils {
 		if (sender instanceof Player) player = (Player) sender;
 
 		List<RPGPlayer> players = RPGUtils.getPlayers();
-		players.sort(new Comparator<RPGPlayer>() {
-
-			@Override
-			public int compare(RPGPlayer rpgOne, RPGPlayer rpgTwo) {
-				if (rpgOne.getLevel() > rpgTwo.getLevel()) return 1;
-				else if (rpgOne.getLevel() < rpgTwo.getLevel()) return -1;
-				else if (rpgOne.getExperience().doubleValue() > rpgTwo.getExperience().doubleValue()) return 1;
-				else if (rpgOne.getExperience().doubleValue() < rpgTwo.getExperience().doubleValue()) return -1;
-				return 0;
-			}
+		players.sort((rpgOne, rpgTwo) -> {
+			if (rpgOne.getLevel() > rpgTwo.getLevel()) return 1;
+			else if (rpgOne.getLevel() < rpgTwo.getLevel()) return -1;
+			else if (rpgOne.getExperience().doubleValue() > rpgTwo.getExperience().doubleValue()) return 1;
+			else if (rpgOne.getExperience().doubleValue() < rpgTwo.getExperience().doubleValue()) return -1;
+			return 0;
 		});
 
 		int page = 1;
@@ -495,7 +491,7 @@ public class CommandUtils {
 					ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(ChatUtils.getCodes(), "commands.specify-experience-double"), Level.WARNING);
 					return false;
 				case "set_enchantment_level":
-					if(args.length > 3) {
+					if (args.length > 3) {
 						String enchantmentName = args[3];
 						for(CustomEnchantment enchant: RegisterEnchantments.getRegisteredEnchantments())
 							if (enchant.getName().equalsIgnoreCase(enchantmentName)) {

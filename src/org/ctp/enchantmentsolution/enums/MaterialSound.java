@@ -93,13 +93,13 @@ public enum MaterialSound {
 	private final float volume, pitch;
 
 	MaterialSound() {
-		material = new MatData(this.name());
-		this.volume = 1;
-		this.pitch = 1;
+		material = new MatData(name());
+		volume = 1;
+		pitch = 1;
 	}
-	
+
 	MaterialSound(float volume, float pitch) {
-		material = new MatData(this.name());
+		material = new MatData(name());
 		this.volume = volume;
 		this.pitch = pitch;
 	}

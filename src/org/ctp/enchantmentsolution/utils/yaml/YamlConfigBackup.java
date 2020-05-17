@@ -113,7 +113,7 @@ public class YamlConfigBackup extends YamlConfig {
 		if (info == null) return null;
 		return info.getStringList();
 	}
-	
+
 	public boolean matches(String otherConfig) {
 		return otherConfig.equals(encode(true));
 	}
@@ -130,7 +130,7 @@ public class YamlConfigBackup extends YamlConfig {
 		ArrayList<YamlChild> keyList = new ArrayList<YamlChild>();
 
 		Map<String, YamlInfo> updatedInfo = new HashMap<String, YamlInfo>();
-		
+
 		for(Iterator<java.util.Map.Entry<String, YamlInfo>> it = getDefaults().entrySet().iterator(); it.hasNext();) {
 			java.util.Map.Entry<String, YamlInfo> e = it.next();
 			if (updatedInfo.containsKey(e.getKey())) {
@@ -140,7 +140,7 @@ public class YamlConfigBackup extends YamlConfig {
 			} else
 				updatedInfo.put(e.getKey(), e.getValue());
 		}
-		
+
 		for(Iterator<java.util.Map.Entry<String, YamlInfo>> it = getAllInfo().entrySet().iterator(); it.hasNext();) {
 			java.util.Map.Entry<String, YamlInfo> e = it.next();
 			if (updatedInfo.containsKey(e.getKey())) {
@@ -150,7 +150,7 @@ public class YamlConfigBackup extends YamlConfig {
 			} else
 				updatedInfo.put(e.getKey(), e.getValue());
 		}
-		
+
 		for(Iterator<java.util.Map.Entry<String, YamlInfo>> it = configInventoryData.entrySet().iterator(); it.hasNext();) {
 			java.util.Map.Entry<String, YamlInfo> e = it.next();
 			if (updatedInfo.containsKey(e.getKey())) {
@@ -177,7 +177,7 @@ public class YamlConfigBackup extends YamlConfig {
 
 		for(YamlChild child: keyList)
 			config.append(getLevel(child, false));
-		
+
 		return new String(Base64.getEncoder().encode(config.toString().getBytes()));
 	}
 }

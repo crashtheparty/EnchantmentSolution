@@ -5,7 +5,7 @@ import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.nms.hotbar.*;
 
 public class HotbarNMS {
-	
+
 	public static void sendHotBarMessage(Player player, String message) {
 		switch (EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber()) {
 			case 1:

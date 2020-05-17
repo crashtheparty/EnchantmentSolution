@@ -145,7 +145,7 @@ public class JobsUtils {
 		ItemStack item = Jobs.getNms().getItemInMainHand(player);
 		if (item != null && !item.getType().equals(Material.AIR)) // Protection for block break with silktouch
 			if (Jobs.getGCManager().useSilkTouchProtection) for(Entry<Enchantment, Integer> one: item.getEnchantments().entrySet())
-			if (CMIEnchantment.get(one.getKey()) == CMIEnchantment.SILK_TOUCH) if (Jobs.getBpManager().isInBp(block)) return;
+				if (CMIEnchantment.get(one.getKey()) == CMIEnchantment.SILK_TOUCH) if (Jobs.getBpManager().isInBp(block)) return;
 
 		JobsPlayer jPlayer = Jobs.getPlayerManager().getJobsPlayer(player);
 		if (jPlayer == null) return;
