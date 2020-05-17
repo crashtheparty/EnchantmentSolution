@@ -1,9 +1,6 @@
 package org.ctp.enchantmentsolution.api;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
@@ -50,6 +47,7 @@ public class ApiEnchantList {
 		}
 
 		Configurations.getEnchantments().updateExternal(plugin);
+		Configurations.getRPG().updateExternal(plugin);
 		RegisterEnchantments.setEnchantments();
 		Configurations.save();
 	}

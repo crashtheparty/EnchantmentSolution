@@ -143,6 +143,10 @@ enchantments:
             experience: 1.05
             points_level_one: 1
             points_increase: 4
+        soul_speed: 
+            experience: 0
+            points_level_one: -1
+            points_increase: 0
         sweeping_edge: 
             experience: 1.6
             points_level_one: 2
@@ -168,6 +172,10 @@ enchantments:
             experience: 1.7
             points_level_one: 2
             points_increase: 8
+        butcher: 
+            experience: 1.25
+            points_level_one: 3
+            points_increase: 8
         brine: 
             experience: 1.3
             points_level_one: 35
@@ -188,6 +196,10 @@ enchantments:
             experience: 1.0
             points_level_one: 35
             points_increase: 0
+        force_feed: 
+            experience: 0.001
+            points_level_one: 50
+            points_increase: 30
         frequent_flyer: 
             experience: 0.0002
             points_level_one: 80
@@ -216,6 +228,10 @@ enchantments:
             experience: 5.2
             points_level_one: 45
             points_increase: 0
+        husbandry: 
+            experience: 1.25
+            points_level_one: 3
+            points_increase: 8
         icarus: 
             experience: 0.8
             points_level_one: 70
@@ -264,6 +280,10 @@ enchantments:
             experience: 1.25
             points_level_one: 3
             points_increase: 8
+        pushback: 
+            experience: 0.7
+            points_level_one: 3
+            points_increase: 12
         quick_strike: 
             experience: 0.8
             points_level_one: 3
@@ -303,6 +323,10 @@ enchantments:
         splatter_fest: 
             experience: 0.01
             points_level_one: 40
+            points_increase: 0
+        sticky_hold: 
+            experience: 200
+            points_level_one: 100
             points_increase: 0
         stone_throw: 
             experience: 1.1
@@ -361,6 +385,7 @@ free_enchantments:
 - 'enchantmentsolution+lagging_curse 1'
 - 'enchantmentsolution+exhaustion_curse 1'
 - 'enchantmentsolution+contagion_curse 1'
+- 'enchantmentsolution+stagnancy_curse 1'
 
 config_comments:
     experience:

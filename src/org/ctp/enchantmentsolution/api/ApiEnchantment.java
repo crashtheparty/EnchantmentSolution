@@ -6,6 +6,9 @@ import org.ctp.enchantmentsolution.enchantments.helper.Weight;
 public abstract class ApiEnchantment extends CustomEnchantment {
 
 	private final ApiEnchantmentWrapper relative;
+	private int pointsLevelOne, pointsIncrease, freeLevel;
+	private double experience;
+	private boolean free;
 
 	/**
 	 * Constructor for ApiEnchantment
@@ -43,6 +46,9 @@ public abstract class ApiEnchantment extends CustomEnchantment {
 	int fiftyMaxLevel, int thirtyMaxLevel, Weight weight, String englishUSDescription) {
 		super(englishUSDisplayName, fiftyConstant, thirtyConstant, fiftyModifier, thirtyModifier, fiftyStartLevel, thirtyStartLevel, fiftyMaxLevel, thirtyMaxLevel, weight, englishUSDescription);
 		this.relative = relative;
+		setPointsLevelOne(-1);
+		setPointsIncrease(0);
+		setExperience(0);
 	}
 
 	/**
@@ -50,8 +56,49 @@ public abstract class ApiEnchantment extends CustomEnchantment {
 	 * 
 	 * @return - the relative enchantment
 	 */
-	public ApiEnchantmentWrapper getRelative() {
+	@Override
+	public ApiEnchantmentWrapper getRelativeEnchantment() {
 		return relative;
+	}
+
+	public int getPointsLevelOne() {
+		return pointsLevelOne;
+	}
+
+	protected void setPointsLevelOne(int pointsLevelOne) {
+		this.pointsLevelOne = pointsLevelOne;
+	}
+
+	public int getPointsIncrease() {
+		return pointsIncrease;
+	}
+
+	protected void setPointsIncrease(int pointsIncrease) {
+		this.pointsIncrease = pointsIncrease;
+	}
+
+	public double getExperience() {
+		return experience;
+	}
+
+	protected void setExperience(double experience) {
+		this.experience = experience;
+	}
+
+	public boolean isFreeEnchantment() {
+		return free;
+	}
+
+	protected void setFreeEnchantment(boolean free) {
+		this.free = free;
+	}
+
+	public int getFreeLevel() {
+		return freeLevel;
+	}
+
+	protected void setFreeLevel(int freeLevel) {
+		this.freeLevel = freeLevel;
 	}
 
 }
