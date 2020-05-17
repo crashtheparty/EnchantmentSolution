@@ -74,7 +74,7 @@ public class RPGPlayer {
 		experience = new BigDecimal("" + exp);
 		addExperience(0);
 	}
-	
+
 	public void setLevel(int level) {
 		this.level = level;
 		addExperience(0);
@@ -117,7 +117,7 @@ public class RPGPlayer {
 		bar.addPlayer(player.getPlayer());
 		bar.setVisible(true);
 	}
-	
+
 	public void levelUpPoints(int oldLevel, int newLevel) {
 		BigInteger oldPoints = RPGUtils.getPointsForLevel(oldLevel);
 		BigInteger newPoints = RPGUtils.getPointsForLevel(newLevel);
@@ -126,7 +126,7 @@ public class RPGPlayer {
 		codes.put("%added_points%", newPoints.subtract(oldPoints).intValue());
 		codes.put("%old_points%", oldPoints.intValue());
 		codes.put("%new_points%", newPoints.intValue());
-		
+
 		HotbarNMS.sendHotBarMessage(player.getPlayer(), ChatUtils.getMessage(codes, "rpg.level_up_points"));
 	}
 
@@ -188,8 +188,8 @@ public class RPGPlayer {
 		getEnchantmentLevels();
 		return true;
 	}
-	
-	public Map<Enchantment, Integer> getEnchantments(){
+
+	public Map<Enchantment, Integer> getEnchantments() {
 		return getEnchantmentLevels();
 	}
 
@@ -222,7 +222,7 @@ public class RPGPlayer {
 
 	public boolean canBuy(Enchantment key, int value) {
 		CustomEnchantment enchant = RegisterEnchantments.getCustomEnchantment(key);
-		return getPoints() - pointsToBuy(key, value) >= 0 && enchant.isEnabled() && PermissionUtils.canEnchant(player.getPlayer(), enchant, value);
+		return getPoints() >= 0 && pointsToBuy(key, value) >= 0 && getPoints() - pointsToBuy(key, value) >= 0 && enchant.isEnabled() && PermissionUtils.canEnchant(player.getPlayer(), enchant, value);
 	}
 
 }
