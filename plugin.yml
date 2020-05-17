@@ -63,6 +63,15 @@ commands:
   esfix:
     description: Fixes items to make their enchantments work
     usage: /esfix
+  rpgstats:
+    description: Gets a player's stats from ESRPG
+    usage: /rpgstats
+  rpgtop:
+    description: Gets a leaderboard for ESRPG players
+    usage: /rpgtop
+  rpgedit:
+    description: Edits a player's ESRPG information
+    usage: /rpgedit
 permissions:
   enchantmentsolution.command.edit: 
     description: Gives access to the /es config command. 
@@ -138,4 +147,16 @@ permissions:
     default: op
   enchantmentsolution.command.rpg:
     description: Allows players to use the /es rpg command
+    default: op
+  enchantmentsolution.command.rpgstats:
+    description: Allows players to use the /es rpgstats command
+    default: op
+  enchantmentsolution.command.rpgstats.others:
+    description: Allows players to use the /es rpgstats command on others
+    default: op
+  enchantmentsolution.command.rpgtop:
+    description: Allows players to use the /es rpgtop command
+    default: op
+  enchantmentsolution.command.rpgedit:
+    description: Allows players to use the /es rpgedit command
     default: op

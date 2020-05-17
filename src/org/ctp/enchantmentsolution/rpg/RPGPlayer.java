@@ -46,7 +46,7 @@ public class RPGPlayer {
 	}
 
 	public void addExperience(double exp) {
-		if (exp > 0) {
+		if (exp >= 0) {
 			experience = experience.add(BigDecimal.valueOf(exp));
 			int oldLevel = level;
 			boolean levelUp = false;
@@ -72,6 +72,12 @@ public class RPGPlayer {
 
 	public void setExperience(double exp) {
 		experience = new BigDecimal("" + exp);
+		addExperience(0);
+	}
+	
+	public void setLevel(int level) {
+		this.level = level;
+		addExperience(0);
 	}
 
 	public void resetExperience() {
@@ -174,6 +180,17 @@ public class RPGPlayer {
 		enchantmentList.put(level.getEnchant().getRelativeEnchantment(), level.getLevel());
 		getEnchantmentLevels();
 		return true;
+	}
+
+	public boolean removeEnchantment(Enchantment enchantment) {
+		enchantments = null;
+		enchantmentList.remove(enchantment);
+		getEnchantmentLevels();
+		return true;
+	}
+	
+	public Map<Enchantment, Integer> getEnchantments(){
+		return getEnchantmentLevels();
 	}
 
 	public int getPoints() {

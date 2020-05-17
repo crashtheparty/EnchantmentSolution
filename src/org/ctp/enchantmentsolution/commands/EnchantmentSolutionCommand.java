@@ -31,6 +31,9 @@ public class EnchantmentSolutionCommand implements CommandExecutor, TabCompleter
 	private final ESCommand enchantInfo = new ESCommand("info", "commands.aliases.info", "commands.descriptions.info", "commands.usage.info", "enchantmentsolution.command.info");
 	private final ESCommand removeEnchant = new ESCommand("removeenchant", "commands.aliases.removeenchant", "commands.descriptions.removeenchant", "commands.usage.removeenchant", "enchantmentsolution.command.removeenchant");
 	private final ESCommand rpg = new ESCommand("esrpg", "commands.aliases.esrpg", "commands.descriptions.esrpg", "commands.usage.esrpg", "enchantmentsolution.command.rpg");
+	private final ESCommand rpgStats = new ESCommand("rpgstats", "commands.aliases.rpgstats", "commands.descriptions.rpgstats", "commands.usage.rpgstats", "enchantmentsolution.command.rpgstats");
+	private final ESCommand rpgTop = new ESCommand("rpgtop", "commands.aliases.rpgtop", "commands.descriptions.rpgtop", "commands.usage.rpgtop", "enchantmentsolution.command.rpgtop");
+	private final ESCommand rpgEdit = new ESCommand("rpgedit", "commands.aliases.rpgedit", "commands.descriptions.rpgedit", "commands.usage.rpgedit", "enchantmentsolution.command.rpgedit");
 
 	public EnchantmentSolutionCommand() {
 		commands = new ArrayList<ESCommand>();
@@ -45,6 +48,9 @@ public class EnchantmentSolutionCommand implements CommandExecutor, TabCompleter
 		commands.add(reload);
 		commands.add(reset);
 		commands.add(rpg);
+		commands.add(rpgStats);
+		commands.add(rpgTop);
+		commands.add(rpgEdit);
 		commands.add(book);
 		commands.add(enchant);
 		commands.add(enchantInfo);
@@ -138,6 +144,12 @@ public class EnchantmentSolutionCommand implements CommandExecutor, TabCompleter
 		if (i == 2 && containsCommand(removeEnchant, args[0]) && sender.hasPermission(removeEnchant.getPermission())) all.addAll(players(args[i]));
 		if (i == 3 && containsCommand(removeEnchant, args[0]) && sender.hasPermission(removeEnchant.getPermission())) all.addAll(slots(args[i]));
 		if (i == 1 && containsCommand(enchantInfo, args[0]) && sender.hasPermission(enchantInfo.getPermission())) all.addAll(enchant(args[i]));
+		if (i == 1 && containsCommand(rpgStats, args[0]) && sender.hasPermission(rpgStats.getPermission())) all.addAll(players(args[i], sender, rpgStats));
+		if (i == 1 && containsCommand(rpgTop, args[0]) && sender.hasPermission(rpgTop.getPermission())) all.addAll(level());
+		if (i == 1 && containsCommand(rpgEdit, args[0]) && sender.hasPermission(rpgEdit.getPermission())) all.addAll(players(args[i]));
+		if (i == 2 && containsCommand(rpgEdit, args[0]) && sender.hasPermission(rpgEdit.getPermission())) all.addAll(rpgEdit(args[i]));
+		if (i == 3 && containsCommand(rpgEdit, args[0]) && sender.hasPermission(rpgEdit.getPermission())) all.addAll(rpgEdit(args[i], args[2]));
+		if (i == 4 && containsCommand(rpgEdit, args[0]) && sender.hasPermission(rpgEdit.getPermission())) all.addAll(rpgEdit(args[i], args[2], args[3]));
 
 		return all;
 	}
@@ -149,6 +161,35 @@ public class EnchantmentSolutionCommand implements CommandExecutor, TabCompleter
 			if (!entry.startsWith(startsWith)) iter.remove();
 		}
 		return strings;
+	}
+
+	private List<String> rpgEdit(String startsWith) {
+		List<String> strings = new ArrayList<String>();
+		strings.addAll(Arrays.asList("add_level", "set_level", "remove_level", "add_experience", "set_experience", "remove_experience", "set_enchantment_level"));
+		return removeComplete(strings, startsWith);
+	}
+
+	private List<String> rpgEdit(String startsWith, String editType) {
+		List<String> strings = new ArrayList<String>();
+		switch (editType) {
+			case "add_level":
+			case "set_level":
+			case "remove_level":
+				return level();
+			case "add_experience":
+			case "set_experience":
+			case "remove_experience":
+				strings.add("[<double>]");
+				return strings;
+			case "set_enchantment_level":
+				return enchant(startsWith);
+		}
+		return removeComplete(strings, startsWith);
+	}
+
+	private List<String> rpgEdit(String startsWith, String editType, String enchantment) {
+		if (editType.equals("set_enchantment_level")) return level();
+		return new ArrayList<String>();
 	}
 
 	private List<String> enchant(String startsWith) {
@@ -174,7 +215,12 @@ public class EnchantmentSolutionCommand implements CommandExecutor, TabCompleter
 		List<String> strings = new ArrayList<String>();
 		for(Player player: Bukkit.getOnlinePlayers())
 			strings.add(player.getName());
-		return strings;
+		return removeComplete(strings, startsWith);
+	}
+
+	private List<String> players(String startsWith, CommandSender sender, ESCommand command) {
+		if (sender.hasPermission(command.getPermission() + ".others")) return players(startsWith);
+		return new ArrayList<String>();
 	}
 
 	private List<String> book(String startsWith) {

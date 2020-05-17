@@ -73,6 +73,12 @@ public class CommandCallable implements Callable<Boolean>{
 				return EnchantCommandUtils.removeEnchant(sender, command, args);
 			case "esrpg":
 				return CommandUtils.rpg(sender, command, args);
+			case "rpgstats":
+				return CommandUtils.rpgStats(sender, command, args);
+			case "rpgtop":
+				return CommandUtils.rpgTop(sender, command, args);
+			case "rpgedit":
+				return CommandUtils.rpgEdit(sender, command, args);
 		}
 		return null;
 	}
