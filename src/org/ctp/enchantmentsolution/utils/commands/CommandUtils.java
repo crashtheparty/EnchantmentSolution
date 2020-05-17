@@ -273,7 +273,6 @@ public class CommandUtils {
 		if (sender instanceof Player && sender.hasPermission(details.getPermission())) {
 			player = (Player) sender;
 			OfflinePlayer checkPlayer = player;
-			ChatUtils.sendInfo("Args: " + args.length);
 			if (args.length > 1) {
 				checkPlayer = Bukkit.getOfflinePlayer(args[1]);
 				if (checkPlayer != null && !checkPlayer.equals(player) && !player.hasPermission(details.getPermission() + ".others")) {
@@ -285,9 +284,7 @@ public class CommandUtils {
 					ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(codes, "commands.invalid-player"), Level.WARNING);
 					return false;
 				}
-				ChatUtils.sendInfo(checkPlayer.getName());
 			}
-			ChatUtils.sendInfo("After: " + checkPlayer.getName());
 			RPGPlayer rpg = RPGUtils.getPlayer(checkPlayer);
 			HashMap<String, Object> codes = ChatUtils.getCodes();
 			StringBuilder sb = new StringBuilder();
