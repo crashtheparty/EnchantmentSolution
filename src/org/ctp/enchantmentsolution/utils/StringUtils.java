@@ -251,7 +251,8 @@ public class StringUtils {
 		Iterator<String> iterator = lore.iterator();
 		while (iterator.hasNext()) {
 			String l = iterator.next();
-			if (l.endsWith(returnEnchantmentName(enchantment, level))) iterator.remove();
+			EnchantmentLevel enchLevel = getEnchantment(l);
+			if (enchLevel != null && enchLevel.getEnchant().equals(enchantment) && enchLevel.getLevel() == level) iterator.remove();
 		}
 		return lore;
 	}
