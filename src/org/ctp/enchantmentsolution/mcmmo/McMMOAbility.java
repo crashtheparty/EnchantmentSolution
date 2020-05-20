@@ -11,9 +11,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
+import org.bukkit.event.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -66,29 +64,23 @@ public class McMMOAbility implements Listener {
 
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onMcMMOPlayerRepairCheck(McMMOPlayerRepairCheckEvent event) {
-		ItemStack item = event.getRepairedObject();
-		Bukkit.getScheduler().runTaskLater(EnchantmentSolution.getPlugin(), (Runnable) () -> {
-			if (!event.isCancelled() && item != null) {
-				ItemMeta meta = item.getItemMeta();
-				if (meta != null) {
-					Iterator<Entry<Enchantment, Integer>> enchantmentLevels = meta.getEnchants().entrySet().iterator();
-					if (item.getType() == Material.ENCHANTED_BOOK) enchantmentLevels = ((EnchantmentStorageMeta) meta).getStoredEnchants().entrySet().iterator();
-					List<EnchantmentLevel> levels = new ArrayList<EnchantmentLevel>();
-					while (enchantmentLevels.hasNext()) {
-						Entry<Enchantment, Integer> entry = enchantmentLevels.next();
-						levels.add(new EnchantmentLevel(RegisterEnchantments.getCustomEnchantment(entry.getKey()), entry.getValue()));
-					}
-					ItemUtils.removeAllEnchantments(item, true);
-					ItemUtils.addEnchantmentsToItem(item, levels);
-				}
-			}
-		}, 1l);
+		updateItem(event, event.getRepairedObject());
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onMcMMOPlayerSalvageCheck(McMMOPlayerSalvageCheckEvent event) {
-		ItemStack item = event.getEnchantedBook();
-		if (!event.isCancelled() && item != null) {
+		updateItem(event, event.getEnchantedBook());
+	}
+
+	@EventHandler(priority = EventPriority.MONITOR)
+	public void onMcMMOAbilityDeactivated(McMMOPlayerAbilityDeactivateEvent event) {
+		if (isTreeFeller(event)) IGNORE_PLAYERS.remove(event.getPlayer());
+	}
+
+	private void updateItem(Cancellable event, ItemStack item) {
+		List<EnchantmentLevel> previousLevels = ItemUtils.getEnchantmentLevels(item);
+		Bukkit.getScheduler().runTaskLater(EnchantmentSolution.getPlugin(), (Runnable) () -> {
+			if (event.isCancelled() || item == null) return;
 			ItemMeta meta = item.getItemMeta();
 			if (meta != null) {
 				Iterator<Entry<Enchantment, Integer>> enchantmentLevels = meta.getEnchants().entrySet().iterator();
@@ -98,15 +90,11 @@ public class McMMOAbility implements Listener {
 					Entry<Enchantment, Integer> entry = enchantmentLevels.next();
 					levels.add(new EnchantmentLevel(RegisterEnchantments.getCustomEnchantment(entry.getKey()), entry.getValue()));
 				}
-				ItemUtils.removeAllEnchantments(item, true);
+				for(EnchantmentLevel l: previousLevels)
+					ItemUtils.removeEnchantmentFromItem(item, l.getEnchant());
 				ItemUtils.addEnchantmentsToItem(item, levels);
 			}
-		}
-	}
-
-	@EventHandler(priority = EventPriority.MONITOR)
-	public void onMcMMOAbilityDeactivated(McMMOPlayerAbilityDeactivateEvent event) {
-		if (isTreeFeller(event)) IGNORE_PLAYERS.remove(event.getPlayer());
+		}, 1l);
 	}
 
 	public static List<Player> getIgnored() {

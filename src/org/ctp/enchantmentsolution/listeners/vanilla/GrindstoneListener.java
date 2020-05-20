@@ -2,7 +2,9 @@ package org.ctp.enchantmentsolution.listeners.vanilla;
 
 import java.util.HashMap;
 
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -14,6 +16,7 @@ import org.bukkit.inventory.GrindstoneInventory;
 import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.generate.GrindstoneEnchantments;
+import org.ctp.enchantmentsolution.enums.MatData;
 import org.ctp.enchantmentsolution.utils.items.AbilityUtils;
 
 public class GrindstoneListener implements Listener {
@@ -27,10 +30,10 @@ public class GrindstoneListener implements Listener {
 			if (event.getWhoClicked() instanceof Player) {
 				Player player = (Player) event.getWhoClicked();
 				GrindstoneEnchantments ench = GrindstoneEnchantments.getGrindstoneEnchantments(player, first, second);
-				if (ench.canCombine() && event.getSlot() == 2 && (event.getCursor() == null || event.getCursor().getType() == Material.AIR)) {
+				if (ench.canCombine() && event.getSlot() == 2 && (event.getCursor() == null || MatData.isAir(event.getCursor().getType()))) {
 					event.setCancelled(true);
 					combine(ench, event.getClick(), inv);
-				} else if (ench.canTakeEnchantments() && event.getSlot() == 2 && (event.getCursor() == null || event.getCursor().getType() == Material.AIR)) {
+				} else if (ench.canTakeEnchantments() && event.getSlot() == 2 && (event.getCursor() == null || MatData.isAir(event.getCursor().getType()))) {
 					event.setCancelled(true);
 					combine(ench, event.getClick(), inv);
 				} else

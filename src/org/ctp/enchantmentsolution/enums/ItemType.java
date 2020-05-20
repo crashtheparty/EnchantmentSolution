@@ -156,7 +156,7 @@ public class ItemType {
 		} catch (Exception ex) {
 
 		}
-		if (type == null || type.isAir()) return null;
+		if (type == null || MatData.isAir(type)) return null;
 		return new CustomItemType("minecraft:" + type.name().toLowerCase(), VanillaItemType.VANILLA);
 	}
 

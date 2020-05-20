@@ -16,6 +16,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.generate.AnvilEnchantments;
 import org.ctp.enchantmentsolution.enchantments.generate.AnvilEnchantments.RepairType;
+import org.ctp.enchantmentsolution.enums.MatData;
 import org.ctp.enchantmentsolution.utils.AnvilUtils;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
@@ -93,7 +94,7 @@ public class AnvilListener implements Listener {
 					}
 				}
 
-				if (anvil.getRepairType() == RepairType.RENAME && event.getSlot() == 2 && (event.getCursor() == null || event.getCursor().getType() == Material.AIR)) {
+				if (anvil.getRepairType() == RepairType.RENAME && event.getSlot() == 2 && (event.getCursor() == null || MatData.isAir(event.getCursor().getType()))) {
 					if (first == null) return;
 					ItemMeta firstMeta = first.getItemMeta();
 					if (firstMeta.hasDisplayName() && !firstMeta.getDisplayName().equals(inv.getRenameText()) || !firstMeta.hasDisplayName() && inv.getRenameText() != null && !inv.getRenameText().equals("")) {

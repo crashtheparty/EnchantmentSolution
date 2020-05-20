@@ -11,6 +11,7 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.ctp.enchantmentsolution.enchantments.generate.AnvilEnchantments;
+import org.ctp.enchantmentsolution.enums.MatData;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 
 public class MinigameUtils {
@@ -32,7 +33,7 @@ public class MinigameUtils {
 		if (cursor.getItemMeta() instanceof EnchantmentStorageMeta && ((EnchantmentStorageMeta) cursor.getItemMeta()).hasStoredEnchants() || cursor.getItemMeta().hasEnchants()) {
 			List<Material> materials = Arrays.asList(Material.BOOK, Material.ENCHANTED_BOOK);
 			if (materials.contains(cursor.getType()) || cursor.getType() == current.getType()) {
-				if (current == null || current.getType() == Material.AIR || current.getAmount() > 1) return;
+				if (current == null || MatData.isAir(current.getType()) || current.getAmount() > 1) return;
 				event.setCancelled(true);
 				AnvilEnchantments anvil = AnvilEnchantments.getAnvilEnchantments(player, current, cursor);
 				if (anvil.canCombine()) {

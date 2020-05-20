@@ -21,9 +21,7 @@ import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
-import org.ctp.enchantmentsolution.enums.BlockSound;
-import org.ctp.enchantmentsolution.enums.ItemBreakType;
-import org.ctp.enchantmentsolution.enums.ItemPlaceType;
+import org.ctp.enchantmentsolution.enums.*;
 import org.ctp.enchantmentsolution.events.blocks.HeightWidthEvent;
 import org.ctp.enchantmentsolution.events.blocks.LightWeightEvent;
 import org.ctp.enchantmentsolution.events.blocks.WandEvent;
@@ -191,7 +189,7 @@ public class BlockListener extends Enchantmentable {
 				Collection<Location> blocks = new ArrayList<Location>();
 				Block block = event.getBlock();
 				item = player.getInventory().getItemInMainHand();
-				if (item == null || item.getType() == Material.AIR) return;
+				if (item == null || MatData.isAir(item.getType())) return;
 				for(int x = 0; x <= xt; x++)
 					for(int y = 0; y <= yt; y++)
 						for(int z = 0; z <= zt; z++) {
@@ -234,7 +232,7 @@ public class BlockListener extends Enchantmentable {
 					}
 					newEvent.setExpToDrop(exp);
 					Bukkit.getServer().getPluginManager().callEvent(newEvent);
-					if (item != null && item.getType() != Material.AIR && newEvent.getBlock().getType() != Material.AIR && !newEvent.isCancelled()) {
+					if (item != null && !MatData.isAir(item.getType()) && !MatData.isAir(newEvent.getBlock().getType()) && !newEvent.isCancelled()) {
 						Block newBlock = newEvent.getBlock();
 						AdvancementUtils.awardCriteria(player, ESAdvancement.FAST_AND_FURIOUS, "diamond_pickaxe");
 						if (newBlock.getType().equals(Material.SNOW) && ItemBreakType.getType(item.getType()).getBreakTypes().contains(Material.SNOW)) {
@@ -354,7 +352,7 @@ public class BlockListener extends Enchantmentable {
 						AbilityUtils.removeWandBlock(loc);
 					}
 					DamageUtils.damageItem(player, item, 1, 2);
-					if (item == null || item.getType() == Material.AIR) AdvancementUtils.awardCriteria(player, ESAdvancement.DID_YOU_REALLY_WAND_TO_DO_THAT, "break");
+					if (item == null || MatData.isAir(item.getType())) AdvancementUtils.awardCriteria(player, ESAdvancement.DID_YOU_REALLY_WAND_TO_DO_THAT, "break");
 				}
 			}
 		}

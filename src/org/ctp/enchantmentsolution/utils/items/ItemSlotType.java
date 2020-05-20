@@ -1,7 +1,7 @@
 package org.ctp.enchantmentsolution.utils.items;
 
-import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.ctp.enchantmentsolution.enums.MatData;
 
 /**
  * @author Arnah
@@ -17,7 +17,7 @@ public enum ItemSlotType {
 	}
 
 	public final static ItemSlotType matchArmorType(final ItemStack itemStack) {
-		if (itemStack == null || itemStack.getType().equals(Material.AIR)) return null;
+		if (itemStack == null || MatData.isAir(itemStack.getType())) return null;
 		String type = itemStack.getType().name();
 		if (type.endsWith("_HELMET") || type.endsWith("_SKULL")) return HELMET;
 		else if (type.endsWith("_CHESTPLATE") || type.contains("ELYTRA")) return CHESTPLATE;
