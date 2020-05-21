@@ -313,6 +313,8 @@ public class EnchantmentSolutionCommand implements CommandExecutor, TabCompleter
 			strings.addAll(reload.getAliases());
 			strings.add(reset.getCommand());
 			strings.addAll(reset.getAliases());
+			strings.add(rpg.getCommand());
+			strings.addAll(rpg.getAliases());
 		}
 		return strings;
 	}
