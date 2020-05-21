@@ -36,7 +36,7 @@ public class MatData {
 	}
 
 	public static boolean isAir(Material type) {
-		switch(type.name()) {
+		switch (type.name()) {
 			case "AIR":
 			case "CAVE_AIR":
 			case "VOID_AIR":
