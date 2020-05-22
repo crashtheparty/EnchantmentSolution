@@ -98,7 +98,7 @@ public enum ItemBreakType {
 			case "GOLDEN_HOE":
 			case "STONE_HOE":
 			case "WOODEN_HOE":
-				itemTypes.addAll(Arrays.asList("NETHER_WART_BLOCK", "WARPED_WART_BLOCK", "SHROOMLIGHT", "HAY_BALE", "TARGET", "DRIED_KELP_BLOCK", "SPONGE", "WET_SPONGE"));
+				itemTypes.addAll(Arrays.asList("OAK_LEAVES", "BIRCH_LEAVES", "SPRUCE_LEAVES", "JUNGLE_LEAVES", "DARK_OAK_LEAVES", "ACACIA_LEAVES", "NETHER_WART_BLOCK", "WARPED_WART_BLOCK", "SHROOMLIGHT", "HAY_BALE", "TARGET", "DRIED_KELP_BLOCK", "SPONGE", "WET_SPONGE"));
 				return itemTypes;
 			default:
 				break;
