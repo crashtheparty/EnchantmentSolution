@@ -324,11 +324,13 @@ calc:
         stone_tools: '&9Stone Tools and Weapons'
         iron_tools: '&9Iron Tools and Weapons'
         diamond_tools: '&9Diamond Tools and Weapons'
+        netherite_tools: '&9Netherite Tools and Weapons'
         leather_armor: '&9Leather Armor'
         golden_armor: '&9Golden Armor'
         chainmail_armor: '&9Chainmail Armor'
         iron_armor: '&9Iron Armor'
         diamond_armor: '&9Diamond Armor'
+        netherite_armor: '&9Netherite Armor'
         other: '&9Books and Other Items'
     enchantability_lore:
     - '&6Resource Enchantability: &3%resource%'
