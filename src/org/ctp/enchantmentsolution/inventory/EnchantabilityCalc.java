@@ -95,7 +95,10 @@ public class EnchantabilityCalc implements InventoryData, Pageable {
 			int[] slots = new int[] { 11, 12, 13, 14, 15, 20, 21, 22, 23, 24, 30, 31, 32 };
 			int slot = 0;
 			for(EnchantabilityMaterial value: EnchantabilityMaterial.values()) {
-				if(value.getMaterial() == null) continue;
+				if(value.getMaterial() == null) {
+					slot++;
+					continue;
+				}
 				int[] enchantability = getEnchantabilityCalc(value.getEnchantability(), enchantabilityConstant, enchantabilityModifier);
 				ItemStack item = new ItemStack(value.getMaterial());
 				ItemMeta itemMeta = item.getItemMeta();
