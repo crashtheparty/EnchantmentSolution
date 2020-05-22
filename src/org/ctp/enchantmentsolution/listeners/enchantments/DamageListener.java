@@ -72,6 +72,7 @@ public class DamageListener extends Enchantmentable {
 	@EventHandler
 	public void onEntityDamage(EntityDamageEvent event) {
 		runMethod(this, "magicGuard", event, EntityDamageEvent.class);
+		runMethod(this, "magmaWalker", event, EntityDamageEvent.class);
 	}
 
 	@EventHandler
@@ -594,6 +595,15 @@ public class DamageListener extends Enchantmentable {
 
 				if (!magicGuard.isCancelled()) event.setCancelled(true);
 			}
+		}
+	}
+
+	private void magmaWalker(EntityDamageEvent event) {
+		if (!canRun(RegisterEnchantments.MAGMA_WALKER, event)) return;
+		if (event.getCause() == DamageCause.HOT_FLOOR && event.getEntity() instanceof Player) {
+			Player player = (Player) event.getEntity();
+			ItemStack boots = player.getInventory().getBoots();
+			if (boots != null && ItemUtils.hasEnchantment(boots, RegisterEnchantments.MAGMA_WALKER)) event.setCancelled(true);
 		}
 	}
 }
