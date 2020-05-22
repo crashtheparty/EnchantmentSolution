@@ -202,8 +202,8 @@ public class EnchantmentTable implements InventoryData {
 				clone.setAmount(lapisStack.getAmount() + clone.getAmount() - lapisStack.getType().getMaxStackSize());
 				lapisStack.setAmount(lapisStack.getType().getMaxStackSize());
 			} else {
-				clone = new ItemStack(Material.AIR);
 				lapisStack.setAmount(lapisStack.getAmount() + clone.getAmount());
+				clone = new ItemStack(Material.AIR);
 			}
 			return clone;
 		}
