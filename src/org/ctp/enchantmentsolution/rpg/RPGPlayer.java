@@ -14,6 +14,7 @@ import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
+import org.ctp.enchantmentsolution.nms.HotbarNMS;
 import org.ctp.enchantmentsolution.rpg.threads.RPGThread;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.PermissionUtils;
@@ -45,15 +46,18 @@ public class RPGPlayer {
 	}
 
 	public void addExperience(double exp) {
-		if (exp > 0) {
+		if (exp >= 0) {
 			experience = experience.add(BigDecimal.valueOf(exp));
+			int oldLevel = level;
 			boolean levelUp = false;
 			while (RPGUtils.getExperienceNextLevel(level + 1).compareTo(experience) <= 0) {
 				level++;
 				levelUp = true;
 				experience = experience.subtract(RPGUtils.getExperienceNextLevel(level));
 			}
+			int newLevel = level;
 			if (levelUp) {
+				levelUpPoints(oldLevel, newLevel);
 				if ((lastLevelUpSound == 0 || lastLevelUpSound + 2000 < System.currentTimeMillis()) && player.getPlayer() != null) {
 					Player p = player.getPlayer();
 					p.playSound(p.getLocation(), Sound.BLOCK_BEACON_ACTIVATE, SoundCategory.AMBIENT, 1.0F, 4.0F);
@@ -68,6 +72,12 @@ public class RPGPlayer {
 
 	public void setExperience(double exp) {
 		experience = new BigDecimal("" + exp);
+		addExperience(0);
+	}
+
+	public void setLevel(int level) {
+		this.level = level;
+		addExperience(0);
 	}
 
 	public void resetExperience() {
@@ -106,6 +116,18 @@ public class RPGPlayer {
 		bar.setProgress(decimal.doubleValue() % 1);
 		bar.addPlayer(player.getPlayer());
 		bar.setVisible(true);
+	}
+
+	public void levelUpPoints(int oldLevel, int newLevel) {
+		BigInteger oldPoints = RPGUtils.getPointsForLevel(oldLevel);
+		BigInteger newPoints = RPGUtils.getPointsForLevel(newLevel);
+		HashMap<String, Object> codes = ChatUtils.getCodes();
+		codes.put("%player%", player.getName());
+		codes.put("%added_points%", newPoints.subtract(oldPoints).intValue());
+		codes.put("%old_points%", oldPoints.intValue());
+		codes.put("%new_points%", newPoints.intValue());
+
+		HotbarNMS.sendHotBarMessage(player.getPlayer(), ChatUtils.getMessage(codes, "rpg.level_up_points"));
 	}
 
 	public void removeFromBar() {
@@ -160,6 +182,17 @@ public class RPGPlayer {
 		return true;
 	}
 
+	public boolean removeEnchantment(Enchantment enchantment) {
+		enchantments = null;
+		enchantmentList.remove(enchantment);
+		getEnchantmentLevels();
+		return true;
+	}
+
+	public Map<Enchantment, Integer> getEnchantments() {
+		return getEnchantmentLevels();
+	}
+
 	public int getPoints() {
 		BigInteger points = RPGUtils.getPointsForLevel(level);
 		Iterator<Entry<Enchantment, Integer>> iterator = enchantmentList.entrySet().iterator();
@@ -189,7 +222,7 @@ public class RPGPlayer {
 
 	public boolean canBuy(Enchantment key, int value) {
 		CustomEnchantment enchant = RegisterEnchantments.getCustomEnchantment(key);
-		return getPoints() - pointsToBuy(key, value) >= 0 && enchant.isEnabled() && PermissionUtils.canEnchant(player.getPlayer(), enchant, value);
+		return getPoints() >= 0 && pointsToBuy(key, value) >= 0 && getPoints() - pointsToBuy(key, value) >= 0 && enchant.isEnabled() && PermissionUtils.canEnchant(player.getPlayer(), enchant, value);
 	}
 
 }

@@ -34,4 +34,14 @@ public class MatData {
 	public boolean hasMaterial() {
 		return material != null;
 	}
+
+	public static boolean isAir(Material type) {
+		switch (type.name()) {
+			case "AIR":
+			case "CAVE_AIR":
+			case "VOID_AIR":
+				return true;
+		}
+		return false;
+	}
 }

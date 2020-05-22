@@ -6,14 +6,15 @@ import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.enums.MatData;
 
 public class MinigameItem {
-	
+
 	private final MatData show, enchant;
 	private final MinigameItemType type;
 	private final int cost, extraCost, maxCost, minBooks, maxBooks, minLevels, maxLevels, slot;
 	private final boolean increaseCost;
 	private final List<EnchantmentLevel> levels;
-	
-	public MinigameItem(MatData show, MatData enchant, MinigameItemType type, int cost, int extraCost, int maxCost, int minBooks, int maxBooks, int minLevels, int maxLevels, int slot, boolean increaseCost, List<EnchantmentLevel> levels) {
+
+	public MinigameItem(MatData show, MatData enchant, MinigameItemType type, int cost, int extraCost, int maxCost, int minBooks, int maxBooks, int minLevels,
+	int maxLevels, int slot, boolean increaseCost, List<EnchantmentLevel> levels) {
 		this.show = show;
 		this.enchant = enchant;
 		this.type = type;
@@ -28,7 +29,7 @@ public class MinigameItem {
 		this.increaseCost = increaseCost;
 		this.levels = levels;
 	}
-	
+
 	public MatData getShow() {
 		return show;
 	}
@@ -64,7 +65,7 @@ public class MinigameItem {
 	public int getSlot() {
 		return slot;
 	}
-	
+
 	public boolean willIncreaseCost() {
 		return increaseCost;
 	}
@@ -81,15 +82,15 @@ public class MinigameItem {
 		return maxLevels;
 	}
 
-	public enum MinigameItemType{
+	public enum MinigameItemType {
 		ENCHANTMENT(false), RANDOM(false), RANDOM_MULTI(true), RANDOM_BOOKSHELF(false), RANDOM_MULTI_BOOKSHELF(true);
 
 		private final boolean multiple;
-		
-		MinigameItemType(boolean multiple){
+
+		MinigameItemType(boolean multiple) {
 			this.multiple = multiple;
 		}
-		
+
 		public boolean isMultiple() {
 			return multiple;
 		}

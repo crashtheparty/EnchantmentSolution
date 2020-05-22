@@ -14,6 +14,7 @@ import org.bukkit.event.inventory.*;
 import org.bukkit.event.inventory.InventoryType.SlotType;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
+import org.ctp.enchantmentsolution.enums.MatData;
 import org.ctp.enchantmentsolution.events.ArmorEquipEvent;
 import org.ctp.enchantmentsolution.events.ArmorEquipEvent.EquipMethod;
 import org.ctp.enchantmentsolution.events.ItemEquipEvent;
@@ -236,7 +237,7 @@ public class EquipListener implements Listener {
 					for(int i = 0; i <= 8; i++) {
 						ItemStack item = e.getWhoClicked().getInventory().getItem(i);
 
-						if (item == null || item.getType().equals(Material.AIR)) {
+						if (isAirOrNull(item)) {
 							empty = i;
 							break;
 						}
@@ -309,7 +310,7 @@ public class EquipListener implements Listener {
 
 		ItemStack currentItem = e.getCurrentItem();
 
-		if (currentItem == null || currentItem.getType().equals(Material.AIR)) return;
+		if (isAirOrNull(currentItem)) return;
 
 		boolean fits = fitsInInventory(player, currentItem, e);
 
@@ -318,7 +319,7 @@ public class EquipListener implements Listener {
 		for(int i = 8; i >= 0 && !fits; i--) {
 			ItemStack item = e.getWhoClicked().getInventory().getItem(i);
 
-			if (item == null || item.getType().equals(Material.AIR)) {
+			if (isAirOrNull(item)) {
 				empty = i;
 				break;
 			}
@@ -352,9 +353,9 @@ public class EquipListener implements Listener {
 		ItemStack newItem = e.getMainHandItem();
 		ItemStack oldItem = e.getOffHandItem();
 
-		if (newItem == null || newItem.getType().equals(Material.AIR)) newItem = null;
+		if (isAirOrNull(newItem)) newItem = null;
 
-		if (oldItem == null || oldItem.getType().equals(Material.AIR)) oldItem = null;
+		if (isAirOrNull(oldItem)) oldItem = null;
 
 		if (oldItem == null && newItem == null) return;
 
@@ -383,7 +384,7 @@ public class EquipListener implements Listener {
 
 	@EventHandler
 	public void onInventoryPickupHandEquip(EntityPickupItemEvent e) {
-		if (e.isCancelled() || e.getItem() == null || e.getItem().getItemStack() == null || e.getItem().getItemStack().getType().equals(Material.AIR)) return;
+		if (e.isCancelled() || e.getItem() == null || e.getItem().getItemStack() == null || MatData.isAir(e.getItem().getItemStack().getType())) return;
 
 		ItemStack item = e.getItem().getItemStack();
 
@@ -398,7 +399,7 @@ public class EquipListener implements Listener {
 		for(int i = 0; i <= 8 && !fits; i++) {
 			ItemStack t = player.getInventory().getItem(i);
 
-			if (t == null || t.getType().equals(Material.AIR)) {
+			if (isAirOrNull(t)) {
 				empty = i;
 				break;
 			}
@@ -462,7 +463,7 @@ public class EquipListener implements Listener {
 	private boolean fitsInInventory(HumanEntity who, ItemStack item, Event e) {
 		boolean fits = false;
 
-		if (item == null || item.getType().equals(Material.AIR) || item.getMaxStackSize() == 1) return false;
+		if (isAirOrNull(item) || item.getMaxStackSize() == 1) return false;
 
 		int amount = item.getAmount();
 
@@ -471,7 +472,7 @@ public class EquipListener implements Listener {
 		for(int i = 9; i < who.getInventory().getSize() && !fits; i++) {
 			ItemStack t = who.getInventory().getItem(i);
 
-			if (t == null || t.getType().equals(Material.AIR) || t.getAmount() == t.getMaxStackSize()) continue;
+			if (isAirOrNull(t) || t.getAmount() == t.getMaxStackSize()) continue;
 
 			if (t.isSimilar(item)) amount = amount - (t.getMaxStackSize() - t.getAmount());
 
@@ -493,7 +494,7 @@ public class EquipListener implements Listener {
 			int amountCanBeMade = 0;
 
 			for(ItemStack item: e.getInventory().getMatrix())
-				if (item != null && item.getType() != Material.AIR) if (itemsChecked == 0) {
+				if (!isAirOrNull(item)) if (itemsChecked == 0) {
 					possibleCreations = item.getAmount();
 					itemsChecked++;
 				} else
@@ -505,7 +506,7 @@ public class EquipListener implements Listener {
 
 			for(int s = 0; s <= 35; s++) {
 				ItemStack test = p.getInventory().getItem(s);
-				if (test == null || test.getType() == Material.AIR) {
+				if (isAirOrNull(test)) {
 					amountCanBeMade += i.getMaxStackSize();
 					continue;
 				}
@@ -518,6 +519,6 @@ public class EquipListener implements Listener {
 	}
 
 	private boolean isAirOrNull(ItemStack item) {
-		return item == null || item.getType().equals(Material.AIR);
+		return item == null || MatData.isAir(item.getType());
 	}
 }

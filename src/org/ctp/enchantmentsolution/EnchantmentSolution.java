@@ -136,7 +136,7 @@ public class EnchantmentSolution extends JavaPlugin {
 		EnchantmentSolutionCommand c = new EnchantmentSolutionCommand();
 		getCommand("EnchantmentSolution").setExecutor(c);
 		getCommand("EnchantmentSolution").setTabCompleter(c);
-		for(ESCommand s: c.getCommands()) {
+		for(ESCommand s: EnchantmentSolutionCommand.getCommands()) {
 			PluginCommand command = getCommand(s.getCommand());
 			if (command != null) {
 				command.setExecutor(c);
@@ -170,7 +170,7 @@ public class EnchantmentSolution extends JavaPlugin {
 		closeInventories(null);
 		SaveUtils.setData();
 	}
-	
+
 	public void closeInventories(Class<? extends InventoryData> clazz) {
 		List<InventoryData> data = new ArrayList<InventoryData>();
 		data.addAll(inventories);

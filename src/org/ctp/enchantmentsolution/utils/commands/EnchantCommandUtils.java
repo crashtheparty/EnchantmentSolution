@@ -147,18 +147,20 @@ public class EnchantCommandUtils {
 								ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(codes, "commands.add-enchant-other"), Level.INFO);
 								ChatUtils.sendMessage(sender, givePlayer, ChatUtils.getMessage(codes, "commands.other-added-enchant"), Level.INFO);
 							}
+							return true;
 						} else
 							ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(ChatUtils.getCodes(), "commands.enchant-fail"), Level.WARNING);
-						return true;
+						return false;
 					}
 				HashMap<String, Object> codes = ChatUtils.getCodes();
 				codes.put("%enchant%", enchantmentName);
 				ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(codes, "commands.enchant-not-found"), Level.WARNING);
+				return true;
 			} else
 				ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(ChatUtils.getCodes(), "commands.enchant-not-specified"), Level.WARNING);
 		} else
 			ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(ChatUtils.getCodes(), "commands.no-permission"), Level.WARNING);
-		return true;
+		return false;
 	}
 
 	public static boolean removeEnchant(CommandSender sender, ESCommand details, String[] args) {
@@ -185,10 +187,10 @@ public class EnchantCommandUtils {
 									HashMap<String, Object> codes = ChatUtils.getCodes();
 									codes.put("%invalid_player%", args[2]);
 									ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(codes, "commands.invalid-player"), Level.WARNING);
-									return false;
+									return true;
 								} else if (removePlayer != null && !removePlayer.equals(sender) && !sender.hasPermission("enchantmentsolution.command.enchantremove.others")) {
 									ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(ChatUtils.getCodes(), "commands.no-permission-other"), Level.WARNING);
-									return false;
+									return true;
 								}
 							}
 						}
@@ -253,11 +255,12 @@ public class EnchantCommandUtils {
 				HashMap<String, Object> codes = ChatUtils.getCodes();
 				codes.put("%enchant%", enchantmentName);
 				ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(codes, "commands.enchant-not-found"), Level.WARNING);
+				return true;
 			} else
 				ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(ChatUtils.getCodes(), "commands.enchant-not-specified"), Level.WARNING);
 		} else
 			ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(ChatUtils.getCodes(), "commands.no-permission"), Level.WARNING);
-		return true;
+		return false;
 	}
 
 	public static boolean book(CommandSender sender, ESCommand details, String[] args) {
@@ -265,7 +268,7 @@ public class EnchantCommandUtils {
 		if (sender instanceof Player) player = (Player) sender;
 		if (!sender.hasPermission(details.getPermission())) {
 			ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(ChatUtils.getCodes(), "commands.no-permission"), Level.WARNING);
-			return true;
+			return false;
 		}
 		List<EnchantmentLevel> levels = new ArrayList<EnchantmentLevel>();
 		Player givePlayer = player;
@@ -287,13 +290,13 @@ public class EnchantCommandUtils {
 				HashMap<String, Object> codes = ChatUtils.getCodes();
 				codes.put("%player%", ChatUtils.getMessage(codes, "commands.invalid.console"));
 				ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(codes, "commands.invalid-player"), Level.WARNING);
-				return true;
+				return false;
 			}
 		} else {
 			HashMap<String, Object> codes = ChatUtils.getCodes();
 			codes.put("%player%", ChatUtils.getMessage(codes, "commands.invalid.null-player"));
 			ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(codes, "commands.invalid-player"), Level.WARNING);
-			return true;
+			return false;
 		}
 
 		if (args.length > 2) {
@@ -345,7 +348,7 @@ public class EnchantCommandUtils {
 			}
 		} else {
 			ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(ChatUtils.getCodes(), "commands.enchant-not-specified"), Level.WARNING);
-			return true;
+			return false;
 		}
 
 		int amount = 1;

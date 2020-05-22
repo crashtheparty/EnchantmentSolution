@@ -150,7 +150,7 @@ public class GenerateUtils {
 		int random = (int) (Math.random() * lists.size());
 		List<EnchantmentLevel> levels = lists.get(random).getEnchantments();
 
-		while (lists.size() > 0 && (levels == null || levels.size() == 0)) {
+		while (lists.size() > 1 && (levels == null || levels.size() == 0)) {
 			lists.remove(random);
 			random = (int) (Math.random() * lists.size());
 
@@ -161,11 +161,11 @@ public class GenerateUtils {
 
 	private static List<EnchantmentLevel> getEnchantments(List<EnchantmentList> lists, int min, int max) {
 		int random = (int) (Math.random() * lists.size());
-		if(random < min && !(min < 0)) random = min;
-		if(random > max && !(max > lists.size())) random = max;
+		if (random < min && !(min < 0)) random = min;
+		if (random > max && !(max > lists.size())) random = max;
 		List<EnchantmentLevel> levels = lists.get(random).getEnchantments();
 
-		while (lists.size() > 0 && (levels == null || levels.size() == 0)) {
+		while (lists.size() > 1 && (levels == null || levels.size() == 0)) {
 			lists.remove(random);
 			random = (int) (Math.random() * lists.size());
 

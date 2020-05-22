@@ -5,6 +5,7 @@ import java.util.*;
 import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -114,9 +115,9 @@ public class RPGUtils {
 		return config.getDouble(path + namespace + "." + enchant.getName() + ".experience") * (enchantment.getEnchant().isMaxLevelOne() ? 1 : enchantment.getLevel());
 	}
 
-	public static RPGPlayer addRPGPlayer(Player player) {
+	public static RPGPlayer addRPGPlayer(OfflinePlayer player) {
 		for(RPGPlayer p: PLAYERS)
-			if (!p.getPlayer().getUniqueId().toString().equals(player.getUniqueId().toString())) return p;
+			if (p.getPlayer().getUniqueId().toString().equals(player.getUniqueId().toString())) return p;
 		RPGPlayer p = new RPGPlayer(player);
 		PLAYERS.add(p);
 		return p;
@@ -130,7 +131,7 @@ public class RPGUtils {
 		return p;
 	}
 
-	public static RPGPlayer getPlayer(Player player) {
+	public static RPGPlayer getPlayer(OfflinePlayer player) {
 		for(RPGPlayer rpg: PLAYERS)
 			if (rpg.getPlayer().getUniqueId().toString().equals(player.getUniqueId().toString())) return rpg;
 		return addRPGPlayer(player);

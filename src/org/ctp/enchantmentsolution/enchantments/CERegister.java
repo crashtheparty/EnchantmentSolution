@@ -163,7 +163,7 @@ public class CERegister extends CustomEnchantment {
 					if (!enchantments.contains(enchant)) enchantments.add(enchant);
 				for(Enchantment enchant: enchants)
 					if (!enchantments.contains(enchant)) enchantments.add(enchant);
-				return enchants;
+				return enchantments;
 			}
 		}
 		return conflictingEnchantments;

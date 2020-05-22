@@ -39,7 +39,7 @@ public class MinigameConfiguration extends Configuration {
 				config.addDefault(str, defaultConfig.get(str));
 
 		config.addEnum("type", Arrays.asList("FAST", "MONDAYS", "CUSTOM"));
-		
+
 		if (!config.contains("custom.paging")) {
 			config.addDefault("custom.items.first.material.show", "diamond_sword", "The material that will appear in the GUI.");
 			config.addDefault("custom.items.first.material.enchant", "diamond_sword", "The material that will be enchanted upon clicking.");

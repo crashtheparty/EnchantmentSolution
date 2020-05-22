@@ -10,340 +10,364 @@ levels:
         level_0: 5
         base: 1
         add_per_level: 1
-        add_power: 2
+        add_power: 2.2
         divisor: 100
 
 enchantments:
     default_enchantments:
         aqua_affinity: 
             experience: 3.8
-            points_level_one: 10
+            points_level_one: 20
             points_increase: 0
         bane_of_arthropods: 
             experience: 1.2
             points_level_one: 1
-            points_increase: 3
+            points_increase: 4
         blast_protection: 
             experience: 0.1
             points_level_one: 1
-            points_increase: 3
+            points_increase: 5
         channeling: 
             experience: 5.5
-            points_level_one: 15
+            points_level_one: 35
             points_increase: 0
         depth_strider: 
             experience: 0.0002
             points_level_one: 2
-            points_increase: 2
+            points_increase: 5
         efficiency: 
             experience: 0.9
             points_level_one: 1
-            points_increase: 3
+            points_increase: 4
         feather_falling: 
             experience: 0.01
             points_level_one: 2
-            points_increase: 3
+            points_increase: 5
         fire_aspect: 
             experience: 2.2
-            points_level_one: 2
-            points_increase: 4
+            points_level_one: 3
+            points_increase: 7
         fire_protection: 
             experience: 0.01
             points_level_one: 1
-            points_increase: 3
+            points_increase: 5
         flame: 
             experience: 3.5
-            points_level_one: 15
+            points_level_one: 35
             points_increase: 0
         fortune: 
             experience: 1.3
             points_level_one: 3
-            points_increase: 4
+            points_increase: 8
         frost_walker: 
             experience: 0.0002
-            points_level_one: 8
-            points_increase: 12
+            points_level_one: 6
+            points_increase: 20
         impaling: 
             experience: 0.8
             points_level_one: 1
-            points_increase: 3
+            points_increase: 4
         infinity: 
             experience: 2.5
-            points_level_one: 25
+            points_level_one: 40
             points_increase: 0
         knockback: 
             experience: 0.7
             points_level_one: 3
-            points_increase: 4
+            points_increase: 8
         looting: 
             experience: 1.25
             points_level_one: 3
-            points_increase: 4
+            points_increase: 8
         loyalty: 
             experience: 1.1
             points_level_one: 3
-            points_increase: 4
+            points_increase: 10
         luck_of_the_sea: 
             experience: 1.4
             points_level_one: 2
-            points_increase: 3
+            points_increase: 4
         lure: 
             experience: 0.9
             points_level_one: 2
-            points_increase: 3
+            points_increase: 4
         mending: 
             experience: 0.5
-            points_level_one: 40
+            points_level_one: 60
             points_increase: 0
         multishot: 
             experience: 1.0
-            points_level_one: 1
-            points_increase: 3
+            points_level_one: 40
+            points_increase: 0
         piercing: 
             experience: 0.65
             points_level_one: 1
-            points_increase: 3
+            points_increase: 4
         power: 
             experience: 0.8
             points_level_one: 1
-            points_increase: 3
+            points_increase: 4
         projectile_protection: 
             experience: 0.08
             points_level_one: 1
-            points_increase: 3
+            points_increase: 5
         protection: 
             experience: 0.04
             points_level_one: 1
-            points_increase: 3
+            points_increase: 5
         punch: 
             experience: 0.7
             points_level_one: 2
-            points_increase: 3
+            points_increase: 6
         quick_charge: 
             experience: 0.2
-            points_level_one: 3
-            points_increase: 4
+            points_level_one: 5
+            points_increase: 15
         respiration: 
             experience: 0.0002
-            points_level_one: 2
-            points_increase: 3
+            points_level_one: 3
+            points_increase: 12
         riptide: 
             experience: 1.2
             points_level_one: 3
-            points_increase: 4
+            points_increase: 12
         sharpness: 
             experience: 0.8
             points_level_one: 1
-            points_increase: 3
+            points_increase: 4
         silk_touch: 
             experience: 5.0
-            points_level_one: 20
+            points_level_one: 35
             points_increase: 0
         smite: 
             experience: 1.05
             points_level_one: 1
-            points_increase: 3
+            points_increase: 4
+        soul_speed: 
+            experience: 0
+            points_level_one: -1
+            points_increase: 0
         sweeping_edge: 
             experience: 1.6
             points_level_one: 2
-            points_increase: 3
+            points_increase: 6
         thorns: 
             experience: 1.0
-            points_level_one: 4
-            points_increase: 6
+            points_level_one: 5
+            points_increase: 20
         unbreaking: 
             experience: 0.025
-            points_level_one: 1
-            points_increase: 4
+            points_level_one: 2
+            points_increase: 7
     custom_enchantments:
         angler: 
             experience: 1.2
             points_level_one: 2
-            points_increase: 3
+            points_increase: 8
         armored: 
             experience: 0.04
             points_level_one: 3
-            points_increase: 4
+            points_increase: 12
         beheading: 
             experience: 1.7
             points_level_one: 2
-            points_increase: 3
+            points_increase: 8
+        butcher: 
+            experience: 1.25
+            points_level_one: 3
+            points_increase: 8
         brine: 
             experience: 1.3
-            points_level_one: 20
+            points_level_one: 35
             points_increase: 0
         detonator: 
             experience: 0.4
-            points_level_one: 2
-            points_increase: 3
+            points_level_one: 4
+            points_increase: 12
         drowned: 
             experience: 1.0
             points_level_one: 3
-            points_increase: 4
+            points_increase: 12
         exp_share: 
             experience: 0.5
-            points_level_one: 3
-            points_increase: 4
+            points_level_one: 5
+            points_increase: 15
         flower_gift: 
             experience: 1.0
-            points_level_one: 20
+            points_level_one: 35
             points_increase: 0
+        force_feed: 
+            experience: 0.001
+            points_level_one: 50
+            points_increase: 30
         frequent_flyer: 
             experience: 0.0002
-            points_level_one: 8
-            points_increase: 12
+            points_level_one: 80
+            points_increase: 60
         fried: 
             experience: 4.0
-            points_level_one: 15
+            points_level_one: 25
             points_increase: 0
         gold_digger: 
             experience: 1.05
             points_level_one: 3
-            points_increase: 4
+            points_increase: 12
         gung_ho: 
             experience: 0.6
-            points_level_one: 25
+            points_level_one: 45
             points_increase: 0
         hard_bounce: 
             experience: 1.4
             points_level_one: 2
-            points_increase: 3
+            points_increase: 6
         height_plus_plus: 
             experience: 1.8
-            points_level_one: 8
-            points_increase: 12
+            points_level_one: 20
+            points_increase: 25
         hollow_point: 
             experience: 5.2
-            points_level_one: 25
+            points_level_one: 45
             points_increase: 0
+        husbandry: 
+            experience: 1.25
+            points_level_one: 3
+            points_increase: 8
         icarus: 
             experience: 0.8
-            points_level_one: 8
-            points_increase: 12
+            points_level_one: 70
+            points_increase: 40
         lasso_of_irene: 
             experience: 2.1
-            points_level_one: 15
-            points_increase: 15
+            points_level_one: 30
+            points_increase: 30
         iron_defense: 
             experience: 0.2
             points_level_one: 3
-            points_increase: 4
+            points_increase: 12
         knockup: 
             experience: 0.7
             points_level_one: 3
-            points_increase: 4
+            points_increase: 12
         light_weight: 
             experience: 0.3
-            points_level_one: 20
+            points_level_one: 35
             points_increase: 0
         life: 
             experience: 1.0
-            points_level_one: 5
-            points_increase: 7
+            points_level_one: 10
+            points_increase: 15
         magic_guard: 
             experience: 1.5
-            points_level_one: 25
+            points_level_one: 45
             points_increase: 0
         magma_walker: 
             experience: 0.0003
-            points_level_one: 8
-            points_increase: 12
+            points_level_one: 10
+            points_increase: 25
         moisturize: 
             experience: 2.2
-            points_level_one: 15
+            points_level_one: 25
             points_increase: 0
         no_rest: 
             experience: 0.0007
-            points_level_one: 20
+            points_level_one: 35
             points_increase: 0
         overkill: 
             experience: 0.1
-            points_level_one: 25
+            points_level_one: 45
             points_increase: 0
         pillage: 
             experience: 1.25
             points_level_one: 3
-            points_increase: 4
+            points_increase: 8
+        pushback: 
+            experience: 0.7
+            points_level_one: 3
+            points_increase: 12
         quick_strike: 
             experience: 0.8
             points_level_one: 3
-            points_increase: 4
+            points_increase: 10
         recycler: 
             experience: 0.1
-            points_level_one: 20
+            points_level_one: 40
             points_increase: 0
         sacrifice: 
             experience: 1.6
-            points_level_one: 15
-            points_increase: 15
+            points_level_one: 40
+            points_increase: 30
         sand_veil: 
             experience: 1.2
             points_level_one: 1
-            points_increase: 3
+            points_increase: 4
         shock_aspect: 
             experience: 1.75
-            points_level_one: 2
-            points_increase: 4
+            points_level_one: 3
+            points_increase: 7
         smeltery: 
             experience: 3.0
-            points_level_one: 25
+            points_level_one: 45
             points_increase: 0
         sniper: 
             experience: 1.3
-            points_level_one: 3
-            points_increase: 4
+            points_level_one: 4
+            points_increase: 12
         soulbound: 
             experience: 5.0
-            points_level_one: 15
+            points_level_one: 40
             points_increase: 0
         soul_reaper: 
             experience: 4.0
-            points_level_one: 5
-            points_increase: 10
+            points_level_one: 20
+            points_increase: 30
         splatter_fest: 
             experience: 0.01
-            points_level_one: 20
+            points_level_one: 40
+            points_increase: 0
+        sticky_hold: 
+            experience: 200
+            points_level_one: 100
             points_increase: 0
         stone_throw: 
             experience: 1.1
             points_level_one: 1
-            points_increase: 3
+            points_increase: 4
         tank: 
             experience: 0.075
-            points_level_one: 3
-            points_increase: 4
+            points_level_one: 5
+            points_increase: 15
         telepathy: 
             experience: 3.0
-            points_level_one: 40
+            points_level_one: 70
             points_increase: 0
         toughness: 
             experience: 0.01
-            points_level_one: 2
-            points_increase: 3
+            points_level_one: 3
+            points_increase: 9
         transmutation: 
             experience: 3.2
-            points_level_one: 50
+            points_level_one: 120
             points_increase: 0
         unrest: 
             experience: 3.6
-            points_level_one: 20
+            points_level_one: 35
             points_increase: 0
         void_walker: 
             experience: 0.0003
-            points_level_one: 8
-            points_increase: 12
+            points_level_one: 15
+            points_increase: 30
         wand: 
             experience: 1.0
-            points_level_one: 8
-            points_increase: 12
+            points_level_one: 20
+            points_increase: 25
         warp: 
             experience: 1.5
-            points_level_one: 3
-            points_increase: 4
+            points_level_one: 4
+            points_increase: 12
         width_plus_plus: 
             experience: 1.8
-            points_level_one: 8
-            points_increase: 12
+            points_level_one: 20
+            points_increase: 25
 
 free_enchantments:
 - 'minecraft+binding_curse 1'
@@ -361,6 +385,7 @@ free_enchantments:
 - 'enchantmentsolution+lagging_curse 1'
 - 'enchantmentsolution+exhaustion_curse 1'
 - 'enchantmentsolution+contagion_curse 1'
+- 'enchantmentsolution+stagnancy_curse 1'
 
 config_comments:
     experience:

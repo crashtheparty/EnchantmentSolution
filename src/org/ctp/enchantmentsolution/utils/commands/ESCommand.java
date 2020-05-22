@@ -55,7 +55,7 @@ public class ESCommand {
 		return permission;
 	}
 
-	public String getUsage() {
+	public String getFullUsage() {
 		HashMap<String, Object> codes = ChatUtils.getCodes();
 		String usage = "";
 		usage += "/es " + getCommand() + ": " + ChatUtils.getMessage(codes, getDescriptionPath()) + "\n";
@@ -63,6 +63,10 @@ public class ESCommand {
 		codes.put("%aliases%", getAliasesString());
 		usage += ChatUtils.getMessage(codes, getUsagePath() + ".main");
 		return usage;
+	}
+
+	public String getUsage() {
+		return ChatUtils.getMessage(ChatUtils.getCodes(), getUsagePath() + ".string");
 	}
 
 }

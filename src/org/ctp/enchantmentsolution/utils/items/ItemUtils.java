@@ -189,7 +189,7 @@ public class ItemUtils {
 		List<String> lore = meta.getLore();
 		if (lore == null) lore = new ArrayList<String>();
 		if (enchantment == null) return item;
-		if (enchantment.getRelativeEnchantment() instanceof CustomEnchantmentWrapper) lore = StringUtils.removeEnchantment(enchantment, meta.getEnchantLevel(enchantment.getRelativeEnchantment()), lore);
+		if (enchantment instanceof CustomEnchantment) lore = StringUtils.removeEnchantment(enchantment, lore);
 		if (hasEnchantment(item, enchantment.getRelativeEnchantment()) && meta instanceof EnchantmentStorageMeta) ((EnchantmentStorageMeta) meta).removeStoredEnchant(enchantment.getRelativeEnchantment());
 		else if (hasEnchantment(item, enchantment.getRelativeEnchantment())) meta.removeEnchant(enchantment.getRelativeEnchantment());
 		meta = ItemUtils.setLore(meta, lore);

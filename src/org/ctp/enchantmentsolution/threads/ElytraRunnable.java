@@ -6,7 +6,6 @@ import org.bukkit.*;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.utils.Reflectionable;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.FrequentFlyerPlayer;
@@ -72,11 +71,9 @@ public class ElytraRunnable implements Runnable, Reflectionable {
 	public static void addFlyer(@NotNull Player player, ItemStack elytra) {
 		if (!contains(player) && elytra != null && ItemUtils.hasEnchantment(elytra, RegisterEnchantments.FREQUENT_FLYER)) {
 			FrequentFlyerPlayer ffPlayer = new FrequentFlyerPlayer(player, elytra);
-			Bukkit.getScheduler().runTaskLater(EnchantmentSolution.getPlugin(), () -> {
-				if (player.isGliding() || player.isFlying() || player.isInsideVehicle() || player.isRiptiding() || player.isSleeping() || player.isSwimming() || player.getLocation().getBlock().getType() == Material.WATER || !Arrays.asList(Material.LAVA, Material.WATER, Material.AIR, Material.VOID_AIR, Material.CAVE_AIR).contains(player.getLocation().getBlock().getRelative(BlockFace.DOWN).getType())) return;
+			if (player.isGliding() || player.isFlying() || player.isInsideVehicle() || player.isRiptiding() || player.isSleeping() || player.isSwimming() || player.getLocation().getBlock().getType() == Material.WATER || !Arrays.asList(Material.LAVA, Material.WATER, Material.AIR, Material.VOID_AIR, Material.CAVE_AIR).contains(player.getLocation().getBlock().getRelative(BlockFace.DOWN).getType())) return;
 
-				if (ffPlayer.canFly() && player.getGameMode() != GameMode.CREATIVE && player.getGameMode() != GameMode.SPECTATOR) player.setFlying(true);
-			}, 4l);
+			if (ffPlayer.canFly() && player.getGameMode() != GameMode.CREATIVE && player.getGameMode() != GameMode.SPECTATOR) player.setFlying(true);
 			PLAYERS.add(ffPlayer);
 		}
 	}

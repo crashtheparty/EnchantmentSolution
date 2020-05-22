@@ -95,6 +95,16 @@ commands:
     fix-enchants: 'You have fixed your enchanted items.'
     fix-enchants-other: 'You have fixed %fix_player%''s enchanted items.'
     other-fixed-enchants: 'Player %player% has fixed your enchanted items.'
+    invalid-level-positive-integer: 'Level (%level%) must be a positive integer.'
+    rpg-set-level: 'Set %player%''s ESRPG level to %level%.'
+    specify-level-integer: 'You must specify an integer to set player''s level.'
+    invalid-experience-positive-double: 'Experience (%experience%) must be a positive double.'
+    rpg-set-experience: 'Set %player%''s ESRPG experience to %experience%.'
+    specify-experience-double: 'You must specify a double to set player''s experience.'
+    rpg-level-too-low: 'Cannot set a negative level in ESRPG. Setting level to 0.'
+    remove-rpg-enchantment: 'Removing enchantment %enchantment% from %player%''s ESRPG values.'
+    set-rpg-enchantment: 'Setting enchantment %enchantment% to level %level% for %player%''s ESRPG values.'
+    rpg-invalid-edit: 'RPGEdit can only edit level, experience, and enchantments for players.'
     console-player: 'Console'
     invalid:
         console: 'Console Sender'
@@ -171,6 +181,17 @@ commands:
         esrpg: 
         - 'rpg'
 
+        rpgstats: 
+        - 'stats'
+        - 'rpgs'
+        
+        rpgtop:
+        - 'top'
+        - 'rpgt'
+        
+        rpgedit:
+        - 'rpge'
+
     descriptions: 
         enchant: 'Enchants an item for a given player in the given slot.'
         enchantunsafe: 'Enchants an item for a given player in the given slot. May enchant any item with any level of enchantment.'
@@ -188,6 +209,9 @@ commands:
         eshelp: 'Shows description and usage of specified command or commands.'
         esfix: 'Fixes enchantments on items.'
         esrpg: 'Opens the RPG mode.'
+        rpgstats: 'Gets the statistics from ESRPG for a particular player.'
+        rpgtop: 'Lists the top players on ESRPG.'
+        rpgedit: 'Edit ESRPG values for players.'
     usage: 
         enchant: 
             main: 'Usage: %usage%\nAliases: %aliases%'
@@ -200,43 +224,55 @@ commands:
             string: 'removeenchant <enchantment> [player] [slot]'
         esanvil: 
             main: 'Usage: %usage%\nAliases: %aliases%'
-            string: 'anvil'
+            string: 'esanvil'
         esgrindstone: 
             main: 'Usage: %usage%\nAliases: %aliases%'
-            string: 'grindstone'
+            string: 'esgrindstone'
         esdebug: 
             main: 'Usage: %usage%\nAliases: %aliases%'
-            string: 'debug'
+            string: 'esdebug'
         esbook: 
             main: 'Usage: %usage%\nAliases: %aliases%'
-            string: 'book <enchantment> <level> [amount] OR book <RandomEnchant/RandomMultiEnchant> [ignoreLimits] [amount]'
+            string: 'esbook <enchantment> <level> [amount] OR book <RandomEnchant/RandomMultiEnchant> [ignoreLimits] [amount]'
         info: 
             main: 'Usage: %usage%\nAliases: %aliases%'
             string: 'info [enchantment/page]'
         esreload: 
             main: 'Usage: %usage%\nAliases: %aliases%'
-            string: 'reload'
+            string: 'esreload'
         esreset: 
             main: 'Usage: %usage%\nAliases: %aliases%'
-            string: 'reset'
+            string: 'esreset'
         esconfig: 
             main: 'Usage: %usage%\nAliases: %aliases%'
-            string: 'edit'
+            string: 'esconfig'
         configlore: 
             main: 'Usage: %usage%\nAliases: %aliases%'
-            string: 'lore enchantment/enchant <enchantment> [level] OR lore string <string...>'
+            string: 'configlore enchantment/enchant <enchantment> [level] OR lore string <string...>'
         escalc: 
             main: 'Usage: %usage%\nAliases: %aliases%'
-            string: 'calc'
+            string: 'escalc'
         eshelp: 
             main: 'Usage: %usage%\nAliases: %aliases%'
-            string: 'help [command]'
+            string: 'eshelp [command]'
         esfix: 
             main: 'Usage: %usage%\nAliases: %aliases%'
-            string: 'fix [player]'
+            string: 'esfix [player]'
         esrpg: 
             main: 'Usage: %usage%\nAliases: %aliases%'
-            string: 'rpg'
+            string: 'esrpg'
+        rpgstats: 
+            main: 'Usage: %usage%\nAliases: %aliases%'
+            string: 'rpgstats [player]'
+        rpgtop: 
+            main: 'Usage: %usage%\nAliases: %aliases%'
+            string: 'rpgtop [page]'
+        rpgedit: 
+            main: 'Usage: %usage%\nAliases: %aliases%'
+            string: 'rpgedit <player> <subcommand> [...]'
+    help:
+        commands_page: '&bCommands Page %page%'
+        commands_info_shrink: '&f: %description%'
 grindstone: 
     legacy-open: '&aOpen the Grindstone'
     name: '&9Grindstone'
@@ -346,6 +382,13 @@ rpg:
     top_bar:
         title: '&aESRPG Level &f%level% &7(&f%experience%/%next_experience%&7)'
         title_level_up: '&aESRPG &6Level Up! &aLevel &f%level% &7(&f%experience%/%next_experience%&7)'
+    level_up_points: '&6Gained &f%added_points% &6points! &a(New Total Points: &f%new_points%&a)'
+    stats:
+        exp: '&6Level: &3%level% &6Experience: &3%experience%'
+        enchantment: '&6Unlocked Enchantment: &3%enchantment% &fup to level &3%level%'
+    top:
+        page: '&bRPG Players Top Page %page%'
+        player_stats: '&b%rank%. &3%player% &f(Level &3%level%&f)'
 
 minigame:
     name: '&9Enchantment Table'

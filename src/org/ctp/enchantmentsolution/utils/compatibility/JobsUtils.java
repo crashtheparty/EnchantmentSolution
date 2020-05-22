@@ -15,6 +15,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
+import org.ctp.enchantmentsolution.enums.MatData;
 import org.ctp.enchantmentsolution.utils.items.DamageUtils;
 
 import com.gamingmesh.jobs.Jobs;
@@ -143,9 +144,9 @@ public class JobsUtils {
 
 		// Item in hand
 		ItemStack item = Jobs.getNms().getItemInMainHand(player);
-		if (item != null && !item.getType().equals(Material.AIR)) // Protection for block break with silktouch
+		if (item != null && !MatData.isAir(item.getType())) // Protection for block break with silktouch
 			if (Jobs.getGCManager().useSilkTouchProtection) for(Entry<Enchantment, Integer> one: item.getEnchantments().entrySet())
-			if (CMIEnchantment.get(one.getKey()) == CMIEnchantment.SILK_TOUCH) if (Jobs.getBpManager().isInBp(block)) return;
+				if (CMIEnchantment.get(one.getKey()) == CMIEnchantment.SILK_TOUCH) if (Jobs.getBpManager().isInBp(block)) return;
 
 		JobsPlayer jPlayer = Jobs.getPlayerManager().getJobsPlayer(player);
 		if (jPlayer == null) return;
@@ -221,7 +222,7 @@ public class JobsUtils {
 	private static boolean payForItemDurabilityLoss(Player p) {
 		ItemStack hand = Jobs.getNms().getItemInMainHand(p);
 
-		if (!Jobs.getGCManager().payItemDurabilityLoss && hand != null && !hand.getType().equals(Material.AIR) && hand.getType().getMaxDurability() - Jobs.getNms().getDurability(hand) != hand.getType().getMaxDurability()) {
+		if (!Jobs.getGCManager().payItemDurabilityLoss && hand != null && !MatData.isAir(hand.getType()) && hand.getType().getMaxDurability() - Jobs.getNms().getDurability(hand) != hand.getType().getMaxDurability()) {
 			for(String whiteList: Jobs.getGCManager().WhiteListedItems) {
 				String item = whiteList.contains("=") ? whiteList.split("=")[0] : whiteList;
 				if (item.contains("-")) item = item.split("-")[0];

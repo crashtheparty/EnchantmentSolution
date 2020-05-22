@@ -5,15 +5,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
+import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.ctp.enchantmentsolution.enums.MatData;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
 
 public class ItemSerialization {
@@ -22,7 +20,7 @@ public class ItemSerialization {
 		String itemString = "";
 		if (item.getType() != null) itemString = itemString + "name@" + item.getType();
 		itemString = itemString + " amount@" + item.getAmount();
-		if (item.getType().equals(Material.AIR)) return itemString;
+		if (MatData.isAir(item.getType())) return itemString;
 		if (item.getItemMeta().getDisplayName() != null && !item.getItemMeta().getDisplayName().equals("")) itemString = itemString + " item_name@" + item.getItemMeta().getDisplayName().replace(" ", "_").replace("§", "&");
 		if (item.getItemMeta() instanceof Damageable) {
 			Damageable damage = (Damageable) item.getItemMeta();

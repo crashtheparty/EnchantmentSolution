@@ -8,14 +8,13 @@ import org.bukkit.command.*;
 import org.bukkit.entity.Player;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
-import org.ctp.enchantmentsolution.utils.StringUtils;
+import org.ctp.enchantmentsolution.utils.commands.CommandCallable;
 import org.ctp.enchantmentsolution.utils.commands.CommandUtils;
 import org.ctp.enchantmentsolution.utils.commands.ESCommand;
-import org.ctp.enchantmentsolution.utils.commands.EnchantCommandUtils;
 
 public class EnchantmentSolutionCommand implements CommandExecutor, TabCompleter {
 
-	private final List<ESCommand> commands;
+	private static List<ESCommand> commands;
 	private final ESCommand anvil = new ESCommand("esanvil", "commands.aliases.esanvil", "commands.descriptions.esanvil", "commands.usage.esanvil", "enchantmentsolution.command.anvil");
 	private final ESCommand calc = new ESCommand("escalc", "commands.aliases.escalc", "commands.descriptions.escalc", "commands.usage.escalc", "enchantmentsolution.command.calc");
 	private final ESCommand config = new ESCommand("esconfig", "commands.aliases.esconfig", "commands.descriptions.esconfig", "commands.usage.esconfig", "enchantmentsolution.command.config");
@@ -32,6 +31,9 @@ public class EnchantmentSolutionCommand implements CommandExecutor, TabCompleter
 	private final ESCommand enchantInfo = new ESCommand("info", "commands.aliases.info", "commands.descriptions.info", "commands.usage.info", "enchantmentsolution.command.info");
 	private final ESCommand removeEnchant = new ESCommand("removeenchant", "commands.aliases.removeenchant", "commands.descriptions.removeenchant", "commands.usage.removeenchant", "enchantmentsolution.command.removeenchant");
 	private final ESCommand rpg = new ESCommand("esrpg", "commands.aliases.esrpg", "commands.descriptions.esrpg", "commands.usage.esrpg", "enchantmentsolution.command.rpg");
+	private final ESCommand rpgStats = new ESCommand("rpgstats", "commands.aliases.rpgstats", "commands.descriptions.rpgstats", "commands.usage.rpgstats", "enchantmentsolution.command.rpgstats");
+	private final ESCommand rpgTop = new ESCommand("rpgtop", "commands.aliases.rpgtop", "commands.descriptions.rpgtop", "commands.usage.rpgtop", "enchantmentsolution.command.rpgtop");
+	private final ESCommand rpgEdit = new ESCommand("rpgedit", "commands.aliases.rpgedit", "commands.descriptions.rpgedit", "commands.usage.rpgedit", "enchantmentsolution.command.rpgedit");
 
 	public EnchantmentSolutionCommand() {
 		commands = new ArrayList<ESCommand>();
@@ -46,6 +48,9 @@ public class EnchantmentSolutionCommand implements CommandExecutor, TabCompleter
 		commands.add(reload);
 		commands.add(reset);
 		commands.add(rpg);
+		commands.add(rpgStats);
+		commands.add(rpgTop);
+		commands.add(rpgEdit);
 		commands.add(book);
 		commands.add(enchant);
 		commands.add(enchantInfo);
@@ -66,61 +71,38 @@ public class EnchantmentSolutionCommand implements CommandExecutor, TabCompleter
 				break;
 			}
 		}
-		if (args.length == 0 || args.length == 1 && args[0].equals("help")) return printHelp(sender);
+		if (args.length == 0 || args.length == 1 && containsCommand(help, args[0])) return CommandUtils.printHelp(sender, 1);
+		else if (args.length == 2 && containsCommand(help, args[0])) {
+			int page = 0;
+			try {
+				page = Integer.parseInt(args[1]);
+			} catch (NumberFormatException ex) {
 
-		if (containsCommand(help, args[0]) && args.length > 0) return printHelp(sender, args[1]);
-		if (containsCommand(anvil, args[0])) return CommandUtils.anvil(sender, anvil, args);
-		if (containsCommand(calc, args[0])) return CommandUtils.calc(sender, calc, args);
-		if (containsCommand(config, args[0])) return CommandUtils.config(sender, config, args);
-		if (containsCommand(debug, args[0])) return CommandUtils.debug(sender, debug, args);
-		if (containsCommand(fix, args[0])) return CommandUtils.fix(sender, fix, args);
-		if (containsCommand(grindstone, args[0])) return CommandUtils.grindstone(sender, grindstone, args);
-		if (containsCommand(lore, args[0])) return CommandUtils.lore(sender, lore, args);
-		if (containsCommand(reload, args[0])) return CommandUtils.reload(sender, reload, args);
-		if (containsCommand(reset, args[0])) return CommandUtils.reset(sender, reset, args);
-		if (containsCommand(rpg, args[0])) return CommandUtils.rpg(sender, rpg, args);
-		if (containsCommand(book, args[0])) return EnchantCommandUtils.book(sender, book, args);
-		if (containsCommand(enchant, args[0])) return EnchantCommandUtils.enchant(sender, enchant, args, false);
-		if (containsCommand(enchantInfo, args[0])) return EnchantCommandUtils.enchantInfo(sender, enchantInfo, args);
-		if (containsCommand(enchantUnsafe, args[0])) return EnchantCommandUtils.enchant(sender, enchantUnsafe, args, true);
-		if (containsCommand(removeEnchant, args[0])) return EnchantCommandUtils.removeEnchant(sender, removeEnchant, args);
-
+			}
+			if (page > 0) return CommandUtils.printHelp(sender, page);
+			else
+				return CommandUtils.printHelp(sender, args[1]);
+		}
+		final String[] finalArgs = args;
 		Player player = null;
 		if (sender instanceof Player) player = (Player) sender;
+		for(ESCommand command: commands) {
+			if (command == help) continue;
+			if (containsCommand(command, args[0])) try {
+				return new CommandCallable(command, sender, finalArgs).call();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
 		HashMap<String, Object> codes = new HashMap<String, Object>();
 		codes.put("%command%", args[0]);
 		ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(codes, "commands.no-command"), Level.WARNING);
 		return true;
 	}
 
-	private boolean containsCommand(ESCommand details, String s) {
+	public static boolean containsCommand(ESCommand details, String s) {
 		return s.equals(details.getCommand()) || details.getAliases().contains(s);
-	}
-
-	public boolean printHelp(CommandSender sender, String label) {
-		Player player = null;
-		if (sender instanceof Player) player = (Player) sender;
-		for(ESCommand command: commands)
-			if (sender.hasPermission(command.getPermission()) && containsCommand(command, label)) {
-				ChatUtils.sendMessage(sender, player, StringUtils.decodeString("\n" + command.getUsage()), Level.INFO);
-				return true;
-			}
-		return printHelp(sender);
-	}
-
-	public boolean printHelp(CommandSender sender) {
-		Player player = null;
-		if (sender instanceof Player) player = (Player) sender;
-		List<String> strings = new ArrayList<String>();
-		for(ESCommand command: commands)
-			if (sender.hasPermission(command.getPermission())) strings.add(command.getUsage());
-
-		StringBuilder sb = new StringBuilder();
-		for(int i = 0; i < strings.size(); i++)
-			sb.append("\n" + strings.get(i));
-		ChatUtils.sendMessage(sender, player, StringUtils.decodeString(sb.toString()), Level.INFO);
-
-		return true;
 	}
 
 	@Override
@@ -162,6 +144,12 @@ public class EnchantmentSolutionCommand implements CommandExecutor, TabCompleter
 		if (i == 2 && containsCommand(removeEnchant, args[0]) && sender.hasPermission(removeEnchant.getPermission())) all.addAll(players(args[i]));
 		if (i == 3 && containsCommand(removeEnchant, args[0]) && sender.hasPermission(removeEnchant.getPermission())) all.addAll(slots(args[i]));
 		if (i == 1 && containsCommand(enchantInfo, args[0]) && sender.hasPermission(enchantInfo.getPermission())) all.addAll(enchant(args[i]));
+		if (i == 1 && containsCommand(rpgStats, args[0]) && sender.hasPermission(rpgStats.getPermission())) all.addAll(players(args[i], sender, rpgStats));
+		if (i == 1 && containsCommand(rpgTop, args[0]) && sender.hasPermission(rpgTop.getPermission())) all.addAll(level());
+		if (i == 1 && containsCommand(rpgEdit, args[0]) && sender.hasPermission(rpgEdit.getPermission())) all.addAll(players(args[i]));
+		if (i == 2 && containsCommand(rpgEdit, args[0]) && sender.hasPermission(rpgEdit.getPermission())) all.addAll(rpgEdit(args[i]));
+		if (i == 3 && containsCommand(rpgEdit, args[0]) && sender.hasPermission(rpgEdit.getPermission())) all.addAll(rpgEdit(args[i], args[2]));
+		if (i == 4 && containsCommand(rpgEdit, args[0]) && sender.hasPermission(rpgEdit.getPermission())) all.addAll(rpgEdit(args[i], args[2], args[3]));
 
 		return all;
 	}
@@ -173,6 +161,35 @@ public class EnchantmentSolutionCommand implements CommandExecutor, TabCompleter
 			if (!entry.startsWith(startsWith)) iter.remove();
 		}
 		return strings;
+	}
+
+	private List<String> rpgEdit(String startsWith) {
+		List<String> strings = new ArrayList<String>();
+		strings.addAll(Arrays.asList("add_level", "set_level", "remove_level", "add_experience", "set_experience", "remove_experience", "set_enchantment_level"));
+		return removeComplete(strings, startsWith);
+	}
+
+	private List<String> rpgEdit(String startsWith, String editType) {
+		List<String> strings = new ArrayList<String>();
+		switch (editType) {
+			case "add_level":
+			case "set_level":
+			case "remove_level":
+				return level();
+			case "add_experience":
+			case "set_experience":
+			case "remove_experience":
+				strings.add("[<double>]");
+				return strings;
+			case "set_enchantment_level":
+				return enchant(startsWith);
+		}
+		return removeComplete(strings, startsWith);
+	}
+
+	private List<String> rpgEdit(String startsWith, String editType, String enchantment) {
+		if (editType.equals("set_enchantment_level")) return level();
+		return new ArrayList<String>();
 	}
 
 	private List<String> enchant(String startsWith) {
@@ -198,7 +215,12 @@ public class EnchantmentSolutionCommand implements CommandExecutor, TabCompleter
 		List<String> strings = new ArrayList<String>();
 		for(Player player: Bukkit.getOnlinePlayers())
 			strings.add(player.getName());
-		return strings;
+		return removeComplete(strings, startsWith);
+	}
+
+	private List<String> players(String startsWith, CommandSender sender, ESCommand command) {
+		if (sender.hasPermission(command.getPermission() + ".others")) return players(startsWith);
+		return new ArrayList<String>();
 	}
 
 	private List<String> book(String startsWith) {
@@ -291,11 +313,13 @@ public class EnchantmentSolutionCommand implements CommandExecutor, TabCompleter
 			strings.addAll(reload.getAliases());
 			strings.add(reset.getCommand());
 			strings.addAll(reset.getAliases());
+			strings.add(rpg.getCommand());
+			strings.addAll(rpg.getAliases());
 		}
 		return strings;
 	}
 
-	public List<ESCommand> getCommands() {
+	public static List<ESCommand> getCommands() {
 		return commands;
 	}
 }

@@ -10,6 +10,7 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
+import org.ctp.enchantmentsolution.enums.MatData;
 import org.ctp.enchantmentsolution.inventory.*;
 import org.ctp.enchantmentsolution.inventory.ConfigInventory.Screen;
 import org.ctp.enchantmentsolution.inventory.minigame.Minigame;
@@ -63,7 +64,7 @@ public class InventoryClickUtils {
 		if (!inv.getType().equals(InventoryType.CHEST)) {
 			if (inv.getType().equals(InventoryType.ANVIL)) return;
 			ItemStack item = clickedInv.getItem(slot);
-			if (item == null || item.getType().equals(Material.AIR)) return;
+			if (item == null || MatData.isAir(item.getType())) return;
 			ItemStack replace = new ItemStack(Material.AIR);
 			int original_amount = item.getAmount();
 			if (original_amount > 1 && item.getType() == Material.BOOK && item.hasItemMeta() && item.getItemMeta().hasEnchants()) {
@@ -102,7 +103,7 @@ public class InventoryClickUtils {
 	int slot) {
 		if (!inv.getType().equals(InventoryType.CHEST)) {
 			ItemStack item = clickedInv.getItem(slot);
-			if (item == null || item.getType().equals(Material.AIR)) return;
+			if (item == null || MatData.isAir(item.getType())) return;
 			ItemStack replace = new ItemStack(Material.AIR);
 			int original_amount = item.getAmount();
 			if (original_amount > 1) {

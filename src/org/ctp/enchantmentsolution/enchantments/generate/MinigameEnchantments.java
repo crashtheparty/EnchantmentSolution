@@ -31,7 +31,7 @@ public class MinigameEnchantments extends LootEnchantments {
 
 	public static MinigameEnchantments generateMinigameLoot(Player player, ItemStack item, Block block, MinigameItem minigameItem) {
 		int books = 0;
-		if(minigameItem.getType().fromLocation() && block != null) books = LocationUtils.getBookshelves(block.getLocation());
+		if (minigameItem.getType().fromLocation() && block != null) books = LocationUtils.getBookshelves(block.getLocation());
 		else {
 			double rand = (Math.random() + Math.random()) / 2;
 			int min = minigameItem.getMinBooks();
