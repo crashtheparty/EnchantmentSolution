@@ -91,6 +91,7 @@ public class EnchantmentSolution extends JavaPlugin {
 		registerEvent(new InventoryClose());
 		registerEvent(new PlayerInteract());
 		registerEvent(new ChatMessage());
+		registerEvent(new InventoryPlayerListener());
 
 		registerEvent(new ExtraBlockListener());
 		registerEvent(new VanishListener());
