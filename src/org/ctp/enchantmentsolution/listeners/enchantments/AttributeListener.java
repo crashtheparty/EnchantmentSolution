@@ -21,8 +21,10 @@ import org.ctp.enchantmentsolution.enchantments.Attributable;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.events.ArmorEquipEvent;
+import org.ctp.enchantmentsolution.events.ArmorEquipEvent.EquipMethod;
 import org.ctp.enchantmentsolution.events.AttributeEvent;
 import org.ctp.enchantmentsolution.events.ItemEquipEvent;
+import org.ctp.enchantmentsolution.events.ItemEquipEvent.HandMethod;
 import org.ctp.enchantmentsolution.events.potion.MagicGuardPotionEvent;
 import org.ctp.enchantmentsolution.events.potion.PotionEventType;
 import org.ctp.enchantmentsolution.events.potion.UnrestPotionEvent;
@@ -49,17 +51,17 @@ public class AttributeListener extends Enchantmentable {
 
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onArmorEquip(ArmorEquipEvent event) {
-		itemEquip(event.getPlayer(), event.getOldArmorPiece(), event.getType(), false);
-		itemEquip(event.getPlayer(), event.getNewArmorPiece(), event.getType(), true);
+		itemEquip(event.getPlayer(), event.getOldArmorPiece(), event.getType(), false, event.getMethod() == EquipMethod.JOIN);
+		itemEquip(event.getPlayer(), event.getNewArmorPiece(), event.getType(), true, event.getMethod() == EquipMethod.JOIN);
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onItemEquip(ItemEquipEvent event) {
-		itemEquip(event.getPlayer(), event.getOldItem(), event.getSlot(), false);
-		itemEquip(event.getPlayer(), event.getNewItem(), event.getSlot(), true);
+		itemEquip(event.getPlayer(), event.getOldItem(), event.getSlot(), false, event.getMethod() == HandMethod.JOIN);
+		itemEquip(event.getPlayer(), event.getNewItem(), event.getSlot(), true, event.getMethod() == HandMethod.JOIN);
 	}
 
-	private void itemEquip(Player player, ItemStack item, ItemSlotType type, boolean equip) {
+	private void itemEquip(Player player, ItemStack item, ItemSlotType type, boolean equip, boolean join) {
 		if (item != null && item.hasItemMeta()) {
 			Iterator<Entry<Enchantment, Integer>> iterator = item.getItemMeta().getEnchants().entrySet().iterator();
 
@@ -107,7 +109,7 @@ public class AttributeListener extends Enchantmentable {
 					} else { /* placeholder */ }
 				else if (entry.getKey() == RegisterEnchantments.CURSE_OF_EXHAUSTION && equip) MiscRunnable.addExhaustion(player);
 				else if (entry.getKey() == RegisterEnchantments.FORCE_FEED && equip) MiscRunnable.addFeed(player);
-				else if (entry.getKey() == RegisterEnchantments.FREQUENT_FLYER && equip) ElytraRunnable.addFlyer(player, item);
+				else if (entry.getKey() == RegisterEnchantments.FREQUENT_FLYER && equip) ElytraRunnable.addFlyer(player, item, join);
 			}
 		}
 	}

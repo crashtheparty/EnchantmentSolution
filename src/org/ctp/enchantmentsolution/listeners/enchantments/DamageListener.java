@@ -345,7 +345,10 @@ public class DamageListener extends Enchantmentable {
 				PushbackEvent pushback = new PushbackEvent(player, level, v0, new Vector(v0.getX() / 2.0D - v1.getX(), living.isOnGround() ? Math.min(0.4D, v0.getY() / 2.0D + level * 0.5F) : v0.getY(), v0.getZ() / 2.0D - v1.getZ()), living);
 				Bukkit.getPluginManager().callEvent(pushback);
 
-				if (!pushback.isCancelled()) living.setVelocity(pushback.getNewVector());
+				if (!pushback.isCancelled()) {
+					AdvancementUtils.awardCriteria(player, ESAdvancement.KNOCKBACK_REVERSED, "knockback");
+					living.setVelocity(pushback.getNewVector());
+				}
 
 			}
 		}

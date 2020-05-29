@@ -71,8 +71,8 @@ public class RegisterEnchantments {
 	public static final Enchantment CURSE_OF_CONTAGION = new CustomEnchantmentWrapper("contagion_curse", "CONTAGION_CURSE", 1);
 	public static final Enchantment RECYCLER = new CustomEnchantmentWrapper("recycler", "RECYCLER", 1);
 	public static final Enchantment LIGHT_WEIGHT = new CustomEnchantmentWrapper("light_weight", "LIGHT_WEIGHT", 1);
-	public static final Enchantment HUSBANDRY = new CustomEnchantmentWrapper("husbandry", "HUSBANDRY", 1);
-	public static final Enchantment BUTCHER = new CustomEnchantmentWrapper("butcher", "BUTCHER", 1);
+	public static final Enchantment HUSBANDRY = new CustomEnchantmentWrapper("husbandry", "HUSBANDRY", 3);
+	public static final Enchantment BUTCHER = new CustomEnchantmentWrapper("butcher", "BUTCHER", 3);
 	public static final Enchantment CURSE_OF_STAGNANCY = new CustomEnchantmentWrapper("stagnancy_curse", "STAGNANCY_CURSE", 1);
 	public static final Enchantment STICKY_HOLD = new CustomEnchantmentWrapper("sticky_hold", "STICKY_HOLD", 1);
 	public static final Enchantment FORCE_FEED = new CustomEnchantmentWrapper("force_feed", "FORCE_FEED", 3);

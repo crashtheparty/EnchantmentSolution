@@ -20,13 +20,17 @@ public enum ESAdvancement {
 	JUST_AS_SWEET(BONEMEAL_PLUS, "WITHER_ROSE", Arrays.asList(new ESTrigger("wither_rose")), 100, Frame.GOAL, 4),
 	NOT_THAT_KIND(AGRICULTURAL_REVOLUTION, "DIAMOND_SWORD", Arrays.asList(new ESTrigger("chicken"), new ESTrigger("strider", 0, 12, 0), new ESTrigger("hoglin", 0, 12, 0), new ESTrigger("cat", 0, 4, 0), new ESTrigger("cow"), new ESTrigger("fox", 0, 4, 0), new ESTrigger("horse"), new ESTrigger("mule"), new ESTrigger("donkey"), new ESTrigger("llama"), new ESTrigger("mushroom_cow"), new ESTrigger("ocelot", 0, 0, 3), new ESTrigger("panda", 0, 4, 0), new ESTrigger("bee", 0, 9, 0), new ESTrigger("pig"), new ESTrigger("rabbit"), new ESTrigger("sheep"), new ESTrigger("wolf"), new ESTrigger("turtle")), 25),
 	HIGH_METABOLISM(NOT_THAT_KIND, "GOLDEN_CARROT", Arrays.asList(new ESTrigger("exhaustion")), 200, Frame.GOAL),
+	WILDLIFE_CONSERVATION(NOT_THAT_KIND, "COW_SPAWN_EGG", Arrays.asList(new ESTrigger("chicken"), new ESTrigger("strider", 0, 12, 0), new ESTrigger("hoglin", 0, 12, 0), new ESTrigger("cat", 0, 4, 0), new ESTrigger("cow"), new ESTrigger("fox", 0, 4, 0), new ESTrigger("horse"), new ESTrigger("mule"), new ESTrigger("donkey"), new ESTrigger("llama"), new ESTrigger("mushroom_cow"), new ESTrigger("ocelot", 0, 0, 3), new ESTrigger("panda", 0, 4, 0), new ESTrigger("bee", 0, 9, 0), new ESTrigger("pig"), new ESTrigger("rabbit"), new ESTrigger("sheep"), new ESTrigger("wolf"), new ESTrigger("turtle")), 75),
 	FOURTY_NINERS(BONEMEAL_PLUS, "GOLD_BLOCK", Arrays.asList(new ESTrigger("goldblock", 81)), 20),
 	THAT_FOOD_IS_FINE(AGRICULTURAL_REVOLUTION, "POISONOUS_POTATO", Arrays.asList(new ESTrigger("food")), 25),
+	MEAT_READY_TO_EAT(THAT_FOOD_IS_FINE, "COOKED_BEEF", Arrays.asList(new ESTrigger("beef")), 50),
 	CHICKEN_OR_THE_EGG(AGRICULTURAL_REVOLUTION, "EGG", Arrays.asList(new ESTrigger("egg")), 25),
 	EGGED_BY_MYSELF(CHICKEN_OR_THE_EGG, "EGG", Arrays.asList(new ESTrigger("egg")), 40),
 	THORGY(AGRICULTURAL_REVOLUTION, "WOLF_SPAWN_EGG", Arrays.asList(new ESTrigger("wolf")), 50),
 	FREE_PETS(THORGY, "CARROT_ON_A_STICK", Arrays.asList(new ESTrigger("wolf"), new ESTrigger("ocelot", 0, 0, 3), new ESTrigger("cat", 0, 4, 0), new ESTrigger("horse"), new ESTrigger("donkey"), new ESTrigger("mule"), new ESTrigger("parrot"), new ESTrigger("llama"), new ESTrigger("bee", 0, 9, 0)), 500, Frame.CHALLENGE),
-
+	YUMMY_REPAIRS(AGRICULTURAL_REVOLUTION, "ENCHANTED_BOOK", Arrays.asList(new ESTrigger("repair")), 100, Frame.GOAL),
+	HUNGRY_HIPPOS(YUMMY_REPAIRS, "DIAMOND_CHESTPLATE", Arrays.asList(new ESTrigger("armor")), 900, Frame.CHALLENGE),
+	
 	INDUSTRIAL_REVOLUTION("DIAMOND_PICKAXE", Arrays.asList(), 0),
 	EASY_OUT(INDUSTRIAL_REVOLUTION, "CAMPFIRE", Arrays.asList(new ESTrigger("campfire")), 20, Frame.TASK, 4),
 	JUST_ADD_WATER(EASY_OUT, "WHITE_CONCRETE_POWDER", Arrays.asList(new ESTrigger("concrete")), 20),
@@ -34,6 +38,8 @@ public enum ESAdvancement {
 	FLAME_KEEPER(INDUSTRIAL_REVOLUTION, "FLINT_AND_STEEL", Arrays.asList(new ESTrigger("flame")), 40),
 	DETERMINED_CHEATER(FLAME_KEEPER, "OBSIDIAN", Arrays.asList(new ESTrigger("cheater")), 100, Frame.GOAL),
 	IRONT_YOU_GLAD(INDUSTRIAL_REVOLUTION, "IRON_INGOT", Arrays.asList(new ESTrigger("iron")), 25),
+	STAINLESS_STEEL(IRONT_YOU_GLAD, "IRON_PICKAXE", Arrays.asList(new ESTrigger("iron_pickaxe")), 150, Frame.GOAL),
+	NETHER_DULL(STAINLESS_STEEL, "NETHERITE_SWORD", Arrays.asList(new ESTrigger("netherite_sword", 0, 12, 0)), 750, Frame.CHALLENGE, 12),
 	FAST_AND_FURIOUS(IRONT_YOU_GLAD, "DIAMOND_PICKAXE", Arrays.asList(new ESTrigger("diamond_pickaxe")), 40),
 	CARPET_BOMBS(FAST_AND_FURIOUS, "TNT", Arrays.asList(new ESTrigger("explosion", 100)), 200, Frame.GOAL),
 	OVER_9000(FAST_AND_FURIOUS, "DIAMOND_PICKAXE", Arrays.asList(new ESTrigger("stone", 9001)), 1000, Frame.CHALLENGE),
@@ -51,7 +57,9 @@ public enum ESAdvancement {
 	REAPED_THE_REAPER(FEAR_THE_REAPER, "DIAMOND_HOE", Arrays.asList(new ESTrigger("reaper")), 1200, Frame.CHALLENGE),
 	PLAGUE_INC(LAAAGGGGGG, "POISONOUS_POTATO", Arrays.asList(new ESTrigger("contagion")), 15),
 	EXTERMINATION(PLAGUE_INC, "ROTTEN_FLESH", Arrays.asList(new ESTrigger("contagion")), 50),
-
+	ENVIRONMENTAL_PROTECTION(SCIENTIFIC_REVOLUTION, "EXPERIENCE_BOTTLE", Arrays.asList(new ESTrigger("experience", 1000)), 300, Frame.GOAL),
+	LIGHT_AS_A_FEATHER(SCIENTIFIC_REVOLUTION, "DIAMOND_BOOTS", Arrays.asList(new ESTrigger("boots")), 60),
+	
 	IMPERIAL_REVOLUTION("DIAMOND_SWORD", Arrays.asList(), 0),
 	HEX_BAG(IMPERIAL_REVOLUTION, "WITCH_SPAWN_EGG", Arrays.asList(new ESTrigger("player")), 25),
 	SUPER_CHARGED(HEX_BAG, "DIAMOND_AXE", Arrays.asList(new ESTrigger("lightning")), 35),
@@ -73,6 +81,7 @@ public enum ESAdvancement {
 	BLAST_OFF(IMPERIAL_REVOLUTION, "TNT", Arrays.asList(new ESTrigger("creeper")), 30),
 	PENETRATION(BLAST_OFF, "ARROW", Arrays.asList(new ESTrigger("arrow")), 100, Frame.GOAL),
 	KILIMANJARO(PENETRATION, "DIAMOND_SWORD", Arrays.asList(new ESTrigger("kills")), 1000, Frame.CHALLENGE),
+	KNOCKBACK_REVERSED(IMPERIAL_REVOLUTION, "SHIELD", Arrays.asList(new ESTrigger("knockback")), 30),
 
 	MECHANICAL_REVOLUTION("DIAMOND_CHESTPLATE", Arrays.asList(), 0),
 	COFFEE_BREAK(MECHANICAL_REVOLUTION, "SUGAR", Arrays.asList(new ESTrigger("coffee")), 20),
@@ -89,7 +98,9 @@ public enum ESAdvancement {
 	TOO_CLOSE(MECHANICAL_REVOLUTION, "ELYTRA", Arrays.asList(new ESTrigger("failure")), 75),
 	CRUISING_ALTITUDE(TOO_CLOSE, "ELYTRA", Arrays.asList(new ESTrigger("elytra")), 150, Frame.GOAL),
 	DEFLECTION(MECHANICAL_REVOLUTION, "SHIELD", Arrays.asList(new ESTrigger("shield")), 100, Frame.GOAL),
-	IRON_MAN(DEFLECTION, "IRON_BLOCK", Arrays.asList(new ESTrigger("blocked")), 500, Frame.CHALLENGE);
+	IRON_MAN(DEFLECTION, "IRON_BLOCK", Arrays.asList(new ESTrigger("blocked")), 500, Frame.CHALLENGE),
+	SIMPLE_REPAIR(MECHANICAL_REVOLUTION, "STICK", Arrays.asList(new ESTrigger("repair")), 60),
+	STICKY_BEES(SIMPLE_REPAIR, "STICK", Arrays.asList(new ESTrigger("break", 8)), 400, Frame.GOAL);
 
 	private ESAdvancement parent;
 	private Material icon;

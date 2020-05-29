@@ -37,10 +37,10 @@ public class AnimalMob {
 	private Pattern tropicalPattern;
 
 	public AnimalMob(Creature mob, ItemStack item) {
+		if (item != null) setItem(item);
 		setMob(mob.getType());
 		setName(mob.getCustomName());
 		setHealth(mob.getHealth());
-		setItem(item);
 		if (mob instanceof Animals) setAge(((Animals) mob).getAge());
 		if (mob instanceof PufferFish) {
 			PufferFish pufferFish = (PufferFish) mob;
@@ -147,11 +147,15 @@ public class AnimalMob {
 			if (inventoryItems != null && inventoryItems.get(k) != null) config.set("animals." + i + ".inventory_items." + k, ItemSerialization.itemToString(inventoryItems.get(k)));
 	}
 
-	public void editProperties(Entity e) {
+	public void editProperties(Entity e, boolean b1, boolean b2) {
 		try {
 			e.setCustomName(getName());
 			if (e instanceof Creature) {
 				Creature creature = (Creature) e;
+				if (creature instanceof Ageable && b2) {
+					Ageable a = (Ageable) creature;
+					a.setBaby();
+				}
 				if (creature instanceof PufferFish) ((PufferFish) creature).setPuffState(puffState);
 				if (creature instanceof TropicalFish) {
 					if (tropicalBodyColor == null) tropicalBodyColor = DyeColor.WHITE;
@@ -211,12 +215,14 @@ public class AnimalMob {
 					aHorse.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(getMaxHealth());
 					if (aHorse instanceof ChestedHorse) {
 						ChestedHorse cHorse = (ChestedHorse) aHorse;
-						cHorse.setCarryingChest(isCarryingChest());
-						for(int i = 2; i < inventoryItems.size(); i++)
-							cHorse.getInventory().setItem(i, inventoryItems.get(i));
+						if (isCarryingChest() && !b2) {
+							cHorse.setCarryingChest(isCarryingChest());
+							for(int i = 2; i < inventoryItems.size(); i++)
+								cHorse.getInventory().setItem(i, inventoryItems.get(i));
+						}
 					}
 				}
-				creature.setHealth(getHealth());
+				if (b1) creature.setHealth(getHealth());
 				if (creature instanceof Animals) ((Animals) creature).setAge(getAge());
 			}
 		} catch (Exception ex) {
@@ -495,5 +501,11 @@ public class AnimalMob {
 
 	public void setTropicalPattern(Pattern tropicalPattern) {
 		this.tropicalPattern = tropicalPattern;
+	}
+
+	public static Entity setHusbandry(Creature entity, Creature e) {
+		AnimalMob animal = new AnimalMob(entity, null);
+		animal.editProperties(e, false, true);
+		return e;
 	}
 }
