@@ -26,7 +26,7 @@ public class AnimalMob {
 	private ItemStack item;
 	private int age, entityID, domestication, maxDomestication, llamaStrength, puffState;
 	private DyeColor sheepColor, wolfCollar, tropicalBodyColor, tropicalPatternColor;
-	private boolean isHorse, carryingChest, pigSaddle, sheared, angry;
+	private boolean isHorse, carryingChest, pigSaddle, sheared, angry, tamed;
 	private Map<Integer, ItemStack> inventoryItems;
 	private ItemStack saddle, armor;
 	private Color horseColor;
@@ -63,6 +63,7 @@ public class AnimalMob {
 		}
 		if (mob instanceof Tameable) {
 			Tameable tameable = (Tameable) mob;
+			setTamed(tameable.isTamed());
 			if (tameable.getOwner() != null) setOwner(tameable.getOwner().getUniqueId().toString());
 		}
 		if (mob instanceof Pig) {
@@ -121,6 +122,7 @@ public class AnimalMob {
 		config.set("animals." + i + ".owner", getOwner());
 		config.set("animals." + i + ".domestication", getDomestication());
 		config.set("animals." + i + ".max_domestication", getMaxDomestication());
+		config.set("animals." + i + ".tamed", isTamed());
 		config.set("animals." + i + ".jump_strength", getJumpStrength());
 		config.set("animals." + i + ".movement_speed", getMovementSpeed());
 		config.set("animals." + i + ".max_health", getMaxHealth());
@@ -176,6 +178,7 @@ public class AnimalMob {
 				}
 				if (creature instanceof Tameable) {
 					Tameable tameable = (Tameable) creature;
+					tameable.setTamed(isTamed());
 					if (owner != null) {
 						Entity eOwner = Bukkit.getEntity(UUID.fromString(owner));
 						if (eOwner != null && eOwner instanceof AnimalTamer) tameable.setOwner((AnimalTamer) eOwner);
@@ -507,5 +510,13 @@ public class AnimalMob {
 		AnimalMob animal = new AnimalMob(entity, null);
 		animal.editProperties(e, false, true);
 		return e;
+	}
+
+	public boolean isTamed() {
+		return tamed;
+	}
+
+	public void setTamed(boolean tamed) {
+		this.tamed = tamed;
 	}
 }
