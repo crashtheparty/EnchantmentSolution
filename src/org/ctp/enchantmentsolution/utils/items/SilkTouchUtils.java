@@ -30,6 +30,8 @@ public class SilkTouchUtils {
 			case "CAMPFIRE":
 			case "NETHER_GOLD_ORE":
 			case "GILDED_BLACKSTONE":
+			case "CRIMSON_NYLIUM":
+			case "WARPED_NYLIUM":
 				if (type != null && type.getBreakTypes().contains(block.getType())) return new ItemStack(block.getType());
 				break;
 			case "INFESTED_STONE":
