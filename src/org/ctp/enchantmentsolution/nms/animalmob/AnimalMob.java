@@ -199,7 +199,7 @@ public class AnimalMob {
 				}
 				if (creature instanceof AbstractHorse) {
 					AbstractHorse aHorse = (AbstractHorse) creature;
-					aHorse.getInventory().setSaddle(getSaddle());
+					if (!b2) aHorse.getInventory().setSaddle(getSaddle());
 					if (creature instanceof Horse) {
 						Horse horse = (Horse) creature;
 						horse.setColor(getHorseColor());
