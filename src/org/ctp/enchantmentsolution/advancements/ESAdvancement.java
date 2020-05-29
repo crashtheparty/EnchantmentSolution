@@ -30,7 +30,7 @@ public enum ESAdvancement {
 	FREE_PETS(THORGY, "CARROT_ON_A_STICK", Arrays.asList(new ESTrigger("wolf"), new ESTrigger("ocelot", 0, 0, 3), new ESTrigger("cat", 0, 4, 0), new ESTrigger("horse"), new ESTrigger("donkey"), new ESTrigger("mule"), new ESTrigger("parrot"), new ESTrigger("llama"), new ESTrigger("bee", 0, 9, 0)), 500, Frame.CHALLENGE),
 	YUMMY_REPAIRS(AGRICULTURAL_REVOLUTION, "ENCHANTED_BOOK", Arrays.asList(new ESTrigger("repair")), 100, Frame.GOAL),
 	HUNGRY_HIPPOS(YUMMY_REPAIRS, "DIAMOND_CHESTPLATE", Arrays.asList(new ESTrigger("armor")), 900, Frame.CHALLENGE),
-	
+
 	INDUSTRIAL_REVOLUTION("DIAMOND_PICKAXE", Arrays.asList(), 0),
 	EASY_OUT(INDUSTRIAL_REVOLUTION, "CAMPFIRE", Arrays.asList(new ESTrigger("campfire")), 20, Frame.TASK, 4),
 	JUST_ADD_WATER(EASY_OUT, "WHITE_CONCRETE_POWDER", Arrays.asList(new ESTrigger("concrete")), 20),
@@ -59,7 +59,7 @@ public enum ESAdvancement {
 	EXTERMINATION(PLAGUE_INC, "ROTTEN_FLESH", Arrays.asList(new ESTrigger("contagion")), 50),
 	ENVIRONMENTAL_PROTECTION(SCIENTIFIC_REVOLUTION, "EXPERIENCE_BOTTLE", Arrays.asList(new ESTrigger("experience", 1000)), 300, Frame.GOAL),
 	LIGHT_AS_A_FEATHER(SCIENTIFIC_REVOLUTION, "DIAMOND_BOOTS", Arrays.asList(new ESTrigger("boots")), 60),
-	
+
 	IMPERIAL_REVOLUTION("DIAMOND_SWORD", Arrays.asList(), 0),
 	HEX_BAG(IMPERIAL_REVOLUTION, "WITCH_SPAWN_EGG", Arrays.asList(new ESTrigger("player")), 25),
 	SUPER_CHARGED(HEX_BAG, "DIAMOND_AXE", Arrays.asList(new ESTrigger("lightning")), 35),

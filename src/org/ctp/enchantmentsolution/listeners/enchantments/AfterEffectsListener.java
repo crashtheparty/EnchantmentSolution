@@ -88,7 +88,7 @@ public class AfterEffectsListener extends Enchantmentable {
 
 							if (!butcher.isCancelled()) {
 								newDrops.addAll(butcher.getDrops());
-								if(extraDrops.getType().name().contains("COOKED_")) AdvancementUtils.awardCriteria(player, ESAdvancement.MEAT_READY_TO_EAT, "beef");
+								if (extraDrops.getType().name().contains("COOKED_")) AdvancementUtils.awardCriteria(player, ESAdvancement.MEAT_READY_TO_EAT, "beef");
 							}
 						}
 					}

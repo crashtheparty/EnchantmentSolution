@@ -84,7 +84,7 @@ public class AdvancementPlayerEvent implements Listener {
 				Player player = event.getPlayer();
 				boolean hasFeed = true;
 				for(ItemStack item: player.getInventory().getArmorContents())
-					if (item == null || !(ItemUtils.hasEnchantment(item, RegisterEnchantments.FORCE_FEED))) hasFeed = false;
+					if (item == null || !ItemUtils.hasEnchantment(item, RegisterEnchantments.FORCE_FEED)) hasFeed = false;
 
 				if (hasFeed) AdvancementUtils.awardCriteria(player, ESAdvancement.HUNGRY_HIPPOS, "armor");
 			}
