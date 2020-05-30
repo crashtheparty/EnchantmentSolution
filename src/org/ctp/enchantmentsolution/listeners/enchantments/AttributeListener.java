@@ -89,11 +89,14 @@ public class AttributeListener extends Enchantmentable {
 					if (type == ItemSlotType.HELMET) {
 						UnrestPotionEvent event = new UnrestPotionEvent(player, equip ? PotionEventType.ADD : PotionEventType.REMOVE);
 						Bukkit.getPluginManager().callEvent(event);
-
 						if (!event.isCancelled() && equip) {
 							if (player.getStatistic(Statistic.TIME_SINCE_REST) < 96000) player.setStatistic(Statistic.TIME_SINCE_REST, 96000);
-							player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 1000000000, 0, false, false), true);
-						} else if (!event.isCancelled() && !equip) player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 160, 0, false, false), true);
+							player.removePotionEffect(PotionEffectType.NIGHT_VISION);
+							player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 1000000000, 0, false, false));
+						} else if (!event.isCancelled() && !equip) {
+							player.removePotionEffect(PotionEffectType.NIGHT_VISION);
+							player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 160, 0, false, false));
+						}
 					}
 				} else if (entry.getKey() == RegisterEnchantments.NO_REST) {
 					if (type == ItemSlotType.HELMET && equip) {
