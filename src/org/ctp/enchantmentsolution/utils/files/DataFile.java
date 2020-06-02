@@ -88,16 +88,18 @@ public class DataFile implements Configurable {
 	}
 
 	public void createBackup() {
-		String absolutePath = file.getAbsolutePath();
-		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss");
-		LocalDateTime now = LocalDateTime.now();
-		String newPath = absolutePath.substring(0, absolutePath.lastIndexOf('.')) + dtf.format(now) + ".yml.gz";
-		Path source = Paths.get(absolutePath);
-		Path target = Paths.get(newPath);
-		try {
-			Files.copy(source, target);
-		} catch (IOException e1) {
-			e1.printStackTrace();
+		if(file.exists()) {
+			String absolutePath = file.getAbsolutePath();
+			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss");
+			LocalDateTime now = LocalDateTime.now();
+			String newPath = absolutePath.substring(0, absolutePath.lastIndexOf('.')) + dtf.format(now) + ".yml.gz";
+			Path source = Paths.get(absolutePath);
+			Path target = Paths.get(newPath);
+			try {
+				Files.copy(source, target);
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
 		}
 	}
 
