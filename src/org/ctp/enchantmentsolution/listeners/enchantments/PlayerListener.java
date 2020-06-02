@@ -157,7 +157,7 @@ public class PlayerListener extends Enchantmentable {
 							if (loc.getBlock().isPassable()) {
 								Entity e = loc.getWorld().spawnEntity(loc, fromLasso.getMob());
 								if (e == null) return;
-								fromLasso.editProperties(e);
+								fromLasso.editProperties(e, true, false);
 								DamageUtils.damageItem(player, item, 1, 2);
 								player.incrementStatistic(Statistic.USE_ITEM, item.getType());
 								StringUtils.removeAnimal(item, entityID);
@@ -354,6 +354,7 @@ public class PlayerListener extends Enchantmentable {
 				meta.setLore(lore);
 				stickItem.setItemMeta(meta);
 				ItemUtils.giveItemToPlayer(player, stickItem, player.getLocation(), false);
+				AdvancementUtils.awardCriteria(player, ESAdvancement.STICKY_BEES, "break", 1);
 			}, 1l);
 		}
 	}

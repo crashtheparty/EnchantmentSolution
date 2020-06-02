@@ -1,5 +1,6 @@
 package org.ctp.enchantmentsolution.utils.compatibility;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -15,7 +16,6 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
-import org.ctp.enchantmentsolution.enums.MatData;
 import org.ctp.enchantmentsolution.utils.items.DamageUtils;
 
 import com.gamingmesh.jobs.Jobs;
@@ -104,10 +104,10 @@ public class JobsUtils {
 		Jobs plugin = Jobs.getInstance();
 		// make sure plugin is enabled
 		if (!plugin.isEnabled()) return;
-		// disabling plugin in world
-		if (event.getBlock() != null && !Jobs.getGCManager().canPerformActionInWorld(event.getBlock().getWorld())) return;
+
 		Block block = event.getBlock();
-		if (block == null) return;
+		// disabling plugin in world
+		if (!Jobs.getGCManager().canPerformActionInWorld(block.getWorld())) return;
 
 		Player player = event.getPlayer();
 
@@ -120,10 +120,8 @@ public class JobsUtils {
 		if (Jobs.getGCManager().disablePaymentIfRiding && player.isInsideVehicle()) return;
 
 		CMIMaterial cmat = CMIMaterial.get(block);
-		if (cmat.equals(CMIMaterial.FURNACE) && block.hasMetadata(JobsPaymentListener.furnaceOwnerMetadata)) FurnaceBrewingHandling.removeFurnace(block);
-		else if (cmat.equals(CMIMaterial.SMOKER) && block.hasMetadata(JobsPaymentListener.furnaceOwnerMetadata)) FurnaceBrewingHandling.removeFurnace(block);
-		else if (cmat.equals(CMIMaterial.BLAST_FURNACE) && block.hasMetadata(JobsPaymentListener.furnaceOwnerMetadata)) FurnaceBrewingHandling.removeFurnace(block);
-		else if (cmat.equals(CMIMaterial.BREWING_STAND) && block.hasMetadata(JobsPaymentListener.brewingOwnerMetadata)) FurnaceBrewingHandling.removeBrewing(block);
+		if (cmat.equals(CMIMaterial.FURNACE) || cmat.equals(CMIMaterial.SMOKER) || cmat.equals(CMIMaterial.BLAST_FURNACE) && block.hasMetadata(JobsPaymentListener.furnaceOwnerMetadata)) FurnaceBrewingHandling.removeFurnace(block);
+		else if (cmat.equals(CMIMaterial.BREWING_STAND) || cmat.equals(CMIMaterial.LEGACY_BREWING_STAND) && block.hasMetadata(JobsPaymentListener.brewingOwnerMetadata)) FurnaceBrewingHandling.removeBrewing(block);
 
 		if (!Jobs.getPermissionHandler().hasWorldPermission(player, player.getLocation().getWorld().getName())) return;
 
@@ -144,9 +142,9 @@ public class JobsUtils {
 
 		// Item in hand
 		ItemStack item = Jobs.getNms().getItemInMainHand(player);
-		if (item != null && !MatData.isAir(item.getType())) // Protection for block break with silktouch
+		if (item != null && !item.getType().equals(Material.AIR)) // Protection for block break with silktouch
 			if (Jobs.getGCManager().useSilkTouchProtection) for(Entry<Enchantment, Integer> one: item.getEnchantments().entrySet())
-				if (CMIEnchantment.get(one.getKey()) == CMIEnchantment.SILK_TOUCH) if (Jobs.getBpManager().isInBp(block)) return;
+			if (CMIEnchantment.get(one.getKey()) == CMIEnchantment.SILK_TOUCH) if (Jobs.getBpManager().isInBp(block)) return;
 
 		JobsPlayer jPlayer = Jobs.getPlayerManager().getJobsPlayer(player);
 		if (jPlayer == null) return;
@@ -190,10 +188,10 @@ public class JobsUtils {
 		Jobs plugin = Jobs.getInstance();
 		// make sure plugin is enabled
 		if (!plugin.isEnabled()) return;
-		// disabling plugin in world
-		if (event.getPlayer() != null && !Jobs.getGCManager().canPerformActionInWorld(event.getPlayer().getWorld())) return;
 
 		Player player = event.getPlayer();
+		// disabling plugin in world
+		if (!Jobs.getGCManager().canPerformActionInWorld(player.getWorld())) return;
 
 		// check if in creative
 		if (!payIfCreative(player)) return;
@@ -220,30 +218,19 @@ public class JobsUtils {
 
 	// Prevent item durability loss
 	private static boolean payForItemDurabilityLoss(Player p) {
+		if (Jobs.getGCManager().payItemDurabilityLoss) return true;
+
 		ItemStack hand = Jobs.getNms().getItemInMainHand(p);
+		CMIMaterial cmat = CMIMaterial.get(hand);
 
-		if (!Jobs.getGCManager().payItemDurabilityLoss && hand != null && !MatData.isAir(hand.getType()) && hand.getType().getMaxDurability() - Jobs.getNms().getDurability(hand) != hand.getType().getMaxDurability()) {
-			for(String whiteList: Jobs.getGCManager().WhiteListedItems) {
-				String item = whiteList.contains("=") ? whiteList.split("=")[0] : whiteList;
-				if (item.contains("-")) item = item.split("-")[0];
+		HashMap<Enchantment, Integer> got = Jobs.getGCManager().whiteListedItems.get(cmat);
+		if (got == null) return false;
 
-				CMIMaterial mat = CMIMaterial.get(item);
-				if (mat == null) mat = CMIMaterial.get(item.replace(" ", "_").toUpperCase());
+		if (Jobs.getNms().getDurability(hand) == 0) return true;
 
-				if (mat == null) {
-					// try integer method
-					Integer matId = null;
-					try {
-						matId = Integer.valueOf(item);
-					} catch (NumberFormatException e) {}
-					if (matId != null) mat = CMIMaterial.get(matId);
-				}
-
-				if (whiteList.contains("=") && whiteList.split("=").length == 2) if (!hand.getEnchantments().containsKey(CMIEnchantment.getEnchantment(whiteList.split("=")[1]))) return false;
-
-				if (mat != null && hand.getType().equals(mat.getMaterial())) return true;
-			}
-			return false;
+		for(Entry<Enchantment, Integer> oneG: got.entrySet()) {
+			if (!hand.getEnchantments().containsKey(oneG.getKey())) return false;
+			if (oneG.getValue() != null && hand.getEnchantments().get(oneG.getKey()) != oneG.getValue()) return false;
 		}
 
 		return true;

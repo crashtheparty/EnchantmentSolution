@@ -62,8 +62,8 @@ public class AnimalMob_v1_14_R1 extends AnimalMob {
 	}
 
 	@Override
-	public void editProperties(Entity e) {
-		super.editProperties(e);
+	public void editProperties(Entity e, boolean b1, boolean b2) {
+		super.editProperties(e, b1, b2);
 		try {
 			if (e instanceof Cat) {
 				Cat cat = (Cat) e;

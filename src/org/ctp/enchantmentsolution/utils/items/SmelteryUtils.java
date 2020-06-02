@@ -78,9 +78,6 @@ public class SmelteryUtils {
 		String material = null;
 		ItemBreakType type = ItemBreakType.getType(item.getType());
 		switch (block.getType().name()) {
-			case "BASALT":
-				if (type != null && type.getBreakTypes().contains(block.getType())) material = "POLISHED_BASALT";
-				break;
 			case "IRON_ORE":
 				if (type != null && type.getBreakTypes().contains(block.getType())) material = "IRON_INGOT";
 				break;

@@ -139,6 +139,7 @@ public class RPGUtils {
 
 	public static boolean canEnchant(Player player, CustomEnchantment customEnchantment, int i) {
 		if (!ConfigString.GAMETYPES.getStringList().contains("RPG")) return true;
+		if (player == null) return true;
 
 		RPGPlayer rpg = getPlayer(player);
 		if (rpg == null) rpg = addRPGPlayer(player);

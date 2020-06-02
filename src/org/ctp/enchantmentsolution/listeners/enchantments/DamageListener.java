@@ -72,6 +72,7 @@ public class DamageListener extends Enchantmentable {
 	@EventHandler
 	public void onEntityDamage(EntityDamageEvent event) {
 		runMethod(this, "magicGuard", event, EntityDamageEvent.class);
+		runMethod(this, "magmaWalker", event, EntityDamageEvent.class);
 	}
 
 	@EventHandler
@@ -341,10 +342,13 @@ public class DamageListener extends Enchantmentable {
 				else
 					v1 = new Vector(v1.getX() / d2 * level * 0.5F, v1.getY() / d2 * level * 0.5F, v1.getZ() / d2 * level * 0.5F);
 
-				PushbackEvent pushback = new PushbackEvent(player, level, v0, new Vector(v0.getX() / 2.0D - v1.getX(), living.isOnGround() ? Math.min(0.4D, v0.getY() / 2.0D + level * 0.5F) : v0.getY(), v0.getZ() / 2.0D - v1.getZ()));
+				PushbackEvent pushback = new PushbackEvent(player, level, v0, new Vector(v0.getX() / 2.0D - v1.getX(), living.isOnGround() ? Math.min(0.4D, v0.getY() / 2.0D + level * 0.5F) : v0.getY(), v0.getZ() / 2.0D - v1.getZ()), living);
 				Bukkit.getPluginManager().callEvent(pushback);
 
-				if (!pushback.isCancelled()) living.setVelocity(pushback.getNewVector());
+				if (!pushback.isCancelled()) {
+					AdvancementUtils.awardCriteria(player, ESAdvancement.KNOCKBACK_REVERSED, "knockback");
+					living.setVelocity(pushback.getNewVector());
+				}
 
 			}
 		}
@@ -594,6 +598,15 @@ public class DamageListener extends Enchantmentable {
 
 				if (!magicGuard.isCancelled()) event.setCancelled(true);
 			}
+		}
+	}
+
+	private void magmaWalker(EntityDamageEvent event) {
+		if (!canRun(RegisterEnchantments.MAGMA_WALKER, event)) return;
+		if (event.getCause() == DamageCause.HOT_FLOOR && event.getEntity() instanceof Player) {
+			Player player = (Player) event.getEntity();
+			ItemStack boots = player.getInventory().getBoots();
+			if (boots != null && ItemUtils.hasEnchantment(boots, RegisterEnchantments.MAGMA_WALKER)) event.setCancelled(true);
 		}
 	}
 }

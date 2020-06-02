@@ -146,6 +146,7 @@ public class MiscRunnable implements Runnable, Reflectionable {
 						if (damage < 0) damage = 0;
 						DamageUtils.setDamage(item, damage);
 						player.setExhaustion(player.getExhaustion() + forceFeed.getExhaust());
+						AdvancementUtils.awardCriteria(player, ESAdvancement.YUMMY_REPAIRS, "repair");
 					}
 				}
 			}

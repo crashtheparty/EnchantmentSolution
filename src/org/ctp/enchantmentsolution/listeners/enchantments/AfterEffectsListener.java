@@ -27,6 +27,7 @@ import org.ctp.enchantmentsolution.events.player.ExpShareEvent.ExpShareType;
 import org.ctp.enchantmentsolution.events.player.PillageEvent;
 import org.ctp.enchantmentsolution.events.player.RecyclerEvent;
 import org.ctp.enchantmentsolution.listeners.Enchantmentable;
+import org.ctp.enchantmentsolution.nms.animalmob.AnimalMob;
 import org.ctp.enchantmentsolution.threads.MiscRunnable;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.RecyclerDrops;
@@ -85,7 +86,10 @@ public class AfterEffectsListener extends Enchantmentable {
 
 							Bukkit.getPluginManager().callEvent(butcher);
 
-							if (!butcher.isCancelled()) newDrops.addAll(butcher.getDrops());
+							if (!butcher.isCancelled()) {
+								newDrops.addAll(butcher.getDrops());
+								if (extraDrops.getType().name().contains("COOKED_")) AdvancementUtils.awardCriteria(player, ESAdvancement.MEAT_READY_TO_EAT, "beef");
+							}
 						}
 					}
 				for(ItemStack drop: newDrops)
@@ -134,7 +138,9 @@ public class AfterEffectsListener extends Enchantmentable {
 					double random = Math.random();
 					if (chance > random) Bukkit.getScheduler().runTaskLater(EnchantmentSolution.getPlugin(), () -> {
 						Entity e = husbandry.getSpawnWorld().spawnEntity(husbandry.getSpawnLocation(), husbandry.getEntityType());
+						e = AnimalMob.setHusbandry((Creature) entity, (Creature) e);
 						if (e != null && e instanceof Ageable) ((Ageable) e).setBaby();
+						AdvancementUtils.awardCriteria(player, ESAdvancement.WILDLIFE_CONSERVATION, e.getType().name().toLowerCase());
 					}, 1l);
 				}
 			}
@@ -192,7 +198,7 @@ public class AfterEffectsListener extends Enchantmentable {
 				for(ItemStack item: event.getDrops())
 					if (RecyclerDrops.isRecycleable(item.getType())) for(int i = 1; i <= item.getAmount(); i++) {
 						willRecycle = true;
-						recyclerExp = RecyclerDrops.getExperience(item.getType());
+						recyclerExp += RecyclerDrops.getExperience(item.getType());
 					}
 				if (willRecycle) {
 					RecyclerEvent recyclerEvent = new RecyclerEvent(player, exp, exp + recyclerExp);
@@ -200,6 +206,8 @@ public class AfterEffectsListener extends Enchantmentable {
 
 					if (!recyclerEvent.isCancelled() && recyclerEvent.getNewExp() >= 0) {
 						event.setDroppedExp(recyclerEvent.getNewExp());
+						int finalExp = recyclerEvent.getNewExp() - recyclerEvent.getOldExp();
+						AdvancementUtils.awardCriteria(player, ESAdvancement.ENVIRONMENTAL_PROTECTION, "experience", finalExp);
 						Iterator<ItemStack> items = event.getDrops().iterator();
 						while (items.hasNext()) {
 							ItemStack item = items.next();

@@ -324,11 +324,13 @@ calc:
         stone_tools: '&9Stone Tools and Weapons'
         iron_tools: '&9Iron Tools and Weapons'
         diamond_tools: '&9Diamond Tools and Weapons'
+        netherite_tools: '&9Netherite Tools and Weapons'
         leather_armor: '&9Leather Armor'
         golden_armor: '&9Golden Armor'
         chainmail_armor: '&9Chainmail Armor'
         iron_armor: '&9Iron Armor'
         diamond_armor: '&9Diamond Armor'
+        netherite_armor: '&9Netherite Armor'
         other: '&9Books and Other Items'
     enchantability_lore:
     - '&6Resource Enchantability: &3%resource%'
@@ -922,3 +924,36 @@ advancements:
     enchantments/kilimanjaro: 
         name: 'Kilimanjaro!'
         description: 'Kill 10 mobs within 4.5 seconds with Overkill'
+    enchantments/environmental_protection:
+        name: 'Environmental Protection'
+        description: 'Earn 1000 experience with Recycler'
+    enchantments/simple_repair:
+        name: 'Simple Repair'
+        description: 'Turn a stick back into an item'
+    enchantments/sticky_bees:
+        name: 'Sticky Bees'
+        description: 'Break 8 items into sticks'
+    enchantments/knockback_reversed:
+        name: 'Knockback Reversed'
+        description: 'Knockback an enemy with Pushback'
+    enchantments/stainless_steel:
+        name: 'Stainless Steel'
+        description: 'Hold an Iron Pickaxe with the highest level of Unbreaking and Curse of Stagnancy'
+    enchantments/nether_dull:
+        name: 'Nether Dull'
+        description: 'Hold a Netherite Sword with the highest level of Sharpness and Curse of Stagnancy'
+    enchantments/yummy_repairs:
+        name: 'Yummy Repairs'
+        description: 'Repair an item with Force Feed'
+    enchantments/hungry_hippos:
+        name: 'Hungry Hippos'
+        description: 'Wear a full set of armor with Force Feed'
+    enchantments/light_as_a_feather:
+        name: 'Light as a Feather'
+        description: 'Fail to break a fully grown crop with Light Weight'
+    enchantments/wildlife_conservation:
+        name: 'Wildlife Conservation'
+        description: 'Spawn all baby animal breeds by killing an adult animal'
+    enchantments/meat_ready_to_eat:
+        name: 'Meat Ready to Eat'
+        description: 'Earn extra cooked meat with Butcher'

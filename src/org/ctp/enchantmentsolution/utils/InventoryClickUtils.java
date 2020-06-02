@@ -62,7 +62,7 @@ public class InventoryClickUtils {
 
 	public static void setAnvilDetails(Anvil anvil, Player player, Inventory inv, Inventory clickedInv, int slot) {
 		if (!inv.getType().equals(InventoryType.CHEST)) {
-			if (inv.getType().equals(InventoryType.ANVIL)) return;
+			if (inv.getType().equals(InventoryType.ANVIL) || anvil.isInLegacy()) return;
 			ItemStack item = clickedInv.getItem(slot);
 			if (item == null || MatData.isAir(item.getType())) return;
 			ItemStack replace = new ItemStack(Material.AIR);

@@ -44,7 +44,7 @@ public class BlockSound {
 	private BlockSound(String sound, List<String> types, float volume, float pitch) {
 		this.sound = sound;
 		List<MaterialSound> sounds = new ArrayList<MaterialSound>();
-		for(String s : types)
+		for(String s: types)
 			try {
 				sounds.add(MaterialSound.valueOf(s));
 			} catch (Exception ex) {}

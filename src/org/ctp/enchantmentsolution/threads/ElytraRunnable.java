@@ -68,13 +68,13 @@ public class ElytraRunnable implements Runnable, Reflectionable {
 		}
 	}
 
-	public static void addFlyer(@NotNull Player player, ItemStack elytra) {
+	public static void addFlyer(@NotNull Player player, ItemStack elytra, boolean login) {
 		if (!contains(player) && elytra != null && ItemUtils.hasEnchantment(elytra, RegisterEnchantments.FREQUENT_FLYER)) {
 			FrequentFlyerPlayer ffPlayer = new FrequentFlyerPlayer(player, elytra);
-			if (player.isGliding() || player.isFlying() || player.isInsideVehicle() || player.isRiptiding() || player.isSleeping() || player.isSwimming() || player.getLocation().getBlock().getType() == Material.WATER || !Arrays.asList(Material.LAVA, Material.WATER, Material.AIR, Material.VOID_AIR, Material.CAVE_AIR).contains(player.getLocation().getBlock().getRelative(BlockFace.DOWN).getType())) return;
+			PLAYERS.add(ffPlayer);
+			if (login && (player.isGliding() || player.isFlying() || player.isInsideVehicle() || player.isRiptiding() || player.isSleeping() || player.isSwimming() || player.getLocation().getBlock().getType() == Material.WATER || !Arrays.asList(Material.LAVA, Material.WATER, Material.AIR, Material.VOID_AIR, Material.CAVE_AIR).contains(player.getLocation().getBlock().getRelative(BlockFace.DOWN).getType()))) return;
 
 			if (ffPlayer.canFly() && player.getGameMode() != GameMode.CREATIVE && player.getGameMode() != GameMode.SPECTATOR) player.setFlying(true);
-			PLAYERS.add(ffPlayer);
 		}
 	}
 

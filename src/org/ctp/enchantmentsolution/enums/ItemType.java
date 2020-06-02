@@ -54,7 +54,8 @@ public class ItemType {
 	GOLD_INGOT = new ItemType("gold_ingot"), COBBLESTONE = new ItemType("cobblestone"), ACACIA_PLANKS = new ItemType("acacia_planks"),
 	BIRCH_PLANKS = new ItemType("birch_planks"), DARK_OAK_PLANKS = new ItemType("dark_oak_planks"), JUNGLE_PLANKS = new ItemType("jungle_planks"),
 	OAK_PLANKS = new ItemType("oak_planks"), SPRUCE_PLANKS = new ItemType("spruce_planks"), LEATHER = new ItemType("leather"),
-	PHANTOM_MEMBRANE = new ItemType("phantom_membrane"), STRING = new ItemType("string"), NETHERITE_INGOT = new ItemType("netherite_ingot");
+	PHANTOM_MEMBRANE = new ItemType("phantom_membrane"), STRING = new ItemType("string"), NETHERITE_INGOT = new ItemType("netherite_ingot"),
+	BLACKSTONE = new ItemType("blackstone"), CRIMSON_PLANKS = new ItemType("crimson_planks"), WARPED_PLANKS = new ItemType("warped_planks");
 
 	private String type, display;
 	private List<ItemData> enchantMaterials, anvilMaterials;
@@ -129,7 +130,7 @@ public class ItemType {
 	}
 
 	public static List<String> getRepairMaterialsStrings() {
-		return Arrays.asList(DIAMOND.getType(), GOLD_INGOT.getType(), IRON_INGOT.getType(), COBBLESTONE.getType(), ACACIA_PLANKS.getType(), BIRCH_PLANKS.getType(), DARK_OAK_PLANKS.getType(), JUNGLE_PLANKS.getType(), OAK_PLANKS.getType(), DARK_OAK_PLANKS.getType(), LEATHER.getType(), PHANTOM_MEMBRANE.getType(), STRING.getType(), NETHERITE_INGOT.getType());
+		return Arrays.asList(CRIMSON_PLANKS.getType(), WARPED_PLANKS.getType(), BLACKSTONE.getType(), DIAMOND.getType(), GOLD_INGOT.getType(), IRON_INGOT.getType(), COBBLESTONE.getType(), ACACIA_PLANKS.getType(), BIRCH_PLANKS.getType(), DARK_OAK_PLANKS.getType(), JUNGLE_PLANKS.getType(), OAK_PLANKS.getType(), DARK_OAK_PLANKS.getType(), LEATHER.getType(), PHANTOM_MEMBRANE.getType(), STRING.getType(), NETHERITE_INGOT.getType());
 	}
 
 	public String getDisplayName() {
@@ -542,7 +543,7 @@ public class ItemType {
 			case "STONE_PICKAXE":
 			case "STONE_SHOVEL":
 			case "STONE_SWORD":
-				i.addAll(Arrays.asList(type.toUpperCase(), "COBBLESTONE"));
+				i.addAll(Arrays.asList(type.toUpperCase(), "COBBLESTONE", "BLACKSTONE"));
 				break;
 			case "TURTLE_HELMET":
 				i.addAll(Arrays.asList("TURTLE_HELMET", "SCUTE"));
@@ -553,7 +554,7 @@ public class ItemType {
 			case "WOODEN_PICKAXE":
 			case "WOODEN_SHOVEL":
 			case "WOODEN_SWORD":
-				i.addAll(Arrays.asList(type.toUpperCase(), "ACACIA_PLANKS", "BIRCH_PLANKS", "DARK_OAK_PLANKS", "JUNGLE_PLANKS", "OAK_PLANKS", "SPRUCE_PLANKS"));
+				i.addAll(Arrays.asList(type.toUpperCase(), "ACACIA_PLANKS", "BIRCH_PLANKS", "DARK_OAK_PLANKS", "JUNGLE_PLANKS", "OAK_PLANKS", "SPRUCE_PLANKS", "CRIMSON_PLANKS", "NYLIUM_PLANKS"));
 				break;
 			case "CUSTOM":
 				break;

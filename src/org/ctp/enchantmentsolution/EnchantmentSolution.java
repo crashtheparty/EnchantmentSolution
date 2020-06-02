@@ -91,6 +91,7 @@ public class EnchantmentSolution extends JavaPlugin {
 		registerEvent(new InventoryClose());
 		registerEvent(new PlayerInteract());
 		registerEvent(new ChatMessage());
+		registerEvent(new InventoryPlayerListener());
 
 		registerEvent(new ExtraBlockListener());
 		registerEvent(new VanishListener());
@@ -349,7 +350,7 @@ public class EnchantmentSolution extends JavaPlugin {
 				if (warning) {
 					ChatUtils.sendToConsole(Level.WARNING, "McMMO Overhaul updates sporidically. Compatibility may break between versions.");
 					ChatUtils.sendToConsole(Level.WARNING, "If there are any compatibility issues, please notify the plugin author immediately.");
-					ChatUtils.sendToConsole(Level.WARNING, "Current Working Version: 2.1.111");
+					ChatUtils.sendToConsole(Level.WARNING, "Current Working Version: 2.1.128");
 				}
 				mcmmoType = "Overhaul";
 			} else {
