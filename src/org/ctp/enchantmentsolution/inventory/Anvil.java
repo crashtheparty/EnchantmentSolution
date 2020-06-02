@@ -13,8 +13,10 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
+import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.generate.AnvilEnchantments;
 import org.ctp.enchantmentsolution.enchantments.generate.AnvilEnchantments.RepairType;
+import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.AnvilUtils;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.compatibility.JobsUtils;
@@ -38,6 +40,7 @@ public class Anvil implements InventoryData {
 		playerItems = new ArrayList<ItemStack>();
 	}
 
+	@Override
 	public void setInventory() {
 		setInventory(playerItems);
 	}
@@ -213,12 +216,17 @@ public class Anvil implements InventoryData {
 				}
 				player.setLevel(player.getLevel() - anvil.getRepairCost());
 			}
+			if (anvil.getCombinedItem().getAmount() > 1) {
+				anvil.getItem().setAmount(anvil.getItem().getAmount() - 1);
+				ItemUtils.giveItemToPlayer(player, anvil.getItem(), player.getLocation(), false);
+				anvil.getCombinedItem().setAmount(1);
+			}
 			ItemUtils.giveItemToPlayer(player, anvil.getCombinedItem(), player.getLocation(), false);
-			if (anvil.getRepairType().equals(RepairType.REPAIR)) ItemUtils.giveItemToPlayer(player, anvil.getItemLeftover(), player.getLocation(), false);
+			if (anvil.getRepairType() == RepairType.REPAIR || anvil.getRepairType() == RepairType.STICKY_REPAIR) ItemUtils.giveItemToPlayer(player, anvil.getItemLeftover(), player.getLocation(), false);
 			if (EnchantmentSolution.getPlugin().isJobsEnabled()) JobsUtils.sendAnvilAction(player, playerItems.get(1), anvil.getCombinedItem());
+			if (anvil.getRepairType() == RepairType.STICKY_REPAIR) AdvancementUtils.awardCriteria(player, ESAdvancement.SIMPLE_REPAIR, "repair");
 			anvil = null;
 			playerItems.clear();
-
 			AnvilUtils.checkAnvilBreak(player, block, this);
 		} else
 			ChatUtils.sendMessage(player, ChatUtils.getMessage(getCodes(), "anvil.message-cannot-combine"));

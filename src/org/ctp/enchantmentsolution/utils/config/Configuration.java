@@ -6,7 +6,6 @@ import java.util.List;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.ctp.enchantmentsolution.utils.DBUtils;
 import org.ctp.enchantmentsolution.utils.yaml.YamlConfigBackup;
-import org.ctp.enchantmentsolution.utils.yaml.YamlInfo;
 
 public abstract class Configuration implements Configurable, Revertable {
 
@@ -42,6 +41,7 @@ public abstract class Configuration implements Configurable, Revertable {
 		return config;
 	}
 
+	@Override
 	public abstract void setDefaults();
 
 	@Override
@@ -64,10 +64,8 @@ public abstract class Configuration implements Configurable, Revertable {
 	public void revert(int backup) {
 		config.revert();
 
-		List<YamlInfo> info = DBUtils.getBackup(this, backup);
-
-		for(YamlInfo i: info)
-			if (i.getValue() != null) config.set(i.getPath(), i.getValue());
+		String info = DBUtils.getBackup(this, backup);
+		config.setFromBackup(info);
 
 		save();
 	}
@@ -109,6 +107,7 @@ public abstract class Configuration implements Configurable, Revertable {
 		config.set(s, value);
 	}
 
+	@Override
 	public List<String> getStringList(String s) {
 		return config.getStringList(s);
 	}

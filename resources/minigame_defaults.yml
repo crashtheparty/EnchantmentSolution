@@ -1,0 +1,76 @@
+type: 'FAST'
+quick_anvil: true
+
+fast:
+    override_enchantment_cost: false
+    enchantment_cost: 1
+    override_anvil_cost: false
+    anvil_cost: 1
+    random_bookshelves: false
+mondays:
+    override_anvil_cost: true
+    anvil_cost: 0
+    enchantments:
+        0:
+            enchantment: 'protection'
+            cost: 5
+        1:
+            enchantment: 'sharpness'
+            cost: 5
+        2:
+            enchantment: 'feather_falling'
+            cost: 5
+        3:
+            enchantment: 'power'
+            cost: 5
+        4:
+            enchantment: 'unbreaking'
+            cost: 5
+        5:
+            enchantment: 'luck_of_the_sea'
+            cost: 5
+        6:
+            enchantment: 'brine'
+            cost: 10
+        7:
+            enchantment: 'life'
+            cost: 15
+        8:
+            enchantment: 'gung_ho'
+            cost: 15
+        9:
+            enchantment: 'quick_strike'
+            cost: 10
+        10:
+            enchantment: 'tank'
+            cost: 10
+        11:
+            enchantment: 'RandomEnchant'
+            cost: 10
+
+custom: 
+    paging: 28
+
+config_comments:
+    type:
+    - 'The type of GUI to use for the Minigame Enchanting Table.'
+    - 'FAST: List of major enchanting types to enchant items.'
+    - 'MONDAYS: List of level 1 enchantments on books to combine quickly.'
+    - 'CUSTOM: Custom GUI with combinations of the two systems above and more.'
+    
+    quick_anvil:
+    - 'Allow players to combine enchantments using the inventory and not an actual anvil.'
+    
+    fast:
+        override_enchantment_cost:
+        - 'Override the default enchantment cost to the one set by ''fast.enchantment_cost''.'
+        enchantment_cost:
+        - 'Cost to enchant any item type.'
+        override_anvil_cost:
+        - 'Override the default anvil cost to the one set by ''fast.anvil_cost''.'
+        anvil_cost:
+        - 'Cost to anvil any item.'
+    custom:
+        paging:
+        - 'The paging system to be used.'
+        - 'Can only be 7, 9, 14, 18, 21, 27, 28, or 36.'

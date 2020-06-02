@@ -1,5 +1,7 @@
 package org.ctp.enchantmentsolution.enchantments.helper;
 
+import java.util.*;
+import java.util.Map.Entry;
 import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
@@ -49,7 +51,7 @@ public class EnchantmentLevel {
 		}
 		if (Enchantment.getByKey(key) != null) for(CustomEnchantment enchantment: RegisterEnchantments.getEnchantments())
 			if (enchantment.getRelativeEnchantment().equals(Enchantment.getByKey(key))) return enchantment;
-		ChatUtils.sendToConsole(Level.WARNING, "Bad enchantment in fishing config: " + str + ". No chance to get this enchantment.");
+		ChatUtils.sendToConsole(Level.WARNING, "Bad enchantment in config: " + str + ". No chance to get this enchantment.");
 		return null;
 	}
 
@@ -69,5 +71,15 @@ public class EnchantmentLevel {
 	public String toString() {
 		NamespacedKey key = enchant.getRelativeEnchantment().getKey();
 		return key.getNamespace() + "+" + key.getKey() + " " + level;
+	}
+
+	public static List<EnchantmentLevel> fromList(Map<Enchantment, Integer> enchantmentList) {
+		Iterator<Entry<Enchantment, Integer>> iter = enchantmentList.entrySet().iterator();
+		List<EnchantmentLevel> levels = new ArrayList<EnchantmentLevel>();
+		while (iter.hasNext()) {
+			Entry<Enchantment, Integer> entry = iter.next();
+			levels.add(new EnchantmentLevel(RegisterEnchantments.getCustomEnchantment(entry.getKey()), entry.getValue()));
+		}
+		return levels;
 	}
 }

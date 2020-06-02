@@ -1,32 +1,24 @@
 package org.ctp.enchantmentsolution.database.tables;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.util.Base64;
 import java.util.logging.Level;
 
 import org.ctp.enchantmentsolution.database.Errors;
 import org.ctp.enchantmentsolution.database.SQLite;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.yaml.YamlConfigBackup;
-import org.ctp.enchantmentsolution.utils.yaml.YamlInfo;
 
 public class BackupTable extends Table {
 
 	public BackupTable(SQLite db) {
-		super(db, "enchantment_solution", Arrays.asList("info"));
+		super(db, Arrays.asList("info"));
 		addColumn("info", "varchar", "\"\"");
 		addColumn("file_name", "varchar", "\"\"");
 		addColumn("backup_num", "int", "0");
-		addColumn("field", "varchar", "\"\"");
-		addColumn("value", "varchar null", "\"\"");
-		addColumn("type", "varchar", "\"\"");
+		addColumn("config_string", "varchar", "\"\"");
 		addColumn("created_at", "varchar", "\"\"");
 	}
 
@@ -35,29 +27,15 @@ public class BackupTable extends Table {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 
-		LinkedHashMap<String, Boolean> keySame = new LinkedHashMap<String, Boolean>();
-		if (!includeConfigInv) for(String key: config.getAllEntryKeys())
-			keySame.put(key, false);
-		else
-			for(String key: config.getConfigInventoryEntryKeys())
-				keySame.put(key, false);
+		boolean matches = false;
 
 		try {
 			conn = getDb().getSQLConnection();
 			ps = conn.prepareStatement("SELECT * FROM " + getName() + " WHERE file_name = '" + config.getFileName() + "' AND backup_num = " + backupNum + " ORDER BY created_at asc;");
 
 			rs = ps.executeQuery();
-			while (rs.next()) {
-				String field = rs.getString("field");
-				if (includeConfigInv) {
-					if (config.matchConfig(field, rs.getObject("value"))) keySame.put(field, true);
-					else
-						keySame.put(field, false);
-				} else if (keySame.containsKey(field)) {
-					if (config.match(field, rs.getObject("value"))) keySame.put(field, true);
-				} else
-					keySame.put(field, false);
-			}
+			while (rs.next())
+				if (config.matches(rs.getString("config_string"))) matches = true;
 		} catch (SQLException ex) {
 			ChatUtils.sendSevere("ISSUE in \"SELECT * FROM " + getName() + " WHERE file_name = '" + config.getFileName() + "' AND backup_num = " + backupNum + " ORDER BY created_at asc;\"");
 			getDb().getPlugin().getLogger().log(Level.SEVERE, Errors.sqlConnectionExecute(), ex);
@@ -70,8 +48,15 @@ public class BackupTable extends Table {
 				getDb().getPlugin().getLogger().log(Level.SEVERE, Errors.sqlConnectionClose(), ex);
 			}
 		}
-		if (keySame.containsValue(false)) return true;
-		return false;
+		return !matches;
+	}
+
+	private String encode(YamlConfigBackup config, boolean includeChanges) {
+		return config.encode(includeChanges);
+	}
+
+	private String decode(String configString) {
+		return new String(Base64.getDecoder().decode(configString));
 	}
 
 	public int getBackupNum(YamlConfigBackup config) {
@@ -112,24 +97,15 @@ public class BackupTable extends Table {
 			LocalDateTime date = LocalDateTime.now();
 			String dateString = date.toString();
 			conn = getDb().getSQLConnection();
-			conn.setAutoCommit(false);
-			ps = conn.prepareStatement("INSERT INTO " + getName() + " (info, file_name, backup_num, field, value, type, created_at) " + "VALUES (?, ?, ?, ?, ?, ?, ?)");
-			for(String key: config.getAllEntryKeys()) {
-				ps.setString(1, backupNum + " " + config.getFileName() + " " + key);
-				ps.setString(2, config.getFileName());
-				ps.setInt(3, backupNum);
-				ps.setString(4, key);
-				if (config.getBooleanValue(key) != null) ps.setString(5, Boolean.toString(config.getBoolean(key)));
-				else
-					ps.setObject(5, config.get(key));
-				ps.setString(6, config.getType(key));
-				ps.setString(7, dateString);
-				ps.addBatch();
-			}
-			ps.executeBatch();
-			conn.commit();
+			ps = conn.prepareStatement("INSERT INTO " + getName() + " (info, file_name, backup_num, config_string, created_at) " + "VALUES (?, ?, ?, ?, ?)");
+			ps.setString(1, backupNum + " " + config.getFileName());
+			ps.setString(2, config.getFileName());
+			ps.setInt(3, backupNum);
+			ps.setString(4, encode(config, false));
+			ps.setString(5, dateString);
+			ps.execute();
 		} catch (SQLException ex) {
-			ChatUtils.sendSevere("ISSUE on inserting multiple strings into " + config.getFileName());
+			ChatUtils.sendSevere("ISSUE on inserting backup into " + config.getFileName());
 			getDb().getPlugin().getLogger().log(Level.SEVERE, Errors.sqlConnectionExecute(), ex);
 		} finally {
 			try {
@@ -142,13 +118,13 @@ public class BackupTable extends Table {
 		return;
 	}
 
-	public List<YamlInfo> getBackup(YamlConfigBackup config, int backup) {
+	public String getBackup(YamlConfigBackup config, int backup) {
 		Connection conn = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		String file = config.getFileName();
 
-		List<YamlInfo> infos = new ArrayList<YamlInfo>();
+		String backupString = "";
 
 		try {
 			conn = getDb().getSQLConnection();
@@ -157,39 +133,8 @@ public class BackupTable extends Table {
 			ps.setString(2, file);
 			rs = ps.executeQuery();
 			while (rs.next()) {
-				Object obj = null;
-				switch (rs.getString("type")) {
-					case "nested value":
-						obj = null;
-						break;
-					case "enum":
-					case "string":
-						obj = rs.getString("value");
-						break;
-					case "integer":
-						obj = rs.getInt("value");
-						break;
-					case "double":
-						obj = rs.getDouble("value");
-						break;
-					case "boolean":
-						switch (rs.getString("value")) {
-							case "true":
-								obj = new Boolean(true);
-								break;
-							default:
-								obj = new Boolean(false);
-								break;
-						}
-						break;
-					case "enum_list":
-					case "list":
-						String[] values = config.replaceLast(rs.getString("value").replaceFirst("\\[", ""), "]", "").split(", ");
-						obj = Arrays.asList(values);
-						break;
-				}
-				YamlInfo info = new YamlInfo(rs.getString("field"), obj);
-				infos.add(info);
+				backupString = rs.getString("config_string");
+				break;
 			}
 		} catch (SQLException ex) {
 			ChatUtils.sendSevere("ISSUE in \"SELECT * FROM " + getName() + " WHERE backup_num = ? AND file_name = ?\"");
@@ -203,6 +148,7 @@ public class BackupTable extends Table {
 				getDb().getPlugin().getLogger().log(Level.SEVERE, Errors.sqlConnectionClose(), ex);
 			}
 		}
-		return infos;
+
+		return decode(backupString);
 	}
 }

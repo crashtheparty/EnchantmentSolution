@@ -43,6 +43,7 @@ public class MainConfiguration extends Configuration {
 		config.addEnum("language", Language.getValues());
 		config.addEnum("disable_enchant_method", Arrays.asList("vanish", "visible", "repairable"));
 		config.addEnum("enchanting_table.enchanting_type", enchantingTypes);
+		config.addEnum("gametypes", Arrays.asList("MINIGAME", "RPG", "HARD"));
 		config.addMinMax("anvil.max_repair_level", 40, 1000000);
 		if (VersionUtils.getBukkitVersionNumber() > 3) {
 			config.addDefault("loots.chests.pillager_outpost.bookshelves", 10);

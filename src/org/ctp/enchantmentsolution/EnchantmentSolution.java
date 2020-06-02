@@ -7,6 +7,7 @@ import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
@@ -14,7 +15,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.advancements.ESAdvancementProgress;
-import org.ctp.enchantmentsolution.commands.*;
+import org.ctp.enchantmentsolution.commands.EnchantmentSolutionCommand;
 import org.ctp.enchantmentsolution.database.SQLite;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.inventory.InventoryData;
@@ -25,6 +26,7 @@ import org.ctp.enchantmentsolution.listeners.chestloot.ChestLootListener;
 import org.ctp.enchantmentsolution.listeners.enchantments.*;
 import org.ctp.enchantmentsolution.listeners.fishing.EnchantsFishingListener;
 import org.ctp.enchantmentsolution.listeners.fishing.McMMOFishingListener;
+import org.ctp.enchantmentsolution.listeners.hard.HardModeListener;
 import org.ctp.enchantmentsolution.listeners.inventory.*;
 import org.ctp.enchantmentsolution.listeners.legacy.UpdateEnchantments;
 import org.ctp.enchantmentsolution.listeners.mobs.MobSpawning;
@@ -34,10 +36,12 @@ import org.ctp.enchantmentsolution.listeners.vanilla.EnchantmentListener;
 import org.ctp.enchantmentsolution.listeners.vanilla.GrindstoneListener;
 import org.ctp.enchantmentsolution.mcmmo.McMMOAbility;
 import org.ctp.enchantmentsolution.nms.animalmob.AnimalMob;
+import org.ctp.enchantmentsolution.rpg.listener.RPGListener;
 import org.ctp.enchantmentsolution.threads.*;
 import org.ctp.enchantmentsolution.utils.*;
-import org.ctp.enchantmentsolution.utils.abillityhelpers.DrownedEntity;
-import org.ctp.enchantmentsolution.utils.abillityhelpers.EntityAccuracy;
+import org.ctp.enchantmentsolution.utils.abilityhelpers.DrownedEntity;
+import org.ctp.enchantmentsolution.utils.abilityhelpers.EntityAccuracy;
+import org.ctp.enchantmentsolution.utils.commands.ESCommand;
 import org.ctp.enchantmentsolution.utils.compatibility.AuctionHouseUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 import org.ctp.enchantmentsolution.utils.files.SaveUtils;
@@ -63,6 +67,8 @@ public class EnchantmentSolution extends JavaPlugin {
 	private WikiThread wiki;
 	private String mcmmoVersion, mcmmoType;
 	private Plugin veinMiner;
+	private boolean mmoItems = false;
+	private RPGListener rpg;
 
 	@Override
 	public void onLoad() {
@@ -78,13 +84,14 @@ public class EnchantmentSolution extends JavaPlugin {
 
 		Configurations.onEnable();
 	}
-	
+
 	@Override
 	public void onEnable() {
 		registerEvent(new InventoryClick());
 		registerEvent(new InventoryClose());
 		registerEvent(new PlayerInteract());
 		registerEvent(new ChatMessage());
+		registerEvent(new InventoryPlayerListener());
 
 		registerEvent(new ExtraBlockListener());
 		registerEvent(new VanishListener());
@@ -115,6 +122,11 @@ public class EnchantmentSolution extends JavaPlugin {
 		registerEvent(new AdvancementEntityDeath());
 		registerEvent(new AdvancementPlayerEvent());
 
+		rpg = new RPGListener();
+		registerEvent(rpg);
+		Bukkit.getScheduler().runTaskTimer(PLUGIN, rpg, 1l, 1l);
+		registerEvent(new HardModeListener());
+
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN, new AbilityRunnable(), 80l, 80l);
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN, new AdvancementThread(), 1l, 1l);
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN, new ElytraRunnable(), 1l, 1l);
@@ -122,23 +134,18 @@ public class EnchantmentSolution extends JavaPlugin {
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN, new SnapshotRunnable(), 1l, 1l);
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN, new WalkerRunnable(), 1l, 1l);
 
-		getCommand("Enchant").setExecutor(new Enchant());
-		getCommand("Info").setExecutor(new EnchantInfo());
-		getCommand("RemoveEnchant").setExecutor(new RemoveEnchant());
-		getCommand("EnchantUnsafe").setExecutor(new UnsafeEnchant());
-		getCommand("ESReload").setExecutor(new Reload());
-		getCommand("ESConfig").setExecutor(new ConfigEdit());
-		getCommand("ESReset").setExecutor(new Reset());
-		getCommand("ESDebug").setExecutor(new Debug());
-		getCommand("ESCalc").setExecutor(new EnchantabilityCalculator());
-		getCommand("ESBook").setExecutor(new Book());
-		getCommand("ESAnvil").setExecutor(new AnvilCommand());
-		getCommand("ESGrindstone").setExecutor(new GrindstoneCommand());
-		getCommand("ConfigLore").setExecutor(new ConfigLore());
-		getCommand("Enchant").setTabCompleter(new PlayerChatTabComplete());
-		getCommand("Info").setTabCompleter(new PlayerChatTabComplete());
-		getCommand("RemoveEnchant").setTabCompleter(new PlayerChatTabComplete());
-		getCommand("EnchantUnsafe").setTabCompleter(new PlayerChatTabComplete());
+		EnchantmentSolutionCommand c = new EnchantmentSolutionCommand();
+		getCommand("EnchantmentSolution").setExecutor(c);
+		getCommand("EnchantmentSolution").setTabCompleter(c);
+		for(ESCommand s: EnchantmentSolutionCommand.getCommands()) {
+			PluginCommand command = getCommand(s.getCommand());
+			if (command != null) {
+				command.setExecutor(c);
+				command.setTabCompleter(c);
+				command.setAliases(s.getAliases());
+			} else
+				ChatUtils.sendWarning("Couldn't find command '" + s.getCommand() + ".'");
+		}
 
 		check = new VersionCheck(pluginVersion, "https://raw.githubusercontent.com/crashtheparty/EnchantmentSolution/master/VersionHistory", "https://www.spigotmc.org/resources/enchantment-solution.59556/", "https://github.com/crashtheparty/EnchantmentSolution", ConfigString.LATEST_VERSION.getBoolean(), ConfigString.EXPERIMENTAL_VERSION.getBoolean());
 		registerEvent(check);
@@ -161,11 +168,15 @@ public class EnchantmentSolution extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
+		closeInventories(null);
+		SaveUtils.setData();
+	}
+
+	public void closeInventories(Class<? extends InventoryData> clazz) {
 		List<InventoryData> data = new ArrayList<InventoryData>();
 		data.addAll(inventories);
 		for(InventoryData inv: data)
-			inv.close(true);
-		SaveUtils.setData();
+			if (clazz == null || clazz.isAssignableFrom(data.getClass())) inv.close(true);
 	}
 
 	private void registerEvent(Listener l) {
@@ -190,13 +201,6 @@ public class EnchantmentSolution extends JavaPlugin {
 
 	public PluginVersion getPluginVersion() {
 		return pluginVersion;
-	}
-
-	public void resetInventories() {
-		for(int i = inventories.size() - 1; i >= 0; i--) {
-			InventoryData inv = inventories.get(i);
-			inv.close(true);
-		}
 	}
 
 	public InventoryData getInventory(Player player) {
@@ -346,7 +350,7 @@ public class EnchantmentSolution extends JavaPlugin {
 				if (warning) {
 					ChatUtils.sendToConsole(Level.WARNING, "McMMO Overhaul updates sporidically. Compatibility may break between versions.");
 					ChatUtils.sendToConsole(Level.WARNING, "If there are any compatibility issues, please notify the plugin author immediately.");
-					ChatUtils.sendToConsole(Level.WARNING, "Current Working Version: 2.1.111");
+					ChatUtils.sendToConsole(Level.WARNING, "Current Working Version: 2.1.128");
 				}
 				mcmmoType = "Overhaul";
 			} else {
@@ -376,5 +380,14 @@ public class EnchantmentSolution extends JavaPlugin {
 			AuctionHouseUtils.resetAuctionHouse();
 			ChatUtils.sendInfo("Auction House compatibility enabled!");
 		}
+
+		if (Bukkit.getPluginManager().isPluginEnabled("MMOItems")) {
+			mmoItems = true;
+			ChatUtils.sendInfo("MMOItems compatibility enabled!");
+		}
+	}
+
+	public boolean getMMOItems() {
+		return mmoItems;
 	}
 }

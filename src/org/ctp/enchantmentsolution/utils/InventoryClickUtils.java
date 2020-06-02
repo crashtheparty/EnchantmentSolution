@@ -10,16 +10,14 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
-import org.ctp.enchantmentsolution.inventory.Anvil;
-import org.ctp.enchantmentsolution.inventory.ConfigInventory;
-import org.ctp.enchantmentsolution.inventory.EnchantmentTable;
-import org.ctp.enchantmentsolution.inventory.Grindstone;
+import org.ctp.enchantmentsolution.enums.MatData;
+import org.ctp.enchantmentsolution.inventory.*;
 import org.ctp.enchantmentsolution.inventory.ConfigInventory.Screen;
-import org.ctp.enchantmentsolution.inventory.EnchantabilityCalc;
+import org.ctp.enchantmentsolution.inventory.minigame.Minigame;
+import org.ctp.enchantmentsolution.inventory.rpg.RPGInventory;
 import org.ctp.enchantmentsolution.nms.Anvil_GUI_NMS;
 import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 import org.ctp.enchantmentsolution.utils.yaml.YamlConfigBackup;
-import org.ctp.enchantmentsolution.utils.yaml.YamlInfo;
 
 public class InventoryClickUtils {
 
@@ -64,9 +62,9 @@ public class InventoryClickUtils {
 
 	public static void setAnvilDetails(Anvil anvil, Player player, Inventory inv, Inventory clickedInv, int slot) {
 		if (!inv.getType().equals(InventoryType.CHEST)) {
-			if (inv.getType().equals(InventoryType.ANVIL)) return;
+			if (inv.getType().equals(InventoryType.ANVIL) || anvil.isInLegacy()) return;
 			ItemStack item = clickedInv.getItem(slot);
-			if (item == null || item.getType().equals(Material.AIR)) return;
+			if (item == null || MatData.isAir(item.getType())) return;
 			ItemStack replace = new ItemStack(Material.AIR);
 			int original_amount = item.getAmount();
 			if (original_amount > 1 && item.getType() == Material.BOOK && item.hasItemMeta() && item.getItemMeta().hasEnchants()) {
@@ -105,7 +103,7 @@ public class InventoryClickUtils {
 	int slot) {
 		if (!inv.getType().equals(InventoryType.CHEST)) {
 			ItemStack item = clickedInv.getItem(slot);
-			if (item == null || item.getType().equals(Material.AIR)) return;
+			if (item == null || MatData.isAir(item.getType())) return;
 			ItemStack replace = new ItemStack(Material.AIR);
 			int original_amount = item.getAmount();
 			if (original_amount > 1) {
@@ -162,6 +160,15 @@ public class InventoryClickUtils {
 							break;
 						case 6:
 							configInv.listConfigDetails(Configurations.getEnchantments().getConfig(), null);
+							break;
+						case 12:
+							configInv.listConfigDetails(Configurations.getMinigames().getConfig(), null);
+							break;
+						case 13:
+							configInv.listConfigDetails(Configurations.getRPG().getConfig(), null);
+							break;
+						case 14:
+							configInv.listConfigDetails(Configurations.getHardMode().getConfig(), null);
 							break;
 						case 21:
 							if (!item.getType().equals(Material.BARRIER)) configInv.saveAll();
@@ -367,8 +374,7 @@ public class InventoryClickUtils {
 							if (s.startsWith(ChatColor.WHITE + "Num: " + ChatColor.GRAY)) num = s.replace(ChatColor.WHITE + "Num: " + ChatColor.GRAY, "");
 						if (num != null) {
 							backup = new YamlConfigBackup(null, null);
-							List<YamlInfo> backupInfo = EnchantmentSolution.getPlugin().getDb().getBackup(config, Integer.parseInt(num));
-							backup.setFromBackup(backupInfo);
+							backup.setFromBackup(EnchantmentSolution.getPlugin().getDb().getBackup(config, Integer.parseInt(num)));
 							configInv.listConfigDetails(config, backup, level, 1);
 						}
 					}
@@ -457,7 +463,72 @@ public class InventoryClickUtils {
 		}
 	}
 
+	public static void setRPGInventory(RPGInventory rpgInventory, Player player, Inventory inv, Inventory clickedInv, int slot, ClickType click) {
+		if (!inv.getType().equals(InventoryType.CHEST)) return;
+		ItemStack item = clickedInv.getItem(slot);
+		if (item == null) return;
+		switch (slot) {
+			case 53:
+				if (checkPagination(item)) {
+					rpgInventory.setPage(rpgInventory.getPage() + 1);
+					rpgInventory.setInventory();
+				}
+				break;
+			case 45:
+				if (checkPagination(item)) {
+					if (rpgInventory.getPage() > 1) rpgInventory.setPage(rpgInventory.getPage() - 1);
+					rpgInventory.setInventory();
+				}
+				break;
+		}
+		switch (rpgInventory.getScreen()) {
+			case LIST:
+				if (rpgInventory.isEnchantment(slot)) rpgInventory.setEnchantment(slot);
+				break;
+			case ENCHANTMENT:
+				if (slot == 0) rpgInventory.setList();
+				if (rpgInventory.isEnchantment(slot) && item.getType() == Material.BOOK) {
+					rpgInventory.buyEnchantmentLevel(slot);
+					rpgInventory.setInventory();
+				}
+				break;
+			case CONFIRM:
+				if (slot == 2) rpgInventory.cancel();
+				else if (slot == 6) rpgInventory.buy();
+		}
+	}
+
+	public static void setMinigameInventory(Minigame minigameInventory, Player player, Inventory inv, Inventory clickedInv, int slot, ClickType click) {
+		if (!inv.getType().equals(InventoryType.CHEST)) return;
+		ItemStack item = clickedInv.getItem(slot);
+		if (item == null) return;
+		if (slot == 45 && checkPagination(item)) {
+			minigameInventory.setPage(minigameInventory.getPage() - 1);
+			minigameInventory.setInventory();
+			return;
+		}
+		if (slot == 53 && checkPagination(item)) {
+			minigameInventory.setPage(minigameInventory.getPage() + 1);
+			minigameInventory.setInventory();
+			return;
+		}
+		switch (minigameInventory.getScreen()) {
+			case FAST:
+				if (item.getType() != Material.BLACK_STAINED_GLASS_PANE) minigameInventory.addFastEnchantment(slot);
+				break;
+			case MONDAYS:
+				if (item.getType() != Material.BLACK_STAINED_GLASS_PANE) minigameInventory.addMondaysEnchantment(slot);
+				break;
+			case CUSTOM:
+				if (item.getType() != Material.BLACK_STAINED_GLASS_PANE) minigameInventory.addCustomEnchantment(slot);
+				break;
+			default:
+				break;
+		}
+		minigameInventory.setInventory();
+	}
+
 	private static boolean checkPagination(ItemStack item) {
-		return item.getType().equals(Material.ARROW);
+		return item.getType() == Material.ARROW;
 	}
 }

@@ -1,17 +1,15 @@
 package org.ctp.enchantmentsolution.threads;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 import org.bukkit.*;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.utils.Reflectionable;
-import org.ctp.enchantmentsolution.utils.abillityhelpers.FrequentFlyerPlayer;
-import org.ctp.enchantmentsolution.utils.abillityhelpers.IcarusDelay;
+import org.ctp.enchantmentsolution.utils.abilityhelpers.FrequentFlyerPlayer;
+import org.ctp.enchantmentsolution.utils.abilityhelpers.IcarusDelay;
 import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 
 import com.sun.istack.internal.NotNull;
@@ -44,6 +42,7 @@ public class ElytraRunnable implements Runnable, Reflectionable {
 				continue;
 			}
 			ItemStack elytra = player.getInventory().getChestplate();
+			ffPlayer.setDidTick(false);
 			if (elytra != null) {
 				ffPlayer.setElytra(elytra);
 				if (player.isFlying() && !player.getGameMode().equals(GameMode.CREATIVE) && !player.getGameMode().equals(GameMode.SPECTATOR)) ffPlayer.minus();
@@ -69,21 +68,25 @@ public class ElytraRunnable implements Runnable, Reflectionable {
 		}
 	}
 
-	public static void addFlyer(@NotNull Player player, ItemStack elytra) {
-		if (!contains(player) && elytra != null && ItemUtils.hasEnchantment(elytra, RegisterEnchantments.FREQUENT_FLYER)) { 
+	public static void addFlyer(@NotNull Player player, ItemStack elytra, boolean login) {
+		if (!contains(player) && elytra != null && ItemUtils.hasEnchantment(elytra, RegisterEnchantments.FREQUENT_FLYER)) {
 			FrequentFlyerPlayer ffPlayer = new FrequentFlyerPlayer(player, elytra);
-			Bukkit.getScheduler().runTaskLater(EnchantmentSolution.getPlugin(), () -> {
-				if(player.isGliding() || player.isFlying() || player.isInsideVehicle() || player.isRiptiding() || player.isSleeping() || player.isSwimming() || player.getLocation().getBlock().getType() == Material.WATER) return;
-				
-				if (ffPlayer.canFly() && player.getGameMode() != GameMode.CREATIVE && player.getGameMode() != GameMode.SPECTATOR) player.setFlying(true);
-			}, 4l);
 			PLAYERS.add(ffPlayer);
+			if (login && (player.isGliding() || player.isFlying() || player.isInsideVehicle() || player.isRiptiding() || player.isSleeping() || player.isSwimming() || player.getLocation().getBlock().getType() == Material.WATER || !Arrays.asList(Material.LAVA, Material.WATER, Material.AIR, Material.VOID_AIR, Material.CAVE_AIR).contains(player.getLocation().getBlock().getRelative(BlockFace.DOWN).getType()))) return;
+
+			if (ffPlayer.canFly() && player.getGameMode() != GameMode.CREATIVE && player.getGameMode() != GameMode.SPECTATOR) player.setFlying(true);
 		}
 	}
-	
+
 	private static boolean contains(Player player) {
-		for(FrequentFlyerPlayer ffPlayer : PLAYERS)
+		for(FrequentFlyerPlayer ffPlayer: PLAYERS)
 			if (ffPlayer.getPlayer().getUniqueId().equals(player.getUniqueId())) return true;
+		return false;
+	}
+
+	public static boolean didTick(Player player) {
+		for(FrequentFlyerPlayer ffPlayer: PLAYERS)
+			if (ffPlayer.getPlayer().getUniqueId().equals(player.getUniqueId())) return ffPlayer.didTick();
 		return false;
 	}
 }

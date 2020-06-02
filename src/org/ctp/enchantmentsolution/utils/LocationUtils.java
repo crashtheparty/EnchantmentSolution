@@ -1,12 +1,11 @@
 package org.ctp.enchantmentsolution.utils;
 
-import java.util.Arrays;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.ExperienceOrb;
 import org.bukkit.entity.Player;
+import org.ctp.enchantmentsolution.enums.MatData;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 
 public class LocationUtils {
@@ -14,7 +13,7 @@ public class LocationUtils {
 	public static boolean isLocationDifferent(Location locOne, Location locTwo, boolean includeY) {
 		return locOne.getX() != locTwo.getX() || locOne.getZ() != locTwo.getZ() || includeY && locTwo.getY() != locOne.getY();
 	}
-	
+
 	public static boolean isLocationSame(Location locOne, Location locTwo, boolean includeY) {
 		return locOne.getX() == locTwo.getX() && locOne.getZ() == locTwo.getZ() && (!includeY || locTwo.getY() == locOne.getY());
 	}
@@ -22,7 +21,7 @@ public class LocationUtils {
 	public static boolean hasBlockAbove(Player player) {
 		for(int y = player.getLocation().getBlockY(); y < player.getWorld().getMaxHeight(); y++) {
 			Location loc = player.getLocation().clone().add(0, y, 0);
-			if (!Arrays.asList("AIR", "VOID_AIR", "CAVE_AIR").contains(loc.getBlock().getType().name())) return true;
+			if (MatData.isAir(loc.getBlock().getType())) return true;
 		}
 		return false;
 	}
@@ -31,7 +30,7 @@ public class LocationUtils {
 		for(int y = location.getBlockY(); y >= 0; y--) {
 			Location loc = location.clone();
 			loc.setY(y);
-			if (!Arrays.asList("AIR", "VOID_AIR", "CAVE_AIR").contains(loc.getBlock().getType().name())) return true;
+			if (MatData.isAir(loc.getBlock().getType())) return true;
 		}
 		return false;
 	}

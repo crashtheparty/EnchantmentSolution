@@ -1,23 +1,27 @@
 name: EnchantmentSolution
-version: 2.2.16
+version: 2.3.0
 main: org.ctp.enchantmentsolution.EnchantmentSolution
 api-version: 1.13
 softdepend: [mcMMO, Jobs, VeinMiner, AuctionHouse]
 commands:
+  enchantmentsolution:
+    aliases: [es]
+    description: All commands for EnchantmentSolution
+    usage: /enchantmentsolution
   enchant:
-    aliases: [es,customenchant]
+    aliases: [customenchant]
     description: Add enchantments to items.
     usage: /enchant <enchant_name> [level]
   enchantunsafe:
-    aliases: [esu,customenchantunsafe]
+    aliases: [customenchantunsafe]
     description: Displays commands
     usage: /enchantunsafe <enchant_name> [level]
   info:
-    aliases: [einfo,enchantinfo]
+    aliases: [enchantinfo]
     description: Gives player information on an enchantment.
     usage: /info [enchant_name]
   removeenchant:
-    aliases: [esr,eremove]
+    aliases: [eremove]
     description: Remove enchantment from item.
     usage: /removeenchant <enchant_name>
   esreload:
@@ -33,7 +37,6 @@ commands:
     description: Generates a debug file for debugging and testing
     usage: /esdebug
   escalc:
-    aliases: [enchantabilitycalc,enchantabilitycalculator,escalculator]
     description: Calculate the levels that would be possible with certain enchantabilities
     usage: /escalc
   esbook:
@@ -51,36 +54,54 @@ commands:
   configlore:
     description: Gets the hidden chat color value for strings to be used in ES enchantments
     usage: /configlore
+  esrpg:
+    description: Gets the ES RPG information if the RPG mode is enabled
+    usage: /esrpg
+  eshelp:
+    description: Gets a list of commands and their usages
+    usage: /eshelp
+  esfix:
+    description: Fixes items to make their enchantments work
+    usage: /esfix
+  rpgstats:
+    description: Gets a player's stats from ESRPG
+    usage: /rpgstats
+  rpgtop:
+    description: Gets a leaderboard for ESRPG players
+    usage: /rpgtop
+  rpgedit:
+    description: Edits a player's ESRPG information
+    usage: /rpgedit
 permissions:
   enchantmentsolution.command.edit: 
-    description: Gives access to the /esconfig command. 
+    description: Gives access to the /es config command. 
     default: op
   enchantmentsolution.command.enchant: 
-    description: Gives access to the /enchant command. 
+    description: Gives access to the /es enchant command. 
     default: op
   enchantmentsolution.command.enchant.others: 
-    description: Gives access to the /enchant command for use on other people. 
+    description: Gives access to the /es enchant command for use on other people. 
     default: op
   enchantmentsolution.command.reload: 
-    description: Gives access to the /esreload command. 
+    description: Gives access to the /es reload command. 
     default: op
   enchantmentsolution.command.enchantremove: 
-    description: Gives access to the /removeenchant command. 
+    description: Gives access to the /es removeenchant command. 
     default: op
   enchantmentsolution.command.enchantremove.others: 
-    description: Gives access to the /removeenchant command for use on other people. 
+    description: Gives access to the /es removeenchant command for use on other people. 
     default: op
   enchantmentsolution.command.reset: 
-    description: Gives access to the /esreset command. 
+    description: Gives access to the /es reset command. 
     default: op
   enchantmentsolution.command.enchantunsafe: 
-    description: Gives access to the /enchantunsafe command.
+    description: Gives access to the /es enchantunsafe command.
     default: op
   enchantmentsolution.command.enchantunsafe.others: 
-    description: Gives access to the /enchantunsafe command for use on other people. 
+    description: Gives access to the /es enchantunsafe command for use on other people. 
     default: op
   enchantmentsolution.command.calculator:
-    description: Allows players to use the /escalc command
+    description: Allows players to use the /es calc command
     default: op
   enchantmentsolution.enable-flight:
     description: Enables use of external /fly commands without interference from FrequentFlyer
@@ -98,17 +119,44 @@ permissions:
     description: Allows players to combine items higher than their max levels
     default: false
   enchantmentsolution.command.debug:
-    description: Allows players to use the /esdebug command
+    description: Allows players to use the /es debug command
     default: op
   enchantmentsolution.command.book:
-    description: Allows players to use the /esbook command
+    description: Allows players to use the /es book command
     default: op
   enchantmentsolution.command.anvil:
-    description: Allows players to use the /esanvil command
+    description: Allows players to use the /es anvil command
     default: op
   enchantmentsolution.command.grindstone:
-    description: Allows players to use the /esgrindstone command
+    description: Allows players to use the /es grindstone command
     default: op
   enchantmentsolution.command.configlore:
-    description: Allows players to use the /configlore command
+    description: Allows players to use the /es lore command
+    default: op
+  enchantmentsolution.command.help:
+    description: Allows players to use the /es help command
+    default: true
+  enchantmentsolution.command.info:
+    description: Allows players to use the /es info command
+    default: true
+  enchantmentsolution.command.fix:
+    description: Allows players to use the /es fix command
+    default: op
+  enchantmentsolution.command.fix.others:
+    description: Allows players to use the /es fix command on others
+    default: op
+  enchantmentsolution.command.rpg:
+    description: Allows players to use the /es rpg command
+    default: op
+  enchantmentsolution.command.rpgstats:
+    description: Allows players to use the /es rpgstats command
+    default: op
+  enchantmentsolution.command.rpgstats.others:
+    description: Allows players to use the /es rpgstats command on others
+    default: op
+  enchantmentsolution.command.rpgtop:
+    description: Allows players to use the /es rpgtop command
+    default: op
+  enchantmentsolution.command.rpgedit:
+    description: Allows players to use the /es rpgedit command
     default: op

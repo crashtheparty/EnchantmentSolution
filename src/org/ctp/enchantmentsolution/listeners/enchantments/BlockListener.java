@@ -2,37 +2,43 @@ package org.ctp.enchantmentsolution.listeners.enchantments;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.bukkit.*;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.*;
 import org.bukkit.block.data.type.Snow;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
-import org.ctp.enchantmentsolution.enums.ItemBreakType;
-import org.ctp.enchantmentsolution.enums.ItemPlaceType;
+import org.ctp.enchantmentsolution.enums.*;
 import org.ctp.enchantmentsolution.events.blocks.HeightWidthEvent;
+import org.ctp.enchantmentsolution.events.blocks.LightWeightEvent;
 import org.ctp.enchantmentsolution.events.blocks.WandEvent;
 import org.ctp.enchantmentsolution.events.modify.GoldDiggerEvent;
 import org.ctp.enchantmentsolution.events.modify.LagEvent;
-import org.ctp.enchantmentsolution.events.player.ExperienceEvent;
-import org.ctp.enchantmentsolution.events.player.ExperienceEvent.ExpShareType;
+import org.ctp.enchantmentsolution.events.player.ExpShareEvent;
+import org.ctp.enchantmentsolution.events.player.ExpShareEvent.ExpShareType;
 import org.ctp.enchantmentsolution.listeners.Enchantmentable;
 import org.ctp.enchantmentsolution.listeners.VeinMinerListener;
 import org.ctp.enchantmentsolution.mcmmo.McMMOAbility;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
+import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.LocationUtils;
-import org.ctp.enchantmentsolution.utils.abillityhelpers.GoldDiggerCrop;
-import org.ctp.enchantmentsolution.utils.abillityhelpers.ParticleEffect;
+import org.ctp.enchantmentsolution.utils.abilityhelpers.GoldDiggerCrop;
+import org.ctp.enchantmentsolution.utils.abilityhelpers.ParticleEffect;
+import org.ctp.enchantmentsolution.utils.config.ConfigString;
 import org.ctp.enchantmentsolution.utils.items.*;
 
 @SuppressWarnings("unused")
@@ -55,6 +61,11 @@ public class BlockListener extends Enchantmentable {
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onBlockPlaceHighest(BlockPlaceEvent event) {
 		runMethod(this, "wand", event, BlockPlaceEvent.class);
+	}
+
+	@EventHandler(priority = EventPriority.HIGHEST)
+	public void onEntityChangeBlock(EntityChangeBlockEvent event) {
+		runMethod(this, "lightWeight", event, EntityChangeBlockEvent.class);
 	}
 
 	private void curseOfLag(BlockBreakEvent event) {
@@ -86,7 +97,7 @@ public class BlockListener extends Enchantmentable {
 			if (exp > 0) {
 				int level = ItemUtils.getLevel(killItem, RegisterEnchantments.EXP_SHARE);
 
-				ExperienceEvent experienceEvent = new ExperienceEvent(player, level, ExpShareType.BLOCK, exp, AbilityUtils.setExp(exp, level));
+				ExpShareEvent experienceEvent = new ExpShareEvent(player, level, ExpShareType.BLOCK, exp, AbilityUtils.setExp(exp, level));
 				Bukkit.getPluginManager().callEvent(experienceEvent);
 
 				if (!experienceEvent.isCancelled() && experienceEvent.getNewExp() >= 0) event.setExpToDrop(experienceEvent.getNewExp());
@@ -180,7 +191,7 @@ public class BlockListener extends Enchantmentable {
 				Collection<Location> blocks = new ArrayList<Location>();
 				Block block = event.getBlock();
 				item = player.getInventory().getItemInMainHand();
-				if (item == null || item.getType() == Material.AIR) return;
+				if (item == null || MatData.isAir(item.getType())) return;
 				for(int x = 0; x <= xt; x++)
 					for(int y = 0; y <= yt; y++)
 						for(int z = 0; z <= zt; z++) {
@@ -195,7 +206,7 @@ public class BlockListener extends Enchantmentable {
 							addHeightWidthBlock(blocks, item, original, block, -x, -y, -z);
 						}
 
-				HeightWidthEvent heightWidth = new HeightWidthEvent(blocks, player, heightPlusPlus, widthPlusPlus);
+				HeightWidthEvent heightWidth = new HeightWidthEvent(blocks, block, player, heightPlusPlus, widthPlusPlus);
 				Bukkit.getPluginManager().callEvent(heightWidth);
 
 				if (!heightWidth.isCancelled()) for(Location b: heightWidth.getBlocks()) {
@@ -223,17 +234,24 @@ public class BlockListener extends Enchantmentable {
 					}
 					newEvent.setExpToDrop(exp);
 					Bukkit.getServer().getPluginManager().callEvent(newEvent);
-					if (item != null && item.getType() != Material.AIR && newEvent.getBlock().getType() != Material.AIR && !newEvent.isCancelled()) {
+					if (item != null && !MatData.isAir(item.getType()) && !MatData.isAir(newEvent.getBlock().getType()) && !newEvent.isCancelled()) {
+						Block newBlock = newEvent.getBlock();
 						AdvancementUtils.awardCriteria(player, ESAdvancement.FAST_AND_FURIOUS, "diamond_pickaxe");
-						if (newEvent.getBlock().getType().equals(Material.SNOW) && ItemBreakType.getType(item.getType()).getBreakTypes().contains(Material.SNOW)) {
-							int num = ((Snow) newEvent.getBlock().getBlockData()).getLayers();
-							ItemUtils.dropItem(new ItemStack(Material.SNOWBALL, num), newEvent.getBlock().getLocation());
+						if (newBlock.getType().equals(Material.SNOW) && ItemBreakType.getType(item.getType()).getBreakTypes().contains(Material.SNOW)) {
+							int num = ((Snow) newBlock.getBlockData()).getLayers();
+							ItemUtils.dropItem(new ItemStack(Material.SNOWBALL, num), newBlock.getLocation());
 						}
 						blocksBroken++;
-						player.incrementStatistic(Statistic.MINE_BLOCK, event.getBlock().getType());
+						player.incrementStatistic(Statistic.MINE_BLOCK, newBlock.getType());
 						player.incrementStatistic(Statistic.USE_ITEM, item.getType());
-						newEvent.getBlock().breakNaturally(item);
-						AbilityUtils.dropExperience(newEvent.getBlock().getLocation().add(0.5, 0.5, 0.5), newEvent.getExpToDrop());
+						Location loc = newBlock.getLocation().clone().add(0.5, 0.5, 0.5);
+						if (ConfigString.USE_PARTICLES.getBoolean()) loc.getWorld().spawnParticle(Particle.BLOCK_CRACK, loc, 20, newBlock.getBlockData());
+						if (ConfigString.PLAY_SOUND.getBoolean()) {
+							BlockSound sound = BlockSound.getSound(newBlock.getType());
+							loc.getWorld().playSound(loc, sound.getSound(), sound.getVolume(newBlock.getType()), sound.getPitch(newBlock.getType()));
+						}
+						newBlock.breakNaturally(item);
+						AbilityUtils.dropExperience(loc, newEvent.getExpToDrop());
 						DamageUtils.damageItem(player, item);
 					}
 					AbilityUtils.removeHeightWidthBlock(b);
@@ -336,10 +354,36 @@ public class BlockListener extends Enchantmentable {
 						AbilityUtils.removeWandBlock(loc);
 					}
 					DamageUtils.damageItem(player, item, 1, 2);
-					if (item == null || item.getType() == Material.AIR) AdvancementUtils.awardCriteria(player, ESAdvancement.DID_YOU_REALLY_WAND_TO_DO_THAT, "break");
+					if (item == null || MatData.isAir(item.getType())) AdvancementUtils.awardCriteria(player, ESAdvancement.DID_YOU_REALLY_WAND_TO_DO_THAT, "break");
 				}
 			}
 		}
+	}
+
+	private void lightWeight(EntityChangeBlockEvent event) {
+		if (!canRun(RegisterEnchantments.LIGHT_WEIGHT, event)) return;
+		Entity entity = event.getEntity();
+		if (entity instanceof Player) {
+			Player player = (Player) entity;
+			if (event.getBlock().getType() == Material.FARMLAND && event.getTo() == Material.DIRT) {
+				ItemStack boots = player.getInventory().getBoots();
+				if (boots != null && ItemUtils.hasEnchantment(boots, RegisterEnchantments.LIGHT_WEIGHT)) {
+					LightWeightEvent lightWeight = new LightWeightEvent(event.getBlock(), player);
+					Bukkit.getPluginManager().callEvent(lightWeight);
+
+					if (!lightWeight.isCancelled()) {
+						event.setCancelled(true);
+						Block block = event.getBlock().getRelative(BlockFace.UP);
+						if (block.getBlockData() instanceof Ageable) {
+							Ageable crop = (Ageable) block.getBlockData();
+							ChatUtils.sendInfo("Ageable " + crop.getAge() + " " + crop.getMaximumAge());
+							if (crop.getAge() == crop.getMaximumAge()) AdvancementUtils.awardCriteria(player, ESAdvancement.LIGHT_AS_A_FEATHER, "boots");
+						}
+					}
+				}
+			}
+		}
+
 	}
 
 	private boolean hasItem(Player player, ItemStack item) {
@@ -369,7 +413,8 @@ public class BlockListener extends Enchantmentable {
 
 	private Collection<Location> addHeightWidthBlock(Collection<Location> blocks, ItemStack tool, Material original, Block relative, int x, int y, int z) {
 		Block block = relative.getRelative(x, y, z);
-		if (original != Material.OBSIDIAN && block.getType() == Material.OBSIDIAN) return blocks;
+		List<String> pickBlocks = ItemBreakType.WOODEN_PICKAXE.getDiamondPickaxeBlocks();
+		if (!pickBlocks.contains(original.name()) && pickBlocks.contains(block.getType().name())) return blocks;
 
 		if (blocks.contains(block.getLocation())) return blocks;
 

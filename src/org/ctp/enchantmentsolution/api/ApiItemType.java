@@ -2,7 +2,7 @@ package org.ctp.enchantmentsolution.api;
 
 import java.util.List;
 
-import org.bukkit.Material;
+import org.ctp.enchantmentsolution.enums.ItemData;
 import org.ctp.enchantmentsolution.enums.ItemType;
 
 public class ApiItemType {
@@ -16,7 +16,7 @@ public class ApiItemType {
 	 *            - the type of items
 	 */
 	public ApiItemType(String type) {
-		itemType = ItemType.valueOf(type);
+		itemType = ItemType.getItemType(type);
 	}
 
 	/**
@@ -39,12 +39,21 @@ public class ApiItemType {
 	}
 
 	/**
-	 * Returns the list of items that comes with the type
+	 * Returns the list of enchantment materials that comes with the type
 	 * 
-	 * @return List<Material> - the list of items
+	 * @return List<ItemData> - the list of items in ItemData form
 	 */
-	public List<Material> getItemTypes() {
-		return itemType.getItemTypes();
+	public List<ItemData> getEnchantMaterials() {
+		return itemType.getEnchantMaterials();
+	}
+
+	/**
+	 * Returns the list of anvil materials that comes with the type
+	 * 
+	 * @return List<ItemData> - the list of items in ItemData form
+	 */
+	public List<ItemData> getAnvilMaterials() {
+		return itemType.getAnvilMaterials();
 	}
 
 	/**

@@ -23,6 +23,9 @@ public class Configurations {
 	private static LanguageConfiguration LANGUAGE;
 	private static EnchantmentsConfiguration ENCHANTMENTS;
 	private static AdvancementsConfiguration ADVANCEMENTS;
+	private static RPGConfiguration RPG;
+	private static MinigameConfiguration MINIGAME;
+	private static HardModeConfiguration HARD_MODE;
 
 	private static List<LanguageFile> LANGUAGE_FILES = new ArrayList<LanguageFile>();
 	private static DataFile DATA_FILE;
@@ -44,6 +47,9 @@ public class Configurations {
 		FISHING = new FishingConfiguration(dataFolder);
 		ENCHANTMENTS = new EnchantmentsConfiguration(dataFolder);
 		ADVANCEMENTS = new AdvancementsConfiguration(dataFolder);
+		RPG = new RPGConfiguration(dataFolder);
+		MINIGAME = new MinigameConfiguration(dataFolder);
+		HARD_MODE = new HardModeConfiguration(dataFolder);
 
 		String languageFile = CONFIG.getString("language_file");
 		Language lang = Language.getLanguage(CONFIG.getString("language"));
@@ -77,6 +83,9 @@ public class Configurations {
 		LANGUAGE.revert();
 		ENCHANTMENTS.revert();
 		ADVANCEMENTS.revert();
+		RPG.revert();
+		MINIGAME.revert();
+		HARD_MODE.revert();
 	}
 
 	public static void revert(Configuration config, int backup) {
@@ -89,12 +98,18 @@ public class Configurations {
 		LANGUAGE.setComments(ConfigString.USE_COMMENTS.getBoolean());
 		ENCHANTMENTS.setComments(ConfigString.USE_COMMENTS.getBoolean());
 		ADVANCEMENTS.setComments(ConfigString.USE_COMMENTS.getBoolean());
+		RPG.setComments(ConfigString.USE_COMMENTS.getBoolean());
+		MINIGAME.setComments(ConfigString.USE_COMMENTS.getBoolean());
+		HARD_MODE.setComments(ConfigString.USE_COMMENTS.getBoolean());
 
 		CONFIG.save();
 		FISHING.save();
 		LANGUAGE.save();
 		ENCHANTMENTS.save();
 		ADVANCEMENTS.save();
+		RPG.save();
+		MINIGAME.save();
+		HARD_MODE.save();
 
 		if (ConfigString.RESET_ON_RELOAD.getBoolean()) TableEnchantments.removeAllTableEnchantments();
 		RegisterEnchantments.setEnchantments();
@@ -119,6 +134,7 @@ public class Configurations {
 		backup.set("plugins.jobs_reborn", EnchantmentSolution.getPlugin().isJobsEnabled());
 		backup.set("plugins.mcmmo", EnchantmentSolution.getPlugin().getMcMMOType());
 		backup.set("plugins.mcmmo_version", EnchantmentSolution.getPlugin().getMcMMOVersion());
+		backup.set("plugins.mmo_items", EnchantmentSolution.getPlugin().getMMOItems());
 		backup.set("plugins.vein_miner", EnchantmentSolution.getPlugin().getVeinMiner());
 
 		YamlConfigBackup config = CONFIG.getConfig();
@@ -126,6 +142,9 @@ public class Configurations {
 		YamlConfigBackup language = LANGUAGE.getConfig();
 		YamlConfigBackup enchantments = ENCHANTMENTS.getConfig();
 		YamlConfigBackup advancements = ADVANCEMENTS.getConfig();
+		YamlConfigBackup rpg = RPG.getConfig();
+		YamlConfigBackup minigame = MINIGAME.getConfig();
+		YamlConfigBackup hardMode = HARD_MODE.getConfig();
 
 		for(String s: config.getAllEntryKeys())
 			if (config.contains(s)) backup.set("config." + s, config.get(s));
@@ -142,6 +161,15 @@ public class Configurations {
 		for(String s: enchantments.getAllEntryKeys())
 			if (enchantments.contains(s)) backup.set("enchantment." + s, enchantments.get(s));
 
+		for(String s: rpg.getAllEntryKeys())
+			if (rpg.contains(s)) backup.set("rpg." + s, rpg.get(s));
+
+		for(String s: minigame.getAllEntryKeys())
+			if (minigame.contains(s)) backup.set("minigame." + s, rpg.get(s));
+
+		for(String s: hardMode.getAllEntryKeys())
+			if (hardMode.contains(s)) backup.set("hard_mode." + s, rpg.get(s));
+
 		backup.saveConfig();
 	}
 
@@ -151,6 +179,9 @@ public class Configurations {
 		LANGUAGE.reload();
 		ENCHANTMENTS.reload();
 		ADVANCEMENTS.reload();
+		RPG.reload();
+		MINIGAME.reload();
+		HARD_MODE.reload();
 
 		save();
 	}
@@ -175,11 +206,23 @@ public class Configurations {
 		return ADVANCEMENTS;
 	}
 
+	public static RPGConfiguration getRPG() {
+		return RPG;
+	}
+
 	public static List<LanguageFile> getLanguageFiles() {
 		return LANGUAGE_FILES;
 	}
 
 	public static DataFile getDataFile() {
 		return DATA_FILE;
+	}
+
+	public static MinigameConfiguration getMinigames() {
+		return MINIGAME;
+	}
+
+	public static HardModeConfiguration getHardMode() {
+		return HARD_MODE;
 	}
 }

@@ -7,9 +7,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.enchantments.CERegister;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
-import org.ctp.enchantmentsolution.events.player.DropEvent;
 
-public class BeheadingEvent extends DropEvent {
+public class BeheadingEvent extends OverrideDropsEvent {
 
 	private boolean keepInventoryOverride;
 	private final LivingEntity skullOwner;

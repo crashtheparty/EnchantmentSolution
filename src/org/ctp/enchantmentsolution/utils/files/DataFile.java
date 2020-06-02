@@ -1,6 +1,12 @@
 package org.ctp.enchantmentsolution.utils.files;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -34,6 +40,11 @@ public class DataFile implements Configurable {
 	@Override
 	public YamlConfig getConfig() {
 		return config;
+	}
+
+	public void saveOnLoad() {
+		createBackup();
+		config.saveConfig();
 	}
 
 	@Override
@@ -71,8 +82,25 @@ public class DataFile implements Configurable {
 		config.set(s, value);
 	}
 
+	@Override
 	public List<String> getStringList(String s) {
 		return config.getStringList(s);
+	}
+
+	public void createBackup() {
+		if(file.exists()) {
+			String absolutePath = file.getAbsolutePath();
+			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss");
+			LocalDateTime now = LocalDateTime.now();
+			String newPath = absolutePath.substring(0, absolutePath.lastIndexOf('.')) + dtf.format(now) + ".yml.gz";
+			Path source = Paths.get(absolutePath);
+			Path target = Paths.get(newPath);
+			try {
+				Files.copy(source, target);
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+		}
 	}
 
 }

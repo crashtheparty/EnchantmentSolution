@@ -261,7 +261,6 @@ enchantment:
     conflicting-enchantments: '&6Widersprüchliche Verzauberungen: &f'
     enabled: '&6Verzauberung aktiviert: &f'
     treasure: '&6Schatzzauber: &f'
-    disabled-items: '&6Deaktivierte Items: &f'
     display_names: 
         custom_enchantments: 
             angler: 'Profiangler'
@@ -418,7 +417,6 @@ item_display_types:
     none: "Keiner"
 misc:
     no_conflicting_enchantments: "Keiner"
-    no_disabled_items: "Keiner"
     true: "Wahr"
     false: "Falsch"
     beheading_skull: "&7Schädel des %player%"

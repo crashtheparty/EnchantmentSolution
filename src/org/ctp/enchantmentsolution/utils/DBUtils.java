@@ -1,13 +1,11 @@
 package org.ctp.enchantmentsolution.utils;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.utils.config.Configuration;
 import org.ctp.enchantmentsolution.utils.yaml.YamlConfigBackup;
-import org.ctp.enchantmentsolution.utils.yaml.YamlInfo;
 
 public class DBUtils {
 
@@ -15,7 +13,7 @@ public class DBUtils {
 		EnchantmentSolution.getPlugin().getDb().updateConfig(configuration.getConfig());
 	}
 
-	public static List<YamlInfo> getBackup(Configuration configuration, int backup) {
+	public static String getBackup(Configuration configuration, int backup) {
 		return EnchantmentSolution.getPlugin().getDb().getBackup(configuration.getConfig(), backup);
 	}
 

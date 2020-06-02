@@ -15,6 +15,7 @@ import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.enchantments.helper.Weight;
+import org.ctp.enchantmentsolution.enums.EnchantmentLocation;
 import org.ctp.enchantmentsolution.enums.ItemType;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.StringUtils;
@@ -79,12 +80,18 @@ public class SnapshotInventory {
 					if (enchant != null) enchantLore.add(enchant);
 				}
 			boolean change = !(checkSimilar(enchantMeta, enchantLore) && checkSimilar(enchantLore, enchantMeta));
-			if(change) {
+			if (change) {
 				Map<Enchantment, Integer> enchants = new HashMap<Enchantment, Integer>();
-				for(EnchantmentLevel enchant : enchantMeta) {
+				for(EnchantmentLevel enchant: enchantMeta) {
 					int level = enchant.getLevel();
 					Enchantment ench = enchant.getEnchant().getRelativeEnchantment();
-					if(enchants.containsKey(ench)) level = (level > enchants.get(ench) ? level : enchants.get(ench));
+					if (enchants.containsKey(ench)) level = level > enchants.get(ench) ? level : enchants.get(ench);
+					enchants.put(ench, level);
+				}
+				for(EnchantmentLevel enchant: enchantLore) {
+					int level = enchant.getLevel();
+					Enchantment ench = enchant.getEnchant().getRelativeEnchantment();
+					if (enchants.containsKey(ench)) level = level > enchants.get(ench) ? level : enchants.get(ench);
 					enchants.put(ench, level);
 				}
 				for(EnchantmentLevel enchant : enchantLore) {
@@ -95,7 +102,7 @@ public class SnapshotInventory {
 				}
 				if (enchants.size() > 0) {
 					Iterator<Entry<Enchantment, Integer>> iter = enchants.entrySet().iterator();
-					while(iter.hasNext()) {
+					while (iter.hasNext()) {
 						Entry<Enchantment, Integer> entry = iter.next();
 						CustomEnchantment custom = RegisterEnchantments.getCustomEnchantment(entry.getKey());
 						ItemUtils.removeEnchantmentFromItem(item, custom);
@@ -107,21 +114,21 @@ public class SnapshotInventory {
 		}
 		return null;
 	}
-	
+
 	private boolean checkSimilar(List<EnchantmentLevel> levels, List<EnchantmentLevel> levelsTwo) {
 		boolean similar = levels.size() == levelsTwo.size();
-		for(EnchantmentLevel level : levels) {
+		for(EnchantmentLevel level: levels) {
 			EnchantmentLevel hasLevel = null;
-			for(EnchantmentLevel levelTwo : levelsTwo)
-				if(level.getEnchant().getName().equals(levelTwo.getEnchant().getName()) && !(level.getEnchant() instanceof SnapshotEnchantment ^ levelTwo.getEnchant() instanceof SnapshotEnchantment)) {
+			for(EnchantmentLevel levelTwo: levelsTwo)
+				if (level.getEnchant().getName().equals(levelTwo.getEnchant().getName()) && !(level.getEnchant() instanceof SnapshotEnchantment ^ levelTwo.getEnchant() instanceof SnapshotEnchantment)) {
 					hasLevel = level;
 					break;
 				}
-			if(hasLevel == null) similar = false;
+			if (hasLevel == null) similar = false;
 		}
 		return similar;
 	}
-	
+
 	private List<EnchantmentLevel> getEnchantments(ItemStack item) {
 		List<EnchantmentLevel> levels = new ArrayList<EnchantmentLevel>();
 		if (item.getItemMeta() != null) {
@@ -131,17 +138,17 @@ public class SnapshotInventory {
 			for(Iterator<Entry<Enchantment, Integer>> it = enchantments.entrySet().iterator(); it.hasNext();) {
 				Entry<Enchantment, Integer> e = it.next();
 				CustomEnchantment ench = RegisterEnchantments.getCustomEnchantment(e.getKey());
-				if(ench == null) ench = new SnapshotEnchantment(e.getKey());
+				if (ench == null) ench = new SnapshotEnchantment(e.getKey());
 				levels.add(new EnchantmentLevel(ench, e.getValue()));
 			}
 		}
 		return levels;
 	}
-	
-	private class SnapshotEnchantment extends CustomEnchantment{
+
+	private class SnapshotEnchantment extends CustomEnchantment {
 
 		private Enchantment relative;
-		
+
 		public SnapshotEnchantment(Enchantment relative) {
 			super(relative.getKey().getKey(), 0, 0, 0, 0, 0, 0, 0, 0, Weight.NULL, "");
 			this.relative = relative;
@@ -163,14 +170,19 @@ public class SnapshotInventory {
 		}
 
 		@Override
-		protected List<ItemType> getEnchantmentItemTypes() {
+		public List<ItemType> getDefaultEnchantmentItemTypes() {
 			return null;
 		}
 
 		@Override
-		protected List<ItemType> getAnvilItemTypes() {
+		public List<ItemType> getDefaultAnvilItemTypes() {
 			return null;
 		}
-		
+
+		@Override
+		public List<EnchantmentLocation> getDefaultEnchantmentLocations() {
+			return null;
+		}
+
 	}
 }

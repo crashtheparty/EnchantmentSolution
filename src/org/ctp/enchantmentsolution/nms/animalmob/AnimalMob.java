@@ -26,9 +26,9 @@ public class AnimalMob {
 	private ItemStack item;
 	private int age, entityID, domestication, maxDomestication, llamaStrength, puffState;
 	private DyeColor sheepColor, wolfCollar, tropicalBodyColor, tropicalPatternColor;
-	private boolean isHorse, carryingChest, pigSaddle, sheared, angry;
+	private boolean isHorse, carryingChest, pigSaddle, sheared, angry, tamed;
 	private Map<Integer, ItemStack> inventoryItems;
-	private ItemStack saddle,  armor;
+	private ItemStack saddle, armor;
 	private Color horseColor;
 	private org.bukkit.entity.Llama.Color llamaColor;
 	private Style horseStyle;
@@ -37,11 +37,11 @@ public class AnimalMob {
 	private Pattern tropicalPattern;
 
 	public AnimalMob(Creature mob, ItemStack item) {
+		if (item != null) setItem(item);
 		setMob(mob.getType());
 		setName(mob.getCustomName());
 		setHealth(mob.getHealth());
-		setItem(item);
-		if(mob instanceof Animals) setAge(((Animals) mob).getAge());
+		if (mob instanceof Animals) setAge(((Animals) mob).getAge());
 		if (mob instanceof PufferFish) {
 			PufferFish pufferFish = (PufferFish) mob;
 			setPuffState(pufferFish.getPuffState());
@@ -63,6 +63,7 @@ public class AnimalMob {
 		}
 		if (mob instanceof Tameable) {
 			Tameable tameable = (Tameable) mob;
+			setTamed(tameable.isTamed());
 			if (tameable.getOwner() != null) setOwner(tameable.getOwner().getUniqueId().toString());
 		}
 		if (mob instanceof Pig) {
@@ -121,6 +122,7 @@ public class AnimalMob {
 		config.set("animals." + i + ".owner", getOwner());
 		config.set("animals." + i + ".domestication", getDomestication());
 		config.set("animals." + i + ".max_domestication", getMaxDomestication());
+		config.set("animals." + i + ".tamed", isTamed());
 		config.set("animals." + i + ".jump_strength", getJumpStrength());
 		config.set("animals." + i + ".movement_speed", getMovementSpeed());
 		config.set("animals." + i + ".max_health", getMaxHealth());
@@ -147,11 +149,15 @@ public class AnimalMob {
 			if (inventoryItems != null && inventoryItems.get(k) != null) config.set("animals." + i + ".inventory_items." + k, ItemSerialization.itemToString(inventoryItems.get(k)));
 	}
 
-	public void editProperties(Entity e) {
+	public void editProperties(Entity e, boolean b1, boolean b2) {
 		try {
 			e.setCustomName(getName());
 			if (e instanceof Creature) {
 				Creature creature = (Creature) e;
+				if (creature instanceof Ageable && b2) {
+					Ageable a = (Ageable) creature;
+					a.setBaby();
+				}
 				if (creature instanceof PufferFish) ((PufferFish) creature).setPuffState(puffState);
 				if (creature instanceof TropicalFish) {
 					if (tropicalBodyColor == null) tropicalBodyColor = DyeColor.WHITE;
@@ -172,6 +178,7 @@ public class AnimalMob {
 				}
 				if (creature instanceof Tameable) {
 					Tameable tameable = (Tameable) creature;
+					tameable.setTamed(isTamed());
 					if (owner != null) {
 						Entity eOwner = Bukkit.getEntity(UUID.fromString(owner));
 						if (eOwner != null && eOwner instanceof AnimalTamer) tameable.setOwner((AnimalTamer) eOwner);
@@ -192,7 +199,7 @@ public class AnimalMob {
 				}
 				if (creature instanceof AbstractHorse) {
 					AbstractHorse aHorse = (AbstractHorse) creature;
-					aHorse.getInventory().setSaddle(getSaddle());
+					if (!b2) aHorse.getInventory().setSaddle(getSaddle());
 					if (creature instanceof Horse) {
 						Horse horse = (Horse) creature;
 						horse.setColor(getHorseColor());
@@ -211,13 +218,15 @@ public class AnimalMob {
 					aHorse.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(getMaxHealth());
 					if (aHorse instanceof ChestedHorse) {
 						ChestedHorse cHorse = (ChestedHorse) aHorse;
-						cHorse.setCarryingChest(isCarryingChest());
-						for(int i = 2; i < inventoryItems.size(); i++)
-							cHorse.getInventory().setItem(i, inventoryItems.get(i));
+						if (isCarryingChest() && !b2) {
+							cHorse.setCarryingChest(isCarryingChest());
+							for(int i = 2; i < inventoryItems.size(); i++)
+								cHorse.getInventory().setItem(i, inventoryItems.get(i));
+						}
 					}
 				}
-				creature.setHealth(getHealth());
-				if(creature instanceof Animals) ((Animals) creature).setAge(getAge());
+				if (b1) creature.setHealth(getHealth());
+				if (creature instanceof Animals) ((Animals) creature).setAge(getAge());
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -495,5 +504,19 @@ public class AnimalMob {
 
 	public void setTropicalPattern(Pattern tropicalPattern) {
 		this.tropicalPattern = tropicalPattern;
+	}
+
+	public static Entity setHusbandry(Creature entity, Creature e) {
+		AnimalMob animal = new AnimalMob(entity, null);
+		animal.editProperties(e, false, true);
+		return e;
+	}
+
+	public boolean isTamed() {
+		return tamed;
+	}
+
+	public void setTamed(boolean tamed) {
+		this.tamed = tamed;
 	}
 }

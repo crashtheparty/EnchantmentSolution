@@ -13,6 +13,7 @@ import org.ctp.enchantmentsolution.enchantments.generate.TableEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentList;
 import org.ctp.enchantmentsolution.enchantments.helper.LevelList;
+import org.ctp.enchantmentsolution.enums.ItemData;
 import org.ctp.enchantmentsolution.enums.ItemType;
 import org.ctp.enchantmentsolution.nms.EnchantItemCriterion;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
@@ -40,6 +41,7 @@ public class EnchantmentTable implements InventoryData {
 		this.block = block;
 	}
 
+	@Override
 	public void setInventory() {
 		setInventory(playerItems);
 	}
@@ -66,7 +68,7 @@ public class EnchantmentTable implements InventoryData {
 			for(int i = 0; i < 54; i++)
 				if (i % 9 == 1 || i % 9 == 2 || i / 9 == 1) inv.setItem(i, mirror);
 
-			TableEnchantments table = TableEnchantments.getTableEnchantments(player, null, getBooks(), false);
+			TableEnchantments table = TableEnchantments.getTableEnchantments(player, null, getBooks());
 			LevelList list = table.getLevelList();
 
 			for(int i = 1; i <= 6; i++) {
@@ -106,7 +108,7 @@ public class EnchantmentTable implements InventoryData {
 				inv.setItem(start, item);
 
 				if (ItemUtils.isEnchantable(item)) {
-					EnchantmentList[] enchantmentLists = table.getEnchantments(item.getType());
+					EnchantmentList[] enchantmentLists = table.getEnchantments(new ItemData(item));
 
 					int extra = 3;
 					for(EnchantmentList enchantmentList: enchantmentLists) {
@@ -200,8 +202,8 @@ public class EnchantmentTable implements InventoryData {
 				clone.setAmount(lapisStack.getAmount() + clone.getAmount() - lapisStack.getType().getMaxStackSize());
 				lapisStack.setAmount(lapisStack.getType().getMaxStackSize());
 			} else {
-				clone = new ItemStack(Material.AIR);
 				lapisStack.setAmount(lapisStack.getAmount() + clone.getAmount());
+				clone = new ItemStack(Material.AIR);
 			}
 			return clone;
 		}
@@ -252,7 +254,7 @@ public class EnchantmentTable implements InventoryData {
 				return;
 			}
 
-		TableEnchantments table = TableEnchantments.getTableEnchantments(player, null, getBooks(), false);
+		TableEnchantments table = TableEnchantments.getTableEnchantments(player, null, getBooks());
 		if (player.getGameMode().equals(GameMode.SURVIVAL) || player.getGameMode().equals(GameMode.ADVENTURE)) {
 			player.setLevel(player.getLevel() - level - 1);
 			int remove = level + 1;
@@ -270,7 +272,7 @@ public class EnchantmentTable implements InventoryData {
 					}
 				}
 		}
-		List<EnchantmentLevel> enchLevels = table.getEnchantments(enchantableItem.getType())[level].getEnchantments();
+		List<EnchantmentLevel> enchLevels = table.getEnchantments(new ItemData(enchantableItem))[level].getEnchantments();
 		if (playerItems.get(slot).getType() == Material.BOOK && ConfigString.USE_ENCHANTED_BOOKS.getBoolean()) enchantableItem = ItemUtils.convertToEnchantedBook(enchantableItem);
 		player.playSound(player.getLocation(), Sound.BLOCK_ENCHANTMENT_TABLE_USE, 1, 1);
 		enchantableItem = ItemUtils.addEnchantmentsToItem(enchantableItem, enchLevels);

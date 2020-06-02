@@ -1,8 +1,6 @@
 package org.ctp.enchantmentsolution.listeners.enchantments;
 
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -13,28 +11,29 @@ import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.*;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.util.Vector;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
+import org.ctp.enchantmentsolution.enchantments.CERegister;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
+import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.enums.ItemMoisturizeType;
 import org.ctp.enchantmentsolution.events.interact.*;
 import org.ctp.enchantmentsolution.events.modify.IcarusLaunchEvent;
 import org.ctp.enchantmentsolution.listeners.Enchantmentable;
-import org.ctp.enchantmentsolution.nms.FlowerGiftNMS;
 import org.ctp.enchantmentsolution.nms.animalmob.AnimalMob;
 import org.ctp.enchantmentsolution.threads.MiscRunnable;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.LocationUtils;
 import org.ctp.enchantmentsolution.utils.StringUtils;
-import org.ctp.enchantmentsolution.utils.abillityhelpers.IcarusDelay;
-import org.ctp.enchantmentsolution.utils.abillityhelpers.WalkerUtils;
+import org.ctp.enchantmentsolution.utils.abilityhelpers.FlowerGiftDrop;
+import org.ctp.enchantmentsolution.utils.abilityhelpers.IcarusDelay;
+import org.ctp.enchantmentsolution.utils.abilityhelpers.WalkerUtils;
 import org.ctp.enchantmentsolution.utils.items.DamageUtils;
 import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 
@@ -66,6 +65,11 @@ public class PlayerListener extends Enchantmentable {
 		runMethod(this, "contagionCurse", event, PlayerJoinEvent.class);
 	}
 
+	@EventHandler
+	public void onPlayerItemBreak(PlayerItemBreakEvent event) {
+		runMethod(this, "stickyHold", event, PlayerItemBreakEvent.class);
+	}
+
 	private void contagionCurse(PlayerJoinEvent event) {
 		MiscRunnable.addContagion(event.getPlayer());
 	}
@@ -78,8 +82,8 @@ public class PlayerListener extends Enchantmentable {
 			if (player.getGameMode().equals(GameMode.CREATIVE) || player.getGameMode().equals(GameMode.SPECTATOR)) return;
 			ItemStack item = player.getInventory().getItemInMainHand();
 			Block block = event.getClickedBlock();
-			if (block != null && item != null && ItemUtils.hasEnchantment(item, RegisterEnchantments.FLOWER_GIFT) && FlowerGiftNMS.isItem(block.getType())) {
-				FlowerGiftEvent flowerGiftEvent = new FlowerGiftEvent(player, item, block, FlowerGiftNMS.getItem(block.getType()), block.getLocation());
+			if (block != null && item != null && ItemUtils.hasEnchantment(item, RegisterEnchantments.FLOWER_GIFT) && FlowerGiftDrop.isItem(block.getType())) {
+				FlowerGiftEvent flowerGiftEvent = new FlowerGiftEvent(player, item, block, FlowerGiftDrop.getItem(block.getType()), block.getLocation());
 				Bukkit.getPluginManager().callEvent(flowerGiftEvent);
 
 				if (!flowerGiftEvent.isCancelled()) {
@@ -87,8 +91,8 @@ public class PlayerListener extends Enchantmentable {
 					ItemStack flowerGift = flowerGiftEvent.getFlower();
 					if (flowerGiftEvent.getFlower() != null) {
 						player.getWorld().spawnParticle(Particle.VILLAGER_HAPPY, loc, 30, 0.2, 0.5, 0.2);
-						if (FlowerGiftNMS.isDoubleFlower(flowerGift.getType())) AdvancementUtils.awardCriteria(player, ESAdvancement.BONEMEAL_PLUS, "bonemeal");
-						else if (FlowerGiftNMS.isWitherRose(flowerGift.getType())) AdvancementUtils.awardCriteria(player, ESAdvancement.JUST_AS_SWEET, "wither_rose");
+						if (FlowerGiftDrop.isDoubleFlower(flowerGift.getType())) AdvancementUtils.awardCriteria(player, ESAdvancement.BONEMEAL_PLUS, "bonemeal");
+						else if (FlowerGiftDrop.isWitherRose(flowerGift.getType())) AdvancementUtils.awardCriteria(player, ESAdvancement.JUST_AS_SWEET, "wither_rose");
 						ItemUtils.dropItem(flowerGift, flowerGiftEvent.getDropLocation());
 					} else
 						player.getWorld().spawnParticle(Particle.VILLAGER_ANGRY, loc, 30, 0.2, 0.5, 0.2);
@@ -152,8 +156,8 @@ public class PlayerListener extends Enchantmentable {
 							Location loc = lasso.getBlock().getRelative(lasso.getFace()).getLocation().clone().add(0.5, 0, 0.5);
 							if (loc.getBlock().isPassable()) {
 								Entity e = loc.getWorld().spawnEntity(loc, fromLasso.getMob());
-								if(e == null) return;
-								fromLasso.editProperties(e);
+								if (e == null) return;
+								fromLasso.editProperties(e, true, false);
 								DamageUtils.damageItem(player, item, 1, 2);
 								player.incrementStatistic(Statistic.USE_ITEM, item.getType());
 								StringUtils.removeAnimal(item, entityID);
@@ -256,7 +260,7 @@ public class PlayerListener extends Enchantmentable {
 				OverkillEvent overkill = new OverkillEvent(player, item, takeArrow, player.getInventory().all(Material.ARROW).size() > 0, 0.4);
 				Bukkit.getPluginManager().callEvent(overkill);
 
-				if (!overkill.isCancelled()) {
+				if (!overkill.isCancelled() && !overkill.willCancel()) {
 					if (overkill.takeArrow() && overkill.hasArrow()) {
 						ItemStack[] contents = overkill.getPlayer().getInventory().getContents();
 						ItemStack[] extraContents = overkill.getPlayer().getInventory().getExtraContents();
@@ -272,7 +276,7 @@ public class PlayerListener extends Enchantmentable {
 								break;
 							}
 						}
-					} else if (overkill.takeArrow() && !overkill.hasArrow()) return;
+					}
 					player.incrementStatistic(Statistic.USE_ITEM, item.getType());
 					Arrow arrow = player.launchProjectile(Arrow.class);
 					arrow.setMetadata("overkill", new FixedMetadataValue(EnchantmentSolution.getPlugin(), player.getUniqueId().toString()));
@@ -297,7 +301,7 @@ public class PlayerListener extends Enchantmentable {
 				SplatterFestEvent splatterFest = new SplatterFestEvent(player, item, player.getGameMode() != GameMode.CREATIVE, player.getInventory().all(Material.EGG).size() > 0);
 				Bukkit.getPluginManager().callEvent(splatterFest);
 
-				if (!splatterFest.isCancelled()) {
+				if (!splatterFest.isCancelled() && !splatterFest.willCancel()) {
 					if (splatterFest.takeEgg() && splatterFest.hasEgg()) {
 						ItemStack[] contents = splatterFest.getPlayer().getInventory().getContents();
 						ItemStack[] extraContents = splatterFest.getPlayer().getInventory().getExtraContents();
@@ -313,7 +317,7 @@ public class PlayerListener extends Enchantmentable {
 								break;
 							}
 						}
-					} else if (splatterFest.takeEgg() && !splatterFest.hasEgg()) return;
+					}
 					player.incrementStatistic(Statistic.USE_ITEM, item.getType());
 					player.incrementStatistic(Statistic.USE_ITEM, Material.EGG);
 					Egg egg = player.launchProjectile(Egg.class);
@@ -323,6 +327,35 @@ public class PlayerListener extends Enchantmentable {
 					DamageUtils.damageItem(player, item);
 				}
 			}
+		}
+	}
+
+	private void stickyHold(PlayerItemBreakEvent event) {
+		Player player = event.getPlayer();
+		ItemStack item = event.getBrokenItem();
+		if (item != null && ItemUtils.hasEnchantment(item, RegisterEnchantments.STICKY_HOLD)) {
+			List<EnchantmentLevel> levels = ItemUtils.getEnchantmentLevels(item);
+			Iterator<EnchantmentLevel> iter = levels.iterator();
+			while (iter.hasNext()) {
+				EnchantmentLevel level = iter.next();
+				if (level.getEnchant() == CERegister.STICKY_HOLD) iter.remove();
+				else
+					item = ItemUtils.removeEnchantmentFromItem(item, level.getEnchant());
+			}
+			String itemLore = StringUtils.stickyHoldItemType(item);
+			ItemMeta meta = item.getItemMeta();
+			Bukkit.getScheduler().runTaskLater(EnchantmentSolution.getPlugin(), () -> {
+				ItemStack stickItem = new ItemStack(Material.STICK);
+				List<String> lore = meta.getLore();
+				if (lore == null) lore = new ArrayList<String>();
+				lore.add(itemLore);
+				for(EnchantmentLevel level: levels)
+					lore.add(StringUtils.addStickyHold(level));
+				meta.setLore(lore);
+				stickItem.setItemMeta(meta);
+				ItemUtils.giveItemToPlayer(player, stickItem, player.getLocation(), false);
+				AdvancementUtils.awardCriteria(player, ESAdvancement.STICKY_BEES, "break", 1);
+			}, 1l);
 		}
 	}
 

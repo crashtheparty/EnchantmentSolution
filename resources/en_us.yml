@@ -58,6 +58,7 @@ table:
     lack-reqs: 'You do not meet the requirements to enchant this item.'
     lack-enchants: 'This item does not have enchantments generated.'
 commands: 
+    no-command: '&cThe subcommand %command% does not exist!'
     no-permission: '&cYou do not have permission to use this command!'
     no-permission-other: '&cYou do not have permission to use this command on another player!'
     invalid-level: '%level% is not a valid level. Setting level to 1.'
@@ -91,10 +92,187 @@ commands:
     give-book-other-multiple: 'You gave %give_player% %amount% enchanted books.'
     receive-book-multiple: '%player% has given you %amount% enchanted books.'
     give-book-console: 'Console must specify a valid player to give the book to.'
+    fix-enchants: 'You have fixed your enchanted items.'
+    fix-enchants-other: 'You have fixed %fix_player%''s enchanted items.'
+    other-fixed-enchants: 'Player %player% has fixed your enchanted items.'
+    invalid-level-positive-integer: 'Level (%level%) must be a positive integer.'
+    rpg-set-level: 'Set %player%''s ESRPG level to %level%.'
+    specify-level-integer: 'You must specify an integer to set player''s level.'
+    invalid-experience-positive-double: 'Experience (%experience%) must be a positive double.'
+    rpg-set-experience: 'Set %player%''s ESRPG experience to %experience%.'
+    specify-experience-double: 'You must specify a double to set player''s experience.'
+    rpg-level-too-low: 'Cannot set a negative level in ESRPG. Setting level to 0.'
+    remove-rpg-enchantment: 'Removing enchantment %enchantment% from %player%''s ESRPG values.'
+    set-rpg-enchantment: 'Setting enchantment %enchantment% to level %level% for %player%''s ESRPG values.'
+    rpg-invalid-edit: 'RPGEdit can only edit level, experience, and enchantments for players.'
     console-player: 'Console'
     invalid:
         console: 'Console Sender'
         null-player: '**null**'
+    aliases: 
+        enchant: 
+        - 'e'
+        - 'customenchant'
+        - 'ce'
+        - 'esce'
+
+        enchantunsafe: 
+        - 'eu'
+        - 'customenchantunsafe'
+        - 'esu'
+        - 'ceu'
+        - 'esceu'
+
+        removeenchant: 
+        - 'esr'
+        - 'customenchantremove'
+        - 'er'
+        - 'cer'
+        - 'escer'
+
+        esanvil: 
+        - 'anvil'
+
+        esgrindstone: 
+        - 'grindstone'
+
+        esdebug: 
+        - 'debug'
+
+        esbook: 
+        - 'book'
+        - 'custombook'
+        - 'cb'
+        - 'escb'
+
+        info: 
+        - 'einfo'
+        - 'enchantinfo'
+
+        esreload: 
+        - 'reload'
+
+        esreset: 
+        - 'reset'
+
+        esconfig: 
+        - 'config'
+        - 'esedit'
+        - 'ed'
+
+        configlore: 
+        - 'lore'
+        - 'clore'
+        - 'cl'
+
+        escalc: 
+        - 'calc'
+        - 'calculator'
+        - 'esc'
+
+        eshelp: 
+        - 'help'
+        - 'h'
+
+        esfix: 
+        - 'fix'
+        - 'f'
+
+        esrpg: 
+        - 'rpg'
+
+        rpgstats: 
+        - 'stats'
+        - 'rpgs'
+        
+        rpgtop:
+        - 'top'
+        - 'rpgt'
+        
+        rpgedit:
+        - 'rpge'
+
+    descriptions: 
+        enchant: 'Enchants an item for a given player in the given slot.'
+        enchantunsafe: 'Enchants an item for a given player in the given slot. May enchant any item with any level of enchantment.'
+        removeenchant: 'Removes an enchant from item for a given player in the given slot.'
+        esanvil: 'Opens the ES Anvil GUI for yourself.'
+        esgrindstone: 'Opens the ES Grindstone GUI for yourself.'
+        esdebug: 'Generates a debug.yml file to help the developer debug issues.'
+        esbook: 'Gives a book with a specified enchantment or random enchantments to a given player. ignoreLimits in random enchantments means to not limit to chest enchantments.'
+        info: 'Gets the information for a specified enchantment, or a list of enchantments.'
+        esreload: 'Reloads the server configuration files.'
+        esreset: 'Resets the inventories and enchantment table data for all players.'
+        esconfig: 'Modifies the configuration files in game.'
+        configlore: 'Returns a chat color-formatted string to allow compatibility with other plugins.'
+        escalc: 'Shows the values of enchantability for certain items and enchantments or potential enchantments.'
+        eshelp: 'Shows description and usage of specified command or commands.'
+        esfix: 'Fixes enchantments on items.'
+        esrpg: 'Opens the RPG mode.'
+        rpgstats: 'Gets the statistics from ESRPG for a particular player.'
+        rpgtop: 'Lists the top players on ESRPG.'
+        rpgedit: 'Edit ESRPG values for players.'
+    usage: 
+        enchant: 
+            main: 'Usage: %usage%\nAliases: %aliases%'
+            string: 'enchant <enchantment> <level> [player] [slot]'
+        enchantunsafe: 
+            main: 'Usage: %usage%\nAliases: %aliases%'
+            string: 'enchantunsafe <enchantment> <level> [player] [slot]'
+        removeenchant: 
+            main: 'Usage: %usage%\nAliases: %aliases%'
+            string: 'removeenchant <enchantment> [player] [slot]'
+        esanvil: 
+            main: 'Usage: %usage%\nAliases: %aliases%'
+            string: 'esanvil'
+        esgrindstone: 
+            main: 'Usage: %usage%\nAliases: %aliases%'
+            string: 'esgrindstone'
+        esdebug: 
+            main: 'Usage: %usage%\nAliases: %aliases%'
+            string: 'esdebug'
+        esbook: 
+            main: 'Usage: %usage%\nAliases: %aliases%'
+            string: 'esbook <enchantment> <level> [amount] OR book <RandomEnchant/RandomMultiEnchant> [ignoreLimits] [amount]'
+        info: 
+            main: 'Usage: %usage%\nAliases: %aliases%'
+            string: 'info [enchantment/page]'
+        esreload: 
+            main: 'Usage: %usage%\nAliases: %aliases%'
+            string: 'esreload'
+        esreset: 
+            main: 'Usage: %usage%\nAliases: %aliases%'
+            string: 'esreset'
+        esconfig: 
+            main: 'Usage: %usage%\nAliases: %aliases%'
+            string: 'esconfig'
+        configlore: 
+            main: 'Usage: %usage%\nAliases: %aliases%'
+            string: 'configlore enchantment/enchant <enchantment> [level] OR lore string <string...>'
+        escalc: 
+            main: 'Usage: %usage%\nAliases: %aliases%'
+            string: 'escalc'
+        eshelp: 
+            main: 'Usage: %usage%\nAliases: %aliases%'
+            string: 'eshelp [command]'
+        esfix: 
+            main: 'Usage: %usage%\nAliases: %aliases%'
+            string: 'esfix [player]'
+        esrpg: 
+            main: 'Usage: %usage%\nAliases: %aliases%'
+            string: 'esrpg'
+        rpgstats: 
+            main: 'Usage: %usage%\nAliases: %aliases%'
+            string: 'rpgstats [player]'
+        rpgtop: 
+            main: 'Usage: %usage%\nAliases: %aliases%'
+            string: 'rpgtop [page]'
+        rpgedit: 
+            main: 'Usage: %usage%\nAliases: %aliases%'
+            string: 'rpgedit <player> <subcommand> [...]'
+    help:
+        commands_page: '&bCommands Page %page%'
+        commands_info_shrink: '&f: %description%'
 grindstone: 
     legacy-open: '&aOpen the Grindstone'
     name: '&9Grindstone'
@@ -126,9 +304,6 @@ calc:
     - '&6Enchantability Constant: &3%constant%'
     - '&6Enchantability Modifier: &3%modifier%'
     pagination:
-        go_back: '&9Go Back'
-        previous_page: '&9Previous Page'
-        next_page: '&9Next Page'
         enchantability_by_level: '&9View Enchantability by Level'
     info:
         constant: '&9Enchantability Constant'
@@ -149,11 +324,13 @@ calc:
         stone_tools: '&9Stone Tools and Weapons'
         iron_tools: '&9Iron Tools and Weapons'
         diamond_tools: '&9Diamond Tools and Weapons'
+        netherite_tools: '&9Netherite Tools and Weapons'
         leather_armor: '&9Leather Armor'
         golden_armor: '&9Golden Armor'
         chainmail_armor: '&9Chainmail Armor'
         iron_armor: '&9Iron Armor'
         diamond_armor: '&9Diamond Armor'
+        netherite_armor: '&9Netherite Armor'
         other: '&9Books and Other Items'
     enchantability_lore:
     - '&6Resource Enchantability: &3%resource%'
@@ -164,6 +341,88 @@ calc:
     - '&6Required Enchantability: &3%constant%+'
     invalid_number: 'Invalid number, setting to 0.'
     enter_string: 'Enter the string message into the chat.'
+
+rpg:
+    name: '&9ESRPG'
+    name_enchantment: '&9ESRPG: &f%enchantment%'
+    title: '&9ESRPG Info Page &3%page%'
+    instructions: '&9Instructions'
+    instructions_lore: 
+    - '&6All of your currently owned enchantments will show up as enchanted books.'
+    - '&6To add an enchantment level, select the book,'
+    - '&6 then select the levels one at a time on the next page.'
+    info: '&9Player Info'
+    info_lore: 
+    - '&6Experience Level: &3%level%'
+    - '&6Experience: &3%experience%'
+    - '&6Points: &3%points% / %total_points%'
+    mirror: '&f'
+    enchantments: '&9%name%'
+    enchantments_lore: 
+    - '&6Player Max Level: &3%level%'
+    - '&6Points to Buy Level %level_plus_one%: &3%points%'
+    enchantments_lore_unlocked: 
+    - '&6Player Max Level: &3%level%'
+    - '&7Highest level unlocked.'
+    enchantment_levels: '&9%name%'
+    enchantment_levels_lore: 
+    - '&6Points for Level %level%: &3%points%'
+    - '&7Left click to buy a higher level.'
+    enchantment_levels_lore_unlocked: 
+    - '&7Level unlocked.'
+    no-permission: '&7No permission to buy this enchantment!'
+    invalid-enchantment: '&7Invalid enchantment; please contact an administrator.'
+    unlock: 'You have unlocked %enchantment% up to level %level%.'
+    name_confirm: '&9Confirm Unlocking %enchantment% %level%'
+    cancel: '&4Cancel'
+    cancel_lore:
+    - '&7Go back to the last screen.'
+    confirm: '&aConfirm'
+    confirm_lore:
+    - '&6Required Points: &3%total_points%'
+    - '&6Will Unlock: &3%enchantment% &7at level &3%level%&7.'
+    top_bar:
+        title: '&aESRPG Level &f%level% &7(&f%experience%/%next_experience%&7)'
+        title_level_up: '&aESRPG &6Level Up! &aLevel &f%level% &7(&f%experience%/%next_experience%&7)'
+    level_up_points: '&6Gained &f%added_points% &6points! &a(New Total Points: &f%new_points%&a)'
+    stats:
+        exp: '&6Level: &3%level% &6Experience: &3%experience%'
+        enchantment: '&6Unlocked Enchantment: &3%enchantment% &fup to level &3%level%'
+    top:
+        page: '&bRPG Players Top Page %page%'
+        player_stats: '&b%rank%. &3%player% &f(Level &3%level%&f)'
+
+minigame:
+    name: '&9Enchantment Table'
+    mirror: '&f'
+    fast:
+        item: '&9%name%'
+        item_lore:
+        - '&7Left click to get an enchanted book of this kind.'
+    mondays:
+        item: '&9%name%'
+        item_lore:
+        - '&4Cost: &6%cost%'
+        - '&7Left click to get an enchanted book'
+        - '&7 with this enchantment at level 1.'
+    custom:
+        item:
+            name: '&9Enchanting Material: &3%material%'
+            enchantment: '&6Enchantment: &3%enchantment% &6Level: &3%level%'
+            enchantment_cost: '&6Cost: &3%cost%'
+            random: 
+            - '&6Random Enchantments'
+            - '&6Multiple: &3%multiple%'
+            - '&6Cost: &3%cost%'
+            
+    invalid_enchant_name: '&cInvalid enchantment name %name%!'
+    invalid_random_enchant: '&cCould not generate a random enchantment this time!'
+    not_enough_levels: '&cYou need more levels to get this enchantment!'
+
+pagination:
+    go_back: '&9Go Back'
+    previous_page: '&9Previous Page'
+    next_page: '&9Next Page'
 
 enchantment: 
     name: '&6Display Name: &f'
@@ -222,7 +481,7 @@ enchantment:
             frequent_flyer: 'Allows flight. Durability damage every (3 * level) seconds when below 255 height and every (level) seconds above 255 height. Removes flight at 32 durability.'
             fried: 'Cooks fish upon catching them.'
             gold_digger: 'Earn experience and gold nuggets for breaking crops.'
-            gung_ho: 'Decreases health to 5 (hearts). All attacks do 3 times the damage.'
+            gung_ho: 'Decreases health to 50% of base value (usually 5 hearts). Melee attacks do 3 times the damage.'
             hard_bounce: 'Projectiles bounce back from the shield.'
             height_plus_plus: 'Increase up/down break radius by 1 per level.'
             hollow_point: 'Increases damage to armored mobs. Allows projectile damage against enderman and armored wither.'
@@ -264,7 +523,6 @@ enchantment:
     conflicting-enchantments: '&6Conflicting Enchantments: &f'
     enabled: '&6Enchantment Enabled: &f'
     treasure: '&6Treasure Enchantment: &f'
-    disabled-items: '&6Disabled Items: &f'
     display_names: 
         custom_enchantments: 
             angler: 'Angler'
@@ -315,6 +573,17 @@ enchantment:
             wand: 'Wand'
             warp: 'Warp'
             width_plus_plus: 'Width++'
+    locations:
+        none: 'None'
+        table: 'Enchanting Table'
+        non_book: 'Tools/Weapons/Armor'
+        chest_loot: 'Chest Loot'
+        mob_loot: 'Mob Loot'
+        fishing_loot: 'Fishing Loot'
+        villager_trades: 'Villager Trades'
+        piglin_trades: 'Piglin Trades'
+    locations_string: '&6Enchantment Locations: &f'
+    random: 'Random'
 irenes_lasso: 
     error: 'This animal does not belong to you!'
 vanilla: 
@@ -340,6 +609,7 @@ vanilla:
             stone_hoe: 'Stone Hoe'
             golden_leggings: 'Golden Leggings'
             carrot_on_a_stick: 'Carrot on a Stick'
+            warped_fungus_on_a_stick: 'Warped Fungus on a Stick'
             stone_pickaxe: 'Stone Pickaxe'
             stone_shovel: 'Stone Shovel'
             stone_sword: 'Stone Sword'
@@ -385,7 +655,6 @@ item_display_types:
     book: "Books"
     boots: "Boots"
     bow: "Bow"
-    carrot_on_a_stick: "Carrot on a Stick"
     chainmail_armor: "Chainmail Armor"
     chestplates: "Chestplates"
     crossbow: "Crossbow"
@@ -394,6 +663,7 @@ item_display_types:
     elytra: "Elytra"
     enchantable: "Enchantable"
     fishing_rod: "Fishing Rod"
+    fishing_stick: "Fishing Stick"
     flint_and_steel: "Flint and Steel"
     golden_armor: "Golden Armor"
     golden_tools: "Golden Tools"
@@ -421,12 +691,12 @@ item_display_types:
     none: "None"
 misc:
     no_conflicting_enchantments: "None"
-    no_disabled_items: "None"
     true: "True"
     false: "False"
     beheading_skull: "&7%player%'s Skull"
     null_advancement_name: "No Name"
     null_advancement_description: "No Description"
+    no_enchantment_locations: 'No Enchantment Locations'
 
 advancements: 
     enchantments/agricultural_revolution: 
@@ -654,3 +924,36 @@ advancements:
     enchantments/kilimanjaro: 
         name: 'Kilimanjaro!'
         description: 'Kill 10 mobs within 4.5 seconds with Overkill'
+    enchantments/environmental_protection:
+        name: 'Environmental Protection'
+        description: 'Earn 1000 experience with Recycler'
+    enchantments/simple_repair:
+        name: 'Simple Repair'
+        description: 'Turn a stick back into an item'
+    enchantments/sticky_bees:
+        name: 'Sticky Bees'
+        description: 'Break 8 items into sticks'
+    enchantments/knockback_reversed:
+        name: 'Knockback Reversed'
+        description: 'Knockback an enemy with Pushback'
+    enchantments/stainless_steel:
+        name: 'Stainless Steel'
+        description: 'Hold an Iron Pickaxe with the highest level of Unbreaking and Curse of Stagnancy'
+    enchantments/nether_dull:
+        name: 'Nether Dull'
+        description: 'Hold a Netherite Sword with the highest level of Sharpness and Curse of Stagnancy'
+    enchantments/yummy_repairs:
+        name: 'Yummy Repairs'
+        description: 'Repair an item with Force Feed'
+    enchantments/hungry_hippos:
+        name: 'Hungry Hippos'
+        description: 'Wear a full set of armor with Force Feed'
+    enchantments/light_as_a_feather:
+        name: 'Light as a Feather'
+        description: 'Fail to break a fully grown crop with Light Weight'
+    enchantments/wildlife_conservation:
+        name: 'Wildlife Conservation'
+        description: 'Spawn all baby animal breeds by killing an adult animal'
+    enchantments/meat_ready_to_eat:
+        name: 'Meat Ready to Eat'
+        description: 'Earn extra cooked meat with Butcher'

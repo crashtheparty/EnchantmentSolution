@@ -13,6 +13,7 @@ import org.bukkit.inventory.PlayerInventory;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
+import org.ctp.enchantmentsolution.enums.MatData;
 import org.ctp.enchantmentsolution.inventory.InventoryData;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 import org.ctp.enchantmentsolution.utils.items.ItemUtils;
@@ -67,7 +68,7 @@ public class VanishListener implements Listener {
 	public void onEntityPickupItem(EntityPickupItemEvent event) {
 		if (ConfigString.DISABLE_ENCHANT_METHOD.getString().equals("vanish")) {
 			ItemStack item = event.getItem().getItemStack();
-			if(item == null || item.getType().isAir()) return;
+			if (item == null || MatData.isAir(item.getType())) return;
 			event.getItem().setItemStack(removeEnchants(item));
 		}
 	}

@@ -1,9 +1,6 @@
 package org.ctp.enchantmentsolution.inventory;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -21,7 +18,7 @@ import org.ctp.enchantmentsolution.utils.DBUtils;
 import org.ctp.enchantmentsolution.utils.yaml.YamlChild;
 import org.ctp.enchantmentsolution.utils.yaml.YamlConfigBackup;
 
-public class ConfigInventory implements InventoryData {
+public class ConfigInventory implements InventoryData, Pageable {
 
 	private Player player;
 	private Inventory inventory;
@@ -49,6 +46,9 @@ public class ConfigInventory implements InventoryData {
 		isChanged.putAll(DBUtils.getDifferent(Configurations.getLanguage()));
 		isChanged.putAll(DBUtils.getDifferent(Configurations.getEnchantments()));
 		isChanged.putAll(DBUtils.getDifferent(Configurations.getAdvancements()));
+		isChanged.putAll(DBUtils.getDifferent(Configurations.getRPG()));
+		isChanged.putAll(DBUtils.getDifferent(Configurations.getHardMode()));
+		isChanged.putAll(DBUtils.getDifferent(Configurations.getMinigames()));
 
 		hasChanged = isChanged.containsValue(true);
 	}
@@ -77,6 +77,7 @@ public class ConfigInventory implements InventoryData {
 		listFiles();
 	}
 
+	@Override
 	public void setInventory() {
 		setInventory(screen);
 	}
@@ -125,6 +126,24 @@ public class ConfigInventory implements InventoryData {
 		enchantmentFileMeta.setDisplayName(ChatColor.GOLD + Configurations.getEnchantments().getConfig().getFileName());
 		enchantmentFile.setItemMeta(enchantmentFileMeta);
 		inv.setItem(6, enchantmentFile);
+
+		ItemStack minigamesFile = new ItemStack(Material.GOLDEN_SHOVEL);
+		ItemMeta minigamesFileMeta = minigamesFile.getItemMeta();
+		minigamesFileMeta.setDisplayName(ChatColor.GOLD + Configurations.getMinigames().getConfig().getFileName());
+		minigamesFile.setItemMeta(minigamesFileMeta);
+		inv.setItem(12, minigamesFile);
+
+		ItemStack rpgFile = new ItemStack(Material.GOLDEN_APPLE);
+		ItemMeta rpgFileMeta = rpgFile.getItemMeta();
+		rpgFileMeta.setDisplayName(ChatColor.GOLD + Configurations.getRPG().getConfig().getFileName());
+		rpgFile.setItemMeta(rpgFileMeta);
+		inv.setItem(13, rpgFile);
+
+		ItemStack hardModeFile = new ItemStack(Material.SPAWNER);
+		ItemMeta hardModeFileMeta = hardModeFile.getItemMeta();
+		hardModeFileMeta.setDisplayName(ChatColor.GOLD + Configurations.getHardMode().getConfig().getFileName());
+		hardModeFile.setItemMeta(hardModeFileMeta);
+		inv.setItem(14, hardModeFile);
 
 		ItemStack save = null;
 		ItemStack revert = null;
@@ -376,11 +395,10 @@ public class ConfigInventory implements InventoryData {
 		setLevel(level);
 		this.type = type;
 
-		List<String> enums = config.getEnums(level);
-		if (enums == null) return;
-
-		for(String s: config.getStringListCombined(level))
-			enums.remove(s);
+		List<String> enums = new ArrayList<String>();
+		if (config.getEnums(level) == null) return;
+		for(String s: config.getEnums(level))
+			if (!config.getStringListCombined(level).contains(s)) enums.add(s);
 
 		if (PAGING * (page - 1) >= enums.size() && page != 1) {
 			listEnumListEdit(config, level, type, page - 1);
@@ -553,10 +571,12 @@ public class ConfigInventory implements InventoryData {
 		this.level = level;
 	}
 
+	@Override
 	public int getPage() {
 		return page;
 	}
 
+	@Override
 	public void setPage(int page) {
 		this.page = page;
 	}
@@ -669,29 +689,5 @@ public class ConfigInventory implements InventoryData {
 	@Override
 	public List<ItemStack> getItems() {
 		return null;
-	}
-
-	private ItemStack goBack() {
-		ItemStack goBack = new ItemStack(Material.ARROW);
-		ItemMeta goBackMeta = goBack.getItemMeta();
-		goBackMeta.setDisplayName(ChatColor.GOLD + "Go Back");
-		goBack.setItemMeta(goBackMeta);
-		return goBack;
-	}
-
-	private ItemStack nextPage() {
-		ItemStack nextPage = new ItemStack(Material.ARROW);
-		ItemMeta nextPageMeta = nextPage.getItemMeta();
-		nextPageMeta.setDisplayName(ChatColor.BLUE + "Next Page");
-		nextPage.setItemMeta(nextPageMeta);
-		return nextPage;
-	}
-
-	private ItemStack previousPage() {
-		ItemStack prevPage = new ItemStack(Material.ARROW);
-		ItemMeta prevPageMeta = prevPage.getItemMeta();
-		prevPageMeta.setDisplayName(ChatColor.BLUE + "Previous Page");
-		prevPage.setItemMeta(prevPageMeta);
-		return prevPage;
 	}
 }

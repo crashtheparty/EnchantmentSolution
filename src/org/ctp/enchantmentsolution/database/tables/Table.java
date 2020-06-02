@@ -1,11 +1,6 @@
 package org.ctp.enchantmentsolution.database.tables;
 
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -23,15 +18,15 @@ public class Table {
 	private HashMap<String, String> conversions = new HashMap<String, String>();
 	private SQLite db;
 
-	public Table(SQLite db, String name) {
+	public Table(SQLite db) {
 		this.db = db;
-		this.name = name;
+		name = db.getTable();
 		addConversions();
 	}
 
-	public Table(SQLite db, String name, List<String> primary) {
+	public Table(SQLite db, List<String> primary) {
 		this.db = db;
-		this.name = name;
+		name = db.getTable();
 		addConversions();
 		this.primary = primary;
 	}

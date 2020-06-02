@@ -7,9 +7,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.enchantments.CERegister;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
-import org.ctp.enchantmentsolution.events.player.DropEvent;
 
-public class TransmutationEvent extends DropEvent {
+public class TransmutationEvent extends OverrideDropsEvent {
 
 	private final LivingEntity killed;
 

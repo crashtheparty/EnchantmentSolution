@@ -21,5 +21,4 @@ public abstract class PotionEffectEvent extends ESEntityEvent {
 	public void setType(PotionEffectType type) {
 		this.type = type;
 	}
-
 }

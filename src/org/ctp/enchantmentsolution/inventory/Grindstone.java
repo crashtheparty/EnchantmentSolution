@@ -33,6 +33,7 @@ public class Grindstone implements InventoryData {
 		playerItems = new ArrayList<ItemStack>();
 	}
 
+	@Override
 	public void setInventory() {
 		setInventory(playerItems);
 	}
@@ -300,6 +301,7 @@ public class Grindstone implements InventoryData {
 			sound = Sound.valueOf("BLOCK_GRINDSTONE_USE");
 		} catch (Exception ex) {}
 		if (block == null) player.getWorld().playSound(player.getLocation(), sound, 1, 1);
-		block.getWorld().playSound(block.getLocation(), sound, 1, 1);
+		else
+			block.getWorld().playSound(block.getLocation(), sound, 1, 1);
 	}
 }

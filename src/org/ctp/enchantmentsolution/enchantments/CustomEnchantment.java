@@ -9,19 +9,20 @@ import org.bukkit.entity.Player;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentDescription;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentDisplayName;
 import org.ctp.enchantmentsolution.enchantments.helper.Weight;
-import org.ctp.enchantmentsolution.enums.ItemType;
-import org.ctp.enchantmentsolution.enums.Language;
+import org.ctp.enchantmentsolution.enums.*;
+import org.ctp.enchantmentsolution.rpg.RPGUtils;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.PermissionUtils;
 import org.ctp.enchantmentsolution.utils.StringUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 import org.ctp.enchantmentsolution.utils.config.ConfigUtils;
 import org.ctp.enchantmentsolution.utils.config.Type;
+import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 
 public abstract class CustomEnchantment {
 
 	protected boolean enabled = true;
-	protected boolean treasure = false;
+	protected List<EnchantmentLocation> enchantmentLocations, defaultEnchantmentLocations;
 	protected String displayName = null, description = "";
 	protected List<EnchantmentDisplayName> defaultDisplayNames = new ArrayList<EnchantmentDisplayName>();
 	protected List<EnchantmentDescription> defaultDescriptions = new ArrayList<EnchantmentDescription>();
@@ -32,7 +33,7 @@ public abstract class CustomEnchantment {
 	protected Weight weight = Weight.NULL;
 	protected boolean maxLevelOne = false, curse = false;
 	protected List<Enchantment> conflictingEnchantments = null;
-	protected List<Material> disabledItems = new ArrayList<Material>();
+	protected List<ItemType> enchantmentTypes = null, anvilTypes = null;
 	private final Type lang;
 
 	public CustomEnchantment(String englishUSDisplayName, int fiftyConstant, int thirtyConstant, int fiftyModifier,
@@ -59,9 +60,17 @@ public abstract class CustomEnchantment {
 		return false;
 	}
 
-	protected abstract List<ItemType> getEnchantmentItemTypes();
+	public abstract List<ItemType> getDefaultEnchantmentItemTypes();
 
-	protected abstract List<ItemType> getAnvilItemTypes();
+	public abstract List<ItemType> getDefaultAnvilItemTypes();
+
+	public List<ItemType> getEnchantmentItemTypes() {
+		return enchantmentTypes;
+	}
+
+	public List<ItemType> getAnvilItemTypes() {
+		return anvilTypes;
+	}
 
 	protected abstract List<Enchantment> getDefaultConflictingEnchantments();
 
@@ -133,19 +142,7 @@ public abstract class CustomEnchantment {
 			}
 		} else
 			page += ItemType.NONE + ".\n";
-		page += ChatUtils.getMessage(ChatUtils.getCodes(), "enchantment.disabled-items");
-		if (getDisabledItems().size() > 0) {
-			List<String> names = new ArrayList<String>();
-			for(int i = 0; i < getDisabledItems().size(); i++) {
-				Material mat = getDisabledItems().get(i);
-				names.add(mat.name());
-			}
 
-			if (names.isEmpty()) page += ConfigUtils.getString(lang, "misc.no_disabled_items") + ".\n";
-			else
-				page += StringUtils.join(names, ",") + ".\n";
-		} else
-			page += ConfigUtils.getString(lang, "misc.no_disabled_items") + ".\n";
 		page += ChatUtils.getMessage(ChatUtils.getCodes(), "enchantment.conflicting-enchantments");
 		if (getConflictingEnchantments().size() > 0) {
 			List<String> names = new ArrayList<String>();
@@ -162,22 +159,36 @@ public abstract class CustomEnchantment {
 		} else
 			page += ConfigUtils.getString(lang, "misc.no_conflicting_enchantments") + ".\n";
 		page += ChatUtils.getMessage(ChatUtils.getCodes(), "enchantment.enabled") + ConfigUtils.getString(lang, "misc." + isEnabled()) + ".\n";
-		page += ChatUtils.getMessage(ChatUtils.getCodes(), "enchantment.treasure") + ConfigUtils.getString(lang, "misc." + isTreasure()) + ".\n";
+		if (getEnchantmentLocations().size() > 0) {
+			List<String> names = new ArrayList<String>();
+			for(int i = 0; i < getEnchantmentLocations().size(); i++) {
+				EnchantmentLocation enchant = getEnchantmentLocations().get(i);
+				names.add(ChatUtils.getMessage(ChatUtils.getCodes(), "enchantment.locations." + enchant.name().toLowerCase()));
+			}
+
+			if (names.isEmpty()) page += ChatUtils.getMessage(ChatUtils.getCodes(), "enchantment.locations_string") + ConfigUtils.getString(lang, "misc.no_enchantment_locations");
+			else
+				page += ChatUtils.getMessage(ChatUtils.getCodes(), "enchantment.locations_string") + StringUtils.join(names, ", ");
+			page += ".\n";
+		} else
+			page += ChatUtils.getMessage(ChatUtils.getCodes(), "enchantment.locations_string") + ConfigUtils.getString(lang, "misc.no_enchantment_locations") + ".\n";
 		return page;
 	}
 
-	public boolean canEnchantItem(Material item) {
-		if (disabledItems.contains(item)) return false;
-		for(ItemType type: getEnchantmentItemTypes())
-			if (type.getItemTypes() != null) if (type.getItemTypes().contains(item)) return true;
+	public boolean canEnchantItem(ItemData item) {
+		for(ItemType type: getEnchantmentItemTypes()) {
+			if (type instanceof CustomItemType) if (ItemUtils.checkItemType(item, (CustomItemType) type)) return true;
+			if (type.getEnchantMaterials() != null && ItemData.contains(type.getEnchantMaterials(), item.getMaterial())) return true;
+		}
 		return false;
 	}
 
-	public boolean canAnvilItem(Material item) {
-		if (disabledItems.contains(item)) return false;
-		if (item == Material.ENCHANTED_BOOK) return true;
-		for(ItemType type: getAnvilItemTypes())
-			if (type.getItemTypes().contains(item)) return true;
+	public boolean canAnvilItem(ItemData item) {
+		if (item.getMaterial() == Material.ENCHANTED_BOOK) return true;
+		for(ItemType type: getAnvilItemTypes()) {
+			if (type instanceof CustomItemType && ItemUtils.checkItemType(item, (CustomItemType) type)) return true;
+			if (type.getEnchantMaterials() != null && ItemData.contains(type.getEnchantMaterials(), item.getMaterial())) return true;
+		}
 		return false;
 	}
 
@@ -234,7 +245,7 @@ public abstract class CustomEnchantment {
 	public int getEnchantLevel(Player player, int enchantability) {
 		for(int i = getMaxLevel(); i > 0; i--) {
 			int level = enchantability(i);
-			if (PermissionUtils.canEnchant(player, this, i)) if (enchantability >= level) return i;
+			if (PermissionUtils.canEnchant(player, this, i) && RPGUtils.canEnchant(player, this, i) && enchantability >= level) return i;
 		}
 		return 0;
 	}
@@ -254,14 +265,6 @@ public abstract class CustomEnchantment {
 
 	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
-	}
-
-	public boolean isTreasure() {
-		return treasure;
-	}
-
-	public void setTreasure(boolean treasure) {
-		this.treasure = treasure;
 	}
 
 	public void setDisplayName(String name) {
@@ -374,28 +377,38 @@ public abstract class CustomEnchantment {
 			this.maxLevel = maxLevel;
 	}
 
-	void setLevelFifty() {
+	void setLevelFifty(List<ItemType> enchantmentTypes, List<ItemType> anvilTypes, List<EnchantmentLocation> locations) {
 		setConstant(getDefaultFiftyConstant());
 		setModifier(getDefaultFiftyModifier());
 		setStartLevel(getDefaultFiftyStartLevel());
 		setMaxLevel(getDefaultFiftyMaxLevel());
 		setWeight(null);
+		setEnchantmentItemTypes(enchantmentTypes);
+		setAnvilItemTypes(anvilTypes);
+		setEnchantmentLocations(locations);
 	}
 
-	void setLevelThirty() {
+	void setLevelThirty(List<ItemType> enchantmentTypes, List<ItemType> anvilTypes, List<EnchantmentLocation> locations) {
 		setConstant(getDefaultThirtyConstant());
 		setModifier(getDefaultThirtyModifier());
 		setStartLevel(getDefaultThirtyStartLevel());
 		setMaxLevel(getDefaultThirtyMaxLevel());
 		setWeight(null);
+		setEnchantmentItemTypes(enchantmentTypes);
+		setAnvilItemTypes(anvilTypes);
+		setEnchantmentLocations(locations);
 	}
 
-	void setCustom(int constant, int modifier, int startLevel, int maxLevel, Weight weight) {
+	void setCustom(int constant, int modifier, int startLevel, int maxLevel, Weight weight, List<ItemType> enchantmentTypes, List<ItemType> anvilTypes,
+	List<EnchantmentLocation> locations) {
 		setConstant(constant);
 		setModifier(modifier);
 		setStartLevel(startLevel);
 		setMaxLevel(maxLevel);
 		setWeight(weight);
+		setEnchantmentItemTypes(enchantmentTypes);
+		setAnvilItemTypes(anvilTypes);
+		setEnchantmentLocations(locations);
 	}
 
 	public boolean isMaxLevelOne() {
@@ -451,21 +464,6 @@ public abstract class CustomEnchantment {
 		addDefaultDisplayName(new EnchantmentDisplayName(Language.US, name));
 	}
 
-	public List<Material> getDisabledItems() {
-		return disabledItems;
-	}
-
-	public void setDisabledItems(List<Material> disabledItems) {
-		this.disabledItems = disabledItems;
-	}
-
-	public List<String> getDisabledItemsStrings() {
-		List<String> names = new ArrayList<String>();
-		for(Material item: getDisabledItems())
-			names.add(item.name());
-		return names;
-	}
-
 	public boolean isCurse() {
 		return curse;
 	}
@@ -508,5 +506,23 @@ public abstract class CustomEnchantment {
 			}
 		defaultDescriptions.add(defaultDescription);
 	}
+
+	private void setEnchantmentItemTypes(List<ItemType> types) {
+		enchantmentTypes = types;
+	}
+
+	private void setAnvilItemTypes(List<ItemType> types) {
+		anvilTypes = types;
+	}
+
+	public List<EnchantmentLocation> getEnchantmentLocations() {
+		return enchantmentLocations;
+	}
+
+	public void setEnchantmentLocations(List<EnchantmentLocation> locations) {
+		enchantmentLocations = locations;
+	}
+
+	public abstract List<EnchantmentLocation> getDefaultEnchantmentLocations();
 
 }

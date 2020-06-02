@@ -13,7 +13,6 @@ import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.database.tables.BackupTable;
 import org.ctp.enchantmentsolution.database.tables.Table;
 import org.ctp.enchantmentsolution.utils.yaml.YamlConfigBackup;
-import org.ctp.enchantmentsolution.utils.yaml.YamlInfo;
 
 public class SQLite extends Database {
 
@@ -23,10 +22,9 @@ public class SQLite extends Database {
 
 	public SQLite(EnchantmentSolution instance) {
 		super(instance);
+		dbname = "backups"; // Set the table name here e.g player_kills
 
 		tables.add(new BackupTable(this));
-
-		dbname = "enchantment_solution"; // Set the table name here e.g player_kills
 	}
 
 	private <T> Table getTable(Class<T> cls) {
@@ -65,16 +63,17 @@ public class SQLite extends Database {
 		return null;
 	}
 
-	public List<YamlInfo> getBackup(YamlConfigBackup config, int backup) {
+	public String getBackup(YamlConfigBackup config, int backup) {
 		Table table = getTable(BackupTable.class);
 		if (table instanceof BackupTable) {
 			BackupTable bTable = (BackupTable) table;
 			return bTable.getBackup(config, backup);
 		}
-		return null;
+		return "";
 	}
 
 	// SQL creation stuff, You can leave the blow stuff untouched.
+	@Override
 	public Connection getSQLConnection() {
 		File dataFolder = new File(plugin.getDataFolder(), dbname + ".db");
 		if (!dataFolder.exists()) try {
@@ -95,6 +94,7 @@ public class SQLite extends Database {
 		return null;
 	}
 
+	@Override
 	public void load() {
 		connection = getSQLConnection();
 		for(Table t: tables)
@@ -104,5 +104,10 @@ public class SQLite extends Database {
 
 	public EnchantmentSolution getPlugin() {
 		return plugin;
+	}
+
+	@Override
+	public String getTable() {
+		return dbname;
 	}
 }

@@ -14,8 +14,11 @@ import org.bukkit.inventory.AnvilInventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
+import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.generate.AnvilEnchantments;
 import org.ctp.enchantmentsolution.enchantments.generate.AnvilEnchantments.RepairType;
+import org.ctp.enchantmentsolution.enums.MatData;
+import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.AnvilUtils;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
@@ -71,15 +74,17 @@ public class AnvilListener implements Listener {
 								player.setLevel(player.getLevel() - cost);
 								inv.setContents(new ItemStack[3]);
 								AnvilUtils.checkAnvilBreak(player, inv.getLocation().getBlock(), null);
-								if (anvil.getRepairType() == RepairType.REPAIR) inv.setItem(1, anvil.getItemLeftover());
+								if (anvil.getRepairType() == RepairType.REPAIR || anvil.getRepairType() == RepairType.STICKY_REPAIR) inv.setItem(1, anvil.getItemLeftover());
+								if (anvil.getRepairType() == RepairType.STICKY_REPAIR) AdvancementUtils.awardCriteria(player, ESAdvancement.SIMPLE_REPAIR, "repair");
 								break;
 							case SHIFT_LEFT:
 								HashMap<Integer, ItemStack> items = player.getInventory().addItem(combinedItem);
 								if (!items.isEmpty()) return;
 								player.setLevel(player.getLevel() - cost);
 								inv.setContents(new ItemStack[3]);
-								if (anvil.getRepairType() == RepairType.REPAIR) inv.setItem(1, anvil.getItemLeftover());
+								if (anvil.getRepairType() == RepairType.REPAIR || anvil.getRepairType() == RepairType.STICKY_REPAIR) inv.setItem(1, anvil.getItemLeftover());
 								AnvilUtils.checkAnvilBreak(player, inv.getLocation().getBlock(), null);
+								if (anvil.getRepairType() == RepairType.STICKY_REPAIR) AdvancementUtils.awardCriteria(player, ESAdvancement.SIMPLE_REPAIR, "repair");
 								break;
 							default:
 								break;
@@ -93,7 +98,7 @@ public class AnvilListener implements Listener {
 					}
 				}
 
-				if (anvil.getRepairType() == RepairType.RENAME && event.getSlot() == 2 && (event.getCursor() == null || event.getCursor().getType() == Material.AIR)) {
+				if (anvil.getRepairType() == RepairType.RENAME && event.getSlot() == 2 && (event.getCursor() == null || MatData.isAir(event.getCursor().getType()))) {
 					if (first == null) return;
 					ItemMeta firstMeta = first.getItemMeta();
 					if (firstMeta.hasDisplayName() && !firstMeta.getDisplayName().equals(inv.getRenameText()) || !firstMeta.hasDisplayName() && inv.getRenameText() != null && !inv.getRenameText().equals("")) {

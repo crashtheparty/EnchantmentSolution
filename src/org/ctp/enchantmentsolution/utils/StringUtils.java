@@ -11,6 +11,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
+import org.ctp.enchantmentsolution.enums.MatData;
 
 public class StringUtils {
 
@@ -30,6 +31,59 @@ public class StringUtils {
 		if (enchLevel > 10 || enchLevel <= 0) return displayName + " enchantment.level." + enchLevel;
 
 		return displayName + " " + NUMERALS[enchLevel - 1];
+	}
+
+	public static String stickyHoldItemType(ItemStack item) {
+		return ChatColor.ITALIC + "" + ChatColor.ITALIC + ChatUtils.hideText(item.getType().name()) + ChatColor.RESET + ChatColor.GRAY + item.getItemMeta().getDisplayName();
+	}
+
+	public static ItemStack stickyHoldItem(ItemMeta itemMeta) {
+		ItemStack item = null;
+		for(String l: itemMeta.getLore()) {
+			item = stickyHoldItem(l, itemMeta);
+			if (item != null) break;
+		}
+		return item;
+	}
+
+	public static ItemStack stickyHoldItem(String s, ItemMeta meta) {
+		if (s.startsWith(ChatColor.ITALIC + "" + ChatColor.ITALIC)) {
+			s = s.replaceAll(ChatColor.ITALIC + "", "");
+			MatData itemType = new MatData(ChatUtils.revealText(s.substring(0, s.indexOf(ChatColor.RESET + ""))));
+			if (itemType.hasMaterial()) {
+				ItemStack item = new ItemStack(itemType.getMaterial());
+				item.setItemMeta(meta);
+				return item;
+			}
+		}
+		return null;
+	}
+
+	public static String addStickyHold(EnchantmentLevel level) {
+		return ChatColor.UNDERLINE + "" + ChatColor.UNDERLINE + getEnchantmentString(level);
+	}
+
+	public static EnchantmentLevel stickyHoldLevel(String s) {
+		if (s.indexOf(ChatColor.UNDERLINE + "" + ChatColor.UNDERLINE) == 0) {
+			s = s.replaceAll(ChatColor.UNDERLINE + "", "");
+			String enchHidden = s.substring(0, s.indexOf(ChatColor.RESET + ""));
+			String enchName = ChatUtils.revealText(enchHidden);
+			CustomEnchantment enchant = RegisterEnchantments.getByName(enchName);
+			s = s.substring(s.indexOf(ChatColor.RESET + "") + 2);
+			int level = 0;
+			if (s.indexOf(ChatColor.RESET + "") == -1) level = 0;
+			else {
+				String levelHidden = s.substring(0, s.indexOf(ChatColor.RESET + ""));
+				try {
+					level = Integer.parseInt(ChatUtils.revealText(levelHidden));
+				} catch (NumberFormatException ex) {
+
+				}
+			}
+
+			return level > 0 && enchant != null ? new EnchantmentLevel(enchant, level) : null;
+		}
+		return null;
 	}
 
 	public static EnchantmentLevel returnEnchantmentLevel(String s, ItemMeta meta) {
@@ -108,6 +162,7 @@ public class StringUtils {
 	}
 
 	public static boolean isEnchantment(String s) {
+		if (s.indexOf(ChatColor.ITALIC + "" + ChatColor.ITALIC) == 0 || s.indexOf(ChatColor.UNDERLINE + "" + ChatColor.UNDERLINE) == 0) return false;
 		if (s.indexOf(ChatColor.RESET + "") > -1) {
 			String name = s.substring(0, s.indexOf(ChatColor.RESET + ""));
 			try {
@@ -127,6 +182,7 @@ public class StringUtils {
 	}
 
 	public static EnchantmentLevel getEnchantment(String s) {
+		if (s.indexOf(ChatColor.ITALIC + "" + ChatColor.ITALIC) == 0 || s.indexOf(ChatColor.UNDERLINE + "" + ChatColor.UNDERLINE) == 0) return null;
 		if (s.indexOf(ChatColor.RESET + "") > -1) {
 			int level = 0;
 			CustomEnchantment enchant = null;
@@ -199,7 +255,8 @@ public class StringUtils {
 		Iterator<String> iterator = lore.iterator();
 		while (iterator.hasNext()) {
 			String l = iterator.next();
-			if (l.endsWith(returnEnchantmentName(enchantment, level))) iterator.remove();
+			EnchantmentLevel enchLevel = getEnchantment(l);
+			if (enchLevel != null && enchLevel.getEnchant().equals(enchantment) && enchLevel.getLevel() == level) iterator.remove();
 		}
 		return lore;
 	}

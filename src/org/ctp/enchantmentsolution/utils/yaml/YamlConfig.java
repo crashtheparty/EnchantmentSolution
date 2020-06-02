@@ -359,11 +359,11 @@ public class YamlConfig {
 		return config.toString();
 	}
 
-	protected String prepareConfigString() {
+	public String prepareConfigString(boolean comments) {
 		StringBuilder config = new StringBuilder("");
 		ArrayList<YamlChild> keyList = new ArrayList<YamlChild>();
 
-		config.append(headerString());
+		if (comments) config.append(headerString());
 
 		writeDefaults();
 
@@ -382,7 +382,7 @@ public class YamlConfig {
 		}
 
 		for(YamlChild child: keyList)
-			config.append(getLevel(child));
+			config.append(getLevel(child, comments));
 
 		return config.toString();
 	}
@@ -403,6 +403,14 @@ public class YamlConfig {
 					}
 		}
 		return values;
+	}
+
+	public List<String> getLevelEntryKeysAtLevel(String level) {
+		List<String> values = getLevelEntryKeys(level);
+		List<String> newValues = new ArrayList<String>();
+		for(String v: values)
+			newValues.add(v.substring(v.lastIndexOf('.') + 1));
+		return newValues;
 	}
 
 	public List<String> getAllEntryKeys() {
@@ -427,7 +435,7 @@ public class YamlConfig {
 	}
 
 	public void saveConfig() {
-		String configuration = prepareConfigString();
+		String configuration = prepareConfigString(true);
 		try {
 			BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8));
 			writer.write(configuration);
@@ -438,11 +446,11 @@ public class YamlConfig {
 		}
 	}
 
-	private String getLevel(YamlChild child) {
+	protected String getLevel(YamlChild child, boolean comments) {
 		StringBuilder config = new StringBuilder("");
 		String key = child.getPath();
 		int deep = StringUtils.countMatches(key, ".") * 4;
-		if (comments) if (contains(key)) {
+		if (comments && this.comments) if (contains(key)) {
 			YamlInfo info = getInfo(key);
 			if (info.getComments().length > 0) {
 				StringBuilder line = new StringBuilder("\n");
@@ -483,7 +491,7 @@ public class YamlConfig {
 		config.append(line);
 
 		for(YamlChild c: child.getChildren())
-			config.append(getLevel(c));
+			config.append(getLevel(c, comments));
 
 		return config.toString();
 	}
@@ -519,5 +527,14 @@ public class YamlConfig {
 			} else
 				info.put(e.getKey(), e.getValue());
 		}
+	}
+
+	protected Map<String, YamlInfo> getDefaults() {
+		return defaults;
+	}
+
+	public Object getDefaults(String string) {
+		if (defaults.containsKey(string)) return defaults.get(string).getValue();
+		return new Object();
 	}
 }
