@@ -10,6 +10,7 @@ import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentDescription;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentDisplayName;
 import org.ctp.enchantmentsolution.enchantments.helper.Weight;
 import org.ctp.enchantmentsolution.enums.*;
+import org.ctp.enchantmentsolution.enums.vanilla.ItemData;
 import org.ctp.enchantmentsolution.rpg.RPGUtils;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.PermissionUtils;
@@ -22,7 +23,7 @@ import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 public abstract class CustomEnchantment {
 
 	protected boolean enabled = true;
-	protected List<EnchantmentLocation> enchantmentLocations, defaultEnchantmentLocations;
+	protected List<EnchantmentLocation> enchantmentLocations = new ArrayList<EnchantmentLocation>(), defaultEnchantmentLocations = new ArrayList<EnchantmentLocation>();
 	protected String displayName = null, description = "";
 	protected List<EnchantmentDisplayName> defaultDisplayNames = new ArrayList<EnchantmentDisplayName>();
 	protected List<EnchantmentDescription> defaultDescriptions = new ArrayList<EnchantmentDescription>();
@@ -32,8 +33,8 @@ public abstract class CustomEnchantment {
 	protected Weight defaultWeight = Weight.NULL;
 	protected Weight weight = Weight.NULL;
 	protected boolean maxLevelOne = false, curse = false;
-	protected List<Enchantment> conflictingEnchantments = null;
-	protected List<ItemType> enchantmentTypes = null, anvilTypes = null;
+	protected List<Enchantment> conflictingEnchantments = new ArrayList<Enchantment>();
+	protected List<ItemType> enchantmentTypes = new ArrayList<ItemType>(), anvilTypes = new ArrayList<ItemType>();
 	private final Type lang;
 
 	public CustomEnchantment(String englishUSDisplayName, int fiftyConstant, int thirtyConstant, int fiftyModifier,
@@ -524,5 +525,56 @@ public abstract class CustomEnchantment {
 	}
 
 	public abstract List<EnchantmentLocation> getDefaultEnchantmentLocations();
+
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("CustomEnchantment: [name='" + getName() + "' display-name='" + getDisplayName() + "'");
+		sb.append("language-display-names=[");
+		for(int i = 0; i < defaultDisplayNames.size(); i++) {
+			EnchantmentDisplayName e = defaultDisplayNames.get(i);
+			sb.append("DisplayName: [lang='" + e.getLanguage().getLocale() + "' name='" + e.getDisplayName() + "']");
+			if (i + 1 < defaultDisplayNames.size()) sb.append(", ");
+		}
+		sb.append("] description='" + getDescription() + "' language-descriptions=[");
+		for(int i = 0; i < defaultDescriptions.size(); i++) {
+			EnchantmentDescription e = defaultDescriptions.get(i);
+			sb.append("Description: [lang='" + e.getLanguage().getLocale() + "' desc='" + e.getDescription() + "']");
+			if (i + 1 < defaultDescriptions.size()) sb.append(", ");
+		}
+		sb.append("]");
+		sb.append(" level-30=[max-level=" + defaultThirtyMaxLevel + " start-level=" + defaultThirtyStartLevel + " constant=" + defaultThirtyConstant + " modifier=" + defaultThirtyModifier + "]");
+		sb.append(" level-50=[max-level=" + defaultFiftyMaxLevel + " start-level=" + defaultFiftyStartLevel + " constant=" + defaultFiftyConstant + " modifier=" + defaultFiftyModifier + "]");
+		sb.append(" current=[max-level=" + maxLevel + " start-level=" + startLevel + " constant=" + constant + " modifier=" + modifier + "]");
+		sb.append(" default-weight='" + defaultWeight.getName() + "' weight='" + weight.getName() + "' max-level-one=" + maxLevelOne + " curse=" + curse);
+		sb.append(" default-enchantment-locations=[");
+		for(int i = 0; i < defaultEnchantmentLocations.size(); i++) {
+			EnchantmentLocation e = defaultEnchantmentLocations.get(i);
+			sb.append("Location: [name='" + e.name().toLowerCase() + "']");
+			if (i + 1 < defaultEnchantmentLocations.size()) sb.append(", ");
+		}
+		sb.append("] enchantment-locations=[");
+		for(int i = 0; i < enchantmentLocations.size(); i++) {
+			EnchantmentLocation e = enchantmentLocations.get(i);
+			sb.append("Location: [name='" + e.name().toLowerCase() + "']");
+			if (i + 1 < enchantmentLocations.size()) sb.append(", ");
+		}
+		sb.append("] ");
+		sb.append("enchantment-types=[");
+		for(int i = 0; i < enchantmentTypes.size(); i++) {
+			ItemType e = enchantmentTypes.get(i);
+			sb.append("ItemType: [type='" + e.getType() + "' display-name='" + e.getDisplayName() + "']");
+			if (i + 1 < enchantmentTypes.size()) sb.append(", ");
+		}
+		sb.append("] ");
+		sb.append("anvil-types=[");
+		for(int i = 0; i < anvilTypes.size(); i++) {
+			ItemType e = anvilTypes.get(i);
+			sb.append("ItemType: [type='" + e.getType() + "' display-name='" + e.getDisplayName() + "']");
+			if (i + 1 < anvilTypes.size()) sb.append(", ");
+		}
+		sb.append("]]");
+		return sb.toString();
+	}
 
 }

@@ -3,7 +3,7 @@ package org.ctp.enchantmentsolution.utils.compatibility;
 import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enums.CustomItemType;
-import org.ctp.enchantmentsolution.enums.ItemData;
+import org.ctp.enchantmentsolution.enums.vanilla.ItemData;
 
 import net.Indyuce.mmoitems.api.Type;
 import net.mmogroup.mmolib.api.item.NBTItem;

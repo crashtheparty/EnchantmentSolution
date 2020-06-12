@@ -11,7 +11,7 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.ctp.enchantmentsolution.enchantments.generate.AnvilEnchantments;
-import org.ctp.enchantmentsolution.enums.MatData;
+import org.ctp.enchantmentsolution.enums.vanilla.MatData;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 
 public class MinigameUtils {

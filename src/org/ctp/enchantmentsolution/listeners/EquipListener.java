@@ -14,7 +14,7 @@ import org.bukkit.event.inventory.*;
 import org.bukkit.event.inventory.InventoryType.SlotType;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
-import org.ctp.enchantmentsolution.enums.MatData;
+import org.ctp.enchantmentsolution.enums.vanilla.MatData;
 import org.ctp.enchantmentsolution.events.ArmorEquipEvent;
 import org.ctp.enchantmentsolution.events.ArmorEquipEvent.EquipMethod;
 import org.ctp.enchantmentsolution.events.ItemEquipEvent;

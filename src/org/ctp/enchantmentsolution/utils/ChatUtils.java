@@ -1,6 +1,7 @@
 package org.ctp.enchantmentsolution.utils;
 
 import java.util.*;
+import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.stream.IntStream;
 
@@ -95,6 +96,16 @@ public class ChatUtils {
 		return s;
 	}
 
+	public static String getMessage(String message, HashMap<String, Object> codes) {
+		String s = "";
+		try {
+			s = translateCodes(codes, ChatColor.translateAlternateColorCodes('&', message));
+		} catch (Exception e) {
+
+		}
+		return s;
+	}
+
 	public static List<String> getMessages(HashMap<String, Object> codes, String location) {
 		List<String> messages = ConfigUtils.getStringList(Type.LANGUAGE, location);
 		if (messages == null) {
@@ -108,8 +119,8 @@ public class ChatUtils {
 	}
 
 	private static String translateCodes(HashMap<String, Object> codes, String str) {
-		for(Iterator<java.util.Map.Entry<String, Object>> it = codes.entrySet().iterator(); it.hasNext();) {
-			java.util.Map.Entry<String, Object> e = it.next();
+		for(Iterator<Entry<String, Object>> it = codes.entrySet().iterator(); it.hasNext();) {
+			Entry<String, Object> e = it.next();
 			if (e.getValue() != null) str = str.replaceAll(e.getKey(), e.getValue().toString());
 		}
 		return str;

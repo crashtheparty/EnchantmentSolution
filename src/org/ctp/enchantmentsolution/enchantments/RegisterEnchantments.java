@@ -9,6 +9,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.api.ApiEnchantmentWrapper;
+import org.ctp.enchantmentsolution.enchantments.config.ConfigEnchantment;
 import org.ctp.enchantmentsolution.enchantments.helper.Weight;
 import org.ctp.enchantmentsolution.enums.EnchantmentLocation;
 import org.ctp.enchantmentsolution.enums.ItemType;
@@ -125,8 +126,10 @@ public class RegisterEnchantments {
 		JavaPlugin plugin = EnchantmentSolution.getPlugin();
 		if (enchantment.getRelativeEnchantment() instanceof ApiEnchantmentWrapper) plugin = ((ApiEnchantmentWrapper) enchantment.getRelativeEnchantment()).getPlugin();
 		boolean custom = enchantment.getRelativeEnchantment() instanceof CustomEnchantmentWrapper;
-		String error_message = "Trouble adding the " + enchantment.getName() + (custom ? " custom" : "") + " enchantment: ";
-		String success_message = "Added the " + enchantment.getName() + (custom ? " custom" : "") + " enchantment.";
+		boolean config = enchantment instanceof ConfigEnchantment;
+		String enchType = (config ? "config" : custom ? "custom" : "vanilla");
+		String error_message = "Trouble adding the " + enchantment.getName() + " " + enchType + " enchantment: ";
+		String success_message = "Added the " + enchantment.getName() + " " + enchType + " enchantment.";
 		if (!custom) {
 			ChatUtils.sendToConsole(Level.INFO, success_message);
 			return true;

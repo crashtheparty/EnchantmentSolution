@@ -6,7 +6,7 @@ import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentList;
 import org.ctp.enchantmentsolution.enchantments.helper.Level;
 import org.ctp.enchantmentsolution.enchantments.helper.LevelList;
 import org.ctp.enchantmentsolution.enums.EnchantmentLocation;
-import org.ctp.enchantmentsolution.enums.ItemData;
+import org.ctp.enchantmentsolution.enums.vanilla.ItemData;
 
 public abstract class LootEnchantments extends GenerateEnchantments {
 

@@ -4,6 +4,8 @@ import java.util.*;
 
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.ctp.enchantmentsolution.enums.vanilla.ItemData;
+import org.ctp.enchantmentsolution.enums.vanilla.MatData;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 import org.ctp.enchantmentsolution.utils.config.ConfigUtils;
 import org.ctp.enchantmentsolution.utils.config.Type;

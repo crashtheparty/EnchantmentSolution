@@ -1,4 +1,4 @@
-package org.ctp.enchantmentsolution.enums;
+package org.ctp.enchantmentsolution.enums.vanilla;
 
 public enum MaterialSound {
 

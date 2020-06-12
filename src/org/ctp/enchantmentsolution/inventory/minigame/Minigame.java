@@ -15,6 +15,8 @@ import org.ctp.enchantmentsolution.enchantments.generate.MinigameEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentList;
 import org.ctp.enchantmentsolution.enums.*;
+import org.ctp.enchantmentsolution.enums.vanilla.ItemData;
+import org.ctp.enchantmentsolution.enums.vanilla.MatData;
 import org.ctp.enchantmentsolution.inventory.InventoryData;
 import org.ctp.enchantmentsolution.inventory.Pageable;
 import org.ctp.enchantmentsolution.inventory.minigame.MinigameItem.MinigameItemType;

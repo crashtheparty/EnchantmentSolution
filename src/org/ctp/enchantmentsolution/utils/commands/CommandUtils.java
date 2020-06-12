@@ -1,6 +1,8 @@
 package org.ctp.enchantmentsolution.utils.commands;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
@@ -103,7 +105,7 @@ public class CommandUtils {
 		Player player = null;
 		Player fixPlayer = null;
 		if (sender instanceof Player) player = (Player) sender;
-
+		
 		if (sender.hasPermission(details.getPermission())) {
 			fixPlayer = player;
 			if (args.length > 1) {

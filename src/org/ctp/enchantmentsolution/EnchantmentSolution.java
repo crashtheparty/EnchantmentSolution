@@ -45,9 +45,8 @@ import org.ctp.enchantmentsolution.utils.commands.ESCommand;
 import org.ctp.enchantmentsolution.utils.compatibility.AuctionHouseUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 import org.ctp.enchantmentsolution.utils.files.SaveUtils;
-import org.ctp.enchantmentsolution.version.BukkitVersion;
-import org.ctp.enchantmentsolution.version.PluginVersion;
-import org.ctp.enchantmentsolution.version.VersionCheck;
+import org.ctp.enchantmentsolution.version.*;
+import org.ctp.enchantmentsolution.version.Version.VersionType;
 
 public class EnchantmentSolution extends JavaPlugin {
 
@@ -74,7 +73,7 @@ public class EnchantmentSolution extends JavaPlugin {
 	public void onLoad() {
 		PLUGIN = this;
 		bukkitVersion = new BukkitVersion();
-		pluginVersion = new PluginVersion(this, getDescription().getVersion());
+		pluginVersion = new PluginVersion(this, new Version(getDescription().getVersion(), VersionType.UNKNOWN));
 
 		if (!getDataFolder().exists()) getDataFolder().mkdirs();
 
@@ -121,6 +120,8 @@ public class EnchantmentSolution extends JavaPlugin {
 
 		registerEvent(new AdvancementEntityDeath());
 		registerEvent(new AdvancementPlayerEvent());
+
+		registerEvent(new ConfigEnchantsListener());
 
 		rpg = new RPGListener();
 		registerEvent(rpg);
@@ -343,7 +344,7 @@ public class EnchantmentSolution extends JavaPlugin {
 						int num = Integer.parseInt(mcVersion[i]);
 						if (i == 0 && num > 2) warning = true;
 						else if (i == 1 && num > 1) warning = true;
-						else if (i == 2 && num > 111) warning = true;
+						else if (i == 2 && num > 128) warning = true;
 					} catch (NumberFormatException ex) {
 						warning = true;
 					}

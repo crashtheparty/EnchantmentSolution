@@ -1,7 +1,7 @@
 package org.ctp.enchantmentsolution.utils.items;
 
 import org.bukkit.inventory.ItemStack;
-import org.ctp.enchantmentsolution.enums.MatData;
+import org.ctp.enchantmentsolution.enums.vanilla.MatData;
 
 /**
  * @author Arnah

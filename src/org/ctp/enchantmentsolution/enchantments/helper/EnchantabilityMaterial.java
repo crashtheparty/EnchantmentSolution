@@ -3,9 +3,9 @@ package org.ctp.enchantmentsolution.enchantments.helper;
 import java.util.List;
 
 import org.bukkit.Material;
-import org.ctp.enchantmentsolution.enums.ItemData;
 import org.ctp.enchantmentsolution.enums.ItemType;
-import org.ctp.enchantmentsolution.enums.MatData;
+import org.ctp.enchantmentsolution.enums.vanilla.ItemData;
+import org.ctp.enchantmentsolution.enums.vanilla.MatData;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
 
 public enum EnchantabilityMaterial {

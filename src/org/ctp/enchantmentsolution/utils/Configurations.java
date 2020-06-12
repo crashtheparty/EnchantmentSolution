@@ -26,6 +26,7 @@ public class Configurations {
 	private static RPGConfiguration RPG;
 	private static MinigameConfiguration MINIGAME;
 	private static HardModeConfiguration HARD_MODE;
+	private static CustomEnchantmentsConfiguration CUSTOM_ENCHANTMENTS;
 
 	private static List<LanguageFile> LANGUAGE_FILES = new ArrayList<LanguageFile>();
 	private static DataFile DATA_FILE;
@@ -50,6 +51,7 @@ public class Configurations {
 		RPG = new RPGConfiguration(dataFolder);
 		MINIGAME = new MinigameConfiguration(dataFolder);
 		HARD_MODE = new HardModeConfiguration(dataFolder);
+		CUSTOM_ENCHANTMENTS = new CustomEnchantmentsConfiguration(dataFolder);
 
 		String languageFile = CONFIG.getString("language_file");
 		Language lang = Language.getLanguage(CONFIG.getString("language"));
@@ -86,6 +88,7 @@ public class Configurations {
 		RPG.revert();
 		MINIGAME.revert();
 		HARD_MODE.revert();
+		CUSTOM_ENCHANTMENTS.revert();
 	}
 
 	public static void revert(Configuration config, int backup) {
@@ -101,6 +104,7 @@ public class Configurations {
 		RPG.setComments(ConfigString.USE_COMMENTS.getBoolean());
 		MINIGAME.setComments(ConfigString.USE_COMMENTS.getBoolean());
 		HARD_MODE.setComments(ConfigString.USE_COMMENTS.getBoolean());
+		CUSTOM_ENCHANTMENTS.setComments(ConfigString.USE_COMMENTS.getBoolean());
 
 		CONFIG.save();
 		FISHING.save();
@@ -110,8 +114,10 @@ public class Configurations {
 		RPG.save();
 		MINIGAME.save();
 		HARD_MODE.save();
+		CUSTOM_ENCHANTMENTS.save();
 
 		if (ConfigString.RESET_ON_RELOAD.getBoolean()) TableEnchantments.removeAllTableEnchantments();
+		CustomEnchantmentUtils.registerEnchantments();
 		RegisterEnchantments.setEnchantments();
 
 		if (!EnchantmentSolution.getPlugin().isInitializing()) {
@@ -145,6 +151,7 @@ public class Configurations {
 		YamlConfigBackup rpg = RPG.getConfig();
 		YamlConfigBackup minigame = MINIGAME.getConfig();
 		YamlConfigBackup hardMode = HARD_MODE.getConfig();
+		YamlConfigBackup customEnchantments = CUSTOM_ENCHANTMENTS.getConfig();
 
 		for(String s: config.getAllEntryKeys())
 			if (config.contains(s)) backup.set("config." + s, config.get(s));
@@ -170,6 +177,9 @@ public class Configurations {
 		for(String s: hardMode.getAllEntryKeys())
 			if (hardMode.contains(s)) backup.set("hard_mode." + s, rpg.get(s));
 
+		for(String s: customEnchantments.getAllEntryKeys())
+			if (customEnchantments.contains(s)) backup.set("custom_enchantments." + s, rpg.get(s));
+
 		backup.saveConfig();
 	}
 
@@ -182,6 +192,7 @@ public class Configurations {
 		RPG.reload();
 		MINIGAME.reload();
 		HARD_MODE.reload();
+		CUSTOM_ENCHANTMENTS.reload();
 
 		save();
 	}
@@ -224,5 +235,9 @@ public class Configurations {
 
 	public static HardModeConfiguration getHardMode() {
 		return HARD_MODE;
+	}
+
+	public static CustomEnchantmentsConfiguration getCustomEnchantments() {
+		return CUSTOM_ENCHANTMENTS;
 	}
 }
