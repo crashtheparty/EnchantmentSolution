@@ -2,12 +2,17 @@ package org.ctp.enchantmentsolution.version;
 
 public class Version {
 
-	private String versionName;
+	private String versionName, info;
 	private VersionType type;
 
 	public Version(String name, VersionType type) {
 		versionName = name;
 		setType(type);
+	}
+
+	public Version(String name, VersionType type, String info) {
+		this(name, type);
+		this.setInfo(info);
 	}
 
 	public String getVersionName() {
@@ -26,8 +31,16 @@ public class Version {
 		this.type = type;
 	}
 
+	public String getInfo() {
+		return info;
+	}
+
+	public void setInfo(String info) {
+		this.info = info;
+	}
+
 	public enum VersionType {
-		LIVE("live"), EXPERIMENTAL("experimental"), UPCOMING("upcoming"), UNKNOWN(null);
+		LIVE("live"), EXPERIMENTAL("experimental"), UPCOMING("upcoming"), ALPHA("alpha"), UNKNOWN(null);
 
 		private String type;
 
