@@ -9,15 +9,15 @@ import org.ctp.enchantmentsolution.version.Version.VersionType;
 public class PluginVersion {
 
 	private List<Version> pluginVersions = new ArrayList<Version>();
-	private String current;
+	private Version current;
 	private JavaPlugin plugin;
 
-	public PluginVersion(JavaPlugin plugin, String version) {
+	public PluginVersion(JavaPlugin plugin, Version version) {
 		current = version;
 		setPlugin(plugin);
 	}
 
-	public String getCurrent() {
+	public Version getCurrent() {
 		return current;
 	}
 
@@ -25,19 +25,20 @@ public class PluginVersion {
 		for(int i = pluginVersions.size() - 1; i >= 0; i--)
 			if (pluginVersions.get(i).getType() == VersionType.LIVE) return pluginVersions.get(i);
 			else if (pluginVersions.get(i).getType() == VersionType.EXPERIMENTAL) return pluginVersions.get(i);
+			else if (pluginVersions.get(i).getType() == VersionType.ALPHA) return pluginVersions.get(i);
 		return null;
 	}
 
 	public boolean isOfficialVersion() {
 		for(int i = pluginVersions.size() - 1; i >= 0; i--)
-			if (pluginVersions.get(i).getVersionName().equalsIgnoreCase(current)) return true;
+			if (pluginVersions.get(i).getVersionName().equalsIgnoreCase(current.getVersionName())) return true;
 		return false;
 	}
 
 	public boolean hasNewerVersion(boolean experimental) {
 		for(int i = pluginVersions.size() - 1; i >= 0; i--) {
 			Version v = pluginVersions.get(i);
-			if (v.getVersionName().equalsIgnoreCase(current)) return false;
+			if (v.getVersionName().equalsIgnoreCase(current.getVersionName())) return false;
 			if (v.getType() == VersionType.LIVE) return true;
 			if (experimental && v.getType() == VersionType.EXPERIMENTAL) return true;
 		}
@@ -46,13 +47,19 @@ public class PluginVersion {
 
 	public boolean isExperimentalVersion() {
 		for(int i = pluginVersions.size() - 1; i >= 0; i--)
-			if (pluginVersions.get(i).getVersionName().equalsIgnoreCase(current)) return pluginVersions.get(i).getType().equals(VersionType.EXPERIMENTAL);
+			if (pluginVersions.get(i).getVersionName().equalsIgnoreCase(current.getVersionName())) return pluginVersions.get(i).getType().equals(VersionType.EXPERIMENTAL);
 		return false;
 	}
 
 	public boolean isUpcomingVersion() {
 		for(int i = pluginVersions.size() - 1; i >= 0; i--)
-			if (pluginVersions.get(i).getVersionName().equalsIgnoreCase(current)) return pluginVersions.get(i).getType().equals(VersionType.UPCOMING);
+			if (pluginVersions.get(i).getVersionName().equalsIgnoreCase(current.getVersionName())) return pluginVersions.get(i).getType().equals(VersionType.UPCOMING);
+		return false;
+	}
+	
+	public boolean isAlphaVersion() {
+		for(int i = pluginVersions.size() - 1; i >= 0; i--)
+			if (pluginVersions.get(i).getVersionName().equalsIgnoreCase(current.getVersionName())) return pluginVersions.get(i).getType().equals(VersionType.ALPHA);
 		return false;
 	}
 
