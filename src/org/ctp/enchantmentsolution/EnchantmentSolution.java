@@ -45,9 +45,8 @@ import org.ctp.enchantmentsolution.utils.commands.ESCommand;
 import org.ctp.enchantmentsolution.utils.compatibility.AuctionHouseUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 import org.ctp.enchantmentsolution.utils.files.SaveUtils;
-import org.ctp.enchantmentsolution.version.BukkitVersion;
-import org.ctp.enchantmentsolution.version.PluginVersion;
-import org.ctp.enchantmentsolution.version.VersionCheck;
+import org.ctp.enchantmentsolution.version.*;
+import org.ctp.enchantmentsolution.version.Version.VersionType;
 
 public class EnchantmentSolution extends JavaPlugin {
 
@@ -74,7 +73,7 @@ public class EnchantmentSolution extends JavaPlugin {
 	public void onLoad() {
 		PLUGIN = this;
 		bukkitVersion = new BukkitVersion();
-		pluginVersion = new PluginVersion(this, getDescription().getVersion());
+		pluginVersion = new PluginVersion(this, new Version(getDescription().getVersion(), VersionType.UNKNOWN));
 
 		if (!getDataFolder().exists()) getDataFolder().mkdirs();
 

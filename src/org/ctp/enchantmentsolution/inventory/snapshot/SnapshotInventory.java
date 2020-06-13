@@ -94,12 +94,6 @@ public class SnapshotInventory {
 					if (enchants.containsKey(ench)) level = level > enchants.get(ench) ? level : enchants.get(ench);
 					enchants.put(ench, level);
 				}
-				for(EnchantmentLevel enchant : enchantLore) {
-					int level = enchant.getLevel();
-					Enchantment ench = enchant.getEnchant().getRelativeEnchantment();
-					if(enchants.containsKey(ench)) level = (level > enchants.get(ench) ? level : enchants.get(ench));
-					enchants.put(ench, level);
-				}
 				if (enchants.size() > 0) {
 					Iterator<Entry<Enchantment, Integer>> iter = enchants.entrySet().iterator();
 					while (iter.hasNext()) {

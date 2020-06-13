@@ -14,8 +14,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
-import org.ctp.enchantmentsolution.version.PluginVersion;
-import org.ctp.enchantmentsolution.version.Version;
 import org.ctp.enchantmentsolution.version.Version.VersionType;
 
 public class VersionCheck implements Listener, Runnable {
@@ -55,7 +53,11 @@ public class VersionCheck implements Listener, Runnable {
 						}
 						else
 							type = VersionType.UNKNOWN;
-						Version version = new Version(strings[0], type);
+						Version version = null;
+						if (strings.length > 2)
+							version = new Version(strings[0], type, strings[2]);
+						else 
+							version = new Version(strings[0], type);
 						versionHistory.add(version);
 					}
 					line = in.readLine();
@@ -71,6 +73,7 @@ public class VersionCheck implements Listener, Runnable {
 				Version pluginVersion = version.getNewestVersion(experimentalVersion);
 				String versionString = pluginVersion.getVersionName();
 				if (pluginVersion.getType() == VersionType.EXPERIMENTAL) ChatUtils.sendToConsole(Level.WARNING, "Experimental Version " + versionString + " of " + version.getPlugin().getName() + " is ready for testing! Download it here: " + github);
+				else if (pluginVersion.getType() == VersionType.ALPHA) ChatUtils.sendToConsole(Level.WARNING, "Alpha Version " + versionString + " of " + version.getPlugin().getName() + " is ready for testing! Download it here: " + github);
 				else
 					ChatUtils.sendToConsole(Level.WARNING, "Version " + versionString + " of " + version.getPlugin().getName() + " is available! Download it here: " + spigot);
 			}
@@ -96,6 +99,12 @@ public class VersionCheck implements Listener, Runnable {
 			if (pluginVersion.getType() == VersionType.EXPERIMENTAL) ChatUtils.sendMessage(player, "Experimental Version " + versionString + " of " + version.getPlugin().getName() + " is ready for testing! Download it here: " + github);
 			else
 				ChatUtils.sendMessage(player, "Version " + versionString + " of " + version.getPlugin().getName() + " is available! Download it here: " + spigot);
+			if (version.isAlphaVersion()) {
+				ChatUtils.sendMessage(player, "Alpha version " + version.getCurrent().getVersionName() + " is for " + version.getCurrent().getVersionName() + ". Testing should be done around this issue.");
+				ChatUtils.sendMessage(player, "Bug reports and suggestions are helpful during this process! Please go to GitHub and create a ticket if you have either.");
+				ChatUtils.sendMessage(player, "Link: ", github);
+				ChatUtils.sendMessage(player, "Version: " + version.getCurrent());
+			}
 			if (version.isExperimentalVersion()) {
 				ChatUtils.sendMessage(player, "Thank you for using an experimental version of " + version.getPlugin().getName() + "! Please report any bugs you find to github.");
 				ChatUtils.sendMessage(player, "Link: ", github);
@@ -107,6 +116,11 @@ public class VersionCheck implements Listener, Runnable {
 			ChatUtils.sendMessage(player, "Version: " + version.getCurrent());
 		} else if (version.isUpcomingVersion()) {
 			ChatUtils.sendMessage(player, "Thank you for using an upcoming version of " + version.getPlugin().getName() + "! Please report any bugs you find to github.");
+			ChatUtils.sendMessage(player, "Link: ", github);
+			ChatUtils.sendMessage(player, "Version: " + version.getCurrent());
+		} else if (version.isAlphaVersion()) {
+			ChatUtils.sendMessage(player, "Alpha version " + version.getCurrent().getVersionName() + " is for " + version.getCurrent().getVersionName() + ". Testing should be done around this issue.");
+			ChatUtils.sendMessage(player, "Bug reports and suggestions are helpful during this process! Please go to GitHub and create a ticket if you have either.");
 			ChatUtils.sendMessage(player, "Link: ", github);
 			ChatUtils.sendMessage(player, "Version: " + version.getCurrent());
 		}
