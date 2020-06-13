@@ -152,7 +152,7 @@ public class TableEnchantments extends GenerateEnchantments {
 			Entry<ItemData, EnchantmentList[]> entry = iterator.next();
 			ItemData item = entry.getKey();
 			for(EnchantmentList l: entry.getValue())
-				l.setConfig(config, i, j, item);
+				if (l != null) l.setConfig(config, i, j, item);
 			j++;
 		}
 	}
