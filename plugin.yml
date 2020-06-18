@@ -2,7 +2,7 @@ name: EnchantmentSolution
 version: 2.4.0-alpha-1
 main: org.ctp.enchantmentsolution.EnchantmentSolution
 api-version: 1.13
-softdepend: [mcMMO, Jobs, VeinMiner, AuctionHouse]
+softdepend: [mcMMO, Jobs, VeinMiner, AuctionHouse, MMOLib, MMOItems]
 commands:
   enchantmentsolution:
     aliases: [es]

@@ -18,14 +18,16 @@ public class PluginVersion {
 	}
 
 	public Version getCurrent() {
+		if (pluginVersions.size() > 0) for(int i = pluginVersions.size() - 1; i >= 0; i--)
+			if (pluginVersions.get(i).getVersionName().equals(current.getVersionName())) return pluginVersions.get(i);
 		return current;
 	}
 
 	public Version getNewestVersion(boolean experimental) {
 		for(int i = pluginVersions.size() - 1; i >= 0; i--)
 			if (pluginVersions.get(i).getType() == VersionType.LIVE) return pluginVersions.get(i);
-			else if (pluginVersions.get(i).getType() == VersionType.EXPERIMENTAL) return pluginVersions.get(i);
-			else if (pluginVersions.get(i).getType() == VersionType.ALPHA) return pluginVersions.get(i);
+			else if (pluginVersions.get(i).getType() == VersionType.EXPERIMENTAL && experimental) return pluginVersions.get(i);
+			else if (pluginVersions.get(i).getType() == VersionType.ALPHA && experimental) return pluginVersions.get(i);
 		return null;
 	}
 
@@ -40,7 +42,7 @@ public class PluginVersion {
 			Version v = pluginVersions.get(i);
 			if (v.getVersionName().equalsIgnoreCase(current.getVersionName())) return false;
 			if (v.getType() == VersionType.LIVE) return true;
-			if (experimental && v.getType() == VersionType.EXPERIMENTAL) return true;
+			if (experimental && (v.getType() == VersionType.EXPERIMENTAL || v.getType() == VersionType.ALPHA)) return true;
 		}
 		return true;
 	}
@@ -56,7 +58,7 @@ public class PluginVersion {
 			if (pluginVersions.get(i).getVersionName().equalsIgnoreCase(current.getVersionName())) return pluginVersions.get(i).getType().equals(VersionType.UPCOMING);
 		return false;
 	}
-	
+
 	public boolean isAlphaVersion() {
 		for(int i = pluginVersions.size() - 1; i >= 0; i--)
 			if (pluginVersions.get(i).getVersionName().equalsIgnoreCase(current.getVersionName())) return pluginVersions.get(i).getType().equals(VersionType.ALPHA);
