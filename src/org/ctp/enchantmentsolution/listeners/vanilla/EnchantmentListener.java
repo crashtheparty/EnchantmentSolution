@@ -3,6 +3,7 @@ package org.ctp.enchantmentsolution.listeners.vanilla;
 import java.util.List;
 
 import org.bukkit.*;
+import org.bukkit.enchantments.EnchantmentOffer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -13,7 +14,7 @@ import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantmentWrapper;
 import org.ctp.enchantmentsolution.enchantments.generate.TableEnchantments;
-import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
+import org.ctp.enchantmentsolution.enchantments.helper.*;
 import org.ctp.enchantmentsolution.enums.vanilla.ItemData;
 import org.ctp.enchantmentsolution.nms.EnchantItemCriterion;
 import org.ctp.enchantmentsolution.utils.LocationUtils;
@@ -30,14 +31,24 @@ public class EnchantmentListener implements Listener {
 		ItemStack item = event.getItem();
 		TableEnchantments table = TableEnchantments.getTableEnchantments(player, item, bookshelves);
 		if (event.getOffers()[0] == null) return;
-		for(int i = 0; i < event.getOffers().length; i++)
-			for(EnchantmentLevel ench: table.getEnchantments(new ItemData(item))[i].getEnchantments()) {
-				event.getOffers()[i].setCost(table.getLevelList().getList()[i].getLevel());
+		EnchantmentList[] lists = table.getEnchantments(new ItemData(item));
+		for(int i = 0; i < event.getOffers().length; i++) {
+			EnchantmentOffer offer = event.getOffers()[i];
+			EnchantmentList list = lists[i];
+			if (list == null) continue;
+			for(EnchantmentLevel ench: list.getEnchantments()) {
+				if (ench == null || ench.getEnchant() == null) continue;
+				LevelList levelList = table.getLevelList();
+				if (levelList == null) continue;
+				Level level = levelList.getList()[i];
+				if (level == null) continue;
+				offer.setCost(level.getLevel());
 				if (!(ench.getEnchant().getRelativeEnchantment() instanceof CustomEnchantmentWrapper)) {
-					event.getOffers()[i].setEnchantment(ench.getEnchant().getRelativeEnchantment());
-					event.getOffers()[i].setEnchantmentLevel(ench.getLevel());
+					offer.setEnchantment(ench.getEnchant().getRelativeEnchantment());
+					offer.setEnchantmentLevel(ench.getLevel());
 				}
 			}
+		}
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST)
