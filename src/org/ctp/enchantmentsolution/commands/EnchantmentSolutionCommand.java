@@ -60,6 +60,7 @@ public class EnchantmentSolutionCommand implements CommandExecutor, TabCompleter
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+		label = label.substring(label.indexOf(':') + 1);
 		for(ESCommand c: commands) {
 			String[] check;
 			if (containsCommand(c, label)) {
@@ -109,6 +110,7 @@ public class EnchantmentSolutionCommand implements CommandExecutor, TabCompleter
 	public List<String> onTabComplete(CommandSender sender, Command cmd, String label, String[] args) {
 		List<String> all = new ArrayList<String>();
 
+		label = label.substring(label.indexOf(':') + 1);
 		for(ESCommand c: commands) {
 			String[] check;
 			if (containsCommand(c, label)) {
