@@ -1,4 +1,4 @@
-package org.ctp.enchantmentsolution.enums;
+package org.ctp.enchantmentsolution.enums.vanilla;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.bukkit.Material;
 import org.bukkit.Sound;
-import org.ctp.enchantmentsolution.enums.vanilla.MaterialSound;
 
 public class BlockSound {
 
