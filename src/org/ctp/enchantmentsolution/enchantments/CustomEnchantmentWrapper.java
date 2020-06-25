@@ -49,7 +49,7 @@ public class CustomEnchantmentWrapper extends Enchantment {
 
 	@Override
 	public int getMaxLevel() {
-		return getCustomEnchantment().getMaxLevel();
+		return getCustomEnchantment() == null ? 0 : getCustomEnchantment().getMaxLevel();
 	}
 
 	@Override
@@ -59,12 +59,12 @@ public class CustomEnchantmentWrapper extends Enchantment {
 
 	@Override
 	public boolean isCursed() {
-		return getCustomEnchantment().isCurse();
+		return getCustomEnchantment() == null ? false : getCustomEnchantment().isCurse();
 	}
 
 	@Override
 	public boolean isTreasure() {
-		return !getCustomEnchantment().getEnchantmentLocations().contains(EnchantmentLocation.NON_BOOK);
+		return getCustomEnchantment() == null ? false : !getCustomEnchantment().getEnchantmentLocations().contains(EnchantmentLocation.NON_BOOK);
 	}
 
 	@Override

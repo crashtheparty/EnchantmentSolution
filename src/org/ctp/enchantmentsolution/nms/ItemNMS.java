@@ -32,6 +32,8 @@ public class ItemNMS {
 					case 10:
 					case 11:
 						return Item_v1_15_R1.returnLocalizedItemName(item);
+					case 12:
+						return Item_v1_16_R1.returnLocalizedItemName(item);
 				}
 				break;
 			default:
@@ -62,6 +64,8 @@ public class ItemNMS {
 			case 10:
 			case 11:
 				return Item_v1_15_R1.getTrident(trident);
+			case 12:
+				return Item_v1_16_R1.getTrident(trident);
 		}
 		return null;
 	}
