@@ -36,6 +36,7 @@ import org.ctp.enchantmentsolution.utils.abilityhelpers.IcarusDelay;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.WalkerUtils;
 import org.ctp.enchantmentsolution.utils.items.DamageUtils;
 import org.ctp.enchantmentsolution.utils.items.ItemUtils;
+import org.ctp.enchantmentsolution.utils.player.ESPlayer;
 
 @SuppressWarnings("unused")
 public class PlayerListener extends Enchantmentable {
@@ -284,6 +285,8 @@ public class PlayerListener extends Enchantmentable {
 					Bukkit.getScheduler().runTaskLater(EnchantmentSolution.getPlugin(), (Runnable) () -> {
 						arrow.setVelocity(arrow.getVelocity().multiply(overkill.getSpeed()));
 						player.getWorld().playSound(player.getLocation(), Sound.ENTITY_ARROW_SHOOT, 1, 1);
+						ESPlayer esPlayer = EnchantmentSolution.getESPlayer(player);
+						esPlayer.setCooldown(RegisterEnchantments.OVERKILL);
 					}, 0l);
 					DamageUtils.damageItem(player, item);
 				}
@@ -324,6 +327,8 @@ public class PlayerListener extends Enchantmentable {
 					egg.setMetadata("splatter_fest", new FixedMetadataValue(EnchantmentSolution.getPlugin(), player.getUniqueId().toString()));
 					if (!splatterFest.takeEgg()) egg.setMetadata("hatch_egg", new FixedMetadataValue(EnchantmentSolution.getPlugin(), player.getUniqueId().toString()));
 					player.getWorld().playSound(player.getLocation(), Sound.ENTITY_EGG_THROW, 1, 1);
+					ESPlayer esPlayer = EnchantmentSolution.getESPlayer(player);
+					esPlayer.setCooldown(RegisterEnchantments.SPLATTER_FEST);
 					DamageUtils.damageItem(player, item);
 				}
 			}

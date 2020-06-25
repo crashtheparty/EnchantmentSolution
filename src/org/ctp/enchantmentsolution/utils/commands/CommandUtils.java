@@ -568,7 +568,7 @@ public class CommandUtils {
 		for(ESCommand command: EnchantmentSolutionCommand.getCommands())
 			if (sender.hasPermission(command.getPermission())) playerCommands.add(command);
 
-		if (page * 5 > playerCommands.size()) return printHelp(sender, page - 1);
+		if ((page - 1) * 5 > playerCommands.size()) return printHelp(sender, page - 1);
 
 		HashMap<String, Object> codes = new HashMap<String, Object>();
 		codes.put("%page%", page);

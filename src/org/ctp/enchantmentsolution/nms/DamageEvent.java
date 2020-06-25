@@ -29,6 +29,9 @@ public class DamageEvent {
 			case 11:
 				DamageEvent_v1_15_R1.damageEntity(entity, cause, damage);
 				break;
+			case 12:
+				DamageEvent_v1_16_R1.damageEntity(entity, cause, damage);
+				break;
 		}
 	}
 
@@ -53,6 +56,9 @@ public class DamageEvent {
 			case 11:
 				DamageEvent_v1_15_R1.damageEntity(entity, player, cause, damage);
 				break;
+			case 12:
+				DamageEvent_v1_16_R1.damageEntity(entity, player, cause, damage);
+				break;
 		}
 	}
 
@@ -73,6 +79,8 @@ public class DamageEvent {
 			case 10:
 			case 11:
 				return DamageEvent_v1_15_R1.getArrowDamage(entity, arrow);
+			case 12:
+				return DamageEvent_v1_16_R1.getArrowDamage(entity, arrow);
 		}
 		return 0;
 	}
@@ -97,6 +105,9 @@ public class DamageEvent {
 			case 10:
 			case 11:
 				DamageEvent_v1_15_R1.updateHealth(entity);
+				break;
+			case 12:
+				DamageEvent_v1_16_R1.updateHealth(entity);
 				break;
 		}
 	}
