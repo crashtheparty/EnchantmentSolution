@@ -2,16 +2,16 @@ package org.ctp.enchantmentsolution.nms.chest;
 
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.craftbukkit.v1_15_R1.CraftWorld;
-import org.bukkit.craftbukkit.v1_15_R1.entity.CraftEntity;
-import org.bukkit.craftbukkit.v1_15_R1.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_16_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_16_R1.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_16_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.ctp.enchantmentsolution.enums.EnchantmentLocation;
 import org.ctp.enchantmentsolution.utils.GenerateUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 
-import net.minecraft.server.v1_15_R1.*;
+import net.minecraft.server.v1_16_R1.*;
 
 @SuppressWarnings("resource")
 public class ChestPopulate_v1_16_R1 {
@@ -26,18 +26,16 @@ public class ChestPopulate_v1_16_R1 {
 			te.d((EntityHuman) null);
 			for(int i = 0; i < te.getSize(); i++) {
 				ItemStack item = te.getItem(i);
-				// MinecraftKey minecraftkey =
-				// IRegistry.ENCHANTMENT.getKey(Enchantments.SOUL_SPEED);
-				// NBTTagList nbttaglist = item.getEnchantments();
+				MinecraftKey minecraftkey = IRegistry.ENCHANTMENT.getKey(Enchantments.SOUL_SPEED);
+				NBTTagList nbttaglist = item.getEnchantments();
 
 				boolean soulSpeed = false;
-				// for (int j = 0; j < nbttaglist.size(); ++j) {
-				// NBTTagCompound nbttagcompound = nbttaglist.getCompound(j);
-				// MinecraftKey minecraftkey1 = MinecraftKey.a(nbttagcompound.getString("id"));
-				//
-				// if (minecraftkey1 != null && minecraftkey1.equals(minecraftkey)) soulSpeed =
-				// true;
-				// }
+				for(int j = 0; j < nbttaglist.size(); ++j) {
+					NBTTagCompound nbttagcompound = nbttaglist.getCompound(j);
+					MinecraftKey minecraftkey1 = MinecraftKey.a(nbttagcompound.getString("id"));
+
+					if (minecraftkey1 != null && minecraftkey1.equals(minecraftkey)) soulSpeed = true;
+				}
 				CraftItemStack cItem = CraftItemStack.asCraftMirror(item);
 				ItemStack newItem = null;
 				if (!ConfigString.USE_ENCHANTED_BOOKS.getBoolean() && cItem.getType() == Material.ENCHANTED_BOOK) {
@@ -62,21 +60,20 @@ public class ChestPopulate_v1_16_R1 {
 			if (lootChest != null) { // Lootchest
 				String loot = lootChest.getKey();
 				loot = loot.substring(loot.lastIndexOf('/') + 1);
-				c.b((EntityLiving) null);
+				c.c((EntityLiving) null);
 				for(int i = 0; i < c.getSize(); i++) {
 					ItemStack item = c.getItem(i);
-					// MinecraftKey minecraftkey =
-					// IRegistry.ENCHANTMENT.getKey(Enchantments.SOUL_SPEED);
-					// NBTTagList nbttaglist = item.getEnchantments();
+					 MinecraftKey minecraftkey =
+					 IRegistry.ENCHANTMENT.getKey(Enchantments.SOUL_SPEED);
+					 NBTTagList nbttaglist = item.getEnchantments();
 
 					boolean soulSpeed = false;
-					// for (int j = 0; j < nbttaglist.size(); ++j) {
-					// NBTTagCompound nbttagcompound = nbttaglist.getCompound(j);
-					// MinecraftKey minecraftkey1 = MinecraftKey.a(nbttagcompound.getString("id"));
-					//
-					// if (minecraftkey1 != null && minecraftkey1.equals(minecraftkey)) soulSpeed =
-					// true;
-					// }
+					for(int j = 0; j < nbttaglist.size(); ++j) {
+						NBTTagCompound nbttagcompound = nbttaglist.getCompound(j);
+						MinecraftKey minecraftkey1 = MinecraftKey.a(nbttagcompound.getString("id"));
+
+						if (minecraftkey1 != null && minecraftkey1.equals(minecraftkey)) soulSpeed = true;
+					}
 					CraftItemStack cItem = CraftItemStack.asCraftMirror(item);
 					ItemStack newItem = null;
 					if (!ConfigString.USE_ENCHANTED_BOOKS.getBoolean() && cItem.getType() == Material.ENCHANTED_BOOK) {

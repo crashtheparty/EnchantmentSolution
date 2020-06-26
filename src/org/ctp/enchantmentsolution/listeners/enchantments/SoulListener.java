@@ -19,6 +19,7 @@ import org.ctp.enchantmentsolution.events.soul.SoulboundEvent;
 import org.ctp.enchantmentsolution.listeners.Enchantmentable;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.items.ItemUtils;
+import org.ctp.enchantmentsolution.utils.player.ESPlayer;
 
 @SuppressWarnings("unused")
 public class SoulListener extends Enchantmentable {
@@ -38,6 +39,7 @@ public class SoulListener extends Enchantmentable {
 		List<ItemStack> items = event.getDrops();
 		List<ItemStack> soulbound = new ArrayList<ItemStack>();
 		Player player = event.getEntity();
+		ESPlayer esPlayer = EnchantmentSolution.getESPlayer(player);
 		if (event.getKeepInventory()) return;
 
 		for(ItemStack item: items)
@@ -87,14 +89,15 @@ public class SoulListener extends Enchantmentable {
 
 			if (savedItems.size() > 0) for(ItemStack i: savedItems)
 				event.getDrops().remove(i);
-
-			EnchantmentSolution.setSoulItems(player, savedItems);
+			
+			esPlayer.setSoulItems(savedItems);
 		}
 	}
 
 	private void soulbound(PlayerRespawnEvent event) {
 		if (!canRun(RegisterEnchantments.SOULBOUND, event)) return;
 		Player player = event.getPlayer();
+		ESPlayer esPlayer = EnchantmentSolution.getESPlayer(player);
 		HashMap<Material, Boolean> diamonds = new HashMap<Material, Boolean>();
 		diamonds.put(Material.DIAMOND_AXE, false);
 		diamonds.put(Material.DIAMOND_BOOTS, false);
@@ -105,7 +108,7 @@ public class SoulListener extends Enchantmentable {
 		diamonds.put(Material.DIAMOND_PICKAXE, false);
 		diamonds.put(Material.DIAMOND_SHOVEL, false);
 		diamonds.put(Material.DIAMOND_SWORD, false);
-		List<ItemStack> items = EnchantmentSolution.getSoulItems(player);
+		List<ItemStack> items = esPlayer.getSoulItems();
 		if (items != null) {
 			for(ItemStack item: items) {
 				AdvancementUtils.awardCriteria(player, ESAdvancement.KEPT_ON_HAND, "soulbound");
@@ -114,6 +117,6 @@ public class SoulListener extends Enchantmentable {
 			}
 			if (!diamonds.containsValue(false)) AdvancementUtils.awardCriteria(player, ESAdvancement.READY_AFTER_DEATH, "soulbound");
 		}
-		EnchantmentSolution.removeSoulItems(player);
+		esPlayer.removeSoulItems();
 	}
 }

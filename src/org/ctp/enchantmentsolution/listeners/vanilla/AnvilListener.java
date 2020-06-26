@@ -31,7 +31,8 @@ public class AnvilListener implements Listener {
 		ItemStack second = event.getInventory().getItem(1);
 		if (event.getView().getPlayer() instanceof Player) {
 			AnvilEnchantments anvil = AnvilEnchantments.getAnvilEnchantments((Player) event.getView().getPlayer(), first, second);
-			if ((anvil.getRepairType() == RepairType.COMBINE || anvil.getRepairType() == RepairType.REPAIR) && anvil.canCombine()) event.setResult(anvil.getCombinedItem());
+			ItemStack combineItem = null;
+			if ((anvil.getRepairType() == RepairType.COMBINE || anvil.getRepairType() == RepairType.REPAIR) && anvil.canCombine()) combineItem = anvil.getCombinedItem();
 			else if (anvil.getRepairType() == RepairType.RENAME) {
 				ItemStack newFirst = anvil.getCombinedItem();
 				if (newFirst == null) return;
@@ -39,8 +40,12 @@ public class AnvilListener implements Listener {
 				if (firstMeta.hasDisplayName() && !firstMeta.getDisplayName().equals(event.getInventory().getRenameText()) || !firstMeta.hasDisplayName() && event.getInventory().getRenameText() != null && !event.getInventory().getRenameText().equals("")) {
 					firstMeta.setDisplayName(event.getInventory().getRenameText());
 					newFirst.setItemMeta(firstMeta);
-					event.setResult(newFirst);
+					combineItem = newFirst;
 				}
+			}
+			if (combineItem != null) {
+				event.setResult(combineItem);
+				EnchantmentSolution.getPlugin().getServer().getScheduler().runTask(EnchantmentSolution.getPlugin(), () -> event.getInventory().setRepairCost(anvil.getRepairCost()));
 			}
 		}
 	}

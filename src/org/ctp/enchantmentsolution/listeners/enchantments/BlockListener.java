@@ -376,7 +376,6 @@ public class BlockListener extends Enchantmentable {
 						Block block = event.getBlock().getRelative(BlockFace.UP);
 						if (block.getBlockData() instanceof Ageable) {
 							Ageable crop = (Ageable) block.getBlockData();
-							ChatUtils.sendInfo("Ageable " + crop.getAge() + " " + crop.getMaximumAge());
 							if (crop.getAge() == crop.getMaximumAge()) AdvancementUtils.awardCriteria(player, ESAdvancement.LIGHT_AS_A_FEATHER, "boots");
 						}
 					}

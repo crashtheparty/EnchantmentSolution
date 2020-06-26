@@ -11,7 +11,7 @@ public class SplatterFestEvent extends ProjectileSpawnEvent {
 	private final boolean hasEgg;
 
 	public SplatterFestEvent(Player who, ItemStack item, boolean takeEgg, boolean hasEgg) {
-		super(who, new EnchantmentLevel(CERegister.SPLATTER_FEST, 1), item);
+		super(who, new EnchantmentLevel(CERegister.SPLATTER_FEST, 1), item, 1);
 		setTakeEgg(takeEgg);
 		this.hasEgg = hasEgg;
 	}
@@ -30,7 +30,7 @@ public class SplatterFestEvent extends ProjectileSpawnEvent {
 
 	@Override
 	public boolean willCancel() {
-		return !hasEgg && takeEgg;
+		return !hasEgg && takeEgg || super.willCancel();
 	}
 
 }

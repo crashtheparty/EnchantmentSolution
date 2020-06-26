@@ -1,7 +1,6 @@
 package org.ctp.enchantmentsolution;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 
@@ -10,7 +9,6 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
@@ -45,6 +43,7 @@ import org.ctp.enchantmentsolution.utils.commands.ESCommand;
 import org.ctp.enchantmentsolution.utils.compatibility.AuctionHouseUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 import org.ctp.enchantmentsolution.utils.files.SaveUtils;
+import org.ctp.enchantmentsolution.utils.player.ESPlayer;
 import org.ctp.enchantmentsolution.version.*;
 import org.ctp.enchantmentsolution.version.Version.VersionType;
 
@@ -55,7 +54,7 @@ public class EnchantmentSolution extends JavaPlugin {
 	private static List<AnimalMob> ANIMALS = new ArrayList<AnimalMob>();
 	private static List<DrownedEntity> DROWNED = new ArrayList<DrownedEntity>();
 	private static List<EntityAccuracy> ACCURACY = new ArrayList<EntityAccuracy>();
-	private static HashMap<String, List<ItemStack>> SOUL_ITEMS = new HashMap<>();
+	private static List<ESPlayer> PLAYERS = new ArrayList<ESPlayer>();
 	private List<InventoryData> inventories = new ArrayList<InventoryData>();
 	private boolean initialization = true;
 	private BukkitVersion bukkitVersion;
@@ -271,18 +270,6 @@ public class EnchantmentSolution extends JavaPlugin {
 		ANIMALS.remove(remove);
 	}
 
-	public static List<ItemStack> getSoulItems(Player player) {
-		return SOUL_ITEMS.get(player.getUniqueId().toString());
-	}
-
-	public static void setSoulItems(Player player, List<ItemStack> items) {
-		SOUL_ITEMS.put(player.getUniqueId().toString(), items);
-	}
-
-	public static void removeSoulItems(Player player) {
-		SOUL_ITEMS.put(player.getUniqueId().toString(), null);
-	}
-
 	public static List<DrownedEntity> getDrowned() {
 		return DROWNED;
 	}
@@ -322,7 +309,7 @@ public class EnchantmentSolution extends JavaPlugin {
 	}
 
 	private void checkVersion() {
-		Bukkit.getScheduler().runTaskTimerAsynchronously(PLUGIN, check, 20 * 60 * 60 * 4l, 20 * 60 * 60 * 4l);
+		Bukkit.getScheduler().runTaskTimerAsynchronously(PLUGIN, check, 0, 20 * 60 * 60 * 4l);
 	}
 
 	public WikiThread getWiki() {
@@ -388,5 +375,13 @@ public class EnchantmentSolution extends JavaPlugin {
 
 	public boolean getMMOItems() {
 		return mmoItems;
+	}
+
+	public static ESPlayer getESPlayer(OfflinePlayer player) {
+		for (ESPlayer es: PLAYERS)
+			if (es.getPlayer().getUniqueId().equals(player.getUniqueId())) return es;
+		ESPlayer es = new ESPlayer(player);
+		PLAYERS.add(es);
+		return es;
 	}
 }

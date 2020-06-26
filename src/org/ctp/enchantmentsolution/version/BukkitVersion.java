@@ -65,6 +65,9 @@ public class BukkitVersion {
 			case "1.15.2":
 				versionNumber = 11;
 				break;
+			case "1.16.1":
+				versionNumber = 12;
+				break;
 		}
 		if (versionNumber > 0) {
 			ChatUtils.sendInfo("Found version " + version + ". Setting version number to " + versionNumber + ".");
@@ -88,6 +91,9 @@ public class BukkitVersion {
 				break;
 			case "v1_15_R1":
 				versionNumber = 11;
+				break;
+			case "v1_16_R1":
+				versionNumber = 12;
 				break;
 		}
 		if (versionNumber > 0) {

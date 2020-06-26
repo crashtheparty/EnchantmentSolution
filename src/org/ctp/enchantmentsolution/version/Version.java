@@ -40,7 +40,7 @@ public class Version {
 	}
 
 	public enum VersionType {
-		LIVE("live"), EXPERIMENTAL("experimental"), UPCOMING("upcoming"), ALPHA("alpha"), UNKNOWN(null);
+		LIVE("live"), EXPERIMENTAL("experimental"), UPCOMING("upcoming"), UNKNOWN(null);
 
 		private String type;
 
