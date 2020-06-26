@@ -108,6 +108,7 @@ public enum Attributable {
 
 	public boolean hasAttribute(Player player) {
 		AttributeInstance instance = player.getAttribute(getAttr());
+		if (instance == null) return false;
 		AttributeModifier modifier = new AttributeModifier(uuid, attrName, getValue(instance, 0), operation);
 
 		return hasExactAttribute(instance, modifier) || hasAttribute(instance, modifier);

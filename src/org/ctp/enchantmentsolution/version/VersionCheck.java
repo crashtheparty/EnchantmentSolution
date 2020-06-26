@@ -72,7 +72,6 @@ public class VersionCheck implements Listener, Runnable {
 			Version pluginVersion = version.getNewestVersion(experimentalVersion);
 			String versionString = pluginVersion.getVersionName();
 			if (pluginVersion.getType() == VersionType.EXPERIMENTAL) ChatUtils.sendToConsole(Level.WARNING, "Experimental Version " + versionString + " of " + version.getPlugin().getName() + " is ready for testing! Download it here: " + github);
-			else if (pluginVersion.getType() == VersionType.ALPHA) ChatUtils.sendToConsole(Level.WARNING, "Alpha Version " + versionString + " of " + version.getPlugin().getName() + " is ready for testing! Download it here: " + github);
 			else
 				ChatUtils.sendToConsole(Level.WARNING, "Version " + versionString + " of " + version.getPlugin().getName() + " is available! Download it here: " + spigot);
 		}
@@ -93,12 +92,6 @@ public class VersionCheck implements Listener, Runnable {
 		Bukkit.getScheduler().runTaskLater(EnchantmentSolution.getPlugin(), () -> {
 			if (!version.isOfficialVersion()) ChatUtils.sendMessage(player, "Uh oh! Plugin author forgot to update version history. Go tell them: ", github);
 			else if (version.hasNewerVersion(experimentalVersion)) {
-				if (version.isAlphaVersion()) {
-					ChatUtils.sendMessage(player, "Alpha version " + version.getCurrent().getVersionName() + " is for " + version.getCurrent().getInfo() + ". Testing should be done around this issue.");
-					ChatUtils.sendMessage(player, "Bug reports and suggestions are helpful during this process! Please go to GitHub and create a ticket if you have either.");
-					ChatUtils.sendMessage(player, "Link: ", github);
-					ChatUtils.sendMessage(player, "Version: " + version.getCurrent().getVersionName());
-				}
 				if (version.isExperimentalVersion()) {
 					ChatUtils.sendMessage(player, "Thank you for using an experimental version of " + version.getPlugin().getName() + "! Please report any bugs you find to github.");
 					ChatUtils.sendMessage(player, "Link: ", github);
@@ -108,7 +101,6 @@ public class VersionCheck implements Listener, Runnable {
 				Version pluginVersion = version.getNewestVersion(experimentalVersion);
 				String versionString = pluginVersion.getVersionName();
 				if (pluginVersion.getType() == VersionType.EXPERIMENTAL) ChatUtils.sendMessage(player, "Experimental Version " + versionString + " of " + version.getPlugin().getName() + " is ready for testing! Download it here: " + github);
-				else if (pluginVersion.getType() == VersionType.ALPHA) ChatUtils.sendMessage(player, "Alpha Version " + versionString + " of " + version.getPlugin().getName() + " is ready for testing! Download it here: " + github);
 				else
 					ChatUtils.sendMessage(player, "Version " + versionString + " of " + version.getPlugin().getName() + " is available! Download it here: " + spigot);
 			} else if (version.isExperimentalVersion()) {
@@ -117,11 +109,6 @@ public class VersionCheck implements Listener, Runnable {
 				ChatUtils.sendMessage(player, "Version: " + version.getCurrent().getVersionName());
 			} else if (version.isUpcomingVersion()) {
 				ChatUtils.sendMessage(player, "Thank you for using an upcoming version of " + version.getPlugin().getName() + "! Please report any bugs you find to github.");
-				ChatUtils.sendMessage(player, "Link: ", github);
-				ChatUtils.sendMessage(player, "Version: " + version.getCurrent().getVersionName());
-			} else if (version.isAlphaVersion()) {
-				ChatUtils.sendMessage(player, "Alpha version " + version.getCurrent().getVersionName() + " is for " + version.getCurrent().getInfo() + ". Testing should be done around this issue.");
-				ChatUtils.sendMessage(player, "Bug reports and suggestions are helpful during this process! Please go to GitHub and create a ticket if you have either.");
 				ChatUtils.sendMessage(player, "Link: ", github);
 				ChatUtils.sendMessage(player, "Version: " + version.getCurrent().getVersionName());
 			}
