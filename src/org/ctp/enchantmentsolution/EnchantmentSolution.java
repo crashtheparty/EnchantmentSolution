@@ -310,9 +310,8 @@ public class EnchantmentSolution extends JavaPlugin {
 		return mcmmoType;
 	}
 
-	@SuppressWarnings("deprecation")
 	private void checkVersion() {
-		Bukkit.getScheduler().scheduleAsyncRepeatingTask(PLUGIN, check, 0, 20 * 60 * 60 * 4l);
+		Bukkit.getScheduler().runTaskTimerAsynchronously(PLUGIN, check, 0, 20 * 60 * 60 * 4l);
 	}
 
 	public WikiThread getWiki() {
