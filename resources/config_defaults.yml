@@ -96,6 +96,11 @@ gametypes: []
 use_particles: true
 play_sounds: true
 print_usage: true
+multi_block:
+    async: false
+    blocks_per_tick:
+        player: 10
+        global: 25
 
 config_comments: 
 
@@ -250,4 +255,14 @@ config_comments:
     print_usage: 
     - 'Print usage to player when getting a command wrong.'
     - 'Only works for commands for which they have permission.'
+    
+    multi_block:
+        async:
+        - 'Whether the Height/Width/Depth++ enchantments should work asynchronously'
+        - 'This increases peformance but nerfs those enchantments slightly'
+        blocks_per_tick:
+            player:
+            - 'The maximum blocks broken per tick per player using Height/Width/Depth++'
+            global:
+            - 'The maximum blocks broken per tick globally using Height/Width/Depth++'
 

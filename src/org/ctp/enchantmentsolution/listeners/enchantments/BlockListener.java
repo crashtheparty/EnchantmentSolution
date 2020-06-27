@@ -8,8 +8,6 @@ import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.*;
-import org.bukkit.block.data.type.Snow;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -22,8 +20,8 @@ import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
-import org.ctp.enchantmentsolution.enums.*;
-import org.ctp.enchantmentsolution.enums.vanilla.BlockSound;
+import org.ctp.enchantmentsolution.enums.ItemBreakType;
+import org.ctp.enchantmentsolution.enums.ItemPlaceType;
 import org.ctp.enchantmentsolution.enums.vanilla.MatData;
 import org.ctp.enchantmentsolution.events.blocks.HeightWidthEvent;
 import org.ctp.enchantmentsolution.events.blocks.LightWeightEvent;
@@ -36,7 +34,7 @@ import org.ctp.enchantmentsolution.listeners.Enchantmentable;
 import org.ctp.enchantmentsolution.listeners.VeinMinerListener;
 import org.ctp.enchantmentsolution.mcmmo.McMMOAbility;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
-import org.ctp.enchantmentsolution.utils.ChatUtils;
+import org.ctp.enchantmentsolution.utils.BlockUtils;
 import org.ctp.enchantmentsolution.utils.LocationUtils;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.GoldDiggerCrop;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.ParticleEffect;
@@ -151,7 +149,7 @@ public class BlockListener extends Enchantmentable {
 	private void heightWidth(BlockBreakEvent event) {
 		Player player = event.getPlayer();
 		if (!canRun(event, false, RegisterEnchantments.WIDTH_PLUS_PLUS, RegisterEnchantments.HEIGHT_PLUS_PLUS)) return;
-		if (AbilityUtils.getHeightWidthBlocks().contains(event.getBlock().getLocation())) return;
+		if (BlockUtils.multiBlockBreakContains(event.getBlock().getLocation())) return;
 		if (!EnchantmentSolution.getPlugin().getMcMMOType().equals("Disabled") && McMMOAbility.getIgnored() != null && McMMOAbility.getIgnored().contains(player)) return;
 		if (EnchantmentSolution.getPlugin().getVeinMiner() != null && VeinMinerListener.hasVeinMiner(player)) return;
 		if (player.getGameMode().equals(GameMode.CREATIVE) || player.getGameMode().equals(GameMode.SPECTATOR)) return;
@@ -189,7 +187,6 @@ public class BlockListener extends Enchantmentable {
 			}
 			Material original = event.getBlock().getType();
 			if (hasWidthHeight && ItemBreakType.getType(item.getType()) != null && ItemBreakType.getType(item.getType()).getBreakTypes() != null && ItemBreakType.getType(item.getType()).getBreakTypes().contains(original)) {
-				int blocksBroken = 0;
 				Collection<Location> blocks = new ArrayList<Location>();
 				Block block = event.getBlock();
 				item = player.getInventory().getItemInMainHand();
@@ -211,55 +208,19 @@ public class BlockListener extends Enchantmentable {
 				HeightWidthEvent heightWidth = new HeightWidthEvent(blocks, block, player, heightPlusPlus, widthPlusPlus);
 				Bukkit.getPluginManager().callEvent(heightWidth);
 
-				if (!heightWidth.isCancelled()) for(Location b: heightWidth.getBlocks()) {
-					AbilityUtils.addHeightWidthBlock(b);
-					BlockBreakEvent newEvent = new BlockBreakEvent(b.getBlock(), player);
-					int exp = 0;
-					if (!ItemUtils.hasEnchantment(item, Enchantment.SILK_TOUCH)) switch (newEvent.getBlock().getType().name()) {
-						case "COAL_ORE":
-							exp = (int) (Math.random() * 3);
-							break;
-						case "DIAMOND_ORE":
-						case "EMERALD_ORE":
-							exp = (int) (Math.random() * 5) + 3;
-							break;
-						case "LAPIS_ORE":
-						case "NETHER_QUARTZ_ORE":
-							exp = (int) (Math.random() * 4) + 2;
-							break;
-						case "REDSTONE_ORE":
-							exp = (int) (Math.random() * 5) + 1;
-							break;
-						case "SPAWNER":
-							exp = (int) (Math.random() * 29) + 15;
-							break;
+				if (!heightWidth.isCancelled()) {
+					boolean async = ConfigString.MULTI_BLOCK_ASYNC.getBoolean();
+					if (async) {
+						for(Location b: heightWidth.getBlocks())
+							BlockUtils.addMultiBlockBreak(b);
+						new AsyncBlockController(player, item, heightWidth.getBlock(), heightWidth.getBlocks());
+					} else {
+						int blocksBroken = 0;
+						for(Location b: heightWidth.getBlocks())
+							if (BlockUtils.multiBreakBlock(player, item, b)) blocksBroken++;
+						AdvancementUtils.awardCriteria(player, ESAdvancement.OVER_9000, "stone", blocksBroken);
 					}
-					newEvent.setExpToDrop(exp);
-					Bukkit.getServer().getPluginManager().callEvent(newEvent);
-					if (item != null && !MatData.isAir(item.getType()) && !MatData.isAir(newEvent.getBlock().getType()) && !newEvent.isCancelled()) {
-						Block newBlock = newEvent.getBlock();
-						AdvancementUtils.awardCriteria(player, ESAdvancement.FAST_AND_FURIOUS, "diamond_pickaxe");
-						if (newBlock.getType().equals(Material.SNOW) && ItemBreakType.getType(item.getType()).getBreakTypes().contains(Material.SNOW)) {
-							int num = ((Snow) newBlock.getBlockData()).getLayers();
-							ItemUtils.dropItem(new ItemStack(Material.SNOWBALL, num), newBlock.getLocation());
-						}
-						blocksBroken++;
-						player.incrementStatistic(Statistic.MINE_BLOCK, newBlock.getType());
-						player.incrementStatistic(Statistic.USE_ITEM, item.getType());
-						Location loc = newBlock.getLocation().clone().add(0.5, 0.5, 0.5);
-						if (ConfigString.USE_PARTICLES.getBoolean()) loc.getWorld().spawnParticle(Particle.BLOCK_CRACK, loc, 20, newBlock.getBlockData());
-						if (ConfigString.PLAY_SOUND.getBoolean()) {
-							BlockSound sound = BlockSound.getSound(newBlock.getType());
-							loc.getWorld().playSound(loc, sound.getSound(), sound.getVolume(newBlock.getType()), sound.getPitch(newBlock.getType()));
-						}
-						newBlock.breakNaturally(item);
-						AbilityUtils.dropExperience(loc, newEvent.getExpToDrop());
-						DamageUtils.damageItem(player, item);
-					}
-					AbilityUtils.removeHeightWidthBlock(b);
 				}
-
-				AdvancementUtils.awardCriteria(player, ESAdvancement.OVER_9000, "stone", blocksBroken);
 			}
 		}
 	}
@@ -414,6 +375,7 @@ public class BlockListener extends Enchantmentable {
 
 	private Collection<Location> addHeightWidthBlock(Collection<Location> blocks, ItemStack tool, Material original, Block relative, int x, int y, int z) {
 		Block block = relative.getRelative(x, y, z);
+		if (BlockUtils.multiBlockBreakContains(block.getLocation())) return blocks;
 		List<String> pickBlocks = ItemBreakType.WOODEN_PICKAXE.getDiamondPickaxeBlocks();
 		if (!pickBlocks.contains(original.name()) && pickBlocks.contains(block.getType().name())) return blocks;
 
