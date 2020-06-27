@@ -3,7 +3,7 @@ package org.ctp.enchantmentsolution.nms;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 
 public class ServerNMS {
-
+	
 	public static int getCurrentTick() {
 		switch (EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber()) {
 			case 1:
@@ -24,7 +24,7 @@ public class ServerNMS {
 			case 12:
 				return net.minecraft.server.v1_16_R1.MinecraftServer.currentTick;
 		}
-		return 0;
+		return (int) System.currentTimeMillis() / 50;
 	}
 	
 }
