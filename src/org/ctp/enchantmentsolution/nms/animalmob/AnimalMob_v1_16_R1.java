@@ -82,12 +82,17 @@ public class AnimalMob_v1_16_R1 extends AnimalMob {
 
 	@Override
 	public void setConfig(YamlConfig config, int i) {
-		super.setConfig(config, i);
+		this.setConfig(config, "animals.", i);
+	}
 
-		config.set("animals." + i + ".cat_type", getCatType() != null ? getCatType().name() : null);
-		config.set("animals." + i + ".collar_color", getCatType() != null ? getCollarColor().name() : null);
-		config.set("animals." + i + ".panda_main_gene", getPandaMainGene() != null ? getPandaMainGene().name() : null);
-		config.set("animals." + i + ".panda_hidden_gene", getPandaHiddenGene() != null ? getPandaHiddenGene().name() : null);
+	@Override
+	public void setConfig(YamlConfig config, String location, int i) {
+		super.setConfig(config, location, i);
+
+		config.set(location + i + ".cat_type", getCatType() != null ? getCatType().name() : null);
+		config.set(location + i + ".collar_color", getCatType() != null ? getCollarColor().name() : null);
+		config.set(location + i + ".panda_main_gene", getPandaMainGene() != null ? getPandaMainGene().name() : null);
+		config.set(location + i + ".panda_hidden_gene", getPandaHiddenGene() != null ? getPandaHiddenGene().name() : null);
 	}
 
 	public static AnimalMob createFromConfig(YamlConfig config, int i) {

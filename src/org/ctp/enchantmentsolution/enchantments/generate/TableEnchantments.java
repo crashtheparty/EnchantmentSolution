@@ -141,8 +141,12 @@ public class TableEnchantments extends GenerateEnchantments {
 	}
 
 	public void setConfig(YamlConfig config, int i) {
-		config.set("enchanting_table." + i + ".player", getPlayer().getUniqueId().toString());
-		config.set("enchanting_table." + i + ".bookshelves", getBookshelves());
+		setConfig(config, "", i);
+	}
+
+	public void setConfig(YamlConfig config, String starting, int i) {
+		config.set(starting + "enchanting_table." + i + ".player", getPlayer().getUniqueId().toString());
+		config.set(starting + "enchanting_table." + i + ".bookshelves", getBookshelves());
 
 		getLevelList().setConfig(config, i);
 
@@ -152,7 +156,7 @@ public class TableEnchantments extends GenerateEnchantments {
 			Entry<ItemData, EnchantmentList[]> entry = iterator.next();
 			ItemData item = entry.getKey();
 			for(EnchantmentList l: entry.getValue())
-				if (l != null) l.setConfig(config, i, j, item);
+				if (l != null) l.setConfig(config, starting, i, j, item);
 			j++;
 		}
 	}

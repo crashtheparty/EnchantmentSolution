@@ -2,14 +2,23 @@ package org.ctp.enchantmentsolution.utils;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
+import java.util.Map.Entry;
 
+import org.bukkit.block.Block;
+import org.bukkit.enchantments.Enchantment;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
+import org.ctp.enchantmentsolution.advancements.ESAdvancementProgress;
+import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enchantments.generate.TableEnchantments;
+import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.enums.Language;
+import org.ctp.enchantmentsolution.nms.animalmob.AnimalMob;
+import org.ctp.enchantmentsolution.rpg.RPGPlayer;
+import org.ctp.enchantmentsolution.rpg.RPGUtils;
+import org.ctp.enchantmentsolution.utils.abilityhelpers.WalkerBlock;
+import org.ctp.enchantmentsolution.utils.abilityhelpers.WalkerUtils;
 import org.ctp.enchantmentsolution.utils.config.*;
 import org.ctp.enchantmentsolution.utils.files.DataFile;
 import org.ctp.enchantmentsolution.utils.files.LanguageFile;
@@ -143,6 +152,60 @@ public class Configurations {
 		backup.set("plugins.mmo_items", EnchantmentSolution.getPlugin().getMMOItems());
 		backup.set("plugins.vein_miner", EnchantmentSolution.getPlugin().getVeinMiner());
 
+		int i = 0;
+		for(ESAdvancementProgress progress: EnchantmentSolution.getAdvancementProgress()) {
+			backup.set("data_file.advancement_progress." + i + ".advancement", progress.getAdvancement().name());
+			backup.set("data_file.advancement_progress." + i + ".player", progress.getPlayer().getUniqueId());
+			backup.set("data_file.advancement_progress." + i + ".criteria", progress.getCriteria());
+			backup.set("data_file.advancement_progress." + i + ".current_amount", progress.getCurrentAmount());
+			i++;
+		}
+		i = 0;
+		List<WalkerBlock> blocks = WalkerUtils.getBlocks();
+		if (blocks != null) for(WalkerBlock block: blocks) {
+			Block loc = block.getBlock();
+			CustomEnchantment enchantment = RegisterEnchantments.getCustomEnchantment(block.getEnchantment());
+			backup.set("data_file.blocks." + i, enchantment.getName() + " " + loc.getWorld().getName() + " " + loc.getX() + " " + loc.getY() + " " + loc.getZ() + " " + block.getReplaceType().name() + " " + block.getTick() + " " + block.getDamage().name());
+			i++;
+		}
+		i = 0;
+		try {
+			for(AnimalMob animal: EnchantmentSolution.getAnimals()) {
+				animal.setConfig(backup, "data_file.animals.", i);
+				i++;
+			}
+		} catch (NoClassDefFoundError ex) {
+			ex.printStackTrace();
+		}
+
+		if (!ConfigString.RESET_ON_RELOAD.getBoolean()) {
+			i = 0;
+			try {
+				for(TableEnchantments table: TableEnchantments.getAllTableEnchantments()) {
+					table.setConfig(backup, "data_file.", i);
+					i++;
+				}
+			} catch (NoClassDefFoundError ex) {
+				ex.printStackTrace();
+			}
+		}
+		i = 0;
+		List<RPGPlayer> players = RPGUtils.getPlayers();
+		if (players != null) for(RPGPlayer player: players) {
+			backup.set("data_file.rpg." + i + ".player", player.getPlayer().getUniqueId().toString());
+			backup.set("data_file.rpg." + i + ".level", player.getLevel());
+			backup.set("data_file.rpg." + i + ".experience", player.getExperience().toString());
+			List<String> enchants = new ArrayList<String>();
+			Iterator<Entry<Enchantment, Integer>> iterator = player.getEnchantmentList().entrySet().iterator();
+			while (iterator.hasNext()) {
+				Entry<Enchantment, Integer> entry = iterator.next();
+				EnchantmentLevel level = new EnchantmentLevel(RegisterEnchantments.getCustomEnchantment(entry.getKey()), entry.getValue());
+				enchants.add(level.toString());
+			}
+			backup.set("data_file.rpg." + i + ".enchants", enchants);
+			i++;
+		}
+		
 		YamlConfigBackup config = CONFIG.getConfig();
 		YamlConfigBackup fishing = FISHING.getConfig();
 		YamlConfigBackup language = LANGUAGE.getConfig();
