@@ -108,6 +108,7 @@ public enum Attributable {
 
 	public boolean hasAttribute(Player player) {
 		AttributeInstance instance = player.getAttribute(getAttr());
+		if (instance == null) return false;
 		AttributeModifier modifier = new AttributeModifier(uuid, attrName, getValue(instance, 0), operation);
 
 		return hasExactAttribute(instance, modifier) || hasAttribute(instance, modifier);
@@ -115,6 +116,7 @@ public enum Attributable {
 
 	public void addModifier(Player player, int level) {
 		AttributeInstance instance = player.getAttribute(getAttr());
+		if (instance == null) return;
 		AttributeModifier modifier = new AttributeModifier(uuid, attrName, getValue(instance, level), operation);
 		try {
 			if (!hasExactAttribute(instance, modifier) && hasAttribute(instance, modifier)) {
