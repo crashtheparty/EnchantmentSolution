@@ -14,7 +14,7 @@ public class ESPlayer {
 
 	private final OfflinePlayer player;
 	private RPGPlayer rpg;
-	private Map<Enchantment, Long> cooldowns;
+	private Map<Enchantment, Integer> cooldowns;
 	private List<ItemStack> soulItems;
 	private Map<Integer, Integer> blocksBroken;
 	private static Map<Integer, Integer> GLOBAL_BLOCKS = new HashMap<Integer, Integer>();
@@ -22,7 +22,7 @@ public class ESPlayer {
 	public ESPlayer(OfflinePlayer player) {
 		this.player = player;
 		rpg = RPGUtils.getPlayer(player);
-		cooldowns = new HashMap<Enchantment, Long>();
+		cooldowns = new HashMap<Enchantment, Integer>();
 		blocksBroken = new HashMap<Integer, Integer>();
 		removeSoulItems();
 	}
@@ -36,7 +36,7 @@ public class ESPlayer {
 	}
 
 	public boolean setCooldown(Enchantment enchant) {
-		cooldowns.put(enchant, System.currentTimeMillis());
+		cooldowns.put(enchant, ServerNMS.getCurrentTick());
 		return cooldowns.containsKey(enchant);
 	}
 
