@@ -78,6 +78,7 @@ public class McMMOAbility implements Listener {
 	}
 
 	private void updateItem(Cancellable event, ItemStack item) {
+		if (item == null) return;
 		List<EnchantmentLevel> previousLevels = ItemUtils.getEnchantmentLevels(item);
 		Bukkit.getScheduler().runTaskLater(EnchantmentSolution.getPlugin(), (Runnable) () -> {
 			if (event.isCancelled() || item == null) return;
