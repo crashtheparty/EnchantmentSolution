@@ -28,7 +28,6 @@ import org.ctp.enchantmentsolution.events.player.PillageEvent;
 import org.ctp.enchantmentsolution.events.player.RecyclerEvent;
 import org.ctp.enchantmentsolution.listeners.Enchantmentable;
 import org.ctp.enchantmentsolution.nms.animalmob.AnimalMob;
-import org.ctp.enchantmentsolution.threads.MiscRunnable;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.RecyclerDrops;
 import org.ctp.enchantmentsolution.utils.items.AbilityUtils;
@@ -55,12 +54,7 @@ public class AfterEffectsListener extends Enchantmentable {
 
 	@EventHandler
 	public void onPlayerRespawn(PlayerRespawnEvent event) {
-		runMethod(this, "contagionCurse", event, PlayerRespawnEvent.class);
 		runMethod(this, "sacrifice", event, PlayerRespawnEvent.class);
-	}
-
-	private void contagionCurse(PlayerRespawnEvent event) {
-		MiscRunnable.addContagion(event.getPlayer());
 	}
 
 	private void butcher(EntityDeathEvent event) {

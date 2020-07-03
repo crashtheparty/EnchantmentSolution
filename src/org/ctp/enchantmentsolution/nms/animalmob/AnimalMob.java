@@ -14,7 +14,7 @@ import org.bukkit.entity.Parrot.Variant;
 import org.bukkit.entity.TropicalFish.Pattern;
 import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
-import org.ctp.enchantmentsolution.utils.StringUtils;
+import org.ctp.enchantmentsolution.nms.PersistenceNMS;
 import org.ctp.enchantmentsolution.utils.items.ItemSerialization;
 import org.ctp.enchantmentsolution.utils.yaml.YamlConfig;
 
@@ -113,37 +113,41 @@ public class AnimalMob {
 	}
 
 	public void setConfig(YamlConfig config, int i) {
-		config.set("animals." + i + ".entity_type", getMob().name());
-		config.set("animals." + i + ".name", getName());
-		config.set("animals." + i + ".age", getAge());
-		config.set("animals." + i + ".health", getHealth());
-		config.set("animals." + i + ".entity_id", getEntityID());
-		config.set("animals." + i + ".color", getSheepColor() != null ? getSheepColor().toString() : null);
-		config.set("animals." + i + ".owner", getOwner());
-		config.set("animals." + i + ".domestication", getDomestication());
-		config.set("animals." + i + ".max_domestication", getMaxDomestication());
-		config.set("animals." + i + ".tamed", isTamed());
-		config.set("animals." + i + ".jump_strength", getJumpStrength());
-		config.set("animals." + i + ".movement_speed", getMovementSpeed());
-		config.set("animals." + i + ".max_health", getMaxHealth());
-		config.set("animals." + i + ".carrying_chest", isCarryingChest());
-		config.set("animals." + i + ".jump_strength", getJumpStrength());
-		config.set("animals." + i + ".llama_strength", getLlamaStrength());
-		config.set("animals." + i + ".pig_saddle", hasPigSaddle());
-		config.set("animals." + i + ".sheared", isSheared());
-		config.set("animals." + i + ".puff_state", getPuffState());
-		config.set("animals." + i + ".sheep_color", getSheepColor() != null ? getSheepColor().name() : null);
-		config.set("animals." + i + ".wolf_collar", getWolfCollar() != null ? getWolfCollar().name() : null);
-		config.set("animals." + i + ".horse_style", getHorseStyle() != null ? getHorseStyle().name() : null);
-		config.set("animals." + i + ".horse_color", getHorseColor() != null ? getHorseColor().name() : null);
-		config.set("animals." + i + ".llama_color", getLlamaColor() != null ? getLlamaColor().name() : null);
-		config.set("animals." + i + ".rabbit_type", getRabbitType() != null ? getRabbitType().name() : null);
-		config.set("animals." + i + ".tropical_body_color", getTropicalBodyColor() != null ? getTropicalBodyColor().name() : null);
-		config.set("animals." + i + ".tropical_pattern_color", getTropicalPatternColor() != null ? getTropicalPatternColor().name() : null);
-		config.set("animals." + i + ".tropical_pattern", getTropicalPattern() != null ? getTropicalPattern().name() : null);
-		config.set("animals." + i + ".parrot_variant", getParrotVariant() != null ? getParrotVariant().name() : null);
-		config.set("animals." + i + ".saddle", getSaddle() != null ? ItemSerialization.itemToString(getSaddle()) : null);
-		config.set("animals." + i + ".armor", getArmor() != null ? ItemSerialization.itemToString(getArmor()) : null);
+		setConfig(config, "animals.", i);
+	}
+
+	public void setConfig(YamlConfig config, String location, int i) {
+		config.set(location + i + ".entity_type", getMob().name());
+		config.set(location + i + ".name", getName());
+		config.set(location + i + ".age", getAge());
+		config.set(location + i + ".health", getHealth());
+		config.set(location + i + ".entity_id", getEntityID());
+		config.set(location + i + ".color", getSheepColor() != null ? getSheepColor().toString() : null);
+		config.set(location + i + ".owner", getOwner());
+		config.set(location + i + ".domestication", getDomestication());
+		config.set(location + i + ".max_domestication", getMaxDomestication());
+		config.set(location + i + ".tamed", isTamed());
+		config.set(location + i + ".jump_strength", getJumpStrength());
+		config.set(location + i + ".movement_speed", getMovementSpeed());
+		config.set(location + i + ".max_health", getMaxHealth());
+		config.set(location + i + ".carrying_chest", isCarryingChest());
+		config.set(location + i + ".jump_strength", getJumpStrength());
+		config.set(location + i + ".llama_strength", getLlamaStrength());
+		config.set(location + i + ".pig_saddle", hasPigSaddle());
+		config.set(location + i + ".sheared", isSheared());
+		config.set(location + i + ".puff_state", getPuffState());
+		config.set(location + i + ".sheep_color", getSheepColor() != null ? getSheepColor().name() : null);
+		config.set(location + i + ".wolf_collar", getWolfCollar() != null ? getWolfCollar().name() : null);
+		config.set(location + i + ".horse_style", getHorseStyle() != null ? getHorseStyle().name() : null);
+		config.set(location + i + ".horse_color", getHorseColor() != null ? getHorseColor().name() : null);
+		config.set(location + i + ".llama_color", getLlamaColor() != null ? getLlamaColor().name() : null);
+		config.set(location + i + ".rabbit_type", getRabbitType() != null ? getRabbitType().name() : null);
+		config.set(location + i + ".tropical_body_color", getTropicalBodyColor() != null ? getTropicalBodyColor().name() : null);
+		config.set(location + i + ".tropical_pattern_color", getTropicalPatternColor() != null ? getTropicalPatternColor().name() : null);
+		config.set(location + i + ".tropical_pattern", getTropicalPattern() != null ? getTropicalPattern().name() : null);
+		config.set(location + i + ".parrot_variant", getParrotVariant() != null ? getParrotVariant().name() : null);
+		config.set(location + i + ".saddle", getSaddle() != null ? ItemSerialization.itemToString(getSaddle()) : null);
+		config.set(location + i + ".armor", getArmor() != null ? ItemSerialization.itemToString(getArmor()) : null);
 
 		for(int k = 2; k < 17; k++)
 			if (inventoryItems != null && inventoryItems.get(k) != null) config.set("animals." + i + ".inventory_items." + k, ItemSerialization.itemToString(inventoryItems.get(k)));
@@ -287,7 +291,7 @@ public class AnimalMob {
 
 	public void setEntityID(int entityID, boolean addLore) {
 		this.entityID = entityID;
-		if (addLore) StringUtils.addAnimal(item, entityID);
+		if (addLore) PersistenceNMS.addAnimal(item, entityID);
 	}
 
 	public String getOwner() {
@@ -467,7 +471,7 @@ public class AnimalMob {
 	}
 
 	public boolean inItem(ItemStack attackItem) {
-		return getItem() != null && getItem().equals(attackItem) || StringUtils.getAnimalIDsFromItem(attackItem).contains(getEntityID());
+		return getItem() != null && getItem().equals(attackItem) || PersistenceNMS.getAnimalIDsFromItem(attackItem).contains(getEntityID());
 	}
 
 	public boolean inItem(ItemStack item, int entityID) {

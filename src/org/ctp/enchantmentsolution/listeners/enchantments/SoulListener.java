@@ -89,7 +89,7 @@ public class SoulListener extends Enchantmentable {
 
 			if (savedItems.size() > 0) for(ItemStack i: savedItems)
 				event.getDrops().remove(i);
-			
+
 			esPlayer.setSoulItems(savedItems);
 		}
 	}

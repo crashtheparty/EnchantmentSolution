@@ -23,8 +23,8 @@ import org.ctp.enchantmentsolution.enchantments.CustomEnchantmentWrapper;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.enums.*;
+import org.ctp.enchantmentsolution.nms.PersistenceNMS;
 import org.ctp.enchantmentsolution.utils.ESArrays;
-import org.ctp.enchantmentsolution.utils.StringUtils;
 import org.ctp.enchantmentsolution.utils.compatibility.MMOUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 
@@ -75,20 +75,21 @@ public class ItemUtils {
 		EnchantmentStorageMeta enchantmentStorage = (EnchantmentStorageMeta) newItem.getItemMeta();
 
 		ItemMeta meta = item.getItemMeta();
+		List<EnchantmentLevel> newLevels = new ArrayList<EnchantmentLevel>();
 
 		if (meta != null && meta.getEnchants().size() > 0) {
-			List<String> lore = new ArrayList<String>();
 			for(Iterator<Entry<Enchantment, Integer>> it = meta.getEnchants().entrySet().iterator(); it.hasNext();) {
 				Entry<Enchantment, Integer> e = it.next();
 				Enchantment enchant = e.getKey();
 				int level = e.getValue();
 				enchantmentStorage.addStoredEnchant(enchant, level, true);
-				if (enchant instanceof CustomEnchantmentWrapper) lore.add(StringUtils.getEnchantmentString(new EnchantmentLevel(RegisterEnchantments.getCustomEnchantment(enchant), level)));
+				if (enchant instanceof CustomEnchantmentWrapper) newLevels.add(new EnchantmentLevel(RegisterEnchantments.getCustomEnchantment(enchant), level));
 				meta.removeEnchant(enchant);
 			}
 			meta = enchantmentStorage;
-			meta = setLore(meta, lore);
 			newItem.setItemMeta(meta);
+			for(EnchantmentLevel level: newLevels)
+				PersistenceNMS.addEnchantment(item, new EnchantmentLevel(level.getEnchant(), level.getLevel()));
 		}
 		return newItem;
 	}
@@ -98,38 +99,22 @@ public class ItemUtils {
 		EnchantmentStorageMeta enchantmentStorage = (EnchantmentStorageMeta) item.getItemMeta();
 
 		ItemMeta meta = newItem.getItemMeta();
+		List<EnchantmentLevel> newLevels = new ArrayList<EnchantmentLevel>();
 
 		if (enchantmentStorage != null && enchantmentStorage.getStoredEnchants().size() > 0) {
-			List<String> lore = new ArrayList<String>();
 			for(Iterator<Entry<Enchantment, Integer>> it = enchantmentStorage.getStoredEnchants().entrySet().iterator(); it.hasNext();) {
 				Entry<Enchantment, Integer> e = it.next();
 				Enchantment enchant = e.getKey();
 				int level = e.getValue();
 				meta.addEnchant(enchant, level, true);
-				if (enchant instanceof CustomEnchantmentWrapper) lore.add(StringUtils.getEnchantmentString(new EnchantmentLevel(RegisterEnchantments.getCustomEnchantment(enchant), level)));
+				if (enchant instanceof CustomEnchantmentWrapper) newLevels.add(new EnchantmentLevel(RegisterEnchantments.getCustomEnchantment(enchant), level));
 				enchantmentStorage.removeStoredEnchant(enchant);
 			}
-			meta = setLore(meta, lore);
 			newItem.setItemMeta(meta);
+			for(EnchantmentLevel level: newLevels)
+				PersistenceNMS.addEnchantment(item, new EnchantmentLevel(level.getEnchant(), level.getLevel()));
 		}
 		return newItem;
-	}
-
-	public static ItemMeta setLore(ItemMeta meta, List<String> lore) {
-		if (meta == null) return null;
-		if (lore == null) {
-			meta.setLore(new ArrayList<String>());
-			return meta;
-		}
-		if (ConfigString.LORE_ON_TOP.getBoolean()) {
-			List<String> enchantmentsFirst = new ArrayList<String>();
-			for(String l: lore)
-				if (StringUtils.isEnchantment(l)) enchantmentsFirst.add(l);
-			for(String l: lore)
-				if (!StringUtils.isEnchantment(l)) enchantmentsFirst.add(l);
-			meta.setLore(enchantmentsFirst);
-		}
-		return meta;
 	}
 
 	public static List<EnchantmentLevel> getEnchantmentLevels(ItemStack item) {
@@ -158,25 +143,18 @@ public class ItemUtils {
 	public static ItemStack addEnchantmentsToItem(ItemStack item, List<EnchantmentLevel> levels) {
 		if (levels == null) return item;
 		ItemMeta meta = item.getItemMeta();
-		List<String> lore = new ArrayList<String>();
-		List<String> previousLore = null;
 		if (meta == null) return item;
-		else
-			previousLore = meta.getLore();
 		for(EnchantmentLevel level: levels) {
 			if (level == null || level.getEnchant() == null) continue;
 			if (item.getType() == Material.ENCHANTED_BOOK) ((EnchantmentStorageMeta) meta).addStoredEnchant(level.getEnchant().getRelativeEnchantment(), level.getLevel(), true);
 			else
 				meta.addEnchant(level.getEnchant().getRelativeEnchantment(), level.getLevel(), true);
+			item.setItemMeta(meta);
 			if (!item.getItemMeta().hasItemFlag(ItemFlag.HIDE_ENCHANTS) && level.getEnchant().getRelativeEnchantment() instanceof CustomEnchantmentWrapper) {
-				previousLore = StringUtils.removeEnchantment(level.getEnchant(), previousLore);
-				lore.add(StringUtils.getEnchantmentString(level));
+				PersistenceNMS.removeEnchantment(item, level.getEnchant());
+				PersistenceNMS.addEnchantment(item, level);
 			}
 		}
-		if (previousLore != null) for(String l: previousLore)
-			lore.add(l);
-		meta = ItemUtils.setLore(meta, lore);
-		item.setItemMeta(meta);
 		return item;
 	}
 
@@ -185,14 +163,11 @@ public class ItemUtils {
 	}
 
 	public static ItemStack removeEnchantmentFromItem(ItemStack item, CustomEnchantment enchantment) {
-		ItemMeta meta = item.getItemMeta();
-		List<String> lore = meta.getLore();
-		if (lore == null) lore = new ArrayList<String>();
 		if (enchantment == null) return item;
-		if (enchantment instanceof CustomEnchantment) lore = StringUtils.removeEnchantment(enchantment, lore);
+		if (enchantment instanceof CustomEnchantment) PersistenceNMS.removeEnchantment(item, enchantment);
+		ItemMeta meta = item.getItemMeta();
 		if (hasEnchantment(item, enchantment.getRelativeEnchantment()) && meta instanceof EnchantmentStorageMeta) ((EnchantmentStorageMeta) meta).removeStoredEnchant(enchantment.getRelativeEnchantment());
 		else if (hasEnchantment(item, enchantment.getRelativeEnchantment())) meta.removeEnchant(enchantment.getRelativeEnchantment());
-		meta = ItemUtils.setLore(meta, lore);
 		item.setItemMeta(meta);
 		return item;
 	}

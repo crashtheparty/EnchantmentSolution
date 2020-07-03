@@ -1,5 +1,9 @@
-package org.ctp.enchantmentsolution.utils.items;
+package org.ctp.enchantmentsolution.enums;
 
+import java.util.Arrays;
+import java.util.List;
+
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.enums.MatData;
 
@@ -8,12 +12,16 @@ import org.ctp.enchantmentsolution.enums.MatData;
  * @since Jul 30, 2015
  */
 public enum ItemSlotType {
-	MAIN_HAND(45), OFF_HAND(45), HELMET(5), CHESTPLATE(6), LEGGINGS(7), BOOTS(8);
+	MAIN_HAND(45, EquipmentSlot.HAND), OFF_HAND(45, EquipmentSlot.OFF_HAND), HELMET(5, EquipmentSlot.HEAD), CHESTPLATE(6, EquipmentSlot.CHEST),
+	LEGGINGS(7, EquipmentSlot.LEGS), BOOTS(8, EquipmentSlot.FEET);
 
+	public static List<ItemSlotType> ARMOR = Arrays.asList(HELMET, CHESTPLATE, LEGGINGS, BOOTS);
 	private final int slot;
+	private final EquipmentSlot equipmentSlot;
 
-	ItemSlotType(int slot) {
+	ItemSlotType(int slot, EquipmentSlot equipmentSlot) {
 		this.slot = slot;
+		this.equipmentSlot = equipmentSlot;
 	}
 
 	public final static ItemSlotType matchArmorType(final ItemStack itemStack) {
@@ -29,5 +37,9 @@ public enum ItemSlotType {
 
 	public int getSlot() {
 		return slot;
+	}
+
+	public EquipmentSlot getEquipmentSlot() {
+		return equipmentSlot;
 	}
 }

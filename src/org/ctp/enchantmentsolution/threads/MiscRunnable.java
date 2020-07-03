@@ -20,16 +20,14 @@ import org.ctp.enchantmentsolution.events.potion.MagicGuardPotionEvent;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.ESArrays;
 import org.ctp.enchantmentsolution.utils.Reflectionable;
-import org.ctp.enchantmentsolution.utils.abilityhelpers.*;
+import org.ctp.enchantmentsolution.utils.abilityhelpers.DrownedEntity;
+import org.ctp.enchantmentsolution.utils.abilityhelpers.EntityAccuracy;
 import org.ctp.enchantmentsolution.utils.items.DamageUtils;
 import org.ctp.enchantmentsolution.utils.items.ItemUtils;
+import org.ctp.enchantmentsolution.utils.player.ESPlayer;
 
 @SuppressWarnings("unused")
 public class MiscRunnable implements Runnable, Reflectionable {
-
-	private static List<ContagionPlayer> CONTAGION = new ArrayList<ContagionPlayer>();
-	private static List<ExhaustionPlayer> EXHAUSTION = new ArrayList<ExhaustionPlayer>();
-	private static List<ForceFeedPlayer> FEED = new ArrayList<ForceFeedPlayer>();
 
 	@Override
 	public void run() {
@@ -45,17 +43,13 @@ public class MiscRunnable implements Runnable, Reflectionable {
 		if (!canRun(RegisterEnchantments.CURSE_OF_CONTAGION)) return;
 		List<CustomEnchantment> enchantments = RegisterEnchantments.getCurseEnchantments();
 		if (enchantments.size() > 0) {
-			Iterator<ContagionPlayer> iter = CONTAGION.iterator();
+			Iterator<ESPlayer> iter = EnchantmentSolution.getContagionPlayers().iterator();
 			while (iter.hasNext()) {
-				ContagionPlayer cPlayer = iter.next();
-				Player player = cPlayer.getPlayer();
+				ESPlayer cPlayer = iter.next();
+				Player player = cPlayer.getOnlinePlayer();
 				List<ItemStack> items = cPlayer.getCurseableItems();
-				if (cPlayer.getChance() <= 0 || items.size() == 0) {
-					iter.remove();
-					continue;
-				}
 				double random = Math.random();
-				if (cPlayer.getChance() > random) {
+				if (cPlayer.getContagionChance() > random) {
 					int randomItemInt = (int) (Math.random() * items.size());
 					ItemStack randomItem = items.get(randomItemInt);
 					if (Math.random() >= 0.5 && randomItem != null && !ItemUtils.hasEnchantment(randomItem, RegisterEnchantments.CURSE_OF_CONTAGION)) {
@@ -100,10 +94,10 @@ public class MiscRunnable implements Runnable, Reflectionable {
 	}
 
 	private void exhaustionCurse() {
-		Iterator<ExhaustionPlayer> iter = EXHAUSTION.iterator();
+		Iterator<ESPlayer> iter = EnchantmentSolution.getAllESPlayers().iterator();
 		while (iter.hasNext()) {
-			ExhaustionPlayer eplayer = iter.next();
-			Player player = eplayer.getPlayer();
+			ESPlayer eplayer = iter.next();
+			Player player = eplayer.getOnlinePlayer();
 			if (player != null && player.isOnline() && eplayer.getExhaustion() > 0) {
 				eplayer.setCurrentExhaustion();
 				float change = eplayer.getPastExhaustion() - eplayer.getCurrentExhaustion();
@@ -118,23 +112,18 @@ public class MiscRunnable implements Runnable, Reflectionable {
 					}
 					eplayer.setCurrentExhaustion();
 				}
-			} else
-				iter.remove();
+			}
 		}
 	}
 
 	private void forceFeed() {
-		Iterator<ForceFeedPlayer> iter = FEED.iterator();
+		Iterator<ESPlayer> iter = EnchantmentSolution.getForceFeedPlayers().iterator();
 		while (iter.hasNext()) {
-			ForceFeedPlayer fPlayer = iter.next();
-			Player player = fPlayer.getPlayer();
+			ESPlayer fPlayer = iter.next();
+			Player player = fPlayer.getOnlinePlayer();
 			List<ItemStack> items = fPlayer.getForceFeedItems();
-			if (items.size() == 0) {
-				iter.remove();
-				continue;
-			}
 			double rand = Math.random();
-			if (fPlayer.getChance() > rand) {
+			if (fPlayer.getForceFeedChance() > rand) {
 				Collections.shuffle(items);
 				ItemStack item = items.get(0);
 				int damage = DamageUtils.getDamage(item.getItemMeta());
@@ -175,33 +164,6 @@ public class MiscRunnable implements Runnable, Reflectionable {
 			entity.minus();
 			if (entity.getTicks() <= 0 || entity.getEntity() == null) entities.remove();
 		}
-	}
-
-	public static void addContagion(Player player) {
-		Iterator<ContagionPlayer> iter = CONTAGION.iterator();
-		while (iter.hasNext()) {
-			ContagionPlayer cplayer = iter.next();
-			if (cplayer.getPlayer().getUniqueId().equals(player.getUniqueId())) return;
-		}
-		CONTAGION.add(new ContagionPlayer(player));
-	}
-
-	public static void addExhaustion(Player player) {
-		Iterator<ExhaustionPlayer> iter = EXHAUSTION.iterator();
-		while (iter.hasNext()) {
-			ExhaustionPlayer eplayer = iter.next();
-			if (eplayer.getPlayer().getUniqueId().equals(player.getUniqueId())) return;
-		}
-		EXHAUSTION.add(new ExhaustionPlayer(player));
-	}
-
-	public static void addFeed(Player player) {
-		Iterator<ForceFeedPlayer> iter = FEED.iterator();
-		while (iter.hasNext()) {
-			ForceFeedPlayer fplayer = iter.next();
-			if (fplayer.getPlayer().getUniqueId().equals(player.getUniqueId())) return;
-		}
-		FEED.add(new ForceFeedPlayer(player));
 	}
 
 	private void callContagionCurse(Player player, ItemStack item, CustomEnchantment curse) {

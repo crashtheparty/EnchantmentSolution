@@ -19,7 +19,6 @@ import org.ctp.enchantmentsolution.utils.abilityhelpers.ParticleEffect;
 public class AbilityUtils {
 
 	private static List<Location> WAND_BLOCKS = new ArrayList<Location>();
-	private static List<Location> HEIGHT_WIDTH_BLOCKS = new ArrayList<Location>();
 	private static List<Material> CROPS = Arrays.asList(Material.WHEAT, Material.CARROTS, Material.POTATOES, Material.NETHER_WART, Material.BEETROOTS, Material.COCOA_BEANS);
 
 	public static ItemStack getGoldDiggerItems(ItemStack item, Block brokenBlock) {
@@ -133,17 +132,5 @@ public class AbilityUtils {
 
 	public static void removeWandBlock(Location location) {
 		WAND_BLOCKS.remove(location);
-	}
-
-	public static List<Location> getHeightWidthBlocks() {
-		return HEIGHT_WIDTH_BLOCKS;
-	}
-
-	public static void addHeightWidthBlock(Location loc) {
-		HEIGHT_WIDTH_BLOCKS.add(loc);
-	}
-
-	public static void removeHeightWidthBlock(Location loc) {
-		HEIGHT_WIDTH_BLOCKS.remove(loc);
 	}
 }

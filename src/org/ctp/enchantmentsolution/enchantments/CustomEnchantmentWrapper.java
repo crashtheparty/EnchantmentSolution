@@ -29,7 +29,7 @@ public class CustomEnchantmentWrapper extends Enchantment {
 		if (ench != null && ench.canEnchantItem(new ItemData(arg0))) return true;
 		return false;
 	}
-	
+
 	private CustomEnchantment getCustomEnchantment() {
 		return RegisterEnchantments.getCustomEnchantment(this);
 	}

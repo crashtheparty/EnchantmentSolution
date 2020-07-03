@@ -8,7 +8,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.ctp.enchantmentsolution.enchantments.CERegister;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
@@ -16,7 +15,7 @@ import org.ctp.enchantmentsolution.enums.EnchantmentLocation;
 import org.ctp.enchantmentsolution.enums.ItemData;
 import org.ctp.enchantmentsolution.enums.ItemType;
 import org.ctp.enchantmentsolution.nms.AnvilNMS;
-import org.ctp.enchantmentsolution.utils.StringUtils;
+import org.ctp.enchantmentsolution.nms.PersistenceNMS;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 import org.ctp.enchantmentsolution.utils.config.ConfigUtils;
 import org.ctp.enchantmentsolution.utils.items.DamageUtils;
@@ -49,12 +48,8 @@ public class AnvilEnchantments extends GenerateEnchantments {
 			if (enchant.canCombine() || enchant.getItem().getType() == Material.STICK && ItemUtils.hasEnchantment(enchant.getItem(), RegisterEnchantments.STICKY_HOLD)) {
 				for(Material data: ItemType.getRepairMaterials())
 					if (data == enchant.getItemTwo().getType() && ItemData.contains(ItemType.getAnvilType(new ItemData(enchant.getItem())).getAnvilMaterials(), data)) return RepairType.REPAIR;
-				if (enchant.getItem().getType() == Material.STICK && ItemUtils.hasEnchantment(enchant.getItem(), RegisterEnchantments.STICKY_HOLD)) {
-					ItemMeta meta = enchant.getItem().getItemMeta();
-					ItemStack stickyItem = StringUtils.stickyHoldItem(meta);
-					if (stickyItem != null) for(Material data: ItemType.getRepairMaterials())
-						if (data == enchant.getItemTwo().getType() && ItemData.contains(ItemType.getAnvilType(new ItemData(stickyItem)).getAnvilMaterials(), data)) return RepairType.STICKY_REPAIR;
-				}
+				if (enchant.getItem().getType() == Material.STICK && ItemUtils.hasEnchantment(enchant.getItem(), RegisterEnchantments.STICKY_HOLD)) if (PersistenceNMS.isStickyHold(enchant.getItem())) for(Material data: ItemType.getRepairMaterials())
+					if (data == enchant.getItemTwo().getType() && ItemData.contains(ItemType.getAnvilType(new ItemData(new ItemStack(PersistenceNMS.stickyItemType(enchant.getItem())))).getAnvilMaterials(true), data)) return RepairType.STICKY_REPAIR;
 				return RepairType.COMBINE;
 			}
 			return null;
@@ -143,24 +138,8 @@ public class AnvilEnchantments extends GenerateEnchantments {
 			} else
 				itemTwoLeftover = new ItemStack(Material.AIR);
 			repairCost = 20;
-			ItemStack stickyItem = StringUtils.stickyHoldItem(combinedItem.getItemMeta());
-			List<EnchantmentLevel> levels = new ArrayList<EnchantmentLevel>();
-			levels.add(new EnchantmentLevel(CERegister.STICKY_HOLD, 1));
-			ItemMeta stickyMeta = stickyItem.getItemMeta();
-			List<String> lore = stickyMeta.getLore();
-			Iterator<String> iter = lore.iterator();
-			while (iter.hasNext()) {
-				String l = iter.next();
-				EnchantmentLevel level = StringUtils.stickyHoldLevel(l);
-				if (level != null) {
-					levels.add(level);
-					iter.remove();
-				} else if (StringUtils.stickyHoldItem(l, stickyMeta) != null) iter.remove();
-			}
-			stickyMeta.setLore(lore);
-			stickyItem.setItemMeta(stickyMeta);
-			stickyItem = DamageUtils.setDamage(stickyItem, 0);
-			combinedItem = stickyItem.clone();
+			combinedItem = DamageUtils.setDamage(PersistenceNMS.repairStickyHold(combinedItem), 0);
+			List<EnchantmentLevel> levels = ItemUtils.getEnchantmentLevels(itemOne);
 
 			Player player = getPlayer().getPlayer();
 			List<EnchantmentLevel> enchantments = new ArrayList<EnchantmentLevel>();

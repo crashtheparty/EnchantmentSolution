@@ -8,7 +8,7 @@ import java.util.Map.Entry;
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
-import org.ctp.enchantmentsolution.utils.StringUtils;
+import org.ctp.enchantmentsolution.nms.PersistenceNMS;
 import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 
 import com.spawnchunk.auctionhouse.AuctionHouse;
@@ -25,9 +25,9 @@ public class AuctionHouseUtils {
 			if (item.hasItemMeta() && item.getItemMeta().hasLore()) {
 				List<EnchantmentLevel> levels = new ArrayList<EnchantmentLevel>();
 				for(String lore: item.getItemMeta().getLore())
-					if (lore != null && StringUtils.isEnchantment(lore)) {
+					if (lore != null && PersistenceNMS.isEnchantment(lore)) {
 						lore = ChatColor.stripColor(lore);
-						EnchantmentLevel level = StringUtils.returnEnchantmentLevel(lore, item.getItemMeta());
+						EnchantmentLevel level = PersistenceNMS.returnEnchantmentLevel(lore, item.getItemMeta());
 						if (level != null) levels.add(level);
 					}
 				for(EnchantmentLevel level: levels) {

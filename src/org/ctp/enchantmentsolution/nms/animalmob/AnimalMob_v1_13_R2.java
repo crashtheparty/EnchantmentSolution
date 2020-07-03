@@ -52,9 +52,14 @@ public class AnimalMob_v1_13_R2 extends AnimalMob {
 
 	@Override
 	public void setConfig(YamlConfig config, int i) {
-		super.setConfig(config, i);
+		this.setConfig(config, "animals.", i);
+	}
 
-		config.set("animals." + i + ".ocelot_type", getOcelotType() != null ? getOcelotType().name() : null);
+	@Override
+	public void setConfig(YamlConfig config, String location, int i) {
+		super.setConfig(config, location, i);
+
+		config.set(location + i + ".ocelot_type", getOcelotType() != null ? getOcelotType().name() : null);
 	}
 
 	public static AnimalMob createFromConfig(YamlConfig config, int i) {

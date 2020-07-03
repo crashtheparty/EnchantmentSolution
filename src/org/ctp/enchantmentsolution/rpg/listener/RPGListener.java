@@ -18,6 +18,7 @@ import org.bukkit.event.player.*;
 import org.bukkit.event.player.PlayerFishEvent.State;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.projectiles.ProjectileSource;
+import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.api.ApiEnchantmentWrapper;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
@@ -40,6 +41,7 @@ import org.ctp.enchantmentsolution.nms.ItemNMS;
 import org.ctp.enchantmentsolution.rpg.RPGUtils;
 import org.ctp.enchantmentsolution.threads.ElytraRunnable;
 import org.ctp.enchantmentsolution.utils.items.ItemUtils;
+import org.ctp.enchantmentsolution.utils.player.ESPlayer;
 
 public class RPGListener extends Enchantmentable implements Runnable {
 
@@ -234,6 +236,7 @@ public class RPGListener extends Enchantmentable implements Runnable {
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onESPlayerEvent(ESPlayerEvent event) {
 		EnchantmentLevel level = event.getEnchantment();
+		if (level == null || level.getEnchant() == null) return; // something went wrong here
 		if (level.getEnchant().getRelativeEnchantment() instanceof ApiEnchantmentWrapper) return; // other plugins need to make these events go themselves
 		if (level.getEnchant().isCurse()) return; // don't let custom curse enchantments do anything
 		if (event instanceof AttributeEvent || event instanceof BonusDropsEvent || event instanceof IcarusRefreshEvent) return; // these aren't the events we
@@ -323,8 +326,9 @@ public class RPGListener extends Enchantmentable implements Runnable {
 	public void run() {
 		for(Player player: Bukkit.getOnlinePlayers()) {
 			if (ElytraRunnable.didTick(player)) {
-				ItemStack item = player.getInventory().getChestplate();
-				giveExperience(player, RegisterEnchantments.FREQUENT_FLYER, ItemUtils.getLevel(item, RegisterEnchantments.FREQUENT_FLYER));
+				ESPlayer esPlayer = EnchantmentSolution.getESPlayer(player);
+				ItemStack item = esPlayer.getElytra();
+				if (item != null) giveExperience(player, RegisterEnchantments.FREQUENT_FLYER, ItemUtils.getLevel(item, RegisterEnchantments.FREQUENT_FLYER));
 			}
 			for(ItemStack item: player.getInventory().getArmorContents())
 				if (item != null && ItemUtils.hasEnchantment(item, RegisterEnchantments.NO_REST) && player.getWorld().getEnvironment() == Environment.NORMAL && player.getWorld().getTime() > 12540 && player.getWorld().getTime() < 23459) {

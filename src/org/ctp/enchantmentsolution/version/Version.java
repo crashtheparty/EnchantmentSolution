@@ -12,7 +12,7 @@ public class Version {
 
 	public Version(String name, VersionType type, String info) {
 		this(name, type);
-		this.setInfo(info);
+		setInfo(info);
 	}
 
 	public String getVersionName() {

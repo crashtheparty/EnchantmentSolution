@@ -26,7 +26,7 @@ language_file: 'language.yml'
 villager_trades: false
 use_comments: true
 protection_conflicts: true
-lore_on_top: true
+lore_location: 'top'
 version:
     get_latest: true
     get_experimental: false
@@ -96,6 +96,11 @@ gametypes: []
 use_particles: true
 play_sounds: true
 print_usage: true
+multi_block:
+    async: false
+    blocks_per_tick:
+        player: 10
+        global: 25
 
 config_comments: 
 
@@ -191,8 +196,11 @@ config_comments:
     protection_conflicts: 
     - 'All protection types conflict with each other'
 
-    lore_on_top: 
-    - 'Custom enchantment lore will always be at the top of the lore'
+    lore_location: 
+    - 'Modify where custom enchantments will be in the item''s lore'
+    - '- top: At the top of the lore right under normal enchantments'
+    - '- bottom: At the very bottom of the lore'
+    - '- unset: Enchantments will be placed whereever they are (can change randomly when trying to fix them)'
 
     version: 
         get_latest: 
@@ -250,4 +258,14 @@ config_comments:
     print_usage: 
     - 'Print usage to player when getting a command wrong.'
     - 'Only works for commands for which they have permission.'
+    
+    multi_block:
+        async:
+        - 'Whether the Height/Width/Depth++ enchantments should work asynchronously'
+        - 'This increases peformance but nerfs those enchantments slightly'
+        blocks_per_tick:
+            player:
+            - 'The maximum blocks broken per tick per player using Height/Width/Depth++'
+            global:
+            - 'The maximum blocks broken per tick globally using Height/Width/Depth++'
 

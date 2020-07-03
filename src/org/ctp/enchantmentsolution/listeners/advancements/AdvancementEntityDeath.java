@@ -2,16 +2,8 @@ package org.ctp.enchantmentsolution.listeners.advancements;
 
 import java.util.UUID;
 
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.entity.Arrow;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Projectile;
+import org.bukkit.*;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -27,6 +19,7 @@ import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.LocationUtils;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.OverkillDeath;
 import org.ctp.enchantmentsolution.utils.items.ItemUtils;
+import org.ctp.enchantmentsolution.utils.player.ESPlayer;
 
 public class AdvancementEntityDeath implements Listener {
 
@@ -66,7 +59,11 @@ public class AdvancementEntityDeath implements Listener {
 					}
 					if (arrow.getMetadata("overkill") != null && arrow.getMetadata("overkill").size() > 0) for(MetadataValue meta: arrow.getMetadata("overkill")) {
 						UUID uuid = UUID.fromString(meta.asString());
-						OverkillDeath.addDeath(uuid);
+						OfflinePlayer player = Bukkit.getOfflinePlayer(uuid);
+						if (player != null && player.isOnline()) {
+							ESPlayer esPlayer = EnchantmentSolution.getESPlayer(player.getPlayer());
+							esPlayer.addOverkillDeath(new OverkillDeath());
+						}
 						break;
 					}
 

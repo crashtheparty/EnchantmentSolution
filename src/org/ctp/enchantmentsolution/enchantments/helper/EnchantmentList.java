@@ -191,8 +191,8 @@ public class EnchantmentList {
 		return new EnchantmentList(player, level, item, EnchantmentLocation.TABLE, enchantability, levels);
 	}
 
-	public void setConfig(YamlConfig config, int i, int k, ItemData item) {
-		String path = "enchanting_table." + i + ".enchantmentList." + k + ".";
+	public void setConfig(YamlConfig config, String starting, int i, int k, ItemData item) {
+		String path = starting + "enchanting_table." + i + ".enchantmentList." + k + ".";
 		config.set(path + "itemdata", item.toString());
 		List<String> enchants = new ArrayList<String>();
 		for(EnchantmentLevel level: getEnchantments())
