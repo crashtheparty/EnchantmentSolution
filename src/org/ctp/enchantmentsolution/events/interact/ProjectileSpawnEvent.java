@@ -5,6 +5,7 @@ import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.events.Cooldownable;
+import org.ctp.enchantmentsolution.nms.ServerNMS;
 import org.ctp.enchantmentsolution.utils.player.ESPlayer;
 
 public abstract class ProjectileSpawnEvent extends InteractEvent implements Cooldownable {
@@ -19,8 +20,7 @@ public abstract class ProjectileSpawnEvent extends InteractEvent implements Cool
 
 	public boolean willCancel() {
 		ESPlayer player = EnchantmentSolution.getESPlayer(getPlayer());
-		// best we can do is count one tick as 50 milliseconds and hope that goes well
-		return player.getCooldown(getEnchantment().getEnchant().getRelativeEnchantment()) + getCooldownTicks() * 50 > System.currentTimeMillis();
+		return player.getCooldown(getEnchantment().getEnchant().getRelativeEnchantment()) + getCooldownTicks() > ServerNMS.getCurrentTick();
 	}
 
 	@Override

@@ -103,7 +103,7 @@ public enum ItemBreakType {
 			default:
 				break;
 		}
-		return null;
+		return itemTypes;
 	}
 
 	private List<String> getSilkTouchStrings() {

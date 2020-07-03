@@ -1,23 +1,19 @@
 package org.ctp.enchantmentsolution.threads;
 
-import java.util.*;
+import java.util.Iterator;
 
-import org.bukkit.*;
-import org.bukkit.block.BlockFace;
+import org.bukkit.GameMode;
+import org.bukkit.Particle;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
+import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.utils.Reflectionable;
-import org.ctp.enchantmentsolution.utils.abilityhelpers.FrequentFlyerPlayer;
-import org.ctp.enchantmentsolution.utils.abilityhelpers.IcarusDelay;
-import org.ctp.enchantmentsolution.utils.items.ItemUtils;
-
-import com.sun.istack.internal.NotNull;
+import org.ctp.enchantmentsolution.utils.player.ESPlayer;
 
 @SuppressWarnings("unused")
 public class ElytraRunnable implements Runnable, Reflectionable {
 
-	private static List<FrequentFlyerPlayer> PLAYERS = new ArrayList<FrequentFlyerPlayer>();
 	private int run;
 
 	@Override
@@ -33,59 +29,34 @@ public class ElytraRunnable implements Runnable, Reflectionable {
 	private void frequentFlyer() {
 		if (!RegisterEnchantments.isEnabled(RegisterEnchantments.FREQUENT_FLYER)) return;
 
-		Iterator<FrequentFlyerPlayer> iterator = PLAYERS.iterator();
+		Iterator<ESPlayer> iterator = EnchantmentSolution.getAllESPlayers().iterator();
 		while (iterator.hasNext()) {
-			FrequentFlyerPlayer ffPlayer = iterator.next();
-			Player player = ffPlayer.getPlayer();
-			if (player == null || !player.isOnline()) {
-				iterator.remove();
-				continue;
-			}
-			ItemStack elytra = player.getInventory().getChestplate();
+			ESPlayer ffPlayer = iterator.next();
+			if (!ffPlayer.isOnline()) continue;
+			Player player = ffPlayer.getOnlinePlayer();
 			ffPlayer.setDidTick(false);
-			if (elytra != null) {
-				ffPlayer.setElytra(elytra);
-				if (player.isFlying() && !player.getGameMode().equals(GameMode.CREATIVE) && !player.getGameMode().equals(GameMode.SPECTATOR)) ffPlayer.minus();
-			} else if (elytra == null && !player.getGameMode().equals(GameMode.CREATIVE) && !player.getGameMode().equals(GameMode.SPECTATOR)) {
-				ffPlayer.setElytra(null);
-				ffPlayer.setCanFly(false);
-			}
+			ffPlayer.setFrequentFlyer();
+			if (player.isFlying() && !player.getGameMode().equals(GameMode.CREATIVE) && !player.getGameMode().equals(GameMode.SPECTATOR)) ffPlayer.minus();
 		}
 	}
 
 	private void icarus() {
 		if (!RegisterEnchantments.isEnabled(RegisterEnchantments.ICARUS)) return;
-		List<IcarusDelay> icarusDelay = IcarusDelay.getIcarusDelay();
-		for(int i = icarusDelay.size() - 1; i >= 0; i--) {
-			IcarusDelay icarus = icarusDelay.get(i);
-			icarus.minusDelay();
-			if (icarus.getDelay() <= 0) {
-				icarusDelay.remove(icarus);
-				Player player = icarus.getPlayer().getPlayer();
+		Iterator<ESPlayer> iter = EnchantmentSolution.getIcarusPlayers().iterator();
+		while (iter.hasNext()) {
+			ESPlayer esPlayer = iter.next();
+			if (!esPlayer.isOnline()) continue;
+			esPlayer.minusIcarusDelay();
+			if (esPlayer.getIcarusDelay() <= 0) {
+				Player player = esPlayer.getOnlinePlayer();
 				player.getWorld().spawnParticle(Particle.FIREWORKS_SPARK, player.getLocation(), 250, 2, 2, 2);
 				player.getWorld().playSound(player.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_BLAST, 1, 1);
 			}
 		}
 	}
 
-	public static void addFlyer(@NotNull Player player, ItemStack elytra, boolean login) {
-		if (!contains(player) && elytra != null && ItemUtils.hasEnchantment(elytra, RegisterEnchantments.FREQUENT_FLYER)) {
-			FrequentFlyerPlayer ffPlayer = new FrequentFlyerPlayer(player, elytra);
-			PLAYERS.add(ffPlayer);
-			if (login && (player.isGliding() || player.isFlying() || player.isInsideVehicle() || player.isRiptiding() || player.isSleeping() || player.isSwimming() || player.getLocation().getBlock().getType() == Material.WATER || !Arrays.asList(Material.LAVA, Material.WATER, Material.AIR, Material.VOID_AIR, Material.CAVE_AIR).contains(player.getLocation().getBlock().getRelative(BlockFace.DOWN).getType()))) return;
-
-			if (ffPlayer.canFly() && player.getGameMode() != GameMode.CREATIVE && player.getGameMode() != GameMode.SPECTATOR) player.setFlying(true);
-		}
-	}
-
-	private static boolean contains(Player player) {
-		for(FrequentFlyerPlayer ffPlayer: PLAYERS)
-			if (ffPlayer.getPlayer().getUniqueId().equals(player.getUniqueId())) return true;
-		return false;
-	}
-
 	public static boolean didTick(Player player) {
-		for(FrequentFlyerPlayer ffPlayer: PLAYERS)
+		for(ESPlayer ffPlayer: EnchantmentSolution.getAllESPlayers())
 			if (ffPlayer.getPlayer().getUniqueId().equals(player.getUniqueId())) return ffPlayer.didTick();
 		return false;
 	}

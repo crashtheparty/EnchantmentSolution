@@ -95,7 +95,7 @@ public class DamageUtils {
 					numBreaks = event.getDamage();
 				}
 				DamageUtils.setDamage(item, DamageUtils.getDamage(item.getItemMeta()) + numBreaks);
-				if (DamageUtils.getDamage(item.getItemMeta()) > item.getType().getMaxDurability() && item.getType() != Material.ELYTRA) {
+				if (DamageUtils.getDamage(item.getItemMeta()) >= item.getType().getMaxDurability() && item.getType() != Material.ELYTRA) {
 					PlayerItemBreakEvent event = new PlayerItemBreakEvent((Player) player, item);
 					Bukkit.getPluginManager().callEvent(event);
 					event.getBrokenItem().setAmount(0);

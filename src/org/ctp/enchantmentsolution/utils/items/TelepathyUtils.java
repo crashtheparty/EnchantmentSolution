@@ -21,9 +21,7 @@ import org.ctp.enchantmentsolution.events.blocks.TelepathyEvent;
 import org.ctp.enchantmentsolution.events.blocks.TelepathyEvent.TelepathyType;
 import org.ctp.enchantmentsolution.events.modify.GoldDiggerEvent;
 import org.ctp.enchantmentsolution.mcmmo.McMMOHandler;
-import org.ctp.enchantmentsolution.utils.AdvancementUtils;
-import org.ctp.enchantmentsolution.utils.ESArrays;
-import org.ctp.enchantmentsolution.utils.LocationUtils;
+import org.ctp.enchantmentsolution.utils.*;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.GoldDiggerCrop;
 import org.ctp.enchantmentsolution.utils.compatibility.JobsUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
@@ -182,7 +180,7 @@ public class TelepathyUtils {
 
 		if (!telepathy.isCancelled() && damageItems) {
 			damageItem(event);
-			if (AbilityUtils.getHeightWidthBlocks().contains(block.getLocation())) {
+			if (BlockUtils.multiBlockBreakContains(block.getLocation())) {
 				AdvancementUtils.awardCriteria(player, ESAdvancement.FAST_AND_FURIOUS, "diamond_pickaxe");
 				AdvancementUtils.awardCriteria(player, ESAdvancement.OVER_9000, "stone", 1);
 			}

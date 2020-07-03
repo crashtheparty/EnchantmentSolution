@@ -60,12 +60,11 @@ public class ChestPopulate_v1_16_R1 {
 			if (lootChest != null) { // Lootchest
 				String loot = lootChest.getKey();
 				loot = loot.substring(loot.lastIndexOf('/') + 1);
-				c.c((EntityLiving) null);
+				c.a_((EntityLiving) null);
 				for(int i = 0; i < c.getSize(); i++) {
 					ItemStack item = c.getItem(i);
-					 MinecraftKey minecraftkey =
-					 IRegistry.ENCHANTMENT.getKey(Enchantments.SOUL_SPEED);
-					 NBTTagList nbttaglist = item.getEnchantments();
+					MinecraftKey minecraftkey = IRegistry.ENCHANTMENT.getKey(Enchantments.SOUL_SPEED);
+					NBTTagList nbttaglist = item.getEnchantments();
 
 					boolean soulSpeed = false;
 					for(int j = 0; j < nbttaglist.size(); ++j) {

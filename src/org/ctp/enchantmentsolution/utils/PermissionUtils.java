@@ -17,7 +17,7 @@ import org.ctp.enchantmentsolution.utils.config.ConfigString;
 import org.ctp.enchantmentsolution.utils.config.ConfigUtils;
 
 public class PermissionUtils {
-	
+
 	private static Map<EnchantmentLevel, List<Permission>> PERMISSIONS = new HashMap<EnchantmentLevel, List<Permission>>();
 
 	public static void addPermissions(EnchantmentLevel level) {
