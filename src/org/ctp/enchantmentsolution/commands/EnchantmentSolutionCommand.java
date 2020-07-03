@@ -25,7 +25,7 @@ public class EnchantmentSolutionCommand implements CommandExecutor, TabCompleter
 	private final ESCommand lore = new ESCommand("configlore", "commands.aliases.configlore", "commands.descriptions.configlore", "commands.usage.configlore", "enchantmentsolution.command.lore");
 	private final ESCommand reload = new ESCommand("esreload", "commands.aliases.esreload", "commands.descriptions.esreload", "commands.usage.esreload", "enchantmentsolution.command.reload");
 	private final ESCommand reset = new ESCommand("esreset", "commands.aliases.esreset", "commands.descriptions.esreset", "commands.usage.esreset", "enchantmentsolution.command.reset");
-	private final ESCommand book = new ESCommand("esbook", "commands.aliases.esbook", "commands.descriptions.esbook", "commands.usage.esbook", "enchantmentsolution.commands.book");
+	private final ESCommand book = new ESCommand("esbook", "commands.aliases.esbook", "commands.descriptions.esbook", "commands.usage.esbook", "enchantmentsolution.command.book");
 	private final ESCommand enchant = new ESCommand("enchant", "commands.aliases.enchant", "commands.descriptions.enchant", "commands.usage.enchant", "enchantmentsolution.command.enchant");
 	private final ESCommand enchantUnsafe = new ESCommand("enchantunsafe", "commands.aliases.enchantunsafe", "commands.descriptions.enchantunsafe", "commands.usage.enchantunsafe", "enchantmentsolution.command.enchantunsafe");
 	private final ESCommand enchantInfo = new ESCommand("info", "commands.aliases.info", "commands.descriptions.info", "commands.usage.info", "enchantmentsolution.command.info");
