@@ -2,9 +2,7 @@ package org.ctp.enchantmentsolution.utils.files;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.nio.file.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -94,7 +92,7 @@ public class DataFile implements Configurable {
 		String newPath = absolutePath.substring(0, absolutePath.lastIndexOf('.')) + dtf.format(now) + ".yml.gz";
 		Path source = Paths.get(absolutePath);
 		Path target = Paths.get(newPath);
-		try {
+		if (Files.exists(source, LinkOption.NOFOLLOW_LINKS)) try {
 			Files.copy(source, target);
 		} catch (IOException e1) {
 			e1.printStackTrace();
