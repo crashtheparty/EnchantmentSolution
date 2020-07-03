@@ -22,6 +22,7 @@ import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.CERegister;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
+import org.ctp.enchantmentsolution.enums.ItemSlotType;
 import org.ctp.enchantmentsolution.enums.vanilla.MatData;
 import org.ctp.enchantmentsolution.events.ArmorEquipEvent;
 import org.ctp.enchantmentsolution.events.ItemEquipEvent;
@@ -29,7 +30,6 @@ import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.LocationUtils;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.WalkerBlock;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.WalkerUtils;
-import org.ctp.enchantmentsolution.utils.items.ItemSlotType;
 import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 
 public class AdvancementPlayerEvent implements Listener {

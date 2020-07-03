@@ -216,8 +216,10 @@ public class BlockListener extends Enchantmentable {
 						new AsyncBlockController(player, item, heightWidth.getBlock(), heightWidth.getBlocks());
 					} else {
 						int blocksBroken = 0;
-						for(Location b: heightWidth.getBlocks())
+						for(Location b: heightWidth.getBlocks()) {
+							BlockUtils.addMultiBlockBreak(b);
 							if (BlockUtils.multiBreakBlock(player, item, b)) blocksBroken++;
+						}
 						AdvancementUtils.awardCriteria(player, ESAdvancement.OVER_9000, "stone", blocksBroken);
 					}
 				}

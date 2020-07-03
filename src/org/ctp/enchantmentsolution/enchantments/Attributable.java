@@ -1,50 +1,52 @@
 package org.ctp.enchantmentsolution.enchantments;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
+import org.bukkit.Bukkit;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.attribute.AttributeModifier.Operation;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
+import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
+import org.ctp.enchantmentsolution.enums.ItemSlotType;
+import org.ctp.enchantmentsolution.events.AttributeEvent;
+import org.ctp.enchantmentsolution.nms.DamageEvent;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
-import org.ctp.enchantmentsolution.utils.items.ItemSlotType;
+import org.ctp.enchantmentsolution.utils.abilityhelpers.ItemEquippedSlot;
+import org.ctp.enchantmentsolution.utils.player.ESPlayer;
 
 public enum Attributable {
-	ARMORED(RegisterEnchantments.ARMORED, Attribute.GENERIC_ARMOR, ItemSlotType.CHESTPLATE, "armored_armor", UUID.fromString("cccccccc-fefe-fefe-fefe-000000000000"), Operation.ADD_NUMBER),
-	GUNG_HO(RegisterEnchantments.GUNG_HO, Attribute.GENERIC_MAX_HEALTH, ItemSlotType.CHESTPLATE, "gung_ho_health", UUID.fromString("eeeeeeee-ffff-ffff-ffff-000000000000"), Operation.ADD_NUMBER, "generic.maxHealth"),
-	LIFE(RegisterEnchantments.LIFE, Attribute.GENERIC_MAX_HEALTH, ItemSlotType.CHESTPLATE, "life_health", UUID.fromString("eeeeeeee-fefe-fefe-fefe-000000000000"), Operation.ADD_NUMBER, "generic.maxHealth"),
-	QUICK_STRIKE(RegisterEnchantments.QUICK_STRIKE, Attribute.GENERIC_ATTACK_SPEED, ItemSlotType.MAIN_HAND, "quick_strike_speed", UUID.fromString("dddddddd-fefe-fefe-fefe-000000000000"), Operation.ADD_SCALAR, "quick_strike_armor"),
-	TOUGHNESS_HELMET(RegisterEnchantments.TOUGHNESS, Attribute.GENERIC_ARMOR_TOUGHNESS, ItemSlotType.HELMET, "helmet_toughness", UUID.fromString("bbbbbbbb-fefe-fefe-fefe-000000001000"), Operation.ADD_NUMBER),
-	TOUGHNESS_CHESTPLATE(RegisterEnchantments.TOUGHNESS, Attribute.GENERIC_ARMOR_TOUGHNESS, ItemSlotType.CHESTPLATE, "chestplate_toughness", UUID.fromString("bbbbbbbb-fefe-fefe-fefe-000000001100"), Operation.ADD_NUMBER),
-	TOUGHNESS_LEGGINGS(RegisterEnchantments.TOUGHNESS, Attribute.GENERIC_ARMOR_TOUGHNESS, ItemSlotType.LEGGINGS, "leggings_toughness", UUID.fromString("bbbbbbbb-fefe-fefe-fefe-000000001110"), Operation.ADD_NUMBER),
-	TOUGHNESS_BOOTS(RegisterEnchantments.TOUGHNESS, Attribute.GENERIC_ARMOR_TOUGHNESS, ItemSlotType.BOOTS, "boots_toughness", UUID.fromString("bbbbbbbb-fefe-fefe-fefe-000000001111"), Operation.ADD_NUMBER);
+	ARMORED(RegisterEnchantments.ARMORED, Attribute.GENERIC_ARMOR, ItemEquippedSlot.getArmorTypes("armored_armor", ItemEquippedSlot.ARMORED_ID_BASE), UUID.fromString("cccccccc-fefe-fefe-fefe-000000000000"), false, Operation.ADD_NUMBER, null),
+	GUNG_HO(RegisterEnchantments.GUNG_HO, Attribute.GENERIC_MAX_HEALTH, ItemEquippedSlot.getArmorTypes("gung_ho_health", ItemEquippedSlot.GUNG_HO_ID_BASE), UUID.fromString("eeeeeeee-ffff-ffff-ffff-000000000000"), false, Operation.ADD_NUMBER, "generic.maxHealth"),
+	LIFE(RegisterEnchantments.LIFE, Attribute.GENERIC_MAX_HEALTH, ItemEquippedSlot.getArmorTypes(RegisterEnchantments.LIFE, UUID.fromString("eeeeeeee-fefe-fefe-fefe-000000001000"), UUID.fromString("eeeeeeee-fefe-fefe-fefe-000000001100"), UUID.fromString("eeeeeeee-fefe-fefe-fefe-000000001110"), UUID.fromString("eeeeeeee-fefe-fefe-fefe-000000001111")), UUID.fromString("eeeeeeee-fefe-fefe-fefe-000000000000"), true, Operation.ADD_NUMBER, "life_health"),
+	QUICK_STRIKE(RegisterEnchantments.QUICK_STRIKE, Attribute.GENERIC_ATTACK_SPEED, Arrays.asList(new ItemEquippedSlot(ItemSlotType.MAIN_HAND, "quick_strike_speed", UUID.fromString("dddddddd-fefe-fefe-fefe-000000000000"))), UUID.fromString("dddddddd-fefe-fefe-fefe-000000000000"), false, Operation.ADD_SCALAR, "quick_strike_armor"),
+	TOUGHNESS(RegisterEnchantments.TOUGHNESS, Attribute.GENERIC_ARMOR_TOUGHNESS, ItemEquippedSlot.getArmorTypes(RegisterEnchantments.ARMORED, UUID.fromString("bbbbbbbb-fefe-fefe-fefe-000000001000"), UUID.fromString("bbbbbbbb-fefe-fefe-fefe-000000001100"), UUID.fromString("bbbbbbbb-fefe-fefe-fefe-000000001110"), UUID.fromString("bbbbbbbb-fefe-fefe-fefe-000000001111")), true, Operation.ADD_NUMBER);
 
-	private Attribute attr;
-	private ItemSlotType type;
-	private String attrName, legacyAttrName;
-	private UUID uuid;
-	private Operation operation;
-	private Enchantment enchantment;
+	private final Attribute attr;
+	private final List<ItemEquippedSlot> types;
+	private final boolean allowMultiple;
+	private final String legacyAttrName;
+	private final UUID legacyUUID;
+	private final Operation operation;
+	private final Enchantment enchantment;
 
-	Attributable(Enchantment enchantment, Attribute attr, ItemSlotType type, String attrName, UUID uuid,
-	Operation operation) {
-		this(enchantment, attr, type, attrName, uuid, operation, null);
+	Attributable(Enchantment enchantment, Attribute attr, List<ItemEquippedSlot> types, boolean allowMultiple, Operation operation) {
+		this(enchantment, attr, types, null, allowMultiple, operation, null);
 	}
 
-	Attributable(Enchantment enchantment, Attribute attr, ItemSlotType type, String attrName, UUID uuid,
-	Operation operation, String legacyAttrName) {
-		setEnchantment(enchantment);
-		setAttr(attr);
-		setType(type);
-		setAttrName(attrName);
-		setUuid(uuid);
-		setOperation(operation);
-		setLegacyAttrName(legacyAttrName);
+	Attributable(Enchantment enchantment, Attribute attr, List<ItemEquippedSlot> types, UUID legacyUUID, boolean allowMultiple, Operation operation,
+	String legacyAttrName) {
+		this.enchantment = enchantment;
+		this.attr = attr;
+		this.types = types;
+		this.legacyUUID = legacyUUID;
+		this.allowMultiple = allowMultiple;
+		this.operation = operation;
+		this.legacyAttrName = legacyAttrName;
 	}
 
 	public double getValue(AttributeInstance a, int level) {
@@ -57,79 +59,63 @@ public enum Attributable {
 				return 4 * level;
 			case "QUICK_STRIKE":
 				return 0.5 * level;
-			case "TOUGHNESS_HELMET":
-			case "TOUGHNESS_CHESTPLATE":
-			case "TOUGHNESS_LEGGINGS":
-			case "TOUGHNESS_BOOTS":
+			case "TOUGHNESS":
 				return level;
 		}
 		return 0;
-	}
-
-	public String getAttrName() {
-		return attrName;
-	}
-
-	protected void setAttrName(String attrName) {
-		this.attrName = attrName;
-	}
-
-	public UUID getUuid() {
-		return uuid;
-	}
-
-	protected void setUuid(UUID uuid) {
-		this.uuid = uuid;
 	}
 
 	public Operation getOperation() {
 		return operation;
 	}
 
-	protected void setOperation(Operation operation) {
-		this.operation = operation;
-	}
-
 	public String getLegacyAttrName() {
 		return legacyAttrName;
-	}
-
-	public void setLegacyAttrName(String legacyAttrName) {
-		this.legacyAttrName = legacyAttrName;
 	}
 
 	public Attribute getAttr() {
 		return attr;
 	}
 
-	public void setAttr(Attribute attr) {
-		this.attr = attr;
+	public boolean hasAttribute(Player player, ItemSlotType type) {
+		return hasAttribute(player, type, false);
 	}
 
-	public boolean hasAttribute(Player player) {
+	public boolean hasAttribute(Player player, ItemSlotType type, boolean legacy) {
 		AttributeInstance instance = player.getAttribute(getAttr());
 		if (instance == null) return false;
-		AttributeModifier modifier = new AttributeModifier(uuid, attrName, getValue(instance, 0), operation);
-
+		UUID id = null;
+		String name = null;
+		ItemEquippedSlot s = null;
+		for(ItemEquippedSlot slot: types)
+			if (type == slot.getType()) s = slot;
+		if (s == null) return false;
+		if (legacy) {
+			id = legacyUUID;
+			name = s.getName();
+		} else {
+			id = s.getUuid();
+			name = s.getName();
+		}
+		AttributeModifier modifier = new AttributeModifier(id, name, getValue(instance, 0), operation);
 		return hasExactAttribute(instance, modifier) || hasAttribute(instance, modifier);
 	}
 
-	public void addModifier(Player player, int level) {
+	public void addModifier(Player player, int level, ItemSlotType type) {
 		AttributeInstance instance = player.getAttribute(getAttr());
 		if (instance == null) return;
-		AttributeModifier modifier = new AttributeModifier(uuid, attrName, getValue(instance, level), operation);
+		ItemEquippedSlot s = null;
+		for(ItemEquippedSlot slot: types)
+			if (type == slot.getType()) s = slot;
+		if (s == null) return;
+		AttributeModifier modifier = new AttributeModifier(s.getUuid(), s.getName(), getValue(instance, level), operation, type.getEquipmentSlot());
 		try {
 			if (!hasExactAttribute(instance, modifier) && hasAttribute(instance, modifier)) {
 				List<AttributeModifier> override = new ArrayList<AttributeModifier>();
 				for(AttributeModifier m: instance.getModifiers())
 					if (m.getUniqueId().equals(modifier.getUniqueId())) override.add(m);
-				for(AttributeModifier m: override) {
-					AttributeModifier newModifier = new AttributeModifier(UUID.randomUUID(), m.getName(), m.getAmount(), m.getOperation(), m.getSlot());
-					while (hasAttribute(instance, newModifier))
-						newModifier = new AttributeModifier(UUID.randomUUID(), m.getName(), m.getAmount(), m.getOperation(), m.getSlot());
+				for(AttributeModifier m: override)
 					instance.getModifiers().remove(m);
-					instance.getModifiers().add(newModifier);
-				}
 				if (modifier.getName().equals("armored_armor")) AdvancementUtils.awardCriteria(player, ESAdvancement.ARMORED_EVOLUTION, "armored");
 				instance.addModifier(modifier);
 			} else if (!hasAttribute(instance, modifier)) {
@@ -141,12 +127,16 @@ public enum Attributable {
 		}
 	}
 
-	public void removeModifier(Player player) {
-		remove(player, attrName);
-		if (legacyAttrName != null) remove(player, attrName);
+	public void removeModifier(Player player, ItemSlotType type, boolean legacy) {
+		ItemEquippedSlot s = null;
+		for(ItemEquippedSlot slot: types)
+			if (slot.getType() == type) s = slot;
+		if (s != null && legacy) remove(player, s.getName(), legacyUUID);
+		else if (s != null) remove(player, s.getName(), s.getUuid());
+		if (legacyAttrName != null) remove(player, legacyAttrName, legacyUUID);
 	}
 
-	private void remove(Player player, String attrName) {
+	private void remove(Player player, String attrName, UUID uuid) {
 		AttributeInstance instance = player.getAttribute(getAttr());
 		AttributeModifier modifier = new AttributeModifier(uuid, attrName, 0, operation);
 		try {
@@ -168,19 +158,45 @@ public enum Attributable {
 		return false;
 	}
 
-	public ItemSlotType getType() {
-		return type;
-	}
-
-	public void setType(ItemSlotType type) {
-		this.type = type;
-	}
-
 	public Enchantment getEnchantment() {
 		return enchantment;
 	}
 
-	public void setEnchantment(Enchantment enchantment) {
-		this.enchantment = enchantment;
+	public List<ItemEquippedSlot> getTypes() {
+		return types;
+	}
+
+	public boolean doesAllowMultiple() {
+		return allowMultiple;
+	}
+
+	public UUID getLegacyUUID() {
+		return legacyUUID;
+	}
+
+	public static void addAttribute(Player player, EnchantmentLevel level, Attributable a, ItemEquippedSlot slot) {
+		AttributeEvent attrEvent = new AttributeEvent(player, level, null, slot.getName());
+		Bukkit.getPluginManager().callEvent(attrEvent);
+
+		a.addModifier(player, level.getLevel(), slot.getType());
+		ESPlayer esPlayer = EnchantmentSolution.getESPlayer(player);
+		esPlayer.addAttribute(new AttributeLevel(a, level.getLevel(), slot));
+		if (a.getEnchantment() == RegisterEnchantments.TOUGHNESS && player.getAttribute(Attribute.GENERIC_ARMOR_TOUGHNESS).getValue() >= 20) AdvancementUtils.awardCriteria(attrEvent.getPlayer(), ESAdvancement.GRAPHENE_ARMOR, "toughness");
+		if (a.getEnchantment() == RegisterEnchantments.LIFE || a.getEnchantment() == RegisterEnchantments.GUNG_HO) DamageEvent.updateHealth(player);
+	}
+
+	public static void removeAttribute(Player player, EnchantmentLevel level, Attributable a, ItemEquippedSlot slot) {
+		removeAttribute(player, level, a, slot, false);
+	}
+
+	public static void removeAttribute(Player player, EnchantmentLevel level, Attributable a, ItemEquippedSlot slot, boolean legacy) {
+		AttributeEvent attrEvent = new AttributeEvent(player, level, slot.getName(), null);
+		Bukkit.getPluginManager().callEvent(attrEvent);
+
+		a.removeModifier(player, slot.getType(), legacy);
+		ESPlayer esPlayer = EnchantmentSolution.getESPlayer(player);
+		esPlayer.removeAttribute(a, slot);
+		if (a.getEnchantment() == RegisterEnchantments.LIFE || a.getEnchantment() == RegisterEnchantments.GUNG_HO) DamageEvent.updateHealth(player);
+
 	}
 }

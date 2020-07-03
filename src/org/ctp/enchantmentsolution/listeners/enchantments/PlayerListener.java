@@ -1,6 +1,8 @@
 package org.ctp.enchantmentsolution.listeners.enchantments;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
 
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -11,28 +13,25 @@ import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.player.*;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerItemBreakEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.util.Vector;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
-import org.ctp.enchantmentsolution.enchantments.CERegister;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
-import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.enums.ItemMoisturizeType;
 import org.ctp.enchantmentsolution.events.interact.*;
 import org.ctp.enchantmentsolution.events.modify.IcarusLaunchEvent;
 import org.ctp.enchantmentsolution.listeners.Enchantmentable;
+import org.ctp.enchantmentsolution.nms.PersistenceNMS;
 import org.ctp.enchantmentsolution.nms.animalmob.AnimalMob;
-import org.ctp.enchantmentsolution.threads.MiscRunnable;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.LocationUtils;
-import org.ctp.enchantmentsolution.utils.StringUtils;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.FlowerGiftDrop;
-import org.ctp.enchantmentsolution.utils.abilityhelpers.IcarusDelay;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.WalkerUtils;
 import org.ctp.enchantmentsolution.utils.items.DamageUtils;
 import org.ctp.enchantmentsolution.utils.items.ItemUtils;
@@ -62,17 +61,8 @@ public class PlayerListener extends Enchantmentable {
 	}
 
 	@EventHandler
-	public void onPlayerJoin(PlayerJoinEvent event) {
-		runMethod(this, "contagionCurse", event, PlayerJoinEvent.class);
-	}
-
-	@EventHandler
 	public void onPlayerItemBreak(PlayerItemBreakEvent event) {
 		runMethod(this, "stickyHold", event, PlayerItemBreakEvent.class);
-	}
-
-	private void contagionCurse(PlayerJoinEvent event) {
-		MiscRunnable.addContagion(event.getPlayer());
 	}
 
 	private void flowerGift(PlayerInteractEvent event) {
@@ -112,8 +102,8 @@ public class PlayerListener extends Enchantmentable {
 			int level = ItemUtils.getLevel(player.getInventory().getChestplate(), RegisterEnchantments.ICARUS);
 			double additional = Math.log((2 * level + 8) / 5) + 1.5;
 			if (player.getLocation().getPitch() < -10) {
-				for(IcarusDelay icarus: IcarusDelay.getIcarusDelay())
-					if (icarus.getPlayer().equals(player)) return;
+				ESPlayer esPlayer = EnchantmentSolution.getESPlayer(player);
+				if (esPlayer.getIcarusDelay() > 0) return;
 				int num_breaks = DamageUtils.damageItem(player, chestplate, level * 5, 1, false);
 				if (DamageUtils.getDamage(chestplate.getItemMeta()) + num_breaks >= chestplate.getType().getMaxDurability()) {
 					AdvancementUtils.awardCriteria(player, ESAdvancement.TOO_CLOSE, "failure");
@@ -130,7 +120,7 @@ public class PlayerListener extends Enchantmentable {
 					player.setVelocity(v);
 					player.getWorld().spawnParticle(Particle.CLOUD, player.getLocation(), 250, 2, 2, 2);
 					player.getWorld().playSound(player.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 1, 1);
-					IcarusDelay.getIcarusDelay().add(new IcarusDelay(player, icarus.getSecondDelay()));
+					esPlayer.setIcarusDelay(icarus.getSecondDelay());
 				}
 			}
 		}
@@ -143,7 +133,7 @@ public class PlayerListener extends Enchantmentable {
 			ItemStack item = player.getInventory().getItemInMainHand();
 			if (event.getHand() == EquipmentSlot.OFF_HAND) item = player.getInventory().getItemInOffHand();
 			if (item != null && ItemUtils.hasEnchantment(item, RegisterEnchantments.IRENES_LASSO)) {
-				List<Integer> entityIDs = StringUtils.getAnimalIDsFromItem(item);
+				List<Integer> entityIDs = PersistenceNMS.getAnimalIDsFromItem(item);
 				if (entityIDs.size() == 0) return;
 				int entityID = entityIDs.get(0);
 				Iterator<AnimalMob> iterator = EnchantmentSolution.getAnimals().iterator();
@@ -159,9 +149,9 @@ public class PlayerListener extends Enchantmentable {
 								Entity e = loc.getWorld().spawnEntity(loc, fromLasso.getMob());
 								if (e == null) return;
 								fromLasso.editProperties(e, true, false);
+								PersistenceNMS.removeAnimal(item, entityID);
 								DamageUtils.damageItem(player, item, 1, 2);
 								player.incrementStatistic(Statistic.USE_ITEM, item.getType());
-								StringUtils.removeAnimal(item, entityID);
 								iterator.remove();
 								break;
 							}
@@ -339,31 +329,16 @@ public class PlayerListener extends Enchantmentable {
 		Player player = event.getPlayer();
 		ItemStack item = event.getBrokenItem();
 		if (item != null && ItemUtils.hasEnchantment(item, RegisterEnchantments.STICKY_HOLD)) {
-			List<EnchantmentLevel> levels = ItemUtils.getEnchantmentLevels(item);
-			Iterator<EnchantmentLevel> iter = levels.iterator();
-			while (iter.hasNext()) {
-				EnchantmentLevel level = iter.next();
-				if (level.getEnchant() == CERegister.STICKY_HOLD) iter.remove();
-				else
-					item = ItemUtils.removeEnchantmentFromItem(item, level.getEnchant());
-			}
-			String itemLore = StringUtils.stickyHoldItemType(item);
-			ItemMeta meta = item.getItemMeta();
+			ItemStack finalItem = item.clone();
 			Bukkit.getScheduler().runTaskLater(EnchantmentSolution.getPlugin(), () -> {
-				ItemStack stickItem = new ItemStack(Material.STICK);
-				List<String> lore = meta.getLore();
-				if (lore == null) lore = new ArrayList<String>();
-				lore.add(itemLore);
-				for(EnchantmentLevel level: levels)
-					lore.add(StringUtils.addStickyHold(level));
-				meta.setLore(lore);
-				stickItem.setItemMeta(meta);
+				ItemStack stickItem = PersistenceNMS.createStickyHold(finalItem);
 				ItemUtils.giveItemToPlayer(player, stickItem, player.getLocation(), false);
 				AdvancementUtils.awardCriteria(player, ESAdvancement.STICKY_BEES, "break", 1);
 			}, 1l);
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	private void movementListener(PlayerMoveEvent event, Enchantment enchantment) {
 		if (!canRun(enchantment, event)) return;
 		Player player = event.getPlayer();

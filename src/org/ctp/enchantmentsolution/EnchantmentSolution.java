@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
+import org.bukkit.NamespacedKey;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Player;
@@ -106,7 +107,6 @@ public class EnchantmentSolution extends JavaPlugin {
 		registerEvent(new ProjectileListener());
 		registerEvent(new BlockListener());
 		registerEvent(new PotionEffectListener());
-		registerEvent(new InventoryListener());
 
 		registerEvent(new AnvilListener());
 		registerEvent(new EnchantmentListener());
@@ -379,11 +379,58 @@ public class EnchantmentSolution extends JavaPlugin {
 		return mmoItems;
 	}
 
-	public static ESPlayer getESPlayer(OfflinePlayer player) {
-		for (ESPlayer es: PLAYERS)
+	public static ESPlayer getESPlayer(Player player) {
+		for(ESPlayer es: PLAYERS)
 			if (es.getPlayer().getUniqueId().equals(player.getUniqueId())) return es;
 		ESPlayer es = new ESPlayer(player);
 		PLAYERS.add(es);
 		return es;
+	}
+
+	public static List<ESPlayer> getContagionPlayers() {
+		List<ESPlayer> players = new ArrayList<ESPlayer>();
+		for(Player player: Bukkit.getOnlinePlayers()) {
+			ESPlayer es = getESPlayer(player);
+			if (es.getContagionChance() > 0 && es.getCurseableItems().size() > 0) players.add(es);
+		}
+		return players;
+	}
+
+	public static List<ESPlayer> getAllESPlayers() {
+		List<ESPlayer> players = new ArrayList<ESPlayer>();
+		for(Player player: Bukkit.getOnlinePlayers())
+			players.add(getESPlayer(player));
+		return players;
+	}
+
+	public static List<ESPlayer> getForceFeedPlayers() {
+		List<ESPlayer> players = new ArrayList<ESPlayer>();
+		for(Player player: Bukkit.getOnlinePlayers()) {
+			ESPlayer es = getESPlayer(player);
+			if (es.hasForceFeed()) players.add(es);
+		}
+		return players;
+	}
+
+	public static List<ESPlayer> getIcarusPlayers() {
+		List<ESPlayer> players = new ArrayList<ESPlayer>();
+		for(Player player: Bukkit.getOnlinePlayers()) {
+			ESPlayer es = getESPlayer(player);
+			if (es.getIcarusDelay() > 0) players.add(es);
+		}
+		return players;
+	}
+
+	public static List<ESPlayer> getOverkillDeathPlayers() {
+		List<ESPlayer> players = new ArrayList<ESPlayer>();
+		for(Player player: Bukkit.getOnlinePlayers()) {
+			ESPlayer es = getESPlayer(player);
+			if (es.getOverkillDeaths().size() > 0) players.add(es);
+		}
+		return players;
+	}
+
+	public static NamespacedKey getKey(String name) {
+		return new NamespacedKey(getPlugin(), name);
 	}
 }

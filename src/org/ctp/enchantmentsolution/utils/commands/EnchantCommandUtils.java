@@ -19,7 +19,6 @@ import org.ctp.enchantmentsolution.enums.EnchantmentLocation;
 import org.ctp.enchantmentsolution.enums.vanilla.ItemData;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.GenerateUtils;
-import org.ctp.enchantmentsolution.utils.MiscUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 import org.json.simple.JSONArray;
@@ -133,7 +132,6 @@ public class EnchantCommandUtils {
 							itemToEnchant = ItemUtils.addEnchantmentToItem(itemToEnchant, enchant, level);
 
 							givePlayer.getInventory().setItem(slot, itemToEnchant);
-							MiscUtils.updateAbilities(givePlayer);
 							HashMap<String, Object> codes = ChatUtils.getCodes();
 							codes.put("%level%", level);
 							codes.put("%slot%", slot);

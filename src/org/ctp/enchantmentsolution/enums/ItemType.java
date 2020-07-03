@@ -118,6 +118,17 @@ public class ItemType {
 		return anvilMaterials;
 	}
 
+	public List<ItemData> getAnvilMaterials(boolean b) {
+		List<ItemData> data = getAnvilMaterials();
+		if (b) {
+			boolean contains = false;
+			for (Material m : getRepairMaterials())
+				if (ItemData.contains(data, m)) contains = true;
+			if (!contains) data.add(new ItemData(new ItemStack(Material.DIAMOND)));
+		}
+		return data;
+	}
+
 	public static List<Material> getRepairMaterials() {
 		List<Material> repair = new ArrayList<Material>();
 

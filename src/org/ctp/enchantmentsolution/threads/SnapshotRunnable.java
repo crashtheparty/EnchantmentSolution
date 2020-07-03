@@ -14,6 +14,7 @@ public class SnapshotRunnable implements Runnable {
 	private static Map<UUID, SnapshotInventory> INVENTORIES = new HashMap<UUID, SnapshotInventory>();
 	private Player[] players;
 	private int runnable = 0, current = 0;
+	private boolean run = true;
 
 	public SnapshotRunnable() {
 		setRunnable();
@@ -21,10 +22,12 @@ public class SnapshotRunnable implements Runnable {
 
 	private void setRunnable() {
 		runnable = ConfigString.ENCHANTMENT_CHECK.getInt() * 20;
+		run = runnable > 0;
 	}
 
 	@Override
 	public void run() {
+		if (!run) return;
 		if (runnable > 0) {
 			runnable--;
 			return;

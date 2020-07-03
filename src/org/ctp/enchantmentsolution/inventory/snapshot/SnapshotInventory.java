@@ -11,14 +11,15 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.enchantments.helper.Weight;
 import org.ctp.enchantmentsolution.enums.EnchantmentLocation;
 import org.ctp.enchantmentsolution.enums.ItemType;
+import org.ctp.enchantmentsolution.nms.PersistenceNMS;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
-import org.ctp.enchantmentsolution.utils.StringUtils;
 import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 
 public class SnapshotInventory {
@@ -72,11 +73,12 @@ public class SnapshotInventory {
 
 	private ItemStack checkItem(ItemStack item, ItemStack previous) {
 		if (item != null) {
+			if (EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber() > 11) return item.clone();
 			List<EnchantmentLevel> enchantMeta = getEnchantments(item);
 			List<EnchantmentLevel> enchantLore = new ArrayList<EnchantmentLevel>();
 			if (item.hasItemMeta() && item.getItemMeta().hasLore()) for(String s: item.getItemMeta().getLore())
-				if (StringUtils.isEnchantment(s)) {
-					EnchantmentLevel enchant = StringUtils.getEnchantment(s);
+				if (PersistenceNMS.isEnchantment(s)) {
+					EnchantmentLevel enchant = PersistenceNMS.getEnchantment(s, item.getItemMeta());
 					if (enchant != null) enchantLore.add(enchant);
 				}
 			boolean change = !(checkSimilar(enchantMeta, enchantLore) && checkSimilar(enchantLore, enchantMeta));

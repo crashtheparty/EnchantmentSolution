@@ -26,7 +26,7 @@ language_file: 'language.yml'
 villager_trades: false
 use_comments: true
 protection_conflicts: true
-lore_on_top: true
+lore_location: 'top'
 version:
     get_latest: true
     get_experimental: false
@@ -196,8 +196,11 @@ config_comments:
     protection_conflicts: 
     - 'All protection types conflict with each other'
 
-    lore_on_top: 
-    - 'Custom enchantment lore will always be at the top of the lore'
+    lore_location: 
+    - 'Modify where custom enchantments will be in the item''s lore'
+    - '- top: At the top of the lore right under normal enchantments'
+    - '- bottom: At the very bottom of the lore'
+    - '- unset: Enchantments will be placed whereever they are (can change randomly when trying to fix them)'
 
     version: 
         get_latest: 

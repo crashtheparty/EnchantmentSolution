@@ -17,6 +17,7 @@ import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enums.ItemBreakType;
 import org.ctp.enchantmentsolution.enums.vanilla.BlockSound;
 import org.ctp.enchantmentsolution.enums.vanilla.MatData;
+import org.ctp.enchantmentsolution.events.blocks.BlockBreakMultiEvent;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 import org.ctp.enchantmentsolution.utils.items.AbilityUtils;
 import org.ctp.enchantmentsolution.utils.items.DamageUtils;
@@ -45,7 +46,7 @@ public class BlockUtils {
 	}
 
 	public static boolean multiBreakBlock(Player player, ItemStack item, Location b) {
-		BlockBreakEvent newEvent = new BlockBreakEvent(b.getBlock(), player);
+		BlockBreakEvent newEvent = new BlockBreakMultiEvent(b.getBlock(), player);
 		int exp = 0;
 		if (!ItemUtils.hasEnchantment(item, Enchantment.SILK_TOUCH)) switch (newEvent.getBlock().getType().name()) {
 			case "COAL_ORE":
@@ -87,6 +88,7 @@ public class BlockUtils {
 			AbilityUtils.dropExperience(loc, newEvent.getExpToDrop());
 			DamageUtils.damageItem(player, item);
 			EnchantmentSolution.getESPlayer(player).breakBlock();
+			BlockUtils.removeMultiBlockBreak(b);
 			return true;
 		}
 		BlockUtils.removeMultiBlockBreak(b);

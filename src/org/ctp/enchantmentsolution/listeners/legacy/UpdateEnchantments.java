@@ -13,7 +13,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
-import org.ctp.enchantmentsolution.utils.StringUtils;
+import org.ctp.enchantmentsolution.nms.PersistenceNMS;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 
@@ -42,9 +42,9 @@ public class UpdateEnchantments implements Listener {
 				if (lore != null) {
 					List<EnchantmentLevel> levels = new ArrayList<EnchantmentLevel>();
 					for(String s: lore)
-						if (StringUtils.isLegacyEnchantment(s)) {
+						if (PersistenceNMS.isLegacyEnchantment(s)) {
 							String enchantment = ChatColor.stripColor(s);
-							EnchantmentLevel level = StringUtils.returnEnchantmentLevel(enchantment, meta);
+							EnchantmentLevel level = PersistenceNMS.returnEnchantmentLevel(enchantment, meta);
 							if (level != null) levels.add(level);
 						}
 					if (levels.size() > 0) {

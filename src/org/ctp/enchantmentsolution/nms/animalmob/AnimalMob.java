@@ -14,7 +14,7 @@ import org.bukkit.entity.Parrot.Variant;
 import org.bukkit.entity.TropicalFish.Pattern;
 import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
-import org.ctp.enchantmentsolution.utils.StringUtils;
+import org.ctp.enchantmentsolution.nms.PersistenceNMS;
 import org.ctp.enchantmentsolution.utils.items.ItemSerialization;
 import org.ctp.enchantmentsolution.utils.yaml.YamlConfig;
 
@@ -291,7 +291,7 @@ public class AnimalMob {
 
 	public void setEntityID(int entityID, boolean addLore) {
 		this.entityID = entityID;
-		if (addLore) StringUtils.addAnimal(item, entityID);
+		if (addLore) PersistenceNMS.addAnimal(item, entityID);
 	}
 
 	public String getOwner() {
@@ -471,7 +471,7 @@ public class AnimalMob {
 	}
 
 	public boolean inItem(ItemStack attackItem) {
-		return getItem() != null && getItem().equals(attackItem) || StringUtils.getAnimalIDsFromItem(attackItem).contains(getEntityID());
+		return getItem() != null && getItem().equals(attackItem) || PersistenceNMS.getAnimalIDsFromItem(attackItem).contains(getEntityID());
 	}
 
 	public boolean inItem(ItemStack item, int entityID) {
