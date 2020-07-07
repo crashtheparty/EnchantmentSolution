@@ -139,7 +139,7 @@ public class Configurations {
 		backup.set("time", format.format(new Date()));
 		backup.set("version.bukkit", EnchantmentSolution.getPlugin().getBukkitVersion().getVersion());
 		backup.set("version.bukkit_num", EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber());
-		backup.set("version.plugin", EnchantmentSolution.getPlugin().getPluginVersion().getCurrent());
+		backup.set("version.plugin", EnchantmentSolution.getPlugin().getPluginVersion().getCurrent().getVersionName());
 		backup.set("plugins.jobs_reborn", EnchantmentSolution.getPlugin().isJobsEnabled());
 		backup.set("plugins.mcmmo", EnchantmentSolution.getPlugin().getMcMMOType());
 		backup.set("plugins.mcmmo_version", EnchantmentSolution.getPlugin().getMcMMOVersion());
@@ -172,16 +172,14 @@ public class Configurations {
 			ex.printStackTrace();
 		}
 
-		if (!ConfigString.RESET_ON_RELOAD.getBoolean()) {
-			i = 0;
-			try {
-				for(TableEnchantments table: TableEnchantments.getAllTableEnchantments()) {
-					table.setConfig(backup, "data_file.", i);
-					i++;
-				}
-			} catch (NoClassDefFoundError ex) {
-				ex.printStackTrace();
+		i = 0;
+		try {
+			for(TableEnchantments table: TableEnchantments.getAllTableEnchantments()) {
+				table.setConfig(backup, "data_file.", i);
+				i++;
 			}
+		} catch (NoClassDefFoundError ex) {
+			ex.printStackTrace();
 		}
 		i = 0;
 		List<RPGPlayer> players = RPGUtils.getPlayers();

@@ -25,7 +25,7 @@ public class AuctionHouseUtils {
 			if (item.hasItemMeta() && item.getItemMeta().hasLore()) {
 				List<EnchantmentLevel> levels = new ArrayList<EnchantmentLevel>();
 				for(String lore: item.getItemMeta().getLore())
-					if (lore != null && PersistenceNMS.isEnchantment(lore)) {
+					if (lore != null && PersistenceNMS.isEnchantment(item.getItemMeta(), lore)) {
 						lore = ChatColor.stripColor(lore);
 						EnchantmentLevel level = PersistenceNMS.returnEnchantmentLevel(lore, item.getItemMeta());
 						if (level != null) levels.add(level);

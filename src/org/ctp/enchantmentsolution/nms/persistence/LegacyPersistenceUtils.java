@@ -1,19 +1,22 @@
 package org.ctp.enchantmentsolution.nms.persistence;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
+import java.util.Map.Entry;
 import java.util.regex.Pattern;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.CERegister;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.enums.MatData;
+import org.ctp.enchantmentsolution.nms.PersistenceNMS;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 import org.ctp.enchantmentsolution.utils.items.ItemUtils;
@@ -330,5 +333,75 @@ public class LegacyPersistenceUtils {
 			meta.setLore(enchantmentsLast);
 		}
 		return meta;
+	}
+
+	public static ItemStack checkItem(ItemStack item, ItemStack previous) {
+		if (item != null) {
+			if (EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber() > 11) return item.clone();
+			List<EnchantmentLevel> enchantMeta = getEnchantments(item);
+			List<EnchantmentLevel> enchantLore = new ArrayList<EnchantmentLevel>();
+			if (item.hasItemMeta() && item.getItemMeta().hasLore()) for(String s: item.getItemMeta().getLore())
+				if (PersistenceNMS.isEnchantment(item.getItemMeta(), s)) {
+					EnchantmentLevel enchant = getEnchantment(s);
+					if (enchant != null) enchantLore.add(enchant);
+				}
+			boolean change = !(checkSimilar(enchantMeta, enchantLore) && checkSimilar(enchantLore, enchantMeta));
+			if (change) {
+				Map<Enchantment, Integer> enchants = new HashMap<Enchantment, Integer>();
+				for(EnchantmentLevel enchant: enchantMeta) {
+					int level = enchant.getLevel();
+					Enchantment ench = enchant.getEnchant().getRelativeEnchantment();
+					if (enchants.containsKey(ench)) level = level > enchants.get(ench) ? level : enchants.get(ench);
+					enchants.put(ench, level);
+				}
+				for(EnchantmentLevel enchant: enchantLore) {
+					int level = enchant.getLevel();
+					Enchantment ench = enchant.getEnchant().getRelativeEnchantment();
+					if (enchants.containsKey(ench)) level = level > enchants.get(ench) ? level : enchants.get(ench);
+					enchants.put(ench, level);
+				}
+				if (enchants.size() > 0) {
+					Iterator<Entry<Enchantment, Integer>> iter = enchants.entrySet().iterator();
+					while (iter.hasNext()) {
+						Entry<Enchantment, Integer> entry = iter.next();
+						CustomEnchantment custom = RegisterEnchantments.getCustomEnchantment(entry.getKey());
+						ItemUtils.removeEnchantmentFromItem(item, custom);
+						ItemUtils.addEnchantmentToItem(item, custom, entry.getValue());
+					}
+				}
+			}
+			return item.clone();
+		}
+		return null;
+	}
+
+	private static boolean checkSimilar(List<EnchantmentLevel> levels, List<EnchantmentLevel> levelsTwo) {
+		boolean similar = levels.size() == levelsTwo.size();
+		for(EnchantmentLevel level: levels) {
+			EnchantmentLevel hasLevel = null;
+			for(EnchantmentLevel levelTwo: levelsTwo)
+				if (level.getEnchant().getName().equals(levelTwo.getEnchant().getName()) && !(level.getEnchant() instanceof SnapshotEnchantment ^ levelTwo.getEnchant() instanceof SnapshotEnchantment)) {
+					hasLevel = level;
+					break;
+				}
+			if (hasLevel == null) similar = false;
+		}
+		return similar;
+	}
+
+	private static List<EnchantmentLevel> getEnchantments(ItemStack item) {
+		List<EnchantmentLevel> levels = new ArrayList<EnchantmentLevel>();
+		if (item.getItemMeta() != null) {
+			ItemMeta meta = item.getItemMeta();
+			Map<Enchantment, Integer> enchantments = meta.getEnchants();
+			if (item.getType() == Material.ENCHANTED_BOOK) enchantments = ((EnchantmentStorageMeta) meta).getStoredEnchants();
+			for(Iterator<Entry<Enchantment, Integer>> it = enchantments.entrySet().iterator(); it.hasNext();) {
+				Entry<Enchantment, Integer> e = it.next();
+				CustomEnchantment ench = RegisterEnchantments.getCustomEnchantment(e.getKey());
+				if (ench == null) ench = new SnapshotEnchantment(e.getKey());
+				levels.add(new EnchantmentLevel(ench, e.getValue()));
+			}
+		}
+		return levels;
 	}
 }

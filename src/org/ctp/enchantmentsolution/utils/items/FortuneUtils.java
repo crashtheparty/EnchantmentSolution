@@ -12,15 +12,6 @@ import org.ctp.enchantmentsolution.enums.ItemBreakType;
 public class FortuneUtils {
 	private static List<Material> CROPS = Arrays.asList(Material.WHEAT, Material.CARROTS, Material.POTATOES, Material.NETHER_WART, Material.BEETROOTS, Material.COCOA_BEANS);
 
-	public static ItemStack getFortuneForSmeltery(ItemStack smelted, ItemStack item) {
-		if (ItemUtils.hasEnchantment(item, Enchantment.LOOT_BONUS_BLOCKS)) {
-			int level = ItemUtils.getLevel(item, Enchantment.LOOT_BONUS_BLOCKS) + 2;
-			int multiply = (int) (Math.random() * level);
-			if (multiply > 1) smelted.setAmount(smelted.getAmount() * multiply);
-		}
-		return smelted;
-	}
-
 	public static Collection<ItemStack> getFortuneItems(ItemStack item, Block brokenBlock,
 	Collection<ItemStack> priorItems) {
 		int level = ItemUtils.getLevel(item, Enchantment.LOOT_BONUS_BLOCKS);
@@ -55,7 +46,6 @@ public class FortuneUtils {
 			case "COAL_ORE":
 			case "NETHER_QUARTZ_ORE":
 			case "NETHER_GOLD_ORE":
-			case "GILDED_BLACKSTONE":
 			case "LAPIS_ORE":
 				itemBreak = ItemBreakType.getType(item.getType());
 				if (itemBreak != null && itemBreak.getBreakTypes().contains(brokenBlock.getType())) {
@@ -63,6 +53,31 @@ public class FortuneUtils {
 					int multiply = (int) (Math.random() * level);
 					if (multiply > 1) {
 						fortunableItem.setAmount(fortunableItem.getAmount() * multiply);
+						priorItems.clear();
+						priorItems.add(fortunableItem);
+					}
+					for(int i = 0; i < duplicate.size(); i++) {
+						boolean foundPrior = false;
+						for(ItemStack prior: priorItems)
+							if (prior.getType().equals(duplicate.get(i).getType())) foundPrior = true;
+						if (!foundPrior) priorItems.add(duplicate.get(i));
+					}
+				}
+				break;
+			case "ANCIENT_DEBRIS":
+				itemBreak = ItemBreakType.getType(item.getType());
+				if (itemBreak != null && itemBreak.getBreakTypes().contains(brokenBlock.getType())) {
+					ItemStack fortunableItem = duplicate.get(0);
+					double extraAmount = Math.random() * (level * 0.15);
+					double rand = Math.random();
+					int amount = 1;
+					while (extraAmount >= 1) {
+						extraAmount--;
+						amount++;
+					}
+					if (extraAmount > rand) amount++;
+					if (amount > 1) {
+						fortunableItem.setAmount(amount);
 						priorItems.clear();
 						priorItems.add(fortunableItem);
 					}

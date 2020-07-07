@@ -25,8 +25,8 @@ public class PersistenceNMS {
 		return LegacyPersistenceUtils.getEnchantment(s);
 	}
 
-	public static boolean isEnchantment(String s) {
-		if (EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber() > 11) return PersistenceUtils.isEnchantment(s);
+	public static boolean isEnchantment(ItemMeta meta, String s) {
+		if (EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber() > 11) return PersistenceUtils.isEnchantment(meta, s).isEnchant();
 		return LegacyPersistenceUtils.isEnchantment(s);
 	}
 
@@ -144,6 +144,12 @@ public class PersistenceNMS {
 		if (EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber() > 3) PersistenceUtils.addAnimal(item, id);
 		else
 			LegacyPersistenceUtils.addAnimal(item, id);
+	}
+
+	public static ItemStack checkItem(ItemStack original, ItemStack previous) {
+		if (EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber() > 11) return PersistenceUtils.checkItem(original, previous);
+		else
+			return LegacyPersistenceUtils.checkItem(original, previous);
 	}
 
 }
