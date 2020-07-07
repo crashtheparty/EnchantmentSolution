@@ -18,7 +18,7 @@ public class ExpShareEvent extends ExperienceEvent {
 	}
 
 	public enum ExpShareType {
-		BLOCK(), MOB();
+		BLOCK(), MOB(), FISH();
 	}
 
 }

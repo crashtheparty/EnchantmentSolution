@@ -15,14 +15,23 @@ import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.events.fishing.AnglerEvent;
 import org.ctp.enchantmentsolution.events.fishing.FriedEvent;
+import org.ctp.enchantmentsolution.events.player.ExpShareEvent;
+import org.ctp.enchantmentsolution.events.player.ExpShareEvent.ExpShareType;
 import org.ctp.enchantmentsolution.listeners.Enchantmentable;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
+import org.ctp.enchantmentsolution.utils.items.AbilityUtils;
 import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 
+@SuppressWarnings("unused")
 public class FishingListener extends Enchantmentable {
 
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerFish(PlayerFishEvent event) {
+		runMethod(this, "anglerFried", event, PlayerFishEvent.class);
+		runMethod(this, "expShare", event, PlayerFishEvent.class);
+	}
+
+	private void anglerFried(PlayerFishEvent event) {
 		if (event.getState().equals(PlayerFishEvent.State.CAUGHT_FISH)) {
 			List<Material> fish = Arrays.asList(Material.COD, Material.COOKED_COD, Material.SALMON, Material.COOKED_SALMON, Material.TROPICAL_FISH, Material.PUFFERFISH);
 			Item item = (Item) event.getCaught();
@@ -56,6 +65,23 @@ public class FishingListener extends Enchantmentable {
 				}
 			}
 			((Item) event.getCaught()).setItemStack(caught);
+		}
+	}
+
+	private void expShare(PlayerFishEvent event) {
+		if (!canRun(RegisterEnchantments.EXP_SHARE, event)) return;
+		Player player = event.getPlayer();
+		ItemStack item = player.getInventory().getItemInMainHand();
+		if (item != null && ItemUtils.hasEnchantment(item, RegisterEnchantments.EXP_SHARE)) {
+			int exp = event.getExpToDrop();
+			if (exp > 0) {
+				int level = ItemUtils.getLevel(item, RegisterEnchantments.EXP_SHARE);
+
+				ExpShareEvent experienceEvent = new ExpShareEvent(player, level, ExpShareType.FISH, exp, AbilityUtils.setExp(exp, level));
+				Bukkit.getPluginManager().callEvent(experienceEvent);
+
+				if (!experienceEvent.isCancelled() && experienceEvent.getNewExp() >= 0) event.setExpToDrop(experienceEvent.getNewExp());
+			}
 		}
 	}
 }
