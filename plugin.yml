@@ -1,5 +1,5 @@
 name: EnchantmentSolution
-version: 2.3.3
+version: 2.3.4
 main: org.ctp.enchantmentsolution.EnchantmentSolution
 api-version: 1.13
 softdepend: [mcMMO, Jobs, VeinMiner, AuctionHouse, MMOLib, MMOItems]
@@ -72,6 +72,9 @@ commands:
   rpgedit:
     description: Edits a player's ESRPG information
     usage: /rpgedit
+  estest:
+    description: Test items for plugin info
+    usage: /estest [item]
 permissions:
   enchantmentsolution.command.edit: 
     description: Gives access to the /es config command. 
@@ -159,4 +162,7 @@ permissions:
     default: op
   enchantmentsolution.command.rpgedit:
     description: Allows players to use the /es rpgedit command
+    default: op
+  enchantmentsolution.command.test:
+    description: Allows players to use the /es test command
     default: op

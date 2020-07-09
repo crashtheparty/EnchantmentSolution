@@ -75,6 +75,7 @@ public class PersistenceUtils {
 		if (config.equals("unset")) return;
 		ItemMeta meta = item.getItemMeta();
 		List<String> lore = meta.getLore();
+		if (lore == null) return;
 		List<String> newLore = new ArrayList<String>();
 		if (config.equalsIgnoreCase("top")) {
 			for(String s: lore) {
@@ -96,7 +97,8 @@ public class PersistenceUtils {
 				if (result.isEnchant() && result.isChange()) newLore.add(returnEnchantmentName(result.getEnchantment(), ItemUtils.getLevel(item, result.getEnchantment().getRelativeEnchantment())));
 				else if (result.isEnchant()) newLore.add(s);
 			}
-		}
+		} else
+			newLore = lore;
 		meta.setLore(newLore);
 		item.setItemMeta(meta);
 	}

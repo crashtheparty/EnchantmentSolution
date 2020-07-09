@@ -79,6 +79,8 @@ public class CommandCallable implements Callable<Boolean> {
 				return CommandUtils.rpgTop(sender, command, args);
 			case "rpgedit":
 				return CommandUtils.rpgEdit(sender, command, args);
+			case "estest":
+				return CommandUtils.test(sender, command, args);
 		}
 		return null;
 	}

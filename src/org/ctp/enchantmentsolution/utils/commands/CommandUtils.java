@@ -1,6 +1,8 @@
 package org.ctp.enchantmentsolution.utils.commands;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
@@ -8,6 +10,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.commands.EnchantmentSolutionCommand;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
@@ -649,6 +652,42 @@ public class CommandUtils {
 	private static String shrink(String s) {
 		if (s.length() > 60) return s.substring(0, 58) + "...";
 		return s;
+	}
+
+	@SuppressWarnings("unchecked")
+	public static boolean test(CommandSender sender, ESCommand details, String[] args) {
+		Player player = null;
+		if (sender instanceof Player) player = (Player) sender;
+		if (sender.hasPermission(details.getPermission())) {
+			if (args.length > 1) switch (args[1]) {
+				case "item":
+					if (sender instanceof Player) {
+						ItemStack item = ((Player) sender).getInventory().getItemInMainHand();
+						if (item == null) break;
+						JSONArray json = new JSONArray();
+						JSONObject name = new JSONObject();
+						name.put("text", ChatUtils.getStarter());
+						json.add(name);
+						JSONObject obj = new JSONObject();
+						HashMap<String, Object> codes = ChatUtils.getCodes();
+						codes.put("%item%", item.toString().replace(ChatColor.COLOR_CHAR, '&'));
+						obj.put("text", ChatUtils.getMessage(codes, "commands.item-test"));
+						HashMap<Object, Object> action = new HashMap<Object, Object>();
+						action.put("action", "copy_to_clipboard");
+						action.put("value", item.toString());
+						obj.put("clickEvent", action);
+						json.add(obj);
+						ChatUtils.sendRawMessage(player, json.toJSONString());
+					}
+					break;
+				default:
+					return false;
+			}
+			else
+				return false;
+		} else
+			ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(ChatUtils.getCodes(), "commands.no-permission"), Level.WARNING);
+		return true;
 	}
 
 }
