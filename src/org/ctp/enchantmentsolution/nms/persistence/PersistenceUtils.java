@@ -295,16 +295,14 @@ public class PersistenceUtils {
 
 	public static ItemStack checkItem(ItemStack item, ItemStack previous) {
 		if (item != null) {
-			if (EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber() > 11) return item.clone();
 			List<EnchantmentLevel> enchantMeta = getEnchantments(item);
 			List<EnchantmentLevel> enchantLore = new ArrayList<EnchantmentLevel>();
-			item.getItemMeta().getPersistentDataContainer();
 			if (item.hasItemMeta()) {
 				PersistentDataContainer container = item.getItemMeta().getPersistentDataContainer();
 				for(CustomEnchantment enchant: RegisterEnchantments.getEnchantments()) {
 					NamespacedKey key = EnchantmentSolution.getKey(enchant.getName());
 					NamespacedKey keyLevel = EnchantmentSolution.getKey(enchant.getName() + "_level");
-					if (key != null && keyLevel != null) enchantLore.add(new EnchantmentLevel(enchant, Integer.parseInt(container.get(keyLevel, t))));
+					if (container.get(key, t) != null && container.get(keyLevel, t) != null) enchantLore.add(new EnchantmentLevel(enchant, Integer.parseInt(container.get(keyLevel, t))));
 				}
 			}
 			boolean change = !(checkSimilar(enchantMeta, enchantLore) && checkSimilar(enchantLore, enchantMeta));

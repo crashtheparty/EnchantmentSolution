@@ -96,6 +96,7 @@ public class EnchantmentSolution extends JavaPlugin {
 		registerEvent(new VanishListener());
 		registerEvent(new EquipListener());
 		registerEvent(new BadAttributesListener());
+		registerEvent(new GlobalPlayerListener());
 
 		registerEvent(new FishingListener());
 		registerEvent(new DropsListener());

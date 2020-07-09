@@ -16,6 +16,7 @@ import org.ctp.enchantmentsolution.inventory.ConfigInventory.Screen;
 import org.ctp.enchantmentsolution.inventory.minigame.Minigame;
 import org.ctp.enchantmentsolution.inventory.rpg.RPGInventory;
 import org.ctp.enchantmentsolution.nms.Anvil_GUI_NMS;
+import org.ctp.enchantmentsolution.utils.config.ConfigString;
 import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 import org.ctp.enchantmentsolution.utils.yaml.YamlConfigBackup;
 
@@ -79,7 +80,11 @@ public class InventoryClickUtils {
 		} else {
 			ItemStack item = clickedInv.getItem(slot);
 			if (slot == 4) {
-				if (item.getType().equals(Material.LIME_STAINED_GLASS_PANE)) Anvil_GUI_NMS.createAnvil(player, anvil);
+				if (item.getType().equals(Material.LIME_STAINED_GLASS_PANE)) {
+					if (ConfigString.RENAME_FROM_ANVIL.getBoolean() || player.hasPermission("enchantmentsolution.anvil.rename")) Anvil_GUI_NMS.createAnvil(player, anvil);
+					else
+						ChatUtils.sendMessage(player, ChatUtils.getMessage(ChatUtils.getCodes(), "anvil.rename-requires-permission"));
+				} else { /* placeholder */ }
 			} else if (slot == 16) {
 				anvil.combine();
 				anvil.setInventory();
@@ -325,9 +330,10 @@ public class InventoryClickUtils {
 						type = null;
 						String value = null;
 						for(String s: lore) {
-							if (s.startsWith(ChatColor.GRAY + "Path: " + ChatColor.WHITE)) path = s.replace(ChatColor.GRAY + "Path: " + ChatColor.WHITE, "");
-							if (s.startsWith(ChatColor.GRAY + "Type: " + ChatColor.WHITE)) type = s.replace(ChatColor.GRAY + "Type: " + ChatColor.WHITE, "");
-							if (s.startsWith(ChatColor.GRAY + "Value: " + ChatColor.WHITE)) value = s.replace(ChatColor.GRAY + "Value: " + ChatColor.WHITE, "");
+							String l = ChatColor.stripColor(s);
+							if (l.startsWith("Path: ")) path = l.replace("Path: ", "");
+							if (l.startsWith("Type: ")) type = l.replace("Type: ", "");
+							if (l.startsWith("Value: ")) value = l.replace("Value: ", "");
 						}
 						if (click.equals(ClickType.LEFT)) {
 							if (type.equals("nested value")) configInv.listConfigDetails(config, null, path, 1);
@@ -357,8 +363,10 @@ public class InventoryClickUtils {
 					List<String> lore = item.getItemMeta().getLore();
 					if (lore != null) {
 						String value = null;
-						for(String s: lore)
-							if (s.startsWith(ChatColor.GRAY + "Value: " + ChatColor.WHITE)) value = s.replace(ChatColor.GRAY + "Value: " + ChatColor.WHITE, "");
+						for(String s: lore) {
+							String l = ChatColor.stripColor(s);
+							if (l.startsWith("Value: ")) value = l.replace("Value: ", "");
+						}
 						if (value != null) {
 							configInv.setItemName(value);
 							configInv.listEnumDetails(config, level, type, page);
@@ -370,8 +378,10 @@ public class InventoryClickUtils {
 					List<String> lore = item.getItemMeta().getLore();
 					if (lore != null) {
 						String num = null;
-						for(String s: lore)
-							if (s.startsWith(ChatColor.WHITE + "Num: " + ChatColor.GRAY)) num = s.replace(ChatColor.WHITE + "Num: " + ChatColor.GRAY, "");
+						for(String s: lore) {
+							String l = ChatColor.stripColor(s);
+							if (l.startsWith("Num: ")) num = l.replace("Num: ", "");
+						}
 						if (num != null) {
 							backup = new YamlConfigBackup(null, null);
 							backup.setFromBackup(EnchantmentSolution.getPlugin().getDb().getBackup(config, Integer.parseInt(num)));
@@ -386,8 +396,9 @@ public class InventoryClickUtils {
 						String path = null;
 						type = null;
 						for(String s: lore) {
-							if (s.startsWith(ChatColor.GRAY + "Path: " + ChatColor.WHITE)) path = s.replace(ChatColor.GRAY + "Path: " + ChatColor.WHITE, "");
-							if (s.startsWith(ChatColor.GRAY + "Type: " + ChatColor.WHITE)) type = s.replace(ChatColor.GRAY + "Type: " + ChatColor.WHITE, "");
+							String l = ChatColor.stripColor(s);
+							if (l.startsWith("Path: ")) path = s.replace("Path: ", "");
+							if (s.startsWith("Type: ")) type = s.replace("Type: ", "");
 						}
 						if (click.equals(ClickType.LEFT)) if (type.equals("nested value")) configInv.listConfigDetails(config, backup, path, 1);
 						else if (type.equals("list") || type.equals("enum_list")) configInv.listDetails(config, backup, path, type, 1);
@@ -402,8 +413,10 @@ public class InventoryClickUtils {
 				List<String> lore = item.getItemMeta().getLore();
 				if (lore != null) {
 					String value = null;
-					for(String s: lore)
-						if (s.startsWith(ChatColor.GRAY + "Value: " + ChatColor.WHITE)) value = s.replace(ChatColor.GRAY + "Value: " + ChatColor.WHITE, "");
+					for(String s: lore) {
+						String l = ChatColor.stripColor(s);
+						if (l.startsWith("Value: ")) value = l.replace("Value: ", "");
+					}
 					if (value != null) {
 						configInv.setItemName(value);
 						configInv.listEnumListEdit(config, level, type, page);

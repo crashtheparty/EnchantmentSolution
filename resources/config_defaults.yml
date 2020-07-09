@@ -9,6 +9,7 @@ anvil:
     default_use: false
     max_repair_level: 60
     damage: true
+    rename: true
 grindstone:
     custom_gui: true
     use_legacy: false
@@ -20,6 +21,7 @@ update_legacy_enchantments: false
 use_enchanted_books: false
 disable_enchant_method: 'visible'
 enchantment_check: 300
+enchantment_check_on_login: true
 drop_items_naturally: true
 language: 'en_us'
 language_file: 'language.yml'
@@ -137,6 +139,9 @@ config_comments:
         damage: 
         - 'The anvil will be damaged while using it - normal vanilla behavior on true'
 
+        rename: 
+        - 'Whether players can use the custom rename without a permission'
+
     grindstone: 
         custom_gui: 
         - 'Whether to use the custom grindstone gui'
@@ -176,6 +181,9 @@ config_comments:
     - 'The number (in seconds) of time the plugin will run checks for other plugins ruining enchantments on items'
     - 'Will check 10 players a tick while running'
     - 'Lower numbers may cause more lag on the server'
+    
+    enchantment_check_on_login: 
+    - 'Whether a player logging into the server should check for bad enchantments in the player''s inventory'
 
     drop_items_naturally: 
     - 'Items will drop in the default Minecraft way rather than drop straight to the ground'
