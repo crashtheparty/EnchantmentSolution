@@ -172,10 +172,12 @@ public class ConfigInventory implements InventoryData, Pageable {
 	}
 
 	public void listConfigDetails(YamlConfigBackup config, YamlConfigBackup backup, String level) {
+		level = ChatColor.stripColor(level);
 		listConfigDetails(config, backup, level, 1);
 	}
 
 	public void listConfigDetails(YamlConfigBackup config, YamlConfigBackup backup, String level, int page) {
+		level = ChatColor.stripColor(level);
 		setPage(page);
 		screen = Screen.LIST_DETAILS;
 		this.config = config;
@@ -184,6 +186,7 @@ public class ConfigInventory implements InventoryData, Pageable {
 		String title = "List Config Details";
 		String revertTitle = "Revert to Backup";
 		List<String> keys = config.getLevelEntryKeys(level);
+		ChatUtils.sendInfo("Level: " + level + " Keys: " + keys.size());
 
 		if (backup != null) {
 			screen = Screen.LIST_BACKUP_DETAILS;
@@ -238,6 +241,7 @@ public class ConfigInventory implements InventoryData, Pageable {
 	}
 
 	public void listDetails(YamlConfigBackup config, YamlConfigBackup backup, String level, String type, int page) {
+		level = ChatColor.stripColor(level);
 		setPage(page);
 		screen = Screen.LIST_EDIT;
 		this.config = config;
@@ -298,6 +302,7 @@ public class ConfigInventory implements InventoryData, Pageable {
 	}
 
 	public void listEnumDetails(YamlConfigBackup config, String level, String type, int page) {
+		level = ChatColor.stripColor(level);
 		setPage(page);
 		screen = Screen.LIST_ENUM;
 		this.config = config;
@@ -343,6 +348,7 @@ public class ConfigInventory implements InventoryData, Pageable {
 	}
 
 	public void listEnumListShow(YamlConfigBackup config, String level, String type, int page) {
+		level = ChatColor.stripColor(level);
 		setPage(page);
 		screen = Screen.LIST_ENUM_LIST_SHOW;
 		this.config = config;
@@ -389,6 +395,7 @@ public class ConfigInventory implements InventoryData, Pageable {
 	}
 
 	public void listEnumListEdit(YamlConfigBackup config, String level, String type, int page) {
+		level = ChatColor.stripColor(level);
 		setPage(page);
 		screen = Screen.LIST_ENUM_LIST_EDIT;
 		this.config = config;
@@ -568,7 +575,7 @@ public class ConfigInventory implements InventoryData, Pageable {
 	}
 
 	public void setLevel(String level) {
-		this.level = level;
+		this.level = ChatColor.stripColor(level);
 	}
 
 	@Override

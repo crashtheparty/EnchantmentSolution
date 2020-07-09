@@ -79,7 +79,12 @@ public class BlockSound {
 	}
 
 	public Sound getSound() {
-		return Sound.valueOf(sound);
+		try {
+			return Sound.valueOf(sound);
+		} catch (IllegalArgumentException ex) {
+
+		}
+		return null;
 	}
 
 	public String getSoundString() {

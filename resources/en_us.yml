@@ -105,6 +105,7 @@ commands:
     remove-rpg-enchantment: 'Removing enchantment %enchantment% from %player%''s ESRPG values.'
     set-rpg-enchantment: 'Setting enchantment %enchantment% to level %level% for %player%''s ESRPG values.'
     rpg-invalid-edit: 'RPGEdit can only edit level, experience, and enchantments for players.'
+    item-test: '&aCopy To Clipboard: {%item%}'
     console-player: 'Console'
     invalid:
         console: 'Console Sender'
@@ -191,6 +192,9 @@ commands:
         
         rpgedit:
         - 'rpge'
+        
+        estest:
+        - 'test'
 
     descriptions: 
         enchant: 'Enchants an item for a given player in the given slot.'
@@ -212,6 +216,7 @@ commands:
         rpgstats: 'Gets the statistics from ESRPG for a particular player.'
         rpgtop: 'Lists the top players on ESRPG.'
         rpgedit: 'Edit ESRPG values for players.'
+        test: 'Show information on items.'
     usage: 
         enchant: 
             main: 'Usage: %usage%\nAliases: %aliases%'
@@ -270,6 +275,9 @@ commands:
         rpgedit: 
             main: 'Usage: %usage%\nAliases: %aliases%'
             string: 'rpgedit <player> <subcommand> [...]'
+        estest: 
+            main: 'Usage: %usage%\nAliases: %aliases%'
+            string: 'estest [''item'']'
     help:
         commands_page: '&bCommands Page %page%'
         commands_info_shrink: '&f: %description%'
