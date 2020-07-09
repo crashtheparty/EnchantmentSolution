@@ -121,6 +121,9 @@ permissions:
   enchantmentsolution.god-anvil:
     description: Allows players to combine items higher than their max levels
     default: false
+  enchantmentsolution.anvil.rename:
+    description: Allows players to rename their items with the custom GUI
+    default: op
   enchantmentsolution.command.debug:
     description: Allows players to use the /es debug command
     default: op

@@ -21,6 +21,7 @@ anvil:
 
     legacy-gui-open: '&fMinecraft anvil GUI will open on next anvil click.'
     legacy-gui-close: '&fMinecraft anvil GUI closed.'
+    rename-requires-permission: '&cYou do not have permission to use this!'
 table: 
     name: '&9Enchantment Table'
     black-mirror: '&f'

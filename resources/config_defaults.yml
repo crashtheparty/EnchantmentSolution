@@ -9,6 +9,7 @@ anvil:
     default_use: false
     max_repair_level: 60
     damage: true
+    rename: true
 grindstone:
     custom_gui: true
     use_legacy: false
@@ -138,6 +139,9 @@ config_comments:
         damage: 
         - 'The anvil will be damaged while using it - normal vanilla behavior on true'
 
+        rename: 
+        - 'Whether players can use the custom rename without a permission'
+
     grindstone: 
         custom_gui: 
         - 'Whether to use the custom grindstone gui'
@@ -179,7 +183,7 @@ config_comments:
     - 'Lower numbers may cause more lag on the server'
     
     enchantment_check_on_login: 
-    - 'Whether a player logging into the server should check for bad enchantments in the player's inventory'
+    - 'Whether a player logging into the server should check for bad enchantments in the player''s inventory'
 
     drop_items_naturally: 
     - 'Items will drop in the default Minecraft way rather than drop straight to the ground'

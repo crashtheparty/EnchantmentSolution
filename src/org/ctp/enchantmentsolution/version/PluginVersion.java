@@ -41,7 +41,7 @@ public class PluginVersion {
 			Version v = pluginVersions.get(i);
 			if (v.getVersionName().equalsIgnoreCase(current.getVersionName())) return false;
 			if (v.getType() == VersionType.LIVE) return true;
-			if (experimental && v.getType() == VersionType.EXPERIMENTAL) return true;
+			if (experimental && (v.getType() == VersionType.EXPERIMENTAL)) return true;
 		}
 		return true;
 	}

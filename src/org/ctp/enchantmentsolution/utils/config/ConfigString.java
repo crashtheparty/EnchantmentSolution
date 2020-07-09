@@ -12,6 +12,7 @@ public enum ConfigString {
 	LEVEL_DIVISOR(Type.MAIN, "anvil.level_divisor", int.class),
 	DEFAULT_ANVIL(Type.MAIN, "anvil.default_use", boolean.class),
 	DAMAGE_ANVIL(Type.MAIN, "anvil.damage", boolean.class),
+	RENAME_FROM_ANVIL(Type.MAIN, "anvil.rename", boolean.class),
 	MAX_REPAIR_LEVEL(Type.MAIN, "anvil.max_repair_level", int.class),
 	CUSTOM_GRINDSTONE(Type.MAIN, "grindstone.custom_gui", boolean.class),
 	LEGACY_GRINDSTONE(Type.MAIN, "grindstone.use_legacy", boolean.class),
