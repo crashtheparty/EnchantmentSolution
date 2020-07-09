@@ -154,7 +154,9 @@ public class ItemUtils {
 				PersistenceNMS.removeEnchantment(item, level.getEnchant());
 				PersistenceNMS.addEnchantment(item, level);
 			}
+			meta = item.getItemMeta();
 		}
+		item.setItemMeta(meta);
 		return item;
 	}
 

@@ -23,6 +23,7 @@ public enum ConfigString {
 	USE_ENCHANTED_BOOKS(Type.MAIN, "use_enchanted_books", boolean.class),
 	DISABLE_ENCHANT_METHOD(Type.MAIN, "disable_enchant_method", String.class),
 	ENCHANTMENT_CHECK(Type.MAIN, "enchantment_check", int.class),
+	ENCHANTMENT_CHECK_ON_LOGIN(Type.MAIN, "enchantment_check_on_login", boolean.class),
 	DROP_ITEMS_NATURALLY(Type.MAIN, "drop_items_naturally", boolean.class),
 	USE_COMMENTS(Type.MAIN, "use_comments", boolean.class),
 	PROTECTION_CONFLICTS(Type.MAIN, "protection_conflicts", boolean.class),

@@ -76,6 +76,7 @@ public class DamageUtils {
 
 	public static int damageItem(HumanEntity player, ItemStack item, double damage, double extraChance,
 	boolean breakItem) {
+		if (item == null) throw new NullPointerException("The ES dev let you damage a null item, huh? Cool, but you shouldn't be doing that.");
 		if (player.getGameMode().equals(GameMode.CREATIVE) || player.getGameMode().equals(GameMode.SPECTATOR) || !DamageUtils.isDamageable(item.getItemMeta())) return 0;
 		int originalDamage = DamageUtils.getDamage(item.getItemMeta());;
 		int numBreaks = 0;

@@ -1,5 +1,5 @@
 name: EnchantmentSolution
-version: 2.3.4
+version: 2.3.5
 main: org.ctp.enchantmentsolution.EnchantmentSolution
 api-version: 1.13
 softdepend: [mcMMO, Jobs, VeinMiner, AuctionHouse, MMOLib, MMOItems]

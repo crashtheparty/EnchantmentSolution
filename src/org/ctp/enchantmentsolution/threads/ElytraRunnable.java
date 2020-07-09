@@ -36,7 +36,7 @@ public class ElytraRunnable implements Runnable, Reflectionable {
 			Player player = ffPlayer.getOnlinePlayer();
 			ffPlayer.setDidTick(false);
 			ffPlayer.setFrequentFlyer();
-			if (player.isFlying() && !player.getGameMode().equals(GameMode.CREATIVE) && !player.getGameMode().equals(GameMode.SPECTATOR)) ffPlayer.minus();
+			if (ffPlayer.hasFrequentFlyer() && player.isFlying() && !player.getGameMode().equals(GameMode.CREATIVE) && !player.getGameMode().equals(GameMode.SPECTATOR)) ffPlayer.minus();
 		}
 	}
 

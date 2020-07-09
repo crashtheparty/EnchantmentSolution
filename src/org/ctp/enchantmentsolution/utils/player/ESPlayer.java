@@ -181,6 +181,10 @@ public class ESPlayer {
 		return elytra;
 	}
 
+	public boolean hasFrequentFlyer() {
+		return elytra != null;
+	}
+
 	public void setFrequentFlyer() {
 		underLimit = 0;
 		aboveLimit = 0;
