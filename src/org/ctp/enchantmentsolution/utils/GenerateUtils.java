@@ -40,6 +40,21 @@ public class GenerateUtils {
 		return ItemUtils.addEnchantmentsToItem(item, levels);
 	}
 
+	public static ItemStack generatePiglinLoot(ItemStack item) {
+		ChestEnchantments enchantments = ChestEnchantments.getChestEnchantment(null, item, 0, EnchantmentLocation.PIGLIN_TRADES);
+
+		List<EnchantmentList> lists = getLists(enchantments.getList());
+		List<EnchantmentLevel> levels = getEnchantments(lists);
+		if (levels == null || levels.size() == 0) {
+			ChatUtils.sendWarning("Item couldn't find EnchantmentSolution enchantments. Keeping default enchantments on the item.");
+			ChatUtils.sendWarning("This occurs when items do not have valid enchantments based on the item being spawned (as well as the player spawning them, if applicable). THIS IS ONLY A BUG IF THE ITEM HAS VALID ENCHANTMENTS SPECIFIED FOR IT.");
+			ChatUtils.sendWarning("Item: " + item.toString() + " Type: PiglinTrades");
+			return item;
+		}
+
+		return ItemUtils.addEnchantmentsToItem(item, levels);
+	}
+
 	public static ItemStack generateChestLoot(Player player, ItemStack item, String lootType, EnchantmentLocation location) {
 		int minBookshelves = ConfigString.LOOT_BOOKSHELVES.getInt("loots.chests." + lootType + ".bookshelves");
 

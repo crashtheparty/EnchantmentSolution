@@ -29,6 +29,7 @@ import org.ctp.enchantmentsolution.listeners.hard.HardModeListener;
 import org.ctp.enchantmentsolution.listeners.inventory.*;
 import org.ctp.enchantmentsolution.listeners.legacy.UpdateEnchantments;
 import org.ctp.enchantmentsolution.listeners.mobs.MobSpawning;
+import org.ctp.enchantmentsolution.listeners.mobs.PiglinTrade;
 import org.ctp.enchantmentsolution.listeners.mobs.Villagers;
 import org.ctp.enchantmentsolution.listeners.vanilla.AnvilListener;
 import org.ctp.enchantmentsolution.listeners.vanilla.EnchantmentListener;
@@ -115,6 +116,7 @@ public class EnchantmentSolution extends JavaPlugin {
 
 		registerEvent(new MobSpawning());
 		registerEvent(new Villagers());
+		registerEvent(new PiglinTrade());
 		registerEvent(new UpdateEnchantments());
 		registerEvent(new ChestLootListener());
 

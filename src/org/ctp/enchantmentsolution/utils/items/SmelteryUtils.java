@@ -1,8 +1,5 @@
 package org.ctp.enchantmentsolution.utils.items;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -47,19 +44,16 @@ public class SmelteryUtils {
 				Block newBlock = smelteryEvent.getBlock();
 				ItemStack afterSmeltery = smelteryEvent.getDrop();
 				afterSmeltery.setType(smelteryEvent.getChangeTo());
-				Collection<ItemStack> drops = new ArrayList<ItemStack>();
-				drops.add(afterSmeltery);
 				if (smelteryEvent.willFortune()) {
-					drops = FortuneUtils.getFortuneItems(item, blockBroken, drops);
-					for(ItemStack i: drops)
-						if (i.getAmount() > 1 && i.getType() == Material.IRON_INGOT) AdvancementUtils.awardCriteria(player, ESAdvancement.IRONT_YOU_GLAD, "iron");
+					afterSmeltery = FortuneUtils.getFortuneForSmeltery(afterSmeltery, item, newBlock.getType());
+					if (afterSmeltery.getAmount() > 1 && afterSmeltery.getType() == Material.IRON_INGOT) AdvancementUtils.awardCriteria(player, ESAdvancement.IRONT_YOU_GLAD, "iron");
 				}
 				player.incrementStatistic(Statistic.MINE_BLOCK, smelteryEvent.getBlock().getType());
 				player.incrementStatistic(Statistic.USE_ITEM, item.getType());
 				McMMOHandler.handleMcMMO(event, item);
 				if (EnchantmentSolution.getPlugin().isJobsEnabled()) JobsUtils.sendBlockBreakAction(event);
 				DamageUtils.damageItem(player, item);
-				ItemUtils.dropItems(drops, newBlock.getLocation());
+				ItemUtils.dropItem(afterSmeltery, newBlock.getLocation());
 				Location loc = newBlock.getLocation().clone().add(0.5, 0.5, 0.5);
 				AbilityUtils.dropExperience(loc, experience);
 				if (ConfigString.USE_PARTICLES.getBoolean()) loc.getWorld().spawnParticle(Particle.BLOCK_CRACK, loc, 20, newBlock.getBlockData());
