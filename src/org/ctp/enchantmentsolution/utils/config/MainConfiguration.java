@@ -130,6 +130,11 @@ public class MainConfiguration extends Configuration {
 					}
 				config.removeKey(s);
 			}
+
+		if (config.getBooleanValue("villager_trades") != null) {
+			config.set("trades.villager", config.getBoolean("villager_trades"));
+			config.removeKey("villager_trades");
+		}
 	}
 
 }

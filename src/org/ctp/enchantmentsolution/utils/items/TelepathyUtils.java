@@ -175,6 +175,7 @@ public class TelepathyUtils {
 
 	private static TelepathyEvent callTelepathy(BlockBreakEvent event, Block block, Player player,
 	Collection<ItemStack> drops, TelepathyType type, boolean damageItems) {
+		if (EnchantmentSolution.getPlugin().hasRestrictedCreative() && EnchantmentSolution.getPlugin().isRestrictedCreative(block)) drops = new ArrayList<ItemStack>();
 		TelepathyEvent telepathy = new TelepathyEvent(block, player, drops, type);
 		Bukkit.getPluginManager().callEvent(telepathy);
 

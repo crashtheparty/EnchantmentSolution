@@ -11,8 +11,8 @@ import org.ctp.enchantmentsolution.threads.SnapshotRunnable;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 
 public class GlobalPlayerListener implements Listener {
-	
-	@EventHandler(priority=EventPriority.MONITOR)
+
+	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerLogin(PlayerLoginEvent event) {
 		Player player = event.getPlayer();
 		if (ConfigString.ENCHANTMENT_CHECK_ON_LOGIN.getBoolean()) Bukkit.getScheduler().runTaskLater(EnchantmentSolution.getPlugin(), () -> {

@@ -25,7 +25,9 @@ enchantment_check_on_login: true
 drop_items_naturally: true
 language: 'en_us'
 language_file: 'language.yml'
-villager_trades: false
+trades:
+    villager: false
+    piglin: true
 use_comments: true
 protection_conflicts: true
 lore_location: 'top'
@@ -195,8 +197,11 @@ config_comments:
     language: 
     - 'The default language of the language file'
 
-    villager_trades: 
-    - 'Allow custom and/or high level enchants to appear in villager trades'
+    trades: 
+        villager:
+        - 'Allow custom and/or high level enchants to appear in villager trades'
+        piglin:
+        - 'Allow custom and/or high level enchants to appear in piglin bartering loot'
 
     use_comments: 
     - 'Show helpful comments in the config files'
