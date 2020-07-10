@@ -158,15 +158,12 @@ public class TelepathyUtils {
 				if (!smeltery.isCancelled()) {
 					ItemStack afterSmeltery = smeltery.getDrop();
 					afterSmeltery.setType(smeltery.getChangeTo());
-					Collection<ItemStack> finalDrops = new ArrayList<ItemStack>();
-					finalDrops.add(afterSmeltery);
 					if (smeltery.willFortune()) {
-						drops = FortuneUtils.getFortuneItems(item, block, finalDrops);
-						for (ItemStack i : finalDrops)
-							if (i.getAmount() > 1 && i.getType() == Material.IRON_INGOT) AdvancementUtils.awardCriteria(player, ESAdvancement.IRONT_YOU_GLAD, "iron");
+						afterSmeltery = FortuneUtils.getFortuneForSmeltery(afterSmeltery, item, smeltery.getBlock().getType());
+						if (afterSmeltery.getAmount() > 1 && afterSmeltery.getType() == Material.IRON_INGOT) AdvancementUtils.awardCriteria(player, ESAdvancement.IRONT_YOU_GLAD, "iron");
 					}
 					AbilityUtils.giveExperience(player, smeltery.getExp());
-					return finalDrops;
+					return Arrays.asList(afterSmeltery);
 				}
 			}
 		} else if (ItemUtils.hasEnchantment(item, Enchantment.LOOT_BONUS_BLOCKS)) {
