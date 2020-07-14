@@ -2,6 +2,7 @@ package org.ctp.enchantmentsolution.nms.persistence;
 
 import java.util.*;
 import java.util.Map.Entry;
+import java.util.regex.Pattern;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -166,7 +167,7 @@ public class PersistenceUtils {
 		int level = 0;
 		int repair = 0;
 		if (pieces[pieces.length - 1].contains("enchantment.level")) {
-			String[] enchLevel = pieces[pieces.length - 1].split(".");
+			String[] enchLevel = pieces[pieces.length - 1].split(Pattern.quote("."));
 			level = Integer.parseInt(enchLevel[enchLevel.length - 1]);
 			repair = pieces.length - 1;
 		} else {

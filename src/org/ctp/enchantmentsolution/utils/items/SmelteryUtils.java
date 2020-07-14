@@ -30,7 +30,7 @@ public class SmelteryUtils {
 			if (data.hasMaterial() && (data.getMaterial() == Material.IRON_ORE || data.getMaterial() == Material.GOLD_ORE)) {
 				experience = (int) (Math.random() * 3) + 1;
 				fortune = true;
-			} else if (data.hasMaterial() && (data.getMaterialName().equals("ANCIENT_DEBRIS"))) {
+			} else if (data.hasMaterial() && data.getMaterialName().equals("ANCIENT_DEBRIS")) {
 				experience = (int) (Math.random() * 6) + 2;
 				fortune = true;
 			} else if (data.hasMaterial() && (data.getMaterialName().equals("NETHER_GOLD_ORE") || data.getMaterialName().equals("GILDED_BLACKSTONE"))) {
@@ -76,7 +76,7 @@ public class SmelteryUtils {
 			if (data.hasMaterial() && (data.getMaterial() == Material.IRON_ORE || data.getMaterial() == Material.GOLD_ORE)) {
 				experience = (int) (Math.random() * 3) + 1;
 				fortune = true;
-			} else if (data.hasMaterial() && (data.getMaterialName().equals("ANCIENT_DEBRIS"))) {
+			} else if (data.hasMaterial() && data.getMaterialName().equals("ANCIENT_DEBRIS")) {
 				experience = (int) (Math.random() * 6) + 2;
 				fortune = true;
 			} else if (data.hasMaterial() && (data.getMaterialName().equals("NETHER_GOLD_ORE") || data.getMaterialName().equals("GILDED_BLACKSTONE"))) {

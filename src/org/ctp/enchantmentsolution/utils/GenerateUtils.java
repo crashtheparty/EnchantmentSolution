@@ -52,6 +52,7 @@ public class GenerateUtils {
 			return item;
 		}
 
+		item = ItemUtils.removeAllEnchantments(item, true);
 		return ItemUtils.addEnchantmentsToItem(item, levels);
 	}
 

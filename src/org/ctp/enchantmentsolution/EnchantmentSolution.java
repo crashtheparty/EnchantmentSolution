@@ -1,5 +1,7 @@
 package org.ctp.enchantmentsolution;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -7,6 +9,7 @@ import java.util.logging.Level;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.block.Block;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
@@ -58,7 +61,7 @@ public class EnchantmentSolution extends JavaPlugin {
 	private static List<EntityAccuracy> ACCURACY = new ArrayList<EntityAccuracy>();
 	private static List<ESPlayer> PLAYERS = new ArrayList<ESPlayer>();
 	private List<InventoryData> inventories = new ArrayList<InventoryData>();
-	private boolean initialization = true;
+	private boolean initialization = true, mmoItems = false, restrictedCreative;
 	private BukkitVersion bukkitVersion;
 	private PluginVersion pluginVersion;
 	private SQLite db;
@@ -67,7 +70,6 @@ public class EnchantmentSolution extends JavaPlugin {
 	private WikiThread wiki;
 	private String mcmmoVersion, mcmmoType;
 	private Plugin veinMiner;
-	private boolean mmoItems = false;
 	private RPGListener rpg;
 
 	@Override
@@ -332,14 +334,14 @@ public class EnchantmentSolution extends JavaPlugin {
 						int num = Integer.parseInt(mcVersion[i]);
 						if (i == 0 && num > 2) warning = true;
 						else if (i == 1 && num > 1) warning = true;
-						else if (i == 2 && num > 111) warning = true;
+						else if (i == 2 && num > 133) warning = true;
 					} catch (NumberFormatException ex) {
 						warning = true;
 					}
 				if (warning) {
 					ChatUtils.sendToConsole(Level.WARNING, "McMMO Overhaul updates sporidically. Compatibility may break between versions.");
 					ChatUtils.sendToConsole(Level.WARNING, "If there are any compatibility issues, please notify the plugin author immediately.");
-					ChatUtils.sendToConsole(Level.WARNING, "Current Working Version: 2.1.128");
+					ChatUtils.sendToConsole(Level.WARNING, "Current Working Version: 2.1.133");
 				}
 				mcmmoType = "Overhaul";
 			} else {
@@ -373,6 +375,11 @@ public class EnchantmentSolution extends JavaPlugin {
 		if (Bukkit.getPluginManager().isPluginEnabled("MMOItems")) {
 			mmoItems = true;
 			ChatUtils.sendInfo("MMOItems compatibility enabled!");
+		}
+
+		if (Bukkit.getPluginManager().isPluginEnabled("RestrictedCreative")) {
+			restrictedCreative = true;
+			ChatUtils.sendInfo("Restricted Creative compatibility enabled!");
 		}
 	}
 
@@ -433,5 +440,21 @@ public class EnchantmentSolution extends JavaPlugin {
 
 	public static NamespacedKey getKey(String name) {
 		return new NamespacedKey(getPlugin(), name);
+	}
+
+	public boolean hasRestrictedCreative() {
+		return restrictedCreative;
+	}
+
+	public boolean isRestrictedCreative(Block b) {
+		Object isRestricted = null;
+		try {
+			Class<?> api = Class.forName("me.prunt.restrictedcreative.RestrictedCreativeAPI");
+			Method isCreative = api.getMethod("isCreative");
+			isRestricted = isCreative.invoke(null, b);
+		} catch (ClassNotFoundException | NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e1) {
+			e1.printStackTrace();
+		}
+		return isRestricted instanceof Boolean ? (Boolean) isRestricted : false;
 	}
 }
