@@ -16,6 +16,7 @@ import org.ctp.enchantmentsolution.enums.ItemData;
 import org.ctp.enchantmentsolution.enums.ItemType;
 import org.ctp.enchantmentsolution.nms.AnvilNMS;
 import org.ctp.enchantmentsolution.nms.PersistenceNMS;
+import org.ctp.enchantmentsolution.utils.PermissionUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 import org.ctp.enchantmentsolution.utils.config.ConfigUtils;
 import org.ctp.enchantmentsolution.utils.items.DamageUtils;
@@ -44,8 +45,9 @@ public class AnvilEnchantments extends GenerateEnchantments {
 		RENAME, REPAIR, COMBINE, STICKY_REPAIR;
 
 		public static RepairType getRepairType(AnvilEnchantments enchant) {
+			if (enchant == null) return null;
 			if (enchant.getItemTwo() == null) return RepairType.RENAME;
-			if (enchant.canCombine() || enchant.getItem().getType() == Material.STICK && ItemUtils.hasEnchantment(enchant.getItem(), RegisterEnchantments.STICKY_HOLD)) {
+			if (enchant.canCombine() || (enchant.getItem() != null && enchant.getItem().getType() == Material.STICK && ItemUtils.hasEnchantment(enchant.getItem(), RegisterEnchantments.STICKY_HOLD))) {
 				for(Material data: ItemType.getRepairMaterials())
 					if (data == enchant.getItemTwo().getType() && ItemData.contains(ItemType.getAnvilType(new ItemData(enchant.getItem())).getAnvilMaterials(), data)) return RepairType.REPAIR;
 				if (enchant.getItem().getType() == Material.STICK && ItemUtils.hasEnchantment(enchant.getItem(), RegisterEnchantments.STICKY_HOLD)) if (PersistenceNMS.isStickyHold(enchant.getItem())) for(Material data: ItemType.getRepairMaterials())
@@ -143,8 +145,8 @@ public class AnvilEnchantments extends GenerateEnchantments {
 
 			Player player = getPlayer().getPlayer();
 			List<EnchantmentLevel> enchantments = new ArrayList<EnchantmentLevel>();
-			boolean godAnvil = player.hasPermission("enchantmentsolution.god-anvil");
-			boolean demiGodAnvil = player.hasPermission("enchantmentsolution.demigod-anvil");
+			boolean godAnvil = PermissionUtils.check(player, "enchantmentsolution.god-anvil", "enchantmentsolution.anvil.god");
+			boolean demiGodAnvil = PermissionUtils.check(player, "enchantmentsolution.demigod-anvil", "enchantmentsolution.anvil.demigod");
 			if (godAnvil) demiGodAnvil = true;
 			for(EnchantmentLevel enchantOne: levels) {
 				boolean added = false;
@@ -275,10 +277,10 @@ public class AnvilEnchantments extends GenerateEnchantments {
 				}
 		}
 
-		boolean godAnvil = player.hasPermission("enchantmentsolution.god-anvil");
-		boolean demiGodAnvil = player.hasPermission("enchantmentsolution.demigod-anvil");
+		boolean godAnvil = PermissionUtils.check(player, "enchantmentsolution.god-anvil", "enchantmentsolution.anvil.god");
+		boolean demiGodAnvil = PermissionUtils.check(player, "enchantmentsolution.demigod-anvil", "enchantmentsolution.anvil.demigod");
 		if (godAnvil) demiGodAnvil = true;
-		boolean demiGodBooks = demiGodAnvil && player.hasPermission("enchantmentsolution.demigod-books");
+		boolean demiGodBooks = PermissionUtils.check(player, "enchantmentsolution.demigod-books", "enchantmentsolution.anvil.demigod-books");
 
 		for(EnchantmentLevel enchantTwo: secondLevels) {
 			boolean conflict = false;

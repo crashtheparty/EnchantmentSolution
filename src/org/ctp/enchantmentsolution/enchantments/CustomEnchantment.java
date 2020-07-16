@@ -249,6 +249,12 @@ public abstract class CustomEnchantment {
 		}
 		return 0;
 	}
+	
+	public int getMaxLevel(Player player) {
+		for(int i = getMaxLevel(); i > 0; i--)
+			if (PermissionUtils.canEnchant(player, this, i) && RPGUtils.canEnchant(player, this, i)) return i;
+		return 0;
+	}
 
 	public int enchantability(int level) {
 		return modifier * level + constant;
