@@ -101,13 +101,15 @@ public class VanishListener implements Listener {
 		if (item == null || item.getItemMeta() == null) return item;
 		for(CustomEnchantment enchant: RegisterEnchantments.getEnchantments()) {
 			if (!enchant.isEnabled()) item = ItemUtils.removeEnchantmentFromItem(item, enchant);
-			boolean lower = false;
-			int maxLevel = enchant.getMaxLevel();
-			if (player != null) {
-				lower = player.hasPermission("enchantmentsolution.enchantments.lower-levels");
-				maxLevel = enchant.getMaxLevel(player);
+			if (ItemUtils.hasEnchantment(item, enchant.getRelativeEnchantment())) {
+				boolean lower = false;
+				int maxLevel = enchant.getMaxLevel();
+				if (player != null) {
+					lower = player.hasPermission("enchantmentsolution.enchantments.lower-levels");
+					maxLevel = enchant.getMaxLevel(player);
+				}
+				if (lower && maxLevel > ItemUtils.getLevel(item, enchant.getRelativeEnchantment())) item = ItemUtils.addEnchantmentToItem(item, enchant, maxLevel);
 			}
-			if (lower && maxLevel > ItemUtils.getLevel(item, enchant.getRelativeEnchantment())) item = ItemUtils.addEnchantmentToItem(item, enchant, maxLevel);
 		}
 		return item;
 	}
