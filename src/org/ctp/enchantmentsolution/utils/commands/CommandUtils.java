@@ -20,7 +20,6 @@ import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.inventory.*;
 import org.ctp.enchantmentsolution.inventory.minigame.Minigame;
 import org.ctp.enchantmentsolution.inventory.rpg.RPGInventory;
-import org.ctp.enchantmentsolution.listeners.VanishListener;
 import org.ctp.enchantmentsolution.nms.PersistenceNMS;
 import org.ctp.enchantmentsolution.rpg.RPGPlayer;
 import org.ctp.enchantmentsolution.rpg.RPGUtils;
@@ -238,8 +237,6 @@ public class CommandUtils {
 		if (sender instanceof Player) player = (Player) sender;
 		if (sender.hasPermission(details.getPermission())) {
 			Configurations.reload();
-			VanishListener.reload();
-			Minigame.reset();
 			ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(ChatUtils.getCodes(), "commands.reload"), Level.INFO);
 		} else
 			ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(ChatUtils.getCodes(), "commands.no-permission"), Level.WARNING);

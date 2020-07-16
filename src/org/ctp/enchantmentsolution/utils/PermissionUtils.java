@@ -94,4 +94,10 @@ public class PermissionUtils {
 	private static boolean usePermissions() {
 		return ConfigUtils.getAdvancedBoolean(ConfigString.USE_PERMISSIONS, false);
 	}
+
+	public static boolean check(Player player, String... permissions) {
+		for(String s: permissions)
+			if (player.hasPermission(s)) return true;
+		return false;
+	}
 }

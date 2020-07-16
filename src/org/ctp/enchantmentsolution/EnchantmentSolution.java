@@ -1,7 +1,5 @@
 package org.ctp.enchantmentsolution;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -51,6 +49,8 @@ import org.ctp.enchantmentsolution.utils.files.SaveUtils;
 import org.ctp.enchantmentsolution.utils.player.ESPlayer;
 import org.ctp.enchantmentsolution.version.*;
 import org.ctp.enchantmentsolution.version.Version.VersionType;
+
+import me.prunt.restrictedcreative.RestrictedCreativeAPI;
 
 public class EnchantmentSolution extends JavaPlugin {
 
@@ -387,12 +387,21 @@ public class EnchantmentSolution extends JavaPlugin {
 		return mmoItems;
 	}
 
-	public static ESPlayer getESPlayer(Player player) {
+	public static ESPlayer getESPlayer(OfflinePlayer player) {
 		for(ESPlayer es: PLAYERS)
 			if (es.getPlayer().getUniqueId().equals(player.getUniqueId())) return es;
 		ESPlayer es = new ESPlayer(player);
 		PLAYERS.add(es);
 		return es;
+	}
+
+	public static List<ESPlayer> getAllESPlayers(boolean online) {
+		List<ESPlayer> players = new ArrayList<ESPlayer>();
+		for(Player player: Bukkit.getOnlinePlayers())
+			players.add(getESPlayer(player));
+		if (!online) for(OfflinePlayer player: Bukkit.getOfflinePlayers())
+			players.add(getESPlayer(player));
+		return players;
 	}
 
 	public static List<ESPlayer> getContagionPlayers() {
@@ -401,13 +410,6 @@ public class EnchantmentSolution extends JavaPlugin {
 			ESPlayer es = getESPlayer(player);
 			if (es.getContagionChance() > 0 && es.getCurseableItems().size() > 0) players.add(es);
 		}
-		return players;
-	}
-
-	public static List<ESPlayer> getAllESPlayers() {
-		List<ESPlayer> players = new ArrayList<ESPlayer>();
-		for(Player player: Bukkit.getOnlinePlayers())
-			players.add(getESPlayer(player));
 		return players;
 	}
 
@@ -447,14 +449,6 @@ public class EnchantmentSolution extends JavaPlugin {
 	}
 
 	public boolean isRestrictedCreative(Block b) {
-		Object isRestricted = null;
-		try {
-			Class<?> api = Class.forName("me.prunt.restrictedcreative.RestrictedCreativeAPI");
-			Method isCreative = api.getMethod("isCreative");
-			isRestricted = isCreative.invoke(null, b);
-		} catch (ClassNotFoundException | NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e1) {
-			e1.printStackTrace();
-		}
-		return isRestricted instanceof Boolean ? (Boolean) isRestricted : false;
+		return RestrictedCreativeAPI.isCreative(b);
 	}
 }

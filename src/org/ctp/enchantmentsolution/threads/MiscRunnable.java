@@ -94,7 +94,7 @@ public class MiscRunnable implements Runnable, Reflectionable {
 	}
 
 	private void exhaustionCurse() {
-		Iterator<ESPlayer> iter = EnchantmentSolution.getAllESPlayers().iterator();
+		Iterator<ESPlayer> iter = EnchantmentSolution.getAllESPlayers(false).iterator();
 		while (iter.hasNext()) {
 			ESPlayer eplayer = iter.next();
 			Player player = eplayer.getOnlinePlayer();

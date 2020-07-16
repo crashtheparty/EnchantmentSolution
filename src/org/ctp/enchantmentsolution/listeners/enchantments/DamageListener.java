@@ -288,6 +288,7 @@ public class DamageListener extends Enchantmentable {
 		if (!canRun(RegisterEnchantments.KNOCKUP, event)) return;
 		Entity attacker = event.getDamager();
 		Entity attacked = event.getEntity();
+		if (event.getCause() == DamageCause.ENTITY_SWEEP_ATTACK) return; // knockback doesn't use sweep attacks, so neither should knockup
 		if (attacker instanceof Player && attacked instanceof LivingEntity) {
 			Player player = (Player) attacker;
 			ItemStack attackItem = player.getInventory().getItemInMainHand();

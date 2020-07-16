@@ -18,6 +18,7 @@ import org.ctp.enchantmentsolution.nms.ServerNMS;
 import org.ctp.enchantmentsolution.rpg.RPGPlayer;
 import org.ctp.enchantmentsolution.rpg.RPGUtils;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
+import org.ctp.enchantmentsolution.utils.PermissionUtils;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.ItemEquippedSlot;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.OverkillDeath;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
@@ -43,7 +44,7 @@ public class ESPlayer {
 	private List<AttributeLevel> attributes;
 
 	public ESPlayer(OfflinePlayer player) {
-		this.player = player.getPlayer();
+		this.player = player;
 		rpg = RPGUtils.getPlayer(player);
 		cooldowns = new HashMap<Enchantment, Integer>();
 		blocksBroken = new HashMap<Integer, Integer>();
@@ -212,11 +213,13 @@ public class ESPlayer {
 		}
 	}
 
-	public boolean canFly() {
-		if (!isOnline()) return false;
-		if (canFly && !getOnlinePlayer().getAllowFlight()) {
-			setCanFly(canFly);
-			if (!getOnlinePlayer().getAllowFlight()) return false;
+	public boolean canFly(boolean online) {
+		if (online) {
+			if (!isOnline()) return false;
+			if (canFly && !getOnlinePlayer().getAllowFlight()) {
+				setCanFly(canFly);
+				if (!getOnlinePlayer().getAllowFlight()) return false;
+			}
 		}
 		return canFly;
 	}
@@ -224,12 +227,12 @@ public class ESPlayer {
 	public void setCanFly(boolean canFly) {
 		if (!isOnline()) return;
 		Player player = getOnlinePlayer();
+		boolean permission = PermissionUtils.check(player, "enchantmentsolution.enable-flight", "enchantmentsolution.abilities.has-external-flight");
 		boolean modifyCanFly = canFly || player.getGameMode().equals(GameMode.CREATIVE) || player.getGameMode().equals(GameMode.SPECTATOR);
 		FrequentFlyerEvent event = null;
 		if (frequentFlyerLevel == 0 && this.canFly && !modifyCanFly) {
-			if (!player.hasPermission("enchantmentsolution.enable-flight") && currentFFType == FFType.FLIGHT) event = new FrequentFlyerEvent(player, frequentFlyerLevel, FFType.REMOVE_FLIGHT);
+			if (!permission && currentFFType == FFType.FLIGHT) event = new FrequentFlyerEvent(player, frequentFlyerLevel, FFType.REMOVE_FLIGHT);
 		} else if (!this.canFly && modifyCanFly && currentFFType == FFType.NONE) event = new FrequentFlyerEvent(player, frequentFlyerLevel, FFType.ALLOW_FLIGHT);
-
 		if (event != null) {
 			Bukkit.getPluginManager().callEvent(event);
 			if (!event.isCancelled()) {
@@ -237,12 +240,18 @@ public class ESPlayer {
 				if (event.getType().doesAllowFlight()) currentFFType = FFType.FLIGHT;
 				else
 					currentFFType = FFType.NONE;
-				if (this.canFly || !player.hasPermission("enchantmentsolution.enable-flight")) {
+				if (this.canFly || !permission) {
 					player.setAllowFlight(this.canFly);
 					if (player.isFlying() && !this.canFly) player.setFlying(false);
 				}
 			}
 		}
+	}
+	
+	public void logoutFlyer() {
+		currentFFType = FFType.NONE;
+		this.canFly = false;
+		frequentFlyerLevel = 0;
 	}
 
 	public int getUnder() {
