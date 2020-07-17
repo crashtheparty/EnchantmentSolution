@@ -170,6 +170,11 @@ public class ESPlayer {
 		currentExhaustion = AbilityUtils.getExhaustion(getOnlinePlayer());
 	}
 
+	public void resetCurrentExhaustion() {
+		pastExhaustion = 0;
+		currentExhaustion = 0;
+	}
+
 	public float getPastExhaustion() {
 		return pastExhaustion;
 	}

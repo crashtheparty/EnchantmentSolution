@@ -94,7 +94,8 @@ public class MiscRunnable implements Runnable, Reflectionable {
 	}
 
 	private void exhaustionCurse() {
-		Iterator<ESPlayer> iter = EnchantmentSolution.getAllESPlayers(false).iterator();
+		if (!canRun(RegisterEnchantments.CURSE_OF_EXHAUSTION)) return;
+		Iterator<ESPlayer> iter = EnchantmentSolution.getExhaustionPlayers().iterator();
 		while (iter.hasNext()) {
 			ESPlayer eplayer = iter.next();
 			Player player = eplayer.getOnlinePlayer();
@@ -112,11 +113,12 @@ public class MiscRunnable implements Runnable, Reflectionable {
 					}
 					eplayer.setCurrentExhaustion();
 				}
-			}
+			} else if (eplayer.getExhaustion() == 0) eplayer.resetCurrentExhaustion();
 		}
 	}
 
 	private void forceFeed() {
+		if (!canRun(RegisterEnchantments.FORCE_FEED)) return;
 		Iterator<ESPlayer> iter = EnchantmentSolution.getForceFeedPlayers().iterator();
 		while (iter.hasNext()) {
 			ESPlayer fPlayer = iter.next();

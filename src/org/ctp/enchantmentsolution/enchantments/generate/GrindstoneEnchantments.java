@@ -138,7 +138,7 @@ public class GrindstoneEnchantments extends GenerateEnchantments {
 
 			CustomEnchantment custom = RegisterEnchantments.getCustomEnchantment(enchantment);
 
-			if (!RegisterEnchantments.getCustomEnchantment(enchantment).isCurse()) j += custom.enchantability(integer);
+			if (!custom.isCurse()) j += custom.enchantability(integer);
 		}
 
 		return j;

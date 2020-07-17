@@ -17,6 +17,7 @@ import org.bukkit.loot.LootContext;
 import org.bukkit.loot.Lootable;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
+import org.ctp.enchantmentsolution.enchantments.CERegister;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.events.damage.SacrificeEvent;
@@ -160,7 +161,7 @@ public class AfterEffectsListener extends Enchantmentable {
 					if (!pillage.isCancelled()) {
 						event.getDrops().clear();
 						List<EnchantmentLevel> levels = ItemUtils.getEnchantmentLevels(item);
-						ItemUtils.addEnchantmentToItem(item, RegisterEnchantments.getCustomEnchantment(Enchantment.LOOT_BONUS_MOBS), level);
+						ItemUtils.addEnchantmentToItem(item, CERegister.FORTUNE, level);
 						LootContext.Builder contextBuilder = new LootContext.Builder(event.getEntity().getLocation());
 						contextBuilder.killer(player);
 						contextBuilder.lootedEntity(event.getEntity());

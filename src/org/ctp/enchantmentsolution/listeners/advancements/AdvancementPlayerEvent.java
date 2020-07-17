@@ -64,7 +64,7 @@ public class AdvancementPlayerEvent implements Listener {
 		ItemStack chestplate = event.getPlayer().getInventory().getChestplate();
 		if (chestplate != null && ItemUtils.hasEnchantment(chestplate, RegisterEnchantments.LIFE)) {
 			int level = ItemUtils.getLevel(chestplate, RegisterEnchantments.LIFE);
-			if (item.getType() == Material.ENCHANTED_GOLDEN_APPLE && level >= RegisterEnchantments.getCustomEnchantment(RegisterEnchantments.LIFE).getMaxLevel()) AdvancementUtils.awardCriteria(event.getPlayer(), ESAdvancement.EXTRA_POWER, "power");
+			if (item.getType() == Material.ENCHANTED_GOLDEN_APPLE && level >= CERegister.LIFE.getMaxLevel()) AdvancementUtils.awardCriteria(event.getPlayer(), ESAdvancement.EXTRA_POWER, "power");
 		}
 	}
 
@@ -76,7 +76,7 @@ public class AdvancementPlayerEvent implements Listener {
 				Player player = event.getPlayer();
 				boolean hasTank = true;
 				for(ItemStack item: player.getInventory().getArmorContents())
-					if (item == null || !(ItemUtils.hasEnchantment(item, RegisterEnchantments.TANK) && ItemUtils.getLevel(item, RegisterEnchantments.TANK) >= RegisterEnchantments.getCustomEnchantment(RegisterEnchantments.TANK).getMaxLevel())) hasTank = false;
+					if (item == null || !(ItemUtils.hasEnchantment(item, RegisterEnchantments.TANK) && ItemUtils.getLevel(item, RegisterEnchantments.TANK) >= CERegister.TANK.getMaxLevel())) hasTank = false;
 
 				if (hasTank) AdvancementUtils.awardCriteria(player, ESAdvancement.PANZER_SOLDIER, "tank");
 			}

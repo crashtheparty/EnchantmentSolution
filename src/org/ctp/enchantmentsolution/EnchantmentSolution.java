@@ -413,6 +413,15 @@ public class EnchantmentSolution extends JavaPlugin {
 		return players;
 	}
 
+	public static List<ESPlayer> getExhaustionPlayers() {
+		List<ESPlayer> players = new ArrayList<ESPlayer>();
+		for(Player player: Bukkit.getOnlinePlayers()) {
+			ESPlayer es = getESPlayer(player);
+			if (es.getExhaustion() > 0) players.add(es);
+		}
+		return players;
+	}
+
 	public static List<ESPlayer> getForceFeedPlayers() {
 		List<ESPlayer> players = new ArrayList<ESPlayer>();
 		for(Player player: Bukkit.getOnlinePlayers()) {

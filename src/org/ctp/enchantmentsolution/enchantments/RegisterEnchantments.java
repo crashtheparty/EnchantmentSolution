@@ -91,7 +91,7 @@ public class RegisterEnchantments {
 	public static List<CustomEnchantment> getRegisteredEnchantmentsAlphabetical() {
 		List<CustomEnchantment> alphabetical = new ArrayList<CustomEnchantment>();
 		for(CustomEnchantment enchantment: REGISTERED_ENCHANTMENTS)
-			alphabetical.add(enchantment);
+			if (enchantment.isEnabled()) alphabetical.add(enchantment);
 		Collections.sort(alphabetical, (o1, o2) -> o1.getDisplayName().compareTo(o2.getDisplayName()));
 		return alphabetical;
 	}
