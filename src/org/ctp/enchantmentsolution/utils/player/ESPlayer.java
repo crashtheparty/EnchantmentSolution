@@ -31,13 +31,14 @@ public class ESPlayer {
 	private static Map<Integer, Integer> GLOBAL_BLOCKS = new HashMap<Integer, Integer>();
 	private static double CONTAGION_CHANCE = 0.0005, FORCE_FEED_CHANCE = 0.005;
 	private final OfflinePlayer player;
+	private Player onlinePlayer;
 	private RPGPlayer rpg;
 	private Map<Enchantment, Integer> cooldowns;
 	private List<ItemStack> soulItems;
 	private Map<Integer, Integer> blocksBroken;
 	private float currentExhaustion, pastExhaustion;
 	private ItemStack elytra;
-	private boolean canFly, didTick;
+	private boolean canFly, didTick, reset;
 	private int underLimit, aboveLimit, under, above, frequentFlyerLevel, icarusDelay;
 	private FFType currentFFType;
 	private List<OverkillDeath> overkillDeaths;
@@ -45,6 +46,7 @@ public class ESPlayer {
 
 	public ESPlayer(OfflinePlayer player) {
 		this.player = player;
+		this.onlinePlayer = player.getPlayer();
 		rpg = RPGUtils.getPlayer(player);
 		cooldowns = new HashMap<Enchantment, Integer>();
 		blocksBroken = new HashMap<Integer, Integer>();
@@ -59,11 +61,16 @@ public class ESPlayer {
 	}
 
 	public boolean isOnline() {
-		return player.getPlayer() != null && player.isOnline();
+		return onlinePlayer != null && onlinePlayer.isOnline();
 	}
 
 	public Player getOnlinePlayer() {
-		return player.getPlayer();
+		return onlinePlayer;
+	}
+	
+	public void reloadPlayer() {
+		for(Player p : Bukkit.getOnlinePlayers())
+			if (p.getUniqueId().equals(this.player.getUniqueId())) onlinePlayer = p;
 	}
 
 	public ItemStack[] getEquipped() {
@@ -188,27 +195,25 @@ public class ESPlayer {
 	}
 
 	public boolean hasFrequentFlyer() {
-		return elytra != null;
-	}
-
-	public void setFrequentFlyer() {
-		underLimit = 0;
-		aboveLimit = 0;
-		boolean fly = false;
-		boolean reset = false;
 		frequentFlyerLevel = 0;
 		ItemStack newElytra = null;
 		for(ItemStack item: getEquipped())
 			if (item != null && ItemUtils.hasEnchantment(item, RegisterEnchantments.FREQUENT_FLYER)) {
 				int level = ItemUtils.getLevel(item, RegisterEnchantments.FREQUENT_FLYER);
 				if (level > frequentFlyerLevel) {
-					fly = true;
 					frequentFlyerLevel = level;
 					newElytra = item;
 				}
 			}
 		reset = elytra == null || !elytra.equals(newElytra);
 		elytra = newElytra;
+		return elytra != null;
+	}
+
+	public void setFrequentFlyer() {
+		underLimit = 0;
+		aboveLimit = 0;
+		boolean fly = frequentFlyerLevel > 0 && elytra != null;
 		underLimit = frequentFlyerLevel * 4 * 20;
 		aboveLimit = frequentFlyerLevel * 20;
 		setCanFly(fly);
@@ -257,6 +262,8 @@ public class ESPlayer {
 		currentFFType = FFType.NONE;
 		this.canFly = false;
 		frequentFlyerLevel = 0;
+		elytra = null;
+		getOnlinePlayer().setAllowFlight(false);
 	}
 
 	public int getUnder() {

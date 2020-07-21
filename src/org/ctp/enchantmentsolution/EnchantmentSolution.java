@@ -68,7 +68,7 @@ public class EnchantmentSolution extends JavaPlugin {
 	private Plugin jobsReborn;
 	private VersionCheck check;
 	private WikiThread wiki;
-	private String mcmmoVersion, mcmmoType;
+	private String mcmmoVersion = "Disabled", mcmmoType;
 	private Plugin veinMiner;
 	private RPGListener rpg;
 
@@ -162,7 +162,12 @@ public class EnchantmentSolution extends JavaPlugin {
 		initialization = false;
 
 		Bukkit.getScheduler().runTaskLater(this, () -> {
-			SaveUtils.getData();
+			try {
+				SaveUtils.getData();
+			} catch (Exception ex) {
+				ChatUtils.sendWarning("Error in loading data to data.yml - will possibly break.");
+				ex.printStackTrace();
+			}
 			Configurations.getEnchantments().setEnchantmentInformation();
 			Configurations.getEnchantments().save();
 			addCompatibility();
@@ -418,6 +423,15 @@ public class EnchantmentSolution extends JavaPlugin {
 		for(Player player: Bukkit.getOnlinePlayers()) {
 			ESPlayer es = getESPlayer(player);
 			if (es.getExhaustion() > 0) players.add(es);
+		}
+		return players;
+	}
+	
+	public static List<ESPlayer> getFrequentFlyerPlayers(){
+		List<ESPlayer> players = new ArrayList<ESPlayer>();
+		for(Player player: Bukkit.getOnlinePlayers()) {
+			ESPlayer es = getESPlayer(player);
+			if (es.hasFrequentFlyer() || es.canFly(true)) players.add(es);
 		}
 		return players;
 	}

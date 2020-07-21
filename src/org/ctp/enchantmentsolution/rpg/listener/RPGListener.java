@@ -47,18 +47,19 @@ public class RPGListener extends Enchantmentable implements Runnable {
 
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onBlockBreak(BlockBreakEvent event) {
-		if (event.isCancelled()) return;
+		if (!RPGUtils.isEnabled() || event.isCancelled()) return;
 		Player player = event.getPlayer();
 		ItemStack item = player.getInventory().getItemInMainHand();
-		if (item != null && ItemUtils.hasEnchantment(item, Enchantment.SILK_TOUCH) && ItemBreakType.getType(item.getType()).getSilkBreakTypes().contains(event.getBlock().getType())) giveExperience(player, Enchantment.SILK_TOUCH, ItemUtils.getLevel(item, Enchantment.SILK_TOUCH));
-		if (item != null && ItemUtils.hasEnchantment(item, Enchantment.DIG_SPEED) && ItemBreakType.getType(item.getType()).getBreakTypes().contains(event.getBlock().getType())) giveExperience(player, Enchantment.DIG_SPEED, ItemUtils.getLevel(item, Enchantment.DIG_SPEED));
-		if (item != null && ItemUtils.hasEnchantment(item, Enchantment.LOOT_BONUS_BLOCKS) && ItemBreakType.getType(item.getType()).getFortuneBreakTypes().contains(event.getBlock().getType())) giveExperience(player, Enchantment.LOOT_BONUS_BLOCKS, ItemUtils.getLevel(item, Enchantment.LOOT_BONUS_BLOCKS));
+		if (item != null && ItemUtils.hasEnchantment(item, Enchantment.SILK_TOUCH) && ItemBreakType.getType(item.getType()) != null && ItemBreakType.getType(item.getType()).getSilkBreakTypes().contains(event.getBlock().getType())) giveExperience(player, Enchantment.SILK_TOUCH, ItemUtils.getLevel(item, Enchantment.SILK_TOUCH));
+		if (item != null && ItemUtils.hasEnchantment(item, Enchantment.DIG_SPEED) && ItemBreakType.getType(item.getType()) != null && ItemBreakType.getType(item.getType()).getBreakTypes().contains(event.getBlock().getType())) giveExperience(player, Enchantment.DIG_SPEED, ItemUtils.getLevel(item, Enchantment.DIG_SPEED));
+		if (item != null && ItemUtils.hasEnchantment(item, Enchantment.LOOT_BONUS_BLOCKS) && ItemBreakType.getType(item.getType()) != null && ItemBreakType.getType(item.getType()).getFortuneBreakTypes().contains(event.getBlock().getType())) giveExperience(player, Enchantment.LOOT_BONUS_BLOCKS, ItemUtils.getLevel(item, Enchantment.LOOT_BONUS_BLOCKS));
 		ItemStack helmet = player.getInventory().getHelmet();
 		if (helmet != null && ItemUtils.hasEnchantment(helmet, Enchantment.WATER_WORKER) && player.getEyeLocation().getBlock().getType() == Material.WATER) giveExperience(player, Enchantment.WATER_WORKER, ItemUtils.getLevel(helmet, Enchantment.WATER_WORKER));
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onBlockChange(BlockFormEvent event) {
+		if (!RPGUtils.isEnabled() || event.isCancelled()) return;
 		if (event.getNewState().getType() == Material.FROSTED_ICE) {
 			Collection<Entity> entities = event.getBlock().getWorld().getNearbyEntities(event.getBlock().getLocation(), 8, 2, 8);
 			List<Player> players = new ArrayList<Player>();
@@ -78,7 +79,7 @@ public class RPGListener extends Enchantmentable implements Runnable {
 
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onProjectileLaunch(ProjectileLaunchEvent event) {
-		if (event.isCancelled()) return;
+		if (!RPGUtils.isEnabled() || event.isCancelled()) return;
 		ProjectileSource entity = event.getEntity().getShooter();
 		if (entity instanceof Player) {
 			Player player = (Player) entity;
@@ -92,7 +93,7 @@ public class RPGListener extends Enchantmentable implements Runnable {
 
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerFish(PlayerFishEvent event) {
-		if (event.isCancelled()) return;
+		if (!RPGUtils.isEnabled() || event.isCancelled()) return;
 		Player player = event.getPlayer();
 		if (event.getState() == State.CAUGHT_FISH) {
 			ItemStack item = player.getInventory().getItemInMainHand();
@@ -103,7 +104,7 @@ public class RPGListener extends Enchantmentable implements Runnable {
 
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerMove(PlayerMoveEvent event) {
-		if (event.isCancelled()) return;
+		if (!RPGUtils.isEnabled() || event.isCancelled()) return;
 		Player player = event.getPlayer();
 		ItemStack item = event.getPlayer().getInventory().getBoots();
 		if (player.getLocation().getBlock().getType() == Material.WATER && item != null && ItemUtils.hasEnchantment(item, Enchantment.DEPTH_STRIDER)) {
@@ -115,7 +116,7 @@ public class RPGListener extends Enchantmentable implements Runnable {
 
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerItemDamage(PlayerItemDamageEvent event) {
-		if (event.isCancelled()) return;
+		if (!RPGUtils.isEnabled() || event.isCancelled()) return;
 		Player player = event.getPlayer();
 		ItemStack item = player.getInventory().getItemInMainHand();
 		if (item != null && ItemUtils.hasEnchantment(item, Enchantment.DURABILITY)) giveExperience(player, Enchantment.DURABILITY, ItemUtils.getLevel(item, Enchantment.DURABILITY));
@@ -123,7 +124,7 @@ public class RPGListener extends Enchantmentable implements Runnable {
 
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onEntityDeath(EntityDeathEvent event) {
-		if (event.getEntity() instanceof Player) return;
+		if (!RPGUtils.isEnabled()) return;
 		Entity killer = event.getEntity().getKiller();
 		if (killer instanceof Player) {
 			Player player = (Player) killer;
@@ -139,7 +140,7 @@ public class RPGListener extends Enchantmentable implements Runnable {
 
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onEntityAirChange(EntityAirChangeEvent event) {
-		if (event.isCancelled()) return;
+		if (!RPGUtils.isEnabled() || event.isCancelled()) return;
 		Entity entity = event.getEntity();
 		if (entity instanceof Player) {
 			Player player = (Player) entity;
@@ -150,6 +151,7 @@ public class RPGListener extends Enchantmentable implements Runnable {
 
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerRiptide(PlayerRiptideEvent event) {
+		if (!RPGUtils.isEnabled()) return;
 		Player player = event.getPlayer();
 		ItemStack item = player.getInventory().getItemInMainHand();
 		giveExperience(player, Enchantment.RIPTIDE, ItemUtils.getLevel(item, Enchantment.RIPTIDE));
@@ -157,21 +159,21 @@ public class RPGListener extends Enchantmentable implements Runnable {
 
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerItemMend(PlayerItemMendEvent event) {
-		if (event.isCancelled()) return;
+		if (!RPGUtils.isEnabled() || event.isCancelled()) return;
 		Player player = event.getPlayer();
 		giveExperience(player, Enchantment.MENDING, 1);
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onLightWeight(LightWeightEvent event) {
-		if (event.isCancelled()) return;
+		if (!RPGUtils.isEnabled() || event.isCancelled()) return;
 		Player player = event.getPlayer();
 		giveExperience(player, RegisterEnchantments.LIGHT_WEIGHT, 1);
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onEntityDamage(EntityDamageEvent event) {
-		if (event.isCancelled()) return;
+		if (!RPGUtils.isEnabled() || event.isCancelled()) return;
 		Entity entity = event.getEntity();
 		if (entity instanceof Player) {
 			Player player = (Player) entity;
@@ -235,6 +237,7 @@ public class RPGListener extends Enchantmentable implements Runnable {
 
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onESPlayerEvent(ESPlayerEvent event) {
+		if (!RPGUtils.isEnabled() || event.isCancelled()) return;
 		EnchantmentLevel level = event.getEnchantment();
 		if (level == null || level.getEnchant() == null) return; // something went wrong here
 		if (level.getEnchant().getRelativeEnchantment() instanceof ApiEnchantmentWrapper) return; // other plugins need to make these events go themselves
@@ -255,6 +258,7 @@ public class RPGListener extends Enchantmentable implements Runnable {
 
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onESBlockPlaceEvent(ESBlockPlaceEvent event) {
+		if (!RPGUtils.isEnabled() || event.isCancelled()) return;
 		EnchantmentLevel level = event.getEnchantment();
 		if (level.getEnchant().getRelativeEnchantment() instanceof ApiEnchantmentWrapper) return; // other plugins need to make these events go themselves
 		if (level.getEnchant().isCurse()) return; // don't let custom curse enchantments do anything
@@ -263,6 +267,7 @@ public class RPGListener extends Enchantmentable implements Runnable {
 
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onESBlockBreakEvent(ESBlockBreakEvent event) {
+		if (!RPGUtils.isEnabled() || event.isCancelled()) return;
 		EnchantmentLevel level = event.getEnchantment();
 		if (level.getEnchant().getRelativeEnchantment() instanceof ApiEnchantmentWrapper) return; // other plugins need to make these events go themselves
 		if (level.getEnchant().isCurse()) return; // don't let custom curse enchantments do anything
@@ -271,6 +276,7 @@ public class RPGListener extends Enchantmentable implements Runnable {
 
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onMultiBlock(MultiBlockEvent event) {
+		if (!RPGUtils.isEnabled() || event.isCancelled()) return;
 		EnchantmentLevel level = event.getEnchantment();
 		if (level.getEnchant().getRelativeEnchantment() instanceof ApiEnchantmentWrapper) return; // other plugins need to make these events go themselves
 		if (level.getEnchant().isCurse()) return; // don't let custom curse enchantments do anything
@@ -280,12 +286,14 @@ public class RPGListener extends Enchantmentable implements Runnable {
 
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onWarpPlayer(WarpPlayerEvent event) {
+		if (!RPGUtils.isEnabled() || event.isCancelled()) return;
 		EnchantmentLevel level = event.getEnchantment();
 		giveExperience(event.getPlayer(), level);
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onDetonateCreeper(DetonateCreeperEvent event) {
+		if (!RPGUtils.isEnabled() || event.isCancelled()) return;
 		EnchantmentLevel level = event.getEnchantment();
 		Entity entity = event.getDetonator();
 		if (entity instanceof Player) giveExperience((Player) entity, level);
@@ -293,6 +301,7 @@ public class RPGListener extends Enchantmentable implements Runnable {
 
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onDetonatorExplosion(DetonatorExplosionEvent event) {
+		if (!RPGUtils.isEnabled() || event.isCancelled()) return;
 		EnchantmentLevel level = event.getEnchantment();
 		Entity entity = event.getDetonator();
 		if (entity instanceof Player) giveExperience((Player) entity, level);
@@ -300,6 +309,7 @@ public class RPGListener extends Enchantmentable implements Runnable {
 
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onESEntityDamageEntity(ESDamageEntityEvent event) {
+		if (!RPGUtils.isEnabled() || event.isCancelled()) return;
 		EnchantmentLevel level = event.getEnchantment();
 		if (level.getEnchant().getRelativeEnchantment() instanceof ApiEnchantmentWrapper) return; // other plugins need to make these events go themselves
 		if (level.getEnchant().isCurse()) return; // don't let custom curse enchantments do anything
@@ -313,6 +323,7 @@ public class RPGListener extends Enchantmentable implements Runnable {
 
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPotionEffect(PotionEffectEvent event) {
+		if (!RPGUtils.isEnabled() || event.isCancelled()) return;
 		EnchantmentLevel level = event.getEnchantment();
 		if (event.getEntity() instanceof Player) {
 			Player player = (Player) event.getEntity();
@@ -324,6 +335,7 @@ public class RPGListener extends Enchantmentable implements Runnable {
 
 	@Override
 	public void run() {
+		if (!RPGUtils.isEnabled()) return;
 		for(Player player: Bukkit.getOnlinePlayers()) {
 			if (ElytraRunnable.didTick(player)) {
 				ESPlayer esPlayer = EnchantmentSolution.getESPlayer(player);

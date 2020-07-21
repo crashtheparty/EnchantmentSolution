@@ -184,7 +184,7 @@ public class EnchantmentList {
 	public static EnchantmentList fromConfig(YamlConfig config, int i, int j, int k, OfflinePlayer player, Level level, ItemData item) {
 		List<String> enchants = config.getStringList("enchanting_table." + i + ".enchantmentList." + j + "." + k + ".enchants");
 		List<EnchantmentLevel> levels = new ArrayList<EnchantmentLevel>();
-		for(String enchant: enchants)
+		if (enchants != null) for(String enchant: enchants)
 			levels.add(new EnchantmentLevel(enchant));
 		int enchantability = config.getInt("enchanting_table." + i + ".enchantmentList." + j + "." + k + ".enchantability");
 

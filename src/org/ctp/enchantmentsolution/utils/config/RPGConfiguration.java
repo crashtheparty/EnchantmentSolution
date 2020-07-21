@@ -70,4 +70,7 @@ public class RPGConfiguration extends Configuration {
 		config.addDefault("free_enchantments", levels);
 		config.writeDefaults();
 	}
+
+	@Override
+	public void repairConfig() {}
 }

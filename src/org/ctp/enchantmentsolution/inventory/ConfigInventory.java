@@ -186,7 +186,6 @@ public class ConfigInventory implements InventoryData, Pageable {
 		String title = "List Config Details";
 		String revertTitle = "Revert to Backup";
 		List<String> keys = config.getLevelEntryKeys(level);
-		ChatUtils.sendInfo("Level: " + level + " Keys: " + keys.size());
 
 		if (backup != null) {
 			screen = Screen.LIST_BACKUP_DETAILS;

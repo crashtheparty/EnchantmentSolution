@@ -6,6 +6,8 @@ public interface Revertable {
 
 	public void migrateVersion();
 
+	public void repairConfig();
+
 	public void revert();
 
 	public void revert(int backup);

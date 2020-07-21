@@ -203,7 +203,7 @@ public class AnvilEnchantments extends GenerateEnchantments {
 			DamageUtils.setDamage(combinedItem, DamageUtils.getDamage(combinedItem.getItemMeta()) - extraDurability);
 			if (DamageUtils.getDamage(combinedItem.getItemMeta()) < 0) DamageUtils.setDamage(combinedItem, 0);
 		}
-		setEnchantments();
+		repairCost += setEnchantments();
 		int itemOneRepair = AnvilNMS.getRepairCost(itemOne);
 		int itemTwoRepair = AnvilNMS.getRepairCost(itemTwo);
 		if (itemOneRepair > itemTwoRepair) combinedItem = AnvilNMS.setRepairCost(combinedItem, itemOneRepair * 2 + 1);

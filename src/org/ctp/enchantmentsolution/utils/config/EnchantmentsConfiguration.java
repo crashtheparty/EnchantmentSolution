@@ -129,4 +129,7 @@ public class EnchantmentsConfiguration extends Configuration {
 		}
 	}
 
+	@Override
+	public void repairConfig() {}
+
 }

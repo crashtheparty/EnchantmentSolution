@@ -127,7 +127,7 @@ public class RegisterEnchantments {
 		boolean custom = enchantment.getRelativeEnchantment() instanceof CustomEnchantmentWrapper;
 		String error_message = "Trouble adding the " + enchantment.getName() + (custom ? " custom" : "") + " enchantment: ";
 		String success_message = "Added the " + enchantment.getName() + (custom ? " custom" : "") + " enchantment.";
-		if (!custom) {
+		if (!custom || Enchantment.getByKey(enchantment.getRelativeEnchantment().getKey()) != null) {
 			ChatUtils.sendToConsole(Level.INFO, success_message);
 			return true;
 		}
