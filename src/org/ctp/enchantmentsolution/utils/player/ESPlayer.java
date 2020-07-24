@@ -209,7 +209,7 @@ public class ESPlayer {
 		frequentFlyerLevel = 0;
 		ItemStack newElytra = null;
 		for(ItemStack item: getArmor())
-			if (item != null && ItemUtils.hasEnchantment(item, RegisterEnchantments.FREQUENT_FLYER) && DamageUtils.aboveMaxDamage(item)) {
+			if (item != null && ItemUtils.hasEnchantment(item, RegisterEnchantments.FREQUENT_FLYER) && !DamageUtils.aboveMaxDamage(item)) {
 				int level = ItemUtils.getLevel(item, RegisterEnchantments.FREQUENT_FLYER);
 				if (level > frequentFlyerLevel) {
 					frequentFlyerLevel = level;
