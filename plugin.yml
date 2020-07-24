@@ -1,8 +1,8 @@
 name: EnchantmentSolution
-version: 2.3.11
+version: 2.3.12
 main: org.ctp.enchantmentsolution.EnchantmentSolution
 api-version: 1.13
-softdepend: [mcMMO, Jobs, VeinMiner, AuctionHouse, MMOLib, MMOItems]
+softdepend: [mcMMO, Jobs, VeinMiner, AuctionHouse, MMOLib, MMOItems, Quests]
 commands:
   enchantmentsolution:
     aliases: [es]
@@ -97,9 +97,9 @@ permissions:
   enchantmentsolution.abilities.player-skulls:
     description: Enables dropping player's skulls with Beheading
     default: true
-  enchantmentsolution.permissions.ignore: 
-    description: Gives access to all enchantment permissions.
-    default: false
+  enchantmentsolution.enchantments.rpg.all: 
+    description: Gives access to every enchantment through ESRPG.
+    default: op
   enchantmentsolution.enchantments.lower-levels:
     description: Only allow the player to have enchantments and enchantment levels that match their permission levels
     default: false

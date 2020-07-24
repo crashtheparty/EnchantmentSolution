@@ -6,7 +6,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
 
-public class VanishInventory implements SavedInventory{
+public class VanishInventory implements SavedInventory {
 	private ItemStack[] items = new ItemStack[37];
 	private ItemStack[] armor = new ItemStack[4];
 	private OfflinePlayer player;
@@ -55,15 +55,15 @@ public class VanishInventory implements SavedInventory{
 
 		}
 	}
-	
+
 	public ItemStack[] getItems() {
 		ItemStack[] items = new ItemStack[41];
 		int i = 0;
-		for (ItemStack item : this.items) {
+		for(ItemStack item: this.items) {
 			items[i] = item;
 			i++;
 		}
-		for (ItemStack item : this.armor) {
+		for(ItemStack item: armor) {
 			items[i] = item;
 			i++;
 		}

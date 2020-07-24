@@ -23,9 +23,9 @@ import org.ctp.enchantmentsolution.utils.config.RPGConfiguration;
 public class RPGUtils {
 
 	private static List<RPGPlayer> PLAYERS = new ArrayList<RPGPlayer>();
-	
+
 	public static boolean isEnabled() {
-		for (String s : ConfigString.GAMETYPES.getStringList())
+		for(String s: ConfigString.GAMETYPES.getStringList())
 			if (s.equalsIgnoreCase("RPG")) return true;
 		return false;
 	}

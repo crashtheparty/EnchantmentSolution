@@ -16,6 +16,7 @@ import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.VersionUtils;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.SmelteryMaterial;
 import org.ctp.enchantmentsolution.utils.compatibility.JobsUtils;
+import org.ctp.enchantmentsolution.utils.compatibility.QuestsUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 
 public class SmelteryUtils {
@@ -52,6 +53,7 @@ public class SmelteryUtils {
 				player.incrementStatistic(Statistic.USE_ITEM, item.getType());
 				McMMOHandler.handleMcMMO(event, item);
 				if (EnchantmentSolution.getPlugin().isJobsEnabled()) JobsUtils.sendBlockBreakAction(event);
+				QuestsUtils.handle(event);
 				DamageUtils.damageItem(player, item);
 				ItemUtils.dropItem(afterSmeltery, newBlock.getLocation());
 				Location loc = newBlock.getLocation().clone().add(0.5, 0.5, 0.5);

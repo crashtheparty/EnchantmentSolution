@@ -48,7 +48,7 @@ public class JobsUtils {
 		if (!payIfCreative(player)) return;
 
 		// Prevent item durability loss
-		if (!Jobs.getGCManager().payItemDurabilityLoss && item.getType().getMaxDurability() - DamageUtils.getDamage(item.getItemMeta()) != item.getType().getMaxDurability()) return;
+		if (!Jobs.getGCManager().payItemDurabilityLoss && DamageUtils.getMaxDamage(item) - DamageUtils.getDamage(item) != DamageUtils.getMaxDamage(item)) return;
 
 		JobsPlayer jPlayer = Jobs.getPlayerManager().getJobsPlayer(player);
 

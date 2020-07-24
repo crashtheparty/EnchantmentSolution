@@ -12,15 +12,17 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 public class DamageUtils {
 
-	private ItemMeta meta;
+	private ItemStack item;
 	private int damage;
 	private boolean damageable = false;
+	private ItemMeta meta;
 
-	private DamageUtils(ItemMeta item) {
-		meta = item;
-		if (item instanceof Damageable && !item.isUnbreakable()) {
+	private DamageUtils(ItemStack item) {
+		this.item = item;
+		meta = item.getItemMeta();
+		if (meta != null && meta instanceof Damageable && !meta.isUnbreakable() && getMaxDamage(item) > 0) {
 			damageable = true;
-			damage = ((Damageable) item).getDamage();
+			damage = ((Damageable) meta).getDamage();
 		}
 	}
 
@@ -37,29 +39,37 @@ public class DamageUtils {
 		return damageable;
 	}
 
-	private ItemMeta getItemMeta() {
-		return meta;
+	private ItemStack returnItem() {
+		item.setItemMeta(meta);
+		return item;
 	}
 
-	private static boolean isDamageable(ItemMeta itemMeta) {
-		DamageUtils utils = new DamageUtils(itemMeta);
+	private static boolean isDamageable(ItemStack item) {
+		DamageUtils utils = new DamageUtils(item);
 		return utils.isDamageable();
 	}
 
 	public static ItemStack setDamage(ItemStack item, int damage) {
-		DamageUtils utils = new DamageUtils(item.getItemMeta());
+		DamageUtils utils = new DamageUtils(item);
 		if (utils.isDamageable()) {
 			if (damage < 0) damage = 0;
 			utils.setDamage(damage);
 		}
-		item.setItemMeta(utils.getItemMeta());
-		return item;
+		return utils.returnItem();
 	}
 
-	public static int getDamage(ItemMeta meta) {
-		DamageUtils utils = new DamageUtils(meta);
+	public static int getDamage(ItemStack item) {
+		DamageUtils utils = new DamageUtils(item);
 		if (utils.isDamageable()) return utils.getDamage();
 		return 0;
+	}
+
+	public static int getMaxDamage(ItemStack item) {
+		return item.getType().getMaxDurability();
+	}
+
+	public static boolean aboveMaxDamage(ItemStack item) {
+		return new DamageUtils(item).getDamage() >= getMaxDamage(item);
 	}
 
 	public static int damageItem(HumanEntity player, ItemStack item) {
@@ -77,8 +87,8 @@ public class DamageUtils {
 	public static int damageItem(HumanEntity player, ItemStack item, double damage, double extraChance,
 	boolean breakItem) {
 		if (item == null) throw new NullPointerException("The ES dev let you damage a null item, huh? Cool, but you shouldn't be doing that.");
-		if (player.getGameMode().equals(GameMode.CREATIVE) || player.getGameMode().equals(GameMode.SPECTATOR) || !DamageUtils.isDamageable(item.getItemMeta())) return 0;
-		int originalDamage = DamageUtils.getDamage(item.getItemMeta());;
+		if (player.getGameMode().equals(GameMode.CREATIVE) || player.getGameMode().equals(GameMode.SPECTATOR) || !DamageUtils.isDamageable(item)) return 0;
+		int originalDamage = DamageUtils.getDamage(item);
 		int numBreaks = 0;
 		int unbreaking = ItemUtils.getLevel(item, Enchantment.DURABILITY);
 		for(int i = 0; i < damage; i++) {
@@ -95,8 +105,8 @@ public class DamageUtils {
 					if (event.isCancelled()) return 0;
 					numBreaks = event.getDamage();
 				}
-				DamageUtils.setDamage(item, DamageUtils.getDamage(item.getItemMeta()) + numBreaks);
-				if (DamageUtils.getDamage(item.getItemMeta()) >= item.getType().getMaxDurability() && item.getType() != Material.ELYTRA) {
+				DamageUtils.setDamage(item, DamageUtils.getDamage(item) + numBreaks);
+				if (DamageUtils.aboveMaxDamage(item) && item.getType() != Material.ELYTRA) {
 					PlayerItemBreakEvent event = new PlayerItemBreakEvent((Player) player, item);
 					Bukkit.getPluginManager().callEvent(event);
 					event.getBrokenItem().setAmount(0);
@@ -107,8 +117,8 @@ public class DamageUtils {
 						Player p = (Player) player;
 						p.incrementStatistic(Statistic.BREAK_ITEM, item.getType());
 					}
-					return item.getType().getMaxDurability() - originalDamage;
-				} else if (item.getType() == Material.ELYTRA) return item.getType().getMaxDurability() - originalDamage;
+					return DamageUtils.getMaxDamage(item) - originalDamage;
+				} else if (item.getType() == Material.ELYTRA) return DamageUtils.getMaxDamage(item) - originalDamage;
 			}
 			return numBreaks;
 		}

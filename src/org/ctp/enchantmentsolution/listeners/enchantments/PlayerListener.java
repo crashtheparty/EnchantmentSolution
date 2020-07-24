@@ -105,7 +105,7 @@ public class PlayerListener extends Enchantmentable {
 				ESPlayer esPlayer = EnchantmentSolution.getESPlayer(player);
 				if (esPlayer.getIcarusDelay() > 0) return;
 				int num_breaks = DamageUtils.damageItem(player, chestplate, level * 5, 1, false);
-				if (DamageUtils.getDamage(chestplate.getItemMeta()) + num_breaks >= chestplate.getType().getMaxDurability()) {
+				if (DamageUtils.getDamage(chestplate) + num_breaks >= DamageUtils.getMaxDamage(chestplate)) {
 					AdvancementUtils.awardCriteria(player, ESAdvancement.TOO_CLOSE, "failure");
 					player.getWorld().spawnParticle(Particle.EXPLOSION_NORMAL, player.getLocation(), 5, 2, 2, 2);
 					return;
@@ -114,7 +114,7 @@ public class PlayerListener extends Enchantmentable {
 				Bukkit.getPluginManager().callEvent(icarus);
 
 				if (!icarus.isCancelled()) {
-					DamageUtils.setDamage(chestplate, DamageUtils.getDamage(chestplate.getItemMeta()) + num_breaks);
+					DamageUtils.setDamage(chestplate, DamageUtils.getDamage(chestplate) + num_breaks);
 					Vector pV = player.getVelocity().clone();
 					Vector v = pV.add(new Vector(0, icarus.getSpeed(), 0)).multiply(new Vector(icarus.getSpeed() / 2, 1, icarus.getSpeed() / 2));
 					player.setVelocity(v);

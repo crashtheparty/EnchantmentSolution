@@ -50,6 +50,8 @@ import org.ctp.enchantmentsolution.utils.player.ESPlayer;
 import org.ctp.enchantmentsolution.version.*;
 import org.ctp.enchantmentsolution.version.Version.VersionType;
 
+import com.leonardobishop.quests.Quests;
+
 import me.prunt.restrictedcreative.RestrictedCreativeAPI;
 
 public class EnchantmentSolution extends JavaPlugin {
@@ -61,7 +63,7 @@ public class EnchantmentSolution extends JavaPlugin {
 	private static List<EntityAccuracy> ACCURACY = new ArrayList<EntityAccuracy>();
 	private static List<ESPlayer> PLAYERS = new ArrayList<ESPlayer>();
 	private List<InventoryData> inventories = new ArrayList<InventoryData>();
-	private boolean initialization = true, mmoItems = false, restrictedCreative;
+	private boolean initialization = true, mmoItems = false, restrictedCreative = false, quests = false;
 	private BukkitVersion bukkitVersion;
 	private PluginVersion pluginVersion;
 	private SQLite db;
@@ -386,6 +388,14 @@ public class EnchantmentSolution extends JavaPlugin {
 			restrictedCreative = true;
 			ChatUtils.sendInfo("Restricted Creative compatibility enabled!");
 		}
+
+		if (Bukkit.getPluginManager().isPluginEnabled("Quests")) try {
+			Quests.get();
+			quests = true;
+			ChatUtils.sendInfo("Quests compatibility enabled!");
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
 	}
 
 	public boolean getMMOItems() {
@@ -426,8 +436,8 @@ public class EnchantmentSolution extends JavaPlugin {
 		}
 		return players;
 	}
-	
-	public static List<ESPlayer> getFrequentFlyerPlayers(){
+
+	public static List<ESPlayer> getFrequentFlyerPlayers() {
 		List<ESPlayer> players = new ArrayList<ESPlayer>();
 		for(Player player: Bukkit.getOnlinePlayers()) {
 			ESPlayer es = getESPlayer(player);
@@ -473,5 +483,9 @@ public class EnchantmentSolution extends JavaPlugin {
 
 	public boolean isRestrictedCreative(Block b) {
 		return RestrictedCreativeAPI.isCreative(b);
+	}
+
+	public boolean hasQuests() {
+		return quests;
 	}
 }

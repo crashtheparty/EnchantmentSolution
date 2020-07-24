@@ -128,7 +128,7 @@ public class MiscRunnable implements Runnable, Reflectionable {
 			if (fPlayer.getForceFeedChance() > rand) {
 				Collections.shuffle(items);
 				ItemStack item = items.get(0);
-				int damage = DamageUtils.getDamage(item.getItemMeta());
+				int damage = DamageUtils.getDamage(item);
 				if (damage > 0) {
 					ForceFeedEvent forceFeed = new ForceFeedEvent(player, ItemUtils.getLevel(item, RegisterEnchantments.FORCE_FEED), item, 2);
 					Bukkit.getPluginManager().callEvent(forceFeed);

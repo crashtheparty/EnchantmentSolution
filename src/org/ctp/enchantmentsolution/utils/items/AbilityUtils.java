@@ -59,7 +59,7 @@ public class AbilityUtils {
 		if (items.size() > 0) {
 			Collections.shuffle(items);
 			ItemStack item = items.get(0);
-			int durability = DamageUtils.getDamage(item.getItemMeta());
+			int durability = DamageUtils.getDamage(item);
 			while (amount > 0 && durability > 0) {
 				durability -= 2;
 				amount--;

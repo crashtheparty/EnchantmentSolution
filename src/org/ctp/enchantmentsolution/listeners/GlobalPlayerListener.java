@@ -9,6 +9,9 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
+import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
+import org.ctp.enchantmentsolution.rpg.RPGPlayer;
+import org.ctp.enchantmentsolution.rpg.RPGUtils;
 import org.ctp.enchantmentsolution.threads.SnapshotRunnable;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 import org.ctp.enchantmentsolution.utils.player.ESPlayer;
@@ -24,10 +27,12 @@ public class GlobalPlayerListener implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR)
-	public void onPlayerLogin(PlayerJoinEvent event) {
+	public void onPlayerJoin(PlayerJoinEvent event) {
 		ESPlayer esPlayer = EnchantmentSolution.getESPlayer(event.getPlayer());
 		Bukkit.getScheduler().runTaskLater(EnchantmentSolution.getPlugin(), () -> {
 			esPlayer.reloadPlayer();
+			RPGPlayer rpg = RPGUtils.getPlayer(esPlayer.getPlayer());
+			rpg.giveEnchantment((EnchantmentLevel) null);
 		}, 0l);
 	}
 

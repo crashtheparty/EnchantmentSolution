@@ -46,7 +46,7 @@ public class ESPlayer {
 
 	public ESPlayer(OfflinePlayer player) {
 		this.player = player;
-		this.onlinePlayer = player.getPlayer();
+		onlinePlayer = player.getPlayer();
 		rpg = RPGUtils.getPlayer(player);
 		cooldowns = new HashMap<Enchantment, Integer>();
 		blocksBroken = new HashMap<Integer, Integer>();
@@ -67,10 +67,21 @@ public class ESPlayer {
 	public Player getOnlinePlayer() {
 		return onlinePlayer;
 	}
-	
+
 	public void reloadPlayer() {
-		for(Player p : Bukkit.getOnlinePlayers())
-			if (p.getUniqueId().equals(this.player.getUniqueId())) onlinePlayer = p;
+		for(Player p: Bukkit.getOnlinePlayers())
+			if (p.getUniqueId().equals(player.getUniqueId())) onlinePlayer = p;
+	}
+
+	public ItemStack[] getArmor() {
+		ItemStack[] armor = new ItemStack[4];
+		if (!isOnline()) return armor;
+		armor[0] = getOnlinePlayer().getInventory().getHelmet();
+		armor[1] = getOnlinePlayer().getInventory().getChestplate();
+		armor[2] = getOnlinePlayer().getInventory().getLeggings();
+		armor[3] = getOnlinePlayer().getInventory().getBoots();
+
+		return armor;
 	}
 
 	public ItemStack[] getEquipped() {
@@ -197,8 +208,8 @@ public class ESPlayer {
 	public boolean hasFrequentFlyer() {
 		frequentFlyerLevel = 0;
 		ItemStack newElytra = null;
-		for(ItemStack item: getEquipped())
-			if (item != null && ItemUtils.hasEnchantment(item, RegisterEnchantments.FREQUENT_FLYER)) {
+		for(ItemStack item: getArmor())
+			if (item != null && ItemUtils.hasEnchantment(item, RegisterEnchantments.FREQUENT_FLYER) && DamageUtils.aboveMaxDamage(item)) {
 				int level = ItemUtils.getLevel(item, RegisterEnchantments.FREQUENT_FLYER);
 				if (level > frequentFlyerLevel) {
 					frequentFlyerLevel = level;
@@ -257,10 +268,10 @@ public class ESPlayer {
 			}
 		}
 	}
-	
+
 	public void logoutFlyer() {
 		currentFFType = FFType.NONE;
-		this.canFly = false;
+		canFly = false;
 		frequentFlyerLevel = 0;
 		elytra = null;
 		getOnlinePlayer().setAllowFlight(false);

@@ -29,7 +29,7 @@ import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 public class VanishListener implements Listener {
 
 	private static Map<UUID, VanishInventory> VANISH_INVENTORIES = new HashMap<UUID, VanishInventory>();
-	
+
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent event) {
 		Player player = event.getPlayer();
@@ -51,7 +51,7 @@ public class VanishListener implements Listener {
 			if (inv.getLocation() == null) return; // it should not remove enchantments from custom inventories ever
 			for(int i = 0; i < inv.getSize(); i++) {
 				ItemStack item = inv.getItem(i);
-				if (item != null && item.hasItemMeta() && ((item.getType() == Material.ENCHANTED_BOOK && ((EnchantmentStorageMeta) item.getItemMeta()).hasStoredEnchants()) || item.getItemMeta().hasEnchants())) removeEnchants(player, item);
+				if (item != null && item.hasItemMeta() && (item.getType() == Material.ENCHANTED_BOOK && ((EnchantmentStorageMeta) item.getItemMeta()).hasStoredEnchants() || item.getItemMeta().hasEnchants())) removeEnchants(player, item);
 			}
 		}
 	}
@@ -83,7 +83,7 @@ public class VanishListener implements Listener {
 
 		for(int i = 0; i < 36; i++) {
 			ItemStack item = inv.getItem(i);
-			if(item == null || item.equals(items[i])) continue;
+			if (item == null || item.equals(items[i])) continue;
 			removeEnchants(player, item);
 		}
 		ItemStack helmet = inv.getHelmet();
@@ -108,7 +108,7 @@ public class VanishListener implements Listener {
 					InventoryData invData = EnchantmentSolution.getPlugin().getInventory(player);
 					if (invData == null && inv.getLocation() != null) for(int i = 0; i < inv.getSize(); i++) {
 						ItemStack item = inv.getItem(i);
-						if (item != null && item.hasItemMeta() && ((item.getType() == Material.ENCHANTED_BOOK && ((EnchantmentStorageMeta) item.getItemMeta()).hasStoredEnchants()) || item.getItemMeta().hasEnchants())) removeEnchants(player, item);
+						if (item != null && item.hasItemMeta() && (item.getType() == Material.ENCHANTED_BOOK && ((EnchantmentStorageMeta) item.getItemMeta()).hasStoredEnchants() || item.getItemMeta().hasEnchants())) removeEnchants(player, item);
 					}
 				}
 				removePlayerInv(player);
@@ -126,7 +126,11 @@ public class VanishListener implements Listener {
 					lower = player.hasPermission("enchantmentsolution.enchantments.lower-levels");
 					maxLevel = enchant.getMaxLevel(player);
 				}
-				if (lower && maxLevel < ItemUtils.getLevel(item, enchant.getRelativeEnchantment())) item = ItemUtils.addEnchantmentToItem(item, enchant, maxLevel);
+				if (lower && maxLevel < ItemUtils.getLevel(item, enchant.getRelativeEnchantment())) {
+					if (maxLevel == 0) item = ItemUtils.removeEnchantmentFromItem(item, enchant);
+					else
+						item = ItemUtils.addEnchantmentToItem(item, enchant, maxLevel);
+				} else { /* placeholder */ }
 			}
 		}
 		return item;

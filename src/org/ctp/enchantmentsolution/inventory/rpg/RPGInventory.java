@@ -146,7 +146,12 @@ public class RPGInventory implements InventoryData, Pageable {
 				}
 
 				if (enchantments.size() > PAGING * page) inv.setItem(53, nextPage());
+				else
+					inv.setItem(53, mirror);
 				if (page != 1) inv.setItem(45, previousPage());
+				else
+					inv.setItem(45, mirror);
+				inv.setItem(0, mirror);
 			} else if (screen == Screen.ENCHANTMENT) {
 				HashMap<String, Object> nameCodes = getCodes();
 				nameCodes.put("%enchantment%", enchant.getName());
@@ -222,7 +227,11 @@ public class RPGInventory implements InventoryData, Pageable {
 				}
 
 				if (levels.size() > PAGING * enchPage) inv.setItem(53, nextPage());
+				else
+					inv.setItem(53, mirror);
 				if (enchPage != 1) inv.setItem(45, previousPage());
+				else
+					inv.setItem(45, mirror);
 				inv.setItem(0, goBack());
 			} else if (screen == Screen.CONFIRM) {
 				HashMap<String, Object> buyingCodes = getCodes();

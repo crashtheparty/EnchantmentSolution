@@ -30,7 +30,10 @@ public class AnvilListener implements Listener {
 		ItemStack first = event.getInventory().getItem(0);
 		ItemStack second = event.getInventory().getItem(1);
 		if (event.getView().getPlayer() instanceof Player) {
-			AnvilEnchantments anvil = AnvilEnchantments.getAnvilEnchantments((Player) event.getView().getPlayer(), first, second);
+			ItemStack result = event.getResult();
+			String name = null;
+			if (result != null && result.hasItemMeta() && first != null && first.hasItemMeta() && !first.getItemMeta().getDisplayName().equals(name)) name = result.getItemMeta().getDisplayName();
+			AnvilEnchantments anvil = AnvilEnchantments.getAnvilEnchantments((Player) event.getView().getPlayer(), first, second, name);
 			ItemStack combineItem = null;
 			if ((anvil.getRepairType() == RepairType.COMBINE || anvil.getRepairType() == RepairType.REPAIR) && anvil.canCombine()) combineItem = anvil.getCombinedItem();
 			else if (anvil.getRepairType() == RepairType.RENAME) {
@@ -58,8 +61,11 @@ public class AnvilListener implements Listener {
 			ItemStack second = inv.getItem(1);
 			if (event.getWhoClicked() instanceof Player) {
 				Player player = (Player) event.getWhoClicked();
+				ItemStack result = inv.getItem(2);
+				String name = null;
+				if (result != null && result.hasItemMeta() && first != null && first.hasItemMeta() && !first.getItemMeta().getDisplayName().equals(name)) name = result.getItemMeta().getDisplayName();
 				if (EnchantmentSolution.getPlugin().getInventory(player) != null) return;
-				AnvilEnchantments anvil = AnvilEnchantments.getAnvilEnchantments(player, first, second);
+				AnvilEnchantments anvil = AnvilEnchantments.getAnvilEnchantments(player, first, second, name);
 				if ((anvil.getRepairType() == RepairType.COMBINE || anvil.getRepairType() == RepairType.REPAIR) && anvil.canCombine() && event.getSlot() == 2 && (event.getCursor() == null || event.getCursor().getType() == Material.AIR)) {
 					event.setCancelled(true);
 					ItemStack combinedItem = anvil.getCombinedItem();

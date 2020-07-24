@@ -24,6 +24,7 @@ import org.ctp.enchantmentsolution.mcmmo.McMMOHandler;
 import org.ctp.enchantmentsolution.utils.*;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.GoldDiggerCrop;
 import org.ctp.enchantmentsolution.utils.compatibility.JobsUtils;
+import org.ctp.enchantmentsolution.utils.compatibility.QuestsUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 
 public class TelepathyUtils {
@@ -199,6 +200,7 @@ public class TelepathyUtils {
 		player.incrementStatistic(Statistic.USE_ITEM, item.getType());
 		DamageUtils.damageItem(player, item);
 		McMMOHandler.handleMcMMO(event, item);
+		QuestsUtils.handle(event);
 		Block newBlock = event.getBlock();
 		Location loc = newBlock.getLocation().clone().add(0.5, 0.5, 0.5);
 		if (EnchantmentSolution.getPlugin().isJobsEnabled()) JobsUtils.sendBlockBreakAction(event);
