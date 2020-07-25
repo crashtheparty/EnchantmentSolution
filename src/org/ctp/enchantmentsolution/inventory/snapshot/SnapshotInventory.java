@@ -4,8 +4,8 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.nms.PersistenceNMS;
-import org.ctp.enchantmentsolution.utils.ChatUtils;
 
 public class SnapshotInventory implements SavedInventory {
 
@@ -34,7 +34,7 @@ public class SnapshotInventory implements SavedInventory {
 				try {
 					items[i] = PersistenceNMS.checkItem(item, items[i]);
 				} catch (Exception ex) {
-					ChatUtils.sendWarning("There was a problem trying to save item " + item + " in slot " + i + ": ");
+					Chatable.get().sendWarning("There was a problem trying to save item " + item + " in slot " + i + ": ");
 					ex.printStackTrace();
 				}
 			}
@@ -42,7 +42,7 @@ public class SnapshotInventory implements SavedInventory {
 			try {
 				items[36] = PersistenceNMS.checkItem(offhand, items[36]);
 			} catch (Exception ex) {
-				ChatUtils.sendWarning("There was a problem trying to save item " + offhand + " in offhand slot: ");
+				Chatable.get().sendWarning("There was a problem trying to save item " + offhand + " in offhand slot: ");
 				ex.printStackTrace();
 			}
 			for(int i = 0; i < 4; i++) {
@@ -50,7 +50,7 @@ public class SnapshotInventory implements SavedInventory {
 				try {
 					armor[i] = PersistenceNMS.checkItem(item, armor[i]);
 				} catch (Exception ex) {
-					ChatUtils.sendWarning("There was a problem trying to save item " + item + " in armor slot " + i + ": ");
+					Chatable.get().sendWarning("There was a problem trying to save item " + item + " in armor slot " + i + ": ");
 					ex.printStackTrace();
 				}
 			}

@@ -1,15 +1,12 @@
 package org.ctp.enchantmentsolution.utils.config;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.URL;
 import java.util.List;
 
+import org.ctp.enchantmentsolution.crashapi.config.Configuration;
+import org.ctp.enchantmentsolution.crashapi.config.Language;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
-import org.ctp.enchantmentsolution.enums.Language;
 import org.ctp.enchantmentsolution.utils.Configurations;
 import org.ctp.enchantmentsolution.utils.VersionUtils;
 
@@ -25,7 +22,7 @@ public class ConfigUtils {
 	}
 
 	public static boolean isRepairable(CustomEnchantment enchant) {
-		if (Configurations.getConfig().getString("disable_enchant_method").equals("repairable")) return true;
+		if (Configurations.getConfigurations().getConfig().getString("disable_enchant_method").equals("repairable")) return true;
 
 		if (enchant.isEnabled()) return true;
 
@@ -57,7 +54,7 @@ public class ConfigUtils {
 	}
 
 	public static Language getLanguage() {
-		return Configurations.getLanguage().getLanguage();
+		return Configurations.getConfigurations().getLanguage().getLanguage();
 	}
 
 	public static List<String> getStringList(Type type, String s) {
@@ -67,27 +64,27 @@ public class ConfigUtils {
 	}
 
 	public static boolean isAdvancementActive(String string) {
-		return Configurations.getAdvancements().getBoolean("advancements." + string + ".enable");
+		return Configurations.getConfigurations().getAdvancements().getBoolean("advancements." + string + ".enable");
 	}
 
 	public static boolean toastAdvancement(String string) {
-		return Configurations.getAdvancements().getBoolean("advancements." + string + ".toast");
+		return Configurations.getConfigurations().getAdvancements().getBoolean("advancements." + string + ".toast");
 	}
 
 	public static boolean announceAdvancement(String string) {
-		return Configurations.getAdvancements().getBoolean("advancements." + string + ".announce");
+		return Configurations.getConfigurations().getAdvancements().getBoolean("advancements." + string + ".announce");
 	}
 
 	public static String getAdvancementName(String string) {
-		String name = Configurations.getLanguage().getString("advancements." + string + ".name");
-		if (name == null) name = Configurations.getLanguage().getString("misc.null_advancement_name");
+		String name = Configurations.getConfigurations().getLanguage().getString("advancements." + string + ".name");
+		if (name == null) name = Configurations.getConfigurations().getLanguage().getString("misc.null_advancement_name");
 		if (name == null) name = "No Name";
 		return name;
 	}
 
 	public static String getAdvancementDescription(String string) {
-		String desc = Configurations.getLanguage().getString("advancements." + string + ".description");
-		if (desc == null) desc = Configurations.getLanguage().getString("misc.null_advancement_description");
+		String desc = Configurations.getConfigurations().getLanguage().getString("advancements." + string + ".description");
+		if (desc == null) desc = Configurations.getConfigurations().getLanguage().getString("misc.null_advancement_description");
 		if (desc == null) desc = "No Description";
 		return desc;
 	}

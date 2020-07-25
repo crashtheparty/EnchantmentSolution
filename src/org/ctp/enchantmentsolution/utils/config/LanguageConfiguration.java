@@ -2,17 +2,20 @@ package org.ctp.enchantmentsolution.utils.config;
 
 import java.io.File;
 
-import org.ctp.enchantmentsolution.enums.Language;
+import org.ctp.enchantmentsolution.EnchantmentSolution;
+import org.ctp.enchantmentsolution.crashapi.config.Configuration;
+import org.ctp.enchantmentsolution.crashapi.config.Language;
+import org.ctp.enchantmentsolution.crashapi.config.yaml.YamlConfigBackup;
+import org.ctp.enchantmentsolution.crashapi.db.BackupDB;
 import org.ctp.enchantmentsolution.utils.Configurations;
-import org.ctp.enchantmentsolution.utils.files.LanguageFile;
-import org.ctp.enchantmentsolution.utils.yaml.YamlConfigBackup;
+import org.ctp.enchantmentsolution.utils.files.ESLanguageFile;
 
 public class LanguageConfiguration extends Configuration {
 
-	private LanguageFile language;
+	private ESLanguageFile language;
 
-	public LanguageConfiguration(File file, String languageFile, LanguageFile language) {
-		super(new File(file + "/" + languageFile), false);
+	public LanguageConfiguration(File file, String languageFile, ESLanguageFile language, BackupDB db) {
+		super(EnchantmentSolution.getPlugin(), new File(file + "/" + languageFile), db, false);
 
 		this.language = language;
 
@@ -32,10 +35,11 @@ public class LanguageConfiguration extends Configuration {
 
 	@Override
 	public void migrateVersion() {
-		if (Configurations.getConfig().getString("starter") != null) {
-			getConfig().set("starter", Configurations.getConfig().getString("starter"));
-			Configurations.getConfig().getConfig().removeKey("starter");
-			Configurations.getConfig().save();
+		Configurations config = Configurations.getConfigurations();
+		if (config.getConfig().getString("starter") != null) {
+			getConfig().set("starter", config.getConfig().getString("starter"));
+			config.getConfig().getConfig().removeKey("starter");
+			config.getConfig().save();
 		}
 	}
 

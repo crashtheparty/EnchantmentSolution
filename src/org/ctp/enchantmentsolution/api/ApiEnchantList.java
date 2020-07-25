@@ -5,6 +5,7 @@ import java.util.*;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
@@ -45,11 +46,11 @@ public class ApiEnchantList {
 			RegisterEnchantments.addDefaultEnchantment(enchant);
 			RegisterEnchantments.registerEnchantment(enchant);
 		}
-
-		Configurations.getEnchantments().updateExternal(plugin);
-		Configurations.getRPG().updateExternal(plugin);
+		Configurations c = EnchantmentSolution.getPlugin().getConfigurations();
+		c.getEnchantments().updateExternal(plugin);
+		c.getRPG().updateExternal(plugin);
 		RegisterEnchantments.setEnchantments();
-		Configurations.save();
+		c.save();
 	}
 
 	/**

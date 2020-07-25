@@ -3,7 +3,8 @@ package org.ctp.enchantmentsolution.inventory;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.ctp.enchantmentsolution.utils.ChatUtils;
+import org.ctp.enchantmentsolution.Chatable;
+import org.ctp.enchantmentsolution.crashapi.utils.ChatUtils;
 
 public interface Pageable {
 
@@ -22,7 +23,7 @@ public interface Pageable {
 	default ItemStack pagination(String path) {
 		ItemStack nextPage = new ItemStack(Material.ARROW);
 		ItemMeta nextPageMeta = nextPage.getItemMeta();
-		nextPageMeta.setDisplayName(ChatUtils.getMessage(ChatUtils.getCodes(), path));
+		nextPageMeta.setDisplayName(Chatable.get().getMessage(ChatUtils.getCodes(), path));
 		nextPage.setItemMeta(nextPageMeta);
 		return nextPage;
 	}

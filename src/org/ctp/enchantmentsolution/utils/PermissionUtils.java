@@ -2,13 +2,13 @@ package org.ctp.enchantmentsolution.utils;
 
 import java.util.*;
 import java.util.Map.Entry;
-import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.api.ApiEnchantmentWrapper;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantmentWrapper;
@@ -76,7 +76,7 @@ public class PermissionUtils {
 		if (enchant.getRelativeEnchantment() instanceof ApiEnchantmentWrapper) {
 			JavaPlugin plugin = ((ApiEnchantmentWrapper) enchant.getRelativeEnchantment()).getPlugin();
 			if (plugin == null) {
-				ChatUtils.sendToConsole(Level.WARNING, "Enchantment " + enchant.getName() + " (Display Name " + enchant.getDisplayName() + ")" + " does not have a JavaPlugin set. Refusing to check permissions.");
+				Chatable.get().sendWarning("Enchantment " + enchant.getName() + " (Display Name " + enchant.getDisplayName() + ")" + " does not have a JavaPlugin set. Refusing to check permissions.");
 				return null;
 			}
 			return plugin.getName().toLowerCase();
@@ -87,7 +87,7 @@ public class PermissionUtils {
 
 	private static boolean checkPermission(Player player, int level, String path, String permission) {
 		for(int i = 0; i < level; i++)
-			if (Configurations.getEnchantments().getBoolean(path + (i + 1))) if (!player.hasPermission(permission + (i + 1))) return false;
+			if (Configurations.getConfigurations().getEnchantments().getBoolean(path + (i + 1))) if (!player.hasPermission(permission + (i + 1))) return false;
 		return true;
 	}
 

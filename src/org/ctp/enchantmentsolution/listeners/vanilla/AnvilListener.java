@@ -13,14 +13,15 @@ import org.bukkit.event.inventory.PrepareAnvilEvent;
 import org.bukkit.inventory.AnvilInventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
+import org.ctp.enchantmentsolution.crashapi.item.MatData;
+import org.ctp.enchantmentsolution.crashapi.utils.ChatUtils;
 import org.ctp.enchantmentsolution.enchantments.generate.AnvilEnchantments;
 import org.ctp.enchantmentsolution.enchantments.generate.AnvilEnchantments.RepairType;
-import org.ctp.enchantmentsolution.enums.MatData;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.AnvilUtils;
-import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 
 public class AnvilListener implements Listener {
@@ -74,7 +75,7 @@ public class AnvilListener implements Listener {
 						if (cost > ConfigString.MAX_REPAIR_LEVEL.getInt()) {
 							HashMap<String, Object> loreCodes = ChatUtils.getCodes();
 							loreCodes.put("%repairCost%", cost);
-							ChatUtils.sendMessage(player, ChatUtils.getMessage(loreCodes, "anvil.cannot-repair"));
+							Chatable.get().sendMessage(player, Chatable.get().getMessage(loreCodes, "anvil.cannot-repair"));
 							return;
 						}
 						if (player.getLevel() >= cost) switch (event.getClick()) {
@@ -104,7 +105,7 @@ public class AnvilListener implements Listener {
 						else {
 							HashMap<String, Object> codes = ChatUtils.getCodes();
 							codes.put("%level%", cost);
-							ChatUtils.sendMessage(player, ChatUtils.getMessage(ChatUtils.getCodes(), "anvil.message-cannot-combine-cost"));
+							Chatable.get().sendMessage(player, Chatable.get().getMessage(ChatUtils.getCodes(), "anvil.message-cannot-combine-cost"));
 						}
 					}
 				}
@@ -140,7 +141,7 @@ public class AnvilListener implements Listener {
 						else {
 							HashMap<String, Object> codes = ChatUtils.getCodes();
 							codes.put("%level%", cost);
-							ChatUtils.sendMessage(player, ChatUtils.getMessage(ChatUtils.getCodes(), "anvil.message-cannot-combine-cost"));
+							Chatable.get().sendMessage(player, Chatable.get().getMessage(codes, "anvil.message-cannot-combine-cost"));
 						}
 					}
 				}

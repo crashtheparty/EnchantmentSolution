@@ -5,8 +5,11 @@ import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.advancement.AdvancementProgress;
 import org.bukkit.entity.Player;
+import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
-import org.ctp.enchantmentsolution.advancements.*;
+import org.ctp.enchantmentsolution.advancements.ESAdvancement;
+import org.ctp.enchantmentsolution.advancements.ESAdvancementTab;
+import org.ctp.enchantmentsolution.crashapi.resources.advancements.*;
 import org.ctp.enchantmentsolution.utils.config.ConfigUtils;
 
 public class AdvancementUtils {
@@ -42,10 +45,10 @@ public class AdvancementUtils {
 						last = last.getParent();
 					}
 					if (parent != null && ConfigUtils.isAdvancementActive(namespace) && advancement.getActivatedVersion() < version) {
-						List<ESTrigger> triggers = advancement.getTriggers();
+						List<CrashTrigger> triggers = advancement.getTriggers();
 						adv = factory.getSimple(namespace, parent, ConfigUtils.getAdvancementName(namespace), ConfigUtils.getAdvancementDescription(namespace), advancement.getIcon(), triggers.get(0).getCriteria(), triggers.get(0).getTrigger());
 						for(int i = 1; i < triggers.size(); i++) {
-							ESTrigger trigger = triggers.get(i);
+							CrashTrigger trigger = triggers.get(i);
 							if (version >= trigger.getVersionMinimum() && (trigger.getVersionMaximum() == 0 || version <= trigger.getVersionMaximum())) adv.addTrigger(trigger.getCriteria(), trigger.getTrigger());
 						}
 						adv.setAnnounce(announce);
@@ -64,9 +67,9 @@ public class AdvancementUtils {
 			}
 		}
 		if (reload) {
-			ChatUtils.sendInfo("Reloading recipes and advancements...");
+			Chatable.get().sendInfo("Reloading recipes and advancements...");
 			Bukkit.reloadData();
-			ChatUtils.sendInfo("Reloaded!");
+			Chatable.get().sendInfo("Reloaded!");
 		}
 	}
 
@@ -85,10 +88,10 @@ public class AdvancementUtils {
 		if (advancement.isEnabled()) {
 			AdvancementProgress progress = player.getAdvancementProgress(Bukkit.getAdvancement(advancement.getNamespace()));
 			if (progress.getRemainingCriteria().contains(criteria)) {
-				ESAdvancementProgress esProgress = EnchantmentSolution.getAdvancementProgress(player, advancement, criteria);
+				CrashAdvancementProgress esProgress = EnchantmentSolution.getAdvancementProgress(player, advancement, criteria);
 				esProgress.setCurrentAmount(esProgress.getCurrentAmount() + amount);
-				ESTrigger trigger = null;
-				for(ESTrigger t: advancement.getTriggers())
+				CrashTrigger trigger = null;
+				for(CrashTrigger t: advancement.getTriggers())
 					if (t.getCriteria().equals(criteria)) {
 						trigger = t;
 						break;

@@ -4,7 +4,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
-import org.ctp.enchantmentsolution.utils.ChatUtils;
+import org.ctp.enchantmentsolution.Chatable;
 
 public class VanishInventory implements SavedInventory {
 	private ItemStack[] items = new ItemStack[37];
@@ -32,7 +32,7 @@ public class VanishInventory implements SavedInventory {
 				try {
 					items[i] = item;
 				} catch (Exception ex) {
-					ChatUtils.sendWarning("There was a problem trying to save item " + item + " in slot " + i + ": ");
+					Chatable.get().sendWarning("There was a problem trying to save item " + item + " in slot " + i + ": ");
 					ex.printStackTrace();
 				}
 			}
@@ -40,7 +40,7 @@ public class VanishInventory implements SavedInventory {
 			try {
 				items[36] = offhand;
 			} catch (Exception ex) {
-				ChatUtils.sendWarning("There was a problem trying to save item " + offhand + " in offhand slot: ");
+				Chatable.get().sendWarning("There was a problem trying to save item " + offhand + " in offhand slot: ");
 				ex.printStackTrace();
 			}
 			for(int i = 0; i < 4; i++) {
@@ -48,7 +48,7 @@ public class VanishInventory implements SavedInventory {
 				try {
 					armor[i] = item;
 				} catch (Exception ex) {
-					ChatUtils.sendWarning("There was a problem trying to save item " + item + " in armor slot " + i + ": ");
+					Chatable.get().sendWarning("There was a problem trying to save item " + item + " in armor slot " + i + ": ");
 					ex.printStackTrace();
 				}
 			}

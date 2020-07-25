@@ -4,19 +4,21 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
+import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
-import org.ctp.enchantmentsolution.enums.Language;
-import org.ctp.enchantmentsolution.utils.ChatUtils;
+import org.ctp.enchantmentsolution.crashapi.config.Configuration;
+import org.ctp.enchantmentsolution.crashapi.config.Language;
+import org.ctp.enchantmentsolution.crashapi.config.yaml.YamlConfig;
+import org.ctp.enchantmentsolution.crashapi.config.yaml.YamlConfigBackup;
+import org.ctp.enchantmentsolution.crashapi.db.BackupDB;
 import org.ctp.enchantmentsolution.utils.VersionUtils;
-import org.ctp.enchantmentsolution.utils.yaml.YamlConfig;
-import org.ctp.enchantmentsolution.utils.yaml.YamlConfigBackup;
 
 public class MainConfiguration extends Configuration {
 
 	private List<String> enchantingTypes = Arrays.asList("vanilla_30", "vanilla_30_custom", "enhanced_30", "enhanced_30_custom", "enhanced_50", "enhanced_50_custom");
 
-	public MainConfiguration(File dataFolder) {
-		super(new File(dataFolder + "/config.yml"));
+	public MainConfiguration(File dataFolder, BackupDB db) {
+		super(EnchantmentSolution.getPlugin(), new File(dataFolder + "/config.yml"), db);
 
 		migrateVersion();
 		if (getConfig() != null) getConfig().writeDefaults();
@@ -24,7 +26,7 @@ public class MainConfiguration extends Configuration {
 
 	@Override
 	public void setDefaults() {
-		if (EnchantmentSolution.getPlugin().isInitializing()) ChatUtils.sendInfo("Loading main configuration...");
+		if (getPlugin().isInitializing()) Chatable.get().sendInfo("Loading main configuration...");
 
 		YamlConfigBackup config = getConfig();
 
@@ -36,7 +38,7 @@ public class MainConfiguration extends Configuration {
 			if (defaultConfig.get(str) != null) if (str.startsWith("config_comments.")) try {
 				config.addComments(str, defaultConfig.getStringList(str).toArray(new String[] {}));
 			} catch (Exception ex) {
-				ChatUtils.sendWarning("Config key " + str.replaceFirst("config_comments.", "") + " does not exist in the defaults file!");
+				Chatable.get().sendWarning("Config key " + str.replaceFirst("config_comments.", "") + " does not exist in the defaults file!");
 			}
 			else
 				config.addDefault(str, defaultConfig.get(str));
@@ -51,7 +53,7 @@ public class MainConfiguration extends Configuration {
 			config.addDefault("loots.chests.pillager_outpost.treasure", true);
 		}
 
-		if (EnchantmentSolution.getPlugin().isInitializing()) ChatUtils.sendInfo("Main configuration initialized!");
+		if (getPlugin().isInitializing()) Chatable.get().sendInfo("Main configuration initialized!");
 
 		config.saveConfig();
 
@@ -139,7 +141,6 @@ public class MainConfiguration extends Configuration {
 	@Override
 	public void repairConfig() {
 		YamlConfigBackup config = getConfig();
-		ChatUtils.sendInfo("Repair Config: " + config.getInt("anvil.level_divisor"));
 		if (config.getInt("anvil.level_divisor") <= 0) config.set("anvil.level_divisor", 4);
 	}
 

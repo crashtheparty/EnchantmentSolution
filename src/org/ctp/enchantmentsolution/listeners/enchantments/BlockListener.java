@@ -19,10 +19,11 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
+import org.ctp.enchantmentsolution.crashapi.item.ItemSerialization;
+import org.ctp.enchantmentsolution.crashapi.item.MatData;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enums.ItemBreakType;
 import org.ctp.enchantmentsolution.enums.ItemPlaceType;
-import org.ctp.enchantmentsolution.enums.MatData;
 import org.ctp.enchantmentsolution.events.blocks.HeightWidthEvent;
 import org.ctp.enchantmentsolution.events.blocks.LightWeightEvent;
 import org.ctp.enchantmentsolution.events.blocks.WandEvent;
@@ -354,7 +355,8 @@ public class BlockListener extends Enchantmentable {
 		if (player.getGameMode() == GameMode.CREATIVE) return true;
 		for(int i = 0; i < 36; i++) {
 			ItemStack removeItem = player.getInventory().getItem(i);
-			if (removeItem != null && removeItem.getType() == item.getType() && ItemSerialization.itemToData(removeItem).equals(ItemSerialization.itemToData(item))) return true;
+			ItemSerialization serial = EnchantmentSolution.getPlugin().getItemSerial();
+			if (removeItem != null && removeItem.getType() == item.getType() && serial.itemToData(removeItem).equals(serial.itemToData(item))) return true;
 		}
 		return false;
 	}
@@ -363,7 +365,8 @@ public class BlockListener extends Enchantmentable {
 		if (player.getGameMode() == GameMode.CREATIVE) return;
 		for(int i = 0; i < 36; i++) {
 			ItemStack removeItem = player.getInventory().getItem(i);
-			if (removeItem != null && removeItem.getType() == item.getType() && ItemSerialization.itemToData(removeItem).equals(ItemSerialization.itemToData(item))) {
+			ItemSerialization serial = EnchantmentSolution.getPlugin().getItemSerial();
+			if (removeItem != null && removeItem.getType() == item.getType() && serial.itemToData(removeItem).equals(serial.itemToData(item))) {
 				int left = removeItem.getAmount() - 1;
 				if (left == 0) {
 					removeItem.setAmount(0);

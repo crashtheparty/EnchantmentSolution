@@ -3,8 +3,8 @@ package org.ctp.enchantmentsolution.nms;
 import org.bukkit.entity.Creature;
 import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
+import org.ctp.enchantmentsolution.crashapi.config.Configurable;
 import org.ctp.enchantmentsolution.nms.animalmob.*;
-import org.ctp.enchantmentsolution.utils.yaml.YamlConfig;
 
 public class AnimalMobNMS {
 
@@ -35,7 +35,7 @@ public class AnimalMobNMS {
 		return EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber() > 0;
 	}
 
-	public static AnimalMob getFromConfig(YamlConfig config, int i) {
+	public static AnimalMob getFromConfig(Configurable config, int i) {
 		switch (EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber()) {
 			case 1:
 				return AnimalMob_v1_13_R1.createFromConfig(config, i);

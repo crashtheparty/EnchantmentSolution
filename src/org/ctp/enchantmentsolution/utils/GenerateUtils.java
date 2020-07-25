@@ -6,6 +6,7 @@ import java.util.List;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.enchantments.generate.*;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentList;
@@ -31,9 +32,7 @@ public class GenerateUtils {
 		List<EnchantmentList> lists = getLists(enchantments.getList());
 		List<EnchantmentLevel> levels = getEnchantments(lists);
 		if (levels == null || levels.size() == 0) {
-			ChatUtils.sendWarning("Item couldn't find EnchantmentSolution enchantments. Keeping default enchantments on the item.");
-			ChatUtils.sendWarning("This occurs when items do not have valid enchantments based on the item being spawned (as well as the player spawning them, if applicable). THIS IS ONLY A BUG IF THE ITEM HAS VALID ENCHANTMENTS SPECIFIED FOR IT.");
-			ChatUtils.sendWarning("Item: " + item.toString() + " Type: ChestLoot");
+			warningMessages(item, "ChestLoot");
 			return item;
 		}
 
@@ -47,9 +46,7 @@ public class GenerateUtils {
 		List<EnchantmentList> lists = getLists(enchantments.getList());
 		List<EnchantmentLevel> levels = getEnchantments(lists);
 		if (levels == null || levels.size() == 0) {
-			ChatUtils.sendWarning("Item couldn't find EnchantmentSolution enchantments. Keeping default enchantments on the item.");
-			ChatUtils.sendWarning("This occurs when items do not have valid enchantments based on the item being spawned (as well as the player spawning them, if applicable). THIS IS ONLY A BUG IF THE ITEM HAS VALID ENCHANTMENTS SPECIFIED FOR IT.");
-			ChatUtils.sendWarning("Item: " + item.toString() + " Type: PiglinTrades");
+			warningMessages(item, "PiglinTrades");
 			return item;
 		}
 
@@ -65,9 +62,7 @@ public class GenerateUtils {
 		List<EnchantmentList> lists = getLists(enchantments.getList());
 		List<EnchantmentLevel> levels = getEnchantments(lists);
 		if (levels == null || levels.size() == 0) {
-			ChatUtils.sendWarning("Item couldn't find EnchantmentSolution enchantments. Keeping default enchantments on the item.");
-			ChatUtils.sendWarning("This occurs when items do not have valid enchantments based on the item being spawned (as well as the player spawning them, if applicable). THIS IS ONLY A BUG IF THE ITEM HAS VALID ENCHANTMENTS SPECIFIED FOR IT.");
-			ChatUtils.sendWarning("Item: " + item.toString() + " Type: " + (location == EnchantmentLocation.CHEST_LOOT ? "ChestLoot" : "PiglinTrades"));
+			warningMessages(item, (location == EnchantmentLocation.CHEST_LOOT ? "ChestLoot" : "PiglinTrades"));
 			return item;
 		}
 
@@ -81,9 +76,7 @@ public class GenerateUtils {
 		List<EnchantmentList> lists = getLists(enchantments.getList());
 		List<EnchantmentLevel> levels = getEnchantments(lists);
 		if (levels == null || levels.size() == 0) {
-			ChatUtils.sendWarning("Item couldn't find EnchantmentSolution enchantments. Keeping default enchantments on the item.");
-			ChatUtils.sendWarning("This occurs when items do not have valid enchantments based on the item being spawned (as well as the player spawning them, if applicable). THIS IS ONLY A BUG IF THE ITEM HAS VALID ENCHANTMENTS SPECIFIED FOR IT.");
-			ChatUtils.sendWarning("Item: " + item.toString() + " Type: MinigameLoot");
+			warningMessages(item, "MinigameLoot");
 			return item;
 		}
 
@@ -100,9 +93,7 @@ public class GenerateUtils {
 		List<EnchantmentList> lists = getLists(enchantments.getList());
 		List<EnchantmentLevel> levels = getEnchantments(lists, item.getMinLevels(), item.getMaxLevels());
 		if (levels == null || levels.size() == 0) {
-			ChatUtils.sendWarning("Item couldn't find EnchantmentSolution enchantments. Keeping default enchantments on the item.");
-			ChatUtils.sendWarning("This occurs when items do not have valid enchantments based on the item being spawned (as well as the player spawning them, if applicable). THIS IS ONLY A BUG IF THE ITEM HAS VALID ENCHANTMENTS SPECIFIED FOR IT.");
-			ChatUtils.sendWarning("Item: " + item.toString() + " Type: MinigameLoot");
+			warningMessages(enchant, "MinigameLoot");
 			return enchant;
 		}
 
@@ -136,9 +127,7 @@ public class GenerateUtils {
 		List<EnchantmentList> lists = getLists(enchantments.getList());
 		List<EnchantmentLevel> levels = getEnchantments(lists);
 		if (levels == null || levels.size() == 0) {
-			ChatUtils.sendWarning("Item couldn't find EnchantmentSolution enchantments. Keeping default enchantments on the item.");
-			ChatUtils.sendWarning("This occurs when items do not have valid enchantments based on the item being spawned (as well as the player spawning them, if applicable). THIS IS ONLY A BUG IF THE ITEM HAS VALID ENCHANTMENTS SPECIFIED FOR IT.");
-			ChatUtils.sendWarning("Item: " + item.toString() + " Type: FishingLoot");
+			warningMessages(item, "FishingLoot");
 			return item;
 		}
 
@@ -153,9 +142,7 @@ public class GenerateUtils {
 		List<EnchantmentList> lists = getLists(enchantments.getList());
 		List<EnchantmentLevel> levels = getEnchantments(lists);
 		if (levels == null || levels.size() == 0) {
-			ChatUtils.sendWarning("Item couldn't find EnchantmentSolution enchantments. Keeping default enchantments on the item.");
-			ChatUtils.sendWarning("This occurs when items do not have valid enchantments based on the item being spawned (as well as the player spawning them, if applicable). THIS IS ONLY A BUG IF THE ITEM HAS VALID ENCHANTMENTS SPECIFIED FOR IT.");
-			ChatUtils.sendWarning("Item: " + item.toString() + " Type: MobLoot");
+			warningMessages(item, "MobLoot");
 			return item;
 		}
 
@@ -190,5 +177,11 @@ public class GenerateUtils {
 			levels = lists.get(random).getEnchantments();
 		}
 		return levels;
+	}
+
+	private static void warningMessages(ItemStack item, String type) {
+		Chatable.get().sendWarning("Item couldn't find EnchantmentSolution enchantments. Keeping default enchantments on the item.");
+		Chatable.get().sendWarning("This occurs when items do not have valid enchantments based on the item being spawned (as well as the player spawning them, if applicable). THIS IS ONLY A BUG IF THE ITEM HAS VALID ENCHANTMENTS SPECIFIED FOR IT.");
+		Chatable.get().sendWarning("Item: " + item.toString() + " Type: " + type);
 	}
 }

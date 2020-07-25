@@ -1,7 +1,7 @@
 package org.ctp.enchantmentsolution.utils.abilityhelpers;
 
 import org.bukkit.Material;
-import org.ctp.enchantmentsolution.enums.MatData;
+import org.ctp.enchantmentsolution.crashapi.item.MatData;
 
 public enum GoldDiggerCrop {
 	WHEAT(2), CARROTS(2), POTATOES(2), BEETROOTS(2), NETHER_WARTS(3);

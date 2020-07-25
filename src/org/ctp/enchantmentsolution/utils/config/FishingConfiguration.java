@@ -2,15 +2,17 @@ package org.ctp.enchantmentsolution.utils.config;
 
 import java.io.File;
 
+import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
-import org.ctp.enchantmentsolution.utils.ChatUtils;
-import org.ctp.enchantmentsolution.utils.yaml.YamlConfig;
-import org.ctp.enchantmentsolution.utils.yaml.YamlConfigBackup;
+import org.ctp.enchantmentsolution.crashapi.config.Configuration;
+import org.ctp.enchantmentsolution.crashapi.config.yaml.YamlConfig;
+import org.ctp.enchantmentsolution.crashapi.config.yaml.YamlConfigBackup;
+import org.ctp.enchantmentsolution.crashapi.db.BackupDB;
 
 public class FishingConfiguration extends Configuration {
 
-	public FishingConfiguration(File dataFolder) {
-		super(new File(dataFolder + "/fishing.yml"));
+	public FishingConfiguration(File dataFolder, BackupDB db) {
+		super(EnchantmentSolution.getPlugin(), new File(dataFolder + "/fishing.yml"), db);
 
 		migrateVersion();
 		if (getConfig() != null) getConfig().writeDefaults();
@@ -18,7 +20,7 @@ public class FishingConfiguration extends Configuration {
 
 	@Override
 	public void setDefaults() {
-		if (EnchantmentSolution.getPlugin().isInitializing()) ChatUtils.sendInfo("Loading fishing config...");
+		if (getPlugin().isInitializing()) Chatable.get().sendInfo("Loading fishing config...");
 
 		YamlConfigBackup config = getConfig();
 
@@ -33,7 +35,7 @@ public class FishingConfiguration extends Configuration {
 
 		config.writeDefaults();
 
-		if (EnchantmentSolution.getPlugin().isInitializing()) ChatUtils.sendInfo("Fishing config initialized!");
+		if (getPlugin().isInitializing()) Chatable.get().sendInfo("Fishing config initialized!");
 		file.delete();
 	}
 

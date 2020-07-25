@@ -3,17 +3,19 @@ package org.ctp.enchantmentsolution.utils.config;
 import java.io.File;
 import java.util.Arrays;
 
+import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
+import org.ctp.enchantmentsolution.crashapi.config.Configuration;
+import org.ctp.enchantmentsolution.crashapi.config.yaml.YamlConfig;
+import org.ctp.enchantmentsolution.crashapi.config.yaml.YamlConfigBackup;
+import org.ctp.enchantmentsolution.crashapi.db.BackupDB;
 import org.ctp.enchantmentsolution.enchantments.CERegister;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
-import org.ctp.enchantmentsolution.utils.ChatUtils;
-import org.ctp.enchantmentsolution.utils.yaml.YamlConfig;
-import org.ctp.enchantmentsolution.utils.yaml.YamlConfigBackup;
 
 public class MinigameConfiguration extends Configuration {
 
-	public MinigameConfiguration(File dataFolder) {
-		super(new File(dataFolder + "/minigame.yml"));
+	public MinigameConfiguration(File dataFolder, BackupDB db) {
+		super(EnchantmentSolution.getPlugin(), new File(dataFolder + "/minigame.yml"), db);
 
 		migrateVersion();
 		if (getConfig() != null) getConfig().writeDefaults();
@@ -21,7 +23,7 @@ public class MinigameConfiguration extends Configuration {
 
 	@Override
 	public void setDefaults() {
-		if (EnchantmentSolution.getPlugin().isInitializing()) ChatUtils.sendInfo("Loading Minigame configuration...");
+		if (getPlugin().isInitializing()) Chatable.get().sendInfo("Loading Minigame configuration...");
 
 		YamlConfigBackup config = getConfig();
 
@@ -33,7 +35,7 @@ public class MinigameConfiguration extends Configuration {
 			if (defaultConfig.get(str) != null) if (str.startsWith("config_comments.")) try {
 				config.addComments(str, defaultConfig.getStringList(str).toArray(new String[] {}));
 			} catch (Exception ex) {
-				ChatUtils.sendWarning("Config key " + str.replaceFirst("config_comments.", "") + " does not exist in the defaults file!");
+				Chatable.get().sendWarning("Config key " + str.replaceFirst("config_comments.", "") + " does not exist in the defaults file!");
 			}
 			else
 				config.addDefault(str, defaultConfig.get(str));
@@ -84,7 +86,7 @@ public class MinigameConfiguration extends Configuration {
 			config.addDefault("custom.items.third.increase.max_cost", 10);
 		}
 
-		if (EnchantmentSolution.getPlugin().isInitializing()) ChatUtils.sendInfo("Minigame configuration initialized!");
+		if (getPlugin().isInitializing()) Chatable.get().sendInfo("Minigame configuration initialized!");
 
 		config.saveConfig();
 

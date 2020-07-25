@@ -18,14 +18,14 @@ import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.util.Vector;
+import org.ctp.enchantmentsolution.crashapi.compatibility.MMOUtils;
+import org.ctp.enchantmentsolution.crashapi.item.*;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantmentWrapper;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
-import org.ctp.enchantmentsolution.enums.*;
 import org.ctp.enchantmentsolution.nms.PersistenceNMS;
 import org.ctp.enchantmentsolution.utils.ESArrays;
-import org.ctp.enchantmentsolution.utils.compatibility.MMOUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 
 public class ItemUtils {
@@ -135,7 +135,13 @@ public class ItemUtils {
 		if (item == null) return false;
 		ItemMeta meta = item.getItemMeta();
 		if (meta.hasEnchants() || item.getType() == Material.ENCHANTED_BOOK && ((EnchantmentStorageMeta) meta).hasStoredEnchants()) return false;
-		if (ItemData.contains(ItemType.getAllEnchantMaterials(), item.getType())) return true;
+		List<ItemData> all = new ArrayList<ItemData>();
+		all.addAll(ItemType.ALL.getEnchantMaterials());
+		for(String s: ConfigString.EXTRA_ENCHANTING_MATERIALS.getStringList()) {
+			MatData data = new MatData(s);
+			if (data.getMaterial() != null) all.add(new ItemData(data.getMaterial(), null, null));
+		}
+		if (ItemData.contains(all, item.getType())) return true;
 		if (item.getType().equals(Material.BOOK)) return true;
 		return false;
 	}

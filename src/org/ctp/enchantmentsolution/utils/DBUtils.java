@@ -4,8 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.ctp.enchantmentsolution.EnchantmentSolution;
-import org.ctp.enchantmentsolution.utils.config.Configuration;
-import org.ctp.enchantmentsolution.utils.yaml.YamlConfigBackup;
+import org.ctp.enchantmentsolution.crashapi.config.Configuration;
+import org.ctp.enchantmentsolution.crashapi.config.yaml.YamlConfigBackup;
 
 public class DBUtils {
 
