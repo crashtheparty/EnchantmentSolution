@@ -13,9 +13,9 @@ import org.bukkit.entity.Horse.Style;
 import org.bukkit.entity.Parrot.Variant;
 import org.bukkit.entity.TropicalFish.Pattern;
 import org.bukkit.inventory.ItemStack;
+import org.ctp.crashapi.config.Configurable;
+import org.ctp.crashapi.config.yaml.YamlConfig;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
-import org.ctp.enchantmentsolution.crashapi.config.Configurable;
-import org.ctp.enchantmentsolution.crashapi.config.yaml.YamlConfig;
 import org.ctp.enchantmentsolution.nms.PersistenceNMS;
 
 public class AnimalMob {

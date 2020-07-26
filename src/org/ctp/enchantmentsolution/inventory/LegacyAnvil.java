@@ -6,9 +6,9 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.ctp.crashapi.utils.ChatUtils;
 import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
-import org.ctp.enchantmentsolution.crashapi.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.AnvilUtils;
 
 public class LegacyAnvil implements InventoryData {

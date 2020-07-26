@@ -3,11 +3,11 @@ package org.ctp.enchantmentsolution.enchantments.helper;
 import java.util.List;
 
 import org.bukkit.Material;
+import org.ctp.crashapi.item.ItemData;
+import org.ctp.crashapi.item.ItemType;
+import org.ctp.crashapi.item.MatData;
+import org.ctp.crashapi.utils.ChatUtils;
 import org.ctp.enchantmentsolution.Chatable;
-import org.ctp.enchantmentsolution.crashapi.item.ItemData;
-import org.ctp.enchantmentsolution.crashapi.item.ItemType;
-import org.ctp.enchantmentsolution.crashapi.item.MatData;
-import org.ctp.enchantmentsolution.crashapi.utils.ChatUtils;
 
 public enum EnchantabilityMaterial {
 	WOODEN_TOOLS(15, "WOODEN_PICKAXE", "calc.enchantability_values.wooden_tools", ItemType.WOODEN_TOOLS.getEnchantMaterials()),

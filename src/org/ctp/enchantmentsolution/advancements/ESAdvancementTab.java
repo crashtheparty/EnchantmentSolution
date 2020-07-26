@@ -4,9 +4,9 @@ import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import org.ctp.crashapi.resources.advancements.Advancement;
+import org.ctp.crashapi.resources.advancements.AdvancementFactory;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
-import org.ctp.enchantmentsolution.crashapi.resources.advancements.Advancement;
-import org.ctp.enchantmentsolution.crashapi.resources.advancements.AdvancementFactory;
 
 public class ESAdvancementTab {
 

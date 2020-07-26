@@ -3,8 +3,8 @@ package org.ctp.enchantmentsolution.utils.abilityhelpers;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.ctp.crashapi.item.MatData;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
-import org.ctp.enchantmentsolution.crashapi.item.MatData;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.items.DamageUtils;
 

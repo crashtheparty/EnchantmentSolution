@@ -1,6 +1,6 @@
 package org.ctp.enchantmentsolution;
 
-import org.ctp.enchantmentsolution.crashapi.utils.ChatUtils;
+import org.ctp.crashapi.utils.ChatUtils;
 
 public class Chatable {
 

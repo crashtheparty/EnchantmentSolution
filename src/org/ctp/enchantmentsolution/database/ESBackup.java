@@ -1,7 +1,7 @@
 package org.ctp.enchantmentsolution.database;
 
-import org.ctp.enchantmentsolution.crashapi.CrashAPIPlugin;
-import org.ctp.enchantmentsolution.crashapi.db.BackupDB;
+import org.ctp.crashapi.CrashAPIPlugin;
+import org.ctp.crashapi.db.BackupDB;
 
 public class ESBackup extends BackupDB {
 

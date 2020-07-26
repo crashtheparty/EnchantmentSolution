@@ -2,9 +2,9 @@ package org.ctp.enchantmentsolution.threads;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.ctp.crashapi.utils.ChatUtils;
 import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
-import org.ctp.enchantmentsolution.crashapi.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 
 public class WikiThread implements Runnable {

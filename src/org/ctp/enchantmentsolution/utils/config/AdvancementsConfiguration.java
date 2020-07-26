@@ -2,12 +2,12 @@ package org.ctp.enchantmentsolution.utils.config;
 
 import java.io.File;
 
+import org.ctp.crashapi.config.Configuration;
+import org.ctp.crashapi.config.yaml.YamlConfigBackup;
+import org.ctp.crashapi.db.BackupDB;
 import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
-import org.ctp.enchantmentsolution.crashapi.config.Configuration;
-import org.ctp.enchantmentsolution.crashapi.config.yaml.YamlConfigBackup;
-import org.ctp.enchantmentsolution.crashapi.db.BackupDB;
 import org.ctp.enchantmentsolution.utils.Configurations;
 
 public class AdvancementsConfiguration extends Configuration {

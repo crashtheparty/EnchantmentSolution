@@ -3,8 +3,8 @@ package org.ctp.enchantmentsolution.nms;
 import org.bukkit.Material;
 import org.bukkit.entity.Trident;
 import org.bukkit.inventory.ItemStack;
+import org.ctp.crashapi.config.Language;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
-import org.ctp.enchantmentsolution.crashapi.config.Language;
 import org.ctp.enchantmentsolution.nms.item.*;
 
 public class ItemNMS {

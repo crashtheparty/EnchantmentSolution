@@ -2,8 +2,8 @@ package org.ctp.enchantmentsolution.nms;
 
 import org.bukkit.entity.Creature;
 import org.bukkit.inventory.ItemStack;
+import org.ctp.crashapi.config.Configurable;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
-import org.ctp.enchantmentsolution.crashapi.config.Configurable;
 import org.ctp.enchantmentsolution.nms.animalmob.*;
 
 public class AnimalMobNMS {

@@ -7,12 +7,12 @@ import java.util.Map.Entry;
 
 import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
+import org.ctp.crashapi.config.*;
+import org.ctp.crashapi.config.yaml.YamlConfig;
+import org.ctp.crashapi.config.yaml.YamlConfigBackup;
+import org.ctp.crashapi.db.BackupDB;
+import org.ctp.crashapi.resources.advancements.CrashAdvancementProgress;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
-import org.ctp.enchantmentsolution.crashapi.config.*;
-import org.ctp.enchantmentsolution.crashapi.config.yaml.YamlConfig;
-import org.ctp.enchantmentsolution.crashapi.config.yaml.YamlConfigBackup;
-import org.ctp.enchantmentsolution.crashapi.db.BackupDB;
-import org.ctp.enchantmentsolution.crashapi.resources.advancements.CrashAdvancementProgress;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enchantments.generate.TableEnchantments;
@@ -152,7 +152,7 @@ public class Configurations implements CrashConfigurations {
 		debug.set("plugins.jobs_reborn", EnchantmentSolution.getPlugin().isJobsEnabled());
 		debug.set("plugins.mcmmo", EnchantmentSolution.getPlugin().getMcMMOType());
 		debug.set("plugins.mcmmo_version", EnchantmentSolution.getPlugin().getMcMMOVersion());
-		debug.set("plugins.mmo_items", EnchantmentSolution.getPlugin().getMMOItems());
+		debug.set("plugins.mmo_items", EnchantmentSolution.getMMOItems());
 		debug.set("plugins.vein_miner", EnchantmentSolution.getPlugin().getVeinMiner());
 
 		int i = 0;

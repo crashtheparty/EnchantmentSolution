@@ -5,7 +5,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.ExperienceOrb;
 import org.bukkit.entity.Player;
-import org.ctp.enchantmentsolution.crashapi.item.MatData;
+import org.ctp.crashapi.item.MatData;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 
 public class LocationUtils {

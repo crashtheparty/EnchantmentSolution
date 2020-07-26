@@ -5,11 +5,11 @@ import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.advancement.AdvancementProgress;
 import org.bukkit.entity.Player;
+import org.ctp.crashapi.resources.advancements.*;
 import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.advancements.ESAdvancementTab;
-import org.ctp.enchantmentsolution.crashapi.resources.advancements.*;
 import org.ctp.enchantmentsolution.utils.config.ConfigUtils;
 
 public class AdvancementUtils {

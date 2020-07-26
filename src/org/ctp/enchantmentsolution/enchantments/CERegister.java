@@ -5,12 +5,13 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.enchantments.Enchantment;
-import org.ctp.enchantmentsolution.crashapi.config.Language;
-import org.ctp.enchantmentsolution.crashapi.item.ItemType;
+import org.ctp.crashapi.config.Language;
+import org.ctp.crashapi.item.ItemType;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentDescription;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentDisplayName;
 import org.ctp.enchantmentsolution.enchantments.helper.Weight;
-import org.ctp.enchantmentsolution.enums.*;
+import org.ctp.enchantmentsolution.enums.EnchantmentLocation;
+import org.ctp.enchantmentsolution.enums.VanillaEnchantment;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 
 public class CERegister extends CustomEnchantment {

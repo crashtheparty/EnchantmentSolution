@@ -1,6 +1,6 @@
 package org.ctp.enchantmentsolution.utils.config;
 
-import org.ctp.enchantmentsolution.crashapi.config.Configuration;
+import org.ctp.crashapi.config.Configuration;
 import org.ctp.enchantmentsolution.utils.Configurations;
 
 public enum Type {

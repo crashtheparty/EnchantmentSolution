@@ -5,7 +5,7 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.inventory.ItemStack;
-import org.ctp.enchantmentsolution.crashapi.item.ItemSlotType;
+import org.ctp.crashapi.item.ItemSlotType;
 
 /**
  * @author Arnah

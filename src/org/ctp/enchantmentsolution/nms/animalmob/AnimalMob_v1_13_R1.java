@@ -12,9 +12,9 @@ import org.bukkit.entity.Ocelot.Type;
 import org.bukkit.entity.Parrot.Variant;
 import org.bukkit.entity.TropicalFish.Pattern;
 import org.bukkit.inventory.ItemStack;
+import org.ctp.crashapi.config.Configurable;
+import org.ctp.crashapi.config.CrashConfigurations;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
-import org.ctp.enchantmentsolution.crashapi.config.Configurable;
-import org.ctp.enchantmentsolution.crashapi.config.CrashConfigurations;
 
 @SuppressWarnings("deprecation")
 public class AnimalMob_v1_13_R1 extends AnimalMob {

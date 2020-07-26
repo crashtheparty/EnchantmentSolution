@@ -4,13 +4,13 @@ import java.io.File;
 import java.util.Arrays;
 
 import org.bukkit.plugin.java.JavaPlugin;
+import org.ctp.crashapi.config.Configuration;
+import org.ctp.crashapi.config.yaml.YamlConfigBackup;
+import org.ctp.crashapi.db.BackupDB;
+import org.ctp.crashapi.item.ItemType;
 import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.api.ApiEnchantmentWrapper;
-import org.ctp.enchantmentsolution.crashapi.config.Configuration;
-import org.ctp.enchantmentsolution.crashapi.config.yaml.YamlConfigBackup;
-import org.ctp.enchantmentsolution.crashapi.db.BackupDB;
-import org.ctp.enchantmentsolution.crashapi.item.ItemType;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantmentWrapper;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;

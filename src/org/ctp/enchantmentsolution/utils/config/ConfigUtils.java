@@ -4,8 +4,8 @@ import java.io.*;
 import java.net.URL;
 import java.util.List;
 
-import org.ctp.enchantmentsolution.crashapi.config.Configuration;
-import org.ctp.enchantmentsolution.crashapi.config.Language;
+import org.ctp.crashapi.config.Configuration;
+import org.ctp.crashapi.config.Language;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.utils.Configurations;
 import org.ctp.enchantmentsolution.utils.VersionUtils;

@@ -14,8 +14,8 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.GrindstoneInventory;
 import org.bukkit.inventory.ItemStack;
+import org.ctp.crashapi.item.MatData;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
-import org.ctp.enchantmentsolution.crashapi.item.MatData;
 import org.ctp.enchantmentsolution.enchantments.generate.GrindstoneEnchantments;
 import org.ctp.enchantmentsolution.utils.items.AbilityUtils;
 

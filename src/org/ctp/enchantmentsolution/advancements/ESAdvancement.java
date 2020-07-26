@@ -6,11 +6,11 @@ import java.util.List;
 
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.ctp.crashapi.resources.advancements.Advancement.Frame;
+import org.ctp.crashapi.resources.advancements.CrashAdvancement;
+import org.ctp.crashapi.resources.advancements.CrashTrigger;
+import org.ctp.crashapi.resources.advancements.Rewards;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
-import org.ctp.enchantmentsolution.crashapi.resources.advancements.Advancement.Frame;
-import org.ctp.enchantmentsolution.crashapi.resources.advancements.CrashAdvancement;
-import org.ctp.enchantmentsolution.crashapi.resources.advancements.CrashTrigger;
-import org.ctp.enchantmentsolution.crashapi.resources.advancements.Rewards;
 
 public enum ESAdvancement implements CrashAdvancement {
 

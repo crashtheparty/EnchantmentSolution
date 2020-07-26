@@ -11,16 +11,16 @@ import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
+import org.ctp.crashapi.CrashAPIPlugin;
+import org.ctp.crashapi.config.yaml.YamlConfig;
+import org.ctp.crashapi.db.BackupDB;
+import org.ctp.crashapi.item.ItemSerialization;
+import org.ctp.crashapi.resources.advancements.CrashAdvancementProgress;
+import org.ctp.crashapi.utils.ChatUtils;
+import org.ctp.crashapi.version.*;
+import org.ctp.crashapi.version.Version.VersionType;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.commands.EnchantmentSolutionCommand;
-import org.ctp.enchantmentsolution.crashapi.CrashAPIPlugin;
-import org.ctp.enchantmentsolution.crashapi.config.yaml.YamlConfig;
-import org.ctp.enchantmentsolution.crashapi.db.BackupDB;
-import org.ctp.enchantmentsolution.crashapi.item.ItemSerialization;
-import org.ctp.enchantmentsolution.crashapi.resources.advancements.CrashAdvancementProgress;
-import org.ctp.enchantmentsolution.crashapi.utils.ChatUtils;
-import org.ctp.enchantmentsolution.crashapi.version.*;
-import org.ctp.enchantmentsolution.crashapi.version.Version.VersionType;
 import org.ctp.enchantmentsolution.database.ESBackup;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.inventory.InventoryData;
@@ -69,7 +69,7 @@ public class EnchantmentSolution extends CrashAPIPlugin {
 	private static List<ESPlayer> PLAYERS = new ArrayList<ESPlayer>();
 	private static Configurations CONFIGURATIONS;
 	private List<InventoryData> inventories = new ArrayList<InventoryData>();
-	private boolean initialization = true, mmoItems = false, restrictedCreative = false, quests = false;
+	private boolean initialization = true, restrictedCreative = false, quests = false;
 	private BukkitVersion bukkitVersion;
 	private PluginVersion pluginVersion;
 	private BackupDB db;
@@ -387,11 +387,6 @@ public class EnchantmentSolution extends CrashAPIPlugin {
 			getChat().sendInfo("Auction House compatibility enabled!");
 		}
 
-		if (Bukkit.getPluginManager().isPluginEnabled("MMOItems")) {
-			mmoItems = true;
-			getChat().sendInfo("MMOItems compatibility enabled!");
-		}
-
 		if (Bukkit.getPluginManager().isPluginEnabled("RestrictedCreative")) {
 			restrictedCreative = true;
 			getChat().sendInfo("Restricted Creative compatibility enabled!");
@@ -404,11 +399,6 @@ public class EnchantmentSolution extends CrashAPIPlugin {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-	}
-
-	@Override
-	public boolean getMMOItems() {
-		return mmoItems;
 	}
 
 	public static ESPlayer getESPlayer(OfflinePlayer player) {

@@ -1,7 +1,7 @@
 package org.ctp.enchantmentsolution.utils.commands;
 
 import org.bukkit.command.CommandSender;
-import org.ctp.enchantmentsolution.crashapi.commands.CrashCommandCallable;
+import org.ctp.crashapi.commands.CrashCommandCallable;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 
 public class ESCommandCallable implements CrashCommandCallable {

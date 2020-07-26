@@ -6,12 +6,12 @@ import java.util.Map.Entry;
 
 import org.bukkit.Material;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.ctp.crashapi.config.CrashLanguageFile;
+import org.ctp.crashapi.config.Language;
+import org.ctp.crashapi.config.yaml.YamlConfig;
+import org.ctp.crashapi.item.ItemType;
 import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.api.ApiEnchantmentWrapper;
-import org.ctp.enchantmentsolution.crashapi.config.CrashLanguageFile;
-import org.ctp.enchantmentsolution.crashapi.config.Language;
-import org.ctp.enchantmentsolution.crashapi.config.yaml.YamlConfig;
-import org.ctp.enchantmentsolution.crashapi.item.ItemType;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantmentWrapper;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;

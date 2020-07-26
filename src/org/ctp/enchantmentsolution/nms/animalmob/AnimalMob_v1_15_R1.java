@@ -13,10 +13,10 @@ import org.bukkit.entity.Panda.Gene;
 import org.bukkit.entity.Parrot.Variant;
 import org.bukkit.entity.TropicalFish.Pattern;
 import org.bukkit.inventory.ItemStack;
+import org.ctp.crashapi.config.Configurable;
+import org.ctp.crashapi.config.CrashConfigurations;
+import org.ctp.crashapi.config.yaml.YamlConfig;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
-import org.ctp.enchantmentsolution.crashapi.config.Configurable;
-import org.ctp.enchantmentsolution.crashapi.config.CrashConfigurations;
-import org.ctp.enchantmentsolution.crashapi.config.yaml.YamlConfig;
 
 public class AnimalMob_v1_15_R1 extends AnimalMob {
 

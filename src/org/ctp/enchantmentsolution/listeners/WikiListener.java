@@ -3,8 +3,8 @@ package org.ctp.enchantmentsolution.listeners;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.ctp.crashapi.utils.ChatUtils;
 import org.ctp.enchantmentsolution.Chatable;
-import org.ctp.enchantmentsolution.crashapi.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 
 public class WikiListener implements Listener {

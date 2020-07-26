@@ -3,8 +3,8 @@ package org.ctp.enchantmentsolution.inventory;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.ctp.crashapi.utils.ChatUtils;
 import org.ctp.enchantmentsolution.Chatable;
-import org.ctp.enchantmentsolution.crashapi.utils.ChatUtils;
 
 public interface Pageable {
 

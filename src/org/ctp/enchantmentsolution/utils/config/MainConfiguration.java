@@ -4,13 +4,13 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
+import org.ctp.crashapi.config.Configuration;
+import org.ctp.crashapi.config.Language;
+import org.ctp.crashapi.config.yaml.YamlConfig;
+import org.ctp.crashapi.config.yaml.YamlConfigBackup;
+import org.ctp.crashapi.db.BackupDB;
 import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
-import org.ctp.enchantmentsolution.crashapi.config.Configuration;
-import org.ctp.enchantmentsolution.crashapi.config.Language;
-import org.ctp.enchantmentsolution.crashapi.config.yaml.YamlConfig;
-import org.ctp.enchantmentsolution.crashapi.config.yaml.YamlConfigBackup;
-import org.ctp.enchantmentsolution.crashapi.db.BackupDB;
 import org.ctp.enchantmentsolution.utils.VersionUtils;
 
 public class MainConfiguration extends Configuration {

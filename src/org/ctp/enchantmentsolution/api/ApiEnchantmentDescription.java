@@ -1,6 +1,6 @@
 package org.ctp.enchantmentsolution.api;
 
-import org.ctp.enchantmentsolution.crashapi.config.Language;
+import org.ctp.crashapi.config.Language;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentDescription;
 
 public class ApiEnchantmentDescription extends EnchantmentDescription {

@@ -2,10 +2,10 @@ package org.ctp.enchantmentsolution.utils.commands;
 
 import java.util.HashMap;
 
+import org.ctp.crashapi.commands.CrashCommand;
+import org.ctp.crashapi.utils.ChatUtils;
 import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
-import org.ctp.enchantmentsolution.crashapi.commands.CrashCommand;
-import org.ctp.enchantmentsolution.crashapi.utils.ChatUtils;
 
 public class ESCommand extends CrashCommand {
 
