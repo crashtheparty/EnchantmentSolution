@@ -17,17 +17,16 @@ import org.ctp.enchantmentsolution.enchantments.CustomEnchantmentWrapper;
 import org.ctp.enchantmentsolution.enchantments.generate.TableEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.*;
 import org.ctp.enchantmentsolution.nms.EnchantItemCriterion;
-import org.ctp.enchantmentsolution.utils.LocationUtils;
 import org.ctp.enchantmentsolution.utils.compatibility.JobsUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
-import org.ctp.enchantmentsolution.utils.items.ItemUtils;
+import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
 
 public class EnchantmentListener implements Listener {
 
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPrepareEnchant(PrepareItemEnchantEvent event) {
 		Player player = event.getEnchanter();
-		int bookshelves = LocationUtils.getBookshelves(event.getEnchantBlock().getLocation());
+		int bookshelves = EnchantmentUtils.getBookshelves(event.getEnchantBlock().getLocation());
 		ItemStack item = event.getItem();
 		TableEnchantments table = TableEnchantments.getTableEnchantments(player, item, bookshelves);
 		if (event.getOffers()[0] == null) return;
@@ -54,7 +53,7 @@ public class EnchantmentListener implements Listener {
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onEnchantItem(EnchantItemEvent event) {
 		Player player = event.getEnchanter();
-		int bookshelves = LocationUtils.getBookshelves(event.getEnchantBlock().getLocation());
+		int bookshelves = EnchantmentUtils.getBookshelves(event.getEnchantBlock().getLocation());
 		ItemStack item = event.getItem();
 		TableEnchantments table = TableEnchantments.getTableEnchantments(player, item, bookshelves);
 		for(int i = 0; i < table.getLevelList().getList().length; i++) {
@@ -62,8 +61,8 @@ public class EnchantmentListener implements Listener {
 			if (integer == event.getExpLevelCost()) {
 				List<EnchantmentLevel> enchantments = table.getEnchantments(new ItemData(item))[i].getEnchantments();
 				event.getEnchantsToAdd().clear();
-				item = ItemUtils.addEnchantmentsToItem(item, enchantments);
-				if (item.getType() == Material.BOOK && ConfigString.USE_ENCHANTED_BOOKS.getBoolean()) item = ItemUtils.convertToEnchantedBook(item);
+				item = EnchantmentUtils.addEnchantmentsToItem(item, enchantments);
+				if (item.getType() == Material.BOOK && ConfigString.USE_ENCHANTED_BOOKS.getBoolean()) item = EnchantmentUtils.convertToEnchantedBook(item);
 				if (player.getGameMode() != GameMode.CREATIVE) player.setLevel(player.getLevel() - i - 1);
 				event.getInventory().setItem(0, item);
 				event.getInventory().removeItem(new ItemStack(Material.LAPIS_LAZULI, i + 1));

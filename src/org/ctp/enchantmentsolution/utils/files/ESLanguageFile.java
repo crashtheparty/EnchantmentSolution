@@ -10,13 +10,13 @@ import org.ctp.crashapi.config.CrashLanguageFile;
 import org.ctp.crashapi.config.Language;
 import org.ctp.crashapi.config.yaml.YamlConfig;
 import org.ctp.crashapi.item.ItemType;
+import org.ctp.crashapi.nms.ItemNMS;
+import org.ctp.crashapi.utils.StringUtils;
 import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.api.ApiEnchantmentWrapper;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantmentWrapper;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
-import org.ctp.enchantmentsolution.nms.ItemNMS;
-import org.ctp.enchantmentsolution.utils.StringUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigUtils;
 
 public class ESLanguageFile extends CrashLanguageFile {

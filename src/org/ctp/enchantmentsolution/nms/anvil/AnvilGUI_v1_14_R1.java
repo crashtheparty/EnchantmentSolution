@@ -8,8 +8,8 @@ import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.ctp.crashapi.inventory.InventoryData;
 import org.ctp.enchantmentsolution.inventory.Anvil;
-import org.ctp.enchantmentsolution.inventory.InventoryData;
 
 import net.minecraft.server.v1_14_R1.*;
 

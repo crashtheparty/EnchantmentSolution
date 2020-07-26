@@ -40,13 +40,13 @@ public class SilkTouchUtils {
 				return null;
 			case "INFESTED_COBBLESTONE":
 				if (type != null && type.getBreakTypes().contains(block.getType())) {
-					if (ItemUtils.hasEnchantment(item, RegisterEnchantments.SMELTERY)) return new ItemStack(Material.STONE);
+					if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.SMELTERY)) return new ItemStack(Material.STONE);
 					return new ItemStack(Material.COBBLESTONE);
 				}
 				return null;
 			case "INFESTED_STONE_BRICKS":
 				if (type != null && type.getBreakTypes().contains(block.getType())) {
-					if (ItemUtils.hasEnchantment(item, RegisterEnchantments.SMELTERY)) return new ItemStack(Material.CRACKED_STONE_BRICKS);
+					if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.SMELTERY)) return new ItemStack(Material.CRACKED_STONE_BRICKS);
 					return new ItemStack(Material.STONE_BRICKS);
 				}
 				return null;

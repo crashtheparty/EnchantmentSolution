@@ -3,9 +3,8 @@ package org.ctp.enchantmentsolution.nms.anvil;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.ctp.crashapi.inventory.InventoryData;
 import org.ctp.enchantmentsolution.inventory.Anvil;
-import org.ctp.enchantmentsolution.inventory.InventoryData;
-import org.ctp.enchantmentsolution.nms.anvil.AnvilGUI.AnvilClickEvent;
 
 public interface AnvilClickEventHandler {
 	void onAnvilClick(AnvilClickEvent event);

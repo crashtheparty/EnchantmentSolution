@@ -9,9 +9,13 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.ctp.crashapi.config.yaml.YamlConfig;
+import org.ctp.crashapi.inventory.InventoryData;
+import org.ctp.crashapi.inventory.Pageable;
 import org.ctp.crashapi.item.ItemData;
 import org.ctp.crashapi.item.ItemType;
 import org.ctp.crashapi.item.MatData;
+import org.ctp.crashapi.utils.ChatUtils;
+import org.ctp.crashapi.utils.ItemUtils;
 import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
@@ -20,14 +24,12 @@ import org.ctp.enchantmentsolution.enchantments.generate.MinigameEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentList;
 import org.ctp.enchantmentsolution.enums.EnchantmentLocation;
-import org.ctp.enchantmentsolution.inventory.InventoryData;
-import org.ctp.enchantmentsolution.inventory.Pageable;
 import org.ctp.enchantmentsolution.inventory.minigame.MinigameItem.MinigameItemType;
 import org.ctp.enchantmentsolution.utils.Configurations;
 import org.ctp.enchantmentsolution.utils.GenerateUtils;
 import org.ctp.enchantmentsolution.utils.MinigameUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
-import org.ctp.enchantmentsolution.utils.items.ItemUtils;
+import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
 
 public class Minigame implements InventoryData, Pageable {
 
@@ -283,10 +285,10 @@ public class Minigame implements InventoryData, Pageable {
 			return;
 		}
 		item.setType(Material.BOOK);
-		item = ItemUtils.addEnchantmentsToItem(item, levels);
+		item = EnchantmentUtils.addEnchantmentsToItem(item, levels);
 
 		boolean useBooks = ConfigString.USE_ENCHANTED_BOOKS.getBoolean();
-		if (item.getType() == Material.BOOK && useBooks) item = ItemUtils.convertToEnchantedBook(item);
+		if (item.getType() == Material.BOOK && useBooks) item = EnchantmentUtils.convertToEnchantedBook(item);
 		int cost = MinigameUtils.getTableCost(random + 1);
 		if (cost <= player.getLevel() || player.getGameMode() == GameMode.CREATIVE) {
 			if (player.getGameMode() != GameMode.CREATIVE) player.setLevel(player.getLevel() - cost);
@@ -316,9 +318,9 @@ public class Minigame implements InventoryData, Pageable {
 		}
 		if (ench != null) {
 			ItemStack item = new ItemStack(Material.BOOK);
-			ItemUtils.addEnchantmentToItem(item, ench, 1);
+			EnchantmentUtils.addEnchantmentToItem(item, ench, 1);
 			boolean useBooks = ConfigString.USE_ENCHANTED_BOOKS.getBoolean();
-			if (item.getType() == Material.BOOK && useBooks) item = ItemUtils.convertToEnchantedBook(item);
+			if (item.getType() == Material.BOOK && useBooks) item = EnchantmentUtils.convertToEnchantedBook(item);
 			int cost = c.getMinigames().getInt("mondays.enchantments." + s + ".cost");
 			if (player.getLevel() >= cost || player.getGameMode() == GameMode.CREATIVE) {
 				if (player.getGameMode() != GameMode.CREATIVE) player.setLevel(player.getLevel() - cost);
@@ -341,7 +343,7 @@ public class Minigame implements InventoryData, Pageable {
 		if (item != null) {
 			ItemStack enchant = new ItemStack(item.getEnchant().getMaterial());
 			boolean useBooks = ConfigString.USE_ENCHANTED_BOOKS.getBoolean();
-			if (enchant.getType() == Material.BOOK && useBooks) enchant = ItemUtils.convertToEnchantedBook(enchant);
+			if (enchant.getType() == Material.BOOK && useBooks) enchant = EnchantmentUtils.convertToEnchantedBook(enchant);
 			int cost = item.getCost();
 			if (item.willIncreaseCost()) {
 				Map<MinigameItem, Integer> timesUsed = TIMES_USED.get(player.getUniqueId());
@@ -351,7 +353,7 @@ public class Minigame implements InventoryData, Pageable {
 				}
 			}
 			if (item.getMaxCost() > 0 && cost > item.getMaxCost()) cost = item.getMaxCost();
-			if (item.getType() == MinigameItemType.ENCHANTMENT) enchant = ItemUtils.addEnchantmentsToItem(enchant, item.getLevels());
+			if (item.getType() == MinigameItemType.ENCHANTMENT) enchant = EnchantmentUtils.addEnchantmentsToItem(enchant, item.getLevels());
 			else
 				enchant = GenerateUtils.generateMinigameLoot(player, enchant, block, item);
 			if (player.getLevel() >= cost || player.getGameMode() == GameMode.CREATIVE) {
@@ -449,6 +451,11 @@ public class Minigame implements InventoryData, Pageable {
 		TIMES_USED = new HashMap<UUID, Map<MinigameItem, Integer>>();
 
 		EnchantmentSolution.getPlugin().closeInventories(Minigame.class);
+	}
+
+	@Override
+	public ChatUtils getChat() {
+		return Chatable.get();
 	}
 
 }

@@ -12,6 +12,7 @@ import org.bukkit.inventory.ItemStack;
 import org.ctp.crashapi.config.yaml.YamlConfigBackup;
 import org.ctp.crashapi.item.MatData;
 import org.ctp.crashapi.utils.ChatUtils;
+import org.ctp.crashapi.utils.ItemUtils;
 import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.inventory.*;
@@ -20,7 +21,7 @@ import org.ctp.enchantmentsolution.inventory.minigame.Minigame;
 import org.ctp.enchantmentsolution.inventory.rpg.RPGInventory;
 import org.ctp.enchantmentsolution.nms.Anvil_GUI_NMS;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
-import org.ctp.enchantmentsolution.utils.items.ItemUtils;
+import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
 
 public class InventoryClickUtils {
 
@@ -28,7 +29,7 @@ public class InventoryClickUtils {
 	Inventory clickedInv, int slot) {
 		if (!inv.getType().equals(InventoryType.CHEST)) {
 			ItemStack item = clickedInv.getItem(slot);
-			if (ItemUtils.isEnchantable(item)) {
+			if (EnchantmentUtils.isEnchantable(item)) {
 				ItemStack replace = new ItemStack(Material.AIR);
 				int original_amount = item.getAmount();
 				if (original_amount > 1) {

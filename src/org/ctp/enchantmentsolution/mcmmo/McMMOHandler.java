@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.MetadataValue;
+import org.ctp.crashapi.utils.ItemUtils;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enchantments.generate.FishingEnchantments;
@@ -18,7 +19,7 @@ import org.ctp.enchantmentsolution.events.drops.SmelteryBonusDropsEvent;
 import org.ctp.enchantmentsolution.events.drops.TelepathyBonusDropsEvent;
 import org.ctp.enchantmentsolution.utils.VersionUtils;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.SmelteryMaterial;
-import org.ctp.enchantmentsolution.utils.items.ItemUtils;
+import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
 import org.ctp.enchantmentsolution.utils.items.SmelteryUtils;
 import org.ctp.enchantmentsolution.utils.items.TelepathyUtils;
 
@@ -39,7 +40,7 @@ public class McMMOHandler {
 			Block block = event.getBlock();
 			BlockState state = event.getBlock().getState();
 
-			if (ItemUtils.hasEnchantment(item, RegisterEnchantments.TELEPATHY)) {
+			if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.TELEPATHY)) {
 				if (!Config.getInstance().getDoubleDropsEnabled(PrimarySkillType.MINING, block.getType()) && !Config.getInstance().getDoubleDropsEnabled(PrimarySkillType.HERBALISM, block.getType()) && !Config.getInstance().getDoubleDropsEnabled(PrimarySkillType.WOODCUTTING, block.getType())) return;
 				Collection<ItemStack> drops = TelepathyUtils.handleTelepathyBonus(event, event.getPlayer(), item, block);
 				if (state.getMetadata(mcMMO.BONUS_DROPS_METAKEY).size() > 0) for(MetadataValue value: state.getMetadata(mcMMO.BONUS_DROPS_METAKEY)) {
@@ -56,7 +57,7 @@ public class McMMOHandler {
 
 					event.getBlock().getState().removeMetadata(mcMMO.BONUS_DROPS_METAKEY, mcMMO.p);
 				}
-			} else if (ItemUtils.hasEnchantment(item, RegisterEnchantments.SMELTERY)) {
+			} else if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.SMELTERY)) {
 				if (!Config.getInstance().getDoubleDropsEnabled(PrimarySkillType.MINING, block.getType()) && !Config.getInstance().getDoubleDropsEnabled(PrimarySkillType.HERBALISM, block.getType()) && !Config.getInstance().getDoubleDropsEnabled(PrimarySkillType.WOODCUTTING, block.getType())) return;
 				if (state.getMetadata(mcMMO.BONUS_DROPS_METAKEY).size() > 0) for(MetadataValue value: state.getMetadata(mcMMO.BONUS_DROPS_METAKEY)) {
 					SmelteryMaterial smelted = SmelteryUtils.getSmelteryItem(block, item);

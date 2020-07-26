@@ -5,9 +5,9 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.ctp.crashapi.inventory.InventoryData;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.inventory.Grindstone;
-import org.ctp.enchantmentsolution.inventory.InventoryData;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 
 public class PlayerInteract_v1_14 {

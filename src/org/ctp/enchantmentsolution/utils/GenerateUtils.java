@@ -13,7 +13,7 @@ import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentList;
 import org.ctp.enchantmentsolution.enums.EnchantmentLocation;
 import org.ctp.enchantmentsolution.inventory.minigame.MinigameItem;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
-import org.ctp.enchantmentsolution.utils.items.ItemUtils;
+import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
 
 public class GenerateUtils {
 
@@ -36,8 +36,8 @@ public class GenerateUtils {
 			return item;
 		}
 
-		item = ItemUtils.removeAllEnchantments(item, true);
-		return ItemUtils.addEnchantmentsToItem(item, levels);
+		item = EnchantmentUtils.removeAllEnchantments(item, true);
+		return EnchantmentUtils.addEnchantmentsToItem(item, levels);
 	}
 
 	public static ItemStack generatePiglinLoot(ItemStack item) {
@@ -50,8 +50,8 @@ public class GenerateUtils {
 			return item;
 		}
 
-		item = ItemUtils.removeAllEnchantments(item, true);
-		return ItemUtils.addEnchantmentsToItem(item, levels);
+		item = EnchantmentUtils.removeAllEnchantments(item, true);
+		return EnchantmentUtils.addEnchantmentsToItem(item, levels);
 	}
 
 	public static ItemStack generateChestLoot(Player player, ItemStack item, String lootType, EnchantmentLocation location) {
@@ -66,8 +66,8 @@ public class GenerateUtils {
 			return item;
 		}
 
-		item = ItemUtils.removeAllEnchantments(item, true);
-		return ItemUtils.addEnchantmentsToItem(item, levels);
+		item = EnchantmentUtils.removeAllEnchantments(item, true);
+		return EnchantmentUtils.addEnchantmentsToItem(item, levels);
 	}
 
 	public static ItemStack generateMinigameLoot(Player player, ItemStack item, Block block) {
@@ -80,7 +80,7 @@ public class GenerateUtils {
 			return item;
 		}
 
-		return ItemUtils.addEnchantmentsToItem(item, levels);
+		return EnchantmentUtils.addEnchantmentsToItem(item, levels);
 	}
 
 	public static MinigameEnchantments generateMinigameEnchants(Player player, ItemStack item, Block block) {
@@ -100,7 +100,7 @@ public class GenerateUtils {
 		if (!item.getType().isMultiple()) while (levels.size() > 1)
 			levels.remove(levels.size() - 1);
 
-		return ItemUtils.addEnchantmentsToItem(enchant, levels);
+		return EnchantmentUtils.addEnchantmentsToItem(enchant, levels);
 	}
 
 	public static List<EnchantmentLevel> generateBookLoot(Player player, ItemStack item) {
@@ -131,9 +131,8 @@ public class GenerateUtils {
 			return item;
 		}
 
-		item = ItemUtils.removeAllEnchantments(item, true);
-
-		return ItemUtils.addEnchantmentsToItem(item, levels);
+		item = EnchantmentUtils.removeAllEnchantments(item, true);
+		return EnchantmentUtils.addEnchantmentsToItem(item, levels);
 	}
 
 	public static ItemStack generateMobSpawnLoot(ItemStack item) {
@@ -146,9 +145,8 @@ public class GenerateUtils {
 			return item;
 		}
 
-		item = ItemUtils.removeAllEnchantments(item, true);
-
-		return ItemUtils.addEnchantmentsToItem(item, levels);
+		item = EnchantmentUtils.removeAllEnchantments(item, true);
+		return EnchantmentUtils.addEnchantmentsToItem(item, levels);
 	}
 
 	private static List<EnchantmentLevel> getEnchantments(List<EnchantmentList> lists) {

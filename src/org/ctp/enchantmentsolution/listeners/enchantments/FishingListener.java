@@ -20,7 +20,7 @@ import org.ctp.enchantmentsolution.events.player.ExpShareEvent.ExpShareType;
 import org.ctp.enchantmentsolution.listeners.Enchantmentable;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.items.AbilityUtils;
-import org.ctp.enchantmentsolution.utils.items.ItemUtils;
+import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
 
 @SuppressWarnings("unused")
 public class FishingListener extends Enchantmentable {
@@ -38,7 +38,7 @@ public class FishingListener extends Enchantmentable {
 			ItemStack caught = item.getItemStack();
 			Player player = event.getPlayer();
 			ItemStack rod = player.getInventory().getItemInMainHand();
-			if (ItemUtils.hasEnchantment(rod, RegisterEnchantments.FRIED) && canRun(RegisterEnchantments.FRIED, event) && fish.contains(caught.getType())) {
+			if (EnchantmentUtils.hasEnchantment(rod, RegisterEnchantments.FRIED) && canRun(RegisterEnchantments.FRIED, event) && fish.contains(caught.getType())) {
 				FriedEvent e = new FriedEvent(player, caught.getType());
 				Bukkit.getPluginManager().callEvent(e);
 				if (!e.isCancelled()) {
@@ -52,8 +52,8 @@ public class FishingListener extends Enchantmentable {
 					} else if (caught.getType() == Material.TROPICAL_FISH) AdvancementUtils.awardCriteria(player, ESAdvancement.NEMO_ENIM_COQUIT, "tropical_fish");
 				}
 			}
-			if (ItemUtils.hasEnchantment(rod, RegisterEnchantments.ANGLER) && canRun(RegisterEnchantments.ANGLER, event) && fish.contains(caught.getType())) {
-				AnglerEvent e = new AnglerEvent(player, caught.getType(), ItemUtils.getLevel(rod, RegisterEnchantments.ANGLER));
+			if (EnchantmentUtils.hasEnchantment(rod, RegisterEnchantments.ANGLER) && canRun(RegisterEnchantments.ANGLER, event) && fish.contains(caught.getType())) {
+				AnglerEvent e = new AnglerEvent(player, caught.getType(), EnchantmentUtils.getLevel(rod, RegisterEnchantments.ANGLER));
 				Bukkit.getPluginManager().callEvent(e);
 				if (!e.isCancelled()) {
 					caught.setType(e.getFish());
@@ -72,10 +72,10 @@ public class FishingListener extends Enchantmentable {
 		if (!canRun(RegisterEnchantments.EXP_SHARE, event)) return;
 		Player player = event.getPlayer();
 		ItemStack item = player.getInventory().getItemInMainHand();
-		if (item != null && ItemUtils.hasEnchantment(item, RegisterEnchantments.EXP_SHARE)) {
+		if (item != null && EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.EXP_SHARE)) {
 			int exp = event.getExpToDrop();
 			if (exp > 0) {
-				int level = ItemUtils.getLevel(item, RegisterEnchantments.EXP_SHARE);
+				int level = EnchantmentUtils.getLevel(item, RegisterEnchantments.EXP_SHARE);
 
 				ExpShareEvent experienceEvent = new ExpShareEvent(player, level, ExpShareType.FISH, exp, AbilityUtils.setExp(exp, level));
 				Bukkit.getPluginManager().callEvent(experienceEvent);

@@ -17,14 +17,14 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
+import org.ctp.crashapi.inventory.InventoryData;
 import org.ctp.crashapi.item.MatData;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
-import org.ctp.enchantmentsolution.inventory.InventoryData;
 import org.ctp.enchantmentsolution.inventory.snapshot.VanishInventory;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
-import org.ctp.enchantmentsolution.utils.items.ItemUtils;
+import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
 
 public class VanishListener implements Listener {
 
@@ -118,18 +118,18 @@ public class VanishListener implements Listener {
 	private static ItemStack removeEnchants(Player player, ItemStack item) {
 		if (item == null || item.getItemMeta() == null) return item;
 		for(CustomEnchantment enchant: RegisterEnchantments.getEnchantments()) {
-			if (!enchant.isEnabled()) item = ItemUtils.removeEnchantmentFromItem(item, enchant);
-			if (ItemUtils.hasEnchantment(item, enchant.getRelativeEnchantment())) {
+			if (!enchant.isEnabled()) item = EnchantmentUtils.removeEnchantmentFromItem(item, enchant);
+			if (EnchantmentUtils.hasEnchantment(item, enchant.getRelativeEnchantment())) {
 				boolean lower = false;
 				int maxLevel = enchant.getMaxLevel();
 				if (player != null) {
 					lower = player.hasPermission("enchantmentsolution.enchantments.lower-levels");
 					maxLevel = enchant.getMaxLevel(player);
 				}
-				if (lower && maxLevel < ItemUtils.getLevel(item, enchant.getRelativeEnchantment())) {
-					if (maxLevel == 0) item = ItemUtils.removeEnchantmentFromItem(item, enchant);
+				if (lower && maxLevel < EnchantmentUtils.getLevel(item, enchant.getRelativeEnchantment())) {
+					if (maxLevel == 0) item = EnchantmentUtils.removeEnchantmentFromItem(item, enchant);
 					else
-						item = ItemUtils.addEnchantmentToItem(item, enchant, maxLevel);
+						item = EnchantmentUtils.addEnchantmentToItem(item, enchant, maxLevel);
 				} else { /* placeholder */ }
 			}
 		}

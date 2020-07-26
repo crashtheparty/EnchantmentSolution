@@ -1,6 +1,6 @@
 package org.ctp.enchantmentsolution.nms.anvil;
 
-import org.ctp.enchantmentsolution.inventory.InventoryData;
+import org.ctp.crashapi.inventory.InventoryData;
 import org.ctp.enchantmentsolution.nms.anvil.AnvilGUI.AnvilSlot;
 
 public class AnvilClickEvent {

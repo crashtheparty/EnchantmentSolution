@@ -19,6 +19,9 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.ctp.crashapi.item.ItemSerialization;
 import org.ctp.crashapi.item.MatData;
+import org.ctp.crashapi.utils.DamageUtils;
+import org.ctp.crashapi.utils.ItemUtils;
+import org.ctp.crashapi.utils.LocationUtils;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
@@ -36,7 +39,6 @@ import org.ctp.enchantmentsolution.listeners.VeinMinerListener;
 import org.ctp.enchantmentsolution.mcmmo.McMMOAbility;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.BlockUtils;
-import org.ctp.enchantmentsolution.utils.LocationUtils;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.GoldDiggerCrop;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.ParticleEffect;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
@@ -74,7 +76,7 @@ public class BlockListener extends Enchantmentable {
 		Player player = event.getPlayer();
 		if (player != null) {
 			ItemStack item = player.getInventory().getItemInMainHand();
-			if (item != null && ItemUtils.hasEnchantment(item, RegisterEnchantments.CURSE_OF_LAG)) {
+			if (item != null && EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.CURSE_OF_LAG)) {
 				LagEvent lag = new LagEvent(player, player.getLocation(), AbilityUtils.createEffects(player));
 
 				Bukkit.getPluginManager().callEvent(lag);
@@ -93,10 +95,10 @@ public class BlockListener extends Enchantmentable {
 		if (!canRun(RegisterEnchantments.EXP_SHARE, event)) return;
 		Player player = event.getPlayer();
 		ItemStack killItem = player.getInventory().getItemInMainHand();
-		if (killItem != null && ItemUtils.hasEnchantment(killItem, RegisterEnchantments.EXP_SHARE)) {
+		if (killItem != null && EnchantmentUtils.hasEnchantment(killItem, RegisterEnchantments.EXP_SHARE)) {
 			int exp = event.getExpToDrop();
 			if (exp > 0) {
-				int level = ItemUtils.getLevel(killItem, RegisterEnchantments.EXP_SHARE);
+				int level = EnchantmentUtils.getLevel(killItem, RegisterEnchantments.EXP_SHARE);
 
 				ExpShareEvent experienceEvent = new ExpShareEvent(player, level, ExpShareType.BLOCK, exp, AbilityUtils.setExp(exp, level));
 				Bukkit.getPluginManager().callEvent(experienceEvent);
@@ -111,10 +113,10 @@ public class BlockListener extends Enchantmentable {
 		if (event.isCancelled()) return;
 		Player player = event.getPlayer();
 		ItemStack item = player.getInventory().getItemInMainHand();
-		if (item != null) if (!ItemUtils.hasEnchantment(item, RegisterEnchantments.TELEPATHY)) if (ItemUtils.hasEnchantment(item, RegisterEnchantments.GOLD_DIGGER)) {
+		if (item != null) if (!EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.TELEPATHY)) if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.GOLD_DIGGER)) {
 			ItemStack goldDigger = AbilityUtils.getGoldDiggerItems(item, event.getBlock());
 			if (goldDigger != null) {
-				int level = ItemUtils.getLevel(item, RegisterEnchantments.GOLD_DIGGER);
+				int level = EnchantmentUtils.getLevel(item, RegisterEnchantments.GOLD_DIGGER);
 				GoldDiggerEvent goldDiggerEvent = new GoldDiggerEvent(player, level, event.getBlock(), goldDigger, GoldDiggerCrop.getExp(event.getBlock().getType(), level));
 				Bukkit.getPluginManager().callEvent(goldDiggerEvent);
 
@@ -135,7 +137,7 @@ public class BlockListener extends Enchantmentable {
 		Player player = event.getPlayer();
 		ItemStack item = player.getInventory().getItemInMainHand();
 		if (player.getGameMode().equals(GameMode.CREATIVE) || player.getGameMode().equals(GameMode.SPECTATOR)) return;
-		if (item != null) if (ItemUtils.hasEnchantment(item, RegisterEnchantments.SMELTERY)) SmelteryUtils.handleSmeltery(event, player, blockBroken, item);
+		if (item != null) if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.SMELTERY)) SmelteryUtils.handleSmeltery(event, player, blockBroken, item);
 	}
 
 	private void telepathy(BlockBreakEvent event) {
@@ -144,7 +146,7 @@ public class BlockListener extends Enchantmentable {
 		if (player.getGameMode().equals(GameMode.CREATIVE) || player.getGameMode().equals(GameMode.SPECTATOR)) return;
 		Block block = event.getBlock();
 		ItemStack item = player.getInventory().getItemInMainHand();
-		if (item != null) if (ItemUtils.hasEnchantment(item, RegisterEnchantments.TELEPATHY)) TelepathyUtils.handleTelepathy(event, player, item, block);
+		if (item != null) if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.TELEPATHY)) TelepathyUtils.handleTelepathy(event, player, item, block);
 	}
 
 	private void heightWidth(BlockBreakEvent event) {
@@ -159,10 +161,10 @@ public class BlockListener extends Enchantmentable {
 			int xt = 0;
 			int yt = 0;
 			int zt = 0;
-			int heightPlusPlus = ItemUtils.getLevel(item, RegisterEnchantments.HEIGHT_PLUS_PLUS);
-			int widthPlusPlus = ItemUtils.getLevel(item, RegisterEnchantments.WIDTH_PLUS_PLUS);
+			int heightPlusPlus = EnchantmentUtils.getLevel(item, RegisterEnchantments.HEIGHT_PLUS_PLUS);
+			int widthPlusPlus = EnchantmentUtils.getLevel(item, RegisterEnchantments.WIDTH_PLUS_PLUS);
 			boolean hasWidthHeight = false;
-			if (RegisterEnchantments.isEnabled(RegisterEnchantments.WIDTH_PLUS_PLUS) && ItemUtils.hasEnchantment(item, RegisterEnchantments.WIDTH_PLUS_PLUS)) {
+			if (RegisterEnchantments.isEnabled(RegisterEnchantments.WIDTH_PLUS_PLUS) && EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.WIDTH_PLUS_PLUS)) {
 				hasWidthHeight = true;
 				float yaw = player.getLocation().getYaw() % 360;
 				while (yaw < 0)
@@ -172,7 +174,7 @@ public class BlockListener extends Enchantmentable {
 					zt = widthPlusPlus;
 
 			}
-			if (RegisterEnchantments.isEnabled(RegisterEnchantments.HEIGHT_PLUS_PLUS) && ItemUtils.hasEnchantment(item, RegisterEnchantments.HEIGHT_PLUS_PLUS)) {
+			if (RegisterEnchantments.isEnabled(RegisterEnchantments.HEIGHT_PLUS_PLUS) && EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.HEIGHT_PLUS_PLUS)) {
 				hasWidthHeight = true;
 				float pitch = player.getLocation().getPitch();
 				float yaw = player.getLocation().getYaw() % 360;
@@ -237,14 +239,14 @@ public class BlockListener extends Enchantmentable {
 			int xt = 0;
 			int yt = 0;
 			int zt = 0;
-			if (ItemUtils.hasEnchantment(item, RegisterEnchantments.WAND)) {
+			if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.WAND)) {
 				ItemStack offhand = player.getInventory().getItemInOffHand();
 				if (!ItemPlaceType.getPlaceTypes().contains(offhand.getType())) return;
 				float yaw = player.getLocation().getYaw() % 360;
 				float pitch = player.getLocation().getPitch();
 				while (yaw < 0)
 					yaw += 360;
-				int level = ItemUtils.getLevel(item, RegisterEnchantments.WAND);
+				int level = EnchantmentUtils.getLevel(item, RegisterEnchantments.WAND);
 				Block clickedBlock = event.getBlock();
 				if (pitch > 53 || pitch <= -53) {
 					xt = level;
@@ -333,7 +335,7 @@ public class BlockListener extends Enchantmentable {
 			Player player = (Player) entity;
 			if (event.getBlock().getType() == Material.FARMLAND && event.getTo() == Material.DIRT) {
 				ItemStack boots = player.getInventory().getBoots();
-				if (boots != null && ItemUtils.hasEnchantment(boots, RegisterEnchantments.LIGHT_WEIGHT)) {
+				if (boots != null && EnchantmentUtils.hasEnchantment(boots, RegisterEnchantments.LIGHT_WEIGHT)) {
 					LightWeightEvent lightWeight = new LightWeightEvent(event.getBlock(), player);
 					Bukkit.getPluginManager().callEvent(lightWeight);
 

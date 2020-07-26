@@ -10,13 +10,13 @@ import org.bukkit.*;
 import org.bukkit.boss.*;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.ctp.crashapi.nms.HotbarNMS;
 import org.ctp.crashapi.utils.ChatUtils;
 import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
-import org.ctp.enchantmentsolution.nms.HotbarNMS;
 import org.ctp.enchantmentsolution.rpg.threads.RPGThread;
 import org.ctp.enchantmentsolution.utils.PermissionUtils;
 

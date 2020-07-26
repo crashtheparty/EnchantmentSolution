@@ -21,7 +21,7 @@ import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.nms.PersistenceNMS;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
-import org.ctp.enchantmentsolution.utils.items.ItemUtils;
+import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
 
 public class PersistenceUtils {
 
@@ -81,7 +81,7 @@ public class PersistenceUtils {
 		if (config.equalsIgnoreCase("top")) {
 			for(String s: lore) {
 				EnchResult result = isEnchantment(meta, s);
-				if (result.isEnchant() && result.isChange()) newLore.add(returnEnchantmentName(result.getEnchantment(), ItemUtils.getLevel(item, result.getEnchantment().getRelativeEnchantment())));
+				if (result.isEnchant() && result.isChange()) newLore.add(returnEnchantmentName(result.getEnchantment(), EnchantmentUtils.getLevel(item, result.getEnchantment().getRelativeEnchantment())));
 				else if (result.isEnchant()) newLore.add(s);
 			}
 			for(String s: lore) {
@@ -95,7 +95,7 @@ public class PersistenceUtils {
 			}
 			for(String s: lore) {
 				EnchResult result = isEnchantment(meta, s);
-				if (result.isEnchant() && result.isChange()) newLore.add(returnEnchantmentName(result.getEnchantment(), ItemUtils.getLevel(item, result.getEnchantment().getRelativeEnchantment())));
+				if (result.isEnchant() && result.isChange()) newLore.add(returnEnchantmentName(result.getEnchantment(), EnchantmentUtils.getLevel(item, result.getEnchantment().getRelativeEnchantment())));
 				else if (result.isEnchant()) newLore.add(s);
 			}
 		} else
@@ -217,7 +217,7 @@ public class PersistenceUtils {
 				container.remove(EnchantmentSolution.getKey("sticky_hold_" + enchant.getName()));
 			}
 			item.setItemMeta(newMeta);
-			item = ItemUtils.addEnchantmentsToItem(item, levels);
+			item = EnchantmentUtils.addEnchantmentsToItem(item, levels);
 		}
 		return item;
 	}
@@ -242,7 +242,7 @@ public class PersistenceUtils {
 		}
 		stickyItem.setItemMeta(stickyMeta);
 		for(CustomEnchantment e: remove)
-			ItemUtils.removeEnchantmentFromItem(stickyItem, e);
+			EnchantmentUtils.removeEnchantmentFromItem(stickyItem, e);
 
 		return stickyItem;
 	}
@@ -326,8 +326,8 @@ public class PersistenceUtils {
 					while (iter.hasNext()) {
 						Entry<Enchantment, Integer> entry = iter.next();
 						CustomEnchantment custom = RegisterEnchantments.getCustomEnchantment(entry.getKey());
-						ItemUtils.removeEnchantmentFromItem(item, custom);
-						ItemUtils.addEnchantmentToItem(item, custom, entry.getValue());
+						EnchantmentUtils.removeEnchantmentFromItem(item, custom);
+						EnchantmentUtils.addEnchantmentToItem(item, custom, entry.getValue());
 					}
 				}
 			} else {

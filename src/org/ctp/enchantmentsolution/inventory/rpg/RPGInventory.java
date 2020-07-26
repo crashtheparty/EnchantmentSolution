@@ -11,13 +11,14 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.ctp.crashapi.inventory.InventoryData;
+import org.ctp.crashapi.inventory.Pageable;
+import org.ctp.crashapi.utils.ChatUtils;
 import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
-import org.ctp.enchantmentsolution.inventory.InventoryData;
-import org.ctp.enchantmentsolution.inventory.Pageable;
 import org.ctp.enchantmentsolution.rpg.RPGPlayer;
 import org.ctp.enchantmentsolution.rpg.RPGUtils;
 
@@ -368,6 +369,11 @@ public class RPGInventory implements InventoryData, Pageable {
 
 	public Screen getScreen() {
 		return screen;
+	}
+
+	@Override
+	public ChatUtils getChat() {
+		return Chatable.get();
 	}
 
 }

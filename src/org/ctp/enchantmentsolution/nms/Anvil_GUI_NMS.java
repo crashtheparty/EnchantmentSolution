@@ -1,8 +1,8 @@
 package org.ctp.enchantmentsolution.nms;
 
 import org.bukkit.entity.Player;
+import org.ctp.crashapi.inventory.InventoryData;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
-import org.ctp.enchantmentsolution.inventory.InventoryData;
 import org.ctp.enchantmentsolution.nms.anvil.*;
 
 public class Anvil_GUI_NMS {

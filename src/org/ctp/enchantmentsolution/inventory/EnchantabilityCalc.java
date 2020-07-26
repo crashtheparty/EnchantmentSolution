@@ -10,6 +10,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.ctp.crashapi.inventory.InventoryData;
+import org.ctp.crashapi.inventory.Pageable;
+import org.ctp.crashapi.utils.ChatUtils;
 import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
@@ -312,6 +315,11 @@ public class EnchantabilityCalc implements InventoryData, Pageable {
 		}
 
 		return new int[] { level--, max };
+	}
+
+	@Override
+	public ChatUtils getChat() {
+		return Chatable.get();
 	}
 
 }

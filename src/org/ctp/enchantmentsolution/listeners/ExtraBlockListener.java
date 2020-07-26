@@ -14,6 +14,8 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.metadata.FixedMetadataValue;
+import org.ctp.crashapi.utils.DamageUtils;
+import org.ctp.crashapi.utils.ItemUtils;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
@@ -26,8 +28,7 @@ import org.ctp.enchantmentsolution.utils.abilityhelpers.WalkerUtils;
 import org.ctp.enchantmentsolution.utils.compatibility.JobsUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 import org.ctp.enchantmentsolution.utils.items.AbilityUtils;
-import org.ctp.enchantmentsolution.utils.items.DamageUtils;
-import org.ctp.enchantmentsolution.utils.items.ItemUtils;
+import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
 
 public class ExtraBlockListener implements Listener {
 
@@ -40,7 +41,7 @@ public class ExtraBlockListener implements Listener {
 			if (WalkerUtils.getWalker(event.getBlock()).getEnchantment() == RegisterEnchantments.VOID_WALKER) AdvancementUtils.awardCriteria(event.getPlayer(), ESAdvancement.DETERMINED_CHEATER, "cheater");
 		}
 
-		if (ESArrays.getShulkerBoxes().contains(event.getBlock().getType())) if (!ItemUtils.hasEnchantment(event.getPlayer().getInventory().getItemInMainHand(), RegisterEnchantments.TELEPATHY)) {
+		if (ESArrays.getShulkerBoxes().contains(event.getBlock().getType())) if (!EnchantmentUtils.hasEnchantment(event.getPlayer().getInventory().getItemInMainHand(), RegisterEnchantments.TELEPATHY)) {
 			Player player = event.getPlayer();
 			ItemStack item = player.getInventory().getItemInMainHand();
 			Block block = event.getBlock();
@@ -48,7 +49,7 @@ public class ExtraBlockListener implements Listener {
 				event.setCancelled(true);
 				Collection<ItemStack> drops = block.getDrops();
 
-				drops = ItemUtils.getSoulboundShulkerBox(player, block, drops);
+				drops = EnchantmentUtils.getSoulboundShulkerBox(player, block, drops);
 				AbilityUtils.giveExperience(player, event.getExpToDrop());
 				player.incrementStatistic(Statistic.MINE_BLOCK, event.getBlock().getType());
 				player.incrementStatistic(Statistic.USE_ITEM, item.getType());
@@ -69,7 +70,7 @@ public class ExtraBlockListener implements Listener {
 			if (meta != null) {
 				String name = meta.getDisplayName();
 				if (name != null && !name.equals("")) event.getBlockPlaced().setMetadata("shulker_name", new FixedMetadataValue(EnchantmentSolution.getPlugin(), name));
-				if (ItemUtils.hasEnchantment(event.getItemInHand(), RegisterEnchantments.SOULBOUND)) event.getBlockPlaced().setMetadata("soulbound", new FixedMetadataValue(EnchantmentSolution.getPlugin(), true));
+				if (EnchantmentUtils.hasEnchantment(event.getItemInHand(), RegisterEnchantments.SOULBOUND)) event.getBlockPlaced().setMetadata("soulbound", new FixedMetadataValue(EnchantmentSolution.getPlugin(), true));
 			}
 		}
 	}

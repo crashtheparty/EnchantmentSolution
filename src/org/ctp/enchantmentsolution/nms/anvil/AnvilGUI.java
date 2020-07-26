@@ -12,10 +12,10 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.ctp.crashapi.inventory.InventoryData;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.inventory.Anvil;
 import org.ctp.enchantmentsolution.inventory.ConfigInventory;
-import org.ctp.enchantmentsolution.inventory.InventoryData;
 import org.ctp.enchantmentsolution.nms.AnvilNMS;
 import org.ctp.enchantmentsolution.utils.AnvilUtils;
 
@@ -38,51 +38,6 @@ public abstract class AnvilGUI {
 				if (anvilSlot.getSlot() == slot) return anvilSlot;
 
 			return null;
-		}
-	}
-
-	public class AnvilClickEvent {
-		private AnvilSlot slot;
-
-		private String name;
-
-		private InventoryData data;
-
-		private boolean close = true;
-		private boolean destroy = true;
-
-		public AnvilClickEvent(AnvilSlot slot, String name, InventoryData data) {
-			this.slot = slot;
-			this.name = name;
-			this.data = data;
-		}
-
-		public AnvilSlot getSlot() {
-			return slot;
-		}
-
-		public InventoryData getData() {
-			return data;
-		}
-
-		public String getName() {
-			return name;
-		}
-
-		public boolean getWillClose() {
-			return close;
-		}
-
-		public void setWillClose(boolean close) {
-			this.close = close;
-		}
-
-		public boolean getWillDestroy() {
-			return destroy;
-		}
-
-		public void setWillDestroy(boolean destroy) {
-			this.destroy = destroy;
 		}
 	}
 

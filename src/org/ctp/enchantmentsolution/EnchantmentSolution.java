@@ -14,7 +14,9 @@ import org.bukkit.plugin.Plugin;
 import org.ctp.crashapi.CrashAPIPlugin;
 import org.ctp.crashapi.config.yaml.YamlConfig;
 import org.ctp.crashapi.db.BackupDB;
+import org.ctp.crashapi.inventory.InventoryData;
 import org.ctp.crashapi.item.ItemSerialization;
+import org.ctp.crashapi.listeners.EquipListener;
 import org.ctp.crashapi.resources.advancements.CrashAdvancementProgress;
 import org.ctp.crashapi.utils.ChatUtils;
 import org.ctp.crashapi.version.*;
@@ -23,7 +25,6 @@ import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.commands.EnchantmentSolutionCommand;
 import org.ctp.enchantmentsolution.database.ESBackup;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
-import org.ctp.enchantmentsolution.inventory.InventoryData;
 import org.ctp.enchantmentsolution.listeners.*;
 import org.ctp.enchantmentsolution.listeners.advancements.AdvancementEntityDeath;
 import org.ctp.enchantmentsolution.listeners.advancements.AdvancementPlayerEvent;
@@ -212,10 +213,12 @@ public class EnchantmentSolution extends CrashAPIPlugin {
 		return initialization;
 	}
 
+	@Override
 	public BukkitVersion getBukkitVersion() {
 		return bukkitVersion;
 	}
 
+	@Override
 	public PluginVersion getPluginVersion() {
 		return pluginVersion;
 	}

@@ -9,14 +9,16 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.ctp.crashapi.inventory.InventoryData;
+import org.ctp.crashapi.utils.ItemUtils;
+import org.ctp.crashapi.utils.LocationUtils;
 import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.generate.GrindstoneEnchantments;
 import org.ctp.enchantmentsolution.nms.AnvilNMS;
-import org.ctp.enchantmentsolution.utils.LocationUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 import org.ctp.enchantmentsolution.utils.config.ConfigUtils;
-import org.ctp.enchantmentsolution.utils.items.ItemUtils;
+import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
 
 public class Grindstone implements InventoryData {
 
@@ -211,7 +213,7 @@ public class Grindstone implements InventoryData {
 				playerItems.remove(1);
 				if (ConfigString.DESTROY_TAKE_ITEM.getBoolean()) playerItems.remove(0);
 				else
-					playerItems.set(0, ItemUtils.removeAllEnchantments(playerItems.get(0), true));
+					playerItems.set(0, EnchantmentUtils.removeAllEnchantments(playerItems.get(0), true));
 			} else {
 				ItemUtils.giveItemToPlayer(player, grindstone.getCombinedItem(), player.getLocation(), false);
 				playGrindstoneSound();

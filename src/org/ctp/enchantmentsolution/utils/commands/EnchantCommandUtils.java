@@ -15,6 +15,7 @@ import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.ctp.crashapi.commands.CrashCommand;
 import org.ctp.crashapi.item.ItemData;
 import org.ctp.crashapi.utils.ChatUtils;
+import org.ctp.crashapi.utils.ItemUtils;
 import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
@@ -22,7 +23,7 @@ import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.enums.EnchantmentLocation;
 import org.ctp.enchantmentsolution.utils.GenerateUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
-import org.ctp.enchantmentsolution.utils.items.ItemUtils;
+import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -113,7 +114,7 @@ public class EnchantCommandUtils {
 						if (itemToEnchant != null) {
 							if (!unsafe) {
 								int maxEnchants = ConfigString.MAX_ENCHANTMENTS.getInt();
-								int itemEnchants = ItemUtils.getTotalEnchantments(itemToEnchant);
+								int itemEnchants = EnchantmentUtils.getTotalEnchantments(itemToEnchant);
 								if (maxEnchants <= 0 || itemEnchants < maxEnchants && maxEnchants > 0) {
 									if (!(enchant.canAnvilItem(new ItemData(itemToEnchant)) || enchant.canEnchantItem(new ItemData(itemToEnchant)))) {
 										HashMap<String, Object> codes = ChatUtils.getCodes();
@@ -129,9 +130,9 @@ public class EnchantCommandUtils {
 								}
 							}
 							boolean useBooks = ConfigString.USE_ENCHANTED_BOOKS.getBoolean();
-							if (itemToEnchant.getType() == Material.BOOK && useBooks) itemToEnchant = ItemUtils.convertToEnchantedBook(itemToEnchant);
-							else if (itemToEnchant.getType() == Material.ENCHANTED_BOOK && !useBooks) itemToEnchant = ItemUtils.convertToRegularBook(itemToEnchant);
-							itemToEnchant = ItemUtils.addEnchantmentToItem(itemToEnchant, enchant, level);
+							if (itemToEnchant.getType() == Material.BOOK && useBooks) itemToEnchant = EnchantmentUtils.convertToEnchantedBook(itemToEnchant);
+							else if (itemToEnchant.getType() == Material.ENCHANTED_BOOK && !useBooks) itemToEnchant = EnchantmentUtils.convertToRegularBook(itemToEnchant);
+							itemToEnchant = EnchantmentUtils.addEnchantmentToItem(itemToEnchant, enchant, level);
 
 							givePlayer.getInventory().setItem(slot, itemToEnchant);
 							HashMap<String, Object> codes = ChatUtils.getCodes();
@@ -223,14 +224,14 @@ public class EnchantCommandUtils {
 						ItemStack itemToEnchant = removePlayer.getInventory().getItem(slot);
 						if (itemToEnchant != null) {
 							boolean useBooks = ConfigString.USE_ENCHANTED_BOOKS.getBoolean();
-							if (itemToEnchant.getType() == Material.BOOK && useBooks) itemToEnchant = ItemUtils.convertToEnchantedBook(itemToEnchant);
-							else if (itemToEnchant.getType() == Material.ENCHANTED_BOOK && !useBooks) itemToEnchant = ItemUtils.convertToRegularBook(itemToEnchant);
+							if (itemToEnchant.getType() == Material.BOOK && useBooks) itemToEnchant = EnchantmentUtils.convertToEnchantedBook(itemToEnchant);
+							else if (itemToEnchant.getType() == Material.ENCHANTED_BOOK && !useBooks) itemToEnchant = EnchantmentUtils.convertToRegularBook(itemToEnchant);
 							HashMap<String, Object> codes = ChatUtils.getCodes();
 							if (all) {
-								itemToEnchant = ItemUtils.removeAllEnchantments(itemToEnchant, includeCurse);
+								itemToEnchant = EnchantmentUtils.removeAllEnchantments(itemToEnchant, includeCurse);
 								codes.put("%enchant%", "All");
 							} else {
-								itemToEnchant = ItemUtils.removeEnchantmentFromItem(itemToEnchant, enchant);
+								itemToEnchant = EnchantmentUtils.removeEnchantmentFromItem(itemToEnchant, enchant);
 								codes.put("%enchant%", enchant.getDisplayName());
 							}
 							if (itemToEnchant.getType() == Material.ENCHANTED_BOOK && !((EnchantmentStorageMeta) itemToEnchant.getItemMeta()).hasStoredEnchants()) itemToEnchant.setType(Material.BOOK);
@@ -363,7 +364,7 @@ public class EnchantCommandUtils {
 		boolean useBooks = ConfigString.USE_ENCHANTED_BOOKS.getBoolean();
 		ItemStack book = new ItemStack(Material.BOOK);
 		if (useBooks) book = new ItemStack(Material.ENCHANTED_BOOK);
-		book = ItemUtils.addEnchantmentsToItem(book, levels);
+		book = EnchantmentUtils.addEnchantmentsToItem(book, levels);
 
 		for(int i = 0; i < amount; i++)
 			ItemUtils.giveItemToPlayer(givePlayer, book, givePlayer.getLocation(), false);

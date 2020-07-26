@@ -12,25 +12,25 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.ctp.crashapi.events.ArmorEquipEvent;
+import org.ctp.crashapi.events.ArmorEquipEvent.EquipMethod;
+import org.ctp.crashapi.events.ItemEquipEvent;
+import org.ctp.crashapi.events.ItemEquipEvent.HandMethod;
 import org.ctp.crashapi.item.ItemSlot;
 import org.ctp.crashapi.item.ItemSlotType;
+import org.ctp.crashapi.nms.DamageEvent;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.*;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
-import org.ctp.enchantmentsolution.events.ArmorEquipEvent;
-import org.ctp.enchantmentsolution.events.ArmorEquipEvent.EquipMethod;
-import org.ctp.enchantmentsolution.events.ItemEquipEvent;
-import org.ctp.enchantmentsolution.events.ItemEquipEvent.HandMethod;
 import org.ctp.enchantmentsolution.events.potion.MagicGuardPotionEvent;
 import org.ctp.enchantmentsolution.events.potion.PotionEventType;
 import org.ctp.enchantmentsolution.events.potion.UnrestPotionEvent;
 import org.ctp.enchantmentsolution.listeners.Enchantmentable;
-import org.ctp.enchantmentsolution.nms.DamageEvent;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.ESArrays;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.ItemEquippedSlot;
-import org.ctp.enchantmentsolution.utils.items.ItemUtils;
+import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
 import org.ctp.enchantmentsolution.utils.player.ESPlayer;
 
 public class AttributeListener extends Enchantmentable {
@@ -59,7 +59,7 @@ public class AttributeListener extends Enchantmentable {
 
 	private void itemEquip(Player player, ItemStack item, ItemSlotType type, boolean equip, boolean join) {
 		if (item != null && item.hasItemMeta()) {
-			Iterator<EnchantmentLevel> iterator = ItemUtils.getEnchantmentLevels(item).iterator();
+			Iterator<EnchantmentLevel> iterator = EnchantmentUtils.getEnchantmentLevels(item).iterator();
 
 			start: while (iterator.hasNext()) {
 				EnchantmentLevel level = iterator.next();
@@ -109,17 +109,17 @@ public class AttributeListener extends Enchantmentable {
 									for(ItemSlotType s: ItemSlotType.ARMOR) {
 										if (s == slot.getType()) continue;
 										ItemStack armor = esPlayer.getEquipped()[s.getSlot() - 5];
-										if (armor != null && ItemUtils.hasEnchantment(armor, RegisterEnchantments.GUNG_HO)) {
+										if (armor != null && EnchantmentUtils.hasEnchantment(armor, RegisterEnchantments.GUNG_HO)) {
 											gungHo = new ItemSlot(armor, s);
 											break;
-										} else if (armor != null && ItemUtils.hasEnchantment(armor, RegisterEnchantments.LIFE)) life.add(new ItemSlot(armor, s));
+										} else if (armor != null && EnchantmentUtils.hasEnchantment(armor, RegisterEnchantments.LIFE)) life.add(new ItemSlot(armor, s));
 									}
 									if (gungHo != null) {
 										Attributable gh = Attributable.GUNG_HO;
 										for(ItemEquippedSlot s: gh.getTypes())
 											if (gungHo.getType() == s.getType()) {
 												Enchantment ench = gh.getEnchantment();
-												EnchantmentLevel enchLevel = new EnchantmentLevel(RegisterEnchantments.getCustomEnchantment(ench), ItemUtils.getLevel(gungHo.getItem(), ench));
+												EnchantmentLevel enchLevel = new EnchantmentLevel(RegisterEnchantments.getCustomEnchantment(ench), EnchantmentUtils.getLevel(gungHo.getItem(), ench));
 												Attributable.addAttribute(player, enchLevel, gh, s);
 											}
 									} else if (life.size() > 0) {
@@ -127,7 +127,7 @@ public class AttributeListener extends Enchantmentable {
 										for(ItemSlot is: life)
 											for(ItemEquippedSlot s: l.getTypes()) {
 												Enchantment ench = l.getEnchantment();
-												EnchantmentLevel enchLevel = new EnchantmentLevel(RegisterEnchantments.getCustomEnchantment(ench), ItemUtils.getLevel(is.getItem(), ench));
+												EnchantmentLevel enchLevel = new EnchantmentLevel(RegisterEnchantments.getCustomEnchantment(ench), EnchantmentUtils.getLevel(is.getItem(), ench));
 												if (is.getType() == s.getType()) Attributable.addAttribute(player, enchLevel, l, s);
 											}
 									}
@@ -140,13 +140,13 @@ public class AttributeListener extends Enchantmentable {
 										if (slotNum > 10 && s.getType() == ItemSlotType.OFF_HAND) slotNum = 40;
 										ItemStack armor = esPlayer.getEquipped()[slotNum];
 										Enchantment enchant = a.getEnchantment();
-										if (armor != null && ItemUtils.hasEnchantment(armor, enchant) && (ench == null || ItemUtils.getLevel(ench.getItem(), enchant) > ItemUtils.getLevel(armor, enchant))) ench = new ItemSlot(armor, s.getType());
+										if (armor != null && EnchantmentUtils.hasEnchantment(armor, enchant) && (ench == null || EnchantmentUtils.getLevel(ench.getItem(), enchant) > EnchantmentUtils.getLevel(armor, enchant))) ench = new ItemSlot(armor, s.getType());
 									}
 									if (ench != null) {
 										Attributable att = Attributable.valueOf(a.getEnchantment().getKey().getKey().toUpperCase());
 										for(ItemEquippedSlot s: att.getTypes()) {
 											Enchantment enchantment = att.getEnchantment();
-											EnchantmentLevel enchLevel = new EnchantmentLevel(RegisterEnchantments.getCustomEnchantment(enchantment), ItemUtils.getLevel(ench.getItem(), enchantment));
+											EnchantmentLevel enchLevel = new EnchantmentLevel(RegisterEnchantments.getCustomEnchantment(enchantment), EnchantmentUtils.getLevel(ench.getItem(), enchantment));
 											if (ench.getType() == s.getType()) Attributable.addAttribute(player, enchLevel, att, s);
 										}
 									}

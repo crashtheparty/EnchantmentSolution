@@ -13,8 +13,8 @@ public class FortuneUtils {
 	private static List<Material> CROPS = Arrays.asList(Material.WHEAT, Material.CARROTS, Material.POTATOES, Material.NETHER_WART, Material.BEETROOTS, Material.COCOA_BEANS);
 
 	public static ItemStack getFortuneForSmeltery(ItemStack smelted, ItemStack item, Material original) {
-		if (ItemUtils.hasEnchantment(item, Enchantment.LOOT_BONUS_BLOCKS)) {
-			int level = ItemUtils.getLevel(item, Enchantment.LOOT_BONUS_BLOCKS);
+		if (EnchantmentUtils.hasEnchantment(item, Enchantment.LOOT_BONUS_BLOCKS)) {
+			int level = EnchantmentUtils.getLevel(item, Enchantment.LOOT_BONUS_BLOCKS);
 			switch (original.name()) {
 				case "ANCIENT_DEBRIS":
 					double extraAmount = Math.random() * (level * 0.15);
@@ -40,7 +40,7 @@ public class FortuneUtils {
 
 	public static Collection<ItemStack> getFortuneItems(ItemStack item, Block brokenBlock,
 	Collection<ItemStack> priorItems) {
-		int level = ItemUtils.getLevel(item, Enchantment.LOOT_BONUS_BLOCKS);
+		int level = EnchantmentUtils.getLevel(item, Enchantment.LOOT_BONUS_BLOCKS);
 		if (level <= 0) return priorItems;
 		Iterator<ItemStack> iter = priorItems.iterator();
 		List<ItemStack> duplicate = new ArrayList<ItemStack>();

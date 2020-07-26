@@ -23,7 +23,7 @@ import org.ctp.enchantmentsolution.listeners.Enchantmentable;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.PermissionUtils;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.TransmutationLoot;
-import org.ctp.enchantmentsolution.utils.items.ItemUtils;
+import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
 
 @SuppressWarnings("unused")
 public class DropsListener extends Enchantmentable {
@@ -38,8 +38,8 @@ public class DropsListener extends Enchantmentable {
 		if (!canRun(RegisterEnchantments.BEHEADING, event)) return;
 		Entity entity = event.getEntity();
 		Player killer = event.getEntity().getKiller();
-		if (killer != null) if (ItemUtils.hasEnchantment(killer.getInventory().getItemInMainHand(), RegisterEnchantments.BEHEADING)) {
-			int level = ItemUtils.getLevel(killer.getInventory().getItemInMainHand(), RegisterEnchantments.BEHEADING);
+		if (killer != null) if (EnchantmentUtils.hasEnchantment(killer.getInventory().getItemInMainHand(), RegisterEnchantments.BEHEADING)) {
+			int level = EnchantmentUtils.getLevel(killer.getInventory().getItemInMainHand(), RegisterEnchantments.BEHEADING);
 			double chance = level * .05;
 			double random = Math.random();
 			if (chance > random) {
@@ -92,7 +92,7 @@ public class DropsListener extends Enchantmentable {
 					if (meta.getOwningPlugin().equals(EnchantmentSolution.getPlugin())) handleTransmutation(event);
 			} else if (event.getEntity().getKiller() != null) {
 				Player killer = event.getEntity().getKiller();
-				if (ItemUtils.hasEnchantment(killer.getInventory().getItemInMainHand(), RegisterEnchantments.TRANSMUTATION)) handleTransmutation(event);
+				if (EnchantmentUtils.hasEnchantment(killer.getInventory().getItemInMainHand(), RegisterEnchantments.TRANSMUTATION)) handleTransmutation(event);
 			}
 		}
 	}

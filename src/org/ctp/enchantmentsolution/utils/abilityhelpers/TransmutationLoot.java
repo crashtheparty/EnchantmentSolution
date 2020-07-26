@@ -4,9 +4,9 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.ctp.crashapi.item.MatData;
+import org.ctp.crashapi.utils.DamageUtils;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
-import org.ctp.enchantmentsolution.utils.items.DamageUtils;
 
 public enum TransmutationLoot {
 	SALMON(1200, 1, 2), COD(1200, 1, 2), TROPICAL_FISH(750, 1, 1), PUFFERFISH(400, 1, 1), KELP(400, 1, 4), TRIDENT(8, 1, 1), SCUTE(300, 1, 2),

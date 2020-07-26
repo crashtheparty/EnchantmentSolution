@@ -5,11 +5,9 @@ import java.util.Map.Entry;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.Statistic;
 import org.bukkit.block.Block;
 import org.bukkit.block.Container;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -17,9 +15,9 @@ import org.bukkit.inventory.meta.BlockStateMeta;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.metadata.MetadataValue;
-import org.bukkit.util.Vector;
-import org.ctp.crashapi.compatibility.MMOUtils;
-import org.ctp.crashapi.item.*;
+import org.ctp.crashapi.item.ItemData;
+import org.ctp.crashapi.item.ItemType;
+import org.ctp.crashapi.item.MatData;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantmentWrapper;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
@@ -28,47 +26,7 @@ import org.ctp.enchantmentsolution.nms.PersistenceNMS;
 import org.ctp.enchantmentsolution.utils.ESArrays;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 
-public class ItemUtils {
-
-	public static void giveItemsToPlayer(Player player, Collection<ItemStack> drops, Location fallback,
-	boolean statistic) {
-		for(ItemStack drop: drops)
-			giveItemToPlayer(player, drop, fallback, statistic);
-	}
-
-	public static void giveItemToPlayer(Player player, ItemStack item, Location fallback, boolean statistic) {
-		HashMap<Integer, ItemStack> leftOver = new HashMap<Integer, ItemStack>();
-		int amount = item.getAmount();
-		leftOver.putAll(player.getInventory().addItem(item));
-		Location fallbackClone = fallback.clone();
-		boolean dropNaturally = ConfigString.DROP_ITEMS_NATURALLY.getBoolean();
-		if (!leftOver.isEmpty()) for(Iterator<Entry<Integer, ItemStack>> it = leftOver.entrySet().iterator(); it.hasNext();) {
-			Entry<Integer, ItemStack> e = it.next();
-			amount -= e.getValue().getAmount();
-			if (!dropNaturally) {
-				Item droppedItem = fallbackClone.getWorld().dropItem(fallbackClone, e.getValue());
-				droppedItem.setVelocity(new Vector(0, 0, 0));
-				droppedItem.teleport(fallbackClone);
-			} else
-				fallbackClone.getWorld().dropItemNaturally(fallbackClone, item);
-		}
-		if (amount > 0 && statistic) player.incrementStatistic(Statistic.PICKUP, item.getType(), amount);
-	}
-
-	public static void dropItems(Collection<ItemStack> drops, Location loc) {
-		for(ItemStack drop: drops)
-			dropItem(drop, loc);
-	}
-
-	public static void dropItem(ItemStack item, Location loc) {
-		Location location = loc.clone();
-		if (!ConfigString.DROP_ITEMS_NATURALLY.getBoolean()) {
-			Item droppedItem = location.getWorld().dropItem(location, item);
-			droppedItem.setVelocity(new Vector(0, 0, 0));
-			droppedItem.teleport(location);
-		} else
-			location.getWorld().dropItemNaturally(location, item);
-	}
+public class EnchantmentUtils {
 
 	public static ItemStack convertToEnchantedBook(ItemStack item) {
 		ItemStack newItem = new ItemStack(Material.ENCHANTED_BOOK, item.getAmount());
@@ -249,18 +207,25 @@ public class ItemUtils {
 				if (block.getMetadata("shulker_name") != null) for(MetadataValue value: block.getMetadata("shulker_name"))
 					im.setDisplayName(value.asString());
 				drop.setItemMeta(im);
-				if (block.getMetadata("soulbound").size() > 0) drop = ItemUtils.addEnchantmentsToItem(drop, Arrays.asList(new EnchantmentLevel(RegisterEnchantments.getCustomEnchantment(RegisterEnchantments.SOULBOUND), 1)));
+				if (block.getMetadata("soulbound").size() > 0) drop = addEnchantmentsToItem(drop, Arrays.asList(new EnchantmentLevel(RegisterEnchantments.getCustomEnchantment(RegisterEnchantments.SOULBOUND), 1)));
 				items.add(drop);
 			}
 		}
 		return items;
 	}
 
-	public static boolean checkItemType(ItemData item, CustomItemType type) {
-		if (type.getVanilla() == VanillaItemType.VANILLA) {
-			MatData data = new MatData(type.getType().split(":")[1]);
-			return data.hasMaterial() && data.getMaterial() == item.getMaterial();
-		}
-		return MMOUtils.check(item, type);
+	public static int getBookshelves(Location loc) {
+		int bookshelves = 0;
+		for(int x = loc.getBlockX() - 2; x < loc.getBlockX() + 3; x++)
+			for(int y = loc.getBlockY(); y < loc.getBlockY() + 2; y++)
+				for(int z = loc.getBlockZ() - 2; z < loc.getBlockZ() + 3; z++)
+					if (x == loc.getBlockX() - 2 || x == loc.getBlockX() + 2 || z == loc.getBlockZ() - 2 || z == loc.getBlockZ() + 2) {
+						Location bookshelf = new Location(loc.getWorld(), x, y, z);
+						if (bookshelf.getBlock().getType().equals(Material.BOOKSHELF)) bookshelves++;
+					}
+		if (ConfigString.LEVEL_FIFTY.getBoolean()) {
+			if (bookshelves > 23) bookshelves = 23;
+		} else if (bookshelves > 15) bookshelves = 15;
+		return bookshelves;
 	}
 }

@@ -11,6 +11,8 @@ import org.ctp.crashapi.item.CustomItemType;
 import org.ctp.crashapi.item.ItemData;
 import org.ctp.crashapi.item.ItemType;
 import org.ctp.crashapi.utils.ChatUtils;
+import org.ctp.crashapi.utils.ItemUtils;
+import org.ctp.crashapi.utils.StringUtils;
 import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentDescription;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentDisplayName;
@@ -18,11 +20,9 @@ import org.ctp.enchantmentsolution.enchantments.helper.Weight;
 import org.ctp.enchantmentsolution.enums.EnchantmentLocation;
 import org.ctp.enchantmentsolution.rpg.RPGUtils;
 import org.ctp.enchantmentsolution.utils.PermissionUtils;
-import org.ctp.enchantmentsolution.utils.StringUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 import org.ctp.enchantmentsolution.utils.config.ConfigUtils;
 import org.ctp.enchantmentsolution.utils.config.Type;
-import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 
 public abstract class CustomEnchantment {
 

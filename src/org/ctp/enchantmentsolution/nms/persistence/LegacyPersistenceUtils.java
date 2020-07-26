@@ -19,7 +19,7 @@ import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.nms.PersistenceNMS;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
-import org.ctp.enchantmentsolution.utils.items.ItemUtils;
+import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
 
 public class LegacyPersistenceUtils {
 
@@ -125,7 +125,7 @@ public class LegacyPersistenceUtils {
 
 	public static ItemStack createStickyHold(ItemStack stickyItem) {
 		ItemStack item = stickyItem.clone();
-		List<EnchantmentLevel> levels = ItemUtils.getEnchantmentLevels(item);
+		List<EnchantmentLevel> levels = EnchantmentUtils.getEnchantmentLevels(item);
 		String itemLore = stickyHoldItemType(item);
 		ItemMeta meta = item.getItemMeta();
 		ItemStack stickItem = new ItemStack(Material.STICK);
@@ -365,8 +365,8 @@ public class LegacyPersistenceUtils {
 					while (iter.hasNext()) {
 						Entry<Enchantment, Integer> entry = iter.next();
 						CustomEnchantment custom = RegisterEnchantments.getCustomEnchantment(entry.getKey());
-						ItemUtils.removeEnchantmentFromItem(item, custom);
-						ItemUtils.addEnchantmentToItem(item, custom, entry.getValue());
+						EnchantmentUtils.removeEnchantmentFromItem(item, custom);
+						EnchantmentUtils.addEnchantmentToItem(item, custom, entry.getValue());
 					}
 				}
 			}

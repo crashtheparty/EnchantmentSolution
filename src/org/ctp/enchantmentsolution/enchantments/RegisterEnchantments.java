@@ -9,13 +9,13 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.ctp.crashapi.config.Configuration;
 import org.ctp.crashapi.item.ItemType;
 import org.ctp.crashapi.item.VanillaItemType;
+import org.ctp.crashapi.utils.StringUtils;
 import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.api.ApiEnchantmentWrapper;
 import org.ctp.enchantmentsolution.enchantments.helper.Weight;
 import org.ctp.enchantmentsolution.enums.EnchantmentLocation;
 import org.ctp.enchantmentsolution.utils.Configurations;
-import org.ctp.enchantmentsolution.utils.StringUtils;
 import org.ctp.enchantmentsolution.utils.VersionUtils;
 import org.ctp.enchantmentsolution.utils.config.*;
 

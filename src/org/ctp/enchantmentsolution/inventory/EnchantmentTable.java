@@ -8,9 +8,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.ctp.crashapi.inventory.InventoryData;
 import org.ctp.crashapi.item.ItemData;
 import org.ctp.crashapi.item.ItemSerialization;
 import org.ctp.crashapi.item.ItemType;
+import org.ctp.crashapi.utils.ItemUtils;
 import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.generate.TableEnchantments;
@@ -19,12 +21,11 @@ import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentList;
 import org.ctp.enchantmentsolution.enchantments.helper.LevelList;
 import org.ctp.enchantmentsolution.nms.EnchantItemCriterion;
 import org.ctp.enchantmentsolution.nms.PersistenceNMS;
-import org.ctp.enchantmentsolution.utils.LocationUtils;
 import org.ctp.enchantmentsolution.utils.compatibility.JobsUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 import org.ctp.enchantmentsolution.utils.config.ConfigUtils;
 import org.ctp.enchantmentsolution.utils.config.Type;
-import org.ctp.enchantmentsolution.utils.items.ItemUtils;
+import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
 
 public class EnchantmentTable implements InventoryData {
 
@@ -107,7 +108,7 @@ public class EnchantmentTable implements InventoryData {
 				ItemStack item = playerItems.get(i);
 				inv.setItem(start, item);
 
-				if (ItemUtils.isEnchantable(item)) {
+				if (EnchantmentUtils.isEnchantable(item)) {
 					EnchantmentList[] enchantmentLists = table.getEnchantments(new ItemData(item));
 
 					int extra = 3;
@@ -274,9 +275,9 @@ public class EnchantmentTable implements InventoryData {
 				}
 		}
 		List<EnchantmentLevel> enchLevels = table.getEnchantments(new ItemData(enchantableItem))[level].getEnchantments();
-		if (playerItems.get(slot).getType() == Material.BOOK && ConfigString.USE_ENCHANTED_BOOKS.getBoolean()) enchantableItem = ItemUtils.convertToEnchantedBook(enchantableItem);
+		if (playerItems.get(slot).getType() == Material.BOOK && ConfigString.USE_ENCHANTED_BOOKS.getBoolean()) enchantableItem = EnchantmentUtils.convertToEnchantedBook(enchantableItem);
 		player.playSound(player.getLocation(), Sound.BLOCK_ENCHANTMENT_TABLE_USE, 1, 1);
-		enchantableItem = ItemUtils.addEnchantmentsToItem(enchantableItem, enchLevels);
+		enchantableItem = EnchantmentUtils.addEnchantmentsToItem(enchantableItem, enchLevels);
 		playerItems.set(slot, enchantableItem);
 
 		TableEnchantments.removeTableEnchantments(player);
@@ -292,7 +293,7 @@ public class EnchantmentTable implements InventoryData {
 	}
 
 	public int getBooks() {
-		return LocationUtils.getBookshelves(block.getLocation());
+		return EnchantmentUtils.getBookshelves(block.getLocation());
 	}
 
 	@Override

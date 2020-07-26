@@ -12,7 +12,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.ctp.crashapi.commands.CrashCommand;
+import org.ctp.crashapi.inventory.InventoryData;
 import org.ctp.crashapi.utils.ChatUtils;
+import org.ctp.crashapi.utils.StringUtils;
 import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.commands.EnchantmentSolutionCommand;
@@ -28,7 +30,6 @@ import org.ctp.enchantmentsolution.rpg.RPGPlayer;
 import org.ctp.enchantmentsolution.rpg.RPGUtils;
 import org.ctp.enchantmentsolution.threads.SnapshotRunnable;
 import org.ctp.enchantmentsolution.utils.Configurations;
-import org.ctp.enchantmentsolution.utils.StringUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 

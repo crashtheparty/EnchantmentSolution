@@ -12,6 +12,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.ctp.crashapi.config.yaml.YamlChild;
 import org.ctp.crashapi.config.yaml.YamlConfigBackup;
+import org.ctp.crashapi.inventory.InventoryData;
+import org.ctp.crashapi.inventory.Pageable;
+import org.ctp.crashapi.utils.ChatUtils;
 import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.nms.Anvil_GUI_NMS;
@@ -697,5 +700,10 @@ public class ConfigInventory implements InventoryData, Pageable {
 	@Override
 	public List<ItemStack> getItems() {
 		return null;
+	}
+
+	@Override
+	public ChatUtils getChat() {
+		return Chatable.get();
 	}
 }

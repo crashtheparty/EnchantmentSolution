@@ -27,7 +27,7 @@ public class LanguageConfiguration extends Configuration {
 	@Override
 	public void setDefaults() {
 		YamlConfigBackup config = getConfig();
-		config.addDefault("starter", "&8[&dEnchantment Solution&8]");
+		config.addDefault("starter", "&8[&dEnchantment Solution&8]"); 
 		config.copyDefaults(language.getConfig());
 
 		config.writeDefaults();
