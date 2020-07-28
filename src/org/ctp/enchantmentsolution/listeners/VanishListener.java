@@ -33,7 +33,7 @@ public class VanishListener implements Listener {
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent event) {
 		Player player = event.getPlayer();
-		if (hasPermission(player)) removePlayerInv(player);
+		if (ConfigString.ENCHANTMENT_CHECK_ON_LOGIN.getBoolean() && hasPermission(player)) removePlayerInv(player);
 	}
 
 	@EventHandler

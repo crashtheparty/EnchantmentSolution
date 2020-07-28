@@ -7,6 +7,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
+import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enums.BlockSound;
 import org.ctp.enchantmentsolution.enums.ItemBreakType;
 import org.ctp.enchantmentsolution.enums.MatData;
@@ -38,6 +39,7 @@ public class SmelteryUtils {
 				experience = (int) (Math.random() * 2);
 				fortune = data.getMaterialName().equals("NETHER_GOLD_ORE");
 			}
+			experience = AbilityUtils.setExp(experience, ItemUtils.getLevel(item, RegisterEnchantments.EXP_SHARE));
 			SmelteryEvent smelteryEvent = new SmelteryEvent(blockBroken, player, smelted, smeltery.getToMaterial(), experience, fortune);
 			Bukkit.getPluginManager().callEvent(smelteryEvent);
 
@@ -85,6 +87,7 @@ public class SmelteryUtils {
 				experience = (int) (Math.random() * 2);
 				fortune = data.getMaterialName().equals("NETHER_GOLD_ORE");
 			}
+			experience = AbilityUtils.setExp(experience, ItemUtils.getLevel(item, RegisterEnchantments.EXP_SHARE));
 			return new SmelteryEvent(blockBroken, player, smelted, smeltery.getToMaterial(), experience, fortune);
 		}
 		return null;

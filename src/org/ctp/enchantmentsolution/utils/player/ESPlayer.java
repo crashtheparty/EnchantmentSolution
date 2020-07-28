@@ -238,6 +238,7 @@ public class ESPlayer {
 		if (online) {
 			if (!isOnline()) return false;
 			if (canFly && !getOnlinePlayer().getAllowFlight()) {
+				resetFlyer();
 				setCanFly(canFly);
 				if (!getOnlinePlayer().getAllowFlight()) return false;
 			}
@@ -269,6 +270,19 @@ public class ESPlayer {
 		}
 	}
 
+	public void resetFlyer() {
+		if (!isOnline()) return;
+		Player player = getOnlinePlayer();
+		FrequentFlyerEvent event = new FrequentFlyerEvent(player, frequentFlyerLevel, FFType.REMOVE_FLIGHT);
+		Bukkit.getPluginManager().callEvent(event);
+		if (!event.isCancelled()) {
+			this.canFly = false;
+			currentFFType = FFType.NONE;
+			player.setAllowFlight(this.canFly);
+			if (player.isFlying() && !this.canFly) player.setFlying(false);
+		}
+	}
+	
 	public void logoutFlyer() {
 		currentFFType = FFType.NONE;
 		canFly = false;
@@ -287,13 +301,13 @@ public class ESPlayer {
 		if (player.getLocation().getY() > 255) {
 			above = above - 1;
 			if (above <= 0) {
-				DamageUtils.damageItem(player, elytra);
+				if (elytra != null) DamageUtils.damageItem(player, elytra);
 				above = aboveLimit;
 			}
 		} else {
 			under = under - 1;
 			if (under <= 0) {
-				DamageUtils.damageItem(player, elytra);
+				if (elytra != null) DamageUtils.damageItem(player, elytra);
 				under = underLimit;
 			}
 		}
