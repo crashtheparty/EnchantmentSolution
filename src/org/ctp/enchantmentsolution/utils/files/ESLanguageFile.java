@@ -1,23 +1,18 @@
 package org.ctp.enchantmentsolution.utils.files;
 
 import java.io.File;
-import java.util.Iterator;
-import java.util.Map.Entry;
 
-import org.bukkit.Material;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.ctp.crashapi.config.CrashLanguageFile;
 import org.ctp.crashapi.config.Language;
 import org.ctp.crashapi.config.yaml.YamlConfig;
-import org.ctp.crashapi.item.ItemType;
-import org.ctp.crashapi.nms.ItemNMS;
+import org.ctp.crashapi.utils.CrashConfigUtils;
 import org.ctp.crashapi.utils.StringUtils;
 import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.api.ApiEnchantmentWrapper;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantmentWrapper;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
-import org.ctp.enchantmentsolution.utils.config.ConfigUtils;
 
 public class ESLanguageFile extends CrashLanguageFile {
 
@@ -26,7 +21,7 @@ public class ESLanguageFile extends CrashLanguageFile {
 		YamlConfig config = getConfig();
 		config.getFromConfig();
 		
-		File tempFile = ConfigUtils.getTempFile("/resources/" + language.getLocale() + ".yml");
+		File tempFile = CrashConfigUtils.getTempFile("/resources/" + language.getLocale() + ".yml");
 		YamlConfig defaultConfig = new YamlConfig(tempFile, new String[] {});
 		defaultConfig.getFromConfig();
 		for(String str: defaultConfig.getAllEntryKeys())
@@ -57,11 +52,6 @@ public class ESLanguageFile extends CrashLanguageFile {
 			} else if (enchant.getRelativeEnchantment() instanceof CustomEnchantmentWrapper) config.addDefault("enchantment.descriptions." + "custom_enchantments." + enchant.getName(), StringUtils.encodeString(enchantmentDescription));
 			else
 				config.addDefault("enchantment.descriptions." + "default_enchantments." + enchant.getName(), StringUtils.encodeString(enchantmentDescription));
-		}
-
-		for(Iterator<Entry<Material, String>> it = ItemType.ALL.getUnlocalizedNames().entrySet().iterator(); it.hasNext();) {
-			Entry<Material, String> e = it.next();
-			config.addDefault("vanilla." + e.getValue(), ItemNMS.returnLocalizedItemName(language, e.getKey()));
 		}
 
 		config.saveConfig();

@@ -19,6 +19,7 @@ import org.bukkit.metadata.MetadataValue;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.util.Vector;
+import org.ctp.crashapi.CrashAPI;
 import org.ctp.crashapi.utils.ChatUtils;
 import org.ctp.crashapi.utils.DamageUtils;
 import org.ctp.enchantmentsolution.Chatable;
@@ -277,7 +278,7 @@ public class DamageListener extends Enchantmentable {
 					DamageUtils.damageItem(player, ironDefense.getShield(), ironDefense.getShieldDamage());
 
 					if (player instanceof Player) {
-						if ((int) (ironDefense.getNewDamage() * 10) > 0 && EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber() > 1) ((Player) player).incrementStatistic(Statistic.DAMAGE_BLOCKED_BY_SHIELD, (int) (ironDefense.getNewDamage() * 10));
+						if ((int) (ironDefense.getNewDamage() * 10) > 0 && CrashAPI.getPlugin().getBukkitVersion().getVersionNumber() > 1) ((Player) player).incrementStatistic(Statistic.DAMAGE_BLOCKED_BY_SHIELD, (int) (ironDefense.getNewDamage() * 10));
 						if (player.getHealth() <= ironDefense.getDamage() && player.getHealth() > ironDefense.getNewDamage()) AdvancementUtils.awardCriteria((Player) player, ESAdvancement.IRON_MAN, "blocked");
 					}
 				}
@@ -443,7 +444,7 @@ public class DamageListener extends Enchantmentable {
 	}
 
 	private void stoneThrow(EntityDamageByEntityEvent event) {
-		if (EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber() > 3) {
+		if (CrashAPI.getPlugin().getBukkitVersion().getVersionNumber() > 3) {
 			if (!canRun(RegisterEnchantments.STONE_THROW, event)) return;
 			switch (event.getEntityType().name()) {
 				case "BAT":

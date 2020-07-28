@@ -4,12 +4,11 @@ import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.ctp.crashapi.inventory.InventoryData;
+import org.ctp.crashapi.nms.anvil.AnvilClickEventHandler;
 import org.ctp.enchantmentsolution.inventory.Anvil;
 
-public interface AnvilClickEventHandler {
-	void onAnvilClick(AnvilClickEvent event);
-
-	public static AnvilClickEventHandler getHandler(Player player, InventoryData data) {
+public interface ESAnvilClickEventHandler extends AnvilClickEventHandler {
+	public static ESAnvilClickEventHandler getHandler(Player player, InventoryData data) {
 		return event -> {
 			if (event.getSlot() == null || event.getSlot().getSlot() != 2) {
 				event.setWillClose(false);

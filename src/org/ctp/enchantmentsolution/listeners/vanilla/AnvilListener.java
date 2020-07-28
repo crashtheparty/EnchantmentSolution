@@ -15,13 +15,13 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.ctp.crashapi.item.MatData;
 import org.ctp.crashapi.utils.ChatUtils;
+import org.ctp.crashapi.utils.LocationUtils;
 import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.generate.AnvilEnchantments;
 import org.ctp.enchantmentsolution.enchantments.generate.AnvilEnchantments.RepairType;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
-import org.ctp.enchantmentsolution.utils.AnvilUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 
 public class AnvilListener implements Listener {
@@ -64,6 +64,7 @@ public class AnvilListener implements Listener {
 				Player player = (Player) event.getWhoClicked();
 				ItemStack result = inv.getItem(2);
 				String name = null;
+				boolean damageAnvil = ConfigString.DAMAGE_ANVIL.getBoolean();
 				if (result != null && result.hasItemMeta() && first != null && first.hasItemMeta() && !first.getItemMeta().getDisplayName().equals(name)) name = result.getItemMeta().getDisplayName();
 				if (EnchantmentSolution.getPlugin().getInventory(player) != null) return;
 				AnvilEnchantments anvil = AnvilEnchantments.getAnvilEnchantments(player, first, second, name);
@@ -85,7 +86,7 @@ public class AnvilListener implements Listener {
 								player.setItemOnCursor(combinedItem);
 								player.setLevel(player.getLevel() - cost);
 								inv.setContents(new ItemStack[3]);
-								AnvilUtils.checkAnvilBreak(player, inv.getLocation().getBlock(), null);
+								LocationUtils.checkAnvilBreak(player, inv.getLocation().getBlock(), null, damageAnvil);
 								if (anvil.getRepairType() == RepairType.REPAIR || anvil.getRepairType() == RepairType.STICKY_REPAIR) inv.setItem(1, anvil.getItemLeftover());
 								if (anvil.getRepairType() == RepairType.STICKY_REPAIR) AdvancementUtils.awardCriteria(player, ESAdvancement.SIMPLE_REPAIR, "repair");
 								break;
@@ -95,7 +96,7 @@ public class AnvilListener implements Listener {
 								player.setLevel(player.getLevel() - cost);
 								inv.setContents(new ItemStack[3]);
 								if (anvil.getRepairType() == RepairType.REPAIR || anvil.getRepairType() == RepairType.STICKY_REPAIR) inv.setItem(1, anvil.getItemLeftover());
-								AnvilUtils.checkAnvilBreak(player, inv.getLocation().getBlock(), null);
+								LocationUtils.checkAnvilBreak(player, inv.getLocation().getBlock(), null, damageAnvil);
 								if (anvil.getRepairType() == RepairType.STICKY_REPAIR) AdvancementUtils.awardCriteria(player, ESAdvancement.SIMPLE_REPAIR, "repair");
 								break;
 							default:
@@ -125,14 +126,14 @@ public class AnvilListener implements Listener {
 								player.setItemOnCursor(first);
 								player.setLevel(player.getLevel() - cost);
 								inv.setContents(new ItemStack[3]);
-								AnvilUtils.checkAnvilBreak(player, inv.getLocation().getBlock(), null);
+								LocationUtils.checkAnvilBreak(player, inv.getLocation().getBlock(), null, damageAnvil);
 								break;
 							case SHIFT_LEFT:
 								HashMap<Integer, ItemStack> items = player.getInventory().addItem(first);
 								if (!items.isEmpty()) return;
 								player.setLevel(player.getLevel() - cost);
 								inv.setContents(new ItemStack[3]);
-								AnvilUtils.checkAnvilBreak(player, inv.getLocation().getBlock(), null);
+								LocationUtils.checkAnvilBreak(player, inv.getLocation().getBlock(), null, damageAnvil);
 								break;
 							default:
 								break;

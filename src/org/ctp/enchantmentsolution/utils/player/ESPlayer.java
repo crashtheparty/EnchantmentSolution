@@ -238,7 +238,9 @@ public class ESPlayer {
 		if (online) {
 			if (!isOnline()) return false;
 			if (canFly && !getOnlinePlayer().getAllowFlight()) {
-				setCanFly(canFly);
+				boolean temp = canFly;
+				setCanFly(!temp);
+				setCanFly(temp);
 				if (!getOnlinePlayer().getAllowFlight()) return false;
 			}
 		}

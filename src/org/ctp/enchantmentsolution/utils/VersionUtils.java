@@ -1,11 +1,12 @@
 package org.ctp.enchantmentsolution.utils;
 
+import org.ctp.crashapi.CrashAPI;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 
 public class VersionUtils {
 
 	public static int getBukkitVersionNumber() {
-		return EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber();
+		return CrashAPI.getPlugin().getBukkitVersion().getVersionNumber();
 	}
 
 	public static String getMcMMOType() {

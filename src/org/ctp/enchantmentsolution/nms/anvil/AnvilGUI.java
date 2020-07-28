@@ -13,37 +13,21 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.ctp.crashapi.inventory.InventoryData;
+import org.ctp.crashapi.nms.anvil.AnvilClickEvent;
+import org.ctp.crashapi.nms.anvil.AnvilClickEventHandler;
+import org.ctp.crashapi.nms.anvil.AnvilSlot;
+import org.ctp.crashapi.utils.LocationUtils;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.inventory.Anvil;
 import org.ctp.enchantmentsolution.inventory.ConfigInventory;
 import org.ctp.enchantmentsolution.nms.AnvilNMS;
-import org.ctp.enchantmentsolution.utils.AnvilUtils;
+import org.ctp.enchantmentsolution.utils.config.ConfigString;
 
 public abstract class AnvilGUI {
-	public enum AnvilSlot {
-		INPUT_LEFT(0), INPUT_RIGHT(1), OUTPUT(2);
-
-		private int slot;
-
-		AnvilSlot(int slot) {
-			this.slot = slot;
-		}
-
-		public int getSlot() {
-			return slot;
-		}
-
-		public static AnvilSlot bySlot(int slot) {
-			for(AnvilSlot anvilSlot: values())
-				if (anvilSlot.getSlot() == slot) return anvilSlot;
-
-			return null;
-		}
-	}
 
 	private Player player;
 
-	private AnvilClickEventHandler handler;
+	private ESAnvilClickEventHandler handler;
 
 	private HashMap<AnvilSlot, ItemStack> items = new HashMap<>();
 
@@ -53,7 +37,7 @@ public abstract class AnvilGUI {
 
 	private InventoryData data;
 
-	public AnvilGUI(Player player, final AnvilClickEventHandler handler, InventoryData data) {
+	public AnvilGUI(Player player, final ESAnvilClickEventHandler handler, InventoryData data) {
 		this.player = player;
 		setHandler(handler);
 		setData(data);
@@ -85,7 +69,7 @@ public abstract class AnvilGUI {
 						}
 
 						if (clickEvent.getWillDestroy()) {
-							AnvilUtils.checkAnvilBreak(player, anvil.getBlock(), anvil);
+							LocationUtils.checkAnvilBreak(player, anvil.getBlock(), anvil, ConfigString.DAMAGE_ANVIL.getBoolean());
 							destroy();
 						}
 					} else if (data instanceof ConfigInventory) {
@@ -184,7 +168,7 @@ public abstract class AnvilGUI {
 		return handler;
 	}
 
-	public void setHandler(AnvilClickEventHandler handler) {
+	public void setHandler(ESAnvilClickEventHandler handler) {
 		this.handler = handler;
 	}
 

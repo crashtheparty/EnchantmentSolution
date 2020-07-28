@@ -2,6 +2,7 @@ package org.ctp.enchantmentsolution.utils.config;
 
 import java.io.File;
 
+import org.ctp.crashapi.CrashAPI;
 import org.ctp.crashapi.config.Configuration;
 import org.ctp.crashapi.config.yaml.YamlConfigBackup;
 import org.ctp.crashapi.db.BackupDB;
@@ -29,7 +30,7 @@ public class AdvancementsConfiguration extends Configuration {
 				config.addDefault("advancements." + advancement.getNamespace().getKey() + ".enable", false);
 				config.addDefault("advancements." + advancement.getNamespace().getKey() + ".toast", false);
 				config.addDefault("advancements." + advancement.getNamespace().getKey() + ".announce", false);
-			} else if (advancement.getActivatedVersion() < EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber()) {
+			} else if (advancement.getActivatedVersion() < CrashAPI.getPlugin().getBukkitVersion().getVersionNumber()) {
 				config.addDefault("advancements." + advancement.getNamespace().getKey() + ".enable", true);
 				config.addDefault("advancements." + advancement.getNamespace().getKey() + ".toast", true);
 				config.addDefault("advancements." + advancement.getNamespace().getKey() + ".announce", true);

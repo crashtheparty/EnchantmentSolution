@@ -6,6 +6,7 @@ import org.ctp.crashapi.config.Configuration;
 import org.ctp.crashapi.config.yaml.YamlConfig;
 import org.ctp.crashapi.config.yaml.YamlConfigBackup;
 import org.ctp.crashapi.db.BackupDB;
+import org.ctp.crashapi.utils.CrashConfigUtils;
 import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 
@@ -24,7 +25,7 @@ public class FishingConfiguration extends Configuration {
 
 		YamlConfigBackup config = getConfig();
 
-		File file = ConfigUtils.getTempFile("/resources/fishing_defaults.yml");
+		File file = CrashConfigUtils.getTempFile("/resources/fishing_defaults.yml");
 
 		YamlConfig defaultConfig = new YamlConfig(file, new String[] {});
 		defaultConfig.getFromConfig();

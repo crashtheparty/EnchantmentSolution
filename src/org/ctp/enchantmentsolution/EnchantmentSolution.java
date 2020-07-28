@@ -19,8 +19,10 @@ import org.ctp.crashapi.item.ItemSerialization;
 import org.ctp.crashapi.listeners.EquipListener;
 import org.ctp.crashapi.resources.advancements.CrashAdvancementProgress;
 import org.ctp.crashapi.utils.ChatUtils;
-import org.ctp.crashapi.version.*;
+import org.ctp.crashapi.version.PluginVersion;
+import org.ctp.crashapi.version.Version;
 import org.ctp.crashapi.version.Version.VersionType;
+import org.ctp.crashapi.version.VersionCheck;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.commands.EnchantmentSolutionCommand;
 import org.ctp.enchantmentsolution.database.ESBackup;
@@ -71,7 +73,6 @@ public class EnchantmentSolution extends CrashAPIPlugin {
 	private static Configurations CONFIGURATIONS;
 	private List<InventoryData> inventories = new ArrayList<InventoryData>();
 	private boolean initialization = true, restrictedCreative = false, quests = false;
-	private BukkitVersion bukkitVersion;
 	private PluginVersion pluginVersion;
 	private BackupDB db;
 	private Plugin jobsReborn;
@@ -84,7 +85,6 @@ public class EnchantmentSolution extends CrashAPIPlugin {
 	@Override
 	public void onLoad() {
 		PLUGIN = this;
-		bukkitVersion = new BukkitVersion(this);
 		pluginVersion = new PluginVersion(this, new Version(getDescription().getVersion(), VersionType.UNKNOWN));
 
 		if (!getDataFolder().exists()) getDataFolder().mkdirs();
@@ -211,11 +211,6 @@ public class EnchantmentSolution extends CrashAPIPlugin {
 	@Override
 	public boolean isInitializing() {
 		return initialization;
-	}
-
-	@Override
-	public BukkitVersion getBukkitVersion() {
-		return bukkitVersion;
 	}
 
 	@Override

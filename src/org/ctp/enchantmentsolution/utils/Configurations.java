@@ -7,6 +7,7 @@ import java.util.Map.Entry;
 
 import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
+import org.ctp.crashapi.CrashAPI;
 import org.ctp.crashapi.config.*;
 import org.ctp.crashapi.config.yaml.YamlConfig;
 import org.ctp.crashapi.config.yaml.YamlConfigBackup;
@@ -146,8 +147,8 @@ public class Configurations implements CrashConfigurations {
 
 		SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss z Z");
 		debug.set("time", format.format(new Date()));
-		debug.set("version.bukkit", EnchantmentSolution.getPlugin().getBukkitVersion().getVersion());
-		debug.set("version.bukkit_num", EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber());
+		debug.set("version.bukkit", CrashAPI.getPlugin().getBukkitVersion().getVersion());
+		debug.set("version.bukkit_num", CrashAPI.getPlugin().getBukkitVersion().getVersionNumber());
 		debug.set("version.plugin", EnchantmentSolution.getPlugin().getPluginVersion().getCurrent().getVersionName());
 		debug.set("plugins.jobs_reborn", EnchantmentSolution.getPlugin().isJobsEnabled());
 		debug.set("plugins.mcmmo", EnchantmentSolution.getPlugin().getMcMMOType());

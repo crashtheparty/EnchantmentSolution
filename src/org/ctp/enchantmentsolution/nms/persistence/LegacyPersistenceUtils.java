@@ -10,9 +10,9 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.ctp.crashapi.CrashAPI;
 import org.ctp.crashapi.item.MatData;
 import org.ctp.enchantmentsolution.Chatable;
-import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.CERegister;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
@@ -337,7 +337,7 @@ public class LegacyPersistenceUtils {
 
 	public static ItemStack checkItem(ItemStack item, ItemStack previous) {
 		if (item != null) {
-			if (EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber() > 11) return item.clone();
+			if (CrashAPI.getPlugin().getBukkitVersion().getVersionNumber() > 11) return item.clone();
 			List<EnchantmentLevel> enchantMeta = getEnchantments(item);
 			List<EnchantmentLevel> enchantLore = new ArrayList<EnchantmentLevel>();
 			if (item.hasItemMeta() && item.getItemMeta().hasLore()) for(String s: item.getItemMeta().getLore())

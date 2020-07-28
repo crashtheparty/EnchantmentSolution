@@ -14,13 +14,13 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.ctp.crashapi.inventory.InventoryData;
 import org.ctp.crashapi.utils.ItemUtils;
+import org.ctp.crashapi.utils.LocationUtils;
 import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.generate.AnvilEnchantments;
 import org.ctp.enchantmentsolution.enchantments.generate.AnvilEnchantments.RepairType;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
-import org.ctp.enchantmentsolution.utils.AnvilUtils;
 import org.ctp.enchantmentsolution.utils.compatibility.JobsUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 import org.ctp.enchantmentsolution.utils.config.ConfigUtils;
@@ -228,7 +228,7 @@ public class Anvil implements InventoryData {
 			if (anvil.getRepairType() == RepairType.STICKY_REPAIR) AdvancementUtils.awardCriteria(player, ESAdvancement.SIMPLE_REPAIR, "repair");
 			anvil = null;
 			playerItems.clear();
-			AnvilUtils.checkAnvilBreak(player, block, this);
+			LocationUtils.checkAnvilBreak(player, block, this, ConfigString.DAMAGE_ANVIL.getBoolean());
 		} else
 			Chatable.get().sendMessage(player, Chatable.get().getMessage(getCodes(), "anvil.message-cannot-combine"));
 	}

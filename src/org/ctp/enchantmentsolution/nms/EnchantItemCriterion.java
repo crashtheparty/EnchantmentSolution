@@ -5,13 +5,13 @@ import java.lang.reflect.Method;
 
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.ctp.enchantmentsolution.EnchantmentSolution;
+import org.ctp.crashapi.CrashAPI;
 
 public class EnchantItemCriterion {
 
 	public static void enchantItemTrigger(Player player, ItemStack item) {
-		String packageName = "net.minecraft.server." + EnchantmentSolution.getPlugin().getBukkitVersion().getAPIVersion();
-		String craftPackageName = "org.bukkit.craftbukkit." + EnchantmentSolution.getPlugin().getBukkitVersion().getAPIVersion();
+		String packageName = "net.minecraft.server." + CrashAPI.getPlugin().getBukkitVersion().getAPIVersion();
+		String craftPackageName = "org.bukkit.craftbukkit." + CrashAPI.getPlugin().getBukkitVersion().getAPIVersion();
 		Object entityPlayer = null;
 		Object itemStack = null;
 		try {
