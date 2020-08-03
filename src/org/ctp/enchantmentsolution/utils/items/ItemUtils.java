@@ -76,7 +76,6 @@ public class ItemUtils {
 
 		ItemMeta meta = item.getItemMeta();
 		List<EnchantmentLevel> newLevels = new ArrayList<EnchantmentLevel>();
-
 		if (meta != null && meta.getEnchants().size() > 0) {
 			for(Iterator<Entry<Enchantment, Integer>> it = meta.getEnchants().entrySet().iterator(); it.hasNext();) {
 				Entry<Enchantment, Integer> e = it.next();
@@ -89,7 +88,7 @@ public class ItemUtils {
 			meta = enchantmentStorage;
 			newItem.setItemMeta(meta);
 			for(EnchantmentLevel level: newLevels)
-				PersistenceNMS.addEnchantment(item, new EnchantmentLevel(level.getEnchant(), level.getLevel()));
+				PersistenceNMS.addEnchantment(newItem, new EnchantmentLevel(level.getEnchant(), level.getLevel()));
 		}
 		return newItem;
 	}
@@ -112,7 +111,7 @@ public class ItemUtils {
 			}
 			newItem.setItemMeta(meta);
 			for(EnchantmentLevel level: newLevels)
-				PersistenceNMS.addEnchantment(item, new EnchantmentLevel(level.getEnchant(), level.getLevel()));
+				PersistenceNMS.addEnchantment(newItem, new EnchantmentLevel(level.getEnchant(), level.getLevel()));
 		}
 		return newItem;
 	}

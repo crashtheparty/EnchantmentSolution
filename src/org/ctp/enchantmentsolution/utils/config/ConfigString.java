@@ -47,6 +47,7 @@ public enum ConfigString {
 	MULTI_BLOCK_ASYNC(Type.MAIN, "multi_block.async", boolean.class),
 	MULTI_BLOCK_BLOCKS_GLOBAL(Type.MAIN, "multi_block.blocks_per_tick.global", int.class),
 	MULTI_BLOCK_BLOCKS_PLAYER(Type.MAIN, "multi_block.blocks_per_tick.player", int.class),
+	MULTI_BLOCK_ALL_FACES(Type.MAIN, "multi_block.all_faces", boolean.class),
 	EXTRA_ENCHANTING_MATERIALS(Type.ENCHANTMENTS, "extra_enchantables", List.class),
 	ADVANCED_OPTIONS(Type.ENCHANTMENTS, "advanced_options.use", boolean.class),
 	DECAY(Type.ENCHANTMENTS, "advanced_options.enchantability_decay", boolean.class),

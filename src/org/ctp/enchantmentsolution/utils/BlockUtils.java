@@ -40,7 +40,9 @@ public class BlockUtils {
 	}
 
 	public static boolean isAdjacent(Block b1, Block b2) {
-		for(BlockFace face: Arrays.asList(BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST, BlockFace.UP, BlockFace.DOWN))
+		List<BlockFace> faces = Arrays.asList(BlockFace.values());
+		if (!ConfigString.MULTI_BLOCK_ALL_FACES.getBoolean()) Arrays.asList(BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST, BlockFace.UP, BlockFace.DOWN);
+		for(BlockFace face: faces)
 			if (b1.getRelative(face).getLocation().equals(b2.getLocation())) return true;
 		return false;
 	}

@@ -5,8 +5,10 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.Map.Entry;
 
+import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.plugin.Plugin;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.ESAdvancementProgress;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
@@ -149,6 +151,10 @@ public class Configurations {
 		backup.set("plugins.mcmmo_version", EnchantmentSolution.getPlugin().getMcMMOVersion());
 		backup.set("plugins.mmo_items", EnchantmentSolution.getPlugin().getMMOItems());
 		backup.set("plugins.vein_miner", EnchantmentSolution.getPlugin().getVeinMiner());
+		List<String> allPlugins = new ArrayList<String>();
+		for (Plugin pl : Bukkit.getPluginManager().getPlugins())
+			if (pl.isEnabled()) allPlugins.add(pl.getDescription().getName() + " " + pl.getDescription().getVersion());
+		backup.set("plugins.all_plugins", allPlugins);
 
 		int i = 0;
 		for(ESAdvancementProgress progress: EnchantmentSolution.getAdvancementProgress()) {

@@ -129,7 +129,7 @@ public class PersistenceUtils {
 		int level = 0;
 		int repair = 0;
 		if (pieces[pieces.length - 1].contains("enchantment.level")) {
-			String[] enchLevel = pieces[pieces.length - 1].split(".");
+			String[] enchLevel = pieces[pieces.length - 1].split("\\.");
 			level = Integer.parseInt(enchLevel[enchLevel.length - 1]);
 			repair = pieces.length - 1;
 		} else {
