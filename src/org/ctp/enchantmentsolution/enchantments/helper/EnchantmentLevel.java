@@ -2,15 +2,14 @@ package org.ctp.enchantmentsolution.enchantments.helper;
 
 import java.util.*;
 import java.util.Map.Entry;
-import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.plugin.Plugin;
+import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
-import org.ctp.enchantmentsolution.utils.ChatUtils;
 
 public class EnchantmentLevel {
 
@@ -33,7 +32,7 @@ public class EnchantmentLevel {
 			}
 			enchant = getEnchantFromString(split[0]);
 		} else
-			ChatUtils.sendToConsole(Level.WARNING, "Bad enchantment in config: " + configString + ".");
+			Chatable.get().sendWarning("Bad enchantment in config: " + configString + ".");
 	}
 
 	private CustomEnchantment getEnchantFromString(String str) {
@@ -51,7 +50,7 @@ public class EnchantmentLevel {
 		}
 		if (Enchantment.getByKey(key) != null) for(CustomEnchantment enchantment: RegisterEnchantments.getEnchantments())
 			if (enchantment.getRelativeEnchantment().equals(Enchantment.getByKey(key))) return enchantment;
-		ChatUtils.sendToConsole(Level.WARNING, "Bad enchantment in config: " + str + ". No chance to get this enchantment.");
+		Chatable.get().sendWarning("Bad enchantment in config: " + str + ". No chance to get this enchantment.");
 		return null;
 	}
 

@@ -11,19 +11,25 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.ctp.crashapi.item.BlockSound;
+import org.ctp.crashapi.utils.DamageUtils;
+import org.ctp.crashapi.utils.ItemUtils;
+import org.ctp.crashapi.utils.LocationUtils;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enums.ItemBreakType;
-import org.ctp.enchantmentsolution.enums.vanilla.BlockSound;
 import org.ctp.enchantmentsolution.events.blocks.SmelteryEvent;
 import org.ctp.enchantmentsolution.events.blocks.TelepathyEvent;
 import org.ctp.enchantmentsolution.events.blocks.TelepathyEvent.TelepathyType;
 import org.ctp.enchantmentsolution.events.modify.GoldDiggerEvent;
 import org.ctp.enchantmentsolution.mcmmo.McMMOHandler;
-import org.ctp.enchantmentsolution.utils.*;
+import org.ctp.enchantmentsolution.utils.AdvancementUtils;
+import org.ctp.enchantmentsolution.utils.BlockUtils;
+import org.ctp.enchantmentsolution.utils.ESArrays;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.GoldDiggerCrop;
 import org.ctp.enchantmentsolution.utils.compatibility.JobsUtils;
+import org.ctp.enchantmentsolution.utils.compatibility.QuestsUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 
 public class TelepathyUtils {
@@ -37,10 +43,10 @@ public class TelepathyUtils {
 			drops.add(new ItemStack(Material.SNOWBALL, num));
 		}
 		drops = giveItems(player, item, block, drops);
-		if (ItemUtils.hasEnchantment(item, RegisterEnchantments.GOLD_DIGGER)) {
+		if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.GOLD_DIGGER)) {
 			ItemStack goldDigger = AbilityUtils.getGoldDiggerItems(item, block);
 			if (goldDigger != null) {
-				int gdLevel = ItemUtils.getLevel(item, RegisterEnchantments.GOLD_DIGGER);
+				int gdLevel = EnchantmentUtils.getLevel(item, RegisterEnchantments.GOLD_DIGGER);
 				GoldDiggerEvent goldDiggerEvent = new GoldDiggerEvent(player, gdLevel, event.getBlock(), goldDigger, GoldDiggerCrop.getExp(event.getBlock().getType(), gdLevel));
 				Bukkit.getPluginManager().callEvent(goldDiggerEvent);
 
@@ -58,7 +64,7 @@ public class TelepathyUtils {
 	public static void handleTelepathy(BlockBreakEvent event, Player player, ItemStack item, Block block) {
 		Collection<ItemStack> drops = block.getDrops(item);
 		if (ESArrays.getShulkerBoxes().contains(block.getType())) {
-			drops = ItemUtils.getSoulboundShulkerBox(player, block, drops);
+			drops = EnchantmentUtils.getSoulboundShulkerBox(player, block, drops);
 			drops = giveItems(player, item, block, drops);
 
 			callTelepathy(event, block, player, drops, TelepathyType.SHULKER_BOX, true);
@@ -130,10 +136,10 @@ public class TelepathyUtils {
 			drops.add(new ItemStack(Material.SNOWBALL, num));
 		}
 		drops = giveItems(player, item, block, drops);
-		if (ItemUtils.hasEnchantment(item, RegisterEnchantments.GOLD_DIGGER)) {
+		if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.GOLD_DIGGER)) {
 			ItemStack goldDigger = AbilityUtils.getGoldDiggerItems(item, block);
 			if (goldDigger != null) {
-				int gdLevel = ItemUtils.getLevel(item, RegisterEnchantments.GOLD_DIGGER);
+				int gdLevel = EnchantmentUtils.getLevel(item, RegisterEnchantments.GOLD_DIGGER);
 				GoldDiggerEvent goldDiggerEvent = new GoldDiggerEvent(player, gdLevel, event.getBlock(), goldDigger, GoldDiggerCrop.getExp(event.getBlock().getType(), gdLevel));
 				Bukkit.getPluginManager().callEvent(goldDiggerEvent);
 
@@ -150,7 +156,7 @@ public class TelepathyUtils {
 
 	private static Collection<ItemStack> giveItems(Player player, ItemStack item, Block block,
 	Collection<ItemStack> drops) {
-		if (ItemUtils.hasEnchantment(item, RegisterEnchantments.SMELTERY)) {
+		if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.SMELTERY)) {
 			SmelteryEvent smeltery = SmelteryUtils.handleSmelteryTelepathy(player, block, item);
 			if (smeltery != null) {
 				Bukkit.getPluginManager().callEvent(smeltery);
@@ -159,22 +165,23 @@ public class TelepathyUtils {
 					ItemStack afterSmeltery = smeltery.getDrop();
 					afterSmeltery.setType(smeltery.getChangeTo());
 					if (smeltery.willFortune()) {
-						afterSmeltery = FortuneUtils.getFortuneForSmeltery(afterSmeltery, item);
+						afterSmeltery = FortuneUtils.getFortuneForSmeltery(afterSmeltery, item, smeltery.getBlock().getType());
 						if (afterSmeltery.getAmount() > 1 && afterSmeltery.getType() == Material.IRON_INGOT) AdvancementUtils.awardCriteria(player, ESAdvancement.IRONT_YOU_GLAD, "iron");
 					}
 					AbilityUtils.giveExperience(player, smeltery.getExp());
 					return Arrays.asList(afterSmeltery);
 				}
 			}
-		} else if (ItemUtils.hasEnchantment(item, Enchantment.LOOT_BONUS_BLOCKS)) {
+		} else if (EnchantmentUtils.hasEnchantment(item, Enchantment.LOOT_BONUS_BLOCKS)) {
 			Collection<ItemStack> fortuneItems = FortuneUtils.getFortuneItems(item, block, drops);
 			return fortuneItems;
-		} else if (ItemUtils.hasEnchantment(item, Enchantment.SILK_TOUCH) && SilkTouchUtils.getSilkTouchItem(block, item) != null) return Arrays.asList(SilkTouchUtils.getSilkTouchItem(block, item));
+		} else if (EnchantmentUtils.hasEnchantment(item, Enchantment.SILK_TOUCH) && SilkTouchUtils.getSilkTouchItem(block, item) != null) return Arrays.asList(SilkTouchUtils.getSilkTouchItem(block, item));
 		return drops;
 	}
 
 	private static TelepathyEvent callTelepathy(BlockBreakEvent event, Block block, Player player,
 	Collection<ItemStack> drops, TelepathyType type, boolean damageItems) {
+		if (EnchantmentSolution.getPlugin().hasRestrictedCreative() && EnchantmentSolution.getPlugin().isRestrictedCreative(block)) drops = new ArrayList<ItemStack>();
 		TelepathyEvent telepathy = new TelepathyEvent(block, player, drops, type);
 		Bukkit.getPluginManager().callEvent(telepathy);
 
@@ -198,6 +205,7 @@ public class TelepathyUtils {
 		player.incrementStatistic(Statistic.USE_ITEM, item.getType());
 		DamageUtils.damageItem(player, item);
 		McMMOHandler.handleMcMMO(event, item);
+		QuestsUtils.handle(event);
 		Block newBlock = event.getBlock();
 		Location loc = newBlock.getLocation().clone().add(0.5, 0.5, 0.5);
 		if (EnchantmentSolution.getPlugin().isJobsEnabled()) JobsUtils.sendBlockBreakAction(event);

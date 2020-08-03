@@ -5,17 +5,21 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
+import org.ctp.crashapi.item.BlockSound;
+import org.ctp.crashapi.item.MatData;
+import org.ctp.crashapi.utils.DamageUtils;
+import org.ctp.crashapi.utils.ItemUtils;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
+import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enums.ItemBreakType;
-import org.ctp.enchantmentsolution.enums.vanilla.BlockSound;
-import org.ctp.enchantmentsolution.enums.vanilla.MatData;
 import org.ctp.enchantmentsolution.events.blocks.SmelteryEvent;
 import org.ctp.enchantmentsolution.mcmmo.McMMOHandler;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.VersionUtils;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.SmelteryMaterial;
 import org.ctp.enchantmentsolution.utils.compatibility.JobsUtils;
+import org.ctp.enchantmentsolution.utils.compatibility.QuestsUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 
 public class SmelteryUtils {
@@ -26,10 +30,18 @@ public class SmelteryUtils {
 			ItemStack smelted = smeltery.getSmelted();
 			int experience = 0;
 			boolean fortune = false;
-			if (blockBroken.getType() == Material.IRON_ORE || blockBroken.getType() == Material.GOLD_ORE) {
+			MatData data = new MatData(blockBroken.getType().name());
+			if (data.hasMaterial() && (data.getMaterial() == Material.IRON_ORE || data.getMaterial() == Material.GOLD_ORE)) {
 				experience = (int) (Math.random() * 3) + 1;
 				fortune = true;
+			} else if (data.hasMaterial() && data.getMaterialName().equals("ANCIENT_DEBRIS")) {
+				experience = (int) (Math.random() * 6) + 2;
+				fortune = true;
+			} else if (data.hasMaterial() && (data.getMaterialName().equals("NETHER_GOLD_ORE") || data.getMaterialName().equals("GILDED_BLACKSTONE"))) {
+				experience = (int) (Math.random() * 2);
+				fortune = data.getMaterialName().equals("NETHER_GOLD_ORE");
 			}
+			experience = AbilityUtils.setExp(experience, EnchantmentUtils.getLevel(item, RegisterEnchantments.EXP_SHARE));
 			SmelteryEvent smelteryEvent = new SmelteryEvent(blockBroken, player, smelted, smeltery.getToMaterial(), experience, fortune);
 			Bukkit.getPluginManager().callEvent(smelteryEvent);
 
@@ -38,13 +50,14 @@ public class SmelteryUtils {
 				ItemStack afterSmeltery = smelteryEvent.getDrop();
 				afterSmeltery.setType(smelteryEvent.getChangeTo());
 				if (smelteryEvent.willFortune()) {
-					afterSmeltery = FortuneUtils.getFortuneForSmeltery(afterSmeltery, item);
+					afterSmeltery = FortuneUtils.getFortuneForSmeltery(afterSmeltery, item, newBlock.getType());
 					if (afterSmeltery.getAmount() > 1 && afterSmeltery.getType() == Material.IRON_INGOT) AdvancementUtils.awardCriteria(player, ESAdvancement.IRONT_YOU_GLAD, "iron");
 				}
 				player.incrementStatistic(Statistic.MINE_BLOCK, smelteryEvent.getBlock().getType());
 				player.incrementStatistic(Statistic.USE_ITEM, item.getType());
 				McMMOHandler.handleMcMMO(event, item);
 				if (EnchantmentSolution.getPlugin().isJobsEnabled()) JobsUtils.sendBlockBreakAction(event);
+				QuestsUtils.handle(event);
 				DamageUtils.damageItem(player, item);
 				ItemUtils.dropItem(afterSmeltery, newBlock.getLocation());
 				Location loc = newBlock.getLocation().clone().add(0.5, 0.5, 0.5);
@@ -65,10 +78,18 @@ public class SmelteryUtils {
 			ItemStack smelted = smeltery.getSmelted();
 			int experience = 0;
 			boolean fortune = false;
-			if (blockBroken.getType() == Material.IRON_ORE || blockBroken.getType() == Material.GOLD_ORE) {
+			MatData data = new MatData(blockBroken.getType().name());
+			if (data.hasMaterial() && (data.getMaterial() == Material.IRON_ORE || data.getMaterial() == Material.GOLD_ORE)) {
 				experience = (int) (Math.random() * 3) + 1;
 				fortune = true;
+			} else if (data.hasMaterial() && data.getMaterialName().equals("ANCIENT_DEBRIS")) {
+				experience = (int) (Math.random() * 6) + 2;
+				fortune = true;
+			} else if (data.hasMaterial() && (data.getMaterialName().equals("NETHER_GOLD_ORE") || data.getMaterialName().equals("GILDED_BLACKSTONE"))) {
+				experience = (int) (Math.random() * 2);
+				fortune = data.getMaterialName().equals("NETHER_GOLD_ORE");
 			}
+			experience = AbilityUtils.setExp(experience, EnchantmentUtils.getLevel(item, RegisterEnchantments.EXP_SHARE));
 			return new SmelteryEvent(blockBroken, player, smelted, smeltery.getToMaterial(), experience, fortune);
 		}
 		return null;
@@ -78,6 +99,13 @@ public class SmelteryUtils {
 		String material = null;
 		ItemBreakType type = ItemBreakType.getType(item.getType());
 		switch (block.getType().name()) {
+			case "ANCIENT_DEBRIS":
+				if (type != null && type.getBreakTypes().contains(block.getType())) material = "NETHERITE_SCRAP";
+				break;
+			case "GILDED_BLACKSTONE":
+			case "NETHER_GOLD_ORE":
+				if (type != null && type.getBreakTypes().contains(block.getType())) material = "GOLD_NUGGET";
+				break;
 			case "IRON_ORE":
 				if (type != null && type.getBreakTypes().contains(block.getType())) material = "IRON_INGOT";
 				break;

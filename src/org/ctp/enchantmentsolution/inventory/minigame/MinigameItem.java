@@ -2,8 +2,8 @@ package org.ctp.enchantmentsolution.inventory.minigame;
 
 import java.util.List;
 
+import org.ctp.crashapi.item.MatData;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
-import org.ctp.enchantmentsolution.enums.vanilla.MatData;
 
 public class MinigameItem {
 

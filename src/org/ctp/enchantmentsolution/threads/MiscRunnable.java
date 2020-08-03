@@ -8,6 +8,7 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
+import org.ctp.crashapi.utils.DamageUtils;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.CERegister;
@@ -22,8 +23,7 @@ import org.ctp.enchantmentsolution.utils.ESArrays;
 import org.ctp.enchantmentsolution.utils.Reflectionable;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.DrownedEntity;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.EntityAccuracy;
-import org.ctp.enchantmentsolution.utils.items.DamageUtils;
-import org.ctp.enchantmentsolution.utils.items.ItemUtils;
+import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
 import org.ctp.enchantmentsolution.utils.player.ESPlayer;
 
 @SuppressWarnings("unused")
@@ -52,7 +52,7 @@ public class MiscRunnable implements Runnable, Reflectionable {
 				if (cPlayer.getContagionChance() > random) {
 					int randomItemInt = (int) (Math.random() * items.size());
 					ItemStack randomItem = items.get(randomItemInt);
-					if (Math.random() >= 0.5 && randomItem != null && !ItemUtils.hasEnchantment(randomItem, RegisterEnchantments.CURSE_OF_CONTAGION)) {
+					if (Math.random() >= 0.5 && randomItem != null && !EnchantmentUtils.hasEnchantment(randomItem, RegisterEnchantments.CURSE_OF_CONTAGION)) {
 						callContagionCurse(player, randomItem, RegisterEnchantments.getCustomEnchantment(RegisterEnchantments.CURSE_OF_CONTAGION));
 						continue;
 					}
@@ -60,12 +60,12 @@ public class MiscRunnable implements Runnable, Reflectionable {
 					curses.addAll(enchantments);
 					for(int i = curses.size() - 1; i >= 0; i--) {
 						CustomEnchantment curse = curses.get(i);
-						if (!ItemUtils.canAddEnchantment(curse, randomItem)) curses.remove(i);
+						if (!EnchantmentUtils.canAddEnchantment(curse, randomItem)) curses.remove(i);
 					}
 					while (curses.size() > 0) {
 						int randomCursesInt = (int) (Math.random() * curses.size());
 						CustomEnchantment curse = curses.get(randomCursesInt);
-						if (randomItem != null && !ItemUtils.hasEnchantment(randomItem, curse.getRelativeEnchantment())) {
+						if (randomItem != null && !EnchantmentUtils.hasEnchantment(randomItem, curse.getRelativeEnchantment())) {
 							callContagionCurse(player, randomItem, curse);
 							break;
 						}
@@ -94,7 +94,8 @@ public class MiscRunnable implements Runnable, Reflectionable {
 	}
 
 	private void exhaustionCurse() {
-		Iterator<ESPlayer> iter = EnchantmentSolution.getAllESPlayers().iterator();
+		if (!canRun(RegisterEnchantments.CURSE_OF_EXHAUSTION)) return;
+		Iterator<ESPlayer> iter = EnchantmentSolution.getExhaustionPlayers().iterator();
 		while (iter.hasNext()) {
 			ESPlayer eplayer = iter.next();
 			Player player = eplayer.getOnlinePlayer();
@@ -112,11 +113,12 @@ public class MiscRunnable implements Runnable, Reflectionable {
 					}
 					eplayer.setCurrentExhaustion();
 				}
-			}
+			} else if (eplayer.getExhaustion() == 0) eplayer.resetCurrentExhaustion();
 		}
 	}
 
 	private void forceFeed() {
+		if (!canRun(RegisterEnchantments.FORCE_FEED)) return;
 		Iterator<ESPlayer> iter = EnchantmentSolution.getForceFeedPlayers().iterator();
 		while (iter.hasNext()) {
 			ESPlayer fPlayer = iter.next();
@@ -126,9 +128,9 @@ public class MiscRunnable implements Runnable, Reflectionable {
 			if (fPlayer.getForceFeedChance() > rand) {
 				Collections.shuffle(items);
 				ItemStack item = items.get(0);
-				int damage = DamageUtils.getDamage(item.getItemMeta());
+				int damage = DamageUtils.getDamage(item);
 				if (damage > 0) {
-					ForceFeedEvent forceFeed = new ForceFeedEvent(player, ItemUtils.getLevel(item, RegisterEnchantments.FORCE_FEED), item, 2);
+					ForceFeedEvent forceFeed = new ForceFeedEvent(player, EnchantmentUtils.getLevel(item, RegisterEnchantments.FORCE_FEED), item, 2);
 					Bukkit.getPluginManager().callEvent(forceFeed);
 					if (!forceFeed.isCancelled() && forceFeed.getRepair() > 0) {
 						damage -= forceFeed.getRepair();
@@ -146,7 +148,7 @@ public class MiscRunnable implements Runnable, Reflectionable {
 		if (!RegisterEnchantments.isEnabled(RegisterEnchantments.MAGIC_GUARD)) return;
 		for(Player player: Bukkit.getOnlinePlayers()) {
 			ItemStack shield = player.getInventory().getItemInOffHand();
-			if (shield.getType().equals(Material.SHIELD) && ItemUtils.hasEnchantment(shield, RegisterEnchantments.MAGIC_GUARD)) for(PotionEffect effect: player.getActivePotionEffects())
+			if (shield.getType().equals(Material.SHIELD) && EnchantmentUtils.hasEnchantment(shield, RegisterEnchantments.MAGIC_GUARD)) for(PotionEffect effect: player.getActivePotionEffects())
 				if (ESArrays.getBadPotions().contains(effect.getType())) {
 					MagicGuardPotionEvent event = new MagicGuardPotionEvent(player, effect.getType());
 					Bukkit.getPluginManager().callEvent(event);
@@ -174,7 +176,7 @@ public class MiscRunnable implements Runnable, Reflectionable {
 		Bukkit.getPluginManager().callEvent(event);
 
 		if (!event.isCancelled()) {
-			ItemUtils.addEnchantmentToItem(event.getItem(), event.getCurse(), event.getLevel());
+			EnchantmentUtils.addEnchantmentToItem(event.getItem(), event.getCurse(), event.getLevel());
 			if (event.getCurse() == CERegister.CURSE_OF_CONTAGION) AdvancementUtils.awardCriteria(player, ESAdvancement.PLAGUE_INC, "contagion");
 			if (hasAllCurses(item)) AdvancementUtils.awardCriteria(player, ESAdvancement.EXTERMINATION, "contagion");
 			for(Sound s: event.getSounds())
@@ -185,7 +187,7 @@ public class MiscRunnable implements Runnable, Reflectionable {
 	private boolean hasAllCurses(ItemStack item) {
 		boolean noCurse = true;
 		for(CustomEnchantment enchantment: RegisterEnchantments.getEnchantments())
-			if (enchantment.isCurse() && ItemUtils.canAddEnchantment(enchantment, item) && !ItemUtils.hasEnchantment(item, enchantment.getRelativeEnchantment())) {
+			if (enchantment.isCurse() && EnchantmentUtils.canAddEnchantment(enchantment, item) && !EnchantmentUtils.hasEnchantment(item, enchantment.getRelativeEnchantment())) {
 				noCurse = false;
 				break;
 			}

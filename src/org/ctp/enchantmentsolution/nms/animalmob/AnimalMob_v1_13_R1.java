@@ -12,9 +12,9 @@ import org.bukkit.entity.Ocelot.Type;
 import org.bukkit.entity.Parrot.Variant;
 import org.bukkit.entity.TropicalFish.Pattern;
 import org.bukkit.inventory.ItemStack;
+import org.ctp.crashapi.config.Configurable;
+import org.ctp.crashapi.config.CrashConfigurations;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
-import org.ctp.enchantmentsolution.utils.items.ItemSerialization;
-import org.ctp.enchantmentsolution.utils.yaml.YamlConfig;
 
 @SuppressWarnings("deprecation")
 public class AnimalMob_v1_13_R1 extends AnimalMob {
@@ -51,18 +51,18 @@ public class AnimalMob_v1_13_R1 extends AnimalMob {
 	}
 
 	@Override
-	public void setConfig(YamlConfig config, int i) {
+	public void setConfig(Configurable config, int i) {
 		this.setConfig(config, "animals.", i);
 	}
 
 	@Override
-	public void setConfig(YamlConfig config, String location, int i) {
+	public void setConfig(Configurable config, String location, int i) {
 		super.setConfig(config, location, i);
 
-		config.set(location + i + ".ocelot_type", getOcelotType() != null ? getOcelotType().name() : null);
+		config.getConfig().set(location + i + ".ocelot_type", getOcelotType() != null ? getOcelotType().name() : null);
 	}
 
-	public static AnimalMob createFromConfig(YamlConfig config, int i) {
+	public static AnimalMob createFromConfig(Configurable config, int i) {
 		AnimalMob mob = new AnimalMob();
 
 		mob.setName(config.getString("animals." + i + ".name"));
@@ -109,10 +109,10 @@ public class AnimalMob_v1_13_R1 extends AnimalMob {
 			mob.setRabbitType(org.bukkit.entity.Rabbit.Type.valueOf(config.getString("animals." + i + ".rabbit_type")));
 		} catch (Exception ex) {}
 		try {
-			mob.setSaddle(ItemSerialization.stringToItem(config.getString("animals." + i + ".saddle")));
+			mob.setSaddle(CrashConfigurations.getItemStack(config, "animals." + i + ".saddle"));
 		} catch (Exception ex) {}
 		try {
-			mob.setArmor(ItemSerialization.stringToItem(config.getString("animals." + i + ".armor")));
+			mob.setArmor(CrashConfigurations.getItemStack(config, "animals." + i + ".armor"));
 		} catch (Exception ex) {}
 		try {
 			mob.setTropicalBodyColor(DyeColor.valueOf(config.getString("animals." + i + ".tropical_body_color")));
@@ -125,17 +125,19 @@ public class AnimalMob_v1_13_R1 extends AnimalMob {
 		} catch (Exception ex) {}
 
 		Map<Integer, ItemStack> inventoryItems = new HashMap<Integer, ItemStack>();
-		List<String> inventoryKeys = config.getConfigurationInfo("animals." + i + ".inventory_items");
+		List<String> inventoryKeys = config.getConfig().getConfigurationInfo("animals." + i + ".inventory_items");
 		for(String key: inventoryKeys) {
 			String keyNum = key.substring(key.lastIndexOf('.') + 1);
 			try {
 				int num = Integer.parseInt(keyNum);
-				inventoryItems.put(num, ItemSerialization.stringToItem(config.getString(key)));
-				config.removeKey(key);
+				inventoryItems.put(num, CrashConfigurations.getItemStack(config, key));
+				config.getConfig().removeKey(key);
 			} catch (Exception ex) {}
 		}
 		mob.setInventoryItems(inventoryItems);
 
+		for(String key: config.getConfig().getConfigurationInfo("animals." + i))
+			config.getConfig().removeKey(key);
 		EnchantmentSolution.addAnimals(mob);
 		return mob;
 	}

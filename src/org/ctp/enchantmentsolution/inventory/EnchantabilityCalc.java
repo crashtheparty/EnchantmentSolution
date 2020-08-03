@@ -10,12 +10,15 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.ctp.crashapi.inventory.InventoryData;
+import org.ctp.crashapi.inventory.Pageable;
+import org.ctp.crashapi.utils.ChatUtils;
+import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantabilityMaterial;
 import org.ctp.enchantmentsolution.nms.Anvil_GUI_NMS;
-import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 import org.ctp.enchantmentsolution.utils.config.ConfigUtils;
 
@@ -34,7 +37,7 @@ public class EnchantabilityCalc implements InventoryData, Pageable {
 
 	@Override
 	public void setInventory() {
-		Inventory inv = Bukkit.createInventory(null, 54, ChatUtils.getMessage(getCodes(), "calc.name"));
+		Inventory inv = Bukkit.createInventory(null, 54, Chatable.get().getMessage(getCodes(), "calc.name"));
 		inv = open(inv);
 
 		if (page < 1) page = 1;
@@ -50,11 +53,11 @@ public class EnchantabilityCalc implements InventoryData, Pageable {
 				ItemMeta enchantmentMeta = enchantment.getItemMeta();
 				HashMap<String, Object> enchCodes = getCodes();
 				enchCodes.put("%name%", enchant.getDisplayName());
-				enchantmentMeta.setDisplayName(ChatUtils.getMessage(enchCodes, "calc.enchantments"));
+				enchantmentMeta.setDisplayName(Chatable.get().getMessage(enchCodes, "calc.enchantments"));
 				HashMap<String, Object> enchLoreCodes = getCodes();
 				enchLoreCodes.put("%constant%", enchant.enchantability(0));
 				enchLoreCodes.put("%modifier%", enchant.enchantability(1) - enchant.enchantability(0));
-				enchantmentMeta.setLore(ChatUtils.getMessages(enchLoreCodes, "calc.enchantments_lore"));
+				enchantmentMeta.setLore(Chatable.get().getMessages(enchLoreCodes, "calc.enchantments_lore"));
 				enchantment.setItemMeta(enchantmentMeta);
 				inv.setItem(i, enchantment);
 			}
@@ -70,8 +73,8 @@ public class EnchantabilityCalc implements InventoryData, Pageable {
 			ItemMeta constantMeta = constant.getItemMeta();
 			HashMap<String, Object> constantCodes = getCodes();
 			constantCodes.put("%constant%", enchantabilityConstant);
-			constantMeta.setDisplayName(ChatUtils.getMessage(getCodes(), "calc.info.constant"));
-			constantMeta.setLore(ChatUtils.getMessages(constantCodes, "calc.info.constant_lore"));
+			constantMeta.setDisplayName(Chatable.get().getMessage(getCodes(), "calc.info.constant"));
+			constantMeta.setLore(Chatable.get().getMessages(constantCodes, "calc.info.constant_lore"));
 			constant.setItemMeta(constantMeta);
 			inv.setItem(21, constant);
 
@@ -79,14 +82,14 @@ public class EnchantabilityCalc implements InventoryData, Pageable {
 			ItemMeta modifierMeta = modifier.getItemMeta();
 			HashMap<String, Object> modifierCodes = getCodes();
 			modifierCodes.put("%modifier%", enchantabilityModifier);
-			modifierMeta.setDisplayName(ChatUtils.getMessage(getCodes(), "calc.info.modifier"));
-			modifierMeta.setLore(ChatUtils.getMessages(modifierCodes, "calc.info.modifier_lore"));
+			modifierMeta.setDisplayName(Chatable.get().getMessage(getCodes(), "calc.info.modifier"));
+			modifierMeta.setLore(Chatable.get().getMessages(modifierCodes, "calc.info.modifier_lore"));
 			modifier.setItemMeta(modifierMeta);
 			inv.setItem(22, modifier);
 
 			ItemStack enchantment = new ItemStack(Material.ENCHANTED_BOOK);
 			ItemMeta enchantmentMeta = enchantment.getItemMeta();
-			enchantmentMeta.setDisplayName(ChatUtils.getMessage(getCodes(), "calc.info.select_enchantment"));
+			enchantmentMeta.setDisplayName(Chatable.get().getMessage(getCodes(), "calc.info.select_enchantment"));
 			enchantment.setItemMeta(enchantmentMeta);
 			inv.setItem(23, enchantment);
 
@@ -108,7 +111,7 @@ public class EnchantabilityCalc implements InventoryData, Pageable {
 				enchantabilityCodes.put("%max_level%", enchantability[0]);
 				enchantabilityCodes.put("%level%", ConfigString.LEVEL_FIFTY.getBoolean() ? "50: " : "30: ");
 				enchantabilityCodes.put("%max_enchantability%", enchantability[1]);
-				itemMeta.setLore(ChatUtils.getMessages(enchantabilityCodes, "calc.enchantability_lore"));
+				itemMeta.setLore(Chatable.get().getMessages(enchantabilityCodes, "calc.enchantability_lore"));
 				item.setItemMeta(itemMeta);
 				inv.setItem(slots[slot], item);
 				slot++;
@@ -122,10 +125,10 @@ public class EnchantabilityCalc implements InventoryData, Pageable {
 			ItemMeta levelMeta = level.getItemMeta();
 			HashMap<String, Object> levelCodes = getCodes();
 			levelCodes.put("%level%", 1);
-			levelMeta.setDisplayName(ChatUtils.getMessage(levelCodes, "calc.by_level"));
+			levelMeta.setDisplayName(Chatable.get().getMessage(levelCodes, "calc.by_level"));
 			HashMap<String, Object> levelLoreCodes = getCodes();
 			levelLoreCodes.put("%constant%", enchantabilityConstant);
-			levelMeta.setLore(ChatUtils.getMessages(levelLoreCodes, "calc.by_level_lore"));
+			levelMeta.setLore(Chatable.get().getMessages(levelLoreCodes, "calc.by_level_lore"));
 			level.setItemMeta(levelMeta);
 			inv.setItem(0, level);
 
@@ -137,10 +140,10 @@ public class EnchantabilityCalc implements InventoryData, Pageable {
 				ItemMeta levelItemMeta = levelItem.getItemMeta();
 				HashMap<String, Object> levelCodes = getCodes();
 				levelCodes.put("%level%", level);
-				levelItemMeta.setDisplayName(ChatUtils.getMessage(levelCodes, "calc.by_level"));
+				levelItemMeta.setDisplayName(Chatable.get().getMessage(levelCodes, "calc.by_level"));
 				HashMap<String, Object> levelLoreCodes = getCodes();
 				levelLoreCodes.put("%constant%", enchantabilityModifier * level + enchantabilityConstant);
-				levelItemMeta.setLore(ChatUtils.getMessages(levelLoreCodes, "calc.by_level_lore"));
+				levelItemMeta.setLore(Chatable.get().getMessages(levelLoreCodes, "calc.by_level_lore"));
 				levelItem.setItemMeta(levelItemMeta);
 				inv.setItem(i, levelItem);
 			}
@@ -211,7 +214,7 @@ public class EnchantabilityCalc implements InventoryData, Pageable {
 		try {
 			num = Integer.parseInt(name);
 		} catch (NumberFormatException ex) {
-			ChatUtils.sendMessage(player, ChatUtils.getMessage(getCodes(), "calc.invalid_number"));
+			Chatable.get().sendMessage(player, Chatable.get().getMessage(getCodes(), "calc.invalid_number"));
 		}
 		if (type.equals("constant")) enchantabilityConstant = num;
 		else if (type.equals("modifier")) enchantabilityModifier = num;
@@ -232,7 +235,7 @@ public class EnchantabilityCalc implements InventoryData, Pageable {
 		inventory = null;
 
 		setChat(true);
-		ChatUtils.sendMessage(player, ChatUtils.getMessage(getCodes(), "calc.enter_string"));
+		Chatable.get().sendMessage(player, Chatable.get().getMessage(getCodes(), "calc.enter_string"));
 		player.closeInventory();
 	}
 
@@ -312,6 +315,11 @@ public class EnchantabilityCalc implements InventoryData, Pageable {
 		}
 
 		return new int[] { level--, max };
+	}
+
+	@Override
+	public ChatUtils getChat() {
+		return Chatable.get();
 	}
 
 }

@@ -2,15 +2,18 @@ package org.ctp.enchantmentsolution.utils.config;
 
 import java.io.File;
 
+import org.ctp.crashapi.config.Configuration;
+import org.ctp.crashapi.config.yaml.YamlConfig;
+import org.ctp.crashapi.config.yaml.YamlConfigBackup;
+import org.ctp.crashapi.db.BackupDB;
+import org.ctp.crashapi.utils.CrashConfigUtils;
+import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
-import org.ctp.enchantmentsolution.utils.ChatUtils;
-import org.ctp.enchantmentsolution.utils.yaml.YamlConfig;
-import org.ctp.enchantmentsolution.utils.yaml.YamlConfigBackup;
 
 public class FishingConfiguration extends Configuration {
 
-	public FishingConfiguration(File dataFolder) {
-		super(new File(dataFolder + "/fishing.yml"));
+	public FishingConfiguration(File dataFolder, BackupDB db, String[] header) {
+		super(EnchantmentSolution.getPlugin(), new File(dataFolder + "/fishing.yml"), db, header);
 
 		migrateVersion();
 		if (getConfig() != null) getConfig().writeDefaults();
@@ -18,11 +21,11 @@ public class FishingConfiguration extends Configuration {
 
 	@Override
 	public void setDefaults() {
-		if (EnchantmentSolution.getPlugin().isInitializing()) ChatUtils.sendInfo("Loading fishing config...");
+		if (getPlugin().isInitializing()) Chatable.get().sendInfo("Loading fishing config...");
 
 		YamlConfigBackup config = getConfig();
 
-		File file = ConfigUtils.getTempFile("/resources/fishing_defaults.yml");
+		File file = CrashConfigUtils.getTempFile("/resources/fishing_defaults.yml");
 
 		YamlConfig defaultConfig = new YamlConfig(file, new String[] {});
 		defaultConfig.getFromConfig();
@@ -33,11 +36,14 @@ public class FishingConfiguration extends Configuration {
 
 		config.writeDefaults();
 
-		if (EnchantmentSolution.getPlugin().isInitializing()) ChatUtils.sendInfo("Fishing config initialized!");
+		if (getPlugin().isInitializing()) Chatable.get().sendInfo("Fishing config initialized!");
 		file.delete();
 	}
 
 	@Override
 	public void migrateVersion() {}
+
+	@Override
+	public void repairConfig() {}
 
 }

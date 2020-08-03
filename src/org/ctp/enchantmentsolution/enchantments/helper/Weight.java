@@ -72,13 +72,4 @@ public enum Weight {
 		return NULL;
 	}
 
-	public static String strings() {
-		String s = "";
-		for(int i = 0; i < values().length; i++) {
-			s += values()[i].getName();
-			if (i + 1 < values().length) s += ", ";
-		}
-		return s;
-	}
-
 }

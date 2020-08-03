@@ -22,10 +22,4 @@ public enum EnchantmentLocation {
 	public static List<EnchantmentLocation> getNoBooksTreasureLocations() {
 		return Arrays.asList(CHEST_LOOT, MOB_LOOT, FISHING_LOOT, VILLAGER_TRADES);
 	}
-
-	public static EnchantmentLocation getLocation(String s) {
-		for(EnchantmentLocation l: values())
-			if (l.name().equalsIgnoreCase(s)) return l;
-		return null;
-	}
 }

@@ -8,7 +8,7 @@ import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
-import org.ctp.enchantmentsolution.utils.items.ItemUtils;
+import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
 
 import com.gmail.nossr50.config.experience.ExperienceConfig;
 import com.gmail.nossr50.datatypes.experience.XPGainReason;
@@ -28,7 +28,7 @@ public class McMMOOverhaulFishing extends McMMOFishing {
 		Player player = event.getPlayer();
 		ItemStack treasure = event.getTreasure();
 
-		if (Permissions.isSubSkillEnabled(player, SubSkillType.FISHING_MAGIC_HUNTER) && ItemUtils.isEnchantable(treasure)) {
+		if (Permissions.isSubSkillEnabled(player, SubSkillType.FISHING_MAGIC_HUNTER) && EnchantmentUtils.isEnchantable(treasure)) {
 			List<EnchantmentLevel> enchantments = McMMOHandler.getEnchants(player, treasure);
 			event.setCancelled(true);
 			treasure = event.getTreasure();
@@ -38,7 +38,7 @@ public class McMMOOverhaulFishing extends McMMOFishing {
 				boolean enchanted = false;
 
 				if (!enchantments.isEmpty()) {
-					treasure = ItemUtils.addEnchantmentsToItem(treasure, enchantments);
+					treasure = EnchantmentUtils.addEnchantmentsToItem(treasure, enchantments);
 					enchanted = true;
 				}
 

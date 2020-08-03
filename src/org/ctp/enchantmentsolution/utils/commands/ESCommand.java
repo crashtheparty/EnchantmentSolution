@@ -1,72 +1,27 @@
 package org.ctp.enchantmentsolution.utils.commands;
 
 import java.util.HashMap;
-import java.util.List;
 
-import org.ctp.enchantmentsolution.utils.ChatUtils;
-import org.ctp.enchantmentsolution.utils.Configurations;
+import org.ctp.crashapi.commands.CrashCommand;
+import org.ctp.crashapi.utils.ChatUtils;
+import org.ctp.enchantmentsolution.Chatable;
+import org.ctp.enchantmentsolution.EnchantmentSolution;
 
-public class ESCommand {
-
-	private final String command, descriptionPath, usagePath, aliasesPath, permission;
+public class ESCommand extends CrashCommand {
 
 	public ESCommand(String command, String aliasesPath, String descriptionPath, String usagePath, String permission) {
-		this.command = command;
-		this.aliasesPath = aliasesPath;
-		this.descriptionPath = descriptionPath;
-		this.usagePath = usagePath;
-		this.permission = permission;
+		super(EnchantmentSolution.getPlugin(), command, aliasesPath, descriptionPath, usagePath, permission);
 	}
 
-	public String getCommand() {
-		return command;
-	}
-
-	public String getDescriptionPath() {
-		return descriptionPath;
-	}
-
-	public String getUsagePath() {
-		return usagePath;
-	}
-
-	public List<String> getAliases() {
-		return Configurations.getLanguage().getStringList(aliasesPath);
-	}
-
-	public String getAliasesString() {
-		StringBuilder sb = new StringBuilder();
-
-		List<String> aliases = getAliases();
-		if (aliases == null) {
-			ChatUtils.sendWarning("Error with command " + command + ": " + aliasesPath);
-			return "";
-		}
-
-		for(int i = 0; i < aliases.size(); i++) {
-			sb.append(aliases.get(i));
-			if (i + 1 < aliases.size()) sb.append(", ");
-		}
-
-		return sb.toString();
-	}
-
-	public String getPermission() {
-		return permission;
-	}
-
+	@Override
 	public String getFullUsage() {
 		HashMap<String, Object> codes = ChatUtils.getCodes();
 		String usage = "";
-		usage += "/es " + getCommand() + ": " + ChatUtils.getMessage(codes, getDescriptionPath()) + "\n";
-		codes.put("%usage%", ChatUtils.getMessage(codes, getUsagePath() + ".string"));
+		usage += "/es " + getCommand() + ": " + Chatable.get().getMessage(codes, getDescriptionPath()) + "\n";
+		codes.put("%usage%", Chatable.get().getMessage(codes, getUsagePath() + ".string"));
 		codes.put("%aliases%", getAliasesString());
-		usage += ChatUtils.getMessage(codes, getUsagePath() + ".main");
+		usage += Chatable.get().getMessage(codes, getUsagePath() + ".main");
 		return usage;
-	}
-
-	public String getUsage() {
-		return ChatUtils.getMessage(ChatUtils.getCodes(), getUsagePath() + ".string");
 	}
 
 }

@@ -9,8 +9,12 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
+import org.ctp.crashapi.CrashAPI;
+import org.ctp.crashapi.inventory.InventoryData;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
-import org.ctp.enchantmentsolution.inventory.*;
+import org.ctp.enchantmentsolution.inventory.Anvil;
+import org.ctp.enchantmentsolution.inventory.EnchantmentTable;
+import org.ctp.enchantmentsolution.inventory.LegacyAnvil;
 import org.ctp.enchantmentsolution.inventory.minigame.Minigame;
 import org.ctp.enchantmentsolution.nms.playerinteract.PlayerInteract_v1_14;
 import org.ctp.enchantmentsolution.utils.AnvilUtils;
@@ -84,7 +88,7 @@ public class PlayerInteract implements Listener {
 					inv.setInventory(null);
 				}, 1l);
 			}
-			if (EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber() > 3) PlayerInteract_v1_14.onPlayerInteract(event);
+			if (CrashAPI.getPlugin().getBukkitVersion().getVersionNumber() > 3) PlayerInteract_v1_14.onPlayerInteract(event);
 		}
 	}
 

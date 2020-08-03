@@ -12,18 +12,35 @@ import org.ctp.enchantmentsolution.enums.ItemBreakType;
 public class FortuneUtils {
 	private static List<Material> CROPS = Arrays.asList(Material.WHEAT, Material.CARROTS, Material.POTATOES, Material.NETHER_WART, Material.BEETROOTS, Material.COCOA_BEANS);
 
-	public static ItemStack getFortuneForSmeltery(ItemStack smelted, ItemStack item) {
-		if (ItemUtils.hasEnchantment(item, Enchantment.LOOT_BONUS_BLOCKS)) {
-			int level = ItemUtils.getLevel(item, Enchantment.LOOT_BONUS_BLOCKS) + 2;
-			int multiply = (int) (Math.random() * level);
-			if (multiply > 1) smelted.setAmount(smelted.getAmount() * multiply);
+	public static ItemStack getFortuneForSmeltery(ItemStack smelted, ItemStack item, Material original) {
+		if (EnchantmentUtils.hasEnchantment(item, Enchantment.LOOT_BONUS_BLOCKS)) {
+			int level = EnchantmentUtils.getLevel(item, Enchantment.LOOT_BONUS_BLOCKS);
+			switch (original.name()) {
+				case "ANCIENT_DEBRIS":
+					double extraAmount = Math.random() * (level * 0.15);
+					double rand = Math.random();
+					int amount = 1;
+					while (extraAmount >= 1) {
+						extraAmount--;
+						amount++;
+					}
+					if (extraAmount > rand) amount++;
+					if (amount > 1) smelted.setAmount(amount);
+					break;
+				case "IRON_ORE":
+				case "GOLD_ORE":
+				case "NETHER_GOLD_ORE":
+					int multiply = (int) (Math.random() * (level + 2));
+					if (multiply > 1) smelted.setAmount(smelted.getAmount() * multiply);
+					break;
+			}
 		}
 		return smelted;
 	}
 
 	public static Collection<ItemStack> getFortuneItems(ItemStack item, Block brokenBlock,
 	Collection<ItemStack> priorItems) {
-		int level = ItemUtils.getLevel(item, Enchantment.LOOT_BONUS_BLOCKS);
+		int level = EnchantmentUtils.getLevel(item, Enchantment.LOOT_BONUS_BLOCKS);
 		if (level <= 0) return priorItems;
 		Iterator<ItemStack> iter = priorItems.iterator();
 		List<ItemStack> duplicate = new ArrayList<ItemStack>();
@@ -54,15 +71,13 @@ public class FortuneUtils {
 			case "EMERALD_ORE":
 			case "COAL_ORE":
 			case "NETHER_QUARTZ_ORE":
-			case "NETHER_GOLD_ORE":
-			case "GILDED_BLACKSTONE":
 			case "LAPIS_ORE":
 				itemBreak = ItemBreakType.getType(item.getType());
 				if (itemBreak != null && itemBreak.getBreakTypes().contains(brokenBlock.getType())) {
 					ItemStack fortunableItem = duplicate.get(0);
 					int multiply = (int) (Math.random() * level);
 					if (multiply > 1) {
-						fortunableItem.setAmount(fortunableItem.getAmount() * multiply);
+						fortunableItem.setAmount(1 * multiply);
 						priorItems.clear();
 						priorItems.add(fortunableItem);
 					}

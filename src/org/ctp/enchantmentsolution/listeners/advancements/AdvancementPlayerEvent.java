@@ -18,19 +18,19 @@ import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
+import org.ctp.crashapi.events.ArmorEquipEvent;
+import org.ctp.crashapi.events.ItemEquipEvent;
+import org.ctp.crashapi.item.ItemSlotType;
+import org.ctp.crashapi.item.MatData;
+import org.ctp.crashapi.utils.LocationUtils;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.CERegister;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
-import org.ctp.enchantmentsolution.enums.ItemSlotType;
-import org.ctp.enchantmentsolution.enums.vanilla.MatData;
-import org.ctp.enchantmentsolution.events.ArmorEquipEvent;
-import org.ctp.enchantmentsolution.events.ItemEquipEvent;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
-import org.ctp.enchantmentsolution.utils.LocationUtils;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.WalkerBlock;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.WalkerUtils;
-import org.ctp.enchantmentsolution.utils.items.ItemUtils;
+import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
 
 public class AdvancementPlayerEvent implements Listener {
 
@@ -39,14 +39,14 @@ public class AdvancementPlayerEvent implements Listener {
 		Player player = event.getPlayer();
 		if (player.getWorld().getTime() <= 12540 || player.getWorld().getTime() >= 23459) {
 			ItemStack helmet = player.getInventory().getHelmet();
-			if (helmet != null && ItemUtils.hasEnchantment(helmet, RegisterEnchantments.UNREST)) AdvancementUtils.awardCriteria(player, ESAdvancement.I_AINT_AFRAID_OF_NO_GHOSTS, "unrest", 1);
+			if (helmet != null && EnchantmentUtils.hasEnchantment(helmet, RegisterEnchantments.UNREST)) AdvancementUtils.awardCriteria(player, ESAdvancement.I_AINT_AFRAID_OF_NO_GHOSTS, "unrest", 1);
 		}
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerDropItem(PlayerDropItemEvent event) {
 		Player player = event.getPlayer();
-		if (player != null) if (ItemUtils.hasEnchantment(event.getItemDrop().getItemStack(), RegisterEnchantments.EXP_SHARE)) event.getItemDrop().setMetadata("exp_share", new FixedMetadataValue(EnchantmentSolution.getPlugin(), player.getUniqueId().toString()));
+		if (player != null) if (EnchantmentUtils.hasEnchantment(event.getItemDrop().getItemStack(), RegisterEnchantments.EXP_SHARE)) event.getItemDrop().setMetadata("exp_share", new FixedMetadataValue(EnchantmentSolution.getPlugin(), player.getUniqueId().toString()));
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR)
@@ -62,9 +62,9 @@ public class AdvancementPlayerEvent implements Listener {
 	public void onPlayerItemConsume(PlayerItemConsumeEvent event) {
 		ItemStack item = event.getItem();
 		ItemStack chestplate = event.getPlayer().getInventory().getChestplate();
-		if (chestplate != null && ItemUtils.hasEnchantment(chestplate, RegisterEnchantments.LIFE)) {
-			int level = ItemUtils.getLevel(chestplate, RegisterEnchantments.LIFE);
-			if (item.getType() == Material.ENCHANTED_GOLDEN_APPLE && level >= RegisterEnchantments.getCustomEnchantment(RegisterEnchantments.LIFE).getMaxLevel()) AdvancementUtils.awardCriteria(event.getPlayer(), ESAdvancement.EXTRA_POWER, "power");
+		if (chestplate != null && EnchantmentUtils.hasEnchantment(chestplate, RegisterEnchantments.LIFE)) {
+			int level = EnchantmentUtils.getLevel(chestplate, RegisterEnchantments.LIFE);
+			if (item.getType() == Material.ENCHANTED_GOLDEN_APPLE && level >= CERegister.LIFE.getMaxLevel()) AdvancementUtils.awardCriteria(event.getPlayer(), ESAdvancement.EXTRA_POWER, "power");
 		}
 	}
 
@@ -72,19 +72,19 @@ public class AdvancementPlayerEvent implements Listener {
 	public void onArmorEquip(ArmorEquipEvent event) {
 		if (event.isCancelled()) return;
 		Bukkit.getScheduler().runTaskLater(EnchantmentSolution.getPlugin(), () -> {
-			if (event.getNewArmorPiece() != null && ItemUtils.hasEnchantment(event.getNewArmorPiece(), RegisterEnchantments.TANK)) {
+			if (event.getNewArmorPiece() != null && EnchantmentUtils.hasEnchantment(event.getNewArmorPiece(), RegisterEnchantments.TANK)) {
 				Player player = event.getPlayer();
 				boolean hasTank = true;
 				for(ItemStack item: player.getInventory().getArmorContents())
-					if (item == null || !(ItemUtils.hasEnchantment(item, RegisterEnchantments.TANK) && ItemUtils.getLevel(item, RegisterEnchantments.TANK) >= RegisterEnchantments.getCustomEnchantment(RegisterEnchantments.TANK).getMaxLevel())) hasTank = false;
+					if (item == null || !(EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.TANK) && EnchantmentUtils.getLevel(item, RegisterEnchantments.TANK) >= CERegister.TANK.getMaxLevel())) hasTank = false;
 
 				if (hasTank) AdvancementUtils.awardCriteria(player, ESAdvancement.PANZER_SOLDIER, "tank");
 			}
-			if (event.getNewArmorPiece() != null && ItemUtils.hasEnchantment(event.getNewArmorPiece(), RegisterEnchantments.FORCE_FEED)) {
+			if (event.getNewArmorPiece() != null && EnchantmentUtils.hasEnchantment(event.getNewArmorPiece(), RegisterEnchantments.FORCE_FEED)) {
 				Player player = event.getPlayer();
 				boolean hasFeed = true;
 				for(ItemStack item: player.getInventory().getArmorContents())
-					if (item == null || !ItemUtils.hasEnchantment(item, RegisterEnchantments.FORCE_FEED)) hasFeed = false;
+					if (item == null || !EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.FORCE_FEED)) hasFeed = false;
 
 				if (hasFeed) AdvancementUtils.awardCriteria(player, ESAdvancement.HUNGRY_HIPPOS, "armor");
 			}
@@ -96,10 +96,10 @@ public class AdvancementPlayerEvent implements Listener {
 		if (event.isCancelled()) return;
 		ItemStack item = event.getNewItem();
 		if (event.getSlot() == ItemSlotType.MAIN_HAND) Bukkit.getScheduler().runTaskLater(EnchantmentSolution.getPlugin(), () -> {
-			if (item != null && ItemUtils.hasEnchantment(item, RegisterEnchantments.CURSE_OF_STAGNANCY)) {
+			if (item != null && EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.CURSE_OF_STAGNANCY)) {
 				Player player = event.getPlayer();
-				if (item.getType() == Material.IRON_PICKAXE && ItemUtils.hasEnchantment(item, Enchantment.DURABILITY) && ItemUtils.getLevel(item, Enchantment.DURABILITY) >= CERegister.UNBREAKING.getMaxLevel()) AdvancementUtils.awardCriteria(player, ESAdvancement.STAINLESS_STEEL, "iron_pickaxe");
-				if (item.getType() == new MatData("NETHERITE_SWORD").getMaterial() && ItemUtils.hasEnchantment(item, Enchantment.DAMAGE_ALL) && ItemUtils.getLevel(item, Enchantment.DAMAGE_ALL) >= CERegister.SHARPNESS.getMaxLevel()) AdvancementUtils.awardCriteria(player, ESAdvancement.NETHER_DULL, "netherite_sword");
+				if (item.getType() == Material.IRON_PICKAXE && EnchantmentUtils.hasEnchantment(item, Enchantment.DURABILITY) && EnchantmentUtils.getLevel(item, Enchantment.DURABILITY) >= CERegister.UNBREAKING.getMaxLevel()) AdvancementUtils.awardCriteria(player, ESAdvancement.STAINLESS_STEEL, "iron_pickaxe");
+				if (item.getType() == new MatData("NETHERITE_SWORD").getMaterial() && EnchantmentUtils.hasEnchantment(item, Enchantment.DAMAGE_ALL) && EnchantmentUtils.getLevel(item, Enchantment.DAMAGE_ALL) >= CERegister.SHARPNESS.getMaxLevel()) AdvancementUtils.awardCriteria(player, ESAdvancement.NETHER_DULL, "netherite_sword");
 			}
 		}, 0l);
 	}
@@ -111,9 +111,9 @@ public class AdvancementPlayerEvent implements Listener {
 		WalkerBlock walkerBlock = WalkerUtils.getWalker(block);
 		if (player.getInventory().getBoots() != null) {
 			ItemStack boots = player.getInventory().getBoots();
-			if (ItemUtils.hasEnchantment(boots, RegisterEnchantments.MAGMA_WALKER) && walkerBlock != null && walkerBlock.getEnchantment() == RegisterEnchantments.MAGMA_WALKER && player.getFireTicks() > 0) AdvancementUtils.awardCriteria(player, ESAdvancement.THIS_GIRL_IS_ON_FIRE, "lava");
+			if (EnchantmentUtils.hasEnchantment(boots, RegisterEnchantments.MAGMA_WALKER) && walkerBlock != null && walkerBlock.getEnchantment() == RegisterEnchantments.MAGMA_WALKER && player.getFireTicks() > 0) AdvancementUtils.awardCriteria(player, ESAdvancement.THIS_GIRL_IS_ON_FIRE, "lava");
 
-			if (ItemUtils.hasEnchantment(boots, RegisterEnchantments.VOID_WALKER) && walkerBlock != null && walkerBlock.getEnchantment() == RegisterEnchantments.VOID_WALKER && !LocationUtils.hasBlockBelow(block.getRelative(BlockFace.DOWN).getLocation())) AdvancementUtils.awardCriteria(player, ESAdvancement.MADE_FOR_WALKING, "boots");
+			if (EnchantmentUtils.hasEnchantment(boots, RegisterEnchantments.VOID_WALKER) && walkerBlock != null && walkerBlock.getEnchantment() == RegisterEnchantments.VOID_WALKER && !LocationUtils.hasBlockBelow(block.getRelative(BlockFace.DOWN).getLocation())) AdvancementUtils.awardCriteria(player, ESAdvancement.MADE_FOR_WALKING, "boots");
 		}
 	}
 

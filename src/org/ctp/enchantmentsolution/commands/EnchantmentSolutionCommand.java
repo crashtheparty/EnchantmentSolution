@@ -6,11 +6,11 @@ import java.util.logging.Level;
 import org.bukkit.Bukkit;
 import org.bukkit.command.*;
 import org.bukkit.entity.Player;
+import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
-import org.ctp.enchantmentsolution.utils.ChatUtils;
-import org.ctp.enchantmentsolution.utils.commands.CommandCallable;
 import org.ctp.enchantmentsolution.utils.commands.CommandUtils;
 import org.ctp.enchantmentsolution.utils.commands.ESCommand;
+import org.ctp.enchantmentsolution.utils.commands.ESCommandCallable;
 
 public class EnchantmentSolutionCommand implements CommandExecutor, TabCompleter {
 
@@ -25,6 +25,7 @@ public class EnchantmentSolutionCommand implements CommandExecutor, TabCompleter
 	private final ESCommand lore = new ESCommand("configlore", "commands.aliases.configlore", "commands.descriptions.configlore", "commands.usage.configlore", "enchantmentsolution.command.lore");
 	private final ESCommand reload = new ESCommand("esreload", "commands.aliases.esreload", "commands.descriptions.esreload", "commands.usage.esreload", "enchantmentsolution.command.reload");
 	private final ESCommand reset = new ESCommand("esreset", "commands.aliases.esreset", "commands.descriptions.esreset", "commands.usage.esreset", "enchantmentsolution.command.reset");
+	private final ESCommand test = new ESCommand("estest", "commands.aliases.estest", "commands.descriptions.estest", "commands.usage.estest", "enchantmentsolution.command.test");
 	private final ESCommand book = new ESCommand("esbook", "commands.aliases.esbook", "commands.descriptions.esbook", "commands.usage.esbook", "enchantmentsolution.command.book");
 	private final ESCommand enchant = new ESCommand("enchant", "commands.aliases.enchant", "commands.descriptions.enchant", "commands.usage.enchant", "enchantmentsolution.command.enchant");
 	private final ESCommand enchantUnsafe = new ESCommand("enchantunsafe", "commands.aliases.enchantunsafe", "commands.descriptions.enchantunsafe", "commands.usage.enchantunsafe", "enchantmentsolution.command.enchantunsafe");
@@ -51,6 +52,7 @@ public class EnchantmentSolutionCommand implements CommandExecutor, TabCompleter
 		commands.add(rpgStats);
 		commands.add(rpgTop);
 		commands.add(rpgEdit);
+		commands.add(test);
 		commands.add(book);
 		commands.add(enchant);
 		commands.add(enchantInfo);
@@ -90,7 +92,7 @@ public class EnchantmentSolutionCommand implements CommandExecutor, TabCompleter
 		for(ESCommand command: commands) {
 			if (command == help) continue;
 			if (containsCommand(command, args[0])) try {
-				return new CommandCallable(command, sender, finalArgs).call();
+				return new ESCommandCallable(command, sender, finalArgs).call();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -98,7 +100,7 @@ public class EnchantmentSolutionCommand implements CommandExecutor, TabCompleter
 
 		HashMap<String, Object> codes = new HashMap<String, Object>();
 		codes.put("%command%", args[0]);
-		ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(codes, "commands.no-command"), Level.WARNING);
+		Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(codes, "commands.no-command"), Level.WARNING);
 		return true;
 	}
 
@@ -152,6 +154,7 @@ public class EnchantmentSolutionCommand implements CommandExecutor, TabCompleter
 		if (i == 2 && containsCommand(rpgEdit, args[0]) && sender.hasPermission(rpgEdit.getPermission())) all.addAll(rpgEdit(args[i]));
 		if (i == 3 && containsCommand(rpgEdit, args[0]) && sender.hasPermission(rpgEdit.getPermission())) all.addAll(rpgEdit(args[i], args[2]));
 		if (i == 4 && containsCommand(rpgEdit, args[0]) && sender.hasPermission(rpgEdit.getPermission())) all.addAll(rpgEdit(args[i], args[2], args[3]));
+		if (i == 1 && containsCommand(test, args[0]) && sender.hasPermission(test.getPermission())) all.addAll(test(args[i]));
 
 		return all;
 	}
@@ -160,7 +163,18 @@ public class EnchantmentSolutionCommand implements CommandExecutor, TabCompleter
 		Iterator<String> iter = strings.iterator();
 		while (iter.hasNext()) {
 			String entry = iter.next();
-			if (!entry.startsWith(startsWith)) iter.remove();
+			boolean remove = true;
+			if (entry.startsWith(startsWith)) remove = false;// is fine
+			if (entry.indexOf('_') > -1) {
+				String split = entry.substring(entry.indexOf('_') + 1);
+				while (split.length() > 0) {
+					if (split.startsWith(startsWith)) remove = false;// is fine
+					if (split.indexOf('_') > -1) split = split.substring(split.indexOf('_') + 1);
+					else
+						split = "";
+				}
+			}
+			if (remove) iter.remove();
 		}
 		return strings;
 	}
@@ -319,6 +333,12 @@ public class EnchantmentSolutionCommand implements CommandExecutor, TabCompleter
 			strings.addAll(rpg.getAliases());
 		}
 		return strings;
+	}
+
+	private List<String> test(String startsWith) {
+		List<String> strings = new ArrayList<String>();
+		strings.add("item");
+		return removeComplete(strings, startsWith);
 	}
 
 	public static List<ESCommand> getCommands() {

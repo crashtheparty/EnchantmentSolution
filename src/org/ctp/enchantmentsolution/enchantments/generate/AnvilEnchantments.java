@@ -8,18 +8,19 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.ctp.crashapi.item.ItemData;
+import org.ctp.crashapi.item.ItemType;
+import org.ctp.crashapi.utils.DamageUtils;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.enums.EnchantmentLocation;
-import org.ctp.enchantmentsolution.enums.ItemType;
-import org.ctp.enchantmentsolution.enums.vanilla.ItemData;
 import org.ctp.enchantmentsolution.nms.AnvilNMS;
 import org.ctp.enchantmentsolution.nms.PersistenceNMS;
+import org.ctp.enchantmentsolution.utils.PermissionUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 import org.ctp.enchantmentsolution.utils.config.ConfigUtils;
-import org.ctp.enchantmentsolution.utils.items.DamageUtils;
-import org.ctp.enchantmentsolution.utils.items.ItemUtils;
+import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
 
 public class AnvilEnchantments extends GenerateEnchantments {
 
@@ -27,6 +28,7 @@ public class AnvilEnchantments extends GenerateEnchantments {
 	private ItemStack itemTwo, combinedItem, itemTwoLeftover;
 	private List<EnchantmentLevel> enchantments;
 	private boolean canCombine;
+	private String name;
 
 	public AnvilEnchantments(Player player, ItemStack item, ItemStack itemTwo) {
 		super(player, item, EnchantmentLocation.NONE);
@@ -36,19 +38,33 @@ public class AnvilEnchantments extends GenerateEnchantments {
 		if (canCombine) setCombinedItem();
 	}
 
+	public AnvilEnchantments(Player player, ItemStack item, ItemStack itemTwo, String name) {
+		super(player, item, EnchantmentLocation.NONE);
+		this.itemTwo = itemTwo;
+
+		setCanCombine();
+		if (name != null) this.name = name;
+		if (canCombine) setCombinedItem();
+	}
+
 	public static AnvilEnchantments getAnvilEnchantments(Player player, ItemStack item, ItemStack itemTwo) {
 		return new AnvilEnchantments(player, item, itemTwo);
+	}
+
+	public static AnvilEnchantments getAnvilEnchantments(Player player, ItemStack item, ItemStack itemTwo, String name) {
+		return new AnvilEnchantments(player, item, itemTwo, name);
 	}
 
 	public enum RepairType {
 		RENAME, REPAIR, COMBINE, STICKY_REPAIR;
 
 		public static RepairType getRepairType(AnvilEnchantments enchant) {
+			if (enchant == null) return null;
 			if (enchant.getItemTwo() == null) return RepairType.RENAME;
-			if (enchant.canCombine() || enchant.getItem().getType() == Material.STICK && ItemUtils.hasEnchantment(enchant.getItem(), RegisterEnchantments.STICKY_HOLD)) {
+			if (enchant.canCombine() || enchant.getItem() != null && enchant.getItem().getType() == Material.STICK && EnchantmentUtils.hasEnchantment(enchant.getItem(), RegisterEnchantments.STICKY_HOLD)) {
 				for(Material data: ItemType.getRepairMaterials())
 					if (data == enchant.getItemTwo().getType() && ItemData.contains(ItemType.getAnvilType(new ItemData(enchant.getItem())).getAnvilMaterials(), data)) return RepairType.REPAIR;
-				if (enchant.getItem().getType() == Material.STICK && ItemUtils.hasEnchantment(enchant.getItem(), RegisterEnchantments.STICKY_HOLD)) if (PersistenceNMS.isStickyHold(enchant.getItem())) for(Material data: ItemType.getRepairMaterials())
+				if (enchant.getItem().getType() == Material.STICK && EnchantmentUtils.hasEnchantment(enchant.getItem(), RegisterEnchantments.STICKY_HOLD)) if (PersistenceNMS.isStickyHold(enchant.getItem())) for(Material data: ItemType.getRepairMaterials())
 					if (data == enchant.getItemTwo().getType() && ItemData.contains(ItemType.getAnvilType(new ItemData(new ItemStack(PersistenceNMS.stickyItemType(enchant.getItem())))).getAnvilMaterials(true), data)) return RepairType.STICKY_REPAIR;
 				return RepairType.COMBINE;
 			}
@@ -77,10 +93,14 @@ public class AnvilEnchantments extends GenerateEnchantments {
 			canCombine = false;
 			return;
 		}
+		if (RepairType.getRepairType(this) == RepairType.STICKY_REPAIR) {
+			canCombine = true;
+			return;
+		}
 		Map<Enchantment, Integer> enchantments = itemTwo.getItemMeta().getEnchants();
 		if (itemTwo.getType() == Material.ENCHANTED_BOOK) enchantments = ((EnchantmentStorageMeta) itemTwo.getItemMeta()).getStoredEnchants();
 
-		if (enchantments.size() > 0 || DamageUtils.getDamage(item.getItemMeta()) > 0) {
+		if (enchantments.size() > 0 || DamageUtils.getDamage(item) > 0) {
 			boolean willRepair = false;
 			for(ItemData d: items)
 				if (d.equals(dataTwo)) willRepair = true;
@@ -89,15 +109,11 @@ public class AnvilEnchantments extends GenerateEnchantments {
 					canCombine = false;
 					return;
 				}
-				if (!itemTwo.getType().equals(Material.BOOK) && !itemTwo.getType().equals(Material.ENCHANTED_BOOK) || DamageUtils.getDamage(item.getItemMeta()) > 0 || !itemTwo.getType().equals(item.getType())) {
+				if (!itemTwo.getType().equals(Material.BOOK) && !itemTwo.getType().equals(Material.ENCHANTED_BOOK) || DamageUtils.getDamage(item) > 0 || !itemTwo.getType().equals(item.getType())) {
 					canCombine = true;
 					return;
 				}
 				canCombine = checkEnchantments(enchantments, item);
-				return;
-			}
-			if (RepairType.getRepairType(this) == RepairType.STICKY_REPAIR) {
-				canCombine = true;
 				return;
 			}
 		} else if (itemTwo.getType().equals(Material.ENCHANTED_BOOK) && enchantments.size() > 0) {
@@ -112,7 +128,7 @@ public class AnvilEnchantments extends GenerateEnchantments {
 			java.util.Map.Entry<Enchantment, Integer> e = it.next();
 			Enchantment enchant = e.getKey();
 			for(CustomEnchantment customEnchant: RegisterEnchantments.getEnchantments())
-				if (customEnchant.getRelativeEnchantment().equals(enchant)) if (ItemUtils.canAddEnchantment(customEnchant, first)) return true;
+				if (customEnchant.getRelativeEnchantment().equals(enchant)) if (EnchantmentUtils.canAddEnchantment(customEnchant, first)) return true;
 		}
 		return false;
 	}
@@ -120,14 +136,20 @@ public class AnvilEnchantments extends GenerateEnchantments {
 	private void setCombinedItem() {
 		ItemStack itemOne = getItem();
 		combinedItem = itemOne.clone();
-		combinedItem = ItemUtils.removeAllEnchantments(combinedItem, true);
+		combinedItem = EnchantmentUtils.removeAllEnchantments(combinedItem, true);
 		if (itemOne.getType() == Material.BOOK || itemOne.getType() == Material.ENCHANTED_BOOK) if (ConfigString.USE_ENCHANTED_BOOKS.getBoolean()) combinedItem = new ItemStack(Material.ENCHANTED_BOOK);
 		else
 			combinedItem = new ItemStack(Material.BOOK);
-		DamageUtils.setDamage(combinedItem, DamageUtils.getDamage(itemOne.getItemMeta()));
+		DamageUtils.setDamage(combinedItem, DamageUtils.getDamage(itemOne));
 		RepairType repairType = RepairType.getRepairType(this);
 		if (repairType == null) return;
-		if (repairType == RepairType.COMBINE && DamageUtils.getDamage(itemOne.getItemMeta()) != 0) repairCost += 2;
+		if (repairType == RepairType.COMBINE && DamageUtils.getDamage(itemOne) != 0) repairCost += 2;
+		if (name != null) {
+			ItemMeta meta = combinedItem.getItemMeta();
+			meta.setDisplayName(name);
+			combinedItem.setItemMeta(meta);
+			repairCost += 1;
+		}
 		if (repairType == RepairType.STICKY_REPAIR) {
 			int amount = itemTwo.getAmount();
 			if (amount <= 4) return;
@@ -139,12 +161,12 @@ public class AnvilEnchantments extends GenerateEnchantments {
 				itemTwoLeftover = new ItemStack(Material.AIR);
 			repairCost = 20;
 			combinedItem = DamageUtils.setDamage(PersistenceNMS.repairStickyHold(combinedItem), 0);
-			List<EnchantmentLevel> levels = ItemUtils.getEnchantmentLevels(itemOne);
+			List<EnchantmentLevel> levels = EnchantmentUtils.getEnchantmentLevels(itemOne);
 
 			Player player = getPlayer().getPlayer();
 			List<EnchantmentLevel> enchantments = new ArrayList<EnchantmentLevel>();
-			boolean godAnvil = player.hasPermission("enchantmentsolution.god-anvil");
-			boolean demiGodAnvil = player.hasPermission("enchantmentsolution.demigod-anvil");
+			boolean godAnvil = PermissionUtils.check(player, "enchantmentsolution.god-anvil", "enchantmentsolution.anvil.god");
+			boolean demiGodAnvil = PermissionUtils.check(player, "enchantmentsolution.demigod-anvil", "enchantmentsolution.anvil.demigod");
 			if (godAnvil) demiGodAnvil = true;
 			for(EnchantmentLevel enchantOne: levels) {
 				boolean added = false;
@@ -169,21 +191,21 @@ public class AnvilEnchantments extends GenerateEnchantments {
 
 			this.enchantments = enchantments;
 			combinedItem = AnvilNMS.setRepairCost(combinedItem, 0);
-			if (this.enchantments != null) combinedItem = ItemUtils.addEnchantmentsToItem(combinedItem, this.enchantments);
+			if (this.enchantments != null) combinedItem = EnchantmentUtils.addEnchantmentsToItem(combinedItem, this.enchantments);
 
 			return;
 		}
 
 		if (repairType == RepairType.REPAIR) {
 			int amount = itemTwo.getAmount();
-			int durPerItem = combinedItem.getType().getMaxDurability() / 4;
-			while (DamageUtils.getDamage(combinedItem.getItemMeta()) > 0 && amount > 0) {
+			int durPerItem = DamageUtils.getMaxDamage(combinedItem) / 4;
+			while (DamageUtils.getDamage(combinedItem) > 0 && amount > 0) {
 				amount--;
 				repairCost++;
-				DamageUtils.setDamage(combinedItem, DamageUtils.getDamage(combinedItem.getItemMeta()) - durPerItem);
+				DamageUtils.setDamage(combinedItem, DamageUtils.getDamage(combinedItem) - durPerItem);
 			}
 
-			if (DamageUtils.getDamage(combinedItem.getItemMeta()) < 0) DamageUtils.setDamage(combinedItem, 0);
+			if (DamageUtils.getDamage(combinedItem) < 0) DamageUtils.setDamage(combinedItem, 0);
 			if (amount > 0) {
 				itemTwoLeftover = itemTwo.clone();
 				itemTwoLeftover.setAmount(amount);
@@ -197,17 +219,17 @@ public class AnvilEnchantments extends GenerateEnchantments {
 			} else
 				itemTwoLeftover = new ItemStack(Material.AIR);
 		} else if (itemTwo.getType() == itemOne.getType()) {
-			int extraDurability = itemTwo.getType().getMaxDurability() - DamageUtils.getDamage(itemTwo.getItemMeta()) + (int) (itemTwo.getType().getMaxDurability() * .12);
-			DamageUtils.setDamage(combinedItem, DamageUtils.getDamage(combinedItem.getItemMeta()) - extraDurability);
-			if (DamageUtils.getDamage(combinedItem.getItemMeta()) < 0) DamageUtils.setDamage(combinedItem, 0);
+			int extraDurability = DamageUtils.getMaxDamage(itemTwo) - DamageUtils.getDamage(itemTwo) + (int) (DamageUtils.getMaxDamage(itemTwo) * .12);
+			DamageUtils.setDamage(combinedItem, DamageUtils.getDamage(combinedItem) - extraDurability);
+			if (DamageUtils.getDamage(combinedItem) < 0) DamageUtils.setDamage(combinedItem, 0);
 		}
-		setEnchantments();
+		repairCost += setEnchantments();
 		int itemOneRepair = AnvilNMS.getRepairCost(itemOne);
 		int itemTwoRepair = AnvilNMS.getRepairCost(itemTwo);
 		if (itemOneRepair > itemTwoRepair) combinedItem = AnvilNMS.setRepairCost(combinedItem, itemOneRepair * 2 + 1);
 		else
 			combinedItem = AnvilNMS.setRepairCost(combinedItem, itemTwoRepair * 2 + 1);
-		if (enchantments != null) combinedItem = ItemUtils.addEnchantmentsToItem(combinedItem, enchantments);
+		if (enchantments != null) combinedItem = EnchantmentUtils.addEnchantmentsToItem(combinedItem, enchantments);
 		repairCost += itemOneRepair + itemTwoRepair;
 
 		repairCost = Math.max(repairCost / ConfigString.LEVEL_DIVISOR.getInt(), 1);
@@ -275,10 +297,10 @@ public class AnvilEnchantments extends GenerateEnchantments {
 				}
 		}
 
-		boolean godAnvil = player.hasPermission("enchantmentsolution.god-anvil");
-		boolean demiGodAnvil = player.hasPermission("enchantmentsolution.demigod-anvil");
+		boolean godAnvil = PermissionUtils.check(player, "enchantmentsolution.god-anvil", "enchantmentsolution.anvil.god");
+		boolean demiGodAnvil = PermissionUtils.check(player, "enchantmentsolution.demigod-anvil", "enchantmentsolution.anvil.demigod");
 		if (godAnvil) demiGodAnvil = true;
-		boolean demiGodBooks = demiGodAnvil && player.hasPermission("enchantmentsolution.demigod-books");
+		boolean demiGodBooks = PermissionUtils.check(player, "enchantmentsolution.demigod-books", "enchantmentsolution.anvil.demigod-books");
 
 		for(EnchantmentLevel enchantTwo: secondLevels) {
 			boolean conflict = false;

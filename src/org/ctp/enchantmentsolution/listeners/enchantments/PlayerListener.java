@@ -20,6 +20,9 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.util.Vector;
+import org.ctp.crashapi.utils.DamageUtils;
+import org.ctp.crashapi.utils.ItemUtils;
+import org.ctp.crashapi.utils.LocationUtils;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
@@ -30,11 +33,9 @@ import org.ctp.enchantmentsolution.listeners.Enchantmentable;
 import org.ctp.enchantmentsolution.nms.PersistenceNMS;
 import org.ctp.enchantmentsolution.nms.animalmob.AnimalMob;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
-import org.ctp.enchantmentsolution.utils.LocationUtils;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.FlowerGiftDrop;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.WalkerUtils;
-import org.ctp.enchantmentsolution.utils.items.DamageUtils;
-import org.ctp.enchantmentsolution.utils.items.ItemUtils;
+import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
 import org.ctp.enchantmentsolution.utils.player.ESPlayer;
 
 @SuppressWarnings("unused")
@@ -73,7 +74,7 @@ public class PlayerListener extends Enchantmentable {
 			if (player.getGameMode().equals(GameMode.CREATIVE) || player.getGameMode().equals(GameMode.SPECTATOR)) return;
 			ItemStack item = player.getInventory().getItemInMainHand();
 			Block block = event.getClickedBlock();
-			if (block != null && item != null && ItemUtils.hasEnchantment(item, RegisterEnchantments.FLOWER_GIFT) && FlowerGiftDrop.isItem(block.getType())) {
+			if (block != null && item != null && EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.FLOWER_GIFT) && FlowerGiftDrop.isItem(block.getType())) {
 				FlowerGiftEvent flowerGiftEvent = new FlowerGiftEvent(player, item, block, FlowerGiftDrop.getItem(block.getType()), block.getLocation());
 				Bukkit.getPluginManager().callEvent(flowerGiftEvent);
 
@@ -98,14 +99,14 @@ public class PlayerListener extends Enchantmentable {
 		if (!canRun(RegisterEnchantments.ICARUS, event)) return;
 		Player player = event.getPlayer();
 		ItemStack chestplate = player.getInventory().getChestplate();
-		if (chestplate != null && chestplate.getType().equals(Material.ELYTRA) && player.isGliding() && ItemUtils.hasEnchantment(chestplate, RegisterEnchantments.ICARUS)) {
-			int level = ItemUtils.getLevel(player.getInventory().getChestplate(), RegisterEnchantments.ICARUS);
+		if (chestplate != null && chestplate.getType().equals(Material.ELYTRA) && player.isGliding() && EnchantmentUtils.hasEnchantment(chestplate, RegisterEnchantments.ICARUS)) {
+			int level = EnchantmentUtils.getLevel(player.getInventory().getChestplate(), RegisterEnchantments.ICARUS);
 			double additional = Math.log((2 * level + 8) / 5) + 1.5;
 			if (player.getLocation().getPitch() < -10) {
 				ESPlayer esPlayer = EnchantmentSolution.getESPlayer(player);
 				if (esPlayer.getIcarusDelay() > 0) return;
 				int num_breaks = DamageUtils.damageItem(player, chestplate, level * 5, 1, false);
-				if (DamageUtils.getDamage(chestplate.getItemMeta()) + num_breaks >= chestplate.getType().getMaxDurability()) {
+				if (DamageUtils.getDamage(chestplate) + num_breaks >= DamageUtils.getMaxDamage(chestplate)) {
 					AdvancementUtils.awardCriteria(player, ESAdvancement.TOO_CLOSE, "failure");
 					player.getWorld().spawnParticle(Particle.EXPLOSION_NORMAL, player.getLocation(), 5, 2, 2, 2);
 					return;
@@ -114,7 +115,7 @@ public class PlayerListener extends Enchantmentable {
 				Bukkit.getPluginManager().callEvent(icarus);
 
 				if (!icarus.isCancelled()) {
-					DamageUtils.setDamage(chestplate, DamageUtils.getDamage(chestplate.getItemMeta()) + num_breaks);
+					DamageUtils.setDamage(chestplate, DamageUtils.getDamage(chestplate) + num_breaks);
 					Vector pV = player.getVelocity().clone();
 					Vector v = pV.add(new Vector(0, icarus.getSpeed(), 0)).multiply(new Vector(icarus.getSpeed() / 2, 1, icarus.getSpeed() / 2));
 					player.setVelocity(v);
@@ -132,7 +133,7 @@ public class PlayerListener extends Enchantmentable {
 			Player player = event.getPlayer();
 			ItemStack item = player.getInventory().getItemInMainHand();
 			if (event.getHand() == EquipmentSlot.OFF_HAND) item = player.getInventory().getItemInOffHand();
-			if (item != null && ItemUtils.hasEnchantment(item, RegisterEnchantments.IRENES_LASSO)) {
+			if (item != null && EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.IRENES_LASSO)) {
 				List<Integer> entityIDs = PersistenceNMS.getAnimalIDsFromItem(item);
 				if (entityIDs.size() == 0) return;
 				int entityID = entityIDs.get(0);
@@ -140,7 +141,7 @@ public class PlayerListener extends Enchantmentable {
 				while (iterator.hasNext()) {
 					AnimalMob animal = iterator.next();
 					if (animal.inItem(item, entityID)) {
-						LassoInteractEvent lasso = new LassoInteractEvent(player, ItemUtils.getLevel(item, RegisterEnchantments.IRENES_LASSO), item, event.getClickedBlock(), event.getBlockFace(), animal);
+						LassoInteractEvent lasso = new LassoInteractEvent(player, EnchantmentUtils.getLevel(item, RegisterEnchantments.IRENES_LASSO), item, event.getClickedBlock(), event.getBlockFace(), animal);
 						if (!lasso.isCancelled()) {
 							event.setCancelled(true);
 							AnimalMob fromLasso = lasso.getAnimal();
@@ -168,7 +169,7 @@ public class PlayerListener extends Enchantmentable {
 		if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
 			if (event.getHand() == EquipmentSlot.OFF_HAND) return; // off hand packet, ignore.
 			ItemStack item = event.getItem();
-			if (item != null && ItemUtils.hasEnchantment(item, RegisterEnchantments.MOISTURIZE)) {
+			if (item != null && EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.MOISTURIZE)) {
 				Block block = event.getClickedBlock();
 				ItemMoisturizeType type = ItemMoisturizeType.getMoisturizeType(block.getType());
 				if (type != null) {
@@ -244,10 +245,10 @@ public class PlayerListener extends Enchantmentable {
 		if (event.getAction().equals(Action.LEFT_CLICK_AIR)) {
 			Player player = event.getPlayer();
 			ItemStack item = player.getInventory().getItemInMainHand();
-			if (ItemUtils.hasEnchantment(item, RegisterEnchantments.OVERKILL)) {
+			if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.OVERKILL)) {
 				event.setCancelled(false);
 				if (!canRun(RegisterEnchantments.OVERKILL, event)) return;
-				boolean takeArrow = player.getGameMode() != GameMode.CREATIVE && !ItemUtils.hasEnchantment(item, Enchantment.ARROW_INFINITE);
+				boolean takeArrow = player.getGameMode() != GameMode.CREATIVE && !EnchantmentUtils.hasEnchantment(item, Enchantment.ARROW_INFINITE);
 				OverkillEvent overkill = new OverkillEvent(player, item, takeArrow, player.getInventory().all(Material.ARROW).size() > 0, 0.4);
 				Bukkit.getPluginManager().callEvent(overkill);
 
@@ -288,7 +289,7 @@ public class PlayerListener extends Enchantmentable {
 		if (event.getAction().equals(Action.LEFT_CLICK_AIR)) {
 			Player player = event.getPlayer();
 			ItemStack item = player.getInventory().getItemInMainHand();
-			if (ItemUtils.hasEnchantment(item, RegisterEnchantments.SPLATTER_FEST)) {
+			if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.SPLATTER_FEST)) {
 				event.setCancelled(false);
 				if (!canRun(RegisterEnchantments.SPLATTER_FEST, event)) return;
 				SplatterFestEvent splatterFest = new SplatterFestEvent(player, item, player.getGameMode() != GameMode.CREATIVE, player.getInventory().all(Material.EGG).size() > 0);
@@ -328,7 +329,7 @@ public class PlayerListener extends Enchantmentable {
 	private void stickyHold(PlayerItemBreakEvent event) {
 		Player player = event.getPlayer();
 		ItemStack item = event.getBrokenItem();
-		if (item != null && ItemUtils.hasEnchantment(item, RegisterEnchantments.STICKY_HOLD)) {
+		if (item != null && EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.STICKY_HOLD)) {
 			ItemStack finalItem = item.clone();
 			Bukkit.getScheduler().runTaskLater(EnchantmentSolution.getPlugin(), () -> {
 				ItemStack stickItem = PersistenceNMS.createStickyHold(finalItem);
@@ -345,7 +346,7 @@ public class PlayerListener extends Enchantmentable {
 		Location loc = player.getLocation();
 		if (player.isFlying() || player.isGliding() || player.isInsideVehicle()) return;
 		ItemStack boots = player.getInventory().getBoots();
-		if (boots != null && ItemUtils.hasEnchantment(boots, enchantment)) if (enchantment == RegisterEnchantments.MAGMA_WALKER) {
+		if (boots != null && EnchantmentUtils.hasEnchantment(boots, enchantment)) if (enchantment == RegisterEnchantments.MAGMA_WALKER) {
 			if (player.isOnGround()) WalkerUtils.updateBlocks(player, boots, loc, enchantment, Arrays.asList(Material.LAVA), Material.MAGMA_BLOCK, "MagmaWalker");
 		} else if (enchantment == RegisterEnchantments.VOID_WALKER) if (LocationUtils.isLocationDifferent(event.getFrom(), event.getTo(), false)) WalkerUtils.updateBlocks(player, boots, loc, enchantment, Arrays.asList(Material.AIR, Material.CAVE_AIR, Material.VOID_AIR), Material.OBSIDIAN, "VoidWalker");
 		else if (LocationUtils.isLocationDifferent(event.getFrom(), event.getTo(), true)) WalkerUtils.updateBlocks(player, boots, event.getTo(), enchantment, Arrays.asList(Material.AIR, Material.CAVE_AIR, Material.VOID_AIR), Material.OBSIDIAN, "VoidWalker");

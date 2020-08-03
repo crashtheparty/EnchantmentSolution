@@ -2,8 +2,8 @@ package org.ctp.enchantmentsolution.api;
 
 import java.util.List;
 
-import org.ctp.enchantmentsolution.enums.ItemType;
-import org.ctp.enchantmentsolution.enums.vanilla.ItemData;
+import org.ctp.crashapi.item.ItemData;
+import org.ctp.crashapi.item.ItemType;
 
 public class ApiItemType {
 

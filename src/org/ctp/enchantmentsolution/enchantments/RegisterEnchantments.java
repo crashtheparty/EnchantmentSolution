@@ -2,19 +2,21 @@ package org.ctp.enchantmentsolution.enchantments;
 
 import java.lang.reflect.Field;
 import java.util.*;
-import java.util.logging.Level;
 
 import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.ctp.crashapi.config.Configuration;
+import org.ctp.crashapi.item.ItemType;
+import org.ctp.crashapi.item.VanillaItemType;
+import org.ctp.crashapi.utils.StringUtils;
+import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.api.ApiEnchantmentWrapper;
-import org.ctp.enchantmentsolution.enchantments.config.ConfigEnchantment;
 import org.ctp.enchantmentsolution.enchantments.helper.Weight;
 import org.ctp.enchantmentsolution.enums.EnchantmentLocation;
-import org.ctp.enchantmentsolution.enums.ItemType;
-import org.ctp.enchantmentsolution.enums.VanillaItemType;
-import org.ctp.enchantmentsolution.utils.*;
+import org.ctp.enchantmentsolution.utils.Configurations;
+import org.ctp.enchantmentsolution.utils.VersionUtils;
 import org.ctp.enchantmentsolution.utils.config.*;
 
 public class RegisterEnchantments {
@@ -92,7 +94,7 @@ public class RegisterEnchantments {
 	public static List<CustomEnchantment> getRegisteredEnchantmentsAlphabetical() {
 		List<CustomEnchantment> alphabetical = new ArrayList<CustomEnchantment>();
 		for(CustomEnchantment enchantment: REGISTERED_ENCHANTMENTS)
-			alphabetical.add(enchantment);
+			if (enchantment.isEnabled()) alphabetical.add(enchantment);
 		Collections.sort(alphabetical, (o1, o2) -> o1.getDisplayName().compareTo(o2.getDisplayName()));
 		return alphabetical;
 	}
@@ -126,12 +128,10 @@ public class RegisterEnchantments {
 		JavaPlugin plugin = EnchantmentSolution.getPlugin();
 		if (enchantment.getRelativeEnchantment() instanceof ApiEnchantmentWrapper) plugin = ((ApiEnchantmentWrapper) enchantment.getRelativeEnchantment()).getPlugin();
 		boolean custom = enchantment.getRelativeEnchantment() instanceof CustomEnchantmentWrapper;
-		boolean config = enchantment instanceof ConfigEnchantment;
-		String enchType = (config ? "config" : custom ? "custom" : "vanilla");
-		String error_message = "Trouble adding the " + enchantment.getName() + " " + enchType + " enchantment: ";
-		String success_message = "Added the " + enchantment.getName() + " " + enchType + " enchantment.";
-		if (!custom) {
-			ChatUtils.sendToConsole(Level.INFO, success_message);
+		String error_message = "Trouble adding the " + enchantment.getName() + (custom ? " custom" : "") + " enchantment: ";
+		String success_message = "Added the " + enchantment.getName() + (custom ? " custom" : "") + " enchantment.";
+		if (!custom || Enchantment.getByKey(enchantment.getRelativeEnchantment().getKey()) != null) {
+			Chatable.get().sendInfo(success_message);
 			return true;
 		}
 		try {
@@ -139,12 +139,12 @@ public class RegisterEnchantments {
 			f.setAccessible(true);
 			f.set(null, true);
 			Enchantment.registerEnchantment(enchantment.getRelativeEnchantment());
-			ChatUtils.sendToConsole(plugin, Level.INFO, success_message);
+			Chatable.get().sendInfo(plugin, success_message);
 			return true;
 		} catch (Exception e) {
 			REGISTERED_ENCHANTMENTS.remove(enchantment);
 
-			ChatUtils.sendToConsole(plugin, Level.WARNING, error_message);
+			Chatable.get().sendWarning(plugin, error_message);
 			e.printStackTrace();
 			return false;
 		}
@@ -159,15 +159,16 @@ public class RegisterEnchantments {
 		boolean levelFifty = ConfigString.LEVEL_FIFTY.getBoolean();
 		for(int i = 0; i < ENCHANTMENTS.size(); i++) {
 			CustomEnchantment enchantment = ENCHANTMENTS.get(i);
-			LanguageConfiguration language = Configurations.getLanguage();
-			EnchantmentsConfiguration config = Configurations.getEnchantments();
+			Configurations c = EnchantmentSolution.getPlugin().getConfigurations();
+			LanguageConfiguration language = c.getLanguage();
+			EnchantmentsConfiguration config = c.getEnchantments();
 			boolean advanced = ConfigString.ADVANCED_OPTIONS.getBoolean();
 
 			String namespace = "default_enchantments";
 			if (enchantment.getRelativeEnchantment() instanceof ApiEnchantmentWrapper) {
 				JavaPlugin plugin = ((ApiEnchantmentWrapper) enchantment.getRelativeEnchantment()).getPlugin();
 				if (plugin == null) {
-					ChatUtils.sendToConsole(Level.WARNING, "Enchantment " + enchantment.getName() + " (Display Name " + enchantment.getDisplayName() + ")" + " does not have a JavaPlugin set. Refusing to set.");
+					Chatable.get().sendWarning("Enchantment " + enchantment.getName() + " (Display Name " + enchantment.getDisplayName() + ")" + " does not have a JavaPlugin set. Refusing to set.");
 					continue;
 				}
 				namespace = plugin.getName().toLowerCase();

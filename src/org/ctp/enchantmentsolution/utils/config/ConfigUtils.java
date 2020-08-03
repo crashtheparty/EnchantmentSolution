@@ -1,15 +1,10 @@
 package org.ctp.enchantmentsolution.utils.config;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.URL;
 import java.util.List;
 
+import org.ctp.crashapi.config.Configuration;
+import org.ctp.crashapi.config.Language;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
-import org.ctp.enchantmentsolution.enums.Language;
 import org.ctp.enchantmentsolution.utils.Configurations;
 import org.ctp.enchantmentsolution.utils.VersionUtils;
 
@@ -25,7 +20,7 @@ public class ConfigUtils {
 	}
 
 	public static boolean isRepairable(CustomEnchantment enchant) {
-		if (Configurations.getConfig().getString("disable_enchant_method").equals("repairable")) return true;
+		if (Configurations.getConfigurations().getConfig().getString("disable_enchant_method").equals("repairable")) return true;
 
 		if (enchant.isEnabled()) return true;
 
@@ -57,7 +52,7 @@ public class ConfigUtils {
 	}
 
 	public static Language getLanguage() {
-		return Configurations.getLanguage().getLanguage();
+		return Configurations.getConfigurations().getLanguage().getLanguage();
 	}
 
 	public static List<String> getStringList(Type type, String s) {
@@ -67,27 +62,27 @@ public class ConfigUtils {
 	}
 
 	public static boolean isAdvancementActive(String string) {
-		return Configurations.getAdvancements().getBoolean("advancements." + string + ".enable");
+		return Configurations.getConfigurations().getAdvancements().getBoolean("advancements." + string + ".enable");
 	}
 
 	public static boolean toastAdvancement(String string) {
-		return Configurations.getAdvancements().getBoolean("advancements." + string + ".toast");
+		return Configurations.getConfigurations().getAdvancements().getBoolean("advancements." + string + ".toast");
 	}
 
 	public static boolean announceAdvancement(String string) {
-		return Configurations.getAdvancements().getBoolean("advancements." + string + ".announce");
+		return Configurations.getConfigurations().getAdvancements().getBoolean("advancements." + string + ".announce");
 	}
 
 	public static String getAdvancementName(String string) {
-		String name = Configurations.getLanguage().getString("advancements." + string + ".name");
-		if (name == null) name = Configurations.getLanguage().getString("misc.null_advancement_name");
+		String name = Configurations.getConfigurations().getLanguage().getString("advancements." + string + ".name");
+		if (name == null) name = Configurations.getConfigurations().getLanguage().getString("misc.null_advancement_name");
 		if (name == null) name = "No Name";
 		return name;
 	}
 
 	public static String getAdvancementDescription(String string) {
-		String desc = Configurations.getLanguage().getString("advancements." + string + ".description");
-		if (desc == null) desc = Configurations.getLanguage().getString("misc.null_advancement_description");
+		String desc = Configurations.getConfigurations().getLanguage().getString("advancements." + string + ".description");
+		if (desc == null) desc = Configurations.getConfigurations().getLanguage().getString("misc.null_advancement_description");
 		if (desc == null) desc = "No Description";
 		return desc;
 	}
@@ -114,55 +109,5 @@ public class ConfigUtils {
 			return defVal;
 		} else
 			throw new IllegalArgumentException("ConfigString must be an advanced option!");
-	}
-
-	public static File getTempFile(String resource) {
-		return new ConfigUtils().getFile(resource);
-	}
-
-	public static File getTempFile(Class<?> clazz, String resource) {
-		return new ConfigUtils().getFile(clazz, resource);
-	}
-
-	public File getFile(String resource) {
-		return getFile(getClass(), resource);
-	}
-
-	public File getFile(Class<?> clazz, String resource) {
-		File file = null;
-		URL res = clazz.getResource(resource);
-		if (res.getProtocol().equals("jar")) {
-			InputStream input = null;
-			OutputStream out = null;
-			try {
-				input = clazz.getResourceAsStream(resource);
-				file = File.createTempFile("/tempfile", ".tmp");
-				out = new FileOutputStream(file);
-				int read;
-				byte[] bytes = new byte[1024];
-
-				while ((read = input.read(bytes)) != -1)
-					out.write(bytes, 0, read);
-			} catch (IOException ex) {
-				ex.printStackTrace();
-			} finally {
-				try {
-					input.close();
-				} catch (IOException ex) {
-					ex.printStackTrace();
-				}
-				try {
-					out.close();
-				} catch (IOException ex) {
-					ex.printStackTrace();
-				}
-			}
-		} else
-			// this will probably work in your IDE, but not from a JAR
-			file = new File(res.getFile());
-
-		if (file != null && !file.exists()) throw new RuntimeException("Error: File " + file + " not found!");
-		file.deleteOnExit();
-		return file;
 	}
 }

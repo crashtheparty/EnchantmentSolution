@@ -8,42 +8,45 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.ctp.crashapi.item.ItemData;
+import org.ctp.crashapi.item.ItemType;
+import org.ctp.crashapi.nms.ServerNMS;
+import org.ctp.crashapi.utils.DamageUtils;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.*;
-import org.ctp.enchantmentsolution.enums.ItemType;
-import org.ctp.enchantmentsolution.enums.vanilla.ItemData;
 import org.ctp.enchantmentsolution.events.player.FrequentFlyerEvent;
 import org.ctp.enchantmentsolution.events.player.FrequentFlyerEvent.FFType;
-import org.ctp.enchantmentsolution.nms.ServerNMS;
 import org.ctp.enchantmentsolution.rpg.RPGPlayer;
 import org.ctp.enchantmentsolution.rpg.RPGUtils;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
+import org.ctp.enchantmentsolution.utils.PermissionUtils;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.ItemEquippedSlot;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.OverkillDeath;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 import org.ctp.enchantmentsolution.utils.items.AbilityUtils;
-import org.ctp.enchantmentsolution.utils.items.DamageUtils;
-import org.ctp.enchantmentsolution.utils.items.ItemUtils;
+import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
 
 public class ESPlayer {
 
 	private static Map<Integer, Integer> GLOBAL_BLOCKS = new HashMap<Integer, Integer>();
 	private static double CONTAGION_CHANCE = 0.0005, FORCE_FEED_CHANCE = 0.005;
 	private final OfflinePlayer player;
+	private Player onlinePlayer;
 	private RPGPlayer rpg;
 	private Map<Enchantment, Integer> cooldowns;
 	private List<ItemStack> soulItems;
 	private Map<Integer, Integer> blocksBroken;
 	private float currentExhaustion, pastExhaustion;
 	private ItemStack elytra;
-	private boolean canFly, didTick;
+	private boolean canFly, didTick, reset;
 	private int underLimit, aboveLimit, under, above, frequentFlyerLevel, icarusDelay;
 	private FFType currentFFType;
 	private List<OverkillDeath> overkillDeaths;
 	private List<AttributeLevel> attributes;
 
 	public ESPlayer(OfflinePlayer player) {
-		this.player = player.getPlayer();
+		this.player = player;
+		onlinePlayer = player.getPlayer();
 		rpg = RPGUtils.getPlayer(player);
 		cooldowns = new HashMap<Enchantment, Integer>();
 		blocksBroken = new HashMap<Integer, Integer>();
@@ -58,11 +61,27 @@ public class ESPlayer {
 	}
 
 	public boolean isOnline() {
-		return player.getPlayer() != null && player.isOnline();
+		return onlinePlayer != null && onlinePlayer.isOnline();
 	}
 
 	public Player getOnlinePlayer() {
-		return player.getPlayer();
+		return onlinePlayer;
+	}
+
+	public void reloadPlayer() {
+		for(Player p: Bukkit.getOnlinePlayers())
+			if (p.getUniqueId().equals(player.getUniqueId())) onlinePlayer = p;
+	}
+
+	public ItemStack[] getArmor() {
+		ItemStack[] armor = new ItemStack[4];
+		if (!isOnline()) return armor;
+		armor[0] = getOnlinePlayer().getInventory().getHelmet();
+		armor[1] = getOnlinePlayer().getInventory().getChestplate();
+		armor[2] = getOnlinePlayer().getInventory().getLeggings();
+		armor[3] = getOnlinePlayer().getInventory().getBoots();
+
+		return armor;
 	}
 
 	public ItemStack[] getEquipped() {
@@ -123,7 +142,7 @@ public class ESPlayer {
 	public double getContagionChance() {
 		double playerChance = 0;
 		if (isOnline()) for(ItemStack item: getOnlinePlayer().getInventory().getContents())
-			if (item != null && ItemUtils.hasEnchantment(item, RegisterEnchantments.CURSE_OF_CONTAGION)) playerChance += CONTAGION_CHANCE;
+			if (item != null && EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.CURSE_OF_CONTAGION)) playerChance += CONTAGION_CHANCE;
 		return playerChance;
 	}
 
@@ -141,7 +160,7 @@ public class ESPlayer {
 	private boolean hasAllCurses(ItemStack item) {
 		boolean noCurse = true;
 		for(CustomEnchantment enchantment: RegisterEnchantments.getCurseEnchantments())
-			if (enchantment.isCurse() && ItemUtils.canAddEnchantment(enchantment, item) && !ItemUtils.hasEnchantment(item, enchantment.getRelativeEnchantment())) {
+			if (enchantment.isCurse() && EnchantmentUtils.canAddEnchantment(enchantment, item) && !EnchantmentUtils.hasEnchantment(item, enchantment.getRelativeEnchantment())) {
 				noCurse = false;
 				break;
 			}
@@ -150,9 +169,9 @@ public class ESPlayer {
 
 	private boolean canAddCurse(ItemStack item) {
 		boolean addCurse = false;
-		if (ItemUtils.hasEnchantment(item, RegisterEnchantments.CURSE_OF_STAGNANCY)) return false;
+		if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.CURSE_OF_STAGNANCY)) return false;
 		for(CustomEnchantment enchantment: RegisterEnchantments.getCurseEnchantments())
-			if (enchantment.isCurse() && ItemUtils.canAddEnchantment(enchantment, item)) {
+			if (enchantment.isCurse() && EnchantmentUtils.canAddEnchantment(enchantment, item)) {
 				addCurse = true;
 				break;
 			}
@@ -169,6 +188,11 @@ public class ESPlayer {
 		currentExhaustion = AbilityUtils.getExhaustion(getOnlinePlayer());
 	}
 
+	public void resetCurrentExhaustion() {
+		pastExhaustion = 0;
+		currentExhaustion = 0;
+	}
+
 	public float getPastExhaustion() {
 		return pastExhaustion;
 	}
@@ -181,24 +205,26 @@ public class ESPlayer {
 		return elytra;
 	}
 
-	public void setFrequentFlyer() {
-		underLimit = 0;
-		aboveLimit = 0;
-		boolean fly = false;
-		boolean reset = false;
+	public boolean hasFrequentFlyer() {
 		frequentFlyerLevel = 0;
 		ItemStack newElytra = null;
-		for(ItemStack item: getEquipped())
-			if (item != null && ItemUtils.hasEnchantment(item, RegisterEnchantments.FREQUENT_FLYER)) {
-				int level = ItemUtils.getLevel(item, RegisterEnchantments.FREQUENT_FLYER);
+		for(ItemStack item: getArmor())
+			if (item != null && EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.FREQUENT_FLYER) && !DamageUtils.aboveMaxDamage(item)) {
+				int level = EnchantmentUtils.getLevel(item, RegisterEnchantments.FREQUENT_FLYER);
 				if (level > frequentFlyerLevel) {
-					fly = true;
 					frequentFlyerLevel = level;
 					newElytra = item;
 				}
 			}
 		reset = elytra == null || !elytra.equals(newElytra);
 		elytra = newElytra;
+		return elytra != null;
+	}
+
+	public void setFrequentFlyer() {
+		underLimit = 0;
+		aboveLimit = 0;
+		boolean fly = frequentFlyerLevel > 0 && elytra != null;
 		underLimit = frequentFlyerLevel * 4 * 20;
 		aboveLimit = frequentFlyerLevel * 20;
 		setCanFly(fly);
@@ -208,11 +234,14 @@ public class ESPlayer {
 		}
 	}
 
-	public boolean canFly() {
-		if (!isOnline()) return false;
-		if (canFly && !getOnlinePlayer().getAllowFlight()) {
-			setCanFly(canFly);
-			if (!getOnlinePlayer().getAllowFlight()) return false;
+	public boolean canFly(boolean online) {
+		if (online) {
+			if (!isOnline()) return false;
+			if (canFly && !getOnlinePlayer().getAllowFlight()) {
+				resetFlyer();
+				setCanFly(canFly);
+				if (!getOnlinePlayer().getAllowFlight()) return false;
+			}
 		}
 		return canFly;
 	}
@@ -220,12 +249,12 @@ public class ESPlayer {
 	public void setCanFly(boolean canFly) {
 		if (!isOnline()) return;
 		Player player = getOnlinePlayer();
+		boolean permission = PermissionUtils.check(player, "enchantmentsolution.enable-flight", "enchantmentsolution.abilities.has-external-flight");
 		boolean modifyCanFly = canFly || player.getGameMode().equals(GameMode.CREATIVE) || player.getGameMode().equals(GameMode.SPECTATOR);
 		FrequentFlyerEvent event = null;
 		if (frequentFlyerLevel == 0 && this.canFly && !modifyCanFly) {
-			if (!player.hasPermission("enchantmentsolution.enable-flight") && currentFFType == FFType.FLIGHT) event = new FrequentFlyerEvent(player, frequentFlyerLevel, FFType.REMOVE_FLIGHT);
+			if (!permission && currentFFType == FFType.FLIGHT) event = new FrequentFlyerEvent(player, frequentFlyerLevel, FFType.REMOVE_FLIGHT);
 		} else if (!this.canFly && modifyCanFly && currentFFType == FFType.NONE) event = new FrequentFlyerEvent(player, frequentFlyerLevel, FFType.ALLOW_FLIGHT);
-
 		if (event != null) {
 			Bukkit.getPluginManager().callEvent(event);
 			if (!event.isCancelled()) {
@@ -233,12 +262,33 @@ public class ESPlayer {
 				if (event.getType().doesAllowFlight()) currentFFType = FFType.FLIGHT;
 				else
 					currentFFType = FFType.NONE;
-				if (this.canFly || !player.hasPermission("enchantmentsolution.enable-flight")) {
+				if (this.canFly || !permission) {
 					player.setAllowFlight(this.canFly);
 					if (player.isFlying() && !this.canFly) player.setFlying(false);
 				}
 			}
 		}
+	}
+
+	public void resetFlyer() {
+		if (!isOnline()) return;
+		Player player = getOnlinePlayer();
+		FrequentFlyerEvent event = new FrequentFlyerEvent(player, frequentFlyerLevel, FFType.REMOVE_FLIGHT);
+		Bukkit.getPluginManager().callEvent(event);
+		if (!event.isCancelled()) {
+			this.canFly = false;
+			currentFFType = FFType.NONE;
+			player.setAllowFlight(this.canFly);
+			if (player.isFlying() && !this.canFly) player.setFlying(false);
+		}
+	}
+	
+	public void logoutFlyer() {
+		currentFFType = FFType.NONE;
+		canFly = false;
+		frequentFlyerLevel = 0;
+		elytra = null;
+		getOnlinePlayer().setAllowFlight(false);
 	}
 
 	public int getUnder() {
@@ -251,13 +301,13 @@ public class ESPlayer {
 		if (player.getLocation().getY() > 255) {
 			above = above - 1;
 			if (above <= 0) {
-				DamageUtils.damageItem(player, elytra);
+				if (elytra != null) DamageUtils.damageItem(player, elytra);
 				above = aboveLimit;
 			}
 		} else {
 			under = under - 1;
 			if (under <= 0) {
-				DamageUtils.damageItem(player, elytra);
+				if (elytra != null) DamageUtils.damageItem(player, elytra);
 				under = underLimit;
 			}
 		}
@@ -283,7 +333,7 @@ public class ESPlayer {
 	public List<ItemStack> getForceFeedItems() {
 		List<ItemStack> items = new ArrayList<ItemStack>();
 		for(ItemStack item: getEquipped())
-			if (item != null && ItemUtils.hasEnchantment(item, RegisterEnchantments.FORCE_FEED)) items.add(item);
+			if (item != null && EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.FORCE_FEED)) items.add(item);
 		return items;
 	}
 

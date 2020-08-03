@@ -13,10 +13,10 @@ import org.bukkit.entity.Horse.Style;
 import org.bukkit.entity.Parrot.Variant;
 import org.bukkit.entity.TropicalFish.Pattern;
 import org.bukkit.inventory.ItemStack;
+import org.ctp.crashapi.config.Configurable;
+import org.ctp.crashapi.config.yaml.YamlConfig;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.nms.PersistenceNMS;
-import org.ctp.enchantmentsolution.utils.items.ItemSerialization;
-import org.ctp.enchantmentsolution.utils.yaml.YamlConfig;
 
 public class AnimalMob {
 
@@ -112,11 +112,12 @@ public class AnimalMob {
 
 	}
 
-	public void setConfig(YamlConfig config, int i) {
+	public void setConfig(Configurable config, int i) {
 		setConfig(config, "animals.", i);
 	}
 
-	public void setConfig(YamlConfig config, String location, int i) {
+	public void setConfig(Configurable configurable, String location, int i) {
+		YamlConfig config = configurable.getConfig();
 		config.set(location + i + ".entity_type", getMob().name());
 		config.set(location + i + ".name", getName());
 		config.set(location + i + ".age", getAge());
@@ -146,11 +147,11 @@ public class AnimalMob {
 		config.set(location + i + ".tropical_pattern_color", getTropicalPatternColor() != null ? getTropicalPatternColor().name() : null);
 		config.set(location + i + ".tropical_pattern", getTropicalPattern() != null ? getTropicalPattern().name() : null);
 		config.set(location + i + ".parrot_variant", getParrotVariant() != null ? getParrotVariant().name() : null);
-		config.set(location + i + ".saddle", getSaddle() != null ? ItemSerialization.itemToString(getSaddle()) : null);
-		config.set(location + i + ".armor", getArmor() != null ? ItemSerialization.itemToString(getArmor()) : null);
+		config.set(location + i + ".saddle", getSaddle());
+		config.set(location + i + ".armor", getArmor());
 
 		for(int k = 2; k < 17; k++)
-			if (inventoryItems != null && inventoryItems.get(k) != null) config.set("animals." + i + ".inventory_items." + k, ItemSerialization.itemToString(inventoryItems.get(k)));
+			if (inventoryItems != null && inventoryItems.get(k) != null) config.set("animals." + i + ".inventory_items." + k, inventoryItems.get(k));
 	}
 
 	public void editProperties(Entity e, boolean b1, boolean b2) {

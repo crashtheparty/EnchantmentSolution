@@ -5,9 +5,9 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.enchantments.EnchantmentTarget;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.ctp.crashapi.item.ItemData;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enums.EnchantmentLocation;
-import org.ctp.enchantmentsolution.enums.vanilla.ItemData;
 
 public class CustomEnchantmentWrapper extends Enchantment {
 
@@ -29,7 +29,7 @@ public class CustomEnchantmentWrapper extends Enchantment {
 		if (ench != null && ench.canEnchantItem(new ItemData(arg0))) return true;
 		return false;
 	}
-	
+
 	private CustomEnchantment getCustomEnchantment() {
 		return RegisterEnchantments.getCustomEnchantment(this);
 	}

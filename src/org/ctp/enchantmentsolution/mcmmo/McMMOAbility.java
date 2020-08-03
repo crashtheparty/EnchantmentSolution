@@ -19,7 +19,7 @@ import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.utils.VersionUtils;
-import org.ctp.enchantmentsolution.utils.items.ItemUtils;
+import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
 
 import com.gmail.nossr50.datatypes.skills.SuperAbilityType;
 import com.gmail.nossr50.events.skills.abilities.McMMOPlayerAbilityActivateEvent;
@@ -79,7 +79,7 @@ public class McMMOAbility implements Listener {
 
 	private void updateItem(Cancellable event, ItemStack item) {
 		if (item == null) return;
-		List<EnchantmentLevel> previousLevels = ItemUtils.getEnchantmentLevels(item);
+		List<EnchantmentLevel> previousLevels = EnchantmentUtils.getEnchantmentLevels(item);
 		Bukkit.getScheduler().runTaskLater(EnchantmentSolution.getPlugin(), (Runnable) () -> {
 			if (event.isCancelled() || item == null) return;
 			ItemMeta meta = item.getItemMeta();
@@ -92,8 +92,8 @@ public class McMMOAbility implements Listener {
 					levels.add(new EnchantmentLevel(RegisterEnchantments.getCustomEnchantment(entry.getKey()), entry.getValue()));
 				}
 				for(EnchantmentLevel l: previousLevels)
-					ItemUtils.removeEnchantmentFromItem(item, l.getEnchant());
-				ItemUtils.addEnchantmentsToItem(item, levels);
+					EnchantmentUtils.removeEnchantmentFromItem(item, l.getEnchant());
+				EnchantmentUtils.addEnchantmentsToItem(item, levels);
 			}
 		}, 1l);
 	}

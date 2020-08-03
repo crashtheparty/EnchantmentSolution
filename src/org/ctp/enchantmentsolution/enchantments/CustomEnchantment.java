@@ -6,24 +6,28 @@ import java.util.List;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.ctp.crashapi.config.Language;
+import org.ctp.crashapi.item.CustomItemType;
+import org.ctp.crashapi.item.ItemData;
+import org.ctp.crashapi.item.ItemType;
+import org.ctp.crashapi.utils.ChatUtils;
+import org.ctp.crashapi.utils.ItemUtils;
+import org.ctp.crashapi.utils.StringUtils;
+import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentDescription;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentDisplayName;
 import org.ctp.enchantmentsolution.enchantments.helper.Weight;
-import org.ctp.enchantmentsolution.enums.*;
-import org.ctp.enchantmentsolution.enums.vanilla.ItemData;
+import org.ctp.enchantmentsolution.enums.EnchantmentLocation;
 import org.ctp.enchantmentsolution.rpg.RPGUtils;
-import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.PermissionUtils;
-import org.ctp.enchantmentsolution.utils.StringUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 import org.ctp.enchantmentsolution.utils.config.ConfigUtils;
 import org.ctp.enchantmentsolution.utils.config.Type;
-import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 
 public abstract class CustomEnchantment {
 
 	protected boolean enabled = true;
-	protected List<EnchantmentLocation> enchantmentLocations = new ArrayList<EnchantmentLocation>(), defaultEnchantmentLocations = new ArrayList<EnchantmentLocation>();
+	protected List<EnchantmentLocation> enchantmentLocations, defaultEnchantmentLocations;
 	protected String displayName = null, description = "";
 	protected List<EnchantmentDisplayName> defaultDisplayNames = new ArrayList<EnchantmentDisplayName>();
 	protected List<EnchantmentDescription> defaultDescriptions = new ArrayList<EnchantmentDescription>();
@@ -33,8 +37,8 @@ public abstract class CustomEnchantment {
 	protected Weight defaultWeight = Weight.NULL;
 	protected Weight weight = Weight.NULL;
 	protected boolean maxLevelOne = false, curse = false;
-	protected List<Enchantment> conflictingEnchantments = new ArrayList<Enchantment>();
-	protected List<ItemType> enchantmentTypes = new ArrayList<ItemType>(), anvilTypes = new ArrayList<ItemType>();
+	protected List<Enchantment> conflictingEnchantments = null;
+	protected List<ItemType> enchantmentTypes = null, anvilTypes = null;
 	private final Type lang;
 
 	public CustomEnchantment(String englishUSDisplayName, int fiftyConstant, int thirtyConstant, int fiftyModifier,
@@ -108,12 +112,12 @@ public abstract class CustomEnchantment {
 	}
 
 	public String getDetails() {
-		String page = "\n" + "\n" + ChatUtils.getMessage(ChatUtils.getCodes(), "enchantment.name") + getDisplayName() + "\n\n";
-		page += ChatUtils.getMessage(ChatUtils.getCodes(), "enchantment.description") + getDescription() + "\n";
-		page += ChatUtils.getMessage(ChatUtils.getCodes(), "enchantment.max-level") + getMaxLevel() + ".\n";
-		page += ChatUtils.getMessage(ChatUtils.getCodes(), "enchantment.weight") + getWeightName() + ".\n";
-		page += ChatUtils.getMessage(ChatUtils.getCodes(), "enchantment.start-level") + getStartLevel() + ".\n";
-		page += ChatUtils.getMessage(ChatUtils.getCodes(), "enchantment.enchantable-items");
+		String page = "\n" + "\n" + Chatable.get().getMessage(ChatUtils.getCodes(), "enchantment.name") + getDisplayName() + "\n\n";
+		page += Chatable.get().getMessage(ChatUtils.getCodes(), "enchantment.description") + getDescription() + "\n";
+		page += Chatable.get().getMessage(ChatUtils.getCodes(), "enchantment.max-level") + getMaxLevel() + ".\n";
+		page += Chatable.get().getMessage(ChatUtils.getCodes(), "enchantment.weight") + getWeightName() + ".\n";
+		page += Chatable.get().getMessage(ChatUtils.getCodes(), "enchantment.start-level") + getStartLevel() + ".\n";
+		page += Chatable.get().getMessage(ChatUtils.getCodes(), "enchantment.enchantable-items");
 		if (getEnchantmentItemTypes().size() > 0) {
 			if (getEnchantmentItemTypes().get(0).equals(ItemType.ALL)) page += getEnchantmentItemTypes().get(0).getDisplayName() + ".\n";
 			else {
@@ -128,7 +132,7 @@ public abstract class CustomEnchantment {
 			}
 		} else
 			page += ItemType.NONE + ".\n";
-		page += ChatUtils.getMessage(ChatUtils.getCodes(), "enchantment.anvilable-items");
+		page += Chatable.get().getMessage(ChatUtils.getCodes(), "enchantment.anvilable-items");
 		if (getAnvilItemTypes().size() > 0) {
 			if (getAnvilItemTypes().get(0).equals(ItemType.ALL)) page += getAnvilItemTypes().get(0).getDisplayName() + ".\n";
 			else {
@@ -144,7 +148,7 @@ public abstract class CustomEnchantment {
 		} else
 			page += ItemType.NONE + ".\n";
 
-		page += ChatUtils.getMessage(ChatUtils.getCodes(), "enchantment.conflicting-enchantments");
+		page += Chatable.get().getMessage(ChatUtils.getCodes(), "enchantment.conflicting-enchantments");
 		if (getConflictingEnchantments().size() > 0) {
 			List<String> names = new ArrayList<String>();
 			for(int i = 0; i < getConflictingEnchantments().size(); i++) {
@@ -159,20 +163,20 @@ public abstract class CustomEnchantment {
 			page += ".\n";
 		} else
 			page += ConfigUtils.getString(lang, "misc.no_conflicting_enchantments") + ".\n";
-		page += ChatUtils.getMessage(ChatUtils.getCodes(), "enchantment.enabled") + ConfigUtils.getString(lang, "misc." + isEnabled()) + ".\n";
+		page += Chatable.get().getMessage(ChatUtils.getCodes(), "enchantment.enabled") + ConfigUtils.getString(lang, "misc." + isEnabled()) + ".\n";
 		if (getEnchantmentLocations().size() > 0) {
 			List<String> names = new ArrayList<String>();
 			for(int i = 0; i < getEnchantmentLocations().size(); i++) {
 				EnchantmentLocation enchant = getEnchantmentLocations().get(i);
-				names.add(ChatUtils.getMessage(ChatUtils.getCodes(), "enchantment.locations." + enchant.name().toLowerCase()));
+				names.add(Chatable.get().getMessage(ChatUtils.getCodes(), "enchantment.locations." + enchant.name().toLowerCase()));
 			}
 
-			if (names.isEmpty()) page += ChatUtils.getMessage(ChatUtils.getCodes(), "enchantment.locations_string") + ConfigUtils.getString(lang, "misc.no_enchantment_locations");
+			if (names.isEmpty()) page += Chatable.get().getMessage(ChatUtils.getCodes(), "enchantment.locations_string") + ConfigUtils.getString(lang, "misc.no_enchantment_locations");
 			else
-				page += ChatUtils.getMessage(ChatUtils.getCodes(), "enchantment.locations_string") + StringUtils.join(names, ", ");
+				page += Chatable.get().getMessage(ChatUtils.getCodes(), "enchantment.locations_string") + StringUtils.join(names, ", ");
 			page += ".\n";
 		} else
-			page += ChatUtils.getMessage(ChatUtils.getCodes(), "enchantment.locations_string") + ConfigUtils.getString(lang, "misc.no_enchantment_locations") + ".\n";
+			page += Chatable.get().getMessage(ChatUtils.getCodes(), "enchantment.locations_string") + ConfigUtils.getString(lang, "misc.no_enchantment_locations") + ".\n";
 		return page;
 	}
 
@@ -248,6 +252,12 @@ public abstract class CustomEnchantment {
 			int level = enchantability(i);
 			if (PermissionUtils.canEnchant(player, this, i) && RPGUtils.canEnchant(player, this, i) && enchantability >= level) return i;
 		}
+		return 0;
+	}
+
+	public int getMaxLevel(Player player) {
+		for(int i = getMaxLevel(); i > 0; i--)
+			if (PermissionUtils.canEnchant(player, this, i) && RPGUtils.canEnchant(player, this, i)) return i;
 		return 0;
 	}
 
@@ -525,56 +535,5 @@ public abstract class CustomEnchantment {
 	}
 
 	public abstract List<EnchantmentLocation> getDefaultEnchantmentLocations();
-
-	@Override
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		sb.append("CustomEnchantment: [name='" + getName() + "' display-name='" + getDisplayName() + "'");
-		sb.append("language-display-names=[");
-		for(int i = 0; i < defaultDisplayNames.size(); i++) {
-			EnchantmentDisplayName e = defaultDisplayNames.get(i);
-			sb.append("DisplayName: [lang='" + e.getLanguage().getLocale() + "' name='" + e.getDisplayName() + "']");
-			if (i + 1 < defaultDisplayNames.size()) sb.append(", ");
-		}
-		sb.append("] description='" + getDescription() + "' language-descriptions=[");
-		for(int i = 0; i < defaultDescriptions.size(); i++) {
-			EnchantmentDescription e = defaultDescriptions.get(i);
-			sb.append("Description: [lang='" + e.getLanguage().getLocale() + "' desc='" + e.getDescription() + "']");
-			if (i + 1 < defaultDescriptions.size()) sb.append(", ");
-		}
-		sb.append("]");
-		sb.append(" level-30=[max-level=" + defaultThirtyMaxLevel + " start-level=" + defaultThirtyStartLevel + " constant=" + defaultThirtyConstant + " modifier=" + defaultThirtyModifier + "]");
-		sb.append(" level-50=[max-level=" + defaultFiftyMaxLevel + " start-level=" + defaultFiftyStartLevel + " constant=" + defaultFiftyConstant + " modifier=" + defaultFiftyModifier + "]");
-		sb.append(" current=[max-level=" + maxLevel + " start-level=" + startLevel + " constant=" + constant + " modifier=" + modifier + "]");
-		sb.append(" default-weight='" + defaultWeight.getName() + "' weight='" + weight.getName() + "' max-level-one=" + maxLevelOne + " curse=" + curse);
-		sb.append(" default-enchantment-locations=[");
-		for(int i = 0; i < defaultEnchantmentLocations.size(); i++) {
-			EnchantmentLocation e = defaultEnchantmentLocations.get(i);
-			sb.append("Location: [name='" + e.name().toLowerCase() + "']");
-			if (i + 1 < defaultEnchantmentLocations.size()) sb.append(", ");
-		}
-		sb.append("] enchantment-locations=[");
-		for(int i = 0; i < enchantmentLocations.size(); i++) {
-			EnchantmentLocation e = enchantmentLocations.get(i);
-			sb.append("Location: [name='" + e.name().toLowerCase() + "']");
-			if (i + 1 < enchantmentLocations.size()) sb.append(", ");
-		}
-		sb.append("] ");
-		sb.append("enchantment-types=[");
-		for(int i = 0; i < enchantmentTypes.size(); i++) {
-			ItemType e = enchantmentTypes.get(i);
-			sb.append("ItemType: [type='" + e.getType() + "' display-name='" + e.getDisplayName() + "']");
-			if (i + 1 < enchantmentTypes.size()) sb.append(", ");
-		}
-		sb.append("] ");
-		sb.append("anvil-types=[");
-		for(int i = 0; i < anvilTypes.size(); i++) {
-			ItemType e = anvilTypes.get(i);
-			sb.append("ItemType: [type='" + e.getType() + "' display-name='" + e.getDisplayName() + "']");
-			if (i + 1 < anvilTypes.size()) sb.append(", ");
-		}
-		sb.append("]]");
-		return sb.toString();
-	}
 
 }

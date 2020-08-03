@@ -1,13 +1,13 @@
 package org.ctp.enchantmentsolution.nms;
 
 import org.bukkit.inventory.ItemStack;
-import org.ctp.enchantmentsolution.EnchantmentSolution;
+import org.ctp.crashapi.CrashAPI;
 
 public class AnvilNMS {
 
 	public static int getRepairCost(ItemStack item) {
 		if (item == null) return 0;
-		switch (EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber()) {
+		switch (CrashAPI.getPlugin().getBukkitVersion().getVersionNumber()) {
 			case 1:
 				net.minecraft.server.v1_13_R1.ItemStack nmsV1 = org.bukkit.craftbukkit.v1_13_R1.inventory.CraftItemStack.asNMSCopy(item);
 				return nmsV1.getRepairCost();
@@ -35,7 +35,7 @@ public class AnvilNMS {
 	}
 
 	public static ItemStack setRepairCost(ItemStack item, int repairCost) {
-		switch (EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber()) {
+		switch (CrashAPI.getPlugin().getBukkitVersion().getVersionNumber()) {
 			case 1:
 				net.minecraft.server.v1_13_R1.ItemStack nmsV1 = org.bukkit.craftbukkit.v1_13_R1.inventory.CraftItemStack.asNMSCopy(item);
 				nmsV1.setRepairCost(repairCost);

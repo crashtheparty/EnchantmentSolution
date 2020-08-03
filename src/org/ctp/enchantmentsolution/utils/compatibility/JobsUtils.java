@@ -15,8 +15,8 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.inventory.ItemStack;
+import org.ctp.crashapi.utils.DamageUtils;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
-import org.ctp.enchantmentsolution.utils.items.DamageUtils;
 
 import com.gamingmesh.jobs.Jobs;
 import com.gamingmesh.jobs.CMILib.CMIEnchantment;
@@ -48,7 +48,7 @@ public class JobsUtils {
 		if (!payIfCreative(player)) return;
 
 		// Prevent item durability loss
-		if (!Jobs.getGCManager().payItemDurabilityLoss && item.getType().getMaxDurability() - DamageUtils.getDamage(item.getItemMeta()) != item.getType().getMaxDurability()) return;
+		if (!Jobs.getGCManager().payItemDurabilityLoss && DamageUtils.getMaxDamage(item) - DamageUtils.getDamage(item) != DamageUtils.getMaxDamage(item)) return;
 
 		JobsPlayer jPlayer = Jobs.getPlayerManager().getJobsPlayer(player);
 
@@ -144,7 +144,7 @@ public class JobsUtils {
 		ItemStack item = Jobs.getNms().getItemInMainHand(player);
 		if (item != null && !item.getType().equals(Material.AIR)) // Protection for block break with silktouch
 			if (Jobs.getGCManager().useSilkTouchProtection) for(Entry<Enchantment, Integer> one: item.getEnchantments().entrySet())
-			if (CMIEnchantment.get(one.getKey()) == CMIEnchantment.SILK_TOUCH) if (Jobs.getBpManager().isInBp(block)) return;
+				if (CMIEnchantment.get(one.getKey()) == CMIEnchantment.SILK_TOUCH) if (Jobs.getBpManager().isInBp(block)) return;
 
 		JobsPlayer jPlayer = Jobs.getPlayerManager().getJobsPlayer(player);
 		if (jPlayer == null) return;

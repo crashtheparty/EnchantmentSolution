@@ -5,11 +5,12 @@ import java.util.*;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.utils.Configurations;
-import org.ctp.enchantmentsolution.utils.items.ItemUtils;
+import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
 
 public class ApiEnchantList {
 
@@ -45,11 +46,11 @@ public class ApiEnchantList {
 			RegisterEnchantments.addDefaultEnchantment(enchant);
 			RegisterEnchantments.registerEnchantment(enchant);
 		}
-
-		Configurations.getEnchantments().updateExternal(plugin);
-		Configurations.getRPG().updateExternal(plugin);
+		Configurations c = EnchantmentSolution.getPlugin().getConfigurations();
+		c.getEnchantments().updateExternal(plugin);
+		c.getRPG().updateExternal(plugin);
 		RegisterEnchantments.setEnchantments();
-		Configurations.save();
+		c.save();
 	}
 
 	/**
@@ -84,7 +85,7 @@ public class ApiEnchantList {
 	 * @return boolean - whether the item has the enchantment
 	 */
 	public static boolean hasEnchantment(ItemStack item, Enchantment enchant) {
-		return ItemUtils.hasEnchantment(item, enchant);
+		return EnchantmentUtils.hasEnchantment(item, enchant);
 	}
 
 	/**
@@ -98,7 +99,7 @@ public class ApiEnchantList {
 	 *         enchantment does not exist on it
 	 */
 	public static int getLevel(ItemStack item, Enchantment enchant) {
-		return ItemUtils.getLevel(item, enchant);
+		return EnchantmentUtils.getLevel(item, enchant);
 	}
 
 	/**
@@ -111,7 +112,7 @@ public class ApiEnchantList {
 	 * @return ItemStack - the enchanted item stack
 	 */
 	public static ItemStack addEnchantmentsToItem(ItemStack item, List<EnchantmentLevel> levels) {
-		return ItemUtils.addEnchantmentsToItem(item, levels);
+		return EnchantmentUtils.addEnchantmentsToItem(item, levels);
 	}
 
 }
