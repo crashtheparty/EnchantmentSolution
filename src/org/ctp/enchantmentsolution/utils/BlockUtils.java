@@ -12,16 +12,17 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
+import org.ctp.crashapi.item.BlockSound;
+import org.ctp.crashapi.item.MatData;
+import org.ctp.crashapi.utils.DamageUtils;
+import org.ctp.crashapi.utils.ItemUtils;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
-import org.ctp.enchantmentsolution.enums.BlockSound;
 import org.ctp.enchantmentsolution.enums.ItemBreakType;
-import org.ctp.enchantmentsolution.enums.MatData;
 import org.ctp.enchantmentsolution.events.blocks.BlockBreakMultiEvent;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 import org.ctp.enchantmentsolution.utils.items.AbilityUtils;
-import org.ctp.enchantmentsolution.utils.items.DamageUtils;
-import org.ctp.enchantmentsolution.utils.items.ItemUtils;
+import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
 
 public class BlockUtils {
 
@@ -40,7 +41,9 @@ public class BlockUtils {
 	}
 
 	public static boolean isAdjacent(Block b1, Block b2) {
-		for(BlockFace face: Arrays.asList(BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST, BlockFace.UP, BlockFace.DOWN))
+		List<BlockFace> faces = Arrays.asList(BlockFace.values());
+		if (!ConfigString.MULTI_BLOCK_ALL_FACES.getBoolean()) Arrays.asList(BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST, BlockFace.UP, BlockFace.DOWN);
+		for(BlockFace face: faces)
 			if (b1.getRelative(face).getLocation().equals(b2.getLocation())) return true;
 		return false;
 	}
@@ -48,7 +51,7 @@ public class BlockUtils {
 	public static boolean multiBreakBlock(Player player, ItemStack item, Location b) {
 		BlockBreakEvent newEvent = new BlockBreakMultiEvent(b.getBlock(), player);
 		int exp = 0;
-		if (!ItemUtils.hasEnchantment(item, Enchantment.SILK_TOUCH)) switch (newEvent.getBlock().getType().name()) {
+		if (!EnchantmentUtils.hasEnchantment(item, Enchantment.SILK_TOUCH)) switch (newEvent.getBlock().getType().name()) {
 			case "COAL_ORE":
 				exp = (int) (Math.random() * 3);
 				break;

@@ -15,7 +15,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.nms.PersistenceNMS;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
-import org.ctp.enchantmentsolution.utils.items.ItemUtils;
+import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
 
 public class UpdateEnchantments implements Listener {
 
@@ -48,8 +48,8 @@ public class UpdateEnchantments implements Listener {
 							if (level != null) levels.add(level);
 						}
 					if (levels.size() > 0) {
-						item = ItemUtils.removeAllEnchantments(item, true);
-						ItemUtils.addEnchantmentsToItem(item, levels);
+						item = EnchantmentUtils.removeAllEnchantments(item, true);
+						EnchantmentUtils.addEnchantmentsToItem(item, levels);
 					}
 				}
 			}

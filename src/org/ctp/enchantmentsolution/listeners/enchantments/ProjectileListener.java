@@ -15,6 +15,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.util.Vector;
+import org.ctp.crashapi.nms.DamageEvent;
+import org.ctp.crashapi.utils.LocationUtils;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
@@ -24,12 +26,10 @@ import org.ctp.enchantmentsolution.events.modify.HardBounceEvent;
 import org.ctp.enchantmentsolution.events.modify.LagEvent;
 import org.ctp.enchantmentsolution.events.modify.SniperLaunchEvent;
 import org.ctp.enchantmentsolution.listeners.Enchantmentable;
-import org.ctp.enchantmentsolution.nms.DamageEvent;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
-import org.ctp.enchantmentsolution.utils.LocationUtils;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.ParticleEffect;
 import org.ctp.enchantmentsolution.utils.items.AbilityUtils;
-import org.ctp.enchantmentsolution.utils.items.ItemUtils;
+import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
 
 @SuppressWarnings("unused")
 public class ProjectileListener extends Enchantmentable {
@@ -64,7 +64,7 @@ public class ProjectileListener extends Enchantmentable {
 		if (proj.getShooter() instanceof Player) {
 			Player player = (Player) proj.getShooter();
 			ItemStack item = player.getInventory().getItemInMainHand();
-			if (item != null && ItemUtils.hasEnchantment(item, RegisterEnchantments.CURSE_OF_LAG)) {
+			if (item != null && EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.CURSE_OF_LAG)) {
 				LagEvent lag = new LagEvent(player, player.getLocation(), AbilityUtils.createEffects(player));
 
 				Bukkit.getPluginManager().callEvent(lag);
@@ -86,7 +86,7 @@ public class ProjectileListener extends Enchantmentable {
 		if (event.getEntity().getShooter() instanceof HumanEntity) {
 			entity = (HumanEntity) event.getEntity().getShooter();
 			ItemStack item = entity.getInventory().getItemInMainHand();
-			if (ItemUtils.hasEnchantment(item, RegisterEnchantments.DETONATOR)) event.getEntity().setMetadata("detonator", new FixedMetadataValue(EnchantmentSolution.getPlugin(), ItemUtils.getLevel(item, RegisterEnchantments.DETONATOR)));
+			if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.DETONATOR)) event.getEntity().setMetadata("detonator", new FixedMetadataValue(EnchantmentSolution.getPlugin(), EnchantmentUtils.getLevel(item, RegisterEnchantments.DETONATOR)));
 		}
 	}
 
@@ -98,7 +98,7 @@ public class ProjectileListener extends Enchantmentable {
 			if (trident.getShooter() instanceof Player) {
 				Player player = (Player) trident.getShooter();
 				ItemStack tridentItem = player.getInventory().getItemInMainHand();
-				if (tridentItem != null && ItemUtils.hasEnchantment(tridentItem, RegisterEnchantments.DROWNED)) trident.setMetadata("drowned", new FixedMetadataValue(EnchantmentSolution.getPlugin(), ItemUtils.getLevel(tridentItem, RegisterEnchantments.DROWNED)));
+				if (tridentItem != null && EnchantmentUtils.hasEnchantment(tridentItem, RegisterEnchantments.DROWNED)) trident.setMetadata("drowned", new FixedMetadataValue(EnchantmentSolution.getPlugin(), EnchantmentUtils.getLevel(tridentItem, RegisterEnchantments.DROWNED)));
 			}
 		}
 	}
@@ -109,7 +109,7 @@ public class ProjectileListener extends Enchantmentable {
 		HumanEntity entity = null;
 		if (event.getEntity().getShooter() instanceof HumanEntity) {
 			entity = (HumanEntity) event.getEntity().getShooter();
-			if (ItemUtils.hasEnchantment(entity.getInventory().getItemInMainHand(), RegisterEnchantments.HOLLOW_POINT)) event.getEntity().setMetadata("hollow_point", new FixedMetadataValue(EnchantmentSolution.getPlugin(), 1));
+			if (EnchantmentUtils.hasEnchantment(entity.getInventory().getItemInMainHand(), RegisterEnchantments.HOLLOW_POINT)) event.getEntity().setMetadata("hollow_point", new FixedMetadataValue(EnchantmentSolution.getPlugin(), 1));
 		}
 	}
 
@@ -121,8 +121,8 @@ public class ProjectileListener extends Enchantmentable {
 			if (arrow.getShooter() instanceof Player) {
 				Player player = (Player) arrow.getShooter();
 				ItemStack bow = player.getInventory().getItemInMainHand();
-				if (bow != null && ItemUtils.hasEnchantment(bow, RegisterEnchantments.SNIPER)) {
-					int level = ItemUtils.getLevel(bow, RegisterEnchantments.SNIPER);
+				if (bow != null && EnchantmentUtils.hasEnchantment(bow, RegisterEnchantments.SNIPER)) {
+					int level = EnchantmentUtils.getLevel(bow, RegisterEnchantments.SNIPER);
 					double speed = 1 + 0.1 * level * level;
 
 					SniperLaunchEvent sniper = new SniperLaunchEvent(player, level, speed);
@@ -145,7 +145,7 @@ public class ProjectileListener extends Enchantmentable {
 			if (trident.getShooter() instanceof Player) {
 				Player player = (Player) trident.getShooter();
 				ItemStack tridentItem = player.getInventory().getItemInMainHand();
-				if (tridentItem != null && ItemUtils.hasEnchantment(tridentItem, RegisterEnchantments.TRANSMUTATION)) trident.setMetadata("transmutation", new FixedMetadataValue(EnchantmentSolution.getPlugin(), 1));
+				if (tridentItem != null && EnchantmentUtils.hasEnchantment(tridentItem, RegisterEnchantments.TRANSMUTATION)) trident.setMetadata("transmutation", new FixedMetadataValue(EnchantmentSolution.getPlugin(), 1));
 			}
 		}
 	}
@@ -191,8 +191,8 @@ public class ProjectileListener extends Enchantmentable {
 			if (player.isBlocking()) {
 				ItemStack shield = player.getInventory().getItemInMainHand();
 				if (shield.getType() != Material.SHIELD) shield = player.getInventory().getItemInOffHand();
-				if (shield != null && ItemUtils.hasEnchantment(shield, RegisterEnchantments.HARD_BOUNCE)) {
-					int level = ItemUtils.getLevel(shield, RegisterEnchantments.HARD_BOUNCE);
+				if (shield != null && EnchantmentUtils.hasEnchantment(shield, RegisterEnchantments.HARD_BOUNCE)) {
+					int level = EnchantmentUtils.getLevel(shield, RegisterEnchantments.HARD_BOUNCE);
 
 					HardBounceEvent hardBounce = new HardBounceEvent(player, level, 2 + 2 * level);
 					Bukkit.getPluginManager().callEvent(hardBounce);

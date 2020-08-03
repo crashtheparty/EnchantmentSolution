@@ -9,14 +9,16 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.ctp.crashapi.inventory.InventoryData;
+import org.ctp.crashapi.utils.ItemUtils;
+import org.ctp.crashapi.utils.LocationUtils;
+import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.generate.GrindstoneEnchantments;
 import org.ctp.enchantmentsolution.nms.AnvilNMS;
-import org.ctp.enchantmentsolution.utils.ChatUtils;
-import org.ctp.enchantmentsolution.utils.LocationUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 import org.ctp.enchantmentsolution.utils.config.ConfigUtils;
-import org.ctp.enchantmentsolution.utils.items.ItemUtils;
+import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
 
 public class Grindstone implements InventoryData {
 
@@ -45,12 +47,12 @@ public class Grindstone implements InventoryData {
 			boolean grindstoneTakeEnchantments = ConfigString.TAKE_ENCHANTMENTS.getBoolean();
 			int size = 27;
 			if (ConfigUtils.useLegacyGrindstone()) size = 36;
-			Inventory inv = Bukkit.createInventory(null, size, ChatUtils.getMessage(getCodes(), "grindstone.name"));
+			Inventory inv = Bukkit.createInventory(null, size, Chatable.get().getMessage(getCodes(), "grindstone.name"));
 			inv = open(inv);
 
 			ItemStack mirror = new ItemStack(Material.BLACK_STAINED_GLASS_PANE);
 			ItemMeta mirrorMeta = mirror.getItemMeta();
-			mirrorMeta.setDisplayName(ChatUtils.getMessage(getCodes(), "grindstone.mirror"));
+			mirrorMeta.setDisplayName(Chatable.get().getMessage(getCodes(), "grindstone.mirror"));
 			mirror.setItemMeta(mirrorMeta);
 			for(int i = 0; i < 27; i++)
 				switch (i) {
@@ -85,9 +87,9 @@ public class Grindstone implements InventoryData {
 					combinedItem = grindstone.getCombinedItem();
 					combine = new ItemStack(Material.LIME_STAINED_GLASS_PANE);
 					List<String> lore = new ArrayList<String>();
-					lore.add(ChatUtils.getMessage(getCodes(), "grindstone.combine-lore"));
+					lore.add(Chatable.get().getMessage(getCodes(), "grindstone.combine-lore"));
 					ItemMeta combineMeta = combine.getItemMeta();
-					combineMeta.setDisplayName(ChatUtils.getMessage(getCodes(), "grindstone.combine"));
+					combineMeta.setDisplayName(Chatable.get().getMessage(getCodes(), "grindstone.combine"));
 					combineMeta.setLore(lore);
 					combine.setItemMeta(combineMeta);
 				} else if (grindstone.canTakeEnchantments()) {
@@ -99,16 +101,16 @@ public class Grindstone implements InventoryData {
 						ItemMeta combineMeta = combine.getItemMeta();
 						HashMap<String, Object> codes = getCodes();
 						codes.put("%levelCost%", levelCost);
-						combineMeta.setDisplayName(ChatUtils.getMessage(codes, "grindstone.cannot-take-enchantments"));
+						combineMeta.setDisplayName(Chatable.get().getMessage(codes, "grindstone.cannot-take-enchantments"));
 						combine.setItemMeta(combineMeta);
 					} else {
 						combine = new ItemStack(Material.LIME_STAINED_GLASS_PANE);
 						List<String> lore = new ArrayList<String>();
-						lore.addAll(ChatUtils.getMessages(getCodes(), "grindstone.take-enchantments-lore"));
+						lore.addAll(Chatable.get().getMessages(getCodes(), "grindstone.take-enchantments-lore"));
 						ItemMeta combineMeta = combine.getItemMeta();
 						HashMap<String, Object> codes = getCodes();
 						codes.put("%levelCost%", levelCost);
-						combineMeta.setDisplayName(ChatUtils.getMessage(codes, "grindstone.take-enchantments"));
+						combineMeta.setDisplayName(Chatable.get().getMessage(codes, "grindstone.take-enchantments"));
 						combineMeta.setLore(lore);
 						combine.setItemMeta(combineMeta);
 					}
@@ -116,7 +118,7 @@ public class Grindstone implements InventoryData {
 					combinedItem = null;
 					combine = new ItemStack(Material.RED_STAINED_GLASS_PANE);
 					ItemMeta combineMeta = combine.getItemMeta();
-					combineMeta.setDisplayName(ChatUtils.getMessage(getCodes(), "grindstone.cannot-combine"));
+					combineMeta.setDisplayName(Chatable.get().getMessage(getCodes(), "grindstone.cannot-combine"));
 					combine.setItemMeta(combineMeta);
 				}
 			} else if (playerItems.size() == 1) {
@@ -124,15 +126,15 @@ public class Grindstone implements InventoryData {
 					combinedItem = grindstone.getCombinedItem();
 					combine = new ItemStack(Material.LIME_STAINED_GLASS_PANE);
 					ItemMeta combineMeta = combine.getItemMeta();
-					combineMeta.setDisplayName(ChatUtils.getMessage(getCodes(), "grindstone.remove-enchants"));
+					combineMeta.setDisplayName(Chatable.get().getMessage(getCodes(), "grindstone.remove-enchants"));
 					combine.setItemMeta(combineMeta);
 				} else {
 					combinedItem = null;
 					combine = new ItemStack(Material.WHITE_STAINED_GLASS_PANE);
 					ItemMeta combineMeta = combine.getItemMeta();
 					List<String> lore = new ArrayList<String>();
-					lore.addAll(ChatUtils.getMessages(getCodes(), "grindstone.no-enchants-lore"));
-					combineMeta.setDisplayName(ChatUtils.getMessage(getCodes(), "grindstone.no-enchants"));
+					lore.addAll(Chatable.get().getMessages(getCodes(), "grindstone.no-enchants-lore"));
+					combineMeta.setDisplayName(Chatable.get().getMessage(getCodes(), "grindstone.no-enchants"));
 					combineMeta.setLore(lore);
 					combine.setItemMeta(combineMeta);
 				}
@@ -141,8 +143,8 @@ public class Grindstone implements InventoryData {
 				combine = new ItemStack(Material.WHITE_STAINED_GLASS_PANE);
 				ItemMeta combineMeta = combine.getItemMeta();
 				List<String> lore = new ArrayList<String>();
-				lore.addAll(ChatUtils.getMessages(getCodes(), "grindstone.no-items-lore"));
-				combineMeta.setDisplayName(ChatUtils.getMessage(getCodes(), "grindstone.no-items"));
+				lore.addAll(Chatable.get().getMessages(getCodes(), "grindstone.no-items-lore"));
+				combineMeta.setDisplayName(Chatable.get().getMessage(getCodes(), "grindstone.no-items"));
 				combineMeta.setLore(lore);
 				combine.setItemMeta(combineMeta);
 			}
@@ -165,8 +167,8 @@ public class Grindstone implements InventoryData {
 					inv.setItem(i, mirror);
 				ItemStack anvil = new ItemStack(Material.ANVIL);
 				ItemMeta anvilMeta = anvil.getItemMeta();
-				anvilMeta.setDisplayName(ChatUtils.getMessage(getCodes(), "grindstone.anvil"));
-				anvilMeta.setLore(Arrays.asList(ChatUtils.getMessage(getCodes(), "grindstone.switch-to-anvil")));
+				anvilMeta.setDisplayName(Chatable.get().getMessage(getCodes(), "grindstone.anvil"));
+				anvilMeta.setLore(Arrays.asList(Chatable.get().getMessage(getCodes(), "grindstone.switch-to-anvil")));
 				anvil.setItemMeta(anvilMeta);
 				inv.setItem(31, anvil);
 			}
@@ -199,7 +201,7 @@ public class Grindstone implements InventoryData {
 				int levelCost = grindstone.getTakeCost();
 				if (player.getGameMode() != GameMode.CREATIVE) {
 					if (levelCost > player.getLevel()) {
-						ChatUtils.sendMessage(player, ChatUtils.getMessage(getCodes(), "grindstone.message-cannot-combine"));
+						Chatable.get().sendMessage(player, Chatable.get().getMessage(getCodes(), "grindstone.message-cannot-combine"));
 						return;
 					}
 					player.setLevel(player.getLevel() - levelCost);
@@ -211,7 +213,7 @@ public class Grindstone implements InventoryData {
 				playerItems.remove(1);
 				if (ConfigString.DESTROY_TAKE_ITEM.getBoolean()) playerItems.remove(0);
 				else
-					playerItems.set(0, ItemUtils.removeAllEnchantments(playerItems.get(0), true));
+					playerItems.set(0, EnchantmentUtils.removeAllEnchantments(playerItems.get(0), true));
 			} else {
 				ItemUtils.giveItemToPlayer(player, grindstone.getCombinedItem(), player.getLocation(), false);
 				playGrindstoneSound();
@@ -221,9 +223,9 @@ public class Grindstone implements InventoryData {
 				grindstone = null;
 				playerItems.clear();
 			}
-		} else if (takeEnchantments) ChatUtils.sendMessage(player, ChatUtils.getMessage(getCodes(), "grindstone.message-cannot-take-enchantments"));
+		} else if (takeEnchantments) Chatable.get().sendMessage(player, Chatable.get().getMessage(getCodes(), "grindstone.message-cannot-take-enchantments"));
 		else
-			ChatUtils.sendMessage(player, ChatUtils.getMessage(getCodes(), "grindstone.message-cannot-combine"));
+			Chatable.get().sendMessage(player, Chatable.get().getMessage(getCodes(), "grindstone.message-cannot-combine"));
 	}
 
 	public boolean addItem(ItemStack item) {

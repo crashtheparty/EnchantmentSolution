@@ -2,11 +2,11 @@ package org.ctp.enchantmentsolution.enchantments.generate;
 
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.ctp.crashapi.item.ItemData;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentList;
 import org.ctp.enchantmentsolution.enchantments.helper.Level;
 import org.ctp.enchantmentsolution.enchantments.helper.LevelList;
 import org.ctp.enchantmentsolution.enums.EnchantmentLocation;
-import org.ctp.enchantmentsolution.enums.ItemData;
 
 public abstract class LootEnchantments extends GenerateEnchantments {
 

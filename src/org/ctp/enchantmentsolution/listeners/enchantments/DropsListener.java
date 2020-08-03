@@ -12,6 +12,8 @@ import org.bukkit.event.entity.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.metadata.MetadataValue;
+import org.ctp.crashapi.utils.ChatUtils;
+import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
@@ -19,10 +21,9 @@ import org.ctp.enchantmentsolution.events.drops.BeheadingEvent;
 import org.ctp.enchantmentsolution.events.drops.TransmutationEvent;
 import org.ctp.enchantmentsolution.listeners.Enchantmentable;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
-import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.PermissionUtils;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.TransmutationLoot;
-import org.ctp.enchantmentsolution.utils.items.ItemUtils;
+import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
 
 @SuppressWarnings("unused")
 public class DropsListener extends Enchantmentable {
@@ -37,8 +38,8 @@ public class DropsListener extends Enchantmentable {
 		if (!canRun(RegisterEnchantments.BEHEADING, event)) return;
 		Entity entity = event.getEntity();
 		Player killer = event.getEntity().getKiller();
-		if (killer != null) if (ItemUtils.hasEnchantment(killer.getInventory().getItemInMainHand(), RegisterEnchantments.BEHEADING)) {
-			int level = ItemUtils.getLevel(killer.getInventory().getItemInMainHand(), RegisterEnchantments.BEHEADING);
+		if (killer != null) if (EnchantmentUtils.hasEnchantment(killer.getInventory().getItemInMainHand(), RegisterEnchantments.BEHEADING)) {
+			int level = EnchantmentUtils.getLevel(killer.getInventory().getItemInMainHand(), RegisterEnchantments.BEHEADING);
 			double chance = level * .05;
 			double random = Math.random();
 			if (chance > random) {
@@ -53,7 +54,7 @@ public class DropsListener extends Enchantmentable {
 					skullMeta.setOwningPlayer((Player) entity);
 					HashMap<String, Object> codes = ChatUtils.getCodes();
 					codes.put("%player%", ((Player) entity).getName());
-					skullMeta.setDisplayName(ChatUtils.getMessage(codes, "misc.beheading_skull"));
+					skullMeta.setDisplayName(Chatable.get().getMessage(codes, "misc.beheading_skull"));
 					skull.setItemMeta(skullMeta);
 					skulls.add(skull);
 				} else if (entity instanceof EnderDragon) skulls.add(new ItemStack(Material.DRAGON_HEAD));
@@ -91,7 +92,7 @@ public class DropsListener extends Enchantmentable {
 					if (meta.getOwningPlugin().equals(EnchantmentSolution.getPlugin())) handleTransmutation(event);
 			} else if (event.getEntity().getKiller() != null) {
 				Player killer = event.getEntity().getKiller();
-				if (ItemUtils.hasEnchantment(killer.getInventory().getItemInMainHand(), RegisterEnchantments.TRANSMUTATION)) handleTransmutation(event);
+				if (EnchantmentUtils.hasEnchantment(killer.getInventory().getItemInMainHand(), RegisterEnchantments.TRANSMUTATION)) handleTransmutation(event);
 			}
 		}
 	}

@@ -9,7 +9,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.nms.PersistenceNMS;
-import org.ctp.enchantmentsolution.utils.items.ItemUtils;
+import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
 
 import com.spawnchunk.auctionhouse.AuctionHouse;
 import com.spawnchunk.auctionhouse.modules.Listing;
@@ -31,8 +31,8 @@ public class AuctionHouseUtils {
 						if (level != null) levels.add(level);
 					}
 				for(EnchantmentLevel level: levels) {
-					item = ItemUtils.removeEnchantmentFromItem(item, level.getEnchant());
-					item = ItemUtils.addEnchantmentToItem(item, level.getEnchant(), level.getLevel());
+					item = EnchantmentUtils.removeEnchantmentFromItem(item, level.getEnchant());
+					item = EnchantmentUtils.addEnchantmentToItem(item, level.getEnchant(), level.getLevel());
 				}
 			}
 			l.setItem(item);

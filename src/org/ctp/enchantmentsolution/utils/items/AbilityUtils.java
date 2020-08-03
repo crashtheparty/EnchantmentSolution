@@ -12,6 +12,8 @@ import org.bukkit.entity.ExperienceOrb;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.inventory.ItemStack;
+import org.ctp.crashapi.CrashAPI;
+import org.ctp.crashapi.utils.DamageUtils;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.ParticleEffect;
@@ -32,7 +34,7 @@ public class AbilityUtils {
 				return null;
 		} else
 			return null;
-		int level = ItemUtils.getLevel(item, RegisterEnchantments.GOLD_DIGGER);
+		int level = EnchantmentUtils.getLevel(item, RegisterEnchantments.GOLD_DIGGER);
 		int amount = 0;
 		while (level > 0) {
 			double random = Math.random();
@@ -51,10 +53,10 @@ public class AbilityUtils {
 
 	public static void giveExperience(Player player, int amount) {
 		List<ItemStack> items = new ArrayList<ItemStack>();
-		int version = EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber();
+		int version = CrashAPI.getPlugin().getBukkitVersion().getVersionNumber();
 		ESPlayer esPlayer = EnchantmentSolution.getESPlayer(player);
 		for(ItemStack i: esPlayer.getEquipped())
-			if (i != null && ItemUtils.hasEnchantment(i, Enchantment.MENDING)) {
+			if (i != null && EnchantmentUtils.hasEnchantment(i, Enchantment.MENDING)) {
 				if (version > 11 && DamageUtils.getDamage(i) == 0) continue;
 				items.add(i);
 			}
@@ -118,11 +120,11 @@ public class AbilityUtils {
 		Enchantment curse = RegisterEnchantments.CURSE_OF_EXHAUSTION;
 		int exhaustionCurse = 0;
 		for(ItemStack item: player.getInventory().getArmorContents())
-			if (item != null && ItemUtils.hasEnchantment(item, curse)) exhaustionCurse += ItemUtils.getLevel(item, curse);
+			if (item != null && EnchantmentUtils.hasEnchantment(item, curse)) exhaustionCurse += EnchantmentUtils.getLevel(item, curse);
 		ItemStack mainHand = player.getInventory().getItemInMainHand();
-		if (mainHand != null && ItemUtils.hasEnchantment(mainHand, curse)) exhaustionCurse += ItemUtils.getLevel(mainHand, curse);
+		if (mainHand != null && EnchantmentUtils.hasEnchantment(mainHand, curse)) exhaustionCurse += EnchantmentUtils.getLevel(mainHand, curse);
 		ItemStack offHand = player.getInventory().getItemInOffHand();
-		if (offHand != null && ItemUtils.hasEnchantment(offHand, curse)) exhaustionCurse += ItemUtils.getLevel(offHand, curse);
+		if (offHand != null && EnchantmentUtils.hasEnchantment(offHand, curse)) exhaustionCurse += EnchantmentUtils.getLevel(offHand, curse);
 		return exhaustionCurse;
 	}
 

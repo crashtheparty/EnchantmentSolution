@@ -8,19 +8,19 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.ctp.crashapi.item.ItemData;
+import org.ctp.crashapi.item.ItemType;
+import org.ctp.crashapi.utils.DamageUtils;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.enums.EnchantmentLocation;
-import org.ctp.enchantmentsolution.enums.ItemData;
-import org.ctp.enchantmentsolution.enums.ItemType;
 import org.ctp.enchantmentsolution.nms.AnvilNMS;
 import org.ctp.enchantmentsolution.nms.PersistenceNMS;
 import org.ctp.enchantmentsolution.utils.PermissionUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 import org.ctp.enchantmentsolution.utils.config.ConfigUtils;
-import org.ctp.enchantmentsolution.utils.items.DamageUtils;
-import org.ctp.enchantmentsolution.utils.items.ItemUtils;
+import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
 
 public class AnvilEnchantments extends GenerateEnchantments {
 
@@ -61,10 +61,10 @@ public class AnvilEnchantments extends GenerateEnchantments {
 		public static RepairType getRepairType(AnvilEnchantments enchant) {
 			if (enchant == null) return null;
 			if (enchant.getItemTwo() == null) return RepairType.RENAME;
-			if (enchant.canCombine() || enchant.getItem() != null && enchant.getItem().getType() == Material.STICK && ItemUtils.hasEnchantment(enchant.getItem(), RegisterEnchantments.STICKY_HOLD)) {
+			if (enchant.canCombine() || enchant.getItem() != null && enchant.getItem().getType() == Material.STICK && EnchantmentUtils.hasEnchantment(enchant.getItem(), RegisterEnchantments.STICKY_HOLD)) {
 				for(Material data: ItemType.getRepairMaterials())
 					if (data == enchant.getItemTwo().getType() && ItemData.contains(ItemType.getAnvilType(new ItemData(enchant.getItem())).getAnvilMaterials(), data)) return RepairType.REPAIR;
-				if (enchant.getItem().getType() == Material.STICK && ItemUtils.hasEnchantment(enchant.getItem(), RegisterEnchantments.STICKY_HOLD)) if (PersistenceNMS.isStickyHold(enchant.getItem())) for(Material data: ItemType.getRepairMaterials())
+				if (enchant.getItem().getType() == Material.STICK && EnchantmentUtils.hasEnchantment(enchant.getItem(), RegisterEnchantments.STICKY_HOLD)) if (PersistenceNMS.isStickyHold(enchant.getItem())) for(Material data: ItemType.getRepairMaterials())
 					if (data == enchant.getItemTwo().getType() && ItemData.contains(ItemType.getAnvilType(new ItemData(new ItemStack(PersistenceNMS.stickyItemType(enchant.getItem())))).getAnvilMaterials(true), data)) return RepairType.STICKY_REPAIR;
 				return RepairType.COMBINE;
 			}
@@ -128,7 +128,7 @@ public class AnvilEnchantments extends GenerateEnchantments {
 			java.util.Map.Entry<Enchantment, Integer> e = it.next();
 			Enchantment enchant = e.getKey();
 			for(CustomEnchantment customEnchant: RegisterEnchantments.getEnchantments())
-				if (customEnchant.getRelativeEnchantment().equals(enchant)) if (ItemUtils.canAddEnchantment(customEnchant, first)) return true;
+				if (customEnchant.getRelativeEnchantment().equals(enchant)) if (EnchantmentUtils.canAddEnchantment(customEnchant, first)) return true;
 		}
 		return false;
 	}
@@ -136,7 +136,7 @@ public class AnvilEnchantments extends GenerateEnchantments {
 	private void setCombinedItem() {
 		ItemStack itemOne = getItem();
 		combinedItem = itemOne.clone();
-		combinedItem = ItemUtils.removeAllEnchantments(combinedItem, true);
+		combinedItem = EnchantmentUtils.removeAllEnchantments(combinedItem, true);
 		if (itemOne.getType() == Material.BOOK || itemOne.getType() == Material.ENCHANTED_BOOK) if (ConfigString.USE_ENCHANTED_BOOKS.getBoolean()) combinedItem = new ItemStack(Material.ENCHANTED_BOOK);
 		else
 			combinedItem = new ItemStack(Material.BOOK);
@@ -161,7 +161,7 @@ public class AnvilEnchantments extends GenerateEnchantments {
 				itemTwoLeftover = new ItemStack(Material.AIR);
 			repairCost = 20;
 			combinedItem = DamageUtils.setDamage(PersistenceNMS.repairStickyHold(combinedItem), 0);
-			List<EnchantmentLevel> levels = ItemUtils.getEnchantmentLevels(itemOne);
+			List<EnchantmentLevel> levels = EnchantmentUtils.getEnchantmentLevels(itemOne);
 
 			Player player = getPlayer().getPlayer();
 			List<EnchantmentLevel> enchantments = new ArrayList<EnchantmentLevel>();
@@ -191,7 +191,7 @@ public class AnvilEnchantments extends GenerateEnchantments {
 
 			this.enchantments = enchantments;
 			combinedItem = AnvilNMS.setRepairCost(combinedItem, 0);
-			if (this.enchantments != null) combinedItem = ItemUtils.addEnchantmentsToItem(combinedItem, this.enchantments);
+			if (this.enchantments != null) combinedItem = EnchantmentUtils.addEnchantmentsToItem(combinedItem, this.enchantments);
 
 			return;
 		}
@@ -229,7 +229,7 @@ public class AnvilEnchantments extends GenerateEnchantments {
 		if (itemOneRepair > itemTwoRepair) combinedItem = AnvilNMS.setRepairCost(combinedItem, itemOneRepair * 2 + 1);
 		else
 			combinedItem = AnvilNMS.setRepairCost(combinedItem, itemTwoRepair * 2 + 1);
-		if (enchantments != null) combinedItem = ItemUtils.addEnchantmentsToItem(combinedItem, enchantments);
+		if (enchantments != null) combinedItem = EnchantmentUtils.addEnchantmentsToItem(combinedItem, enchantments);
 		repairCost += itemOneRepair + itemTwoRepair;
 
 		repairCost = Math.max(repairCost / ConfigString.LEVEL_DIVISOR.getInt(), 1);

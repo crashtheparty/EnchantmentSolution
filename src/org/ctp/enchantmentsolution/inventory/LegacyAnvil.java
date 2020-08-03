@@ -6,9 +6,11 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.ctp.crashapi.inventory.InventoryData;
+import org.ctp.crashapi.utils.ChatUtils;
+import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.utils.AnvilUtils;
-import org.ctp.enchantmentsolution.utils.ChatUtils;
 
 public class LegacyAnvil implements InventoryData {
 
@@ -35,7 +37,7 @@ public class LegacyAnvil implements InventoryData {
 	@Override
 	public void close(boolean external) {
 		if (EnchantmentSolution.getPlugin().hasInventory(this)) {
-			ChatUtils.sendMessage(player, ChatUtils.getMessage(ChatUtils.getCodes(), "anvil.legacy-gui-close"));
+			Chatable.get().sendMessage(player, Chatable.get().getMessage(ChatUtils.getCodes(), "anvil.legacy-gui-close"));
 			AnvilUtils.removeLegacyAnvil(this);
 			EnchantmentSolution.getPlugin().removeInventory(this);
 			if (!external) player.closeInventory();

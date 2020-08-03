@@ -9,17 +9,17 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.ctp.crashapi.item.ItemData;
+import org.ctp.crashapi.item.ItemType;
+import org.ctp.crashapi.utils.DamageUtils;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.enums.EnchantmentLocation;
-import org.ctp.enchantmentsolution.enums.ItemData;
-import org.ctp.enchantmentsolution.enums.ItemType;
 import org.ctp.enchantmentsolution.nms.AnvilNMS;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 import org.ctp.enchantmentsolution.utils.config.ConfigUtils;
-import org.ctp.enchantmentsolution.utils.items.DamageUtils;
-import org.ctp.enchantmentsolution.utils.items.ItemUtils;
+import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
 
 public class GrindstoneEnchantments extends GenerateEnchantments {
 
@@ -73,8 +73,8 @@ public class GrindstoneEnchantments extends GenerateEnchantments {
 	private void takeEnchantments() {
 		takenItem = new ItemStack(itemTwo.getType());
 		boolean book = ConfigString.USE_ENCHANTED_BOOKS.getBoolean();
-		if (takenItem.getType() == Material.BOOK && book) takenItem = ItemUtils.convertToEnchantedBook(takenItem);
-		else if (takenItem.getType() == Material.ENCHANTED_BOOK && !book) takenItem = ItemUtils.convertToRegularBook(takenItem);
+		if (takenItem.getType() == Material.BOOK && book) takenItem = EnchantmentUtils.convertToEnchantedBook(takenItem);
+		else if (takenItem.getType() == Material.ENCHANTED_BOOK && !book) takenItem = EnchantmentUtils.convertToRegularBook(takenItem);
 
 		List<EnchantmentLevel> enchantments = new ArrayList<EnchantmentLevel>();
 		for(Iterator<java.util.Map.Entry<Enchantment, Integer>> it = getItem().getEnchantments().entrySet().iterator(); it.hasNext();) {
@@ -87,7 +87,7 @@ public class GrindstoneEnchantments extends GenerateEnchantments {
 		else
 			combinedItem = AnvilNMS.setRepairCost(combinedItem, 0);
 
-		takenItem = ItemUtils.addEnchantmentsToItem(takenItem, enchantments);
+		takenItem = EnchantmentUtils.addEnchantmentsToItem(takenItem, enchantments);
 
 		setTakeCost();
 	}
@@ -148,7 +148,7 @@ public class GrindstoneEnchantments extends GenerateEnchantments {
 		ItemStack item = getItem();
 		combinedItem = item.clone();
 		if (item.getType().equals(Material.ENCHANTED_BOOK)) combinedItem = new ItemStack(Material.BOOK);
-		combinedItem = ItemUtils.removeAllEnchantments(combinedItem, false);
+		combinedItem = EnchantmentUtils.removeAllEnchantments(combinedItem, false);
 
 		if (itemTwo != null) {
 			if (item.getType() != Material.BOOK && item.getType() != Material.ENCHANTED_BOOK && ItemType.hasEnchantMaterial(new ItemData(item))) {
@@ -163,7 +163,7 @@ public class GrindstoneEnchantments extends GenerateEnchantments {
 
 		if (combinedItem != null) combinedItem = AnvilNMS.setRepairCost(combinedItem, 0);
 
-		combinedItem = ItemUtils.addEnchantmentsToItem(combinedItem, combineEnchants());
+		combinedItem = EnchantmentUtils.addEnchantmentsToItem(combinedItem, combineEnchants());
 	}
 
 	private List<EnchantmentLevel> combineEnchants() {

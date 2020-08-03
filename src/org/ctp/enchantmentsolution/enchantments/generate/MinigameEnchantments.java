@@ -5,8 +5,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.enums.EnchantmentLocation;
 import org.ctp.enchantmentsolution.inventory.minigame.MinigameItem;
-import org.ctp.enchantmentsolution.utils.LocationUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
+import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
 
 public class MinigameEnchantments extends LootEnchantments {
 
@@ -25,13 +25,13 @@ public class MinigameEnchantments extends LootEnchantments {
 			int random = (int) (rand * maxBooks);
 			if (random >= maxBooks) random = maxBooks - 1;
 			books = random;
-		} else if (block != null) books = LocationUtils.getBookshelves(block.getLocation());
+		} else if (block != null) books = EnchantmentUtils.getBookshelves(block.getLocation());
 		return new MinigameEnchantments(player, item, books, EnchantmentLocation.TABLE);
 	}
 
 	public static MinigameEnchantments generateMinigameLoot(Player player, ItemStack item, Block block, MinigameItem minigameItem) {
 		int books = 0;
-		if (minigameItem.getType().fromLocation() && block != null) books = LocationUtils.getBookshelves(block.getLocation());
+		if (minigameItem.getType().fromLocation() && block != null) books = EnchantmentUtils.getBookshelves(block.getLocation());
 		else {
 			double rand = (Math.random() + Math.random()) / 2;
 			int min = minigameItem.getMinBooks();

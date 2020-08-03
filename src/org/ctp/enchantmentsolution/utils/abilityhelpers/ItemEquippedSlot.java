@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.enchantments.Enchantment;
-import org.ctp.enchantmentsolution.enums.ItemSlotType;
+import org.ctp.crashapi.item.ItemSlotType;
 
 public class ItemEquippedSlot {
 

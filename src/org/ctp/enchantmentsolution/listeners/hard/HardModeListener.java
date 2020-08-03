@@ -12,7 +12,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
-import org.ctp.enchantmentsolution.nms.WorldNMS;
+import org.ctp.crashapi.nms.WorldNMS;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 
 public class HardModeListener implements Listener {

@@ -4,20 +4,23 @@ import java.io.File;
 import java.util.List;
 
 import org.bukkit.plugin.java.JavaPlugin;
+import org.ctp.crashapi.config.Configuration;
+import org.ctp.crashapi.config.yaml.YamlConfig;
+import org.ctp.crashapi.config.yaml.YamlConfigBackup;
+import org.ctp.crashapi.db.BackupDB;
+import org.ctp.crashapi.utils.CrashConfigUtils;
+import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.api.ApiEnchantment;
 import org.ctp.enchantmentsolution.api.ApiEnchantmentWrapper;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
-import org.ctp.enchantmentsolution.utils.ChatUtils;
-import org.ctp.enchantmentsolution.utils.yaml.YamlConfig;
-import org.ctp.enchantmentsolution.utils.yaml.YamlConfigBackup;
 
 public class RPGConfiguration extends Configuration {
 
-	public RPGConfiguration(File dataFolder) {
-		super(new File(dataFolder + "/rpg.yml"));
+	public RPGConfiguration(File dataFolder, BackupDB db, String[] header) {
+		super(EnchantmentSolution.getPlugin(), new File(dataFolder + "/rpg.yml"), db, header);
 
 		migrateVersion();
 		if (getConfig() != null) getConfig().writeDefaults();
@@ -25,11 +28,11 @@ public class RPGConfiguration extends Configuration {
 
 	@Override
 	public void setDefaults() {
-		if (EnchantmentSolution.getPlugin().isInitializing()) ChatUtils.sendInfo("Loading RPG configuration...");
+		if (getPlugin().isInitializing()) Chatable.get().sendInfo("Loading RPG configuration...");
 
 		YamlConfigBackup config = getConfig();
 
-		File file = ConfigUtils.getTempFile("/resources/rpg_defaults.yml");
+		File file = CrashConfigUtils.getTempFile("/resources/rpg_defaults.yml");
 
 		YamlConfig defaultConfig = new YamlConfig(file, new String[] {});
 		defaultConfig.getFromConfig();
@@ -37,14 +40,14 @@ public class RPGConfiguration extends Configuration {
 			if (defaultConfig.get(str) != null) if (str.startsWith("config_comments.")) try {
 				config.addComments(str, defaultConfig.getStringList(str).toArray(new String[] {}));
 			} catch (Exception ex) {
-				ChatUtils.sendWarning("Config key " + str.replaceFirst("config_comments.", "") + " does not exist in the defaults file!");
+				Chatable.get().sendWarning("Config key " + str.replaceFirst("config_comments.", "") + " does not exist in the defaults file!");
 			}
 			else
 				config.addDefault(str, defaultConfig.get(str));
 
 		config.saveConfig();
 
-		if (EnchantmentSolution.getPlugin().isInitializing()) ChatUtils.sendInfo("RPG configuration initialized!");
+		if (getPlugin().isInitializing()) Chatable.get().sendInfo("RPG configuration initialized!");
 
 		file.delete();
 	}

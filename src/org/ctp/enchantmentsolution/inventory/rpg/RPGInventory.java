@@ -11,15 +11,16 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.ctp.crashapi.inventory.InventoryData;
+import org.ctp.crashapi.inventory.Pageable;
+import org.ctp.crashapi.utils.ChatUtils;
+import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
-import org.ctp.enchantmentsolution.inventory.InventoryData;
-import org.ctp.enchantmentsolution.inventory.Pageable;
 import org.ctp.enchantmentsolution.rpg.RPGPlayer;
 import org.ctp.enchantmentsolution.rpg.RPGUtils;
-import org.ctp.enchantmentsolution.utils.ChatUtils;
 
 public class RPGInventory implements InventoryData, Pageable {
 
@@ -73,21 +74,21 @@ public class RPGInventory implements InventoryData, Pageable {
 	public void setInventory() {
 		try {
 			if (screen == Screen.LIST) {
-				Inventory inv = Bukkit.createInventory(null, 54, ChatUtils.getMessage(getCodes(), "rpg.name"));
+				Inventory inv = Bukkit.createInventory(null, 54, Chatable.get().getMessage(getCodes(), "rpg.name"));
 				inv = open(inv);
 
 				ItemStack title = new ItemStack(Material.BOOK);
 				ItemMeta titleMeta = title.getItemMeta();
 				HashMap<String, Object> titleCodes = getCodes();
 				titleCodes.put("%page%", page);
-				titleMeta.setDisplayName(ChatUtils.getMessage(titleCodes, "rpg.title"));
+				titleMeta.setDisplayName(Chatable.get().getMessage(titleCodes, "rpg.title"));
 				title.setItemMeta(titleMeta);
 				inv.setItem(4, title);
 
 				ItemStack instructions = new ItemStack(Material.WRITTEN_BOOK);
 				ItemMeta instructionsMeta = instructions.getItemMeta();
-				instructionsMeta.setDisplayName(ChatUtils.getMessage(getCodes(), "rpg.instructions"));
-				instructionsMeta.setLore(ChatUtils.getMessages(getCodes(), "rpg.instructions_lore"));
+				instructionsMeta.setDisplayName(Chatable.get().getMessage(getCodes(), "rpg.instructions"));
+				instructionsMeta.setLore(Chatable.get().getMessages(getCodes(), "rpg.instructions_lore"));
 				instructions.setItemMeta(instructionsMeta);
 				inv.setItem(3, instructions);
 
@@ -98,14 +99,14 @@ public class RPGInventory implements InventoryData, Pageable {
 				infoCodes.put("%experience%", rpg.getExperience());
 				infoCodes.put("%points%", rpg.getPoints());
 				infoCodes.put("%total_points%", RPGUtils.getPointsForLevel(rpg.getLevel()));
-				infoMeta.setDisplayName(ChatUtils.getMessage(getCodes(), "rpg.info"));
-				infoMeta.setLore(ChatUtils.getMessages(infoCodes, "rpg.info_lore"));
+				infoMeta.setDisplayName(Chatable.get().getMessage(getCodes(), "rpg.info"));
+				infoMeta.setLore(Chatable.get().getMessages(infoCodes, "rpg.info_lore"));
 				info.setItemMeta(infoMeta);
 				inv.setItem(5, info);
 
 				ItemStack mirror = new ItemStack(Material.BLACK_STAINED_GLASS_PANE);
 				ItemMeta mirrorMeta = mirror.getItemMeta();
-				mirrorMeta.setDisplayName(ChatUtils.getMessage(getCodes(), "rpg.mirror"));
+				mirrorMeta.setDisplayName(Chatable.get().getMessage(getCodes(), "rpg.mirror"));
 				mirror.setItemMeta(mirrorMeta);
 
 				for(int i = 0; i < 54; i++)
@@ -124,7 +125,7 @@ public class RPGInventory implements InventoryData, Pageable {
 					if (rpg.hasEnchantment(ench, 1)) enchantment.setType(Material.ENCHANTED_BOOK);
 					HashMap<String, Object> enchCodes = getCodes();
 					enchCodes.put("%name%", enchant.getDisplayName());
-					enchantmentMeta.setDisplayName(ChatUtils.getMessage(enchCodes, "rpg.enchantments"));
+					enchantmentMeta.setDisplayName(Chatable.get().getMessage(enchCodes, "rpg.enchantments"));
 					HashMap<String, Object> enchLoreCodes = getCodes();
 					String path = "rpg.enchantments_lore_unlocked";
 					int levelPlusOne = rpg.getMaxLevel(enchant.getRelativeEnchantment()) + 1;
@@ -133,12 +134,12 @@ public class RPGInventory implements InventoryData, Pageable {
 						path = "rpg.enchantments_lore";
 						BigInteger points = RPGUtils.getPointsForEnchantment(player, enchant.getRelativeEnchantment(), levelPlusOne);
 						String pointsString = points.intValue() + "";
-						if (points.intValue() == -2) pointsString = ChatUtils.getMessage(getCodes(), "rpg.no-permission");
-						else if (points.intValue() == -1) pointsString = ChatUtils.getMessage(getCodes(), "rpg.invalid-enchantment");
+						if (points.intValue() == -2) pointsString = Chatable.get().getMessage(getCodes(), "rpg.no-permission");
+						else if (points.intValue() == -1) pointsString = Chatable.get().getMessage(getCodes(), "rpg.invalid-enchantment");
 						enchLoreCodes.put("%points%", pointsString);
 						enchLoreCodes.put("%level_plus_one%", levelPlusOne);
 					}
-					enchantmentMeta.setLore(ChatUtils.getMessages(enchLoreCodes, path));
+					enchantmentMeta.setLore(Chatable.get().getMessages(enchLoreCodes, path));
 					enchantment.setItemMeta(enchantmentMeta);
 
 					int loc = (int) (i / 7.0D) * 2 + 19 + i;
@@ -155,21 +156,21 @@ public class RPGInventory implements InventoryData, Pageable {
 			} else if (screen == Screen.ENCHANTMENT) {
 				HashMap<String, Object> nameCodes = getCodes();
 				nameCodes.put("%enchantment%", enchant.getName());
-				Inventory inv = Bukkit.createInventory(null, 54, ChatUtils.getMessage(nameCodes, "rpg.name_enchantment"));
+				Inventory inv = Bukkit.createInventory(null, 54, Chatable.get().getMessage(nameCodes, "rpg.name_enchantment"));
 				inv = open(inv);
 
 				ItemStack title = new ItemStack(Material.BOOK);
 				ItemMeta titleMeta = title.getItemMeta();
 				HashMap<String, Object> titleCodes = getCodes();
 				titleCodes.put("%page%", enchPage);
-				titleMeta.setDisplayName(ChatUtils.getMessage(titleCodes, "rpg.title"));
+				titleMeta.setDisplayName(Chatable.get().getMessage(titleCodes, "rpg.title"));
 				title.setItemMeta(titleMeta);
 				inv.setItem(4, title);
 
 				ItemStack instructions = new ItemStack(Material.WRITTEN_BOOK);
 				ItemMeta instructionsMeta = instructions.getItemMeta();
-				instructionsMeta.setDisplayName(ChatUtils.getMessage(getCodes(), "rpg.instructions"));
-				instructionsMeta.setLore(ChatUtils.getMessages(getCodes(), "rpg.instructions_lore"));
+				instructionsMeta.setDisplayName(Chatable.get().getMessage(getCodes(), "rpg.instructions"));
+				instructionsMeta.setLore(Chatable.get().getMessages(getCodes(), "rpg.instructions_lore"));
 				instructions.setItemMeta(instructionsMeta);
 				inv.setItem(3, instructions);
 
@@ -180,14 +181,14 @@ public class RPGInventory implements InventoryData, Pageable {
 				infoCodes.put("%experience%", rpg.getExperience());
 				infoCodes.put("%points%", rpg.getPoints());
 				infoCodes.put("%total_points%", RPGUtils.getPointsForLevel(rpg.getLevel()));
-				infoMeta.setDisplayName(ChatUtils.getMessage(getCodes(), "rpg.info"));
-				infoMeta.setLore(ChatUtils.getMessages(infoCodes, "rpg.info_lore"));
+				infoMeta.setDisplayName(Chatable.get().getMessage(getCodes(), "rpg.info"));
+				infoMeta.setLore(Chatable.get().getMessages(infoCodes, "rpg.info_lore"));
 				info.setItemMeta(infoMeta);
 				inv.setItem(5, info);
 
 				ItemStack mirror = new ItemStack(Material.BLACK_STAINED_GLASS_PANE);
 				ItemMeta mirrorMeta = mirror.getItemMeta();
-				mirrorMeta.setDisplayName(ChatUtils.getMessage(getCodes(), "rpg.mirror"));
+				mirrorMeta.setDisplayName(Chatable.get().getMessage(getCodes(), "rpg.mirror"));
 				mirror.setItemMeta(mirrorMeta);
 
 				for(int i = 0; i < 54; i++)
@@ -207,19 +208,19 @@ public class RPGInventory implements InventoryData, Pageable {
 					if (rpg.hasEnchantment(enchant.getRelativeEnchantment(), level)) levelItem.setType(Material.ENCHANTED_BOOK);
 					HashMap<String, Object> enchCodes = getCodes();
 					enchCodes.put("%name%", enchant.getDisplayName());
-					levelItemMeta.setDisplayName(ChatUtils.getMessage(enchCodes, "rpg.enchantment_levels"));
+					levelItemMeta.setDisplayName(Chatable.get().getMessage(enchCodes, "rpg.enchantment_levels"));
 					HashMap<String, Object> enchLoreCodes = getCodes();
 					String path = "rpg.enchantment_levels_lore_unlocked";
 					if (rpg.getMaxLevel(enchant.getRelativeEnchantment()) < level) {
 						path = "rpg.enchantment_levels_lore";
 						BigInteger points = RPGUtils.getPointsForEnchantment(player, enchant.getRelativeEnchantment(), level);
 						String pointsString = points.intValue() + "";
-						if (points.intValue() == -2) pointsString = ChatUtils.getMessage(getCodes(), "rpg.no-permission");
-						else if (points.intValue() == -1) pointsString = ChatUtils.getMessage(getCodes(), "rpg.invalid-enchantment");
+						if (points.intValue() == -2) pointsString = Chatable.get().getMessage(getCodes(), "rpg.no-permission");
+						else if (points.intValue() == -1) pointsString = Chatable.get().getMessage(getCodes(), "rpg.invalid-enchantment");
 						enchLoreCodes.put("%points%", pointsString);
 						enchLoreCodes.put("%level%", level);
 					}
-					levelItemMeta.setLore(ChatUtils.getMessages(enchLoreCodes, path));
+					levelItemMeta.setLore(Chatable.get().getMessages(enchLoreCodes, path));
 					levelItem.setItemMeta(levelItemMeta);
 
 					int loc = (int) (i / 7.0D) * 2 + 19 + i;
@@ -237,13 +238,13 @@ public class RPGInventory implements InventoryData, Pageable {
 				HashMap<String, Object> buyingCodes = getCodes();
 				buyingCodes.put("%enchantment%", buying.getEnchant().getDisplayName());
 				buyingCodes.put("%level%", buying.getLevel());
-				Inventory inv = Bukkit.createInventory(null, 9, ChatUtils.getMessage(buyingCodes, "rpg.name_confirm"));
+				Inventory inv = Bukkit.createInventory(null, 9, Chatable.get().getMessage(buyingCodes, "rpg.name_confirm"));
 				inv = open(inv);
 
 				ItemStack cancel = new ItemStack(Material.REDSTONE_BLOCK);
 				ItemMeta cancelMeta = cancel.getItemMeta();
-				cancelMeta.setDisplayName(ChatUtils.getMessage(getCodes(), "rpg.cancel"));
-				cancelMeta.setLore(ChatUtils.getMessages(getCodes(), "rpg.cancel_lore"));
+				cancelMeta.setDisplayName(Chatable.get().getMessage(getCodes(), "rpg.cancel"));
+				cancelMeta.setLore(Chatable.get().getMessages(getCodes(), "rpg.cancel_lore"));
 				cancel.setItemMeta(cancelMeta);
 				inv.setItem(2, cancel);
 
@@ -253,8 +254,8 @@ public class RPGInventory implements InventoryData, Pageable {
 				confirmCodes.put("%enchantment%", buying.getEnchant().getDisplayName());
 				confirmCodes.put("%level%", buying.getLevel());
 				confirmCodes.put("%total_points%", RPGUtils.getBuyPoints(rpg, buying));
-				confirmMeta.setDisplayName(ChatUtils.getMessage(getCodes(), "rpg.confirm"));
-				confirmMeta.setLore(ChatUtils.getMessages(confirmCodes, "rpg.confirm_lore"));
+				confirmMeta.setDisplayName(Chatable.get().getMessage(getCodes(), "rpg.confirm"));
+				confirmMeta.setLore(Chatable.get().getMessages(confirmCodes, "rpg.confirm_lore"));
 				confirm.setItemMeta(confirmMeta);
 				inv.setItem(6, confirm);
 			}
@@ -311,7 +312,7 @@ public class RPGInventory implements InventoryData, Pageable {
 		HashMap<String, Object> codes = getCodes();
 		codes.put("%enchantment%", buying.getEnchant().getDisplayName());
 		codes.put("%level%", buying.getLevel());
-		ChatUtils.sendMessage(player, ChatUtils.getMessage(codes, "rpg.unlock"));
+		Chatable.get().sendMessage(player, Chatable.get().getMessage(codes, "rpg.unlock"));
 		buying = null;
 		setInventory();
 	}
@@ -368,6 +369,11 @@ public class RPGInventory implements InventoryData, Pageable {
 
 	public Screen getScreen() {
 		return screen;
+	}
+
+	@Override
+	public ChatUtils getChat() {
+		return Chatable.get();
 	}
 
 }

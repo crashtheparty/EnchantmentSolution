@@ -1,41 +1,27 @@
 package org.ctp.enchantmentsolution.utils.files;
 
 import java.io.File;
-import java.util.Iterator;
-import java.util.logging.Level;
 
-import org.bukkit.Material;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.ctp.crashapi.config.CrashLanguageFile;
+import org.ctp.crashapi.config.Language;
+import org.ctp.crashapi.config.yaml.YamlConfig;
+import org.ctp.crashapi.utils.CrashConfigUtils;
+import org.ctp.crashapi.utils.StringUtils;
+import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.api.ApiEnchantmentWrapper;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantmentWrapper;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
-import org.ctp.enchantmentsolution.enums.ItemType;
-import org.ctp.enchantmentsolution.enums.Language;
-import org.ctp.enchantmentsolution.nms.ItemNMS;
-import org.ctp.enchantmentsolution.utils.ChatUtils;
-import org.ctp.enchantmentsolution.utils.StringUtils;
-import org.ctp.enchantmentsolution.utils.config.ConfigUtils;
-import org.ctp.enchantmentsolution.utils.yaml.YamlConfig;
 
-public class LanguageFile {
+public class ESLanguageFile extends CrashLanguageFile {
 
-	private Language language;
-	private File file;
-	private YamlConfig config;
-
-	public LanguageFile(File dataFolder, Language language) {
-		setLanguage(language);
-
-		File tempFile = ConfigUtils.getTempFile("/resources/" + language.getLocale() + ".yml");
-
-		file = new File(dataFolder + "/language/" + language.getLocale() + ".yml");
-
-		YamlConfiguration.loadConfiguration(file);
-		config = new YamlConfig(file, new String[] {});
+	public ESLanguageFile(File dataFolder, Language language) {
+		super(dataFolder, language);
+		YamlConfig config = getConfig();
 		config.getFromConfig();
-
+		
+		File tempFile = CrashConfigUtils.getTempFile("/resources/" + language.getLocale() + ".yml");
 		YamlConfig defaultConfig = new YamlConfig(tempFile, new String[] {});
 		defaultConfig.getFromConfig();
 		for(String str: defaultConfig.getAllEntryKeys())
@@ -59,7 +45,7 @@ public class LanguageFile {
 			if (enchant.getRelativeEnchantment() instanceof ApiEnchantmentWrapper) {
 				JavaPlugin plugin = ((ApiEnchantmentWrapper) enchant.getRelativeEnchantment()).getPlugin();
 				if (plugin == null) {
-					ChatUtils.sendToConsole(Level.WARNING, "Enchantment " + enchant.getName() + " (Display Name " + enchant.getDisplayName() + ")" + " does not have a JavaPlugin set. Refusing to set language defaults.");
+					Chatable.get().sendWarning("Enchantment " + enchant.getName() + " (Display Name " + enchant.getDisplayName() + ")" + " does not have a JavaPlugin set. Refusing to set language defaults.");
 					continue;
 				}
 				config.addDefault("enchantment.descriptions." + plugin.getName().toLowerCase() + "." + enchant.getName(), StringUtils.encodeString(enchantmentDescription));
@@ -68,35 +54,6 @@ public class LanguageFile {
 				config.addDefault("enchantment.descriptions." + "default_enchantments." + enchant.getName(), StringUtils.encodeString(enchantmentDescription));
 		}
 
-		for(Iterator<java.util.Map.Entry<Material, String>> it = ItemType.ALL.getUnlocalizedNames().entrySet().iterator(); it.hasNext();) {
-			java.util.Map.Entry<Material, String> e = it.next();
-			config.addDefault("vanilla." + e.getValue(), ItemNMS.returnLocalizedItemName(language, e.getKey()));
-		}
-
 		config.saveConfig();
-	}
-
-	public YamlConfig getConfig() {
-		return config;
-	}
-
-	public void setConfig(YamlConfig config) {
-		this.config = config;
-	}
-
-	public Language getLanguage() {
-		return language;
-	}
-
-	public void setLanguage(Language language) {
-		this.language = language;
-	}
-
-	public File getFile() {
-		return file;
-	}
-
-	public void setFile(File file) {
-		this.file = file;
 	}
 }

@@ -19,6 +19,10 @@ import org.bukkit.metadata.MetadataValue;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.util.Vector;
+import org.ctp.crashapi.CrashAPI;
+import org.ctp.crashapi.utils.ChatUtils;
+import org.ctp.crashapi.utils.DamageUtils;
+import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
@@ -34,14 +38,12 @@ import org.ctp.enchantmentsolution.mcmmo.McMMOHandler;
 import org.ctp.enchantmentsolution.nms.AnimalMobNMS;
 import org.ctp.enchantmentsolution.nms.animalmob.AnimalMob;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
-import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.ESArrays;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.DrownedEntity;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.EntityAccuracy;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.ParticleEffect;
 import org.ctp.enchantmentsolution.utils.items.AbilityUtils;
-import org.ctp.enchantmentsolution.utils.items.DamageUtils;
-import org.ctp.enchantmentsolution.utils.items.ItemUtils;
+import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
 
 @SuppressWarnings("unused")
 public class DamageListener extends Enchantmentable {
@@ -86,7 +88,7 @@ public class DamageListener extends Enchantmentable {
 		if (entity instanceof Player) {
 			Player player = (Player) entity;
 			ItemStack item = player.getInventory().getItemInMainHand();
-			if (ItemUtils.hasEnchantment(item, RegisterEnchantments.BRINE)) {
+			if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.BRINE)) {
 				Entity damaged = event.getEntity();
 				if (damaged instanceof LivingEntity) {
 					LivingEntity living = (LivingEntity) damaged;
@@ -110,7 +112,7 @@ public class DamageListener extends Enchantmentable {
 		if (entity instanceof Player) {
 			Player player = (Player) entity;
 			ItemStack item = player.getInventory().getItemInMainHand();
-			if (item != null && ItemUtils.hasEnchantment(item, RegisterEnchantments.CURSE_OF_LAG)) {
+			if (item != null && EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.CURSE_OF_LAG)) {
 				LagEvent lag = new LagEvent(player, player.getLocation(), AbilityUtils.createEffects(player));
 
 				Bukkit.getPluginManager().callEvent(lag);
@@ -164,8 +166,8 @@ public class DamageListener extends Enchantmentable {
 		} else if (event.getDamager() instanceof HumanEntity) {
 			HumanEntity human = (HumanEntity) event.getDamager();
 			ItemStack item = human.getInventory().getItemInMainHand();
-			if (item != null && ItemUtils.hasEnchantment(item, RegisterEnchantments.DROWNED)) {
-				int level = ItemUtils.getLevel(item, RegisterEnchantments.DROWNED);
+			if (item != null && EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.DROWNED)) {
+				int level = EnchantmentUtils.getLevel(item, RegisterEnchantments.DROWNED);
 				if (event.getEntity() instanceof LivingEntity) applyDrowned(level, human, (LivingEntity) event.getEntity(), event);
 			}
 		}
@@ -178,7 +180,7 @@ public class DamageListener extends Enchantmentable {
 		if (damager instanceof Player) player = (Player) damager;
 		if (player != null) {
 			ItemStack item = player.getInventory().getChestplate();
-			if (item != null && ItemUtils.hasEnchantment(item, RegisterEnchantments.GUNG_HO)) {
+			if (item != null && EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.GUNG_HO)) {
 				Entity damaged = event.getEntity();
 				if (damaged instanceof LivingEntity) {
 					GungHoEvent gungHo = new GungHoEvent((LivingEntity) damaged, player, event.getDamage(), event.getDamage() * 3);
@@ -220,10 +222,10 @@ public class DamageListener extends Enchantmentable {
 			Player player = (Player) attacker;
 			Creature animals = (Creature) attacked;
 			ItemStack attackItem = player.getInventory().getItemInMainHand();
-			if (attackItem != null && ItemUtils.hasEnchantment(attackItem, RegisterEnchantments.IRENES_LASSO)) {
+			if (attackItem != null && EnchantmentUtils.hasEnchantment(attackItem, RegisterEnchantments.IRENES_LASSO)) {
 				if (!AnimalMobNMS.canAddMob()) return;
 				event.setCancelled(true);
-				int max = ItemUtils.getLevel(attackItem, RegisterEnchantments.IRENES_LASSO);
+				int max = EnchantmentUtils.getLevel(attackItem, RegisterEnchantments.IRENES_LASSO);
 				int current = 0;
 				for(AnimalMob animal: EnchantmentSolution.getAnimals())
 					if (animal.inItem(attackItem)) current++;
@@ -233,7 +235,7 @@ public class DamageListener extends Enchantmentable {
 				if (!lasso.isCancelled()) {
 					if (attacked instanceof Tameable) {
 						if (((Tameable) attacked).getOwner() != null && !((Tameable) attacked).getOwner().getUniqueId().equals(player.getUniqueId())) {
-							ChatUtils.sendMessage(player, ChatUtils.getMessage(ChatUtils.getCodes(), "irenes_lasso.error"));
+							Chatable.get().sendMessage(player, Chatable.get().getMessage(ChatUtils.getCodes(), "irenes_lasso.error"));
 							return;
 						}
 						String type = attacked.getType().name().toLowerCase();
@@ -259,8 +261,8 @@ public class DamageListener extends Enchantmentable {
 			ItemStack shield = player.getEquipment().getItemInOffHand();
 			if (shield == null) return;
 			if (player.isBlocking()) return;
-			if (ItemUtils.hasEnchantment(shield, RegisterEnchantments.IRON_DEFENSE)) {
-				int level = ItemUtils.getLevel(shield, RegisterEnchantments.IRON_DEFENSE);
+			if (EnchantmentUtils.hasEnchantment(shield, RegisterEnchantments.IRON_DEFENSE)) {
+				int level = EnchantmentUtils.getLevel(shield, RegisterEnchantments.IRON_DEFENSE);
 				double percentage = .1 + .05 * level;
 				double originalDamage = event.getDamage();
 				double damage = originalDamage * percentage;
@@ -276,7 +278,7 @@ public class DamageListener extends Enchantmentable {
 					DamageUtils.damageItem(player, ironDefense.getShield(), ironDefense.getShieldDamage());
 
 					if (player instanceof Player) {
-						if ((int) (ironDefense.getNewDamage() * 10) > 0 && EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber() > 1) ((Player) player).incrementStatistic(Statistic.DAMAGE_BLOCKED_BY_SHIELD, (int) (ironDefense.getNewDamage() * 10));
+						if ((int) (ironDefense.getNewDamage() * 10) > 0 && CrashAPI.getPlugin().getBukkitVersion().getVersionNumber() > 1) ((Player) player).incrementStatistic(Statistic.DAMAGE_BLOCKED_BY_SHIELD, (int) (ironDefense.getNewDamage() * 10));
 						if (player.getHealth() <= ironDefense.getDamage() && player.getHealth() > ironDefense.getNewDamage()) AdvancementUtils.awardCriteria((Player) player, ESAdvancement.IRON_MAN, "blocked");
 					}
 				}
@@ -292,8 +294,8 @@ public class DamageListener extends Enchantmentable {
 		if (attacker instanceof Player && attacked instanceof LivingEntity) {
 			Player player = (Player) attacker;
 			ItemStack attackItem = player.getInventory().getItemInMainHand();
-			if (ItemUtils.hasEnchantment(attackItem, RegisterEnchantments.KNOCKUP)) {
-				int level = ItemUtils.getLevel(attackItem, RegisterEnchantments.KNOCKUP);
+			if (EnchantmentUtils.hasEnchantment(attackItem, RegisterEnchantments.KNOCKUP)) {
+				int level = EnchantmentUtils.getLevel(attackItem, RegisterEnchantments.KNOCKUP);
 				double levelMultiplier = 0.18;
 				KnockUpEvent knockUp = new KnockUpEvent((LivingEntity) attacked, level, player, event.getDamage(), 0.275184010449 + levelMultiplier * level);
 				Bukkit.getPluginManager().callEvent(knockUp);
@@ -314,7 +316,7 @@ public class DamageListener extends Enchantmentable {
 		if (event.getDamager() instanceof AreaEffectCloud) if (event.getEntity() instanceof Player) {
 			Player player = (Player) event.getEntity();
 			ItemStack shield = player.getInventory().getItemInOffHand();
-			if (shield.getType().equals(Material.SHIELD)) if (ItemUtils.hasEnchantment(shield, RegisterEnchantments.MAGIC_GUARD)) {
+			if (shield.getType().equals(Material.SHIELD)) if (EnchantmentUtils.hasEnchantment(shield, RegisterEnchantments.MAGIC_GUARD)) {
 				MagicGuardPotionEvent magicGuard = new MagicGuardPotionEvent(player, ((AreaEffectCloud) event.getDamager()).getBasePotionData().getType().getEffectType());
 				Bukkit.getPluginManager().callEvent(magicGuard);
 
@@ -332,8 +334,8 @@ public class DamageListener extends Enchantmentable {
 			Player player = (Player) damaged;
 			LivingEntity living = (LivingEntity) damager;
 			ItemStack item = player.getInventory().getItemInOffHand();
-			if (item != null && ItemUtils.hasEnchantment(item, RegisterEnchantments.PUSHBACK) && player.isBlocking()) {
-				int level = ItemUtils.getLevel(item, RegisterEnchantments.PUSHBACK);
+			if (item != null && EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.PUSHBACK) && player.isBlocking()) {
+				int level = EnchantmentUtils.getLevel(item, RegisterEnchantments.PUSHBACK);
 				double d0 = Math.sin(player.getLocation().getYaw() * 0.017453292F);
 				double d1 = -Math.cos(player.getLocation().getYaw() * 0.017453292F);
 				Vector v0 = player.getVelocity();
@@ -387,8 +389,8 @@ public class DamageListener extends Enchantmentable {
 		if (!event.isCancelled()) if (damager instanceof Player && event.getEntity() instanceof LivingEntity) {
 			Player player = (Player) damager;
 			ItemStack item = player.getInventory().getItemInMainHand();
-			if (ItemUtils.hasEnchantment(item, RegisterEnchantments.SAND_VEIL)) {
-				int level = ItemUtils.getLevel(item, RegisterEnchantments.SAND_VEIL);
+			if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.SAND_VEIL)) {
+				int level = EnchantmentUtils.getLevel(item, RegisterEnchantments.SAND_VEIL);
 				double accuracy = 1 - level * .05;
 				LivingEntity entity = (LivingEntity) event.getEntity();
 				ea = null;
@@ -424,8 +426,8 @@ public class DamageListener extends Enchantmentable {
 		if (entity instanceof Player && damaged instanceof LivingEntity) {
 			Player player = (Player) entity;
 			ItemStack item = player.getInventory().getItemInMainHand();
-			if (ItemUtils.hasEnchantment(item, RegisterEnchantments.SHOCK_ASPECT) && item.getType() != Material.BOOK) {
-				int level = ItemUtils.getLevel(item, RegisterEnchantments.SHOCK_ASPECT);
+			if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.SHOCK_ASPECT) && item.getType() != Material.BOOK) {
+				int level = EnchantmentUtils.getLevel(item, RegisterEnchantments.SHOCK_ASPECT);
 				double chance = .05 + 0.1 * level;
 				double random = Math.random();
 
@@ -442,7 +444,7 @@ public class DamageListener extends Enchantmentable {
 	}
 
 	private void stoneThrow(EntityDamageByEntityEvent event) {
-		if (EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber() > 3) {
+		if (CrashAPI.getPlugin().getBukkitVersion().getVersionNumber() > 3) {
 			if (!canRun(RegisterEnchantments.STONE_THROW, event)) return;
 			switch (event.getEntityType().name()) {
 				case "BAT":
@@ -461,9 +463,9 @@ public class DamageListener extends Enchantmentable {
 						if (shooter instanceof HumanEntity) {
 							HumanEntity human = (HumanEntity) shooter;
 							ItemStack item = human.getInventory().getItemInOffHand();
-							if (item == null || !ItemUtils.hasEnchantment(item, RegisterEnchantments.STONE_THROW)) item = human.getInventory().getItemInMainHand();
-							if (ItemUtils.hasEnchantment(item, RegisterEnchantments.STONE_THROW)) {
-								int level = ItemUtils.getLevel(item, RegisterEnchantments.STONE_THROW);
+							if (item == null || !EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.STONE_THROW)) item = human.getInventory().getItemInMainHand();
+							if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.STONE_THROW)) {
+								int level = EnchantmentUtils.getLevel(item, RegisterEnchantments.STONE_THROW);
 								double percentage = .4 * level + 1.2;
 								int extraDamage = (int) (percentage * event.getDamage() + .5);
 
@@ -491,8 +493,8 @@ public class DamageListener extends Enchantmentable {
 	private void tank(PlayerItemDamageEvent event) {
 		if (!canRun(RegisterEnchantments.TANK, event)) return;
 		ItemStack item = event.getItem();
-		if (ItemUtils.hasEnchantment(item, RegisterEnchantments.TANK)) {
-			int level = ItemUtils.getLevel(item, RegisterEnchantments.TANK);
+		if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.TANK)) {
+			int level = EnchantmentUtils.getLevel(item, RegisterEnchantments.TANK);
 			double chance = level * 1.0D / (level + 1);
 			int damage = event.getDamage();
 			for(int i = 0; i < event.getDamage(); i++) {
@@ -514,8 +516,8 @@ public class DamageListener extends Enchantmentable {
 			LivingEntity entity = (LivingEntity) attacked;
 			ItemStack leggings = entity.getEquipment().getLeggings();
 			if (leggings == null) return;
-			if (ItemUtils.hasEnchantment(leggings, RegisterEnchantments.WARP)) {
-				int level = ItemUtils.getLevel(leggings, RegisterEnchantments.WARP);
+			if (EnchantmentUtils.hasEnchantment(leggings, RegisterEnchantments.WARP)) {
+				int level = EnchantmentUtils.getLevel(leggings, RegisterEnchantments.WARP);
 				List<Location> locsToTp = new ArrayList<Location>();
 				for(int x = -(level + 4); x <= level + 5; x++)
 					for(int y = -(level + 4); y <= level + 5; y++) {
@@ -593,7 +595,7 @@ public class DamageListener extends Enchantmentable {
 		if (event.getCause() == DamageCause.MAGIC || event.getCause() == DamageCause.POISON) if (event.getEntity() instanceof Player) {
 			Player player = (Player) event.getEntity();
 			ItemStack shield = player.getInventory().getItemInOffHand();
-			if (shield.getType().equals(Material.SHIELD)) if (ItemUtils.hasEnchantment(shield, RegisterEnchantments.MAGIC_GUARD)) {
+			if (shield.getType().equals(Material.SHIELD)) if (EnchantmentUtils.hasEnchantment(shield, RegisterEnchantments.MAGIC_GUARD)) {
 				MagicGuardPotionEvent magicGuard = new MagicGuardPotionEvent(player, event.getCause() == DamageCause.POISON ? PotionEffectType.POISON : PotionEffectType.HARM);
 				Bukkit.getPluginManager().callEvent(magicGuard);
 
@@ -607,7 +609,7 @@ public class DamageListener extends Enchantmentable {
 		if (event.getCause() == DamageCause.HOT_FLOOR && event.getEntity() instanceof Player) {
 			Player player = (Player) event.getEntity();
 			ItemStack boots = player.getInventory().getBoots();
-			if (boots != null && ItemUtils.hasEnchantment(boots, RegisterEnchantments.MAGMA_WALKER)) event.setCancelled(true);
+			if (boots != null && EnchantmentUtils.hasEnchantment(boots, RegisterEnchantments.MAGMA_WALKER)) event.setCancelled(true);
 		}
 	}
 }

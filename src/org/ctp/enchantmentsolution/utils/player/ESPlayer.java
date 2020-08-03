@@ -8,13 +8,14 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.ctp.crashapi.item.ItemData;
+import org.ctp.crashapi.item.ItemType;
+import org.ctp.crashapi.nms.ServerNMS;
+import org.ctp.crashapi.utils.DamageUtils;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.*;
-import org.ctp.enchantmentsolution.enums.ItemData;
-import org.ctp.enchantmentsolution.enums.ItemType;
 import org.ctp.enchantmentsolution.events.player.FrequentFlyerEvent;
 import org.ctp.enchantmentsolution.events.player.FrequentFlyerEvent.FFType;
-import org.ctp.enchantmentsolution.nms.ServerNMS;
 import org.ctp.enchantmentsolution.rpg.RPGPlayer;
 import org.ctp.enchantmentsolution.rpg.RPGUtils;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
@@ -23,8 +24,7 @@ import org.ctp.enchantmentsolution.utils.abilityhelpers.ItemEquippedSlot;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.OverkillDeath;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 import org.ctp.enchantmentsolution.utils.items.AbilityUtils;
-import org.ctp.enchantmentsolution.utils.items.DamageUtils;
-import org.ctp.enchantmentsolution.utils.items.ItemUtils;
+import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
 
 public class ESPlayer {
 
@@ -142,7 +142,7 @@ public class ESPlayer {
 	public double getContagionChance() {
 		double playerChance = 0;
 		if (isOnline()) for(ItemStack item: getOnlinePlayer().getInventory().getContents())
-			if (item != null && ItemUtils.hasEnchantment(item, RegisterEnchantments.CURSE_OF_CONTAGION)) playerChance += CONTAGION_CHANCE;
+			if (item != null && EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.CURSE_OF_CONTAGION)) playerChance += CONTAGION_CHANCE;
 		return playerChance;
 	}
 
@@ -160,7 +160,7 @@ public class ESPlayer {
 	private boolean hasAllCurses(ItemStack item) {
 		boolean noCurse = true;
 		for(CustomEnchantment enchantment: RegisterEnchantments.getCurseEnchantments())
-			if (enchantment.isCurse() && ItemUtils.canAddEnchantment(enchantment, item) && !ItemUtils.hasEnchantment(item, enchantment.getRelativeEnchantment())) {
+			if (enchantment.isCurse() && EnchantmentUtils.canAddEnchantment(enchantment, item) && !EnchantmentUtils.hasEnchantment(item, enchantment.getRelativeEnchantment())) {
 				noCurse = false;
 				break;
 			}
@@ -169,9 +169,9 @@ public class ESPlayer {
 
 	private boolean canAddCurse(ItemStack item) {
 		boolean addCurse = false;
-		if (ItemUtils.hasEnchantment(item, RegisterEnchantments.CURSE_OF_STAGNANCY)) return false;
+		if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.CURSE_OF_STAGNANCY)) return false;
 		for(CustomEnchantment enchantment: RegisterEnchantments.getCurseEnchantments())
-			if (enchantment.isCurse() && ItemUtils.canAddEnchantment(enchantment, item)) {
+			if (enchantment.isCurse() && EnchantmentUtils.canAddEnchantment(enchantment, item)) {
 				addCurse = true;
 				break;
 			}
@@ -209,8 +209,8 @@ public class ESPlayer {
 		frequentFlyerLevel = 0;
 		ItemStack newElytra = null;
 		for(ItemStack item: getArmor())
-			if (item != null && ItemUtils.hasEnchantment(item, RegisterEnchantments.FREQUENT_FLYER) && !DamageUtils.aboveMaxDamage(item)) {
-				int level = ItemUtils.getLevel(item, RegisterEnchantments.FREQUENT_FLYER);
+			if (item != null && EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.FREQUENT_FLYER) && !DamageUtils.aboveMaxDamage(item)) {
+				int level = EnchantmentUtils.getLevel(item, RegisterEnchantments.FREQUENT_FLYER);
 				if (level > frequentFlyerLevel) {
 					frequentFlyerLevel = level;
 					newElytra = item;
@@ -333,7 +333,7 @@ public class ESPlayer {
 	public List<ItemStack> getForceFeedItems() {
 		List<ItemStack> items = new ArrayList<ItemStack>();
 		for(ItemStack item: getEquipped())
-			if (item != null && ItemUtils.hasEnchantment(item, RegisterEnchantments.FORCE_FEED)) items.add(item);
+			if (item != null && EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.FORCE_FEED)) items.add(item);
 		return items;
 	}
 

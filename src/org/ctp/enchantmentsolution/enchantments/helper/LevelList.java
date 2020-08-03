@@ -1,7 +1,7 @@
 package org.ctp.enchantmentsolution.enchantments.helper;
 
+import org.ctp.crashapi.config.yaml.YamlConfig;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
-import org.ctp.enchantmentsolution.utils.yaml.YamlConfig;
 
 public class LevelList {
 

@@ -1,9 +1,9 @@
 package org.ctp.enchantmentsolution.utils.compatibility;
 
 import org.bukkit.inventory.ItemStack;
-import org.ctp.enchantmentsolution.EnchantmentSolution;
-import org.ctp.enchantmentsolution.enums.CustomItemType;
-import org.ctp.enchantmentsolution.enums.ItemData;
+import org.ctp.crashapi.CrashAPI;
+import org.ctp.crashapi.item.CustomItemType;
+import org.ctp.crashapi.item.ItemData;
 
 import net.Indyuce.mmoitems.api.Type;
 import net.mmogroup.mmolib.api.item.NBTItem;
@@ -11,7 +11,7 @@ import net.mmogroup.mmolib.api.item.NBTItem;
 public class MMOUtils {
 
 	private static boolean isEnabled() {
-		return EnchantmentSolution.getPlugin().getMMOItems();
+		return CrashAPI.getMMOItems();
 	}
 
 	public static String getMMOTypeString(ItemStack item) {

@@ -1,30 +1,32 @@
 package org.ctp.enchantmentsolution.utils.commands;
 
-import java.util.concurrent.Callable;
-
 import org.bukkit.command.CommandSender;
+import org.ctp.crashapi.commands.CrashCommandCallable;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 
-public class CommandCallable implements Callable<Boolean> {
+public class ESCommandCallable implements CrashCommandCallable {
 
 	private final ESCommand command;
 	private final String[] args;
 	private final CommandSender sender;
 
-	public CommandCallable(ESCommand command, CommandSender sender, String[] args) {
+	public ESCommandCallable(ESCommand command, CommandSender sender, String[] args) {
 		this.command = command;
 		this.sender = sender;
 		this.args = args;
 	}
 
+	@Override
 	public ESCommand getCommand() {
 		return command;
 	}
 
+	@Override
 	public String[] getArgs() {
 		return args;
 	}
 
+	@Override
 	public CommandSender getSender() {
 		return sender;
 	}
@@ -41,7 +43,8 @@ public class CommandCallable implements Callable<Boolean> {
 		return true;
 	}
 
-	private Boolean fromCommand() {
+	@Override
+	public Boolean fromCommand() {
 		switch (command.getCommand()) {
 			case "esanvil":
 				return CommandUtils.anvil(sender, command, args);

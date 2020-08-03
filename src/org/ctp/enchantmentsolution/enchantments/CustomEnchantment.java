@@ -6,18 +6,23 @@ import java.util.List;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.ctp.crashapi.config.Language;
+import org.ctp.crashapi.item.CustomItemType;
+import org.ctp.crashapi.item.ItemData;
+import org.ctp.crashapi.item.ItemType;
+import org.ctp.crashapi.utils.ChatUtils;
+import org.ctp.crashapi.utils.ItemUtils;
+import org.ctp.crashapi.utils.StringUtils;
+import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentDescription;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentDisplayName;
 import org.ctp.enchantmentsolution.enchantments.helper.Weight;
-import org.ctp.enchantmentsolution.enums.*;
+import org.ctp.enchantmentsolution.enums.EnchantmentLocation;
 import org.ctp.enchantmentsolution.rpg.RPGUtils;
-import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.PermissionUtils;
-import org.ctp.enchantmentsolution.utils.StringUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 import org.ctp.enchantmentsolution.utils.config.ConfigUtils;
 import org.ctp.enchantmentsolution.utils.config.Type;
-import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 
 public abstract class CustomEnchantment {
 
@@ -107,12 +112,12 @@ public abstract class CustomEnchantment {
 	}
 
 	public String getDetails() {
-		String page = "\n" + "\n" + ChatUtils.getMessage(ChatUtils.getCodes(), "enchantment.name") + getDisplayName() + "\n\n";
-		page += ChatUtils.getMessage(ChatUtils.getCodes(), "enchantment.description") + getDescription() + "\n";
-		page += ChatUtils.getMessage(ChatUtils.getCodes(), "enchantment.max-level") + getMaxLevel() + ".\n";
-		page += ChatUtils.getMessage(ChatUtils.getCodes(), "enchantment.weight") + getWeightName() + ".\n";
-		page += ChatUtils.getMessage(ChatUtils.getCodes(), "enchantment.start-level") + getStartLevel() + ".\n";
-		page += ChatUtils.getMessage(ChatUtils.getCodes(), "enchantment.enchantable-items");
+		String page = "\n" + "\n" + Chatable.get().getMessage(ChatUtils.getCodes(), "enchantment.name") + getDisplayName() + "\n\n";
+		page += Chatable.get().getMessage(ChatUtils.getCodes(), "enchantment.description") + getDescription() + "\n";
+		page += Chatable.get().getMessage(ChatUtils.getCodes(), "enchantment.max-level") + getMaxLevel() + ".\n";
+		page += Chatable.get().getMessage(ChatUtils.getCodes(), "enchantment.weight") + getWeightName() + ".\n";
+		page += Chatable.get().getMessage(ChatUtils.getCodes(), "enchantment.start-level") + getStartLevel() + ".\n";
+		page += Chatable.get().getMessage(ChatUtils.getCodes(), "enchantment.enchantable-items");
 		if (getEnchantmentItemTypes().size() > 0) {
 			if (getEnchantmentItemTypes().get(0).equals(ItemType.ALL)) page += getEnchantmentItemTypes().get(0).getDisplayName() + ".\n";
 			else {
@@ -127,7 +132,7 @@ public abstract class CustomEnchantment {
 			}
 		} else
 			page += ItemType.NONE + ".\n";
-		page += ChatUtils.getMessage(ChatUtils.getCodes(), "enchantment.anvilable-items");
+		page += Chatable.get().getMessage(ChatUtils.getCodes(), "enchantment.anvilable-items");
 		if (getAnvilItemTypes().size() > 0) {
 			if (getAnvilItemTypes().get(0).equals(ItemType.ALL)) page += getAnvilItemTypes().get(0).getDisplayName() + ".\n";
 			else {
@@ -143,7 +148,7 @@ public abstract class CustomEnchantment {
 		} else
 			page += ItemType.NONE + ".\n";
 
-		page += ChatUtils.getMessage(ChatUtils.getCodes(), "enchantment.conflicting-enchantments");
+		page += Chatable.get().getMessage(ChatUtils.getCodes(), "enchantment.conflicting-enchantments");
 		if (getConflictingEnchantments().size() > 0) {
 			List<String> names = new ArrayList<String>();
 			for(int i = 0; i < getConflictingEnchantments().size(); i++) {
@@ -158,20 +163,20 @@ public abstract class CustomEnchantment {
 			page += ".\n";
 		} else
 			page += ConfigUtils.getString(lang, "misc.no_conflicting_enchantments") + ".\n";
-		page += ChatUtils.getMessage(ChatUtils.getCodes(), "enchantment.enabled") + ConfigUtils.getString(lang, "misc." + isEnabled()) + ".\n";
+		page += Chatable.get().getMessage(ChatUtils.getCodes(), "enchantment.enabled") + ConfigUtils.getString(lang, "misc." + isEnabled()) + ".\n";
 		if (getEnchantmentLocations().size() > 0) {
 			List<String> names = new ArrayList<String>();
 			for(int i = 0; i < getEnchantmentLocations().size(); i++) {
 				EnchantmentLocation enchant = getEnchantmentLocations().get(i);
-				names.add(ChatUtils.getMessage(ChatUtils.getCodes(), "enchantment.locations." + enchant.name().toLowerCase()));
+				names.add(Chatable.get().getMessage(ChatUtils.getCodes(), "enchantment.locations." + enchant.name().toLowerCase()));
 			}
 
-			if (names.isEmpty()) page += ChatUtils.getMessage(ChatUtils.getCodes(), "enchantment.locations_string") + ConfigUtils.getString(lang, "misc.no_enchantment_locations");
+			if (names.isEmpty()) page += Chatable.get().getMessage(ChatUtils.getCodes(), "enchantment.locations_string") + ConfigUtils.getString(lang, "misc.no_enchantment_locations");
 			else
-				page += ChatUtils.getMessage(ChatUtils.getCodes(), "enchantment.locations_string") + StringUtils.join(names, ", ");
+				page += Chatable.get().getMessage(ChatUtils.getCodes(), "enchantment.locations_string") + StringUtils.join(names, ", ");
 			page += ".\n";
 		} else
-			page += ChatUtils.getMessage(ChatUtils.getCodes(), "enchantment.locations_string") + ConfigUtils.getString(lang, "misc.no_enchantment_locations") + ".\n";
+			page += Chatable.get().getMessage(ChatUtils.getCodes(), "enchantment.locations_string") + ConfigUtils.getString(lang, "misc.no_enchantment_locations") + ".\n";
 		return page;
 	}
 

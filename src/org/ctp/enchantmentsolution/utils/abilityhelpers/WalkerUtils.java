@@ -16,13 +16,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
+import org.ctp.crashapi.nms.PacketNMS;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.events.blocks.*;
-import org.ctp.enchantmentsolution.nms.PacketNMS;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
-import org.ctp.enchantmentsolution.utils.items.ItemUtils;
+import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
 
 public class WalkerUtils {
 
@@ -37,7 +37,7 @@ public class WalkerUtils {
 
 	public static void updateBlocks(Player player, ItemStack boots, Location loc, Enchantment enchantment,
 	List<Material> checkMaterial, Material replaceMaterial, String metadata) {
-		int level = ItemUtils.getLevel(boots, enchantment);
+		int level = EnchantmentUtils.getLevel(boots, enchantment);
 		int radius = 1 + level;
 		for(int x = -radius; x <= radius; x++)
 			for(int z = -radius; z <= radius; z++) {

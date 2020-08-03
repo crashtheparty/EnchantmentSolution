@@ -12,7 +12,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.permissions.Permissible;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
-import org.ctp.enchantmentsolution.utils.items.ItemUtils;
+import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
 
 import com.gmail.nossr50.config.experience.ExperienceConfig;
 import com.gmail.nossr50.datatypes.skills.SecondaryAbility;
@@ -41,7 +41,7 @@ public class McMMOClassicFishing extends McMMOFishing {
 				boolean enchanted = false;
 
 				if (!enchantments.isEmpty()) {
-					treasure = ItemUtils.addEnchantmentsToItem(treasure, enchantments);
+					treasure = EnchantmentUtils.addEnchantmentsToItem(treasure, enchantments);
 					enchanted = true;
 				}
 

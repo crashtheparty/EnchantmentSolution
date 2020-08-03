@@ -10,13 +10,16 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.ctp.crashapi.config.yaml.YamlChild;
+import org.ctp.crashapi.config.yaml.YamlConfigBackup;
+import org.ctp.crashapi.inventory.InventoryData;
+import org.ctp.crashapi.inventory.Pageable;
+import org.ctp.crashapi.utils.ChatUtils;
+import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.nms.Anvil_GUI_NMS;
-import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.Configurations;
 import org.ctp.enchantmentsolution.utils.DBUtils;
-import org.ctp.enchantmentsolution.utils.yaml.YamlChild;
-import org.ctp.enchantmentsolution.utils.yaml.YamlConfigBackup;
 
 public class ConfigInventory implements InventoryData, Pageable {
 
@@ -32,23 +35,25 @@ public class ConfigInventory implements InventoryData, Pageable {
 	private String level = null, type = null;
 	private boolean chat = false;
 	private boolean opening;
+	private Configurations configurations;
 
 	public ConfigInventory(Player player) {
 		this.player = player;
 		screen = Screen.LIST_FILES;
 
+		configurations = EnchantmentSolution.getPlugin().getConfigurations();
 		change();
 	}
 
 	private void change() {
-		isChanged.putAll(DBUtils.getDifferent(Configurations.getConfig()));
-		isChanged.putAll(DBUtils.getDifferent(Configurations.getFishing()));
-		isChanged.putAll(DBUtils.getDifferent(Configurations.getLanguage()));
-		isChanged.putAll(DBUtils.getDifferent(Configurations.getEnchantments()));
-		isChanged.putAll(DBUtils.getDifferent(Configurations.getAdvancements()));
-		isChanged.putAll(DBUtils.getDifferent(Configurations.getRPG()));
-		isChanged.putAll(DBUtils.getDifferent(Configurations.getHardMode()));
-		isChanged.putAll(DBUtils.getDifferent(Configurations.getMinigames()));
+		isChanged.putAll(DBUtils.getDifferent(configurations.getConfig()));
+		isChanged.putAll(DBUtils.getDifferent(configurations.getFishing()));
+		isChanged.putAll(DBUtils.getDifferent(configurations.getLanguage()));
+		isChanged.putAll(DBUtils.getDifferent(configurations.getEnchantments()));
+		isChanged.putAll(DBUtils.getDifferent(configurations.getAdvancements()));
+		isChanged.putAll(DBUtils.getDifferent(configurations.getRPG()));
+		isChanged.putAll(DBUtils.getDifferent(configurations.getHardMode()));
+		isChanged.putAll(DBUtils.getDifferent(configurations.getMinigames()));
 
 		hasChanged = isChanged.containsValue(true);
 	}
@@ -60,18 +65,18 @@ public class ConfigInventory implements InventoryData, Pageable {
 	}
 
 	public void revert() {
-		ChatUtils.sendMessage(player, "Reverting changes made in the config UI.");
+		Chatable.get().sendMessage(player, "Reverting changes made in the config UI.");
 
-		Configurations.revert();
+		configurations.revert();
 
 		change();
 		listFiles();
 	}
 
 	public void saveAll() {
-		ChatUtils.sendMessage(player, "Saving changes made in the config UI.");
+		Chatable.get().sendMessage(player, "Saving changes made in the config UI.");
 
-		Configurations.save();
+		configurations.save();
 
 		change();
 		listFiles();
@@ -99,49 +104,49 @@ public class ConfigInventory implements InventoryData, Pageable {
 
 		ItemStack configFile = new ItemStack(Material.COMMAND_BLOCK);
 		ItemMeta configFileMeta = configFile.getItemMeta();
-		configFileMeta.setDisplayName(ChatColor.GOLD + Configurations.getConfig().getConfig().getFileName());
+		configFileMeta.setDisplayName(ChatColor.GOLD + configurations.getConfig().getConfig().getFileName());
 		configFile.setItemMeta(configFileMeta);
 		inv.setItem(2, configFile);
 
 		ItemStack fishingFile = new ItemStack(Material.FISHING_ROD);
 		ItemMeta fishingFileMeta = fishingFile.getItemMeta();
-		fishingFileMeta.setDisplayName(ChatColor.GOLD + Configurations.getFishing().getConfig().getFileName());
+		fishingFileMeta.setDisplayName(ChatColor.GOLD + configurations.getFishing().getConfig().getFileName());
 		fishingFile.setItemMeta(fishingFileMeta);
 		inv.setItem(3, fishingFile);
 
 		ItemStack advancementsFile = new ItemStack(Material.KNOWLEDGE_BOOK);
 		ItemMeta advancementsFileMeta = advancementsFile.getItemMeta();
-		advancementsFileMeta.setDisplayName(ChatColor.GOLD + Configurations.getAdvancements().getConfig().getFileName());
+		advancementsFileMeta.setDisplayName(ChatColor.GOLD + configurations.getAdvancements().getConfig().getFileName());
 		advancementsFile.setItemMeta(advancementsFileMeta);
 		inv.setItem(4, advancementsFile);
 
 		ItemStack languageFile = new ItemStack(Material.BOOK);
 		ItemMeta languageFileMeta = languageFile.getItemMeta();
-		languageFileMeta.setDisplayName(ChatColor.GOLD + Configurations.getLanguage().getConfig().getFileName());
+		languageFileMeta.setDisplayName(ChatColor.GOLD + configurations.getLanguage().getConfig().getFileName());
 		languageFile.setItemMeta(languageFileMeta);
 		inv.setItem(5, languageFile);
 
 		ItemStack enchantmentFile = new ItemStack(Material.GOLDEN_APPLE);
 		ItemMeta enchantmentFileMeta = enchantmentFile.getItemMeta();
-		enchantmentFileMeta.setDisplayName(ChatColor.GOLD + Configurations.getEnchantments().getConfig().getFileName());
+		enchantmentFileMeta.setDisplayName(ChatColor.GOLD + configurations.getEnchantments().getConfig().getFileName());
 		enchantmentFile.setItemMeta(enchantmentFileMeta);
 		inv.setItem(6, enchantmentFile);
 
 		ItemStack minigamesFile = new ItemStack(Material.GOLDEN_SHOVEL);
 		ItemMeta minigamesFileMeta = minigamesFile.getItemMeta();
-		minigamesFileMeta.setDisplayName(ChatColor.GOLD + Configurations.getMinigames().getConfig().getFileName());
+		minigamesFileMeta.setDisplayName(ChatColor.GOLD + configurations.getMinigames().getConfig().getFileName());
 		minigamesFile.setItemMeta(minigamesFileMeta);
 		inv.setItem(12, minigamesFile);
 
 		ItemStack rpgFile = new ItemStack(Material.GOLDEN_APPLE);
 		ItemMeta rpgFileMeta = rpgFile.getItemMeta();
-		rpgFileMeta.setDisplayName(ChatColor.GOLD + Configurations.getRPG().getConfig().getFileName());
+		rpgFileMeta.setDisplayName(ChatColor.GOLD + configurations.getRPG().getConfig().getFileName());
 		rpgFile.setItemMeta(rpgFileMeta);
 		inv.setItem(13, rpgFile);
 
 		ItemStack hardModeFile = new ItemStack(Material.SPAWNER);
 		ItemMeta hardModeFileMeta = hardModeFile.getItemMeta();
-		hardModeFileMeta.setDisplayName(ChatColor.GOLD + Configurations.getHardMode().getConfig().getFileName());
+		hardModeFileMeta.setDisplayName(ChatColor.GOLD + configurations.getHardMode().getConfig().getFileName());
 		hardModeFile.setItemMeta(hardModeFileMeta);
 		inv.setItem(14, hardModeFile);
 
@@ -501,7 +506,7 @@ public class ConfigInventory implements InventoryData, Pageable {
 		this.type = type;
 
 		setChat(true);
-		ChatUtils.sendMessage(player, "Enter the string message into the chat.");
+		Chatable.get().sendMessage(player, "Enter the string message into the chat.");
 		player.closeInventory();
 	}
 
@@ -615,30 +620,30 @@ public class ConfigInventory implements InventoryData, Pageable {
 				int value = 0;
 				try {
 					value = Integer.parseInt(name);
-					ChatUtils.sendMessage(player, "Set path " + level + " to " + value + ".");
+					Chatable.get().sendMessage(player, "Set path " + level + " to " + value + ".");
 					setPath(level, value);
 				} catch (Exception e) {
-					ChatUtils.sendMessage(player, "Entered value not an integer.");
+					Chatable.get().sendMessage(player, "Entered value not an integer.");
 				}
 				break;
 			case "double":
 				double d = 0;
 				try {
 					d = Double.parseDouble(name);
-					ChatUtils.sendMessage(player, "Set path " + level + " to " + d + ".");
+					Chatable.get().sendMessage(player, "Set path " + level + " to " + d + ".");
 					setPath(level, d);
 				} catch (Exception e) {
-					ChatUtils.sendMessage(player, "Entered value not an integer.");
+					Chatable.get().sendMessage(player, "Entered value not an integer.");
 				}
 				break;
 			case "enum":
 			case "string":
-				ChatUtils.sendMessage(player, "Set path " + level + " to " + name + ".");
+				Chatable.get().sendMessage(player, "Set path " + level + " to " + name + ".");
 				setPath(level, name);
 				break;
 			case "list":
 			case "enum_list":
-				ChatUtils.sendMessage(player, "Added " + name + " to path " + level + ".");
+				Chatable.get().sendMessage(player, "Added " + name + " to path " + level + ".");
 				addToList(name);
 				break;
 		}
@@ -695,5 +700,10 @@ public class ConfigInventory implements InventoryData, Pageable {
 	@Override
 	public List<ItemStack> getItems() {
 		return null;
+	}
+
+	@Override
+	public ChatUtils getChat() {
+		return Chatable.get();
 	}
 }

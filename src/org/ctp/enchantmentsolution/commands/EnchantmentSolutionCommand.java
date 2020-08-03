@@ -6,11 +6,11 @@ import java.util.logging.Level;
 import org.bukkit.Bukkit;
 import org.bukkit.command.*;
 import org.bukkit.entity.Player;
+import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
-import org.ctp.enchantmentsolution.utils.ChatUtils;
-import org.ctp.enchantmentsolution.utils.commands.CommandCallable;
 import org.ctp.enchantmentsolution.utils.commands.CommandUtils;
 import org.ctp.enchantmentsolution.utils.commands.ESCommand;
+import org.ctp.enchantmentsolution.utils.commands.ESCommandCallable;
 
 public class EnchantmentSolutionCommand implements CommandExecutor, TabCompleter {
 
@@ -92,7 +92,7 @@ public class EnchantmentSolutionCommand implements CommandExecutor, TabCompleter
 		for(ESCommand command: commands) {
 			if (command == help) continue;
 			if (containsCommand(command, args[0])) try {
-				return new CommandCallable(command, sender, finalArgs).call();
+				return new ESCommandCallable(command, sender, finalArgs).call();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -100,7 +100,7 @@ public class EnchantmentSolutionCommand implements CommandExecutor, TabCompleter
 
 		HashMap<String, Object> codes = new HashMap<String, Object>();
 		codes.put("%command%", args[0]);
-		ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(codes, "commands.no-command"), Level.WARNING);
+		Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(codes, "commands.no-command"), Level.WARNING);
 		return true;
 	}
 

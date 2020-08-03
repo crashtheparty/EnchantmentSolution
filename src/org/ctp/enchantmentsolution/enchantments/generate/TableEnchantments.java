@@ -7,13 +7,13 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.ctp.crashapi.config.yaml.YamlConfig;
+import org.ctp.crashapi.item.ItemData;
+import org.ctp.crashapi.item.MatData;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentList;
 import org.ctp.enchantmentsolution.enchantments.helper.Level;
 import org.ctp.enchantmentsolution.enchantments.helper.LevelList;
 import org.ctp.enchantmentsolution.enums.EnchantmentLocation;
-import org.ctp.enchantmentsolution.enums.ItemData;
-import org.ctp.enchantmentsolution.enums.MatData;
-import org.ctp.enchantmentsolution.utils.yaml.YamlConfig;
 
 public class TableEnchantments extends GenerateEnchantments {
 
