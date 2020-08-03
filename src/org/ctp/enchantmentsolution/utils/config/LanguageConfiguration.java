@@ -39,6 +39,9 @@ public class LanguageConfiguration extends Configuration {
 		}
 	}
 
+	@Override
+	public void repairConfig() {}
+
 	public Language getLanguage() {
 		return language.getLanguage();
 	}

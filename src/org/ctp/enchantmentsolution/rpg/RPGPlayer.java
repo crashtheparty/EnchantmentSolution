@@ -146,6 +146,12 @@ public class RPGPlayer {
 	}
 
 	private Map<Enchantment, Integer> getEnchantmentLevels() {
+		if (player.isOnline() && player.getPlayer().hasPermission("enchantmentsolution.enchantments.rpg.all")) {
+			enchantments = new HashMap<Enchantment, Integer>();
+			for(CustomEnchantment ench: RegisterEnchantments.getEnchantments())
+				enchantments.put(ench.getRelativeEnchantment(), Integer.MAX_VALUE);
+			return enchantments;
+		}
 		if (enchantments == null) {
 			enchantments = new HashMap<Enchantment, Integer>();
 			Iterator<Entry<Enchantment, Integer>> iter2 = RPGUtils.getFreeEnchantments().entrySet().iterator();
@@ -177,7 +183,7 @@ public class RPGPlayer {
 
 	public boolean giveEnchantment(EnchantmentLevel level) {
 		enchantments = null;
-		enchantmentList.put(level.getEnchant().getRelativeEnchantment(), level.getLevel());
+		if (level != null) enchantmentList.put(level.getEnchant().getRelativeEnchantment(), level.getLevel());
 		getEnchantmentLevels();
 		return true;
 	}

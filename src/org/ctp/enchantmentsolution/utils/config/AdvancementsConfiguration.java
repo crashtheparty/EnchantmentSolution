@@ -52,4 +52,7 @@ public class AdvancementsConfiguration extends Configuration {
 		main.saveConfig();
 	}
 
+	@Override
+	public void repairConfig() {}
+
 }

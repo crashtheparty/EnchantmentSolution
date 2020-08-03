@@ -127,16 +127,16 @@ config_comments:
         - 'Whether to use the custom anvil gui'
         
         level_divisor: 
-        - 'Greater numbers allow more anvil uses.'
+        - 'Greater numbers allow more anvil uses'
 
         max_repair_level: 
         - 'The highest repair level that will be allowed in the anvil'
-        - 'Only used when enchanting type is enhanced. '
+        - 'Will show ''Too Expensive to Repair'' if using above 39 and using the vanilla GUI'
 
         default_use: 
-        - 'Allow default use of anvil GUI via option at bottom right of custom GUI.'
-        - 'Only used when enchanting type is enhanced.'
-        - 'Should only be true if anvil is used for custom recipes.'
+        - 'Allow default use of anvil GUI via option at bottom right of custom GUI'
+        - 'Only used when custom_gui is true'
+        - 'Should only be true if anvil is used for custom recipes'
 
         damage: 
         - 'The anvil will be damaged while using it - normal vanilla behavior on true'
@@ -154,8 +154,8 @@ config_comments:
         - 'Will always be false above 1.13.2'
         
         take_enchantments: 
-        - 'Use the grindstone to add enchantments from items to books.'
-        - 'Only used when enchanting type is enhanced.'
+        - 'Use the grindstone to add enchantments from items to books'
+        - 'Only used when custom_gui is true'
 
         set_repair_cost: 
         - 'When grindstone takes enchantments, set repair cost of the generated book to the item used''s repair cost'
@@ -170,10 +170,10 @@ config_comments:
     - 'Update any enchantments generated in EnchantmentSolutionLegacy'
 
     use_enchanted_books: 
-    - 'Uses the vanilla Enchanted Books rather than Books to store enchantments.'
+    - 'Uses the vanilla Enchanted Books rather than Books to store enchantments'
 
     disable_enchant_method: 
-    - 'How disabling an enchantment in enchantments.yml or enchantments_advanced.yml will work.'
+    - 'How disabling an enchantment in enchantments.yml or enchantments_advanced.yml will work'
     - 'Options:'
     - 'vanish - removes enchantment from items'
     - 'visible - keeps enchantment on item, but custom effects will not work and anvil will remove enchant'
@@ -182,7 +182,7 @@ config_comments:
     enchantment_check: 
     - 'The number (in seconds) of time the plugin will run checks for other plugins ruining enchantments on items'
     - 'Will check 10 players a tick while running'
-    - 'Lower numbers may cause more lag on the server'
+    - 'Lower numbers may cause more lag on the server; setting to 0 will disable'
     
     enchantment_check_on_login: 
     - 'Whether a player logging into the server should check for bad enchantments in the player''s inventory'

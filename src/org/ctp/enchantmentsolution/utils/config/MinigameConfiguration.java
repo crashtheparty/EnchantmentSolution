@@ -94,4 +94,7 @@ public class MinigameConfiguration extends Configuration {
 	@Override
 	public void migrateVersion() {}
 
+	@Override
+	public void repairConfig() {}
+
 }

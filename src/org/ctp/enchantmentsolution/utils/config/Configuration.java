@@ -48,7 +48,12 @@ public abstract class Configuration implements Configurable, Revertable {
 	public abstract void migrateVersion();
 
 	@Override
+	public abstract void repairConfig();
+
+	@Override
 	public void save() {
+		config.update();
+		repairConfig();
 		config.setComments(comments);
 		config.saveConfig();
 

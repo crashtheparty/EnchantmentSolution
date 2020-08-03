@@ -62,7 +62,6 @@ public class MainConfiguration extends Configuration {
 	public void migrateVersion() {
 		YamlConfigBackup config = getConfig();
 
-		if (config.getInt("anvil.level_divisor") <= 0) config.set("anvil.level_divisor", 4);
 		if (config.getBoolean("level_50_enchants")) {
 			if (config.getBoolean("use_advanced_file")) config.set("enchanting_table.enchanting_type", "enhanced_50_custom");
 			else
@@ -135,6 +134,13 @@ public class MainConfiguration extends Configuration {
 			config.set("trades.villager", config.getBoolean("villager_trades"));
 			config.removeKey("villager_trades");
 		}
+	}
+
+	@Override
+	public void repairConfig() {
+		YamlConfigBackup config = getConfig();
+		ChatUtils.sendInfo("Repair Config: " + config.getInt("anvil.level_divisor"));
+		if (config.getInt("anvil.level_divisor") <= 0) config.set("anvil.level_divisor", 4);
 	}
 
 }

@@ -45,4 +45,7 @@ public class HardModeConfiguration extends Configuration {
 	@Override
 	public void migrateVersion() {}
 
+	@Override
+	public void repairConfig() {}
+
 }

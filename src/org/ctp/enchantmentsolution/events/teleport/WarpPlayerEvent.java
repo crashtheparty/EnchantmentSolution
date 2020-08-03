@@ -5,7 +5,7 @@ import java.util.List;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent;
-import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
+import org.ctp.enchantmentsolution.enchantments.CERegister;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 
 public class WarpPlayerEvent extends PlayerTeleportEvent {
@@ -15,7 +15,7 @@ public class WarpPlayerEvent extends PlayerTeleportEvent {
 
 	public WarpPlayerEvent(Player player, Location from, Location to, List<Location> otherLocations, int level) {
 		super(player, from, to);
-		enchantment = new EnchantmentLevel(RegisterEnchantments.getCustomEnchantment(RegisterEnchantments.WARP), level);
+		enchantment = new EnchantmentLevel(CERegister.WARP, level);
 		this.otherLocations = otherLocations;
 	}
 

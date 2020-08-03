@@ -1,6 +1,11 @@
 package org.ctp.enchantmentsolution.listeners;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -11,20 +16,24 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enums.MatData;
 import org.ctp.enchantmentsolution.inventory.InventoryData;
+import org.ctp.enchantmentsolution.inventory.snapshot.VanishInventory;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 
 public class VanishListener implements Listener {
 
+	private static Map<UUID, VanishInventory> VANISH_INVENTORIES = new HashMap<UUID, VanishInventory>();
+
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent event) {
 		Player player = event.getPlayer();
-		if (hasPermission(player)) removePlayerInv(player);
+		if (ConfigString.ENCHANTMENT_CHECK_ON_LOGIN.getBoolean() && hasPermission(player)) removePlayerInv(player);
 	}
 
 	@EventHandler
@@ -39,9 +48,10 @@ public class VanishListener implements Listener {
 		}
 		if (ConfigString.DISABLE_ENCHANT_METHOD.getString().equals("vanish") && shouldCheck) {
 			Inventory inv = event.getInventory();
+			if (inv.getLocation() == null) return; // it should not remove enchantments from custom inventories ever
 			for(int i = 0; i < inv.getSize(); i++) {
 				ItemStack item = inv.getItem(i);
-				inv.setItem(i, removeEnchants(player, item));
+				if (item != null && item.hasItemMeta() && (item.getType() == Material.ENCHANTED_BOOK && ((EnchantmentStorageMeta) item.getItemMeta()).hasStoredEnchants() || item.getItemMeta().hasEnchants())) removeEnchants(player, item);
 			}
 		}
 	}
@@ -57,17 +67,24 @@ public class VanishListener implements Listener {
 
 		if (ConfigString.DISABLE_ENCHANT_METHOD.getString().equals("vanish")) {
 			ItemStack item = event.getItem().getItemStack();
-			if (item == null || MatData.isAir(item.getType())) return;
-			event.getItem().setItemStack(removeEnchants(player, item));
+			if (item == null || MatData.isAir(item.getType()) || !item.hasItemMeta()) return;
+			removeEnchants(player, item);
 		}
 	}
 
 	private static void removePlayerInv(Player player) {
 		PlayerInventory inv = player.getInventory();
+		VanishInventory vanish;
+		if (VANISH_INVENTORIES.containsKey(player.getUniqueId())) vanish = VANISH_INVENTORIES.get(player.getUniqueId());
+		else
+			vanish = new VanishInventory(player);
+		vanish.setInventory(); // update the inventory
+		ItemStack[] items = vanish.getItems();
 
 		for(int i = 0; i < 36; i++) {
 			ItemStack item = inv.getItem(i);
-			inv.setItem(i, removeEnchants(player, item));
+			if (item == null || item.equals(items[i])) continue;
+			removeEnchants(player, item);
 		}
 		ItemStack helmet = inv.getHelmet();
 		ItemStack chest = inv.getChestplate();
@@ -75,11 +92,12 @@ public class VanishListener implements Listener {
 		ItemStack boots = inv.getBoots();
 		ItemStack offhand = inv.getItemInOffHand();
 
-		if (helmet != null) inv.setHelmet(removeEnchants(player, helmet));
-		if (chest != null) inv.setChestplate(removeEnchants(player, chest));
-		if (legs != null) inv.setLeggings(removeEnchants(player, legs));
-		if (boots != null) inv.setBoots(removeEnchants(player, boots));
-		if (offhand != null) inv.setItemInOffHand(removeEnchants(player, offhand));
+		if (helmet != null && !helmet.equals(items[37])) removeEnchants(player, helmet);
+		if (chest != null && !chest.equals(items[38])) removeEnchants(player, chest);
+		if (legs != null && !legs.equals(items[39])) removeEnchants(player, legs);
+		if (boots != null && !boots.equals(items[40])) removeEnchants(player, boots);
+		if (offhand != null && !offhand.equals(items[36])) removeEnchants(player, offhand);
+		VANISH_INVENTORIES.put(player.getUniqueId(), vanish);
 	}
 
 	public static void reload() {
@@ -88,9 +106,9 @@ public class VanishListener implements Listener {
 				if (player.getOpenInventory() != null) {
 					Inventory inv = player.getOpenInventory().getTopInventory();
 					InventoryData invData = EnchantmentSolution.getPlugin().getInventory(player);
-					if (invData == null) for(int i = 0; i < inv.getSize(); i++) {
+					if (invData == null && inv.getLocation() != null) for(int i = 0; i < inv.getSize(); i++) {
 						ItemStack item = inv.getItem(i);
-						inv.setItem(i, removeEnchants(player, item));
+						if (item != null && item.hasItemMeta() && (item.getType() == Material.ENCHANTED_BOOK && ((EnchantmentStorageMeta) item.getItemMeta()).hasStoredEnchants() || item.getItemMeta().hasEnchants())) removeEnchants(player, item);
 					}
 				}
 				removePlayerInv(player);
@@ -108,12 +126,16 @@ public class VanishListener implements Listener {
 					lower = player.hasPermission("enchantmentsolution.enchantments.lower-levels");
 					maxLevel = enchant.getMaxLevel(player);
 				}
-				if (lower && maxLevel > ItemUtils.getLevel(item, enchant.getRelativeEnchantment())) item = ItemUtils.addEnchantmentToItem(item, enchant, maxLevel);
+				if (lower && maxLevel < ItemUtils.getLevel(item, enchant.getRelativeEnchantment())) {
+					if (maxLevel == 0) item = ItemUtils.removeEnchantmentFromItem(item, enchant);
+					else
+						item = ItemUtils.addEnchantmentToItem(item, enchant, maxLevel);
+				} else { /* placeholder */ }
 			}
 		}
 		return item;
 	}
-	
+
 	private static boolean hasPermission(Player player) {
 		return player.hasPermission("enchantmentsolution.enchantments.lower-levels") || ConfigString.DISABLE_ENCHANT_METHOD.getString().equals("vanish");
 	}

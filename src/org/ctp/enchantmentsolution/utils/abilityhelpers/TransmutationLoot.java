@@ -51,7 +51,7 @@ public enum TransmutationLoot {
 		TransmutationLoot loot = getRandomLoot();
 		ItemStack lootItem = new ItemStack(loot.getMaterial(), (int) (Math.random() * (loot.getMax() - loot.getMin() + 1) + loot.getMin()));
 		if (!loot.canStack()) {
-			int random = (int) (Math.random() * loot.getMaterial().getMaxDurability());
+			int random = (int) (Math.random() * DamageUtils.getMaxDamage(lootItem));
 			lootItem = DamageUtils.setDamage(lootItem, random);
 		}
 		switch (lootItem.getType().name()) {

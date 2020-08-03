@@ -91,7 +91,7 @@ public class RegisterEnchantments {
 	public static List<CustomEnchantment> getRegisteredEnchantmentsAlphabetical() {
 		List<CustomEnchantment> alphabetical = new ArrayList<CustomEnchantment>();
 		for(CustomEnchantment enchantment: REGISTERED_ENCHANTMENTS)
-			alphabetical.add(enchantment);
+			if (enchantment.isEnabled()) alphabetical.add(enchantment);
 		Collections.sort(alphabetical, (o1, o2) -> o1.getDisplayName().compareTo(o2.getDisplayName()));
 		return alphabetical;
 	}
@@ -127,7 +127,7 @@ public class RegisterEnchantments {
 		boolean custom = enchantment.getRelativeEnchantment() instanceof CustomEnchantmentWrapper;
 		String error_message = "Trouble adding the " + enchantment.getName() + (custom ? " custom" : "") + " enchantment: ";
 		String success_message = "Added the " + enchantment.getName() + (custom ? " custom" : "") + " enchantment.";
-		if (!custom) {
+		if (!custom || Enchantment.getByKey(enchantment.getRelativeEnchantment().getKey()) != null) {
 			ChatUtils.sendToConsole(Level.INFO, success_message);
 			return true;
 		}

@@ -138,7 +138,7 @@ public class GrindstoneEnchantments extends GenerateEnchantments {
 
 			CustomEnchantment custom = RegisterEnchantments.getCustomEnchantment(enchantment);
 
-			if (!RegisterEnchantments.getCustomEnchantment(enchantment).isCurse()) j += custom.enchantability(integer);
+			if (!custom.isCurse()) j += custom.enchantability(integer);
 		}
 
 		return j;
@@ -152,14 +152,14 @@ public class GrindstoneEnchantments extends GenerateEnchantments {
 
 		if (itemTwo != null) {
 			if (item.getType() != Material.BOOK && item.getType() != Material.ENCHANTED_BOOK && ItemType.hasEnchantMaterial(new ItemData(item))) {
-				DamageUtils.setDamage(combinedItem, DamageUtils.getDamage(item.getItemMeta()));
-				int extraDurability = itemTwo.getType().getMaxDurability() - DamageUtils.getDamage(itemTwo.getItemMeta()) + (int) (itemTwo.getType().getMaxDurability() * .05);
-				DamageUtils.setDamage(combinedItem, DamageUtils.getDamage(item.getItemMeta()) - extraDurability);
-				if (DamageUtils.getDamage(combinedItem.getItemMeta()) < 0) DamageUtils.setDamage(combinedItem, 0);
+				DamageUtils.setDamage(combinedItem, DamageUtils.getDamage(item));
+				int extraDurability = DamageUtils.getMaxDamage(itemTwo) - DamageUtils.getDamage(itemTwo) + (int) (DamageUtils.getMaxDamage(itemTwo) * .05);
+				DamageUtils.setDamage(combinedItem, DamageUtils.getDamage(item) - extraDurability);
+				if (DamageUtils.getDamage(combinedItem) < 0) DamageUtils.setDamage(combinedItem, 0);
 			} else
 				combinedItem.setAmount(1);
 		} else
-			DamageUtils.setDamage(combinedItem, DamageUtils.getDamage(item.getItemMeta()));
+			DamageUtils.setDamage(combinedItem, DamageUtils.getDamage(item));
 
 		if (combinedItem != null) combinedItem = AnvilNMS.setRepairCost(combinedItem, 0);
 

@@ -50,6 +50,8 @@ import org.ctp.enchantmentsolution.utils.player.ESPlayer;
 import org.ctp.enchantmentsolution.version.*;
 import org.ctp.enchantmentsolution.version.Version.VersionType;
 
+import com.leonardobishop.quests.Quests;
+
 import me.prunt.restrictedcreative.RestrictedCreativeAPI;
 
 public class EnchantmentSolution extends JavaPlugin {
@@ -61,14 +63,14 @@ public class EnchantmentSolution extends JavaPlugin {
 	private static List<EntityAccuracy> ACCURACY = new ArrayList<EntityAccuracy>();
 	private static List<ESPlayer> PLAYERS = new ArrayList<ESPlayer>();
 	private List<InventoryData> inventories = new ArrayList<InventoryData>();
-	private boolean initialization = true, mmoItems = false, restrictedCreative;
+	private boolean initialization = true, mmoItems = false, restrictedCreative = false, quests = false;
 	private BukkitVersion bukkitVersion;
 	private PluginVersion pluginVersion;
 	private SQLite db;
 	private Plugin jobsReborn;
 	private VersionCheck check;
 	private WikiThread wiki;
-	private String mcmmoVersion, mcmmoType;
+	private String mcmmoVersion = "Disabled", mcmmoType;
 	private Plugin veinMiner;
 	private RPGListener rpg;
 
@@ -162,7 +164,12 @@ public class EnchantmentSolution extends JavaPlugin {
 		initialization = false;
 
 		Bukkit.getScheduler().runTaskLater(this, () -> {
-			SaveUtils.getData();
+			try {
+				SaveUtils.getData();
+			} catch (Exception ex) {
+				ChatUtils.sendWarning("Error in loading data to data.yml - will possibly break.");
+				ex.printStackTrace();
+			}
 			Configurations.getEnchantments().setEnchantmentInformation();
 			Configurations.getEnchantments().save();
 			addCompatibility();
@@ -381,6 +388,14 @@ public class EnchantmentSolution extends JavaPlugin {
 			restrictedCreative = true;
 			ChatUtils.sendInfo("Restricted Creative compatibility enabled!");
 		}
+
+		if (Bukkit.getPluginManager().isPluginEnabled("Quests")) try {
+			Quests.get();
+			quests = true;
+			ChatUtils.sendInfo("Quests compatibility enabled!");
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
 	}
 
 	public boolean getMMOItems() {
@@ -409,6 +424,24 @@ public class EnchantmentSolution extends JavaPlugin {
 		for(Player player: Bukkit.getOnlinePlayers()) {
 			ESPlayer es = getESPlayer(player);
 			if (es.getContagionChance() > 0 && es.getCurseableItems().size() > 0) players.add(es);
+		}
+		return players;
+	}
+
+	public static List<ESPlayer> getExhaustionPlayers() {
+		List<ESPlayer> players = new ArrayList<ESPlayer>();
+		for(Player player: Bukkit.getOnlinePlayers()) {
+			ESPlayer es = getESPlayer(player);
+			if (es.getExhaustion() > 0) players.add(es);
+		}
+		return players;
+	}
+
+	public static List<ESPlayer> getFrequentFlyerPlayers() {
+		List<ESPlayer> players = new ArrayList<ESPlayer>();
+		for(Player player: Bukkit.getOnlinePlayers()) {
+			ESPlayer es = getESPlayer(player);
+			if (es.hasFrequentFlyer() || es.canFly(true)) players.add(es);
 		}
 		return players;
 	}
@@ -450,5 +483,9 @@ public class EnchantmentSolution extends JavaPlugin {
 
 	public boolean isRestrictedCreative(Block b) {
 		return RestrictedCreativeAPI.isCreative(b);
+	}
+
+	public boolean hasQuests() {
+		return quests;
 	}
 }

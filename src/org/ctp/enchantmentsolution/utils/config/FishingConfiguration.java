@@ -40,4 +40,7 @@ public class FishingConfiguration extends Configuration {
 	@Override
 	public void migrateVersion() {}
 
+	@Override
+	public void repairConfig() {}
+
 }

@@ -47,7 +47,7 @@ public class DropsListener extends Enchantmentable {
 				else if (entity instanceof Skeleton) skulls.add(new ItemStack(Material.SKELETON_SKULL));
 				else if (entity instanceof Zombie) skulls.add(new ItemStack(Material.ZOMBIE_HEAD));
 				else if (entity instanceof Creeper) skulls.add(new ItemStack(Material.CREEPER_HEAD));
-				else if (entity instanceof Player && PermissionUtils.check(((Player) entity), "enchantmentsolution.abilities.player-skulls")) {
+				else if (entity instanceof Player && PermissionUtils.check((Player) entity, "enchantmentsolution.abilities.player-skulls")) {
 					ItemStack skull = new ItemStack(Material.PLAYER_HEAD);
 					SkullMeta skullMeta = (SkullMeta) skull.getItemMeta();
 					skullMeta.setOwningPlayer((Player) entity);

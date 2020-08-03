@@ -29,7 +29,7 @@ public class ElytraRunnable implements Runnable, Reflectionable {
 	private void frequentFlyer() {
 		if (!RegisterEnchantments.isEnabled(RegisterEnchantments.FREQUENT_FLYER)) return;
 
-		Iterator<ESPlayer> iterator = EnchantmentSolution.getAllESPlayers(false).iterator();
+		Iterator<ESPlayer> iterator = EnchantmentSolution.getFrequentFlyerPlayers().iterator();
 		while (iterator.hasNext()) {
 			ESPlayer ffPlayer = iterator.next();
 			if (!ffPlayer.isOnline()) {
@@ -39,7 +39,7 @@ public class ElytraRunnable implements Runnable, Reflectionable {
 			Player player = ffPlayer.getOnlinePlayer();
 			ffPlayer.setDidTick(false);
 			ffPlayer.setFrequentFlyer();
-			if (ffPlayer.hasFrequentFlyer() && player.isFlying() && !player.getGameMode().equals(GameMode.CREATIVE) && !player.getGameMode().equals(GameMode.SPECTATOR)) ffPlayer.minus();
+			if (ffPlayer.canFly(true) && player.isFlying() && !player.getGameMode().equals(GameMode.CREATIVE) && !player.getGameMode().equals(GameMode.SPECTATOR)) ffPlayer.minus();
 		}
 	}
 

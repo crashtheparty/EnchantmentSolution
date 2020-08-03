@@ -4,16 +4,14 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
-import org.ctp.enchantmentsolution.nms.PersistenceNMS;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
 
-public class SnapshotInventory implements SavedInventory {
-
+public class VanishInventory implements SavedInventory {
 	private ItemStack[] items = new ItemStack[37];
 	private ItemStack[] armor = new ItemStack[4];
 	private OfflinePlayer player;
 
-	public SnapshotInventory(Player player) {
+	public VanishInventory(Player player) {
 		this.player = player;
 
 		setInventory();
@@ -32,7 +30,7 @@ public class SnapshotInventory implements SavedInventory {
 			for(int i = 0; i < 36; i++) {
 				ItemStack item = inv.getItem(i);
 				try {
-					items[i] = PersistenceNMS.checkItem(item, items[i]);
+					items[i] = item;
 				} catch (Exception ex) {
 					ChatUtils.sendWarning("There was a problem trying to save item " + item + " in slot " + i + ": ");
 					ex.printStackTrace();
@@ -40,7 +38,7 @@ public class SnapshotInventory implements SavedInventory {
 			}
 			ItemStack offhand = inv.getItemInOffHand();
 			try {
-				items[36] = PersistenceNMS.checkItem(offhand, items[36]);
+				items[36] = offhand;
 			} catch (Exception ex) {
 				ChatUtils.sendWarning("There was a problem trying to save item " + offhand + " in offhand slot: ");
 				ex.printStackTrace();
@@ -48,7 +46,7 @@ public class SnapshotInventory implements SavedInventory {
 			for(int i = 0; i < 4; i++) {
 				ItemStack item = inv.getArmorContents()[i];
 				try {
-					armor[i] = PersistenceNMS.checkItem(item, armor[i]);
+					armor[i] = item;
 				} catch (Exception ex) {
 					ChatUtils.sendWarning("There was a problem trying to save item " + item + " in armor slot " + i + ": ");
 					ex.printStackTrace();
@@ -58,4 +56,17 @@ public class SnapshotInventory implements SavedInventory {
 		}
 	}
 
+	public ItemStack[] getItems() {
+		ItemStack[] items = new ItemStack[41];
+		int i = 0;
+		for(ItemStack item: this.items) {
+			items[i] = item;
+			i++;
+		}
+		for(ItemStack item: armor) {
+			items[i] = item;
+			i++;
+		}
+		return items;
+	}
 }

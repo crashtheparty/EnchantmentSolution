@@ -67,7 +67,7 @@ public class YamlConfigBackup extends YamlConfig {
 		saveConfig();
 	}
 
-	private void update() {
+	public void update() {
 		for(Iterator<java.util.Map.Entry<String, YamlInfo>> it = configInventoryData.entrySet().iterator(); it.hasNext();) {
 			java.util.Map.Entry<String, YamlInfo> e = it.next();
 			if (contains(e.getKey())) {

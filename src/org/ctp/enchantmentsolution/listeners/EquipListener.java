@@ -128,7 +128,7 @@ public class EquipListener implements Listener {
 			if (armorEquipEvent.isCancelled()) {
 				ItemStack i = e.getBrokenItem().clone();
 				i.setAmount(1);
-				DamageUtils.setDamage(i, DamageUtils.getDamage(i.getItemMeta()) - 1);
+				DamageUtils.setDamage(i, DamageUtils.getDamage(i) - 1);
 				if (type.equals(ItemSlotType.HELMET)) p.getInventory().setHelmet(i);
 				else if (type.equals(ItemSlotType.CHESTPLATE)) p.getInventory().setChestplate(i);
 				else if (type.equals(ItemSlotType.LEGGINGS)) p.getInventory().setLeggings(i);

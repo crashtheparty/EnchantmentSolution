@@ -144,8 +144,13 @@ public class ItemUtils {
 		if (levels == null) return item;
 		ItemMeta meta = item.getItemMeta();
 		if (meta == null) return item;
+		List<EnchantmentLevel> remove = new ArrayList<EnchantmentLevel>();
 		for(EnchantmentLevel level: levels) {
 			if (level == null || level.getEnchant() == null) continue;
+			if (level.getLevel() < 1) {
+				remove.add(level);
+				continue;
+			}
 			if (item.getType() == Material.ENCHANTED_BOOK) ((EnchantmentStorageMeta) meta).addStoredEnchant(level.getEnchant().getRelativeEnchantment(), level.getLevel(), true);
 			else
 				meta.addEnchant(level.getEnchant().getRelativeEnchantment(), level.getLevel(), true);
@@ -157,6 +162,8 @@ public class ItemUtils {
 			meta = item.getItemMeta();
 		}
 		item.setItemMeta(meta);
+		for (EnchantmentLevel level : remove)
+			removeEnchantmentFromItem(item, level.getEnchant());
 		return item;
 	}
 

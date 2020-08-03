@@ -7,6 +7,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
+import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enums.BlockSound;
 import org.ctp.enchantmentsolution.enums.ItemBreakType;
 import org.ctp.enchantmentsolution.enums.MatData;
@@ -16,6 +17,7 @@ import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.VersionUtils;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.SmelteryMaterial;
 import org.ctp.enchantmentsolution.utils.compatibility.JobsUtils;
+import org.ctp.enchantmentsolution.utils.compatibility.QuestsUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 
 public class SmelteryUtils {
@@ -37,6 +39,7 @@ public class SmelteryUtils {
 				experience = (int) (Math.random() * 2);
 				fortune = data.getMaterialName().equals("NETHER_GOLD_ORE");
 			}
+			experience = AbilityUtils.setExp(experience, ItemUtils.getLevel(item, RegisterEnchantments.EXP_SHARE));
 			SmelteryEvent smelteryEvent = new SmelteryEvent(blockBroken, player, smelted, smeltery.getToMaterial(), experience, fortune);
 			Bukkit.getPluginManager().callEvent(smelteryEvent);
 
@@ -52,6 +55,7 @@ public class SmelteryUtils {
 				player.incrementStatistic(Statistic.USE_ITEM, item.getType());
 				McMMOHandler.handleMcMMO(event, item);
 				if (EnchantmentSolution.getPlugin().isJobsEnabled()) JobsUtils.sendBlockBreakAction(event);
+				QuestsUtils.handle(event);
 				DamageUtils.damageItem(player, item);
 				ItemUtils.dropItem(afterSmeltery, newBlock.getLocation());
 				Location loc = newBlock.getLocation().clone().add(0.5, 0.5, 0.5);
@@ -83,6 +87,7 @@ public class SmelteryUtils {
 				experience = (int) (Math.random() * 2);
 				fortune = data.getMaterialName().equals("NETHER_GOLD_ORE");
 			}
+			experience = AbilityUtils.setExp(experience, ItemUtils.getLevel(item, RegisterEnchantments.EXP_SHARE));
 			return new SmelteryEvent(blockBroken, player, smelted, smeltery.getToMaterial(), experience, fortune);
 		}
 		return null;
