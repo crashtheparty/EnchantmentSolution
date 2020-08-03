@@ -93,6 +93,10 @@ public class AnvilEnchantments extends GenerateEnchantments {
 			canCombine = false;
 			return;
 		}
+		if (RepairType.getRepairType(this) == RepairType.STICKY_REPAIR) {
+			canCombine = true;
+			return;
+		}
 		Map<Enchantment, Integer> enchantments = itemTwo.getItemMeta().getEnchants();
 		if (itemTwo.getType() == Material.ENCHANTED_BOOK) enchantments = ((EnchantmentStorageMeta) itemTwo.getItemMeta()).getStoredEnchants();
 
@@ -110,10 +114,6 @@ public class AnvilEnchantments extends GenerateEnchantments {
 					return;
 				}
 				canCombine = checkEnchantments(enchantments, item);
-				return;
-			}
-			if (RepairType.getRepairType(this) == RepairType.STICKY_REPAIR) {
-				canCombine = true;
 				return;
 			}
 		} else if (itemTwo.getType().equals(Material.ENCHANTED_BOOK) && enchantments.size() > 0) {

@@ -66,7 +66,9 @@ public class EnchantmentListener implements Listener {
 				if (item.getType() == Material.BOOK && ConfigString.USE_ENCHANTED_BOOKS.getBoolean()) item = ItemUtils.convertToEnchantedBook(item);
 				if (player.getGameMode() != GameMode.CREATIVE) player.setLevel(player.getLevel() - i - 1);
 				event.getInventory().setItem(0, item);
-				event.getInventory().removeItem(new ItemStack(Material.LAPIS_LAZULI, i + 1));
+				ItemStack lapis = event.getInventory().getItem(1).clone();
+				lapis.setAmount(i + 1);
+				event.getInventory().removeItem(lapis);
 				player.playSound(player.getLocation(), Sound.BLOCK_ENCHANTMENT_TABLE_USE, 1, 1);
 				player.setStatistic(Statistic.ITEM_ENCHANTED, player.getStatistic(Statistic.ITEM_ENCHANTED) + 1);
 				EnchantItemCriterion.enchantItemTrigger(player, item);
