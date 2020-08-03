@@ -71,14 +71,13 @@ public class FortuneUtils {
 			case "EMERALD_ORE":
 			case "COAL_ORE":
 			case "NETHER_QUARTZ_ORE":
-			case "NETHER_GOLD_ORE":
 			case "LAPIS_ORE":
 				itemBreak = ItemBreakType.getType(item.getType());
 				if (itemBreak != null && itemBreak.getBreakTypes().contains(brokenBlock.getType())) {
 					ItemStack fortunableItem = duplicate.get(0);
 					int multiply = (int) (Math.random() * level);
 					if (multiply > 1) {
-						fortunableItem.setAmount(fortunableItem.getAmount() * multiply);
+						fortunableItem.setAmount(1 * multiply);
 						priorItems.clear();
 						priorItems.add(fortunableItem);
 					}

@@ -12,8 +12,8 @@ import org.ctp.enchantmentsolution.EnchantmentSolution;
 
 public class HardModeConfiguration extends Configuration {
 
-	public HardModeConfiguration(File dataFolder, BackupDB db) {
-		super(EnchantmentSolution.getPlugin(), new File(dataFolder + "/hard.yml"), db);
+	public HardModeConfiguration(File dataFolder, BackupDB db, String[] header) {
+		super(EnchantmentSolution.getPlugin(), new File(dataFolder + "/hard.yml"), db, header);
 
 		migrateVersion();
 		if (getConfig() != null) getConfig().writeDefaults();

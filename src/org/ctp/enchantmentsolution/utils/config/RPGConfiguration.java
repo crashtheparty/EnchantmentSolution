@@ -19,8 +19,8 @@ import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 
 public class RPGConfiguration extends Configuration {
 
-	public RPGConfiguration(File dataFolder, BackupDB db) {
-		super(EnchantmentSolution.getPlugin(), new File(dataFolder + "/rpg.yml"), db);
+	public RPGConfiguration(File dataFolder, BackupDB db, String[] header) {
+		super(EnchantmentSolution.getPlugin(), new File(dataFolder + "/rpg.yml"), db, header);
 
 		migrateVersion();
 		if (getConfig() != null) getConfig().writeDefaults();

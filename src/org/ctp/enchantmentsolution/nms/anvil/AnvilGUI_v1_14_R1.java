@@ -18,6 +18,7 @@ public class AnvilGUI_v1_14_R1 extends AnvilGUI {
 	private class AnvilContainer extends ContainerAnvil {
 		public AnvilContainer(EntityHuman entity, int windowId) {
 			super(windowId, entity.inventory, at(entity.world, new BlockPosition(0, 0, 0)));
+			setTitle(new ChatMessage("container.anvil"));
 		}
 
 		@Override

@@ -14,8 +14,8 @@ public class LanguageConfiguration extends Configuration {
 
 	private ESLanguageFile language;
 
-	public LanguageConfiguration(File file, String languageFile, ESLanguageFile language, BackupDB db) {
-		super(EnchantmentSolution.getPlugin(), new File(file + "/" + languageFile), db, false);
+	public LanguageConfiguration(File file, String languageFile, ESLanguageFile language, BackupDB db, String[] header) {
+		super(EnchantmentSolution.getPlugin(), new File(file + "/" + languageFile), db, header, false);
 
 		this.language = language;
 

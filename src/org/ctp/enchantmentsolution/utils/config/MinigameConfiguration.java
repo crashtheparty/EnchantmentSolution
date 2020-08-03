@@ -15,8 +15,8 @@ import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 
 public class MinigameConfiguration extends Configuration {
 
-	public MinigameConfiguration(File dataFolder, BackupDB db) {
-		super(EnchantmentSolution.getPlugin(), new File(dataFolder + "/minigame.yml"), db);
+	public MinigameConfiguration(File dataFolder, BackupDB db, String[] header) {
+		super(EnchantmentSolution.getPlugin(), new File(dataFolder + "/minigame.yml"), db, header);
 
 		migrateVersion();
 		if (getConfig() != null) getConfig().writeDefaults();

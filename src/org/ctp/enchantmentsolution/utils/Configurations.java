@@ -58,14 +58,15 @@ public class Configurations implements CrashConfigurations {
 		}
 
 		BackupDB db = EnchantmentSolution.getPlugin().getDb();
+		String[] header = { "Enchantment Solution", "Plugin by", "crashtheparty" };
 		
-		CONFIG = new MainConfiguration(dataFolder, db);
-		FISHING = new FishingConfiguration(dataFolder, db);
-		ENCHANTMENTS = new EnchantmentsConfiguration(dataFolder, db);
-		ADVANCEMENTS = new AdvancementsConfiguration(dataFolder, db);
-		RPG = new RPGConfiguration(dataFolder, db);
-		MINIGAME = new MinigameConfiguration(dataFolder, db);
-		HARD_MODE = new HardModeConfiguration(dataFolder, db);
+		CONFIG = new MainConfiguration(dataFolder, db, header);
+		FISHING = new FishingConfiguration(dataFolder, db, header);
+		ENCHANTMENTS = new EnchantmentsConfiguration(dataFolder, db, header);
+		ADVANCEMENTS = new AdvancementsConfiguration(dataFolder, db, header);
+		RPG = new RPGConfiguration(dataFolder, db, header);
+		MINIGAME = new MinigameConfiguration(dataFolder, db, header);
+		HARD_MODE = new HardModeConfiguration(dataFolder, db, header);
 
 		String languageFile = CONFIG.getString("language_file");
 		Language lang = Language.getLanguage(CONFIG.getString("language"));
@@ -80,9 +81,9 @@ public class Configurations implements CrashConfigurations {
 		LANGUAGE_FILES.add(new ESLanguageFile(dataFolder, Language.CHINA_SIMPLE));
 
 		for(ESLanguageFile file: LANGUAGE_FILES)
-			if (file.getLanguage() == lang) LANGUAGE = new LanguageConfiguration(dataFolder, languageFile, file, db);
+			if (file.getLanguage() == lang) LANGUAGE = new LanguageConfiguration(dataFolder, languageFile, file, db, header);
 
-		if (LANGUAGE == null) LANGUAGE = new LanguageConfiguration(dataFolder, languageFile, LANGUAGE_FILES.get(0), db);
+		if (LANGUAGE == null) LANGUAGE = new LanguageConfiguration(dataFolder, languageFile, LANGUAGE_FILES.get(0), db, header);
 
 		File extras = new File(dataFolder + "/extras");
 

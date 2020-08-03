@@ -18,8 +18,8 @@ public class MainConfiguration extends Configuration {
 
 	private List<String> enchantingTypes = Arrays.asList("vanilla_30", "vanilla_30_custom", "enhanced_30", "enhanced_30_custom", "enhanced_50", "enhanced_50_custom");
 
-	public MainConfiguration(File dataFolder, BackupDB db) {
-		super(EnchantmentSolution.getPlugin(), new File(dataFolder + "/config.yml"), db);
+	public MainConfiguration(File dataFolder, BackupDB db, String[] header) {
+		super(EnchantmentSolution.getPlugin(), new File(dataFolder + "/config.yml"), db, header);
 
 		migrateVersion();
 		if (getConfig() != null) getConfig().writeDefaults();

@@ -21,8 +21,8 @@ import org.ctp.enchantmentsolution.utils.PermissionUtils;
 
 public class EnchantmentsConfiguration extends Configuration {
 
-	public EnchantmentsConfiguration(File dataFolder, BackupDB db) {
-		super(EnchantmentSolution.getPlugin(), new File(dataFolder + "/enchantments.yml"), db);
+	public EnchantmentsConfiguration(File dataFolder, BackupDB db, String[] header) {
+		super(EnchantmentSolution.getPlugin(), new File(dataFolder + "/enchantments.yml"), db, header);
 
 		migrateVersion();
 		if (getConfig() != null) getConfig().writeDefaults();

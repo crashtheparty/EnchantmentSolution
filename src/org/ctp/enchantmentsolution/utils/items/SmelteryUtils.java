@@ -11,6 +11,7 @@ import org.ctp.crashapi.utils.DamageUtils;
 import org.ctp.crashapi.utils.ItemUtils;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
+import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enums.ItemBreakType;
 import org.ctp.enchantmentsolution.events.blocks.SmelteryEvent;
 import org.ctp.enchantmentsolution.mcmmo.McMMOHandler;
@@ -40,6 +41,7 @@ public class SmelteryUtils {
 				experience = (int) (Math.random() * 2);
 				fortune = data.getMaterialName().equals("NETHER_GOLD_ORE");
 			}
+			experience = AbilityUtils.setExp(experience, EnchantmentUtils.getLevel(item, RegisterEnchantments.EXP_SHARE));
 			SmelteryEvent smelteryEvent = new SmelteryEvent(blockBroken, player, smelted, smeltery.getToMaterial(), experience, fortune);
 			Bukkit.getPluginManager().callEvent(smelteryEvent);
 
@@ -87,6 +89,7 @@ public class SmelteryUtils {
 				experience = (int) (Math.random() * 2);
 				fortune = data.getMaterialName().equals("NETHER_GOLD_ORE");
 			}
+			experience = AbilityUtils.setExp(experience, EnchantmentUtils.getLevel(item, RegisterEnchantments.EXP_SHARE));
 			return new SmelteryEvent(blockBroken, player, smelted, smeltery.getToMaterial(), experience, fortune);
 		}
 		return null;

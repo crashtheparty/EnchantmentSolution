@@ -12,10 +12,12 @@ import org.bukkit.entity.ExperienceOrb;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
+import org.ctp.crashapi.CrashAPI;
 import org.ctp.crashapi.utils.DamageUtils;
+import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.ParticleEffect;
+import org.ctp.enchantmentsolution.utils.player.ESPlayer;
 
 public class AbilityUtils {
 
@@ -51,13 +53,15 @@ public class AbilityUtils {
 
 	public static void giveExperience(Player player, int amount) {
 		List<ItemStack> items = new ArrayList<ItemStack>();
-		PlayerInventory playerInv = player.getInventory();
-		for(ItemStack i: playerInv.getArmorContents())
-			if (i != null && EnchantmentUtils.hasEnchantment(i, Enchantment.MENDING)) items.add(i);
-		if (playerInv.getItemInMainHand() != null && EnchantmentUtils.hasEnchantment(playerInv.getItemInMainHand(), Enchantment.MENDING)) items.add(playerInv.getItemInMainHand());
-		if (playerInv.getItemInOffHand() != null && EnchantmentUtils.hasEnchantment(playerInv.getItemInOffHand(), Enchantment.MENDING)) items.add(playerInv.getItemInOffHand());
+		int version = CrashAPI.getPlugin().getBukkitVersion().getVersionNumber();
+		ESPlayer esPlayer = EnchantmentSolution.getESPlayer(player);
+		for(ItemStack i: esPlayer.getEquipped())
+			if (i != null && EnchantmentUtils.hasEnchantment(i, Enchantment.MENDING)) {
+				if (version > 11 && DamageUtils.getDamage(i) == 0) continue;
+				items.add(i);
+			}
 
-		if (items.size() > 0) {
+		while (items.size() > 0) {
 			Collections.shuffle(items);
 			ItemStack item = items.get(0);
 			int durability = DamageUtils.getDamage(item);
@@ -67,8 +71,13 @@ public class AbilityUtils {
 			}
 			if (durability < 0) durability = 0;
 			DamageUtils.setDamage(item, durability);
-			if (amount > 0) player.giveExp(amount);
-		} else
+			if (version <= 11 && amount > 0) {
+				player.giveExp(amount);
+				break;
+			}
+			items.remove(0);
+		}
+		if (amount > 0)
 			player.giveExp(amount);
 	}
 

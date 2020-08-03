@@ -13,8 +13,8 @@ import org.ctp.enchantmentsolution.utils.Configurations;
 
 public class AdvancementsConfiguration extends Configuration {
 
-	public AdvancementsConfiguration(File dataFolder, BackupDB db) {
-		super(EnchantmentSolution.getPlugin(), new File(dataFolder + "/advancements.yml"), db, true);
+	public AdvancementsConfiguration(File dataFolder, BackupDB db, String[] header) {
+		super(EnchantmentSolution.getPlugin(), new File(dataFolder + "/advancements.yml"), db, header, true);
 
 		migrateVersion();
 		save();
