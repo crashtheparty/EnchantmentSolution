@@ -139,7 +139,6 @@ public class MainConfiguration extends Configuration {
 	@Override
 	public void repairConfig() {
 		YamlConfigBackup config = getConfig();
-		ChatUtils.sendInfo("Repair Config: " + config.getInt("anvil.level_divisor"));
 		if (config.getInt("anvil.level_divisor") <= 0) config.set("anvil.level_divisor", 4);
 	}
 

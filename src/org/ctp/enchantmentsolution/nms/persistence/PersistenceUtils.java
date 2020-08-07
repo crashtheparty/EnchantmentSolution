@@ -187,9 +187,12 @@ public class PersistenceUtils {
 			repaired += " " + pieces[i];
 		PersistentDataContainer container = meta.getPersistentDataContainer();
 		for(CustomEnchantment ench: RegisterEnchantments.getEnchantments()) {
-			if (ench.getDisplayName().startsWith(repaired)) return new EnchResult(true, true, ench);
-			String oldDisplayName = container.get(EnchantmentSolution.getKey(ench.getName()), t);
-			if (oldDisplayName != null && oldDisplayName.equals(repaired)) return new EnchResult(true, true, ench);
+			NamespacedKey key = EnchantmentSolution.getKey(ench.getName());
+			if (container.has(key, t)) {
+				if (ench.getDisplayName().equals(repaired)) return new EnchResult(true, true, ench);
+				String oldDisplayName = container.get(key, t);
+				if (oldDisplayName != null && oldDisplayName.equals(repaired)) return new EnchResult(true, true, ench);
+			}
 		}
 		return new EnchResult(false, false, null);
 	}

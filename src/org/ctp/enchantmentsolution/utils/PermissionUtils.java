@@ -22,8 +22,9 @@ public class PermissionUtils {
 
 	public static void addPermissions(EnchantmentLevel level) {
 		List<Permission> permissions = getPermissions(level);
-		permissions.add(new Permission("enchantmentsolution." + level.getEnchant().getName() + ".table.level" + level.getLevel(), PermissionDefault.FALSE));
-		permissions.add(new Permission("enchantmentsolution." + level.getEnchant().getName() + ".anvil.level" + level.getLevel(), PermissionDefault.FALSE));
+		String name = level.getEnchant().getName().toLowerCase();
+		permissions.add(new Permission("enchantmentsolution." + name + ".table.level" + level.getLevel(), PermissionDefault.FALSE));
+		permissions.add(new Permission("enchantmentsolution." + name + ".anvil.level" + level.getLevel(), PermissionDefault.FALSE));
 		for(Permission p: permissions)
 			if (Bukkit.getPluginManager().getPermission(p.getName()) == null) Bukkit.getPluginManager().addPermission(p);
 		PERMISSIONS.put(level, permissions);
@@ -52,7 +53,7 @@ public class PermissionUtils {
 			if (player.hasPermission("enchantmentsolution.permissions.ignore")) return true;
 			String namespace = getNamespace(enchant);
 			String path = namespace + "." + enchant.getName().toLowerCase() + ".advanced.permissions.table.level";
-			String permission = namespace + "." + enchant.getName().toLowerCase() + ".table.level";
+			String permission = "enchantmentsolution." + enchant.getName().toLowerCase() + ".table.level";
 			return checkPermission(player, level, path, permission);
 		}
 
@@ -65,7 +66,7 @@ public class PermissionUtils {
 			if (player.hasPermission("enchantmentsolution.permissions.ignore")) return true;
 			String namespace = getNamespace(enchant);
 			String path = namespace + "." + enchant.getName().toLowerCase() + ".advanced.permissions.anvil.level";
-			String permission = namespace + "." + enchant.getName().toLowerCase() + ".anvil.level";
+			String permission = "enchantmentsolution." + enchant.getName().toLowerCase() + ".anvil.level";
 			return checkPermission(player, level, path, permission);
 		}
 
@@ -87,7 +88,7 @@ public class PermissionUtils {
 
 	private static boolean checkPermission(Player player, int level, String path, String permission) {
 		for(int i = 0; i < level; i++)
-			if (Configurations.getEnchantments().getBoolean(path + (i + 1))) if (!player.hasPermission(permission + (i + 1))) return false;
+			if (Configurations.getEnchantments().getBoolean(path + (i + 1)) && !player.hasPermission(permission + (i + 1))) return false;
 		return true;
 	}
 

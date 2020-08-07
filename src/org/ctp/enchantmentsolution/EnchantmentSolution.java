@@ -393,9 +393,7 @@ public class EnchantmentSolution extends JavaPlugin {
 			Quests.get();
 			quests = true;
 			ChatUtils.sendInfo("Quests compatibility enabled!");
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
+		} catch (Exception ex) {}
 	}
 
 	public boolean getMMOItems() {

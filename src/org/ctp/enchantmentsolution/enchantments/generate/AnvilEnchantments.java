@@ -58,6 +58,8 @@ public class AnvilEnchantments extends GenerateEnchantments {
 	public enum RepairType {
 		RENAME, REPAIR, COMBINE, STICKY_REPAIR;
 
+		private static List<RepairType> willRepair = Arrays.asList(REPAIR, COMBINE, STICKY_REPAIR);
+
 		public static RepairType getRepairType(AnvilEnchantments enchant) {
 			if (enchant == null) return null;
 			if (enchant.getItemTwo() == null) return RepairType.RENAME;
@@ -69,6 +71,10 @@ public class AnvilEnchantments extends GenerateEnchantments {
 				return RepairType.COMBINE;
 			}
 			return null;
+		}
+
+		public static boolean willRepair(RepairType repairType) {
+			return willRepair.contains(repairType);
 		}
 	}
 
@@ -84,6 +90,7 @@ public class AnvilEnchantments extends GenerateEnchantments {
 			canCombine = false;
 			return;
 		}
+
 		ItemData dataTwo = new ItemData(itemTwo);
 		ItemType typeTwo = ItemType.getAnvilType(dataTwo);
 		List<ItemData> items = typeOne.getAnvilMaterials();
@@ -152,7 +159,10 @@ public class AnvilEnchantments extends GenerateEnchantments {
 		}
 		if (repairType == RepairType.STICKY_REPAIR) {
 			int amount = itemTwo.getAmount();
-			if (amount <= 4) return;
+			if (amount < 4) {
+				combinedItem = null;
+				return;
+			}
 			amount -= 4;
 			if (amount > 0) {
 				itemTwoLeftover = itemTwo.clone();
