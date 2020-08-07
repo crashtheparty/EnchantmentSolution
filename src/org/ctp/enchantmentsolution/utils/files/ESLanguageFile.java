@@ -21,7 +21,7 @@ public class ESLanguageFile extends CrashLanguageFile {
 		YamlConfig config = getConfig();
 		config.getFromConfig();
 		
-		File tempFile = CrashConfigUtils.getTempFile("/resources/" + language.getLocale() + ".yml");
+		File tempFile = CrashConfigUtils.getTempFile(getClass(), "/resources/" + language.getLocale() + ".yml");
 		YamlConfig defaultConfig = new YamlConfig(tempFile, new String[] {});
 		defaultConfig.getFromConfig();
 		for(String str: defaultConfig.getAllEntryKeys())

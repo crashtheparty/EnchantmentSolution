@@ -488,8 +488,7 @@ public class EnchantmentSolution extends CrashAPIPlugin {
 
 	@Override
 	public String getStarter() {
-		// TODO Auto-generated method stub
-		return null;
+		return getLanguageFile().getString("starter");
 	}
 
 	@Override
