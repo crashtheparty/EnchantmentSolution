@@ -16,6 +16,7 @@ import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enums.BlockSound;
 import org.ctp.enchantmentsolution.enums.ItemBreakType;
+import org.ctp.enchantmentsolution.events.ItemEquipEvent.HandMethod;
 import org.ctp.enchantmentsolution.events.blocks.SmelteryEvent;
 import org.ctp.enchantmentsolution.events.blocks.TelepathyEvent;
 import org.ctp.enchantmentsolution.events.blocks.TelepathyEvent.TelepathyType;
@@ -122,7 +123,7 @@ public class TelepathyUtils {
 				for(int j = lowBound; j < highBound; j++)
 					inv.clear(j);
 				damageItem(event);
-				ItemUtils.giveItemsToPlayer(telepathy.getPlayer(), telepathy.getDrops(), telepathy.getPlayer().getLocation(), true);
+				ItemUtils.giveItemsToPlayer(telepathy.getPlayer(), telepathy.getDrops(), telepathy.getPlayer().getLocation(), true, HandMethod.PICK_UP);
 			}
 			return;
 		}
@@ -187,7 +188,7 @@ public class TelepathyUtils {
 				AdvancementUtils.awardCriteria(player, ESAdvancement.OVER_9000, "stone", 1);
 			}
 			if (telepathy.getType() == TelepathyType.SHULKER_BOX) AdvancementUtils.awardCriteria(player, ESAdvancement.HEY_IT_WORKS, "shulker_box");
-			ItemUtils.giveItemsToPlayer(telepathy.getPlayer(), telepathy.getDrops(), telepathy.getPlayer().getLocation(), true);
+			ItemUtils.giveItemsToPlayer(telepathy.getPlayer(), telepathy.getDrops(), telepathy.getPlayer().getLocation(), true, HandMethod.PICK_UP);
 		}
 		return telepathy;
 	}

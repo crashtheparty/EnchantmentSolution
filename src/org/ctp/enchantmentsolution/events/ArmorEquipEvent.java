@@ -107,6 +107,10 @@ public final class ArmorEquipEvent extends PlayerEvent implements Cancellable {
 		/**
 		 * When you join the server.
 		 */
-		JOIN,;
+		JOIN,
+		/**
+		 * When equipping an item from commands/other
+		 */
+		COMMAND;
 	}
 }

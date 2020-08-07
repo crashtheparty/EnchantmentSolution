@@ -29,6 +29,7 @@ import org.ctp.enchantmentsolution.events.modify.IcarusLaunchEvent;
 import org.ctp.enchantmentsolution.listeners.Enchantmentable;
 import org.ctp.enchantmentsolution.nms.PersistenceNMS;
 import org.ctp.enchantmentsolution.nms.animalmob.AnimalMob;
+import org.ctp.enchantmentsolution.threads.IcarusThread;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.LocationUtils;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.FlowerGiftDrop;
@@ -121,6 +122,11 @@ public class PlayerListener extends Enchantmentable {
 					player.getWorld().spawnParticle(Particle.CLOUD, player.getLocation(), 250, 2, 2, 2);
 					player.getWorld().playSound(player.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 1, 1);
 					esPlayer.setIcarusDelay(icarus.getSecondDelay());
+					IcarusThread thread = IcarusThread.createThread(player);
+					if (!thread.isRunning()) {
+						int scheduler = Bukkit.getScheduler().scheduleSyncRepeatingTask(EnchantmentSolution.getPlugin(), thread, 0l, 20l);
+						thread.setScheduler(scheduler);
+					}
 				}
 			}
 		}

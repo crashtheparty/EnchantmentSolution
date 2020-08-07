@@ -23,7 +23,7 @@ import org.ctp.enchantmentsolution.inventory.rpg.RPGInventory;
 import org.ctp.enchantmentsolution.nms.PersistenceNMS;
 import org.ctp.enchantmentsolution.rpg.RPGPlayer;
 import org.ctp.enchantmentsolution.rpg.RPGUtils;
-import org.ctp.enchantmentsolution.threads.SnapshotRunnable;
+import org.ctp.enchantmentsolution.threads.SnapshotThread;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.Configurations;
 import org.ctp.enchantmentsolution.utils.StringUtils;
@@ -125,7 +125,7 @@ public class CommandUtils {
 				}
 			}
 
-			SnapshotRunnable.updateInventory(fixPlayer);
+			SnapshotThread.updateInventory(fixPlayer);
 			HashMap<String, Object> codes = ChatUtils.getCodes();
 			codes.put("%player%", player.getName());
 			codes.put("%fix_player%", fixPlayer.getName());

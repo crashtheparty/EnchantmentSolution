@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
-import org.ctp.enchantmentsolution.enums.MatData;
 
 /**
  * @author Arnah
@@ -41,5 +40,12 @@ public enum ItemSlotType {
 
 	public EquipmentSlot getEquipmentSlot() {
 		return equipmentSlot;
+	}
+
+	public final static ItemSlotType getTypeFromSlot(int slot) {
+		int modifiedSlot = slot - 32;
+		for(ItemSlotType value: values())
+			if (value.getSlot() == modifiedSlot) return value;
+		return null;
 	}
 }

@@ -2,9 +2,7 @@ package org.ctp.enchantmentsolution.utils.player;
 
 import java.util.*;
 
-import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
-import org.bukkit.OfflinePlayer;
+import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -71,6 +69,11 @@ public class ESPlayer {
 	public void reloadPlayer() {
 		for(Player p: Bukkit.getOnlinePlayers())
 			if (p.getUniqueId().equals(player.getUniqueId())) onlinePlayer = p;
+	}
+
+	public ItemStack getOffhand() {
+		if (!isOnline()) return new ItemStack(Material.AIR);
+		return getOnlinePlayer().getInventory().getItemInOffHand();
 	}
 
 	public ItemStack[] getArmor() {
@@ -282,7 +285,7 @@ public class ESPlayer {
 			if (player.isFlying() && !this.canFly) player.setFlying(false);
 		}
 	}
-	
+
 	public void logoutFlyer() {
 		currentFFType = FFType.NONE;
 		canFly = false;

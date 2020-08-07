@@ -39,7 +39,6 @@ import org.ctp.enchantmentsolution.events.teleport.WarpPlayerEvent;
 import org.ctp.enchantmentsolution.listeners.Enchantmentable;
 import org.ctp.enchantmentsolution.nms.ItemNMS;
 import org.ctp.enchantmentsolution.rpg.RPGUtils;
-import org.ctp.enchantmentsolution.threads.ElytraRunnable;
 import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 import org.ctp.enchantmentsolution.utils.player.ESPlayer;
 
@@ -337,8 +336,8 @@ public class RPGListener extends Enchantmentable implements Runnable {
 	public void run() {
 		if (!RPGUtils.isEnabled()) return;
 		for(Player player: Bukkit.getOnlinePlayers()) {
-			if (ElytraRunnable.didTick(player)) {
-				ESPlayer esPlayer = EnchantmentSolution.getESPlayer(player);
+			ESPlayer esPlayer = EnchantmentSolution.getESPlayer(player);
+			if (esPlayer.didTick()) {
 				ItemStack item = esPlayer.getElytra();
 				if (item != null) giveExperience(player, RegisterEnchantments.FREQUENT_FLYER, ItemUtils.getLevel(item, RegisterEnchantments.FREQUENT_FLYER));
 			}

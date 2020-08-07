@@ -284,4 +284,3 @@ config_comments:
             - 'The maximum blocks broken per tick per player using Height/Width/Depth++'
             global:
             - 'The maximum blocks broken per tick globally using Height/Width/Depth++'
-

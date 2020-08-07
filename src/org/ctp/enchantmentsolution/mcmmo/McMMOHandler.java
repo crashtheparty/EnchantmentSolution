@@ -14,6 +14,7 @@ import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enchantments.generate.FishingEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
+import org.ctp.enchantmentsolution.events.ItemEquipEvent.HandMethod;
 import org.ctp.enchantmentsolution.events.drops.SmelteryBonusDropsEvent;
 import org.ctp.enchantmentsolution.events.drops.TelepathyBonusDropsEvent;
 import org.ctp.enchantmentsolution.utils.VersionUtils;
@@ -49,7 +50,7 @@ public class McMMOHandler {
 					if (!telepathyBonus.isCancelled()) {
 						int num = telepathyBonus.getMultiplyAmount();
 						while (num > 0) {
-							ItemUtils.giveItemsToPlayer(telepathyBonus.getPlayer(), telepathyBonus.getDrops(), telepathyBonus.getPlayer().getLocation(), true);
+							ItemUtils.giveItemsToPlayer(telepathyBonus.getPlayer(), telepathyBonus.getDrops(), telepathyBonus.getPlayer().getLocation(), true, HandMethod.PICK_UP);
 							num--;
 						}
 					}

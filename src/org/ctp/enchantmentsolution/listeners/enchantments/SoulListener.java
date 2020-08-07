@@ -25,7 +25,7 @@ import org.ctp.enchantmentsolution.utils.player.ESPlayer;
 public class SoulListener extends Enchantmentable {
 
 	@EventHandler(priority = EventPriority.HIGHEST)
-	public void onDeathListener(PlayerDeathEvent event) {
+	public void onPlayerDeath(PlayerDeathEvent event) {
 		runMethod(this, "soulbound", event, PlayerDeathEvent.class);
 	}
 

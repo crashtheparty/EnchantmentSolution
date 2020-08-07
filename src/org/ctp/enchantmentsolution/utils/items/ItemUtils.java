@@ -3,14 +3,13 @@ package org.ctp.enchantmentsolution.utils.items;
 import java.util.*;
 import java.util.Map.Entry;
 
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Statistic;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.Container;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BlockStateMeta;
@@ -23,7 +22,11 @@ import org.ctp.enchantmentsolution.enchantments.CustomEnchantmentWrapper;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.enums.*;
+import org.ctp.enchantmentsolution.events.ItemAddEvent;
+import org.ctp.enchantmentsolution.events.ItemEquipEvent;
+import org.ctp.enchantmentsolution.events.ItemEquipEvent.HandMethod;
 import org.ctp.enchantmentsolution.nms.PersistenceNMS;
+import org.ctp.enchantmentsolution.utils.Configurations;
 import org.ctp.enchantmentsolution.utils.ESArrays;
 import org.ctp.enchantmentsolution.utils.compatibility.MMOUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
@@ -32,27 +35,61 @@ public class ItemUtils {
 
 	public static void giveItemsToPlayer(Player player, Collection<ItemStack> drops, Location fallback,
 	boolean statistic) {
+		giveItemsToPlayer(player, drops, fallback, statistic, HandMethod.COMMAND);
+	}
+
+	public static void giveItemsToPlayer(Player player, Collection<ItemStack> drops, Location fallback,
+	boolean statistic, HandMethod method) {
 		for(ItemStack drop: drops)
-			giveItemToPlayer(player, drop, fallback, statistic);
+			giveItemToPlayer(player, drop, fallback, statistic, method);
 	}
 
 	public static void giveItemToPlayer(Player player, ItemStack item, Location fallback, boolean statistic) {
-		HashMap<Integer, ItemStack> leftOver = new HashMap<Integer, ItemStack>();
-		int amount = item.getAmount();
-		leftOver.putAll(player.getInventory().addItem(item));
+		giveItemToPlayer(player, item, fallback, statistic, HandMethod.COMMAND);
+	}
+
+	public static void giveItemToPlayer(Player player, ItemStack item, Location fallback, boolean statistic, HandMethod method) {
+		int addedAmount = 0;
+		addedAmount += addItems(player, item, method, false);
+		if (item.getAmount() > 0) addedAmount += addItems(player, item, method, true);
 		Location fallbackClone = fallback.clone();
-		boolean dropNaturally = ConfigString.DROP_ITEMS_NATURALLY.getBoolean();
-		if (!leftOver.isEmpty()) for(Iterator<Entry<Integer, ItemStack>> it = leftOver.entrySet().iterator(); it.hasNext();) {
-			Entry<Integer, ItemStack> e = it.next();
-			amount -= e.getValue().getAmount();
-			if (!dropNaturally) {
-				Item droppedItem = fallbackClone.getWorld().dropItem(fallbackClone, e.getValue());
-				droppedItem.setVelocity(new Vector(0, 0, 0));
-				droppedItem.teleport(fallbackClone);
-			} else
-				fallbackClone.getWorld().dropItemNaturally(fallbackClone, item);
+		boolean dropNaturally = Configurations.getConfig().getBoolean("drop_items_naturally");
+		if (item.getAmount() > 0 && !dropNaturally) {
+			Item droppedItem = fallbackClone.getWorld().dropItem(fallbackClone, item);
+			droppedItem.setVelocity(new Vector(0, 0, 0));
+			droppedItem.teleport(fallbackClone);
+		} else if (item.getAmount() > 0) fallbackClone.getWorld().dropItemNaturally(fallbackClone, item);
+		if (addedAmount > 0 && statistic) player.incrementStatistic(Statistic.PICKUP, item.getType(), addedAmount);
+	}
+	
+	private static int addItems(Player player, ItemStack item, HandMethod method, boolean empty) {
+		int addedAmount = 0;
+		for(int i = 0; i < 36; i++) {
+			ItemStack prevItem = null;
+			if (player.getInventory().getItem(i) != null) prevItem = player.getInventory().getItem(i).clone();
+			
+			if (empty && (prevItem == null || MatData.isAir(prevItem.getType())) || !empty && prevItem != null && prevItem.isSimilar(item)) {
+				Event event = null;
+				ItemStack finalItem = player.getInventory().getItem(i);
+				if (finalItem == null || MatData.isAir(finalItem.getType())) {
+					finalItem = item.clone();
+					addedAmount += item.getAmount();
+					item.setAmount(0);
+					player.getInventory().setItem(i, finalItem);
+				} else {
+					int amount = Math.min(prevItem.getType().getMaxStackSize(), prevItem.getAmount() + item.getAmount());
+					int leftover = prevItem.getAmount() + item.getAmount() - amount;
+					addedAmount += item.getAmount() - amount;
+					item.setAmount(leftover);
+					finalItem.setAmount(amount);
+				}
+				if (i == player.getInventory().getHeldItemSlot()) event = new ItemEquipEvent(player, method, ItemSlotType.MAIN_HAND, prevItem, finalItem);
+				else
+					event = new ItemAddEvent(player, finalItem);
+				Bukkit.getPluginManager().callEvent(event);
+			}
 		}
-		if (amount > 0 && statistic) player.incrementStatistic(Statistic.PICKUP, item.getType(), amount);
+		return addedAmount;
 	}
 
 	public static void dropItems(Collection<ItemStack> drops, Location loc) {

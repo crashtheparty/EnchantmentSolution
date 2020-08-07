@@ -9,7 +9,7 @@ import org.ctp.enchantmentsolution.utils.Reflectionable;
 import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 
 @SuppressWarnings("unused")
-public class AbilityRunnable implements Runnable, Reflectionable {
+public class AbilityThreads implements Runnable, Reflectionable {
 
 	@Override
 	public void run() {

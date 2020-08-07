@@ -9,14 +9,14 @@ import org.bukkit.entity.Player;
 import org.ctp.enchantmentsolution.inventory.snapshot.SnapshotInventory;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 
-public class SnapshotRunnable implements Runnable {
+public class SnapshotThread implements Runnable {
 
 	private static Map<UUID, SnapshotInventory> INVENTORIES = new HashMap<UUID, SnapshotInventory>();
 	private Player[] players;
 	private int runnable = 0, current = 0;
 	private boolean run = true;
 
-	public SnapshotRunnable() {
+	public SnapshotThread() {
 		setRunnable();
 	}
 

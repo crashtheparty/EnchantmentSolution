@@ -12,6 +12,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.ctp.crashapi.events.ItemAddEvent;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.*;
@@ -27,6 +28,7 @@ import org.ctp.enchantmentsolution.events.potion.PotionEventType;
 import org.ctp.enchantmentsolution.events.potion.UnrestPotionEvent;
 import org.ctp.enchantmentsolution.listeners.Enchantmentable;
 import org.ctp.enchantmentsolution.nms.DamageEvent;
+import org.ctp.enchantmentsolution.threads.*;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.ESArrays;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.ItemEquippedSlot;
@@ -57,18 +59,31 @@ public class AttributeListener extends Enchantmentable {
 		itemEquip(event.getPlayer(), event.getNewItem(), event.getSlot(), true, event.getMethod() == HandMethod.JOIN);
 	}
 
+	@EventHandler(priority = EventPriority.HIGHEST)
+	public void onItemAdd(ItemAddEvent event) {
+		ItemStack item = event.getItem();
+		if (item != null && ItemUtils.hasEnchantment(item, RegisterEnchantments.CURSE_OF_CONTAGION)) {
+			ContagionCurseThread thread = ContagionCurseThread.createThread(event.getPlayer());
+			if (!thread.isRunning()) {
+				int scheduler = Bukkit.getScheduler().scheduleSyncRepeatingTask(EnchantmentSolution.getPlugin(), thread, 0l, 1l);
+				thread.setScheduler(scheduler);
+			}
+		}
+	}
+
 	private void itemEquip(Player player, ItemStack item, ItemSlotType type, boolean equip, boolean join) {
+		ESPlayer esPlayer = EnchantmentSolution.getESPlayer(player);
 		if (item != null && item.hasItemMeta()) {
 			Iterator<EnchantmentLevel> iterator = ItemUtils.getEnchantmentLevels(item).iterator();
 
 			start: while (iterator.hasNext()) {
 				EnchantmentLevel level = iterator.next();
 				if (level == null || level.getEnchant() == null) continue; // not an ES enchantment, or possibly a disabled enchantment, so don't bother
+				Enchantment relative = level.getEnchant().getRelativeEnchantment();
 				if (attributes.containsKey(level.getEnchant().getRelativeEnchantment())) {
 					Attributable a = attributes.get(level.getEnchant().getRelativeEnchantment());
 					for(ItemEquippedSlot slot: a.getTypes())
 						if (slot.getType() == type) {
-							ESPlayer esPlayer = EnchantmentSolution.getESPlayer(player);
 							Iterator<AttributeLevel> iter = esPlayer.getAttributes().iterator();
 							if (equip) {
 								if (a.getEnchantment() == RegisterEnchantments.LIFE) while (iter.hasNext()) {
@@ -171,13 +186,39 @@ public class AttributeListener extends Enchantmentable {
 						if (player.getStatistic(Statistic.TIME_SINCE_REST) > 72000 && player.getWorld().getEnvironment() == Environment.NORMAL && player.getWorld().getTime() > 12540 && player.getWorld().getTime() < 23459) AdvancementUtils.awardCriteria(player, ESAdvancement.COFFEE_BREAK, "coffee");
 						if (player.getStatistic(Statistic.TIME_SINCE_REST) > 0) player.setStatistic(Statistic.TIME_SINCE_REST, 0);
 					}
-				} else if (level.getEnchant() == CERegister.MAGIC_GUARD && type == ItemSlotType.OFF_HAND && equip) for(PotionEffectType potionEffect: ESArrays.getBadPotions())
-					if (player.hasPotionEffect(potionEffect)) {
-						MagicGuardPotionEvent event = new MagicGuardPotionEvent(player, potionEffect);
-						Bukkit.getPluginManager().callEvent(event);
+				} else if (level.getEnchant() == CERegister.MAGIC_GUARD && type == ItemSlotType.OFF_HAND && equip) {
+					for(PotionEffectType potionEffect: ESArrays.getBadPotions())
+						if (player.hasPotionEffect(potionEffect)) {
+							MagicGuardPotionEvent event = new MagicGuardPotionEvent(player, potionEffect);
+							Bukkit.getPluginManager().callEvent(event);
 
-						if (!event.isCancelled()) player.removePotionEffect(potionEffect);
-					} else { /* placeholder */ }
+							if (!event.isCancelled()) player.removePotionEffect(potionEffect);
+						} else { /* placeholder */ }
+
+					MagicGuardThread thread = MagicGuardThread.createThread(player);
+					if (!thread.isRunning()) {
+						int scheduler = Bukkit.getScheduler().scheduleSyncRepeatingTask(EnchantmentSolution.getPlugin(), thread, 0l, 1l);
+						thread.setScheduler(scheduler);
+					}
+				} else if (relative == RegisterEnchantments.FREQUENT_FLYER && equip) {
+					FrequentFlyerThread thread = FrequentFlyerThread.createThread(player);
+					if (!thread.isRunning()) {
+						int scheduler = Bukkit.getScheduler().scheduleSyncRepeatingTask(EnchantmentSolution.getPlugin(), thread, 0l, 1l);
+						thread.setScheduler(scheduler);
+					}
+				} else if (relative == RegisterEnchantments.FORCE_FEED && equip) {
+					ForceFeedThread thread = ForceFeedThread.createThread(player);
+					if (!thread.isRunning()) {
+						int scheduler = Bukkit.getScheduler().scheduleSyncRepeatingTask(EnchantmentSolution.getPlugin(), thread, 0l, 1l);
+						thread.setScheduler(scheduler);
+					}
+				} else if (relative == RegisterEnchantments.CURSE_OF_EXHAUSTION && equip) {
+					ExhaustionCurseThread thread = ExhaustionCurseThread.createThread(player);
+					if (!thread.isRunning()) {
+						int scheduler = Bukkit.getScheduler().scheduleSyncRepeatingTask(EnchantmentSolution.getPlugin(), thread, 0l, 1l);
+						thread.setScheduler(scheduler);
+					}
+				}
 			}
 		}
 	}
