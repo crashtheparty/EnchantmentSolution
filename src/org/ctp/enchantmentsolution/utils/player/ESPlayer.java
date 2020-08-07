@@ -5,6 +5,8 @@ import java.util.*;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.attribute.AttributeModifier;
+import org.bukkit.attribute.AttributeModifier.Operation;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -25,6 +27,7 @@ import org.ctp.enchantmentsolution.utils.abilityhelpers.OverkillDeath;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 import org.ctp.enchantmentsolution.utils.items.AbilityUtils;
 import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
+import org.ctp.enchantmentsolution.utils.player.attributes.FlySpeedAttribute;
 
 public class ESPlayer {
 
@@ -39,10 +42,11 @@ public class ESPlayer {
 	private float currentExhaustion, pastExhaustion;
 	private ItemStack elytra;
 	private boolean canFly, didTick, reset;
-	private int underLimit, aboveLimit, under, above, frequentFlyerLevel, icarusDelay;
+	private int flightDamage, flightDamageLimit, frequentFlyerLevel, icarusDelay;
 	private FFType currentFFType;
 	private List<OverkillDeath> overkillDeaths;
 	private List<AttributeLevel> attributes;
+	private ESPlayerAttributeInstance flyAttribute = new FlySpeedAttribute();
 
 	public ESPlayer(OfflinePlayer player) {
 		this.player = player;
@@ -54,6 +58,7 @@ public class ESPlayer {
 		attributes = new ArrayList<AttributeLevel>();
 		currentFFType = FFType.NONE;
 		removeSoulItems();
+		flyAttribute.addModifier(new AttributeModifier(UUID.fromString("ffffffff-ffff-ffff-ffff-000000000000"), "frequentFlyerFlight", -0.08, Operation.ADD_NUMBER));
 	}
 
 	public OfflinePlayer getPlayer() {
@@ -222,16 +227,19 @@ public class ESPlayer {
 	}
 
 	public void setFrequentFlyer() {
-		underLimit = 0;
-		aboveLimit = 0;
 		boolean fly = frequentFlyerLevel > 0 && elytra != null;
-		underLimit = frequentFlyerLevel * 4 * 20;
-		aboveLimit = frequentFlyerLevel * 20;
+		flightDamageLimit = 60;
 		setCanFly(fly);
-		if (reset) {
-			under = underLimit;
-			above = aboveLimit;
-		}
+		setFlightSpeed(fly);
+		if (reset) flightDamage = flightDamageLimit;
+	}
+
+	private void setFlightSpeed(boolean canFly) {
+		if (canFly) {
+			flyAttribute.removeModifier(UUID.fromString("ffffffff-ffff-ffff-ffff-000000001111"));
+			flyAttribute.addModifier(new AttributeModifier(UUID.fromString("ffffffff-ffff-ffff-ffff-000000001111"), "frequentFlyerLevel", 0.016 * frequentFlyerLevel, Operation.ADD_NUMBER));
+			player.getPlayer().setFlySpeed((float) flyAttribute.getValue());
+		} else if (player.isOnline()) player.getPlayer().setFlySpeed((float) flyAttribute.getDefaultValue());
 	}
 
 	public boolean canFly(boolean online) {
@@ -282,7 +290,7 @@ public class ESPlayer {
 			if (player.isFlying() && !this.canFly) player.setFlying(false);
 		}
 	}
-	
+
 	public void logoutFlyer() {
 		currentFFType = FFType.NONE;
 		canFly = false;
@@ -291,31 +299,19 @@ public class ESPlayer {
 		getOnlinePlayer().setAllowFlight(false);
 	}
 
-	public int getUnder() {
-		return under;
+	public int getFlightDamage() {
+		return flightDamage;
 	}
 
 	public void minus() {
 		Player player = getOnlinePlayer();
 		if (player.getLocation().getY() >= 12000) AdvancementUtils.awardCriteria(player, ESAdvancement.CRUISING_ALTITUDE, "elytra");
-		if (player.getLocation().getY() > 255) {
-			above = above - 1;
-			if (above <= 0) {
-				if (elytra != null) DamageUtils.damageItem(player, elytra);
-				above = aboveLimit;
-			}
-		} else {
-			under = under - 1;
-			if (under <= 0) {
-				if (elytra != null) DamageUtils.damageItem(player, elytra);
-				under = underLimit;
-			}
+		flightDamage --;
+		if (flightDamage <= 0) {
+			if (elytra != null) DamageUtils.damageItem(player, elytra);
+			flightDamage = flightDamageLimit;
 		}
 		setDidTick(true);
-	}
-
-	public int getAbove() {
-		return above;
 	}
 
 	public void setDidTick(boolean b) {
