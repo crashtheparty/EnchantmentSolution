@@ -23,9 +23,8 @@ import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.*;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
-import org.ctp.enchantmentsolution.events.potion.MagicGuardPotionEvent;
-import org.ctp.enchantmentsolution.events.potion.PotionEventType;
-import org.ctp.enchantmentsolution.events.potion.UnrestPotionEvent;
+import org.ctp.enchantmentsolution.events.player.ESPotionEffectEvent;
+import org.ctp.enchantmentsolution.events.potion.*;
 import org.ctp.enchantmentsolution.listeners.Enchantmentable;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.ESArrays;
@@ -36,6 +35,7 @@ import org.ctp.enchantmentsolution.utils.player.ESPlayer;
 public class AttributeListener extends Enchantmentable {
 
 	private Map<Enchantment, Attributable> attributes = new HashMap<Enchantment, Attributable>();
+	private Map<Enchantment, PotionEffectType> potions = new HashMap<Enchantment, PotionEffectType>();
 
 	public AttributeListener() {
 		attributes.put(RegisterEnchantments.ARMORED, Attributable.ARMORED);
@@ -43,6 +43,10 @@ public class AttributeListener extends Enchantmentable {
 		attributes.put(RegisterEnchantments.LIFE, Attributable.LIFE);
 		attributes.put(RegisterEnchantments.GUNG_HO, Attributable.GUNG_HO);
 		attributes.put(RegisterEnchantments.TOUGHNESS, Attributable.TOUGHNESS);
+
+		potions.put(RegisterEnchantments.JOGGERS, PotionEffectType.SPEED);
+		potions.put(RegisterEnchantments.PLYOMETRICS, PotionEffectType.JUMP);
+		potions.put(RegisterEnchantments.WATER_BREATHING, PotionEffectType.WATER_BREATHING);
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST)
@@ -64,8 +68,9 @@ public class AttributeListener extends Enchantmentable {
 			start: while (iterator.hasNext()) {
 				EnchantmentLevel level = iterator.next();
 				if (level == null || level.getEnchant() == null) continue; // not an ES enchantment, or possibly a disabled enchantment, so don't bother
-				if (attributes.containsKey(level.getEnchant().getRelativeEnchantment())) {
-					Attributable a = attributes.get(level.getEnchant().getRelativeEnchantment());
+				Enchantment relative = level.getEnchant().getRelativeEnchantment();
+				if (attributes.containsKey(relative)) {
+					Attributable a = attributes.get(relative);
 					for(ItemEquippedSlot slot: a.getTypes())
 						if (slot.getType() == type) {
 							ESPlayer esPlayer = EnchantmentSolution.getESPlayer(player);
@@ -178,6 +183,18 @@ public class AttributeListener extends Enchantmentable {
 
 						if (!event.isCancelled()) player.removePotionEffect(potionEffect);
 					} else { /* placeholder */ }
+				else if (ItemSlotType.ARMOR.contains(type) && potions.containsKey(relative)) {
+					PotionEffectType effectType = potions.get(relative);
+					ESPotionEffectEvent event = null;
+					if (equip) event = new PotionEffectArmorAddEvent(player, level, effectType);
+					else
+						event = new PotionEffectArmorRemoveEvent(player, level, effectType);
+					Bukkit.getPluginManager().callEvent(event);
+
+					if (equip) event.getPlayer().addPotionEffect(new PotionEffect(event.getType(), 10000000, level.getLevel() - 1));
+					else
+						event.getPlayer().removePotionEffect(event.getType());
+				}
 			}
 		}
 	}

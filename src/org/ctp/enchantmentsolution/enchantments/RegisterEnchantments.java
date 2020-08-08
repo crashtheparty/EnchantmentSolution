@@ -80,6 +80,18 @@ public class RegisterEnchantments {
 	public static final Enchantment STICKY_HOLD = new CustomEnchantmentWrapper("sticky_hold", "STICKY_HOLD");
 	public static final Enchantment FORCE_FEED = new CustomEnchantmentWrapper("force_feed", "FORCE_FEED");
 	public static final Enchantment PUSHBACK = new CustomEnchantmentWrapper("pushback", "PUSHBACK");
+	public static final Enchantment WATER_BREATHING = new CustomEnchantmentWrapper("water_breathing", "WATER_BREATHING");
+	public static final Enchantment LIFE_DRAIN = new CustomEnchantmentWrapper("life_drain", "LIFE_DRAIN");
+	public static final Enchantment INSTABILITY_CURSE = new CustomEnchantmentWrapper("instability_curse", "INSTABILITY_CURSE");
+	public static final Enchantment BLINDNESS = new CustomEnchantmentWrapper("blindness", "BLINDNESS");
+	public static final Enchantment JOGGERS = new CustomEnchantmentWrapper("joggers", "JOGGERS");
+	public static final Enchantment PLYOMETRICS = new CustomEnchantmentWrapper("plyometrics", "PLYOMETRICS");
+	public static final Enchantment TRUANT = new CustomEnchantmentWrapper("truant", "TRUANT");
+	public static final Enchantment VENOM = new CustomEnchantmentWrapper("venom", "VENOM");
+	public static final Enchantment WITHERING = new CustomEnchantmentWrapper("withering", "WITHERING");
+	public static final Enchantment FROSTY = new CustomEnchantmentWrapper("frosty", "FROSTY");
+	public static final Enchantment ZEAL = new CustomEnchantmentWrapper("zeal", "ZEAL");
+	public static final Enchantment DEPTH_PLUS_PLUS = new CustomEnchantmentWrapper("depth_plus_plus", "DEPTH_PLUS_PLUS");
 
 	private RegisterEnchantments() {}
 

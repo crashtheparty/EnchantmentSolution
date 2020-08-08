@@ -69,6 +69,7 @@ public class DamageListener extends Enchantmentable {
 		runMethod(this, "stoneThrow", event, EntityDamageByEntityEvent.class);
 		runMethod(this, "warp", event, EntityDamageByEntityEvent.class);
 		runMethod(this, "ironDefense", event, EntityDamageByEntityEvent.class);
+		runMethod(this, "lifeDrain", event, EntityDamageByEntityEvent.class);
 	}
 
 	@EventHandler
@@ -306,6 +307,31 @@ public class DamageListener extends Enchantmentable {
 						if (attacked.isDead()) knockup /= 1.5;
 						attacked.setVelocity(new Vector(attacked.getVelocity().getX(), knockup, attacked.getVelocity().getZ()));
 					}, 0l);
+				}
+			}
+		}
+	}
+	
+	private void lifeDrain(EntityDamageByEntityEvent event) {
+		if(!canRun(RegisterEnchantments.LIFE_DRAIN, event)) return;
+		Entity attacked = event.getEntity();
+		Entity attacker = event.getDamager();
+		if(attacked instanceof LivingEntity && attacker instanceof LivingEntity) if(attacker instanceof HumanEntity) {
+			HumanEntity human = (HumanEntity) attacker;
+			ItemStack item = human.getInventory().getItemInMainHand();
+			if(EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.LIFE_DRAIN)) {
+				double damage = event.getDamage() / 2;
+				int level = EnchantmentUtils.getLevel(item, RegisterEnchantments.LIFE_DRAIN);
+				double healthBack = damage * 0.10 * level;
+				LifeDrainEvent lifeDrain = new LifeDrainEvent((LivingEntity) attacked, level, human, event.getDamage(), damage, healthBack);
+				Bukkit.getPluginManager().callEvent(lifeDrain);
+				
+				if(!lifeDrain.isCancelled()) {
+					event.setDamage(lifeDrain.getNewDamage());
+					healthBack = lifeDrain.getHealthBack();
+					if(healthBack + human.getHealth() > human.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()) human.setHealth(human.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
+					else
+						human.setHealth(healthBack + human.getHealth());
 				}
 			}
 		}

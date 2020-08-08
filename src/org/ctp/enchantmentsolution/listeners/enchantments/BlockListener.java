@@ -27,7 +27,7 @@ import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enums.ItemBreakType;
 import org.ctp.enchantmentsolution.enums.ItemPlaceType;
-import org.ctp.enchantmentsolution.events.blocks.HeightWidthEvent;
+import org.ctp.enchantmentsolution.events.blocks.HeightWidthDepthEvent;
 import org.ctp.enchantmentsolution.events.blocks.LightWeightEvent;
 import org.ctp.enchantmentsolution.events.blocks.WandEvent;
 import org.ctp.enchantmentsolution.events.modify.GoldDiggerEvent;
@@ -151,7 +151,7 @@ public class BlockListener extends Enchantmentable {
 
 	private void heightWidth(BlockBreakEvent event) {
 		Player player = event.getPlayer();
-		if (!canRun(event, false, RegisterEnchantments.WIDTH_PLUS_PLUS, RegisterEnchantments.HEIGHT_PLUS_PLUS)) return;
+		if (!canRun(event, false, RegisterEnchantments.DEPTH_PLUS_PLUS, RegisterEnchantments.WIDTH_PLUS_PLUS, RegisterEnchantments.HEIGHT_PLUS_PLUS)) return;
 		if (BlockUtils.multiBlockBreakContains(event.getBlock().getLocation())) return;
 		if (!EnchantmentSolution.getPlugin().getMcMMOType().equals("Disabled") && McMMOAbility.getIgnored() != null && McMMOAbility.getIgnored().contains(player)) return;
 		if (EnchantmentSolution.getPlugin().getVeinMiner() != null && VeinMinerListener.hasVeinMiner(player)) return;
@@ -163,21 +163,20 @@ public class BlockListener extends Enchantmentable {
 			int zt = 0;
 			int heightPlusPlus = EnchantmentUtils.getLevel(item, RegisterEnchantments.HEIGHT_PLUS_PLUS);
 			int widthPlusPlus = EnchantmentUtils.getLevel(item, RegisterEnchantments.WIDTH_PLUS_PLUS);
-			boolean hasWidthHeight = false;
+			int depthPlusPlus = EnchantmentUtils.getLevel(item, RegisterEnchantments.DEPTH_PLUS_PLUS);
+			boolean hasEnchant = false;
+			float pitch = player.getLocation().getPitch();
+			float yaw = player.getLocation().getYaw() % 360;
 			if (RegisterEnchantments.isEnabled(RegisterEnchantments.WIDTH_PLUS_PLUS) && EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.WIDTH_PLUS_PLUS)) {
-				hasWidthHeight = true;
-				float yaw = player.getLocation().getYaw() % 360;
+				hasEnchant = true;
 				while (yaw < 0)
 					yaw += 360;
 				if (yaw <= 45 || yaw > 135 && yaw <= 225 || yaw > 315) xt = widthPlusPlus;
 				else
 					zt = widthPlusPlus;
-
 			}
 			if (RegisterEnchantments.isEnabled(RegisterEnchantments.HEIGHT_PLUS_PLUS) && EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.HEIGHT_PLUS_PLUS)) {
-				hasWidthHeight = true;
-				float pitch = player.getLocation().getPitch();
-				float yaw = player.getLocation().getYaw() % 360;
+				hasEnchant = true;
 				while (yaw < 0)
 					yaw += 360;
 				if (pitch > 53 || pitch <= -53) {
@@ -188,8 +187,15 @@ public class BlockListener extends Enchantmentable {
 					yt = heightPlusPlus;
 
 			}
+			if (RegisterEnchantments.isEnabled(RegisterEnchantments.DEPTH_PLUS_PLUS) && EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.DEPTH_PLUS_PLUS)) {
+				hasEnchant = true;
+				if (pitch > 53 || pitch <= -53) yt = depthPlusPlus;
+				else if (yaw <= 45 || yaw > 135 && yaw <= 225 || yaw > 315) zt = depthPlusPlus;
+				else
+					xt = depthPlusPlus;
+			}
 			Material original = event.getBlock().getType();
-			if (hasWidthHeight && ItemBreakType.getType(item.getType()) != null && ItemBreakType.getType(item.getType()).getBreakTypes() != null && ItemBreakType.getType(item.getType()).getBreakTypes().contains(original)) {
+			if (hasEnchant && ItemBreakType.getType(item.getType()) != null && ItemBreakType.getType(item.getType()).getBreakTypes() != null && ItemBreakType.getType(item.getType()).getBreakTypes().contains(original)) {
 				Collection<Location> blocks = new ArrayList<Location>();
 				Block block = event.getBlock();
 				item = player.getInventory().getItemInMainHand();
@@ -198,28 +204,28 @@ public class BlockListener extends Enchantmentable {
 					for(int y = 0; y <= yt; y++)
 						for(int z = 0; z <= zt; z++) {
 							if (x == 0 && y == 0 && z == 0) continue;
-							addHeightWidthBlock(blocks, item, original, block, x, y, z);
-							addHeightWidthBlock(blocks, item, original, block, -x, y, z);
-							addHeightWidthBlock(blocks, item, original, block, x, -y, z);
-							addHeightWidthBlock(blocks, item, original, block, x, y, -z);
-							addHeightWidthBlock(blocks, item, original, block, -x, -y, z);
-							addHeightWidthBlock(blocks, item, original, block, -x, y, -z);
-							addHeightWidthBlock(blocks, item, original, block, x, -y, -z);
-							addHeightWidthBlock(blocks, item, original, block, -x, -y, -z);
+							addMultiBlock(blocks, item, original, block, x, y, z);
+							addMultiBlock(blocks, item, original, block, -x, y, z);
+							addMultiBlock(blocks, item, original, block, x, -y, z);
+							addMultiBlock(blocks, item, original, block, x, y, -z);
+							addMultiBlock(blocks, item, original, block, -x, -y, z);
+							addMultiBlock(blocks, item, original, block, -x, y, -z);
+							addMultiBlock(blocks, item, original, block, x, -y, -z);
+							addMultiBlock(blocks, item, original, block, -x, -y, -z);
 						}
 
-				HeightWidthEvent heightWidth = new HeightWidthEvent(blocks, block, player, heightPlusPlus, widthPlusPlus);
-				Bukkit.getPluginManager().callEvent(heightWidth);
+				HeightWidthDepthEvent hwd = new HeightWidthDepthEvent(blocks, block, player, heightPlusPlus, widthPlusPlus, depthPlusPlus);
+				Bukkit.getPluginManager().callEvent(hwd);
 
-				if (!heightWidth.isCancelled()) {
+				if (!hwd.isCancelled()) {
 					boolean async = ConfigString.MULTI_BLOCK_ASYNC.getBoolean();
 					if (async) {
-						for(Location b: heightWidth.getBlocks())
+						for(Location b: hwd.getBlocks())
 							BlockUtils.addMultiBlockBreak(b);
-						new AsyncBlockController(player, item, heightWidth.getBlock(), heightWidth.getBlocks());
+						new AsyncBlockController(player, item, hwd.getBlock(), hwd.getBlocks());
 					} else {
 						int blocksBroken = 0;
-						for(Location b: heightWidth.getBlocks()) {
+						for(Location b: hwd.getBlocks()) {
 							BlockUtils.addMultiBlockBreak(b);
 							if (BlockUtils.multiBreakBlock(player, item, b)) blocksBroken++;
 						}
@@ -380,7 +386,7 @@ public class BlockListener extends Enchantmentable {
 		}
 	}
 
-	private Collection<Location> addHeightWidthBlock(Collection<Location> blocks, ItemStack tool, Material original, Block relative, int x, int y, int z) {
+	private Collection<Location> addMultiBlock(Collection<Location> blocks, ItemStack tool, Material original, Block relative, int x, int y, int z) {
 		Block block = relative.getRelative(x, y, z);
 		if (BlockUtils.multiBlockBreakContains(block.getLocation())) return blocks;
 		List<String> pickBlocks = ItemBreakType.WOODEN_PICKAXE.getDiamondPickaxeBlocks();

@@ -44,9 +44,11 @@ public class PlayerListener extends Enchantmentable {
 	@EventHandler
 	public void onPlayerInteract(PlayerInteractEvent event) {
 		runMethod(this, "flowerGift", event, PlayerInteractEvent.class);
+		runMethod(this, "frosty", event, PlayerInteractEvent.class);
 		runMethod(this, "irenesLasso", event, PlayerInteractEvent.class);
 		runMethod(this, "overkill", event, PlayerInteractEvent.class);
 		runMethod(this, "splatterFest", event, PlayerInteractEvent.class);
+		runMethod(this, "zeal", event, PlayerInteractEvent.class);
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST)
@@ -89,6 +91,45 @@ public class PlayerListener extends Enchantmentable {
 					} else
 						player.getWorld().spawnParticle(Particle.VILLAGER_ANGRY, loc, 30, 0.2, 0.5, 0.2);
 					player.incrementStatistic(Statistic.USE_ITEM, item.getType());
+					DamageUtils.damageItem(player, item);
+				}
+			}
+		}
+	}
+
+	private void frosty(PlayerInteractEvent event) {
+		if (event.getAction().equals(Action.LEFT_CLICK_AIR)) {
+			Player player = event.getPlayer();
+			ItemStack item = player.getInventory().getItemInMainHand();
+			if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.FROSTY)) {
+				event.setCancelled(false);
+				if (!canRun(RegisterEnchantments.FROSTY, event)) return;
+				boolean takeSnow = player.getGameMode() != GameMode.CREATIVE;
+				FrostyEvent frosty = new FrostyEvent(player, item, takeSnow, player.getInventory().all(Material.SNOWBALL).size() > 0);
+				Bukkit.getPluginManager().callEvent(frosty);
+
+				if (!frosty.isCancelled() && !frosty.willCancel()) {
+					if (frosty.takeSnowball() && frosty.hasSnowball()) {
+						ItemStack[] contents = frosty.getPlayer().getInventory().getContents();
+						ItemStack[] extraContents = frosty.getPlayer().getInventory().getExtraContents();
+						ItemStack[] allContents = Arrays.copyOf(contents, contents.length + extraContents.length);
+						System.arraycopy(extraContents, 0, allContents, contents.length, extraContents.length);
+						for(int i = 0; i < allContents.length; i++) {
+							ItemStack removeItem = player.getInventory().getItem(i);
+							if (removeItem != null && removeItem.getType().equals(Material.SNOWBALL)) if (removeItem.getAmount() - 1 <= 0) {
+								player.getInventory().setItem(i, new ItemStack(Material.AIR));
+								break;
+							} else {
+								removeItem.setAmount(removeItem.getAmount() - 1);
+								break;
+							}
+						}
+					}
+					player.incrementStatistic(Statistic.USE_ITEM, item.getType());
+					Snowball snowball = player.launchProjectile(Snowball.class);
+					player.getWorld().playSound(player.getLocation(), Sound.ENTITY_SNOWBALL_THROW, 1, 1);
+					ESPlayer esPlayer = EnchantmentSolution.getESPlayer(player);
+					esPlayer.setCooldown(RegisterEnchantments.FROSTY);
 					DamageUtils.damageItem(player, item);
 				}
 			}
@@ -336,6 +377,45 @@ public class PlayerListener extends Enchantmentable {
 				ItemUtils.giveItemToPlayer(player, stickItem, player.getLocation(), false);
 				AdvancementUtils.awardCriteria(player, ESAdvancement.STICKY_BEES, "break", 1);
 			}, 1l);
+		}
+	}
+
+	private void zeal(PlayerInteractEvent event) {
+		if (event.getAction().equals(Action.LEFT_CLICK_AIR)) {
+			Player player = event.getPlayer();
+			ItemStack item = player.getInventory().getItemInMainHand();
+			if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.ZEAL)) {
+				event.setCancelled(false);
+				if (!canRun(RegisterEnchantments.ZEAL, event)) return;
+				boolean takeFireCharge = player.getGameMode() != GameMode.CREATIVE;
+				ZealEvent zeal = new ZealEvent(player, item, takeFireCharge, player.getInventory().all(Material.FIRE_CHARGE).size() > 0);
+				Bukkit.getPluginManager().callEvent(zeal);
+
+				if (!zeal.isCancelled() && !zeal.willCancel()) {
+					if (zeal.takeFireCharge() && zeal.hasFireCharge()) {
+						ItemStack[] contents = zeal.getPlayer().getInventory().getContents();
+						ItemStack[] extraContents = zeal.getPlayer().getInventory().getExtraContents();
+						ItemStack[] allContents = Arrays.copyOf(contents, contents.length + extraContents.length);
+						System.arraycopy(extraContents, 0, allContents, contents.length, extraContents.length);
+						for(int i = 0; i < allContents.length; i++) {
+							ItemStack removeItem = player.getInventory().getItem(i);
+							if (removeItem != null && removeItem.getType().equals(Material.FIRE_CHARGE)) if (removeItem.getAmount() - 1 <= 0) {
+								player.getInventory().setItem(i, new ItemStack(Material.AIR));
+								break;
+							} else {
+								removeItem.setAmount(removeItem.getAmount() - 1);
+								break;
+							}
+						}
+					}
+					player.incrementStatistic(Statistic.USE_ITEM, item.getType());
+					Fireball fireball = player.launchProjectile(Fireball.class);
+					player.getWorld().playSound(player.getLocation(), Sound.ITEM_FIRECHARGE_USE, 1, 1);
+					ESPlayer esPlayer = EnchantmentSolution.getESPlayer(player);
+					esPlayer.setCooldown(RegisterEnchantments.ZEAL);
+					DamageUtils.damageItem(player, item);
+				}
+			}
 		}
 	}
 
