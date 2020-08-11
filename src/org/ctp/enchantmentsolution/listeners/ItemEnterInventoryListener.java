@@ -14,10 +14,10 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
-import org.ctp.crashapi.events.ArmorEquipEvent;
-import org.ctp.crashapi.events.ItemAddEvent;
-import org.ctp.crashapi.events.ItemEquipEvent;
-import org.ctp.crashapi.item.MatData;
+import org.ctp.enchantmentsolution.enums.MatData;
+import org.ctp.enchantmentsolution.events.ArmorEquipEvent;
+import org.ctp.enchantmentsolution.events.ItemAddEvent;
+import org.ctp.enchantmentsolution.events.ItemEquipEvent;
 
 public class ItemEnterInventoryListener implements Listener {
 
