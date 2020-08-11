@@ -12,7 +12,7 @@ import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.rpg.RPGPlayer;
 import org.ctp.enchantmentsolution.rpg.RPGUtils;
-import org.ctp.enchantmentsolution.threads.SnapshotRunnable;
+import org.ctp.enchantmentsolution.threads.SnapshotThread;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 import org.ctp.enchantmentsolution.utils.player.ESPlayer;
 
@@ -22,7 +22,7 @@ public class GlobalPlayerListener implements Listener {
 	public void onPlayerLogin(PlayerLoginEvent event) {
 		Player player = event.getPlayer();
 		if (ConfigString.ENCHANTMENT_CHECK_ON_LOGIN.getBoolean()) Bukkit.getScheduler().runTaskLater(EnchantmentSolution.getPlugin(), () -> {
-			SnapshotRunnable.updateInventory(player);
+			SnapshotThread.updateInventory(player);
 		}, 1l);
 	}
 

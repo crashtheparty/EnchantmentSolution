@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.MetadataValue;
+import org.ctp.crashapi.events.ItemEquipEvent.HandMethod;
 import org.ctp.crashapi.utils.ItemUtils;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
@@ -50,7 +51,7 @@ public class McMMOHandler {
 					if (!telepathyBonus.isCancelled()) {
 						int num = telepathyBonus.getMultiplyAmount();
 						while (num > 0) {
-							ItemUtils.giveItemsToPlayer(telepathyBonus.getPlayer(), telepathyBonus.getDrops(), telepathyBonus.getPlayer().getLocation(), true);
+							ItemUtils.giveItemsToPlayer(telepathyBonus.getPlayer(), telepathyBonus.getDrops(), telepathyBonus.getPlayer().getLocation(), true, HandMethod.PICK_UP);
 							num--;
 						}
 					}
