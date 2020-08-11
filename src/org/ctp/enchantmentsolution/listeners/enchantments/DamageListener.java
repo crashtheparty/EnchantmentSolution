@@ -7,6 +7,7 @@ import java.util.List;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -16,6 +17,7 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.player.PlayerItemDamageEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.MetadataValue;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.util.Vector;
@@ -26,11 +28,13 @@ import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
+import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.events.damage.*;
 import org.ctp.enchantmentsolution.events.entity.DetonateCreeperEvent;
 import org.ctp.enchantmentsolution.events.modify.LagEvent;
 import org.ctp.enchantmentsolution.events.modify.PushbackEvent;
 import org.ctp.enchantmentsolution.events.potion.MagicGuardPotionEvent;
+import org.ctp.enchantmentsolution.events.potion.PotionAfflictEvent;
 import org.ctp.enchantmentsolution.events.teleport.WarpEntityEvent;
 import org.ctp.enchantmentsolution.events.teleport.WarpPlayerEvent;
 import org.ctp.enchantmentsolution.listeners.Enchantmentable;
@@ -68,6 +72,7 @@ public class DamageListener extends Enchantmentable {
 		runMethod(this, "shockAspect", event, EntityDamageByEntityEvent.class);
 		runMethod(this, "stoneThrow", event, EntityDamageByEntityEvent.class);
 		runMethod(this, "warp", event, EntityDamageByEntityEvent.class);
+		runMethod(this, "potions", event, EntityDamageByEntityEvent.class);
 		runMethod(this, "ironDefense", event, EntityDamageByEntityEvent.class);
 		runMethod(this, "lifeDrain", event, EntityDamageByEntityEvent.class);
 	}
@@ -311,25 +316,25 @@ public class DamageListener extends Enchantmentable {
 			}
 		}
 	}
-	
+
 	private void lifeDrain(EntityDamageByEntityEvent event) {
-		if(!canRun(RegisterEnchantments.LIFE_DRAIN, event)) return;
+		if (!canRun(RegisterEnchantments.LIFE_DRAIN, event)) return;
 		Entity attacked = event.getEntity();
 		Entity attacker = event.getDamager();
-		if(attacked instanceof LivingEntity && attacker instanceof LivingEntity) if(attacker instanceof HumanEntity) {
+		if (attacked instanceof LivingEntity && attacker instanceof LivingEntity) if (attacker instanceof HumanEntity) {
 			HumanEntity human = (HumanEntity) attacker;
 			ItemStack item = human.getInventory().getItemInMainHand();
-			if(EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.LIFE_DRAIN)) {
+			if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.LIFE_DRAIN)) {
 				double damage = event.getDamage() / 2;
 				int level = EnchantmentUtils.getLevel(item, RegisterEnchantments.LIFE_DRAIN);
 				double healthBack = damage * 0.10 * level;
 				LifeDrainEvent lifeDrain = new LifeDrainEvent((LivingEntity) attacked, level, human, event.getDamage(), damage, healthBack);
 				Bukkit.getPluginManager().callEvent(lifeDrain);
-				
-				if(!lifeDrain.isCancelled()) {
+
+				if (!lifeDrain.isCancelled()) {
 					event.setDamage(lifeDrain.getNewDamage());
 					healthBack = lifeDrain.getHealthBack();
-					if(healthBack + human.getHealth() > human.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()) human.setHealth(human.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
+					if (healthBack + human.getHealth() > human.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()) human.setHealth(human.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
 					else
 						human.setHealth(healthBack + human.getHealth());
 				}
@@ -347,6 +352,79 @@ public class DamageListener extends Enchantmentable {
 				Bukkit.getPluginManager().callEvent(magicGuard);
 
 				if (!magicGuard.isCancelled()) event.setCancelled(true);
+			}
+		}
+	}
+
+	private void potions(EntityDamageByEntityEvent event) {
+		try {
+			potion(event, RegisterEnchantments.BLINDNESS, PotionEffectType.BLINDNESS);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		try {
+			potion(event, RegisterEnchantments.VENOM, PotionEffectType.POISON);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		try {
+			potion(event, RegisterEnchantments.TRUANT, PotionEffectType.SLOW);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		try {
+			potion(event, RegisterEnchantments.WITHERING, PotionEffectType.WITHER);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+	}
+
+	private void potion(EntityDamageByEntityEvent event, Enchantment enchantment, PotionEffectType type) {
+		if (!canRun(enchantment, event)) return;
+		Entity attacker = event.getDamager();
+		Entity attacked = event.getEntity();
+		if (attacker instanceof HumanEntity && attacked instanceof LivingEntity) {
+			HumanEntity human = (HumanEntity) attacker;
+			LivingEntity living = (LivingEntity) attacked;
+			ItemStack item = human.getInventory().getItemInMainHand();
+			if (item != null && EnchantmentUtils.hasEnchantment(item, enchantment)) {
+				int level = EnchantmentUtils.getLevel(item, enchantment);
+				int ticks = 8 * 20;
+				PotionEffect previousEffect = null;
+				boolean override = false;
+				for(PotionEffect activeEffect: living.getActivePotionEffects())
+					if (activeEffect.getType() == type) {
+						override = true;
+						previousEffect = activeEffect;
+						break;
+					}
+
+				PotionAfflictEvent potionAfflict = new PotionAfflictEvent(living, human, new EnchantmentLevel(RegisterEnchantments.getCustomEnchantment(enchantment), level), type, ticks, level - 1, previousEffect, override);
+				Bukkit.getPluginManager().callEvent(potionAfflict);
+
+				if (!potionAfflict.isCancelled()) living.addPotionEffect(new PotionEffect(potionAfflict.getType(), potionAfflict.getDuration(), potionAfflict.getLevel()));
+			}
+		} else if (attacker instanceof Projectile) {
+			Projectile projectile = (Projectile) attacker;
+			if (projectile.hasMetadata(enchantment.getKey().getKey())) {
+				int ticks = 8 * 20;
+				int level = projectile.getMetadata(enchantment.getKey().getKey()).get(0).asInt();
+				if (attacked instanceof LivingEntity) {
+					LivingEntity living = (LivingEntity) attacked;
+					PotionEffect previousEffect = null;
+					boolean override = false;
+					for(PotionEffect activeEffect: living.getActivePotionEffects())
+						if (activeEffect.getType() == type) {
+							override = true;
+							previousEffect = activeEffect;
+							break;
+						}
+
+					PotionAfflictEvent potionAfflict = new PotionAfflictEvent(living, (LivingEntity) projectile.getShooter(), new EnchantmentLevel(RegisterEnchantments.getCustomEnchantment(enchantment), level), type, ticks, level - 1, previousEffect, override);
+					Bukkit.getPluginManager().callEvent(potionAfflict);
+
+					if (!potionAfflict.isCancelled()) living.addPotionEffect(new PotionEffect(potionAfflict.getType(), potionAfflict.getDuration(), potionAfflict.getLevel()));
+				}
 			}
 		}
 	}
