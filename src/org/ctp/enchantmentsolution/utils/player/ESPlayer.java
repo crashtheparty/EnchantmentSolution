@@ -2,9 +2,7 @@ package org.ctp.enchantmentsolution.utils.player;
 
 import java.util.*;
 
-import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
-import org.bukkit.OfflinePlayer;
+import org.bukkit.*;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.attribute.AttributeModifier.Operation;
 import org.bukkit.enchantments.Enchantment;
@@ -32,7 +30,7 @@ import org.ctp.enchantmentsolution.utils.player.attributes.FlySpeedAttribute;
 public class ESPlayer {
 
 	private static Map<Integer, Integer> GLOBAL_BLOCKS = new HashMap<Integer, Integer>();
-	private static double CONTAGION_CHANCE = 0.0005, FORCE_FEED_CHANCE = 0.005;
+	private static double CONTAGION_CHANCE = 0.0005;
 	private final OfflinePlayer player;
 	private Player onlinePlayer;
 	private RPGPlayer rpg;
@@ -76,6 +74,11 @@ public class ESPlayer {
 	public void reloadPlayer() {
 		for(Player p: Bukkit.getOnlinePlayers())
 			if (p.getUniqueId().equals(player.getUniqueId())) onlinePlayer = p;
+	}
+
+	public ItemStack getOffhand() {
+		if (!isOnline()) return new ItemStack(Material.AIR);
+		return getOnlinePlayer().getInventory().getItemInOffHand();
 	}
 
 	public ItemStack[] getArmor() {
@@ -306,7 +309,7 @@ public class ESPlayer {
 	public void minus() {
 		Player player = getOnlinePlayer();
 		if (player.getLocation().getY() >= 12000) AdvancementUtils.awardCriteria(player, ESAdvancement.CRUISING_ALTITUDE, "elytra");
-		flightDamage --;
+		flightDamage--;
 		if (flightDamage <= 0) {
 			if (elytra != null) DamageUtils.damageItem(player, elytra);
 			flightDamage = flightDamageLimit;
@@ -322,8 +325,8 @@ public class ESPlayer {
 		return didTick;
 	}
 
-	public double getForceFeedChance() {
-		return FORCE_FEED_CHANCE;
+	public double getForceFeedChance(int level) {
+		return 0.005 + level * 0.005;
 	}
 
 	public List<ItemStack> getForceFeedItems() {
