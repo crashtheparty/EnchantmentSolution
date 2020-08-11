@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.ctp.crashapi.CrashAPI;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
@@ -146,10 +147,12 @@ public class PersistenceNMS {
 			LegacyPersistenceUtils.addAnimal(item, id);
 	}
 
-	public static ItemStack checkItem(ItemStack original, ItemStack previous) {
-		if (CrashAPI.getPlugin().getBukkitVersion().getVersionNumber() > 11) return PersistenceUtils.checkItem(original, previous);
-		else
-			return LegacyPersistenceUtils.checkItem(original, previous);
+	public static ItemStack checkItem(ItemStack original) {
+		if (CrashAPI.getPlugin().getBukkitVersion().getVersionNumber() > 11) {
+			if (original.getItemMeta().getPersistentDataContainer().getKeys().size() == 0 && (!original.getItemMeta().hasEnchants() || (original.getItemMeta() instanceof EnchantmentStorageMeta && !((EnchantmentStorageMeta) original.getItemMeta()).hasStoredEnchants()))) return original;
+			return PersistenceUtils.checkItem(original);
+		} else
+			return LegacyPersistenceUtils.checkItem(original);
 	}
 
 }

@@ -294,7 +294,7 @@ public class PersistenceUtils {
 		item.setItemMeta(meta);
 	}
 
-	public static ItemStack checkItem(ItemStack item, ItemStack previous) {
+	public static ItemStack checkItem(ItemStack item) {
 		if (item != null) {
 			List<EnchantmentLevel> enchantMeta = getEnchantments(item);
 			List<EnchantmentLevel> enchantLore = new ArrayList<EnchantmentLevel>();
@@ -337,7 +337,7 @@ public class PersistenceUtils {
 					PersistenceNMS.addEnchantment(item, entry);
 				}
 			}
-			return item.clone();
+			return item;
 		}
 		return null;
 	}

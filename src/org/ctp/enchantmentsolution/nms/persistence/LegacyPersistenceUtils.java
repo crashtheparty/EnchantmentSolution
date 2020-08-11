@@ -10,7 +10,6 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.ctp.crashapi.CrashAPI;
 import org.ctp.crashapi.item.MatData;
 import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.enchantments.CERegister;
@@ -335,9 +334,8 @@ public class LegacyPersistenceUtils {
 		return meta;
 	}
 
-	public static ItemStack checkItem(ItemStack item, ItemStack previous) {
+	public static ItemStack checkItem(ItemStack item) {
 		if (item != null) {
-			if (CrashAPI.getPlugin().getBukkitVersion().getVersionNumber() > 11) return item.clone();
 			List<EnchantmentLevel> enchantMeta = getEnchantments(item);
 			List<EnchantmentLevel> enchantLore = new ArrayList<EnchantmentLevel>();
 			if (item.hasItemMeta() && item.getItemMeta().hasLore()) for(String s: item.getItemMeta().getLore())
@@ -370,7 +368,7 @@ public class LegacyPersistenceUtils {
 					}
 				}
 			}
-			return item.clone();
+			return item;
 		}
 		return null;
 	}
