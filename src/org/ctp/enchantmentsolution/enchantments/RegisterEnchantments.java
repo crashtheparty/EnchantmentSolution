@@ -82,7 +82,7 @@ public class RegisterEnchantments {
 	public static final Enchantment PUSHBACK = new CustomEnchantmentWrapper("pushback", "PUSHBACK");
 	public static final Enchantment WATER_BREATHING = new CustomEnchantmentWrapper("water_breathing", "WATER_BREATHING");
 	public static final Enchantment LIFE_DRAIN = new CustomEnchantmentWrapper("life_drain", "LIFE_DRAIN");
-	public static final Enchantment INSTABILITY_CURSE = new CustomEnchantmentWrapper("instability_curse", "INSTABILITY_CURSE");
+	public static final Enchantment CURSE_OF_INSTABILITY = new CustomEnchantmentWrapper("instability_curse", "INSTABILITY_CURSE");
 	public static final Enchantment BLINDNESS = new CustomEnchantmentWrapper("blindness", "BLINDNESS");
 	public static final Enchantment JOGGERS = new CustomEnchantmentWrapper("joggers", "JOGGERS");
 	public static final Enchantment PLYOMETRICS = new CustomEnchantmentWrapper("plyometrics", "PLYOMETRICS");
@@ -289,12 +289,15 @@ public class RegisterEnchantments {
 		addDefaultEnchantment(CERegister.ANGLER);
 		addDefaultEnchantment(CERegister.ARMORED);
 		addDefaultEnchantment(CERegister.BEHEADING);
+		addDefaultEnchantment(CERegister.BLINDNESS);
 		addDefaultEnchantment(CERegister.BRINE);
 		addDefaultEnchantment(CERegister.BUTCHER);
 		addDefaultEnchantment(CERegister.CURSE_OF_CONTAGION);
 		addDefaultEnchantment(CERegister.CURSE_OF_EXHAUSTION);
+		addDefaultEnchantment(CERegister.CURSE_OF_INSTABILITY);
 		addDefaultEnchantment(CERegister.CURSE_OF_LAG);
 		addDefaultEnchantment(CERegister.CURSE_OF_STAGNANCY);
+		addDefaultEnchantment(CERegister.DEPTH_PLUS_PLUS);
 		addDefaultEnchantment(CERegister.DETONATOR);
 		addDefaultEnchantment(CERegister.DROWNED);
 		addDefaultEnchantment(CERegister.EXP_SHARE);
@@ -302,6 +305,7 @@ public class RegisterEnchantments {
 		addDefaultEnchantment(CERegister.FORCE_FEED);
 		addDefaultEnchantment(CERegister.FREQUENT_FLYER);
 		addDefaultEnchantment(CERegister.FRIED);
+		addDefaultEnchantment(CERegister.FROSTY);
 		addDefaultEnchantment(CERegister.GOLD_DIGGER);
 		addDefaultEnchantment(CERegister.GUNG_HO);
 		addDefaultEnchantment(CERegister.HARD_BOUNCE);
@@ -311,15 +315,18 @@ public class RegisterEnchantments {
 		addDefaultEnchantment(CERegister.ICARUS);
 		addDefaultEnchantment(CERegister.IRENES_LASSO);
 		addDefaultEnchantment(CERegister.IRON_DEFENSE);
+		addDefaultEnchantment(CERegister.JOGGERS);
 		addDefaultEnchantment(CERegister.KNOCKUP);
 		addDefaultEnchantment(CERegister.LIGHT_WEIGHT);
 		addDefaultEnchantment(CERegister.LIFE);
+		addDefaultEnchantment(CERegister.LIFE_DRAIN);
 		addDefaultEnchantment(CERegister.MAGIC_GUARD);
 		addDefaultEnchantment(CERegister.MAGMA_WALKER);
 		addDefaultEnchantment(CERegister.MOISTURIZE);
 		addDefaultEnchantment(CERegister.NO_REST);
 		addDefaultEnchantment(CERegister.OVERKILL);
 		if (VersionUtils.getBukkitVersionNumber() > 3) addDefaultEnchantment(CERegister.PILLAGE);
+		addDefaultEnchantment(CERegister.PLYOMETRICS);
 		addDefaultEnchantment(CERegister.PUSHBACK);
 		addDefaultEnchantment(CERegister.QUICK_STRIKE);
 		addDefaultEnchantment(CERegister.RECYCLER);
@@ -337,11 +344,16 @@ public class RegisterEnchantments {
 		addDefaultEnchantment(CERegister.TELEPATHY);
 		addDefaultEnchantment(CERegister.TOUGHNESS);
 		addDefaultEnchantment(CERegister.TRANSMUTATION);
+		addDefaultEnchantment(CERegister.TRUANT);
 		addDefaultEnchantment(CERegister.UNREST);
+		addDefaultEnchantment(CERegister.VENOM);
 		addDefaultEnchantment(CERegister.VOID_WALKER);
 		addDefaultEnchantment(CERegister.WAND);
 		addDefaultEnchantment(CERegister.WARP);
+		addDefaultEnchantment(CERegister.WATER_BREATHING);
 		addDefaultEnchantment(CERegister.WIDTH_PLUS_PLUS);
+		addDefaultEnchantment(CERegister.WITHERING);
+		addDefaultEnchantment(CERegister.ZEAL);
 	}
 
 	public static List<String> getEnchantmentNames() {

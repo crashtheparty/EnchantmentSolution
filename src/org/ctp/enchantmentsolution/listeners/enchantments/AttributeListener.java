@@ -233,6 +233,12 @@ public class AttributeListener extends Enchantmentable {
 						int scheduler = Bukkit.getScheduler().scheduleSyncRepeatingTask(EnchantmentSolution.getPlugin(), thread, 0l, 1l);
 						thread.setScheduler(scheduler);
 					}
+				} else if (relative == RegisterEnchantments.CURSE_OF_INSTABILITY && equip) {
+					InstabilityCurseThread thread = InstabilityCurseThread.createThread(player);
+					if (!thread.isRunning()) {
+						int scheduler = Bukkit.getScheduler().scheduleSyncRepeatingTask(EnchantmentSolution.getPlugin(), thread, 0l, 1l);
+						thread.setScheduler(scheduler);
+					}
 				}
 			}
 		}

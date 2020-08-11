@@ -105,6 +105,13 @@ public class ESPlayer {
 		return equipped;
 	}
 
+	public List<ItemStack> getUnstableItems() {
+		List<ItemStack> items = new ArrayList<ItemStack>();
+		for (ItemStack item : getEquipped())
+			if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.CURSE_OF_INSTABILITY)) items.add(item);
+		return items;
+	}
+
 	public long getCooldown(Enchantment enchant) {
 		return cooldowns.containsKey(enchant) ? cooldowns.get(enchant) : 0;
 	}
