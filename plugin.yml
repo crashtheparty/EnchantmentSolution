@@ -97,6 +97,9 @@ permissions:
   enchantmentsolution.abilities.player-skulls:
     description: Enables dropping player's skulls with Beheading
     default: true
+  enchantmentsolution.abilities.custom-skulls:
+    description: Enables dropping custom skulls with Beheading
+    default: true
   enchantmentsolution.enchantments.rpg.all: 
     description: Gives access to every enchantment through ESRPG.
     default: op
