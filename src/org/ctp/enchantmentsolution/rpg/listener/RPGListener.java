@@ -34,12 +34,12 @@ import org.ctp.enchantmentsolution.events.interact.ProjectileSpawnEvent;
 import org.ctp.enchantmentsolution.events.player.BonusDropsEvent;
 import org.ctp.enchantmentsolution.events.player.IcarusRefreshEvent;
 import org.ctp.enchantmentsolution.events.potion.MagicGuardPotionEvent;
+import org.ctp.enchantmentsolution.events.potion.PotionAfflictEvent;
 import org.ctp.enchantmentsolution.events.potion.PotionEffectEvent;
 import org.ctp.enchantmentsolution.events.soul.SoulReaperEvent;
 import org.ctp.enchantmentsolution.events.teleport.WarpPlayerEvent;
 import org.ctp.enchantmentsolution.listeners.Enchantmentable;
 import org.ctp.enchantmentsolution.rpg.RPGUtils;
-import org.ctp.enchantmentsolution.threads.ElytraRunnable;
 import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
 import org.ctp.enchantmentsolution.utils.player.ESPlayer;
 
@@ -336,16 +336,21 @@ public class RPGListener extends Enchantmentable implements Runnable {
 		}
 	}
 
+	@EventHandler(priority = EventPriority.MONITOR)
+	public void onPotionAfflict(PotionAfflictEvent event) {
+		if (event.getAfflicter() instanceof Player) giveExperience((Player) event.getAfflicter(), event.getEnchantment());
+	}
+
 	@Override
 	public void run() {
 		if (!RPGUtils.isEnabled()) return;
 		for(Player player: Bukkit.getOnlinePlayers()) {
-			if (ElytraRunnable.didTick(player)) {
-				ESPlayer esPlayer = EnchantmentSolution.getESPlayer(player);
+			ESPlayer esPlayer = EnchantmentSolution.getESPlayer(player);
+			if (esPlayer.didTick()) {
 				ItemStack item = esPlayer.getElytra();
 				if (item != null) giveExperience(player, RegisterEnchantments.FREQUENT_FLYER, EnchantmentUtils.getLevel(item, RegisterEnchantments.FREQUENT_FLYER));
 			}
-			for(ItemStack item: player.getInventory().getArmorContents())
+			for(ItemStack item: esPlayer.getArmor())
 				if (item != null && EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.NO_REST) && player.getWorld().getEnvironment() == Environment.NORMAL && player.getWorld().getTime() > 12540 && player.getWorld().getTime() < 23459) {
 					giveExperience(player, RegisterEnchantments.NO_REST, EnchantmentUtils.getLevel(item, RegisterEnchantments.NO_REST));
 					break;
