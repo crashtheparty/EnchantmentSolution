@@ -76,6 +76,15 @@ public class ESPlayer {
 			if (p.getUniqueId().equals(player.getUniqueId())) onlinePlayer = p;
 	}
 
+	public boolean isInInventory(ItemStack item) {
+		for (int i = 0; i < 41; i++) {
+			ItemStack content = getOnlinePlayer().getInventory().getItem(i);
+			if (content == null) continue;
+			if (item.equals(content)) return true;
+		}
+		return false;
+	}
+
 	public ItemStack getOffhand() {
 		if (!isOnline()) return new ItemStack(Material.AIR);
 		return getOnlinePlayer().getInventory().getItemInOffHand();

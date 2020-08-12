@@ -24,6 +24,8 @@ import org.ctp.enchantmentsolution.mcmmo.McMMOHandler;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.BlockUtils;
 import org.ctp.enchantmentsolution.utils.ESArrays;
+import org.ctp.enchantmentsolution.utils.abilityhelpers.GaiaUtils;
+import org.ctp.enchantmentsolution.utils.abilityhelpers.GaiaUtils.GaiaTrees;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.WalkerUtils;
 import org.ctp.enchantmentsolution.utils.compatibility.JobsUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
@@ -34,6 +36,15 @@ public class ExtraBlockListener implements Listener {
 
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onBlockBreak(BlockBreakEvent event) {
+		if (GaiaUtils.hasLocation(event.getBlock().getLocation())) {
+			for (GaiaTrees tree : GaiaTrees.values())
+				if (event.getBlock().getType() == tree.getSapling().getMaterial()) {
+					event.getBlock().setType(Material.AIR);
+					event.setCancelled(true);
+				}
+			GaiaUtils.removeLocation(event.getBlock().getLocation());
+		}
+		
 		if (ConfigString.MULTI_BLOCK_ASYNC.getBoolean() && BlockUtils.multiBlockBreakContains(event.getBlock().getLocation()) && !(event instanceof BlockBreakMultiEvent)) event.setCancelled(true);
 
 		if (WalkerUtils.hasBlock(event.getBlock())) {
@@ -41,7 +52,7 @@ public class ExtraBlockListener implements Listener {
 			if (WalkerUtils.getWalker(event.getBlock()).getEnchantment() == RegisterEnchantments.VOID_WALKER) AdvancementUtils.awardCriteria(event.getPlayer(), ESAdvancement.DETERMINED_CHEATER, "cheater");
 		}
 
-		if (ESArrays.getShulkerBoxes().contains(event.getBlock().getType())) if (!EnchantmentUtils.hasEnchantment(event.getPlayer().getInventory().getItemInMainHand(), RegisterEnchantments.TELEPATHY)) {
+		if (ESArrays.getShulkerBoxes().contains(event.getBlock().getType()) && !EnchantmentUtils.hasEnchantment(event.getPlayer().getInventory().getItemInMainHand(), RegisterEnchantments.TELEPATHY)) {
 			Player player = event.getPlayer();
 			ItemStack item = player.getInventory().getItemInMainHand();
 			Block block = event.getBlock();

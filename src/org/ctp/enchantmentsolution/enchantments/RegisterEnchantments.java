@@ -92,6 +92,7 @@ public class RegisterEnchantments {
 	public static final Enchantment FROSTY = new CustomEnchantmentWrapper("frosty", "FROSTY");
 	public static final Enchantment ZEAL = new CustomEnchantmentWrapper("zeal", "ZEAL");
 	public static final Enchantment DEPTH_PLUS_PLUS = new CustomEnchantmentWrapper("depth_plus_plus", "DEPTH_PLUS_PLUS");
+	public static final Enchantment GAIA = new CustomEnchantmentWrapper("gaia", "GAIA");
 
 	private RegisterEnchantments() {}
 
@@ -306,6 +307,7 @@ public class RegisterEnchantments {
 		addDefaultEnchantment(CERegister.FREQUENT_FLYER);
 		addDefaultEnchantment(CERegister.FRIED);
 		addDefaultEnchantment(CERegister.FROSTY);
+		addDefaultEnchantment(CERegister.GAIA);
 		addDefaultEnchantment(CERegister.GOLD_DIGGER);
 		addDefaultEnchantment(CERegister.GUNG_HO);
 		addDefaultEnchantment(CERegister.HARD_BOUNCE);

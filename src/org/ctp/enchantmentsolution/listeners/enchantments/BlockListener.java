@@ -39,6 +39,7 @@ import org.ctp.enchantmentsolution.listeners.VeinMinerListener;
 import org.ctp.enchantmentsolution.mcmmo.McMMOAbility;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.BlockUtils;
+import org.ctp.enchantmentsolution.utils.abilityhelpers.GaiaUtils.GaiaTrees;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.GoldDiggerCrop;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.ParticleEffect;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
@@ -54,6 +55,7 @@ public class BlockListener extends Enchantmentable {
 
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onBlockBreakHighest(BlockBreakEvent event) {
+		runMethod(this, "gaia", event, BlockBreakEvent.class);
 		runMethod(this, "heightWidth", event, BlockBreakEvent.class);
 		runMethod(this, "curseOfLag", event, BlockBreakEvent.class);
 		runMethod(this, "goldDigger", event, BlockBreakEvent.class);
@@ -69,6 +71,39 @@ public class BlockListener extends Enchantmentable {
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onEntityChangeBlock(EntityChangeBlockEvent event) {
 		runMethod(this, "lightWeight", event, EntityChangeBlockEvent.class);
+	}
+
+	private void gaia(BlockBreakEvent event) {
+		if (!canRun(RegisterEnchantments.GAIA, event)) return;
+		Player player = event.getPlayer();
+		if (BlockUtils.multiBlockBreakContains(event.getBlock().getLocation())) return;
+		if (!EnchantmentSolution.getPlugin().getMcMMOType().equals("Disabled") && McMMOAbility.getIgnored() != null && McMMOAbility.getIgnored().contains(player)) return;
+		if (player.getGameMode().equals(GameMode.CREATIVE) || player.getGameMode().equals(GameMode.SPECTATOR)) return;
+		ItemStack item = player.getInventory().getItemInMainHand();
+		GaiaTrees tree = GaiaTrees.getTree(event.getBlock().getType());
+		if (item != null && EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.GAIA) && tree != null) {
+			List<Location> logs = new ArrayList<Location>();
+			int level = EnchantmentUtils.getLevel(item, RegisterEnchantments.GAIA);
+			int maxBlocks = 50 + (level * level) * 50;
+			logs.add(event.getBlock().getLocation());
+			for(int i = 0; i < logs.size(); i++) {
+				getLikeBlocks(logs, tree.getLog().getMaterial(), logs.get(i));
+				if (logs.size() > maxBlocks) break;
+			}
+			for (Location b : logs)
+				BlockUtils.addMultiBlockBreak(b, RegisterEnchantments.GAIA);
+			new AsyncGaiaController(player, item, event.getBlock(), logs, tree);
+		}
+	}
+
+	private void getLikeBlocks(List<Location> logs, Material log, Location loc) {
+		for(int x = -2; x <= 2; x++)
+			for(int y = -1; y <= 1; y++)
+				for(int z = -2; z <= 2; z++) {
+					Block b = loc.getBlock().getRelative(x, y, z);
+					Location l = b.getLocation();
+					if (!logs.contains(l) && b.getType() == log) logs.add(l);
+				}
 	}
 
 	private void curseOfLag(BlockBreakEvent event) {
@@ -221,13 +256,13 @@ public class BlockListener extends Enchantmentable {
 					boolean async = ConfigString.MULTI_BLOCK_ASYNC.getBoolean();
 					if (async) {
 						for(Location b: hwd.getBlocks())
-							BlockUtils.addMultiBlockBreak(b);
+							BlockUtils.addMultiBlockBreak(b, RegisterEnchantments.HEIGHT_PLUS_PLUS);
 						new AsyncBlockController(player, item, hwd.getBlock(), hwd.getBlocks());
 					} else {
 						int blocksBroken = 0;
 						for(Location b: hwd.getBlocks()) {
-							BlockUtils.addMultiBlockBreak(b);
-							if (BlockUtils.multiBreakBlock(player, item, b)) blocksBroken++;
+							BlockUtils.addMultiBlockBreak(b, RegisterEnchantments.HEIGHT_PLUS_PLUS);
+							if (BlockUtils.multiBreakBlock(player, item, b, RegisterEnchantments.HEIGHT_PLUS_PLUS)) blocksBroken++;
 						}
 						AdvancementUtils.awardCriteria(player, ESAdvancement.OVER_9000, "stone", blocksBroken);
 					}

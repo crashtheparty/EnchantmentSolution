@@ -24,6 +24,7 @@ import org.ctp.enchantmentsolution.nms.animalmob.AnimalMob;
 import org.ctp.enchantmentsolution.rpg.RPGPlayer;
 import org.ctp.enchantmentsolution.rpg.RPGUtils;
 import org.ctp.enchantmentsolution.utils.Configurations;
+import org.ctp.enchantmentsolution.utils.abilityhelpers.GaiaUtils;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.WalkerBlock;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.WalkerUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
@@ -67,6 +68,21 @@ public class SaveUtils {
 			}
 			WalkerUtils.addBlocks(blocks);
 			config.removeKeys("blocks");
+		}
+		if (config.containsElements("gaia")) {
+			int i = 0;
+			while (config.getString("gaia." + i) != null) {
+				String stringBlock = config.getString("gaia." + i);
+				String[] arrayBlock = stringBlock.split(" ");
+				try {
+					Location loc = new Location(Bukkit.getWorld(arrayBlock[0]), Integer.parseInt(arrayBlock[1]), Integer.parseInt(arrayBlock[2]), Integer.parseInt(arrayBlock[3]));
+					GaiaUtils.addLocation(loc);
+				} catch (Exception ex) {
+					Chatable.get().sendInfo("Block at position " + i + " was invalid, skipping.");
+				}
+				i++;
+			}
+			config.removeKeys("gaia");
 		}
 		if (config.containsElements("animals")) {
 			int i = 0;
@@ -121,6 +137,12 @@ public class SaveUtils {
 			Block loc = block.getBlock();
 			CustomEnchantment enchantment = RegisterEnchantments.getCustomEnchantment(block.getEnchantment());
 			config.set("blocks." + i, enchantment.getName() + " " + loc.getWorld().getName() + " " + loc.getX() + " " + loc.getY() + " " + loc.getZ() + " " + block.getReplaceType().name() + " " + block.getTick() + " " + block.getDamage().name());
+			i++;
+		}
+		i = 0;
+		List<Location> locs = GaiaUtils.getLocations();
+		if (locs != null) for(Location loc: locs) {
+			config.set("gaia." + i, loc.getWorld().getName() + " " + loc.getBlockX() + " " + loc.getBlockY() + " " + loc.getBlockZ());
 			i++;
 		}
 		i = 0;

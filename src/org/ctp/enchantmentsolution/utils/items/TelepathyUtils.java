@@ -188,7 +188,7 @@ public class TelepathyUtils {
 
 		if (!telepathy.isCancelled() && damageItems) {
 			damageItem(event);
-			if (BlockUtils.multiBlockBreakContains(block.getLocation())) {
+			if (BlockUtils.multiBlockBreakContains(block.getLocation(), RegisterEnchantments.HEIGHT_PLUS_PLUS)) {
 				AdvancementUtils.awardCriteria(player, ESAdvancement.FAST_AND_FURIOUS, "diamond_pickaxe");
 				AdvancementUtils.awardCriteria(player, ESAdvancement.OVER_9000, "stone", 1);
 			}
