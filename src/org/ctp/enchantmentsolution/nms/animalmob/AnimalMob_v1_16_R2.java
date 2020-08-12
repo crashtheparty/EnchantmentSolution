@@ -17,13 +17,13 @@ import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.utils.items.ItemSerialization;
 import org.ctp.enchantmentsolution.utils.yaml.YamlConfig;
 
-public class AnimalMob_v1_16_R1 extends AnimalMob {
+public class AnimalMob_v1_16_R2 extends AnimalMob {
 
 	private Type catType;
 	private Gene pandaHiddenGene, pandaMainGene;
 	private DyeColor collarColor;
 
-	public AnimalMob_v1_16_R1(Creature mob, ItemStack item) {
+	public AnimalMob_v1_16_R2(Creature mob, ItemStack item) {
 		super(mob, item);
 		if (mob instanceof Cat) {
 			Cat cat = (Cat) mob;
@@ -136,16 +136,16 @@ public class AnimalMob_v1_16_R1 extends AnimalMob {
 			mob.setParrotVariant(Variant.valueOf(config.getString("animals." + i + ".parrot_variant")));
 		} catch (Exception ex) {}
 		try {
-			((AnimalMob_v1_16_R1) mob).setCatType(Type.valueOf(config.getString("animals." + i + ".cat_type")));
+			((AnimalMob_v1_16_R2) mob).setCatType(Type.valueOf(config.getString("animals." + i + ".cat_type")));
 		} catch (Exception ex) {}
 		try {
-			((AnimalMob_v1_16_R1) mob).setPandaMainGene(Gene.valueOf(config.getString("animals." + i + ".panda_main_gene")));
+			((AnimalMob_v1_16_R2) mob).setPandaMainGene(Gene.valueOf(config.getString("animals." + i + ".panda_main_gene")));
 		} catch (Exception ex) {}
 		try {
-			((AnimalMob_v1_16_R1) mob).setPandaHiddenGene(Gene.valueOf(config.getString("animals." + i + ".panda_hidden_gene")));
+			((AnimalMob_v1_16_R2) mob).setPandaHiddenGene(Gene.valueOf(config.getString("animals." + i + ".panda_hidden_gene")));
 		} catch (Exception ex) {}
 		try {
-			((AnimalMob_v1_16_R1) mob).setCollarColor(DyeColor.valueOf(config.getString("animals." + i + ".collar_color")));
+			((AnimalMob_v1_16_R2) mob).setCollarColor(DyeColor.valueOf(config.getString("animals." + i + ".collar_color")));
 		} catch (Exception ex) {}
 		try {
 			mob.setRabbitType(org.bukkit.entity.Rabbit.Type.valueOf(config.getString("animals." + i + ".rabbit_type")));

@@ -30,6 +30,9 @@ public class HotbarNMS {
 			case 12:
 				Hotbar_v1_16_R1.sendHotBarMessage(player, message);
 				break;
+			case 13:
+				Hotbar_v1_16_R2.sendHotBarMessage(player, message);
+				break;
 		}
 	}
 }

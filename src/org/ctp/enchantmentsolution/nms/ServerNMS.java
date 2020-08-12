@@ -23,6 +23,8 @@ public class ServerNMS {
 				return net.minecraft.server.v1_15_R1.MinecraftServer.currentTick;
 			case 12:
 				return net.minecraft.server.v1_16_R1.MinecraftServer.currentTick;
+			case 13:
+				return net.minecraft.server.v1_16_R2.MinecraftServer.currentTick;
 		}
 		return (int) System.currentTimeMillis() / 50;
 	}
