@@ -30,6 +30,9 @@ public class AnvilNMS {
 			case 12:
 				net.minecraft.server.v1_16_R1.ItemStack nmsV5 = org.bukkit.craftbukkit.v1_16_R1.inventory.CraftItemStack.asNMSCopy(item);
 				return nmsV5.getRepairCost();
+			case 13:
+				net.minecraft.server.v1_16_R2.ItemStack nmsV6 = org.bukkit.craftbukkit.v1_16_R2.inventory.CraftItemStack.asNMSCopy(item);
+				return nmsV6.getRepairCost();
 		}
 		return 0;
 	}
@@ -63,6 +66,10 @@ public class AnvilNMS {
 				net.minecraft.server.v1_16_R1.ItemStack nmsV5 = org.bukkit.craftbukkit.v1_16_R1.inventory.CraftItemStack.asNMSCopy(item);
 				nmsV5.setRepairCost(repairCost);
 				return org.bukkit.craftbukkit.v1_16_R1.inventory.CraftItemStack.asBukkitCopy(nmsV5);
+			case 13:
+				net.minecraft.server.v1_16_R2.ItemStack nmsV6 = org.bukkit.craftbukkit.v1_16_R2.inventory.CraftItemStack.asNMSCopy(item);
+				nmsV6.setRepairCost(repairCost);
+				return org.bukkit.craftbukkit.v1_16_R2.inventory.CraftItemStack.asBukkitCopy(nmsV6);
 		}
 		return item;
 	}
