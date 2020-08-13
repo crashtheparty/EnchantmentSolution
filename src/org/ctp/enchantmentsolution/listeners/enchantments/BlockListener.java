@@ -222,12 +222,23 @@ public class BlockListener extends Enchantmentable {
 					yt = heightPlusPlus;
 
 			}
+			String which = "";
+			int times = 1;
 			if (RegisterEnchantments.isEnabled(RegisterEnchantments.DEPTH_PLUS_PLUS) && EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.DEPTH_PLUS_PLUS)) {
 				hasEnchant = true;
-				if (pitch > 53 || pitch <= -53) yt = depthPlusPlus;
-				else if (yaw <= 45 || yaw > 135 && yaw <= 225 || yaw > 315) zt = depthPlusPlus;
-				else
+				if (pitch > 53 || pitch <= -53) {
+					yt = depthPlusPlus;
+					which = "yt";
+					if (pitch > 53) times = -1;
+				} else if (yaw <= 45 || yaw > 135 && yaw <= 225 || yaw > 315) {
+					zt = depthPlusPlus;
+					which = "zt";
+					if (yaw > 45 && yaw <= 225) times = -1;
+				} else {
 					xt = depthPlusPlus;
+					which = "xt";
+					if (yaw > 45 && yaw <= 225) times = -1;
+				}
 			}
 			Material original = event.getBlock().getType();
 			if (hasEnchant && ItemBreakType.getType(item.getType()) != null && ItemBreakType.getType(item.getType()).getBreakTypes() != null && ItemBreakType.getType(item.getType()).getBreakTypes().contains(original)) {
@@ -239,14 +250,39 @@ public class BlockListener extends Enchantmentable {
 					for(int y = 0; y <= yt; y++)
 						for(int z = 0; z <= zt; z++) {
 							if (x == 0 && y == 0 && z == 0) continue;
-							addMultiBlock(blocks, item, original, block, x, y, z);
-							addMultiBlock(blocks, item, original, block, -x, y, z);
-							addMultiBlock(blocks, item, original, block, x, -y, z);
-							addMultiBlock(blocks, item, original, block, x, y, -z);
-							addMultiBlock(blocks, item, original, block, -x, -y, z);
-							addMultiBlock(blocks, item, original, block, -x, y, -z);
-							addMultiBlock(blocks, item, original, block, x, -y, -z);
-							addMultiBlock(blocks, item, original, block, -x, -y, -z);
+							if (which.equals("")) {
+								addMultiBlock(blocks, item, original, block, x, y, z);
+								addMultiBlock(blocks, item, original, block, -x, y, z);
+								addMultiBlock(blocks, item, original, block, x, -y, z);
+								addMultiBlock(blocks, item, original, block, x, y, -z);
+								addMultiBlock(blocks, item, original, block, -x, -y, z);
+								addMultiBlock(blocks, item, original, block, -x, y, -z);
+								addMultiBlock(blocks, item, original, block, x, -y, -z);
+								addMultiBlock(blocks, item, original, block, -x, -y, -z);
+							} else
+								switch (which) {
+									case "xt":
+										int xc = x * times;
+										addMultiBlock(blocks, item, original, block, xc, y, z);
+										addMultiBlock(blocks, item, original, block, xc, -y, z);
+										addMultiBlock(blocks, item, original, block, xc, y, -z);
+										addMultiBlock(blocks, item, original, block, xc, -y, -z);
+										break;
+									case "yt":
+										int yc = y * times;
+										addMultiBlock(blocks, item, original, block, x, yc, z);
+										addMultiBlock(blocks, item, original, block, -x, yc, z);
+										addMultiBlock(blocks, item, original, block, x, yc, -z);
+										addMultiBlock(blocks, item, original, block, -x, yc, -z);
+										break;
+									case "zt":
+										int zc = z * times;
+										addMultiBlock(blocks, item, original, block, x, y, zc);
+										addMultiBlock(blocks, item, original, block, -x, y, zc);
+										addMultiBlock(blocks, item, original, block, x, -y, zc);
+										addMultiBlock(blocks, item, original, block, -x, -y, zc);
+										break;
+								}
 						}
 
 				HeightWidthDepthEvent hwd = new HeightWidthDepthEvent(blocks, block, player, heightPlusPlus, widthPlusPlus, depthPlusPlus);
