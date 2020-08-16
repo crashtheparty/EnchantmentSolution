@@ -337,7 +337,7 @@ public class PersistenceUtils {
 					PersistenceNMS.addEnchantment(item, entry);
 				}
 			}
-			return item;
+			return item.clone();
 		}
 		return null;
 	}
