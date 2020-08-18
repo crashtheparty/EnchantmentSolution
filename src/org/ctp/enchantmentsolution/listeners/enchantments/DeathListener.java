@@ -16,17 +16,20 @@ import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.events.drops.BeheadingEvent;
 import org.ctp.enchantmentsolution.events.drops.TransmutationEvent;
+import org.ctp.enchantmentsolution.events.entity.StreakDeathEvent;
 import org.ctp.enchantmentsolution.listeners.Enchantmentable;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.TransmutationLoot;
 import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
+import org.ctp.enchantmentsolution.utils.player.ESPlayer;
 
 @SuppressWarnings("unused")
-public class DropsListener extends Enchantmentable {
+public class DeathListener extends Enchantmentable {
 
 	@EventHandler
 	public void onEntityDeath(EntityDeathEvent event) {
 		runMethod(this, "beheading", event, EntityDeathEvent.class);
+		runMethod(this, "streak", event, EntityDeathEvent.class);
 		runMethod(this, "transmutation", event, EntityDeathEvent.class);
 	}
 
@@ -62,6 +65,24 @@ public class DropsListener extends Enchantmentable {
 							for(ItemStack drop: newDrops)
 								event.getDrops().add(drop);
 						}
+					}
+				}
+			}
+		}
+	}
+
+	private void streak(EntityDeathEvent event) {
+		if (!canRun(RegisterEnchantments.STREAK, event)) return;
+		EntityDamageEvent e = event.getEntity().getLastDamageCause();
+		if (e instanceof EntityDamageByEntityEvent) {
+			EntityDamageByEntityEvent entityDamage = (EntityDamageByEntityEvent) e;
+			if (event.getEntity().getKiller() != null) {
+				Player killer = event.getEntity().getKiller();
+				if (EnchantmentUtils.hasEnchantment(killer.getInventory().getItemInMainHand(), RegisterEnchantments.STREAK)) {
+					StreakDeathEvent streak = new StreakDeathEvent(event.getEntity(), killer);
+					if (!streak.isCancelled()) {
+						ESPlayer player = EnchantmentSolution.getESPlayer(killer);
+						player.addToStreak(streak.getEntity());
 					}
 				}
 			}

@@ -93,6 +93,9 @@ public class RegisterEnchantments {
 	public static final Enchantment ZEAL = new CustomEnchantmentWrapper("zeal", "ZEAL");
 	public static final Enchantment DEPTH_PLUS_PLUS = new CustomEnchantmentWrapper("depth_plus_plus", "DEPTH_PLUS_PLUS");
 	public static final Enchantment GAIA = new CustomEnchantmentWrapper("gaia", "GAIA");
+	public static final Enchantment PACIFIED = new CustomEnchantmentWrapper("pacified", "PACIFIED");
+	public static final Enchantment STREAK = new CustomEnchantmentWrapper("streak", "STREAK");
+	public static final Enchantment GREEN_THUMB = new CustomEnchantmentWrapper("green_thumb", "GREEN_THUMB");
 
 	private RegisterEnchantments() {}
 
@@ -309,6 +312,7 @@ public class RegisterEnchantments {
 		addDefaultEnchantment(CERegister.FROSTY);
 		addDefaultEnchantment(CERegister.GAIA);
 		addDefaultEnchantment(CERegister.GOLD_DIGGER);
+		addDefaultEnchantment(CERegister.GREEN_THUMB);
 		addDefaultEnchantment(CERegister.GUNG_HO);
 		addDefaultEnchantment(CERegister.HARD_BOUNCE);
 		addDefaultEnchantment(CERegister.HEIGHT_PLUS_PLUS);
@@ -327,6 +331,7 @@ public class RegisterEnchantments {
 		addDefaultEnchantment(CERegister.MOISTURIZE);
 		addDefaultEnchantment(CERegister.NO_REST);
 		addDefaultEnchantment(CERegister.OVERKILL);
+		addDefaultEnchantment(CERegister.PACIFIED);
 		if (VersionUtils.getBukkitVersionNumber() > 3) addDefaultEnchantment(CERegister.PILLAGE);
 		addDefaultEnchantment(CERegister.PLYOMETRICS);
 		addDefaultEnchantment(CERegister.PUSHBACK);
@@ -342,6 +347,7 @@ public class RegisterEnchantments {
 		addDefaultEnchantment(CERegister.SPLATTER_FEST);
 		addDefaultEnchantment(CERegister.STICKY_HOLD);
 		if (VersionUtils.getBukkitVersionNumber() > 3) addDefaultEnchantment(CERegister.STONE_THROW);
+		addDefaultEnchantment(CERegister.STREAK);
 		addDefaultEnchantment(CERegister.TANK);
 		addDefaultEnchantment(CERegister.TELEPATHY);
 		addDefaultEnchantment(CERegister.TOUGHNESS);

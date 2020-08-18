@@ -111,7 +111,7 @@ public class EnchantmentSolution extends CrashAPIPlugin {
 		registerEvent(new GlobalPlayerListener());
 
 		registerEvent(new FishingListener());
-		registerEvent(new DropsListener());
+		registerEvent(new DeathListener());
 		registerEvent(new SoulListener());
 		registerEvent(new DamageListener());
 		registerEvent(new PlayerListener());

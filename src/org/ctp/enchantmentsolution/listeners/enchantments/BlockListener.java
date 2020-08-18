@@ -9,10 +9,12 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.*;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockDropItemEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.inventory.EquipmentSlot;
@@ -27,9 +29,7 @@ import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enums.ItemBreakType;
 import org.ctp.enchantmentsolution.enums.ItemPlaceType;
-import org.ctp.enchantmentsolution.events.blocks.HeightWidthDepthEvent;
-import org.ctp.enchantmentsolution.events.blocks.LightWeightEvent;
-import org.ctp.enchantmentsolution.events.blocks.WandEvent;
+import org.ctp.enchantmentsolution.events.blocks.*;
 import org.ctp.enchantmentsolution.events.modify.GoldDiggerEvent;
 import org.ctp.enchantmentsolution.events.modify.LagEvent;
 import org.ctp.enchantmentsolution.events.player.ExpShareEvent;
@@ -39,11 +39,13 @@ import org.ctp.enchantmentsolution.listeners.VeinMinerListener;
 import org.ctp.enchantmentsolution.mcmmo.McMMOAbility;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.BlockUtils;
+import org.ctp.enchantmentsolution.utils.abilityhelpers.Crop;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.GaiaUtils.GaiaTrees;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.GoldDiggerCrop;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.ParticleEffect;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 import org.ctp.enchantmentsolution.utils.items.*;
+import org.ctp.enchantmentsolution.utils.player.ESPlayer;
 
 @SuppressWarnings("unused")
 public class BlockListener extends Enchantmentable {
@@ -53,8 +55,14 @@ public class BlockListener extends Enchantmentable {
 		runMethod(this, "expShare", event, BlockBreakEvent.class);
 	}
 
+	@EventHandler
+	public void onBlockDropItem(BlockDropItemEvent event) {
+		runMethod(this, "greenThumb", event, BlockDropItemEvent.class);
+	}
+
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onBlockBreakHighest(BlockBreakEvent event) {
+		runMethod(this, "greenThumb", event, BlockBreakEvent.class);
 		runMethod(this, "gaia", event, BlockBreakEvent.class);
 		runMethod(this, "heightWidth", event, BlockBreakEvent.class);
 		runMethod(this, "curseOfLag", event, BlockBreakEvent.class);
@@ -71,39 +79,6 @@ public class BlockListener extends Enchantmentable {
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onEntityChangeBlock(EntityChangeBlockEvent event) {
 		runMethod(this, "lightWeight", event, EntityChangeBlockEvent.class);
-	}
-
-	private void gaia(BlockBreakEvent event) {
-		if (!canRun(RegisterEnchantments.GAIA, event)) return;
-		Player player = event.getPlayer();
-		if (BlockUtils.multiBlockBreakContains(event.getBlock().getLocation())) return;
-		if (!EnchantmentSolution.getPlugin().getMcMMOType().equals("Disabled") && McMMOAbility.getIgnored() != null && McMMOAbility.getIgnored().contains(player)) return;
-		if (player.getGameMode().equals(GameMode.CREATIVE) || player.getGameMode().equals(GameMode.SPECTATOR)) return;
-		ItemStack item = player.getInventory().getItemInMainHand();
-		GaiaTrees tree = GaiaTrees.getTree(event.getBlock().getType());
-		if (item != null && EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.GAIA) && tree != null) {
-			List<Location> logs = new ArrayList<Location>();
-			int level = EnchantmentUtils.getLevel(item, RegisterEnchantments.GAIA);
-			int maxBlocks = 50 + (level * level) * 50;
-			logs.add(event.getBlock().getLocation());
-			for(int i = 0; i < logs.size(); i++) {
-				getLikeBlocks(logs, tree.getLog().getMaterial(), logs.get(i));
-				if (logs.size() > maxBlocks) break;
-			}
-			for (Location b : logs)
-				BlockUtils.addMultiBlockBreak(b, RegisterEnchantments.GAIA);
-			new AsyncGaiaController(player, item, event.getBlock(), logs, tree);
-		}
-	}
-
-	private void getLikeBlocks(List<Location> logs, Material log, Location loc) {
-		for(int x = -2; x <= 2; x++)
-			for(int y = -1; y <= 1; y++)
-				for(int z = -2; z <= 2; z++) {
-					Block b = loc.getBlock().getRelative(x, y, z);
-					Location l = b.getLocation();
-					if (!logs.contains(l) && b.getType() == log) logs.add(l);
-				}
 	}
 
 	private void curseOfLag(BlockBreakEvent event) {
@@ -139,6 +114,110 @@ public class BlockListener extends Enchantmentable {
 				Bukkit.getPluginManager().callEvent(experienceEvent);
 
 				if (!experienceEvent.isCancelled() && experienceEvent.getNewExp() >= 0) event.setExpToDrop(experienceEvent.getNewExp());
+			}
+		}
+	}
+
+	private void gaia(BlockBreakEvent event) {
+		if (!canRun(RegisterEnchantments.GAIA, event)) return;
+		Player player = event.getPlayer();
+		if (BlockUtils.multiBlockBreakContains(event.getBlock().getLocation())) return;
+		if (!EnchantmentSolution.getPlugin().getMcMMOType().equals("Disabled") && McMMOAbility.getIgnored() != null && McMMOAbility.getIgnored().contains(player)) return;
+		if (player.getGameMode().equals(GameMode.CREATIVE) || player.getGameMode().equals(GameMode.SPECTATOR)) return;
+		ItemStack item = player.getInventory().getItemInMainHand();
+		GaiaTrees tree = GaiaTrees.getTree(event.getBlock().getType());
+		if (item != null && EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.GAIA) && tree != null) {
+			List<Location> logs = new ArrayList<Location>();
+			int level = EnchantmentUtils.getLevel(item, RegisterEnchantments.GAIA);
+			int maxBlocks = 50 + (level * level) * 50;
+			logs.add(event.getBlock().getLocation());
+			for(int i = 0; i < logs.size(); i++) {
+				getLikeBlocks(logs, tree.getLog().getMaterial(), logs.get(i));
+				if (logs.size() > maxBlocks) break;
+			}
+			for(Location b: logs)
+				BlockUtils.addMultiBlockBreak(b, RegisterEnchantments.GAIA);
+			new AsyncGaiaController(player, item, event.getBlock(), logs, tree);
+		}
+	}
+
+	private void getLikeBlocks(List<Location> logs, Material log, Location loc) {
+		for(int x = -2; x <= 2; x++)
+			for(int y = -1; y <= 1; y++)
+				for(int z = -2; z <= 2; z++) {
+					Block b = loc.getBlock().getRelative(x, y, z);
+					Location l = b.getLocation();
+					if (!logs.contains(l) && b.getType() == log) logs.add(l);
+				}
+	}
+
+	private void greenThumb(BlockBreakEvent event) {
+		if (!canRun(RegisterEnchantments.GREEN_THUMB, event)) return;
+		Player player = event.getPlayer();
+		if (player.getGameMode().equals(GameMode.CREATIVE) || player.getGameMode().equals(GameMode.SPECTATOR)) return;
+		ItemStack item = player.getInventory().getItemInMainHand();
+		Block block = event.getBlock();
+		if (item != null && EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.GREEN_THUMB) && block.getBlockData() instanceof Ageable) {
+			Ageable age = (Ageable) block.getBlockData();
+			Material mat = block.getType();
+			if (Crop.hasBlock(mat) && age.getAge() == 0) event.setCancelled(true);
+		}
+	}
+
+	private void greenThumb(BlockDropItemEvent event) {
+		if (!canRun(RegisterEnchantments.GREEN_THUMB, event)) return;
+		Player player = event.getPlayer();
+		if (player.getGameMode().equals(GameMode.CREATIVE) || player.getGameMode().equals(GameMode.SPECTATOR)) return;
+		ESPlayer esPlayer = EnchantmentSolution.getESPlayer(player);
+		ItemStack item = player.getInventory().getItemInMainHand();
+		Block block = event.getBlock();
+		BlockData data = event.getBlockState().getBlockData();
+		if (item != null && EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.GREEN_THUMB) && data instanceof Ageable) {
+			Ageable age = (Ageable) data;
+			Material mat = data.getMaterial();
+			if (!Crop.hasBlock(mat) || Crop.hasBlock(mat) && age.getAge() != age.getMaximumAge()) return;
+			Crop c = Crop.getCrop(mat);
+			Item dropItem = null;
+			ItemStack dropStack = null;
+			List<ItemStack> overrideItems = new ArrayList<ItemStack>();
+			List<ItemStack> items = new ArrayList<ItemStack>();
+			for (Item i : event.getItems()) {
+				if (i.getItemStack().getType() == c.getSeed().getMaterial()) {
+					dropItem = i;
+					dropStack = i.getItemStack();
+					ItemStack clone = dropStack.clone();
+					if (clone.getAmount() <= 1) {
+						clone.setType(Material.AIR);
+						clone.setAmount(0);
+					} else
+						clone.setAmount(clone.getAmount() - 1);
+					items.add(clone);
+				} else
+					items.add(i.getItemStack());
+				overrideItems.add(i.getItemStack());
+			}
+			if (dropStack == null) for (ItemStack i : esPlayer.getInventoryItems())
+				if (i != null && i.getType() == c.getSeed().getMaterial()) {
+					dropStack = i;
+					break;
+				}
+			GreenThumbEvent greenThumb = new GreenThumbEvent(block, player, items, overrideItems, dropStack);
+			
+			Bukkit.getPluginManager().callEvent(greenThumb);
+			
+			if (!greenThumb.isCancelled()) {
+				dropStack.setAmount(dropStack.getAmount() - 1);
+				if (dropStack.getAmount() == 0) dropStack.setType(Material.AIR);
+				if (dropItem != null) for(Item i: event.getItems())
+					if (i.getItemStack().getType() == c.getSeed().getMaterial()) {
+						i.setItemStack(dropStack);
+						break;
+					}
+				Bukkit.getScheduler().runTaskLater(EnchantmentSolution.getPlugin(), () -> {
+					block.setType(c.getBlock().getMaterial());
+					Ageable newAge = (Ageable) block.getBlockData();
+					newAge.setAge(0);
+				}, 0l); 
 			}
 		}
 	}

@@ -6,6 +6,8 @@ import org.bukkit.*;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.attribute.AttributeModifier.Operation;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.ctp.crashapi.item.ItemData;
@@ -22,6 +24,7 @@ import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.PermissionUtils;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.ItemEquippedSlot;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.OverkillDeath;
+import org.ctp.enchantmentsolution.utils.abilityhelpers.Streak;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 import org.ctp.enchantmentsolution.utils.items.AbilityUtils;
 import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
@@ -45,6 +48,7 @@ public class ESPlayer {
 	private List<OverkillDeath> overkillDeaths;
 	private List<AttributeLevel> attributes;
 	private ESPlayerAttributeInstance flyAttribute = new FlySpeedAttribute();
+	private Streak streak;
 
 	public ESPlayer(OfflinePlayer player) {
 		this.player = player;
@@ -77,7 +81,7 @@ public class ESPlayer {
 	}
 
 	public boolean isInInventory(ItemStack item) {
-		for (int i = 0; i < 41; i++) {
+		for(int i = 0; i < 41; i++) {
 			ItemStack content = getOnlinePlayer().getInventory().getItem(i);
 			if (content == null) continue;
 			if (item.equals(content)) return true;
@@ -114,9 +118,13 @@ public class ESPlayer {
 		return equipped;
 	}
 
+	public ItemStack[] getInventoryItems() {
+		return isOnline() ? getOnlinePlayer().getInventory().getContents() : new ItemStack[41];
+	}
+
 	public List<ItemStack> getUnstableItems() {
 		List<ItemStack> items = new ArrayList<ItemStack>();
-		for (ItemStack item : getEquipped())
+		for(ItemStack item: getEquipped())
 			if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.CURSE_OF_INSTABILITY)) items.add(item);
 		return items;
 	}
@@ -390,6 +398,23 @@ public class ESPlayer {
 			AttributeLevel level = iter.next();
 			if (level.getAttribute().equals(attribute) && level.getSlot().equals(slot)) iter.remove();
 		}
+	}
+
+	public int addToStreak(LivingEntity entity) {
+		if (streak == null) streak = new Streak();
+		return streak.addToStreak(entity);
+	}
+
+	public int getStreak() {
+		return streak.getStreak();
+	}
+
+	public EntityType getType() {
+		return streak.getType();
+	}
+
+	public void setStreak(EntityType type, int streak) {
+		this.streak.setStreak(type, streak);
 	}
 
 }

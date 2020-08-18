@@ -48,6 +48,7 @@ import org.ctp.enchantmentsolution.utils.abilityhelpers.EntityAccuracy;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.ParticleEffect;
 import org.ctp.enchantmentsolution.utils.items.AbilityUtils;
 import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
+import org.ctp.enchantmentsolution.utils.player.ESPlayer;
 
 @SuppressWarnings("unused")
 public class DamageListener extends Enchantmentable {
@@ -67,9 +68,11 @@ public class DamageListener extends Enchantmentable {
 		runMethod(this, "hollowPoint", event, EntityDamageByEntityEvent.class);
 		runMethod(this, "irenesLasso", event, EntityDamageByEntityEvent.class);
 		runMethod(this, "knockUp", event, EntityDamageByEntityEvent.class);
+		runMethod(this, "pacified", event, EntityDamageByEntityEvent.class);
 		runMethod(this, "pushback", event, EntityDamageByEntityEvent.class);
 		runMethod(this, "sandVeil", event, EntityDamageByEntityEvent.class);
 		runMethod(this, "shockAspect", event, EntityDamageByEntityEvent.class);
+		runMethod(this, "streak", event, EntityDamageByEntityEvent.class);
 		runMethod(this, "stoneThrow", event, EntityDamageByEntityEvent.class);
 		runMethod(this, "warp", event, EntityDamageByEntityEvent.class);
 		runMethod(this, "potions", event, EntityDamageByEntityEvent.class);
@@ -96,7 +99,7 @@ public class DamageListener extends Enchantmentable {
 			ItemStack item = player.getInventory().getItemInMainHand();
 			if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.BRINE)) {
 				Entity damaged = event.getEntity();
-				if (damaged instanceof LivingEntity) {
+				if (item != null && damaged instanceof LivingEntity) {
 					LivingEntity living = (LivingEntity) damaged;
 					AttributeInstance a = living.getAttribute(Attribute.GENERIC_MAX_HEALTH);
 					double maxHealth = a.getValue();
@@ -429,6 +432,28 @@ public class DamageListener extends Enchantmentable {
 		}
 	}
 
+	private void pacified(EntityDamageByEntityEvent event) {
+		if (!canRun(RegisterEnchantments.PACIFIED, event)) return;
+		Entity entity = event.getDamager();
+		if (entity instanceof Player) {
+			Player player = (Player) entity;
+			ItemStack item = player.getInventory().getItemInMainHand();
+			if (item != null && EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.PACIFIED)) {
+				int level = EnchantmentUtils.getLevel(item, RegisterEnchantments.PACIFIED);
+				Entity damaged = event.getEntity();
+				if (damaged instanceof Tameable && ((Tameable) damaged).getOwner().getUniqueId().equals(player.getUniqueId())) {
+					LivingEntity living = (LivingEntity) damaged;
+					double damage = event.getDamage();
+					double newDamage = Math.max(damage * (1 - .15 * level), 0);
+					PacifiedEvent pacified = new PacifiedEvent(living, player, level, damage, newDamage);
+					Bukkit.getPluginManager().callEvent(pacified);
+
+					if (!pacified.isCancelled()) event.setDamage(pacified.getNewDamage());
+				}
+			}
+		}
+	}
+
 	private void pushback(EntityDamageByEntityEvent event) {
 		if (!canRun(RegisterEnchantments.PUSHBACK, event)) return;
 
@@ -590,6 +615,29 @@ public class DamageListener extends Enchantmentable {
 					break;
 				default:
 					break;
+			}
+		}
+	}
+
+	private void streak(EntityDamageByEntityEvent event) {
+		if (!canRun(RegisterEnchantments.STREAK, event)) return;
+		Entity entity = event.getDamager();
+		if (entity instanceof Player) {
+			Player player = (Player) entity;
+			ItemStack item = player.getInventory().getItemInMainHand();
+			if (item != null && EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.STREAK)) {
+				Entity damaged = event.getEntity();
+				ESPlayer esPlayer = EnchantmentSolution.getESPlayer(player);
+				if (damaged instanceof LivingEntity) {
+					LivingEntity living = (LivingEntity) damaged;
+					int num = esPlayer.getStreak();
+					double damage = event.getDamage();
+					double newDamage = damage * (1 + 0.01 * num);
+					StreakEvent streak = new StreakEvent(living, player, damage, newDamage);
+					Bukkit.getPluginManager().callEvent(streak);
+
+					if (!streak.isCancelled()) event.setDamage(streak.getNewDamage());
+				}
 			}
 		}
 	}

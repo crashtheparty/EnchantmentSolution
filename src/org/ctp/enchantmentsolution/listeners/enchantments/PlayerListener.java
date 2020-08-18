@@ -15,7 +15,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemBreakEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
@@ -29,6 +28,7 @@ import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enums.ItemMoisturizeType;
 import org.ctp.enchantmentsolution.events.interact.*;
 import org.ctp.enchantmentsolution.events.modify.IcarusLaunchEvent;
+import org.ctp.enchantmentsolution.events.player.PlayerChangeCoordsEvent;
 import org.ctp.enchantmentsolution.listeners.Enchantmentable;
 import org.ctp.enchantmentsolution.nms.PersistenceNMS;
 import org.ctp.enchantmentsolution.nms.animalmob.AnimalMob;
@@ -58,8 +58,8 @@ public class PlayerListener extends Enchantmentable {
 	}
 
 	@EventHandler
-	public void onPlayerMove(PlayerMoveEvent event) {
-		runMethod(this, "icarus", event, PlayerMoveEvent.class);
+	public void onPlayerChangeCoords(PlayerChangeCoordsEvent event) {
+		runMethod(this, "icarus", event, PlayerChangeCoordsEvent.class);
 		runMethod(this, "movementListener", event, RegisterEnchantments.MAGMA_WALKER);
 		runMethod(this, "movementListener", event, RegisterEnchantments.VOID_WALKER);
 	}
@@ -137,7 +137,7 @@ public class PlayerListener extends Enchantmentable {
 		}
 	}
 
-	private void icarus(PlayerMoveEvent event) {
+	private void icarus(PlayerChangeCoordsEvent event) {
 		if (!canRun(RegisterEnchantments.ICARUS, event)) return;
 		Player player = event.getPlayer();
 		ItemStack chestplate = player.getInventory().getChestplate();
@@ -426,7 +426,7 @@ public class PlayerListener extends Enchantmentable {
 	}
 
 	@SuppressWarnings("deprecation")
-	private void movementListener(PlayerMoveEvent event, Enchantment enchantment) {
+	private void movementListener(PlayerChangeCoordsEvent event, Enchantment enchantment) {
 		if (!canRun(enchantment, event)) return;
 		Player player = event.getPlayer();
 		Location loc = player.getLocation();

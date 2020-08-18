@@ -8,10 +8,10 @@ import org.bukkit.block.data.Ageable;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.enums.ItemBreakType;
+import org.ctp.enchantmentsolution.utils.abilityhelpers.Crop;
 
 public class FortuneUtils {
-	private static List<Material> CROPS = Arrays.asList(Material.WHEAT, Material.CARROTS, Material.POTATOES, Material.NETHER_WART, Material.BEETROOTS, Material.COCOA_BEANS);
-
+	
 	public static ItemStack getFortuneForSmeltery(ItemStack smelted, ItemStack item, Material original) {
 		if (EnchantmentUtils.hasEnchantment(item, Enchantment.LOOT_BONUS_BLOCKS)) {
 			int level = EnchantmentUtils.getLevel(item, Enchantment.LOOT_BONUS_BLOCKS);
@@ -51,7 +51,7 @@ public class FortuneUtils {
 		int actualMax = 0;
 		if (brokenBlock.getBlockData() instanceof Ageable) {
 			Ageable age = (Ageable) brokenBlock.getBlockData();
-			if (CROPS.contains(brokenBlock.getType())) if (age.getAge() != age.getMaximumAge()) return priorItems;
+			if (Crop.hasBlock(brokenBlock.getType()) && age.getAge() != age.getMaximumAge()) return priorItems;
 		}
 
 		double chance = 0;
