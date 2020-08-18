@@ -11,6 +11,7 @@ import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
+import org.ctp.crashapi.CrashAPI;
 import org.ctp.crashapi.CrashAPIPlugin;
 import org.ctp.crashapi.config.yaml.YamlConfig;
 import org.ctp.crashapi.db.BackupDB;
@@ -98,6 +99,10 @@ public class EnchantmentSolution extends CrashAPIPlugin {
 
 	@Override
 	public void onEnable() {
+		if (CrashAPI.getPlugin().getBukkitVersion().getVersionNumber() < 4) {
+			Chatable.get().sendWarning("WARNING: Minecraft 1.13 is now deprecated! Support will not be offered for any issues with enchantments or NMS.");
+			Chatable.get().sendWarning("Please use an older version of EnchantmentSolution (2.3.x) if problems persist.");
+		}
 		registerEvent(new InventoryClick());
 		registerEvent(new InventoryClose());
 		registerEvent(new PlayerInteract());
