@@ -136,7 +136,6 @@ public class EnchantmentSolution extends JavaPlugin {
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN, new AbilityThreads(), 80l, 80l);
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN, new AdvancementThread(), 1l, 1l);
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN, new EntityThreads(), 1l, 1l);
-		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN, new SnapshotThread(), 1l, 1l);
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN, new WalkerThread(), 1l, 1l);
 
 		EnchantmentSolutionCommand c = new EnchantmentSolutionCommand();
@@ -393,7 +392,7 @@ public class EnchantmentSolution extends JavaPlugin {
 			Quests.get();
 			quests = true;
 			ChatUtils.sendInfo("Quests compatibility enabled!");
-		} catch (Exception ex) {}
+		} catch (Exception | Error ex) {}
 	}
 
 	public boolean getMMOItems() {

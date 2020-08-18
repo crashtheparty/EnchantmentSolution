@@ -206,6 +206,19 @@ public class AnvilEnchantments extends GenerateEnchantments {
 			return;
 		}
 
+		if (ItemUtils.getEnchantmentLevels(itemTwo).size() > 0) {
+			List<EnchantmentLevel> levels = ItemUtils.getEnchantmentLevels(itemTwo);
+			boolean canEnchant = false;
+			for(EnchantmentLevel level: levels) {
+				CustomEnchantment enchant = level.getEnchant();
+				if (enchant.addEnchantThroughAnvil(new ItemData(itemTwo), new ItemData(itemOne), getPlayer().getPlayer(), level.getLevel())) canEnchant = true;
+			}
+			if (!canEnchant) {
+				combinedItem = null;
+				return;
+			}
+		}
+
 		if (repairType == RepairType.REPAIR) {
 			int amount = itemTwo.getAmount();
 			int durPerItem = DamageUtils.getMaxDamage(combinedItem) / 4;

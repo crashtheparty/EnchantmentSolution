@@ -76,7 +76,7 @@ public class AnvilListener implements Listener {
 						int cost = anvil.getRepairCost();
 						if (cost > ConfigString.MAX_REPAIR_LEVEL.getInt()) {
 							HashMap<String, Object> loreCodes = ChatUtils.getCodes();
-							loreCodes.put("%repairCost%", cost);
+							loreCodes.put("%level%", cost);
 							ChatUtils.sendMessage(player, ChatUtils.getMessage(loreCodes, "anvil.cannot-repair"));
 							return;
 						}
@@ -107,7 +107,7 @@ public class AnvilListener implements Listener {
 						else {
 							HashMap<String, Object> codes = ChatUtils.getCodes();
 							codes.put("%level%", cost);
-							ChatUtils.sendMessage(player, ChatUtils.getMessage(ChatUtils.getCodes(), "anvil.message-cannot-combine-cost"));
+							ChatUtils.sendMessage(player, ChatUtils.getMessage(codes, "anvil.message-cannot-combine-cost"));
 						}
 					}
 				}
@@ -143,7 +143,7 @@ public class AnvilListener implements Listener {
 						else {
 							HashMap<String, Object> codes = ChatUtils.getCodes();
 							codes.put("%level%", cost);
-							ChatUtils.sendMessage(player, ChatUtils.getMessage(ChatUtils.getCodes(), "anvil.message-cannot-combine-cost"));
+							ChatUtils.sendMessage(player, ChatUtils.getMessage(codes, "anvil.message-cannot-combine-cost"));
 						}
 					}
 				}

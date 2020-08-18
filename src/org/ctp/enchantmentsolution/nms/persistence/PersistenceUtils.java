@@ -164,6 +164,7 @@ public class PersistenceUtils {
 	public static EnchResult isEnchantment(ItemMeta meta, String s) {
 		s = ChatColor.stripColor(s);
 		String[] pieces = s.split(" ");
+		if (pieces.length == 0) return new EnchResult(false, false, null);
 		int level = 0;
 		int repair = 0;
 		if (pieces[pieces.length - 1].contains("enchantment.level")) {

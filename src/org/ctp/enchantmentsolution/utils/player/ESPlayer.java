@@ -100,6 +100,10 @@ public class ESPlayer {
 		return equipped;
 	}
 
+	public ItemStack[] getInventoryItems() {
+		return isOnline() ? getOnlinePlayer().getInventory().getContents() : new ItemStack[1];
+	}
+
 	public long getCooldown(Enchantment enchant) {
 		return cooldowns.containsKey(enchant) ? cooldowns.get(enchant) : 0;
 	}

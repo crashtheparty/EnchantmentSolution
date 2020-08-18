@@ -68,7 +68,7 @@ public class AnvilGUI_v1_16_R2 extends AnvilGUI {
 	public static void createAnvil(Player player, InventoryData data) {
 		AnvilClickEventHandler handler = AnvilClickEventHandler.getHandler(player, data);
 		if (data instanceof Anvil) ((Anvil) data).setInLegacy(true);
-		AnvilGUI_v1_16_R1 gui = new AnvilGUI_v1_16_R1(player, handler, data);
+		AnvilGUI_v1_16_R2 gui = new AnvilGUI_v1_16_R2(player, handler, data);
 		gui.open();
 	}
 

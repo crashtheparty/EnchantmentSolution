@@ -20,10 +20,10 @@ import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.inventory.*;
 import org.ctp.enchantmentsolution.inventory.minigame.Minigame;
 import org.ctp.enchantmentsolution.inventory.rpg.RPGInventory;
+import org.ctp.enchantmentsolution.listeners.VanishListener;
 import org.ctp.enchantmentsolution.nms.PersistenceNMS;
 import org.ctp.enchantmentsolution.rpg.RPGPlayer;
 import org.ctp.enchantmentsolution.rpg.RPGUtils;
-import org.ctp.enchantmentsolution.threads.SnapshotThread;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.Configurations;
 import org.ctp.enchantmentsolution.utils.StringUtils;
@@ -125,7 +125,8 @@ public class CommandUtils {
 				}
 			}
 
-			SnapshotThread.updateInventory(fixPlayer);
+			for (ItemStack item : EnchantmentSolution.getESPlayer(fixPlayer).getInventoryItems())
+				VanishListener.checkEnchants(fixPlayer, item);
 			HashMap<String, Object> codes = ChatUtils.getCodes();
 			codes.put("%player%", player.getName());
 			codes.put("%fix_player%", fixPlayer.getName());

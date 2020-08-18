@@ -6,9 +6,7 @@ import java.util.List;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
-import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentDescription;
-import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentDisplayName;
-import org.ctp.enchantmentsolution.enchantments.helper.Weight;
+import org.ctp.enchantmentsolution.enchantments.helper.*;
 import org.ctp.enchantmentsolution.enums.*;
 import org.ctp.enchantmentsolution.rpg.RPGUtils;
 import org.ctp.enchantmentsolution.utils.ChatUtils;
@@ -188,6 +186,24 @@ public abstract class CustomEnchantment {
 		for(ItemType type: getAnvilItemTypes()) {
 			if (type instanceof CustomItemType && ItemUtils.checkItemType(item, (CustomItemType) type)) return true;
 			if (type.getEnchantMaterials() != null && ItemData.contains(type.getEnchantMaterials(), item.getMaterial())) return true;
+		}
+		return false;
+	}
+
+	public boolean addEnchantThroughAnvil(ItemData item, ItemData addItem, Player player, int level) {
+		if (canAnvilItem(item) && getAnvilLevel(player, level) > 0) {
+			ItemType t = ItemType.getAnvilType(addItem);
+			CustomItemType customType = null;
+			if (item.getMMOType() != null) ItemType.getCustomType(VanillaItemType.TYPE, addItem.getMMOType());
+			CustomItemType customTypeSet = null;
+			if (item.getMMOTypeSet() != null) ItemType.getCustomType(VanillaItemType.TYPE_SET, addItem.getMMOTypeSet());
+			boolean hasType = false;
+			boolean noConflicts = true;
+			for(ItemType type: getAnvilItemTypes())
+				if (type == t || type == customType || type == customTypeSet) hasType = true;
+			for(EnchantmentLevel l: ItemUtils.getEnchantmentLevels(item.getItem()))
+				if (conflictsWith(this, l.getEnchant()) && this.getRelativeEnchantment() != l.getEnchant().getRelativeEnchantment()) noConflicts = false;
+			return hasType && noConflicts;
 		}
 		return false;
 	}
