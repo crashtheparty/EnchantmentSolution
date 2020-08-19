@@ -397,9 +397,7 @@ public class EnchantmentSolution extends CrashAPIPlugin {
 			Quests.get();
 			quests = true;
 			getChat().sendInfo("Quests compatibility enabled!");
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
+		} catch (Exception | Error ex) {}
 	}
 
 	public static ESPlayer getESPlayer(OfflinePlayer player) {

@@ -129,9 +129,8 @@ public class CommandUtils {
 				}
 			}
 
-			for(ItemStack item: player.getInventory().getContents())
+			for (ItemStack item : EnchantmentSolution.getESPlayer(fixPlayer).getInventoryItems())
 				VanishListener.checkEnchants(fixPlayer, item);
-
 			HashMap<String, Object> codes = ChatUtils.getCodes();
 			codes.put("%player%", player.getName());
 			codes.put("%fix_player%", fixPlayer.getName());

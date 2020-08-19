@@ -20,8 +20,6 @@ max_enchantments: 0
 update_legacy_enchantments: false
 use_enchanted_books: false
 disable_enchant_method: 'visible'
-enchantment_check: 300
-enchantment_check_on_login: true
 drop_items_naturally: true
 language: 'en_us'
 language_file: 'language.yml'
@@ -178,14 +176,6 @@ config_comments:
     - 'vanish - removes enchantment from items'
     - 'visible - keeps enchantment on item, but custom effects will not work and anvil will remove enchant'
     - 'repairable - same as above but anvil will not remove enchant'
-
-    enchantment_check: 
-    - 'The number (in seconds) of time the plugin will run checks for other plugins ruining enchantments on items'
-    - 'Will check 10 players a tick while running'
-    - 'Lower numbers may cause more lag on the server; setting to 0 will disable'
-    
-    enchantment_check_on_login: 
-    - 'Whether a player logging into the server should check for bad enchantments in the player''s inventory'
 
     drop_items_naturally: 
     - 'Items will drop in the default Minecraft way rather than drop straight to the ground'
