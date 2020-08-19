@@ -77,7 +77,7 @@ public class EnchantmentUtils {
 
 	public static List<EnchantmentLevel> getEnchantmentLevels(ItemStack item) {
 		List<EnchantmentLevel> levels = new ArrayList<EnchantmentLevel>();
-		if (item.getItemMeta() != null) {
+		if (item != null && item.getItemMeta() != null) {
 			ItemMeta meta = item.getItemMeta();
 			Map<Enchantment, Integer> enchantments = meta.getEnchants();
 			if (item.getType() == Material.ENCHANTED_BOOK) enchantments = ((EnchantmentStorageMeta) meta).getStoredEnchants();

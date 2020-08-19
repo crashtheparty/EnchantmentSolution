@@ -2,6 +2,7 @@ name: EnchantmentSolution
 version: 2.4.0-pre1
 main: org.ctp.enchantmentsolution.EnchantmentSolution
 api-version: 1.13
+depend: [CrashAPI]
 softdepend: [mcMMO, Jobs, VeinMiner, AuctionHouse, MMOLib, MMOItems, Quests]
 commands:
   enchantmentsolution:

@@ -1,8 +1,6 @@
 package org.ctp.enchantmentsolution.listeners.enchantments;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -30,7 +28,6 @@ import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enums.ItemBreakType;
 import org.ctp.enchantmentsolution.enums.ItemPlaceType;
 import org.ctp.enchantmentsolution.events.blocks.*;
-import org.ctp.enchantmentsolution.events.modify.GoldDiggerEvent;
 import org.ctp.enchantmentsolution.events.modify.LagEvent;
 import org.ctp.enchantmentsolution.events.player.ExpShareEvent;
 import org.ctp.enchantmentsolution.events.player.ExpShareEvent.ExpShareType;
@@ -44,7 +41,9 @@ import org.ctp.enchantmentsolution.utils.abilityhelpers.GaiaUtils.GaiaTrees;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.GoldDiggerCrop;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.ParticleEffect;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
-import org.ctp.enchantmentsolution.utils.items.*;
+import org.ctp.enchantmentsolution.utils.items.AbilityUtils;
+import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
+import org.ctp.enchantmentsolution.utils.items.SmelteryUtils;
 import org.ctp.enchantmentsolution.utils.player.ESPlayer;
 
 @SuppressWarnings("unused")
@@ -57,18 +56,18 @@ public class BlockListener extends Enchantmentable {
 
 	@EventHandler
 	public void onBlockDropItem(BlockDropItemEvent event) {
-		runMethod(this, "greenThumb", event, BlockDropItemEvent.class);
+//		runMethod(this, "greenThumb", event, BlockDropItemEvent.class);
+		runMethod(this, "goldDigger", event, BlockDropItemEvent.class);
+//		runMethod(this, "smeltery", event, BlockDropItemEvent.class);
+		runMethod(this, "telepathy", event, BlockDropItemEvent.class);
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onBlockBreakHighest(BlockBreakEvent event) {
-		runMethod(this, "greenThumb", event, BlockBreakEvent.class);
 		runMethod(this, "gaia", event, BlockBreakEvent.class);
+		runMethod(this, "greenThumb", event, BlockBreakEvent.class);
 		runMethod(this, "heightWidth", event, BlockBreakEvent.class);
 		runMethod(this, "curseOfLag", event, BlockBreakEvent.class);
-		runMethod(this, "goldDigger", event, BlockBreakEvent.class);
-		runMethod(this, "telepathy", event, BlockBreakEvent.class);
-		runMethod(this, "smeltery", event, BlockBreakEvent.class);
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST)
@@ -79,6 +78,23 @@ public class BlockListener extends Enchantmentable {
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onEntityChangeBlock(EntityChangeBlockEvent event) {
 		runMethod(this, "lightWeight", event, EntityChangeBlockEvent.class);
+	}
+
+	@EventHandler(priority=EventPriority.HIGHEST)
+	public void telepathy(BlockDropItemEvent event) {
+		if (!canRun(RegisterEnchantments.TELEPATHY, event)) return;
+		Player player = event.getPlayer();
+		if (player.getGameMode().equals(GameMode.CREATIVE) || player.getGameMode().equals(GameMode.SPECTATOR)) return;
+		Block block = event.getBlock();
+		ItemStack item = player.getInventory().getItemInMainHand();
+		if (item != null && EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.TELEPATHY)) {
+			Iterator<Item> items = event.getItems().iterator();
+			while (items.hasNext()) {
+				Item ie = items.next();
+				ItemUtils.giveItemToPlayer(player, ie.getItemStack(), player.getLocation(), true);
+				ie.remove();
+			}
+		}
 	}
 
 	private void curseOfLag(BlockBreakEvent event) {
@@ -222,21 +238,22 @@ public class BlockListener extends Enchantmentable {
 		}
 	}
 
-	private void goldDigger(BlockBreakEvent event) {
+	private void goldDigger(BlockDropItemEvent event) {
 		if (!canRun(RegisterEnchantments.GOLD_DIGGER, event)) return;
 		if (event.isCancelled()) return;
 		Player player = event.getPlayer();
 		ItemStack item = player.getInventory().getItemInMainHand();
-		if (item != null) if (!EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.TELEPATHY)) if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.GOLD_DIGGER)) {
+		if (item != null && EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.GOLD_DIGGER)) {
 			ItemStack goldDigger = AbilityUtils.getGoldDiggerItems(item, event.getBlock());
 			if (goldDigger != null) {
 				int level = EnchantmentUtils.getLevel(item, RegisterEnchantments.GOLD_DIGGER);
-				GoldDiggerEvent goldDiggerEvent = new GoldDiggerEvent(player, level, event.getBlock(), goldDigger, GoldDiggerCrop.getExp(event.getBlock().getType(), level));
+				GoldDiggerEvent goldDiggerEvent = new GoldDiggerEvent(player, level, event.getBlock(), Arrays.asList(goldDigger), GoldDiggerCrop.getExp(event.getBlock().getBlockData().getMaterial(), level));
 				Bukkit.getPluginManager().callEvent(goldDiggerEvent);
 
 				if (!goldDiggerEvent.isCancelled()) {
+					for (ItemStack i : goldDiggerEvent.getItems())
+						event.getItems().add(ItemUtils.spawnItem(i, goldDiggerEvent.getBlock().getLocation()));
 					AbilityUtils.dropExperience(goldDiggerEvent.getBlock().getLocation(), goldDiggerEvent.getExpToDrop());
-					ItemUtils.dropItem(goldDiggerEvent.getGoldItem(), goldDiggerEvent.getBlock().getLocation());
 					AdvancementUtils.awardCriteria(player, ESAdvancement.FOURTY_NINERS, "goldblock", goldDigger.getAmount());
 					player.incrementStatistic(Statistic.USE_ITEM, item.getType());
 					DamageUtils.damageItem(player, item);
@@ -252,15 +269,6 @@ public class BlockListener extends Enchantmentable {
 		ItemStack item = player.getInventory().getItemInMainHand();
 		if (player.getGameMode().equals(GameMode.CREATIVE) || player.getGameMode().equals(GameMode.SPECTATOR)) return;
 		if (item != null) if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.SMELTERY)) SmelteryUtils.handleSmeltery(event, player, blockBroken, item);
-	}
-
-	private void telepathy(BlockBreakEvent event) {
-		if (!canRun(RegisterEnchantments.TELEPATHY, event)) return;
-		Player player = event.getPlayer();
-		if (player.getGameMode().equals(GameMode.CREATIVE) || player.getGameMode().equals(GameMode.SPECTATOR)) return;
-		Block block = event.getBlock();
-		ItemStack item = player.getInventory().getItemInMainHand();
-		if (item != null) if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.TELEPATHY)) TelepathyUtils.handleTelepathy(event, player, item, block);
 	}
 
 	private void heightWidth(BlockBreakEvent event) {
