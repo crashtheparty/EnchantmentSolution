@@ -122,9 +122,7 @@ public enum Attributable {
 				if (modifier.getName().equals("armored_armor")) AdvancementUtils.awardCriteria(player, ESAdvancement.ARMORED_EVOLUTION, "armored");
 				instance.addModifier(modifier);
 			}
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
+		} catch (Exception ex) {}
 	}
 
 	public void removeModifier(Player player, ItemSlotType type, boolean legacy) {
