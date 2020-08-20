@@ -488,6 +488,28 @@ public abstract class CustomEnchantment {
 		return description;
 	}
 
+	public String getAdvancementDescription() {
+		String page = Chatable.get().getMessage(ChatUtils.getCodes(), "enchantment.description") + getDescription() + "\n";
+		page += Chatable.get().getMessage(ChatUtils.getCodes(), "enchantment.max-level") + getMaxLevel() + ".\n";
+		page += Chatable.get().getMessage(ChatUtils.getCodes(), "enchantment.weight") + getWeightName() + ".\n";
+		page += Chatable.get().getMessage(ChatUtils.getCodes(), "enchantment.conflicting-enchantments");
+		if (getConflictingEnchantments().size() > 0) {
+			List<String> names = new ArrayList<String>();
+			for(int i = 0; i < getConflictingEnchantments().size(); i++) {
+				Enchantment enchant = getConflictingEnchantments().get(i);
+				CustomEnchantment custom = RegisterEnchantments.getCustomEnchantment(enchant);
+				if (custom != null && !custom.getRelativeEnchantment().equals(getRelativeEnchantment())) names.add(custom.getDisplayName());
+			}
+
+			if (names.isEmpty()) page += ConfigUtils.getString(lang, "misc.no_conflicting_enchantments");
+			else
+				page += StringUtils.join(names, ", ");
+			page += ".";
+		} else
+			page += ConfigUtils.getString(lang, "misc.no_conflicting_enchantments") + ".";
+		return page;
+	}
+
 	public void setDescription(String description) {
 		this.description = description;
 	}

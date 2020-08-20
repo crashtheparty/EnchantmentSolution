@@ -8,8 +8,10 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.ctp.crashapi.item.MatData;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
+import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.BlockUtils;
 import org.ctp.enchantmentsolution.utils.player.ESPlayer;
@@ -33,6 +35,12 @@ public class AsyncBlockController {
 		breakingBlocks(breaking);
 	}
 
+	protected AsyncBlockController(Player player, ItemStack item, Block original) {
+		this.player = player;
+		this.item = item;
+		this.original = original;
+	}
+
 	private void breakingBlocks(List<Location> breaking) {
 		List<Location> adjacent = new ArrayList<Location>();
 		int blocksBrokenTick = 0;
@@ -48,7 +56,12 @@ public class AsyncBlockController {
 					combine = true;
 					break;
 				}
-				if (BlockUtils.multiBreakBlock(player, item, b)) blocksBrokenTick++;
+				if (!esPlayer.isInInventory(item) || item == null || MatData.isAir(item.getType())) {
+					for(Location loc: allBlocks)
+						BlockUtils.removeMultiBlockBreak(loc, RegisterEnchantments.GAIA);
+					return;
+				}
+				if (BlockUtils.multiBreakBlock(player, item, b, RegisterEnchantments.HEIGHT_PLUS_PLUS)) blocksBrokenTick++;
 				allBlocks.remove(b);
 				for(Location loc: allBlocks)
 					if (!breaking.contains(loc) && !adjacent.contains(loc) && BlockUtils.isAdjacent(loc.getBlock(), b.getBlock())) adjacent.add(loc);
@@ -69,7 +82,7 @@ public class AsyncBlockController {
 		}, 1l);
 		else
 			for(Location loc: allBlocks)
-				BlockUtils.removeMultiBlockBreak(loc);
+				BlockUtils.removeMultiBlockBreak(loc, RegisterEnchantments.HEIGHT_PLUS_PLUS);
 
 	}
 
@@ -83,5 +96,13 @@ public class AsyncBlockController {
 
 	public Block getOriginal() {
 		return original;
+	}
+
+	protected Collection<Location> getAllBlocks() {
+		return allBlocks;
+	}
+
+	protected void setAllBlocks(Collection<Location> allBlocks) {
+		this.allBlocks = allBlocks;
 	}
 }

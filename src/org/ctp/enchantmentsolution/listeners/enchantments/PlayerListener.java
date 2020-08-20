@@ -15,7 +15,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemBreakEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
@@ -29,9 +28,11 @@ import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enums.ItemMoisturizeType;
 import org.ctp.enchantmentsolution.events.interact.*;
 import org.ctp.enchantmentsolution.events.modify.IcarusLaunchEvent;
+import org.ctp.enchantmentsolution.events.player.PlayerChangeCoordsEvent;
 import org.ctp.enchantmentsolution.listeners.Enchantmentable;
 import org.ctp.enchantmentsolution.nms.PersistenceNMS;
 import org.ctp.enchantmentsolution.nms.animalmob.AnimalMob;
+import org.ctp.enchantmentsolution.threads.IcarusThread;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.FlowerGiftDrop;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.WalkerUtils;
@@ -44,9 +45,11 @@ public class PlayerListener extends Enchantmentable {
 	@EventHandler
 	public void onPlayerInteract(PlayerInteractEvent event) {
 		runMethod(this, "flowerGift", event, PlayerInteractEvent.class);
+		runMethod(this, "frosty", event, PlayerInteractEvent.class);
 		runMethod(this, "irenesLasso", event, PlayerInteractEvent.class);
 		runMethod(this, "overkill", event, PlayerInteractEvent.class);
 		runMethod(this, "splatterFest", event, PlayerInteractEvent.class);
+		runMethod(this, "zeal", event, PlayerInteractEvent.class);
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST)
@@ -55,8 +58,8 @@ public class PlayerListener extends Enchantmentable {
 	}
 
 	@EventHandler
-	public void onPlayerMove(PlayerMoveEvent event) {
-		runMethod(this, "icarus", event, PlayerMoveEvent.class);
+	public void onPlayerChangeCoords(PlayerChangeCoordsEvent event) {
+		runMethod(this, "icarus", event, PlayerChangeCoordsEvent.class);
 		runMethod(this, "movementListener", event, RegisterEnchantments.MAGMA_WALKER);
 		runMethod(this, "movementListener", event, RegisterEnchantments.VOID_WALKER);
 	}
@@ -95,7 +98,46 @@ public class PlayerListener extends Enchantmentable {
 		}
 	}
 
-	private void icarus(PlayerMoveEvent event) {
+	private void frosty(PlayerInteractEvent event) {
+		if (event.getAction().equals(Action.LEFT_CLICK_AIR)) {
+			Player player = event.getPlayer();
+			ItemStack item = player.getInventory().getItemInMainHand();
+			if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.FROSTY)) {
+				event.setCancelled(false);
+				if (!canRun(RegisterEnchantments.FROSTY, event)) return;
+				boolean takeSnow = player.getGameMode() != GameMode.CREATIVE;
+				FrostyEvent frosty = new FrostyEvent(player, item, takeSnow, player.getInventory().all(Material.SNOWBALL).size() > 0);
+				Bukkit.getPluginManager().callEvent(frosty);
+
+				if (!frosty.isCancelled() && !frosty.willCancel()) {
+					if (frosty.takeSnowball() && frosty.hasSnowball()) {
+						ItemStack[] contents = frosty.getPlayer().getInventory().getContents();
+						ItemStack[] extraContents = frosty.getPlayer().getInventory().getExtraContents();
+						ItemStack[] allContents = Arrays.copyOf(contents, contents.length + extraContents.length);
+						System.arraycopy(extraContents, 0, allContents, contents.length, extraContents.length);
+						for(int i = 0; i < allContents.length; i++) {
+							ItemStack removeItem = player.getInventory().getItem(i);
+							if (removeItem != null && removeItem.getType().equals(Material.SNOWBALL)) if (removeItem.getAmount() - 1 <= 0) {
+								player.getInventory().setItem(i, new ItemStack(Material.AIR));
+								break;
+							} else {
+								removeItem.setAmount(removeItem.getAmount() - 1);
+								break;
+							}
+						}
+					}
+					player.incrementStatistic(Statistic.USE_ITEM, item.getType());
+					Snowball snowball = player.launchProjectile(Snowball.class);
+					player.getWorld().playSound(player.getLocation(), Sound.ENTITY_SNOWBALL_THROW, 1, 1);
+					ESPlayer esPlayer = EnchantmentSolution.getESPlayer(player);
+					esPlayer.setCooldown(RegisterEnchantments.FROSTY);
+					DamageUtils.damageItem(player, item);
+				}
+			}
+		}
+	}
+
+	private void icarus(PlayerChangeCoordsEvent event) {
 		if (!canRun(RegisterEnchantments.ICARUS, event)) return;
 		Player player = event.getPlayer();
 		ItemStack chestplate = player.getInventory().getChestplate();
@@ -122,6 +164,11 @@ public class PlayerListener extends Enchantmentable {
 					player.getWorld().spawnParticle(Particle.CLOUD, player.getLocation(), 250, 2, 2, 2);
 					player.getWorld().playSound(player.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 1, 1);
 					esPlayer.setIcarusDelay(icarus.getSecondDelay());
+					IcarusThread thread = IcarusThread.createThread(player);
+					if (!thread.isRunning()) {
+						int scheduler = Bukkit.getScheduler().scheduleSyncRepeatingTask(EnchantmentSolution.getPlugin(), thread, 0l, 20l);
+						thread.setScheduler(scheduler);
+					}
 				}
 			}
 		}
@@ -339,8 +386,47 @@ public class PlayerListener extends Enchantmentable {
 		}
 	}
 
+	private void zeal(PlayerInteractEvent event) {
+		if (event.getAction().equals(Action.LEFT_CLICK_AIR)) {
+			Player player = event.getPlayer();
+			ItemStack item = player.getInventory().getItemInMainHand();
+			if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.ZEAL)) {
+				event.setCancelled(false);
+				if (!canRun(RegisterEnchantments.ZEAL, event)) return;
+				boolean takeFireCharge = player.getGameMode() != GameMode.CREATIVE;
+				ZealEvent zeal = new ZealEvent(player, item, takeFireCharge, player.getInventory().all(Material.FIRE_CHARGE).size() > 0);
+				Bukkit.getPluginManager().callEvent(zeal);
+
+				if (!zeal.isCancelled() && !zeal.willCancel()) {
+					if (zeal.takeFireCharge() && zeal.hasFireCharge()) {
+						ItemStack[] contents = zeal.getPlayer().getInventory().getContents();
+						ItemStack[] extraContents = zeal.getPlayer().getInventory().getExtraContents();
+						ItemStack[] allContents = Arrays.copyOf(contents, contents.length + extraContents.length);
+						System.arraycopy(extraContents, 0, allContents, contents.length, extraContents.length);
+						for(int i = 0; i < allContents.length; i++) {
+							ItemStack removeItem = player.getInventory().getItem(i);
+							if (removeItem != null && removeItem.getType().equals(Material.FIRE_CHARGE)) if (removeItem.getAmount() - 1 <= 0) {
+								player.getInventory().setItem(i, new ItemStack(Material.AIR));
+								break;
+							} else {
+								removeItem.setAmount(removeItem.getAmount() - 1);
+								break;
+							}
+						}
+					}
+					player.incrementStatistic(Statistic.USE_ITEM, item.getType());
+					Fireball fireball = player.launchProjectile(Fireball.class);
+					player.getWorld().playSound(player.getLocation(), Sound.ITEM_FIRECHARGE_USE, 1, 1);
+					ESPlayer esPlayer = EnchantmentSolution.getESPlayer(player);
+					esPlayer.setCooldown(RegisterEnchantments.ZEAL);
+					DamageUtils.damageItem(player, item);
+				}
+			}
+		}
+	}
+
 	@SuppressWarnings("deprecation")
-	private void movementListener(PlayerMoveEvent event, Enchantment enchantment) {
+	private void movementListener(PlayerChangeCoordsEvent event, Enchantment enchantment) {
 		if (!canRun(enchantment, event)) return;
 		Player player = event.getPlayer();
 		Location loc = player.getLocation();

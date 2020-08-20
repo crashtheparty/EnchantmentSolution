@@ -491,7 +491,7 @@ enchantment:
             exp_share: 'Increase experience earned from killing mobs and breaking blocks.'
             flower_gift: 'Has a chance of dropping flowers when right clicking them.'
             force_feed: 'Takes saturation to repair equipped armor and items.'
-            frequent_flyer: 'Allows flight. Durability damage every (3 * level) seconds when below 255 height and every (level) seconds above 255 height. Removes flight at 32 durability.'
+            frequent_flyer: 'Allows flight with (20% + 16% * level) speed. Damages item every 3 seconds in flight.'
             fried: 'Cooks fish upon catching them.'
             gold_digger: 'Earn experience and gold nuggets for breaking crops.'
             gung_ho: 'Decreases health to 50% of base value (usually 5 hearts). Melee attacks do 3 times the damage.'

@@ -21,7 +21,6 @@ import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enchantments.generate.TableEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.inventory.minigame.Minigame;
-import org.ctp.enchantmentsolution.listeners.VanishListener;
 import org.ctp.enchantmentsolution.nms.animalmob.AnimalMob;
 import org.ctp.enchantmentsolution.rpg.RPGPlayer;
 import org.ctp.enchantmentsolution.rpg.RPGUtils;
@@ -139,7 +138,6 @@ public class Configurations implements CrashConfigurations {
 			AdvancementUtils.createAdvancements();
 			EnchantmentSolution.getPlugin().getWiki().resetRunner();
 		}
-		VanishListener.reload();
 		Minigame.reset();
 	}
 

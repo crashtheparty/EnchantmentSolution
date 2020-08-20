@@ -2,10 +2,12 @@ package org.ctp.enchantmentsolution.utils.player;
 
 import java.util.*;
 
-import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
-import org.bukkit.OfflinePlayer;
+import org.bukkit.*;
+import org.bukkit.attribute.AttributeModifier;
+import org.bukkit.attribute.AttributeModifier.Operation;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.ctp.crashapi.item.ItemData;
@@ -22,14 +24,16 @@ import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.PermissionUtils;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.ItemEquippedSlot;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.OverkillDeath;
+import org.ctp.enchantmentsolution.utils.abilityhelpers.Streak;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 import org.ctp.enchantmentsolution.utils.items.AbilityUtils;
 import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
+import org.ctp.enchantmentsolution.utils.player.attributes.FlySpeedAttribute;
 
 public class ESPlayer {
 
 	private static Map<Integer, Integer> GLOBAL_BLOCKS = new HashMap<Integer, Integer>();
-	private static double CONTAGION_CHANCE = 0.0005, FORCE_FEED_CHANCE = 0.005;
+	private static double CONTAGION_CHANCE = 0.0005;
 	private final OfflinePlayer player;
 	private Player onlinePlayer;
 	private RPGPlayer rpg;
@@ -39,10 +43,12 @@ public class ESPlayer {
 	private float currentExhaustion, pastExhaustion;
 	private ItemStack elytra;
 	private boolean canFly, didTick, reset;
-	private int underLimit, aboveLimit, under, above, frequentFlyerLevel, icarusDelay;
+	private int flightDamage, flightDamageLimit, frequentFlyerLevel, icarusDelay;
 	private FFType currentFFType;
 	private List<OverkillDeath> overkillDeaths;
 	private List<AttributeLevel> attributes;
+	private ESPlayerAttributeInstance flyAttribute = new FlySpeedAttribute();
+	private Streak streak;
 
 	public ESPlayer(OfflinePlayer player) {
 		this.player = player;
@@ -54,6 +60,7 @@ public class ESPlayer {
 		attributes = new ArrayList<AttributeLevel>();
 		currentFFType = FFType.NONE;
 		removeSoulItems();
+		flyAttribute.addModifier(new AttributeModifier(UUID.fromString("ffffffff-ffff-ffff-ffff-000000000000"), "frequentFlyerFlight", -0.08, Operation.ADD_NUMBER));
 	}
 
 	public OfflinePlayer getPlayer() {
@@ -71,6 +78,20 @@ public class ESPlayer {
 	public void reloadPlayer() {
 		for(Player p: Bukkit.getOnlinePlayers())
 			if (p.getUniqueId().equals(player.getUniqueId())) onlinePlayer = p;
+	}
+
+	public boolean isInInventory(ItemStack item) {
+		for(int i = 0; i < 41; i++) {
+			ItemStack content = getOnlinePlayer().getInventory().getItem(i);
+			if (content == null) continue;
+			if (item.equals(content)) return true;
+		}
+		return false;
+	}
+
+	public ItemStack getOffhand() {
+		if (!isOnline()) return new ItemStack(Material.AIR);
+		return getOnlinePlayer().getInventory().getItemInOffHand();
 	}
 
 	public ItemStack[] getArmor() {
@@ -95,6 +116,17 @@ public class ESPlayer {
 		equipped[5] = getOnlinePlayer().getInventory().getItemInOffHand();
 
 		return equipped;
+	}
+
+	public ItemStack[] getInventoryItems() {
+		return isOnline() ? getOnlinePlayer().getInventory().getContents() : new ItemStack[41];
+	}
+
+	public List<ItemStack> getUnstableItems() {
+		List<ItemStack> items = new ArrayList<ItemStack>();
+		for(ItemStack item: getEquipped())
+			if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.CURSE_OF_INSTABILITY)) items.add(item);
+		return items;
 	}
 
 	public long getCooldown(Enchantment enchant) {
@@ -222,16 +254,19 @@ public class ESPlayer {
 	}
 
 	public void setFrequentFlyer() {
-		underLimit = 0;
-		aboveLimit = 0;
 		boolean fly = frequentFlyerLevel > 0 && elytra != null;
-		underLimit = frequentFlyerLevel * 4 * 20;
-		aboveLimit = frequentFlyerLevel * 20;
+		flightDamageLimit = 60;
 		setCanFly(fly);
-		if (reset) {
-			under = underLimit;
-			above = aboveLimit;
-		}
+		setFlightSpeed(fly);
+		if (reset) flightDamage = flightDamageLimit;
+	}
+
+	private void setFlightSpeed(boolean canFly) {
+		if (canFly) {
+			flyAttribute.removeModifier(UUID.fromString("ffffffff-ffff-ffff-ffff-000000001111"));
+			flyAttribute.addModifier(new AttributeModifier(UUID.fromString("ffffffff-ffff-ffff-ffff-000000001111"), "frequentFlyerLevel", 0.016 * frequentFlyerLevel, Operation.ADD_NUMBER));
+			player.getPlayer().setFlySpeed((float) flyAttribute.getValue());
+		} else if (player.isOnline()) player.getPlayer().setFlySpeed((float) flyAttribute.getDefaultValue());
 	}
 
 	public boolean canFly(boolean online) {
@@ -282,7 +317,7 @@ public class ESPlayer {
 			if (player.isFlying() && !this.canFly) player.setFlying(false);
 		}
 	}
-	
+
 	public void logoutFlyer() {
 		currentFFType = FFType.NONE;
 		canFly = false;
@@ -291,31 +326,19 @@ public class ESPlayer {
 		getOnlinePlayer().setAllowFlight(false);
 	}
 
-	public int getUnder() {
-		return under;
+	public int getFlightDamage() {
+		return flightDamage;
 	}
 
 	public void minus() {
 		Player player = getOnlinePlayer();
 		if (player.getLocation().getY() >= 12000) AdvancementUtils.awardCriteria(player, ESAdvancement.CRUISING_ALTITUDE, "elytra");
-		if (player.getLocation().getY() > 255) {
-			above = above - 1;
-			if (above <= 0) {
-				if (elytra != null) DamageUtils.damageItem(player, elytra);
-				above = aboveLimit;
-			}
-		} else {
-			under = under - 1;
-			if (under <= 0) {
-				if (elytra != null) DamageUtils.damageItem(player, elytra);
-				under = underLimit;
-			}
+		flightDamage--;
+		if (flightDamage <= 0) {
+			if (elytra != null) DamageUtils.damageItem(player, elytra);
+			flightDamage = flightDamageLimit;
 		}
 		setDidTick(true);
-	}
-
-	public int getAbove() {
-		return above;
 	}
 
 	public void setDidTick(boolean b) {
@@ -326,8 +349,8 @@ public class ESPlayer {
 		return didTick;
 	}
 
-	public double getForceFeedChance() {
-		return FORCE_FEED_CHANCE;
+	public double getForceFeedChance(int level) {
+		return 0.005 + level * 0.005;
 	}
 
 	public List<ItemStack> getForceFeedItems() {
@@ -375,6 +398,23 @@ public class ESPlayer {
 			AttributeLevel level = iter.next();
 			if (level.getAttribute().equals(attribute) && level.getSlot().equals(slot)) iter.remove();
 		}
+	}
+
+	public int addToStreak(LivingEntity entity) {
+		if (streak == null) streak = new Streak();
+		return streak.addToStreak(entity);
+	}
+
+	public int getStreak() {
+		return streak.getStreak();
+	}
+
+	public EntityType getType() {
+		return streak.getType();
+	}
+
+	public void setStreak(EntityType type, int streak) {
+		this.streak.setStreak(type, streak);
 	}
 
 }

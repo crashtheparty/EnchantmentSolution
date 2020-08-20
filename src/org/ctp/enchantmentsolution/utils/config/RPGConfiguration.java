@@ -32,7 +32,7 @@ public class RPGConfiguration extends Configuration {
 
 		YamlConfigBackup config = getConfig();
 
-		File file = CrashConfigUtils.getTempFile("/resources/rpg_defaults.yml");
+		File file = CrashConfigUtils.getTempFile(getClass(), "/resources/rpg_defaults.yml");
 
 		YamlConfig defaultConfig = new YamlConfig(file, new String[] {});
 		defaultConfig.getFromConfig();

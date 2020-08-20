@@ -14,7 +14,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityPickupItemEvent;
-import org.bukkit.event.player.*;
+import org.bukkit.event.player.PlayerBedLeaveEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
@@ -27,6 +29,7 @@ import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.CERegister;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
+import org.ctp.enchantmentsolution.events.player.PlayerChangeCoordsEvent;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.WalkerBlock;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.WalkerUtils;
@@ -105,7 +108,7 @@ public class AdvancementPlayerEvent implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR)
-	public void onPlayerMove(PlayerMoveEvent event) {
+	public void onPlayerChangeCoords(PlayerChangeCoordsEvent event) {
 		Player player = event.getPlayer();
 		Block block = player.getLocation().getBlock().getRelative(BlockFace.DOWN);
 		WalkerBlock walkerBlock = WalkerUtils.getWalker(block);

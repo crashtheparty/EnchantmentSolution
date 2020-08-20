@@ -10,8 +10,8 @@ public class ForceFeedEvent extends ItemRepairEvent {
 
 	private float exhaust;
 
-	public ForceFeedEvent(Player who, int level, ItemStack item, float exhaust) {
-		super(who, new EnchantmentLevel(CERegister.FORCE_FEED, level), item, level);
+	public ForceFeedEvent(Player who, int level, ItemStack item, float exhaust, int damage) {
+		super(who, new EnchantmentLevel(CERegister.FORCE_FEED, level), item, damage);
 		this.exhaust = exhaust;
 	}
 

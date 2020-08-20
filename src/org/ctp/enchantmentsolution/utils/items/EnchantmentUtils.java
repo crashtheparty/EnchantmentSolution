@@ -5,16 +5,14 @@ import java.util.Map.Entry;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
 import org.bukkit.block.Container;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BlockStateMeta;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.metadata.MetadataValue;
 import org.ctp.crashapi.item.ItemData;
 import org.ctp.crashapi.item.ItemType;
 import org.ctp.crashapi.item.MatData;
@@ -23,7 +21,6 @@ import org.ctp.enchantmentsolution.enchantments.CustomEnchantmentWrapper;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.nms.PersistenceNMS;
-import org.ctp.enchantmentsolution.utils.ESArrays;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 
 public class EnchantmentUtils {
@@ -76,7 +73,7 @@ public class EnchantmentUtils {
 
 	public static List<EnchantmentLevel> getEnchantmentLevels(ItemStack item) {
 		List<EnchantmentLevel> levels = new ArrayList<EnchantmentLevel>();
-		if (item.getItemMeta() != null) {
+		if (item != null && item.getItemMeta() != null) {
 			ItemMeta meta = item.getItemMeta();
 			Map<Enchantment, Integer> enchantments = meta.getEnchants();
 			if (item.getType() == Material.ENCHANTED_BOOK) enchantments = ((EnchantmentStorageMeta) meta).getStoredEnchants();
@@ -200,24 +197,12 @@ public class EnchantmentUtils {
 		return true;
 	}
 
-	public static Collection<ItemStack> getSoulboundShulkerBox(Player player, Block block,
-	Collection<ItemStack> drops) {
-		Iterator<ItemStack> i = drops.iterator();
-		Collection<ItemStack> items = new ArrayList<ItemStack>();
-		while (i.hasNext()) {
-			ItemStack drop = i.next();
-			if (ESArrays.getShulkerBoxes().contains(drop.getType())) {
-				BlockStateMeta im = (BlockStateMeta) drop.getItemMeta();
-				Container container = (Container) block.getState();
-				im.setBlockState(container);
-				if (block.getMetadata("shulker_name") != null) for(MetadataValue value: block.getMetadata("shulker_name"))
-					im.setDisplayName(value.asString());
-				drop.setItemMeta(im);
-				if (block.getMetadata("soulbound").size() > 0) drop = addEnchantmentsToItem(drop, Arrays.asList(new EnchantmentLevel(RegisterEnchantments.getCustomEnchantment(RegisterEnchantments.SOULBOUND), 1)));
-				items.add(drop);
-			}
-		}
-		return items;
+	public static ItemStack getSoulboundShulkerBox(BlockState state, ItemStack eventItem) {
+		BlockStateMeta im = (BlockStateMeta) eventItem.getItemMeta();
+		Container container = (Container) state;
+		im.setBlockState(container);
+		if (state.getMetadata("soulbound").size() > 0) eventItem = addEnchantmentsToItem(eventItem, Arrays.asList(new EnchantmentLevel(RegisterEnchantments.getCustomEnchantment(RegisterEnchantments.SOULBOUND), 1)));
+		return eventItem;
 	}
 
 	public static int getBookshelves(Location loc) {

@@ -138,16 +138,16 @@ public class AnimalMob_v1_16_R1 extends AnimalMob {
 			mob.setParrotVariant(Variant.valueOf(config.getString("animals." + i + ".parrot_variant")));
 		} catch (Exception ex) {}
 		try {
-			((AnimalMob_v1_15_R1) mob).setCatType(Type.valueOf(config.getString("animals." + i + ".cat_type")));
+			((AnimalMob_v1_16_R1) mob).setCatType(Type.valueOf(config.getString("animals." + i + ".cat_type")));
 		} catch (Exception ex) {}
 		try {
-			((AnimalMob_v1_15_R1) mob).setPandaMainGene(Gene.valueOf(config.getString("animals." + i + ".panda_main_gene")));
+			((AnimalMob_v1_16_R1) mob).setPandaMainGene(Gene.valueOf(config.getString("animals." + i + ".panda_main_gene")));
 		} catch (Exception ex) {}
 		try {
-			((AnimalMob_v1_15_R1) mob).setPandaHiddenGene(Gene.valueOf(config.getString("animals." + i + ".panda_hidden_gene")));
+			((AnimalMob_v1_16_R1) mob).setPandaHiddenGene(Gene.valueOf(config.getString("animals." + i + ".panda_hidden_gene")));
 		} catch (Exception ex) {}
 		try {
-			((AnimalMob_v1_15_R1) mob).setCollarColor(DyeColor.valueOf(config.getString("animals." + i + ".collar_color")));
+			((AnimalMob_v1_16_R1) mob).setCollarColor(DyeColor.valueOf(config.getString("animals." + i + ".collar_color")));
 		} catch (Exception ex) {}
 		try {
 			mob.setRabbitType(org.bukkit.entity.Rabbit.Type.valueOf(config.getString("animals." + i + ".rabbit_type")));

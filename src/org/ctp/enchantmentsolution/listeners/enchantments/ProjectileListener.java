@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.entity.AbstractArrow.PickupStatus;
 import org.bukkit.event.EventHandler;
@@ -14,11 +15,13 @@ import org.bukkit.event.player.PlayerEggThrowEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 import org.ctp.crashapi.nms.DamageEvent;
 import org.ctp.crashapi.utils.LocationUtils;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
+import org.ctp.enchantmentsolution.api.ApiEnchantList;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.events.damage.HollowPointDamageEvent;
 import org.ctp.enchantmentsolution.events.entity.DetonatorExplosionEvent;
@@ -146,6 +149,49 @@ public class ProjectileListener extends Enchantmentable {
 				Player player = (Player) trident.getShooter();
 				ItemStack tridentItem = player.getInventory().getItemInMainHand();
 				if (tridentItem != null && EnchantmentUtils.hasEnchantment(tridentItem, RegisterEnchantments.TRANSMUTATION)) trident.setMetadata("transmutation", new FixedMetadataValue(EnchantmentSolution.getPlugin(), 1));
+			}
+		}
+	}
+
+	private void potions(ProjectileLaunchEvent event) {
+		try {
+			potion(event, RegisterEnchantments.BLINDNESS, PotionEffectType.BLINDNESS);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		try {
+			potion(event, RegisterEnchantments.VENOM, PotionEffectType.POISON);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		try {
+			potion(event, RegisterEnchantments.TRUANT, PotionEffectType.SLOW);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		try {
+			potion(event, RegisterEnchantments.WITHERING, PotionEffectType.WITHER);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+	}
+
+	private void potion(ProjectileLaunchEvent event, Enchantment enchantment, PotionEffectType type) {
+		if (!canRun(enchantment, event)) return;
+		Projectile proj = event.getEntity();
+		if (proj instanceof Trident) {
+			Trident trident = (Trident) proj;
+			if (trident.getShooter() instanceof HumanEntity) {
+				HumanEntity player = (HumanEntity) trident.getShooter();
+				ItemStack tridentItem = player.getInventory().getItemInMainHand();
+				if (tridentItem != null && tridentItem.getType() == Material.TRIDENT && EnchantmentUtils.hasEnchantment(tridentItem, enchantment)) proj.setMetadata(enchantment.getKey().getKey(), new FixedMetadataValue(EnchantmentSolution.getPlugin(), ApiEnchantList.getLevel(tridentItem, enchantment)));
+			}
+		} else if (proj instanceof Arrow) {
+			Arrow arrow = (Arrow) proj;
+			if (arrow.getShooter() instanceof HumanEntity) {
+				HumanEntity entity = (HumanEntity) arrow.getShooter();
+				ItemStack bow = entity.getInventory().getItemInMainHand();
+				if (bow != null && EnchantmentUtils.hasEnchantment(bow, enchantment)) proj.setMetadata(enchantment.getKey().getKey(), new FixedMetadataValue(EnchantmentSolution.getPlugin(), ApiEnchantList.getLevel(bow, enchantment)));
 			}
 		}
 	}

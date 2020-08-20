@@ -31,7 +31,7 @@ public class MainConfiguration extends Configuration {
 
 		YamlConfigBackup config = getConfig();
 
-		File file = CrashConfigUtils.getTempFile("/resources/config_defaults.yml");
+		File file = CrashConfigUtils.getTempFile(getClass(), "/resources/config_defaults.yml");
 
 		YamlConfig defaultConfig = new YamlConfig(file, new String[] {});
 		defaultConfig.getFromConfig();
