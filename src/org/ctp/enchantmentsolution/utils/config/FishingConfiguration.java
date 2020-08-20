@@ -25,7 +25,7 @@ public class FishingConfiguration extends Configuration {
 
 		YamlConfigBackup config = getConfig();
 
-		File file = CrashConfigUtils.getTempFile("/resources/fishing_defaults.yml");
+		File file = CrashConfigUtils.getTempFile(getClass(), "/resources/fishing_defaults.yml");
 
 		YamlConfig defaultConfig = new YamlConfig(file, new String[] {});
 		defaultConfig.getFromConfig();

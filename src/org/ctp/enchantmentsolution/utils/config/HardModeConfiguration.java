@@ -25,7 +25,7 @@ public class HardModeConfiguration extends Configuration {
 
 		YamlConfigBackup config = getConfig();
 
-		File file = CrashConfigUtils.getTempFile("/resources/hard_defaults.yml");
+		File file = CrashConfigUtils.getTempFile(getClass(), "/resources/hard_defaults.yml");
 
 		YamlConfig defaultConfig = new YamlConfig(file, new String[] {});
 		defaultConfig.getFromConfig();

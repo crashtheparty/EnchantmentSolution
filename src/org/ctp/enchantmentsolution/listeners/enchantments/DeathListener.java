@@ -1,36 +1,36 @@
 package org.ctp.enchantmentsolution.listeners.enchantments;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.*;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.metadata.MetadataValue;
-import org.ctp.crashapi.utils.ChatUtils;
-import org.ctp.enchantmentsolution.Chatable;
+import org.ctp.crashapi.item.MobHeads;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.events.drops.BeheadingEvent;
 import org.ctp.enchantmentsolution.events.drops.TransmutationEvent;
+import org.ctp.enchantmentsolution.events.entity.StreakDeathEvent;
 import org.ctp.enchantmentsolution.listeners.Enchantmentable;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
-import org.ctp.enchantmentsolution.utils.PermissionUtils;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.TransmutationLoot;
 import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
+import org.ctp.enchantmentsolution.utils.player.ESPlayer;
 
 @SuppressWarnings("unused")
-public class DropsListener extends Enchantmentable {
+public class DeathListener extends Enchantmentable {
 
-	@EventHandler
+	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onEntityDeath(EntityDeathEvent event) {
 		runMethod(this, "beheading", event, EntityDeathEvent.class);
+		runMethod(this, "streak", event, EntityDeathEvent.class);
 		runMethod(this, "transmutation", event, EntityDeathEvent.class);
 	}
 
@@ -38,43 +38,53 @@ public class DropsListener extends Enchantmentable {
 		if (!canRun(RegisterEnchantments.BEHEADING, event)) return;
 		Entity entity = event.getEntity();
 		Player killer = event.getEntity().getKiller();
-		if (killer != null) if (EnchantmentUtils.hasEnchantment(killer.getInventory().getItemInMainHand(), RegisterEnchantments.BEHEADING)) {
-			int level = EnchantmentUtils.getLevel(killer.getInventory().getItemInMainHand(), RegisterEnchantments.BEHEADING);
-			double chance = level * .05;
-			double random = Math.random();
-			if (chance > random) {
-				List<ItemStack> skulls = new ArrayList<ItemStack>();
-				if (entity instanceof WitherSkeleton) skulls.add(new ItemStack(Material.WITHER_SKELETON_SKULL));
-				else if (entity instanceof Skeleton) skulls.add(new ItemStack(Material.SKELETON_SKULL));
-				else if (entity instanceof Zombie) skulls.add(new ItemStack(Material.ZOMBIE_HEAD));
-				else if (entity instanceof Creeper) skulls.add(new ItemStack(Material.CREEPER_HEAD));
-				else if (entity instanceof Player && PermissionUtils.check((Player) entity, "enchantmentsolution.abilities.player-skulls")) {
-					ItemStack skull = new ItemStack(Material.PLAYER_HEAD);
-					SkullMeta skullMeta = (SkullMeta) skull.getItemMeta();
-					skullMeta.setOwningPlayer((Player) entity);
-					HashMap<String, Object> codes = ChatUtils.getCodes();
-					codes.put("%player%", ((Player) entity).getName());
-					skullMeta.setDisplayName(Chatable.get().getMessage(codes, "misc.beheading_skull"));
-					skull.setItemMeta(skullMeta);
-					skulls.add(skull);
-				} else if (entity instanceof EnderDragon) skulls.add(new ItemStack(Material.DRAGON_HEAD));
+		if (entity instanceof LivingEntity && killer != null) {
+			LivingEntity living = (LivingEntity) entity;
+			if (EnchantmentUtils.hasEnchantment(killer.getInventory().getItemInMainHand(), RegisterEnchantments.BEHEADING)) {
+				int level = EnchantmentUtils.getLevel(killer.getInventory().getItemInMainHand(), RegisterEnchantments.BEHEADING);
+				double chance = level * .05;
+				double random = Math.random();
+				if (chance > random) {
+					List<ItemStack> skulls = new ArrayList<ItemStack>();
+					ItemStack skull = MobHeads.getMobHead(living, killer.hasPermission("enchantmentsolution.abilities.player-skulls"), killer.hasPermission("enchantmentsolution.abilities.custom-skulls"));
+					if (skull != null) {
+						skulls.add(skull);
+						BeheadingEvent beheading = new BeheadingEvent(killer, (LivingEntity) entity, level, skulls, event.getDrops(), false, true);
+						Bukkit.getPluginManager().callEvent(beheading);
 
-				BeheadingEvent beheading = new BeheadingEvent(killer, (LivingEntity) entity, level, skulls, event.getDrops(), false, true);
-				Bukkit.getPluginManager().callEvent(beheading);
+						if (!beheading.isCancelled()) {
+							List<ItemStack> newDrops = new ArrayList<ItemStack>();
+							if (!beheading.isOverride()) {
+								newDrops.addAll(beheading.getOriginalDrops());
+								if (heads(Material.WITHER_SKELETON_SKULL, beheading.getOriginalDrops(), beheading.getDrops()) >= 2) AdvancementUtils.awardCriteria(killer, ESAdvancement.DOUBLE_HEADER, "wither_skull");
+							}
+							newDrops.addAll(beheading.getDrops());
+							if (event instanceof PlayerDeathEvent && ((PlayerDeathEvent) event).getKeepInventory() && !beheading.isKeepInventoryOverride()) return;
+							if (living instanceof Player) AdvancementUtils.awardCriteria(killer, ESAdvancement.HEADHUNTER, "player_head");
 
-				if (!beheading.isCancelled()) {
-					List<ItemStack> newDrops = new ArrayList<ItemStack>();
-					if (!beheading.isOverride()) {
-						newDrops.addAll(beheading.getOriginalDrops());
-						if (heads(Material.WITHER_SKELETON_SKULL, beheading.getOriginalDrops(), beheading.getDrops()) >= 2) AdvancementUtils.awardCriteria(killer, ESAdvancement.DOUBLE_HEADER, "wither_skull");
+							event.getDrops().clear();
+							for(ItemStack drop: newDrops)
+								event.getDrops().add(drop);
+						}
 					}
-					newDrops.addAll(beheading.getDrops());
-					if (event instanceof PlayerDeathEvent) if (((PlayerDeathEvent) event).getKeepInventory() && !beheading.isKeepInventoryOverride()) return;
-					if (heads(Material.PLAYER_HEAD, newDrops, null) > 0) AdvancementUtils.awardCriteria(killer, ESAdvancement.HEADHUNTER, "player_head");
+				}
+			}
+		}
+	}
 
-					event.getDrops().clear();
-					for(ItemStack drop: newDrops)
-						event.getDrops().add(drop);
+	private void streak(EntityDeathEvent event) {
+		if (!canRun(RegisterEnchantments.STREAK, event)) return;
+		EntityDamageEvent e = event.getEntity().getLastDamageCause();
+		if (e instanceof EntityDamageByEntityEvent) {
+			EntityDamageByEntityEvent entityDamage = (EntityDamageByEntityEvent) e;
+			if (event.getEntity().getKiller() != null) {
+				Player killer = event.getEntity().getKiller();
+				if (EnchantmentUtils.hasEnchantment(killer.getInventory().getItemInMainHand(), RegisterEnchantments.STREAK)) {
+					StreakDeathEvent streak = new StreakDeathEvent(event.getEntity(), killer);
+					if (!streak.isCancelled()) {
+						ESPlayer player = EnchantmentSolution.getESPlayer(killer);
+						player.addToStreak(streak.getEntity());
+					}
 				}
 			}
 		}

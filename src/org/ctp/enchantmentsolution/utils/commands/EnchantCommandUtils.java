@@ -10,10 +10,17 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.ctp.crashapi.commands.CrashCommand;
+import org.ctp.crashapi.events.ArmorEquipEvent;
+import org.ctp.crashapi.events.ArmorEquipEvent.EquipMethod;
+import org.ctp.crashapi.events.ItemAddEvent;
+import org.ctp.crashapi.events.ItemEquipEvent;
+import org.ctp.crashapi.events.ItemEquipEvent.HandMethod;
 import org.ctp.crashapi.item.ItemData;
+import org.ctp.crashapi.item.ItemSlotType;
 import org.ctp.crashapi.utils.ChatUtils;
 import org.ctp.crashapi.utils.ItemUtils;
 import org.ctp.enchantmentsolution.Chatable;
@@ -129,12 +136,25 @@ public class EnchantCommandUtils {
 									return true;
 								}
 							}
+							ItemStack prevItem = itemToEnchant.clone();
+							int heldSlot = givePlayer.getInventory().getHeldItemSlot();
 							boolean useBooks = ConfigString.USE_ENCHANTED_BOOKS.getBoolean();
 							if (itemToEnchant.getType() == Material.BOOK && useBooks) itemToEnchant = EnchantmentUtils.convertToEnchantedBook(itemToEnchant);
 							else if (itemToEnchant.getType() == Material.ENCHANTED_BOOK && !useBooks) itemToEnchant = EnchantmentUtils.convertToRegularBook(itemToEnchant);
 							itemToEnchant = EnchantmentUtils.addEnchantmentToItem(itemToEnchant, enchant, level);
 
 							givePlayer.getInventory().setItem(slot, itemToEnchant);
+							
+							Event event = null;
+							
+							if (slot == heldSlot || slot > 36) {
+								if (slot == heldSlot || slot == 36) event = new ItemEquipEvent(givePlayer, HandMethod.COMMAND, slot == 36 ? ItemSlotType.OFF_HAND : ItemSlotType.MAIN_HAND, prevItem, itemToEnchant);
+								else
+									event = new ArmorEquipEvent(givePlayer, EquipMethod.COMMAND, ItemSlotType.getTypeFromSlot(slot), prevItem, itemToEnchant);
+							} else
+								event = new ItemAddEvent(givePlayer, itemToEnchant);
+							Bukkit.getPluginManager().callEvent(event);
+							
 							HashMap<String, Object> codes = ChatUtils.getCodes();
 							codes.put("%level%", level);
 							codes.put("%slot%", slot);
@@ -223,6 +243,8 @@ public class EnchantCommandUtils {
 						}
 						ItemStack itemToEnchant = removePlayer.getInventory().getItem(slot);
 						if (itemToEnchant != null) {
+							ItemStack prevItem = itemToEnchant.clone();
+							int heldSlot = removePlayer.getInventory().getHeldItemSlot();
 							boolean useBooks = ConfigString.USE_ENCHANTED_BOOKS.getBoolean();
 							if (itemToEnchant.getType() == Material.BOOK && useBooks) itemToEnchant = EnchantmentUtils.convertToEnchantedBook(itemToEnchant);
 							else if (itemToEnchant.getType() == Material.ENCHANTED_BOOK && !useBooks) itemToEnchant = EnchantmentUtils.convertToRegularBook(itemToEnchant);
@@ -236,6 +258,15 @@ public class EnchantCommandUtils {
 							}
 							if (itemToEnchant.getType() == Material.ENCHANTED_BOOK && !((EnchantmentStorageMeta) itemToEnchant.getItemMeta()).hasStoredEnchants()) itemToEnchant.setType(Material.BOOK);
 
+							Event event = null;
+							
+							if (slot == heldSlot || slot > 36) {
+								if (slot == heldSlot || slot == 36) event = new ItemEquipEvent(removePlayer, HandMethod.COMMAND, slot == 36 ? ItemSlotType.OFF_HAND : ItemSlotType.MAIN_HAND, prevItem, itemToEnchant);
+								else
+									event = new ArmorEquipEvent(removePlayer, EquipMethod.COMMAND, ItemSlotType.getTypeFromSlot(slot), prevItem, itemToEnchant);
+							} else
+								event = new ItemAddEvent(removePlayer, itemToEnchant);
+							Bukkit.getPluginManager().callEvent(event);
 							removePlayer.getInventory().setItem(slot, itemToEnchant);
 							codes.put("%player%", sender.getName());
 							if (player != null) codes.put("%player%", player.getDisplayName());

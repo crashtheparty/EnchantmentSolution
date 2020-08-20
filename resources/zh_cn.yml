@@ -260,7 +260,6 @@ enchantment:
     conflicting-enchantments: '&6冲突的附魔: &f'
     enabled: '&6启用的附魔: &f'
     treasure: '&6财富附魔: &f'
-    disabled-items: '&6禁用的物品: &f'
     display_names: 
         custom_enchantments: 
             angler: '垂钓者'
@@ -411,7 +410,6 @@ item_display_types:
     none: "无"
 misc:
     no_conflicting_enchantments: "无"
-    no_disabled_items: "无"
     true: "True"
     false: "False"
     beheading_skull: "&7%player%的头"

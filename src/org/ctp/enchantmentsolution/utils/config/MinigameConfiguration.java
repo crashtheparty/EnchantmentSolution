@@ -28,7 +28,7 @@ public class MinigameConfiguration extends Configuration {
 
 		YamlConfigBackup config = getConfig();
 
-		File file = CrashConfigUtils.getTempFile("/resources/minigame_defaults.yml");
+		File file = CrashConfigUtils.getTempFile(getClass(), "/resources/minigame_defaults.yml");
 
 		YamlConfig defaultConfig = new YamlConfig(file, new String[] {});
 		defaultConfig.getFromConfig();

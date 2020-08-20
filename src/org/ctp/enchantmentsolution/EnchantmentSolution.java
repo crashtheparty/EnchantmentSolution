@@ -11,6 +11,7 @@ import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
+import org.ctp.crashapi.CrashAPI;
 import org.ctp.crashapi.CrashAPIPlugin;
 import org.ctp.crashapi.config.yaml.YamlConfig;
 import org.ctp.crashapi.db.BackupDB;
@@ -98,6 +99,10 @@ public class EnchantmentSolution extends CrashAPIPlugin {
 
 	@Override
 	public void onEnable() {
+		if (CrashAPI.getPlugin().getBukkitVersion().getVersionNumber() < 4) {
+			Chatable.get().sendWarning("WARNING: Minecraft 1.13 is now deprecated! Support will not be offered for any issues with enchantments or NMS.");
+			Chatable.get().sendWarning("Please use an older version of EnchantmentSolution (2.3.x) if problems persist.");
+		}
 		registerEvent(new InventoryClick());
 		registerEvent(new InventoryClose());
 		registerEvent(new PlayerInteract());
@@ -111,7 +116,7 @@ public class EnchantmentSolution extends CrashAPIPlugin {
 		registerEvent(new GlobalPlayerListener());
 
 		registerEvent(new FishingListener());
-		registerEvent(new DropsListener());
+		registerEvent(new DeathListener());
 		registerEvent(new SoulListener());
 		registerEvent(new DamageListener());
 		registerEvent(new PlayerListener());
@@ -139,12 +144,10 @@ public class EnchantmentSolution extends CrashAPIPlugin {
 		Bukkit.getScheduler().runTaskTimer(PLUGIN, rpg, 1l, 1l);
 		registerEvent(new HardModeListener());
 
-		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN, new AbilityRunnable(), 80l, 80l);
+		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN, new AbilityThreads(), 80l, 80l);
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN, new AdvancementThread(), 1l, 1l);
-		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN, new ElytraRunnable(), 1l, 1l);
-		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN, new MiscRunnable(), 1l, 1l);
-		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN, new SnapshotRunnable(), 1l, 1l);
-		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN, new WalkerRunnable(), 1l, 1l);
+		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN, new EntityThreads(), 1l, 1l);
+		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN, new WalkerThread(), 1l, 1l);
 
 		EnchantmentSolutionCommand c = new EnchantmentSolutionCommand();
 		getCommand("EnchantmentSolution").setExecutor(c);
@@ -394,9 +397,7 @@ public class EnchantmentSolution extends CrashAPIPlugin {
 			Quests.get();
 			quests = true;
 			getChat().sendInfo("Quests compatibility enabled!");
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
+		} catch (Exception | Error ex) {}
 	}
 
 	public static ESPlayer getESPlayer(OfflinePlayer player) {
@@ -413,51 +414,6 @@ public class EnchantmentSolution extends CrashAPIPlugin {
 			players.add(getESPlayer(player));
 		if (!online) for(OfflinePlayer player: Bukkit.getOfflinePlayers())
 			players.add(getESPlayer(player));
-		return players;
-	}
-
-	public static List<ESPlayer> getContagionPlayers() {
-		List<ESPlayer> players = new ArrayList<ESPlayer>();
-		for(Player player: Bukkit.getOnlinePlayers()) {
-			ESPlayer es = getESPlayer(player);
-			if (es.getContagionChance() > 0 && es.getCurseableItems().size() > 0) players.add(es);
-		}
-		return players;
-	}
-
-	public static List<ESPlayer> getExhaustionPlayers() {
-		List<ESPlayer> players = new ArrayList<ESPlayer>();
-		for(Player player: Bukkit.getOnlinePlayers()) {
-			ESPlayer es = getESPlayer(player);
-			if (es.getExhaustion() > 0) players.add(es);
-		}
-		return players;
-	}
-
-	public static List<ESPlayer> getFrequentFlyerPlayers() {
-		List<ESPlayer> players = new ArrayList<ESPlayer>();
-		for(Player player: Bukkit.getOnlinePlayers()) {
-			ESPlayer es = getESPlayer(player);
-			if (es.hasFrequentFlyer() || es.canFly(true)) players.add(es);
-		}
-		return players;
-	}
-
-	public static List<ESPlayer> getForceFeedPlayers() {
-		List<ESPlayer> players = new ArrayList<ESPlayer>();
-		for(Player player: Bukkit.getOnlinePlayers()) {
-			ESPlayer es = getESPlayer(player);
-			if (es.hasForceFeed()) players.add(es);
-		}
-		return players;
-	}
-
-	public static List<ESPlayer> getIcarusPlayers() {
-		List<ESPlayer> players = new ArrayList<ESPlayer>();
-		for(Player player: Bukkit.getOnlinePlayers()) {
-			ESPlayer es = getESPlayer(player);
-			if (es.getIcarusDelay() > 0) players.add(es);
-		}
 		return players;
 	}
 
@@ -488,8 +444,7 @@ public class EnchantmentSolution extends CrashAPIPlugin {
 
 	@Override
 	public String getStarter() {
-		// TODO Auto-generated method stub
-		return null;
+		return getLanguageFile().getString("starter");
 	}
 
 	@Override

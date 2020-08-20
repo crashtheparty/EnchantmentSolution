@@ -21,6 +21,7 @@ anvil:
 
     legacy-gui-open: '&fMinecraft anvil GUI will open on next anvil click.'
     legacy-gui-close: '&fMinecraft anvil GUI closed.'
+    rename-requires-permission: '&cYou do not have permission to use this!'
 table: 
     name: '&9Enchantment Table'
     black-mirror: '&f'
@@ -105,6 +106,7 @@ commands:
     remove-rpg-enchantment: 'Removing enchantment %enchantment% from %player%''s ESRPG values.'
     set-rpg-enchantment: 'Setting enchantment %enchantment% to level %level% for %player%''s ESRPG values.'
     rpg-invalid-edit: 'RPGEdit can only edit level, experience, and enchantments for players.'
+    item-test: '&aCopy To Clipboard: {%item%}'
     console-player: 'Console'
     invalid:
         console: 'Console Sender'
@@ -191,6 +193,9 @@ commands:
         
         rpgedit:
         - 'rpge'
+        
+        estest:
+        - 'test'
 
     descriptions: 
         enchant: 'Enchants an item for a given player in the given slot.'
@@ -212,6 +217,7 @@ commands:
         rpgstats: 'Gets the statistics from ESRPG for a particular player.'
         rpgtop: 'Lists the top players on ESRPG.'
         rpgedit: 'Edit ESRPG values for players.'
+        test: 'Show information on items.'
     usage: 
         enchant: 
             main: 'Usage: %usage%\nAliases: %aliases%'
@@ -270,6 +276,9 @@ commands:
         rpgedit: 
             main: 'Usage: %usage%\nAliases: %aliases%'
             string: 'rpgedit <player> <subcommand> [...]'
+        estest: 
+            main: 'Usage: %usage%\nAliases: %aliases%'
+            string: 'estest [''item'']'
     help:
         commands_page: '&bCommands Page %page%'
         commands_info_shrink: '&f: %description%'
@@ -482,7 +491,7 @@ enchantment:
             exp_share: 'Increase experience earned from killing mobs and breaking blocks.'
             flower_gift: 'Has a chance of dropping flowers when right clicking them.'
             force_feed: 'Takes saturation to repair equipped armor and items.'
-            frequent_flyer: 'Allows flight. Durability damage every (3 * level) seconds when below 255 height and every (level) seconds above 255 height. Removes flight at 32 durability.'
+            frequent_flyer: 'Allows flight with (20% + 16% * level) speed. Damages item every 3 seconds in flight.'
             fried: 'Cooks fish upon catching them.'
             gold_digger: 'Earn experience and gold nuggets for breaking crops.'
             gung_ho: 'Decreases health to 50% of base value (usually 5 hearts). Melee attacks do 3 times the damage.'
@@ -532,7 +541,6 @@ enchantment:
     conflicting-enchantments: '&6Conflicting Enchantments: &f'
     enabled: '&6Enchantment Enabled: &f'
     treasure: '&6Treasure Enchantment: &f'
-    disabled-items: '&6Disabled Items: &f'
     display_names: 
         custom_enchantments: 
             angler: 'Angler'
@@ -720,7 +728,6 @@ item_display_types:
     none: "None"
 misc:
     no_conflicting_enchantments: "None"
-    no_disabled_items: "None"
     true: "True"
     false: "False"
     beheading_skull: "&7%player%'s Skull"

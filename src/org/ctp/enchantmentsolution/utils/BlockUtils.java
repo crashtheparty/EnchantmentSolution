@@ -1,8 +1,6 @@
 package org.ctp.enchantmentsolution.utils;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -26,18 +24,31 @@ import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
 
 public class BlockUtils {
 
-	private static List<Location> MULTI_BLOCK_BREAK = new ArrayList<Location>();
+	private static Map<Enchantment, List<Location>> MULTI_BLOCK_BREAK = new HashMap<Enchantment, List<Location>>();
 
 	public static boolean multiBlockBreakContains(Location loc) {
-		return MULTI_BLOCK_BREAK.contains(loc);
+		for(Enchantment enchantment: MULTI_BLOCK_BREAK.keySet())
+			if (MULTI_BLOCK_BREAK.get(enchantment).contains(loc)) return true;
+		return false;
 	}
 
-	public static void addMultiBlockBreak(Location loc) {
-		MULTI_BLOCK_BREAK.add(loc);
+	public static boolean multiBlockBreakContains(Location loc, Enchantment enchantment) {
+		if (!MULTI_BLOCK_BREAK.containsKey(enchantment)) return false;
+		return MULTI_BLOCK_BREAK.get(enchantment).contains(loc);
 	}
 
-	public static void removeMultiBlockBreak(Location loc) {
-		MULTI_BLOCK_BREAK.remove(loc);
+	public static void addMultiBlockBreak(Location loc, Enchantment enchantment) {
+		List<Location> locs = MULTI_BLOCK_BREAK.get(enchantment);
+		if (locs == null) locs = new ArrayList<Location>();
+		locs.add(loc);
+		MULTI_BLOCK_BREAK.put(enchantment, locs);
+	}
+
+	public static void removeMultiBlockBreak(Location loc, Enchantment enchantment) {
+		List<Location> locs = MULTI_BLOCK_BREAK.get(enchantment);
+		if (locs == null) locs = new ArrayList<Location>();
+		locs.remove(loc);
+		MULTI_BLOCK_BREAK.put(enchantment, locs);
 	}
 
 	public static boolean isAdjacent(Block b1, Block b2) {
@@ -46,10 +57,34 @@ public class BlockUtils {
 		return false;
 	}
 
-	public static boolean multiBreakBlock(Player player, ItemStack item, Location b) {
+	public static boolean isNextTo(Block b1, Block b2) {
+		int x = Math.abs(b1.getX() - b2.getX());
+		int y = Math.abs(b1.getY() - b2.getY());
+		int z = Math.abs(b1.getZ() - b2.getZ());
+		return x <= 1 && y <= 1 && z <= 1;
+	}
+
+	public static List<Location> getNextTo(Location loc) {
+		return getNextTo(loc, 1);
+	}
+
+	public static List<Location> getNextTo(Location loc, int i) {
+		List<Location> locs = new ArrayList<Location>();
+		for(int x = -i; x <= i; x++)
+			for(int y = -i; y <= i; y++)
+				for(int z = -i; z <= i; z++)
+					locs.add(loc.getBlock().getRelative(x, y, z).getLocation());
+		return locs;
+	}
+
+	public static boolean multiBreakBlock(Player player, ItemStack item, Location b, Enchantment enchantment) {
+		return multiBreakBlock(player, item, b, enchantment, 1, 1);
+	}
+
+	public static boolean multiBreakBlock(Player player, ItemStack item, Location b, Enchantment enchantment, int damage, float dropChance) {
 		BlockBreakEvent newEvent = new BlockBreakMultiEvent(b.getBlock(), player);
 		int exp = 0;
-		if (!EnchantmentUtils.hasEnchantment(item, Enchantment.SILK_TOUCH)) switch (newEvent.getBlock().getType().name()) {
+		if (item != null && !EnchantmentUtils.hasEnchantment(item, Enchantment.SILK_TOUCH)) switch (newEvent.getBlock().getType().name()) {
 			case "COAL_ORE":
 				exp = (int) (Math.random() * 3);
 				break;
@@ -75,7 +110,7 @@ public class BlockUtils {
 			AdvancementUtils.awardCriteria(player, ESAdvancement.FAST_AND_FURIOUS, "diamond_pickaxe");
 			if (newBlock.getType().equals(Material.SNOW) && ItemBreakType.getType(item.getType()).getBreakTypes().contains(Material.SNOW)) {
 				int num = ((Snow) newBlock.getBlockData()).getLayers();
-				ItemUtils.dropItem(new ItemStack(Material.SNOWBALL, num), newBlock.getLocation());
+				if (dropChance > Math.random()) ItemUtils.dropItem(new ItemStack(Material.SNOWBALL, num), newBlock.getLocation());
 			}
 			player.incrementStatistic(Statistic.MINE_BLOCK, newBlock.getType());
 			player.incrementStatistic(Statistic.USE_ITEM, item.getType());
@@ -87,12 +122,23 @@ public class BlockUtils {
 			}
 			newBlock.breakNaturally(item);
 			AbilityUtils.dropExperience(loc, newEvent.getExpToDrop());
-			DamageUtils.damageItem(player, item);
+			DamageUtils.damageItem(player, item, damage);
 			EnchantmentSolution.getESPlayer(player).breakBlock();
-			BlockUtils.removeMultiBlockBreak(b);
+			BlockUtils.removeMultiBlockBreak(b, enchantment);
+			return true;
+		} else if (!newEvent.isCancelled() && item == null || MatData.isAir(item.getType())) {
+			Block newBlock = newEvent.getBlock();
+			Location loc = newBlock.getLocation().clone().add(0.5, 0.5, 0.5);
+			if (ConfigString.USE_PARTICLES.getBoolean()) loc.getWorld().spawnParticle(Particle.BLOCK_CRACK, loc, 20, newBlock.getBlockData());
+			if (ConfigString.PLAY_SOUND.getBoolean()) {
+				BlockSound sound = BlockSound.getSound(newBlock.getType());
+				loc.getWorld().playSound(loc, sound.getSound(), sound.getVolume(newBlock.getType()), sound.getPitch(newBlock.getType()));
+			}
+			newBlock.breakNaturally();
+			BlockUtils.removeMultiBlockBreak(b, enchantment);
 			return true;
 		}
-		BlockUtils.removeMultiBlockBreak(b);
+		BlockUtils.removeMultiBlockBreak(b, enchantment);
 		return false;
 	}
 }

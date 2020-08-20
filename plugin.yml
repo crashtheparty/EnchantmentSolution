@@ -1,8 +1,9 @@
 name: EnchantmentSolution
-version: 2.4.0-alpha-1
+version: 2.4.0-pre2
 main: org.ctp.enchantmentsolution.EnchantmentSolution
 api-version: 1.13
-softdepend: [mcMMO, Jobs, VeinMiner, AuctionHouse, MMOLib, MMOItems]
+depend: [CrashAPI]
+softdepend: [mcMMO, Jobs, VeinMiner, AuctionHouse, MMOLib, MMOItems, Quests]
 commands:
   enchantmentsolution:
     aliases: [es]
@@ -72,7 +73,55 @@ commands:
   rpgedit:
     description: Edits a player's ESRPG information
     usage: /rpgedit
+  estest:
+    description: Test items for plugin info
+    usage: /estest [item]
 permissions:
+  enchantmentsolution.enable-flight:
+    description: Enables use of external /fly commands without interference from FrequentFlyer
+    default: false
+  enchantmentsolution.permissions.ignore: 
+    description: Gives access to all enchantment permissions.
+    default: false
+  enchantmentsolution.demigod-anvil:
+    description: Allows players to repair items with enchantments they cannot combine
+    default: false
+  enchantmentsolution.demigod-books:
+    description: Allows players to add levels from enchanted books to items even if they cannot combine the levels
+    default: false
+  enchantmentsolution.god-anvil:
+    description: Allows players to combine items higher than their max levels
+    default: false
+  enchantmentsolution.abilities.has-external-flight:
+    description: Enables use of external /fly commands without interference from FrequentFlyer
+    default: false
+  enchantmentsolution.abilities.player-skulls:
+    description: Enables dropping player's skulls with Beheading
+    default: true
+  enchantmentsolution.abilities.custom-skulls:
+    description: Enables dropping custom skulls with Beheading
+    default: true
+  enchantmentsolution.enchantments.rpg.all: 
+    description: Gives access to every enchantment through ESRPG.
+    default: op
+  enchantmentsolution.enchantments.lower-levels:
+    description: Only allow the player to have enchantments and enchantment levels that match their permission levels
+    default: false
+  enchantmentsolution.anvil.demigod:
+    description: Allows players to repair items with enchantments they cannot combine
+    default: false
+  enchantmentsolution.anvil.demigod-books:
+    description: Allows players to add levels from enchanted books to items even if they cannot combine the levels
+    default: false
+  enchantmentsolution.anvil.god:
+    description: Allows players to combine items higher than their max levels
+    default: false
+  enchantmentsolution.anvil.rename:
+    description: Allows players to rename their items with the custom GUI
+    default: op
+  enchantmentsolution.command.calculator:
+    description: Allows players to use the /es calc command
+    default: op
   enchantmentsolution.command.edit: 
     description: Gives access to the /es config command. 
     default: op
@@ -100,24 +149,6 @@ permissions:
   enchantmentsolution.command.enchantunsafe.others: 
     description: Gives access to the /es enchantunsafe command for use on other people. 
     default: op
-  enchantmentsolution.command.calculator:
-    description: Allows players to use the /es calc command
-    default: op
-  enchantmentsolution.enable-flight:
-    description: Enables use of external /fly commands without interference from FrequentFlyer
-    default: false
-  enchantmentsolution.permissions.ignore: 
-    description: Gives access to all enchantment permissions.
-    default: false
-  enchantmentsolution.demigod-anvil:
-    description: Allows players to repair items with enchantments they cannot combine
-    default: false
-  enchantmentsolution.demigod-books:
-    description: Allows players to add levels from enchanted books to items even if they cannot combine the levels
-    default: false
-  enchantmentsolution.god-anvil:
-    description: Allows players to combine items higher than their max levels
-    default: false
   enchantmentsolution.command.debug:
     description: Allows players to use the /es debug command
     default: op
@@ -159,4 +190,7 @@ permissions:
     default: op
   enchantmentsolution.command.rpgedit:
     description: Allows players to use the /es rpgedit command
+    default: op
+  enchantmentsolution.command.test:
+    description: Allows players to use the /es test command
     default: op
