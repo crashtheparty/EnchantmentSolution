@@ -1,35 +1,32 @@
 package org.ctp.enchantmentsolution.listeners;
 
-import java.util.Collection;
+import java.util.List;
 
 import org.bukkit.Material;
-import org.bukkit.Statistic;
 import org.bukkit.block.Block;
-import org.bukkit.entity.Player;
+import org.bukkit.block.BlockState;
+import org.bukkit.block.data.BlockData;
+import org.bukkit.entity.Item;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockDropItemEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.metadata.FixedMetadataValue;
-import org.ctp.crashapi.utils.DamageUtils;
-import org.ctp.crashapi.utils.ItemUtils;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.events.blocks.BlockBreakMultiEvent;
-import org.ctp.enchantmentsolution.mcmmo.McMMOHandler;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.BlockUtils;
 import org.ctp.enchantmentsolution.utils.ESArrays;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.GaiaUtils;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.GaiaUtils.GaiaTrees;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.WalkerUtils;
-import org.ctp.enchantmentsolution.utils.compatibility.JobsUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
-import org.ctp.enchantmentsolution.utils.items.AbilityUtils;
 import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
 
 public class ExtraBlockListener implements Listener {
@@ -51,25 +48,22 @@ public class ExtraBlockListener implements Listener {
 			event.setCancelled(true);
 			if (WalkerUtils.getWalker(event.getBlock()).getEnchantment() == RegisterEnchantments.VOID_WALKER) AdvancementUtils.awardCriteria(event.getPlayer(), ESAdvancement.DETERMINED_CHEATER, "cheater");
 		}
+	}
+	
+	@EventHandler(priority = EventPriority.HIGH)
+	public void onBlockDropItem(BlockDropItemEvent event) {
+		BlockState state = event.getBlockState();
+		BlockData data = state.getBlockData();
+		List<Material> shulker = ESArrays.getShulkerBoxes();
 
-		if (ESArrays.getShulkerBoxes().contains(event.getBlock().getType()) && !EnchantmentUtils.hasEnchantment(event.getPlayer().getInventory().getItemInMainHand(), RegisterEnchantments.TELEPATHY)) {
-			Player player = event.getPlayer();
-			ItemStack item = player.getInventory().getItemInMainHand();
-			Block block = event.getBlock();
-			if (block.getMetadata("soulbound").size() > 0) {
-				event.setCancelled(true);
-				Collection<ItemStack> drops = block.getDrops();
-
-				drops = EnchantmentUtils.getSoulboundShulkerBox(player, block, drops);
-				AbilityUtils.giveExperience(player, event.getExpToDrop());
-				player.incrementStatistic(Statistic.MINE_BLOCK, event.getBlock().getType());
-				player.incrementStatistic(Statistic.USE_ITEM, item.getType());
-				DamageUtils.damageItem(player, item);
-				McMMOHandler.handleMcMMO(event, item);
-				if (EnchantmentSolution.getPlugin().isJobsEnabled()) JobsUtils.sendBlockBreakAction(event);
-				event.getBlock().setType(Material.AIR);
-				ItemUtils.dropItems(drops, block.getLocation());
-				block.setType(Material.AIR);
+		for (Item i : event.getItems()) {
+			ItemStack eventItem = i.getItemStack();
+			if (shulker.contains(data.getMaterial()) && shulker.contains(eventItem.getType())) {
+				Block block = event.getBlock();
+				if (block.getMetadata("soulbound").size() > 0) {
+					eventItem = EnchantmentUtils.getSoulboundShulkerBox(state, eventItem);
+					i.setItemStack(eventItem);
+				}
 			}
 		}
 	}

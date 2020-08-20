@@ -1,23 +1,24 @@
 package org.ctp.enchantmentsolution.events.blocks;
 
-import java.util.Collection;
+import java.util.List;
 
 import org.bukkit.block.Block;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 
 public abstract class ESBlockDropOverrideItemEvent extends ESBlockDropItemEvent {
 
-	private final Collection<ItemStack> originalItems;
+	private final List<ItemStack> originalItems;
 	private boolean override = true;
 	
-	public ESBlockDropOverrideItemEvent(Block theBlock, EnchantmentLevel enchantment, Player player, Collection<ItemStack> items, Collection<ItemStack> originalItems) {
-		super(theBlock, enchantment, player, items);
+	public ESBlockDropOverrideItemEvent(Block theBlock, BlockData blockData, EnchantmentLevel enchantment, Player player, List<ItemStack> items, List<ItemStack> originalItems) {
+		super(theBlock, blockData, enchantment, player, items);
 		this.originalItems = originalItems;
 	}
 
-	public Collection<ItemStack> getOriginalItems() {
+	public List<ItemStack> getOriginalItems() {
 		return originalItems;
 	}
 

@@ -8,25 +8,25 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 
-public abstract class ESBlockDropItemEvent extends ESBlockEvent {
+public abstract class ESCollectBlockDropEvent extends ESBlockEvent {
 
-	private final List<ItemStack> items;
 	private final Player player;
+	private final List<ItemStack> items;
 	private final BlockData blockData;
 	
-	public ESBlockDropItemEvent(Block theBlock, BlockData blockData, EnchantmentLevel enchantment, Player player, List<ItemStack> items) {
+	public ESCollectBlockDropEvent(Block theBlock, BlockData blockData, EnchantmentLevel enchantment, Player player, List<ItemStack> items) {
 		super(theBlock, enchantment);
-		this.blockData = blockData;
-		this.items = items;
 		this.player = player;
-	}
-
-	public List<ItemStack> getItems() {
-		return items;
+		this.items = items;
+		this.blockData = blockData;
 	}
 
 	public Player getPlayer() {
 		return player;
+	}
+
+	public List<ItemStack> getItems() {
+		return items;
 	}
 
 	public BlockData getBlockData() {

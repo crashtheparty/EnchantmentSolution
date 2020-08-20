@@ -7,6 +7,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.MetadataValue;
@@ -26,7 +27,7 @@ import org.ctp.enchantmentsolution.utils.player.ESPlayer;
 @SuppressWarnings("unused")
 public class DeathListener extends Enchantmentable {
 
-	@EventHandler
+	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onEntityDeath(EntityDeathEvent event) {
 		runMethod(this, "beheading", event, EntityDeathEvent.class);
 		runMethod(this, "streak", event, EntityDeathEvent.class);

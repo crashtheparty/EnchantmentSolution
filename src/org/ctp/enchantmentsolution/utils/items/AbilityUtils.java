@@ -5,7 +5,6 @@ import java.util.*;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
-import org.bukkit.block.Block;
 import org.bukkit.block.data.Ageable;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.enchantments.Enchantment;
@@ -25,8 +24,7 @@ public class AbilityUtils {
 	private static List<Location> WAND_BLOCKS = new ArrayList<Location>();
 	private static List<Material> CROPS = Arrays.asList(Material.WHEAT, Material.CARROTS, Material.POTATOES, Material.NETHER_WART, Material.BEETROOTS, Material.COCOA_BEANS);
 
-	public static ItemStack getGoldDiggerItems(ItemStack item, Block brokenBlock) {
-		BlockData data = brokenBlock.getState().getBlockData();
+	public static ItemStack getGoldDiggerItems(ItemStack item, BlockData data) {
 		if (data instanceof Ageable) {
 			Ageable age = (Ageable) data;
 			if (CROPS.contains(data.getMaterial())) {
@@ -78,8 +76,7 @@ public class AbilityUtils {
 			}
 			items.remove(0);
 		}
-		if (amount > 0)
-			player.giveExp(amount);
+		if (amount > 0) player.giveExp(amount);
 	}
 
 	public static int setExp(int exp, int level) {
