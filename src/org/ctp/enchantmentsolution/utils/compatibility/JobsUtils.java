@@ -127,13 +127,13 @@ public class JobsUtils {
 
 		BlockActionInfo bInfo = new BlockActionInfo(block, ActionType.BREAK);
 
-		FastPayment fp = Jobs.FastPayment.get(player.getUniqueId());
+		FastPayment fp = Jobs.FASTPAYMENT.get(player.getUniqueId());
 		if (fp != null) {
 			if (fp.getTime() > System.currentTimeMillis()) if (fp.getInfo().getName().equalsIgnoreCase(bInfo.getName()) || fp.getInfo().getNameWithSub().equalsIgnoreCase(bInfo.getNameWithSub())) {
 				Jobs.perform(fp.getPlayer(), fp.getInfo(), fp.getPayment(), fp.getJob());
 				return;
 			}
-			Jobs.FastPayment.remove(player.getUniqueId());
+			Jobs.FASTPAYMENT.remove(player.getUniqueId());
 		}
 
 		if (!payForItemDurabilityLoss(player)) return;

@@ -283,10 +283,10 @@ public class ESPlayer {
 		FrequentFlyerEvent event = new FrequentFlyerEvent(player, frequentFlyerLevel, FFType.REMOVE_FLIGHT);
 		Bukkit.getPluginManager().callEvent(event);
 		if (!event.isCancelled()) {
-			this.canFly = false;
+			canFly = false;
 			currentFFType = FFType.NONE;
-			player.setAllowFlight(this.canFly);
-			if (player.isFlying() && !this.canFly) player.setFlying(false);
+			player.setAllowFlight(canFly);
+			if (player.isFlying() && !canFly) player.setFlying(false);
 		}
 	}
 

@@ -13,6 +13,7 @@ public class AdvancementThread implements Runnable {
 
 	@Override
 	public void run() {
+		if (!ESAdvancement.KILIMANJARO.isEnabled()) return;
 		Iterator<ESPlayer> iter = EnchantmentSolution.getOverkillDeathPlayers().iterator();
 		while (iter.hasNext()) {
 			ESPlayer esPlayer = iter.next();

@@ -75,8 +75,7 @@ public class AbilityUtils {
 			}
 			items.remove(0);
 		}
-		if (amount > 0)
-			player.giveExp(amount);
+		if (amount > 0) player.giveExp(amount);
 	}
 
 	public static int setExp(int exp, int level) {

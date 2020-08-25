@@ -80,7 +80,7 @@ public final class ItemEquipEvent extends PlayerEvent implements Cancellable {
 		 * When you die causing all items to unequip
 		 */
 		DEATH,
-		JOIN, 
+		JOIN,
 		/**
 		 * When getting an item from commands/other
 		 */

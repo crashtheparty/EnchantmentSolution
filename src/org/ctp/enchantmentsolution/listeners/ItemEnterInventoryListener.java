@@ -105,7 +105,7 @@ public class ItemEnterInventoryListener implements Listener {
 				if (clicked == 45) // handled by ItemEquipEvent
 					return;
 				else if (currentItem != null && currentItem.getType() == Material.SHIELD && isAirOrNull(player.getInventory().getItemInOffHand())) // handled by
-																																					// ItemEquipEvent
+					// ItemEquipEvent
 					return;
 				int empty = -1;
 

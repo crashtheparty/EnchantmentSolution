@@ -19,7 +19,7 @@ public class ItemAddEvent extends PlayerEvent {
 	}
 
 	private final ItemStack item;
-	
+
 	public ItemAddEvent(Player who, ItemStack item) {
 		super(who);
 		this.item = item;

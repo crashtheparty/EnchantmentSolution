@@ -61,13 +61,13 @@ public class ItemUtils {
 		} else if (item.getAmount() > 0) fallbackClone.getWorld().dropItemNaturally(fallbackClone, item);
 		if (addedAmount > 0 && statistic) player.incrementStatistic(Statistic.PICKUP, item.getType(), addedAmount);
 	}
-	
+
 	private static int addItems(Player player, ItemStack item, HandMethod method, boolean empty) {
 		int addedAmount = 0;
 		for(int i = 0; i < 36; i++) {
 			ItemStack prevItem = null;
 			if (player.getInventory().getItem(i) != null) prevItem = player.getInventory().getItem(i).clone();
-			
+
 			if (empty && (prevItem == null || MatData.isAir(prevItem.getType())) || !empty && prevItem != null && prevItem.isSimilar(item)) {
 				Event event = null;
 				ItemStack finalItem = player.getInventory().getItem(i);
@@ -198,7 +198,7 @@ public class ItemUtils {
 			meta = item.getItemMeta();
 		}
 		item.setItemMeta(meta);
-		for (EnchantmentLevel level : remove)
+		for(EnchantmentLevel level: remove)
 			removeEnchantmentFromItem(item, level.getEnchant());
 		return item;
 	}

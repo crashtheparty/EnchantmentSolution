@@ -340,14 +340,14 @@ public class EnchantmentSolution extends JavaPlugin {
 						int num = Integer.parseInt(mcVersion[i]);
 						if (i == 0 && num > 2) warning = true;
 						else if (i == 1 && num > 1) warning = true;
-						else if (i == 2 && num > 133) warning = true;
+						else if (i == 2 && num > 147) warning = true;
 					} catch (NumberFormatException ex) {
 						warning = true;
 					}
 				if (warning) {
 					ChatUtils.sendToConsole(Level.WARNING, "McMMO Overhaul updates sporidically. Compatibility may break between versions.");
 					ChatUtils.sendToConsole(Level.WARNING, "If there are any compatibility issues, please notify the plugin author immediately.");
-					ChatUtils.sendToConsole(Level.WARNING, "Current Working Version: 2.1.133");
+					ChatUtils.sendToConsole(Level.WARNING, "Current Working Version: 2.1.147");
 				}
 				mcmmoType = "Overhaul";
 			} else {

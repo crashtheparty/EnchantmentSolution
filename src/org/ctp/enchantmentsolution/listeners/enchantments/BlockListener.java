@@ -161,9 +161,12 @@ public class BlockListener extends Enchantmentable {
 			int heightPlusPlus = ItemUtils.getLevel(item, RegisterEnchantments.HEIGHT_PLUS_PLUS);
 			int widthPlusPlus = ItemUtils.getLevel(item, RegisterEnchantments.WIDTH_PLUS_PLUS);
 			boolean hasWidthHeight = false;
+			float pitch = player.getLocation().getPitch();
+			float yaw = player.getLocation().getYaw() % 360;
+			while (yaw < 0)
+				yaw += 360;
 			if (RegisterEnchantments.isEnabled(RegisterEnchantments.WIDTH_PLUS_PLUS) && ItemUtils.hasEnchantment(item, RegisterEnchantments.WIDTH_PLUS_PLUS)) {
 				hasWidthHeight = true;
-				float yaw = player.getLocation().getYaw() % 360;
 				while (yaw < 0)
 					yaw += 360;
 				if (yaw <= 45 || yaw > 135 && yaw <= 225 || yaw > 315) xt = widthPlusPlus;
@@ -173,10 +176,6 @@ public class BlockListener extends Enchantmentable {
 			}
 			if (RegisterEnchantments.isEnabled(RegisterEnchantments.HEIGHT_PLUS_PLUS) && ItemUtils.hasEnchantment(item, RegisterEnchantments.HEIGHT_PLUS_PLUS)) {
 				hasWidthHeight = true;
-				float pitch = player.getLocation().getPitch();
-				float yaw = player.getLocation().getYaw() % 360;
-				while (yaw < 0)
-					yaw += 360;
 				if (pitch > 53 || pitch <= -53) {
 					if (yaw <= 45 || yaw > 135 && yaw <= 225 || yaw > 315) zt = heightPlusPlus;
 					else

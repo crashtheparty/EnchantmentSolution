@@ -13,7 +13,7 @@ import org.ctp.enchantmentsolution.utils.player.ESPlayer;
 public class FrequentFlyerThread extends EnchantmentThread {
 
 	private static List<FrequentFlyerThread> FLYER_THREADS = new ArrayList<FrequentFlyerThread>();
-	
+
 	public static FrequentFlyerThread createThread(Player player) {
 		Iterator<FrequentFlyerThread> threads = FLYER_THREADS.iterator();
 		while (threads.hasNext()) {

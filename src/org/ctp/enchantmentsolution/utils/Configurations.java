@@ -150,7 +150,7 @@ public class Configurations {
 		backup.set("plugins.mmo_items", EnchantmentSolution.getPlugin().getMMOItems());
 		backup.set("plugins.vein_miner", EnchantmentSolution.getPlugin().getVeinMiner());
 		List<String> allPlugins = new ArrayList<String>();
-		for (Plugin pl : Bukkit.getPluginManager().getPlugins())
+		for(Plugin pl: Bukkit.getPluginManager().getPlugins())
 			if (pl.isEnabled()) allPlugins.add(pl.getDescription().getName() + " " + pl.getDescription().getVersion());
 		backup.set("plugins.all_plugins", allPlugins);
 
