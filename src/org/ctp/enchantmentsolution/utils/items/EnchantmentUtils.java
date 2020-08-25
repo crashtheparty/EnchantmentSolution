@@ -160,6 +160,12 @@ public class EnchantmentUtils {
 		return false;
 	}
 
+	public static boolean hasOneEnchantment(ItemStack item, Enchantment... enchantments) {
+		for (Enchantment e : enchantments)
+			if (hasEnchantment(item, e)) return true;
+		return false;
+	}
+
 	public static int getTotalEnchantments(ItemStack item) {
 		if (item.getItemMeta() != null) {
 			ItemMeta meta = item.getItemMeta();

@@ -4,7 +4,6 @@ import java.util.*;
 
 import org.bukkit.*;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.type.Snow;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -50,13 +49,7 @@ public class BlockUtils {
 		locs.remove(loc);
 		MULTI_BLOCK_BREAK.put(enchantment, locs);
 	}
-
-	public static boolean isAdjacent(Block b1, Block b2) {
-		for(BlockFace face: Arrays.asList(BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST, BlockFace.UP, BlockFace.DOWN))
-			if (b1.getRelative(face).getLocation().equals(b2.getLocation())) return true;
-		return false;
-	}
-
+	
 	public static boolean isNextTo(Block b1, Block b2) {
 		int x = Math.abs(b1.getX() - b2.getX());
 		int y = Math.abs(b1.getY() - b2.getY());
