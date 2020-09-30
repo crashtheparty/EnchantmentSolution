@@ -219,10 +219,10 @@ public class AfterEffectsListener extends Enchantmentable {
 		if (!canRun(RegisterEnchantments.SACRIFICE, event)) return;
 		Player player = event.getEntity();
 		ItemStack chest = player.getInventory().getChestplate();
-		if (chest != null) if (EnchantmentUtils.hasEnchantment(chest, RegisterEnchantments.SACRIFICE)) {
+		if (chest != null && EnchantmentUtils.hasEnchantment(chest, RegisterEnchantments.SACRIFICE)) {
 			int level = EnchantmentUtils.getLevel(chest, RegisterEnchantments.SACRIFICE);
 			int playerLevel = player.getLevel();
-			double damage = playerLevel / (8.0D / level);
+			double damage = playerLevel / (3.0D / level);
 			Entity killer = player.getKiller();
 			LivingEntity living = null;
 
@@ -235,14 +235,16 @@ public class AfterEffectsListener extends Enchantmentable {
 					if (proj.getShooter() instanceof LivingEntity) living = (LivingEntity) proj.getShooter();
 				} else if (nEvent.getDamager() instanceof LivingEntity) living = (LivingEntity) nEvent.getDamager();
 			}
-			SacrificeEvent sacrifice = new SacrificeEvent(living, player, damage);
-			Bukkit.getPluginManager().callEvent(sacrifice);
+			if (living != null) {
+				SacrificeEvent sacrifice = new SacrificeEvent(living, player, damage);
+				Bukkit.getPluginManager().callEvent(sacrifice);
 
-			if (!sacrifice.isCancelled()) {
-				((LivingEntity) sacrifice.getEntity()).damage(sacrifice.getNewDamage(), sacrifice.getDamager());
-				if (sacrifice.getEntity() instanceof Player) {
-					Player dead = (Player) sacrifice.getEntity();
-					if (dead.getHealth() <= 0) SACRIFICE_ADVANCEMENT.add(player.getUniqueId());
+				if (!sacrifice.isCancelled()) {
+					((LivingEntity) sacrifice.getEntity()).damage(sacrifice.getNewDamage(), sacrifice.getDamager());
+					if (sacrifice.getEntity() instanceof Player) {
+						Player dead = (Player) sacrifice.getEntity();
+						if (dead.getHealth() <= 0) SACRIFICE_ADVANCEMENT.add(player.getUniqueId());
+					}
 				}
 			}
 		}

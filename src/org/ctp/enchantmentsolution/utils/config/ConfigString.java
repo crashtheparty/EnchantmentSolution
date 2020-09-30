@@ -55,6 +55,7 @@ public enum ConfigString {
 	LAPIS_MULTIPLIER(Type.ENCHANTMENTS, "advanced_options.lapis_modifiers.multiplier", double.class),
 	MULTI_ENCHANT_DIVISOR(Type.ENCHANTMENTS, "advanced_options.multi_enchant_divisor", double.class),
 	USE_PERMISSIONS(Type.ENCHANTMENTS, "advanced_options.use_permissions", boolean.class),
+	DISCOVERY_ADVANCEMENTS(Type.ADVANCEMENTS, "discovery_advancements", boolean.class),
 	RPG_BASE(Type.RPG, "experience.base", double.class),
 	RPG_MULTIPLY(Type.RPG, "experience.multiply", double.class),
 	RPG_LEVELS_0(Type.RPG, "levels.points.level_0", double.class),

@@ -541,6 +541,10 @@ enchantment:
     conflicting-enchantments: '&6Conflicting Enchantments: &f'
     enabled: '&6Enchantment Enabled: &f'
     treasure: '&6Treasure Enchantment: &f'
+    advancement-description: 'Description: '
+    advancement-max-level: 'Max Level: '
+    advancement-weight: 'Weight: '
+    advancement-conflicting-enchantments: 'Conflicting Enchantments: '
     display_names: 
         custom_enchantments: 
             angler: 'Angler'
@@ -736,6 +740,10 @@ misc:
     no_enchantment_locations: 'No Enchantment Locations'
 
 advancements: 
+    discovery:
+        name: 'Enchantment Discovery'
+        description: 'Use /esinfo for more information.'
+        enchantments: 'Enchantment: %enchantment%'
     enchantments/agricultural_revolution: 
         name: 'Agricultural Revolution'
         description: 'Who likes farming and animals? We do!'

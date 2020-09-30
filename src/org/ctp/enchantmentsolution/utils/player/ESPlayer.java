@@ -350,7 +350,7 @@ public class ESPlayer {
 	}
 
 	public double getForceFeedChance(int level) {
-		return 0.005 + level * 0.005;
+		return 0.0075 + level * 0.0075;
 	}
 
 	public List<ItemStack> getForceFeedItems() {
