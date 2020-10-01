@@ -19,7 +19,7 @@ import org.ctp.enchantmentsolution.utils.player.ESPlayer;
 public class MagicGuardThread extends EnchantmentThread {
 
 	private static List<MagicGuardThread> MAGIC_THREADS = new ArrayList<MagicGuardThread>();
-	
+
 	public static MagicGuardThread createThread(Player player) {
 		Iterator<MagicGuardThread> threads = MAGIC_THREADS.iterator();
 		while (threads.hasNext()) {
@@ -34,7 +34,7 @@ public class MagicGuardThread extends EnchantmentThread {
 	private MagicGuardThread(ESPlayer player) {
 		super(player);
 	}
-	
+
 	@Override
 	public void run() {
 		ESPlayer player = getPlayer();

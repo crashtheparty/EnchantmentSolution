@@ -13,9 +13,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BlockStateMeta;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.ctp.crashapi.item.ItemData;
-import org.ctp.crashapi.item.ItemType;
-import org.ctp.crashapi.item.MatData;
+import org.ctp.crashapi.compatibility.MMOUtils;
+import org.ctp.crashapi.item.*;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantmentWrapper;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
@@ -123,7 +122,7 @@ public class EnchantmentUtils {
 			meta = item.getItemMeta();
 		}
 		item.setItemMeta(meta);
-		for (EnchantmentLevel level : remove)
+		for(EnchantmentLevel level: remove)
 			removeEnchantmentFromItem(item, level.getEnchant());
 		return item;
 	}
@@ -161,7 +160,7 @@ public class EnchantmentUtils {
 	}
 
 	public static boolean hasOneEnchantment(ItemStack item, Enchantment... enchantments) {
-		for (Enchantment e : enchantments)
+		for(Enchantment e: enchantments)
 			if (hasEnchantment(item, e)) return true;
 		return false;
 	}
@@ -210,6 +209,14 @@ public class EnchantmentUtils {
 		im.setBlockState(container);
 		if (state.getMetadata("soulbound").size() > 0) eventItem = addEnchantmentsToItem(eventItem, Arrays.asList(new EnchantmentLevel(RegisterEnchantments.getCustomEnchantment(RegisterEnchantments.SOULBOUND), 1)));
 		return eventItem;
+	}
+
+	public static boolean checkItemType(ItemData item, CustomItemType type) {
+		if (type.getVanilla() == VanillaItemType.VANILLA) {
+			MatData data = new MatData(type.getType().split(":")[1]);
+			return data.hasMaterial() && data.getMaterial() == item.getMaterial();
+		}
+		return MMOUtils.check(item, type);
 	}
 
 	public static int getBookshelves(Location loc) {

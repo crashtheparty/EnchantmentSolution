@@ -14,7 +14,7 @@ import org.ctp.enchantmentsolution.utils.player.ESPlayer;
 public class IcarusThread extends EnchantmentThread {
 
 	private static List<IcarusThread> ICARUS_THREADS = new ArrayList<IcarusThread>();
-	
+
 	public static IcarusThread createThread(Player player) {
 		Iterator<IcarusThread> threads = ICARUS_THREADS.iterator();
 		while (threads.hasNext()) {
@@ -29,11 +29,11 @@ public class IcarusThread extends EnchantmentThread {
 	private IcarusThread(ESPlayer player) {
 		super(player);
 	}
-	
+
 	@Override
 	public void run() {
 		ESPlayer player = getPlayer();
-		
+
 		if (!player.isOnline()) return;
 		player.minusIcarusDelay();
 		if (player.getIcarusDelay() <= 0) {

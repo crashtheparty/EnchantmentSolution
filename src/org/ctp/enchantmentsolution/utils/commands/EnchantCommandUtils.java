@@ -144,9 +144,9 @@ public class EnchantCommandUtils {
 							itemToEnchant = EnchantmentUtils.addEnchantmentToItem(itemToEnchant, enchant, level);
 
 							givePlayer.getInventory().setItem(slot, itemToEnchant);
-							
+
 							Event event = null;
-							
+
 							if (slot == heldSlot || slot > 36) {
 								if (slot == heldSlot || slot == 36) event = new ItemEquipEvent(givePlayer, HandMethod.COMMAND, slot == 36 ? ItemSlotType.OFF_HAND : ItemSlotType.MAIN_HAND, prevItem, itemToEnchant);
 								else
@@ -154,7 +154,7 @@ public class EnchantCommandUtils {
 							} else
 								event = new ItemAddEvent(givePlayer, itemToEnchant);
 							Bukkit.getPluginManager().callEvent(event);
-							
+
 							HashMap<String, Object> codes = ChatUtils.getCodes();
 							codes.put("%level%", level);
 							codes.put("%slot%", slot);
@@ -259,7 +259,7 @@ public class EnchantCommandUtils {
 							if (itemToEnchant.getType() == Material.ENCHANTED_BOOK && !((EnchantmentStorageMeta) itemToEnchant.getItemMeta()).hasStoredEnchants()) itemToEnchant.setType(Material.BOOK);
 
 							Event event = null;
-							
+
 							if (slot == heldSlot || slot > 36) {
 								if (slot == heldSlot || slot == 36) event = new ItemEquipEvent(removePlayer, HandMethod.COMMAND, slot == 36 ? ItemSlotType.OFF_HAND : ItemSlotType.MAIN_HAND, prevItem, itemToEnchant);
 								else

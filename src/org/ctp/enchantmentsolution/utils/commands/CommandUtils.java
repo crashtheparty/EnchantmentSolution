@@ -129,7 +129,7 @@ public class CommandUtils {
 				}
 			}
 
-			for (ItemStack item : EnchantmentSolution.getESPlayer(fixPlayer).getInventoryItems())
+			for(ItemStack item: EnchantmentSolution.getESPlayer(fixPlayer).getInventoryItems())
 				VanishListener.checkEnchants(fixPlayer, item);
 			HashMap<String, Object> codes = ChatUtils.getCodes();
 			codes.put("%player%", player.getName());
@@ -303,7 +303,7 @@ public class CommandUtils {
 				codes.put("%experience%", 0);
 			}
 			sb.append(Chatable.get().getMessage(codes, "rpg.stats.exp"));
-			List<EnchantmentLevel> levels = EnchantmentLevel.fromList(rpg == null ? RPGUtils.getFreeEnchantments() : rpg.getEnchantments());
+			List<EnchantmentLevel> levels = EnchantmentLevel.fromMap(rpg == null ? RPGUtils.getFreeEnchantments() : rpg.getEnchantments());
 			for(EnchantmentLevel l: levels) {
 				HashMap<String, Object> enchCodes = ChatUtils.getCodes();
 				enchCodes.put("%enchantment%", l.getEnchant().getDisplayName());

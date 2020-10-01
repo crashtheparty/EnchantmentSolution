@@ -44,8 +44,9 @@ public class VillagerEnchantments extends LootEnchantments {
 
 		enchantments = enchantmentLists.get(levelPrice[0]).getEnchantments();
 
-		if (enchantments == null) throw new NullPointerException("enchantmentLevel cannot be null.");
+		if (enchantments == null) throw new NullPointerException("EnchantmentLevel cannot be null.");
 		Material mat = original.getResult().getType();
+		ItemStack matItem = new ItemStack(mat == Material.ENCHANTED_BOOK ? Material.BOOK : mat);
 		if (!ConfigString.USE_ENCHANTED_BOOKS.getBoolean() && mat == Material.ENCHANTED_BOOK) mat = Material.BOOK;
 		else if (ConfigString.USE_ENCHANTED_BOOKS.getBoolean() && mat == Material.BOOK) mat = Material.ENCHANTED_BOOK;
 
@@ -55,7 +56,7 @@ public class VillagerEnchantments extends LootEnchantments {
 			if (!enchant.getEnchant().getEnchantmentLocations().contains(EnchantmentLocation.TABLE)) levelPrice[1] *= 2;
 			if (levelPrice[1] > 64) levelPrice[1] = 64;
 			ItemStack priceItem = new ItemStack(Material.EMERALD, levelPrice[1]);
-			ingredients.add(new ItemStack(mat));
+			ingredients.add(matItem);
 			ingredients.add(priceItem);
 		} else {
 			ItemStack priceItem = new ItemStack(Material.EMERALD, levelPrice[1]);

@@ -350,14 +350,14 @@ public class EnchantmentSolution extends CrashAPIPlugin {
 						int num = Integer.parseInt(mcVersion[i]);
 						if (i == 0 && num > 2) warning = true;
 						else if (i == 1 && num > 1) warning = true;
-						else if (i == 2 && num > 133) warning = true;
+						else if (i == 2 && num > 147) warning = true;
 					} catch (NumberFormatException ex) {
 						warning = true;
 					}
 				if (warning) {
 					getChat().sendWarning("McMMO Overhaul updates sporidically. Compatibility may break between versions.");
 					getChat().sendWarning("If there are any compatibility issues, please notify the plugin author immediately.");
-					getChat().sendWarning("Current Working Version: 2.1.133");
+					getChat().sendWarning("Current Working Version: 2.1.147");
 				}
 				mcmmoType = "Overhaul";
 			} else {

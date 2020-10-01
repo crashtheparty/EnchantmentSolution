@@ -98,7 +98,7 @@ public class ContagionCurseThread extends EnchantmentThread {
 			}
 		return noCurse;
 	}
-	
+
 	private void remove() {
 		CONTAGION_THREADS.remove(this);
 		Bukkit.getScheduler().cancelTask(getScheduler());

@@ -5,8 +5,10 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.Map.Entry;
 
+import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.plugin.Plugin;
 import org.ctp.crashapi.CrashAPI;
 import org.ctp.crashapi.config.*;
 import org.ctp.crashapi.config.yaml.YamlConfig;
@@ -154,6 +156,10 @@ public class Configurations implements CrashConfigurations {
 		debug.set("plugins.mcmmo_version", EnchantmentSolution.getPlugin().getMcMMOVersion());
 		debug.set("plugins.mmo_items", EnchantmentSolution.getMMOItems());
 		debug.set("plugins.vein_miner", EnchantmentSolution.getPlugin().getVeinMiner());
+		List<String> allPlugins = new ArrayList<String>();
+		for(Plugin pl: Bukkit.getPluginManager().getPlugins())
+			if (pl.isEnabled()) allPlugins.add(pl.getDescription().getName() + " " + pl.getDescription().getVersion());
+		debug.set("plugins.all_plugins", allPlugins);
 
 		int i = 0;
 		for(CrashAdvancementProgress progress: EnchantmentSolution.getAdvancementProgress()) {
