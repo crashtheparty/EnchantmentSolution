@@ -32,14 +32,14 @@ import org.ctp.enchantmentsolution.utils.player.attributes.FlySpeedAttribute;
 
 public class ESPlayer {
 
-	private static Map<Integer, Integer> GLOBAL_BLOCKS = new HashMap<Integer, Integer>();
+	private static Map<Long, Integer> GLOBAL_BLOCKS = new HashMap<Long, Integer>();
 	private static double CONTAGION_CHANCE = 0.0005;
 	private final OfflinePlayer player;
 	private Player onlinePlayer;
 	private RPGPlayer rpg;
-	private Map<Enchantment, Integer> cooldowns;
+	private Map<Enchantment, Long> cooldowns;
 	private List<ItemStack> soulItems;
-	private Map<Integer, Integer> blocksBroken;
+	private Map<Long, Integer> blocksBroken;
 	private float currentExhaustion, pastExhaustion;
 	private ItemStack elytra;
 	private boolean canFly, didTick, reset;
@@ -54,8 +54,8 @@ public class ESPlayer {
 		this.player = player;
 		onlinePlayer = player.getPlayer();
 		rpg = RPGUtils.getPlayer(player);
-		cooldowns = new HashMap<Enchantment, Integer>();
-		blocksBroken = new HashMap<Integer, Integer>();
+		cooldowns = new HashMap<Enchantment, Long>();
+		blocksBroken = new HashMap<Long, Integer>();
 		overkillDeaths = new ArrayList<OverkillDeath>();
 		attributes = new ArrayList<AttributeLevel>();
 		currentFFType = FFType.NONE;
@@ -155,14 +155,14 @@ public class ESPlayer {
 	}
 
 	public boolean canBreakBlock() {
-		int tick = ServerNMS.getCurrentTick();
+		long tick = ServerNMS.getCurrentTick();
 		if (GLOBAL_BLOCKS.containsKey(tick) && GLOBAL_BLOCKS.get(tick) >= ConfigString.MULTI_BLOCK_BLOCKS_GLOBAL.getInt()) return false;
 		if (blocksBroken.containsKey(tick) && blocksBroken.get(tick) >= ConfigString.MULTI_BLOCK_BLOCKS_PLAYER.getInt()) return false;
 		return true;
 	}
 
 	public void breakBlock() {
-		int tick = ServerNMS.getCurrentTick();
+		long tick = ServerNMS.getCurrentTick();
 		int blocks = 1;
 		if (blocksBroken.containsKey(tick)) blocks += blocksBroken.get(tick);
 		blocksBroken.put(tick, blocks);

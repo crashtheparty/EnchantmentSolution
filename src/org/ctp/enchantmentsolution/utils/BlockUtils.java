@@ -9,6 +9,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
+import org.ctp.crashapi.api.Configurations;
 import org.ctp.crashapi.item.BlockSound;
 import org.ctp.crashapi.item.MatData;
 import org.ctp.crashapi.utils.DamageUtils;
@@ -103,7 +104,7 @@ public class BlockUtils {
 			AdvancementUtils.awardCriteria(player, ESAdvancement.FAST_AND_FURIOUS, "diamond_pickaxe");
 			if (newBlock.getType().equals(Material.SNOW) && ItemBreakType.getType(item.getType()).getBreakTypes().contains(Material.SNOW)) {
 				int num = ((Snow) newBlock.getBlockData()).getLayers();
-				if (dropChance > Math.random()) ItemUtils.dropItem(new ItemStack(Material.SNOWBALL, num), newBlock.getLocation());
+				if (dropChance > Math.random()) ItemUtils.dropItem(new ItemStack(Material.SNOWBALL, num), newBlock.getLocation(), Configurations.getConfigurations().getConfig().getBoolean("drop_items_naturally"));
 			}
 			player.incrementStatistic(Statistic.MINE_BLOCK, newBlock.getType());
 			player.incrementStatistic(Statistic.USE_ITEM, item.getType());

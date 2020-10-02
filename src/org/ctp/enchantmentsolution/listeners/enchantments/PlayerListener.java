@@ -19,6 +19,7 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.util.Vector;
+import org.ctp.crashapi.api.Configurations;
 import org.ctp.crashapi.utils.DamageUtils;
 import org.ctp.crashapi.utils.ItemUtils;
 import org.ctp.crashapi.utils.LocationUtils;
@@ -78,20 +79,23 @@ public class PlayerListener extends Enchantmentable {
 			ItemStack item = player.getInventory().getItemInMainHand();
 			Block block = event.getClickedBlock();
 			if (block != null && item != null && EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.FLOWER_GIFT) && FlowerGiftDrop.isItem(block.getType())) {
-				FlowerGiftEvent flowerGiftEvent = new FlowerGiftEvent(player, item, block, FlowerGiftDrop.getItem(block.getType()), block.getLocation());
+				FlowerGiftEvent flowerGiftEvent = new FlowerGiftEvent(player, item, block, FlowerGiftDrop.getItem(block.getType()), LocationUtils.offset(block.getLocation()));
 				Bukkit.getPluginManager().callEvent(flowerGiftEvent);
 
-				if (!flowerGiftEvent.isCancelled()) {
+				if (!flowerGiftEvent.isCancelled() && flowerGiftEvent.overCooldown()) {
 					Location loc = flowerGiftEvent.getDropLocation();
 					ItemStack flowerGift = flowerGiftEvent.getFlower();
+					if (FlowerGiftDrop.isDoubleFlower(flowerGift.getType())) loc.add(0, 1, 0);
 					if (flowerGiftEvent.getFlower() != null) {
 						player.getWorld().spawnParticle(Particle.VILLAGER_HAPPY, loc, 30, 0.2, 0.5, 0.2);
 						if (FlowerGiftDrop.isDoubleFlower(flowerGift.getType())) AdvancementUtils.awardCriteria(player, ESAdvancement.BONEMEAL_PLUS, "bonemeal");
 						else if (FlowerGiftDrop.isWitherRose(flowerGift.getType())) AdvancementUtils.awardCriteria(player, ESAdvancement.JUST_AS_SWEET, "wither_rose");
-						ItemUtils.dropItem(flowerGift, flowerGiftEvent.getDropLocation());
+						ItemUtils.dropItem(flowerGift, flowerGiftEvent.getDropLocation(), Configurations.getConfigurations().getConfig().getBoolean("drop_items_naturally"));
 					} else
 						player.getWorld().spawnParticle(Particle.VILLAGER_ANGRY, loc, 30, 0.2, 0.5, 0.2);
 					player.incrementStatistic(Statistic.USE_ITEM, item.getType());
+					ESPlayer esPlayer = EnchantmentSolution.getESPlayer(player);
+					esPlayer.setCooldown(RegisterEnchantments.FLOWER_GIFT);
 					DamageUtils.damageItem(player, item);
 				}
 			}
@@ -294,7 +298,8 @@ public class PlayerListener extends Enchantmentable {
 			ItemStack item = player.getInventory().getItemInMainHand();
 			if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.OVERKILL)) {
 				event.setCancelled(false);
-				if (!canRun(RegisterEnchantments.OVERKILL, event)) return;
+				if (!canRun(RegisterEnchantments.OVERKILL, event))
+					return;
 				boolean takeArrow = player.getGameMode() != GameMode.CREATIVE && !EnchantmentUtils.hasEnchantment(item, Enchantment.ARROW_INFINITE);
 				OverkillEvent overkill = new OverkillEvent(player, item, takeArrow, player.getInventory().all(Material.ARROW).size() > 0, 0.4);
 				Bukkit.getPluginManager().callEvent(overkill);

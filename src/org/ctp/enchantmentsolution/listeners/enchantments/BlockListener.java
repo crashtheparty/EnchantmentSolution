@@ -17,6 +17,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+import org.ctp.crashapi.api.Configurations;
 import org.ctp.crashapi.item.ItemSerialization;
 import org.ctp.crashapi.item.MatData;
 import org.ctp.crashapi.utils.DamageUtils;
@@ -480,7 +481,7 @@ public class BlockListener extends Enchantmentable {
 							remove(player, offhand);
 							block.setBlockData(newEvent.getBlockReplacedState().getBlockData());
 							for(ItemStack drop: drops)
-								ItemUtils.dropItem(drop, newEvent.getBlock().getLocation());
+								ItemUtils.dropItem(drop, newEvent.getBlock().getLocation(), Configurations.getConfigurations().getConfig().getBoolean("drop_items_naturally"));
 						} else {
 							block.setType(oldType);
 							block.setBlockData(oldData);
