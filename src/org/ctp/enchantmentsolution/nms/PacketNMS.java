@@ -26,6 +26,7 @@ public class PacketNMS {
 			case 12:
 				return Packet_v1_16_R1.addParticle(block, stage);
 			case 13:
+			case 14:
 				return Packet_v1_16_R2.addParticle(block, stage);
 		}
 		return 0;
@@ -51,6 +52,7 @@ public class PacketNMS {
 			case 12:
 				return Packet_v1_16_R1.updateParticle(block, stage, id);
 			case 13:
+			case 14:
 				return Packet_v1_16_R2.updateParticle(block, stage, id);
 		}
 		return 0;

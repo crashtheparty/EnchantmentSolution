@@ -134,7 +134,7 @@ public class BlockListener extends Enchantmentable {
 		Player player = event.getPlayer();
 		ItemStack item = player.getInventory().getItemInMainHand();
 		if (player.getGameMode().equals(GameMode.CREATIVE) || player.getGameMode().equals(GameMode.SPECTATOR)) return;
-		if (item != null) if (ItemUtils.hasEnchantment(item, RegisterEnchantments.SMELTERY)) SmelteryUtils.handleSmeltery(event, player, blockBroken, item);
+		if (item != null && ItemUtils.hasEnchantment(item, RegisterEnchantments.SMELTERY)) SmelteryUtils.handleSmeltery(event, player, blockBroken, item);
 	}
 
 	private void telepathy(BlockBreakEvent event) {
@@ -143,7 +143,7 @@ public class BlockListener extends Enchantmentable {
 		if (player.getGameMode().equals(GameMode.CREATIVE) || player.getGameMode().equals(GameMode.SPECTATOR)) return;
 		Block block = event.getBlock();
 		ItemStack item = player.getInventory().getItemInMainHand();
-		if (item != null) if (ItemUtils.hasEnchantment(item, RegisterEnchantments.TELEPATHY)) TelepathyUtils.handleTelepathy(event, player, item, block);
+		if (item != null && ItemUtils.hasEnchantment(item, RegisterEnchantments.TELEPATHY)) TelepathyUtils.handleTelepathy(event, player, item, block);
 	}
 
 	private void heightWidth(BlockBreakEvent event) {

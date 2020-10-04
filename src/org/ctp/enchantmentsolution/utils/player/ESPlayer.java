@@ -6,10 +6,12 @@ import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.*;
 import org.ctp.enchantmentsolution.enums.ItemData;
 import org.ctp.enchantmentsolution.enums.ItemType;
+import org.ctp.enchantmentsolution.events.ItemEquipEvent.HandMethod;
 import org.ctp.enchantmentsolution.events.player.FrequentFlyerEvent;
 import org.ctp.enchantmentsolution.events.player.FrequentFlyerEvent.FFType;
 import org.ctp.enchantmentsolution.nms.ServerNMS;
@@ -32,7 +34,7 @@ public class ESPlayer {
 	private Player onlinePlayer;
 	private RPGPlayer rpg;
 	private Map<Enchantment, Integer> cooldowns;
-	private List<ItemStack> soulItems;
+	private List<ItemStack> soulItems, telepathyItems;
 	private Map<Integer, Integer> blocksBroken;
 	private float currentExhaustion, pastExhaustion;
 	private ItemStack elytra;
@@ -41,6 +43,7 @@ public class ESPlayer {
 	private FFType currentFFType;
 	private List<OverkillDeath> overkillDeaths;
 	private List<AttributeLevel> attributes;
+	private Runnable telepathyTask;
 
 	public ESPlayer(OfflinePlayer player) {
 		this.player = player;
@@ -51,6 +54,7 @@ public class ESPlayer {
 		overkillDeaths = new ArrayList<OverkillDeath>();
 		attributes = new ArrayList<AttributeLevel>();
 		currentFFType = FFType.NONE;
+		telepathyItems = new ArrayList<ItemStack>();
 		removeSoulItems();
 	}
 
@@ -382,6 +386,55 @@ public class ESPlayer {
 			AttributeLevel level = iter.next();
 			if (level.getAttribute().equals(attribute) && level.getSlot().equals(slot)) iter.remove();
 		}
+	}
+
+	public void giveTelepathyItems() {
+		Collection<ItemStack> newItems = new ArrayList<ItemStack>(telepathyItems);
+		telepathyItems = new ArrayList<ItemStack>();
+		telepathyTask = null;
+		Player p = Bukkit.getPlayer(getOnlinePlayer().getUniqueId());
+		ItemUtils.giveItemsToPlayer(p, newItems, p.getLocation(), true, HandMethod.PICK_UP);
+	}
+
+	public void addTelepathyItems(Collection<ItemStack> items) {
+		checkTelepathyTask();
+		for(ItemStack item: items)
+			addTelepathyItem(item);
+		checkTelepathyTask();
+	}
+
+	private void checkTelepathyTask() {
+		if (telepathyTask == null) {
+			telepathyTask = new Runnable() {
+				@Override
+				public void run() {
+					giveTelepathyItems();
+				}
+			};
+			Bukkit.getScheduler().runTaskLater(EnchantmentSolution.getPlugin(), telepathyTask, 0l);
+		}
+	}
+
+	private void addTelepathyItem(ItemStack item) {
+		checkTelepathyTask();
+		int amount = item.getAmount();
+		for(ItemStack i: telepathyItems)
+			if (i.isSimilar(item) && i.getMaxStackSize() > 1) if (i.getAmount() == i.getMaxStackSize()) continue;
+			else if (i.getAmount() + amount > i.getMaxStackSize()) {
+				amount -= i.getMaxStackSize();
+				i.setAmount(i.getMaxStackSize());
+				break;
+			} else {
+				i.setAmount(amount + i.getAmount());
+				amount = 0;
+				break;
+			}
+			else {}
+		if (amount > 0) {
+			item.setAmount(amount);
+			telepathyItems.add(item);
+		}
+		checkTelepathyTask();
 	}
 
 }

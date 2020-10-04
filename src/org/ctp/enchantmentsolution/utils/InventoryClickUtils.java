@@ -24,7 +24,7 @@ public class InventoryClickUtils {
 
 	public static void setEnchantmentTableDetails(EnchantmentTable table, Player player, Inventory inv,
 	Inventory clickedInv, int slot) {
-		if (!inv.getType().equals(InventoryType.CHEST)) {
+		if (inv.getType() != InventoryType.CHEST) {
 			ItemStack item = clickedInv.getItem(slot);
 			if (ItemUtils.isEnchantable(item)) {
 				ItemStack replace = new ItemStack(Material.AIR);
@@ -38,7 +38,7 @@ public class InventoryClickUtils {
 					table.setInventory();
 					player.getInventory().setItem(slot, replace);
 				} else if (original_amount > 1) item.setAmount(original_amount);
-			} else if (item != null && item.getType().equals(Material.LAPIS_LAZULI)) {
+			} else if (item != null && item.getType() == Material.LAPIS_LAZULI) {
 				player.getInventory().setItem(slot, table.addToLapisStack(item));
 				table.setInventory();
 			}
@@ -62,8 +62,8 @@ public class InventoryClickUtils {
 	}
 
 	public static void setAnvilDetails(Anvil anvil, Player player, Inventory inv, Inventory clickedInv, int slot) {
-		if (!inv.getType().equals(InventoryType.CHEST)) {
-			if (inv.getType().equals(InventoryType.ANVIL) || anvil.isInLegacy()) return;
+		if (inv.getType() != InventoryType.CHEST) {
+			if (inv.getType() == InventoryType.ANVIL || anvil.isInLegacy()) return;
 			ItemStack item = clickedInv.getItem(slot);
 			if (item == null || MatData.isAir(item.getType())) return;
 			ItemStack replace = new ItemStack(Material.AIR);
@@ -80,7 +80,7 @@ public class InventoryClickUtils {
 		} else {
 			ItemStack item = clickedInv.getItem(slot);
 			if (slot == 4) {
-				if (item.getType().equals(Material.LIME_STAINED_GLASS_PANE)) {
+				if (item.getType() == Material.LIME_STAINED_GLASS_PANE) {
 					if (ConfigString.RENAME_FROM_ANVIL.getBoolean() || player.hasPermission("enchantmentsolution.anvil.rename")) Anvil_GUI_NMS.createAnvil(player, anvil);
 					else
 						ChatUtils.sendMessage(player, ChatUtils.getMessage(ChatUtils.getCodes(), "anvil.rename-requires-permission"));
@@ -88,11 +88,11 @@ public class InventoryClickUtils {
 			} else if (slot == 16) {
 				anvil.combine();
 				anvil.setInventory();
-			} else if ((slot == 31 || slot == 30) && item.getType().equals(Material.ANVIL)) {
+			} else if ((slot == 31 || slot == 30) && item.getType() == Material.ANVIL) {
 				anvil.close(false);
 				AnvilUtils.addLegacyAnvil(player);
 				ChatUtils.sendMessage(player, ChatUtils.getMessage(ChatUtils.getCodes(), "anvil.legacy-gui-open"));
-			} else if ((slot == 31 || slot == 32) && item.getType().equals(Material.SMOOTH_STONE)) {
+			} else if ((slot == 31 || slot == 32) && item.getType() == Material.SMOOTH_STONE) {
 				anvil.close(false);
 				Grindstone stone = new Grindstone(player, anvil.getBlock());
 				EnchantmentSolution.getPlugin().addInventory(stone);
@@ -106,7 +106,7 @@ public class InventoryClickUtils {
 
 	public static void setGrindstoneDetails(Grindstone stone, Player player, Inventory inv, Inventory clickedInv,
 	int slot) {
-		if (!inv.getType().equals(InventoryType.CHEST)) {
+		if (inv.getType() != InventoryType.CHEST) {
 			ItemStack item = clickedInv.getItem(slot);
 			if (item == null || MatData.isAir(item.getType())) return;
 			ItemStack replace = new ItemStack(Material.AIR);
@@ -125,7 +125,7 @@ public class InventoryClickUtils {
 			if (slot == 7) {
 				stone.combine();
 				stone.setInventory();
-			} else if (slot == 31 && item.getType().equals(Material.ANVIL)) {
+			} else if (slot == 31 && item.getType() == Material.ANVIL) {
 				stone.close(false);
 				Anvil anvil = new Anvil(player, stone.getBlock());
 				EnchantmentSolution.getPlugin().addInventory(anvil);
@@ -139,7 +139,7 @@ public class InventoryClickUtils {
 
 	public static void setConfigInventoryDetails(ConfigInventory configInv, Player player, Inventory inv,
 	Inventory clickedInv, int slot, ClickType click) {
-		if (!inv.getType().equals(InventoryType.CHEST)) return;
+		if (inv.getType() != InventoryType.CHEST) return;
 		else {
 			ItemStack item = clickedInv.getItem(slot);
 			if (item == null) return;
@@ -176,10 +176,10 @@ public class InventoryClickUtils {
 							configInv.listConfigDetails(Configurations.getHardMode().getConfig(), null);
 							break;
 						case 21:
-							if (!item.getType().equals(Material.BARRIER)) configInv.saveAll();
+							if (item.getType() != Material.BARRIER) configInv.saveAll();
 							break;
 						case 23:
-							if (!item.getType().equals(Material.BARRIER)) configInv.revert();
+							if (item.getType() != Material.BARRIER) configInv.revert();
 							break;
 					}
 					break;
@@ -192,13 +192,13 @@ public class InventoryClickUtils {
 							if (checkPagination(item)) configInv.listConfigDetails(config, null, level, page - 1);
 							break;
 						case 48:
-							if (checkPagination(item)) if (level == null || level.equals("")) configInv.setInventory(Screen.LIST_FILES);
+							if (checkPagination(item) && (level == null || level.equals(""))) configInv.setInventory(Screen.LIST_FILES);
 							else if (level.indexOf(".") > -1) configInv.listConfigDetails(config, null, level.substring(0, level.lastIndexOf(".")), page);
 							else
 								configInv.listConfigDetails(config, null, null, page);
 							break;
 						case 50:
-							if (item.getType().equals(Material.FIREWORK_STAR)) configInv.listBackup(config, 1);
+							if (item.getType() == Material.FIREWORK_STAR) configInv.listBackup(config, 1);
 							break;
 					}
 					break;
@@ -216,8 +216,10 @@ public class InventoryClickUtils {
 								configInv.listConfigDetails(config, null, null);
 							break;
 						case 50:
-							if (item.getType().equals(Material.NAME_TAG)) if (click.equals(ClickType.LEFT)) configInv.openAnvil(level, type);
-							else if (click.equals(ClickType.RIGHT)) configInv.openChat(level, type);
+							if (item.getType() == Material.NAME_TAG) if (click == ClickType.LEFT) configInv.openAnvil(level, type);
+							else if (click == ClickType.RIGHT) configInv.openChat(level, type);
+							else {}
+							else {}
 							break;
 					}
 					break;
@@ -233,6 +235,7 @@ public class InventoryClickUtils {
 							if (checkPagination(item)) if (level.indexOf(".") > -1) configInv.listConfigDetails(config, null, level.substring(0, level.lastIndexOf(".")));
 							else
 								configInv.listConfigDetails(config, null, null);
+							else {}
 							break;
 					}
 					break;
@@ -248,9 +251,10 @@ public class InventoryClickUtils {
 							if (checkPagination(item)) if (level.indexOf(".") > -1) configInv.listConfigDetails(config, null, level.substring(0, level.lastIndexOf(".")));
 							else
 								configInv.listConfigDetails(config, null, null);
+							else {}
 							break;
 						case 50:
-							if (item.getType().equals(Material.NAME_TAG)) configInv.listEnumListEdit(config, level, type, 1);
+							if (item.getType() == Material.NAME_TAG) configInv.listEnumListEdit(config, level, type, 1);
 							break;
 					}
 					break;
@@ -294,9 +298,10 @@ public class InventoryClickUtils {
 							else if (level.indexOf(".") > -1) configInv.listConfigDetails(config, backup, level.substring(0, level.lastIndexOf(".")), page);
 							else
 								configInv.listConfigDetails(config, backup, null, page);
+							else {}
 							break;
 						case 50:
-							if (item.getType().equals(Material.FIREWORK_STAR)) {
+							if (item.getType() == Material.FIREWORK_STAR) {
 								ChatUtils.sendMessage(player, "Reverting to backup. Saving...");
 								config.setFromBackup(backup);
 								configInv.setInventory(Screen.LIST_FILES);
@@ -322,8 +327,8 @@ public class InventoryClickUtils {
 					break;
 				default:
 			}
-			if (configInv.getScreen().equals(Screen.LIST_DETAILS)) {
-				if (slot < 36) if (item.hasItemMeta()) {
+			if (configInv.getScreen() == Screen.LIST_DETAILS) {
+				if (slot < 36 && item.hasItemMeta()) {
 					List<String> lore = item.getItemMeta().getLore();
 					if (lore != null) {
 						String path = null;
@@ -335,7 +340,7 @@ public class InventoryClickUtils {
 							if (l.startsWith("Type: ")) type = l.replace("Type: ", "");
 							if (l.startsWith("Value: ")) value = l.replace("Value: ", "");
 						}
-						if (click.equals(ClickType.LEFT)) {
+						if (click == ClickType.LEFT) {
 							if (type.equals("nested value")) configInv.listConfigDetails(config, null, path, 1);
 							else if (type.equals("list")) configInv.listDetails(config, null, path, type, 1);
 							else if (type.equals("enum_list")) configInv.listEnumListShow(config, path, type, 1);
@@ -350,16 +355,16 @@ public class InventoryClickUtils {
 								configInv.listConfigDetails(config, null, level, page);
 							} else if (type.equals("integer") || type.equals("double") || type.equals("string")) configInv.openAnvil(path, type);
 							else if (type.equals("enum")) configInv.listEnumDetails(config, path, type, 1);
-						} else if (click.equals(ClickType.RIGHT)) if (type.equals("string")) configInv.openChat(path, type);
+						} else if (click == ClickType.RIGHT) if (type.equals("string")) configInv.openChat(path, type);
 					}
 				}
 			} else if (configInv.getScreen().equals(Screen.LIST_EDIT)) {
-				if (slot < 36) if (item.hasItemMeta()) {
+				if (slot < 36 && item.hasItemMeta()) {
 					configInv.removeFromList(slot);
 					configInv.listDetails(config, null, level, type, page);
 				}
 			} else if (configInv.getScreen().equals(Screen.LIST_ENUM)) {
-				if (slot < 36) if (item.hasItemMeta()) {
+				if (slot < 36 && item.hasItemMeta()) {
 					List<String> lore = item.getItemMeta().getLore();
 					if (lore != null) {
 						String value = null;
@@ -374,7 +379,7 @@ public class InventoryClickUtils {
 					}
 				}
 			} else if (configInv.getScreen().equals(Screen.LIST_BACKUP)) {
-				if (slot < 36) if (item.hasItemMeta()) {
+				if (slot < 36 && item.hasItemMeta()) {
 					List<String> lore = item.getItemMeta().getLore();
 					if (lore != null) {
 						String num = null;
@@ -390,7 +395,7 @@ public class InventoryClickUtils {
 					}
 				}
 			} else if (configInv.getScreen().equals(Screen.LIST_BACKUP_DETAILS)) {
-				if (slot < 36) if (item.hasItemMeta()) {
+				if (slot < 36 && item.hasItemMeta()) {
 					List<String> lore = item.getItemMeta().getLore();
 					if (lore != null) {
 						String path = null;
@@ -400,12 +405,14 @@ public class InventoryClickUtils {
 							if (l.startsWith("Path: ")) path = s.replace("Path: ", "");
 							if (s.startsWith("Type: ")) type = s.replace("Type: ", "");
 						}
-						if (click.equals(ClickType.LEFT)) if (type.equals("nested value")) configInv.listConfigDetails(config, backup, path, 1);
+						if (click == ClickType.LEFT) if (type.equals("nested value")) configInv.listConfigDetails(config, backup, path, 1);
 						else if (type.equals("list") || type.equals("enum_list")) configInv.listDetails(config, backup, path, type, 1);
+						else {}
+						else {}
 					}
 				}
 			} else if (configInv.getScreen().equals(Screen.LIST_ENUM_LIST_SHOW)) {
-				if (slot < 36) if (item.hasItemMeta()) {
+				if (slot < 36 && item.hasItemMeta()) {
 					configInv.removeFromList(slot);
 					configInv.listEnumListShow(config, level, type, page);
 				}
@@ -428,7 +435,7 @@ public class InventoryClickUtils {
 
 	public static void setEnchantabilityCalc(EnchantabilityCalc enchantabilityCalc, Player player, Inventory inv,
 	Inventory clickedInv, int slot, ClickType click) {
-		if (!inv.getType().equals(InventoryType.CHEST)) return;
+		if (inv.getType() != InventoryType.CHEST) return;
 		else {
 			ItemStack item = clickedInv.getItem(slot);
 			if (item == null) return;
@@ -477,7 +484,7 @@ public class InventoryClickUtils {
 	}
 
 	public static void setRPGInventory(RPGInventory rpgInventory, Player player, Inventory inv, Inventory clickedInv, int slot, ClickType click) {
-		if (!inv.getType().equals(InventoryType.CHEST)) return;
+		if (inv.getType() != InventoryType.CHEST) return;
 		ItemStack item = clickedInv.getItem(slot);
 		if (item == null) return;
 		switch (slot) {
@@ -512,7 +519,7 @@ public class InventoryClickUtils {
 	}
 
 	public static void setMinigameInventory(Minigame minigameInventory, Player player, Inventory inv, Inventory clickedInv, int slot, ClickType click) {
-		if (!inv.getType().equals(InventoryType.CHEST)) return;
+		if (inv.getType() != InventoryType.CHEST) return;
 		ItemStack item = clickedInv.getItem(slot);
 		if (item == null) return;
 		if (slot == 45 && checkPagination(item)) {

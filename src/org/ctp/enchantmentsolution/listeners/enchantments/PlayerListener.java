@@ -6,16 +6,15 @@ import java.util.List;
 
 import org.bukkit.*;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
 import org.bukkit.block.data.Waterlogged;
 import org.bukkit.block.data.type.Campfire;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
+import org.bukkit.event.*;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerItemBreakEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.block.EntityBlockFormEvent;
+import org.bukkit.event.player.*;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
@@ -173,6 +172,7 @@ public class PlayerListener extends Enchantmentable {
 
 		if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
 			if (event.getHand() == EquipmentSlot.OFF_HAND) return; // off hand packet, ignore.
+			Player player = event.getPlayer();
 			ItemStack item = event.getItem();
 			if (item != null && ItemUtils.hasEnchantment(item, RegisterEnchantments.MOISTURIZE)) {
 				Block block = event.getClickedBlock();
@@ -193,17 +193,36 @@ public class PlayerListener extends Enchantmentable {
 						case "waterlog":
 							if (block.getBlockData() instanceof Waterlogged) {
 								Waterlogged water = (Waterlogged) block.getBlockData();
-								if (block.getType().isInteractable() && event.getPlayer().isSneaking() && !water.isWaterlogged() || !block.getType().isInteractable() && !water.isWaterlogged()) sound = Sound.ENTITY_SHEEP_SHEAR;
+								if (block.getType().isInteractable() && player.isSneaking() && !water.isWaterlogged() || !block.getType().isInteractable() && !water.isWaterlogged()) sound = Sound.ENTITY_SHEEP_SHEAR;
 							}
 							break;
 					}
 					if (sound != null) {
-						MoisturizeEvent moisturize = new MoisturizeEvent(event.getPlayer(), item, block, type, sound);
+						BlockState state = block.getState();
+
+						Event blockEvent = null;
+
+						switch (type.getName().toLowerCase()) {
+							case "extinguish":
+								break;
+							case "wet":
+							case "unsmelt":
+								blockEvent = new EntityBlockFormEvent(player, block, state);
+								break;
+							case "waterlog":
+								blockEvent = new PlayerBucketEmptyEvent(player, block, block, event.getBlockFace(), Material.WATER_BUCKET, item);
+								break;
+						}
+
+						if (blockEvent != null) {
+							Bukkit.getPluginManager().callEvent(blockEvent);
+							if (((Cancellable) blockEvent).isCancelled()) return;
+						}
+						MoisturizeEvent moisturize = new MoisturizeEvent(player, item, block, type, sound);
 						Bukkit.getPluginManager().callEvent(moisturize);
 
 						if (!moisturize.isCancelled()) {
 							Block moisturizeBlock = moisturize.getBlock();
-							Player player = moisturize.getPlayer();
 
 							switch (type.getName().toLowerCase()) {
 								case "extinguish":
@@ -221,17 +240,21 @@ public class PlayerListener extends Enchantmentable {
 									DamageUtils.damageItem(player, item);
 									player.playSound(player.getLocation(), moisturize.getSound(), 1, 1);
 									player.incrementStatistic(Statistic.USE_ITEM, item.getType());
+
 									break;
 								case "unsmelt":
 									if (moisturizeBlock.getType() == Material.CRACKED_STONE_BRICKS) AdvancementUtils.awardCriteria(player, ESAdvancement.REPAIRED, "broken_bricks");
 									moisturizeBlock.setType(ItemMoisturizeType.getUnsmelt(moisturizeBlock.getType()));
+
 									DamageUtils.damageItem(player, item);
 									player.playSound(player.getLocation(), moisturize.getSound(), 1, 1);
 									player.incrementStatistic(Statistic.USE_ITEM, item.getType());
+									event.setCancelled(true);
 									break;
 								case "waterlog":
 									Waterlogged water = (Waterlogged) moisturizeBlock.getBlockData();
 									water.setWaterlogged(true);
+
 									moisturizeBlock.setBlockData(water);
 									DamageUtils.damageItem(player, item);
 									player.playSound(player.getLocation(), moisturize.getSound(), 1, 1);

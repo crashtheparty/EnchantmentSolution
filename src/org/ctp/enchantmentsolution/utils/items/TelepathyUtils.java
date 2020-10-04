@@ -27,6 +27,7 @@ import org.ctp.enchantmentsolution.utils.abilityhelpers.GoldDiggerCrop;
 import org.ctp.enchantmentsolution.utils.compatibility.JobsUtils;
 import org.ctp.enchantmentsolution.utils.compatibility.QuestsUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
+import org.ctp.enchantmentsolution.utils.player.ESPlayer;
 
 public class TelepathyUtils {
 
@@ -188,7 +189,8 @@ public class TelepathyUtils {
 				AdvancementUtils.awardCriteria(player, ESAdvancement.OVER_9000, "stone", 1);
 			}
 			if (telepathy.getType() == TelepathyType.SHULKER_BOX) AdvancementUtils.awardCriteria(player, ESAdvancement.HEY_IT_WORKS, "shulker_box");
-			ItemUtils.giveItemsToPlayer(telepathy.getPlayer(), telepathy.getDrops(), telepathy.getPlayer().getLocation(), true, HandMethod.PICK_UP);
+			ESPlayer esPlayer = EnchantmentSolution.getESPlayer(player);
+			esPlayer.addTelepathyItems(telepathy.getDrops());
 		}
 		return telepathy;
 	}

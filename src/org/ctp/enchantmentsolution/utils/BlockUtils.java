@@ -1,12 +1,10 @@
 package org.ctp.enchantmentsolution.utils;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.*;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.type.Snow;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -14,6 +12,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
+import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enums.BlockSound;
 import org.ctp.enchantmentsolution.enums.ItemBreakType;
 import org.ctp.enchantmentsolution.enums.MatData;
@@ -22,6 +21,7 @@ import org.ctp.enchantmentsolution.utils.config.ConfigString;
 import org.ctp.enchantmentsolution.utils.items.AbilityUtils;
 import org.ctp.enchantmentsolution.utils.items.DamageUtils;
 import org.ctp.enchantmentsolution.utils.items.ItemUtils;
+import org.ctp.enchantmentsolution.utils.player.ESPlayer;
 
 public class BlockUtils {
 
@@ -38,13 +38,12 @@ public class BlockUtils {
 	public static void removeMultiBlockBreak(Location loc) {
 		MULTI_BLOCK_BREAK.remove(loc);
 	}
-
-	public static boolean isAdjacent(Block b1, Block b2) {
-		List<BlockFace> faces = Arrays.asList(BlockFace.values());
-		if (!ConfigString.MULTI_BLOCK_ALL_FACES.getBoolean()) Arrays.asList(BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST, BlockFace.UP, BlockFace.DOWN);
-		for(BlockFace face: faces)
-			if (b1.getRelative(face).getLocation().equals(b2.getLocation())) return true;
-		return false;
+	
+	public static boolean isNextTo(Block b1, Block b2) {
+		int x = Math.abs(b1.getX() - b2.getX());
+		int y = Math.abs(b1.getY() - b2.getY());
+		int z = Math.abs(b1.getZ() - b2.getZ());
+		return x <= 1 && y <= 1 && z <= 1;
 	}
 
 	public static boolean multiBreakBlock(Player player, ItemStack item, Location b) {
@@ -89,8 +88,14 @@ public class BlockUtils {
 			newBlock.breakNaturally(item);
 			AbilityUtils.dropExperience(loc, newEvent.getExpToDrop());
 			DamageUtils.damageItem(player, item);
-			EnchantmentSolution.getESPlayer(player).breakBlock();
 			BlockUtils.removeMultiBlockBreak(b);
+			ESPlayer esPlayer = EnchantmentSolution.getESPlayer(player);
+			esPlayer.breakBlock();
+			return true;
+		} else if (item != null && ItemUtils.hasEnchantment(item, RegisterEnchantments.TELEPATHY)) {
+			BlockUtils.removeMultiBlockBreak(b);
+			ESPlayer esPlayer = EnchantmentSolution.getESPlayer(player);
+			esPlayer.breakBlock();
 			return true;
 		}
 		BlockUtils.removeMultiBlockBreak(b);
