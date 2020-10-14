@@ -78,7 +78,7 @@ public class AttributeListener extends Enchantmentable {
 
 			start: while (iterator.hasNext()) {
 				EnchantmentLevel level = iterator.next();
-				if (level == null || level.getEnchant() == null) continue; // not an ES enchantment, or possibly a disabled enchantment, so don't bother
+				if (level == null || level.getEnchant() == null || (!level.getEnchant().isEnabled() && equip)) continue; // not an ES enchantment, or possibly a disabled enchantment, so don't bother
 				Enchantment relative = level.getEnchant().getRelativeEnchantment();
 				if (attributes.containsKey(level.getEnchant().getRelativeEnchantment())) {
 					Attributable a = attributes.get(level.getEnchant().getRelativeEnchantment());

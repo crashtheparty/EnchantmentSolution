@@ -9,6 +9,7 @@ import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
+import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.utils.player.ESPlayer;
 
 public class IcarusThread extends EnchantmentThread {
@@ -32,6 +33,10 @@ public class IcarusThread extends EnchantmentThread {
 
 	@Override
 	public void run() {
+		if (!RegisterEnchantments.isEnabled(RegisterEnchantments.ICARUS)) {
+			remove();
+			return;
+		}
 		ESPlayer player = getPlayer();
 
 		if (!player.isOnline()) return;

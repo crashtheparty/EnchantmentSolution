@@ -9,8 +9,7 @@ import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.*;
-import org.ctp.enchantmentsolution.enums.ItemData;
-import org.ctp.enchantmentsolution.enums.ItemType;
+import org.ctp.enchantmentsolution.enums.*;
 import org.ctp.enchantmentsolution.events.ItemEquipEvent.HandMethod;
 import org.ctp.enchantmentsolution.events.player.FrequentFlyerEvent;
 import org.ctp.enchantmentsolution.events.player.FrequentFlyerEvent.FFType;
@@ -87,6 +86,17 @@ public class ESPlayer {
 		armor[1] = getOnlinePlayer().getInventory().getChestplate();
 		armor[2] = getOnlinePlayer().getInventory().getLeggings();
 		armor[3] = getOnlinePlayer().getInventory().getBoots();
+
+		return armor;
+	}
+
+	public ItemSlot[] getArmorAndType() {
+		ItemSlot[] armor = new ItemSlot[4];
+		if (!isOnline()) return armor;
+		armor[0] = new ItemSlot(getOnlinePlayer().getInventory().getHelmet(), ItemSlotType.HELMET);
+		armor[1] = new ItemSlot(getOnlinePlayer().getInventory().getChestplate(), ItemSlotType.CHESTPLATE);
+		armor[2] = new ItemSlot(getOnlinePlayer().getInventory().getLeggings(), ItemSlotType.LEGGINGS);
+		armor[3] = new ItemSlot(getOnlinePlayer().getInventory().getBoots(), ItemSlotType.BOOTS);
 
 		return armor;
 	}

@@ -11,6 +11,7 @@ import org.bukkit.block.Block;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
@@ -18,6 +19,9 @@ import org.ctp.enchantmentsolution.advancements.ESAdvancementProgress;
 import org.ctp.enchantmentsolution.commands.EnchantmentSolutionCommand;
 import org.ctp.enchantmentsolution.database.SQLite;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
+import org.ctp.enchantmentsolution.enums.ItemSlot;
+import org.ctp.enchantmentsolution.events.ArmorEquipEvent;
+import org.ctp.enchantmentsolution.events.ArmorEquipEvent.EquipMethod;
 import org.ctp.enchantmentsolution.inventory.InventoryData;
 import org.ctp.enchantmentsolution.listeners.*;
 import org.ctp.enchantmentsolution.listeners.advancements.AdvancementEntityDeath;
@@ -46,6 +50,7 @@ import org.ctp.enchantmentsolution.utils.commands.ESCommand;
 import org.ctp.enchantmentsolution.utils.compatibility.AuctionHouseUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 import org.ctp.enchantmentsolution.utils.files.SaveUtils;
+import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 import org.ctp.enchantmentsolution.utils.player.ESPlayer;
 import org.ctp.enchantmentsolution.version.*;
 import org.ctp.enchantmentsolution.version.Version.VersionType;
@@ -439,5 +444,18 @@ public class EnchantmentSolution extends JavaPlugin {
 
 	public boolean hasQuests() {
 		return quests;
+	}
+
+	public void reEquipArmor() {
+		for(Player p: Bukkit.getOnlinePlayers()) {
+			ESPlayer esPlayer = getESPlayer(p);
+			for(ItemSlot slot: esPlayer.getArmorAndType()) {
+				ItemStack item = slot.getItem();
+				if (item != null && ItemUtils.getTotalEnchantments(item) > 0) {
+					ArmorEquipEvent armorEquipEvent = new ArmorEquipEvent(p, EquipMethod.COMMAND, slot.getType(), item, item);
+					Bukkit.getServer().getPluginManager().callEvent(armorEquipEvent);
+				}
+			}
+		}
 	}
 }
