@@ -263,6 +263,23 @@ public class ItemType {
 			case "WOODEN_PICKAXE":
 			case "WOODEN_SHOVEL":
 			case "WOODEN_SWORD":
+			case "SHULKER_BOX":
+			case "BLACK_SHULKER_BOX":
+			case "BLUE_SHULKER_BOX":
+			case "BROWN_SHULKER_BOX":
+			case "CYAN_SHULKER_BOX":
+			case "GRAY_SHULKER_BOX":
+			case "GREEN_SHULKER_BOX":
+			case "LIGHT_BLUE_SHULKER_BOX":
+			case "LIGHT_GRAY_SHULKER_BOX":
+			case "LIME_SHULKER_BOX":
+			case "MAGENTA_SHULKER_BOX":
+			case "ORANGE_SHULKER_BOX":
+			case "PINK_SHULKER_BOX":
+			case "PURPLE_SHULKER_BOX":
+			case "RED_SHULKER_BOX":
+			case "WHITE_SHULKER_BOX":
+			case "YELLOW_SHULKER_BOX":
 				i.add(type.toUpperCase());
 				break;
 			case "ALL":
@@ -440,6 +457,25 @@ public class ItemType {
 				i.addAll(getEnchantables(NETHERITE_SHOVEL.getType()));
 				i.addAll(getEnchantables(STONE_SHOVEL.getType()));
 				i.addAll(getEnchantables(WOODEN_SHOVEL.getType()));
+				break;
+			case "SHULKER_BOXES":
+				i.addAll(getEnchantables(BLACK_SHULKER_BOX.getType()));
+				i.addAll(getEnchantables(BLUE_SHULKER_BOX.getType()));
+				i.addAll(getEnchantables(BROWN_SHULKER_BOX.getType()));
+				i.addAll(getEnchantables(CYAN_SHULKER_BOX.getType()));
+				i.addAll(getEnchantables(GRAY_SHULKER_BOX.getType()));
+				i.addAll(getEnchantables(GREEN_SHULKER_BOX.getType()));
+				i.addAll(getEnchantables(LIGHT_BLUE_SHULKER_BOX.getType()));
+				i.addAll(getEnchantables(LIGHT_GRAY_SHULKER_BOX.getType()));
+				i.addAll(getEnchantables(LIME_SHULKER_BOX.getType()));
+				i.addAll(getEnchantables(MAGENTA_SHULKER_BOX.getType()));
+				i.addAll(getEnchantables(ORANGE_SHULKER_BOX.getType()));
+				i.addAll(getEnchantables(PINK_SHULKER_BOX.getType()));
+				i.addAll(getEnchantables(PURPLE_SHULKER_BOX.getType()));
+				i.addAll(getEnchantables(RED_SHULKER_BOX.getType()));
+				i.addAll(getEnchantables(WHITE_SHULKER_BOX.getType()));
+				i.addAll(getEnchantables(YELLOW_SHULKER_BOX.getType()));
+				i.addAll(getEnchantables(SHULKER_BOX.getType()));
 				break;
 			case "STONE_TOOLS":
 				i.addAll(getEnchantables(STONE_AXE.getType()));
