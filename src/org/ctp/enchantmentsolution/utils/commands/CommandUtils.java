@@ -1,8 +1,7 @@
 package org.ctp.enchantmentsolution.utils.commands;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
+import java.util.Map.Entry;
 import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
@@ -125,11 +124,40 @@ public class CommandUtils {
 				}
 			}
 
-			for(ItemStack item: EnchantmentSolution.getESPlayer(fixPlayer).getInventoryItems())
-				VanishListener.checkEnchants(fixPlayer, item);
+			int items = 0;
+			int fixedItems = 0;
+			ItemStack[] playerItems = EnchantmentSolution.getESPlayer(fixPlayer).getInventoryItems();
+			Map<Integer, ItemStack> changedItems = new HashMap<Integer, ItemStack>();
+			
+			for(int i = 0; i < playerItems.length; i++) {
+				ItemStack item = playerItems[i];
+				if (item != null) {
+					items++;
+					int changed = VanishListener.checkEnchants(fixPlayer, item);
+					if (changed == 1) {
+						changedItems.put(i, item);
+						fixedItems++;
+					}
+				}
+			}
+			String fIString = "";
+			if (!changedItems.isEmpty()) {
+				Iterator<Entry<Integer, ItemStack>> iter = changedItems.entrySet().iterator();
+				while (iter.hasNext()) {
+					HashMap<String, Object> fICodes = ChatUtils.getCodes();
+					Entry<Integer, ItemStack> entry = iter.next();
+					fICodes.put("%slot%", entry.getKey());
+					fICodes.put("%material%", entry.getValue().getType());
+					fIString += "\n" + ChatUtils.getMessage(fICodes, "commands.fixed-item-string");
+				}
+			}
+			
 			HashMap<String, Object> codes = ChatUtils.getCodes();
 			codes.put("%player%", player.getName());
 			codes.put("%fix_player%", fixPlayer.getName());
+			codes.put("%total_items%", items);
+			codes.put("%fixed_items%", fixedItems);
+			codes.put("%fixed_item_string%", fIString);
 			if (fixPlayer.equals(player)) ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(codes, "commands.fix-enchants"), Level.INFO);
 			else {
 				ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(codes, "commands.fix-enchants-other"), Level.INFO);

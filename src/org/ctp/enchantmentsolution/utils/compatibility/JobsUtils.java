@@ -16,6 +16,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
+import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.items.DamageUtils;
 
 import com.gamingmesh.jobs.Jobs;
@@ -35,8 +36,9 @@ public class JobsUtils {
 	@SuppressWarnings("deprecation")
 	public static void sendEnchantAction(Player player, ItemStack item, ItemStack resultStack,
 	List<EnchantmentLevel> levels) {
-		Jobs plugin = Jobs.getInstance();
-		if (!plugin.isEnabled()) return;
+		Jobs plugin = getJobs();
+		// make sure plugin is enabled
+		if (plugin == null) return;
 		// disabling plugin in world
 		if (!Jobs.getGCManager().canPerformActionInWorld(player.getWorld())) return;
 
@@ -67,9 +69,9 @@ public class JobsUtils {
 
 	@SuppressWarnings("deprecation")
 	public static void sendAnvilAction(Player player, ItemStack combine, ItemStack resultStack) {
-		Jobs plugin = Jobs.getInstance();
+		Jobs plugin = getJobs();
 		// make sure plugin is enabled
-		if (!plugin.isEnabled()) return;
+		if (plugin == null) return;
 		// disabling plugin in world
 		if (!Jobs.getGCManager().canPerformActionInWorld(player.getWorld())) return;
 
@@ -101,9 +103,9 @@ public class JobsUtils {
 	}
 
 	public static void sendBlockBreakAction(BlockBreakEvent event) {
-		Jobs plugin = Jobs.getInstance();
+		Jobs plugin = getJobs();
 		// make sure plugin is enabled
-		if (!plugin.isEnabled()) return;
+		if (plugin == null) return;
 
 		Block block = event.getBlock();
 		// disabling plugin in world
@@ -153,9 +155,9 @@ public class JobsUtils {
 	}
 
 	public static void sendBlockPlaceAction(BlockPlaceEvent event) {
-		Jobs plugin = Jobs.getInstance();
+		Jobs plugin = getJobs();
 		// make sure plugin is enabled
-		if (!plugin.isEnabled()) return;
+		if (plugin == null) return;
 		Block block = event.getBlock();
 
 		if (block == null) return;
@@ -185,9 +187,9 @@ public class JobsUtils {
 	}
 
 	public static void sendFishAction(PlayerFishEvent event) {
-		Jobs plugin = Jobs.getInstance();
+		Jobs plugin = getJobs();
 		// make sure plugin is enabled
-		if (!plugin.isEnabled()) return;
+		if (plugin == null) return;
 
 		Player player = event.getPlayer();
 		// disabling plugin in world
@@ -234,6 +236,18 @@ public class JobsUtils {
 		}
 
 		return true;
+	}
+	
+	private static Jobs getJobs() {
+		Jobs plugin = null;
+		try {
+			plugin = Jobs.getInstance();
+			if (plugin == null)
+				ChatUtils.sendWarning("Jobs has not been initialized properly - ES will ignore it.");
+		} catch (Exception ex) {
+			ChatUtils.sendWarning("Jobs is not installed on this server - something is wrong.");
+		}
+		return plugin != null ? plugin.isEnabled() ? plugin : null : null;
 	}
 
 }

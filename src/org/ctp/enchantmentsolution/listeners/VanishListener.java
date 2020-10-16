@@ -18,11 +18,15 @@ public class VanishListener implements Listener {
 		checkEnchants(event.getPlayer(), event.getItem());
 	}
 
-	public static ItemStack checkEnchants(Player player, ItemStack item) {
-		if (item == null || item.getItemMeta() == null) return item;
-		item = PersistenceNMS.checkItem(item, null);
+	public static int checkEnchants(Player player, ItemStack item) {
+		if (item == null || item.getItemMeta() == null) return 0;
+		int changed = 0;
+		if (PersistenceNMS.checkItem(item, null)) changed = 1;
 		for(CustomEnchantment enchant: RegisterEnchantments.getEnchantments()) {
-			if (!enchant.isEnabled() && ConfigString.DISABLE_ENCHANT_METHOD.getString().equals("vanish")) item = ItemUtils.removeEnchantmentFromItem(item, enchant);
+			if (!enchant.isEnabled() && ConfigString.DISABLE_ENCHANT_METHOD.getString().equals("vanish")) {
+				changed = 1;
+				item = ItemUtils.removeEnchantmentFromItem(item, enchant);
+			}
 			if (ItemUtils.hasEnchantment(item, enchant.getRelativeEnchantment())) {
 				boolean lower = false;
 				int maxLevel = enchant.getMaxLevel();
@@ -34,10 +38,11 @@ public class VanishListener implements Listener {
 					if (maxLevel == 0) item = ItemUtils.removeEnchantmentFromItem(item, enchant);
 					else
 						item = ItemUtils.addEnchantmentToItem(item, enchant, maxLevel);
+					changed = 1;
 				} else { /* placeholder */ }
 			}
 		}
-		return item;
+		return changed;
 	}
 
 }

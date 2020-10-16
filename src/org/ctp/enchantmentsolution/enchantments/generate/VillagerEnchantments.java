@@ -56,8 +56,8 @@ public class VillagerEnchantments extends LootEnchantments {
 			if (!enchant.getEnchant().getEnchantmentLocations().contains(EnchantmentLocation.TABLE)) levelPrice[1] *= 2;
 			if (levelPrice[1] > 64) levelPrice[1] = 64;
 			ItemStack priceItem = new ItemStack(Material.EMERALD, levelPrice[1]);
-			ingredients.add(matItem);
 			ingredients.add(priceItem);
+			ingredients.add(matItem);
 		} else {
 			ItemStack priceItem = new ItemStack(Material.EMERALD, levelPrice[1]);
 			if (levelPrice[1] > 64) levelPrice[1] = 64;

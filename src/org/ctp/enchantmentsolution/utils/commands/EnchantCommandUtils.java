@@ -499,7 +499,7 @@ public class EnchantCommandUtils {
 			List<CustomEnchantment> alphabetical = RegisterEnchantments.getRegisteredEnchantmentsAlphabetical();
 			for(int i = 0; i < 10; i++) {
 				int num = i + (page - 1) * 10;
-				if (num >= registered.size()) break;
+				if (num >= alphabetical.size()) break;
 				CustomEnchantment enchant = alphabetical.get(num);
 				JSONObject name = new JSONObject();
 				JSONObject desc = new JSONObject();

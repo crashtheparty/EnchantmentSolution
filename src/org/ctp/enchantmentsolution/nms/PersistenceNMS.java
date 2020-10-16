@@ -63,8 +63,8 @@ public class PersistenceNMS {
 		return false;
 	}
 
-	public static void addEnchantments(ItemStack item, List<EnchantmentLevel> levels) {
-		if (EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber() > 11) PersistenceUtils.addPersistence(item, levels);
+	public static boolean addEnchantments(ItemStack item, List<EnchantmentLevel> levels) {
+		if (EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber() > 11) return PersistenceUtils.addPersistence(item, levels);
 		else {
 			ItemMeta meta = item.getItemMeta();
 			List<String> lore = meta.getLore();
@@ -73,11 +73,12 @@ public class PersistenceNMS {
 				lore.add(LegacyPersistenceUtils.getEnchantmentString(level));
 			meta.setLore(lore);
 			item.setItemMeta(meta);
+			return true;
 		}
 	}
 
-	public static void addEnchantment(ItemStack item, EnchantmentLevel level) {
-		if (EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber() > 11) addEnchantments(item, Arrays.asList(level));
+	public static boolean addEnchantment(ItemStack item, EnchantmentLevel level) {
+		if (EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber() > 11) return addEnchantments(item, Arrays.asList(level));
 		else {
 			ItemMeta meta = item.getItemMeta();
 			List<String> lore = meta.getLore();
@@ -85,6 +86,7 @@ public class PersistenceNMS {
 			lore.add(LegacyPersistenceUtils.getEnchantmentString(level));
 			meta.setLore(lore);
 			item.setItemMeta(meta);
+			return true;
 		}
 
 	}
@@ -146,10 +148,10 @@ public class PersistenceNMS {
 			LegacyPersistenceUtils.addAnimal(item, id);
 	}
 
-	public static ItemStack checkItem(ItemStack original, ItemStack previous) {
+	public static boolean checkItem(ItemStack original, ItemStack previous) {
 		if (EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber() > 11) return PersistenceUtils.checkItem(original, previous);
 		else
-			return LegacyPersistenceUtils.checkItem(original, previous);
+			return LegacyPersistenceUtils.checkItem(original, previous) != null;
 	}
 
 }
