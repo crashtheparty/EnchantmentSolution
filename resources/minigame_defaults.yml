@@ -3,50 +3,141 @@ quick_anvil: true
 
 fast:
     override_enchantment_cost: false
-    enchantment_cost: 1
+    enchant_costs:
+        use:
+        - 'level'
+        - 'lapis'
+        - 'economy'
+        level: 1
+        lapis: 0
+        economy: 0
     override_anvil_cost: false
-    anvil_cost: 1
+    anvil_level_cost: 1
     random_bookshelves: false
 mondays:
     override_anvil_cost: true
-    anvil_cost: 0
+    anvil_level_cost: 0
     enchantments:
         0:
             enchantment: 'protection'
-            cost: 5
+            costs:
+                use:
+                - 'level'
+                - 'lapis'
+                - 'economy'
+                level: 5
+                lapis: 0
+                economy: 0
         1:
             enchantment: 'sharpness'
-            cost: 5
+            costs:
+                use:
+                - 'level'
+                - 'lapis'
+                - 'economy'
+                level: 5
+                lapis: 0
+                economy: 0
         2:
             enchantment: 'feather_falling'
-            cost: 5
+            costs:
+                use:
+                - 'level'
+                - 'lapis'
+                - 'economy'
+                level: 5
+                lapis: 0
+                economy: 0
         3:
             enchantment: 'power'
-            cost: 5
+            costs:
+                use:
+                - 'level'
+                - 'lapis'
+                - 'economy'
+                level: 5
+                lapis: 0
+                economy: 0
         4:
             enchantment: 'unbreaking'
-            cost: 5
+            costs:
+                use:
+                - 'level'
+                - 'lapis'
+                - 'economy'
+                level: 5
+                lapis: 0
+                economy: 0
         5:
             enchantment: 'luck_of_the_sea'
-            cost: 5
+            costs:
+                use:
+                - 'level'
+                - 'lapis'
+                - 'economy'
+                level: 5
+                lapis: 0
+                economy: 0
         6:
             enchantment: 'brine'
-            cost: 10
+            costs:
+                use:
+                - 'level'
+                - 'lapis'
+                - 'economy'
+                level: 10
+                lapis: 0
+                economy: 0
         7:
             enchantment: 'life'
-            cost: 15
+            costs:
+                use:
+                - 'level'
+                - 'lapis'
+                - 'economy'
+                level: 15
+                lapis: 0
+                economy: 0
         8:
             enchantment: 'gung_ho'
-            cost: 15
+            costs:
+                use:
+                - 'level'
+                - 'lapis'
+                - 'economy'
+                level: 15
+                lapis: 0
+                economy: 0
         9:
             enchantment: 'quick_strike'
-            cost: 10
+            costs:
+                use:
+                - 'level'
+                - 'lapis'
+                - 'economy'
+                level: 10
+                lapis: 0
+                economy: 0
         10:
             enchantment: 'tank'
-            cost: 10
+            costs:
+                use:
+                - 'level'
+                - 'lapis'
+                - 'economy'
+                level: 10
+                lapis: 0
+                economy: 0
         11:
             enchantment: 'RandomEnchant'
-            cost: 10
+            costs:
+                use:
+                - 'level'
+                - 'lapis'
+                - 'economy'
+                level: 10
+                lapis: 0
+                economy: 0
 
 custom: 
     paging: 28
