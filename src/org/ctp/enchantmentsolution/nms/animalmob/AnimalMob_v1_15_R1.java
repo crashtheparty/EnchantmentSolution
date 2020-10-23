@@ -22,6 +22,8 @@ public class AnimalMob_v1_15_R1 extends AnimalMob {
 	private Type catType;
 	private Gene pandaHiddenGene, pandaMainGene;
 	private DyeColor collarColor;
+	private MushroomCow.Variant mooshroomType;
+	private Fox.Type foxType;
 
 	public AnimalMob_v1_15_R1(Creature mob, ItemStack item) {
 		super(mob, item);
@@ -34,6 +36,14 @@ public class AnimalMob_v1_15_R1 extends AnimalMob {
 			Panda panda = (Panda) mob;
 			setPandaHiddenGene(panda.getHiddenGene());
 			setPandaMainGene(panda.getMainGene());
+		}
+		if (mob instanceof MushroomCow) {
+			MushroomCow cow = (MushroomCow) mob;
+			setMooshroomType(cow.getVariant());
+		}
+		if (mob instanceof Fox) {
+			Fox fox = (Fox) mob;
+			setFoxType(fox.getFoxType());
 		}
 	}
 
@@ -75,6 +85,14 @@ public class AnimalMob_v1_15_R1 extends AnimalMob {
 				panda.setHiddenGene(getPandaHiddenGene());
 				panda.setMainGene(getPandaMainGene());
 			}
+			if (e instanceof MushroomCow) {
+				MushroomCow cow = (MushroomCow) e;
+				cow.setVariant(getMooshroomType());
+			}
+			if (e instanceof Fox) {
+				Fox fox = (Fox) e;
+				fox.setFoxType(getFoxType());
+			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -93,6 +111,8 @@ public class AnimalMob_v1_15_R1 extends AnimalMob {
 		config.set(location + i + ".collar_color", getCatType() != null ? getCollarColor().name() : null);
 		config.set(location + i + ".panda_main_gene", getPandaMainGene() != null ? getPandaMainGene().name() : null);
 		config.set(location + i + ".panda_hidden_gene", getPandaHiddenGene() != null ? getPandaHiddenGene().name() : null);
+		config.set(location + i + ".mooshroom_cow_variant", getMooshroomType() != null ? getMooshroomType().name() : null);
+		config.set(location + i + ".fox_type", getFoxType() != null ? getFoxType().name() : null);
 	}
 
 	public static AnimalMob createFromConfig(YamlConfig config, int i) {
@@ -148,6 +168,12 @@ public class AnimalMob_v1_15_R1 extends AnimalMob {
 			((AnimalMob_v1_15_R1) mob).setCollarColor(DyeColor.valueOf(config.getString("animals." + i + ".collar_color")));
 		} catch (Exception ex) {}
 		try {
+			((AnimalMob_v1_15_R1) mob).setMooshroomType(MushroomCow.Variant.valueOf(config.getString("animals." + i + ".mooshroom_cow_variant")));
+		} catch (Exception ex) {}
+		try {
+			((AnimalMob_v1_15_R1) mob).setFoxType(Fox.Type.valueOf(config.getString("animals." + i + ".fox_type")));
+		} catch (Exception ex) {}
+		try {
 			mob.setRabbitType(org.bukkit.entity.Rabbit.Type.valueOf(config.getString("animals." + i + ".rabbit_type")));
 		} catch (Exception ex) {}
 		try {
@@ -190,5 +216,21 @@ public class AnimalMob_v1_15_R1 extends AnimalMob {
 
 	public void setCollarColor(DyeColor collarColor) {
 		this.collarColor = collarColor;
+	}
+
+	public MushroomCow.Variant getMooshroomType() {
+		return mooshroomType;
+	}
+
+	public void setMooshroomType(MushroomCow.Variant mooshroomType) {
+		this.mooshroomType = mooshroomType;
+	}
+
+	public Fox.Type getFoxType() {
+		return foxType;
+	}
+
+	public void setFoxType(Fox.Type foxType) {
+		this.foxType = foxType;
 	}
 }
