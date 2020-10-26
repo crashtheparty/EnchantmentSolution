@@ -8,6 +8,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
+import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.events.modify.ExhaustionEvent;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.player.ESPlayer;
@@ -33,6 +34,10 @@ public class ExhaustionCurseThread extends EnchantmentThread {
 
 	@Override
 	public void run() {
+		if (!RegisterEnchantments.isEnabled(RegisterEnchantments.CURSE_OF_EXHAUSTION)) {
+			remove();
+			return;
+		}
 		ESPlayer player = getPlayer();
 
 		Player p = player.getOnlinePlayer();

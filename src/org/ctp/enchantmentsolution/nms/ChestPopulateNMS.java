@@ -32,6 +32,7 @@ public class ChestPopulateNMS {
 				ChestPopulate_v1_16_R1.populateChest(player, block);
 				break;
 			case 13:
+			case 14:
 				ChestPopulate_v1_16_R2.populateChest(player, block);
 				break;
 		}
@@ -57,6 +58,7 @@ public class ChestPopulateNMS {
 			case 12:
 				return ChestPopulate_v1_16_R1.isLootChest(block);
 			case 13:
+			case 14:
 				return ChestPopulate_v1_16_R2.isLootChest(block);
 		}
 		return false;
@@ -87,6 +89,7 @@ public class ChestPopulateNMS {
 				ChestPopulate_v1_16_R1.populateCart(player, e);
 				break;
 			case 13:
+			case 14:
 				ChestPopulate_v1_16_R2.populateCart(player, e);
 				break;
 		}
@@ -112,6 +115,7 @@ public class ChestPopulateNMS {
 			case 12:
 				return ChestPopulate_v1_16_R1.isLootCart(e);
 			case 13:
+			case 14:
 				return ChestPopulate_v1_16_R2.isLootCart(e);
 		}
 		return false;

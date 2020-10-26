@@ -10,13 +10,17 @@ import org.bukkit.block.Block;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.ctp.crashapi.CrashAPI;
 import org.ctp.crashapi.CrashAPIPlugin;
 import org.ctp.crashapi.config.yaml.YamlConfig;
 import org.ctp.crashapi.db.BackupDB;
+import org.ctp.crashapi.events.ArmorEquipEvent;
+import org.ctp.crashapi.events.ArmorEquipEvent.EquipMethod;
 import org.ctp.crashapi.inventory.InventoryData;
 import org.ctp.crashapi.item.ItemSerialization;
+import org.ctp.crashapi.item.ItemSlot;
 import org.ctp.crashapi.listeners.EquipListener;
 import org.ctp.crashapi.resources.advancements.CrashAdvancementProgress;
 import org.ctp.crashapi.utils.ChatUtils;
@@ -57,6 +61,7 @@ import org.ctp.enchantmentsolution.utils.commands.ESCommand;
 import org.ctp.enchantmentsolution.utils.compatibility.AuctionHouseUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 import org.ctp.enchantmentsolution.utils.files.SaveUtils;
+import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
 import org.ctp.enchantmentsolution.utils.player.ESPlayer;
 
 import com.leonardobishop.quests.Quests;
@@ -440,6 +445,19 @@ public class EnchantmentSolution extends CrashAPIPlugin {
 
 	public boolean hasQuests() {
 		return quests;
+	}
+
+	public void reEquipArmor() {
+		for(Player p: Bukkit.getOnlinePlayers()) {
+			ESPlayer esPlayer = getESPlayer(p);
+			for(ItemSlot slot: esPlayer.getArmorAndType()) {
+				ItemStack item = slot.getItem();
+				if (item != null && EnchantmentUtils.getTotalEnchantments(item) > 0) {
+					ArmorEquipEvent armorEquipEvent = new ArmorEquipEvent(p, EquipMethod.COMMAND, slot.getType(), item, item);
+					Bukkit.getServer().getPluginManager().callEvent(armorEquipEvent);
+				}
+			}
+		}
 	}
 
 	@Override

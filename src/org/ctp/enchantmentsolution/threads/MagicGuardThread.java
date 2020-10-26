@@ -38,7 +38,7 @@ public class MagicGuardThread extends EnchantmentThread {
 	@Override
 	public void run() {
 		ESPlayer player = getPlayer();
-		if (!player.isOnline()) {
+		if (!player.isOnline() || !RegisterEnchantments.isEnabled(RegisterEnchantments.MAGIC_GUARD)) {
 			remove();
 			return;
 		}

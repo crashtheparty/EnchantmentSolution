@@ -242,8 +242,14 @@ public class DamageListener extends Enchantmentable {
 				event.setCancelled(true);
 				int max = EnchantmentUtils.getLevel(attackItem, RegisterEnchantments.IRENES_LASSO);
 				int current = 0;
-				for(AnimalMob animal: EnchantmentSolution.getAnimals())
+				boolean animalRemove = false;
+				for(AnimalMob animal: EnchantmentSolution.getAnimals()) {
+					if (animal == null) {
+						Chatable.get().sendWarning("An animal is null for some reason: this animal will be removed.");
+						animalRemove = true;
+					}
 					if (animal.inItem(attackItem)) current++;
+				}
 				if (current >= max) return;
 				LassoDamageEvent lasso = new LassoDamageEvent(animals, max, player);
 				Bukkit.getPluginManager().callEvent(lasso);
@@ -260,6 +266,13 @@ public class DamageListener extends Enchantmentable {
 					McMMOHandler.customName(attacked);
 					EnchantmentSolution.addAnimals(AnimalMobNMS.getMob(animals, attackItem));
 					attacked.remove();
+				}
+				if (animalRemove) {
+					Iterator<AnimalMob> mobs = EnchantmentSolution.getAnimals().iterator();
+					while (mobs.hasNext()) {
+						AnimalMob mob = mobs.next();
+						if (mob == null) mobs.remove();
+					}
 				}
 			}
 		}

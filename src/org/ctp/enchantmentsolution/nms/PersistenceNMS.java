@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.ctp.crashapi.CrashAPI;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
@@ -64,8 +63,8 @@ public class PersistenceNMS {
 		return false;
 	}
 
-	public static void addEnchantments(ItemStack item, List<EnchantmentLevel> levels) {
-		if (CrashAPI.getPlugin().getBukkitVersion().getVersionNumber() > 11) PersistenceUtils.addPersistence(item, levels);
+	public static boolean addEnchantments(ItemStack item, List<EnchantmentLevel> levels) {
+		if (CrashAPI.getPlugin().getBukkitVersion().getVersionNumber() > 11) return PersistenceUtils.addPersistence(item, levels);
 		else {
 			ItemMeta meta = item.getItemMeta();
 			List<String> lore = meta.getLore();
@@ -74,11 +73,12 @@ public class PersistenceNMS {
 				lore.add(LegacyPersistenceUtils.getEnchantmentString(level));
 			meta.setLore(lore);
 			item.setItemMeta(meta);
+			return true;
 		}
 	}
 
-	public static void addEnchantment(ItemStack item, EnchantmentLevel level) {
-		if (CrashAPI.getPlugin().getBukkitVersion().getVersionNumber() > 11) addEnchantments(item, Arrays.asList(level));
+	public static boolean addEnchantment(ItemStack item, EnchantmentLevel level) {
+		if (CrashAPI.getPlugin().getBukkitVersion().getVersionNumber() > 11) return addEnchantments(item, Arrays.asList(level));
 		else {
 			ItemMeta meta = item.getItemMeta();
 			List<String> lore = meta.getLore();
@@ -86,6 +86,7 @@ public class PersistenceNMS {
 			lore.add(LegacyPersistenceUtils.getEnchantmentString(level));
 			meta.setLore(lore);
 			item.setItemMeta(meta);
+			return true;
 		}
 
 	}
@@ -147,12 +148,10 @@ public class PersistenceNMS {
 			LegacyPersistenceUtils.addAnimal(item, id);
 	}
 
-	public static ItemStack checkItem(ItemStack original) {
-		if (CrashAPI.getPlugin().getBukkitVersion().getVersionNumber() > 11) {
-			if (original.getItemMeta().getPersistentDataContainer().getKeys().size() == 0 && (!original.getItemMeta().hasEnchants() || (original.getItemMeta() instanceof EnchantmentStorageMeta && !((EnchantmentStorageMeta) original.getItemMeta()).hasStoredEnchants()))) return original;
-			return PersistenceUtils.checkItem(original);
-		} else
-			return LegacyPersistenceUtils.checkItem(original);
+	public static boolean checkItem(ItemStack original) {
+		if (CrashAPI.getPlugin().getBukkitVersion().getVersionNumber() > 11) return PersistenceUtils.checkItem(original);
+		else
+			return LegacyPersistenceUtils.checkItem(original) != null;
 	}
 
 }

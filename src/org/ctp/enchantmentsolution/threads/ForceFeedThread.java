@@ -39,7 +39,7 @@ public class ForceFeedThread extends EnchantmentThread {
 		Player p = player.getOnlinePlayer();
 		List<ItemStack> i = player.getForceFeedItems();
 		List<ItemStack> items = new ArrayList<ItemStack>();
-		if (i.size() == 0) {
+		if (!RegisterEnchantments.isEnabled(RegisterEnchantments.FORCE_FEED) || items.size() == 0) {
 			remove();
 			return;
 		}

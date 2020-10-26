@@ -101,8 +101,8 @@ print_usage: true
 multi_block:
     async: false
     blocks_per_tick:
-        player: 10
-        global: 25
+        player: 30
+        global: 250
 
 config_comments: 
 
@@ -266,6 +266,9 @@ config_comments:
         async:
         - 'Whether the Height/Width/Depth++ enchantments should work asynchronously'
         - 'This increases peformance but nerfs those enchantments slightly'
+        - 'DEPRECATED - now will always be true for performance reasons'
+        all_faces:
+        - 'Whether the async will only check basic block faces (North, South, East, West, Up, Down) or all faces.'
         blocks_per_tick:
             player:
             - 'The maximum blocks broken per tick per player using Height/Width/Depth++'

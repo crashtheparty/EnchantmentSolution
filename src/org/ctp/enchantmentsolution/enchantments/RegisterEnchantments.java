@@ -246,9 +246,7 @@ public class RegisterEnchantments {
 			} else if (levelFifty) enchantment.setLevelFifty(enchantmentTypes, anvilTypes, locations);
 			else
 				enchantment.setLevelThirty(enchantmentTypes, anvilTypes, locations);
-			if (!namespace.equals("default_enchantments")) enchantment.setDisplayName(displayName);
-			else
-				enchantment.setDisplayName(ConfigUtils.getLanguage());
+			enchantment.setDisplayName(displayName);
 			enchantment.setDescription(description);
 		}
 	}
