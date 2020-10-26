@@ -75,6 +75,7 @@ public class PlayerListener extends Enchantmentable {
 		if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
 			if (event.getHand() == EquipmentSlot.OFF_HAND) return; // off hand packet, ignore.
 			Player player = event.getPlayer();
+			if (isDisabled(player, RegisterEnchantments.FLOWER_GIFT)) return;
 			if (player.getGameMode().equals(GameMode.CREATIVE) || player.getGameMode().equals(GameMode.SPECTATOR)) return;
 			ItemStack item = player.getInventory().getItemInMainHand();
 			Block block = event.getClickedBlock();
@@ -105,6 +106,7 @@ public class PlayerListener extends Enchantmentable {
 	private void frosty(PlayerInteractEvent event) {
 		if (event.getAction().equals(Action.LEFT_CLICK_AIR)) {
 			Player player = event.getPlayer();
+			if (isDisabled(player, RegisterEnchantments.FROSTY)) return;
 			ItemStack item = player.getInventory().getItemInMainHand();
 			if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.FROSTY)) {
 				event.setCancelled(false);
@@ -144,6 +146,7 @@ public class PlayerListener extends Enchantmentable {
 	private void icarus(PlayerChangeCoordsEvent event) {
 		if (!canRun(RegisterEnchantments.ICARUS, event)) return;
 		Player player = event.getPlayer();
+		if (isDisabled(player, RegisterEnchantments.ICARUS)) return;
 		ItemStack chestplate = player.getInventory().getChestplate();
 		if (chestplate != null && chestplate.getType().equals(Material.ELYTRA) && player.isGliding() && EnchantmentUtils.hasEnchantment(chestplate, RegisterEnchantments.ICARUS)) {
 			int level = EnchantmentUtils.getLevel(player.getInventory().getChestplate(), RegisterEnchantments.ICARUS);
@@ -182,6 +185,7 @@ public class PlayerListener extends Enchantmentable {
 		if (!canRun(RegisterEnchantments.IRENES_LASSO, event)) return;
 		if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
 			Player player = event.getPlayer();
+			if (isDisabled(player, RegisterEnchantments.IRENES_LASSO)) return;
 			ItemStack item = player.getInventory().getItemInMainHand();
 			if (event.getHand() == EquipmentSlot.OFF_HAND) item = player.getInventory().getItemInOffHand();
 			if (item != null && EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.IRENES_LASSO)) {
@@ -215,7 +219,7 @@ public class PlayerListener extends Enchantmentable {
 	}
 
 	private void moisturize(PlayerInteractEvent event) {
-		if (!canRun(RegisterEnchantments.MOISTURIZE, event)) return;
+		if (!canRun(RegisterEnchantments.MOISTURIZE, event) || isDisabled(event.getPlayer(), RegisterEnchantments.MOISTURIZE)) return;
 
 		if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
 			if (event.getHand() == EquipmentSlot.OFF_HAND) return; // off hand packet, ignore.
@@ -295,6 +299,7 @@ public class PlayerListener extends Enchantmentable {
 	private void overkill(PlayerInteractEvent event) {
 		if (event.getAction().equals(Action.LEFT_CLICK_AIR)) {
 			Player player = event.getPlayer();
+			if (isDisabled(player, RegisterEnchantments.OVERKILL)) return;
 			ItemStack item = player.getInventory().getItemInMainHand();
 			if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.OVERKILL)) {
 				event.setCancelled(false);
@@ -340,6 +345,7 @@ public class PlayerListener extends Enchantmentable {
 	private void splatterFest(PlayerInteractEvent event) {
 		if (event.getAction().equals(Action.LEFT_CLICK_AIR)) {
 			Player player = event.getPlayer();
+			if (isDisabled(player, RegisterEnchantments.SPLATTER_FEST)) return;
 			ItemStack item = player.getInventory().getItemInMainHand();
 			if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.SPLATTER_FEST)) {
 				event.setCancelled(false);
@@ -379,7 +385,9 @@ public class PlayerListener extends Enchantmentable {
 	}
 
 	private void stickyHold(PlayerItemBreakEvent event) {
+		if (!canRun(RegisterEnchantments.STICKY_HOLD, event)) return;
 		Player player = event.getPlayer();
+		if (isDisabled(player, RegisterEnchantments.STICKY_HOLD)) return;
 		ItemStack item = event.getBrokenItem();
 		if (item != null && EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.STICKY_HOLD)) {
 			ItemStack finalItem = item.clone();
@@ -394,6 +402,7 @@ public class PlayerListener extends Enchantmentable {
 	private void zeal(PlayerInteractEvent event) {
 		if (event.getAction().equals(Action.LEFT_CLICK_AIR)) {
 			Player player = event.getPlayer();
+			if (isDisabled(player, RegisterEnchantments.ZEAL)) return;
 			ItemStack item = player.getInventory().getItemInMainHand();
 			if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.ZEAL)) {
 				event.setCancelled(false);
@@ -434,6 +443,7 @@ public class PlayerListener extends Enchantmentable {
 	private void movementListener(PlayerChangeCoordsEvent event, Enchantment enchantment) {
 		if (!canRun(enchantment, event)) return;
 		Player player = event.getPlayer();
+		if (isDisabled(player, enchantment)) return;
 		Location loc = player.getLocation();
 		if (player.isFlying() || player.isGliding() || player.isInsideVehicle()) return;
 		ItemStack boots = player.getInventory().getBoots();

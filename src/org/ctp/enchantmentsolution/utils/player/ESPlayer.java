@@ -37,7 +37,8 @@ public class ESPlayer {
 	private final OfflinePlayer player;
 	private Player onlinePlayer;
 	private RPGPlayer rpg;
-	private Map<Enchantment, Long> cooldowns;
+	private Map<Enchantment, Long> cooldowns, timedDisable;
+	private List<Enchantment> disable;
 	private List<ItemStack> soulItems;
 	private Map<Long, Integer> blocksBroken;
 	private float currentExhaustion, pastExhaustion;
@@ -55,6 +56,8 @@ public class ESPlayer {
 		onlinePlayer = player.getPlayer();
 		rpg = RPGUtils.getPlayer(player);
 		cooldowns = new HashMap<Enchantment, Long>();
+		timedDisable = new HashMap<Enchantment, Long>();
+		disable = new ArrayList<Enchantment>();
 		blocksBroken = new HashMap<Long, Integer>();
 		overkillDeaths = new ArrayList<OverkillDeath>();
 		attributes = new ArrayList<AttributeLevel>();
@@ -417,4 +420,59 @@ public class ESPlayer {
 		this.streak.setStreak(type, streak);
 	}
 
+	public void addTimedDisableEnchant(Enchantment enchant, int ticks) {
+		long tick = ServerNMS.getCurrentTick() + ticks;
+		if (!isTimedDisableEnchant(enchant)) timedDisable.put(enchant, tick);
+	}
+
+	public void addTimeToDisableEnchant(Enchantment enchant, int moreTicks) {
+		if (isTimedDisableEnchant(enchant)) {
+			long tick = timedDisable.get(enchant) + moreTicks;
+			timedDisable.put(enchant, tick);
+		} else
+			addTimedDisableEnchant(enchant, moreTicks);
+	}
+
+	public void setTimeDisableEnchant(Enchantment enchant, int ticks) {
+		long tick = ServerNMS.getCurrentTick() + ticks;
+		timedDisable.put(enchant, tick);
+	}
+
+	public void removeTimedDisableEnchant(Enchantment enchant) {
+		timedDisable.remove(enchant);
+	}
+
+	public void removeTimeFromDisableEnchant(Enchantment enchant, int lessTicks) {
+		if (isTimedDisableEnchant(enchant)) {
+			long tick = timedDisable.get(enchant) - lessTicks;
+			timedDisable.put(enchant, tick);
+		}
+	}
+
+	public boolean isTimedDisableEnchant(Enchantment enchant) {
+		if (timedDisable.containsKey(enchant)) {
+			long tick = timedDisable.get(enchant);
+			long currentTick = ServerNMS.getCurrentTick();
+			return tick >= currentTick;
+		}
+		return false;
+	}
+
+	public void setDisabledEnchant(Enchantment enchant) {
+		if (!isDisabledEnchant(enchant)) disable.add(enchant);
+	}
+
+	public boolean isDisabledEnchant(Enchantment enchant) {
+		for(Enchantment e: disable)
+			if (e == enchant) return true;
+		return false;
+	}
+
+	public void removeDisabledEnchant(Enchantment enchant) {
+		Iterator<Enchantment> iter = disable.iterator();
+		while (iter.hasNext()) {
+			Enchantment e = iter.next();
+			if (e == enchant) iter.remove();
+		}
+	}
 }

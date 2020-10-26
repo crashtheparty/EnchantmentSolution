@@ -39,6 +39,7 @@ public class SoulListener extends Enchantmentable {
 		List<ItemStack> items = event.getDrops();
 		List<ItemStack> soulbound = new ArrayList<ItemStack>();
 		Player player = event.getEntity();
+		if (isDisabled(player, RegisterEnchantments.SOULBOUND)) return;
 		ESPlayer esPlayer = EnchantmentSolution.getESPlayer(player);
 		if (event.getKeepInventory()) return;
 
@@ -56,7 +57,7 @@ public class SoulListener extends Enchantmentable {
 			List<ItemStack> savedItems = new ArrayList<ItemStack>();
 			savedItems.addAll(soulboundEvent.getSavedItems());
 
-			if (killItem != null && RegisterEnchantments.isEnabled(RegisterEnchantments.SOUL_REAPER) && EnchantmentUtils.hasEnchantment(killItem, RegisterEnchantments.SOUL_REAPER)) {
+			if (killItem != null && !isDisabled(player, RegisterEnchantments.SOUL_REAPER) && RegisterEnchantments.isEnabled(RegisterEnchantments.SOUL_REAPER) && EnchantmentUtils.hasEnchantment(killItem, RegisterEnchantments.SOUL_REAPER)) {
 				List<ItemStack> soulReaper = new ArrayList<ItemStack>();
 				int level = EnchantmentUtils.getLevel(killItem, RegisterEnchantments.SOUL_REAPER);
 				if (level > savedItems.size()) soulReaper.addAll(savedItems);
@@ -97,6 +98,7 @@ public class SoulListener extends Enchantmentable {
 	private void soulbound(PlayerRespawnEvent event) {
 		if (!canRun(RegisterEnchantments.SOULBOUND, event)) return;
 		Player player = event.getPlayer();
+		if (isDisabled(player, RegisterEnchantments.SOULBOUND)) return;
 		ESPlayer esPlayer = EnchantmentSolution.getESPlayer(player);
 		HashMap<Material, Boolean> diamonds = new HashMap<Material, Boolean>();
 		diamonds.put(Material.DIAMOND_AXE, false);

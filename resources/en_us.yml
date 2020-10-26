@@ -418,15 +418,21 @@ minigame:
         item:
             name: '&9Enchanting Material: &3%material%'
             enchantment: '&6Enchantment: &3%enchantment% &6Level: &3%level%'
-            enchantment_cost: '&6Cost: &3%cost%'
-            random: 
+            enchantment_multiple: 
             - '&6Random Enchantments'
             - '&6Multiple: &3%multiple%'
-            - '&6Cost: &3%cost%'
+            enchantment_level_cost: '&6Experience Level Cost: &3%lvl_cost%'
+            enchantment_lapis_cost: '&6Lapis Lazuli Cost: &3%lapis_cost%'
+            enchantment_economy_cost: '&6%money_name% Cost: &3%money_sign%%economy_cost%'
             
     invalid_enchant_name: '&cInvalid enchantment name %name%!'
     invalid_random_enchant: '&cCould not generate a random enchantment this time!'
-    not_enough_levels: '&cYou need more levels to get this enchantment!'
+    not_enough_levels: '&cYou need more experience levels to get this enchantment! (Have %player_level%, need %level_cost%.)'
+    not_enough_lapis: '&cYou need lapis lazuli in your inventory to get this enchantment! (Have %player_lapis% lapis, need %lapis_cost%.)'
+    not_enough_money: '&cYou need more %money_name% to get this enchantment! (Have %money_sign%%player_economy%, need %money_sign%%economy_cost%.)'
+    cannot_get_enchantment: '&cCannot get enchantment! %level%%lapis%%economy%'
+    default_money_name: 'Dollars'
+    default_money_sign: '\$'
 
 pagination:
     go_back: '&9Go Back'

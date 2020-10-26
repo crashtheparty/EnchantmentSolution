@@ -38,6 +38,7 @@ public class DeathListener extends Enchantmentable {
 		if (!canRun(RegisterEnchantments.BEHEADING, event)) return;
 		Entity entity = event.getEntity();
 		Player killer = event.getEntity().getKiller();
+		if (killer == null || isDisabled(killer, RegisterEnchantments.BEHEADING)) return;
 		if (entity instanceof LivingEntity && killer != null) {
 			LivingEntity living = (LivingEntity) entity;
 			if (EnchantmentUtils.hasEnchantment(killer.getInventory().getItemInMainHand(), RegisterEnchantments.BEHEADING)) {
@@ -79,6 +80,7 @@ public class DeathListener extends Enchantmentable {
 			EntityDamageByEntityEvent entityDamage = (EntityDamageByEntityEvent) e;
 			if (event.getEntity().getKiller() != null) {
 				Player killer = event.getEntity().getKiller();
+				if (killer == null || isDisabled(killer, RegisterEnchantments.STREAK)) return;
 				if (EnchantmentUtils.hasEnchantment(killer.getInventory().getItemInMainHand(), RegisterEnchantments.STREAK)) {
 					StreakDeathEvent streak = new StreakDeathEvent(event.getEntity(), killer);
 					if (!streak.isCancelled()) {
@@ -117,6 +119,8 @@ public class DeathListener extends Enchantmentable {
 	}
 
 	private void handleTransmutation(EntityDeathEvent event) {
+		Player player = event.getEntity().getKiller();
+		if (player == null || isDisabled(player, RegisterEnchantments.TRANSMUTATION)) return;
 		List<ItemStack> drops = new ArrayList<ItemStack>();
 		boolean override = true;
 		boolean changedLoot = false;
@@ -137,14 +141,14 @@ public class DeathListener extends Enchantmentable {
 			return;
 		}
 
-		TransmutationEvent transmutation = new TransmutationEvent(event.getEntity().getKiller(), event.getEntity(), drops, event.getDrops(), override);
+		TransmutationEvent transmutation = new TransmutationEvent(player, event.getEntity(), drops, event.getDrops(), override);
 		Bukkit.getPluginManager().callEvent(transmutation);
 
 		if (!transmutation.isCancelled()) {
 			List<ItemStack> newDrops = new ArrayList<ItemStack>();
 			if (!transmutation.isOverride()) newDrops.addAll(transmutation.getOriginalDrops());
 			newDrops.addAll(transmutation.getDrops());
-			if (!override) AdvancementUtils.awardCriteria(event.getEntity().getKiller(), ESAdvancement.CERBERUS, "obsidian");
+			if (!override) AdvancementUtils.awardCriteria(player, ESAdvancement.CERBERUS, "obsidian");
 			event.getDrops().clear();
 			for(ItemStack drop: newDrops)
 				event.getDrops().add(drop);
