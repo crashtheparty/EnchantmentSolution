@@ -37,33 +37,35 @@ public class ForceFeedThread extends EnchantmentThread {
 	public void run() {
 		ESPlayer player = getPlayer();
 		Player p = player.getOnlinePlayer();
-		List<ItemStack> items = player.getForceFeedItems();
-		if (items.size() == 0) {
+		List<ItemStack> i = player.getForceFeedItems();
+		List<ItemStack> items = new ArrayList<ItemStack>();
+		if (!RegisterEnchantments.isEnabled(RegisterEnchantments.FORCE_FEED) || items.size() == 0) {
 			remove();
 			return;
 		}
+		for (ItemStack item : i)
+			if (DamageUtils.getDamage(item) > 0) items.add(item);
+		if (items.size() == 0) return;
 		Collections.shuffle(items);
 		ItemStack item = items.get(0);
 		int damage = DamageUtils.getDamage(item);
-		if (damage > 0) {
-			double rand = Math.random();
-			int level = EnchantmentUtils.getLevel(item, RegisterEnchantments.FORCE_FEED);
-			double chance = player.getForceFeedChance(level);
-			if (chance > rand) {
-				int newDamage = Math.max((int) (Math.random() * (level + 4) - ((3 + level) / 2.0D)), 1);
-				ForceFeedEvent forceFeed = new ForceFeedEvent(p, level, item, 0.3f, newDamage);
-				Bukkit.getPluginManager().callEvent(forceFeed);
-				if (!forceFeed.isCancelled() && forceFeed.getRepair() > 0) {
-					int repair = forceFeed.getRepair();
-					damage -= repair;
-					if (damage < 0) {
-						repair += damage;
-						damage = 0;
-					}
-					DamageUtils.setDamage(item, damage);
-					p.setExhaustion(p.getExhaustion() + (forceFeed.getExhaust() * repair));
-					AdvancementUtils.awardCriteria(p, ESAdvancement.YUMMY_REPAIRS, "repair");
+		double rand = Math.random();
+		int level = EnchantmentUtils.getLevel(item, RegisterEnchantments.FORCE_FEED);
+		double chance = player.getForceFeedChance(level);
+		if (chance > rand) {
+			int newDamage = Math.max((int) (Math.random() * (level + 4) - ((3 + level) / 2.0D)), 1);
+			ForceFeedEvent forceFeed = new ForceFeedEvent(p, level, item, 0.4f, newDamage);
+			Bukkit.getPluginManager().callEvent(forceFeed);
+			if (!forceFeed.isCancelled() && forceFeed.getRepair() > 0) {
+				int repair = forceFeed.getRepair();
+				damage -= repair;
+				if (damage < 0) {
+					repair += damage;
+					damage = 0;
 				}
+				DamageUtils.setDamage(item, damage);
+				p.setExhaustion(p.getExhaustion() + (forceFeed.getExhaust() * repair));
+				AdvancementUtils.awardCriteria(p, ESAdvancement.YUMMY_REPAIRS, "repair");
 			}
 		}
 	}

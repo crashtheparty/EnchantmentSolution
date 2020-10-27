@@ -20,7 +20,8 @@ public abstract class ProjectileSpawnEvent extends InteractEvent implements Cool
 
 	public boolean willCancel() {
 		ESPlayer player = EnchantmentSolution.getESPlayer(getPlayer());
-		return player.getCooldown(getEnchantment().getEnchant().getRelativeEnchantment()) + getCooldownTicks() > ServerNMS.getCurrentTick();
+		long cooldown = player.getCooldown(getEnchantment().getEnchant().getRelativeEnchantment());
+		return cooldown + getCooldownTicks() > ServerNMS.getCurrentTick() && !ServerNMS.hasOverrun(cooldown);
 	}
 
 	@Override

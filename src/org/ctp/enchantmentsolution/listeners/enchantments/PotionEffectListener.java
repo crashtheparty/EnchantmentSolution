@@ -19,8 +19,10 @@ public class PotionEffectListener extends Enchantmentable {
 
 	@EventHandler
 	public void onEntityPotionEffect(EntityPotionEffectEvent event) {
+		if (!canRun(RegisterEnchantments.MAGIC_GUARD, event)) return;
 		if (event.getEntity() instanceof Player) {
 			Player player = (Player) event.getEntity();
+			if (isDisabled(player, RegisterEnchantments.MAGIC_GUARD)) return;
 			ItemStack shield = player.getInventory().getItemInOffHand();
 			if (shield != null && EnchantmentUtils.hasEnchantment(shield, RegisterEnchantments.MAGIC_GUARD) && (event.getAction() == Action.ADDED || event.getAction() == Action.CHANGED) && ESArrays.getBadPotions().contains(event.getModifiedType())) {
 				MagicGuardPotionEvent magicGuard = new MagicGuardPotionEvent(player, event.getModifiedType());

@@ -29,11 +29,11 @@ public class PlayerInteract implements Listener {
 		if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
 			if (event.getHand() == EquipmentSlot.OFF_HAND) return; // off hand packet, ignore.
 			Block block = event.getClickedBlock();
-			if (block.getType() == Material.ENCHANTING_TABLE && (ConfigString.CUSTOM_TABLE.getBoolean() || ConfigString.LEVEL_FIFTY.getBoolean())) Bukkit.getScheduler().scheduleSyncDelayedTask(EnchantmentSolution.getPlugin(), () -> {
-				if (event.isCancelled()) return;
-				Player player = event.getPlayer();
-				InventoryData inv = EnchantmentSolution.getPlugin().getInventory(player);
-				if (MinigameUtils.isEnabled()) {
+			if (block.getType() == Material.ENCHANTING_TABLE && MinigameUtils.isEnabled()) {
+				Bukkit.getScheduler().scheduleSyncDelayedTask(EnchantmentSolution.getPlugin(), () -> {
+					if (event.isCancelled()) return;
+					Player player = event.getPlayer();
+					InventoryData inv = EnchantmentSolution.getPlugin().getInventory(player);
 					if (inv == null) {
 						inv = new Minigame(player, block);
 						EnchantmentSolution.getPlugin().addInventory(inv);
@@ -43,8 +43,15 @@ public class PlayerInteract implements Listener {
 						EnchantmentSolution.getPlugin().addInventory(inv);
 					}
 					inv.setInventory();
-					return;
-				}
+				}, 1l);
+
+				return;
+			}
+			Bukkit.getScheduler().scheduleSyncDelayedTask(EnchantmentSolution.getPlugin(), () -> {}, 1l);
+			if (block.getType() == Material.ENCHANTING_TABLE && (ConfigString.CUSTOM_TABLE.getBoolean() || ConfigString.LEVEL_FIFTY.getBoolean())) Bukkit.getScheduler().scheduleSyncDelayedTask(EnchantmentSolution.getPlugin(), () -> {
+				if (event.isCancelled()) return;
+				Player player = event.getPlayer();
+				InventoryData inv = EnchantmentSolution.getPlugin().getInventory(player);
 				if (inv == null) {
 					inv = new EnchantmentTable(player, block);
 					EnchantmentSolution.getPlugin().addInventory(inv);

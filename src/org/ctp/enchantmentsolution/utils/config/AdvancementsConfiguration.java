@@ -25,6 +25,8 @@ public class AdvancementsConfiguration extends Configuration {
 		if (getPlugin().isInitializing()) Chatable.get().sendInfo("Loading advancements configuration...");
 		YamlConfigBackup config = getConfig();
 
+		config.addDefault("discovery_advancements", false);
+		
 		for(ESAdvancement advancement: ESAdvancement.values())
 			if (advancement.getParent() == null) {
 				config.addDefault("advancements." + advancement.getNamespace().getKey() + ".enable", false);

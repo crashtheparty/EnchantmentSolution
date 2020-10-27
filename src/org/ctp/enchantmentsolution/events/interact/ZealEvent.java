@@ -11,7 +11,7 @@ public class ZealEvent extends ProjectileSpawnEvent {
 	private final boolean hasFireCharge;
 
 	public ZealEvent(Player who, ItemStack item, boolean takeFireCharge, boolean hasFireCharge) {
-		super(who, new EnchantmentLevel(CERegister.ZEAL, 1), item, 10);
+		super(who, new EnchantmentLevel(CERegister.ZEAL, 1), item, 20);
 		setTakeFireCharge(takeFireCharge);
 		this.hasFireCharge = hasFireCharge;
 	}

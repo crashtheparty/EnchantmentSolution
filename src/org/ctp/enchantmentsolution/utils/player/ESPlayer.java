@@ -10,10 +10,12 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.ctp.crashapi.item.ItemData;
-import org.ctp.crashapi.item.ItemType;
+import org.ctp.crashapi.events.ItemEquipEvent.HandMethod;
+import org.ctp.crashapi.item.*;
 import org.ctp.crashapi.nms.ServerNMS;
 import org.ctp.crashapi.utils.DamageUtils;
+import org.ctp.crashapi.utils.ItemUtils;
+import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.*;
 import org.ctp.enchantmentsolution.events.player.FrequentFlyerEvent;
@@ -32,14 +34,15 @@ import org.ctp.enchantmentsolution.utils.player.attributes.FlySpeedAttribute;
 
 public class ESPlayer {
 
-	private static Map<Integer, Integer> GLOBAL_BLOCKS = new HashMap<Integer, Integer>();
+	private static Map<Long, Integer> GLOBAL_BLOCKS = new HashMap<Long, Integer>();
 	private static double CONTAGION_CHANCE = 0.0005;
 	private final OfflinePlayer player;
 	private Player onlinePlayer;
 	private RPGPlayer rpg;
-	private Map<Enchantment, Integer> cooldowns;
-	private List<ItemStack> soulItems;
-	private Map<Integer, Integer> blocksBroken;
+	private Map<Enchantment, Long> cooldowns, timedDisable;
+	private List<Enchantment> disable;
+	private List<ItemStack> soulItems, telepathyItems;
+	private Map<Long, Integer> blocksBroken;
 	private float currentExhaustion, pastExhaustion;
 	private ItemStack elytra;
 	private boolean canFly, didTick, reset;
@@ -49,16 +52,20 @@ public class ESPlayer {
 	private List<AttributeLevel> attributes;
 	private ESPlayerAttributeInstance flyAttribute = new FlySpeedAttribute();
 	private Streak streak;
+	private Runnable telepathyTask;
 
 	public ESPlayer(OfflinePlayer player) {
 		this.player = player;
 		onlinePlayer = player.getPlayer();
 		rpg = RPGUtils.getPlayer(player);
-		cooldowns = new HashMap<Enchantment, Integer>();
-		blocksBroken = new HashMap<Integer, Integer>();
+		cooldowns = new HashMap<Enchantment, Long>();
+		timedDisable = new HashMap<Enchantment, Long>();
+		disable = new ArrayList<Enchantment>();
+		blocksBroken = new HashMap<Long, Integer>();
 		overkillDeaths = new ArrayList<OverkillDeath>();
 		attributes = new ArrayList<AttributeLevel>();
 		currentFFType = FFType.NONE;
+		telepathyItems = new ArrayList<ItemStack>();
 		removeSoulItems();
 		flyAttribute.addModifier(new AttributeModifier(UUID.fromString("ffffffff-ffff-ffff-ffff-000000000000"), "frequentFlyerFlight", -0.08, Operation.ADD_NUMBER));
 	}
@@ -101,6 +108,17 @@ public class ESPlayer {
 		armor[1] = getOnlinePlayer().getInventory().getChestplate();
 		armor[2] = getOnlinePlayer().getInventory().getLeggings();
 		armor[3] = getOnlinePlayer().getInventory().getBoots();
+
+		return armor;
+	}
+
+	public ItemSlot[] getArmorAndType() {
+		ItemSlot[] armor = new ItemSlot[4];
+		if (!isOnline()) return armor;
+		armor[0] = new ItemSlot(getOnlinePlayer().getInventory().getHelmet(), ItemSlotType.HELMET);
+		armor[1] = new ItemSlot(getOnlinePlayer().getInventory().getChestplate(), ItemSlotType.CHESTPLATE);
+		armor[2] = new ItemSlot(getOnlinePlayer().getInventory().getLeggings(), ItemSlotType.LEGGINGS);
+		armor[3] = new ItemSlot(getOnlinePlayer().getInventory().getBoots(), ItemSlotType.BOOTS);
 
 		return armor;
 	}
@@ -155,14 +173,14 @@ public class ESPlayer {
 	}
 
 	public boolean canBreakBlock() {
-		int tick = ServerNMS.getCurrentTick();
+		long tick = ServerNMS.getCurrentTick();
 		if (GLOBAL_BLOCKS.containsKey(tick) && GLOBAL_BLOCKS.get(tick) >= ConfigString.MULTI_BLOCK_BLOCKS_GLOBAL.getInt()) return false;
 		if (blocksBroken.containsKey(tick) && blocksBroken.get(tick) >= ConfigString.MULTI_BLOCK_BLOCKS_PLAYER.getInt()) return false;
 		return true;
 	}
 
 	public void breakBlock() {
-		int tick = ServerNMS.getCurrentTick();
+		long tick = ServerNMS.getCurrentTick();
 		int blocks = 1;
 		if (blocksBroken.containsKey(tick)) blocks += blocksBroken.get(tick);
 		blocksBroken.put(tick, blocks);
@@ -311,10 +329,10 @@ public class ESPlayer {
 		FrequentFlyerEvent event = new FrequentFlyerEvent(player, frequentFlyerLevel, FFType.REMOVE_FLIGHT);
 		Bukkit.getPluginManager().callEvent(event);
 		if (!event.isCancelled()) {
-			this.canFly = false;
+			canFly = false;
 			currentFFType = FFType.NONE;
-			player.setAllowFlight(this.canFly);
-			if (player.isFlying() && !this.canFly) player.setFlying(false);
+			player.setAllowFlight(canFly);
+			if (player.isFlying() && !canFly) player.setFlying(false);
 		}
 	}
 
@@ -350,7 +368,7 @@ public class ESPlayer {
 	}
 
 	public double getForceFeedChance(int level) {
-		return 0.005 + level * 0.005;
+		return 0.0075 + level * 0.0075;
 	}
 
 	public List<ItemStack> getForceFeedItems() {
@@ -400,6 +418,55 @@ public class ESPlayer {
 		}
 	}
 
+	public void giveTelepathyItems() {
+		Collection<ItemStack> newItems = new ArrayList<ItemStack>(telepathyItems);
+		telepathyItems = new ArrayList<ItemStack>();
+		telepathyTask = null;
+		Player p = Bukkit.getPlayer(getOnlinePlayer().getUniqueId());
+		ItemUtils.giveItemsToPlayer(p, newItems, p.getLocation(), true, HandMethod.PICK_UP);
+	}
+
+	public void addTelepathyItems(Collection<ItemStack> items) {
+		checkTelepathyTask();
+		for(ItemStack item: items)
+			addTelepathyItem(item);
+		checkTelepathyTask();
+	}
+
+	private void checkTelepathyTask() {
+		if (telepathyTask == null) {
+			telepathyTask = new Runnable() {
+				@Override
+				public void run() {
+					giveTelepathyItems();
+				}
+			};
+			Bukkit.getScheduler().runTaskLater(EnchantmentSolution.getPlugin(), telepathyTask, 0l);
+		}
+	}
+
+	private void addTelepathyItem(ItemStack item) {
+		checkTelepathyTask();
+		int amount = item.getAmount();
+		for(ItemStack i: telepathyItems)
+			if (i.isSimilar(item) && i.getMaxStackSize() > 1) if (i.getAmount() == i.getMaxStackSize()) continue;
+			else if (i.getAmount() + amount > i.getMaxStackSize()) {
+				amount -= i.getMaxStackSize();
+				i.setAmount(i.getMaxStackSize());
+				break;
+			} else {
+				i.setAmount(amount + i.getAmount());
+				amount = 0;
+				break;
+			}
+			else {}
+		if (amount > 0) {
+			item.setAmount(amount);
+			telepathyItems.add(item);
+		}
+		checkTelepathyTask();
+	}
+
 	public int addToStreak(LivingEntity entity) {
 		if (streak == null) streak = new Streak();
 		return streak.addToStreak(entity);
@@ -417,4 +484,59 @@ public class ESPlayer {
 		this.streak.setStreak(type, streak);
 	}
 
+	public void addTimedDisableEnchant(Enchantment enchant, int ticks) {
+		long tick = ServerNMS.getCurrentTick() + ticks;
+		if (!isTimedDisableEnchant(enchant)) timedDisable.put(enchant, tick);
+	}
+
+	public void addTimeToDisableEnchant(Enchantment enchant, int moreTicks) {
+		if (isTimedDisableEnchant(enchant)) {
+			long tick = timedDisable.get(enchant) + moreTicks;
+			timedDisable.put(enchant, tick);
+		} else
+			addTimedDisableEnchant(enchant, moreTicks);
+	}
+
+	public void setTimeDisableEnchant(Enchantment enchant, int ticks) {
+		long tick = ServerNMS.getCurrentTick() + ticks;
+		timedDisable.put(enchant, tick);
+	}
+
+	public void removeTimedDisableEnchant(Enchantment enchant) {
+		timedDisable.remove(enchant);
+	}
+
+	public void removeTimeFromDisableEnchant(Enchantment enchant, int lessTicks) {
+		if (isTimedDisableEnchant(enchant)) {
+			long tick = timedDisable.get(enchant) - lessTicks;
+			timedDisable.put(enchant, tick);
+		}
+	}
+
+	public boolean isTimedDisableEnchant(Enchantment enchant) {
+		if (timedDisable.containsKey(enchant)) {
+			long tick = timedDisable.get(enchant);
+			long currentTick = ServerNMS.getCurrentTick();
+			return tick >= currentTick;
+		}
+		return false;
+	}
+
+	public void setDisabledEnchant(Enchantment enchant) {
+		if (!isDisabledEnchant(enchant)) disable.add(enchant);
+	}
+
+	public boolean isDisabledEnchant(Enchantment enchant) {
+		for(Enchantment e: disable)
+			if (e == enchant) return true;
+		return false;
+	}
+
+	public void removeDisabledEnchant(Enchantment enchant) {
+		Iterator<Enchantment> iter = disable.iterator();
+		while (iter.hasNext()) {
+			Enchantment e = iter.next();
+			if (e == enchant) iter.remove();
+		}
+	}
 }

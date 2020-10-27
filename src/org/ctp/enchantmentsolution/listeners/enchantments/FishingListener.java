@@ -39,6 +39,7 @@ public class FishingListener extends Enchantmentable {
 			Player player = event.getPlayer();
 			ItemStack rod = player.getInventory().getItemInMainHand();
 			if (EnchantmentUtils.hasEnchantment(rod, RegisterEnchantments.FRIED) && canRun(RegisterEnchantments.FRIED, event) && fish.contains(caught.getType())) {
+				if (isDisabled(player, RegisterEnchantments.FRIED)) return;
 				FriedEvent e = new FriedEvent(player, caught.getType());
 				Bukkit.getPluginManager().callEvent(e);
 				if (!e.isCancelled()) {
@@ -53,6 +54,7 @@ public class FishingListener extends Enchantmentable {
 				}
 			}
 			if (EnchantmentUtils.hasEnchantment(rod, RegisterEnchantments.ANGLER) && canRun(RegisterEnchantments.ANGLER, event) && fish.contains(caught.getType())) {
+				if (isDisabled(player, RegisterEnchantments.ANGLER)) return;
 				AnglerEvent e = new AnglerEvent(player, caught.getType(), EnchantmentUtils.getLevel(rod, RegisterEnchantments.ANGLER));
 				Bukkit.getPluginManager().callEvent(e);
 				if (!e.isCancelled()) {
@@ -71,6 +73,7 @@ public class FishingListener extends Enchantmentable {
 	private void expShare(PlayerFishEvent event) {
 		if (!canRun(RegisterEnchantments.EXP_SHARE, event)) return;
 		Player player = event.getPlayer();
+		if (isDisabled(player, RegisterEnchantments.EXP_SHARE)) return;
 		ItemStack item = player.getInventory().getItemInMainHand();
 		if (item != null && EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.EXP_SHARE)) {
 			int exp = event.getExpToDrop();

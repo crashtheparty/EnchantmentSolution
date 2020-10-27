@@ -3,50 +3,141 @@ quick_anvil: true
 
 fast:
     override_enchantment_cost: false
-    enchantment_cost: 1
+    enchant_costs:
+        use:
+        - 'level'
+        - 'lapis'
+        - 'economy'
+        level: 1
+        lapis: 0
+        economy: 0
     override_anvil_cost: false
-    anvil_cost: 1
+    anvil_level_cost: 1
     random_bookshelves: false
 mondays:
     override_anvil_cost: true
-    anvil_cost: 0
+    anvil_level_cost: 0
     enchantments:
         0:
             enchantment: 'protection'
-            cost: 5
+            costs:
+                use:
+                - 'level'
+                - 'lapis'
+                - 'economy'
+                level: 5
+                lapis: 0
+                economy: 0
         1:
             enchantment: 'sharpness'
-            cost: 5
+            costs:
+                use:
+                - 'level'
+                - 'lapis'
+                - 'economy'
+                level: 5
+                lapis: 0
+                economy: 0
         2:
             enchantment: 'feather_falling'
-            cost: 5
+            costs:
+                use:
+                - 'level'
+                - 'lapis'
+                - 'economy'
+                level: 5
+                lapis: 0
+                economy: 0
         3:
             enchantment: 'power'
-            cost: 5
+            costs:
+                use:
+                - 'level'
+                - 'lapis'
+                - 'economy'
+                level: 5
+                lapis: 0
+                economy: 0
         4:
             enchantment: 'unbreaking'
-            cost: 5
+            costs:
+                use:
+                - 'level'
+                - 'lapis'
+                - 'economy'
+                level: 5
+                lapis: 0
+                economy: 0
         5:
             enchantment: 'luck_of_the_sea'
-            cost: 5
+            costs:
+                use:
+                - 'level'
+                - 'lapis'
+                - 'economy'
+                level: 5
+                lapis: 0
+                economy: 0
         6:
             enchantment: 'brine'
-            cost: 10
+            costs:
+                use:
+                - 'level'
+                - 'lapis'
+                - 'economy'
+                level: 10
+                lapis: 0
+                economy: 0
         7:
             enchantment: 'life'
-            cost: 15
+            costs:
+                use:
+                - 'level'
+                - 'lapis'
+                - 'economy'
+                level: 15
+                lapis: 0
+                economy: 0
         8:
             enchantment: 'gung_ho'
-            cost: 15
+            costs:
+                use:
+                - 'level'
+                - 'lapis'
+                - 'economy'
+                level: 15
+                lapis: 0
+                economy: 0
         9:
             enchantment: 'quick_strike'
-            cost: 10
+            costs:
+                use:
+                - 'level'
+                - 'lapis'
+                - 'economy'
+                level: 10
+                lapis: 0
+                economy: 0
         10:
             enchantment: 'tank'
-            cost: 10
+            costs:
+                use:
+                - 'level'
+                - 'lapis'
+                - 'economy'
+                level: 10
+                lapis: 0
+                economy: 0
         11:
             enchantment: 'RandomEnchant'
-            cost: 10
+            costs:
+                use:
+                - 'level'
+                - 'lapis'
+                - 'economy'
+                level: 10
+                lapis: 0
+                economy: 0
 
 custom: 
     paging: 28
@@ -63,12 +154,22 @@ config_comments:
     
     fast:
         override_enchantment_cost:
-        - 'Override the default enchantment cost to the one set by ''fast.enchantment_cost''.'
-        enchantment_cost:
-        - 'Cost to enchant any item type.'
+        - 'Override the default enchantment cost to the one set by ''fast.enchant_costs''.'
+        enchant_costs:
+            use:
+            - 'Which costs will be used by ES for a player to buy the item.'
+            - 'level: The player''s experience level.'
+            - 'lapis: The lapis lazuli a player has.' 
+            - 'economy: The money the player has using a Vault Economy plugin.'
+            level:
+            - 'The experience level cost of enchanting an item.'
+            lapis:
+            - 'The lapis lazuli a player must have in their inventory to enchant an item.'
+            economy:
+            - 'The Vault economy cost of enchanting an item.'
         override_anvil_cost:
-        - 'Override the default anvil cost to the one set by ''fast.anvil_cost''.'
-        anvil_cost:
+        - 'Override the default anvil cost to the one set by ''fast.anvil_level_cost''.'
+        anvil_level_cost:
         - 'Cost to anvil any item.'
     custom:
         paging:

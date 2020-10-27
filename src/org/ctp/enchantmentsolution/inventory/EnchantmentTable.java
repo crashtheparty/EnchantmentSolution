@@ -265,13 +265,15 @@ public class EnchantmentTable implements InventoryData {
 				for(int i = 0; i < player.getInventory().getSize(); i++) {
 					if (remove == 0) break;
 					ItemStack item = player.getInventory().getItem(i);
-					if (item != null && item.getType().equals(Material.LAPIS_LAZULI)) if (item.getAmount() - remove <= 0) {
-						remove -= item.getAmount();
-						player.getInventory().setItem(i, new ItemStack(Material.AIR));
-					} else {
-						item.setAmount(item.getAmount() - remove);
-						break;
-					}
+					if (item != null && item.getType() == Material.LAPIS_LAZULI) {
+						if (item.getAmount() - remove <= 0) {
+							remove -= item.getAmount();
+							player.getInventory().setItem(i, new ItemStack(Material.AIR));
+						} else {
+							item.setAmount(item.getAmount() - remove);
+							break;
+						}
+					} else {}
 				}
 		}
 		List<EnchantmentLevel> enchLevels = table.getEnchantments(new ItemData(enchantableItem))[level].getEnchantments();

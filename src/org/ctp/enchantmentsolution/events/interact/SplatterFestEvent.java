@@ -11,7 +11,7 @@ public class SplatterFestEvent extends ProjectileSpawnEvent {
 	private final boolean hasEgg;
 
 	public SplatterFestEvent(Player who, ItemStack item, boolean takeEgg, boolean hasEgg) {
-		super(who, new EnchantmentLevel(CERegister.SPLATTER_FEST, 1), item, 1);
+		super(who, new EnchantmentLevel(CERegister.SPLATTER_FEST, 1), item, 2);
 		setTakeEgg(takeEgg);
 		this.hasEgg = hasEgg;
 	}

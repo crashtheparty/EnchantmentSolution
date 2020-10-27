@@ -23,6 +23,7 @@ public class RegisterEnchantments {
 	private static List<CustomEnchantment> ENCHANTMENTS = new ArrayList<CustomEnchantment>();
 	private static List<CustomEnchantment> REGISTERED_ENCHANTMENTS = new ArrayList<CustomEnchantment>();
 	private static List<CustomEnchantment> CURSE_ENCHANTMENTS = new ArrayList<CustomEnchantment>();
+	private static List<CustomEnchantment> DISABLED_ENCHANTMENTS = new ArrayList<CustomEnchantment>();
 
 	public static final Enchantment SOULBOUND = new CustomEnchantmentWrapper("soulbound", "SOULBOUND");
 	public static final Enchantment SOUL_REAPER = new CustomEnchantmentWrapper("soul_reaper", "SOUL_REAPER");
@@ -103,6 +104,10 @@ public class RegisterEnchantments {
 		return ENCHANTMENTS;
 	}
 
+	public static List<CustomEnchantment> getDisabledEnchantments() {
+		return DISABLED_ENCHANTMENTS;
+	}
+
 	public static List<CustomEnchantment> getRegisteredEnchantments() {
 		return REGISTERED_ENCHANTMENTS;
 	}
@@ -172,6 +177,7 @@ public class RegisterEnchantments {
 
 	public static void setEnchantments() {
 		CURSE_ENCHANTMENTS = null;
+		DISABLED_ENCHANTMENTS = new ArrayList<CustomEnchantment>();
 		boolean levelFifty = ConfigString.LEVEL_FIFTY.getBoolean();
 		for(int i = 0; i < ENCHANTMENTS.size(); i++) {
 			CustomEnchantment enchantment = ENCHANTMENTS.get(i);
@@ -194,8 +200,10 @@ public class RegisterEnchantments {
 				List<ItemType> anvilTypes = getTypes(config, namespace, enchantment, "anvil_item_types");
 				List<EnchantmentLocation> locations = getEnchantmentLocations(config, namespace, enchantment);
 				if (registerEnchantment(enchantment)) enchantment.setEnabled(true);
-				else
+				else {
 					enchantment.setEnabled(false);
+					DISABLED_ENCHANTMENTS.add(enchantment);
+				}
 				String description = StringUtils.decodeString(language.getString("enchantment.descriptions.default_enchantments." + enchantment.getName()));
 				enchantment.setDescription(description);
 				if (levelFifty) enchantment.setLevelFifty(enchantmentTypes, anvilTypes, locations);
@@ -206,10 +214,14 @@ public class RegisterEnchantments {
 
 			if (registerEnchantment(enchantment)) {
 				if (config.getBoolean(namespace + "." + enchantment.getName() + ".enabled")) enchantment.setEnabled(true);
-				else
+				else {
 					enchantment.setEnabled(false);
-			} else
+					DISABLED_ENCHANTMENTS.add(enchantment);
+				}
+			} else {
 				enchantment.setEnabled(false);
+				DISABLED_ENCHANTMENTS.add(enchantment);
+			}
 			String displayName = StringUtils.decodeString(language.getString("enchantment.display_names." + namespace + "." + enchantment.getName()));
 			String description = StringUtils.decodeString(language.getString("enchantment.descriptions." + namespace + "." + enchantment.getName()));
 
@@ -234,9 +246,7 @@ public class RegisterEnchantments {
 			} else if (levelFifty) enchantment.setLevelFifty(enchantmentTypes, anvilTypes, locations);
 			else
 				enchantment.setLevelThirty(enchantmentTypes, anvilTypes, locations);
-			if (!namespace.equals("default_enchantments")) enchantment.setDisplayName(displayName);
-			else
-				enchantment.setDisplayName(ConfigUtils.getLanguage());
+			enchantment.setDisplayName(displayName);
 			enchantment.setDescription(description);
 		}
 	}

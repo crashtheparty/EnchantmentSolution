@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockDropItemEvent;
 import org.bukkit.inventory.ItemStack;
+import org.ctp.crashapi.api.Configurations;
 import org.ctp.crashapi.item.BlockSound;
 import org.ctp.crashapi.item.MatData;
 import org.ctp.crashapi.utils.DamageUtils;
@@ -53,15 +54,7 @@ public class BlockUtils {
 		locs.remove(loc);
 		MULTI_BLOCK_BREAK.put(enchantment, locs);
 	}
-
-	public static boolean isAdjacent(Block b1, Block b2) {
-		List<BlockFace> faces = Arrays.asList(BlockFace.values());
-		if (!ConfigString.MULTI_BLOCK_ALL_FACES.getBoolean()) Arrays.asList(BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST, BlockFace.UP, BlockFace.DOWN);
-		for(BlockFace face: faces)
-			if (b1.getRelative(face).getLocation().equals(b2.getLocation())) return true;
-		return false;
-	}
-
+	
 	public static boolean isNextTo(Block b1, Block b2) {
 		int x = Math.abs(b1.getX() - b2.getX());
 		int y = Math.abs(b1.getY() - b2.getY());
@@ -115,7 +108,7 @@ public class BlockUtils {
 			AdvancementUtils.awardCriteria(player, ESAdvancement.FAST_AND_FURIOUS, "diamond_pickaxe");
 			if (newBlock.getType().equals(Material.SNOW) && ItemBreakType.getType(item.getType()).getBreakTypes().contains(Material.SNOW)) {
 				int num = ((Snow) newBlock.getBlockData()).getLayers();
-				if (dropChance > Math.random()) ItemUtils.dropItem(new ItemStack(Material.SNOWBALL, num), newBlock.getLocation());
+				if (dropChance > Math.random()) ItemUtils.dropItem(new ItemStack(Material.SNOWBALL, num), newBlock.getLocation(), Configurations.getConfigurations().getConfig().getBoolean("drop_items_naturally"));
 			}
 			player.incrementStatistic(Statistic.MINE_BLOCK, newBlock.getType());
 			player.incrementStatistic(Statistic.USE_ITEM, item.getType());

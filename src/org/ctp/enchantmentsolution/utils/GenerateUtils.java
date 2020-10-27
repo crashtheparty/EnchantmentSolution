@@ -166,6 +166,7 @@ public class GenerateUtils {
 		int random = (int) (Math.random() * lists.size());
 		if (random < min && !(min < 0)) random = min;
 		if (random > max && !(max > lists.size())) random = max;
+		if (max >= lists.size()) random = lists.size() - 1;
 		List<EnchantmentLevel> levels = lists.get(random).getEnchantments();
 
 		while (lists.size() > 1 && (levels == null || levels.size() == 0)) {
