@@ -105,7 +105,8 @@ public class EnchantmentSolutionCommand implements CommandExecutor, TabCompleter
 	}
 
 	public static boolean containsCommand(ESCommand details, String s) {
-		return s.equals(details.getCommand()) || details.getAliases().contains(s);
+		if (details == null) return false;
+		return details.getCommand() != null && details.getCommand().equals(s) || details.getAliases() != null && details.getAliases().contains(s);
 	}
 
 	@Override

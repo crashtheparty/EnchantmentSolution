@@ -72,7 +72,7 @@ public class EnchantmentLevel {
 		return key.getNamespace() + "+" + key.getKey() + " " + level;
 	}
 
-	public static List<EnchantmentLevel> fromList(Map<Enchantment, Integer> enchantmentList) {
+	public static List<EnchantmentLevel> fromMap(Map<Enchantment, Integer> enchantmentList) {
 		Iterator<Entry<Enchantment, Integer>> iter = enchantmentList.entrySet().iterator();
 		List<EnchantmentLevel> levels = new ArrayList<EnchantmentLevel>();
 		while (iter.hasNext()) {
@@ -80,5 +80,12 @@ public class EnchantmentLevel {
 			levels.add(new EnchantmentLevel(RegisterEnchantments.getCustomEnchantment(entry.getKey()), entry.getValue()));
 		}
 		return levels;
+	}
+
+	public static Map<Enchantment, Integer> fromList(List<EnchantmentLevel> levels) {
+		Map<Enchantment, Integer> map = new HashMap<Enchantment, Integer>();
+		for(EnchantmentLevel level: levels)
+			map.put(level.getEnchant().getRelativeEnchantment(), level.getLevel());
+		return map;
 	}
 }

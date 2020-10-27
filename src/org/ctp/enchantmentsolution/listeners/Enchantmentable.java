@@ -1,22 +1,30 @@
 package org.ctp.enchantmentsolution.listeners;
 
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.Listener;
+import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.utils.Reflectionable;
+import org.ctp.enchantmentsolution.utils.player.ESPlayer;
 
 public abstract class Enchantmentable implements Listener, Reflectionable {
 
+	protected boolean isDisabled(Player player, Enchantment enchantment) {
+		ESPlayer esPlayer = EnchantmentSolution.getESPlayer(player);
+		return esPlayer.isDisabledEnchant(enchantment) || esPlayer.isTimedDisableEnchant(enchantment);
+	}
+	
 	protected boolean canRun(Enchantment enchantment, Event event) {
 		if (!RegisterEnchantments.isEnabled(enchantment)) return false;
-		if (event instanceof Cancellable) if (((Cancellable) event).isCancelled()) return false;
+		if (event instanceof Cancellable && ((Cancellable) event).isCancelled()) return false;
 		return true;
 	}
 
 	protected boolean canRun(Event event, boolean all, Enchantment... enchantments) {
-		if (event instanceof Cancellable) if (((Cancellable) event).isCancelled()) return false;
+		if (event instanceof Cancellable && ((Cancellable) event).isCancelled()) return false;
 		if (all) {
 			for(Enchantment enchantment: enchantments)
 				if (!RegisterEnchantments.isEnabled(enchantment)) all = false;

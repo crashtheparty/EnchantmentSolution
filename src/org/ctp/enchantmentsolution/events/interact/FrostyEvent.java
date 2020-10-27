@@ -11,7 +11,7 @@ public class FrostyEvent extends ProjectileSpawnEvent {
 	private final boolean hasSnowball;
 
 	public FrostyEvent(Player who, ItemStack item, boolean takeSnowball, boolean hasSnowball) {
-		super(who, new EnchantmentLevel(CERegister.FROSTY, 1), item, 1);
+		super(who, new EnchantmentLevel(CERegister.FROSTY, 1), item, 2);
 		setTakeSnowball(takeSnowball);
 		this.hasSnowball = hasSnowball;
 	}

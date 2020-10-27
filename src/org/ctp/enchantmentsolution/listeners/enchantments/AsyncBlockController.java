@@ -31,7 +31,7 @@ public class AsyncBlockController {
 
 		List<Location> breaking = new ArrayList<Location>();
 		for(Location loc: allBlocks)
-			if (BlockUtils.isAdjacent(loc.getBlock(), original)) breaking.add(loc);
+			if (BlockUtils.isNextTo(loc.getBlock(), original)) breaking.add(loc);
 		breakingBlocks(breaking);
 	}
 
@@ -64,7 +64,7 @@ public class AsyncBlockController {
 				if (BlockUtils.multiBreakBlock(player, item, b, RegisterEnchantments.HEIGHT_PLUS_PLUS)) blocksBrokenTick++;
 				allBlocks.remove(b);
 				for(Location loc: allBlocks)
-					if (!breaking.contains(loc) && !adjacent.contains(loc) && BlockUtils.isAdjacent(loc.getBlock(), b.getBlock())) adjacent.add(loc);
+					if (!breaking.contains(loc) && !adjacent.contains(loc) && BlockUtils.isNextTo(loc.getBlock(), b.getBlock())) adjacent.add(loc);
 				iter.remove();
 			}
 			if (combine) {

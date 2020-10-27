@@ -41,7 +41,7 @@ public class ContagionCurseThread extends EnchantmentThread {
 	public void run() {
 		ESPlayer player = getPlayer();
 		List<CustomEnchantment> enchantments = RegisterEnchantments.getCurseEnchantments();
-		if (enchantments.size() == 0 || player.getContagionChance() == 0) {
+		if (!RegisterEnchantments.isEnabled(RegisterEnchantments.CURSE_OF_CONTAGION) || enchantments.size() == 0 || player.getContagionChance() == 0) {
 			remove();
 			return;
 		}
@@ -98,7 +98,7 @@ public class ContagionCurseThread extends EnchantmentThread {
 			}
 		return noCurse;
 	}
-	
+
 	private void remove() {
 		CONTAGION_THREADS.remove(this);
 		Bukkit.getScheduler().cancelTask(getScheduler());

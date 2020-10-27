@@ -489,10 +489,10 @@ public abstract class CustomEnchantment {
 	}
 
 	public String getAdvancementDescription() {
-		String page = Chatable.get().getMessage(ChatUtils.getCodes(), "enchantment.description") + getDescription() + "\n";
-		page += Chatable.get().getMessage(ChatUtils.getCodes(), "enchantment.max-level") + getMaxLevel() + ".\n";
-		page += Chatable.get().getMessage(ChatUtils.getCodes(), "enchantment.weight") + getWeightName() + ".\n";
-		page += Chatable.get().getMessage(ChatUtils.getCodes(), "enchantment.conflicting-enchantments");
+		String page = Chatable.get().getMessage(ChatUtils.getCodes(), "enchantment.advancement-description") + getDescription() + "\n";
+		page += Chatable.get().getMessage(ChatUtils.getCodes(), "enchantment.advancement-max-level") + getMaxLevel() + ".\n";
+		page += Chatable.get().getMessage(ChatUtils.getCodes(), "enchantment.advancement-weight") + getWeightName() + ".\n";
+		page += Chatable.get().getMessage(ChatUtils.getCodes(), "enchantment.advancement-conflicting-enchantments");
 		if (getConflictingEnchantments().size() > 0) {
 			List<String> names = new ArrayList<String>();
 			for(int i = 0; i < getConflictingEnchantments().size(); i++) {
