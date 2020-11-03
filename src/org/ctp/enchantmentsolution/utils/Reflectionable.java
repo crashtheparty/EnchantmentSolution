@@ -1,16 +1,16 @@
 package org.ctp.enchantmentsolution.utils;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.util.*;
 import java.util.Map.Entry;
 
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.potion.PotionEffectType;
+import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
+import org.ctp.enchantmentsolution.utils.player.ESPlayer;
 
 public interface Reflectionable {
 
@@ -115,5 +115,11 @@ public interface Reflectionable {
 				if (RegisterEnchantments.isEnabled(enchantment)) return true;
 			return false;
 		}
+	}
+
+	default boolean isDisabled(Player player, Enchantment enchantment) {
+		ESPlayer esPlayer = EnchantmentSolution.getESPlayer(player);
+		if (esPlayer == null) return false;
+		return esPlayer.hasTimedDisable(player, enchantment) || esPlayer.hasDisabled(player, enchantment);
 	}
 }

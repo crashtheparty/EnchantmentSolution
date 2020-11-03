@@ -34,14 +34,15 @@ public class ExtraBlockListener implements Listener {
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onBlockBreak(BlockBreakEvent event) {
 		if (GaiaUtils.hasLocation(event.getBlock().getLocation())) {
-			for (GaiaTrees tree : GaiaTrees.values())
+			for(GaiaTrees tree: GaiaTrees.values())
 				if (event.getBlock().getType() == tree.getSapling().getMaterial()) {
 					event.getBlock().setType(Material.AIR);
 					event.setCancelled(true);
+					AdvancementUtils.awardCriteria(event.getPlayer(), ESAdvancement.SCOURGE_OF_THE_FOREST, "tree");
 				}
 			GaiaUtils.removeLocation(event.getBlock().getLocation());
 		}
-		
+
 		if (ConfigString.MULTI_BLOCK_ASYNC.getBoolean() && BlockUtils.multiBlockBreakContains(event.getBlock().getLocation()) && !(event instanceof BlockBreakMultiEvent)) event.setCancelled(true);
 
 		if (WalkerUtils.hasBlock(event.getBlock())) {
@@ -49,14 +50,14 @@ public class ExtraBlockListener implements Listener {
 			if (WalkerUtils.getWalker(event.getBlock()).getEnchantment() == RegisterEnchantments.VOID_WALKER) AdvancementUtils.awardCriteria(event.getPlayer(), ESAdvancement.DETERMINED_CHEATER, "cheater");
 		}
 	}
-	
+
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onBlockDropItem(BlockDropItemEvent event) {
 		BlockState state = event.getBlockState();
 		BlockData data = state.getBlockData();
 		List<Material> shulker = ESArrays.getShulkerBoxes();
 
-		for (Item i : event.getItems()) {
+		for(Item i: event.getItems()) {
 			ItemStack eventItem = i.getItemStack();
 			if (shulker.contains(data.getMaterial()) && shulker.contains(eventItem.getType())) {
 				Block block = event.getBlock();

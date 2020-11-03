@@ -10,10 +10,13 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.ctp.crashapi.item.ItemData;
-import org.ctp.crashapi.item.ItemType;
+import org.bukkit.plugin.java.JavaPlugin;
+import org.ctp.crashapi.events.ItemEquipEvent.HandMethod;
+import org.ctp.crashapi.item.*;
 import org.ctp.crashapi.nms.ServerNMS;
 import org.ctp.crashapi.utils.DamageUtils;
+import org.ctp.crashapi.utils.ItemUtils;
+import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.*;
 import org.ctp.enchantmentsolution.events.player.FrequentFlyerEvent;
@@ -32,33 +35,39 @@ import org.ctp.enchantmentsolution.utils.player.attributes.FlySpeedAttribute;
 
 public class ESPlayer {
 
-	private static Map<Integer, Integer> GLOBAL_BLOCKS = new HashMap<Integer, Integer>();
+	private static Map<Long, Integer> GLOBAL_BLOCKS = new HashMap<Long, Integer>();
 	private static double CONTAGION_CHANCE = 0.0005;
 	private final OfflinePlayer player;
 	private Player onlinePlayer;
 	private RPGPlayer rpg;
-	private Map<Enchantment, Integer> cooldowns;
-	private List<ItemStack> soulItems;
-	private Map<Integer, Integer> blocksBroken;
+	private Map<Enchantment, Long> cooldowns;
+	private List<EnchantmentTimedDisable> timedDisable;
+	private List<EnchantmentDisable> disable;
+	private List<ItemStack> soulItems, telepathyItems;
+	private Map<Long, Integer> blocksBroken;
 	private float currentExhaustion, pastExhaustion;
 	private ItemStack elytra;
-	private boolean canFly, didTick, reset;
-	private int flightDamage, flightDamageLimit, frequentFlyerLevel, icarusDelay;
+	private boolean canFly, didTick, reset, sacrificeAdvancement, plyometricsAdvancement;
+	private int flightDamage, flightDamageLimit, frequentFlyerLevel, icarusDelay, underwaterTicks;
 	private FFType currentFFType;
 	private List<OverkillDeath> overkillDeaths;
 	private List<AttributeLevel> attributes;
 	private ESPlayerAttributeInstance flyAttribute = new FlySpeedAttribute();
 	private Streak streak;
+	private Runnable telepathyTask;
 
 	public ESPlayer(OfflinePlayer player) {
 		this.player = player;
 		onlinePlayer = player.getPlayer();
 		rpg = RPGUtils.getPlayer(player);
-		cooldowns = new HashMap<Enchantment, Integer>();
-		blocksBroken = new HashMap<Integer, Integer>();
+		cooldowns = new HashMap<Enchantment, Long>();
+		timedDisable = new ArrayList<EnchantmentTimedDisable>();
+		disable = new ArrayList<EnchantmentDisable>();
+		blocksBroken = new HashMap<Long, Integer>();
 		overkillDeaths = new ArrayList<OverkillDeath>();
 		attributes = new ArrayList<AttributeLevel>();
 		currentFFType = FFType.NONE;
+		telepathyItems = new ArrayList<ItemStack>();
 		removeSoulItems();
 		flyAttribute.addModifier(new AttributeModifier(UUID.fromString("ffffffff-ffff-ffff-ffff-000000000000"), "frequentFlyerFlight", -0.08, Operation.ADD_NUMBER));
 	}
@@ -89,6 +98,11 @@ public class ESPlayer {
 		return false;
 	}
 
+	public ItemStack getMainHand() {
+		if (!isOnline()) return new ItemStack(Material.AIR);
+		return getOnlinePlayer().getInventory().getItemInMainHand();
+	}
+
 	public ItemStack getOffhand() {
 		if (!isOnline()) return new ItemStack(Material.AIR);
 		return getOnlinePlayer().getInventory().getItemInOffHand();
@@ -101,6 +115,17 @@ public class ESPlayer {
 		armor[1] = getOnlinePlayer().getInventory().getChestplate();
 		armor[2] = getOnlinePlayer().getInventory().getLeggings();
 		armor[3] = getOnlinePlayer().getInventory().getBoots();
+
+		return armor;
+	}
+
+	public ItemSlot[] getArmorAndType() {
+		ItemSlot[] armor = new ItemSlot[4];
+		if (!isOnline()) return armor;
+		armor[0] = new ItemSlot(getOnlinePlayer().getInventory().getHelmet(), ItemSlotType.HELMET);
+		armor[1] = new ItemSlot(getOnlinePlayer().getInventory().getChestplate(), ItemSlotType.CHESTPLATE);
+		armor[2] = new ItemSlot(getOnlinePlayer().getInventory().getLeggings(), ItemSlotType.LEGGINGS);
+		armor[3] = new ItemSlot(getOnlinePlayer().getInventory().getBoots(), ItemSlotType.BOOTS);
 
 		return armor;
 	}
@@ -125,7 +150,7 @@ public class ESPlayer {
 	public List<ItemStack> getUnstableItems() {
 		List<ItemStack> items = new ArrayList<ItemStack>();
 		for(ItemStack item: getEquipped())
-			if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.CURSE_OF_INSTABILITY)) items.add(item);
+			if (item != null && EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.CURSE_OF_INSTABILITY)) items.add(item);
 		return items;
 	}
 
@@ -155,14 +180,14 @@ public class ESPlayer {
 	}
 
 	public boolean canBreakBlock() {
-		int tick = ServerNMS.getCurrentTick();
+		long tick = ServerNMS.getCurrentTick();
 		if (GLOBAL_BLOCKS.containsKey(tick) && GLOBAL_BLOCKS.get(tick) >= ConfigString.MULTI_BLOCK_BLOCKS_GLOBAL.getInt()) return false;
 		if (blocksBroken.containsKey(tick) && blocksBroken.get(tick) >= ConfigString.MULTI_BLOCK_BLOCKS_PLAYER.getInt()) return false;
 		return true;
 	}
 
 	public void breakBlock() {
-		int tick = ServerNMS.getCurrentTick();
+		long tick = ServerNMS.getCurrentTick();
 		int blocks = 1;
 		if (blocksBroken.containsKey(tick)) blocks += blocksBroken.get(tick);
 		blocksBroken.put(tick, blocks);
@@ -311,10 +336,10 @@ public class ESPlayer {
 		FrequentFlyerEvent event = new FrequentFlyerEvent(player, frequentFlyerLevel, FFType.REMOVE_FLIGHT);
 		Bukkit.getPluginManager().callEvent(event);
 		if (!event.isCancelled()) {
-			this.canFly = false;
+			canFly = false;
 			currentFFType = FFType.NONE;
-			player.setAllowFlight(this.canFly);
-			if (player.isFlying() && !this.canFly) player.setFlying(false);
+			player.setAllowFlight(canFly);
+			if (player.isFlying() && !canFly) player.setFlying(false);
 		}
 	}
 
@@ -350,7 +375,7 @@ public class ESPlayer {
 	}
 
 	public double getForceFeedChance(int level) {
-		return 0.005 + level * 0.005;
+		return 0.0075 + level * 0.0075;
 	}
 
 	public List<ItemStack> getForceFeedItems() {
@@ -400,12 +425,64 @@ public class ESPlayer {
 		}
 	}
 
+	public void giveTelepathyItems() {
+		Collection<ItemStack> newItems = new ArrayList<ItemStack>(telepathyItems);
+		telepathyItems = new ArrayList<ItemStack>();
+		telepathyTask = null;
+		Player p = Bukkit.getPlayer(getOnlinePlayer().getUniqueId());
+		ItemUtils.giveItemsToPlayer(p, newItems, p.getLocation(), true, HandMethod.PICK_UP);
+	}
+
+	public void addTelepathyItems(Collection<ItemStack> items) {
+		checkTelepathyTask();
+		for(ItemStack item: items)
+			addTelepathyItem(item);
+		checkTelepathyTask();
+	}
+
+	private void checkTelepathyTask() {
+		if (telepathyTask == null) {
+			telepathyTask = new Runnable() {
+				@Override
+				public void run() {
+					giveTelepathyItems();
+				}
+			};
+			Bukkit.getScheduler().runTaskLater(EnchantmentSolution.getPlugin(), telepathyTask, 0l);
+		}
+	}
+
+	private void addTelepathyItem(ItemStack item) {
+		checkTelepathyTask();
+		int amount = item.getAmount();
+		for(ItemStack i: telepathyItems)
+			if (i.isSimilar(item) && i.getMaxStackSize() > 1) if (i.getAmount() == i.getMaxStackSize()) continue;
+			else if (i.getAmount() + amount > i.getMaxStackSize()) {
+				amount -= i.getMaxStackSize();
+				i.setAmount(i.getMaxStackSize());
+				break;
+			} else {
+				i.setAmount(amount + i.getAmount());
+				amount = 0;
+				break;
+			}
+			else {}
+		if (amount > 0) {
+			item.setAmount(amount);
+			telepathyItems.add(item);
+		}
+		checkTelepathyTask();
+	}
+
 	public int addToStreak(LivingEntity entity) {
 		if (streak == null) streak = new Streak();
-		return streak.addToStreak(entity);
+		int entityStreak = streak.addToStreak(entity);
+		if (entityStreak == 100) AdvancementUtils.awardCriteria(onlinePlayer, ESAdvancement.DOUBLE_DAMAGE, "kills");
+		return entityStreak;
 	}
 
 	public int getStreak() {
+		if (streak == null) return 0;
 		return streak.getStreak();
 	}
 
@@ -417,4 +494,112 @@ public class ESPlayer {
 		this.streak.setStreak(type, streak);
 	}
 
+	public void addTimedDisableEnchant(JavaPlugin plugin, Enchantment enchant, int ticks) {
+		long tick = ServerNMS.getCurrentTick() + ticks;
+		if (!isTimedDisableEnchant(plugin, enchant)) timedDisable.add(new EnchantmentTimedDisable(plugin, enchant, tick));
+	}
+
+	public void addTimeToDisableEnchant(JavaPlugin plugin, Enchantment enchant, int moreTicks) {
+		if (isTimedDisableEnchant(plugin, enchant)) {
+			EnchantmentTimedDisable disable = getTimedDisable(plugin, enchant);
+			disable.addToEndTime(moreTicks);
+		} else
+			addTimedDisableEnchant(plugin, enchant, moreTicks);
+	}
+
+	private EnchantmentTimedDisable getTimedDisable(JavaPlugin plugin, Enchantment enchant) {
+		for(EnchantmentTimedDisable etd: timedDisable)
+			if (etd.isSimilar(plugin, enchant)) return etd;
+		return null;
+	}
+
+	public void setTimeDisableEnchant(JavaPlugin plugin, Enchantment enchant, int ticks) {
+		long tick = ServerNMS.getCurrentTick() + ticks;
+		if (isTimedDisableEnchant(plugin, enchant)) {
+			EnchantmentTimedDisable disable = getTimedDisable(plugin, enchant);
+			disable.setEndTime(tick);
+		} else
+			addTimedDisableEnchant(plugin, enchant, ticks);
+	}
+
+	public void removeTimedDisableEnchant(JavaPlugin plugin, Enchantment enchant) {
+		Iterator<EnchantmentTimedDisable> iter = timedDisable.iterator();
+		while (iter.hasNext()) {
+			EnchantmentTimedDisable etd = iter.next();
+			if (etd.isSimilar(plugin, enchant)) iter.remove();
+		}
+	}
+
+	public void removeTimeFromDisableEnchant(JavaPlugin plugin, Enchantment enchant, int lessTicks) {
+		if (isTimedDisableEnchant(plugin, enchant)) {
+			EnchantmentTimedDisable disable = getTimedDisable(plugin, enchant);
+			disable.removeFromEndTime(lessTicks);
+		}
+	}
+
+	public boolean isTimedDisableEnchant(JavaPlugin plugin, Enchantment enchant) {
+		for(EnchantmentTimedDisable etd: timedDisable)
+			if (etd.isSimilar(plugin, enchant)) return true;
+		return false;
+	}
+
+	public boolean hasTimedDisable(Player player, Enchantment enchant) {
+		for(EnchantmentTimedDisable etd: timedDisable)
+			if (etd.getEnchantment() == enchant) return true;
+		return false;
+	}
+
+	public void setDisabledEnchant(JavaPlugin plugin, Enchantment enchant) {
+		if (!isDisabledEnchant(plugin, enchant)) disable.add(new EnchantmentDisable(plugin, enchant));
+	}
+
+	public boolean isDisabledEnchant(JavaPlugin plugin, Enchantment enchant) {
+		for(EnchantmentDisable e: disable)
+			if (e.isSimilar(plugin, enchant)) return true;
+		return false;
+	}
+
+	public void removeDisabledEnchant(JavaPlugin plugin, Enchantment enchant) {
+		Iterator<EnchantmentDisable> iter = disable.iterator();
+		while (iter.hasNext()) {
+			EnchantmentDisable e = iter.next();
+			if (e.isSimilar(plugin, enchant)) iter.remove();
+		}
+	}
+
+	public boolean hasDisabled(Player player, Enchantment enchant) {
+		for(EnchantmentDisable e: disable)
+			if (e.getEnchantment() == enchant) return true;
+		return false;
+	}
+
+	public boolean getSacrificeAdvancement() {
+		return sacrificeAdvancement;
+	}
+
+	public void setSacrificeAdvancement(boolean sacrificeAdvancement) {
+		this.sacrificeAdvancement = sacrificeAdvancement;
+	}
+
+	public boolean getPlyometricsAdvancement() {
+		return plyometricsAdvancement;
+	}
+
+	public void setPlyometricsAdvancement(boolean plyometricsAdvancement) {
+		this.plyometricsAdvancement = plyometricsAdvancement;
+	}
+
+	public void addUnderwaterTick() {
+		for(ItemStack item: getArmor())
+			if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.WATER_BREATHING)) {
+				underwaterTicks++;
+				if (underwaterTicks >= 13900) AdvancementUtils.awardCriteria(onlinePlayer, ESAdvancement.WORLD_RECORD, "record");
+				return;
+			}
+		resetUnderwaterTick();
+	}
+
+	public void resetUnderwaterTick() {
+		underwaterTicks = 0;
+	}
 }

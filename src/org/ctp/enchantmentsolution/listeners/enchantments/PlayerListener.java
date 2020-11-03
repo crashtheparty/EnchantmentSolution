@@ -6,19 +6,22 @@ import java.util.List;
 
 import org.bukkit.*;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
 import org.bukkit.block.data.Waterlogged;
 import org.bukkit.block.data.type.Campfire;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
+import org.bukkit.event.*;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.block.EntityBlockFormEvent;
+import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemBreakEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.util.Vector;
+import org.ctp.crashapi.api.Configurations;
 import org.ctp.crashapi.utils.DamageUtils;
 import org.ctp.crashapi.utils.ItemUtils;
 import org.ctp.crashapi.utils.LocationUtils;
@@ -74,24 +77,28 @@ public class PlayerListener extends Enchantmentable {
 		if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
 			if (event.getHand() == EquipmentSlot.OFF_HAND) return; // off hand packet, ignore.
 			Player player = event.getPlayer();
+			if (isDisabled(player, RegisterEnchantments.FLOWER_GIFT)) return;
 			if (player.getGameMode().equals(GameMode.CREATIVE) || player.getGameMode().equals(GameMode.SPECTATOR)) return;
 			ItemStack item = player.getInventory().getItemInMainHand();
 			Block block = event.getClickedBlock();
 			if (block != null && item != null && EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.FLOWER_GIFT) && FlowerGiftDrop.isItem(block.getType())) {
-				FlowerGiftEvent flowerGiftEvent = new FlowerGiftEvent(player, item, block, FlowerGiftDrop.getItem(block.getType()), block.getLocation());
+				FlowerGiftEvent flowerGiftEvent = new FlowerGiftEvent(player, item, block, FlowerGiftDrop.getItem(block.getType()), LocationUtils.offset(block.getLocation()));
 				Bukkit.getPluginManager().callEvent(flowerGiftEvent);
 
-				if (!flowerGiftEvent.isCancelled()) {
+				if (!flowerGiftEvent.isCancelled() && flowerGiftEvent.overCooldown()) {
 					Location loc = flowerGiftEvent.getDropLocation();
 					ItemStack flowerGift = flowerGiftEvent.getFlower();
+					if (FlowerGiftDrop.isDoubleFlower(flowerGift.getType())) loc.add(0, 1, 0);
 					if (flowerGiftEvent.getFlower() != null) {
 						player.getWorld().spawnParticle(Particle.VILLAGER_HAPPY, loc, 30, 0.2, 0.5, 0.2);
 						if (FlowerGiftDrop.isDoubleFlower(flowerGift.getType())) AdvancementUtils.awardCriteria(player, ESAdvancement.BONEMEAL_PLUS, "bonemeal");
 						else if (FlowerGiftDrop.isWitherRose(flowerGift.getType())) AdvancementUtils.awardCriteria(player, ESAdvancement.JUST_AS_SWEET, "wither_rose");
-						ItemUtils.dropItem(flowerGift, flowerGiftEvent.getDropLocation());
+						ItemUtils.dropItem(flowerGift, flowerGiftEvent.getDropLocation(), Configurations.getConfigurations().getConfig().getBoolean("drop_items_naturally"));
 					} else
 						player.getWorld().spawnParticle(Particle.VILLAGER_ANGRY, loc, 30, 0.2, 0.5, 0.2);
 					player.incrementStatistic(Statistic.USE_ITEM, item.getType());
+					ESPlayer esPlayer = EnchantmentSolution.getESPlayer(player);
+					esPlayer.setCooldown(RegisterEnchantments.FLOWER_GIFT);
 					DamageUtils.damageItem(player, item);
 				}
 			}
@@ -101,6 +108,7 @@ public class PlayerListener extends Enchantmentable {
 	private void frosty(PlayerInteractEvent event) {
 		if (event.getAction().equals(Action.LEFT_CLICK_AIR)) {
 			Player player = event.getPlayer();
+			if (isDisabled(player, RegisterEnchantments.FROSTY)) return;
 			ItemStack item = player.getInventory().getItemInMainHand();
 			if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.FROSTY)) {
 				event.setCancelled(false);
@@ -128,6 +136,7 @@ public class PlayerListener extends Enchantmentable {
 					}
 					player.incrementStatistic(Statistic.USE_ITEM, item.getType());
 					Snowball snowball = player.launchProjectile(Snowball.class);
+					snowball.setMetadata("frosty", new FixedMetadataValue(EnchantmentSolution.getPlugin(), player.getUniqueId().toString()));
 					player.getWorld().playSound(player.getLocation(), Sound.ENTITY_SNOWBALL_THROW, 1, 1);
 					ESPlayer esPlayer = EnchantmentSolution.getESPlayer(player);
 					esPlayer.setCooldown(RegisterEnchantments.FROSTY);
@@ -140,6 +149,7 @@ public class PlayerListener extends Enchantmentable {
 	private void icarus(PlayerChangeCoordsEvent event) {
 		if (!canRun(RegisterEnchantments.ICARUS, event)) return;
 		Player player = event.getPlayer();
+		if (isDisabled(player, RegisterEnchantments.ICARUS)) return;
 		ItemStack chestplate = player.getInventory().getChestplate();
 		if (chestplate != null && chestplate.getType().equals(Material.ELYTRA) && player.isGliding() && EnchantmentUtils.hasEnchantment(chestplate, RegisterEnchantments.ICARUS)) {
 			int level = EnchantmentUtils.getLevel(player.getInventory().getChestplate(), RegisterEnchantments.ICARUS);
@@ -147,7 +157,7 @@ public class PlayerListener extends Enchantmentable {
 			if (player.getLocation().getPitch() < -10) {
 				ESPlayer esPlayer = EnchantmentSolution.getESPlayer(player);
 				if (esPlayer.getIcarusDelay() > 0) return;
-				int num_breaks = DamageUtils.damageItem(player, chestplate, level * 5, 1, false);
+				int num_breaks = DamageUtils.damageItem(player, chestplate, level * 5, 1, false).getDamageAmount();
 				if (DamageUtils.getDamage(chestplate) + num_breaks >= DamageUtils.getMaxDamage(chestplate)) {
 					AdvancementUtils.awardCriteria(player, ESAdvancement.TOO_CLOSE, "failure");
 					player.getWorld().spawnParticle(Particle.EXPLOSION_NORMAL, player.getLocation(), 5, 2, 2, 2);
@@ -178,6 +188,7 @@ public class PlayerListener extends Enchantmentable {
 		if (!canRun(RegisterEnchantments.IRENES_LASSO, event)) return;
 		if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
 			Player player = event.getPlayer();
+			if (isDisabled(player, RegisterEnchantments.IRENES_LASSO)) return;
 			ItemStack item = player.getInventory().getItemInMainHand();
 			if (event.getHand() == EquipmentSlot.OFF_HAND) item = player.getInventory().getItemInOffHand();
 			if (item != null && EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.IRENES_LASSO)) {
@@ -211,10 +222,11 @@ public class PlayerListener extends Enchantmentable {
 	}
 
 	private void moisturize(PlayerInteractEvent event) {
-		if (!canRun(RegisterEnchantments.MOISTURIZE, event)) return;
+		if (!canRun(RegisterEnchantments.MOISTURIZE, event) || isDisabled(event.getPlayer(), RegisterEnchantments.MOISTURIZE)) return;
 
 		if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
 			if (event.getHand() == EquipmentSlot.OFF_HAND) return; // off hand packet, ignore.
+			Player player = event.getPlayer();
 			ItemStack item = event.getItem();
 			if (item != null && EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.MOISTURIZE)) {
 				Block block = event.getClickedBlock();
@@ -235,17 +247,36 @@ public class PlayerListener extends Enchantmentable {
 						case "waterlog":
 							if (block.getBlockData() instanceof Waterlogged) {
 								Waterlogged water = (Waterlogged) block.getBlockData();
-								if (block.getType().isInteractable() && event.getPlayer().isSneaking() && !water.isWaterlogged() || !block.getType().isInteractable() && !water.isWaterlogged()) sound = Sound.ENTITY_SHEEP_SHEAR;
+								if (block.getType().isInteractable() && player.isSneaking() && !water.isWaterlogged() || !block.getType().isInteractable() && !water.isWaterlogged()) sound = Sound.ENTITY_SHEEP_SHEAR;
 							}
 							break;
 					}
 					if (sound != null) {
-						MoisturizeEvent moisturize = new MoisturizeEvent(event.getPlayer(), item, block, type, sound);
+						BlockState state = block.getState();
+
+						Event blockEvent = null;
+
+						switch (type.getName().toLowerCase()) {
+							case "extinguish":
+								break;
+							case "wet":
+							case "unsmelt":
+								blockEvent = new EntityBlockFormEvent(player, block, state);
+								break;
+							case "waterlog":
+								blockEvent = new PlayerBucketEmptyEvent(player, block, block, event.getBlockFace(), Material.WATER_BUCKET, item);
+								break;
+						}
+
+						if (blockEvent != null) {
+							Bukkit.getPluginManager().callEvent(blockEvent);
+							if (((Cancellable) blockEvent).isCancelled()) return;
+						}
+						MoisturizeEvent moisturize = new MoisturizeEvent(player, item, block, type, sound);
 						Bukkit.getPluginManager().callEvent(moisturize);
 
 						if (!moisturize.isCancelled()) {
 							Block moisturizeBlock = moisturize.getBlock();
-							Player player = moisturize.getPlayer();
 
 							switch (type.getName().toLowerCase()) {
 								case "extinguish":
@@ -263,17 +294,21 @@ public class PlayerListener extends Enchantmentable {
 									DamageUtils.damageItem(player, item);
 									player.playSound(player.getLocation(), moisturize.getSound(), 1, 1);
 									player.incrementStatistic(Statistic.USE_ITEM, item.getType());
+
 									break;
 								case "unsmelt":
 									if (moisturizeBlock.getType() == Material.CRACKED_STONE_BRICKS) AdvancementUtils.awardCriteria(player, ESAdvancement.REPAIRED, "broken_bricks");
 									moisturizeBlock.setType(ItemMoisturizeType.getUnsmelt(moisturizeBlock.getType()));
+
 									DamageUtils.damageItem(player, item);
 									player.playSound(player.getLocation(), moisturize.getSound(), 1, 1);
 									player.incrementStatistic(Statistic.USE_ITEM, item.getType());
+									event.setCancelled(true);
 									break;
 								case "waterlog":
 									Waterlogged water = (Waterlogged) moisturizeBlock.getBlockData();
 									water.setWaterlogged(true);
+
 									moisturizeBlock.setBlockData(water);
 									DamageUtils.damageItem(player, item);
 									player.playSound(player.getLocation(), moisturize.getSound(), 1, 1);
@@ -291,10 +326,12 @@ public class PlayerListener extends Enchantmentable {
 	private void overkill(PlayerInteractEvent event) {
 		if (event.getAction().equals(Action.LEFT_CLICK_AIR)) {
 			Player player = event.getPlayer();
+			if (isDisabled(player, RegisterEnchantments.OVERKILL)) return;
 			ItemStack item = player.getInventory().getItemInMainHand();
 			if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.OVERKILL)) {
 				event.setCancelled(false);
-				if (!canRun(RegisterEnchantments.OVERKILL, event)) return;
+				if (!canRun(RegisterEnchantments.OVERKILL, event))
+					return;
 				boolean takeArrow = player.getGameMode() != GameMode.CREATIVE && !EnchantmentUtils.hasEnchantment(item, Enchantment.ARROW_INFINITE);
 				OverkillEvent overkill = new OverkillEvent(player, item, takeArrow, player.getInventory().all(Material.ARROW).size() > 0, 0.4);
 				Bukkit.getPluginManager().callEvent(overkill);
@@ -335,6 +372,7 @@ public class PlayerListener extends Enchantmentable {
 	private void splatterFest(PlayerInteractEvent event) {
 		if (event.getAction().equals(Action.LEFT_CLICK_AIR)) {
 			Player player = event.getPlayer();
+			if (isDisabled(player, RegisterEnchantments.SPLATTER_FEST)) return;
 			ItemStack item = player.getInventory().getItemInMainHand();
 			if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.SPLATTER_FEST)) {
 				event.setCancelled(false);
@@ -374,7 +412,9 @@ public class PlayerListener extends Enchantmentable {
 	}
 
 	private void stickyHold(PlayerItemBreakEvent event) {
+		if (!canRun(RegisterEnchantments.STICKY_HOLD, event)) return;
 		Player player = event.getPlayer();
+		if (isDisabled(player, RegisterEnchantments.STICKY_HOLD)) return;
 		ItemStack item = event.getBrokenItem();
 		if (item != null && EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.STICKY_HOLD)) {
 			ItemStack finalItem = item.clone();
@@ -389,6 +429,7 @@ public class PlayerListener extends Enchantmentable {
 	private void zeal(PlayerInteractEvent event) {
 		if (event.getAction().equals(Action.LEFT_CLICK_AIR)) {
 			Player player = event.getPlayer();
+			if (isDisabled(player, RegisterEnchantments.ZEAL)) return;
 			ItemStack item = player.getInventory().getItemInMainHand();
 			if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.ZEAL)) {
 				event.setCancelled(false);
@@ -416,6 +457,7 @@ public class PlayerListener extends Enchantmentable {
 					}
 					player.incrementStatistic(Statistic.USE_ITEM, item.getType());
 					Fireball fireball = player.launchProjectile(Fireball.class);
+					fireball.setMetadata("zeal", new FixedMetadataValue(EnchantmentSolution.getPlugin(), player.getUniqueId().toString()));
 					player.getWorld().playSound(player.getLocation(), Sound.ITEM_FIRECHARGE_USE, 1, 1);
 					ESPlayer esPlayer = EnchantmentSolution.getESPlayer(player);
 					esPlayer.setCooldown(RegisterEnchantments.ZEAL);
@@ -429,6 +471,7 @@ public class PlayerListener extends Enchantmentable {
 	private void movementListener(PlayerChangeCoordsEvent event, Enchantment enchantment) {
 		if (!canRun(enchantment, event)) return;
 		Player player = event.getPlayer();
+		if (isDisabled(player, enchantment)) return;
 		Location loc = player.getLocation();
 		if (player.isFlying() || player.isGliding() || player.isInsideVehicle()) return;
 		ItemStack boots = player.getInventory().getBoots();

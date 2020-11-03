@@ -13,7 +13,7 @@ import org.ctp.enchantmentsolution.EnchantmentSolution;
 public class FishingConfiguration extends Configuration {
 
 	public FishingConfiguration(File dataFolder, BackupDB db, String[] header) {
-		super(EnchantmentSolution.getPlugin(), new File(dataFolder + "/fishing.yml"), db, header);
+		super(EnchantmentSolution.getPlugin(), new File(dataFolder + "/mcmmo-fishing.yml"), db, header);
 
 		migrateVersion();
 		if (getConfig() != null) getConfig().writeDefaults();

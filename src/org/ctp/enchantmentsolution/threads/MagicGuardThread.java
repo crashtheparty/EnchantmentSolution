@@ -19,7 +19,7 @@ import org.ctp.enchantmentsolution.utils.player.ESPlayer;
 public class MagicGuardThread extends EnchantmentThread {
 
 	private static List<MagicGuardThread> MAGIC_THREADS = new ArrayList<MagicGuardThread>();
-	
+
 	public static MagicGuardThread createThread(Player player) {
 		Iterator<MagicGuardThread> threads = MAGIC_THREADS.iterator();
 		while (threads.hasNext()) {
@@ -34,11 +34,12 @@ public class MagicGuardThread extends EnchantmentThread {
 	private MagicGuardThread(ESPlayer player) {
 		super(player);
 	}
-	
+
 	@Override
 	public void run() {
 		ESPlayer player = getPlayer();
-		if (!player.isOnline()) {
+		if (isDisabled(player.getOnlinePlayer(), RegisterEnchantments.MAGIC_GUARD)) return;
+		if (!player.isOnline() || !RegisterEnchantments.isEnabled(RegisterEnchantments.MAGIC_GUARD)) {
 			remove();
 			return;
 		}
@@ -57,8 +58,9 @@ public class MagicGuardThread extends EnchantmentThread {
 			}
 	}
 
-	private void remove() {
+	@Override
+	protected void remove() {
 		MAGIC_THREADS.remove(this);
-		Bukkit.getScheduler().cancelTask(getScheduler());
+		super.remove();
 	}
 }

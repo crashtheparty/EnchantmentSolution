@@ -4,16 +4,16 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
+import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.utils.player.ESPlayer;
 
 public class FrequentFlyerThread extends EnchantmentThread {
 
 	private static List<FrequentFlyerThread> FLYER_THREADS = new ArrayList<FrequentFlyerThread>();
-	
+
 	public static FrequentFlyerThread createThread(Player player) {
 		Iterator<FrequentFlyerThread> threads = FLYER_THREADS.iterator();
 		while (threads.hasNext()) {
@@ -32,6 +32,11 @@ public class FrequentFlyerThread extends EnchantmentThread {
 	@Override
 	public void run() {
 		ESPlayer player = getPlayer();
+		if (!RegisterEnchantments.isEnabled(RegisterEnchantments.FREQUENT_FLYER) || isDisabled(player.getOnlinePlayer(), RegisterEnchantments.FREQUENT_FLYER)) {
+			player.logoutFlyer();
+			remove();
+			return;
+		}
 		if (player.hasFrequentFlyer() || player.canFly(true)) {
 			if (!player.isOnline()) {
 				if (player.canFly(false)) player.logoutFlyer();
@@ -47,9 +52,10 @@ public class FrequentFlyerThread extends EnchantmentThread {
 		remove();
 	}
 
-	private void remove() {
+	@Override
+	protected void remove() {
 		FLYER_THREADS.remove(this);
-		Bukkit.getScheduler().cancelTask(getScheduler());
+		super.remove();
 	}
 
 }

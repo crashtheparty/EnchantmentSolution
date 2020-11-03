@@ -41,11 +41,12 @@ public class ContagionCurseThread extends EnchantmentThread {
 	public void run() {
 		ESPlayer player = getPlayer();
 		List<CustomEnchantment> enchantments = RegisterEnchantments.getCurseEnchantments();
-		if (enchantments.size() == 0 || player.getContagionChance() == 0) {
+		if (!RegisterEnchantments.isEnabled(RegisterEnchantments.CURSE_OF_CONTAGION) || enchantments.size() == 0 || player.getContagionChance() == 0) {
 			remove();
 			return;
 		}
 		Player p = player.getOnlinePlayer();
+		if (isDisabled(p, RegisterEnchantments.CURSE_OF_CONTAGION)) return;
 		List<ItemStack> items = player.getCurseableItems();
 		double random = Math.random();
 		if (player.getContagionChance() > random) {
@@ -98,10 +99,11 @@ public class ContagionCurseThread extends EnchantmentThread {
 			}
 		return noCurse;
 	}
-	
-	private void remove() {
+
+	@Override
+	protected void remove() {
 		CONTAGION_THREADS.remove(this);
-		Bukkit.getScheduler().cancelTask(getScheduler());
+		super.remove();
 	}
 
 }

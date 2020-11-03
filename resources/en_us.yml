@@ -93,9 +93,10 @@ commands:
     give-book-other-multiple: 'You gave %give_player% %amount% enchanted books.'
     receive-book-multiple: '%player% has given you %amount% enchanted books.'
     give-book-console: 'Console must specify a valid player to give the book to.'
-    fix-enchants: 'You have fixed your enchanted items.'
-    fix-enchants-other: 'You have fixed %fix_player%''s enchanted items.'
+    fix-enchants: 'You have fixed %fixed_items% enchanted items out of the %total_items% in your inventory. %fixed_item_string%'
+    fix-enchants-other: 'You have fixed %fixed_items% enchanted items out of the %total_items% in %fix_player%''s inventory. %fixed_item_string%'
     other-fixed-enchants: 'Player %player% has fixed your enchanted items.'
+    fixed-item-string: 'Slot: %slot% Material: %material%'
     invalid-level-positive-integer: 'Level (%level%) must be a positive integer.'
     rpg-set-level: 'Set %player%''s ESRPG level to %level%.'
     specify-level-integer: 'You must specify an integer to set player''s level.'
@@ -418,15 +419,21 @@ minigame:
         item:
             name: '&9Enchanting Material: &3%material%'
             enchantment: '&6Enchantment: &3%enchantment% &6Level: &3%level%'
-            enchantment_cost: '&6Cost: &3%cost%'
-            random: 
+            enchantment_multiple: 
             - '&6Random Enchantments'
             - '&6Multiple: &3%multiple%'
-            - '&6Cost: &3%cost%'
+            enchantment_level_cost: '&6Experience Level Cost: &3%lvl_cost%'
+            enchantment_lapis_cost: '&6Lapis Lazuli Cost: &3%lapis_cost%'
+            enchantment_economy_cost: '&6%money_name% Cost: &3%money_sign%%economy_cost%'
             
     invalid_enchant_name: '&cInvalid enchantment name %name%!'
     invalid_random_enchant: '&cCould not generate a random enchantment this time!'
-    not_enough_levels: '&cYou need more levels to get this enchantment!'
+    not_enough_levels: '&cYou need more experience levels to get this enchantment! (Have %player_level%, need %level_cost%.)'
+    not_enough_lapis: '&cYou need lapis lazuli in your inventory to get this enchantment! (Have %player_lapis% lapis, need %lapis_cost%.)'
+    not_enough_money: '&cYou need more %money_name% to get this enchantment! (Have %money_sign%%player_economy%, need %money_sign%%economy_cost%.)'
+    cannot_get_enchantment: '&cCannot get enchantment! %level%%lapis%%economy%'
+    default_money_name: 'Dollars'
+    default_money_sign: '\$'
 
 pagination:
     go_back: '&9Go Back'
@@ -541,7 +548,50 @@ enchantment:
     conflicting-enchantments: '&6Conflicting Enchantments: &f'
     enabled: '&6Enchantment Enabled: &f'
     treasure: '&6Treasure Enchantment: &f'
+    advancement-description: 'Description: '
+    advancement-max-level: 'Max Level: '
+    advancement-weight: 'Weight: '
+    advancement-conflicting-enchantments: 'Conflicting Enchantments: '
     display_names: 
+        default_enchantments:
+            aqua_affinity: 'Aqua Affinity'
+            bane_of_arthropods: 'Bane of Arthropods'
+            blast_protection: 'Blast Protection'
+            channeling: 'Channeling'
+            binding_curse: 'Curse of Binding'
+            vanishing_curse: 'Curse of Vanishing'
+            depth_strider: 'Depth Strider'
+            efficiency: 'Efficiency'
+            feather_falling: 'Feather Falling'
+            fire_aspect: 'Fire Aspect'
+            fire_protection: 'Fire Protection'
+            flame: 'Flame'
+            fortune: 'Fortune'
+            frost_walker: 'Frost Walker'
+            impaling: 'Impaling'
+            infinity: 'Infinity'
+            knockback: 'Knockback'
+            looting: 'Looting'
+            loyalty: 'Loyalty'
+            luck_of_the_sea: 'Luck of the Sea'
+            lure: 'Lure'
+            mending: 'Mending'
+            multishot: 'Multishot'
+            piercing: 'Piercing'
+            power: 'Power'
+            projectile_protection: 'Projectile Protection'
+            protection: 'Protection'
+            punch: 'Punch'
+            quick_charge: 'Quick Charge'
+            respiration: 'Respiration'
+            riptide: 'Riptide'
+            sharpness: 'Sharpness'
+            silk_touch: 'Silk Touch'
+            smite: 'Smite'
+            soul_speed: 'Soul Speed'
+            sweeping_edge: 'Sweeping Edge'
+            thorns: 'Thorns'
+            unbreaking: 'Unbreaking'
         custom_enchantments: 
             angler: 'Angler'
             armored: 'Armored'
@@ -736,6 +786,10 @@ misc:
     no_enchantment_locations: 'No Enchantment Locations'
 
 advancements: 
+    discovery:
+        name: 'Enchantment Discovery'
+        description: 'Use /esinfo for more information.'
+        enchantments: 'Enchantment: %enchantment%'
     enchantments/agricultural_revolution: 
         name: 'Agricultural Revolution'
         description: 'Who likes farming and animals? We do!'
@@ -933,7 +987,7 @@ advancements:
         description: 'Obtain more than one iron ingot from an iron ore using Smeltery'
     enchantments/fast_and_furious: 
         name: 'Fast and Furious'
-        description: 'Break multiple blocks at once using Height++ or Width++'
+        description: 'Break multiple blocks at once using Height++, Width++, and/or Depth++'
     enchantments/hey_it_works: 
         name: 'Hey It Works!'
         description: 'Break a Shulker Box using Telepathy'
@@ -942,7 +996,7 @@ advancements:
         description: 'Grab an item directly over lava using Telepathy'
     enchantments/over_9000: 
         name: 'Over 9000'
-        description: 'Collect 9001 extra items with Height++ or Width++'
+        description: 'Collect 9001 extra items with Height++, Width++, and/or Depth++'
     enchantments/plague_inc: 
         name: 'Plague Inc.'
         description: 'Spread the Contagion Curse to another item'
@@ -994,3 +1048,57 @@ advancements:
     enchantments/meat_ready_to_eat:
         name: 'Meat Ready to Eat'
         description: 'Earn extra cooked meat with Butcher'
+    enchantments/thumbs_up:
+        name: 'Thumbs Up'
+        description: 'Replant a crop using Green Thumb'
+    enchantments/reforestation:
+        name: 'Reforestation'
+        description: 'With Gaia, replant 1000 trees'
+    enchantments/scourge_of_the_forest:
+        name: 'Scourge of the Forest'
+        description: 'Destroy a Gaia-planted sapling'
+    enchantments/deforestation: 
+        name: 'Deforestation'
+        description: 'With Gaia, break 1000 logs'
+    enchantments/broken_dreams:
+        name: 'Broken Dreams'
+        description: 'Have an item break from Curse of Instability'
+    enchantments/blind_as_a_bat:
+        name: 'Blind as a Bat'
+        description: 'Make a bat even more blind with Blindness'
+    enchantments/world_record:
+        name: 'World Record'
+        description: 'Stay underwater for 11 minutes and 35 seconds using Water Breathing'
+    enchantments/replenished:
+        name: 'Replenished'
+        description: 'Replenish extra hearts with Life Drain'
+    enchantments/the_snowman:
+        name: 'The Snowman'
+        description: 'Have a snowball fight with a Snow Golem'
+    enchantments/double_damage:
+        name: 'Double Damage'
+        description: 'Kill 100 of a single mob in a row with Streak'
+    enchantments/spooky_scary_skeleton:
+        name: 'Spooky Scary Skeleton'
+        description: 'Give a skeleton the withering effect using Withering'
+    enchantments/saving_grace:
+        name: 'Saving Grace'
+        description: 'Protect your tamed animal from death with Pacified'
+    enchantments/kill_the_messenger:
+        name: 'Kill the Messenger'
+        description: 'Kill a ghast with a fire charge using Zeal'
+    enchantments/before_i_melt_away:
+        name: 'Before I Melt Away...'
+        description: 'Kill an entity who would melt you with Frosty'
+    enchantments/too_high:
+        name: 'Too High'
+        description: 'Die of fall damage when equipped with Plyometrics'
+    enchantments/evening_stroll:
+        name: 'Evening Stroll'
+        description: 'Run around at night with Joggers'
+    enchantments/slackin:
+        name: 'Slackin'''
+        description: 'Be afflicted with the Slowness effect from Truant'
+    enchantments/spider_senses:
+        name: 'Spider Senses'
+        description: 'Afflict another player with the Poison effect using Venom'

@@ -60,7 +60,7 @@ public class ChestPopulate_v1_16_R2 {
 			if (lootChest != null) { // Lootchest
 				String loot = lootChest.getKey();
 				loot = loot.substring(loot.lastIndexOf('/') + 1);
-				c.a((WorldServer) null, (EntityLiving) null);
+				c.d((EntityHuman) null);
 				for(int i = 0; i < c.getSize(); i++) {
 					ItemStack item = c.getItem(i);
 					MinecraftKey minecraftkey = IRegistry.ENCHANTMENT.getKey(Enchantments.SOUL_SPEED);

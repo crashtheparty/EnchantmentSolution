@@ -1,11 +1,12 @@
 package org.ctp.enchantmentsolution.threads;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Item;
 import org.ctp.crashapi.item.MatData;
+import org.ctp.enchantmentsolution.advancements.ESAdvancement;
+import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.GaiaUtils;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.GaiaUtils.GaiaTrees;
 import org.ctp.enchantmentsolution.utils.player.ESPlayer;
@@ -30,6 +31,7 @@ public class GaiaItemThread extends EnchantmentThread {
 				if (m.getMaterial() == below.getType() && loc.getBlock().isEmpty()) {
 					loc.getBlock().setType(item.getItemStack().getType());
 					GaiaUtils.addLocation(loc);
+					AdvancementUtils.awardCriteria(getPlayer().getOnlinePlayer(), ESAdvancement.REFORESTATION, "tree", 1);
 				}
 			item.remove();
 			remove();
@@ -40,8 +42,9 @@ public class GaiaItemThread extends EnchantmentThread {
 		return item;
 	}
 
-	private void remove() {
-		Bukkit.getScheduler().cancelTask(getScheduler());
+	@Override
+	protected void remove() {
+		super.remove();
 	}
 
 }

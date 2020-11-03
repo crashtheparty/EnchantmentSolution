@@ -4,18 +4,22 @@ import java.util.*;
 
 import org.bukkit.*;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
+import org.bukkit.block.BlockState;
 import org.bukkit.block.data.type.Snow;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockDropItemEvent;
 import org.bukkit.inventory.ItemStack;
+import org.ctp.crashapi.api.Configurations;
 import org.ctp.crashapi.item.BlockSound;
 import org.ctp.crashapi.item.MatData;
 import org.ctp.crashapi.utils.DamageUtils;
 import org.ctp.crashapi.utils.ItemUtils;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
+import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enums.ItemBreakType;
 import org.ctp.enchantmentsolution.events.blocks.BlockBreakMultiEvent;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
@@ -50,13 +54,7 @@ public class BlockUtils {
 		locs.remove(loc);
 		MULTI_BLOCK_BREAK.put(enchantment, locs);
 	}
-
-	public static boolean isAdjacent(Block b1, Block b2) {
-		for(BlockFace face: Arrays.asList(BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST, BlockFace.UP, BlockFace.DOWN))
-			if (b1.getRelative(face).getLocation().equals(b2.getLocation())) return true;
-		return false;
-	}
-
+	
 	public static boolean isNextTo(Block b1, Block b2) {
 		int x = Math.abs(b1.getX() - b2.getX());
 		int y = Math.abs(b1.getY() - b2.getY());
@@ -107,10 +105,10 @@ public class BlockUtils {
 		Bukkit.getServer().getPluginManager().callEvent(newEvent);
 		if (item != null && !MatData.isAir(item.getType()) && !MatData.isAir(newEvent.getBlock().getType()) && !newEvent.isCancelled()) {
 			Block newBlock = newEvent.getBlock();
-			AdvancementUtils.awardCriteria(player, ESAdvancement.FAST_AND_FURIOUS, "diamond_pickaxe");
+			if (RegisterEnchantments.getHWD().contains(enchantment)) AdvancementUtils.awardCriteria(player, ESAdvancement.FAST_AND_FURIOUS, "diamond_pickaxe");
 			if (newBlock.getType().equals(Material.SNOW) && ItemBreakType.getType(item.getType()).getBreakTypes().contains(Material.SNOW)) {
 				int num = ((Snow) newBlock.getBlockData()).getLayers();
-				if (dropChance > Math.random()) ItemUtils.dropItem(new ItemStack(Material.SNOWBALL, num), newBlock.getLocation());
+				if (dropChance > Math.random()) ItemUtils.dropItem(new ItemStack(Material.SNOWBALL, num), newBlock.getLocation(), Configurations.getConfigurations().getConfig().getBoolean("drop_items_naturally"));
 			}
 			player.incrementStatistic(Statistic.MINE_BLOCK, newBlock.getType());
 			player.incrementStatistic(Statistic.USE_ITEM, item.getType());
@@ -120,7 +118,18 @@ public class BlockUtils {
 				BlockSound sound = BlockSound.getSound(newBlock.getType());
 				loc.getWorld().playSound(loc, sound.getSound(), sound.getVolume(newBlock.getType()), sound.getPitch(newBlock.getType()));
 			}
-			newBlock.breakNaturally(item);
+			Collection<ItemStack> drops = newBlock.getDrops(item, player);
+			List<Item> items = new ArrayList<Item>();
+			for(ItemStack drop: drops)
+				items.add(ItemUtils.spawnItem(drop, loc));
+			BlockState blockState = newBlock.getState();
+			newBlock.setType(Material.AIR);
+			BlockDropItemEvent blockDrop = new BlockDropItemEvent(newBlock, blockState, player, items);
+			Bukkit.getServer().getPluginManager().callEvent(blockDrop);
+
+			if (blockDrop.isCancelled()) for(Item i: blockDrop.getItems())
+				i.remove();
+
 			AbilityUtils.dropExperience(loc, newEvent.getExpToDrop());
 			DamageUtils.damageItem(player, item, damage);
 			EnchantmentSolution.getESPlayer(player).breakBlock();
@@ -134,7 +143,17 @@ public class BlockUtils {
 				BlockSound sound = BlockSound.getSound(newBlock.getType());
 				loc.getWorld().playSound(loc, sound.getSound(), sound.getVolume(newBlock.getType()), sound.getPitch(newBlock.getType()));
 			}
-			newBlock.breakNaturally();
+			Collection<ItemStack> drops = newBlock.getDrops(item, player);
+			List<Item> items = new ArrayList<Item>();
+			for(ItemStack drop: drops)
+				items.add(ItemUtils.spawnItem(drop, loc));
+			BlockState blockState = newBlock.getState();
+			newBlock.setType(Material.AIR);
+			BlockDropItemEvent blockDrop = new BlockDropItemEvent(newBlock, blockState, player, items);
+			Bukkit.getServer().getPluginManager().callEvent(blockDrop);
+
+			if (blockDrop.isCancelled()) for(Item i: blockDrop.getItems())
+				i.remove();
 			BlockUtils.removeMultiBlockBreak(b, enchantment);
 			return true;
 		}

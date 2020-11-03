@@ -2,9 +2,8 @@ package org.ctp.enchantmentsolution.listeners.advancements;
 
 import java.util.UUID;
 
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.OfflinePlayer;
+import org.bukkit.*;
+import org.bukkit.World.Environment;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.enchantments.Enchantment;
@@ -14,9 +13,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityPickupItemEvent;
-import org.bukkit.event.player.PlayerBedLeaveEvent;
-import org.bukkit.event.player.PlayerDropItemEvent;
-import org.bukkit.event.player.PlayerItemConsumeEvent;
+import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
@@ -34,8 +31,9 @@ import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.WalkerBlock;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.WalkerUtils;
 import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
+import org.ctp.enchantmentsolution.utils.player.ESPlayer;
 
-public class AdvancementPlayerEvent implements Listener {
+public class AdvancementPlayerListener implements Listener {
 
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerBedLeave(PlayerBedLeaveEvent event) {
@@ -108,6 +106,20 @@ public class AdvancementPlayerEvent implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR)
+	public void onPlayerRespawn(PlayerRespawnEvent event) {
+		Player player = event.getPlayer();
+		ESPlayer esPlayer = EnchantmentSolution.getESPlayer(player);
+		if (esPlayer.getSacrificeAdvancement()) {
+			esPlayer.setSacrificeAdvancement(false);
+			AdvancementUtils.awardCriteria(player, ESAdvancement.DIVINE_RETRIBUTION, "retribution");
+		}
+		if (esPlayer.getPlyometricsAdvancement()) {
+			esPlayer.setPlyometricsAdvancement(false);
+			AdvancementUtils.awardCriteria(player, ESAdvancement.TOO_HIGH, "fall_damage");
+		}
+	}
+
+	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerChangeCoords(PlayerChangeCoordsEvent event) {
 		Player player = event.getPlayer();
 		Block block = player.getLocation().getBlock().getRelative(BlockFace.DOWN);
@@ -118,6 +130,10 @@ public class AdvancementPlayerEvent implements Listener {
 
 			if (EnchantmentUtils.hasEnchantment(boots, RegisterEnchantments.VOID_WALKER) && walkerBlock != null && walkerBlock.getEnchantment() == RegisterEnchantments.VOID_WALKER && !LocationUtils.hasBlockBelow(block.getRelative(BlockFace.DOWN).getLocation())) AdvancementUtils.awardCriteria(player, ESAdvancement.MADE_FOR_WALKING, "boots");
 		}
+		ESPlayer esPlayer = EnchantmentSolution.getESPlayer(player);
+		Location l = player.getLocation();
+		if (l.getBlock().getLightFromSky() == 15 && l.getWorld().getEnvironment() == Environment.NORMAL && l.getWorld().getTime() > 12540 && l.getWorld().getTime() < 23459) for(ItemStack i: esPlayer.getArmor())
+			if (i != null && EnchantmentUtils.hasEnchantment(i, RegisterEnchantments.JOGGERS)) AdvancementUtils.awardCriteria(player, ESAdvancement.EVENING_STROLL, "evening");
 	}
 
 }

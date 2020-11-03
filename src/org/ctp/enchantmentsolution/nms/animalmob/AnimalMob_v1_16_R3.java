@@ -18,7 +18,7 @@ import org.ctp.crashapi.config.CrashConfigurations;
 import org.ctp.crashapi.config.yaml.YamlConfig;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 
-public class AnimalMob_v1_16_R1 extends AnimalMob {
+public class AnimalMob_v1_16_R3 extends AnimalMob {
 
 	private Type catType;
 	private Gene pandaHiddenGene, pandaMainGene;
@@ -26,7 +26,7 @@ public class AnimalMob_v1_16_R1 extends AnimalMob {
 	private MushroomCow.Variant mooshroomType;
 	private Fox.Type foxType;
 
-	public AnimalMob_v1_16_R1(Creature mob, ItemStack item) {
+	public AnimalMob_v1_16_R3(Creature mob, ItemStack item) {
 		super(mob, item);
 		if (mob instanceof Cat) {
 			Cat cat = (Cat) mob;
@@ -158,22 +158,22 @@ public class AnimalMob_v1_16_R1 extends AnimalMob {
 			mob.setParrotVariant(Variant.valueOf(config.getString("animals." + i + ".parrot_variant")));
 		} catch (Exception ex) {}
 		try {
-			((AnimalMob_v1_16_R1) mob).setCatType(Type.valueOf(config.getString("animals." + i + ".cat_type")));
+			((AnimalMob_v1_16_R3) mob).setCatType(Type.valueOf(config.getString("animals." + i + ".cat_type")));
 		} catch (Exception ex) {}
 		try {
-			((AnimalMob_v1_16_R1) mob).setPandaMainGene(Gene.valueOf(config.getString("animals." + i + ".panda_main_gene")));
+			((AnimalMob_v1_16_R3) mob).setPandaMainGene(Gene.valueOf(config.getString("animals." + i + ".panda_main_gene")));
 		} catch (Exception ex) {}
 		try {
-			((AnimalMob_v1_16_R1) mob).setPandaHiddenGene(Gene.valueOf(config.getString("animals." + i + ".panda_hidden_gene")));
+			((AnimalMob_v1_16_R3) mob).setPandaHiddenGene(Gene.valueOf(config.getString("animals." + i + ".panda_hidden_gene")));
 		} catch (Exception ex) {}
 		try {
-			((AnimalMob_v1_16_R1) mob).setCollarColor(DyeColor.valueOf(config.getString("animals." + i + ".collar_color")));
+			((AnimalMob_v1_16_R3) mob).setCollarColor(DyeColor.valueOf(config.getString("animals." + i + ".collar_color")));
 		} catch (Exception ex) {}
 		try {
-			((AnimalMob_v1_16_R1) mob).setMooshroomType(MushroomCow.Variant.valueOf(config.getString("animals." + i + ".mooshroom_cow_variant")));
+			((AnimalMob_v1_16_R3) mob).setMooshroomType(MushroomCow.Variant.valueOf(config.getString("animals." + i + ".mooshroom_cow_variant")));
 		} catch (Exception ex) {}
 		try {
-			((AnimalMob_v1_16_R1) mob).setFoxType(Fox.Type.valueOf(config.getString("animals." + i + ".fox_type")));
+			((AnimalMob_v1_16_R3) mob).setFoxType(Fox.Type.valueOf(config.getString("animals." + i + ".fox_type")));
 		} catch (Exception ex) {}
 		try {
 			mob.setRabbitType(org.bukkit.entity.Rabbit.Type.valueOf(config.getString("animals." + i + ".rabbit_type")));

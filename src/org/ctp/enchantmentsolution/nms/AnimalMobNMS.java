@@ -28,7 +28,10 @@ public class AnimalMobNMS {
 			case 12:
 				return new AnimalMob_v1_16_R1(animal, item);
 			case 13:
+			case 14:
 				return new AnimalMob_v1_16_R2(animal, item);
+			case 15:
+				return new AnimalMob_v1_16_R3(animal, item);
 		}
 		return null;
 	}
@@ -57,7 +60,10 @@ public class AnimalMobNMS {
 			case 12:
 				return AnimalMob_v1_16_R1.createFromConfig(config, i);
 			case 13:
+			case 14:
 				return AnimalMob_v1_16_R2.createFromConfig(config, i);
+			case 15:
+				return AnimalMob_v1_16_R3.createFromConfig(config, i);
 		}
 		return null;
 	}
