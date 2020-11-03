@@ -1,5 +1,5 @@
 name: EnchantmentSolution
-version: 2.4.0-pre3
+version: 2.4.0-pre4
 main: org.ctp.enchantmentsolution.EnchantmentSolution
 api-version: 1.13
 depend: [CrashAPI]
@@ -77,20 +77,8 @@ commands:
     description: Test items for plugin info
     usage: /estest [item]
 permissions:
-  enchantmentsolution.enable-flight:
-    description: Enables use of external /fly commands without interference from FrequentFlyer
-    default: false
   enchantmentsolution.permissions.ignore: 
     description: Gives access to all enchantment permissions.
-    default: false
-  enchantmentsolution.demigod-anvil:
-    description: Allows players to repair items with enchantments they cannot combine
-    default: false
-  enchantmentsolution.demigod-books:
-    description: Allows players to add levels from enchanted books to items even if they cannot combine the levels
-    default: false
-  enchantmentsolution.god-anvil:
-    description: Allows players to combine items higher than their max levels
     default: false
   enchantmentsolution.abilities.has-external-flight:
     description: Enables use of external /fly commands without interference from FrequentFlyer

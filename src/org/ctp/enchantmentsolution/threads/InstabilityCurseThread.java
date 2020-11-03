@@ -5,9 +5,13 @@ import java.util.*;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.ctp.crashapi.utils.DamageResult;
 import org.ctp.crashapi.utils.DamageUtils;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
+import org.ctp.enchantmentsolution.advancements.ESAdvancement;
+import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.events.damage.InstabilityEvent;
+import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.player.ESPlayer;
 
 public class InstabilityCurseThread extends EnchantmentThread {
@@ -42,6 +46,7 @@ public class InstabilityCurseThread extends EnchantmentThread {
 			remove();
 			return;
 		}
+		if (isDisabled(p, RegisterEnchantments.CURSE_OF_INSTABILITY)) return;
 
 		double chance = 1 / 50.0;
 		double random = Math.random();
@@ -51,13 +56,17 @@ public class InstabilityCurseThread extends EnchantmentThread {
 			InstabilityEvent event = new InstabilityEvent(p, item, 0, 1);
 			Bukkit.getPluginManager().callEvent(event);
 
-			if (!event.isCancelled()) DamageUtils.damageItem(p, item, 1);
+			if (!event.isCancelled()) {
+				DamageResult damage = DamageUtils.damageItem(p, item, 1);
+				if (damage.isBroken()) AdvancementUtils.awardCriteria(p, ESAdvancement.BROKEN_DREAMS, "unstable");
+			}
 		}
 	}
 
-	private void remove() {
+	@Override
+	protected void remove() {
 		UNSTABLE_THREADS.remove(this);
-		Bukkit.getScheduler().cancelTask(getScheduler());
+		super.remove();
 	}
 
 }

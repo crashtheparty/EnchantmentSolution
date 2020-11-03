@@ -11,7 +11,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.loot.LootContext;
 import org.bukkit.loot.Lootable;
@@ -34,11 +33,10 @@ import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.RecyclerDrops;
 import org.ctp.enchantmentsolution.utils.items.AbilityUtils;
 import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
+import org.ctp.enchantmentsolution.utils.player.ESPlayer;
 
 @SuppressWarnings("unused")
 public class AfterEffectsListener extends Enchantmentable {
-
-	private static List<UUID> SACRIFICE_ADVANCEMENT = new ArrayList<UUID>();
 
 	@EventHandler
 	public void onEntityDeath(EntityDeathEvent event) {
@@ -52,11 +50,6 @@ public class AfterEffectsListener extends Enchantmentable {
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerDeath(PlayerDeathEvent event) {
 		runMethod(this, "sacrifice", event, PlayerDeathEvent.class);
-	}
-
-	@EventHandler
-	public void onPlayerRespawn(PlayerRespawnEvent event) {
-		runMethod(this, "sacrifice", event, PlayerRespawnEvent.class);
 	}
 
 	private void butcher(EntityDeathEvent event) {
@@ -241,17 +234,13 @@ public class AfterEffectsListener extends Enchantmentable {
 					((LivingEntity) sacrifice.getEntity()).damage(sacrifice.getNewDamage(), sacrifice.getDamager());
 					if (sacrifice.getEntity() instanceof Player) {
 						Player dead = (Player) sacrifice.getEntity();
-						if (dead.getHealth() <= 0) SACRIFICE_ADVANCEMENT.add(player.getUniqueId());
+						if (dead.getHealth() <= 0) {
+							ESPlayer esPlayer = EnchantmentSolution.getESPlayer(player);
+							esPlayer.setSacrificeAdvancement(true);
+						}
 					}
 				}
 			}
-		}
-	}
-
-	private void sacrifice(PlayerRespawnEvent event) {
-		if (SACRIFICE_ADVANCEMENT.contains(event.getPlayer().getUniqueId())) {
-			AdvancementUtils.awardCriteria(event.getPlayer(), ESAdvancement.DIVINE_RETRIBUTION, "retribution");
-			SACRIFICE_ADVANCEMENT.remove(event.getPlayer().getUniqueId());
 		}
 	}
 }

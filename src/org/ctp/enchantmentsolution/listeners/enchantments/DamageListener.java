@@ -359,6 +359,7 @@ public class DamageListener extends Enchantmentable {
 				if (!lifeDrain.isCancelled()) {
 					event.setDamage(lifeDrain.getNewDamage());
 					healthBack = lifeDrain.getHealthBack();
+					if (human instanceof Player && human.getHealth() < human.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()) AdvancementUtils.awardCriteria((Player) human, ESAdvancement.REPLENISHED, "life");
 					if (healthBack + human.getHealth() > human.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()) human.setHealth(human.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
 					else
 						human.setHealth(healthBack + human.getHealth());
@@ -429,7 +430,13 @@ public class DamageListener extends Enchantmentable {
 				PotionAfflictEvent potionAfflict = new PotionAfflictEvent(living, human, new EnchantmentLevel(RegisterEnchantments.getCustomEnchantment(enchantment), level), type, ticks, level - 1, previousEffect, override);
 				Bukkit.getPluginManager().callEvent(potionAfflict);
 
-				if (!potionAfflict.isCancelled()) living.addPotionEffect(new PotionEffect(potionAfflict.getType(), potionAfflict.getDuration(), potionAfflict.getLevel()));
+				if (!potionAfflict.isCancelled()) {
+					living.addPotionEffect(new PotionEffect(potionAfflict.getType(), potionAfflict.getDuration(), potionAfflict.getLevel()));
+					if (human instanceof Player && living instanceof Bat && potionAfflict.getType() == PotionEffectType.BLINDNESS) AdvancementUtils.awardCriteria((Player) human, ESAdvancement.BLIND_AS_A_BAT, "blindness");
+					if (human instanceof Player && living instanceof Skeleton && !(living instanceof WitherSkeleton) && potionAfflict.getType() == PotionEffectType.WITHER) AdvancementUtils.awardCriteria((Player) human, ESAdvancement.SPOOKY_SCARY_SKELETON, "skeleton_skull");
+					if (human instanceof Player && potionAfflict.getType() == PotionEffectType.POISON && human != living) AdvancementUtils.awardCriteria((Player) human, ESAdvancement.SPIDER_SENSES, "venom");
+					if (living instanceof Player && potionAfflict.getType() == PotionEffectType.SLOW) AdvancementUtils.awardCriteria((Player) living, ESAdvancement.SLACKIN, "truant");
+				}
 			}
 		} else if (attacker instanceof Projectile) {
 			Projectile projectile = (Projectile) attacker;
@@ -449,8 +456,15 @@ public class DamageListener extends Enchantmentable {
 
 					PotionAfflictEvent potionAfflict = new PotionAfflictEvent(living, (LivingEntity) projectile.getShooter(), new EnchantmentLevel(RegisterEnchantments.getCustomEnchantment(enchantment), level), type, ticks, level - 1, previousEffect, override);
 					Bukkit.getPluginManager().callEvent(potionAfflict);
+					ProjectileSource shooter = projectile.getShooter();
 
-					if (!potionAfflict.isCancelled()) living.addPotionEffect(new PotionEffect(potionAfflict.getType(), potionAfflict.getDuration(), potionAfflict.getLevel()));
+					if (!potionAfflict.isCancelled()) {
+						living.addPotionEffect(new PotionEffect(potionAfflict.getType(), potionAfflict.getDuration(), potionAfflict.getLevel()));
+						if (shooter instanceof Player && living instanceof Bat && potionAfflict.getType() == PotionEffectType.BLINDNESS) AdvancementUtils.awardCriteria((Player) shooter, ESAdvancement.BLIND_AS_A_BAT, "blindness");
+						if (shooter instanceof Player && living instanceof Skeleton && !(living instanceof WitherSkeleton) && potionAfflict.getType() == PotionEffectType.WITHER) AdvancementUtils.awardCriteria((Player) shooter, ESAdvancement.SPOOKY_SCARY_SKELETON, "skeleton_skull");
+						if (shooter instanceof Player && potionAfflict.getType() == PotionEffectType.POISON && shooter != living) AdvancementUtils.awardCriteria((Player) shooter, ESAdvancement.SPIDER_SENSES, "venom");
+						if (living instanceof Player && potionAfflict.getType() == PotionEffectType.SLOW) AdvancementUtils.awardCriteria((Player) living, ESAdvancement.SLACKIN, "truant");
+					}
 				}
 			}
 		}
@@ -473,7 +487,10 @@ public class DamageListener extends Enchantmentable {
 					PacifiedEvent pacified = new PacifiedEvent(living, player, level, damage, newDamage);
 					Bukkit.getPluginManager().callEvent(pacified);
 
-					if (!pacified.isCancelled()) event.setDamage(pacified.getNewDamage());
+					if (!pacified.isCancelled()) {
+						event.setDamage(pacified.getNewDamage());
+						if (damage > living.getHealth() && living.getHealth() > pacified.getNewDamage()) AdvancementUtils.awardCriteria(player, ESAdvancement.SAVING_GRACE, "animal");
+					}
 				}
 			}
 		}

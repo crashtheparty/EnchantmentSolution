@@ -9,6 +9,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.MetadataValue;
@@ -22,7 +23,7 @@ import org.ctp.enchantmentsolution.utils.abilityhelpers.OverkillDeath;
 import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
 import org.ctp.enchantmentsolution.utils.player.ESPlayer;
 
-public class AdvancementEntityDeath implements Listener {
+public class AdvancementEntityListener implements Listener {
 
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onEntityDeath(EntityDeathEvent event) {
@@ -69,8 +70,47 @@ public class AdvancementEntityDeath implements Listener {
 					}
 
 				}
+				if (p instanceof Snowball) {
+					Snowball snowball = (Snowball) p;
+					if (snowball.getMetadata("frosty") != null && snowball.getMetadata("frosty").size() > 0 && event.getEntityType() == EntityType.BLAZE) {
+						Player player = Bukkit.getPlayer(UUID.fromString(snowball.getMetadata("frosty").get(0).asString()));
+						if (player != null) AdvancementUtils.awardCriteria(player, ESAdvancement.BEFORE_I_MELT_AWAY, "blaze");
+					}
+				}
+				if (p instanceof Fireball) {
+					Fireball fireball = (Fireball) p;
+					if (fireball.getMetadata("zeal") != null && fireball.getMetadata("zeal").size() > 0 && event.getEntityType() == EntityType.GHAST) {
+						Player player = Bukkit.getPlayer(UUID.fromString(fireball.getMetadata("zeal").get(0).asString()));
+						if (player != null) AdvancementUtils.awardCriteria(player, ESAdvancement.KILL_THE_MESSENGER, "ghast");
+					}
+				}
+			}
+			if (killed instanceof Player) {
+				Player player = (Player) killed;
+				if (player.getLastDamageCause().getCause() == DamageCause.FALL) {
+					ESPlayer esPlayer = EnchantmentSolution.getESPlayer(player);
+					for(ItemStack i: esPlayer.getArmor())
+						if (i != null && EnchantmentUtils.hasEnchantment(i, RegisterEnchantments.PLYOMETRICS)) {
+							esPlayer.setPlyometricsAdvancement(true);
+							break;
+						}
+				}
 			}
 		}
 	}
 
+	@EventHandler(priority = EventPriority.HIGHEST)
+	public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
+		Entity damager = event.getDamager();
+		if (damager instanceof Projectile) {
+			Projectile p = (Projectile) damager;
+			if (p instanceof Snowball) {
+				Snowball snowball = (Snowball) p;
+				if (snowball.getMetadata("frosty") != null && snowball.getMetadata("frosty").size() > 0 && event.getEntityType() == EntityType.SNOWMAN) {
+					Player player = Bukkit.getPlayer(UUID.fromString(snowball.getMetadata("frosty").get(0).asString()));
+					if (player != null) AdvancementUtils.awardCriteria(player, ESAdvancement.THE_SNOWMAN, "snowball");
+				}
+			}
+		}
+	}
 }

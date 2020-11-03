@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -49,9 +48,10 @@ public class IcarusThread extends EnchantmentThread {
 		}
 	}
 
-	private void remove() {
+	@Override
+	protected void remove() {
 		ICARUS_THREADS.remove(this);
-		Bukkit.getScheduler().cancelTask(getScheduler());
+		super.remove();
 	}
 
 }

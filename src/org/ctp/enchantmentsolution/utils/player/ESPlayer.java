@@ -10,6 +10,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.ctp.crashapi.events.ItemEquipEvent.HandMethod;
 import org.ctp.crashapi.item.*;
 import org.ctp.crashapi.nms.ServerNMS;
@@ -39,14 +40,15 @@ public class ESPlayer {
 	private final OfflinePlayer player;
 	private Player onlinePlayer;
 	private RPGPlayer rpg;
-	private Map<Enchantment, Long> cooldowns, timedDisable;
-	private List<Enchantment> disable;
+	private Map<Enchantment, Long> cooldowns;
+	private List<EnchantmentTimedDisable> timedDisable;
+	private List<EnchantmentDisable> disable;
 	private List<ItemStack> soulItems, telepathyItems;
 	private Map<Long, Integer> blocksBroken;
 	private float currentExhaustion, pastExhaustion;
 	private ItemStack elytra;
-	private boolean canFly, didTick, reset;
-	private int flightDamage, flightDamageLimit, frequentFlyerLevel, icarusDelay;
+	private boolean canFly, didTick, reset, sacrificeAdvancement, plyometricsAdvancement;
+	private int flightDamage, flightDamageLimit, frequentFlyerLevel, icarusDelay, underwaterTicks;
 	private FFType currentFFType;
 	private List<OverkillDeath> overkillDeaths;
 	private List<AttributeLevel> attributes;
@@ -59,8 +61,8 @@ public class ESPlayer {
 		onlinePlayer = player.getPlayer();
 		rpg = RPGUtils.getPlayer(player);
 		cooldowns = new HashMap<Enchantment, Long>();
-		timedDisable = new HashMap<Enchantment, Long>();
-		disable = new ArrayList<Enchantment>();
+		timedDisable = new ArrayList<EnchantmentTimedDisable>();
+		disable = new ArrayList<EnchantmentDisable>();
 		blocksBroken = new HashMap<Long, Integer>();
 		overkillDeaths = new ArrayList<OverkillDeath>();
 		attributes = new ArrayList<AttributeLevel>();
@@ -94,6 +96,11 @@ public class ESPlayer {
 			if (item.equals(content)) return true;
 		}
 		return false;
+	}
+
+	public ItemStack getMainHand() {
+		if (!isOnline()) return new ItemStack(Material.AIR);
+		return getOnlinePlayer().getInventory().getItemInMainHand();
 	}
 
 	public ItemStack getOffhand() {
@@ -143,7 +150,7 @@ public class ESPlayer {
 	public List<ItemStack> getUnstableItems() {
 		List<ItemStack> items = new ArrayList<ItemStack>();
 		for(ItemStack item: getEquipped())
-			if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.CURSE_OF_INSTABILITY)) items.add(item);
+			if (item != null && EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.CURSE_OF_INSTABILITY)) items.add(item);
 		return items;
 	}
 
@@ -469,10 +476,13 @@ public class ESPlayer {
 
 	public int addToStreak(LivingEntity entity) {
 		if (streak == null) streak = new Streak();
-		return streak.addToStreak(entity);
+		int entityStreak = streak.addToStreak(entity);
+		if (entityStreak == 100) AdvancementUtils.awardCriteria(onlinePlayer, ESAdvancement.DOUBLE_DAMAGE, "kills");
+		return entityStreak;
 	}
 
 	public int getStreak() {
+		if (streak == null) return 0;
 		return streak.getStreak();
 	}
 
@@ -484,59 +494,112 @@ public class ESPlayer {
 		this.streak.setStreak(type, streak);
 	}
 
-	public void addTimedDisableEnchant(Enchantment enchant, int ticks) {
+	public void addTimedDisableEnchant(JavaPlugin plugin, Enchantment enchant, int ticks) {
 		long tick = ServerNMS.getCurrentTick() + ticks;
-		if (!isTimedDisableEnchant(enchant)) timedDisable.put(enchant, tick);
+		if (!isTimedDisableEnchant(plugin, enchant)) timedDisable.add(new EnchantmentTimedDisable(plugin, enchant, tick));
 	}
 
-	public void addTimeToDisableEnchant(Enchantment enchant, int moreTicks) {
-		if (isTimedDisableEnchant(enchant)) {
-			long tick = timedDisable.get(enchant) + moreTicks;
-			timedDisable.put(enchant, tick);
+	public void addTimeToDisableEnchant(JavaPlugin plugin, Enchantment enchant, int moreTicks) {
+		if (isTimedDisableEnchant(plugin, enchant)) {
+			EnchantmentTimedDisable disable = getTimedDisable(plugin, enchant);
+			disable.addToEndTime(moreTicks);
 		} else
-			addTimedDisableEnchant(enchant, moreTicks);
+			addTimedDisableEnchant(plugin, enchant, moreTicks);
 	}
 
-	public void setTimeDisableEnchant(Enchantment enchant, int ticks) {
+	private EnchantmentTimedDisable getTimedDisable(JavaPlugin plugin, Enchantment enchant) {
+		for(EnchantmentTimedDisable etd: timedDisable)
+			if (etd.isSimilar(plugin, enchant)) return etd;
+		return null;
+	}
+
+	public void setTimeDisableEnchant(JavaPlugin plugin, Enchantment enchant, int ticks) {
 		long tick = ServerNMS.getCurrentTick() + ticks;
-		timedDisable.put(enchant, tick);
+		if (isTimedDisableEnchant(plugin, enchant)) {
+			EnchantmentTimedDisable disable = getTimedDisable(plugin, enchant);
+			disable.setEndTime(tick);
+		} else
+			addTimedDisableEnchant(plugin, enchant, ticks);
 	}
 
-	public void removeTimedDisableEnchant(Enchantment enchant) {
-		timedDisable.remove(enchant);
-	}
-
-	public void removeTimeFromDisableEnchant(Enchantment enchant, int lessTicks) {
-		if (isTimedDisableEnchant(enchant)) {
-			long tick = timedDisable.get(enchant) - lessTicks;
-			timedDisable.put(enchant, tick);
-		}
-	}
-
-	public boolean isTimedDisableEnchant(Enchantment enchant) {
-		if (timedDisable.containsKey(enchant)) {
-			long tick = timedDisable.get(enchant);
-			long currentTick = ServerNMS.getCurrentTick();
-			return tick >= currentTick;
-		}
-		return false;
-	}
-
-	public void setDisabledEnchant(Enchantment enchant) {
-		if (!isDisabledEnchant(enchant)) disable.add(enchant);
-	}
-
-	public boolean isDisabledEnchant(Enchantment enchant) {
-		for(Enchantment e: disable)
-			if (e == enchant) return true;
-		return false;
-	}
-
-	public void removeDisabledEnchant(Enchantment enchant) {
-		Iterator<Enchantment> iter = disable.iterator();
+	public void removeTimedDisableEnchant(JavaPlugin plugin, Enchantment enchant) {
+		Iterator<EnchantmentTimedDisable> iter = timedDisable.iterator();
 		while (iter.hasNext()) {
-			Enchantment e = iter.next();
-			if (e == enchant) iter.remove();
+			EnchantmentTimedDisable etd = iter.next();
+			if (etd.isSimilar(plugin, enchant)) iter.remove();
 		}
+	}
+
+	public void removeTimeFromDisableEnchant(JavaPlugin plugin, Enchantment enchant, int lessTicks) {
+		if (isTimedDisableEnchant(plugin, enchant)) {
+			EnchantmentTimedDisable disable = getTimedDisable(plugin, enchant);
+			disable.removeFromEndTime(lessTicks);
+		}
+	}
+
+	public boolean isTimedDisableEnchant(JavaPlugin plugin, Enchantment enchant) {
+		for(EnchantmentTimedDisable etd: timedDisable)
+			if (etd.isSimilar(plugin, enchant)) return true;
+		return false;
+	}
+
+	public boolean hasTimedDisable(Player player, Enchantment enchant) {
+		for(EnchantmentTimedDisable etd: timedDisable)
+			if (etd.getEnchantment() == enchant) return true;
+		return false;
+	}
+
+	public void setDisabledEnchant(JavaPlugin plugin, Enchantment enchant) {
+		if (!isDisabledEnchant(plugin, enchant)) disable.add(new EnchantmentDisable(plugin, enchant));
+	}
+
+	public boolean isDisabledEnchant(JavaPlugin plugin, Enchantment enchant) {
+		for(EnchantmentDisable e: disable)
+			if (e.isSimilar(plugin, enchant)) return true;
+		return false;
+	}
+
+	public void removeDisabledEnchant(JavaPlugin plugin, Enchantment enchant) {
+		Iterator<EnchantmentDisable> iter = disable.iterator();
+		while (iter.hasNext()) {
+			EnchantmentDisable e = iter.next();
+			if (e.isSimilar(plugin, enchant)) iter.remove();
+		}
+	}
+
+	public boolean hasDisabled(Player player, Enchantment enchant) {
+		for(EnchantmentDisable e: disable)
+			if (e.getEnchantment() == enchant) return true;
+		return false;
+	}
+
+	public boolean getSacrificeAdvancement() {
+		return sacrificeAdvancement;
+	}
+
+	public void setSacrificeAdvancement(boolean sacrificeAdvancement) {
+		this.sacrificeAdvancement = sacrificeAdvancement;
+	}
+
+	public boolean getPlyometricsAdvancement() {
+		return plyometricsAdvancement;
+	}
+
+	public void setPlyometricsAdvancement(boolean plyometricsAdvancement) {
+		this.plyometricsAdvancement = plyometricsAdvancement;
+	}
+
+	public void addUnderwaterTick() {
+		for(ItemStack item: getArmor())
+			if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.WATER_BREATHING)) {
+				underwaterTicks++;
+				if (underwaterTicks >= 13900) AdvancementUtils.awardCriteria(onlinePlayer, ESAdvancement.WORLD_RECORD, "record");
+				return;
+			}
+		resetUnderwaterTick();
+	}
+
+	public void resetUnderwaterTick() {
+		underwaterTicks = 0;
 	}
 }

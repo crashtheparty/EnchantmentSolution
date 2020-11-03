@@ -41,6 +41,7 @@ public class ExhaustionCurseThread extends EnchantmentThread {
 		ESPlayer player = getPlayer();
 
 		Player p = player.getOnlinePlayer();
+		if (isDisabled(p, RegisterEnchantments.CURSE_OF_EXHAUSTION)) return;
 		if (p != null && p.isOnline() && player.getExhaustion() > 0) {
 			player.setCurrentExhaustion();
 			float change = player.getPastExhaustion() - player.getCurrentExhaustion();
@@ -58,9 +59,10 @@ public class ExhaustionCurseThread extends EnchantmentThread {
 		} else if (player.getExhaustion() == 0) remove();
 	}
 
-	private void remove() {
+	@Override
+	protected void remove() {
 		EXHAUSTION_THREADS.remove(this);
-		Bukkit.getScheduler().cancelTask(getScheduler());
+		super.remove();
 	}
 
 }

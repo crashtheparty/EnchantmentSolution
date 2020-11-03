@@ -46,6 +46,7 @@ public class ContagionCurseThread extends EnchantmentThread {
 			return;
 		}
 		Player p = player.getOnlinePlayer();
+		if (isDisabled(p, RegisterEnchantments.CURSE_OF_CONTAGION)) return;
 		List<ItemStack> items = player.getCurseableItems();
 		double random = Math.random();
 		if (player.getContagionChance() > random) {
@@ -99,9 +100,10 @@ public class ContagionCurseThread extends EnchantmentThread {
 		return noCurse;
 	}
 
-	private void remove() {
+	@Override
+	protected void remove() {
 		CONTAGION_THREADS.remove(this);
-		Bukkit.getScheduler().cancelTask(getScheduler());
+		super.remove();
 	}
 
 }

@@ -140,6 +140,19 @@ public class BlockListener extends Enchantmentable {
 		}
 	}
 
+	private void greenThumb(BlockBreakEvent event) {
+		if (!canRun(RegisterEnchantments.GREEN_THUMB, event)) return;
+		Player player = event.getPlayer();
+		if (player.getGameMode().equals(GameMode.CREATIVE) || player.getGameMode().equals(GameMode.SPECTATOR)) return;
+		ItemStack item = player.getInventory().getItemInMainHand();
+		Block block = event.getBlock();
+		if (item != null && EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.GREEN_THUMB) && block.getBlockData() instanceof Ageable) {
+			Ageable age = (Ageable) block.getBlockData();
+			Material mat = block.getType();
+			if (Crop.hasBlock(mat) && age.getAge() == 0) event.setCancelled(true);
+		}
+	}
+
 	private void getLikeBlocks(List<Location> logs, Material log, Location loc) {
 		for(int x = -2; x <= 2; x++)
 			for(int y = -1; y <= 1; y++)
@@ -203,6 +216,7 @@ public class BlockListener extends Enchantmentable {
 					block.setType(c.getBlock().getMaterial());
 					Ageable newAge = (Ageable) block.getBlockData();
 					newAge.setAge(0);
+					AdvancementUtils.awardCriteria(player, ESAdvancement.THUMBS_UP, "replant");
 				}, 0l);
 			}
 		}

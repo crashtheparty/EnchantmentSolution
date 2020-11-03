@@ -39,13 +39,14 @@ public class ForceFeedThread extends EnchantmentThread {
 		Player p = player.getOnlinePlayer();
 		List<ItemStack> i = player.getForceFeedItems();
 		List<ItemStack> items = new ArrayList<ItemStack>();
-		if (!RegisterEnchantments.isEnabled(RegisterEnchantments.FORCE_FEED) || items.size() == 0) {
+		if (!RegisterEnchantments.isEnabled(RegisterEnchantments.FORCE_FEED)) {
 			remove();
 			return;
 		}
-		for (ItemStack item : i)
+		for(ItemStack item: i)
 			if (DamageUtils.getDamage(item) > 0) items.add(item);
 		if (items.size() == 0) return;
+		if (isDisabled(p, RegisterEnchantments.FORCE_FEED)) return;
 		Collections.shuffle(items);
 		ItemStack item = items.get(0);
 		int damage = DamageUtils.getDamage(item);
@@ -70,8 +71,9 @@ public class ForceFeedThread extends EnchantmentThread {
 		}
 	}
 
-	private void remove() {
+	@Override
+	protected void remove() {
 		FEED_THREADS.remove(this);
-		Bukkit.getScheduler().cancelTask(getScheduler());
+		super.remove();
 	}
 }

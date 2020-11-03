@@ -17,7 +17,9 @@ import org.ctp.enchantmentsolution.enchantments.helper.Weight;
 import org.ctp.enchantmentsolution.enums.EnchantmentLocation;
 import org.ctp.enchantmentsolution.utils.Configurations;
 import org.ctp.enchantmentsolution.utils.VersionUtils;
-import org.ctp.enchantmentsolution.utils.config.*;
+import org.ctp.enchantmentsolution.utils.config.ConfigString;
+import org.ctp.enchantmentsolution.utils.config.EnchantmentsConfiguration;
+import org.ctp.enchantmentsolution.utils.config.LanguageConfiguration;
 
 public class RegisterEnchantments {
 	private static List<CustomEnchantment> ENCHANTMENTS = new ArrayList<CustomEnchantment>();
@@ -97,7 +99,9 @@ public class RegisterEnchantments {
 	public static final Enchantment PACIFIED = new CustomEnchantmentWrapper("pacified", "PACIFIED");
 	public static final Enchantment STREAK = new CustomEnchantmentWrapper("streak", "STREAK");
 	public static final Enchantment GREEN_THUMB = new CustomEnchantmentWrapper("green_thumb", "GREEN_THUMB");
-
+	public static final Enchantment[] HWD = new Enchantment[] {HEIGHT_PLUS_PLUS, WIDTH_PLUS_PLUS, DEPTH_PLUS_PLUS};
+	
+	
 	private RegisterEnchantments() {}
 
 	public static List<CustomEnchantment> getEnchantments() {
@@ -110,6 +114,10 @@ public class RegisterEnchantments {
 
 	public static List<CustomEnchantment> getRegisteredEnchantments() {
 		return REGISTERED_ENCHANTMENTS;
+	}
+	
+	public static List<Enchantment> getHWD(){
+		return Arrays.asList(HWD);
 	}
 
 	public static List<CustomEnchantment> getRegisteredEnchantmentsAlphabetical() {

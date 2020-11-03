@@ -136,6 +136,7 @@ public class PlayerListener extends Enchantmentable {
 					}
 					player.incrementStatistic(Statistic.USE_ITEM, item.getType());
 					Snowball snowball = player.launchProjectile(Snowball.class);
+					snowball.setMetadata("frosty", new FixedMetadataValue(EnchantmentSolution.getPlugin(), player.getUniqueId().toString()));
 					player.getWorld().playSound(player.getLocation(), Sound.ENTITY_SNOWBALL_THROW, 1, 1);
 					ESPlayer esPlayer = EnchantmentSolution.getESPlayer(player);
 					esPlayer.setCooldown(RegisterEnchantments.FROSTY);
@@ -156,7 +157,7 @@ public class PlayerListener extends Enchantmentable {
 			if (player.getLocation().getPitch() < -10) {
 				ESPlayer esPlayer = EnchantmentSolution.getESPlayer(player);
 				if (esPlayer.getIcarusDelay() > 0) return;
-				int num_breaks = DamageUtils.damageItem(player, chestplate, level * 5, 1, false);
+				int num_breaks = DamageUtils.damageItem(player, chestplate, level * 5, 1, false).getDamageAmount();
 				if (DamageUtils.getDamage(chestplate) + num_breaks >= DamageUtils.getMaxDamage(chestplate)) {
 					AdvancementUtils.awardCriteria(player, ESAdvancement.TOO_CLOSE, "failure");
 					player.getWorld().spawnParticle(Particle.EXPLOSION_NORMAL, player.getLocation(), 5, 2, 2, 2);
@@ -456,6 +457,7 @@ public class PlayerListener extends Enchantmentable {
 					}
 					player.incrementStatistic(Statistic.USE_ITEM, item.getType());
 					Fireball fireball = player.launchProjectile(Fireball.class);
+					fireball.setMetadata("zeal", new FixedMetadataValue(EnchantmentSolution.getPlugin(), player.getUniqueId().toString()));
 					player.getWorld().playSound(player.getLocation(), Sound.ITEM_FIRECHARGE_USE, 1, 1);
 					ESPlayer esPlayer = EnchantmentSolution.getESPlayer(player);
 					esPlayer.setCooldown(RegisterEnchantments.ZEAL);

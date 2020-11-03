@@ -19,6 +19,7 @@ import org.ctp.crashapi.utils.DamageUtils;
 import org.ctp.crashapi.utils.ItemUtils;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
+import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enums.ItemBreakType;
 import org.ctp.enchantmentsolution.events.blocks.BlockBreakMultiEvent;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
@@ -104,7 +105,7 @@ public class BlockUtils {
 		Bukkit.getServer().getPluginManager().callEvent(newEvent);
 		if (item != null && !MatData.isAir(item.getType()) && !MatData.isAir(newEvent.getBlock().getType()) && !newEvent.isCancelled()) {
 			Block newBlock = newEvent.getBlock();
-			AdvancementUtils.awardCriteria(player, ESAdvancement.FAST_AND_FURIOUS, "diamond_pickaxe");
+			if (RegisterEnchantments.getHWD().contains(enchantment)) AdvancementUtils.awardCriteria(player, ESAdvancement.FAST_AND_FURIOUS, "diamond_pickaxe");
 			if (newBlock.getType().equals(Material.SNOW) && ItemBreakType.getType(item.getType()).getBreakTypes().contains(Material.SNOW)) {
 				int num = ((Snow) newBlock.getBlockData()).getLayers();
 				if (dropChance > Math.random()) ItemUtils.dropItem(new ItemStack(Material.SNOWBALL, num), newBlock.getLocation(), Configurations.getConfigurations().getConfig().getBoolean("drop_items_naturally"));

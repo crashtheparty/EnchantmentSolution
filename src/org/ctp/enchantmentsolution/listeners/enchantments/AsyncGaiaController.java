@@ -11,8 +11,10 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.ctp.crashapi.item.MatData;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
+import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.threads.GaiaItemThread;
+import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.BlockUtils;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.GaiaUtils.GaiaTrees;
 import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
@@ -50,6 +52,7 @@ public class AsyncGaiaController extends AsyncBlockController {
 				return;
 			}
 			BlockUtils.multiBreakBlock(player, item, b, RegisterEnchantments.GAIA);
+			AdvancementUtils.awardCriteria(player, ESAdvancement.DEFORESTATION, "tree", 1);
 			allBlocks.remove(b);
 			for(Location loc: BlockUtils.getNextTo(b, 3))
 				if (loc.getBlock().getType() == tree.getLeaf().getMaterial()) {

@@ -43,6 +43,7 @@ public class ProjectileListener extends Enchantmentable {
 		runMethod(this, "detonator", event, ProjectileLaunchEvent.class);
 		runMethod(this, "drowned", event, ProjectileLaunchEvent.class);
 		runMethod(this, "hollowPoint", event, ProjectileLaunchEvent.class);
+		runMethod(this, "potions", event, ProjectileLaunchEvent.class);
 		runMethod(this, "sniper", event, ProjectileLaunchEvent.class);
 		runMethod(this, "transmutation", event, ProjectileLaunchEvent.class);
 	}

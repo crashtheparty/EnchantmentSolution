@@ -36,6 +36,8 @@ public class AnvilEnchantments extends GenerateEnchantments {
 
 		setCanCombine();
 		if (canCombine) setCombinedItem();
+		else
+			setRenamedItem();
 	}
 
 	public AnvilEnchantments(Player player, ItemStack item, ItemStack itemTwo, String name) {
@@ -45,6 +47,8 @@ public class AnvilEnchantments extends GenerateEnchantments {
 		setCanCombine();
 		if (name != null) this.name = name;
 		if (canCombine) setCombinedItem();
+		else
+			setRenamedItem();
 	}
 
 	public static AnvilEnchantments getAnvilEnchantments(Player player, ItemStack item, ItemStack itemTwo) {
@@ -131,6 +135,22 @@ public class AnvilEnchantments extends GenerateEnchantments {
 				if (customEnchant.getRelativeEnchantment().equals(enchant)) if (EnchantmentUtils.canAddEnchantment(customEnchant, first)) return true;
 		}
 		return false;
+	}
+
+	private void setRenamedItem() {
+		if (name != null && !name.isEmpty()) {
+			ItemStack itemOne = getItem();
+			if (itemOne == null) return;
+			combinedItem = itemOne.clone();
+			int itemOneRepair = AnvilNMS.getRepairCost(itemOne);
+			combinedItem = AnvilNMS.setRepairCost(combinedItem, itemOneRepair * 2 + 1);
+			repairCost += itemOneRepair;
+			ItemMeta meta = combinedItem.getItemMeta();
+			meta.setDisplayName(name);
+			combinedItem.setItemMeta(meta);
+			repairCost += 1;
+			repairCost = Math.max(repairCost / ConfigString.LEVEL_DIVISOR.getInt(), 1);
+		}
 	}
 
 	private void setCombinedItem() {

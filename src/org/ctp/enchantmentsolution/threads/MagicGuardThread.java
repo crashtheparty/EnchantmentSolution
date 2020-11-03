@@ -38,6 +38,7 @@ public class MagicGuardThread extends EnchantmentThread {
 	@Override
 	public void run() {
 		ESPlayer player = getPlayer();
+		if (isDisabled(player.getOnlinePlayer(), RegisterEnchantments.MAGIC_GUARD)) return;
 		if (!player.isOnline() || !RegisterEnchantments.isEnabled(RegisterEnchantments.MAGIC_GUARD)) {
 			remove();
 			return;
@@ -57,8 +58,9 @@ public class MagicGuardThread extends EnchantmentThread {
 			}
 	}
 
-	private void remove() {
+	@Override
+	protected void remove() {
 		MAGIC_THREADS.remove(this);
-		Bukkit.getScheduler().cancelTask(getScheduler());
+		super.remove();
 	}
 }
