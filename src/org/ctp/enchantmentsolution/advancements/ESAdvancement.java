@@ -1,8 +1,6 @@
 package org.ctp.enchantmentsolution.advancements;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -125,7 +123,7 @@ public enum ESAdvancement {
 
 	ESAdvancement(ESAdvancement parent, String icon, List<ESTrigger> triggers, int exp, Frame frame,
 	int activatedVersion) {
-		namespace = new NamespacedKey(EnchantmentSolution.getPlugin(), "enchantments/" + name().toLowerCase());
+		namespace = new NamespacedKey(EnchantmentSolution.getPlugin(), "enchantments/" + name().toLowerCase(Locale.ROOT));
 		for(Material m: Material.values())
 			if (m.name().equals(icon)) {
 				this.icon = m;

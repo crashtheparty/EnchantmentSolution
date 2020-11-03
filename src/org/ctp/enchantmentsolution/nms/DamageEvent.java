@@ -3,6 +3,7 @@ package org.ctp.enchantmentsolution.nms;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.ctp.crashapi.nms.damage.DamageEvent_v1_16_R3;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.nms.damage.*;
 
@@ -36,6 +37,9 @@ public class DamageEvent {
 			case 14:
 				DamageEvent_v1_16_R2.damageEntity(entity, cause, damage);
 				break;
+			case 15:
+				DamageEvent_v1_16_R3.damageEntity(entity, cause, damage);
+				break;
 		}
 	}
 
@@ -67,6 +71,9 @@ public class DamageEvent {
 			case 14:
 				DamageEvent_v1_16_R2.damageEntity(entity, player, cause, damage);
 				break;
+			case 15:
+				DamageEvent_v1_16_R3.damageEntity(entity, player, cause, damage);
+				break;
 		}
 	}
 
@@ -92,6 +99,8 @@ public class DamageEvent {
 			case 13:
 			case 14:
 				return DamageEvent_v1_16_R2.getArrowDamage(entity, arrow);
+			case 15:
+				return DamageEvent_v1_16_R3.getArrowDamage(entity, arrow);
 		}
 		return 0;
 	}
@@ -123,6 +132,9 @@ public class DamageEvent {
 			case 13:
 			case 14:
 				DamageEvent_v1_16_R2.updateHealth(entity);
+				break;
+			case 15:
+				DamageEvent_v1_16_R3.updateHealth(entity);
 				break;
 		}
 	}
