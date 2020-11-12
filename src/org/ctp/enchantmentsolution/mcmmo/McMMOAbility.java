@@ -2,9 +2,7 @@ package org.ctp.enchantmentsolution.mcmmo;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
@@ -49,11 +47,11 @@ public class McMMOAbility implements Listener {
 				e.printStackTrace();
 			}
 			if (clazz != null && abilityClazz != null) for(Object obj: clazz.getEnumConstants()) {
-				String name = obj.toString().toUpperCase();
+				String name = obj.toString().toUpperCase(Locale.ROOT);
 				if (name.equals("TREE_FELLER")) try {
 					Method method = abilityClazz.getDeclaredMethod("getAbility");
 					Object returnType = method.invoke(event);
-					if (returnType.toString().toUpperCase().equals(name)) return true;
+					if (returnType.toString().toUpperCase(Locale.ROOT).equals(name)) return true;
 				} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 					e.printStackTrace();
 				}

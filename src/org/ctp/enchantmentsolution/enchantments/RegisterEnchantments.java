@@ -99,9 +99,8 @@ public class RegisterEnchantments {
 	public static final Enchantment PACIFIED = new CustomEnchantmentWrapper("pacified", "PACIFIED");
 	public static final Enchantment STREAK = new CustomEnchantmentWrapper("streak", "STREAK");
 	public static final Enchantment GREEN_THUMB = new CustomEnchantmentWrapper("green_thumb", "GREEN_THUMB");
-	public static final Enchantment[] HWD = new Enchantment[] {HEIGHT_PLUS_PLUS, WIDTH_PLUS_PLUS, DEPTH_PLUS_PLUS};
-	
-	
+	public static final Enchantment[] HWD = new Enchantment[] { HEIGHT_PLUS_PLUS, WIDTH_PLUS_PLUS, DEPTH_PLUS_PLUS };
+
 	private RegisterEnchantments() {}
 
 	public static List<CustomEnchantment> getEnchantments() {
@@ -115,8 +114,8 @@ public class RegisterEnchantments {
 	public static List<CustomEnchantment> getRegisteredEnchantments() {
 		return REGISTERED_ENCHANTMENTS;
 	}
-	
-	public static List<Enchantment> getHWD(){
+
+	public static List<Enchantment> getHWD() {
 		return Arrays.asList(HWD);
 	}
 
@@ -201,7 +200,7 @@ public class RegisterEnchantments {
 					Chatable.get().sendWarning("Enchantment " + enchantment.getName() + " (Display Name " + enchantment.getDisplayName() + ")" + " does not have a JavaPlugin set. Refusing to set.");
 					continue;
 				}
-				namespace = plugin.getName().toLowerCase();
+				namespace = plugin.getName().toLowerCase(Locale.ROOT);
 			} else if (enchantment.getRelativeEnchantment() instanceof CustomEnchantmentWrapper) namespace = "custom_enchantments";
 			if (!advanced && !(enchantment.getRelativeEnchantment() instanceof CustomEnchantmentWrapper)) {
 				List<ItemType> enchantmentTypes = getTypes(config, namespace, enchantment, "enchantment_item_types");
@@ -406,7 +405,7 @@ public class RegisterEnchantments {
 		List<String> enchantmentLocationsString = config.getStringList(namespace + "." + enchantment.getName() + ".enchantment_locations");
 		if (enchantmentLocationsString != null) for(String s: enchantmentLocationsString)
 			try {
-				EnchantmentLocation location = EnchantmentLocation.valueOf(s.toUpperCase());
+				EnchantmentLocation location = EnchantmentLocation.valueOf(s.toUpperCase(Locale.ROOT));
 				if (location != null) locations.add(location);
 			} catch (Exception ex) {}
 		return locations;
@@ -417,9 +416,9 @@ public class RegisterEnchantments {
 		List<ItemType> types = new ArrayList<ItemType>();
 		if (itemTypes != null) for(String s: itemTypes) {
 			ItemType type = null;
-			if (s.contains(":")) type = ItemType.getCustomType(VanillaItemType.get(s.toUpperCase()), s.toUpperCase());
+			if (s.contains(":")) type = ItemType.getCustomType(VanillaItemType.get(s.toUpperCase(Locale.ROOT)), s.toUpperCase(Locale.ROOT));
 			else
-				type = ItemType.getItemType(s.toUpperCase());
+				type = ItemType.getItemType(s.toUpperCase(Locale.ROOT));
 			if (type != null) types.add(type);
 		}
 		return types;

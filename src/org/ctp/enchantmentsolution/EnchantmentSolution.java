@@ -82,7 +82,7 @@ public class EnchantmentSolution extends CrashAPIPlugin {
 	private static List<ESPlayer> PLAYERS = new ArrayList<ESPlayer>();
 	private static Configurations CONFIGURATIONS;
 	private List<InventoryData> inventories = new ArrayList<InventoryData>();
-	private boolean initialization = true, restrictedCreative = false, quests = false;
+	private boolean restrictedCreative = false, quests = false;
 	private PluginVersion pluginVersion;
 	private BackupDB db;
 	private Plugin jobsReborn;
@@ -180,7 +180,6 @@ public class EnchantmentSolution extends CrashAPIPlugin {
 		registerEvent(new WikiListener());
 		wiki = new WikiThread();
 		Bukkit.getScheduler().runTaskTimerAsynchronously(PLUGIN, wiki, 20l, 20l);
-		initialization = false;
 
 		Bukkit.getScheduler().runTaskLater(this, () -> {
 			try {
@@ -218,11 +217,6 @@ public class EnchantmentSolution extends CrashAPIPlugin {
 
 	public static EnchantmentSolution getPlugin() {
 		return PLUGIN;
-	}
-
-	@Override
-	public boolean isInitializing() {
-		return initialization;
 	}
 
 	@Override
@@ -359,14 +353,14 @@ public class EnchantmentSolution extends CrashAPIPlugin {
 						int num = Integer.parseInt(mcVersion[i]);
 						if (i == 0 && num > 2) warning = true;
 						else if (i == 1 && num > 1) warning = true;
-						else if (i == 2 && num > 147) warning = true;
+						else if (i == 2 && num > 156) warning = true;
 					} catch (NumberFormatException ex) {
 						warning = true;
 					}
 				if (warning) {
 					getChat().sendWarning("McMMO Overhaul updates sporidically. Compatibility may break between versions.");
 					getChat().sendWarning("If there are any compatibility issues, please notify the plugin author immediately.");
-					getChat().sendWarning("Current Working Version: 2.1.147");
+					getChat().sendWarning("Current Working Version: 2.1.156");
 				}
 				mcmmoType = "Overhaul";
 			} else {

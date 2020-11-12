@@ -1,5 +1,6 @@
 package org.ctp.enchantmentsolution.listeners.advancements;
 
+import java.util.Locale;
 import java.util.UUID;
 
 import org.bukkit.*;
@@ -33,9 +34,9 @@ public class AdvancementEntityListener implements Listener {
 			Player killer = killed.getKiller();
 			if (killer != null) {
 				ItemStack mainHand = killer.getInventory().getItemInMainHand();
-				if (EnchantmentUtils.hasEnchantment(mainHand, RegisterEnchantments.KNOCKUP)) AdvancementUtils.awardCriteria(killer, ESAdvancement.NOT_THAT_KIND, killed.getType().name().toLowerCase());
+				if (EnchantmentUtils.hasEnchantment(mainHand, RegisterEnchantments.KNOCKUP)) AdvancementUtils.awardCriteria(killer, ESAdvancement.NOT_THAT_KIND, killed.getType().name().toLowerCase(Locale.ROOT));
 				if (killed instanceof Player && EnchantmentUtils.hasEnchantment(mainHand, RegisterEnchantments.QUICK_STRIKE)) AdvancementUtils.awardCriteria(killer, ESAdvancement.PRE_COMBAT_UPDATE, "combat_update");
-				if (EnchantmentUtils.hasEnchantment(mainHand, RegisterEnchantments.BRINE) && mainHand.getType().name().endsWith("SWORD")) if (killed.getType() == EntityType.DROWNED) AdvancementUtils.awardCriteria(killer, ESAdvancement.NOT_VERY_EFFECTIVE, killed.getType().name().toLowerCase());
+				if (EnchantmentUtils.hasEnchantment(mainHand, RegisterEnchantments.BRINE) && mainHand.getType().name().endsWith("SWORD")) if (killed.getType() == EntityType.DROWNED) AdvancementUtils.awardCriteria(killer, ESAdvancement.NOT_VERY_EFFECTIVE, killed.getType().name().toLowerCase(Locale.ROOT));
 				else if (killed.getType() == EntityType.ENDER_DRAGON || killed.getType() == EntityType.WITHER || killed.getType() == EntityType.ELDER_GUARDIAN) AdvancementUtils.awardCriteria(killer, ESAdvancement.SUPER_EFFECTIVE, "boss");
 				else if (CrashAPI.getPlugin().getBukkitVersion().getVersionNumber() > 3) if (killed.getType() == EntityType.RAVAGER) AdvancementUtils.awardCriteria(killer, ESAdvancement.SUPER_EFFECTIVE, "boss");
 				if (EnchantmentUtils.hasEnchantment(mainHand, RegisterEnchantments.EXP_SHARE)) if (killed.getType() == EntityType.ENDER_DRAGON) if (AdvancementUtils.awardCriteria(killer, ESAdvancement.MOTHERLOAD, "dragon")) {

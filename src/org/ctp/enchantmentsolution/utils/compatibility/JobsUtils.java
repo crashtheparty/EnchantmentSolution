@@ -237,13 +237,12 @@ public class JobsUtils {
 
 		return true;
 	}
-	
+
 	private static Jobs getJobs() {
 		Jobs plugin = null;
 		try {
 			plugin = Jobs.getInstance();
-			if (plugin == null)
-				Chatable.get().sendWarning("Jobs has not been initialized properly - ES will ignore it.");
+			if (plugin == null) Chatable.get().sendWarning("Jobs has not been initialized properly - ES will ignore it.");
 		} catch (Exception ex) {
 			Chatable.get().sendWarning("Jobs is not installed on this server - something is wrong.");
 		}

@@ -2,6 +2,7 @@ package org.ctp.enchantmentsolution.listeners.enchantments;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -63,7 +64,7 @@ public class FishingListener extends Enchantmentable {
 					Material type = e.getFish();
 					if (type == Material.COOKED_COD) type = Material.COD;
 					if (type == Material.COOKED_SALMON) type = Material.SALMON;
-					AdvancementUtils.awardCriteria(player, ESAdvancement.FED_FOR_A_LIFETIME, type.name().toLowerCase());
+					AdvancementUtils.awardCriteria(player, ESAdvancement.FED_FOR_A_LIFETIME, type.name().toLowerCase(Locale.ROOT));
 				}
 			}
 			((Item) event.getCaught()).setItemStack(caught);

@@ -49,11 +49,11 @@ public class ApiESPlayerUtils {
 	public static void removeDisabledEnchant(JavaPlugin plugin, Player player, Enchantment enchant) {
 		getPlayer(player).removeDisabledEnchant(plugin, enchant);
 	}
-	
+
 	public static boolean isAnyDisabledEnchant(Player player, Enchantment enchant) {
 		return getPlayer(player).hasTimedDisable(player, enchant) || getPlayer(player).hasDisabled(player, enchant);
 	}
-	
+
 	private static ESPlayer getPlayer(Player player) {
 		return EnchantmentSolution.getESPlayer(player);
 	}

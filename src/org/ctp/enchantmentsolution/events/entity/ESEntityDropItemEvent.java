@@ -10,13 +10,13 @@ public abstract class ESEntityDropItemEvent extends ESEntityEvent {
 
 	private final Player killer;
 	private final ItemStack item;
-	
+
 	public ESEntityDropItemEvent(LivingEntity who, Player killer, EnchantmentLevel enchantment, ItemStack item) {
 		super(who, enchantment);
 		this.killer = killer;
 		this.item = item;
 	}
-	
+
 	@Override
 	public LivingEntity getEntity() {
 		return (LivingEntity) super.getEntity();

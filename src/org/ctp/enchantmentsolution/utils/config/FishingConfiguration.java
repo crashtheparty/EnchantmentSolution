@@ -9,6 +9,7 @@ import org.ctp.crashapi.db.BackupDB;
 import org.ctp.crashapi.utils.CrashConfigUtils;
 import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
+import org.ctp.enchantmentsolution.utils.Configurations;
 
 public class FishingConfiguration extends Configuration {
 
@@ -16,12 +17,12 @@ public class FishingConfiguration extends Configuration {
 		super(EnchantmentSolution.getPlugin(), new File(dataFolder + "/mcmmo-fishing.yml"), db, header);
 
 		migrateVersion();
-		if (getConfig() != null) getConfig().writeDefaults();
+		save();
 	}
 
 	@Override
 	public void setDefaults() {
-		if (getPlugin().isInitializing()) Chatable.get().sendInfo("Loading fishing config...");
+		if (Configurations.isInitializing()) Chatable.get().sendInfo("Initializing fishing config...");
 
 		YamlConfigBackup config = getConfig();
 
@@ -36,7 +37,7 @@ public class FishingConfiguration extends Configuration {
 
 		config.writeDefaults();
 
-		if (getPlugin().isInitializing()) Chatable.get().sendInfo("Fishing config initialized!");
+		if (Configurations.isInitializing()) Chatable.get().sendInfo("Fishing config initialized!");
 		file.delete();
 	}
 

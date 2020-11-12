@@ -5,6 +5,7 @@ import java.util.*;
 import org.bukkit.*;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.attribute.AttributeModifier.Operation;
+import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
@@ -21,10 +22,13 @@ import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.*;
 import org.ctp.enchantmentsolution.events.player.FrequentFlyerEvent;
 import org.ctp.enchantmentsolution.events.player.FrequentFlyerEvent.FFType;
+import org.ctp.enchantmentsolution.listeners.enchantments.AsyncGaiaController;
+import org.ctp.enchantmentsolution.listeners.enchantments.AsyncHWDController;
 import org.ctp.enchantmentsolution.rpg.RPGPlayer;
 import org.ctp.enchantmentsolution.rpg.RPGUtils;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.PermissionUtils;
+import org.ctp.enchantmentsolution.utils.abilityhelpers.GaiaUtils.GaiaTrees;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.ItemEquippedSlot;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.OverkillDeath;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.Streak;
@@ -55,6 +59,8 @@ public class ESPlayer {
 	private ESPlayerAttributeInstance flyAttribute = new FlySpeedAttribute();
 	private Streak streak;
 	private Runnable telepathyTask;
+	private AsyncHWDController hwdController;
+	private AsyncGaiaController gaiaController;
 
 	public ESPlayer(OfflinePlayer player) {
 		this.player = player;
@@ -442,12 +448,7 @@ public class ESPlayer {
 
 	private void checkTelepathyTask() {
 		if (telepathyTask == null) {
-			telepathyTask = new Runnable() {
-				@Override
-				public void run() {
-					giveTelepathyItems();
-				}
-			};
+			telepathyTask = () -> giveTelepathyItems();
 			Bukkit.getScheduler().runTaskLater(EnchantmentSolution.getPlugin(), telepathyTask, 0l);
 		}
 	}
@@ -601,5 +602,35 @@ public class ESPlayer {
 
 	public void resetUnderwaterTick() {
 		underwaterTicks = 0;
+	}
+
+	public void addToHWDController(ItemStack item, Block original, List<Location> allBlocks) {
+		if (hwdController == null) hwdController = new AsyncHWDController(getOnlinePlayer(), item, original, allBlocks);
+		else if (!hwdController.addBlocks(original, allBlocks)) hwdController = new AsyncHWDController(getOnlinePlayer(), item, original, allBlocks);
+	}
+
+	public boolean correctHWDItem(ItemStack item) {
+		return hwdController == null || item.isSimilar(hwdController.getItem());
+	}
+
+	public void removeHWDController() {
+		hwdController = null;
+	}
+
+	public void addToGaiaController(ItemStack item, Block original, List<Location> allBlocks, GaiaTrees tree) {
+		if (gaiaController == null) gaiaController = new AsyncGaiaController(getOnlinePlayer(), item, original, allBlocks, tree);
+		else if (!gaiaController.addBlocks(original, allBlocks)) gaiaController = new AsyncGaiaController(getOnlinePlayer(), item, original, allBlocks, tree);
+	}
+
+	public boolean correctGaiaItem(ItemStack item) {
+		return gaiaController == null || item.isSimilar(gaiaController.getItem());
+	}
+
+	public boolean correctGaiaTree(GaiaTrees tree) {
+		return gaiaController == null || tree == gaiaController.getTree();
+	}
+
+	public void removeGaiaController() {
+		gaiaController = null;
 	}
 }

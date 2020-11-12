@@ -134,7 +134,7 @@ public enum ConfigString {
 		if (!complete && value.isAssignableFrom(List.class)) return type.getConfig().getStringList(location);
 		return null;
 	}
-	
+
 	public boolean listContains(String search) {
 		if (!complete && value.isAssignableFrom(List.class)) for(Object obj: type.getConfig().getStringList(location))
 			if (obj.toString() != null && search != null && obj.toString().equalsIgnoreCase(search)) return true;
@@ -165,7 +165,7 @@ public enum ConfigString {
 		if (complete && value.isAssignableFrom(List.class)) return type.getConfig().getStringList(location + addedLocation);
 		return null;
 	}
-	
+
 	public boolean listContains(String search, String addedLocation) {
 		if (!complete && value.isAssignableFrom(List.class)) for(Object obj: type.getConfig().getStringList(location + addedLocation))
 			if (obj.toString() != null && search != null && obj.toString().equalsIgnoreCase(search)) return true;

@@ -2,6 +2,7 @@ package org.ctp.enchantmentsolution.utils.config;
 
 import java.io.File;
 import java.util.List;
+import java.util.Locale;
 
 import org.bukkit.plugin.java.JavaPlugin;
 import org.ctp.crashapi.config.Configuration;
@@ -16,6 +17,7 @@ import org.ctp.enchantmentsolution.api.ApiEnchantmentWrapper;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
+import org.ctp.enchantmentsolution.utils.Configurations;
 
 public class RPGConfiguration extends Configuration {
 
@@ -28,7 +30,7 @@ public class RPGConfiguration extends Configuration {
 
 	@Override
 	public void setDefaults() {
-		if (getPlugin().isInitializing()) Chatable.get().sendInfo("Loading RPG configuration...");
+		if (Configurations.isInitializing()) Chatable.get().sendInfo("Initializing RPG configuration...");
 
 		YamlConfigBackup config = getConfig();
 
@@ -45,9 +47,9 @@ public class RPGConfiguration extends Configuration {
 			else
 				config.addDefault(str, defaultConfig.get(str));
 
-		config.saveConfig();
+		config.writeDefaults();
 
-		if (getPlugin().isInitializing()) Chatable.get().sendInfo("RPG configuration initialized!");
+		if (Configurations.isInitializing()) Chatable.get().sendInfo("RPG configuration initialized!");
 
 		file.delete();
 	}
@@ -61,7 +63,7 @@ public class RPGConfiguration extends Configuration {
 		List<String> levels = (List<String>) config.getDefaults("free_enchantments");
 		for(CustomEnchantment enchant: RegisterEnchantments.getEnchantments())
 			if (enchant.getRelativeEnchantment() instanceof ApiEnchantmentWrapper) if (plugin.equals(((ApiEnchantmentWrapper) enchant.getRelativeEnchantment()).getPlugin())) {
-				String namespace = "enchantments." + plugin.getName().toLowerCase() + "." + enchant.getName().toLowerCase();
+				String namespace = "enchantments." + plugin.getName().toLowerCase(Locale.ROOT) + "." + enchant.getName().toLowerCase(Locale.ROOT);
 				if (enchant instanceof ApiEnchantment) {
 					ApiEnchantment api = (ApiEnchantment) enchant;
 					config.addDefault(namespace + ".points_level_one", api.getPointsLevelOne());

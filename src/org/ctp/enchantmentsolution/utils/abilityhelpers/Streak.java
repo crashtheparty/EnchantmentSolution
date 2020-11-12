@@ -24,7 +24,7 @@ public class Streak {
 	public EntityType getType() {
 		return type;
 	}
-	
+
 	public void setStreak(EntityType type, int streak) {
 		this.type = type;
 		this.streak = streak;

@@ -12,6 +12,7 @@ import org.ctp.crashapi.db.BackupDB;
 import org.ctp.crashapi.utils.CrashConfigUtils;
 import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
+import org.ctp.enchantmentsolution.utils.Configurations;
 import org.ctp.enchantmentsolution.utils.VersionUtils;
 
 public class MainConfiguration extends Configuration {
@@ -22,12 +23,12 @@ public class MainConfiguration extends Configuration {
 		super(EnchantmentSolution.getPlugin(), new File(dataFolder + "/config.yml"), db, header);
 
 		migrateVersion();
-		if (getConfig() != null) getConfig().writeDefaults();
+		save();
 	}
 
 	@Override
 	public void setDefaults() {
-		if (getPlugin().isInitializing()) Chatable.get().sendInfo("Loading main configuration...");
+		if (Configurations.isInitializing()) Chatable.get().sendInfo("Initializing main configuration...");
 
 		YamlConfigBackup config = getConfig();
 
@@ -54,9 +55,9 @@ public class MainConfiguration extends Configuration {
 			config.addDefault("loots.chests.pillager_outpost.treasure", true);
 		}
 
-		if (getPlugin().isInitializing()) Chatable.get().sendInfo("Main configuration initialized!");
+		config.writeDefaults();
 
-		config.saveConfig();
+		if (Configurations.isInitializing()) Chatable.get().sendInfo("Main configuration initialized!");
 
 		file.delete();
 	}

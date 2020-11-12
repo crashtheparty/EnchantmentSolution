@@ -20,27 +20,47 @@ import org.ctp.enchantmentsolution.utils.abilityhelpers.GaiaUtils.GaiaTrees;
 import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
 import org.ctp.enchantmentsolution.utils.player.ESPlayer;
 
-public class AsyncGaiaController extends AsyncBlockController {
+public class AsyncGaiaController {
 
 	private final GaiaTrees tree;
 
+	private final Player player;
+	private final ItemStack item;
+	private final Block original;
+	private List<Location> allBlocks;
+	private List<Location> breaking;
+
 	public AsyncGaiaController(Player player, ItemStack item, Block original, List<Location> allBlocks, GaiaTrees tree) {
-		super(player, item, original);
-		setAllBlocks(allBlocks);
+		this.player = player;
+		this.item = item;
+		this.original = original;
+		this.allBlocks = allBlocks;
 		this.tree = tree;
 
-		List<Location> breaking = new ArrayList<Location>();
+		breaking = new ArrayList<Location>();
 		for(int i = 0; i < 4; i++)
 			if (allBlocks.size() > i) breaking.add(allBlocks.get(i));
-		breakingBlocks(breaking);
+		breakingBlocks();
 	}
 
-	private void breakingBlocks(List<Location> breaking) {
-		Iterator<Location> iter = breaking.iterator();
-		Player player = getPlayer().getPlayer();
-		List<Location> allBlocks = (List<Location>) getAllBlocks();
-		ItemStack item = getItem();
+	public boolean addBlocks(Block original, Collection<Location> blocks) {
+		if (breaking.size() == 0) return false;
+		for(Location loc: blocks) {
+			allBlocks.add(loc);
+			if (BlockUtils.isNextTo(loc.getBlock(), original)) breaking.add(loc);
+		}
+		return breaking.size() != 0;
+	}
+
+	private void breakingBlocks() {
 		ESPlayer esPlayer = EnchantmentSolution.getESPlayer(player);
+		if (breaking == null || breaking.size() == 0) {
+			for(Location loc: allBlocks)
+				BlockUtils.removeMultiBlockBreak(loc, RegisterEnchantments.GAIA);
+			esPlayer.removeGaiaController();
+			return;
+		}
+		Iterator<Location> iter = breaking.iterator();
 
 		List<Location> breakNext = new ArrayList<Location>();
 		if (esPlayer.canBreakBlock()) while (iter.hasNext()) {
@@ -70,24 +90,33 @@ public class AsyncGaiaController extends AsyncBlockController {
 			iter.remove();
 		}
 		int j = breaking.size();
-		for (int i = j; i < 4; i++)
+		for(int i = j; i < 4; i++)
 			if (allBlocks.size() > i) breakNext.add(allBlocks.get(i));
-		List<Location> finalBreakNext = breakNext;
-		if (finalBreakNext.size() > 0) Bukkit.getScheduler().runTaskLater(EnchantmentSolution.getPlugin(), () -> {
-			breakingBlocks(finalBreakNext);
+		breaking = breakNext;
+		Bukkit.getScheduler().runTaskLater(EnchantmentSolution.getPlugin(), () -> {
+			breakingBlocks();
 		}, 20l);
-		else
-			for(Location loc: allBlocks)
-				BlockUtils.removeMultiBlockBreak(loc, RegisterEnchantments.GAIA);
 
 	}
 
 	public GaiaTrees getTree() {
 		return tree;
 	}
-	
+
 	public int getBlockBreakAmount() {
-		return EnchantmentUtils.getLevel(getItem(), RegisterEnchantments.GAIA) + 1;
+		return EnchantmentUtils.getLevel(item, RegisterEnchantments.GAIA) + 1;
+	}
+
+	public Player getPlayer() {
+		return player;
+	}
+
+	public ItemStack getItem() {
+		return item;
+	}
+
+	public Block getOriginal() {
+		return original;
 	}
 
 }

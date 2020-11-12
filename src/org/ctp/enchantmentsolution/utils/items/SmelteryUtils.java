@@ -13,7 +13,7 @@ public class SmelteryUtils {
 
 	public static SmelteryMaterial getSmelteryItem(BlockData data, ItemStack from, ItemStack item) {
 		String material = null;
-		Material f = data.getMaterial();
+		Material f = from.getType();
 		ItemBreakType type = ItemBreakType.getType(item.getType());
 		switch (data.getMaterial().name()) {
 			case "ANCIENT_DEBRIS":
@@ -134,7 +134,7 @@ public class SmelteryUtils {
 		}
 		return null;
 	}
-	
+
 	public static int getFortuneForSmeltery(ItemStack smelted, ItemStack item, Material original) {
 		if (EnchantmentUtils.hasEnchantment(item, Enchantment.LOOT_BONUS_BLOCKS)) {
 			int level = EnchantmentUtils.getLevel(item, Enchantment.LOOT_BONUS_BLOCKS);

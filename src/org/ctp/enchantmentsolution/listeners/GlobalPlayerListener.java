@@ -44,10 +44,10 @@ public class GlobalPlayerListener implements Listener {
 	public void onInvent(ItemAddEvent event) {
 		ItemStack item = event.getItem();
 		List<EnchantmentLevel> levels = EnchantmentUtils.getEnchantmentLevels(item);
-		for (EnchantmentLevel level : levels)
+		for(EnchantmentLevel level: levels)
 			AdvancementUtils.awardCriteria(event.getPlayer(), level.getEnchant());
 	}
-	
+
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerMove(PlayerMoveEvent event) {
 		double oldX = event.getFrom().getX();
@@ -56,10 +56,10 @@ public class GlobalPlayerListener implements Listener {
 		double newX = event.getTo().getX();
 		double newY = event.getTo().getY();
 		double newZ = event.getTo().getZ();
-		
+
 		if (oldX != newX || oldY != newY || oldZ != newZ) {
 			PlayerChangeCoordsEvent change = new PlayerChangeCoordsEvent(event.getPlayer(), event.getFrom(), event.getTo());
-			
+
 			Bukkit.getPluginManager().callEvent(change);
 			if (change.isCancelled()) event.setCancelled(true);
 		}

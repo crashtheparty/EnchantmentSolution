@@ -132,7 +132,7 @@ public class CommandUtils {
 			int fixedItems = 0;
 			ItemStack[] playerItems = EnchantmentSolution.getESPlayer(fixPlayer).getInventoryItems();
 			Map<Integer, ItemStack> changedItems = new HashMap<Integer, ItemStack>();
-			
+
 			for(int i = 0; i < playerItems.length; i++) {
 				ItemStack item = playerItems[i];
 				if (item != null) {
@@ -155,7 +155,7 @@ public class CommandUtils {
 					fIString += "\n" + Chatable.get().getMessage(fICodes, "commands.fixed-item-string");
 				}
 			}
-			
+
 			HashMap<String, Object> codes = ChatUtils.getCodes();
 			codes.put("%player%", player.getName());
 			codes.put("%fix_player%", fixPlayer.getName());
@@ -204,7 +204,7 @@ public class CommandUtils {
 			if (player.hasPermission(details.getPermission())) {
 				if (args.length > 1) {
 					String arg = args[1];
-					switch (arg.toLowerCase()) {
+					switch (arg.toLowerCase(Locale.ROOT)) {
 						case "enchantment":
 						case "enchant":
 							if (args.length > 2) for(CustomEnchantment enchant: RegisterEnchantments.getRegisteredEnchantments())

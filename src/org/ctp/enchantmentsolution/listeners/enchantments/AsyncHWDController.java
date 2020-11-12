@@ -1,6 +1,8 @@
 package org.ctp.enchantmentsolution.listeners.enchantments;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -16,37 +18,53 @@ import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.BlockUtils;
 import org.ctp.enchantmentsolution.utils.player.ESPlayer;
 
-public class AsyncBlockController {
+public class AsyncHWDController {
 
 	private final Player player;
 	private final ItemStack item;
 	private final Block original;
-	private Collection<Location> allBlocks;
+	private List<Location> allBlocks;
+	private List<Location> breaking;
 
-	public AsyncBlockController(Player player, ItemStack item, Block original, Collection<Location> allBlocks) {
+	public AsyncHWDController(Player player, ItemStack item, Block original, List<Location> allBlocks) {
 		this.player = player;
 		this.item = item;
 		this.original = original;
 		this.allBlocks = allBlocks;
 
-		List<Location> breaking = new ArrayList<Location>();
+		breaking = new ArrayList<Location>();
 		for(Location loc: allBlocks)
 			if (BlockUtils.isNextTo(loc.getBlock(), original)) breaking.add(loc);
-		breakingBlocks(breaking);
+		breakingBlocks();
 	}
 
-	protected AsyncBlockController(Player player, ItemStack item, Block original) {
+	protected AsyncHWDController(Player player, ItemStack item, Block original) {
 		this.player = player;
 		this.item = item;
 		this.original = original;
 	}
 
-	private void breakingBlocks(List<Location> breaking) {
+	public boolean addBlocks(Block original, List<Location> blocks) {
+		if (breaking.size() == 0) return false;
+		for(Location loc: blocks) {
+			allBlocks.add(loc);
+			if (BlockUtils.isNextTo(loc.getBlock(), original)) breaking.add(loc);
+		}
+		return breaking.size() != 0;
+	}
+
+	private void breakingBlocks() {
+		ESPlayer esPlayer = EnchantmentSolution.getESPlayer(player);
+		if (breaking == null || breaking.size() == 0) {
+			for(Location loc: allBlocks)
+				BlockUtils.removeMultiBlockBreak(loc, RegisterEnchantments.HEIGHT_PLUS_PLUS);
+			esPlayer.removeHWDController();
+			return;
+		}
 		List<Location> adjacent = new ArrayList<Location>();
 		int blocksBrokenTick = 0;
 		boolean combine = false;
 		Iterator<Location> iter = breaking.iterator();
-		ESPlayer esPlayer = EnchantmentSolution.getESPlayer(player);
 
 		List<Location> breakNext = new ArrayList<Location>();
 		if (esPlayer.canBreakBlock()) {
@@ -58,7 +76,7 @@ public class AsyncBlockController {
 				}
 				if (!esPlayer.isInInventory(item) || item == null || MatData.isAir(item.getType())) {
 					for(Location loc: allBlocks)
-						BlockUtils.removeMultiBlockBreak(loc, RegisterEnchantments.GAIA);
+						BlockUtils.removeMultiBlockBreak(loc, RegisterEnchantments.HEIGHT_PLUS_PLUS);
 					return;
 				}
 				if (BlockUtils.multiBreakBlock(player, item, b, RegisterEnchantments.HEIGHT_PLUS_PLUS)) blocksBrokenTick++;
@@ -75,15 +93,11 @@ public class AsyncBlockController {
 				breakNext.addAll(adjacent);
 		} else
 			breakNext = breaking;
-		List<Location> finalBreakNext = breakNext;
+		breaking = breakNext;
 		AdvancementUtils.awardCriteria(player, ESAdvancement.OVER_9000, "stone", blocksBrokenTick);
-		if (finalBreakNext.size() > 0) Bukkit.getScheduler().runTaskLater(EnchantmentSolution.getPlugin(), () -> {
-			breakingBlocks(finalBreakNext);
+		Bukkit.getScheduler().runTaskLater(EnchantmentSolution.getPlugin(), () -> {
+			breakingBlocks();
 		}, 1l);
-		else
-			for(Location loc: allBlocks)
-				BlockUtils.removeMultiBlockBreak(loc, RegisterEnchantments.HEIGHT_PLUS_PLUS);
-
 	}
 
 	public OfflinePlayer getPlayer() {
@@ -98,11 +112,11 @@ public class AsyncBlockController {
 		return original;
 	}
 
-	protected Collection<Location> getAllBlocks() {
+	protected List<Location> getAllBlocks() {
 		return allBlocks;
 	}
 
-	protected void setAllBlocks(Collection<Location> allBlocks) {
+	protected void setAllBlocks(List<Location> allBlocks) {
 		this.allBlocks = allBlocks;
 	}
 }

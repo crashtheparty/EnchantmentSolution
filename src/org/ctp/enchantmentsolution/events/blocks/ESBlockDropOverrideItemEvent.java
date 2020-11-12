@@ -12,8 +12,9 @@ public abstract class ESBlockDropOverrideItemEvent extends ESBlockDropItemEvent 
 
 	private final List<ItemStack> originalItems;
 	private boolean override = true;
-	
-	public ESBlockDropOverrideItemEvent(Block theBlock, BlockData blockData, EnchantmentLevel enchantment, Player player, List<ItemStack> items, List<ItemStack> originalItems) {
+
+	public ESBlockDropOverrideItemEvent(Block theBlock, BlockData blockData, EnchantmentLevel enchantment, Player player, List<ItemStack> items,
+	List<ItemStack> originalItems) {
 		super(theBlock, blockData, enchantment, player, items);
 		this.originalItems = originalItems;
 	}

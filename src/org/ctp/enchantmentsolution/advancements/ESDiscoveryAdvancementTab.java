@@ -20,7 +20,7 @@ public class ESDiscoveryAdvancementTab {
 	private static final String BACKGROUND = "block/bookshelf";
 
 	private ESDiscoveryAdvancementTab() {
-		this.factory = new AdvancementFactory(EnchantmentSolution.getPlugin(), false, false);
+		factory = new AdvancementFactory(EnchantmentSolution.getPlugin(), false, false);
 		advancements = new ArrayList<ESDiscoveryAdvancement>();
 		for(CustomEnchantment custom: RegisterEnchantments.getRegisteredEnchantmentsAlphabetical())
 			advancements.add(new ESDiscoveryAdvancement(custom));
@@ -48,7 +48,7 @@ public class ESDiscoveryAdvancementTab {
 	public AdvancementFactory getFactory() {
 		return factory;
 	}
-	
+
 	private boolean notNull(Object obj) {
 		return obj != null;
 	}

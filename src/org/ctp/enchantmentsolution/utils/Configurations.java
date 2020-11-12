@@ -10,6 +10,7 @@ import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.plugin.Plugin;
 import org.ctp.crashapi.CrashAPI;
+import org.ctp.crashapi.CrashAPIPlugin;
 import org.ctp.crashapi.config.*;
 import org.ctp.crashapi.config.yaml.YamlConfig;
 import org.ctp.crashapi.config.yaml.YamlConfigBackup;
@@ -31,6 +32,7 @@ import org.ctp.enchantmentsolution.utils.files.ESLanguageFile;
 
 public class Configurations implements CrashConfigurations {
 
+	private static boolean INITIALIZING = true, FIRST_SAVE = true;
 	private final static Configurations CONFIGURATIONS = new Configurations();
 	private MainConfiguration CONFIG;
 	private FishingConfiguration FISHING;
@@ -92,6 +94,7 @@ public class Configurations implements CrashConfigurations {
 
 		DATA_FILE = new DataFile(EnchantmentSolution.getPlugin(), dataFolder, "data.yml", true);
 
+		INITIALIZING = false;
 		save();
 	}
 
@@ -134,12 +137,13 @@ public class Configurations implements CrashConfigurations {
 		RegisterEnchantments.setEnchantments();
 		EnchantmentSolution.getPlugin().reEquipArmor();
 
-		if (!EnchantmentSolution.getPlugin().isInitializing()) {
+		if (!FIRST_SAVE) {
 			EnchantmentSolution.getPlugin().setVersionCheck(ConfigString.LATEST_VERSION.getBoolean(), ConfigString.EXPERIMENTAL_VERSION.getBoolean());
 			AdvancementUtils.createAdvancements();
 			EnchantmentSolution.getPlugin().getWiki().resetRunner();
 		}
 		Minigame.reset();
+		FIRST_SAVE = false;
 	}
 
 	public void generateDebug() {
@@ -155,7 +159,7 @@ public class Configurations implements CrashConfigurations {
 		debug.set("plugins.jobs_reborn", EnchantmentSolution.getPlugin().isJobsEnabled());
 		debug.set("plugins.mcmmo", EnchantmentSolution.getPlugin().getMcMMOType());
 		debug.set("plugins.mcmmo_version", EnchantmentSolution.getPlugin().getMcMMOVersion());
-		debug.set("plugins.mmo_items", CrashAPI.getMMOItems());
+		debug.set("plugins.mmo_items", CrashAPIPlugin.getMMOItems());
 		debug.set("plugins.vein_miner", EnchantmentSolution.getPlugin().getVeinMiner());
 		List<String> allPlugins = new ArrayList<String>();
 		for(Plugin pl: Bukkit.getPluginManager().getPlugins())
@@ -301,5 +305,9 @@ public class Configurations implements CrashConfigurations {
 
 	public HardModeConfiguration getHardMode() {
 		return HARD_MODE;
+	}
+
+	public static boolean isInitializing() {
+		return INITIALIZING;
 	}
 }

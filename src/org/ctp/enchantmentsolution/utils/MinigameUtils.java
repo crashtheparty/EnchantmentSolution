@@ -2,6 +2,7 @@ package org.ctp.enchantmentsolution.utils;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -88,7 +89,7 @@ public class MinigameUtils {
 	}
 
 	public static int getTableLevelCost(int normal) {
-		switch (ConfigString.MINIGAME_TYPE.getString().toUpperCase()) {
+		switch (ConfigString.MINIGAME_TYPE.getString().toUpperCase(Locale.ROOT)) {
 			case "FAST":
 				if (ConfigString.MINIGAME_FAST_ENCHANTING_OVERRIDE.getBoolean()) {
 					if (ConfigString.MINIGAME_FAST_ENCHANTING_COSTS.listContains("level")) return ConfigString.MINIGAME_FAST_ENCHANTING_LEVEL_COST.getInt();
@@ -100,7 +101,7 @@ public class MinigameUtils {
 	}
 
 	public static int getTableLapisCost(int normal) {
-		switch (ConfigString.MINIGAME_TYPE.getString().toUpperCase()) {
+		switch (ConfigString.MINIGAME_TYPE.getString().toUpperCase(Locale.ROOT)) {
 			case "FAST":
 				if (ConfigString.MINIGAME_FAST_ENCHANTING_OVERRIDE.getBoolean()) {
 					if (ConfigString.MINIGAME_FAST_ENCHANTING_COSTS.listContains("lapis")) return ConfigString.MINIGAME_FAST_ENCHANTING_LAPIS_COST.getInt();

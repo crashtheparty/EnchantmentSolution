@@ -10,7 +10,7 @@ public enum Crop {
 	private final MatData block, drop, seed;
 
 	Crop(String drop, String seed) {
-		block = new MatData(this.name());
+		block = new MatData(name());
 		this.drop = new MatData(drop);
 		this.seed = new MatData(seed);
 	}

@@ -123,7 +123,7 @@ public class CERegister extends CustomEnchantment {
 	public static CERegister WIDTH_PLUS_PLUS = new CERegister("width_plus_plus", "Width++", "Increase left/right break radius by 1 per level.", RegisterEnchantments.WIDTH_PLUS_PLUS, new int[] { 0, -10, 20, 20, 15, 1, 3, 2 }, Weight.RARE, Arrays.asList(ItemType.TOOLS), Arrays.asList(ItemType.TOOLS), Arrays.asList(), EnchantmentLocation.getDefaultLocations());
 	public static CERegister WITHERING = new CERegister("withering", "Withering", "Gives the attacked player wither damage.", RegisterEnchantments.WITHERING, new int[] { 0, -10, 20, 20, 15, 1, 3, 2 }, Weight.RARE, Arrays.asList(ItemType.MELEE, ItemType.RANGED), Arrays.asList(ItemType.MELEE, ItemType.RANGED), Arrays.asList(), EnchantmentLocation.getDefaultLocations());
 	public static CERegister ZEAL = new CERegister("zeal", "Zeal", "Shoots fireballs out of hoe on left click.", RegisterEnchantments.ZEAL, new int[] { 25, 25, 0, 0, 20, 1, 1, 1 }, Weight.RARE, Arrays.asList(ItemType.HOES), Arrays.asList(ItemType.HOES), Arrays.asList(), false, true, EnchantmentLocation.getDefaultLocations());
-	
+
 	private final Enchantment relative;
 	private List<ItemType> enchantmentItems, anvilItems;
 	private List<Enchantment> conflictingEnchantments;

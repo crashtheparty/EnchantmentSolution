@@ -55,7 +55,7 @@ public class Minigame implements InventoryData, Pageable {
 	public void setInventory() {
 		screen = Screen.FAST;
 		try {
-			screen = Screen.valueOf(ConfigString.MINIGAME_TYPE.getString().toUpperCase());
+			screen = Screen.valueOf(ConfigString.MINIGAME_TYPE.getString().toUpperCase(Locale.ROOT));
 		} catch (Exception ex) {}
 		try {
 			Configurations c = EnchantmentSolution.getPlugin().getConfigurations();
@@ -145,14 +145,14 @@ public class Minigame implements InventoryData, Pageable {
 					Map<MinigameItem, Integer> timesUsed = TIMES_USED.get(player.getUniqueId());
 					int times = 0;
 					if (timesUsed != null && timesUsed.get(item) != null) times = timesUsed.get(item);
-					
+
 					if (item.willIncreaseLevelCost()) lvlCost += times * item.getLvlExtraCost();
 					if (item.willIncreaseLapisCost()) lapisCost += times * item.getLapisExtraCost();
 					if (item.willIncreaseEconomyCost()) economyCost += times * item.getEconomyExtraCost();
 					if (item.getLvlMaxCost() > 0 && lvlCost > item.getLvlMaxCost()) lvlCost = item.getLvlMaxCost();
 					if (item.getLapisMaxCost() > 0 && lapisCost > item.getLapisMaxCost()) lapisCost = item.getLapisMaxCost();
 					if (item.getEconomyMaxCost() > 0 && economyCost > item.getEconomyMaxCost()) economyCost = item.getEconomyMaxCost();
-					
+
 					if (item.getType() == MinigameItemType.ENCHANTMENT) {
 						List<String> lore = new ArrayList<String>();
 						for(EnchantmentLevel level: item.getLevels()) {
@@ -372,7 +372,7 @@ public class Minigame implements InventoryData, Pageable {
 			int lapis = MinigameUtils.getLapis(player);
 			double economyCost = 0;
 			double playerMoney = MinigameUtils.getPlayerMoney(player);
-			for (String string : c.getMinigames().getStringList(location + "use")) {
+			for(String string: c.getMinigames().getStringList(location + "use")) {
 				if (string.equalsIgnoreCase("level")) lvlCost = c.getMinigames().getInt(location + ".level");
 				if (string.equalsIgnoreCase("lapis")) lapisCost = c.getMinigames().getInt(location + ".lapis");
 				if (string.equalsIgnoreCase("economy")) economyCost = MinigameUtils.getTableEconomyCost(c.getMinigames().getInt(location + ".economy"));
@@ -411,7 +411,7 @@ public class Minigame implements InventoryData, Pageable {
 			Map<MinigameItem, Integer> timesUsed = TIMES_USED.get(player.getUniqueId());
 			int times = 0;
 			if (timesUsed != null && timesUsed.get(item) != null) times = timesUsed.get(item);
-			
+
 			if (item.willIncreaseLevelCost()) lvlCost += times * item.getLvlExtraCost();
 			if (item.willIncreaseLapisCost()) lapisCost += times * item.getLapisExtraCost();
 			if (item.willIncreaseEconomyCost()) economyCost += times * item.getEconomyExtraCost();
@@ -493,7 +493,7 @@ public class Minigame implements InventoryData, Pageable {
 					if (level != null) levels.add(level);
 				}
 				try {
-					items.add(new MinigameItem(new MatData(config.getString(key + ".material.show")), new MatData(config.getString(key + ".material.enchant")), MinigameItemType.valueOf(config.getString(key + ".type").toUpperCase()), config.getInt(key + ".costs.level"), config.getInt(key + ".costs.extra_level_cost_per_use"), config.getInt(key + ".costs.max_level_cost"), config.getInt(key + ".costs.lapis"), config.getInt(key + ".costs.extra_lapis_cost_per_use"), config.getInt(key + ".costs.max_lapis_cost"), config.getDouble(key + ".costs.economy"), config.getDouble(key + ".costs.extra_economy_cost_per_use"), config.getDouble(key + ".costs.max_economy_cost"), config.getStringList(key + ".costs.use"), config.getInt(key + ".books.min"), config.getInt(key + ".books.max"), config.getInt(key + ".levels.min"), config.getInt(key + ".levels.max"), config.getInt(key + ".slot"), config.getBoolean(key + ".costs.use_level_cost_increase"), config.getBoolean(key + ".costs.use_lapis_cost_increase"), config.getBoolean(key + ".costs.use_economy_cost_increase"), levels));
+					items.add(new MinigameItem(new MatData(config.getString(key + ".material.show")), new MatData(config.getString(key + ".material.enchant")), MinigameItemType.valueOf(config.getString(key + ".type").toUpperCase(Locale.ROOT)), config.getInt(key + ".costs.level"), config.getInt(key + ".costs.extra_level_cost_per_use"), config.getInt(key + ".costs.max_level_cost"), config.getInt(key + ".costs.lapis"), config.getInt(key + ".costs.extra_lapis_cost_per_use"), config.getInt(key + ".costs.max_lapis_cost"), config.getDouble(key + ".costs.economy"), config.getDouble(key + ".costs.extra_economy_cost_per_use"), config.getDouble(key + ".costs.max_economy_cost"), config.getStringList(key + ".costs.use"), config.getInt(key + ".books.min"), config.getInt(key + ".books.max"), config.getInt(key + ".levels.min"), config.getInt(key + ".levels.max"), config.getInt(key + ".slot"), config.getBoolean(key + ".costs.use_level_cost_increase"), config.getBoolean(key + ".costs.use_lapis_cost_increase"), config.getBoolean(key + ".costs.use_economy_cost_increase"), levels));
 				} catch (IllegalArgumentException ex) {
 					ex.printStackTrace();
 				}
@@ -536,13 +536,16 @@ public class Minigame implements InventoryData, Pageable {
 		economyCodes.put("%player_economy%", MinigameUtils.format(playerMoney));
 		economyCodes.put("%economy_cost%", MinigameUtils.format(economyCost));
 		if (lvlCost > 0 && lvlCost > player.getLevel()) codes.put("%level%", "\n" + Chatable.get().getMessage(lvlCodes, "minigame.not_enough_levels"));
-		else codes.put("%level%", "");
+		else
+			codes.put("%level%", "");
 		if (lapisCost > 0 && lapisCost > lapis) codes.put("%lapis%", "\n" + Chatable.get().getMessage(lapisCodes, "minigame.not_enough_lapis"));
-		else codes.put("%lapis%", "");
+		else
+			codes.put("%lapis%", "");
 		if (economyCost > 0 && economyCost > playerMoney) codes.put("%economy%", "\n" + Chatable.get().getMessage(economyCodes, "minigame.not_enough_money"));
-		else codes.put("%economy%", "");
-		
+		else
+			codes.put("%economy%", "");
+
 		Chatable.get().sendMessage(player, Chatable.get().getMessage(codes, "minigame.cannot_get_enchantment"));
 	}
-	
+
 }

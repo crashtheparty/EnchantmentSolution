@@ -127,7 +127,7 @@ public class AfterEffectsListener extends Enchantmentable {
 						Entity e = husbandry.getSpawnWorld().spawnEntity(husbandry.getSpawnLocation(), husbandry.getEntityType());
 						e = AnimalMob.setHusbandry((Creature) entity, (Creature) e);
 						if (e != null && e instanceof Ageable) ((Ageable) e).setBaby();
-						AdvancementUtils.awardCriteria(player, ESAdvancement.WILDLIFE_CONSERVATION, e.getType().name().toLowerCase());
+						AdvancementUtils.awardCriteria(player, ESAdvancement.WILDLIFE_CONSERVATION, e.getType().name().toLowerCase(Locale.ROOT));
 					}, 1l);
 				}
 			}

@@ -1,5 +1,7 @@
 package org.ctp.enchantmentsolution.utils.abilityhelpers;
 
+import java.util.Locale;
+
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -59,7 +61,7 @@ public enum TransmutationLoot {
 			case "SALMON":
 			case "PUFFERFISH":
 			case "TROPICAL_FISH":
-				AdvancementUtils.awardCriteria(player, ESAdvancement.FISHY_BUSINESS, lootItem.getType().name().toLowerCase());
+				AdvancementUtils.awardCriteria(player, ESAdvancement.FISHY_BUSINESS, lootItem.getType().name().toLowerCase(Locale.ROOT));
 				break;
 			case "TRIDENT":
 				AdvancementUtils.awardCriteria(player, ESAdvancement.POSEIDON_REBORN, "trident");

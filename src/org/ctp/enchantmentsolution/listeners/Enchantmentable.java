@@ -8,7 +8,7 @@ import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.utils.Reflectionable;
 
 public abstract class Enchantmentable implements Listener, Reflectionable {
-	
+
 	protected boolean canRun(Enchantment enchantment, Event event) {
 		if (!RegisterEnchantments.isEnabled(enchantment)) return false;
 		if (event instanceof Cancellable && ((Cancellable) event).isCancelled()) return false;

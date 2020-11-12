@@ -31,7 +31,7 @@ public class FlySpeedAttribute implements ESPlayerAttributeInstance {
 
 		if (attributemodifier1 != null) throw new IllegalArgumentException("Modifier is already applied on this attribute!");
 		else
-			this.addModifierOperation(attributemodifier.getOperation()).add(attributemodifier);
+			addModifierOperation(attributemodifier.getOperation()).add(attributemodifier);
 	}
 
 	private Set<AttributeModifier> addModifierOperation(AttributeModifier.Operation attributemodifier_operation) {

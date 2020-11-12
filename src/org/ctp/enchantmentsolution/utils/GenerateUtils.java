@@ -62,7 +62,7 @@ public class GenerateUtils {
 		List<EnchantmentList> lists = getLists(enchantments.getList());
 		List<EnchantmentLevel> levels = getEnchantments(lists);
 		if (levels == null || levels.size() == 0) {
-			warningMessages(item, (location == EnchantmentLocation.CHEST_LOOT ? "ChestLoot" : "PiglinTrades"));
+			warningMessages(item, location == EnchantmentLocation.CHEST_LOOT ? "ChestLoot" : "PiglinTrades");
 			return item;
 		}
 
