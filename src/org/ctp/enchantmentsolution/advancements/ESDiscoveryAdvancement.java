@@ -1,8 +1,6 @@
 package org.ctp.enchantmentsolution.advancements;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -12,17 +10,17 @@ import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 
 public class ESDiscoveryAdvancement {
-	
+
 	private final NamespacedKey namespace;
 	private final Material icon = Material.ENCHANTED_BOOK;
 	private List<CrashTrigger> triggers = new ArrayList<CrashTrigger>();
 	private final Frame frame = Frame.GOAL;
 	private boolean enabled;
 	private final CustomEnchantment enchantment;
-	
+
 	public ESDiscoveryAdvancement(CustomEnchantment enchantment) {
 		this.enchantment = enchantment;
-		namespace = EnchantmentSolution.getKey("discovery/" + enchantment.getName().toLowerCase());
+		namespace = EnchantmentSolution.getKey("discovery/" + enchantment.getName().toLowerCase(Locale.ROOT));
 		triggers = Arrays.asList(new CrashTrigger("discovery"));
 	}
 

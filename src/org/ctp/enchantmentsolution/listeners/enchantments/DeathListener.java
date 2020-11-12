@@ -77,7 +77,6 @@ public class DeathListener extends Enchantmentable {
 		if (!canRun(RegisterEnchantments.STREAK, event)) return;
 		EntityDamageEvent e = event.getEntity().getLastDamageCause();
 		if (e instanceof EntityDamageByEntityEvent) {
-			EntityDamageByEntityEvent entityDamage = (EntityDamageByEntityEvent) e;
 			if (event.getEntity().getKiller() != null) {
 				Player killer = event.getEntity().getKiller();
 				if (killer == null || isDisabled(killer, RegisterEnchantments.STREAK)) return;

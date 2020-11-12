@@ -14,7 +14,7 @@ import org.ctp.enchantmentsolution.utils.Configurations;
 public class AdvancementsConfiguration extends Configuration {
 
 	public AdvancementsConfiguration(File dataFolder, BackupDB db, String[] header) {
-		super(EnchantmentSolution.getPlugin(), new File(dataFolder + "/advancements.yml"), db, header, true);
+		super(EnchantmentSolution.getPlugin(), new File(dataFolder + "/advancements.yml"), db, header);
 
 		migrateVersion();
 		save();
@@ -22,11 +22,11 @@ public class AdvancementsConfiguration extends Configuration {
 
 	@Override
 	public void setDefaults() {
-		if (getPlugin().isInitializing()) Chatable.get().sendInfo("Loading advancements configuration...");
+		if (Configurations.isInitializing()) Chatable.get().sendInfo("Initializing advancements configuration...");
 		YamlConfigBackup config = getConfig();
 
 		config.addDefault("discovery_advancements", false);
-		
+
 		for(ESAdvancement advancement: ESAdvancement.values())
 			if (advancement.getParent() == null) {
 				config.addDefault("advancements." + advancement.getNamespace().getKey() + ".enable", false);
@@ -38,7 +38,9 @@ public class AdvancementsConfiguration extends Configuration {
 				config.addDefault("advancements." + advancement.getNamespace().getKey() + ".announce", true);
 			}
 
-		if (getPlugin().isInitializing()) Chatable.get().sendInfo("Advancements configuration initialized!");
+		config.writeDefaults();
+
+		if (Configurations.isInitializing()) Chatable.get().sendInfo("Advancements configuration initialized!");
 	}
 
 	@Override

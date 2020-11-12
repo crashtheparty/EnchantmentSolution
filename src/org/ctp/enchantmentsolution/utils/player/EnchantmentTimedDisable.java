@@ -12,7 +12,7 @@ public class EnchantmentTimedDisable {
 	public EnchantmentTimedDisable(JavaPlugin plugin, Enchantment enchantment, long endTime) {
 		this.plugin = plugin;
 		this.enchantment = enchantment;
-		this.setEndTime(endTime);
+		setEndTime(endTime);
 	}
 
 	public JavaPlugin getPlugin() {

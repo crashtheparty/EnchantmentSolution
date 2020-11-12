@@ -1,8 +1,6 @@
 package org.ctp.enchantmentsolution.listeners.enchantments;
 
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -21,7 +19,6 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.util.Vector;
-import org.ctp.crashapi.api.Configurations;
 import org.ctp.crashapi.utils.DamageUtils;
 import org.ctp.crashapi.utils.ItemUtils;
 import org.ctp.crashapi.utils.LocationUtils;
@@ -93,7 +90,7 @@ public class PlayerListener extends Enchantmentable {
 						player.getWorld().spawnParticle(Particle.VILLAGER_HAPPY, loc, 30, 0.2, 0.5, 0.2);
 						if (FlowerGiftDrop.isDoubleFlower(flowerGift.getType())) AdvancementUtils.awardCriteria(player, ESAdvancement.BONEMEAL_PLUS, "bonemeal");
 						else if (FlowerGiftDrop.isWitherRose(flowerGift.getType())) AdvancementUtils.awardCriteria(player, ESAdvancement.JUST_AS_SWEET, "wither_rose");
-						ItemUtils.dropItem(flowerGift, flowerGiftEvent.getDropLocation(), Configurations.getConfigurations().getConfig().getBoolean("drop_items_naturally"));
+						ItemUtils.dropItem(flowerGift, flowerGiftEvent.getDropLocation());
 					} else
 						player.getWorld().spawnParticle(Particle.VILLAGER_ANGRY, loc, 30, 0.2, 0.5, 0.2);
 					player.incrementStatistic(Statistic.USE_ITEM, item.getType());
@@ -233,7 +230,7 @@ public class PlayerListener extends Enchantmentable {
 				ItemMoisturizeType type = ItemMoisturizeType.getMoisturizeType(block.getType());
 				if (type != null) {
 					Sound sound = null;
-					switch (type.getName().toLowerCase()) {
+					switch (type.getName().toLowerCase(Locale.ROOT)) {
 						case "extinguish":
 							if (block.getType() == Material.CAMPFIRE) {
 								Campfire fire = (Campfire) block.getBlockData();
@@ -256,7 +253,7 @@ public class PlayerListener extends Enchantmentable {
 
 						Event blockEvent = null;
 
-						switch (type.getName().toLowerCase()) {
+						switch (type.getName().toLowerCase(Locale.ROOT)) {
 							case "extinguish":
 								break;
 							case "wet":
@@ -278,7 +275,7 @@ public class PlayerListener extends Enchantmentable {
 						if (!moisturize.isCancelled()) {
 							Block moisturizeBlock = moisturize.getBlock();
 
-							switch (type.getName().toLowerCase()) {
+							switch (type.getName().toLowerCase(Locale.ROOT)) {
 								case "extinguish":
 									Campfire fire = (Campfire) moisturizeBlock.getBlockData();
 									fire.setLit(false);
@@ -330,8 +327,7 @@ public class PlayerListener extends Enchantmentable {
 			ItemStack item = player.getInventory().getItemInMainHand();
 			if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.OVERKILL)) {
 				event.setCancelled(false);
-				if (!canRun(RegisterEnchantments.OVERKILL, event))
-					return;
+				if (!canRun(RegisterEnchantments.OVERKILL, event)) return;
 				boolean takeArrow = player.getGameMode() != GameMode.CREATIVE && !EnchantmentUtils.hasEnchantment(item, Enchantment.ARROW_INFINITE);
 				OverkillEvent overkill = new OverkillEvent(player, item, takeArrow, player.getInventory().all(Material.ARROW).size() > 0, 0.4);
 				Bukkit.getPluginManager().callEvent(overkill);

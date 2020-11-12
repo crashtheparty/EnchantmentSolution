@@ -8,7 +8,7 @@ import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 public class StreakDeathEvent extends ESEntityDeathEvent {
 
 	private final Player player;
-	
+
 	public StreakDeathEvent(LivingEntity who, Player player) {
 		super(who, new EnchantmentLevel(CERegister.STREAK, 1));
 		this.player = player;
@@ -17,7 +17,7 @@ public class StreakDeathEvent extends ESEntityDeathEvent {
 	public Player getPlayer() {
 		return player;
 	}
-	
+
 	@Override
 	public LivingEntity getEntity() {
 		return (LivingEntity) super.getEntity();

@@ -16,7 +16,7 @@ public class AdvancementThread implements Runnable {
 		kilimanjaro();
 		worldRecord();
 	}
-	
+
 	private void kilimanjaro() {
 		if (!ESAdvancement.KILIMANJARO.isEnabled()) return;
 		Iterator<ESPlayer> iter = EnchantmentSolution.getOverkillDeathPlayers().iterator();
@@ -34,7 +34,7 @@ public class AdvancementThread implements Runnable {
 			}
 		}
 	}
-	
+
 	private void worldRecord() {
 		if (!ESAdvancement.WORLD_RECORD.isEnabled()) return;
 		Iterator<ESPlayer> iter = EnchantmentSolution.getAllESPlayers(true).iterator();

@@ -118,22 +118,22 @@ public class MinigameItem {
 	public List<String> getCosts() {
 		return costs;
 	}
-	
+
 	public boolean useLvlCost() {
-		for (String s : costs)
+		for(String s: costs)
 			if (s.equalsIgnoreCase("level")) return true;
 		return false;
 	}
-	
+
 	public boolean useLapisCost() {
-		for (String s : costs)
+		for(String s: costs)
 			if (s.equalsIgnoreCase("lapis")) return true;
 		return false;
 	}
-	
+
 	public boolean useEconomyCost() {
 		if (!CrashAPI.hasEconomy()) return false;
-		for (String s : costs)
+		for(String s: costs)
 			if (s.equalsIgnoreCase("economy")) return true;
 		return false;
 	}

@@ -13,7 +13,7 @@ public abstract class ESBlockDropItemEvent extends ESBlockEvent {
 	private final List<ItemStack> items;
 	private final Player player;
 	private final BlockData blockData;
-	
+
 	public ESBlockDropItemEvent(Block theBlock, BlockData blockData, EnchantmentLevel enchantment, Player player, List<ItemStack> items) {
 		super(theBlock, enchantment);
 		this.blockData = blockData;

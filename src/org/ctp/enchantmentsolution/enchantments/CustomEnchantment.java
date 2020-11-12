@@ -2,6 +2,7 @@ package org.ctp.enchantmentsolution.enchantments;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -168,7 +169,7 @@ public abstract class CustomEnchantment {
 			List<String> names = new ArrayList<String>();
 			for(int i = 0; i < getEnchantmentLocations().size(); i++) {
 				EnchantmentLocation enchant = getEnchantmentLocations().get(i);
-				names.add(Chatable.get().getMessage(ChatUtils.getCodes(), "enchantment.locations." + enchant.name().toLowerCase()));
+				names.add(Chatable.get().getMessage(ChatUtils.getCodes(), "enchantment.locations." + enchant.name().toLowerCase(Locale.ROOT)));
 			}
 
 			if (names.isEmpty()) page += Chatable.get().getMessage(ChatUtils.getCodes(), "enchantment.locations_string") + ConfigUtils.getString(lang, "misc.no_enchantment_locations");

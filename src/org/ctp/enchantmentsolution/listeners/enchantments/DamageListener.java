@@ -1,8 +1,6 @@
 package org.ctp.enchantmentsolution.listeners.enchantments;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
@@ -176,7 +174,7 @@ public class DamageListener extends Enchantmentable {
 			}
 		} else if (event.getDamager() instanceof HumanEntity) {
 			HumanEntity human = (HumanEntity) event.getDamager();
-			if (human instanceof Player && isDisabled(((Player) human), RegisterEnchantments.DROWNED)) return;
+			if (human instanceof Player && isDisabled((Player) human, RegisterEnchantments.DROWNED)) return;
 			ItemStack item = human.getInventory().getItemInMainHand();
 			if (item != null && EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.DROWNED)) {
 				int level = EnchantmentUtils.getLevel(item, RegisterEnchantments.DROWNED);
@@ -259,7 +257,7 @@ public class DamageListener extends Enchantmentable {
 							Chatable.get().sendMessage(player, Chatable.get().getMessage(ChatUtils.getCodes(), "irenes_lasso.error"));
 							return;
 						}
-						String type = attacked.getType().name().toLowerCase();
+						String type = attacked.getType().name().toLowerCase(Locale.ROOT);
 						AdvancementUtils.awardCriteria(player, ESAdvancement.THORGY, type);
 						AdvancementUtils.awardCriteria(player, ESAdvancement.FREE_PETS, type);
 					}

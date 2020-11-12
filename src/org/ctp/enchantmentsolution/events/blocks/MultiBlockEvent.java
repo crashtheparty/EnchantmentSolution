@@ -1,6 +1,6 @@
 package org.ctp.enchantmentsolution.events.blocks;
 
-import java.util.Collection;
+import java.util.List;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -22,18 +22,18 @@ public abstract class MultiBlockEvent extends Event implements Cancellable {
 		return handlers;
 	}
 
-	private Collection<Location> blocks;
+	private List<Location> blocks;
 	private final Player player;
 	private boolean cancelled;
 	private final EnchantmentLevel enchantment;
 
-	public MultiBlockEvent(Collection<Location> blocks, Player player, EnchantmentLevel enchantment) {
+	public MultiBlockEvent(List<Location> blocks, Player player, EnchantmentLevel enchantment) {
 		this.blocks = blocks;
 		this.player = player;
 		this.enchantment = enchantment;
 	}
 
-	public Collection<Location> getBlocks() {
+	public List<Location> getBlocks() {
 		return blocks;
 	}
 

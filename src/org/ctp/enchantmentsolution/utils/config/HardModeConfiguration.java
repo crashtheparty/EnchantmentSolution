@@ -9,6 +9,7 @@ import org.ctp.crashapi.db.BackupDB;
 import org.ctp.crashapi.utils.CrashConfigUtils;
 import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
+import org.ctp.enchantmentsolution.utils.Configurations;
 
 public class HardModeConfiguration extends Configuration {
 
@@ -16,12 +17,12 @@ public class HardModeConfiguration extends Configuration {
 		super(EnchantmentSolution.getPlugin(), new File(dataFolder + "/hard.yml"), db, header);
 
 		migrateVersion();
-		if (getConfig() != null) getConfig().writeDefaults();
+		save();
 	}
 
 	@Override
 	public void setDefaults() {
-		if (getPlugin().isInitializing()) Chatable.get().sendInfo("Loading Hard Mode configuration...");
+		if (Configurations.isInitializing()) Chatable.get().sendInfo("Initializing Hard Mode configuration...");
 
 		YamlConfigBackup config = getConfig();
 
@@ -38,9 +39,8 @@ public class HardModeConfiguration extends Configuration {
 			else
 				config.addDefault(str, defaultConfig.get(str));
 
-		if (getPlugin().isInitializing()) Chatable.get().sendInfo("Hard Mode configuration initialized!");
-
-		config.saveConfig();
+		config.writeDefaults();
+		if (Configurations.isInitializing()) Chatable.get().sendInfo("Hard Mode configuration initialized!");
 
 		file.delete();
 	}

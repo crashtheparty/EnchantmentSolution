@@ -8,10 +8,10 @@ import org.ctp.enchantmentsolution.events.entity.ESEntityDamageEntityEvent;
 public class LifeDrainEvent extends ESEntityDamageEntityEvent {
 
 	private double healthBack;
-	
+
 	public LifeDrainEvent(LivingEntity damaged, int level, LivingEntity damager, double damage, double newDamage, double healthBack) {
 		super(damaged, new EnchantmentLevel(CERegister.LIFE_DRAIN, level), damager, damage, newDamage);
-		this.setHealthBack(healthBack);
+		setHealthBack(healthBack);
 	}
 
 	public double getHealthBack() {

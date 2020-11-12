@@ -56,7 +56,7 @@ public class RPGUtils {
 				Chatable.get().sendWarning("Enchantment " + enchant.getName() + " (Display Name " + enchant.getDisplayName() + ")" + " does not have a JavaPlugin set. Refusing to set config defaults.");
 				return new BigInteger("-1");
 			}
-			namespace = plugin.getName().toLowerCase();
+			namespace = plugin.getName().toLowerCase(Locale.ROOT);
 		} else if (enchant.getRelativeEnchantment() instanceof CustomEnchantmentWrapper) namespace = "custom_enchantments";
 		int pointsLevelOne = ConfigString.RPG_ENCHANTMENT_LEVELONE.getInt(namespace + "." + enchant.getName() + ".points_level_one");
 		int pointsIncrease = ConfigString.RPG_ENCHANTMENT_INCREASE.getInt(namespace + "." + enchant.getName() + ".points_increase");
@@ -106,7 +106,7 @@ public class RPGUtils {
 				Chatable.get().sendWarning("Enchantment " + enchant.getName() + " (Display Name " + enchant.getDisplayName() + ")" + " does not have a JavaPlugin set. Refusing to set config defaults.");
 				return 0;
 			}
-			namespace = plugin.getName().toLowerCase();
+			namespace = plugin.getName().toLowerCase(Locale.ROOT);
 		} else if (enchant.getRelativeEnchantment() instanceof CustomEnchantmentWrapper) namespace = "custom_enchantments";
 
 		RPGPlayer p = getPlayer(player);

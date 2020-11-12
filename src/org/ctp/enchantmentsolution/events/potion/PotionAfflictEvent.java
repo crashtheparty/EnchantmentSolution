@@ -11,14 +11,15 @@ public class PotionAfflictEvent extends PotionEffectEvent {
 	private final PotionEffect previousEffect;
 	private boolean override;
 	private final LivingEntity afflicter;
-	
-	public PotionAfflictEvent(LivingEntity who, LivingEntity afflicter, EnchantmentLevel enchantment, PotionEffectType type, int duration, int level, PotionEffect previousEffect, boolean override) {
+
+	public PotionAfflictEvent(LivingEntity who, LivingEntity afflicter, EnchantmentLevel enchantment, PotionEffectType type, int duration, int level,
+	PotionEffect previousEffect, boolean override) {
 		super(who, enchantment, type);
 		this.afflicter = afflicter;
-		this.setDuration(duration);
-		this.setLevel(level);
+		setDuration(duration);
+		setLevel(level);
 		this.previousEffect = previousEffect;
-		this.setOverride(override);
+		setOverride(override);
 	}
 
 	public int getDuration() {

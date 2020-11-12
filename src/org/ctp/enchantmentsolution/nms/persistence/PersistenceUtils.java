@@ -209,7 +209,7 @@ public class PersistenceUtils {
 		for(CustomEnchantment ench: RegisterEnchantments.getEnchantments()) {
 			NamespacedKey key = EnchantmentSolution.getKey(ench.getName());
 			if (container.has(key, t)) {
-				if (ench.getDisplayName().equals(repaired)) return new EnchResult(true, false, ench);
+				if (ench.getDisplayName().trim().equals(repaired.trim())) return new EnchResult(false, true, ench);
 				String oldDisplayName = container.get(key, t);
 				if (oldDisplayName != null && oldDisplayName.equals(repaired)) return new EnchResult(true, true, ench);
 			}
@@ -332,7 +332,7 @@ public class PersistenceUtils {
 					} else if (item.containsEnchantment(enchant.getRelativeEnchantment())) enchantLore.add(new EnchantmentLevel(enchant, EnchantmentUtils.getLevel(item, enchant.getRelativeEnchantment())));
 			}
 
-			boolean change = (!checkSimilar(enchantMeta, enchantLore) && !checkSimilar(enchantLore, enchantMeta));
+			boolean change = !checkSimilar(enchantMeta, enchantLore) && !checkSimilar(enchantLore, enchantMeta);
 			if (change) {
 				changed = true;
 				Map<Enchantment, Integer> enchants = new HashMap<Enchantment, Integer>();

@@ -12,6 +12,7 @@ import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.CERegister;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
+import org.ctp.enchantmentsolution.utils.Configurations;
 
 public class MinigameConfiguration extends Configuration {
 
@@ -24,7 +25,7 @@ public class MinigameConfiguration extends Configuration {
 
 	@Override
 	public void setDefaults() {
-		if (getPlugin().isInitializing()) Chatable.get().sendInfo("Loading Minigame configuration...");
+		if (Configurations.isInitializing()) Chatable.get().sendInfo("Initializing Minigame configuration...");
 
 		YamlConfigBackup config = getConfig();
 
@@ -47,7 +48,7 @@ public class MinigameConfiguration extends Configuration {
 			config.addDefault("custom.items.first.material.show", "diamond_sword", "The material that will appear in the GUI.");
 			config.addDefault("custom.items.first.material.enchant", "diamond_sword", "The material that will be enchanted upon clicking.");
 			config.addDefault("custom.items.first.type", "enchantment", new String[] { "The type that will generate from this item.", "ENCHANTMENT: Generates the enchantments specified under 'enchantments'.", "RANDOM: Uses the values under 'books' to generate a single random enchantment.", "RANDOM_MULTI: Uses the values under 'books' to generate random enchantments (with possibility of multiple enchantments).", "RANDOM_BOOKSHELF: Uses the number of bookshelves surrounding the enchanting table to generate a single random enchantment.", "RANDOM_MULTI_BOOKSHELF: Uses the bookshelves surrounding the enchanting table to generate random enchantments (with possibility of multiple enchantments)." });
-			config.addDefault("custom.items.first.costs.use", Arrays.asList("level", "lapis", "economy"), new String[] {"Which costs will be used by ES for a player to buy the item.", "level: The player's experience level.", "lapis: The lapis lazuli a player has.", "economy: The money the player has using a Vault Economy plugin."});
+			config.addDefault("custom.items.first.costs.use", Arrays.asList("level", "lapis", "economy"), new String[] { "Which costs will be used by ES for a player to buy the item.", "level: The player's experience level.", "lapis: The lapis lazuli a player has.", "economy: The money the player has using a Vault Economy plugin." });
 			config.addDefault("custom.items.first.costs.level", 5, "The experience level cost of enchanting an item.");
 			config.addDefault("custom.items.first.costs.use_level_cost_increase", false, "Whether the experience level cost should increase with each use (resets on '/esreset', '/esreload', and server restart.");
 			config.addDefault("custom.items.first.costs.extra_level_cost_per_use", 1, "The extra experience level cost of enchanting an item.");
@@ -114,9 +115,9 @@ public class MinigameConfiguration extends Configuration {
 			config.addDefault("custom.items.third.slot", 5);
 		}
 
-		if (getPlugin().isInitializing()) Chatable.get().sendInfo("Minigame configuration initialized!");
+		config.writeDefaults();
 
-		config.saveConfig();
+		if (Configurations.isInitializing()) Chatable.get().sendInfo("Minigame configuration initialized!");
 
 		file.delete();
 	}

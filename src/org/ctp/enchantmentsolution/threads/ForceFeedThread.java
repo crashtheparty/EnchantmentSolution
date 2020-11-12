@@ -54,7 +54,7 @@ public class ForceFeedThread extends EnchantmentThread {
 		int level = EnchantmentUtils.getLevel(item, RegisterEnchantments.FORCE_FEED);
 		double chance = player.getForceFeedChance(level);
 		if (chance > rand) {
-			int newDamage = Math.max((int) (Math.random() * (level + 4) - ((3 + level) / 2.0D)), 1);
+			int newDamage = Math.max((int) (Math.random() * (level + 4) - (3 + level) / 2.0D), 1);
 			ForceFeedEvent forceFeed = new ForceFeedEvent(p, level, item, 0.4f, newDamage);
 			Bukkit.getPluginManager().callEvent(forceFeed);
 			if (!forceFeed.isCancelled() && forceFeed.getRepair() > 0) {
@@ -65,7 +65,7 @@ public class ForceFeedThread extends EnchantmentThread {
 					damage = 0;
 				}
 				DamageUtils.setDamage(item, damage);
-				p.setExhaustion(p.getExhaustion() + (forceFeed.getExhaust() * repair));
+				p.setExhaustion(p.getExhaustion() + forceFeed.getExhaust() * repair);
 				AdvancementUtils.awardCriteria(p, ESAdvancement.YUMMY_REPAIRS, "repair");
 			}
 		}

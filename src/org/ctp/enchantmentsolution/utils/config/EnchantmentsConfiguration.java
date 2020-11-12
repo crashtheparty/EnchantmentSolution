@@ -2,6 +2,7 @@ package org.ctp.enchantmentsolution.utils.config;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.Locale;
 
 import org.bukkit.plugin.java.JavaPlugin;
 import org.ctp.crashapi.config.Configuration;
@@ -21,16 +22,18 @@ import org.ctp.enchantmentsolution.utils.PermissionUtils;
 
 public class EnchantmentsConfiguration extends Configuration {
 
+	private boolean firstLoad = true;
+
 	public EnchantmentsConfiguration(File dataFolder, BackupDB db, String[] header) {
 		super(EnchantmentSolution.getPlugin(), new File(dataFolder + "/enchantments.yml"), db, header);
 
 		migrateVersion();
-		if (getConfig() != null) getConfig().writeDefaults();
+		save();
 	}
 
 	@Override
 	public void setDefaults() {
-		if (getPlugin().isInitializing()) Chatable.get().sendInfo("Loading enchantment configuration...");
+		if (firstLoad) Chatable.get().sendInfo("Initializing enchantment configuration...");
 
 		YamlConfigBackup config = getConfig();
 
@@ -48,7 +51,8 @@ public class EnchantmentsConfiguration extends Configuration {
 
 		config.writeDefaults();
 
-		if (getPlugin().isInitializing()) Chatable.get().sendInfo("Enchantment configuration initialized!");
+		if (firstLoad) Chatable.get().sendInfo("Enchantment configuration initialized!");
+		firstLoad = false;
 	}
 
 	@Override
@@ -68,9 +72,9 @@ public class EnchantmentsConfiguration extends Configuration {
 					Chatable.get().sendWarning("Enchantment " + enchant.getName() + " (Display Name " + enchant.getDisplayName() + ")" + " does not have a JavaPlugin set. Refusing to set config defaults.");
 					continue;
 				}
-				namespace = plugin.getName().toLowerCase();
+				namespace = plugin.getName().toLowerCase(Locale.ROOT);
 			} else if (enchant.getRelativeEnchantment() instanceof CustomEnchantmentWrapper) namespace = "custom_enchantments";
-			String start = namespace + "." + enchant.getName().toLowerCase();
+			String start = namespace + "." + enchant.getName().toLowerCase(Locale.ROOT);
 			config.addDefault(start + ".enabled", true);
 			config.addDefault(start + ".enchantment_locations", enchant.getDefaultEnchantmentLocations());
 			config.addDefault(start + ".enchantment_item_types", ItemType.itemTypesToStrings(enchant.getDefaultEnchantmentItemTypes()));
@@ -97,7 +101,7 @@ public class EnchantmentsConfiguration extends Configuration {
 		YamlConfigBackup config = getConfig();
 		for(CustomEnchantment enchant: RegisterEnchantments.getEnchantments())
 			if (enchant.getRelativeEnchantment() instanceof ApiEnchantmentWrapper) if (plugin.equals(((ApiEnchantmentWrapper) enchant.getRelativeEnchantment()).getPlugin())) {
-				String namespace = plugin.getName().toLowerCase() + "." + enchant.getName().toLowerCase();
+				String namespace = plugin.getName().toLowerCase(Locale.ROOT) + "." + enchant.getName().toLowerCase(Locale.ROOT);
 				config.addDefault(namespace + ".enabled", true);
 				config.addDefault(namespace + ".enchantment_locations", enchant.getDefaultEnchantmentLocations());
 				config.addDefault(namespace + ".enchantment_item_types", ItemType.itemTypesToStrings(enchant.getDefaultEnchantmentItemTypes()));

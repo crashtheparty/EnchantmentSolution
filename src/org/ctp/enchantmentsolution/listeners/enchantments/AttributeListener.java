@@ -82,7 +82,9 @@ public class AttributeListener extends Enchantmentable {
 
 			start: while (iterator.hasNext()) {
 				EnchantmentLevel level = iterator.next();
-				if (level == null || level.getEnchant() == null || (!level.getEnchant().isEnabled() && equip)) continue; // not an ES enchantment, or possibly a disabled enchantment, so don't bother
+				if (level == null || level.getEnchant() == null || !level.getEnchant().isEnabled() && equip) continue; // not an ES enchantment, or possibly a
+				// disabled enchantment, so don't
+				// bother
 				Enchantment relative = level.getEnchant().getRelativeEnchantment();
 				if (attributes.containsKey(relative)) {
 					Attributable a = attributes.get(relative);
@@ -162,7 +164,7 @@ public class AttributeListener extends Enchantmentable {
 										if (armor != null && EnchantmentUtils.hasEnchantment(armor, enchant) && (ench == null || EnchantmentUtils.getLevel(ench.getItem(), enchant) > EnchantmentUtils.getLevel(armor, enchant))) ench = new ItemSlot(armor, s.getType());
 									}
 									if (ench != null) {
-										Attributable att = Attributable.valueOf(a.getEnchantment().getKey().getKey().toUpperCase());
+										Attributable att = Attributable.valueOf(a.getEnchantment().getKey().getKey().toUpperCase(Locale.ROOT));
 										for(ItemEquippedSlot s: att.getTypes()) {
 											Enchantment enchantment = att.getEnchantment();
 											EnchantmentLevel enchLevel = new EnchantmentLevel(RegisterEnchantments.getCustomEnchantment(enchantment), EnchantmentUtils.getLevel(ench.getItem(), enchantment));

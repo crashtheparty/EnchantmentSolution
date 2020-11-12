@@ -8,7 +8,7 @@ import org.ctp.enchantmentsolution.events.ESPlayerEvent;
 public abstract class ESPotionEffectEvent extends ESPlayerEvent {
 
 	private final PotionEffectType type;
-	
+
 	public ESPotionEffectEvent(Player who, EnchantmentLevel enchantment, PotionEffectType type) {
 		super(who, enchantment);
 		this.type = type;

@@ -1,6 +1,7 @@
 package org.ctp.enchantmentsolution.utils.files;
 
 import java.io.File;
+import java.util.Locale;
 
 import org.bukkit.plugin.java.JavaPlugin;
 import org.ctp.crashapi.config.CrashLanguageFile;
@@ -20,7 +21,7 @@ public class ESLanguageFile extends CrashLanguageFile {
 		super(dataFolder, language);
 		YamlConfig config = getConfig();
 		config.getFromConfig();
-		
+
 		File tempFile = CrashConfigUtils.getTempFile(getClass(), "/resources/" + language.getLocale() + ".yml");
 		YamlConfig defaultConfig = new YamlConfig(tempFile, new String[] {});
 		defaultConfig.getFromConfig();
@@ -48,7 +49,7 @@ public class ESLanguageFile extends CrashLanguageFile {
 					Chatable.get().sendWarning("Enchantment " + enchant.getName() + " (Display Name " + enchant.getDisplayName() + ")" + " does not have a JavaPlugin set. Refusing to set language defaults.");
 					continue;
 				}
-				config.addDefault("enchantment.descriptions." + plugin.getName().toLowerCase() + "." + enchant.getName(), StringUtils.encodeString(enchantmentDescription));
+				config.addDefault("enchantment.descriptions." + plugin.getName().toLowerCase(Locale.ROOT) + "." + enchant.getName(), StringUtils.encodeString(enchantmentDescription));
 			} else if (enchant.getRelativeEnchantment() instanceof CustomEnchantmentWrapper) config.addDefault("enchantment.descriptions." + "custom_enchantments." + enchant.getName(), StringUtils.encodeString(enchantmentDescription));
 			else
 				config.addDefault("enchantment.descriptions." + "default_enchantments." + enchant.getName(), StringUtils.encodeString(enchantmentDescription));

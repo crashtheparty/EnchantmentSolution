@@ -4,6 +4,7 @@ import java.util.*;
 
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.ctp.crashapi.CrashAPIPlugin;
 import org.ctp.crashapi.resources.advancements.Advancement.Frame;
 import org.ctp.crashapi.resources.advancements.CrashAdvancement;
 import org.ctp.crashapi.resources.advancements.CrashTrigger;
@@ -48,8 +49,8 @@ public enum ESAdvancement implements CrashAdvancement {
 	OVER_9000(FAST_AND_FURIOUS, "DIAMOND_PICKAXE", Arrays.asList(new CrashTrigger("stone", 9001)), 1000, Frame.CHALLENGE),
 	HEY_IT_WORKS(INDUSTRIAL_REVOLUTION, "PURPLE_SHULKER_BOX", Arrays.asList(new CrashTrigger("shulker_box")), 75),
 	NO_PANIC(HEY_IT_WORKS, "LAVA_BUCKET", Arrays.asList(new CrashTrigger("lava")), 100, Frame.GOAL),
-	SCOURGE_OF_THE_FOREST(INDUSTRIAL_REVOLUTION, "IRON_AXE", Arrays.asList(new CrashTrigger("tree")), 20), 
-	DEFORESTATION(SCOURGE_OF_THE_FOREST, "BARRIER", Arrays.asList(new CrashTrigger("tree", 1000)), 500, Frame.CHALLENGE), 
+	SCOURGE_OF_THE_FOREST(INDUSTRIAL_REVOLUTION, "IRON_AXE", Arrays.asList(new CrashTrigger("tree")), 20),
+	DEFORESTATION(SCOURGE_OF_THE_FOREST, "BARRIER", Arrays.asList(new CrashTrigger("tree", 1000)), 500, Frame.CHALLENGE),
 
 	SCIENTIFIC_REVOLUTION("ENCHANTED_BOOK", Arrays.asList(), 0),
 	BREAKER_BREAKER(SCIENTIFIC_REVOLUTION, "TORCH", Arrays.asList(new CrashTrigger("torch")), 25),
@@ -64,16 +65,16 @@ public enum ESAdvancement implements CrashAdvancement {
 	EXTERMINATION(PLAGUE_INC, "ROTTEN_FLESH", Arrays.asList(new CrashTrigger("contagion")), 50),
 	BROKEN_DREAMS(PLAGUE_INC, "CYAN_CONCRETE", Arrays.asList(new CrashTrigger("unstable")), 50),
 	ENVIRONMENTAL_PROTECTION(SCIENTIFIC_REVOLUTION, "EXPERIENCE_BOTTLE", Arrays.asList(new CrashTrigger("experience", 1000)), 300, Frame.GOAL),
-	BLIND_AS_A_BAT(SCIENTIFIC_REVOLUTION, "BAT_SPAWN_EGG", Arrays.asList(new CrashTrigger("blindness")), 30), 
+	BLIND_AS_A_BAT(SCIENTIFIC_REVOLUTION, "BAT_SPAWN_EGG", Arrays.asList(new CrashTrigger("blindness")), 30),
 	LIGHT_AS_A_FEATHER(BLIND_AS_A_BAT, "DIAMOND_BOOTS", Arrays.asList(new CrashTrigger("boots")), 60),
-	WORLD_RECORD(SCIENTIFIC_REVOLUTION, "SUNFLOWER", Arrays.asList(new CrashTrigger("record")), 400, Frame.GOAL), 
-	REPLENISHED(SCIENTIFIC_REVOLUTION, "GOLDEN_APPLE", Arrays.asList(new CrashTrigger("life")), 20), 
-	THE_SNOWMAN(SCIENTIFIC_REVOLUTION, "SNOW_BLOCK", Arrays.asList(new CrashTrigger("snowball")), 20), 
+	WORLD_RECORD(SCIENTIFIC_REVOLUTION, "SUNFLOWER", Arrays.asList(new CrashTrigger("record")), 400, Frame.GOAL),
+	REPLENISHED(SCIENTIFIC_REVOLUTION, "GOLDEN_APPLE", Arrays.asList(new CrashTrigger("life")), 20),
+	THE_SNOWMAN(SCIENTIFIC_REVOLUTION, "SNOW_BLOCK", Arrays.asList(new CrashTrigger("snowball")), 20),
 
 	IMPERIAL_REVOLUTION("DIAMOND_SWORD", Arrays.asList(), 0),
 	HEX_BAG(IMPERIAL_REVOLUTION, "WITCH_SPAWN_EGG", Arrays.asList(new CrashTrigger("player")), 25),
-	SUPER_CHARGED(HEX_BAG, "DIAMOND_AXE", Arrays.asList(new CrashTrigger("lightning")), 35), 
-	DOUBLE_DAMAGE(SUPER_CHARGED, "DIAMOND_SWORD", Arrays.asList(new CrashTrigger("kills")), 100, Frame.GOAL), 
+	SUPER_CHARGED(HEX_BAG, "DIAMOND_AXE", Arrays.asList(new CrashTrigger("lightning")), 35),
+	DOUBLE_DAMAGE(SUPER_CHARGED, "DIAMOND_SWORD", Arrays.asList(new CrashTrigger("kills")), 100, Frame.GOAL),
 	SEVEN_POINT_EIGHT(HEX_BAG, "WATER_BUCKET", Arrays.asList(new CrashTrigger("drowning")), 40),
 	NOT_VERY_EFFECTIVE(IMPERIAL_REVOLUTION, "NAUTILUS_SHELL", Arrays.asList(new CrashTrigger("drowned")), 50),
 	SUPER_EFFECTIVE(NOT_VERY_EFFECTIVE, "HEART_OF_THE_SEA", Arrays.asList(new CrashTrigger("boss")), 250, Frame.GOAL),
@@ -91,18 +92,18 @@ public enum ESAdvancement implements CrashAdvancement {
 	JUST_DIE_ALREADY(LOOK_WHAT_YOU_MADE_ME_DO, "PHANTOM_SPAWN_EGG", Arrays.asList(new CrashTrigger("phantom")), 75, Frame.TASK, 4),
 	UNDERKILL(LOOK_WHAT_YOU_MADE_ME_DO, "DRAGON_EGG", Arrays.asList(new CrashTrigger("dragon")), 100, Frame.GOAL, 4),
 	WHERE_DID_THAT_COME_FROM(UNDERKILL, "ARROW", Arrays.asList(new CrashTrigger("sniper")), 500, Frame.CHALLENGE),
-	KILL_THE_MESSENGER(UNDERKILL, "FIRE_CHARGE", Arrays.asList(new CrashTrigger("ghast")), 200, Frame.GOAL), 
+	KILL_THE_MESSENGER(UNDERKILL, "FIRE_CHARGE", Arrays.asList(new CrashTrigger("ghast")), 200, Frame.GOAL),
 	BLAST_OFF(IMPERIAL_REVOLUTION, "TNT", Arrays.asList(new CrashTrigger("creeper")), 30),
 	PENETRATION(BLAST_OFF, "ARROW", Arrays.asList(new CrashTrigger("arrow")), 100, Frame.GOAL),
 	KILIMANJARO(PENETRATION, "DIAMOND_SWORD", Arrays.asList(new CrashTrigger("kills")), 1000, Frame.CHALLENGE),
 	KNOCKBACK_REVERSED(IMPERIAL_REVOLUTION, "SHIELD", Arrays.asList(new CrashTrigger("knockback")), 30),
-	BEFORE_I_MELT_AWAY(IMPERIAL_REVOLUTION, "SNOWBALL", Arrays.asList(new CrashTrigger("blaze")), 200, Frame.GOAL), 
+	BEFORE_I_MELT_AWAY(IMPERIAL_REVOLUTION, "SNOWBALL", Arrays.asList(new CrashTrigger("blaze")), 200, Frame.GOAL),
 
 	MECHANICAL_REVOLUTION("DIAMOND_CHESTPLATE", Arrays.asList(), 0),
 	COFFEE_BREAK(MECHANICAL_REVOLUTION, "SUGAR", Arrays.asList(new CrashTrigger("coffee")), 20),
-	TOO_HIGH(COFFEE_BREAK, "IRON_BOOTS", Arrays.asList(new CrashTrigger("fall_damage")), 50), 
-	EVENING_STROLL(COFFEE_BREAK, "IRON_LEGGINGS", Arrays.asList(new CrashTrigger("evening")), 50), 
-	SLACKIN(COFFEE_BREAK, "LEATHER_BOOTS", Arrays.asList(new CrashTrigger("truant")), 30), 
+	TOO_HIGH(COFFEE_BREAK, "IRON_BOOTS", Arrays.asList(new CrashTrigger("fall_damage")), 50),
+	EVENING_STROLL(COFFEE_BREAK, "IRON_LEGGINGS", Arrays.asList(new CrashTrigger("evening")), 50),
+	SLACKIN(COFFEE_BREAK, "LEATHER_BOOTS", Arrays.asList(new CrashTrigger("truant")), 30),
 	SPIDER_SENSES(COFFEE_BREAK, "SPIDER_EYE", Arrays.asList(new CrashTrigger("venom")), 30),
 	I_AINT_AFRAID_OF_NO_GHOSTS(COFFEE_BREAK, "WHITE_BED", Arrays.asList(new CrashTrigger("unrest", 10)), 150, Frame.GOAL),
 	THIS_GIRL_IS_ON_FIRE(MECHANICAL_REVOLUTION, "LAVA_BUCKET", Arrays.asList(new CrashTrigger("lava")), 25),
@@ -216,5 +217,10 @@ public enum ESAdvancement implements CrashAdvancement {
 
 	public void setFrame(Frame frame) {
 		this.frame = frame;
+	}
+
+	@Override
+	public CrashAPIPlugin getPlugin() {
+		return EnchantmentSolution.getPlugin();
 	}
 }
