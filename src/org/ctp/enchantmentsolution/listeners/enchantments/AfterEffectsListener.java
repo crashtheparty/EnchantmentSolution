@@ -60,7 +60,7 @@ public class AfterEffectsListener extends Enchantmentable {
 		if (player == null || isDisabled(player, RegisterEnchantments.BUTCHER)) return;
 		if (entity instanceof Ageable && ((Ageable) entity).isAdult()) {
 			ItemStack killItem = player.getInventory().getItemInMainHand();
-			if (killItem != null && EnchantmentUtils.hasEnchantment(killItem, RegisterEnchantments.BUTCHER)) {
+			if (EnchantmentUtils.hasEnchantment(killItem, RegisterEnchantments.BUTCHER)) {
 				List<ItemStack> drops = event.getDrops();
 				int level = EnchantmentUtils.getLevel(killItem, RegisterEnchantments.BUTCHER);
 				List<ItemStack> newDrops = new ArrayList<ItemStack>();
@@ -93,7 +93,7 @@ public class AfterEffectsListener extends Enchantmentable {
 		Player player = event.getEntity().getKiller();
 		if (player == null || isDisabled(player, RegisterEnchantments.EXP_SHARE)) return;
 		ItemStack killItem = player.getInventory().getItemInMainHand();
-		if (killItem != null && EnchantmentUtils.hasEnchantment(killItem, RegisterEnchantments.EXP_SHARE)) {
+		if (EnchantmentUtils.hasEnchantment(killItem, RegisterEnchantments.EXP_SHARE)) {
 			int exp = event.getDroppedExp();
 			if (exp > 0) {
 				int level = EnchantmentUtils.getLevel(killItem, RegisterEnchantments.EXP_SHARE);
@@ -115,7 +115,7 @@ public class AfterEffectsListener extends Enchantmentable {
 		if (entity instanceof Ageable && ((Ageable) entity).isAdult()) {
 			ItemStack killItem = player.getInventory().getItemInMainHand();
 
-			if (killItem != null && EnchantmentUtils.hasEnchantment(killItem, RegisterEnchantments.HUSBANDRY)) {
+			if (EnchantmentUtils.hasEnchantment(killItem, RegisterEnchantments.HUSBANDRY)) {
 				int level = EnchantmentUtils.getLevel(killItem, RegisterEnchantments.HUSBANDRY);
 				double chance = 0.05 * (1 + level);
 				HusbandryEvent husbandry = new HusbandryEvent(entity, player, entity.getLocation(), level, chance);
@@ -177,7 +177,7 @@ public class AfterEffectsListener extends Enchantmentable {
 		Player player = event.getEntity().getKiller();
 		if (player == null || isDisabled(player, RegisterEnchantments.RECYCLER)) return;
 		ItemStack killItem = player.getInventory().getItemInMainHand();
-		if (killItem != null && EnchantmentUtils.hasEnchantment(killItem, RegisterEnchantments.RECYCLER)) {
+		if (EnchantmentUtils.hasEnchantment(killItem, RegisterEnchantments.RECYCLER)) {
 			int exp = event.getDroppedExp();
 			int recyclerExp = 0;
 			boolean willRecycle = false;
@@ -210,7 +210,7 @@ public class AfterEffectsListener extends Enchantmentable {
 		Player player = event.getEntity();
 		if (player == null || isDisabled(player, RegisterEnchantments.SACRIFICE)) return;
 		ItemStack chest = player.getInventory().getChestplate();
-		if (chest != null && EnchantmentUtils.hasEnchantment(chest, RegisterEnchantments.SACRIFICE)) {
+		if (EnchantmentUtils.hasEnchantment(chest, RegisterEnchantments.SACRIFICE)) {
 			int level = EnchantmentUtils.getLevel(chest, RegisterEnchantments.SACRIFICE);
 			int playerLevel = player.getLevel();
 			double damage = playerLevel / (3.0D / level);

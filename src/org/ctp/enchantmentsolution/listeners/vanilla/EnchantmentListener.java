@@ -33,10 +33,11 @@ public class EnchantmentListener implements Listener {
 		EnchantmentList[] lists = table.getEnchantments(new ItemData(item));
 		for(int i = 0; i < event.getOffers().length; i++) {
 			EnchantmentOffer offer = event.getOffers()[i];
+			if (offer == null) continue;
 			EnchantmentList list = lists[i];
 			if (list == null) continue;
 			for(EnchantmentLevel ench: list.getEnchantments()) {
-				if (ench == null || ench.getEnchant() == null) continue;
+				if (ench == null || ench.getEnchant() == null) continue; 
 				LevelList levelList = table.getLevelList();
 				if (levelList == null) continue;
 				Level level = levelList.getList()[i];

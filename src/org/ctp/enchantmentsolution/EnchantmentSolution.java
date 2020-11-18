@@ -461,12 +461,12 @@ public class EnchantmentSolution extends CrashAPIPlugin {
 	public void reEquipItems(ESPlayer player, Enchantment enchantment) {
 		if (!player.isOnline()) return;
 		ItemStack mainHand = player.getMainHand();
-		if (mainHand != null && EnchantmentUtils.hasEnchantment(mainHand, enchantment)) {
+		if (EnchantmentUtils.hasEnchantment(mainHand, enchantment)) {
 			ItemEquipEvent itemEquipEvent = new ItemEquipEvent(player.getOnlinePlayer(), HandMethod.COMMAND, ItemSlotType.MAIN_HAND, mainHand, mainHand);
 			Bukkit.getServer().getPluginManager().callEvent(itemEquipEvent);
 		}
 		ItemStack offHand = player.getMainHand();
-		if (offHand != null && EnchantmentUtils.hasEnchantment(offHand, enchantment)) {
+		if (EnchantmentUtils.hasEnchantment(offHand, enchantment)) {
 			ItemEquipEvent itemEquipEvent = new ItemEquipEvent(player.getOnlinePlayer(), HandMethod.COMMAND, ItemSlotType.MAIN_HAND, offHand, offHand);
 			Bukkit.getServer().getPluginManager().callEvent(itemEquipEvent);
 		}
@@ -489,7 +489,7 @@ public class EnchantmentSolution extends CrashAPIPlugin {
 		if (!player.isOnline()) return;
 		for(ItemSlot slot: player.getArmorAndType()) {
 			ItemStack item = slot.getItem();
-			if (item != null && EnchantmentUtils.hasEnchantment(item, enchantment)) {
+			if (EnchantmentUtils.hasEnchantment(item, enchantment)) {
 				ArmorEquipEvent armorEquipEvent = new ArmorEquipEvent(player.getOnlinePlayer(), EquipMethod.COMMAND, slot.getType(), item, item);
 				Bukkit.getServer().getPluginManager().callEvent(armorEquipEvent);
 			}

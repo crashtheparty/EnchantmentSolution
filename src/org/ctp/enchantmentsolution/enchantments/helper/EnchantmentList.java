@@ -185,7 +185,7 @@ public class EnchantmentList {
 		List<String> enchants = config.getStringList("enchanting_table." + i + ".enchantmentList." + j + "." + k + ".enchants");
 		List<EnchantmentLevel> levels = new ArrayList<EnchantmentLevel>();
 		if (enchants != null) for(String enchant: enchants)
-			levels.add(new EnchantmentLevel(enchant));
+			levels.add(new EnchantmentLevel(enchant, config));
 		int enchantability = config.getInt("enchanting_table." + i + ".enchantmentList." + j + "." + k + ".enchantability");
 
 		return new EnchantmentList(player, level, item, EnchantmentLocation.TABLE, enchantability, levels);

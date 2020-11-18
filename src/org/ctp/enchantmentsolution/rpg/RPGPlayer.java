@@ -10,6 +10,7 @@ import org.bukkit.*;
 import org.bukkit.boss.*;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.ctp.crashapi.config.yaml.YamlConfig;
 import org.ctp.crashapi.nms.HotbarNMS;
 import org.ctp.crashapi.utils.ChatUtils;
 import org.ctp.enchantmentsolution.Chatable;
@@ -177,8 +178,8 @@ public class RPGPlayer {
 		return enchantmentList;
 	}
 
-	public boolean giveEnchantment(String s) {
-		EnchantmentLevel level = new EnchantmentLevel(s);
+	public boolean giveEnchantment(String s, YamlConfig config) {
+		EnchantmentLevel level = new EnchantmentLevel(s, config);
 		return level.getEnchant() != null && level.getLevel() > 0 && giveEnchantment(level);
 	}
 

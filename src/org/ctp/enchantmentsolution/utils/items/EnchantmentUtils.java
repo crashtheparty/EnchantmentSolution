@@ -147,7 +147,7 @@ public class EnchantmentUtils {
 	}
 
 	public static boolean hasEnchantment(ItemStack item, Enchantment enchant) {
-		if (item.getItemMeta() != null) {
+		if (item != null && item.getItemMeta() != null) {
 			Map<Enchantment, Integer> enchantments = item.getItemMeta().getEnchants();
 			if (item.getType() == Material.ENCHANTED_BOOK) enchantments = ((EnchantmentStorageMeta) item.getItemMeta()).getStoredEnchants();
 			for(Iterator<Entry<Enchantment, Integer>> it = enchantments.entrySet().iterator(); it.hasNext();) {

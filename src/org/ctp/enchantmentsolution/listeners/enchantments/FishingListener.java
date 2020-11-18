@@ -76,7 +76,7 @@ public class FishingListener extends Enchantmentable {
 		Player player = event.getPlayer();
 		if (isDisabled(player, RegisterEnchantments.EXP_SHARE)) return;
 		ItemStack item = player.getInventory().getItemInMainHand();
-		if (item != null && EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.EXP_SHARE)) {
+		if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.EXP_SHARE)) {
 			int exp = event.getExpToDrop();
 			if (exp > 0) {
 				int level = EnchantmentUtils.getLevel(item, RegisterEnchantments.EXP_SHARE);

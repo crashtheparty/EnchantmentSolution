@@ -91,7 +91,7 @@ public class FishingEnchantments extends LootEnchantments {
 		List<EnchantmentLevel> fishing = new ArrayList<EnchantmentLevel>();
 
 		for(String str: configStrings) {
-			EnchantmentLevel level = new EnchantmentLevel(str);
+			EnchantmentLevel level = new EnchantmentLevel(str, config.getConfig());
 			if (level != null) fishing.add(level);
 		}
 

@@ -16,6 +16,7 @@ import org.bukkit.persistence.PersistentDataType;
 import org.ctp.crashapi.item.MatData;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.*;
+import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentErrorReason;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.nms.PersistenceNMS;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
@@ -236,7 +237,7 @@ public class PersistenceUtils {
 			levels.add(new EnchantmentLevel(CERegister.STICKY_HOLD, 1));
 			for(CustomEnchantment enchant: RegisterEnchantments.getEnchantments()) {
 				String s = container.get(EnchantmentSolution.getKey("sticky_hold_" + enchant.getName()), t);
-				if (s != null) levels.add(new EnchantmentLevel(s));
+				if (s != null) levels.add(new EnchantmentLevel(s, EnchantmentErrorReason.STICKY_HOLD));
 				container.remove(EnchantmentSolution.getKey("sticky_hold_" + enchant.getName()));
 			}
 			item.setItemMeta(newMeta);

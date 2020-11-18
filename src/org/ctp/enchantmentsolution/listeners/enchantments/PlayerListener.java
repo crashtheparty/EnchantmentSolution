@@ -78,7 +78,7 @@ public class PlayerListener extends Enchantmentable {
 			if (player.getGameMode().equals(GameMode.CREATIVE) || player.getGameMode().equals(GameMode.SPECTATOR)) return;
 			ItemStack item = player.getInventory().getItemInMainHand();
 			Block block = event.getClickedBlock();
-			if (block != null && item != null && EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.FLOWER_GIFT) && FlowerGiftDrop.isItem(block.getType())) {
+			if (block != null && EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.FLOWER_GIFT) && FlowerGiftDrop.isItem(block.getType())) {
 				FlowerGiftEvent flowerGiftEvent = new FlowerGiftEvent(player, item, block, FlowerGiftDrop.getItem(block.getType()), LocationUtils.offset(block.getLocation()));
 				Bukkit.getPluginManager().callEvent(flowerGiftEvent);
 
@@ -188,7 +188,7 @@ public class PlayerListener extends Enchantmentable {
 			if (isDisabled(player, RegisterEnchantments.IRENES_LASSO)) return;
 			ItemStack item = player.getInventory().getItemInMainHand();
 			if (event.getHand() == EquipmentSlot.OFF_HAND) item = player.getInventory().getItemInOffHand();
-			if (item != null && EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.IRENES_LASSO)) {
+			if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.IRENES_LASSO)) {
 				List<Integer> entityIDs = PersistenceNMS.getAnimalIDsFromItem(item);
 				if (entityIDs.size() == 0) return;
 				int entityID = entityIDs.get(0);
@@ -225,7 +225,7 @@ public class PlayerListener extends Enchantmentable {
 			if (event.getHand() == EquipmentSlot.OFF_HAND) return; // off hand packet, ignore.
 			Player player = event.getPlayer();
 			ItemStack item = event.getItem();
-			if (item != null && EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.MOISTURIZE)) {
+			if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.MOISTURIZE)) {
 				Block block = event.getClickedBlock();
 				ItemMoisturizeType type = ItemMoisturizeType.getMoisturizeType(block.getType());
 				if (type != null) {
@@ -412,7 +412,7 @@ public class PlayerListener extends Enchantmentable {
 		Player player = event.getPlayer();
 		if (isDisabled(player, RegisterEnchantments.STICKY_HOLD)) return;
 		ItemStack item = event.getBrokenItem();
-		if (item != null && EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.STICKY_HOLD)) {
+		if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.STICKY_HOLD)) {
 			ItemStack finalItem = item.clone();
 			Bukkit.getScheduler().runTaskLater(EnchantmentSolution.getPlugin(), () -> {
 				ItemStack stickItem = PersistenceNMS.createStickyHold(finalItem);
@@ -471,9 +471,8 @@ public class PlayerListener extends Enchantmentable {
 		Location loc = player.getLocation();
 		if (player.isFlying() || player.isGliding() || player.isInsideVehicle()) return;
 		ItemStack boots = player.getInventory().getBoots();
-		if (boots != null && EnchantmentUtils.hasEnchantment(boots, enchantment)) if (enchantment == RegisterEnchantments.MAGMA_WALKER) {
-			if (player.isOnGround()) WalkerUtils.updateBlocks(player, boots, loc, enchantment, Arrays.asList(Material.LAVA), Material.MAGMA_BLOCK, "MagmaWalker");
-		} else if (enchantment == RegisterEnchantments.VOID_WALKER) if (LocationUtils.isLocationDifferent(event.getFrom(), event.getTo(), false)) WalkerUtils.updateBlocks(player, boots, loc, enchantment, Arrays.asList(Material.AIR, Material.CAVE_AIR, Material.VOID_AIR), Material.OBSIDIAN, "VoidWalker");
-		else if (LocationUtils.isLocationDifferent(event.getFrom(), event.getTo(), true)) WalkerUtils.updateBlocks(player, boots, event.getTo(), enchantment, Arrays.asList(Material.AIR, Material.CAVE_AIR, Material.VOID_AIR), Material.OBSIDIAN, "VoidWalker");
+		if (EnchantmentUtils.hasEnchantment(boots, enchantment) && enchantment == RegisterEnchantments.MAGMA_WALKER && player.isOnGround()) WalkerUtils.updateBlocks(player, boots, loc, enchantment, Arrays.asList(Material.LAVA), Material.MAGMA_BLOCK, "MagmaWalker");
+		else if (EnchantmentUtils.hasEnchantment(boots, enchantment) && enchantment == RegisterEnchantments.VOID_WALKER && LocationUtils.isLocationDifferent(event.getFrom(), event.getTo(), false)) WalkerUtils.updateBlocks(player, boots, loc, enchantment, Arrays.asList(Material.AIR, Material.CAVE_AIR, Material.VOID_AIR), Material.OBSIDIAN, "VoidWalker");
+		else if (EnchantmentUtils.hasEnchantment(boots, enchantment) && enchantment == RegisterEnchantments.VOID_WALKER && LocationUtils.isLocationDifferent(event.getFrom(), event.getTo(), true)) WalkerUtils.updateBlocks(player, boots, event.getTo(), enchantment, Arrays.asList(Material.AIR, Material.CAVE_AIR, Material.VOID_AIR), Material.OBSIDIAN, "VoidWalker");
 	}
 }

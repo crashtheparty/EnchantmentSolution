@@ -156,7 +156,7 @@ public class ESPlayer {
 	public List<ItemStack> getUnstableItems() {
 		List<ItemStack> items = new ArrayList<ItemStack>();
 		for(ItemStack item: getEquipped())
-			if (item != null && EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.CURSE_OF_INSTABILITY)) items.add(item);
+			if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.CURSE_OF_INSTABILITY)) items.add(item);
 		return items;
 	}
 
@@ -205,7 +205,7 @@ public class ESPlayer {
 	public double getContagionChance() {
 		double playerChance = 0;
 		if (isOnline()) for(ItemStack item: getOnlinePlayer().getInventory().getContents())
-			if (item != null && EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.CURSE_OF_CONTAGION)) playerChance += CONTAGION_CHANCE;
+			if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.CURSE_OF_CONTAGION)) playerChance += CONTAGION_CHANCE;
 		return playerChance;
 	}
 
@@ -272,7 +272,7 @@ public class ESPlayer {
 		frequentFlyerLevel = 0;
 		ItemStack newElytra = null;
 		for(ItemStack item: getArmor())
-			if (item != null && EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.FREQUENT_FLYER) && !DamageUtils.aboveMaxDamage(item)) {
+			if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.FREQUENT_FLYER) && !DamageUtils.aboveMaxDamage(item)) {
 				int level = EnchantmentUtils.getLevel(item, RegisterEnchantments.FREQUENT_FLYER);
 				if (level > frequentFlyerLevel) {
 					frequentFlyerLevel = level;
@@ -387,7 +387,7 @@ public class ESPlayer {
 	public List<ItemStack> getForceFeedItems() {
 		List<ItemStack> items = new ArrayList<ItemStack>();
 		for(ItemStack item: getEquipped())
-			if (item != null && EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.FORCE_FEED)) items.add(item);
+			if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.FORCE_FEED)) items.add(item);
 		return items;
 	}
 

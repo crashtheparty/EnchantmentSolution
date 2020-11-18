@@ -55,7 +55,7 @@ public class AbilityUtils {
 		int version = CrashAPI.getPlugin().getBukkitVersion().getVersionNumber();
 		ESPlayer esPlayer = EnchantmentSolution.getESPlayer(player);
 		for(ItemStack i: esPlayer.getEquipped())
-			if (i != null && EnchantmentUtils.hasEnchantment(i, Enchantment.MENDING)) {
+			if (EnchantmentUtils.hasEnchantment(i, Enchantment.MENDING)) {
 				if (version > 11 && DamageUtils.getDamage(i) == 0) continue;
 				items.add(i);
 			}
@@ -118,11 +118,11 @@ public class AbilityUtils {
 		Enchantment curse = RegisterEnchantments.CURSE_OF_EXHAUSTION;
 		int exhaustionCurse = 0;
 		for(ItemStack item: player.getInventory().getArmorContents())
-			if (item != null && EnchantmentUtils.hasEnchantment(item, curse)) exhaustionCurse += EnchantmentUtils.getLevel(item, curse);
+			if (EnchantmentUtils.hasEnchantment(item, curse)) exhaustionCurse += EnchantmentUtils.getLevel(item, curse);
 		ItemStack mainHand = player.getInventory().getItemInMainHand();
-		if (mainHand != null && EnchantmentUtils.hasEnchantment(mainHand, curse)) exhaustionCurse += EnchantmentUtils.getLevel(mainHand, curse);
+		if (EnchantmentUtils.hasEnchantment(mainHand, curse)) exhaustionCurse += EnchantmentUtils.getLevel(mainHand, curse);
 		ItemStack offHand = player.getInventory().getItemInOffHand();
-		if (offHand != null && EnchantmentUtils.hasEnchantment(offHand, curse)) exhaustionCurse += EnchantmentUtils.getLevel(offHand, curse);
+		if (EnchantmentUtils.hasEnchantment(offHand, curse)) exhaustionCurse += EnchantmentUtils.getLevel(offHand, curse);
 		return exhaustionCurse;
 	}
 
