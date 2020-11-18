@@ -22,7 +22,7 @@ public class AbilityThreads implements Runnable, Reflectionable {
 		for(Player player: Bukkit.getOnlinePlayers()) {
 			if (isDisabled(player, RegisterEnchantments.NO_REST)) return;
 			ItemStack helmet = player.getInventory().getHelmet();
-			if (helmet != null && EnchantmentUtils.hasEnchantment(helmet, RegisterEnchantments.NO_REST)) player.setStatistic(Statistic.TIME_SINCE_REST, 0);
+			if (EnchantmentUtils.hasEnchantment(helmet, RegisterEnchantments.NO_REST)) player.setStatistic(Statistic.TIME_SINCE_REST, 0);
 		}
 	}
 
@@ -31,7 +31,7 @@ public class AbilityThreads implements Runnable, Reflectionable {
 		for(Player player: Bukkit.getOnlinePlayers()) {
 			if (isDisabled(player, RegisterEnchantments.UNREST)) return;
 			ItemStack helmet = player.getInventory().getHelmet();
-			if (helmet != null && EnchantmentUtils.hasEnchantment(helmet, RegisterEnchantments.UNREST)) if (player.getStatistic(Statistic.TIME_SINCE_REST) < 96000) player.setStatistic(Statistic.TIME_SINCE_REST, 96000);
+			if (EnchantmentUtils.hasEnchantment(helmet, RegisterEnchantments.UNREST)) if (player.getStatistic(Statistic.TIME_SINCE_REST) < 96000) player.setStatistic(Statistic.TIME_SINCE_REST, 96000);
 		}
 	}
 }

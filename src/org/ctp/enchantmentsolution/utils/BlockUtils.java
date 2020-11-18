@@ -119,16 +119,19 @@ public class BlockUtils {
 			}
 			Collection<ItemStack> drops = newBlock.getDrops(item, player);
 			List<Item> items = new ArrayList<Item>();
-			for(ItemStack drop: drops)
+			for(ItemStack drop: drops) {
+				if (drop == null || MatData.isAir(drop.getType())) continue;
 				items.add(ItemUtils.spawnItem(drop, loc));
+			}
 			BlockState blockState = newBlock.getState();
 			newBlock.setType(Material.AIR);
-			BlockDropItemEvent blockDrop = new BlockDropItemEvent(newBlock, blockState, player, items);
-			Bukkit.getServer().getPluginManager().callEvent(blockDrop);
+			if (items.size() > 0) {
+				BlockDropItemEvent blockDrop = new BlockDropItemEvent(newBlock, blockState, player, items);
+				Bukkit.getServer().getPluginManager().callEvent(blockDrop);
 
-			if (blockDrop.isCancelled()) for(Item i: blockDrop.getItems())
-				i.remove();
-
+				if (blockDrop.isCancelled()) for(Item i: blockDrop.getItems())
+					i.remove();
+			}
 			AbilityUtils.dropExperience(loc, newEvent.getExpToDrop());
 			DamageUtils.damageItem(player, item, damage);
 			EnchantmentSolution.getESPlayer(player).breakBlock();

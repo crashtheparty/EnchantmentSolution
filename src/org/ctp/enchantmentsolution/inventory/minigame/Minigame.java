@@ -489,7 +489,7 @@ public class Minigame implements InventoryData, Pageable {
 			for(String key: keys) {
 				List<EnchantmentLevel> levels = new ArrayList<EnchantmentLevel>();
 				for(String s: config.getStringList(key + ".enchantments")) {
-					EnchantmentLevel level = new EnchantmentLevel(s);
+					EnchantmentLevel level = new EnchantmentLevel(s, config);
 					if (level != null) levels.add(level);
 				}
 				try {

@@ -8,6 +8,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.ctp.crashapi.config.yaml.YamlConfig;
 import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.api.ApiEnchantmentWrapper;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
@@ -70,10 +71,10 @@ public class RPGUtils {
 
 	public static Map<Enchantment, Integer> getFreeEnchantments() {
 		Map<Enchantment, Integer> free = new HashMap<Enchantment, Integer>();
-
-		List<String> freeStrings = Configurations.getConfigurations().getRPG().getStringList("free_enchantments");
+		YamlConfig config = Configurations.getConfigurations().getRPG().getConfig();
+		List<String> freeStrings = config.getStringList("free_enchantments");
 		for(String s: freeStrings) {
-			EnchantmentLevel level = new EnchantmentLevel(s);
+			EnchantmentLevel level = new EnchantmentLevel(s, config);
 			if (level.getEnchant() != null && level.getLevel() > 0) free.put(level.getEnchant().getRelativeEnchantment(), level.getLevel());
 		}
 		return free;

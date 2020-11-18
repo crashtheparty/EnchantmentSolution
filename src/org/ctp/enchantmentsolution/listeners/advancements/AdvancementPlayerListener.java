@@ -40,7 +40,7 @@ public class AdvancementPlayerListener implements Listener {
 		Player player = event.getPlayer();
 		if (player.getWorld().getTime() <= 12540 || player.getWorld().getTime() >= 23459) {
 			ItemStack helmet = player.getInventory().getHelmet();
-			if (helmet != null && EnchantmentUtils.hasEnchantment(helmet, RegisterEnchantments.UNREST)) AdvancementUtils.awardCriteria(player, ESAdvancement.I_AINT_AFRAID_OF_NO_GHOSTS, "unrest", 1);
+			if (EnchantmentUtils.hasEnchantment(helmet, RegisterEnchantments.UNREST)) AdvancementUtils.awardCriteria(player, ESAdvancement.I_AINT_AFRAID_OF_NO_GHOSTS, "unrest", 1);
 		}
 	}
 
@@ -63,7 +63,7 @@ public class AdvancementPlayerListener implements Listener {
 	public void onPlayerItemConsume(PlayerItemConsumeEvent event) {
 		ItemStack item = event.getItem();
 		ItemStack chestplate = event.getPlayer().getInventory().getChestplate();
-		if (chestplate != null && EnchantmentUtils.hasEnchantment(chestplate, RegisterEnchantments.LIFE)) {
+		if (EnchantmentUtils.hasEnchantment(chestplate, RegisterEnchantments.LIFE)) {
 			int level = EnchantmentUtils.getLevel(chestplate, RegisterEnchantments.LIFE);
 			if (item.getType() == Material.ENCHANTED_GOLDEN_APPLE && level >= CERegister.LIFE.getMaxLevel()) AdvancementUtils.awardCriteria(event.getPlayer(), ESAdvancement.EXTRA_POWER, "power");
 		}
@@ -73,7 +73,7 @@ public class AdvancementPlayerListener implements Listener {
 	public void onArmorEquip(ArmorEquipEvent event) {
 		if (event.isCancelled()) return;
 		Bukkit.getScheduler().runTaskLater(EnchantmentSolution.getPlugin(), () -> {
-			if (event.getNewArmorPiece() != null && EnchantmentUtils.hasEnchantment(event.getNewArmorPiece(), RegisterEnchantments.TANK)) {
+			if (EnchantmentUtils.hasEnchantment(event.getNewArmorPiece(), RegisterEnchantments.TANK)) {
 				Player player = event.getPlayer();
 				boolean hasTank = true;
 				for(ItemStack item: player.getInventory().getArmorContents())
@@ -81,7 +81,7 @@ public class AdvancementPlayerListener implements Listener {
 
 				if (hasTank) AdvancementUtils.awardCriteria(player, ESAdvancement.PANZER_SOLDIER, "tank");
 			}
-			if (event.getNewArmorPiece() != null && EnchantmentUtils.hasEnchantment(event.getNewArmorPiece(), RegisterEnchantments.FORCE_FEED)) {
+			if (EnchantmentUtils.hasEnchantment(event.getNewArmorPiece(), RegisterEnchantments.FORCE_FEED)) {
 				Player player = event.getPlayer();
 				boolean hasFeed = true;
 				for(ItemStack item: player.getInventory().getArmorContents())
@@ -97,7 +97,7 @@ public class AdvancementPlayerListener implements Listener {
 		if (event.isCancelled()) return;
 		ItemStack item = event.getNewItem();
 		if (event.getSlot() == ItemSlotType.MAIN_HAND) Bukkit.getScheduler().runTaskLater(EnchantmentSolution.getPlugin(), () -> {
-			if (item != null && EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.CURSE_OF_STAGNANCY)) {
+			if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.CURSE_OF_STAGNANCY)) {
 				Player player = event.getPlayer();
 				if (item.getType() == Material.IRON_PICKAXE && EnchantmentUtils.hasEnchantment(item, Enchantment.DURABILITY) && EnchantmentUtils.getLevel(item, Enchantment.DURABILITY) >= CERegister.UNBREAKING.getMaxLevel()) AdvancementUtils.awardCriteria(player, ESAdvancement.STAINLESS_STEEL, "iron_pickaxe");
 				if (item.getType() == new MatData("NETHERITE_SWORD").getMaterial() && EnchantmentUtils.hasEnchantment(item, Enchantment.DAMAGE_ALL) && EnchantmentUtils.getLevel(item, Enchantment.DAMAGE_ALL) >= CERegister.SHARPNESS.getMaxLevel()) AdvancementUtils.awardCriteria(player, ESAdvancement.NETHER_DULL, "netherite_sword");
@@ -133,7 +133,7 @@ public class AdvancementPlayerListener implements Listener {
 		ESPlayer esPlayer = EnchantmentSolution.getESPlayer(player);
 		Location l = player.getLocation();
 		if (l.getBlock().getLightFromSky() == 15 && l.getWorld().getEnvironment() == Environment.NORMAL && l.getWorld().getTime() > 12540 && l.getWorld().getTime() < 23459) for(ItemStack i: esPlayer.getArmor())
-			if (i != null && EnchantmentUtils.hasEnchantment(i, RegisterEnchantments.JOGGERS)) AdvancementUtils.awardCriteria(player, ESAdvancement.EVENING_STROLL, "evening");
+			if (EnchantmentUtils.hasEnchantment(i, RegisterEnchantments.JOGGERS)) AdvancementUtils.awardCriteria(player, ESAdvancement.EVENING_STROLL, "evening");
 	}
 
 }

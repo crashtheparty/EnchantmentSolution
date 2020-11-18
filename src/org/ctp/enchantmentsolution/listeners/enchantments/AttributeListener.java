@@ -24,7 +24,6 @@ import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.*;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
-import org.ctp.enchantmentsolution.events.player.ESPotionEffectEvent;
 import org.ctp.enchantmentsolution.events.potion.*;
 import org.ctp.enchantmentsolution.listeners.Enchantmentable;
 import org.ctp.enchantmentsolution.threads.*;
@@ -66,7 +65,7 @@ public class AttributeListener extends Enchantmentable {
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onItemAdd(ItemAddEvent event) {
 		ItemStack item = event.getItem();
-		if (item != null && EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.CURSE_OF_CONTAGION)) {
+		if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.CURSE_OF_CONTAGION)) {
 			ContagionCurseThread thread = ContagionCurseThread.createThread(event.getPlayer());
 			if (!thread.isRunning()) {
 				int scheduler = Bukkit.getScheduler().scheduleSyncRepeatingTask(EnchantmentSolution.getPlugin(), thread, 0l, 1l);
@@ -130,10 +129,10 @@ public class AttributeListener extends Enchantmentable {
 									for(ItemSlotType s: ItemSlotType.ARMOR) {
 										if (s == slot.getType()) continue;
 										ItemStack armor = esPlayer.getEquipped()[s.getSlot() - 5];
-										if (armor != null && EnchantmentUtils.hasEnchantment(armor, RegisterEnchantments.GUNG_HO)) {
+										if (EnchantmentUtils.hasEnchantment(armor, RegisterEnchantments.GUNG_HO)) {
 											gungHo = new ItemSlot(armor, s);
 											break;
-										} else if (armor != null && EnchantmentUtils.hasEnchantment(armor, RegisterEnchantments.LIFE)) life.add(new ItemSlot(armor, s));
+										} else if (EnchantmentUtils.hasEnchantment(armor, RegisterEnchantments.LIFE)) life.add(new ItemSlot(armor, s));
 									}
 									if (gungHo != null) {
 										Attributable gh = Attributable.GUNG_HO;
@@ -161,7 +160,7 @@ public class AttributeListener extends Enchantmentable {
 										if (slotNum > 10 && s.getType() == ItemSlotType.OFF_HAND) slotNum = 40;
 										ItemStack armor = esPlayer.getEquipped()[slotNum];
 										Enchantment enchant = a.getEnchantment();
-										if (armor != null && EnchantmentUtils.hasEnchantment(armor, enchant) && (ench == null || EnchantmentUtils.getLevel(ench.getItem(), enchant) > EnchantmentUtils.getLevel(armor, enchant))) ench = new ItemSlot(armor, s.getType());
+										if (EnchantmentUtils.hasEnchantment(armor, enchant) && (ench == null || EnchantmentUtils.getLevel(ench.getItem(), enchant) > EnchantmentUtils.getLevel(armor, enchant))) ench = new ItemSlot(armor, s.getType());
 									}
 									if (ench != null) {
 										Attributable att = Attributable.valueOf(a.getEnchantment().getKey().getKey().toUpperCase(Locale.ROOT));
@@ -208,15 +207,15 @@ public class AttributeListener extends Enchantmentable {
 					}
 				} else if (ItemSlotType.ARMOR.contains(type) && potions.containsKey(relative)) {
 					PotionEffectType effectType = potions.get(relative);
-					ESPotionEffectEvent event = null;
+					PotionEffectEvent event = null;
 					if (equip) event = new PotionEffectArmorAddEvent(player, level, effectType);
 					else
 						event = new PotionEffectArmorRemoveEvent(player, level, effectType);
 					Bukkit.getPluginManager().callEvent(event);
 
-					if (equip) event.getPlayer().addPotionEffect(new PotionEffect(event.getType(), 10000000, level.getLevel() - 1));
+					if (equip) player.addPotionEffect(new PotionEffect(event.getType(), 10000000, level.getLevel() - 1));
 					else
-						event.getPlayer().removePotionEffect(event.getType());
+						player.removePotionEffect(event.getType());
 				} else if (relative == RegisterEnchantments.FREQUENT_FLYER && equip) {
 					FrequentFlyerThread thread = FrequentFlyerThread.createThread(player);
 					if (!thread.isRunning()) {

@@ -84,7 +84,7 @@ public class BlockListener extends Enchantmentable {
 		Player player = event.getPlayer();
 		if (player != null && !isDisabled(player, RegisterEnchantments.CURSE_OF_LAG)) {
 			ItemStack item = player.getInventory().getItemInMainHand();
-			if (item != null && EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.CURSE_OF_LAG)) {
+			if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.CURSE_OF_LAG)) {
 				LagEvent lag = new LagEvent(player, player.getLocation(), AbilityUtils.createEffects(player));
 
 				Bukkit.getPluginManager().callEvent(lag);
@@ -103,7 +103,7 @@ public class BlockListener extends Enchantmentable {
 		if (!canRun(RegisterEnchantments.EXP_SHARE, event)) return;
 		Player player = event.getPlayer();
 		ItemStack killItem = player.getInventory().getItemInMainHand();
-		if (killItem != null && EnchantmentUtils.hasEnchantment(killItem, RegisterEnchantments.EXP_SHARE) && !isDisabled(player, RegisterEnchantments.EXP_SHARE)) {
+		if (EnchantmentUtils.hasEnchantment(killItem, RegisterEnchantments.EXP_SHARE) && !isDisabled(player, RegisterEnchantments.EXP_SHARE)) {
 			int exp = event.getExpToDrop();
 			if (exp > 0) {
 				int level = EnchantmentUtils.getLevel(killItem, RegisterEnchantments.EXP_SHARE);
@@ -135,9 +135,14 @@ public class BlockListener extends Enchantmentable {
 				getLikeBlocks(logs, tree.getLog().getMaterial(), logs.get(i));
 				if (logs.size() > maxBlocks) break;
 			}
-			for(Location b: logs)
-				BlockUtils.addMultiBlockBreak(b, RegisterEnchantments.GAIA);
-			esPlayer.addToGaiaController(item, event.getBlock(), logs, tree);
+			GaiaEvent gaia = new GaiaEvent(logs, player, level);
+			Bukkit.getPluginManager().callEvent(gaia);
+
+			if (!gaia.isCancelled()) {
+				for(Location b: logs)
+					BlockUtils.addMultiBlockBreak(b, RegisterEnchantments.GAIA);
+				esPlayer.addToGaiaController(item, event.getBlock(), logs, tree);
+			}
 		}
 	}
 
@@ -147,7 +152,7 @@ public class BlockListener extends Enchantmentable {
 		if (player.getGameMode().equals(GameMode.CREATIVE) || player.getGameMode().equals(GameMode.SPECTATOR)) return;
 		ItemStack item = player.getInventory().getItemInMainHand();
 		Block block = event.getBlock();
-		if (item != null && EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.GREEN_THUMB) && block.getBlockData() instanceof Ageable) {
+		if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.GREEN_THUMB) && block.getBlockData() instanceof Ageable) {
 			Ageable age = (Ageable) block.getBlockData();
 			Material mat = block.getType();
 			if (Crop.hasBlock(mat) && age.getAge() == 0) event.setCancelled(true);
@@ -172,7 +177,7 @@ public class BlockListener extends Enchantmentable {
 		ItemStack item = player.getInventory().getItemInMainHand();
 		Block block = event.getBlock();
 		BlockData data = event.getBlockState().getBlockData();
-		if (item != null && EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.GREEN_THUMB) && data instanceof Ageable) {
+		if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.GREEN_THUMB) && data instanceof Ageable) {
 			Ageable age = (Ageable) data;
 			Material mat = data.getMaterial();
 			if (!Crop.hasBlock(mat) || Crop.hasBlock(mat) && age.getAge() != age.getMaximumAge()) return;
@@ -230,7 +235,7 @@ public class BlockListener extends Enchantmentable {
 		if (isDisabled(player, RegisterEnchantments.GOLD_DIGGER)) return;
 		ItemStack item = player.getInventory().getItemInMainHand();
 		BlockData data = event.getBlockState().getBlockData();
-		if (item != null && EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.GOLD_DIGGER)) {
+		if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.GOLD_DIGGER)) {
 			ItemStack goldDigger = AbilityUtils.getGoldDiggerItems(item, data);
 			if (goldDigger != null) {
 				int level = EnchantmentUtils.getLevel(item, RegisterEnchantments.GOLD_DIGGER);
@@ -259,7 +264,7 @@ public class BlockListener extends Enchantmentable {
 		if (isDisabled(player, RegisterEnchantments.SMELTERY)) return;
 		ItemStack item = player.getInventory().getItemInMainHand();
 		if (player.getGameMode().equals(GameMode.CREATIVE) || player.getGameMode().equals(GameMode.SPECTATOR)) return;
-		if (item != null && EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.SMELTERY)) for(Item i: event.getItems()) {
+		if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.SMELTERY)) for(Item i: event.getItems()) {
 			ItemStack from = i.getItemStack();
 			SmelteryMaterial smeltery = SmelteryUtils.getSmelteryItem(data, from, item);
 			if (smeltery != null) {
@@ -512,7 +517,7 @@ public class BlockListener extends Enchantmentable {
 			if (isDisabled(player, RegisterEnchantments.LIGHT_WEIGHT)) return;
 			if (event.getBlock().getType() == Material.FARMLAND && event.getTo() == Material.DIRT) {
 				ItemStack boots = player.getInventory().getBoots();
-				if (boots != null && EnchantmentUtils.hasEnchantment(boots, RegisterEnchantments.LIGHT_WEIGHT)) {
+				if (EnchantmentUtils.hasEnchantment(boots, RegisterEnchantments.LIGHT_WEIGHT)) {
 					LightWeightEvent lightWeight = new LightWeightEvent(event.getBlock(), player);
 					Bukkit.getPluginManager().callEvent(lightWeight);
 
@@ -536,7 +541,7 @@ public class BlockListener extends Enchantmentable {
 		if (player.getGameMode().equals(GameMode.CREATIVE) || player.getGameMode().equals(GameMode.SPECTATOR)) return;
 		Block block = event.getBlock();
 		ItemStack item = player.getInventory().getItemInMainHand();
-		if (item != null && EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.TELEPATHY)) {
+		if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.TELEPATHY)) {
 			List<ItemStack> itemStacks = new ArrayList<ItemStack>();
 			for(Item i: event.getItems())
 				itemStacks.add(i.getItemStack());

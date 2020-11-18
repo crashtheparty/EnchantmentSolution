@@ -69,7 +69,7 @@ public class ProjectileListener extends Enchantmentable {
 			Player player = (Player) proj.getShooter();
 			if (isDisabled(player, RegisterEnchantments.CURSE_OF_LAG)) return;
 			ItemStack item = player.getInventory().getItemInMainHand();
-			if (item != null && EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.CURSE_OF_LAG)) {
+			if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.CURSE_OF_LAG)) {
 				LagEvent lag = new LagEvent(player, player.getLocation(), AbilityUtils.createEffects(player));
 
 				Bukkit.getPluginManager().callEvent(lag);
@@ -105,7 +105,7 @@ public class ProjectileListener extends Enchantmentable {
 				Player player = (Player) trident.getShooter();
 				if (isDisabled(player, RegisterEnchantments.DROWNED)) return;
 				ItemStack tridentItem = player.getInventory().getItemInMainHand();
-				if (tridentItem != null && EnchantmentUtils.hasEnchantment(tridentItem, RegisterEnchantments.DROWNED)) trident.setMetadata("drowned", new FixedMetadataValue(EnchantmentSolution.getPlugin(), EnchantmentUtils.getLevel(tridentItem, RegisterEnchantments.DROWNED)));
+				if (EnchantmentUtils.hasEnchantment(tridentItem, RegisterEnchantments.DROWNED)) trident.setMetadata("drowned", new FixedMetadataValue(EnchantmentSolution.getPlugin(), EnchantmentUtils.getLevel(tridentItem, RegisterEnchantments.DROWNED)));
 			}
 		}
 	}
@@ -130,7 +130,7 @@ public class ProjectileListener extends Enchantmentable {
 				Player player = (Player) arrow.getShooter();
 				if (isDisabled(player, RegisterEnchantments.SNIPER)) return;
 				ItemStack bow = player.getInventory().getItemInMainHand();
-				if (bow != null && EnchantmentUtils.hasEnchantment(bow, RegisterEnchantments.SNIPER)) {
+				if (EnchantmentUtils.hasEnchantment(bow, RegisterEnchantments.SNIPER)) {
 					int level = EnchantmentUtils.getLevel(bow, RegisterEnchantments.SNIPER);
 					double speed = 1 + 0.1 * level * level;
 
@@ -155,7 +155,7 @@ public class ProjectileListener extends Enchantmentable {
 				Player player = (Player) trident.getShooter();
 				if (isDisabled(player, RegisterEnchantments.TRANSMUTATION)) return;
 				ItemStack tridentItem = player.getInventory().getItemInMainHand();
-				if (tridentItem != null && EnchantmentUtils.hasEnchantment(tridentItem, RegisterEnchantments.TRANSMUTATION)) trident.setMetadata("transmutation", new FixedMetadataValue(EnchantmentSolution.getPlugin(), 1));
+				if (EnchantmentUtils.hasEnchantment(tridentItem, RegisterEnchantments.TRANSMUTATION)) trident.setMetadata("transmutation", new FixedMetadataValue(EnchantmentSolution.getPlugin(), 1));
 			}
 		}
 	}
@@ -200,7 +200,7 @@ public class ProjectileListener extends Enchantmentable {
 				HumanEntity entity = (HumanEntity) arrow.getShooter();
 				if (entity instanceof Player && isDisabled((Player) entity, enchantment)) return;
 				ItemStack bow = entity.getInventory().getItemInMainHand();
-				if (bow != null && EnchantmentUtils.hasEnchantment(bow, enchantment)) proj.setMetadata(enchantment.getKey().getKey(), new FixedMetadataValue(EnchantmentSolution.getPlugin(), ApiEnchantList.getLevel(bow, enchantment)));
+				if (EnchantmentUtils.hasEnchantment(bow, enchantment)) proj.setMetadata(enchantment.getKey().getKey(), new FixedMetadataValue(EnchantmentSolution.getPlugin(), ApiEnchantList.getLevel(bow, enchantment)));
 			}
 		}
 	}
@@ -248,7 +248,7 @@ public class ProjectileListener extends Enchantmentable {
 			if (player.isBlocking()) {
 				ItemStack shield = player.getInventory().getItemInMainHand();
 				if (shield.getType() != Material.SHIELD) shield = player.getInventory().getItemInOffHand();
-				if (shield != null && EnchantmentUtils.hasEnchantment(shield, RegisterEnchantments.HARD_BOUNCE)) {
+				if (EnchantmentUtils.hasEnchantment(shield, RegisterEnchantments.HARD_BOUNCE)) {
 					int level = EnchantmentUtils.getLevel(shield, RegisterEnchantments.HARD_BOUNCE);
 
 					HardBounceEvent hardBounce = new HardBounceEvent(player, level, 2 + 2 * level);

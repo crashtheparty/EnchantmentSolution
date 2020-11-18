@@ -110,7 +110,7 @@ public class SaveUtils {
 				RPGPlayer player = RPGUtils.addRPGPlayer(uuid, level, experience);
 				List<String> data = config.getStringList("rpg." + i + ".enchants");
 				if (data != null) for(String s: config.getStringList("rpg." + i + ".enchants"))
-					player.giveEnchantment(s);
+					player.giveEnchantment(s, config);
 				i++;
 			}
 		}

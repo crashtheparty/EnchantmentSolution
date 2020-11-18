@@ -24,7 +24,7 @@ public class PotionEffectListener extends Enchantmentable {
 			Player player = (Player) event.getEntity();
 			if (isDisabled(player, RegisterEnchantments.MAGIC_GUARD)) return;
 			ItemStack shield = player.getInventory().getItemInOffHand();
-			if (shield != null && EnchantmentUtils.hasEnchantment(shield, RegisterEnchantments.MAGIC_GUARD) && (event.getAction() == Action.ADDED || event.getAction() == Action.CHANGED) && ESArrays.getBadPotions().contains(event.getModifiedType())) {
+			if (EnchantmentUtils.hasEnchantment(shield, RegisterEnchantments.MAGIC_GUARD) && (event.getAction() == Action.ADDED || event.getAction() == Action.CHANGED) && ESArrays.getBadPotions().contains(event.getModifiedType())) {
 				MagicGuardPotionEvent magicGuard = new MagicGuardPotionEvent(player, event.getModifiedType());
 				Bukkit.getPluginManager().callEvent(magicGuard);
 

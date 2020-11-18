@@ -45,7 +45,7 @@ public class AdvancementEntityListener implements Listener {
 					event.getDrops().add(new ItemStack(Material.DRAGON_BREATH, 64));
 				}
 				ItemStack chestplate = killer.getInventory().getChestplate();
-				if (chestplate != null && EnchantmentUtils.hasEnchantment(chestplate, RegisterEnchantments.GUNG_HO) && killed.getType() == EntityType.WITHER) AdvancementUtils.awardCriteria(killer, ESAdvancement.DANGER_DEFEATED, "wither");
+				if (EnchantmentUtils.hasEnchantment(chestplate, RegisterEnchantments.GUNG_HO) && killed.getType() == EntityType.WITHER) AdvancementUtils.awardCriteria(killer, ESAdvancement.DANGER_DEFEATED, "wither");
 			}
 			EntityDamageEvent damageEvent = entity.getLastDamageCause();
 			if (damageEvent instanceof EntityDamageByEntityEvent && ((EntityDamageByEntityEvent) damageEvent).getDamager() instanceof Projectile) {
@@ -91,7 +91,7 @@ public class AdvancementEntityListener implements Listener {
 				if (player.getLastDamageCause().getCause() == DamageCause.FALL) {
 					ESPlayer esPlayer = EnchantmentSolution.getESPlayer(player);
 					for(ItemStack i: esPlayer.getArmor())
-						if (i != null && EnchantmentUtils.hasEnchantment(i, RegisterEnchantments.PLYOMETRICS)) {
+						if (EnchantmentUtils.hasEnchantment(i, RegisterEnchantments.PLYOMETRICS)) {
 							esPlayer.setPlyometricsAdvancement(true);
 							break;
 						}
