@@ -1,8 +1,9 @@
 name: EnchantmentSolution
-version: 2.3.26
+version: 2.4.0
 main: org.ctp.enchantmentsolution.EnchantmentSolution
 api-version: 1.13
-softdepend: [mcMMO, Jobs, VeinMiner, AuctionHouse, MMOLib, MMOItems, Quests]
+depend: [CrashAPI]
+softdepend: [mcMMO, Jobs, VeinMiner, AuctionHouse, MMOLib, MMOItems, Quests, Vault]
 commands:
   enchantmentsolution:
     aliases: [es]
@@ -76,26 +77,17 @@ commands:
     description: Test items for plugin info
     usage: /estest [item]
 permissions:
-  enchantmentsolution.enable-flight:
-    description: Enables use of external /fly commands without interference from FrequentFlyer
-    default: false
   enchantmentsolution.permissions.ignore: 
     description: Gives access to all enchantment permissions.
-    default: false
-  enchantmentsolution.demigod-anvil:
-    description: Allows players to repair items with enchantments they cannot combine
-    default: false
-  enchantmentsolution.demigod-books:
-    description: Allows players to add levels from enchanted books to items even if they cannot combine the levels
-    default: false
-  enchantmentsolution.god-anvil:
-    description: Allows players to combine items higher than their max levels
     default: false
   enchantmentsolution.abilities.has-external-flight:
     description: Enables use of external /fly commands without interference from FrequentFlyer
     default: false
   enchantmentsolution.abilities.player-skulls:
     description: Enables dropping player's skulls with Beheading
+    default: true
+  enchantmentsolution.abilities.custom-skulls:
+    description: Enables dropping custom skulls with Beheading
     default: true
   enchantmentsolution.enchantments.rpg.all: 
     description: Gives access to every enchantment through ESRPG.

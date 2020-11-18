@@ -13,6 +13,11 @@ public class AdvancementThread implements Runnable {
 
 	@Override
 	public void run() {
+		kilimanjaro();
+		worldRecord();
+	}
+
+	private void kilimanjaro() {
 		if (!ESAdvancement.KILIMANJARO.isEnabled()) return;
 		Iterator<ESPlayer> iter = EnchantmentSolution.getOverkillDeathPlayers().iterator();
 		while (iter.hasNext()) {
@@ -27,6 +32,17 @@ public class AdvancementThread implements Runnable {
 				Player player = esPlayer.getOnlinePlayer();
 				AdvancementUtils.awardCriteria(player, ESAdvancement.KILIMANJARO, "kills");
 			}
+		}
+	}
+
+	private void worldRecord() {
+		if (!ESAdvancement.WORLD_RECORD.isEnabled()) return;
+		Iterator<ESPlayer> iter = EnchantmentSolution.getAllESPlayers(true).iterator();
+		while (iter.hasNext()) {
+			ESPlayer esPlayer = iter.next();
+			if (esPlayer.getOnlinePlayer().getEyeLocation().getBlock().isLiquid()) esPlayer.addUnderwaterTick();
+			else
+				esPlayer.resetUnderwaterTick();
 		}
 	}
 }

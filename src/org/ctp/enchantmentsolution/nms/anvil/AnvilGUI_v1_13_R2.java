@@ -6,8 +6,9 @@ import org.bukkit.craftbukkit.v1_13_R2.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.ctp.crashapi.inventory.InventoryData;
+import org.ctp.crashapi.nms.anvil.AnvilSlot;
 import org.ctp.enchantmentsolution.inventory.Anvil;
-import org.ctp.enchantmentsolution.inventory.InventoryData;
 
 import net.minecraft.server.v1_13_R2.*;
 
@@ -25,7 +26,7 @@ public class AnvilGUI_v1_13_R2 extends AnvilGUI {
 
 	private HashMap<AnvilSlot, ItemStack> items = new HashMap<>();
 
-	public AnvilGUI_v1_13_R2(Player player, final AnvilClickEventHandler handler, InventoryData data) {
+	public AnvilGUI_v1_13_R2(Player player, final ESAnvilClickEventHandler handler, InventoryData data) {
 		super(player, handler, data);
 	}
 
@@ -66,7 +67,7 @@ public class AnvilGUI_v1_13_R2 extends AnvilGUI {
 	}
 
 	public static void createAnvil(Player player, InventoryData data) {
-		AnvilClickEventHandler handler = AnvilClickEventHandler.getHandler(player, data);
+		ESAnvilClickEventHandler handler = ESAnvilClickEventHandler.getHandler(player, data);
 		if (data instanceof Anvil) ((Anvil) data).setInLegacy(true);
 		AnvilGUI_v1_13_R2 gui = new AnvilGUI_v1_13_R2(player, handler, data);
 		gui.open();

@@ -8,9 +8,12 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
+import org.ctp.crashapi.config.DataFile;
+import org.ctp.crashapi.config.yaml.YamlConfig;
+import org.ctp.crashapi.resources.advancements.CrashAdvancementProgress;
+import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
-import org.ctp.enchantmentsolution.advancements.ESAdvancementProgress;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enchantments.generate.TableEnchantments;
@@ -20,23 +23,24 @@ import org.ctp.enchantmentsolution.nms.AnimalMobNMS;
 import org.ctp.enchantmentsolution.nms.animalmob.AnimalMob;
 import org.ctp.enchantmentsolution.rpg.RPGPlayer;
 import org.ctp.enchantmentsolution.rpg.RPGUtils;
-import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.Configurations;
+import org.ctp.enchantmentsolution.utils.abilityhelpers.GaiaUtils;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.WalkerBlock;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.WalkerUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
-import org.ctp.enchantmentsolution.utils.yaml.YamlConfig;
 
 public class SaveUtils {
 
 	public static void getData() {
-		if (Configurations.getDataFile() == null) return;
-		YamlConfig config = Configurations.getDataFile().getConfig();
+		Configurations c = Configurations.getConfigurations();
+		if (c.getDataFile() == null) return;
+		DataFile file = c.getDataFile();
+		YamlConfig config = file.getConfig();
 		if (config.containsElements("advancement_progress")) {
 			int i = 0;
 			while (config.containsElements("advancement_progress." + i)) {
 				try {
-					ESAdvancementProgress progress = EnchantmentSolution.getAdvancementProgress(Bukkit.getOfflinePlayer(UUID.fromString(config.getString("advancement_progress." + i + ".player"))), ESAdvancement.valueOf(config.getString("advancement_progress." + i + ".advancement")), config.getString("advancement_progress." + i + ".criteria"));
+					CrashAdvancementProgress progress = EnchantmentSolution.getAdvancementProgress(Bukkit.getOfflinePlayer(UUID.fromString(config.getString("advancement_progress." + i + ".player"))), ESAdvancement.valueOf(config.getString("advancement_progress." + i + ".advancement")), config.getString("advancement_progress." + i + ".criteria"));
 					progress.setCurrentAmount(config.getInt("advancement_progress." + i + ".current_amount"));
 					config.removeKey("advancement_progress." + i);
 				} catch (Exception ex) {
@@ -58,17 +62,32 @@ public class SaveUtils {
 					WalkerBlock walkerBlock = new WalkerBlock(enchantment, block, Material.valueOf(arrayBlock[5]), Integer.parseInt(arrayBlock[6]), DamageState.valueOf(arrayBlock[7]));
 					blocks.add(walkerBlock);
 				} catch (Exception ex) {
-					ChatUtils.sendInfo("Block at position " + i + " was invalid, skipping.");
+					Chatable.get().sendInfo("Block at position " + i + " was invalid, skipping.");
 				}
 				i++;
 			}
 			WalkerUtils.addBlocks(blocks);
 			config.removeKeys("blocks");
 		}
+		if (config.containsElements("gaia")) {
+			int i = 0;
+			while (config.getString("gaia." + i) != null) {
+				String stringBlock = config.getString("gaia." + i);
+				String[] arrayBlock = stringBlock.split(" ");
+				try {
+					Location loc = new Location(Bukkit.getWorld(arrayBlock[0]), Integer.parseInt(arrayBlock[1]), Integer.parseInt(arrayBlock[2]), Integer.parseInt(arrayBlock[3]));
+					GaiaUtils.addLocation(loc);
+				} catch (Exception ex) {
+					Chatable.get().sendInfo("Block at position " + i + " was invalid, skipping.");
+				}
+				i++;
+			}
+			config.removeKeys("gaia");
+		}
 		if (config.containsElements("animals")) {
 			int i = 0;
 			while (config.getString("animals." + i + ".entity_type") != null) {
-				AnimalMobNMS.getFromConfig(config, i);
+				AnimalMobNMS.getFromConfig(file, i);
 				i++;
 			}
 			config.removeKeys("animals");
@@ -91,19 +110,21 @@ public class SaveUtils {
 				RPGPlayer player = RPGUtils.addRPGPlayer(uuid, level, experience);
 				List<String> data = config.getStringList("rpg." + i + ".enchants");
 				if (data != null) for(String s: config.getStringList("rpg." + i + ".enchants"))
-					player.giveEnchantment(s);
+					player.giveEnchantment(s, config);
 				i++;
 			}
 		}
 
-		Configurations.getDataFile().saveOnLoad();
+		file.saveOnLoad();
 	}
 
 	public static void setData() {
-		if (Configurations.getDataFile() == null) return;
+		Configurations c = Configurations.getConfigurations();
+		if (c.getDataFile() == null) return;
+		DataFile file = c.getDataFile();
+		YamlConfig config = file.getConfig();
 		int i = 0;
-		YamlConfig config = Configurations.getDataFile().getConfig();
-		for(ESAdvancementProgress progress: EnchantmentSolution.getAdvancementProgress()) {
+		for(CrashAdvancementProgress progress: EnchantmentSolution.getAdvancementProgress()) {
 			config.set("advancement_progress." + i + ".advancement", progress.getAdvancement().name());
 			config.set("advancement_progress." + i + ".player", progress.getPlayer().getUniqueId());
 			config.set("advancement_progress." + i + ".criteria", progress.getCriteria());
@@ -119,9 +140,15 @@ public class SaveUtils {
 			i++;
 		}
 		i = 0;
+		List<Location> locs = GaiaUtils.getLocations();
+		if (locs != null) for(Location loc: locs) {
+			config.set("gaia." + i, loc.getWorld().getName() + " " + loc.getBlockX() + " " + loc.getBlockY() + " " + loc.getBlockZ());
+			i++;
+		}
+		i = 0;
 		try {
 			for(AnimalMob animal: EnchantmentSolution.getAnimals()) {
-				animal.setConfig(config, i);
+				animal.setConfig(file, i);
 				i++;
 			}
 		} catch (NoClassDefFoundError ex) {
@@ -156,6 +183,6 @@ public class SaveUtils {
 			i++;
 		}
 
-		Configurations.getDataFile().save();
+		file.save();
 	}
 }

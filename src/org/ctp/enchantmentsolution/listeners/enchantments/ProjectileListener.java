@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.entity.AbstractArrow.PickupStatus;
 import org.bukkit.event.EventHandler;
@@ -14,9 +15,13 @@ import org.bukkit.event.player.PlayerEggThrowEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
+import org.ctp.crashapi.nms.DamageEvent;
+import org.ctp.crashapi.utils.LocationUtils;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
+import org.ctp.enchantmentsolution.api.ApiEnchantList;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.events.damage.HollowPointDamageEvent;
 import org.ctp.enchantmentsolution.events.entity.DetonatorExplosionEvent;
@@ -24,12 +29,10 @@ import org.ctp.enchantmentsolution.events.modify.HardBounceEvent;
 import org.ctp.enchantmentsolution.events.modify.LagEvent;
 import org.ctp.enchantmentsolution.events.modify.SniperLaunchEvent;
 import org.ctp.enchantmentsolution.listeners.Enchantmentable;
-import org.ctp.enchantmentsolution.nms.DamageEvent;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
-import org.ctp.enchantmentsolution.utils.LocationUtils;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.ParticleEffect;
 import org.ctp.enchantmentsolution.utils.items.AbilityUtils;
-import org.ctp.enchantmentsolution.utils.items.ItemUtils;
+import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
 
 @SuppressWarnings("unused")
 public class ProjectileListener extends Enchantmentable {
@@ -40,6 +43,7 @@ public class ProjectileListener extends Enchantmentable {
 		runMethod(this, "detonator", event, ProjectileLaunchEvent.class);
 		runMethod(this, "drowned", event, ProjectileLaunchEvent.class);
 		runMethod(this, "hollowPoint", event, ProjectileLaunchEvent.class);
+		runMethod(this, "potions", event, ProjectileLaunchEvent.class);
 		runMethod(this, "sniper", event, ProjectileLaunchEvent.class);
 		runMethod(this, "transmutation", event, ProjectileLaunchEvent.class);
 	}
@@ -63,8 +67,9 @@ public class ProjectileListener extends Enchantmentable {
 		Projectile proj = event.getEntity();
 		if (proj.getShooter() instanceof Player) {
 			Player player = (Player) proj.getShooter();
+			if (isDisabled(player, RegisterEnchantments.CURSE_OF_LAG)) return;
 			ItemStack item = player.getInventory().getItemInMainHand();
-			if (item != null && ItemUtils.hasEnchantment(item, RegisterEnchantments.CURSE_OF_LAG)) {
+			if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.CURSE_OF_LAG)) {
 				LagEvent lag = new LagEvent(player, player.getLocation(), AbilityUtils.createEffects(player));
 
 				Bukkit.getPluginManager().callEvent(lag);
@@ -85,8 +90,9 @@ public class ProjectileListener extends Enchantmentable {
 		HumanEntity entity = null;
 		if (event.getEntity().getShooter() instanceof HumanEntity) {
 			entity = (HumanEntity) event.getEntity().getShooter();
+			if (entity instanceof Player && isDisabled((Player) entity, RegisterEnchantments.DETONATOR)) return;
 			ItemStack item = entity.getInventory().getItemInMainHand();
-			if (ItemUtils.hasEnchantment(item, RegisterEnchantments.DETONATOR)) event.getEntity().setMetadata("detonator", new FixedMetadataValue(EnchantmentSolution.getPlugin(), ItemUtils.getLevel(item, RegisterEnchantments.DETONATOR)));
+			if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.DETONATOR)) event.getEntity().setMetadata("detonator", new FixedMetadataValue(EnchantmentSolution.getPlugin(), EnchantmentUtils.getLevel(item, RegisterEnchantments.DETONATOR)));
 		}
 	}
 
@@ -97,8 +103,9 @@ public class ProjectileListener extends Enchantmentable {
 			Trident trident = (Trident) proj;
 			if (trident.getShooter() instanceof Player) {
 				Player player = (Player) trident.getShooter();
+				if (isDisabled(player, RegisterEnchantments.DROWNED)) return;
 				ItemStack tridentItem = player.getInventory().getItemInMainHand();
-				if (tridentItem != null && ItemUtils.hasEnchantment(tridentItem, RegisterEnchantments.DROWNED)) trident.setMetadata("drowned", new FixedMetadataValue(EnchantmentSolution.getPlugin(), ItemUtils.getLevel(tridentItem, RegisterEnchantments.DROWNED)));
+				if (EnchantmentUtils.hasEnchantment(tridentItem, RegisterEnchantments.DROWNED)) trident.setMetadata("drowned", new FixedMetadataValue(EnchantmentSolution.getPlugin(), EnchantmentUtils.getLevel(tridentItem, RegisterEnchantments.DROWNED)));
 			}
 		}
 	}
@@ -109,7 +116,8 @@ public class ProjectileListener extends Enchantmentable {
 		HumanEntity entity = null;
 		if (event.getEntity().getShooter() instanceof HumanEntity) {
 			entity = (HumanEntity) event.getEntity().getShooter();
-			if (ItemUtils.hasEnchantment(entity.getInventory().getItemInMainHand(), RegisterEnchantments.HOLLOW_POINT)) event.getEntity().setMetadata("hollow_point", new FixedMetadataValue(EnchantmentSolution.getPlugin(), 1));
+			if (entity instanceof Player && isDisabled((Player) entity, RegisterEnchantments.HOLLOW_POINT)) return;
+			if (EnchantmentUtils.hasEnchantment(entity.getInventory().getItemInMainHand(), RegisterEnchantments.HOLLOW_POINT)) event.getEntity().setMetadata("hollow_point", new FixedMetadataValue(EnchantmentSolution.getPlugin(), 1));
 		}
 	}
 
@@ -120,9 +128,10 @@ public class ProjectileListener extends Enchantmentable {
 			Arrow arrow = (Arrow) proj;
 			if (arrow.getShooter() instanceof Player) {
 				Player player = (Player) arrow.getShooter();
+				if (isDisabled(player, RegisterEnchantments.SNIPER)) return;
 				ItemStack bow = player.getInventory().getItemInMainHand();
-				if (bow != null && ItemUtils.hasEnchantment(bow, RegisterEnchantments.SNIPER)) {
-					int level = ItemUtils.getLevel(bow, RegisterEnchantments.SNIPER);
+				if (EnchantmentUtils.hasEnchantment(bow, RegisterEnchantments.SNIPER)) {
+					int level = EnchantmentUtils.getLevel(bow, RegisterEnchantments.SNIPER);
 					double speed = 1 + 0.1 * level * level;
 
 					SniperLaunchEvent sniper = new SniperLaunchEvent(player, level, speed);
@@ -144,8 +153,54 @@ public class ProjectileListener extends Enchantmentable {
 			Trident trident = (Trident) proj;
 			if (trident.getShooter() instanceof Player) {
 				Player player = (Player) trident.getShooter();
+				if (isDisabled(player, RegisterEnchantments.TRANSMUTATION)) return;
 				ItemStack tridentItem = player.getInventory().getItemInMainHand();
-				if (tridentItem != null && ItemUtils.hasEnchantment(tridentItem, RegisterEnchantments.TRANSMUTATION)) trident.setMetadata("transmutation", new FixedMetadataValue(EnchantmentSolution.getPlugin(), 1));
+				if (EnchantmentUtils.hasEnchantment(tridentItem, RegisterEnchantments.TRANSMUTATION)) trident.setMetadata("transmutation", new FixedMetadataValue(EnchantmentSolution.getPlugin(), 1));
+			}
+		}
+	}
+
+	private void potions(ProjectileLaunchEvent event) {
+		try {
+			potion(event, RegisterEnchantments.BLINDNESS, PotionEffectType.BLINDNESS);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		try {
+			potion(event, RegisterEnchantments.VENOM, PotionEffectType.POISON);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		try {
+			potion(event, RegisterEnchantments.TRUANT, PotionEffectType.SLOW);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		try {
+			potion(event, RegisterEnchantments.WITHERING, PotionEffectType.WITHER);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+	}
+
+	private void potion(ProjectileLaunchEvent event, Enchantment enchantment, PotionEffectType type) {
+		if (!canRun(enchantment, event)) return;
+		Projectile proj = event.getEntity();
+		if (proj instanceof Trident) {
+			Trident trident = (Trident) proj;
+			if (trident.getShooter() instanceof HumanEntity) {
+				HumanEntity player = (HumanEntity) trident.getShooter();
+				if (player instanceof Player && isDisabled((Player) player, enchantment)) return;
+				ItemStack tridentItem = player.getInventory().getItemInMainHand();
+				if (tridentItem != null && tridentItem.getType() == Material.TRIDENT && EnchantmentUtils.hasEnchantment(tridentItem, enchantment)) proj.setMetadata(enchantment.getKey().getKey(), new FixedMetadataValue(EnchantmentSolution.getPlugin(), ApiEnchantList.getLevel(tridentItem, enchantment)));
+			}
+		} else if (proj instanceof Arrow) {
+			Arrow arrow = (Arrow) proj;
+			if (arrow.getShooter() instanceof HumanEntity) {
+				HumanEntity entity = (HumanEntity) arrow.getShooter();
+				if (entity instanceof Player && isDisabled((Player) entity, enchantment)) return;
+				ItemStack bow = entity.getInventory().getItemInMainHand();
+				if (EnchantmentUtils.hasEnchantment(bow, enchantment)) proj.setMetadata(enchantment.getKey().getKey(), new FixedMetadataValue(EnchantmentSolution.getPlugin(), ApiEnchantList.getLevel(bow, enchantment)));
 			}
 		}
 	}
@@ -154,6 +209,7 @@ public class ProjectileListener extends Enchantmentable {
 		if (!canRun(RegisterEnchantments.DETONATOR, event)) return;
 		if (event.getEntity().getShooter() instanceof LivingEntity) {
 			LivingEntity entity = (LivingEntity) event.getEntity().getShooter();
+			if (entity instanceof Player && isDisabled((Player) entity, RegisterEnchantments.DETONATOR)) return;
 			if (event.getHitEntity() != null && event.getHitEntity().getType() == EntityType.CREEPER) return;
 			if (event.getEntity().hasMetadata("detonator")) {
 				Location loc = event.getEntity().getLocation();
@@ -188,11 +244,12 @@ public class ProjectileListener extends Enchantmentable {
 		Projectile p = event.getEntity();
 		if (e != null && e instanceof Player) {
 			Player player = (Player) e;
+			if (isDisabled(player, RegisterEnchantments.HARD_BOUNCE)) return;
 			if (player.isBlocking()) {
 				ItemStack shield = player.getInventory().getItemInMainHand();
 				if (shield.getType() != Material.SHIELD) shield = player.getInventory().getItemInOffHand();
-				if (shield != null && ItemUtils.hasEnchantment(shield, RegisterEnchantments.HARD_BOUNCE)) {
-					int level = ItemUtils.getLevel(shield, RegisterEnchantments.HARD_BOUNCE);
+				if (EnchantmentUtils.hasEnchantment(shield, RegisterEnchantments.HARD_BOUNCE)) {
+					int level = EnchantmentUtils.getLevel(shield, RegisterEnchantments.HARD_BOUNCE);
 
 					HardBounceEvent hardBounce = new HardBounceEvent(player, level, 2 + 2 * level);
 					Bukkit.getPluginManager().callEvent(hardBounce);
@@ -214,18 +271,21 @@ public class ProjectileListener extends Enchantmentable {
 
 	private void hollowPoint(ProjectileHitEvent event) {
 		if (!canRun(RegisterEnchantments.HOLLOW_POINT, event)) return;
-		if (event.getHitEntity() != null && event.getEntity().hasMetadata("hollow_point")) if (event.getEntity() instanceof Arrow && event.getEntity().getShooter() instanceof LivingEntity) {
+		if (event.getHitEntity() != null && event.getEntity().hasMetadata("hollow_point") && event.getEntity() instanceof Arrow && event.getEntity().getShooter() instanceof LivingEntity) {
 			Arrow arrow = (Arrow) event.getEntity();
 			LivingEntity entity = (LivingEntity) arrow.getShooter();
-			if (event.getHitEntity().getType() == EntityType.ENDERMAN || event.getHitEntity().getType() == EntityType.WITHER && ((Wither) event.getHitEntity()).getHealth() <= ((Wither) event.getHitEntity()).getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() / 2) {
-				double damage = DamageEvent.getArrowDamage(entity, arrow);
-				HollowPointDamageEvent hollowPoint = new HollowPointDamageEvent(event.getEntity(), event.getHitEntity(), DamageCause.PROJECTILE, damage);
-				Bukkit.getPluginManager().callEvent(hollowPoint);
-				if (!hollowPoint.isCancelled()) {
-					Player player = (Player) ((Projectile) hollowPoint.getDamager()).getShooter();
-					DamageEvent.damageEntity((LivingEntity) hollowPoint.getEntity(), player, "arrow", (float) hollowPoint.getDamage());
-					event.getEntity().remove();
-					AdvancementUtils.awardCriteria(player, ESAdvancement.PENETRATION, "arrow");
+			if (entity instanceof Player) {
+				Player player = (Player) entity;
+				if (isDisabled(player, RegisterEnchantments.HOLLOW_POINT)) return;
+				if (event.getHitEntity().getType() == EntityType.ENDERMAN || event.getHitEntity().getType() == EntityType.WITHER && ((Wither) event.getHitEntity()).getHealth() <= ((Wither) event.getHitEntity()).getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() / 2) {
+					double damage = DamageEvent.getArrowDamage(entity, arrow);
+					HollowPointDamageEvent hollowPoint = new HollowPointDamageEvent(event.getEntity(), event.getHitEntity(), DamageCause.PROJECTILE, damage);
+					Bukkit.getPluginManager().callEvent(hollowPoint);
+					if (!hollowPoint.isCancelled()) {
+						DamageEvent.damageEntity((LivingEntity) hollowPoint.getEntity(), player, "arrow", (float) hollowPoint.getDamage());
+						event.getEntity().remove();
+						AdvancementUtils.awardCriteria(player, ESAdvancement.PENETRATION, "arrow");
+					}
 				}
 			}
 		}

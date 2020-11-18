@@ -2,14 +2,14 @@ package org.ctp.enchantmentsolution.nms;
 
 import org.bukkit.entity.Creature;
 import org.bukkit.inventory.ItemStack;
-import org.ctp.enchantmentsolution.EnchantmentSolution;
+import org.ctp.crashapi.CrashAPI;
+import org.ctp.crashapi.config.Configurable;
 import org.ctp.enchantmentsolution.nms.animalmob.*;
-import org.ctp.enchantmentsolution.utils.yaml.YamlConfig;
 
 public class AnimalMobNMS {
 
 	public static AnimalMob getMob(Creature animal, ItemStack item) {
-		switch (EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber()) {
+		switch (CrashAPI.getPlugin().getBukkitVersion().getVersionNumber()) {
 			case 1:
 				return new AnimalMob_v1_13_R1(animal, item);
 			case 2:
@@ -37,11 +37,11 @@ public class AnimalMobNMS {
 	}
 
 	public static boolean canAddMob() {
-		return EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber() > 0;
+		return CrashAPI.getPlugin().getBukkitVersion().getVersionNumber() > 0;
 	}
 
-	public static AnimalMob getFromConfig(YamlConfig config, int i) {
-		switch (EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber()) {
+	public static AnimalMob getFromConfig(Configurable config, int i) {
+		switch (CrashAPI.getPlugin().getBukkitVersion().getVersionNumber()) {
 			case 1:
 				return AnimalMob_v1_13_R1.createFromConfig(config, i);
 			case 2:

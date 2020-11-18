@@ -15,7 +15,7 @@ import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.events.player.ContagionEvent;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
-import org.ctp.enchantmentsolution.utils.items.ItemUtils;
+import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
 import org.ctp.enchantmentsolution.utils.player.ESPlayer;
 
 public class ContagionCurseThread extends EnchantmentThread {
@@ -46,12 +46,13 @@ public class ContagionCurseThread extends EnchantmentThread {
 			return;
 		}
 		Player p = player.getOnlinePlayer();
+		if (isDisabled(p, RegisterEnchantments.CURSE_OF_CONTAGION)) return;
 		List<ItemStack> items = player.getCurseableItems();
 		double random = Math.random();
 		if (player.getContagionChance() > random) {
 			int randomItemInt = (int) (Math.random() * items.size());
 			ItemStack randomItem = items.get(randomItemInt);
-			if (Math.random() >= 0.5 && randomItem != null && !ItemUtils.hasEnchantment(randomItem, RegisterEnchantments.CURSE_OF_CONTAGION)) {
+			if (Math.random() >= 0.5 && randomItem != null && !EnchantmentUtils.hasEnchantment(randomItem, RegisterEnchantments.CURSE_OF_CONTAGION)) {
 				callContagionCurse(p, randomItem, RegisterEnchantments.getCustomEnchantment(RegisterEnchantments.CURSE_OF_CONTAGION));
 				return;
 			}
@@ -59,12 +60,12 @@ public class ContagionCurseThread extends EnchantmentThread {
 			curses.addAll(enchantments);
 			for(int i = curses.size() - 1; i >= 0; i--) {
 				CustomEnchantment curse = curses.get(i);
-				if (!ItemUtils.canAddEnchantment(curse, randomItem)) curses.remove(i);
+				if (!EnchantmentUtils.canAddEnchantment(curse, randomItem)) curses.remove(i);
 			}
 			while (curses.size() > 0) {
 				int randomCursesInt = (int) (Math.random() * curses.size());
 				CustomEnchantment curse = curses.get(randomCursesInt);
-				if (randomItem != null && !ItemUtils.hasEnchantment(randomItem, curse.getRelativeEnchantment())) {
+				if (randomItem != null && !EnchantmentUtils.hasEnchantment(randomItem, curse.getRelativeEnchantment())) {
 					callContagionCurse(p, randomItem, curse);
 					break;
 				}
@@ -81,7 +82,7 @@ public class ContagionCurseThread extends EnchantmentThread {
 		Bukkit.getPluginManager().callEvent(event);
 
 		if (!event.isCancelled()) {
-			ItemUtils.addEnchantmentToItem(event.getItem(), event.getCurse(), event.getLevel());
+			EnchantmentUtils.addEnchantmentToItem(event.getItem(), event.getCurse(), event.getLevel());
 			if (event.getCurse() == CERegister.CURSE_OF_CONTAGION) AdvancementUtils.awardCriteria(player, ESAdvancement.PLAGUE_INC, "contagion");
 			if (hasAllCurses(item)) AdvancementUtils.awardCriteria(player, ESAdvancement.EXTERMINATION, "contagion");
 			for(Sound s: event.getSounds())
@@ -92,16 +93,17 @@ public class ContagionCurseThread extends EnchantmentThread {
 	private boolean hasAllCurses(ItemStack item) {
 		boolean noCurse = true;
 		for(CustomEnchantment enchantment: RegisterEnchantments.getEnchantments())
-			if (enchantment.isCurse() && ItemUtils.canAddEnchantment(enchantment, item) && !ItemUtils.hasEnchantment(item, enchantment.getRelativeEnchantment())) {
+			if (enchantment.isCurse() && EnchantmentUtils.canAddEnchantment(enchantment, item) && !EnchantmentUtils.hasEnchantment(item, enchantment.getRelativeEnchantment())) {
 				noCurse = false;
 				break;
 			}
 		return noCurse;
 	}
 
-	private void remove() {
+	@Override
+	protected void remove() {
 		CONTAGION_THREADS.remove(this);
-		Bukkit.getScheduler().cancelTask(getScheduler());
+		super.remove();
 	}
 
 }

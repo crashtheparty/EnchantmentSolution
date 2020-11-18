@@ -3,10 +3,10 @@ package org.ctp.enchantmentsolution.nms.persistence;
 import java.util.List;
 
 import org.bukkit.enchantments.Enchantment;
+import org.ctp.crashapi.item.ItemType;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.helper.Weight;
 import org.ctp.enchantmentsolution.enums.EnchantmentLocation;
-import org.ctp.enchantmentsolution.enums.ItemType;
 
 public class SnapshotEnchantment extends CustomEnchantment {
 

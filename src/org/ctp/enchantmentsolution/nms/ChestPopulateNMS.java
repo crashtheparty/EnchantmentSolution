@@ -3,12 +3,12 @@ package org.ctp.enchantmentsolution.nms;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.ctp.enchantmentsolution.EnchantmentSolution;
+import org.ctp.crashapi.CrashAPI;
 import org.ctp.enchantmentsolution.nms.chest.*;
 
 public class ChestPopulateNMS {
 	public static void populateChest(Player player, Block block) {
-		switch (EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber()) {
+		switch (CrashAPI.getPlugin().getBukkitVersion().getVersionNumber()) {
 			case 1:
 				ChestPopulate_v1_13_R1.populateChest(player, block);
 				break;
@@ -42,7 +42,7 @@ public class ChestPopulateNMS {
 	}
 
 	public static boolean isLootChest(Block block) {
-		switch (EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber()) {
+		switch (CrashAPI.getPlugin().getBukkitVersion().getVersionNumber()) {
 			case 1:
 				return ChestPopulate_v1_13_R1.isLootChest(block);
 			case 2:
@@ -70,7 +70,7 @@ public class ChestPopulateNMS {
 	}
 
 	public static void populateCart(Player player, Entity e) {
-		switch (EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber()) {
+		switch (CrashAPI.getPlugin().getBukkitVersion().getVersionNumber()) {
 			case 1:
 				ChestPopulate_v1_13_R1.populateCart(player, e);
 				break;
@@ -104,7 +104,7 @@ public class ChestPopulateNMS {
 	}
 
 	public static boolean isLootCart(Entity e) {
-		switch (EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber()) {
+		switch (CrashAPI.getPlugin().getBukkitVersion().getVersionNumber()) {
 			case 1:
 				return ChestPopulate_v1_13_R1.isLootCart(e);
 			case 2:

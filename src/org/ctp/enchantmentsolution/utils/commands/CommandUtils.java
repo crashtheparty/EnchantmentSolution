@@ -10,6 +10,11 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.ctp.crashapi.commands.CrashCommand;
+import org.ctp.crashapi.inventory.InventoryData;
+import org.ctp.crashapi.utils.ChatUtils;
+import org.ctp.crashapi.utils.StringUtils;
+import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.commands.EnchantmentSolutionCommand;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
@@ -23,15 +28,13 @@ import org.ctp.enchantmentsolution.listeners.VanishListener;
 import org.ctp.enchantmentsolution.nms.PersistenceNMS;
 import org.ctp.enchantmentsolution.rpg.RPGPlayer;
 import org.ctp.enchantmentsolution.rpg.RPGUtils;
-import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.Configurations;
-import org.ctp.enchantmentsolution.utils.StringUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 public class CommandUtils {
 
-	public static boolean anvil(CommandSender sender, ESCommand details, String[] args) {
+	public static boolean anvil(CommandSender sender, CrashCommand details, String[] args) {
 		Player player = null;
 		if (sender instanceof Player) {
 			player = (Player) sender;
@@ -48,14 +51,14 @@ public class CommandUtils {
 					inv.setInventory();
 				}
 			} else
-				ChatUtils.sendMessage(player, ChatUtils.getMessage(ChatUtils.getCodes(), "commands.no-permission"));
+				Chatable.get().sendMessage(player, Chatable.get().getMessage(ChatUtils.getCodes(), "commands.no-permission"));
 			return true;
 		}
-		ChatUtils.sendWarning("Console may not use this command.");
+		Chatable.get().sendWarning("Console may not use this command.");
 		return true;
 	}
 
-	public static boolean calc(CommandSender sender, ESCommand details, String[] args) {
+	public static boolean calc(CommandSender sender, CrashCommand details, String[] args) {
 		Player player = null;
 		if (sender instanceof Player) {
 			player = (Player) sender;
@@ -64,13 +67,13 @@ public class CommandUtils {
 				EnchantmentSolution.getPlugin().addInventory(inv);
 				inv.setInventory();
 			} else
-				ChatUtils.sendMessage(player, ChatUtils.getMessage(ChatUtils.getCodes(), "commands.no-permission"));
+				Chatable.get().sendMessage(player, Chatable.get().getMessage(ChatUtils.getCodes(), "commands.no-permission"));
 		}
-		ChatUtils.sendWarning("Console may not use this command.");
+		Chatable.get().sendWarning("Console may not use this command.");
 		return true;
 	}
 
-	public static boolean config(CommandSender sender, ESCommand details, String[] args) {
+	public static boolean config(CommandSender sender, CrashCommand details, String[] args) {
 		Player player = null;
 		if (sender instanceof Player) {
 			player = (Player) sender;
@@ -79,29 +82,30 @@ public class CommandUtils {
 				EnchantmentSolution.getPlugin().addInventory(inv);
 				inv.setInventory();
 			} else
-				ChatUtils.sendMessage(player, ChatUtils.getMessage(ChatUtils.getCodes(), "commands.no-permission"));
+				Chatable.get().sendMessage(player, Chatable.get().getMessage(ChatUtils.getCodes(), "commands.no-permission"));
 			return true;
 		}
-		ChatUtils.sendWarning("Console may not use this command.");
+		Chatable.get().sendWarning("Console may not use this command.");
 		return true;
 	}
 
-	public static boolean debug(CommandSender sender, ESCommand details, String[] args) {
+	public static boolean debug(CommandSender sender, CrashCommand details, String[] args) {
 		Player player = null;
+		Configurations c = Configurations.getConfigurations();
 		if (sender instanceof Player) player = (Player) sender;
 		else if (sender.isOp()) {
-			Configurations.generateDebug();
-			ChatUtils.sendInfo(ChatUtils.getMessage(ChatUtils.getCodes(), "commands.debug"));
+			c.generateDebug();
+			Chatable.get().sendInfo(Chatable.get().getMessage(ChatUtils.getCodes(), "commands.debug"));
 		}
 		if (sender.hasPermission(details.getPermission())) {
-			Configurations.generateDebug();
-			ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(ChatUtils.getCodes(), "commands.debug"), Level.INFO);
+			c.generateDebug();
+			Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(ChatUtils.getCodes(), "commands.debug"), Level.INFO);
 		} else
-			ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(ChatUtils.getCodes(), "commands.no-permission"), Level.WARNING);
+			Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(ChatUtils.getCodes(), "commands.no-permission"), Level.WARNING);
 		return true;
 	}
 
-	public static boolean fix(CommandSender sender, ESCommand details, String[] args) {
+	public static boolean fix(CommandSender sender, CrashCommand details, String[] args) {
 		Player player = null;
 		Player fixPlayer = null;
 		if (sender instanceof Player) player = (Player) sender;
@@ -113,12 +117,12 @@ public class CommandUtils {
 				if (!arg.equals("@p")) {
 					fixPlayer = Bukkit.getPlayer(arg);
 					if (fixPlayer != null && !fixPlayer.equals(sender) && !sender.hasPermission(details.getPermission() + ".others")) {
-						ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(ChatUtils.getCodes(), "commands.no-permission-other"), Level.WARNING);
+						Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(ChatUtils.getCodes(), "commands.no-permission-other"), Level.WARNING);
 						return false;
 					} else if (fixPlayer == null) {
 						HashMap<String, Object> codes = ChatUtils.getCodes();
 						codes.put("%invalid_player%", args[1]);
-						ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(codes, "commands.invalid-player"), Level.WARNING);
+						Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(codes, "commands.invalid-player"), Level.WARNING);
 						return false;
 					}
 				}
@@ -128,7 +132,7 @@ public class CommandUtils {
 			int fixedItems = 0;
 			ItemStack[] playerItems = EnchantmentSolution.getESPlayer(fixPlayer).getInventoryItems();
 			Map<Integer, ItemStack> changedItems = new HashMap<Integer, ItemStack>();
-			
+
 			for(int i = 0; i < playerItems.length; i++) {
 				ItemStack item = playerItems[i];
 				if (item != null) {
@@ -148,27 +152,27 @@ public class CommandUtils {
 					Entry<Integer, ItemStack> entry = iter.next();
 					fICodes.put("%slot%", entry.getKey());
 					fICodes.put("%material%", entry.getValue().getType());
-					fIString += "\n" + ChatUtils.getMessage(fICodes, "commands.fixed-item-string");
+					fIString += "\n" + Chatable.get().getMessage(fICodes, "commands.fixed-item-string");
 				}
 			}
-			
+
 			HashMap<String, Object> codes = ChatUtils.getCodes();
 			codes.put("%player%", player.getName());
 			codes.put("%fix_player%", fixPlayer.getName());
 			codes.put("%total_items%", items);
 			codes.put("%fixed_items%", fixedItems);
 			codes.put("%fixed_item_string%", fIString);
-			if (fixPlayer.equals(player)) ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(codes, "commands.fix-enchants"), Level.INFO);
+			if (fixPlayer.equals(player)) Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(codes, "commands.fix-enchants"), Level.INFO);
 			else {
-				ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(codes, "commands.fix-enchants-other"), Level.INFO);
-				ChatUtils.sendMessage(sender, fixPlayer, ChatUtils.getMessage(codes, "commands.other-fixed-enchants"), Level.INFO);
+				Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(codes, "commands.fix-enchants-other"), Level.INFO);
+				Chatable.get().sendMessage(sender, fixPlayer, Chatable.get().getMessage(codes, "commands.other-fixed-enchants"), Level.INFO);
 			}
 		} else
-			ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(ChatUtils.getCodes(), "commands.no-permission"), Level.WARNING);
+			Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(ChatUtils.getCodes(), "commands.no-permission"), Level.WARNING);
 		return true;
 	}
 
-	public static boolean grindstone(CommandSender sender, ESCommand details, String[] args) {
+	public static boolean grindstone(CommandSender sender, CrashCommand details, String[] args) {
 		Player player = null;
 		if (sender instanceof Player) {
 			player = (Player) sender;
@@ -185,22 +189,22 @@ public class CommandUtils {
 					inv.setInventory();
 				}
 			} else
-				ChatUtils.sendMessage(player, ChatUtils.getMessage(ChatUtils.getCodes(), "commands.no-permission"));
+				Chatable.get().sendMessage(player, Chatable.get().getMessage(ChatUtils.getCodes(), "commands.no-permission"));
 			return true;
 		}
-		ChatUtils.sendWarning("Console may not use this command.");
+		Chatable.get().sendWarning("Console may not use this command.");
 		return true;
 	}
 
 	@SuppressWarnings("unchecked")
-	public static boolean lore(CommandSender sender, ESCommand details, String[] args) {
+	public static boolean lore(CommandSender sender, CrashCommand details, String[] args) {
 		Player player = null;
 		if (sender instanceof Player) {
 			player = (Player) sender;
 			if (player.hasPermission(details.getPermission())) {
 				if (args.length > 1) {
 					String arg = args[1];
-					switch (arg.toLowerCase()) {
+					switch (arg.toLowerCase(Locale.ROOT)) {
 						case "enchantment":
 						case "enchant":
 							if (args.length > 2) for(CustomEnchantment enchant: RegisterEnchantments.getRegisteredEnchantments())
@@ -211,17 +215,17 @@ public class CommandUtils {
 										if (level < 1) {
 											HashMap<String, Object> codes = ChatUtils.getCodes();
 											codes.put("%level%", level);
-											ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(codes, "commands.level-too-low"), Level.WARNING);
+											Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(codes, "commands.level-too-low"), Level.WARNING);
 											level = 1;
 										}
 									} catch (NumberFormatException ex) {
 										HashMap<String, Object> codes = ChatUtils.getCodes();
 										codes.put("%level%", args[3]);
-										ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(codes, "commands.invalid-level"), Level.WARNING);
+										Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(codes, "commands.invalid-level"), Level.WARNING);
 									}
 									JSONArray json = new JSONArray();
 									JSONObject name = new JSONObject();
-									name.put("text", ChatUtils.getStarter());
+									name.put("text", Chatable.get().getStarter());
 									json.add(name);
 									JSONObject obj = new JSONObject();
 									obj.put("text", ChatColor.GREEN + "Click Here");
@@ -230,7 +234,7 @@ public class CommandUtils {
 									action.put("value", PersistenceNMS.getEnchantmentString(new EnchantmentLevel(enchant, level)).replace(ChatColor.COLOR_CHAR, '&'));
 									obj.put("clickEvent", action);
 									json.add(obj);
-									ChatUtils.sendRawMessage(player, json.toJSONString());
+									Chatable.get().sendRawMessage(player, json.toJSONString());
 								}
 							break;
 						case "string":
@@ -242,7 +246,7 @@ public class CommandUtils {
 							}
 							JSONArray json = new JSONArray();
 							JSONObject name = new JSONObject();
-							name.put("text", ChatUtils.getStarter());
+							name.put("text", Chatable.get().getStarter());
 							json.add(name);
 							JSONObject obj = new JSONObject();
 							obj.put("text", ChatColor.GREEN + "Click Here");
@@ -251,28 +255,28 @@ public class CommandUtils {
 							action.put("value", str.toString());
 							obj.put("clickEvent", action);
 							json.add(obj);
-							ChatUtils.sendRawMessage(player, json.toJSONString());
+							Chatable.get().sendRawMessage(player, json.toJSONString());
 							break;
 					}
 				}
 			} else
-				ChatUtils.sendMessage(player, ChatUtils.getMessage(ChatUtils.getCodes(), "commands.no-permission"));
+				Chatable.get().sendMessage(player, Chatable.get().getMessage(ChatUtils.getCodes(), "commands.no-permission"));
 		}
 		return true;
 	}
 
-	public static boolean reload(CommandSender sender, ESCommand details, String[] args) {
+	public static boolean reload(CommandSender sender, CrashCommand details, String[] args) {
 		Player player = null;
 		if (sender instanceof Player) player = (Player) sender;
 		if (sender.hasPermission(details.getPermission())) {
-			Configurations.reload();
-			ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(ChatUtils.getCodes(), "commands.reload"), Level.INFO);
+			Configurations.getConfigurations().reload();
+			Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(ChatUtils.getCodes(), "commands.reload"), Level.INFO);
 		} else
-			ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(ChatUtils.getCodes(), "commands.no-permission"), Level.WARNING);
+			Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(ChatUtils.getCodes(), "commands.no-permission"), Level.WARNING);
 		return true;
 	}
 
-	public static boolean reset(CommandSender sender, ESCommand details, String[] args) {
+	public static boolean reset(CommandSender sender, CrashCommand details, String[] args) {
 		Player player = null;
 		if (sender instanceof Player) player = (Player) sender;
 		if (sender.hasPermission(details.getPermission())) {
@@ -280,13 +284,13 @@ public class CommandUtils {
 			EnchantmentSolution.getPlugin().reEquipArmor();
 			TableEnchantments.removeAllTableEnchantments();
 			Minigame.reset();
-			ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(ChatUtils.getCodes(), "commands.reset-inventory"), Level.INFO);
+			Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(ChatUtils.getCodes(), "commands.reset-inventory"), Level.INFO);
 		} else
-			ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(ChatUtils.getCodes(), "commands.no-permission"), Level.WARNING);
+			Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(ChatUtils.getCodes(), "commands.no-permission"), Level.WARNING);
 		return true;
 	}
 
-	public static boolean rpg(CommandSender sender, ESCommand details, String[] args) {
+	public static boolean rpg(CommandSender sender, CrashCommand details, String[] args) {
 		Player player = null;
 		if (sender instanceof Player && sender.hasPermission(details.getPermission())) {
 			player = (Player) sender;
@@ -294,12 +298,12 @@ public class CommandUtils {
 			EnchantmentSolution.getPlugin().addInventory(rpg);
 			rpg.setInventory();
 		} else
-			ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(ChatUtils.getCodes(), "commands.no-permission"), Level.WARNING);
+			Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(ChatUtils.getCodes(), "commands.no-permission"), Level.WARNING);
 		return true;
 	}
 
 	@SuppressWarnings("deprecation")
-	public static boolean rpgStats(CommandSender sender, ESCommand details, String[] args) {
+	public static boolean rpgStats(CommandSender sender, CrashCommand details, String[] args) {
 		Player player = null;
 		if (sender instanceof Player && sender.hasPermission(details.getPermission())) {
 			player = (Player) sender;
@@ -307,12 +311,12 @@ public class CommandUtils {
 			if (args.length > 1) {
 				checkPlayer = Bukkit.getOfflinePlayer(args[1]);
 				if (checkPlayer != null && !checkPlayer.equals(player) && !player.hasPermission(details.getPermission() + ".others")) {
-					ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(ChatUtils.getCodes(), "commands.no-permission-other"), Level.WARNING);
+					Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(ChatUtils.getCodes(), "commands.no-permission-other"), Level.WARNING);
 					return false;
 				} else if (checkPlayer == null) {
 					HashMap<String, Object> codes = ChatUtils.getCodes();
 					codes.put("%invalid_player%", args[1]);
-					ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(codes, "commands.invalid-player"), Level.WARNING);
+					Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(codes, "commands.invalid-player"), Level.WARNING);
 					return false;
 				}
 			}
@@ -327,22 +331,22 @@ public class CommandUtils {
 				codes.put("%level%", 0);
 				codes.put("%experience%", 0);
 			}
-			sb.append(ChatUtils.getMessage(codes, "rpg.stats.exp"));
+			sb.append(Chatable.get().getMessage(codes, "rpg.stats.exp"));
 			List<EnchantmentLevel> levels = EnchantmentLevel.fromMap(rpg == null ? RPGUtils.getFreeEnchantments() : rpg.getEnchantments());
 			for(EnchantmentLevel l: levels) {
 				HashMap<String, Object> enchCodes = ChatUtils.getCodes();
 				enchCodes.put("%enchantment%", l.getEnchant().getDisplayName());
 				enchCodes.put("%level%", l.getLevel());
-				sb.append("\n" + ChatUtils.getMessage(enchCodes, "rpg.stats.enchantment"));
+				sb.append("\n" + Chatable.get().getMessage(enchCodes, "rpg.stats.enchantment"));
 			}
-			ChatUtils.sendMessage(sender, player, sb.toString(), Level.INFO);
+			Chatable.get().sendMessage(sender, player, sb.toString(), Level.INFO);
 		} else
-			ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(ChatUtils.getCodes(), "commands.no-permission"), Level.WARNING);
+			Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(ChatUtils.getCodes(), "commands.no-permission"), Level.WARNING);
 		return true;
 	}
 
 	@SuppressWarnings("unchecked")
-	public static boolean rpgTop(CommandSender sender, ESCommand details, String[] args) {
+	public static boolean rpgTop(CommandSender sender, CrashCommand details, String[] args) {
 		Player player = null;
 		if (sender instanceof Player) player = (Player) sender;
 
@@ -366,7 +370,7 @@ public class CommandUtils {
 
 		HashMap<String, Object> codes = new HashMap<String, Object>();
 		codes.put("%page%", page);
-		String rpgPage = ChatUtils.getMessage(codes, "rpg.top.page");
+		String rpgPage = Chatable.get().getMessage(codes, "rpg.top.page");
 		if (player != null) {
 			JSONArray json = new JSONArray();
 			JSONObject first = new JSONObject();
@@ -407,7 +411,7 @@ public class CommandUtils {
 				playerCodes.put("%player%", rpg.getPlayer().getName());
 				playerCodes.put("%rank%", num + 1);
 				playerCodes.put("%level%", rpg.getLevel());
-				name.put("text", ChatUtils.getMessage(playerCodes, "rpg.top.player_stats"));
+				name.put("text", Chatable.get().getMessage(playerCodes, "rpg.top.player_stats"));
 				json.add(name);
 			}
 			json.add("\n");
@@ -416,7 +420,7 @@ public class CommandUtils {
 			json.add(third);
 			json.add(fourth);
 			json.add(fifth);
-			ChatUtils.sendRawMessage(player, json.toJSONString());
+			Chatable.get().sendRawMessage(player, json.toJSONString());
 		} else {
 			String message = "\n" + ChatColor.DARK_BLUE + "******" + (page > 1 ? "<<<" : "***") + "****** " + rpgPage + ChatColor.DARK_BLUE + " ******" + (players.size() > page * 10 ? ">>>" : "***") + "******" + "\n";
 			for(int i = 0; i < 10; i++) {
@@ -427,16 +431,16 @@ public class CommandUtils {
 				playerCodes.put("%player%", rpg.getPlayer().getName());
 				playerCodes.put("%rank%", num + 1);
 				playerCodes.put("%level%", rpg.getLevel());
-				message += "\n" + ChatUtils.getMessage(playerCodes, "rpg.top.player_stats");
+				message += "\n" + Chatable.get().getMessage(playerCodes, "rpg.top.player_stats");
 			}
 			message += "\n" + ChatColor.DARK_BLUE + "******" + (page > 1 ? "<<<" : "***") + "****** " + rpgPage + ChatColor.DARK_BLUE + " ******" + (players.size() > page * 10 ? ">>>" : "***") + "******" + "\n";
-			ChatUtils.sendToConsole(Level.INFO, message);
+			Chatable.get().sendToConsole(Level.INFO, message);
 		}
 		return true;
 	}
 
 	@SuppressWarnings("deprecation")
-	public static boolean rpgEdit(CommandSender sender, ESCommand details, String[] args) {
+	public static boolean rpgEdit(CommandSender sender, CrashCommand details, String[] args) {
 		Player player = null;
 		if (sender instanceof Player && sender.hasPermission(details.getPermission())) {
 			player = (Player) sender;
@@ -446,7 +450,7 @@ public class CommandUtils {
 				if (editPlayer == null) {
 					HashMap<String, Object> codes = ChatUtils.getCodes();
 					codes.put("%invalid_player%", args[1]);
-					ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(codes, "commands.invalid-player"), Level.WARNING);
+					Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(codes, "commands.invalid-player"), Level.WARNING);
 					return false;
 				}
 			}
@@ -475,17 +479,17 @@ public class CommandUtils {
 						} catch (NumberFormatException ex) {
 							HashMap<String, Object> codes = ChatUtils.getCodes();
 							codes.put("%level%", args[3]);
-							ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(codes, "commands.invalid-level-positive-integer"), Level.WARNING);
+							Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(codes, "commands.invalid-level-positive-integer"), Level.WARNING);
 							return false;
 						}
 						HashMap<String, Object> codes = ChatUtils.getCodes();
 						codes.put("%level%", level);
 						codes.put("%player%", editPlayer.getName());
 						rpg.setLevel(level);
-						ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(codes, "commands.rpg-set-level"), Level.INFO);
+						Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(codes, "commands.rpg-set-level"), Level.INFO);
 						return true;
 					}
-					ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(ChatUtils.getCodes(), "commands.specify-level-integer"), Level.WARNING);
+					Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(ChatUtils.getCodes(), "commands.specify-level-integer"), Level.WARNING);
 					return false;
 				case "add_experience":
 				case "set_experience":
@@ -509,17 +513,17 @@ public class CommandUtils {
 						} catch (NumberFormatException ex) {
 							HashMap<String, Object> codes = ChatUtils.getCodes();
 							codes.put("%experience%", args[3]);
-							ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(codes, "commands.invalid-experience-positive-double"), Level.WARNING);
+							Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(codes, "commands.invalid-experience-positive-double"), Level.WARNING);
 							return false;
 						}
 						HashMap<String, Object> codes = ChatUtils.getCodes();
 						codes.put("%experience%", experience);
 						codes.put("%player%", editPlayer.getName());
 						rpg.setExperience(experience);
-						ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(codes, "commands.rpg-set-experience"), Level.INFO);
+						Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(codes, "commands.rpg-set-experience"), Level.INFO);
 						return true;
 					}
-					ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(ChatUtils.getCodes(), "commands.specify-experience-double"), Level.WARNING);
+					Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(ChatUtils.getCodes(), "commands.specify-experience-double"), Level.WARNING);
 					return false;
 				case "set_enchantment_level":
 					if (args.length > 3) {
@@ -528,7 +532,7 @@ public class CommandUtils {
 							if (enchant.getName().equalsIgnoreCase(enchantmentName)) {
 								if (!enchant.isEnabled()) {
 									HashMap<String, Object> codes = ChatUtils.getCodes();
-									ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(codes, "commands.enchant-disabled"), Level.WARNING);
+									Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(codes, "commands.enchant-disabled"), Level.WARNING);
 									return true;
 								}
 								int enchLevel = 1;
@@ -537,20 +541,20 @@ public class CommandUtils {
 									if (enchLevel < 0) {
 										HashMap<String, Object> codes = ChatUtils.getCodes();
 										codes.put("%level%", enchLevel);
-										ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(codes, "commands.rpg-level-too-low"), Level.WARNING);
+										Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(codes, "commands.rpg-level-too-low"), Level.WARNING);
 										enchLevel = 0;
 									}
 								} catch (NumberFormatException ex) {
 									HashMap<String, Object> codes = ChatUtils.getCodes();
 									codes.put("%level%", args[4]);
-									ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(codes, "commands.invalid-level"), Level.WARNING);
+									Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(codes, "commands.invalid-level"), Level.WARNING);
 								}
 								if (enchLevel < 1) {
 									rpg.removeEnchantment(enchant.getRelativeEnchantment());
 									HashMap<String, Object> codes = ChatUtils.getCodes();
 									codes.put("%player%", editPlayer.getName());
 									codes.put("%enchantment%", enchant.getDisplayName());
-									ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(codes, "commands.remove-rpg-enchantment"), Level.INFO);
+									Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(codes, "commands.remove-rpg-enchantment"), Level.INFO);
 									return true;
 								} else {
 									rpg.giveEnchantment(new EnchantmentLevel(enchant, enchLevel));
@@ -558,24 +562,24 @@ public class CommandUtils {
 									codes.put("%player%", editPlayer.getName());
 									codes.put("%enchantment%", enchant.getDisplayName());
 									codes.put("%level%", enchLevel);
-									ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(codes, "commands.set-rpg-enchantment"), Level.INFO);
+									Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(codes, "commands.set-rpg-enchantment"), Level.INFO);
 									return true;
 								}
 							}
 						HashMap<String, Object> codes = ChatUtils.getCodes();
 						codes.put("%enchant%", enchantmentName);
-						ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(codes, "commands.enchant-not-found"), Level.WARNING);
+						Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(codes, "commands.enchant-not-found"), Level.WARNING);
 						return true;
 					}
 					return false;
 				default:
 					HashMap<String, Object> codes = ChatUtils.getCodes();
 					codes.put("%command%", args[2]);
-					ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(codes, "commands.rpg-invalid-edit"), Level.WARNING);
+					Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(codes, "commands.rpg-invalid-edit"), Level.WARNING);
 					return false;
 			}
 		} else
-			ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(ChatUtils.getCodes(), "commands.no-permission"), Level.WARNING);
+			Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(ChatUtils.getCodes(), "commands.no-permission"), Level.WARNING);
 		return true;
 	}
 
@@ -584,7 +588,7 @@ public class CommandUtils {
 		if (sender instanceof Player) player = (Player) sender;
 		for(ESCommand command: EnchantmentSolutionCommand.getCommands())
 			if (sender.hasPermission(command.getPermission()) && EnchantmentSolutionCommand.containsCommand(command, label)) {
-				ChatUtils.sendMessage(sender, player, StringUtils.decodeString("\n" + command.getFullUsage()), Level.INFO);
+				Chatable.get().sendMessage(sender, player, StringUtils.decodeString("\n" + command.getFullUsage()), Level.INFO);
 				return true;
 			}
 		return printHelp(sender, 1);
@@ -603,7 +607,7 @@ public class CommandUtils {
 
 		HashMap<String, Object> codes = new HashMap<String, Object>();
 		codes.put("%page%", page);
-		String commandsPage = ChatUtils.getMessage(codes, "commands.help.commands_page");
+		String commandsPage = Chatable.get().getMessage(codes, "commands.help.commands_page");
 		if (player != null) {
 			JSONArray json = new JSONArray();
 			JSONObject first = new JSONObject();
@@ -638,7 +642,7 @@ public class CommandUtils {
 			for(int i = 0; i < 5; i++) {
 				int num = i + (page - 1) * 5;
 				if (num >= playerCommands.size()) break;
-				ESCommand c = playerCommands.get(num);
+				CrashCommand c = playerCommands.get(num);
 				JSONObject name = new JSONObject();
 				JSONObject desc = new JSONObject();
 				JSONObject action = new JSONObject();
@@ -648,8 +652,8 @@ public class CommandUtils {
 				name.put("clickEvent", action);
 				json.add(name);
 				HashMap<String, Object> descCodes = new HashMap<String, Object>();
-				descCodes.put("%description%", ChatUtils.getMessage(ChatUtils.getCodes(), c.getDescriptionPath()));
-				desc.put("text", shrink(ChatUtils.getMessage(descCodes, "commands.help.commands_info_shrink")) + "\n");
+				descCodes.put("%description%", Chatable.get().getMessage(ChatUtils.getCodes(), c.getDescriptionPath()));
+				desc.put("text", shrink(Chatable.get().getMessage(descCodes, "commands.help.commands_info_shrink")) + "\n");
 				json.add(desc);
 			}
 			json.add(first);
@@ -657,20 +661,20 @@ public class CommandUtils {
 			json.add(third);
 			json.add(fourth);
 			json.add(fifth);
-			ChatUtils.sendRawMessage(player, json.toJSONString());
+			Chatable.get().sendRawMessage(player, json.toJSONString());
 		} else {
 			String message = "\n" + ChatColor.DARK_BLUE + "******" + (page > 1 ? "<<<" : "***") + "****** " + commandsPage + ChatColor.DARK_BLUE + " ******" + (playerCommands.size() > page * 5 ? ">>>" : "***") + "******" + "\n";
 			for(int i = 0; i < 5; i++) {
 				int num = i + (page - 1) * 5;
 				if (num >= playerCommands.size()) break;
-				ESCommand c = playerCommands.get(num);
+				CrashCommand c = playerCommands.get(num);
 				HashMap<String, Object> descCodes = new HashMap<String, Object>();
 				descCodes.put("%command%", c.getCommand());
-				descCodes.put("%description%", ChatUtils.getMessage(ChatUtils.getCodes(), c.getDescriptionPath()));
-				message += shrink(ChatUtils.getMessage(descCodes, "commands.help.commands_info_shrink")) + "\n";
+				descCodes.put("%description%", Chatable.get().getMessage(ChatUtils.getCodes(), c.getDescriptionPath()));
+				message += shrink(Chatable.get().getMessage(descCodes, "commands.help.commands_info_shrink")) + "\n";
 			}
 			message += "\n" + ChatColor.DARK_BLUE + "******" + (page > 1 ? "<<<" : "***") + "****** " + commandsPage + ChatColor.DARK_BLUE + " ******" + (playerCommands.size() > page * 5 ? ">>>" : "***") + "******" + "\n";
-			ChatUtils.sendToConsole(Level.INFO, message);
+			Chatable.get().sendToConsole(Level.INFO, message);
 		}
 
 		return true;
@@ -682,7 +686,7 @@ public class CommandUtils {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static boolean test(CommandSender sender, ESCommand details, String[] args) {
+	public static boolean test(CommandSender sender, CrashCommand details, String[] args) {
 		Player player = null;
 		if (sender instanceof Player) player = (Player) sender;
 		if (sender.hasPermission(details.getPermission())) {
@@ -693,18 +697,18 @@ public class CommandUtils {
 						if (item == null) break;
 						JSONArray json = new JSONArray();
 						JSONObject name = new JSONObject();
-						name.put("text", ChatUtils.getStarter());
+						name.put("text", Chatable.get().getStarter());
 						json.add(name);
 						JSONObject obj = new JSONObject();
 						HashMap<String, Object> codes = ChatUtils.getCodes();
 						codes.put("%item%", item.toString().replace(ChatColor.COLOR_CHAR, '&'));
-						obj.put("text", ChatUtils.getMessage(codes, "commands.item-test"));
+						obj.put("text", Chatable.get().getMessage(codes, "commands.item-test"));
 						HashMap<Object, Object> action = new HashMap<Object, Object>();
 						action.put("action", "copy_to_clipboard");
 						action.put("value", item.toString());
 						obj.put("clickEvent", action);
 						json.add(obj);
-						ChatUtils.sendRawMessage(player, json.toJSONString());
+						Chatable.get().sendRawMessage(player, json.toJSONString());
 					}
 					break;
 				default:
@@ -713,7 +717,7 @@ public class CommandUtils {
 			else
 				return false;
 		} else
-			ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(ChatUtils.getCodes(), "commands.no-permission"), Level.WARNING);
+			Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(ChatUtils.getCodes(), "commands.no-permission"), Level.WARNING);
 		return true;
 	}
 

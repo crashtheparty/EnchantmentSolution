@@ -12,7 +12,7 @@ import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentList;
 import org.ctp.enchantmentsolution.enums.EnchantmentLocation;
 import org.ctp.enchantmentsolution.utils.VersionUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
-import org.ctp.enchantmentsolution.utils.items.ItemUtils;
+import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
 
 public class VillagerEnchantments extends LootEnchantments {
 
@@ -64,7 +64,7 @@ public class VillagerEnchantments extends LootEnchantments {
 			ingredients.add(priceItem);
 		}
 
-		recipe = new MerchantRecipe(ItemUtils.addEnchantmentToItem(new ItemStack(mat), enchant.getEnchant(), enchant.getLevel()), original.getUses(), original.getMaxUses(), original.hasExperienceReward());
+		recipe = new MerchantRecipe(EnchantmentUtils.addEnchantmentToItem(new ItemStack(mat), enchant.getEnchant(), enchant.getLevel()), original.getUses(), original.getMaxUses(), original.hasExperienceReward());
 		recipe.setIngredients(ingredients);
 		if (VersionUtils.getBukkitVersionNumber() > 3) recipe.setVillagerExperience(original.getVillagerExperience());
 	}

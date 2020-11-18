@@ -12,17 +12,18 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.ctp.crashapi.inventory.InventoryData;
+import org.ctp.crashapi.utils.ItemUtils;
+import org.ctp.crashapi.utils.LocationUtils;
+import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.generate.AnvilEnchantments;
 import org.ctp.enchantmentsolution.enchantments.generate.AnvilEnchantments.RepairType;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
-import org.ctp.enchantmentsolution.utils.AnvilUtils;
-import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.compatibility.JobsUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 import org.ctp.enchantmentsolution.utils.config.ConfigUtils;
-import org.ctp.enchantmentsolution.utils.items.ItemUtils;
 
 public class Anvil implements InventoryData {
 
@@ -54,12 +55,12 @@ public class Anvil implements InventoryData {
 		try {
 			int size = 27;
 			if (useAnvil || useLegacyGrindstone) size = 45;
-			Inventory inv = Bukkit.createInventory(null, size, ChatUtils.getMessage(getCodes(), "anvil.name"));
+			Inventory inv = Bukkit.createInventory(null, size, Chatable.get().getMessage(getCodes(), "anvil.name"));
 			inv = open(inv);
 
 			ItemStack mirror = new ItemStack(Material.BLACK_STAINED_GLASS_PANE);
 			ItemMeta mirrorMeta = mirror.getItemMeta();
-			mirrorMeta.setDisplayName(ChatUtils.getMessage(getCodes(), "anvil.mirror"));
+			mirrorMeta.setDisplayName(Chatable.get().getMessage(getCodes(), "anvil.mirror"));
 			mirror.setItemMeta(mirrorMeta);
 			int num_mirrors = 27;
 			if (useAnvil || ConfigUtils.useLegacyGrindstone()) num_mirrors = 45;
@@ -68,33 +69,33 @@ public class Anvil implements InventoryData {
 			if (useAnvil && useLegacyGrindstone) {
 				ItemStack anvil = new ItemStack(Material.ANVIL);
 				ItemMeta anvilMeta = anvil.getItemMeta();
-				anvilMeta.setDisplayName(ChatUtils.getMessage(getCodes(), "anvil.legacy-gui"));
-				anvilMeta.setLore(ChatUtils.getMessages(getCodes(), "anvil.legacy-gui-warning"));
+				anvilMeta.setDisplayName(Chatable.get().getMessage(getCodes(), "anvil.legacy-gui"));
+				anvilMeta.setLore(Chatable.get().getMessages(getCodes(), "anvil.legacy-gui-warning"));
 				anvil.setItemMeta(anvilMeta);
 				inv.setItem(30, anvil);
 				ItemStack grindstone = new ItemStack(Material.SMOOTH_STONE);
 				ItemMeta grindstoneMeta = grindstone.getItemMeta();
-				grindstoneMeta.setDisplayName(ChatUtils.getMessage(getCodes(), "grindstone.legacy-open"));
+				grindstoneMeta.setDisplayName(Chatable.get().getMessage(getCodes(), "grindstone.legacy-open"));
 				grindstone.setItemMeta(grindstoneMeta);
 				inv.setItem(32, grindstone);
 			} else if (useAnvil) {
 				ItemStack anvil = new ItemStack(Material.ANVIL);
 				ItemMeta anvilMeta = anvil.getItemMeta();
-				anvilMeta.setDisplayName(ChatUtils.getMessage(getCodes(), "anvil.legacy-gui"));
-				anvilMeta.setLore(ChatUtils.getMessages(getCodes(), "anvil.legacy-gui-warning"));
+				anvilMeta.setDisplayName(Chatable.get().getMessage(getCodes(), "anvil.legacy-gui"));
+				anvilMeta.setLore(Chatable.get().getMessages(getCodes(), "anvil.legacy-gui-warning"));
 				anvil.setItemMeta(anvilMeta);
 				inv.setItem(31, anvil);
 			} else if (useLegacyGrindstone) {
 				ItemStack grindstone = new ItemStack(Material.SMOOTH_STONE);
 				ItemMeta grindstoneMeta = grindstone.getItemMeta();
-				grindstoneMeta.setDisplayName(ChatUtils.getMessage(getCodes(), "grindstone.legacy-open"));
+				grindstoneMeta.setDisplayName(Chatable.get().getMessage(getCodes(), "grindstone.legacy-open"));
 				grindstone.setItemMeta(grindstoneMeta);
 				inv.setItem(31, grindstone);
 			}
 
 			ItemStack rename = new ItemStack(Material.LIME_STAINED_GLASS_PANE);
 			ItemMeta renameMeta = rename.getItemMeta();
-			renameMeta.setDisplayName(ChatUtils.getMessage(getCodes(), "anvil.rename"));
+			renameMeta.setDisplayName(Chatable.get().getMessage(getCodes(), "anvil.rename"));
 			rename.setItemMeta(renameMeta);
 
 			ItemStack combine = null;
@@ -115,37 +116,37 @@ public class Anvil implements InventoryData {
 						combine = new ItemStack(Material.RED_STAINED_GLASS_PANE);
 						HashMap<String, Object> loreCodes = getCodes();
 						loreCodes.put("%repairCost%", repairCost);
-						lore.add(ChatUtils.getMessage(loreCodes, "anvil.cannot-repair"));
+						lore.add(Chatable.get().getMessage(loreCodes, "anvil.cannot-repair"));
 					} else {
 						combine = new ItemStack(Material.LIME_STAINED_GLASS_PANE);
 						HashMap<String, Object> loreCodes = getCodes();
 						loreCodes.put("%repairCost%", repairCost);
-						lore.add(ChatUtils.getMessage(loreCodes, "anvil.repair-cost"));
+						lore.add(Chatable.get().getMessage(loreCodes, "anvil.repair-cost"));
 					}
 				} else {
 					combine = new ItemStack(Material.RED_STAINED_GLASS_PANE);
-					if (!player.getGameMode().equals(GameMode.CREATIVE) && repairCost > maxRepairLevel) lore.add(ChatUtils.getMessage(getCodes(), "anvil.cannot-repair"));
+					if (!player.getGameMode().equals(GameMode.CREATIVE) && repairCost > maxRepairLevel) lore.add(Chatable.get().getMessage(getCodes(), "anvil.cannot-repair"));
 					else {
 						HashMap<String, Object> loreCodes = getCodes();
 						loreCodes.put("%repairCost%", repairCost);
-						lore.add(ChatUtils.getMessage(loreCodes, "anvil.repair-cost-high"));
+						lore.add(Chatable.get().getMessage(loreCodes, "anvil.repair-cost-high"));
 					}
 				}
 				ItemMeta combineMeta = combine.getItemMeta();
-				combineMeta.setDisplayName(ChatUtils.getMessage(getCodes(), "anvil.combine"));
+				combineMeta.setDisplayName(Chatable.get().getMessage(getCodes(), "anvil.combine"));
 				combineMeta.setLore(lore);
 				combine.setItemMeta(combineMeta);
 				combine.setAmount(repairCost);
 			} else {
 				combine = new ItemStack(Material.BARRIER);
 				ItemMeta combineMeta = combine.getItemMeta();
-				combineMeta.setDisplayName(ChatUtils.getMessage(getCodes(), "anvil.cannot-combine"));
+				combineMeta.setDisplayName(Chatable.get().getMessage(getCodes(), "anvil.cannot-combine"));
 				combine.setItemMeta(combineMeta);
 			}
 
 			ItemStack barrierRename = new ItemStack(Material.BARRIER);
 			ItemMeta barrierRenameMeta = barrierRename.getItemMeta();
-			barrierRenameMeta.setDisplayName(ChatUtils.getMessage(getCodes(), "anvil.cannot-rename"));
+			barrierRenameMeta.setDisplayName(Chatable.get().getMessage(getCodes(), "anvil.cannot-rename"));
 			barrierRename.setItemMeta(barrierRenameMeta);
 
 			inv.setItem(10, new ItemStack(Material.AIR));
@@ -211,7 +212,7 @@ public class Anvil implements InventoryData {
 		if (inventory.getItem(14).getType().equals(Material.LIME_STAINED_GLASS_PANE)) {
 			if (player.getGameMode() != GameMode.CREATIVE) {
 				if (anvil.getRepairCost() > player.getLevel()) {
-					ChatUtils.sendMessage(player, ChatUtils.getMessage(getCodes(), "anvil.message-cannot-combine"));
+					Chatable.get().sendMessage(player, Chatable.get().getMessage(getCodes(), "anvil.message-cannot-combine"));
 					return;
 				}
 				player.setLevel(player.getLevel() - anvil.getRepairCost());
@@ -227,9 +228,9 @@ public class Anvil implements InventoryData {
 			if (anvil.getRepairType() == RepairType.STICKY_REPAIR) AdvancementUtils.awardCriteria(player, ESAdvancement.SIMPLE_REPAIR, "repair");
 			anvil = null;
 			playerItems.clear();
-			AnvilUtils.checkAnvilBreak(player, block, this);
+			LocationUtils.checkAnvilBreak(player, block, this, ConfigString.DAMAGE_ANVIL.getBoolean());
 		} else
-			ChatUtils.sendMessage(player, ChatUtils.getMessage(getCodes(), "anvil.message-cannot-combine"));
+			Chatable.get().sendMessage(player, Chatable.get().getMessage(getCodes(), "anvil.message-cannot-combine"));
 	}
 
 	@Override

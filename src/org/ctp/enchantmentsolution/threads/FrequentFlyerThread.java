@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
@@ -32,11 +31,12 @@ public class FrequentFlyerThread extends EnchantmentThread {
 
 	@Override
 	public void run() {
-		if (!RegisterEnchantments.isEnabled(RegisterEnchantments.FREQUENT_FLYER)) {
+		ESPlayer player = getPlayer();
+		if (!RegisterEnchantments.isEnabled(RegisterEnchantments.FREQUENT_FLYER) || isDisabled(player.getOnlinePlayer(), RegisterEnchantments.FREQUENT_FLYER)) {
+			player.logoutFlyer();
 			remove();
 			return;
 		}
-		ESPlayer player = getPlayer();
 		if (player.hasFrequentFlyer() || player.canFly(true)) {
 			if (!player.isOnline()) {
 				if (player.canFly(false)) player.logoutFlyer();
@@ -52,9 +52,10 @@ public class FrequentFlyerThread extends EnchantmentThread {
 		remove();
 	}
 
-	private void remove() {
+	@Override
+	protected void remove() {
 		FLYER_THREADS.remove(this);
-		Bukkit.getScheduler().cancelTask(getScheduler());
+		super.remove();
 	}
 
 }

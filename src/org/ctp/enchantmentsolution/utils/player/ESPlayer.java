@@ -3,58 +3,79 @@ package org.ctp.enchantmentsolution.utils.player;
 import java.util.*;
 
 import org.bukkit.*;
+import org.bukkit.attribute.AttributeModifier;
+import org.bukkit.attribute.AttributeModifier.Operation;
+import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.java.JavaPlugin;
+import org.ctp.crashapi.events.ItemEquipEvent.HandMethod;
+import org.ctp.crashapi.item.*;
+import org.ctp.crashapi.nms.ServerNMS;
+import org.ctp.crashapi.utils.DamageUtils;
+import org.ctp.crashapi.utils.ItemUtils;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.*;
-import org.ctp.enchantmentsolution.enums.*;
-import org.ctp.enchantmentsolution.events.ItemEquipEvent.HandMethod;
 import org.ctp.enchantmentsolution.events.player.FrequentFlyerEvent;
 import org.ctp.enchantmentsolution.events.player.FrequentFlyerEvent.FFType;
-import org.ctp.enchantmentsolution.nms.ServerNMS;
+import org.ctp.enchantmentsolution.listeners.enchantments.AsyncGaiaController;
+import org.ctp.enchantmentsolution.listeners.enchantments.AsyncHWDController;
 import org.ctp.enchantmentsolution.rpg.RPGPlayer;
 import org.ctp.enchantmentsolution.rpg.RPGUtils;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.PermissionUtils;
+import org.ctp.enchantmentsolution.utils.abilityhelpers.GaiaUtils.GaiaTrees;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.ItemEquippedSlot;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.OverkillDeath;
+import org.ctp.enchantmentsolution.utils.abilityhelpers.Streak;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 import org.ctp.enchantmentsolution.utils.items.AbilityUtils;
-import org.ctp.enchantmentsolution.utils.items.DamageUtils;
-import org.ctp.enchantmentsolution.utils.items.ItemUtils;
+import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
+import org.ctp.enchantmentsolution.utils.player.attributes.FlySpeedAttribute;
 
 public class ESPlayer {
 
-	private static Map<Integer, Integer> GLOBAL_BLOCKS = new HashMap<Integer, Integer>();
-	private static double CONTAGION_CHANCE = 0.0005, FORCE_FEED_CHANCE = 0.005;
+	private static Map<Long, Integer> GLOBAL_BLOCKS = new HashMap<Long, Integer>();
+	private static double CONTAGION_CHANCE = 0.0005;
 	private final OfflinePlayer player;
 	private Player onlinePlayer;
 	private RPGPlayer rpg;
-	private Map<Enchantment, Integer> cooldowns;
+	private Map<Enchantment, Long> cooldowns;
+	private List<EnchantmentTimedDisable> timedDisable;
+	private List<EnchantmentDisable> disable;
 	private List<ItemStack> soulItems, telepathyItems;
-	private Map<Integer, Integer> blocksBroken;
+	private Map<Long, Integer> blocksBroken;
 	private float currentExhaustion, pastExhaustion;
 	private ItemStack elytra;
-	private boolean canFly, didTick, reset;
-	private int underLimit, aboveLimit, under, above, frequentFlyerLevel, icarusDelay;
+	private boolean canFly, didTick, reset, sacrificeAdvancement, plyometricsAdvancement;
+	private int flightDamage, flightDamageLimit, frequentFlyerLevel, icarusDelay, underwaterTicks;
 	private FFType currentFFType;
 	private List<OverkillDeath> overkillDeaths;
 	private List<AttributeLevel> attributes;
+	private ESPlayerAttributeInstance flyAttribute = new FlySpeedAttribute();
+	private Streak streak;
 	private Runnable telepathyTask;
+	private AsyncHWDController hwdController;
+	private AsyncGaiaController gaiaController;
 
 	public ESPlayer(OfflinePlayer player) {
 		this.player = player;
 		onlinePlayer = player.getPlayer();
 		rpg = RPGUtils.getPlayer(player);
-		cooldowns = new HashMap<Enchantment, Integer>();
-		blocksBroken = new HashMap<Integer, Integer>();
+		cooldowns = new HashMap<Enchantment, Long>();
+		timedDisable = new ArrayList<EnchantmentTimedDisable>();
+		disable = new ArrayList<EnchantmentDisable>();
+		blocksBroken = new HashMap<Long, Integer>();
 		overkillDeaths = new ArrayList<OverkillDeath>();
 		attributes = new ArrayList<AttributeLevel>();
 		currentFFType = FFType.NONE;
 		telepathyItems = new ArrayList<ItemStack>();
 		removeSoulItems();
+		flyAttribute.addModifier(new AttributeModifier(UUID.fromString("ffffffff-ffff-ffff-ffff-000000000000"), "frequentFlyerFlight", -0.08, Operation.ADD_NUMBER));
 	}
 
 	public OfflinePlayer getPlayer() {
@@ -72,6 +93,20 @@ public class ESPlayer {
 	public void reloadPlayer() {
 		for(Player p: Bukkit.getOnlinePlayers())
 			if (p.getUniqueId().equals(player.getUniqueId())) onlinePlayer = p;
+	}
+
+	public boolean isInInventory(ItemStack item) {
+		for(int i = 0; i < 41; i++) {
+			ItemStack content = getOnlinePlayer().getInventory().getItem(i);
+			if (content == null) continue;
+			if (item.equals(content)) return true;
+		}
+		return false;
+	}
+
+	public ItemStack getMainHand() {
+		if (!isOnline()) return new ItemStack(Material.AIR);
+		return getOnlinePlayer().getInventory().getItemInMainHand();
 	}
 
 	public ItemStack getOffhand() {
@@ -115,7 +150,14 @@ public class ESPlayer {
 	}
 
 	public ItemStack[] getInventoryItems() {
-		return isOnline() ? getOnlinePlayer().getInventory().getContents() : new ItemStack[1];
+		return isOnline() ? getOnlinePlayer().getInventory().getContents() : new ItemStack[41];
+	}
+
+	public List<ItemStack> getUnstableItems() {
+		List<ItemStack> items = new ArrayList<ItemStack>();
+		for(ItemStack item: getEquipped())
+			if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.CURSE_OF_INSTABILITY)) items.add(item);
+		return items;
 	}
 
 	public long getCooldown(Enchantment enchant) {
@@ -144,14 +186,14 @@ public class ESPlayer {
 	}
 
 	public boolean canBreakBlock() {
-		int tick = ServerNMS.getCurrentTick();
+		long tick = ServerNMS.getCurrentTick();
 		if (GLOBAL_BLOCKS.containsKey(tick) && GLOBAL_BLOCKS.get(tick) >= ConfigString.MULTI_BLOCK_BLOCKS_GLOBAL.getInt()) return false;
 		if (blocksBroken.containsKey(tick) && blocksBroken.get(tick) >= ConfigString.MULTI_BLOCK_BLOCKS_PLAYER.getInt()) return false;
 		return true;
 	}
 
 	public void breakBlock() {
-		int tick = ServerNMS.getCurrentTick();
+		long tick = ServerNMS.getCurrentTick();
 		int blocks = 1;
 		if (blocksBroken.containsKey(tick)) blocks += blocksBroken.get(tick);
 		blocksBroken.put(tick, blocks);
@@ -163,7 +205,7 @@ public class ESPlayer {
 	public double getContagionChance() {
 		double playerChance = 0;
 		if (isOnline()) for(ItemStack item: getOnlinePlayer().getInventory().getContents())
-			if (item != null && ItemUtils.hasEnchantment(item, RegisterEnchantments.CURSE_OF_CONTAGION)) playerChance += CONTAGION_CHANCE;
+			if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.CURSE_OF_CONTAGION)) playerChance += CONTAGION_CHANCE;
 		return playerChance;
 	}
 
@@ -181,7 +223,7 @@ public class ESPlayer {
 	private boolean hasAllCurses(ItemStack item) {
 		boolean noCurse = true;
 		for(CustomEnchantment enchantment: RegisterEnchantments.getCurseEnchantments())
-			if (enchantment.isCurse() && ItemUtils.canAddEnchantment(enchantment, item) && !ItemUtils.hasEnchantment(item, enchantment.getRelativeEnchantment())) {
+			if (enchantment.isCurse() && EnchantmentUtils.canAddEnchantment(enchantment, item) && !EnchantmentUtils.hasEnchantment(item, enchantment.getRelativeEnchantment())) {
 				noCurse = false;
 				break;
 			}
@@ -190,9 +232,9 @@ public class ESPlayer {
 
 	private boolean canAddCurse(ItemStack item) {
 		boolean addCurse = false;
-		if (ItemUtils.hasEnchantment(item, RegisterEnchantments.CURSE_OF_STAGNANCY)) return false;
+		if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.CURSE_OF_STAGNANCY)) return false;
 		for(CustomEnchantment enchantment: RegisterEnchantments.getCurseEnchantments())
-			if (enchantment.isCurse() && ItemUtils.canAddEnchantment(enchantment, item)) {
+			if (enchantment.isCurse() && EnchantmentUtils.canAddEnchantment(enchantment, item)) {
 				addCurse = true;
 				break;
 			}
@@ -230,8 +272,8 @@ public class ESPlayer {
 		frequentFlyerLevel = 0;
 		ItemStack newElytra = null;
 		for(ItemStack item: getArmor())
-			if (item != null && ItemUtils.hasEnchantment(item, RegisterEnchantments.FREQUENT_FLYER) && !DamageUtils.aboveMaxDamage(item)) {
-				int level = ItemUtils.getLevel(item, RegisterEnchantments.FREQUENT_FLYER);
+			if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.FREQUENT_FLYER) && !DamageUtils.aboveMaxDamage(item)) {
+				int level = EnchantmentUtils.getLevel(item, RegisterEnchantments.FREQUENT_FLYER);
 				if (level > frequentFlyerLevel) {
 					frequentFlyerLevel = level;
 					newElytra = item;
@@ -243,16 +285,19 @@ public class ESPlayer {
 	}
 
 	public void setFrequentFlyer() {
-		underLimit = 0;
-		aboveLimit = 0;
 		boolean fly = frequentFlyerLevel > 0 && elytra != null;
-		underLimit = frequentFlyerLevel * 4 * 20;
-		aboveLimit = frequentFlyerLevel * 20;
+		flightDamageLimit = 60;
 		setCanFly(fly);
-		if (reset) {
-			under = underLimit;
-			above = aboveLimit;
-		}
+		setFlightSpeed(fly);
+		if (reset) flightDamage = flightDamageLimit;
+	}
+
+	private void setFlightSpeed(boolean canFly) {
+		if (canFly) {
+			flyAttribute.removeModifier(UUID.fromString("ffffffff-ffff-ffff-ffff-000000001111"));
+			flyAttribute.addModifier(new AttributeModifier(UUID.fromString("ffffffff-ffff-ffff-ffff-000000001111"), "frequentFlyerLevel", 0.016 * frequentFlyerLevel, Operation.ADD_NUMBER));
+			player.getPlayer().setFlySpeed((float) flyAttribute.getValue());
+		} else if (player.isOnline()) player.getPlayer().setFlySpeed((float) flyAttribute.getDefaultValue());
 	}
 
 	public boolean canFly(boolean online) {
@@ -312,31 +357,19 @@ public class ESPlayer {
 		getOnlinePlayer().setAllowFlight(false);
 	}
 
-	public int getUnder() {
-		return under;
+	public int getFlightDamage() {
+		return flightDamage;
 	}
 
 	public void minus() {
 		Player player = getOnlinePlayer();
 		if (player.getLocation().getY() >= 12000) AdvancementUtils.awardCriteria(player, ESAdvancement.CRUISING_ALTITUDE, "elytra");
-		if (player.getLocation().getY() > 255) {
-			above = above - 1;
-			if (above <= 0) {
-				if (elytra != null) DamageUtils.damageItem(player, elytra);
-				above = aboveLimit;
-			}
-		} else {
-			under = under - 1;
-			if (under <= 0) {
-				if (elytra != null) DamageUtils.damageItem(player, elytra);
-				under = underLimit;
-			}
+		flightDamage--;
+		if (flightDamage <= 0) {
+			if (elytra != null) DamageUtils.damageItem(player, elytra);
+			flightDamage = flightDamageLimit;
 		}
 		setDidTick(true);
-	}
-
-	public int getAbove() {
-		return above;
 	}
 
 	public void setDidTick(boolean b) {
@@ -347,14 +380,14 @@ public class ESPlayer {
 		return didTick;
 	}
 
-	public double getForceFeedChance() {
-		return FORCE_FEED_CHANCE;
+	public double getForceFeedChance(int level) {
+		return 0.0075 + level * 0.0075;
 	}
 
 	public List<ItemStack> getForceFeedItems() {
 		List<ItemStack> items = new ArrayList<ItemStack>();
 		for(ItemStack item: getEquipped())
-			if (item != null && ItemUtils.hasEnchantment(item, RegisterEnchantments.FORCE_FEED)) items.add(item);
+			if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.FORCE_FEED)) items.add(item);
 		return items;
 	}
 
@@ -415,12 +448,7 @@ public class ESPlayer {
 
 	private void checkTelepathyTask() {
 		if (telepathyTask == null) {
-			telepathyTask = new Runnable() {
-				@Override
-				public void run() {
-					giveTelepathyItems();
-				}
-			};
+			telepathyTask = () -> giveTelepathyItems();
 			Bukkit.getScheduler().runTaskLater(EnchantmentSolution.getPlugin(), telepathyTask, 0l);
 		}
 	}
@@ -447,4 +475,162 @@ public class ESPlayer {
 		checkTelepathyTask();
 	}
 
+	public int addToStreak(LivingEntity entity) {
+		if (streak == null) streak = new Streak();
+		int entityStreak = streak.addToStreak(entity);
+		if (entityStreak == 100) AdvancementUtils.awardCriteria(onlinePlayer, ESAdvancement.DOUBLE_DAMAGE, "kills");
+		return entityStreak;
+	}
+
+	public int getStreak() {
+		if (streak == null) return 0;
+		return streak.getStreak();
+	}
+
+	public EntityType getType() {
+		return streak.getType();
+	}
+
+	public void setStreak(EntityType type, int streak) {
+		this.streak.setStreak(type, streak);
+	}
+
+	public void addTimedDisableEnchant(JavaPlugin plugin, Enchantment enchant, int ticks) {
+		long tick = ServerNMS.getCurrentTick() + ticks;
+		if (!isTimedDisableEnchant(plugin, enchant)) timedDisable.add(new EnchantmentTimedDisable(plugin, enchant, tick));
+	}
+
+	public void addTimeToDisableEnchant(JavaPlugin plugin, Enchantment enchant, int moreTicks) {
+		if (isTimedDisableEnchant(plugin, enchant)) {
+			EnchantmentTimedDisable disable = getTimedDisable(plugin, enchant);
+			disable.addToEndTime(moreTicks);
+		} else
+			addTimedDisableEnchant(plugin, enchant, moreTicks);
+	}
+
+	private EnchantmentTimedDisable getTimedDisable(JavaPlugin plugin, Enchantment enchant) {
+		for(EnchantmentTimedDisable etd: timedDisable)
+			if (etd.isSimilar(plugin, enchant)) return etd;
+		return null;
+	}
+
+	public void setTimeDisableEnchant(JavaPlugin plugin, Enchantment enchant, int ticks) {
+		long tick = ServerNMS.getCurrentTick() + ticks;
+		if (isTimedDisableEnchant(plugin, enchant)) {
+			EnchantmentTimedDisable disable = getTimedDisable(plugin, enchant);
+			disable.setEndTime(tick);
+		} else
+			addTimedDisableEnchant(plugin, enchant, ticks);
+	}
+
+	public void removeTimedDisableEnchant(JavaPlugin plugin, Enchantment enchant) {
+		Iterator<EnchantmentTimedDisable> iter = timedDisable.iterator();
+		while (iter.hasNext()) {
+			EnchantmentTimedDisable etd = iter.next();
+			if (etd.isSimilar(plugin, enchant)) iter.remove();
+		}
+	}
+
+	public void removeTimeFromDisableEnchant(JavaPlugin plugin, Enchantment enchant, int lessTicks) {
+		if (isTimedDisableEnchant(plugin, enchant)) {
+			EnchantmentTimedDisable disable = getTimedDisable(plugin, enchant);
+			disable.removeFromEndTime(lessTicks);
+		}
+	}
+
+	public boolean isTimedDisableEnchant(JavaPlugin plugin, Enchantment enchant) {
+		for(EnchantmentTimedDisable etd: timedDisable)
+			if (etd.isSimilar(plugin, enchant)) return true;
+		return false;
+	}
+
+	public boolean hasTimedDisable(Player player, Enchantment enchant) {
+		for(EnchantmentTimedDisable etd: timedDisable)
+			if (etd.getEnchantment() == enchant) return true;
+		return false;
+	}
+
+	public void setDisabledEnchant(JavaPlugin plugin, Enchantment enchant) {
+		if (!isDisabledEnchant(plugin, enchant)) disable.add(new EnchantmentDisable(plugin, enchant));
+	}
+
+	public boolean isDisabledEnchant(JavaPlugin plugin, Enchantment enchant) {
+		for(EnchantmentDisable e: disable)
+			if (e.isSimilar(plugin, enchant)) return true;
+		return false;
+	}
+
+	public void removeDisabledEnchant(JavaPlugin plugin, Enchantment enchant) {
+		Iterator<EnchantmentDisable> iter = disable.iterator();
+		while (iter.hasNext()) {
+			EnchantmentDisable e = iter.next();
+			if (e.isSimilar(plugin, enchant)) iter.remove();
+		}
+	}
+
+	public boolean hasDisabled(Player player, Enchantment enchant) {
+		for(EnchantmentDisable e: disable)
+			if (e.getEnchantment() == enchant) return true;
+		return false;
+	}
+
+	public boolean getSacrificeAdvancement() {
+		return sacrificeAdvancement;
+	}
+
+	public void setSacrificeAdvancement(boolean sacrificeAdvancement) {
+		this.sacrificeAdvancement = sacrificeAdvancement;
+	}
+
+	public boolean getPlyometricsAdvancement() {
+		return plyometricsAdvancement;
+	}
+
+	public void setPlyometricsAdvancement(boolean plyometricsAdvancement) {
+		this.plyometricsAdvancement = plyometricsAdvancement;
+	}
+
+	public void addUnderwaterTick() {
+		for(ItemStack item: getArmor())
+			if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.WATER_BREATHING)) {
+				underwaterTicks++;
+				if (underwaterTicks >= 13900) AdvancementUtils.awardCriteria(onlinePlayer, ESAdvancement.WORLD_RECORD, "record");
+				return;
+			}
+		resetUnderwaterTick();
+	}
+
+	public void resetUnderwaterTick() {
+		underwaterTicks = 0;
+	}
+
+	public void addToHWDController(ItemStack item, Block original, List<Location> allBlocks) {
+		if (hwdController == null) hwdController = new AsyncHWDController(getOnlinePlayer(), item, original, allBlocks);
+		else if (!hwdController.addBlocks(original, allBlocks)) hwdController = new AsyncHWDController(getOnlinePlayer(), item, original, allBlocks);
+	}
+
+	public boolean correctHWDItem(ItemStack item) {
+		return hwdController == null || item.isSimilar(hwdController.getItem());
+	}
+
+	public void removeHWDController() {
+		hwdController = null;
+	}
+
+	public void addToGaiaController(ItemStack item, Block original, List<Location> allBlocks, GaiaTrees tree) {
+		if (gaiaController == null) gaiaController = new AsyncGaiaController(getOnlinePlayer(), item, original, allBlocks, tree);
+		else if (!gaiaController.addBlocks(original, allBlocks)) gaiaController = new AsyncGaiaController(getOnlinePlayer(), item, original, allBlocks, tree);
+	}
+
+	public boolean correctGaiaItem(ItemStack item) {
+		return gaiaController == null || item.isSimilar(gaiaController.getItem());
+	}
+
+	public boolean correctGaiaTree(GaiaTrees tree) {
+		return gaiaController == null || tree == gaiaController.getTree();
+	}
+
+	public void removeGaiaController() {
+		gaiaController = null;
+	}
 }

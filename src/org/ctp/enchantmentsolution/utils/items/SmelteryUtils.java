@@ -1,129 +1,51 @@
 package org.ctp.enchantmentsolution.utils.items;
 
-import org.bukkit.*;
-import org.bukkit.block.Block;
-import org.bukkit.entity.Player;
-import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.Material;
+import org.bukkit.block.data.BlockData;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
-import org.ctp.enchantmentsolution.EnchantmentSolution;
-import org.ctp.enchantmentsolution.advancements.ESAdvancement;
-import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
-import org.ctp.enchantmentsolution.enums.BlockSound;
+import org.ctp.crashapi.item.MatData;
 import org.ctp.enchantmentsolution.enums.ItemBreakType;
-import org.ctp.enchantmentsolution.enums.MatData;
-import org.ctp.enchantmentsolution.events.blocks.SmelteryEvent;
-import org.ctp.enchantmentsolution.mcmmo.McMMOHandler;
-import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.VersionUtils;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.SmelteryMaterial;
-import org.ctp.enchantmentsolution.utils.compatibility.JobsUtils;
-import org.ctp.enchantmentsolution.utils.compatibility.QuestsUtils;
-import org.ctp.enchantmentsolution.utils.config.ConfigString;
 
 public class SmelteryUtils {
 
-	public static void handleSmeltery(BlockBreakEvent event, Player player, Block blockBroken, ItemStack item) {
-		SmelteryMaterial smeltery = SmelteryUtils.getSmelteryItem(blockBroken, item);
-		if (smeltery != null) {
-			ItemStack smelted = smeltery.getSmelted();
-			int experience = 0;
-			boolean fortune = false;
-			MatData data = new MatData(blockBroken.getType().name());
-			if (data.hasMaterial() && (data.getMaterial() == Material.IRON_ORE || data.getMaterial() == Material.GOLD_ORE)) {
-				experience = (int) (Math.random() * 3) + 1;
-				fortune = true;
-			} else if (data.hasMaterial() && data.getMaterialName().equals("ANCIENT_DEBRIS")) {
-				experience = (int) (Math.random() * 6) + 2;
-				fortune = true;
-			} else if (data.hasMaterial() && (data.getMaterialName().equals("NETHER_GOLD_ORE") || data.getMaterialName().equals("GILDED_BLACKSTONE"))) {
-				experience = (int) (Math.random() * 2);
-				fortune = data.getMaterialName().equals("NETHER_GOLD_ORE");
-			}
-			experience = AbilityUtils.setExp(experience, ItemUtils.getLevel(item, RegisterEnchantments.EXP_SHARE));
-			SmelteryEvent smelteryEvent = new SmelteryEvent(blockBroken, player, smelted, smeltery.getToMaterial(), experience, fortune);
-			Bukkit.getPluginManager().callEvent(smelteryEvent);
-
-			if (!smelteryEvent.isCancelled()) {
-				Block newBlock = smelteryEvent.getBlock();
-				ItemStack afterSmeltery = smelteryEvent.getDrop();
-				afterSmeltery.setType(smelteryEvent.getChangeTo());
-				if (smelteryEvent.willFortune()) {
-					afterSmeltery = FortuneUtils.getFortuneForSmeltery(afterSmeltery, item, newBlock.getType());
-					if (afterSmeltery.getAmount() > 1 && afterSmeltery.getType() == Material.IRON_INGOT) AdvancementUtils.awardCriteria(player, ESAdvancement.IRONT_YOU_GLAD, "iron");
-				}
-				player.incrementStatistic(Statistic.MINE_BLOCK, smelteryEvent.getBlock().getType());
-				player.incrementStatistic(Statistic.USE_ITEM, item.getType());
-				McMMOHandler.handleMcMMO(event, item);
-				if (EnchantmentSolution.getPlugin().isJobsEnabled()) JobsUtils.sendBlockBreakAction(event);
-				QuestsUtils.handle(event);
-				DamageUtils.damageItem(player, item);
-				ItemUtils.dropItem(afterSmeltery, newBlock.getLocation());
-				Location loc = newBlock.getLocation().clone().add(0.5, 0.5, 0.5);
-				AbilityUtils.dropExperience(loc, experience);
-				if (ConfigString.USE_PARTICLES.getBoolean()) loc.getWorld().spawnParticle(Particle.BLOCK_CRACK, loc, 20, newBlock.getBlockData());
-				if (ConfigString.PLAY_SOUND.getBoolean()) {
-					BlockSound sound = BlockSound.getSound(newBlock.getType());
-					loc.getWorld().playSound(loc, sound.getSound(), sound.getVolume(newBlock.getType()), sound.getPitch(newBlock.getType()));
-				}
-				event.getBlock().setType(Material.AIR);
-			}
-		}
-	}
-
-	public static SmelteryEvent handleSmelteryTelepathy(Player player, Block blockBroken, ItemStack item) {
-		SmelteryMaterial smeltery = SmelteryUtils.getSmelteryItem(blockBroken, item);
-		if (smeltery != null) {
-			ItemStack smelted = smeltery.getSmelted();
-			int experience = 0;
-			boolean fortune = false;
-			MatData data = new MatData(blockBroken.getType().name());
-			if (data.hasMaterial() && (data.getMaterial() == Material.IRON_ORE || data.getMaterial() == Material.GOLD_ORE)) {
-				experience = (int) (Math.random() * 3) + 1;
-				fortune = true;
-			} else if (data.hasMaterial() && data.getMaterialName().equals("ANCIENT_DEBRIS")) {
-				experience = (int) (Math.random() * 6) + 2;
-				fortune = true;
-			} else if (data.hasMaterial() && (data.getMaterialName().equals("NETHER_GOLD_ORE") || data.getMaterialName().equals("GILDED_BLACKSTONE"))) {
-				experience = (int) (Math.random() * 2);
-				fortune = data.getMaterialName().equals("NETHER_GOLD_ORE");
-			}
-			experience = AbilityUtils.setExp(experience, ItemUtils.getLevel(item, RegisterEnchantments.EXP_SHARE));
-			return new SmelteryEvent(blockBroken, player, smelted, smeltery.getToMaterial(), experience, fortune);
-		}
-		return null;
-	}
-
-	public static SmelteryMaterial getSmelteryItem(Block block, ItemStack item) {
+	public static SmelteryMaterial getSmelteryItem(BlockData data, ItemStack from, ItemStack item) {
 		String material = null;
+		Material f = from.getType();
 		ItemBreakType type = ItemBreakType.getType(item.getType());
-		switch (block.getType().name()) {
+		switch (data.getMaterial().name()) {
 			case "ANCIENT_DEBRIS":
-				if (type != null && type.getBreakTypes().contains(block.getType())) material = "NETHERITE_SCRAP";
+				if (type != null && type.getBreakTypes().contains(data.getMaterial())) material = "NETHERITE_SCRAP";
 				break;
 			case "GILDED_BLACKSTONE":
 			case "NETHER_GOLD_ORE":
-				if (type != null && type.getBreakTypes().contains(block.getType())) material = "GOLD_NUGGET";
+				if (type != null && type.getBreakTypes().contains(data.getMaterial())) material = "GOLD_NUGGET";
 				break;
 			case "IRON_ORE":
-				if (type != null && type.getBreakTypes().contains(block.getType())) material = "IRON_INGOT";
+				if (type != null && type.getBreakTypes().contains(data.getMaterial())) material = "IRON_INGOT";
 				break;
 			case "GOLD_ORE":
-				if (type != null && type.getBreakTypes().contains(block.getType())) material = "GOLD_INGOT";
+				if (type != null && type.getBreakTypes().contains(data.getMaterial())) material = "GOLD_INGOT";
 				break;
 			case "SAND":
 				material = "GLASS";
 				break;
 			case "COBBLESTONE":
-				if (type != null && type.getBreakTypes().contains(block.getType())) material = "STONE";
+				if (type != null && type.getBreakTypes().contains(data.getMaterial())) material = "STONE";
 				break;
 			case "STONE":
-				if (type != null && type.getBreakTypes().contains(block.getType())) material = "SMOOTH_STONE";
+				if (type != null && type.getBreakTypes().contains(data.getMaterial())) {
+					f = Material.COBBLESTONE;
+					material = "SMOOTH_STONE";
+				}
 				break;
 			case "STONE_BRICKS":
-				if (type != null && type.getBreakTypes().contains(block.getType())) material = "CRACKED_STONE_BRICKS";
+				if (type != null && type.getBreakTypes().contains(data.getMaterial())) material = "CRACKED_STONE_BRICKS";
 				break;
 			case "NETHERRACK":
-				if (type != null && type.getBreakTypes().contains(block.getType())) material = "NETHER_BRICK";
+				if (type != null && type.getBreakTypes().contains(data.getMaterial())) material = "NETHER_BRICK";
 				break;
 			case "CLAY":
 				material = "TERRACOTTA";
@@ -184,8 +106,8 @@ public class SmelteryUtils {
 			case "RED_TERRACOTTA":
 			case "WHITE_TERRACOTTA":
 			case "YELLOW_TERRACOTTA":
-				if (type != null && type.getBreakTypes().contains(block.getType())) {
-					String[] terra = block.getType().name().split("_");
+				if (type != null && type.getBreakTypes().contains(data.getMaterial())) {
+					String[] terra = data.getMaterial().name().split("_");
 					String[] newTerra = new String[terra.length + 1];
 					for(int i = 0; i < terra.length - 1; i++)
 						newTerra[i] = terra[i];
@@ -195,21 +117,45 @@ public class SmelteryUtils {
 				}
 				break;
 			case "QUARTZ_BLOCK":
-				if (type != null && type.getBreakTypes().contains(block.getType())) material = "SMOOTH_QUARTZ";
+				if (type != null && type.getBreakTypes().contains(data.getMaterial())) material = "SMOOTH_QUARTZ";
 				break;
 			case "SANDSTONE":
-				if (type != null && type.getBreakTypes().contains(block.getType())) material = "SMOOTH_SANDSTONE";
+				if (type != null && type.getBreakTypes().contains(data.getMaterial())) material = "SMOOTH_SANDSTONE";
 				break;
 			case "RED_SANDSTONE":
-				if (type != null && type.getBreakTypes().contains(block.getType())) material = "SMOOTH_RED_SANDSTONE";
+				if (type != null && type.getBreakTypes().contains(data.getMaterial())) material = "SMOOTH_RED_SANDSTONE";
 				break;
 			default:
 
 		}
 		if (material != null) {
-			MatData data = new MatData(material);
-			if (data.getMaterial() != null) return new SmelteryMaterial(new ItemStack(data.getMaterial()), block.getType(), data.getMaterial());
+			MatData mat = new MatData(material);
+			if (mat.getMaterial() != null) return new SmelteryMaterial(new ItemStack(mat.getMaterial()), f, mat.getMaterial());
 		}
 		return null;
+	}
+
+	public static int getFortuneForSmeltery(ItemStack smelted, ItemStack item, Material original) {
+		if (EnchantmentUtils.hasEnchantment(item, Enchantment.LOOT_BONUS_BLOCKS)) {
+			int level = EnchantmentUtils.getLevel(item, Enchantment.LOOT_BONUS_BLOCKS);
+			switch (original.name()) {
+				case "ANCIENT_DEBRIS":
+					double extraAmount = Math.random() * (level * 0.15);
+					double rand = Math.random();
+					int amount = 1;
+					while (extraAmount >= 1) {
+						extraAmount--;
+						amount++;
+					}
+					if (extraAmount > rand) amount++;
+					return amount;
+				case "IRON_ORE":
+				case "GOLD_ORE":
+				case "NETHER_GOLD_ORE":
+					int multiply = (int) (Math.random() * (level + 2));
+					return smelted.getAmount() * multiply;
+			}
+		}
+		return smelted.getAmount();
 	}
 }

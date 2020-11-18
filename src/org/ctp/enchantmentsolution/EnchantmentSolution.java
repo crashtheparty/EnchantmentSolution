@@ -2,30 +2,43 @@ package org.ctp.enchantmentsolution;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Block;
 import org.bukkit.command.PluginCommand;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.java.JavaPlugin;
+import org.ctp.crashapi.CrashAPI;
+import org.ctp.crashapi.CrashAPIPlugin;
+import org.ctp.crashapi.config.yaml.YamlConfig;
+import org.ctp.crashapi.db.BackupDB;
+import org.ctp.crashapi.events.ArmorEquipEvent;
+import org.ctp.crashapi.events.ArmorEquipEvent.EquipMethod;
+import org.ctp.crashapi.events.ItemEquipEvent;
+import org.ctp.crashapi.events.ItemEquipEvent.HandMethod;
+import org.ctp.crashapi.inventory.InventoryData;
+import org.ctp.crashapi.item.ItemSerialization;
+import org.ctp.crashapi.item.ItemSlot;
+import org.ctp.crashapi.item.ItemSlotType;
+import org.ctp.crashapi.listeners.EquipListener;
+import org.ctp.crashapi.resources.advancements.CrashAdvancementProgress;
+import org.ctp.crashapi.utils.ChatUtils;
+import org.ctp.crashapi.version.PluginVersion;
+import org.ctp.crashapi.version.Version;
+import org.ctp.crashapi.version.Version.VersionType;
+import org.ctp.crashapi.version.VersionCheck;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
-import org.ctp.enchantmentsolution.advancements.ESAdvancementProgress;
 import org.ctp.enchantmentsolution.commands.EnchantmentSolutionCommand;
-import org.ctp.enchantmentsolution.database.SQLite;
+import org.ctp.enchantmentsolution.database.ESBackup;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
-import org.ctp.enchantmentsolution.enums.ItemSlot;
-import org.ctp.enchantmentsolution.events.ArmorEquipEvent;
-import org.ctp.enchantmentsolution.events.ArmorEquipEvent.EquipMethod;
-import org.ctp.enchantmentsolution.inventory.InventoryData;
 import org.ctp.enchantmentsolution.listeners.*;
-import org.ctp.enchantmentsolution.listeners.advancements.AdvancementEntityDeath;
-import org.ctp.enchantmentsolution.listeners.advancements.AdvancementPlayerEvent;
+import org.ctp.enchantmentsolution.listeners.advancements.AdvancementEntityListener;
+import org.ctp.enchantmentsolution.listeners.advancements.AdvancementPlayerListener;
 import org.ctp.enchantmentsolution.listeners.chestloot.ChestLootListener;
 import org.ctp.enchantmentsolution.listeners.enchantments.*;
 import org.ctp.enchantmentsolution.listeners.fishing.EnchantsFishingListener;
@@ -43,35 +56,35 @@ import org.ctp.enchantmentsolution.mcmmo.McMMOAbility;
 import org.ctp.enchantmentsolution.nms.animalmob.AnimalMob;
 import org.ctp.enchantmentsolution.rpg.listener.RPGListener;
 import org.ctp.enchantmentsolution.threads.*;
-import org.ctp.enchantmentsolution.utils.*;
+import org.ctp.enchantmentsolution.utils.AdvancementUtils;
+import org.ctp.enchantmentsolution.utils.Configurations;
+import org.ctp.enchantmentsolution.utils.MetricsUtils;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.DrownedEntity;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.EntityAccuracy;
 import org.ctp.enchantmentsolution.utils.commands.ESCommand;
 import org.ctp.enchantmentsolution.utils.compatibility.AuctionHouseUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 import org.ctp.enchantmentsolution.utils.files.SaveUtils;
-import org.ctp.enchantmentsolution.utils.items.ItemUtils;
+import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
 import org.ctp.enchantmentsolution.utils.player.ESPlayer;
-import org.ctp.enchantmentsolution.version.*;
-import org.ctp.enchantmentsolution.version.Version.VersionType;
 
 import com.leonardobishop.quests.Quests;
 
 import me.prunt.restrictedcreative.RestrictedCreativeAPI;
 
-public class EnchantmentSolution extends JavaPlugin {
+public class EnchantmentSolution extends CrashAPIPlugin {
 
 	private static EnchantmentSolution PLUGIN;
-	private static List<ESAdvancementProgress> PROGRESS = new ArrayList<ESAdvancementProgress>();
+	private static List<CrashAdvancementProgress> PROGRESS = new ArrayList<CrashAdvancementProgress>();
 	private static List<AnimalMob> ANIMALS = new ArrayList<AnimalMob>();
 	private static List<DrownedEntity> DROWNED = new ArrayList<DrownedEntity>();
 	private static List<EntityAccuracy> ACCURACY = new ArrayList<EntityAccuracy>();
 	private static List<ESPlayer> PLAYERS = new ArrayList<ESPlayer>();
+	private static Configurations CONFIGURATIONS;
 	private List<InventoryData> inventories = new ArrayList<InventoryData>();
-	private boolean initialization = true, mmoItems = false, restrictedCreative = false, quests = false;
-	private BukkitVersion bukkitVersion;
+	private boolean restrictedCreative = false, quests = false;
 	private PluginVersion pluginVersion;
-	private SQLite db;
+	private BackupDB db;
 	private Plugin jobsReborn;
 	private VersionCheck check;
 	private WikiThread wiki;
@@ -82,20 +95,23 @@ public class EnchantmentSolution extends JavaPlugin {
 	@Override
 	public void onLoad() {
 		PLUGIN = this;
-		bukkitVersion = new BukkitVersion();
 		pluginVersion = new PluginVersion(this, new Version(getDescription().getVersion(), VersionType.UNKNOWN));
 
 		if (!getDataFolder().exists()) getDataFolder().mkdirs();
 
-		db = new SQLite(this);
+		db = new ESBackup(this);
 		db.load();
 		RegisterEnchantments.addEnchantments();
-
-		Configurations.onEnable();
+		CONFIGURATIONS = Configurations.getConfigurations();
+		CONFIGURATIONS.onEnable();
 	}
 
 	@Override
 	public void onEnable() {
+		if (CrashAPI.getPlugin().getBukkitVersion().getVersionNumber() < 4) {
+			Chatable.get().sendWarning("WARNING: Minecraft 1.13 is now deprecated! Support will not be offered for any issues with enchantments or NMS.");
+			Chatable.get().sendWarning("Please use an older version of EnchantmentSolution (2.3.x) if problems persist.");
+		}
 		registerEvent(new InventoryClick());
 		registerEvent(new InventoryClose());
 		registerEvent(new PlayerInteract());
@@ -104,13 +120,12 @@ public class EnchantmentSolution extends JavaPlugin {
 
 		registerEvent(new ExtraBlockListener());
 		registerEvent(new VanishListener());
-		registerEvent(new ItemEnterInventoryListener());
 		registerEvent(new EquipListener());
 		registerEvent(new BadAttributesListener());
 		registerEvent(new GlobalPlayerListener());
 
 		registerEvent(new FishingListener());
-		registerEvent(new DropsListener());
+		registerEvent(new DeathListener());
 		registerEvent(new SoulListener());
 		registerEvent(new DamageListener());
 		registerEvent(new PlayerListener());
@@ -130,8 +145,8 @@ public class EnchantmentSolution extends JavaPlugin {
 		registerEvent(new UpdateEnchantments());
 		registerEvent(new ChestLootListener());
 
-		registerEvent(new AdvancementEntityDeath());
-		registerEvent(new AdvancementPlayerEvent());
+		registerEvent(new AdvancementEntityListener());
+		registerEvent(new AdvancementPlayerListener());
 
 		rpg = new RPGListener();
 		registerEvent(rpg);
@@ -153,7 +168,7 @@ public class EnchantmentSolution extends JavaPlugin {
 				command.setTabCompleter(c);
 				command.setAliases(s.getAliases());
 			} else
-				ChatUtils.sendWarning("Couldn't find command '" + s.getCommand() + ".'");
+				getChat().sendWarning("Couldn't find command '" + s.getCommand() + ".'");
 		}
 
 		check = new VersionCheck(pluginVersion, "https://raw.githubusercontent.com/crashtheparty/EnchantmentSolution/master/VersionHistory", "https://www.spigotmc.org/resources/enchantment-solution.59556/", "https://github.com/crashtheparty/EnchantmentSolution", ConfigString.LATEST_VERSION.getBoolean(), ConfigString.EXPERIMENTAL_VERSION.getBoolean());
@@ -165,17 +180,16 @@ public class EnchantmentSolution extends JavaPlugin {
 		registerEvent(new WikiListener());
 		wiki = new WikiThread();
 		Bukkit.getScheduler().runTaskTimerAsynchronously(PLUGIN, wiki, 20l, 20l);
-		initialization = false;
 
 		Bukkit.getScheduler().runTaskLater(this, () -> {
 			try {
 				SaveUtils.getData();
 			} catch (Exception ex) {
-				ChatUtils.sendWarning("Error in loading data to data.yml - will possibly break.");
+				getChat().sendWarning("Error in loading data to data.yml - will possibly break.");
 				ex.printStackTrace();
 			}
-			Configurations.getEnchantments().setEnchantmentInformation();
-			Configurations.getEnchantments().save();
+			CONFIGURATIONS.getEnchantments().setEnchantmentInformation();
+			CONFIGURATIONS.getEnchantments().save();
 			addCompatibility();
 		}, 1l);
 	}
@@ -197,7 +211,7 @@ public class EnchantmentSolution extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(l, this);
 	}
 
-	public SQLite getDb() {
+	public BackupDB getDb() {
 		return db;
 	}
 
@@ -205,14 +219,7 @@ public class EnchantmentSolution extends JavaPlugin {
 		return PLUGIN;
 	}
 
-	public boolean isInitializing() {
-		return initialization;
-	}
-
-	public BukkitVersion getBukkitVersion() {
-		return bukkitVersion;
-	}
-
+	@Override
 	public PluginVersion getPluginVersion() {
 		return pluginVersion;
 	}
@@ -236,36 +243,36 @@ public class EnchantmentSolution extends JavaPlugin {
 		inventories.remove(inv);
 	}
 
-	public static List<ESAdvancementProgress> getProgress() {
+	public static List<CrashAdvancementProgress> getProgress() {
 		return PROGRESS;
 	}
 
-	public static void addProgress(ESAdvancementProgress progress) {
+	public static void addProgress(CrashAdvancementProgress progress) {
 		PROGRESS.add(progress);
 	}
 
-	public static ESAdvancementProgress getAdvancementProgress(OfflinePlayer player, ESAdvancement advancement,
+	public static CrashAdvancementProgress getAdvancementProgress(OfflinePlayer player, ESAdvancement advancement,
 	String criteria) {
-		for(ESAdvancementProgress progress: EnchantmentSolution.getProgress())
+		for(CrashAdvancementProgress progress: EnchantmentSolution.getProgress())
 			if (progress.getPlayer().equals(player) && progress.getAdvancement() == advancement && progress.getCriteria().equals(criteria)) return progress;
-		ESAdvancementProgress progress = new ESAdvancementProgress(advancement, criteria, 0, player);
+		CrashAdvancementProgress progress = new CrashAdvancementProgress(advancement, criteria, 0, player);
 		EnchantmentSolution.addProgress(progress);
 		return progress;
 	}
 
-	public static List<ESAdvancementProgress> getAdvancementProgress() {
-		List<ESAdvancementProgress> progress = new ArrayList<ESAdvancementProgress>();
-		for(ESAdvancementProgress pr: PROGRESS)
+	public static List<CrashAdvancementProgress> getAdvancementProgress() {
+		List<CrashAdvancementProgress> progress = new ArrayList<CrashAdvancementProgress>();
+		for(CrashAdvancementProgress pr: PROGRESS)
 			progress.add(pr);
 		return progress;
 	}
 
-	public static void completed(ESAdvancementProgress esProgress) {
+	public static void completed(CrashAdvancementProgress esProgress) {
 		PROGRESS.remove(esProgress);
 	}
 
 	public static boolean exists(Player player, ESAdvancement advancement, String criteria) {
-		for(ESAdvancementProgress progress: PROGRESS)
+		for(CrashAdvancementProgress progress: PROGRESS)
 			if (progress.getPlayer().equals(player) && progress.getAdvancement() == advancement && progress.getCriteria().equals(criteria)) return true;
 		return false;
 	}
@@ -332,12 +339,13 @@ public class EnchantmentSolution extends JavaPlugin {
 		return wiki;
 	}
 
+	@Override
 	public void addCompatibility() {
 		if (Bukkit.getPluginManager().isPluginEnabled("mcMMO")) {
 			mcmmoVersion = Bukkit.getPluginManager().getPlugin("mcMMO").getDescription().getVersion();
-			ChatUtils.sendToConsole(Level.INFO, "mcMMO Version: " + mcmmoVersion);
+			getChat().sendInfo("mcMMO Version: " + mcmmoVersion);
 			if (mcmmoVersion.substring(0, mcmmoVersion.indexOf(".")).equals("2")) {
-				ChatUtils.sendToConsole(Level.INFO, "Using the Overhaul Version!");
+				getChat().sendInfo("Using the Overhaul Version!");
 				String[] mcVersion = mcmmoVersion.split("\\.");
 				boolean warning = false;
 				for(int i = 0; i < mcVersion.length; i++)
@@ -345,18 +353,18 @@ public class EnchantmentSolution extends JavaPlugin {
 						int num = Integer.parseInt(mcVersion[i]);
 						if (i == 0 && num > 2) warning = true;
 						else if (i == 1 && num > 1) warning = true;
-						else if (i == 2 && num > 147) warning = true;
+						else if (i == 2 && num > 156) warning = true;
 					} catch (NumberFormatException ex) {
 						warning = true;
 					}
 				if (warning) {
-					ChatUtils.sendToConsole(Level.WARNING, "McMMO Overhaul updates sporidically. Compatibility may break between versions.");
-					ChatUtils.sendToConsole(Level.WARNING, "If there are any compatibility issues, please notify the plugin author immediately.");
-					ChatUtils.sendToConsole(Level.WARNING, "Current Working Version: 2.1.147");
+					getChat().sendWarning("McMMO Overhaul updates sporidically. Compatibility may break between versions.");
+					getChat().sendWarning("If there are any compatibility issues, please notify the plugin author immediately.");
+					getChat().sendWarning("Current Working Version: 2.1.156");
 				}
 				mcmmoType = "Overhaul";
 			} else {
-				ChatUtils.sendToConsole(Level.INFO, "Using the Classic Version! Compatibility should be intact.");
+				getChat().sendWarning("Using the Classic Version! Compatibility should be intact.");
 				mcmmoType = "Classic";
 			}
 			registerEvent(new McMMOFishingListener());
@@ -369,39 +377,30 @@ public class EnchantmentSolution extends JavaPlugin {
 
 		if (Bukkit.getPluginManager().isPluginEnabled("Jobs")) {
 			jobsReborn = Bukkit.getPluginManager().getPlugin("Jobs");
-			ChatUtils.sendInfo("Jobs Reborn compatibility enabled!");
+			getChat().sendInfo("Jobs Reborn compatibility enabled!");
 		}
 
 		if (Bukkit.getPluginManager().isPluginEnabled("VeinMiner")) {
 			veinMiner = Bukkit.getPluginManager().getPlugin("VeinMiner");
-			ChatUtils.sendInfo("Vein Miner compatibility enabled!");
+			getChat().sendInfo("Vein Miner compatibility enabled!");
 			registerEvent(new VeinMinerListener());
 		}
 
 		if (Bukkit.getPluginManager().isPluginEnabled("AuctionHouse")) {
 			AuctionHouseUtils.resetAuctionHouse();
-			ChatUtils.sendInfo("Auction House compatibility enabled!");
-		}
-
-		if (Bukkit.getPluginManager().isPluginEnabled("MMOItems")) {
-			mmoItems = true;
-			ChatUtils.sendInfo("MMOItems compatibility enabled!");
+			getChat().sendInfo("Auction House compatibility enabled!");
 		}
 
 		if (Bukkit.getPluginManager().isPluginEnabled("RestrictedCreative")) {
 			restrictedCreative = true;
-			ChatUtils.sendInfo("Restricted Creative compatibility enabled!");
+			getChat().sendInfo("Restricted Creative compatibility enabled!");
 		}
 
 		if (Bukkit.getPluginManager().isPluginEnabled("Quests")) try {
 			Quests.get();
 			quests = true;
-			ChatUtils.sendInfo("Quests compatibility enabled!");
+			getChat().sendInfo("Quests compatibility enabled!");
 		} catch (Exception | Error ex) {}
-	}
-
-	public boolean getMMOItems() {
-		return mmoItems;
 	}
 
 	public static ESPlayer getESPlayer(OfflinePlayer player) {
@@ -446,16 +445,79 @@ public class EnchantmentSolution extends JavaPlugin {
 		return quests;
 	}
 
-	public void reEquipArmor() {
+	public void reEquipItems() {
 		for(Player p: Bukkit.getOnlinePlayers()) {
 			ESPlayer esPlayer = getESPlayer(p);
 			for(ItemSlot slot: esPlayer.getArmorAndType()) {
 				ItemStack item = slot.getItem();
-				if (item != null && ItemUtils.getTotalEnchantments(item) > 0) {
+				if (item != null && EnchantmentUtils.getTotalEnchantments(item) > 0) {
 					ArmorEquipEvent armorEquipEvent = new ArmorEquipEvent(p, EquipMethod.COMMAND, slot.getType(), item, item);
 					Bukkit.getServer().getPluginManager().callEvent(armorEquipEvent);
 				}
 			}
 		}
+	}
+
+	public void reEquipItems(ESPlayer player, Enchantment enchantment) {
+		if (!player.isOnline()) return;
+		ItemStack mainHand = player.getMainHand();
+		if (EnchantmentUtils.hasEnchantment(mainHand, enchantment)) {
+			ItemEquipEvent itemEquipEvent = new ItemEquipEvent(player.getOnlinePlayer(), HandMethod.COMMAND, ItemSlotType.MAIN_HAND, mainHand, mainHand);
+			Bukkit.getServer().getPluginManager().callEvent(itemEquipEvent);
+		}
+		ItemStack offHand = player.getMainHand();
+		if (EnchantmentUtils.hasEnchantment(offHand, enchantment)) {
+			ItemEquipEvent itemEquipEvent = new ItemEquipEvent(player.getOnlinePlayer(), HandMethod.COMMAND, ItemSlotType.MAIN_HAND, offHand, offHand);
+			Bukkit.getServer().getPluginManager().callEvent(itemEquipEvent);
+		}
+	}
+
+	public void reEquipArmor() {
+		for(Player p: Bukkit.getOnlinePlayers()) {
+			ESPlayer esPlayer = getESPlayer(p);
+			for(ItemSlot slot: esPlayer.getArmorAndType()) {
+				ItemStack item = slot.getItem();
+				if (item != null && EnchantmentUtils.getTotalEnchantments(item) > 0) {
+					ArmorEquipEvent armorEquipEvent = new ArmorEquipEvent(p, EquipMethod.COMMAND, slot.getType(), item, item);
+					Bukkit.getServer().getPluginManager().callEvent(armorEquipEvent);
+				}
+			}
+		}
+	}
+
+	public void reEquipArmor(ESPlayer player, Enchantment enchantment) {
+		if (!player.isOnline()) return;
+		for(ItemSlot slot: player.getArmorAndType()) {
+			ItemStack item = slot.getItem();
+			if (EnchantmentUtils.hasEnchantment(item, enchantment)) {
+				ArmorEquipEvent armorEquipEvent = new ArmorEquipEvent(player.getOnlinePlayer(), EquipMethod.COMMAND, slot.getType(), item, item);
+				Bukkit.getServer().getPluginManager().callEvent(armorEquipEvent);
+			}
+		}
+	}
+
+	@Override
+	public String getStarter() {
+		return getLanguageFile().getString("starter");
+	}
+
+	@Override
+	public ChatUtils getChat() {
+		return ChatUtils.getUtils(PLUGIN);
+	}
+
+	@Override
+	public ItemSerialization getItemSerial() {
+		return ItemSerialization.getItemSerial(PLUGIN);
+	}
+
+	@Override
+	public Configurations getConfigurations() {
+		return CONFIGURATIONS;
+	}
+
+	@Override
+	public YamlConfig getLanguageFile() {
+		return CONFIGURATIONS.getLanguage().getConfig();
 	}
 }

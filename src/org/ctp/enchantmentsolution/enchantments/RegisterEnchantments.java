@@ -2,24 +2,30 @@ package org.ctp.enchantmentsolution.enchantments;
 
 import java.lang.reflect.Field;
 import java.util.*;
-import java.util.logging.Level;
 
 import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.ctp.crashapi.config.Configuration;
+import org.ctp.crashapi.item.ItemType;
+import org.ctp.crashapi.item.VanillaItemType;
+import org.ctp.crashapi.utils.StringUtils;
+import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.api.ApiEnchantmentWrapper;
 import org.ctp.enchantmentsolution.enchantments.helper.Weight;
 import org.ctp.enchantmentsolution.enums.EnchantmentLocation;
-import org.ctp.enchantmentsolution.enums.ItemType;
-import org.ctp.enchantmentsolution.enums.VanillaItemType;
-import org.ctp.enchantmentsolution.utils.*;
-import org.ctp.enchantmentsolution.utils.config.*;
+import org.ctp.enchantmentsolution.utils.Configurations;
+import org.ctp.enchantmentsolution.utils.VersionUtils;
+import org.ctp.enchantmentsolution.utils.config.ConfigString;
+import org.ctp.enchantmentsolution.utils.config.EnchantmentsConfiguration;
+import org.ctp.enchantmentsolution.utils.config.LanguageConfiguration;
 
 public class RegisterEnchantments {
 	private static List<CustomEnchantment> ENCHANTMENTS = new ArrayList<CustomEnchantment>();
 	private static List<CustomEnchantment> REGISTERED_ENCHANTMENTS = new ArrayList<CustomEnchantment>();
 	private static List<CustomEnchantment> CURSE_ENCHANTMENTS = new ArrayList<CustomEnchantment>();
+	private static List<CustomEnchantment> DISABLED_ENCHANTMENTS = new ArrayList<CustomEnchantment>();
 
 	public static final Enchantment SOULBOUND = new CustomEnchantmentWrapper("soulbound", "SOULBOUND");
 	public static final Enchantment SOUL_REAPER = new CustomEnchantmentWrapper("soul_reaper", "SOUL_REAPER");
@@ -77,6 +83,23 @@ public class RegisterEnchantments {
 	public static final Enchantment STICKY_HOLD = new CustomEnchantmentWrapper("sticky_hold", "STICKY_HOLD");
 	public static final Enchantment FORCE_FEED = new CustomEnchantmentWrapper("force_feed", "FORCE_FEED");
 	public static final Enchantment PUSHBACK = new CustomEnchantmentWrapper("pushback", "PUSHBACK");
+	public static final Enchantment WATER_BREATHING = new CustomEnchantmentWrapper("water_breathing", "WATER_BREATHING");
+	public static final Enchantment LIFE_DRAIN = new CustomEnchantmentWrapper("life_drain", "LIFE_DRAIN");
+	public static final Enchantment CURSE_OF_INSTABILITY = new CustomEnchantmentWrapper("instability_curse", "INSTABILITY_CURSE");
+	public static final Enchantment BLINDNESS = new CustomEnchantmentWrapper("blindness", "BLINDNESS");
+	public static final Enchantment JOGGERS = new CustomEnchantmentWrapper("joggers", "JOGGERS");
+	public static final Enchantment PLYOMETRICS = new CustomEnchantmentWrapper("plyometrics", "PLYOMETRICS");
+	public static final Enchantment TRUANT = new CustomEnchantmentWrapper("truant", "TRUANT");
+	public static final Enchantment VENOM = new CustomEnchantmentWrapper("venom", "VENOM");
+	public static final Enchantment WITHERING = new CustomEnchantmentWrapper("withering", "WITHERING");
+	public static final Enchantment FROSTY = new CustomEnchantmentWrapper("frosty", "FROSTY");
+	public static final Enchantment ZEAL = new CustomEnchantmentWrapper("zeal", "ZEAL");
+	public static final Enchantment DEPTH_PLUS_PLUS = new CustomEnchantmentWrapper("depth_plus_plus", "DEPTH_PLUS_PLUS");
+	public static final Enchantment GAIA = new CustomEnchantmentWrapper("gaia", "GAIA");
+	public static final Enchantment PACIFIED = new CustomEnchantmentWrapper("pacified", "PACIFIED");
+	public static final Enchantment STREAK = new CustomEnchantmentWrapper("streak", "STREAK");
+	public static final Enchantment GREEN_THUMB = new CustomEnchantmentWrapper("green_thumb", "GREEN_THUMB");
+	public static final Enchantment[] HWD = new Enchantment[] { HEIGHT_PLUS_PLUS, WIDTH_PLUS_PLUS, DEPTH_PLUS_PLUS };
 
 	private RegisterEnchantments() {}
 
@@ -84,8 +107,16 @@ public class RegisterEnchantments {
 		return ENCHANTMENTS;
 	}
 
+	public static List<CustomEnchantment> getDisabledEnchantments() {
+		return DISABLED_ENCHANTMENTS;
+	}
+
 	public static List<CustomEnchantment> getRegisteredEnchantments() {
 		return REGISTERED_ENCHANTMENTS;
+	}
+
+	public static List<Enchantment> getHWD() {
+		return Arrays.asList(HWD);
 	}
 
 	public static List<CustomEnchantment> getRegisteredEnchantmentsAlphabetical() {
@@ -128,7 +159,7 @@ public class RegisterEnchantments {
 		String error_message = "Trouble adding the " + enchantment.getName() + (custom ? " custom" : "") + " enchantment: ";
 		String success_message = "Added the " + enchantment.getName() + (custom ? " custom" : "") + " enchantment.";
 		if (!custom || Enchantment.getByKey(enchantment.getRelativeEnchantment().getKey()) != null) {
-			ChatUtils.sendToConsole(Level.INFO, success_message);
+			Chatable.get().sendInfo(success_message);
 			return true;
 		}
 		try {
@@ -136,12 +167,12 @@ public class RegisterEnchantments {
 			f.setAccessible(true);
 			f.set(null, true);
 			Enchantment.registerEnchantment(enchantment.getRelativeEnchantment());
-			ChatUtils.sendToConsole(plugin, Level.INFO, success_message);
+			Chatable.get().sendInfo(plugin, success_message);
 			return true;
 		} catch (Exception e) {
 			REGISTERED_ENCHANTMENTS.remove(enchantment);
 
-			ChatUtils.sendToConsole(plugin, Level.WARNING, error_message);
+			Chatable.get().sendWarning(plugin, error_message);
 			e.printStackTrace();
 			return false;
 		}
@@ -153,29 +184,33 @@ public class RegisterEnchantments {
 
 	public static void setEnchantments() {
 		CURSE_ENCHANTMENTS = null;
+		DISABLED_ENCHANTMENTS = new ArrayList<CustomEnchantment>();
 		boolean levelFifty = ConfigString.LEVEL_FIFTY.getBoolean();
 		for(int i = 0; i < ENCHANTMENTS.size(); i++) {
 			CustomEnchantment enchantment = ENCHANTMENTS.get(i);
-			LanguageConfiguration language = Configurations.getLanguage();
-			EnchantmentsConfiguration config = Configurations.getEnchantments();
+			Configurations c = EnchantmentSolution.getPlugin().getConfigurations();
+			LanguageConfiguration language = c.getLanguage();
+			EnchantmentsConfiguration config = c.getEnchantments();
 			boolean advanced = ConfigString.ADVANCED_OPTIONS.getBoolean();
 
 			String namespace = "default_enchantments";
 			if (enchantment.getRelativeEnchantment() instanceof ApiEnchantmentWrapper) {
 				JavaPlugin plugin = ((ApiEnchantmentWrapper) enchantment.getRelativeEnchantment()).getPlugin();
 				if (plugin == null) {
-					ChatUtils.sendToConsole(Level.WARNING, "Enchantment " + enchantment.getName() + " (Display Name " + enchantment.getDisplayName() + ")" + " does not have a JavaPlugin set. Refusing to set.");
+					Chatable.get().sendWarning("Enchantment " + enchantment.getName() + " (Display Name " + enchantment.getDisplayName() + ")" + " does not have a JavaPlugin set. Refusing to set.");
 					continue;
 				}
-				namespace = plugin.getName().toLowerCase();
+				namespace = plugin.getName().toLowerCase(Locale.ROOT);
 			} else if (enchantment.getRelativeEnchantment() instanceof CustomEnchantmentWrapper) namespace = "custom_enchantments";
 			if (!advanced && !(enchantment.getRelativeEnchantment() instanceof CustomEnchantmentWrapper)) {
 				List<ItemType> enchantmentTypes = getTypes(config, namespace, enchantment, "enchantment_item_types");
 				List<ItemType> anvilTypes = getTypes(config, namespace, enchantment, "anvil_item_types");
 				List<EnchantmentLocation> locations = getEnchantmentLocations(config, namespace, enchantment);
 				if (registerEnchantment(enchantment)) enchantment.setEnabled(true);
-				else
+				else {
 					enchantment.setEnabled(false);
+					DISABLED_ENCHANTMENTS.add(enchantment);
+				}
 				String description = StringUtils.decodeString(language.getString("enchantment.descriptions.default_enchantments." + enchantment.getName()));
 				enchantment.setDescription(description);
 				if (levelFifty) enchantment.setLevelFifty(enchantmentTypes, anvilTypes, locations);
@@ -186,10 +221,14 @@ public class RegisterEnchantments {
 
 			if (registerEnchantment(enchantment)) {
 				if (config.getBoolean(namespace + "." + enchantment.getName() + ".enabled")) enchantment.setEnabled(true);
-				else
+				else {
 					enchantment.setEnabled(false);
-			} else
+					DISABLED_ENCHANTMENTS.add(enchantment);
+				}
+			} else {
 				enchantment.setEnabled(false);
+				DISABLED_ENCHANTMENTS.add(enchantment);
+			}
 			String displayName = StringUtils.decodeString(language.getString("enchantment.display_names." + namespace + "." + enchantment.getName()));
 			String description = StringUtils.decodeString(language.getString("enchantment.descriptions." + namespace + "." + enchantment.getName()));
 
@@ -249,7 +288,7 @@ public class RegisterEnchantments {
 		addDefaultEnchantment(CERegister.LUCK_OF_THE_SEA);
 		addDefaultEnchantment(CERegister.LURE);
 		addDefaultEnchantment(CERegister.MENDING);
-		if (VersionUtils.getBukkitVersionNumber() > 3) {
+		if (VersionUtils.getBukkitVersionNumber() > 3 || VersionUtils.getBukkitVersionNumber() == 0) {
 			addDefaultEnchantment(CERegister.MULTISHOT);
 			addDefaultEnchantment(CERegister.PIERCING);
 		}
@@ -257,7 +296,7 @@ public class RegisterEnchantments {
 		addDefaultEnchantment(CERegister.PROJECTILE_PROTECTION);
 		addDefaultEnchantment(CERegister.PROTECTION);
 		addDefaultEnchantment(CERegister.PUNCH);
-		if (VersionUtils.getBukkitVersionNumber() > 3) addDefaultEnchantment(CERegister.QUICK_CHARGE);
+		if (VersionUtils.getBukkitVersionNumber() > 3 || VersionUtils.getBukkitVersionNumber() == 0) addDefaultEnchantment(CERegister.QUICK_CHARGE);
 		addDefaultEnchantment(CERegister.RESPIRATION);
 		addDefaultEnchantment(CERegister.RIPTIDE);
 		addDefaultEnchantment(CERegister.SHARPNESS);
@@ -271,12 +310,15 @@ public class RegisterEnchantments {
 		addDefaultEnchantment(CERegister.ANGLER);
 		addDefaultEnchantment(CERegister.ARMORED);
 		addDefaultEnchantment(CERegister.BEHEADING);
+		addDefaultEnchantment(CERegister.BLINDNESS);
 		addDefaultEnchantment(CERegister.BRINE);
 		addDefaultEnchantment(CERegister.BUTCHER);
 		addDefaultEnchantment(CERegister.CURSE_OF_CONTAGION);
 		addDefaultEnchantment(CERegister.CURSE_OF_EXHAUSTION);
+		addDefaultEnchantment(CERegister.CURSE_OF_INSTABILITY);
 		addDefaultEnchantment(CERegister.CURSE_OF_LAG);
 		addDefaultEnchantment(CERegister.CURSE_OF_STAGNANCY);
+		addDefaultEnchantment(CERegister.DEPTH_PLUS_PLUS);
 		addDefaultEnchantment(CERegister.DETONATOR);
 		addDefaultEnchantment(CERegister.DROWNED);
 		addDefaultEnchantment(CERegister.EXP_SHARE);
@@ -284,7 +326,10 @@ public class RegisterEnchantments {
 		addDefaultEnchantment(CERegister.FORCE_FEED);
 		addDefaultEnchantment(CERegister.FREQUENT_FLYER);
 		addDefaultEnchantment(CERegister.FRIED);
+		addDefaultEnchantment(CERegister.FROSTY);
+		addDefaultEnchantment(CERegister.GAIA);
 		addDefaultEnchantment(CERegister.GOLD_DIGGER);
+		addDefaultEnchantment(CERegister.GREEN_THUMB);
 		addDefaultEnchantment(CERegister.GUNG_HO);
 		addDefaultEnchantment(CERegister.HARD_BOUNCE);
 		addDefaultEnchantment(CERegister.HEIGHT_PLUS_PLUS);
@@ -293,15 +338,19 @@ public class RegisterEnchantments {
 		addDefaultEnchantment(CERegister.ICARUS);
 		addDefaultEnchantment(CERegister.IRENES_LASSO);
 		addDefaultEnchantment(CERegister.IRON_DEFENSE);
+		addDefaultEnchantment(CERegister.JOGGERS);
 		addDefaultEnchantment(CERegister.KNOCKUP);
 		addDefaultEnchantment(CERegister.LIGHT_WEIGHT);
 		addDefaultEnchantment(CERegister.LIFE);
+		addDefaultEnchantment(CERegister.LIFE_DRAIN);
 		addDefaultEnchantment(CERegister.MAGIC_GUARD);
 		addDefaultEnchantment(CERegister.MAGMA_WALKER);
 		addDefaultEnchantment(CERegister.MOISTURIZE);
 		addDefaultEnchantment(CERegister.NO_REST);
 		addDefaultEnchantment(CERegister.OVERKILL);
-		if (VersionUtils.getBukkitVersionNumber() > 3) addDefaultEnchantment(CERegister.PILLAGE);
+		addDefaultEnchantment(CERegister.PACIFIED);
+		if (VersionUtils.getBukkitVersionNumber() > 3 || VersionUtils.getBukkitVersionNumber() == 0) addDefaultEnchantment(CERegister.PILLAGE);
+		addDefaultEnchantment(CERegister.PLYOMETRICS);
 		addDefaultEnchantment(CERegister.PUSHBACK);
 		addDefaultEnchantment(CERegister.QUICK_STRIKE);
 		addDefaultEnchantment(CERegister.RECYCLER);
@@ -314,16 +363,22 @@ public class RegisterEnchantments {
 		addDefaultEnchantment(CERegister.SOUL_REAPER);
 		addDefaultEnchantment(CERegister.SPLATTER_FEST);
 		addDefaultEnchantment(CERegister.STICKY_HOLD);
-		if (VersionUtils.getBukkitVersionNumber() > 3) addDefaultEnchantment(CERegister.STONE_THROW);
+		if (VersionUtils.getBukkitVersionNumber() > 3 || VersionUtils.getBukkitVersionNumber() == 0) addDefaultEnchantment(CERegister.STONE_THROW);
+		addDefaultEnchantment(CERegister.STREAK);
 		addDefaultEnchantment(CERegister.TANK);
 		addDefaultEnchantment(CERegister.TELEPATHY);
 		addDefaultEnchantment(CERegister.TOUGHNESS);
 		addDefaultEnchantment(CERegister.TRANSMUTATION);
+		addDefaultEnchantment(CERegister.TRUANT);
 		addDefaultEnchantment(CERegister.UNREST);
+		addDefaultEnchantment(CERegister.VENOM);
 		addDefaultEnchantment(CERegister.VOID_WALKER);
 		addDefaultEnchantment(CERegister.WAND);
 		addDefaultEnchantment(CERegister.WARP);
+		addDefaultEnchantment(CERegister.WATER_BREATHING);
 		addDefaultEnchantment(CERegister.WIDTH_PLUS_PLUS);
+		addDefaultEnchantment(CERegister.WITHERING);
+		addDefaultEnchantment(CERegister.ZEAL);
 	}
 
 	public static List<String> getEnchantmentNames() {
@@ -350,7 +405,7 @@ public class RegisterEnchantments {
 		List<String> enchantmentLocationsString = config.getStringList(namespace + "." + enchantment.getName() + ".enchantment_locations");
 		if (enchantmentLocationsString != null) for(String s: enchantmentLocationsString)
 			try {
-				EnchantmentLocation location = EnchantmentLocation.valueOf(s.toUpperCase());
+				EnchantmentLocation location = EnchantmentLocation.valueOf(s.toUpperCase(Locale.ROOT));
 				if (location != null) locations.add(location);
 			} catch (Exception ex) {}
 		return locations;
@@ -361,9 +416,9 @@ public class RegisterEnchantments {
 		List<ItemType> types = new ArrayList<ItemType>();
 		if (itemTypes != null) for(String s: itemTypes) {
 			ItemType type = null;
-			if (s.contains(":")) type = ItemType.getCustomType(VanillaItemType.get(s.toUpperCase()), s.toUpperCase());
+			if (s.contains(":")) type = ItemType.getCustomType(VanillaItemType.get(s.toUpperCase(Locale.ROOT)), s.toUpperCase(Locale.ROOT));
 			else
-				type = ItemType.getItemType(s.toUpperCase());
+				type = ItemType.getItemType(s.toUpperCase(Locale.ROOT));
 			if (type != null) types.add(type);
 		}
 		return types;

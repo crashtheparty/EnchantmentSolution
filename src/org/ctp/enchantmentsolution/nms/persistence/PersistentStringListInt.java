@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.bukkit.persistence.PersistentDataAdapterContext;
 import org.bukkit.persistence.PersistentDataType;
-import org.ctp.enchantmentsolution.utils.StringUtils;
+import org.ctp.crashapi.utils.StringUtils;
 
 public class PersistentStringListInt implements PersistentDataType<String, List<Integer>> {
 

@@ -10,7 +10,6 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.potion.PotionEffectType;
 
 public class ESArrays {
-
 	private static List<String> SHULKER_BOXES = Arrays.asList("BLACK_SHULKER_BOX", "BLUE_SHULKER_BOX", "BROWN_SHULKER_BOX", "CYAN_SHULKER_BOX", "GRAY_SHULKER_BOX", "GREEN_SHULKER_BOX", "LIGHT_BLUE_SHULKER_BOX", "LIME_SHULKER_BOX", "MAGENTA_SHULKER_BOX", "ORANGE_SHULKER_BOX", "PINK_SHULKER_BOX", "PURPLE_SHULKER_BOX", "RED_SHULKER_BOX", "LIGHT_GRAY_SHULKER_BOX", "WHITE_SHULKER_BOX", "YELLOW_SHULKER_BOX", "SHULKER_BOX");
 
 	private static List<String> BAD_POTIONS = Arrays.asList("BAD_OMEN", "BLINDNESS", "CONFUSION", "HARM", "HUNGER", "POISON", "SLOW", "SLOW_DIGGING", "UNLUCK", "WEAKNESS", "WITHER");
@@ -25,6 +24,10 @@ public class ESArrays {
 		return changeValues(SHULKER_BOXES, Material.class);
 	}
 
+	public static List<DamageCause> getContactCauses() {
+		return changeValues(CONTACT_CAUSES, DamageCause.class);
+	}
+
 	@SuppressWarnings({ "unchecked" })
 	private static <E> List<E> changeValues(List<String> original, Class<E> clazz) {
 		List<E> list = new ArrayList<E>();
@@ -37,9 +40,5 @@ public class ESArrays {
 				ex.printStackTrace();
 			}
 		return list;
-	}
-
-	public static List<DamageCause> getContactCauses() {
-		return changeValues(CONTACT_CAUSES, DamageCause.class);
 	}
 }

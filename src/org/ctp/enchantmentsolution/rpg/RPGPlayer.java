@@ -10,13 +10,15 @@ import org.bukkit.*;
 import org.bukkit.boss.*;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.ctp.crashapi.config.yaml.YamlConfig;
+import org.ctp.crashapi.nms.HotbarNMS;
+import org.ctp.crashapi.utils.ChatUtils;
+import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
-import org.ctp.enchantmentsolution.nms.HotbarNMS;
 import org.ctp.enchantmentsolution.rpg.threads.RPGThread;
-import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.PermissionUtils;
 
 public class RPGPlayer {
@@ -100,9 +102,9 @@ public class RPGPlayer {
 		codes.put("%level%", level);
 		codes.put("%experience%", experience.setScale(2, RoundingMode.DOWN).toPlainString());
 		codes.put("%next_experience%", nextExperience.setScale(2, RoundingMode.DOWN).toPlainString());
-		String title = ChatUtils.getMessage(codes, "rpg.top_bar.title");
+		String title = Chatable.get().getMessage(codes, "rpg.top_bar.title");
 
-		if (lastLevelUp + 3000 > System.currentTimeMillis()) title = ChatUtils.getMessage(codes, "rpg.top_bar.title_level_up");
+		if (lastLevelUp + 3000 > System.currentTimeMillis()) title = Chatable.get().getMessage(codes, "rpg.top_bar.title_level_up");
 		if (bar == null) bar = Bukkit.createBossBar(title, BarColor.GREEN, BarStyle.SOLID, new BarFlag[0]);
 		else
 			bar.setTitle(title);
@@ -127,7 +129,7 @@ public class RPGPlayer {
 		codes.put("%old_points%", oldPoints.intValue());
 		codes.put("%new_points%", newPoints.intValue());
 
-		HotbarNMS.sendHotBarMessage(player.getPlayer(), ChatUtils.getMessage(codes, "rpg.level_up_points"));
+		HotbarNMS.sendHotBarMessage(player.getPlayer(), Chatable.get().getMessage(codes, "rpg.level_up_points"));
 	}
 
 	public void removeFromBar() {
@@ -176,8 +178,8 @@ public class RPGPlayer {
 		return enchantmentList;
 	}
 
-	public boolean giveEnchantment(String s) {
-		EnchantmentLevel level = new EnchantmentLevel(s);
+	public boolean giveEnchantment(String s, YamlConfig config) {
+		EnchantmentLevel level = new EnchantmentLevel(s, config);
 		return level.getEnchant() != null && level.getLevel() > 0 && giveEnchantment(level);
 	}
 

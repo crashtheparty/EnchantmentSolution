@@ -9,8 +9,12 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
+import org.ctp.crashapi.CrashAPI;
+import org.ctp.crashapi.inventory.InventoryData;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
-import org.ctp.enchantmentsolution.inventory.*;
+import org.ctp.enchantmentsolution.inventory.Anvil;
+import org.ctp.enchantmentsolution.inventory.EnchantmentTable;
+import org.ctp.enchantmentsolution.inventory.LegacyAnvil;
 import org.ctp.enchantmentsolution.inventory.minigame.Minigame;
 import org.ctp.enchantmentsolution.nms.playerinteract.PlayerInteract_v1_14;
 import org.ctp.enchantmentsolution.utils.AnvilUtils;
@@ -25,11 +29,11 @@ public class PlayerInteract implements Listener {
 		if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
 			if (event.getHand() == EquipmentSlot.OFF_HAND) return; // off hand packet, ignore.
 			Block block = event.getClickedBlock();
-			if (block.getType() == Material.ENCHANTING_TABLE && (ConfigString.CUSTOM_TABLE.getBoolean() || ConfigString.LEVEL_FIFTY.getBoolean())) Bukkit.getScheduler().scheduleSyncDelayedTask(EnchantmentSolution.getPlugin(), () -> {
-				if (event.isCancelled()) return;
-				Player player = event.getPlayer();
-				InventoryData inv = EnchantmentSolution.getPlugin().getInventory(player);
-				if (MinigameUtils.isEnabled()) {
+			if (block.getType() == Material.ENCHANTING_TABLE && MinigameUtils.isEnabled()) {
+				Bukkit.getScheduler().scheduleSyncDelayedTask(EnchantmentSolution.getPlugin(), () -> {
+					if (event.isCancelled()) return;
+					Player player = event.getPlayer();
+					InventoryData inv = EnchantmentSolution.getPlugin().getInventory(player);
 					if (inv == null) {
 						inv = new Minigame(player, block);
 						EnchantmentSolution.getPlugin().addInventory(inv);
@@ -39,8 +43,15 @@ public class PlayerInteract implements Listener {
 						EnchantmentSolution.getPlugin().addInventory(inv);
 					}
 					inv.setInventory();
-					return;
-				}
+				}, 1l);
+
+				return;
+			}
+			Bukkit.getScheduler().scheduleSyncDelayedTask(EnchantmentSolution.getPlugin(), () -> {}, 1l);
+			if (block.getType() == Material.ENCHANTING_TABLE && (ConfigString.CUSTOM_TABLE.getBoolean() || ConfigString.LEVEL_FIFTY.getBoolean())) Bukkit.getScheduler().scheduleSyncDelayedTask(EnchantmentSolution.getPlugin(), () -> {
+				if (event.isCancelled()) return;
+				Player player = event.getPlayer();
+				InventoryData inv = EnchantmentSolution.getPlugin().getInventory(player);
 				if (inv == null) {
 					inv = new EnchantmentTable(player, block);
 					EnchantmentSolution.getPlugin().addInventory(inv);
@@ -84,7 +95,7 @@ public class PlayerInteract implements Listener {
 					inv.setInventory(null);
 				}, 1l);
 			}
-			if (EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber() > 3) PlayerInteract_v1_14.onPlayerInteract(event);
+			if (CrashAPI.getPlugin().getBukkitVersion().getVersionNumber() > 3) PlayerInteract_v1_14.onPlayerInteract(event);
 		}
 	}
 

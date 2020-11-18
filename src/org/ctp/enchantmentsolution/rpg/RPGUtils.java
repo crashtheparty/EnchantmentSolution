@@ -2,19 +2,19 @@ package org.ctp.enchantmentsolution.rpg;
 
 import java.math.*;
 import java.util.*;
-import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.ctp.crashapi.config.yaml.YamlConfig;
+import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.api.ApiEnchantmentWrapper;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantmentWrapper;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
-import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.Configurations;
 import org.ctp.enchantmentsolution.utils.PermissionUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
@@ -54,10 +54,10 @@ public class RPGUtils {
 		if (enchant.getRelativeEnchantment() instanceof ApiEnchantmentWrapper) {
 			JavaPlugin plugin = ((ApiEnchantmentWrapper) enchant.getRelativeEnchantment()).getPlugin();
 			if (plugin == null) {
-				ChatUtils.sendToConsole(Level.WARNING, "Enchantment " + enchant.getName() + " (Display Name " + enchant.getDisplayName() + ")" + " does not have a JavaPlugin set. Refusing to set config defaults.");
+				Chatable.get().sendWarning("Enchantment " + enchant.getName() + " (Display Name " + enchant.getDisplayName() + ")" + " does not have a JavaPlugin set. Refusing to set config defaults.");
 				return new BigInteger("-1");
 			}
-			namespace = plugin.getName().toLowerCase();
+			namespace = plugin.getName().toLowerCase(Locale.ROOT);
 		} else if (enchant.getRelativeEnchantment() instanceof CustomEnchantmentWrapper) namespace = "custom_enchantments";
 		int pointsLevelOne = ConfigString.RPG_ENCHANTMENT_LEVELONE.getInt(namespace + "." + enchant.getName() + ".points_level_one");
 		int pointsIncrease = ConfigString.RPG_ENCHANTMENT_INCREASE.getInt(namespace + "." + enchant.getName() + ".points_increase");
@@ -71,10 +71,10 @@ public class RPGUtils {
 
 	public static Map<Enchantment, Integer> getFreeEnchantments() {
 		Map<Enchantment, Integer> free = new HashMap<Enchantment, Integer>();
-
-		List<String> freeStrings = Configurations.getRPG().getStringList("free_enchantments");
+		YamlConfig config = Configurations.getConfigurations().getRPG().getConfig();
+		List<String> freeStrings = config.getStringList("free_enchantments");
 		for(String s: freeStrings) {
-			EnchantmentLevel level = new EnchantmentLevel(s);
+			EnchantmentLevel level = new EnchantmentLevel(s, config);
 			if (level.getEnchant() != null && level.getLevel() > 0) free.put(level.getEnchant().getRelativeEnchantment(), level.getLevel());
 		}
 		return free;
@@ -97,17 +97,17 @@ public class RPGUtils {
 	}
 
 	private static double getExperience(Player player, EnchantmentLevel enchantment) {
-		RPGConfiguration config = Configurations.getRPG();
+		RPGConfiguration config = Configurations.getConfigurations().getRPG();
 		CustomEnchantment enchant = enchantment.getEnchant();
 		String path = "enchantments.";
 		String namespace = "default_enchantments";
 		if (enchant.getRelativeEnchantment() instanceof ApiEnchantmentWrapper) {
 			JavaPlugin plugin = ((ApiEnchantmentWrapper) enchant.getRelativeEnchantment()).getPlugin();
 			if (plugin == null) {
-				ChatUtils.sendToConsole(Level.WARNING, "Enchantment " + enchant.getName() + " (Display Name " + enchant.getDisplayName() + ")" + " does not have a JavaPlugin set. Refusing to set config defaults.");
+				Chatable.get().sendWarning("Enchantment " + enchant.getName() + " (Display Name " + enchant.getDisplayName() + ")" + " does not have a JavaPlugin set. Refusing to set config defaults.");
 				return 0;
 			}
-			namespace = plugin.getName().toLowerCase();
+			namespace = plugin.getName().toLowerCase(Locale.ROOT);
 		} else if (enchant.getRelativeEnchantment() instanceof CustomEnchantmentWrapper) namespace = "custom_enchantments";
 
 		RPGPlayer p = getPlayer(player);

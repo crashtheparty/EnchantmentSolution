@@ -15,9 +15,9 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.inventory.ItemStack;
+import org.ctp.crashapi.utils.DamageUtils;
+import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
-import org.ctp.enchantmentsolution.utils.ChatUtils;
-import org.ctp.enchantmentsolution.utils.items.DamageUtils;
 
 import com.gamingmesh.jobs.Jobs;
 import com.gamingmesh.jobs.CMILib.CMIEnchantment;
@@ -243,9 +243,9 @@ public class JobsUtils {
 		try {
 			plugin = Jobs.getInstance();
 			if (plugin == null)
-				ChatUtils.sendWarning("Jobs has not been initialized properly - ES will ignore it.");
+				Chatable.get().sendWarning("Jobs has not been initialized properly - ES will ignore it.");
 		} catch (Exception ex) {
-			ChatUtils.sendWarning("Jobs is not installed on this server - something is wrong.");
+			Chatable.get().sendWarning("Jobs is not installed on this server - something is wrong.");
 		}
 		return plugin != null ? plugin.isEnabled() ? plugin : null : null;
 	}

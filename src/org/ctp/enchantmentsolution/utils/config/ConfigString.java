@@ -55,6 +55,7 @@ public enum ConfigString {
 	LAPIS_MULTIPLIER(Type.ENCHANTMENTS, "advanced_options.lapis_modifiers.multiplier", double.class),
 	MULTI_ENCHANT_DIVISOR(Type.ENCHANTMENTS, "advanced_options.multi_enchant_divisor", double.class),
 	USE_PERMISSIONS(Type.ENCHANTMENTS, "advanced_options.use_permissions", boolean.class),
+	DISCOVERY_ADVANCEMENTS(Type.ADVANCEMENTS, "discovery_advancements", boolean.class),
 	RPG_BASE(Type.RPG, "experience.base", double.class),
 	RPG_MULTIPLY(Type.RPG, "experience.multiply", double.class),
 	RPG_LEVELS_0(Type.RPG, "levels.points.level_0", double.class),
@@ -68,7 +69,10 @@ public enum ConfigString {
 	RPG_EXPERIENCE_LOCKED_LEVEL(Type.RPG, "experience.no_exp.level_locked", boolean.class),
 	MINIGAME_TYPE(Type.MINIGAME, "type", String.class),
 	MINIGAME_FAST_ENCHANTING_OVERRIDE(Type.MINIGAME, "fast.override_enchanting_cost", boolean.class),
-	MINIGAME_FAST_ENCHANTING_COST(Type.MINIGAME, "fast.enchanting_cost", int.class),
+	MINIGAME_FAST_ENCHANTING_COSTS(Type.MINIGAME, "fast.enchant_costs.use", List.class),
+	MINIGAME_FAST_ENCHANTING_LEVEL_COST(Type.MINIGAME, "fast.enchant_costs.level", int.class),
+	MINIGAME_FAST_ENCHANTING_LAPIS_COST(Type.MINIGAME, "fast.enchant_costs.lapis", int.class),
+	MINIGAME_FAST_ENCHANTING_ECONOMY_COST(Type.MINIGAME, "fast.enchant_costs.economy", double.class),
 	MINIGAME_FAST_ANVIL_OVERRIDE(Type.MINIGAME, "fast.override_anvil_cost", boolean.class),
 	MINIGAME_FAST_ANVIL_COST(Type.MINIGAME, "fast.anvil_cost", int.class),
 	MINIGAME_FAST_RANDOM_BOOKSHELVES(Type.MINIGAME, "fast.random_bookshelves", boolean.class),
@@ -131,6 +135,12 @@ public enum ConfigString {
 		return null;
 	}
 
+	public boolean listContains(String search) {
+		if (!complete && value.isAssignableFrom(List.class)) for(Object obj: type.getConfig().getStringList(location))
+			if (obj.toString() != null && search != null && obj.toString().equalsIgnoreCase(search)) return true;
+		return false;
+	}
+
 	public String getString(String addedLocation) {
 		if (complete && value.isAssignableFrom(String.class)) return type.getConfig().getString(location + addedLocation);
 		return null;
@@ -154,5 +164,11 @@ public enum ConfigString {
 	public List<String> getStringList(String addedLocation) {
 		if (complete && value.isAssignableFrom(List.class)) return type.getConfig().getStringList(location + addedLocation);
 		return null;
+	}
+
+	public boolean listContains(String search, String addedLocation) {
+		if (!complete && value.isAssignableFrom(List.class)) for(Object obj: type.getConfig().getStringList(location + addedLocation))
+			if (obj.toString() != null && search != null && obj.toString().equalsIgnoreCase(search)) return true;
+		return false;
 	}
 }

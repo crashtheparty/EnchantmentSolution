@@ -18,14 +18,14 @@ import org.ctp.enchantmentsolution.events.soul.SoulReaperEvent;
 import org.ctp.enchantmentsolution.events.soul.SoulboundEvent;
 import org.ctp.enchantmentsolution.listeners.Enchantmentable;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
-import org.ctp.enchantmentsolution.utils.items.ItemUtils;
+import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
 import org.ctp.enchantmentsolution.utils.player.ESPlayer;
 
 @SuppressWarnings("unused")
 public class SoulListener extends Enchantmentable {
 
 	@EventHandler(priority = EventPriority.HIGHEST)
-	public void onPlayerDeath(PlayerDeathEvent event) {
+	public void onDeathListener(PlayerDeathEvent event) {
 		runMethod(this, "soulbound", event, PlayerDeathEvent.class);
 	}
 
@@ -39,11 +39,12 @@ public class SoulListener extends Enchantmentable {
 		List<ItemStack> items = event.getDrops();
 		List<ItemStack> soulbound = new ArrayList<ItemStack>();
 		Player player = event.getEntity();
+		if (isDisabled(player, RegisterEnchantments.SOULBOUND)) return;
 		ESPlayer esPlayer = EnchantmentSolution.getESPlayer(player);
 		if (event.getKeepInventory()) return;
 
 		for(ItemStack item: items)
-			if (ItemUtils.hasEnchantment(item, RegisterEnchantments.SOULBOUND)) soulbound.add(item);
+			if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.SOULBOUND)) soulbound.add(item);
 		if (soulbound.size() == 0) return;
 
 		SoulboundEvent soulboundEvent = new SoulboundEvent(player, soulbound);
@@ -56,9 +57,9 @@ public class SoulListener extends Enchantmentable {
 			List<ItemStack> savedItems = new ArrayList<ItemStack>();
 			savedItems.addAll(soulboundEvent.getSavedItems());
 
-			if (killItem != null && RegisterEnchantments.isEnabled(RegisterEnchantments.SOUL_REAPER) && ItemUtils.hasEnchantment(killItem, RegisterEnchantments.SOUL_REAPER)) {
+			if (killItem != null && !isDisabled(player, RegisterEnchantments.SOUL_REAPER) && RegisterEnchantments.isEnabled(RegisterEnchantments.SOUL_REAPER) && EnchantmentUtils.hasEnchantment(killItem, RegisterEnchantments.SOUL_REAPER)) {
 				List<ItemStack> soulReaper = new ArrayList<ItemStack>();
-				int level = ItemUtils.getLevel(killItem, RegisterEnchantments.SOUL_REAPER);
+				int level = EnchantmentUtils.getLevel(killItem, RegisterEnchantments.SOUL_REAPER);
 				if (level > savedItems.size()) soulReaper.addAll(savedItems);
 				else {
 					while (soulReaper.size() < level) {
@@ -79,7 +80,7 @@ public class SoulListener extends Enchantmentable {
 							player.getWorld().spawnParticle(Particle.EXPLOSION_HUGE, player.getLocation(), 50, 0.2, 2, 0.2);
 							player.getWorld().playSound(player.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 0.6f, 0.6f);
 							for(ItemStack item: soulReaperEvent.getReapedItems())
-								if (ItemUtils.hasEnchantment(item, RegisterEnchantments.SOUL_REAPER)) AdvancementUtils.awardCriteria(player.getKiller(), ESAdvancement.REAPED_THE_REAPER, "reaper");
+								if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.SOUL_REAPER)) AdvancementUtils.awardCriteria(player.getKiller(), ESAdvancement.REAPED_THE_REAPER, "reaper");
 						}
 						for(ItemStack i: soulReaperEvent.getReapedItems())
 							savedItems.remove(i);
@@ -97,6 +98,7 @@ public class SoulListener extends Enchantmentable {
 	private void soulbound(PlayerRespawnEvent event) {
 		if (!canRun(RegisterEnchantments.SOULBOUND, event)) return;
 		Player player = event.getPlayer();
+		if (isDisabled(player, RegisterEnchantments.SOULBOUND)) return;
 		ESPlayer esPlayer = EnchantmentSolution.getESPlayer(player);
 		HashMap<Material, Boolean> diamonds = new HashMap<Material, Boolean>();
 		diamonds.put(Material.DIAMOND_AXE, false);

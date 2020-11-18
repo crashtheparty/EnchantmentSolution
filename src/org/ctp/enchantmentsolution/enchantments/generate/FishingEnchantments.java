@@ -4,11 +4,11 @@ import java.util.*;
 
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.ctp.crashapi.item.ItemData;
+import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentList;
 import org.ctp.enchantmentsolution.enums.EnchantmentLocation;
-import org.ctp.enchantmentsolution.enums.ItemData;
-import org.ctp.enchantmentsolution.utils.Configurations;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 import org.ctp.enchantmentsolution.utils.config.FishingConfiguration;
 
@@ -41,7 +41,7 @@ public class FishingEnchantments extends LootEnchantments {
 
 	public static FishingEnchantments getFishingEnchantments(Player player, ItemStack item) {
 		HashMap<String, Double> chanceMap = new HashMap<String, Double>();
-		FishingConfiguration config = Configurations.getFishing();
+		FishingConfiguration config = EnchantmentSolution.getPlugin().getConfigurations().getFishing();
 		String location = ConfigString.LEVEL_FIFTY.getBoolean() ? "Enchantments_Rarity_50" : "Enchantments_Rarity_30";
 		FishingManager manager = UserManager.getPlayer(player).getFishingManager();
 		for(String s: config.getConfig().getConfigurationInfo(location)) {
@@ -69,7 +69,7 @@ public class FishingEnchantments extends LootEnchantments {
 	}
 
 	private static double getTierChances(int tier, String type, boolean fifty) {
-		FishingConfiguration config = Configurations.getFishing();
+		FishingConfiguration config = EnchantmentSolution.getPlugin().getConfigurations().getFishing();
 		String location = "Enchantment_Drop_Rates_";
 		if (fifty) location += "50";
 		else
@@ -91,7 +91,7 @@ public class FishingEnchantments extends LootEnchantments {
 		List<EnchantmentLevel> fishing = new ArrayList<EnchantmentLevel>();
 
 		for(String str: configStrings) {
-			EnchantmentLevel level = new EnchantmentLevel(str);
+			EnchantmentLevel level = new EnchantmentLevel(str, config.getConfig());
 			if (level != null) fishing.add(level);
 		}
 

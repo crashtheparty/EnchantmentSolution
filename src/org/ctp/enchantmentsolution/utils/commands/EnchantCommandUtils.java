@@ -13,27 +13,30 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
+import org.ctp.crashapi.commands.CrashCommand;
+import org.ctp.crashapi.events.ArmorEquipEvent;
+import org.ctp.crashapi.events.ArmorEquipEvent.EquipMethod;
+import org.ctp.crashapi.events.ItemAddEvent;
+import org.ctp.crashapi.events.ItemEquipEvent;
+import org.ctp.crashapi.events.ItemEquipEvent.HandMethod;
+import org.ctp.crashapi.item.ItemData;
+import org.ctp.crashapi.item.ItemSlotType;
+import org.ctp.crashapi.utils.ChatUtils;
+import org.ctp.crashapi.utils.ItemUtils;
+import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.enums.EnchantmentLocation;
-import org.ctp.enchantmentsolution.enums.ItemData;
-import org.ctp.enchantmentsolution.enums.ItemSlotType;
-import org.ctp.enchantmentsolution.events.ArmorEquipEvent;
-import org.ctp.enchantmentsolution.events.ArmorEquipEvent.EquipMethod;
-import org.ctp.enchantmentsolution.events.ItemAddEvent;
-import org.ctp.enchantmentsolution.events.ItemEquipEvent;
-import org.ctp.enchantmentsolution.events.ItemEquipEvent.HandMethod;
-import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.GenerateUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
-import org.ctp.enchantmentsolution.utils.items.ItemUtils;
+import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 public class EnchantCommandUtils {
 
-	public static boolean enchant(CommandSender sender, ESCommand details, String[] args, boolean unsafe) {
+	public static boolean enchant(CommandSender sender, CrashCommand details, String[] args, boolean unsafe) {
 		Player player = null;
 		Player givePlayer = null;
 		if (sender instanceof Player) {
@@ -48,7 +51,7 @@ public class EnchantCommandUtils {
 					if (enchant.getName().equalsIgnoreCase(enchantmentName)) {
 						if (!enchant.isEnabled()) {
 							HashMap<String, Object> codes = ChatUtils.getCodes();
-							ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(codes, "commands.enchant-disabled"), Level.WARNING);
+							Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(codes, "commands.enchant-disabled"), Level.WARNING);
 							return true;
 						}
 						int level = 1;
@@ -57,20 +60,20 @@ public class EnchantCommandUtils {
 							if (level < 1) {
 								HashMap<String, Object> codes = ChatUtils.getCodes();
 								codes.put("%level%", level);
-								ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(codes, "commands.level-too-low"), Level.WARNING);
+								Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(codes, "commands.level-too-low"), Level.WARNING);
 								level = 1;
 							}
 						} catch (NumberFormatException ex) {
 							HashMap<String, Object> codes = ChatUtils.getCodes();
 							codes.put("%level%", args[2]);
-							ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(codes, "commands.invalid-level"), Level.WARNING);
+							Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(codes, "commands.invalid-level"), Level.WARNING);
 						}
 						if (level > enchant.getMaxLevel() && !unsafe) {
 							HashMap<String, Object> codes = ChatUtils.getCodes();
 							codes.put("%level%", level);
 							codes.put("%maxLevel%", enchant.getMaxLevel());
 							codes.put("%enchant%", enchant.getDisplayName());
-							ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(codes, "commands.level-too-high"), Level.WARNING);
+							Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(codes, "commands.level-too-high"), Level.WARNING);
 							level = enchant.getMaxLevel();
 						}
 						if (args.length > 3) {
@@ -80,18 +83,18 @@ public class EnchantCommandUtils {
 								if (givePlayer == null) {
 									HashMap<String, Object> codes = ChatUtils.getCodes();
 									codes.put("%invalid_player%", args[3]);
-									ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(codes, "commands.invalid-player"), Level.WARNING);
+									Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(codes, "commands.invalid-player"), Level.WARNING);
 									return false;
 								} else if (givePlayer != null && !givePlayer.equals(sender) && !sender.hasPermission(details.getPermission() + ".others")) {
-									ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(ChatUtils.getCodes(), "commands.no-permission-other"), Level.WARNING);
+									Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(ChatUtils.getCodes(), "commands.no-permission-other"), Level.WARNING);
 									return false;
 								}
 							}
 						}
 						if (givePlayer == null) {
 							HashMap<String, Object> codes = ChatUtils.getCodes();
-							codes.put("%player%", ChatUtils.getMessage(codes, "commands.invalid.console"));
-							ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(codes, "commands.invalid-player"), Level.WARNING);
+							codes.put("%player%", Chatable.get().getMessage(codes, "commands.invalid.console"));
+							Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(codes, "commands.invalid-player"), Level.WARNING);
 							return true;
 						}
 						int slot = givePlayer.getInventory().getHeldItemSlot();
@@ -100,45 +103,45 @@ public class EnchantCommandUtils {
 							if (slot < 0) {
 								HashMap<String, Object> codes = ChatUtils.getCodes();
 								codes.put("%slot%", slot);
-								ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(codes, "commands.slot-too-low"), Level.WARNING);
+								Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(codes, "commands.slot-too-low"), Level.WARNING);
 								slot = givePlayer.getInventory().getHeldItemSlot();
 							} else if (slot >= 45) {
 								HashMap<String, Object> codes = ChatUtils.getCodes();
 								codes.put("%slot%", slot);
-								ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(codes, "commands.slot-too-high"), Level.WARNING);
+								Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(codes, "commands.slot-too-high"), Level.WARNING);
 								slot = givePlayer.getInventory().getHeldItemSlot();
 							}
 						} catch (NumberFormatException ex) {
 							HashMap<String, Object> codes = ChatUtils.getCodes();
 							codes.put("%slot%", args[4]);
-							ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(codes, "commands.invalid-slot"), Level.WARNING);
+							Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(codes, "commands.invalid-slot"), Level.WARNING);
 							slot = givePlayer.getInventory().getHeldItemSlot();
 						}
 						ItemStack itemToEnchant = givePlayer.getInventory().getItem(slot);
 						if (itemToEnchant != null) {
 							if (!unsafe) {
 								int maxEnchants = ConfigString.MAX_ENCHANTMENTS.getInt();
-								int itemEnchants = ItemUtils.getTotalEnchantments(itemToEnchant);
+								int itemEnchants = EnchantmentUtils.getTotalEnchantments(itemToEnchant);
 								if (maxEnchants <= 0 || itemEnchants < maxEnchants && maxEnchants > 0) {
 									if (!(enchant.canAnvilItem(new ItemData(itemToEnchant)) || enchant.canEnchantItem(new ItemData(itemToEnchant)))) {
 										HashMap<String, Object> codes = ChatUtils.getCodes();
 										codes.put("%enchant%", enchant.getDisplayName());
-										ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(codes, "commands.cannot-enchant-item"), Level.WARNING);
+										Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(codes, "commands.cannot-enchant-item"), Level.WARNING);
 										return true;
 									}
 								} else {
 									HashMap<String, Object> codes = ChatUtils.getCodes();
 									codes.put("%maxEnchants%", maxEnchants);
-									ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(codes, "commands.too-many-enchants"), Level.WARNING);
+									Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(codes, "commands.too-many-enchants"), Level.WARNING);
 									return true;
 								}
 							}
 							ItemStack prevItem = itemToEnchant.clone();
 							int heldSlot = givePlayer.getInventory().getHeldItemSlot();
 							boolean useBooks = ConfigString.USE_ENCHANTED_BOOKS.getBoolean();
-							if (itemToEnchant.getType() == Material.BOOK && useBooks) itemToEnchant = ItemUtils.convertToEnchantedBook(itemToEnchant);
-							else if (itemToEnchant.getType() == Material.ENCHANTED_BOOK && !useBooks) itemToEnchant = ItemUtils.convertToRegularBook(itemToEnchant);
-							itemToEnchant = ItemUtils.addEnchantmentToItem(itemToEnchant, enchant, level);
+							if (itemToEnchant.getType() == Material.BOOK && useBooks) itemToEnchant = EnchantmentUtils.convertToEnchantedBook(itemToEnchant);
+							else if (itemToEnchant.getType() == Material.ENCHANTED_BOOK && !useBooks) itemToEnchant = EnchantmentUtils.convertToRegularBook(itemToEnchant);
+							itemToEnchant = EnchantmentUtils.addEnchantmentToItem(itemToEnchant, enchant, level);
 
 							givePlayer.getInventory().setItem(slot, itemToEnchant);
 
@@ -158,30 +161,30 @@ public class EnchantCommandUtils {
 							codes.put("%enchant%", enchant.getDisplayName());
 							if (player != null) codes.put("%player%", player.getDisplayName());
 							else
-								codes.put("%player%", ChatUtils.getMessage(codes, "commands.console-player"));
+								codes.put("%player%", Chatable.get().getMessage(codes, "commands.console-player"));
 							codes.put("%give_player%", givePlayer.getName());
-							if (givePlayer.equals(player)) ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(codes, "commands.add-enchant"), Level.INFO);
+							if (givePlayer.equals(player)) Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(codes, "commands.add-enchant"), Level.INFO);
 							else {
-								ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(codes, "commands.add-enchant-other"), Level.INFO);
-								ChatUtils.sendMessage(sender, givePlayer, ChatUtils.getMessage(codes, "commands.other-added-enchant"), Level.INFO);
+								Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(codes, "commands.add-enchant-other"), Level.INFO);
+								Chatable.get().sendMessage(sender, givePlayer, Chatable.get().getMessage(codes, "commands.other-added-enchant"), Level.INFO);
 							}
 							return true;
 						} else
-							ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(ChatUtils.getCodes(), "commands.enchant-fail"), Level.WARNING);
+							Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(ChatUtils.getCodes(), "commands.enchant-fail"), Level.WARNING);
 						return false;
 					}
 				HashMap<String, Object> codes = ChatUtils.getCodes();
 				codes.put("%enchant%", enchantmentName);
-				ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(codes, "commands.enchant-not-found"), Level.WARNING);
+				Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(codes, "commands.enchant-not-found"), Level.WARNING);
 				return true;
 			} else
-				ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(ChatUtils.getCodes(), "commands.enchant-not-specified"), Level.WARNING);
+				Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(ChatUtils.getCodes(), "commands.enchant-not-specified"), Level.WARNING);
 		} else
-			ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(ChatUtils.getCodes(), "commands.no-permission"), Level.WARNING);
+			Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(ChatUtils.getCodes(), "commands.no-permission"), Level.WARNING);
 		return false;
 	}
 
-	public static boolean removeEnchant(CommandSender sender, ESCommand details, String[] args) {
+	public static boolean removeEnchant(CommandSender sender, CrashCommand details, String[] args) {
 		Player player = null;
 		Player removePlayer = null;
 		if (sender instanceof Player) {
@@ -204,18 +207,18 @@ public class EnchantCommandUtils {
 								if (removePlayer == null) {
 									HashMap<String, Object> codes = ChatUtils.getCodes();
 									codes.put("%invalid_player%", args[2]);
-									ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(codes, "commands.invalid-player"), Level.WARNING);
+									Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(codes, "commands.invalid-player"), Level.WARNING);
 									return true;
 								} else if (removePlayer != null && !removePlayer.equals(sender) && !sender.hasPermission("enchantmentsolution.command.enchantremove.others")) {
-									ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(ChatUtils.getCodes(), "commands.no-permission-other"), Level.WARNING);
+									Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(ChatUtils.getCodes(), "commands.no-permission-other"), Level.WARNING);
 									return true;
 								}
 							}
 						}
 						if (removePlayer == null) {
 							HashMap<String, Object> codes = ChatUtils.getCodes();
-							codes.put("%player%", ChatUtils.getMessage(codes, "commands.invalid.console"));
-							ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(codes, "commands.invalid-player"), Level.WARNING);
+							codes.put("%player%", Chatable.get().getMessage(codes, "commands.invalid.console"));
+							Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(codes, "commands.invalid-player"), Level.WARNING);
 							return true;
 						}
 						int slot = removePlayer.getInventory().getHeldItemSlot();
@@ -224,18 +227,18 @@ public class EnchantCommandUtils {
 							if (slot < 0) {
 								HashMap<String, Object> codes = ChatUtils.getCodes();
 								codes.put("%slot%", slot);
-								ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(codes, "commands.slot-too-low"), Level.WARNING);
+								Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(codes, "commands.slot-too-low"), Level.WARNING);
 								slot = removePlayer.getInventory().getHeldItemSlot();
 							} else if (slot >= 45) {
 								HashMap<String, Object> codes = ChatUtils.getCodes();
 								codes.put("%slot%", slot);
-								ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(codes, "commands.slot-too-high"), Level.WARNING);
+								Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(codes, "commands.slot-too-high"), Level.WARNING);
 								slot = removePlayer.getInventory().getHeldItemSlot();
 							}
 						} catch (NumberFormatException ex) {
 							HashMap<String, Object> codes = ChatUtils.getCodes();
 							codes.put("%slot%", args[3]);
-							ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(codes, "commands.invalid-slot"), Level.WARNING);
+							Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(codes, "commands.invalid-slot"), Level.WARNING);
 							slot = removePlayer.getInventory().getHeldItemSlot();
 						}
 						ItemStack itemToEnchant = removePlayer.getInventory().getItem(slot);
@@ -243,14 +246,14 @@ public class EnchantCommandUtils {
 							ItemStack prevItem = itemToEnchant.clone();
 							int heldSlot = removePlayer.getInventory().getHeldItemSlot();
 							boolean useBooks = ConfigString.USE_ENCHANTED_BOOKS.getBoolean();
-							if (itemToEnchant.getType() == Material.BOOK && useBooks) itemToEnchant = ItemUtils.convertToEnchantedBook(itemToEnchant);
-							else if (itemToEnchant.getType() == Material.ENCHANTED_BOOK && !useBooks) itemToEnchant = ItemUtils.convertToRegularBook(itemToEnchant);
+							if (itemToEnchant.getType() == Material.BOOK && useBooks) itemToEnchant = EnchantmentUtils.convertToEnchantedBook(itemToEnchant);
+							else if (itemToEnchant.getType() == Material.ENCHANTED_BOOK && !useBooks) itemToEnchant = EnchantmentUtils.convertToRegularBook(itemToEnchant);
 							HashMap<String, Object> codes = ChatUtils.getCodes();
 							if (all) {
-								itemToEnchant = ItemUtils.removeAllEnchantments(itemToEnchant, includeCurse);
+								itemToEnchant = EnchantmentUtils.removeAllEnchantments(itemToEnchant, includeCurse);
 								codes.put("%enchant%", "All");
 							} else {
-								itemToEnchant = ItemUtils.removeEnchantmentFromItem(itemToEnchant, enchant);
+								itemToEnchant = EnchantmentUtils.removeEnchantmentFromItem(itemToEnchant, enchant);
 								codes.put("%enchant%", enchant.getDisplayName());
 							}
 							if (itemToEnchant.getType() == Material.ENCHANTED_BOOK && !((EnchantmentStorageMeta) itemToEnchant.getItemMeta()).hasStoredEnchants()) itemToEnchant.setType(Material.BOOK);
@@ -268,35 +271,35 @@ public class EnchantCommandUtils {
 							codes.put("%player%", sender.getName());
 							if (player != null) codes.put("%player%", player.getDisplayName());
 							else
-								codes.put("%player%", ChatUtils.getMessage(codes, "commands.console-player"));
+								codes.put("%player%", Chatable.get().getMessage(codes, "commands.console-player"));
 							codes.put("%slot%", slot);
 							codes.put("%remove_player%", removePlayer.getName());
-							if (removePlayer.equals(player)) ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(codes, "commands.enchant-removed"), Level.INFO);
+							if (removePlayer.equals(player)) Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(codes, "commands.enchant-removed"), Level.INFO);
 							else {
-								ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(codes, "commands.enchant-removed-other"), Level.INFO);
-								ChatUtils.sendMessage(sender, removePlayer, ChatUtils.getMessage(codes, "commands.other-removed-enchant"), Level.INFO);
+								Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(codes, "commands.enchant-removed-other"), Level.INFO);
+								Chatable.get().sendMessage(sender, removePlayer, Chatable.get().getMessage(codes, "commands.other-removed-enchant"), Level.INFO);
 							}
 						} else
-							ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(ChatUtils.getCodes(), "commands.enchant-remove-from-item"), Level.WARNING);
+							Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(ChatUtils.getCodes(), "commands.enchant-remove-from-item"), Level.WARNING);
 						return true;
 					}
 				}
 				HashMap<String, Object> codes = ChatUtils.getCodes();
 				codes.put("%enchant%", enchantmentName);
-				ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(codes, "commands.enchant-not-found"), Level.WARNING);
+				Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(codes, "commands.enchant-not-found"), Level.WARNING);
 				return true;
 			} else
-				ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(ChatUtils.getCodes(), "commands.enchant-not-specified"), Level.WARNING);
+				Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(ChatUtils.getCodes(), "commands.enchant-not-specified"), Level.WARNING);
 		} else
-			ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(ChatUtils.getCodes(), "commands.no-permission"), Level.WARNING);
+			Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(ChatUtils.getCodes(), "commands.no-permission"), Level.WARNING);
 		return false;
 	}
 
-	public static boolean book(CommandSender sender, ESCommand details, String[] args) {
+	public static boolean book(CommandSender sender, CrashCommand details, String[] args) {
 		Player player = null;
 		if (sender instanceof Player) player = (Player) sender;
 		if (!sender.hasPermission(details.getPermission())) {
-			ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(ChatUtils.getCodes(), "commands.no-permission"), Level.WARNING);
+			Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(ChatUtils.getCodes(), "commands.no-permission"), Level.WARNING);
 			return false;
 		}
 		List<EnchantmentLevel> levels = new ArrayList<EnchantmentLevel>();
@@ -309,22 +312,22 @@ public class EnchantCommandUtils {
 				if (givePlayer == null) {
 					HashMap<String, Object> codes = ChatUtils.getCodes();
 					codes.put("%player%", arg);
-					ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(codes, "commands.invalid-player"), Level.WARNING);
+					Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(codes, "commands.invalid-player"), Level.WARNING);
 					return true;
 				} else if (givePlayer != null && !givePlayer.equals(player) && !sender.hasPermission("enchantmentsolution.command.book.others")) {
-					ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(ChatUtils.getCodes(), "commands.no-permission-other"), Level.WARNING);
+					Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(ChatUtils.getCodes(), "commands.no-permission-other"), Level.WARNING);
 					return true;
 				}
 			} else if (player == null) {
 				HashMap<String, Object> codes = ChatUtils.getCodes();
-				codes.put("%player%", ChatUtils.getMessage(codes, "commands.invalid.console"));
-				ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(codes, "commands.invalid-player"), Level.WARNING);
+				codes.put("%player%", Chatable.get().getMessage(codes, "commands.invalid.console"));
+				Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(codes, "commands.invalid-player"), Level.WARNING);
 				return false;
 			}
 		} else {
 			HashMap<String, Object> codes = ChatUtils.getCodes();
-			codes.put("%player%", ChatUtils.getMessage(codes, "commands.invalid.null-player"));
-			ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(codes, "commands.invalid-player"), Level.WARNING);
+			codes.put("%player%", Chatable.get().getMessage(codes, "commands.invalid.null-player"));
+			Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(codes, "commands.invalid-player"), Level.WARNING);
 			return false;
 		}
 
@@ -341,7 +344,7 @@ public class EnchantCommandUtils {
 					if (enchant.getName().equalsIgnoreCase(args[2])) {
 						if (!enchant.isEnabled()) {
 							HashMap<String, Object> codes = ChatUtils.getCodes();
-							ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(codes, "commands.enchant-disabled"), Level.WARNING);
+							Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(codes, "commands.enchant-disabled"), Level.WARNING);
 							return true;
 						}
 						int level = 1;
@@ -350,20 +353,20 @@ public class EnchantCommandUtils {
 							if (level < 1) {
 								HashMap<String, Object> codes = ChatUtils.getCodes();
 								codes.put("%level%", level);
-								ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(codes, "commands.level-too-low"), Level.WARNING);
+								Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(codes, "commands.level-too-low"), Level.WARNING);
 								level = 1;
 							}
 						} catch (NumberFormatException ex) {
 							HashMap<String, Object> codes = ChatUtils.getCodes();
 							codes.put("%level%", args[3]);
-							ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(codes, "commands.invalid-level"), Level.WARNING);
+							Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(codes, "commands.invalid-level"), Level.WARNING);
 						}
 						if (level > enchant.getMaxLevel()) {
 							HashMap<String, Object> codes = ChatUtils.getCodes();
 							codes.put("%level%", level);
 							codes.put("%maxLevel%", enchant.getMaxLevel());
 							codes.put("%enchant%", enchant.getDisplayName());
-							ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(codes, "commands.level-too-high"), Level.WARNING);
+							Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(codes, "commands.level-too-high"), Level.WARNING);
 							level = enchant.getMaxLevel();
 						}
 						levels.add(new EnchantmentLevel(enchant, level));
@@ -372,11 +375,11 @@ public class EnchantCommandUtils {
 			if (levels.size() == 0) {
 				HashMap<String, Object> codes = ChatUtils.getCodes();
 				codes.put("%enchant%", arg);
-				ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(codes, "commands.enchant-not-found"), Level.WARNING);
+				Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(codes, "commands.enchant-not-found"), Level.WARNING);
 				return true;
 			}
 		} else {
-			ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(ChatUtils.getCodes(), "commands.enchant-not-specified"), Level.WARNING);
+			Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(ChatUtils.getCodes(), "commands.enchant-not-specified"), Level.WARNING);
 			return false;
 		}
 
@@ -386,13 +389,13 @@ public class EnchantCommandUtils {
 		} catch (NumberFormatException ex) {
 			HashMap<String, Object> codes = ChatUtils.getCodes();
 			codes.put("%amount%", args[4]);
-			ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(codes, "commands.invalid-amount"), Level.WARNING);
+			Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(codes, "commands.invalid-amount"), Level.WARNING);
 		}
 
 		boolean useBooks = ConfigString.USE_ENCHANTED_BOOKS.getBoolean();
 		ItemStack book = new ItemStack(Material.BOOK);
 		if (useBooks) book = new ItemStack(Material.ENCHANTED_BOOK);
-		book = ItemUtils.addEnchantmentsToItem(book, levels);
+		book = EnchantmentUtils.addEnchantmentsToItem(book, levels);
 
 		for(int i = 0; i < amount; i++)
 			ItemUtils.giveItemToPlayer(givePlayer, book, givePlayer.getLocation(), false);
@@ -400,32 +403,32 @@ public class EnchantCommandUtils {
 		HashMap<String, Object> codes = ChatUtils.getCodes();
 		if (player != null) codes.put("%player%", player.getDisplayName());
 		else
-			codes.put("%player%", ChatUtils.getMessage(codes, "commands.console-player"));
+			codes.put("%player%", Chatable.get().getMessage(codes, "commands.console-player"));
 		codes.put("%give_player%", givePlayer.getDisplayName());
 
 		if (amount == 1) {
-			if (sender.equals(givePlayer)) ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(codes, "commands.give-book"), Level.INFO);
+			if (sender.equals(givePlayer)) Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(codes, "commands.give-book"), Level.INFO);
 			else {
-				ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(codes, "commands.give-book-other"), Level.INFO);
-				ChatUtils.sendMessage(sender, givePlayer, ChatUtils.getMessage(codes, "commands.receive-book"), Level.INFO);
+				Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(codes, "commands.give-book-other"), Level.INFO);
+				Chatable.get().sendMessage(sender, givePlayer, Chatable.get().getMessage(codes, "commands.receive-book"), Level.INFO);
 			}
 			return true;
 		} else {
 			codes.put("%amount%", amount);
-			if (sender.equals(givePlayer)) ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(codes, "commands.give-book-multiple"), Level.INFO);
+			if (sender.equals(givePlayer)) Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(codes, "commands.give-book-multiple"), Level.INFO);
 			else {
-				ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(codes, "commands.give-book-other-multiple"), Level.INFO);
-				ChatUtils.sendMessage(sender, givePlayer, ChatUtils.getMessage(codes, "commands.receive-book-multiple"), Level.INFO);
+				Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(codes, "commands.give-book-other-multiple"), Level.INFO);
+				Chatable.get().sendMessage(sender, givePlayer, Chatable.get().getMessage(codes, "commands.receive-book-multiple"), Level.INFO);
 			}
 			return true;
 		}
 	}
 
-	public static boolean enchantInfo(CommandSender sender, ESCommand details, String[] args) {
+	public static boolean enchantInfo(CommandSender sender, CrashCommand details, String[] args) {
 		Player player = null;
 		if (sender instanceof Player) player = (Player) sender;
 		if (!sender.hasPermission(details.getPermission())) {
-			ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(ChatUtils.getCodes(), "commands.no-permission"), Level.WARNING);
+			Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(ChatUtils.getCodes(), "commands.no-permission"), Level.WARNING);
 			return true;
 		}
 		if (args.length == 1) sendEnchantInfo(sender, 1);
@@ -446,10 +449,10 @@ public class EnchantCommandUtils {
 			if (enchantment == null) {
 				HashMap<String, Object> codes = ChatUtils.getCodes();
 				codes.put("%enchant%", args[1]);
-				ChatUtils.sendMessage(sender, player, ChatUtils.getMessage(codes, "commands.enchant-not-found"), Level.WARNING);
+				Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(codes, "commands.enchant-not-found"), Level.WARNING);
 			} else {
 				String page = enchantment.getDetails();
-				ChatUtils.sendMessage(sender, player, page, Level.INFO);
+				Chatable.get().sendMessage(sender, player, page, Level.INFO);
 			}
 		}
 		return true;
@@ -516,7 +519,7 @@ public class EnchantCommandUtils {
 			json.add(third);
 			json.add(fourth);
 			json.add(fifth);
-			ChatUtils.sendRawMessage(player, json.toJSONString());
+			Chatable.get().sendRawMessage(player, json.toJSONString());
 		} else {
 			String message = "\n" + ChatColor.DARK_BLUE + "******" + (page > 1 ? "<<<" : "***") + "******" + ChatColor.AQUA + " Enchantments Page " + page + ChatColor.DARK_BLUE + " ******" + (alphabetical.size() < (page - 1) * 10 ? ">>>" : "***") + "******" + "\n";
 			for(int i = 0; i < 10; i++) {
@@ -526,7 +529,7 @@ public class EnchantCommandUtils {
 				message += shrink(ChatColor.GOLD + enchant.getDisplayName() + ": " + ChatColor.WHITE + enchant.getDescription()) + "\n";
 			}
 			message += "\n" + ChatColor.DARK_BLUE + "******" + (page > 1 ? "<<<" : "***") + "******" + ChatColor.AQUA + " Enchantments Page " + page + ChatColor.DARK_BLUE + " ******" + (alphabetical.size() < (page - 1) * 10 ? ">>>" : "***") + "******" + "\n";
-			ChatUtils.sendToConsole(Level.INFO, message);
+			Chatable.get().sendToConsole(Level.INFO, message);
 		}
 	}
 

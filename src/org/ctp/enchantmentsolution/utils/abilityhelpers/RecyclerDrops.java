@@ -1,7 +1,7 @@
 package org.ctp.enchantmentsolution.utils.abilityhelpers;
 
 import org.bukkit.Material;
-import org.ctp.enchantmentsolution.enums.MatData;
+import org.ctp.crashapi.item.MatData;
 
 public enum RecyclerDrops {
 	LEATHER(0, 2), BEEF(-1, 1), COOKED_BEEF(0, 2), STRING(0, 1), FEATHER(0, 1), CHICKEN(-1, 1), COOKED_CHICKEN(0, 2), COD(-2, 1),

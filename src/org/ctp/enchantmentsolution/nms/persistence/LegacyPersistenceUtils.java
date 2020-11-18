@@ -10,16 +10,15 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.ctp.enchantmentsolution.EnchantmentSolution;
+import org.ctp.crashapi.item.MatData;
+import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.enchantments.CERegister;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
-import org.ctp.enchantmentsolution.enums.MatData;
 import org.ctp.enchantmentsolution.nms.PersistenceNMS;
-import org.ctp.enchantmentsolution.utils.ChatUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
-import org.ctp.enchantmentsolution.utils.items.ItemUtils;
+import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
 
 public class LegacyPersistenceUtils {
 
@@ -67,7 +66,7 @@ public class LegacyPersistenceUtils {
 	}
 
 	public static String stickyHoldItemType(ItemStack item) {
-		return ChatColor.ITALIC + "" + ChatColor.ITALIC + ChatUtils.hideText(item.getType().name()) + ChatColor.RESET + ChatColor.GRAY + item.getItemMeta().getDisplayName();
+		return ChatColor.ITALIC + "" + ChatColor.ITALIC + Chatable.get().hideText(item.getType().name()) + ChatColor.RESET + ChatColor.GRAY + item.getItemMeta().getDisplayName();
 	}
 
 	public static ItemStack stickyHoldItem(ItemMeta itemMeta) {
@@ -82,7 +81,7 @@ public class LegacyPersistenceUtils {
 	public static ItemStack stickyHoldItem(String s, ItemMeta meta) {
 		if (s.startsWith(ChatColor.ITALIC + "" + ChatColor.ITALIC)) {
 			s = s.replaceAll(ChatColor.ITALIC + "", "");
-			MatData itemType = new MatData(ChatUtils.revealText(s.substring(0, s.indexOf(ChatColor.RESET + ""))));
+			MatData itemType = new MatData(Chatable.get().revealText(s.substring(0, s.indexOf(ChatColor.RESET + ""))));
 			if (itemType.hasMaterial()) {
 				ItemStack item = new ItemStack(itemType.getMaterial());
 				item.setItemMeta(meta);
@@ -100,7 +99,7 @@ public class LegacyPersistenceUtils {
 		if (s.indexOf(ChatColor.UNDERLINE + "" + ChatColor.UNDERLINE) == 0) {
 			s = s.replaceAll(ChatColor.UNDERLINE + "", "");
 			String enchHidden = s.substring(0, s.indexOf(ChatColor.RESET + ""));
-			String enchName = ChatUtils.revealText(enchHidden);
+			String enchName = Chatable.get().revealText(enchHidden);
 			CustomEnchantment enchant = RegisterEnchantments.getByName(enchName);
 			s = s.substring(s.indexOf(ChatColor.RESET + "") + 2);
 			int level = 0;
@@ -108,7 +107,7 @@ public class LegacyPersistenceUtils {
 			else {
 				String levelHidden = s.substring(0, s.indexOf(ChatColor.RESET + ""));
 				try {
-					level = Integer.parseInt(ChatUtils.revealText(levelHidden));
+					level = Integer.parseInt(Chatable.get().revealText(levelHidden));
 				} catch (NumberFormatException ex) {
 
 				}
@@ -125,7 +124,7 @@ public class LegacyPersistenceUtils {
 
 	public static ItemStack createStickyHold(ItemStack stickyItem) {
 		ItemStack item = stickyItem.clone();
-		List<EnchantmentLevel> levels = ItemUtils.getEnchantmentLevels(item);
+		List<EnchantmentLevel> levels = EnchantmentUtils.getEnchantmentLevels(item);
 		String itemLore = stickyHoldItemType(item);
 		ItemMeta meta = item.getItemMeta();
 		ItemStack stickItem = new ItemStack(Material.STICK);
@@ -177,14 +176,14 @@ public class LegacyPersistenceUtils {
 	}
 
 	public static boolean isRetroEnchantment(String s) {
-		if (s.startsWith(ChatUtils.hideText("legacy") + "" + ChatColor.GRAY + "" + ChatColor.BLUE)) return false;
-		if (s.startsWith(ChatUtils.hideText("legacy") + "" + ChatColor.GRAY)) return true;
+		if (s.startsWith(Chatable.get().hideText("legacy") + "" + ChatColor.GRAY + "" + ChatColor.BLUE)) return false;
+		if (s.startsWith(Chatable.get().hideText("legacy") + "" + ChatColor.GRAY)) return true;
 		return false;
 	}
 
 	public static boolean isLegacyEnchantment(String s) {
-		if (s.startsWith(ChatUtils.hideText("solution") + "" + ChatColor.GRAY + "" + ChatColor.BLUE)) return false;
-		if (s.startsWith(ChatUtils.hideText("solution") + "" + ChatColor.GRAY)) return true;
+		if (s.startsWith(Chatable.get().hideText("solution") + "" + ChatColor.GRAY + "" + ChatColor.BLUE)) return false;
+		if (s.startsWith(Chatable.get().hideText("solution") + "" + ChatColor.GRAY)) return true;
 		s = ChatColor.stripColor(s);
 		String[] pieces = s.split(" ");
 		if (pieces.length == 0) return false;
@@ -219,7 +218,7 @@ public class LegacyPersistenceUtils {
 		if (s.indexOf(ChatColor.RESET + "") > -1) {
 			String name = s.substring(0, s.indexOf(ChatColor.RESET + ""));
 			if (ChatColor.stripColor(name).equals("")) {
-				String enchName = ChatUtils.revealText(name);
+				String enchName = Chatable.get().revealText(name);
 				if (RegisterEnchantments.getByName(enchName) != null) return true;
 			}
 		}
@@ -227,7 +226,7 @@ public class LegacyPersistenceUtils {
 	}
 
 	public static String getEnchantmentString(EnchantmentLevel enchantment) {
-		return ChatUtils.hideText(enchantment.getEnchant().getName()) + ChatColor.RESET + ChatUtils.hideText(enchantment.getLevel() + "") + ChatColor.RESET + ChatColor.GRAY + returnEnchantmentName(enchantment.getEnchant(), enchantment.getLevel());
+		return Chatable.get().hideText(enchantment.getEnchant().getName()) + ChatColor.RESET + Chatable.get().hideText(enchantment.getLevel() + "") + ChatColor.RESET + ChatColor.GRAY + returnEnchantmentName(enchantment.getEnchant(), enchantment.getLevel());
 	}
 
 	public static EnchantmentLevel getEnchantment(String s) {
@@ -237,7 +236,7 @@ public class LegacyPersistenceUtils {
 			CustomEnchantment enchant = null;
 			try {
 				String enchHidden = s.substring(0, s.indexOf(ChatColor.RESET + ""));
-				String enchName = ChatUtils.revealText(enchHidden);
+				String enchName = Chatable.get().revealText(enchHidden);
 				enchant = RegisterEnchantments.getByName(enchName);
 				s = s.substring(s.indexOf(ChatColor.RESET + "") + 2);
 				level = 0;
@@ -245,7 +244,7 @@ public class LegacyPersistenceUtils {
 				else {
 					String levelHidden = s.substring(0, s.indexOf(ChatColor.RESET + ""));
 					try {
-						level = Integer.parseInt(ChatUtils.revealText(levelHidden));
+						level = Integer.parseInt(Chatable.get().revealText(levelHidden));
 					} catch (NumberFormatException ex) {
 
 					}
@@ -261,7 +260,7 @@ public class LegacyPersistenceUtils {
 		ItemMeta meta = item.getItemMeta();
 		List<String> lore = meta.getLore();
 		if (lore == null) lore = new ArrayList<String>();
-		lore.add(ChatUtils.hideText("solution") + "" + ChatColor.GRAY + "" + ChatColor.BLUE + "Entity ID: " + entityID);
+		lore.add(Chatable.get().hideText("solution") + "" + ChatColor.GRAY + "" + ChatColor.BLUE + "Entity ID: " + entityID);
 		meta.setLore(lore);
 		item.setItemMeta(meta);
 	}
@@ -272,7 +271,7 @@ public class LegacyPersistenceUtils {
 		List<Integer> ids = new ArrayList<Integer>();
 		if (lore == null) lore = new ArrayList<String>();
 		for(String l: lore)
-			if (l.startsWith(ChatUtils.hideText("solution") + "" + ChatColor.GRAY + "" + ChatColor.BLUE)) try {
+			if (l.startsWith(Chatable.get().hideText("solution") + "" + ChatColor.GRAY + "" + ChatColor.BLUE)) try {
 				ids.add(Integer.parseInt(l.substring(l.indexOf("Entity ID: ") + "Entity ID: ".length())));
 			} catch (Exception ex) {}
 		return ids;
@@ -282,8 +281,8 @@ public class LegacyPersistenceUtils {
 		ItemMeta meta = item.getItemMeta();
 		List<String> lore = meta.getLore();
 		if (lore == null) lore = new ArrayList<String>();
-		while (lore.contains(ChatUtils.hideText("solution") + "" + ChatColor.GRAY + "" + ChatColor.BLUE + "Entity ID: " + entityID))
-			lore.remove(ChatUtils.hideText("solution") + "" + ChatColor.GRAY + "" + ChatColor.BLUE + "Entity ID: " + entityID);
+		while (lore.contains(Chatable.get().hideText("solution") + "" + ChatColor.GRAY + "" + ChatColor.BLUE + "Entity ID: " + entityID))
+			lore.remove(Chatable.get().hideText("solution") + "" + ChatColor.GRAY + "" + ChatColor.BLUE + "Entity ID: " + entityID);
 		meta.setLore(lore);
 		item.setItemMeta(meta);
 	}
@@ -335,9 +334,8 @@ public class LegacyPersistenceUtils {
 		return meta;
 	}
 
-	public static ItemStack checkItem(ItemStack item, ItemStack previous) {
+	public static ItemStack checkItem(ItemStack item) {
 		if (item != null) {
-			if (EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber() > 11) return item.clone();
 			List<EnchantmentLevel> enchantMeta = getEnchantments(item);
 			List<EnchantmentLevel> enchantLore = new ArrayList<EnchantmentLevel>();
 			if (item.hasItemMeta() && item.getItemMeta().hasLore()) for(String s: item.getItemMeta().getLore())
@@ -365,12 +363,12 @@ public class LegacyPersistenceUtils {
 					while (iter.hasNext()) {
 						Entry<Enchantment, Integer> entry = iter.next();
 						CustomEnchantment custom = RegisterEnchantments.getCustomEnchantment(entry.getKey());
-						ItemUtils.removeEnchantmentFromItem(item, custom);
-						ItemUtils.addEnchantmentToItem(item, custom, entry.getValue());
+						EnchantmentUtils.removeEnchantmentFromItem(item, custom);
+						EnchantmentUtils.addEnchantmentToItem(item, custom, entry.getValue());
 					}
 				}
 			}
-			return item.clone();
+			return item;
 		}
 		return null;
 	}

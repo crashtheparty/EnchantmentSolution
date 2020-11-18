@@ -1,18 +1,25 @@
 package org.ctp.enchantmentsolution.utils;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.advancement.AdvancementProgress;
 import org.bukkit.entity.Player;
+import org.ctp.crashapi.CrashAPI;
+import org.ctp.crashapi.resources.advancements.*;
+import org.ctp.crashapi.utils.ChatUtils;
+import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.*;
+import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
+import org.ctp.enchantmentsolution.utils.config.ConfigString;
 import org.ctp.enchantmentsolution.utils.config.ConfigUtils;
 
 public class AdvancementUtils {
 
 	public static void createAdvancements() {
-		int version = EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber();
+		int version = CrashAPI.getPlugin().getBukkitVersion().getVersionNumber();
 		boolean reload = false;
 
 		for(ESAdvancementTab tab: ESAdvancementTab.getAllTabs()) {
@@ -42,10 +49,10 @@ public class AdvancementUtils {
 						last = last.getParent();
 					}
 					if (parent != null && ConfigUtils.isAdvancementActive(namespace) && advancement.getActivatedVersion() < version) {
-						List<ESTrigger> triggers = advancement.getTriggers();
+						List<CrashTrigger> triggers = advancement.getTriggers();
 						adv = factory.getSimple(namespace, parent, ConfigUtils.getAdvancementName(namespace), ConfigUtils.getAdvancementDescription(namespace), advancement.getIcon(), triggers.get(0).getCriteria(), triggers.get(0).getTrigger());
 						for(int i = 1; i < triggers.size(); i++) {
-							ESTrigger trigger = triggers.get(i);
+							CrashTrigger trigger = triggers.get(i);
 							if (version >= trigger.getVersionMinimum() && (trigger.getVersionMaximum() == 0 || version <= trigger.getVersionMaximum())) adv.addTrigger(trigger.getCriteria(), trigger.getTrigger());
 						}
 						adv.setAnnounce(announce);
@@ -63,11 +70,51 @@ public class AdvancementUtils {
 				if (adv != null) tab.register(advancement, adv);
 			}
 		}
-		if (reload) {
-			ChatUtils.sendInfo("Reloading recipes and advancements...");
-			Bukkit.reloadData();
-			ChatUtils.sendInfo("Reloaded!");
+		ESDiscoveryAdvancementTab discoveryTab = ESDiscoveryAdvancementTab.getTab();
+		AdvancementFactory factory = discoveryTab.getFactory();
+		Advancement discoveryRoot = ESDiscoveryAdvancementTab.createRoot(factory);
+		if (ConfigString.DISCOVERY_ADVANCEMENTS.getBoolean() && discoveryRoot.activate(false).isChanged()) reload = true;
+		else if (!ConfigString.DISCOVERY_ADVANCEMENTS.getBoolean() && Advancement.deactivate(false, EnchantmentSolution.getKey("discovery/root")).isChanged()) reload = true;
+		int i = 0;
+		Advancement last = null;
+		for(ESDiscoveryAdvancement advancement: discoveryTab.getAdvancements()) {
+			String namespace = advancement.getNamespace().getKey();
+			List<CrashTrigger> triggers = advancement.getTriggers();
+			ChatUtils utils = Chatable.get();
+			HashMap<String, Object> codes = ChatUtils.getCodes();
+			codes.put("%enchantment%", advancement.getEnchantment().getDisplayName());
+			Advancement adv = factory.getSimple(namespace, i == 0 ? discoveryRoot : last, utils.getMessage(codes, "advancements.discovery.enchantments"), advancement.getEnchantment().getAdvancementDescription(), advancement.getIcon(), triggers.get(0).getCriteria(), triggers.get(0).getTrigger());
+			adv.setAnnounce(false);
+			adv.setToast(true);
+			adv.setHidden(true);
+			if (ConfigString.DISCOVERY_ADVANCEMENTS.getBoolean()) {
+				advancement.setEnabled(advancement.getEnchantment().isEnabled());
+				if (adv.activate(false).isChanged()) reload = true;
+			} else {
+				advancement.setEnabled(false);
+				if (Advancement.deactivate(false, adv.getId()).isChanged()) reload = true;
+			}
+			i = (i + 1) % 8;
+			last = adv;
 		}
+
+		if (reload) {
+			Chatable.get().sendInfo("Reloading recipes and advancements...");
+			Bukkit.reloadData();
+			Chatable.get().sendInfo("Reloaded!");
+		}
+	}
+
+	public static boolean awardCriteria(Player player, CustomEnchantment enchantment) {
+		ESDiscoveryAdvancement advancement = ESDiscoveryAdvancementTab.getTab().getAdvancement(enchantment);
+		if (advancement != null && advancement.isEnabled()) {
+			AdvancementProgress progress = player.getAdvancementProgress(Bukkit.getAdvancement(advancement.getNamespace()));
+			if (progress.getRemainingCriteria().contains("discovery")) {
+				progress.awardCriteria("discovery");
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public static boolean awardCriteria(Player player, ESAdvancement advancement, String criteria) {
@@ -85,10 +132,10 @@ public class AdvancementUtils {
 		if (advancement.isEnabled()) {
 			AdvancementProgress progress = player.getAdvancementProgress(Bukkit.getAdvancement(advancement.getNamespace()));
 			if (progress.getRemainingCriteria().contains(criteria)) {
-				ESAdvancementProgress esProgress = EnchantmentSolution.getAdvancementProgress(player, advancement, criteria);
+				CrashAdvancementProgress esProgress = EnchantmentSolution.getAdvancementProgress(player, advancement, criteria);
 				esProgress.setCurrentAmount(esProgress.getCurrentAmount() + amount);
-				ESTrigger trigger = null;
-				for(ESTrigger t: advancement.getTriggers())
+				CrashTrigger trigger = null;
+				for(CrashTrigger t: advancement.getTriggers())
 					if (t.getCriteria().equals(criteria)) {
 						trigger = t;
 						break;

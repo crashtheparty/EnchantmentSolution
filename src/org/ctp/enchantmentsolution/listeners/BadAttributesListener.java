@@ -13,7 +13,7 @@ import org.ctp.enchantmentsolution.enchantments.Attributable;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.ItemEquippedSlot;
-import org.ctp.enchantmentsolution.utils.items.ItemUtils;
+import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
 
 public class BadAttributesListener implements Listener {
 
@@ -66,7 +66,7 @@ public class BadAttributesListener implements Listener {
 				check = player.getInventory().getItemInOffHand();
 				break;
 		}
-		if (check != null && ItemUtils.hasEnchantment(check, a.getEnchantment())) return;
+		if (EnchantmentUtils.hasEnchantment(check, a.getEnchantment())) return;
 		Attributable.removeAttribute(player, new EnchantmentLevel(RegisterEnchantments.getCustomEnchantment(a.getEnchantment()), 0), a, type, legacy);
 	}
 }

@@ -6,13 +6,13 @@ import java.util.List;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
+import org.ctp.crashapi.config.yaml.YamlConfig;
+import org.ctp.crashapi.item.ItemData;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enums.EnchantmentLocation;
-import org.ctp.enchantmentsolution.enums.ItemData;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 import org.ctp.enchantmentsolution.utils.config.ConfigUtils;
-import org.ctp.enchantmentsolution.utils.yaml.YamlConfig;
 
 public class EnchantmentList {
 
@@ -185,7 +185,7 @@ public class EnchantmentList {
 		List<String> enchants = config.getStringList("enchanting_table." + i + ".enchantmentList." + j + "." + k + ".enchants");
 		List<EnchantmentLevel> levels = new ArrayList<EnchantmentLevel>();
 		if (enchants != null) for(String enchant: enchants)
-			levels.add(new EnchantmentLevel(enchant));
+			levels.add(new EnchantmentLevel(enchant, config));
 		int enchantability = config.getInt("enchanting_table." + i + ".enchantmentList." + j + "." + k + ".enchantability");
 
 		return new EnchantmentList(player, level, item, EnchantmentLocation.TABLE, enchantability, levels);

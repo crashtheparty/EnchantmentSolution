@@ -1,5 +1,6 @@
 package org.ctp.enchantmentsolution.utils.config;
 
+import org.ctp.crashapi.config.Configuration;
 import org.ctp.enchantmentsolution.utils.Configurations;
 
 public enum Type {
@@ -8,25 +9,26 @@ public enum Type {
 	Type() {}
 
 	public Configuration getConfig() {
+		Configurations c = Configurations.getConfigurations();
 		switch (name()) {
 			case "MAIN":
-				return Configurations.getConfig();
+				return c.getConfig();
 			case "FISHING":
-				return Configurations.getFishing();
+				return c.getFishing();
 			case "ENCHANTMENTS":
-				return Configurations.getEnchantments();
+				return c.getEnchantments();
 			case "LANGUAGE":
-				return Configurations.getLanguage();
+				return c.getLanguage();
 			case "ADVANCEMENTS":
-				return Configurations.getAdvancements();
+				return c.getAdvancements();
 			case "RPG":
-				return Configurations.getRPG();
+				return c.getRPG();
 			case "MINIGAME":
-				return Configurations.getMinigames();
+				return c.getMinigames();
 			case "HARD_MODE":
-				return Configurations.getHardMode();
+				return c.getHardMode();
 		}
-		return Configurations.getConfig();
+		return c.getConfig();
 	}
 
 }

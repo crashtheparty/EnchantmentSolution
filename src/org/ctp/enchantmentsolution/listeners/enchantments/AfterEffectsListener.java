@@ -11,10 +11,10 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.loot.LootContext;
 import org.bukkit.loot.Lootable;
+import org.ctp.crashapi.CrashAPI;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.CERegister;
@@ -32,12 +32,11 @@ import org.ctp.enchantmentsolution.nms.animalmob.AnimalMob;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.RecyclerDrops;
 import org.ctp.enchantmentsolution.utils.items.AbilityUtils;
-import org.ctp.enchantmentsolution.utils.items.ItemUtils;
+import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
+import org.ctp.enchantmentsolution.utils.player.ESPlayer;
 
 @SuppressWarnings("unused")
 public class AfterEffectsListener extends Enchantmentable {
-
-	private static List<UUID> SACRIFICE_ADVANCEMENT = new ArrayList<UUID>();
 
 	@EventHandler
 	public void onEntityDeath(EntityDeathEvent event) {
@@ -53,22 +52,17 @@ public class AfterEffectsListener extends Enchantmentable {
 		runMethod(this, "sacrifice", event, PlayerDeathEvent.class);
 	}
 
-	@EventHandler
-	public void onPlayerRespawn(PlayerRespawnEvent event) {
-		runMethod(this, "sacrifice", event, PlayerRespawnEvent.class);
-	}
-
 	private void butcher(EntityDeathEvent event) {
 		if (!canRun(RegisterEnchantments.BUTCHER, event)) return;
 		LivingEntity entity = event.getEntity();
 		if (event.getEntity() instanceof Player) return;
-		Entity killer = entity.getKiller();
-		if (killer instanceof Player && entity instanceof Ageable && ((Ageable) entity).isAdult()) {
-			Player player = (Player) killer;
+		Player player = entity.getKiller();
+		if (player == null || isDisabled(player, RegisterEnchantments.BUTCHER)) return;
+		if (entity instanceof Ageable && ((Ageable) entity).isAdult()) {
 			ItemStack killItem = player.getInventory().getItemInMainHand();
-			if (killItem != null && ItemUtils.hasEnchantment(killItem, RegisterEnchantments.BUTCHER)) {
+			if (EnchantmentUtils.hasEnchantment(killItem, RegisterEnchantments.BUTCHER)) {
 				List<ItemStack> drops = event.getDrops();
-				int level = ItemUtils.getLevel(killItem, RegisterEnchantments.BUTCHER);
+				int level = EnchantmentUtils.getLevel(killItem, RegisterEnchantments.BUTCHER);
 				List<ItemStack> newDrops = new ArrayList<ItemStack>();
 				for(ItemStack drop: drops)
 					if (Arrays.asList(Material.BEEF, Material.COOKED_BEEF, Material.CHICKEN, Material.COOKED_CHICKEN, Material.COD, Material.COOKED_COD, Material.MUTTON, Material.COOKED_MUTTON, Material.PORKCHOP, Material.COOKED_PORKCHOP, Material.RABBIT, Material.COOKED_RABBIT, Material.SALMON, Material.COOKED_SALMON).contains(drop.getType())) {
@@ -96,20 +90,18 @@ public class AfterEffectsListener extends Enchantmentable {
 	private void expShare(EntityDeathEvent event) {
 		if (!canRun(RegisterEnchantments.EXP_SHARE, event)) return;
 		if (event.getEntity() instanceof Player) return;
-		Entity killer = event.getEntity().getKiller();
-		if (killer instanceof Player) {
-			Player player = (Player) killer;
-			ItemStack killItem = player.getInventory().getItemInMainHand();
-			if (killItem != null && ItemUtils.hasEnchantment(killItem, RegisterEnchantments.EXP_SHARE)) {
-				int exp = event.getDroppedExp();
-				if (exp > 0) {
-					int level = ItemUtils.getLevel(killItem, RegisterEnchantments.EXP_SHARE);
+		Player player = event.getEntity().getKiller();
+		if (player == null || isDisabled(player, RegisterEnchantments.EXP_SHARE)) return;
+		ItemStack killItem = player.getInventory().getItemInMainHand();
+		if (EnchantmentUtils.hasEnchantment(killItem, RegisterEnchantments.EXP_SHARE)) {
+			int exp = event.getDroppedExp();
+			if (exp > 0) {
+				int level = EnchantmentUtils.getLevel(killItem, RegisterEnchantments.EXP_SHARE);
 
-					ExpShareEvent experienceEvent = new ExpShareEvent(player, level, ExpShareType.MOB, exp, AbilityUtils.setExp(exp, level));
-					Bukkit.getPluginManager().callEvent(experienceEvent);
+				ExpShareEvent experienceEvent = new ExpShareEvent(player, level, ExpShareType.MOB, exp, AbilityUtils.setExp(exp, level));
+				Bukkit.getPluginManager().callEvent(experienceEvent);
 
-					if (!experienceEvent.isCancelled() && experienceEvent.getNewExp() >= 0) event.setDroppedExp(experienceEvent.getNewExp());
-				}
+				if (!experienceEvent.isCancelled() && experienceEvent.getNewExp() >= 0) event.setDroppedExp(experienceEvent.getNewExp());
 			}
 		}
 	}
@@ -118,13 +110,13 @@ public class AfterEffectsListener extends Enchantmentable {
 		if (!canRun(RegisterEnchantments.HUSBANDRY, event)) return;
 		LivingEntity entity = event.getEntity();
 		if (event.getEntity() instanceof Player) return;
-		Entity killer = entity.getKiller();
-		if (killer instanceof Player && entity instanceof Ageable && ((Ageable) entity).isAdult()) {
-			Player player = (Player) killer;
+		Player player = entity.getKiller();
+		if (player == null || isDisabled(player, RegisterEnchantments.HUSBANDRY)) return;
+		if (entity instanceof Ageable && ((Ageable) entity).isAdult()) {
 			ItemStack killItem = player.getInventory().getItemInMainHand();
 
-			if (killItem != null && ItemUtils.hasEnchantment(killItem, RegisterEnchantments.HUSBANDRY)) {
-				int level = ItemUtils.getLevel(killItem, RegisterEnchantments.HUSBANDRY);
+			if (EnchantmentUtils.hasEnchantment(killItem, RegisterEnchantments.HUSBANDRY)) {
+				int level = EnchantmentUtils.getLevel(killItem, RegisterEnchantments.HUSBANDRY);
 				double chance = 0.05 * (1 + level);
 				HusbandryEvent husbandry = new HusbandryEvent(entity, player, entity.getLocation(), level, chance);
 				Bukkit.getPluginManager().callEvent(husbandry);
@@ -135,7 +127,7 @@ public class AfterEffectsListener extends Enchantmentable {
 						Entity e = husbandry.getSpawnWorld().spawnEntity(husbandry.getSpawnLocation(), husbandry.getEntityType());
 						e = AnimalMob.setHusbandry((Creature) entity, (Creature) e);
 						if (e != null && e instanceof Ageable) ((Ageable) e).setBaby();
-						AdvancementUtils.awardCriteria(player, ESAdvancement.WILDLIFE_CONSERVATION, e.getType().name().toLowerCase());
+						AdvancementUtils.awardCriteria(player, ESAdvancement.WILDLIFE_CONSERVATION, e.getType().name().toLowerCase(Locale.ROOT));
 					}, 1l);
 				}
 			}
@@ -143,25 +135,26 @@ public class AfterEffectsListener extends Enchantmentable {
 	}
 
 	private void pillage(EntityDeathEvent event) {
-		if (EnchantmentSolution.getPlugin().getBukkitVersion().getVersionNumber() > 3) {
+		if (CrashAPI.getPlugin().getBukkitVersion().getVersionNumber() > 3) {
 			if (!canRun(RegisterEnchantments.PILLAGE, event)) return;
 			LivingEntity entity = event.getEntity();
 			if (entity instanceof Lootable && entity.getKiller() != null) {
 				Player player = entity.getKiller();
+				if (player == null || isDisabled(player, RegisterEnchantments.PILLAGE)) return;
 				ItemStack item = player.getInventory().getItemInOffHand();
-				if (item == null || !ItemUtils.hasEnchantment(item, RegisterEnchantments.PILLAGE)) {
+				if (item == null || !EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.PILLAGE)) {
 					item = player.getInventory().getItemInMainHand();
-					if (ItemUtils.hasEnchantment(item, Enchantment.LOOT_BONUS_MOBS)) return;
+					if (EnchantmentUtils.hasEnchantment(item, Enchantment.LOOT_BONUS_MOBS)) return;
 				}
-				if (ItemUtils.hasEnchantment(item, RegisterEnchantments.PILLAGE)) {
-					int level = ItemUtils.getLevel(item, RegisterEnchantments.PILLAGE);
+				if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.PILLAGE)) {
+					int level = EnchantmentUtils.getLevel(item, RegisterEnchantments.PILLAGE);
 					PillageEvent pillage = new PillageEvent(player, level);
 					Bukkit.getPluginManager().callEvent(pillage);
 
 					if (!pillage.isCancelled()) {
 						event.getDrops().clear();
-						List<EnchantmentLevel> levels = ItemUtils.getEnchantmentLevels(item);
-						ItemUtils.addEnchantmentToItem(item, CERegister.FORTUNE, level);
+						List<EnchantmentLevel> levels = EnchantmentUtils.getEnchantmentLevels(item);
+						EnchantmentUtils.addEnchantmentToItem(item, CERegister.FORTUNE, level);
 						LootContext.Builder contextBuilder = new LootContext.Builder(event.getEntity().getLocation());
 						contextBuilder.killer(player);
 						contextBuilder.lootedEntity(event.getEntity());
@@ -169,8 +162,8 @@ public class AfterEffectsListener extends Enchantmentable {
 						LootContext context = contextBuilder.build();
 						Collection<ItemStack> items = ((Lootable) entity).getLootTable().populateLoot(new Random(), context);
 						event.getDrops().addAll(items);
-						ItemUtils.removeAllEnchantments(item, true);
-						ItemUtils.addEnchantmentsToItem(item, levels);
+						EnchantmentUtils.removeAllEnchantments(item, true);
+						EnchantmentUtils.addEnchantmentsToItem(item, levels);
 						if (event.getEntity().getType() == EntityType.PILLAGER) AdvancementUtils.awardCriteria(player, ESAdvancement.LOOK_WHAT_YOU_MADE_ME_DO, "pillage");
 					}
 				}
@@ -181,33 +174,31 @@ public class AfterEffectsListener extends Enchantmentable {
 	private void recycler(EntityDeathEvent event) {
 		if (!canRun(RegisterEnchantments.RECYCLER, event)) return;
 		if (event.getEntity() instanceof Player) return;
-		Entity killer = event.getEntity().getKiller();
-		if (killer instanceof Player) {
-			Player player = (Player) killer;
-			ItemStack killItem = player.getInventory().getItemInMainHand();
-			if (killItem != null && ItemUtils.hasEnchantment(killItem, RegisterEnchantments.RECYCLER)) {
-				int exp = event.getDroppedExp();
-				int recyclerExp = 0;
-				boolean willRecycle = false;
+		Player player = event.getEntity().getKiller();
+		if (player == null || isDisabled(player, RegisterEnchantments.RECYCLER)) return;
+		ItemStack killItem = player.getInventory().getItemInMainHand();
+		if (EnchantmentUtils.hasEnchantment(killItem, RegisterEnchantments.RECYCLER)) {
+			int exp = event.getDroppedExp();
+			int recyclerExp = 0;
+			boolean willRecycle = false;
 
-				for(ItemStack item: event.getDrops())
-					if (RecyclerDrops.isRecycleable(item.getType())) for(int i = 1; i <= item.getAmount(); i++) {
-						willRecycle = true;
-						recyclerExp += RecyclerDrops.getExperience(item.getType());
-					}
-				if (willRecycle) {
-					RecyclerEvent recyclerEvent = new RecyclerEvent(player, exp, exp + recyclerExp);
-					Bukkit.getPluginManager().callEvent(recyclerEvent);
+			for(ItemStack item: event.getDrops())
+				if (RecyclerDrops.isRecycleable(item.getType())) for(int i = 1; i <= item.getAmount(); i++) {
+					willRecycle = true;
+					recyclerExp += RecyclerDrops.getExperience(item.getType());
+				}
+			if (willRecycle) {
+				RecyclerEvent recyclerEvent = new RecyclerEvent(player, exp, exp + recyclerExp);
+				Bukkit.getPluginManager().callEvent(recyclerEvent);
 
-					if (!recyclerEvent.isCancelled() && recyclerEvent.getNewExp() >= 0) {
-						event.setDroppedExp(recyclerEvent.getNewExp());
-						int finalExp = recyclerEvent.getNewExp() - recyclerEvent.getOldExp();
-						AdvancementUtils.awardCriteria(player, ESAdvancement.ENVIRONMENTAL_PROTECTION, "experience", finalExp);
-						Iterator<ItemStack> items = event.getDrops().iterator();
-						while (items.hasNext()) {
-							ItemStack item = items.next();
-							if (RecyclerDrops.isRecycleable(item.getType())) items.remove();
-						}
+				if (!recyclerEvent.isCancelled() && recyclerEvent.getNewExp() >= 0) {
+					event.setDroppedExp(recyclerEvent.getNewExp());
+					int finalExp = recyclerEvent.getNewExp() - recyclerEvent.getOldExp();
+					AdvancementUtils.awardCriteria(player, ESAdvancement.ENVIRONMENTAL_PROTECTION, "experience", finalExp);
+					Iterator<ItemStack> items = event.getDrops().iterator();
+					while (items.hasNext()) {
+						ItemStack item = items.next();
+						if (RecyclerDrops.isRecycleable(item.getType())) items.remove();
 					}
 				}
 			}
@@ -217,11 +208,12 @@ public class AfterEffectsListener extends Enchantmentable {
 	private void sacrifice(PlayerDeathEvent event) {
 		if (!canRun(RegisterEnchantments.SACRIFICE, event)) return;
 		Player player = event.getEntity();
+		if (player == null || isDisabled(player, RegisterEnchantments.SACRIFICE)) return;
 		ItemStack chest = player.getInventory().getChestplate();
-		if (chest != null) if (ItemUtils.hasEnchantment(chest, RegisterEnchantments.SACRIFICE)) {
-			int level = ItemUtils.getLevel(chest, RegisterEnchantments.SACRIFICE);
+		if (EnchantmentUtils.hasEnchantment(chest, RegisterEnchantments.SACRIFICE)) {
+			int level = EnchantmentUtils.getLevel(chest, RegisterEnchantments.SACRIFICE);
 			int playerLevel = player.getLevel();
-			double damage = playerLevel / (8.0D / level);
+			double damage = playerLevel / (3.0D / level);
 			Entity killer = player.getKiller();
 			LivingEntity living = null;
 
@@ -234,23 +226,21 @@ public class AfterEffectsListener extends Enchantmentable {
 					if (proj.getShooter() instanceof LivingEntity) living = (LivingEntity) proj.getShooter();
 				} else if (nEvent.getDamager() instanceof LivingEntity) living = (LivingEntity) nEvent.getDamager();
 			}
-			SacrificeEvent sacrifice = new SacrificeEvent(living, player, damage);
-			Bukkit.getPluginManager().callEvent(sacrifice);
+			if (living != null) {
+				SacrificeEvent sacrifice = new SacrificeEvent(living, player, damage);
+				Bukkit.getPluginManager().callEvent(sacrifice);
 
-			if (!sacrifice.isCancelled()) {
-				((LivingEntity) sacrifice.getEntity()).damage(sacrifice.getNewDamage(), sacrifice.getDamager());
-				if (sacrifice.getEntity() instanceof Player) {
-					Player dead = (Player) sacrifice.getEntity();
-					if (dead.getHealth() <= 0) SACRIFICE_ADVANCEMENT.add(player.getUniqueId());
+				if (!sacrifice.isCancelled()) {
+					((LivingEntity) sacrifice.getEntity()).damage(sacrifice.getNewDamage(), sacrifice.getDamager());
+					if (sacrifice.getEntity() instanceof Player) {
+						Player dead = (Player) sacrifice.getEntity();
+						if (dead.getHealth() <= 0) {
+							ESPlayer esPlayer = EnchantmentSolution.getESPlayer(player);
+							esPlayer.setSacrificeAdvancement(true);
+						}
+					}
 				}
 			}
-		}
-	}
-
-	private void sacrifice(PlayerRespawnEvent event) {
-		if (SACRIFICE_ADVANCEMENT.contains(event.getPlayer().getUniqueId())) {
-			AdvancementUtils.awardCriteria(event.getPlayer(), ESAdvancement.DIVINE_RETRIBUTION, "retribution");
-			SACRIFICE_ADVANCEMENT.remove(event.getPlayer().getUniqueId());
 		}
 	}
 }

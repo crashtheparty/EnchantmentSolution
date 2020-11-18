@@ -2,13 +2,13 @@ package org.ctp.enchantmentsolution.utils;
 
 import java.util.*;
 import java.util.Map.Entry;
-import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.api.ApiEnchantmentWrapper;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantmentWrapper;
@@ -22,9 +22,8 @@ public class PermissionUtils {
 
 	public static void addPermissions(EnchantmentLevel level) {
 		List<Permission> permissions = getPermissions(level);
-		String name = level.getEnchant().getName().toLowerCase();
-		permissions.add(new Permission("enchantmentsolution." + name + ".table.level" + level.getLevel(), PermissionDefault.FALSE));
-		permissions.add(new Permission("enchantmentsolution." + name + ".anvil.level" + level.getLevel(), PermissionDefault.FALSE));
+		permissions.add(new Permission("enchantmentsolution." + level.getEnchant().getName() + ".table.level" + level.getLevel(), PermissionDefault.FALSE));
+		permissions.add(new Permission("enchantmentsolution." + level.getEnchant().getName() + ".anvil.level" + level.getLevel(), PermissionDefault.FALSE));
 		for(Permission p: permissions)
 			if (Bukkit.getPluginManager().getPermission(p.getName()) == null) Bukkit.getPluginManager().addPermission(p);
 		PERMISSIONS.put(level, permissions);
@@ -52,8 +51,8 @@ public class PermissionUtils {
 		if (usePermissions()) {
 			if (player.hasPermission("enchantmentsolution.permissions.ignore")) return true;
 			String namespace = getNamespace(enchant);
-			String path = namespace + "." + enchant.getName().toLowerCase() + ".advanced.permissions.table.level";
-			String permission = "enchantmentsolution." + enchant.getName().toLowerCase() + ".table.level";
+			String path = namespace + "." + enchant.getName().toLowerCase(Locale.ROOT) + ".advanced.permissions.table.level";
+			String permission = namespace + "." + enchant.getName().toLowerCase(Locale.ROOT) + ".table.level";
 			return checkPermission(player, level, path, permission);
 		}
 
@@ -65,8 +64,8 @@ public class PermissionUtils {
 		if (usePermissions()) {
 			if (player.hasPermission("enchantmentsolution.permissions.ignore")) return true;
 			String namespace = getNamespace(enchant);
-			String path = namespace + "." + enchant.getName().toLowerCase() + ".advanced.permissions.anvil.level";
-			String permission = "enchantmentsolution." + enchant.getName().toLowerCase() + ".anvil.level";
+			String path = namespace + "." + enchant.getName().toLowerCase(Locale.ROOT) + ".advanced.permissions.anvil.level";
+			String permission = namespace + "." + enchant.getName().toLowerCase(Locale.ROOT) + ".anvil.level";
 			return checkPermission(player, level, path, permission);
 		}
 
@@ -77,10 +76,10 @@ public class PermissionUtils {
 		if (enchant.getRelativeEnchantment() instanceof ApiEnchantmentWrapper) {
 			JavaPlugin plugin = ((ApiEnchantmentWrapper) enchant.getRelativeEnchantment()).getPlugin();
 			if (plugin == null) {
-				ChatUtils.sendToConsole(Level.WARNING, "Enchantment " + enchant.getName() + " (Display Name " + enchant.getDisplayName() + ")" + " does not have a JavaPlugin set. Refusing to check permissions.");
+				Chatable.get().sendWarning("Enchantment " + enchant.getName() + " (Display Name " + enchant.getDisplayName() + ")" + " does not have a JavaPlugin set. Refusing to check permissions.");
 				return null;
 			}
-			return plugin.getName().toLowerCase();
+			return plugin.getName().toLowerCase(Locale.ROOT);
 		} else if (enchant.getRelativeEnchantment() instanceof CustomEnchantmentWrapper) return "custom_enchantments";
 		else
 			return "default_enchantments";
@@ -88,7 +87,7 @@ public class PermissionUtils {
 
 	private static boolean checkPermission(Player player, int level, String path, String permission) {
 		for(int i = 0; i < level; i++)
-			if (Configurations.getEnchantments().getBoolean(path + (i + 1)) && !player.hasPermission(permission + (i + 1))) return false;
+			if (Configurations.getConfigurations().getEnchantments().getBoolean(path + (i + 1))) if (!player.hasPermission(permission + (i + 1))) return false;
 		return true;
 	}
 
