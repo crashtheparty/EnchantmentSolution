@@ -88,7 +88,7 @@ public class EnchantmentSolution extends CrashAPIPlugin {
 	private Plugin jobsReborn;
 	private VersionCheck check;
 	private WikiThread wiki;
-	private String mcmmoVersion = "Disabled", mcmmoType;
+	private String mcmmoVersion, mcmmoType = "Disabled";
 	private Plugin veinMiner;
 	private RPGListener rpg;
 

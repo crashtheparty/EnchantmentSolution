@@ -10,6 +10,7 @@ import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.ctp.crashapi.item.ItemData;
 import org.ctp.crashapi.item.ItemType;
+import org.ctp.crashapi.item.MatData;
 import org.ctp.crashapi.utils.DamageUtils;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
@@ -185,8 +186,8 @@ public class AnvilEnchantments extends GenerateEnchantments {
 
 			Player player = getPlayer().getPlayer();
 			List<EnchantmentLevel> enchantments = new ArrayList<EnchantmentLevel>();
-			boolean godAnvil = PermissionUtils.check(player, "enchantmentsolution.god-anvil", "enchantmentsolution.anvil.god");
-			boolean demiGodAnvil = PermissionUtils.check(player, "enchantmentsolution.demigod-anvil", "enchantmentsolution.anvil.demigod");
+			boolean godAnvil = PermissionUtils.check(player, "enchantmentsolution.anvil.god");
+			boolean demiGodAnvil = PermissionUtils.check(player, "enchantmentsolution.anvil.demigod");
 			if (godAnvil) demiGodAnvil = true;
 			for(EnchantmentLevel enchantOne: levels) {
 				boolean added = false;
@@ -317,10 +318,10 @@ public class AnvilEnchantments extends GenerateEnchantments {
 				}
 		}
 
-		boolean godAnvil = PermissionUtils.check(player, "enchantmentsolution.god-anvil", "enchantmentsolution.anvil.god");
-		boolean demiGodAnvil = PermissionUtils.check(player, "enchantmentsolution.demigod-anvil", "enchantmentsolution.anvil.demigod");
+		boolean godAnvil = PermissionUtils.check(player, "enchantmentsolution.anvil.god");
+		boolean demiGodAnvil = PermissionUtils.check(player, "enchantmentsolution.anvil.demigod");
 		if (godAnvil) demiGodAnvil = true;
-		boolean demiGodBooks = PermissionUtils.check(player, "enchantmentsolution.demigod-books", "enchantmentsolution.anvil.demigod-books");
+		boolean demiGodBooks = PermissionUtils.check(player, "enchantmentsolution.anvil.demigod-books");
 
 		for(EnchantmentLevel enchantTwo: secondLevels) {
 			boolean conflict = false;
@@ -413,6 +414,10 @@ public class AnvilEnchantments extends GenerateEnchantments {
 
 	public RepairType getRepairType() {
 		return RepairType.getRepairType(this);
+	}
+
+	public boolean dropLeftovers() {
+		return itemTwoLeftover != null && !MatData.isAir(itemTwoLeftover.getType()) && itemTwoLeftover.getAmount() > 0;
 	}
 
 }

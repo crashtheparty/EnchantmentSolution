@@ -370,7 +370,7 @@ public class PersistenceUtils {
 	}
 
 	private static boolean checkSimilar(List<EnchantmentLevel> levels, List<EnchantmentLevel> levelsTwo) {
-		boolean similar = true;
+		boolean similar = levels.size() == levelsTwo.size();
 		for(EnchantmentLevel level: levels) {
 			EnchantmentLevel hasLevel = null;
 			for(EnchantmentLevel levelTwo: levelsTwo)

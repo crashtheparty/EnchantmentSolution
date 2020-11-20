@@ -315,7 +315,7 @@ public class ESPlayer {
 	public void setCanFly(boolean canFly) {
 		if (!isOnline()) return;
 		Player player = getOnlinePlayer();
-		boolean permission = PermissionUtils.check(player, "enchantmentsolution.enable-flight", "enchantmentsolution.abilities.has-external-flight");
+		boolean permission = PermissionUtils.check(player, "enchantmentsolution.abilities.has-external-flight");
 		boolean modifyCanFly = canFly || player.getGameMode().equals(GameMode.CREATIVE) || player.getGameMode().equals(GameMode.SPECTATOR);
 		FrequentFlyerEvent event = null;
 		if (frequentFlyerLevel == 0 && this.canFly && !modifyCanFly) {

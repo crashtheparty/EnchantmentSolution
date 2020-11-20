@@ -293,7 +293,7 @@ public class BlockListener extends Enchantmentable {
 						if (smelteryEvent.willFortune()) from.setAmount(SmelteryUtils.getFortuneForSmeltery(smelteryEvent.getDrop(), item, smeltery.getFromMaterial()));
 						i.setItemStack(from);
 					}
-					McMMOHandler.handleMcMMO(event, item, RegisterEnchantments.SMELTERY);
+					McMMOHandler.handleBlockDrops(event, item, RegisterEnchantments.SMELTERY);
 				}
 			}
 		}
@@ -551,7 +551,7 @@ public class BlockListener extends Enchantmentable {
 			if (!telepathy.isCancelled()) {
 				ESPlayer esPlayer = EnchantmentSolution.getESPlayer(player);
 				esPlayer.addTelepathyItems(telepathy.getItems());
-				McMMOHandler.handleMcMMO(event, item, RegisterEnchantments.TELEPATHY);
+				McMMOHandler.handleBlockDrops(event, item, RegisterEnchantments.TELEPATHY);
 				event.setCancelled(true);
 			}
 		}
