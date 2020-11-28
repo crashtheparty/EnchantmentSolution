@@ -40,6 +40,7 @@ public class EnchantmentsConfiguration extends Configuration {
 		config.getFromConfig();
 
 		config.addDefault("extra_enchantables", Arrays.asList("COMPASS"), new String[] { "Additional items that should be allowed to be enchanted in the enchanting table.", "Will not add any enchantments for these items." });
+		config.addDefault("legacy_frequent_flyer", false, new String[] { "Level of Frequent Flyer increases relative durability instead of the speed." });
 		config.addDefault("advanced_options.use", false, new String[] { "Use the advanced customization options for the plugin", "** Only modify if you understand what you're doing! **" });
 		config.addDefault("advanced_options.enchantability_decay", false, new String[] { "Adds the 1.14-1.14.2 feature of additional enchantments getting lower levels" });
 		config.addDefault("advanced_options.starting_level", true, new String[] { "Enchantments will not be available unless the enchanting level is the set value or above" });

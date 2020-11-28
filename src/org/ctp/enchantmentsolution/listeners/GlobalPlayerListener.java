@@ -37,7 +37,7 @@ public class GlobalPlayerListener implements Listener {
 	public void onPlayerQuit(PlayerQuitEvent event) {
 		Player player = event.getPlayer();
 		ESPlayer esPlayer = EnchantmentSolution.getESPlayer(player);
-		if (esPlayer != null && esPlayer.canFly(false)) esPlayer.logoutFlyer();
+		if (esPlayer != null && esPlayer.canFly(false)) esPlayer.logout();
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR)

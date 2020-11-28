@@ -2,46 +2,57 @@ package org.ctp.enchantmentsolution.nms;
 
 import org.bukkit.inventory.ItemStack;
 import org.ctp.crashapi.CrashAPI;
+import org.ctp.enchantmentsolution.utils.config.ConfigString;
 
 public class AnvilNMS {
 
 	public static int getRepairCost(ItemStack item) {
 		if (item == null) return 0;
+		int repairCost = 0;
 		switch (CrashAPI.getPlugin().getBukkitVersion().getVersionNumber()) {
 			case 1:
 				net.minecraft.server.v1_13_R1.ItemStack nmsV1 = org.bukkit.craftbukkit.v1_13_R1.inventory.CraftItemStack.asNMSCopy(item);
-				return nmsV1.getRepairCost();
+				repairCost = nmsV1.getRepairCost();
+				break;
 			case 2:
 			case 3:
 				net.minecraft.server.v1_13_R2.ItemStack nmsV2 = org.bukkit.craftbukkit.v1_13_R2.inventory.CraftItemStack.asNMSCopy(item);
-				return nmsV2.getRepairCost();
+				repairCost = nmsV2.getRepairCost();
+				break;
 			case 4:
 			case 5:
 			case 6:
 			case 7:
 			case 8:
 				net.minecraft.server.v1_14_R1.ItemStack nmsV3 = org.bukkit.craftbukkit.v1_14_R1.inventory.CraftItemStack.asNMSCopy(item);
-				return nmsV3.getRepairCost();
+				repairCost = nmsV3.getRepairCost();
+				break;
 			case 9:
 			case 10:
 			case 11:
 				net.minecraft.server.v1_15_R1.ItemStack nmsV4 = org.bukkit.craftbukkit.v1_15_R1.inventory.CraftItemStack.asNMSCopy(item);
-				return nmsV4.getRepairCost();
+				repairCost = nmsV4.getRepairCost();
+				break;
 			case 12:
 				net.minecraft.server.v1_16_R1.ItemStack nmsV5 = org.bukkit.craftbukkit.v1_16_R1.inventory.CraftItemStack.asNMSCopy(item);
-				return nmsV5.getRepairCost();
+				repairCost = nmsV5.getRepairCost();
+				break;
 			case 13:
 			case 14:
 				net.minecraft.server.v1_16_R2.ItemStack nmsV6 = org.bukkit.craftbukkit.v1_16_R2.inventory.CraftItemStack.asNMSCopy(item);
-				return nmsV6.getRepairCost();
+				repairCost = nmsV6.getRepairCost();
+				break;
 			case 15:
 				net.minecraft.server.v1_16_R3.ItemStack nmsV7 = org.bukkit.craftbukkit.v1_16_R3.inventory.CraftItemStack.asNMSCopy(item);
-				return nmsV7.getRepairCost();
+				repairCost = nmsV7.getRepairCost();
+				break;
 		}
-		return 0;
+		if (ConfigString.REPAIR_COST_LIMIT.getInt() > 0 && repairCost > ConfigString.REPAIR_COST_LIMIT.getInt()) repairCost = ConfigString.REPAIR_COST_LIMIT.getInt();
+		return repairCost;
 	}
 
 	public static ItemStack setRepairCost(ItemStack item, int repairCost) {
+		if (ConfigString.REPAIR_COST_LIMIT.getInt() > 0 && repairCost > ConfigString.REPAIR_COST_LIMIT.getInt()) repairCost = ConfigString.REPAIR_COST_LIMIT.getInt();
 		switch (CrashAPI.getPlugin().getBukkitVersion().getVersionNumber()) {
 			case 1:
 				net.minecraft.server.v1_13_R1.ItemStack nmsV1 = org.bukkit.craftbukkit.v1_13_R1.inventory.CraftItemStack.asNMSCopy(item);

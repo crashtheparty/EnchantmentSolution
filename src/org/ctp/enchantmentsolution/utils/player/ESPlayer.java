@@ -1,6 +1,7 @@
 package org.ctp.enchantmentsolution.utils.player;
 
 import java.util.*;
+import java.util.Map.Entry;
 
 import org.bukkit.*;
 import org.bukkit.attribute.AttributeModifier;
@@ -26,6 +27,7 @@ import org.ctp.enchantmentsolution.listeners.enchantments.AsyncGaiaController;
 import org.ctp.enchantmentsolution.listeners.enchantments.AsyncHWDController;
 import org.ctp.enchantmentsolution.rpg.RPGPlayer;
 import org.ctp.enchantmentsolution.rpg.RPGUtils;
+import org.ctp.enchantmentsolution.threads.ESPlayerThread;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.PermissionUtils;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.GaiaUtils.GaiaTrees;
@@ -59,8 +61,8 @@ public class ESPlayer {
 	private ESPlayerAttributeInstance flyAttribute = new FlySpeedAttribute();
 	private Streak streak;
 	private Runnable telepathyTask;
-	private AsyncHWDController hwdController;
-	private AsyncGaiaController gaiaController;
+	private Map<ItemStack, AsyncHWDController> hwdControllers;
+	private Map<ItemStack, Map<GaiaTrees, AsyncGaiaController>> gaiaControllers;
 
 	public ESPlayer(OfflinePlayer player) {
 		this.player = player;
@@ -76,6 +78,9 @@ public class ESPlayer {
 		telepathyItems = new ArrayList<ItemStack>();
 		removeSoulItems();
 		flyAttribute.addModifier(new AttributeModifier(UUID.fromString("ffffffff-ffff-ffff-ffff-000000000000"), "frequentFlyerFlight", -0.08, Operation.ADD_NUMBER));
+		ESPlayerThread.getThread(this);
+		hwdControllers = new HashMap<>();
+		gaiaControllers = new HashMap<>();
 	}
 
 	public OfflinePlayer getPlayer() {
@@ -88,6 +93,12 @@ public class ESPlayer {
 
 	public Player getOnlinePlayer() {
 		return onlinePlayer;
+	}
+
+	public void logout() {
+		logoutFlyer();
+		removeAllHWDControllers();
+		removeAllGaiaControllers();
 	}
 
 	public void reloadPlayer() {
@@ -286,7 +297,7 @@ public class ESPlayer {
 
 	public void setFrequentFlyer() {
 		boolean fly = frequentFlyerLevel > 0 && elytra != null;
-		flightDamageLimit = 60;
+		flightDamageLimit = ConfigString.LEGACY_FF.getBoolean() ? frequentFlyerLevel * 2 * 20 : 60;
 		setCanFly(fly);
 		setFlightSpeed(fly);
 		if (reset) flightDamage = flightDamageLimit;
@@ -294,8 +305,9 @@ public class ESPlayer {
 
 	private void setFlightSpeed(boolean canFly) {
 		if (canFly) {
+			double flight = ConfigString.LEGACY_FF.getBoolean() ? 0.08 : 0.016 * frequentFlyerLevel;
 			flyAttribute.removeModifier(UUID.fromString("ffffffff-ffff-ffff-ffff-000000001111"));
-			flyAttribute.addModifier(new AttributeModifier(UUID.fromString("ffffffff-ffff-ffff-ffff-000000001111"), "frequentFlyerLevel", 0.016 * frequentFlyerLevel, Operation.ADD_NUMBER));
+			flyAttribute.addModifier(new AttributeModifier(UUID.fromString("ffffffff-ffff-ffff-ffff-000000001111"), "frequentFlyerLevel", flight, Operation.ADD_NUMBER));
 			player.getPlayer().setFlySpeed((float) flyAttribute.getValue());
 		} else if (player.isOnline()) player.getPlayer().setFlySpeed((float) flyAttribute.getDefaultValue());
 	}
@@ -605,32 +617,93 @@ public class ESPlayer {
 	}
 
 	public void addToHWDController(ItemStack item, Block original, List<Location> allBlocks) {
-		if (hwdController == null) hwdController = new AsyncHWDController(getOnlinePlayer(), item, original, allBlocks);
-		else if (!hwdController.addBlocks(original, allBlocks)) hwdController = new AsyncHWDController(getOnlinePlayer(), item, original, allBlocks);
+		if (hwdControllers.containsKey(item)) hwdControllers.get(item).addBlocks(original, allBlocks);
+		else
+			hwdControllers.put(item, new AsyncHWDController(onlinePlayer, item, original, allBlocks));
 	}
 
-	public boolean correctHWDItem(ItemStack item) {
-		return hwdController == null || item.isSimilar(hwdController.getItem());
+	public void removeHWDController(ItemStack item) {
+		hwdControllers.remove(item);
 	}
 
-	public void removeHWDController() {
-		hwdController = null;
+	public void removeNullHWDControllers() {
+		Iterator<Entry<ItemStack, AsyncHWDController>> iter = hwdControllers.entrySet().iterator();
+		while (iter.hasNext()) {
+			Entry<ItemStack, AsyncHWDController> controller = iter.next();
+			if (controller.getKey() == null || MatData.isAir(controller.getKey().getType())) iter.remove();
+		}
+	}
+
+	public void removeAllHWDControllers() {
+		Iterator<Entry<ItemStack, AsyncHWDController>> iter = hwdControllers.entrySet().iterator();
+		while (iter.hasNext()) {
+			Entry<ItemStack, AsyncHWDController> controller = iter.next();
+			controller.getValue().removeBlocks();
+			iter.remove();
+		}
+	}
+
+	public void runHWD() {
+		Iterator<Entry<ItemStack, AsyncHWDController>> iter = hwdControllers.entrySet().iterator();
+		while (iter.hasNext()) {
+			Entry<ItemStack, AsyncHWDController> controller = iter.next();
+			controller.getValue().breakingBlocks();
+		}
 	}
 
 	public void addToGaiaController(ItemStack item, Block original, List<Location> allBlocks, GaiaTrees tree) {
-		if (gaiaController == null) gaiaController = new AsyncGaiaController(getOnlinePlayer(), item, original, allBlocks, tree);
-		else if (!gaiaController.addBlocks(original, allBlocks)) gaiaController = new AsyncGaiaController(getOnlinePlayer(), item, original, allBlocks, tree);
+		if (gaiaControllers.containsKey(item)) {
+			Map<GaiaTrees, AsyncGaiaController> controller = gaiaControllers.get(item);
+			if (controller == null) controller = new HashMap<>();
+			if (controller.containsKey(tree)) controller.get(tree).addBlocks(original, allBlocks);
+			else
+				controller.put(tree, new AsyncGaiaController(onlinePlayer, item, original, allBlocks, tree));
+			gaiaControllers.put(item, controller);
+		} else {
+			Map<GaiaTrees, AsyncGaiaController> controller = new HashMap<>();
+			controller.put(tree, new AsyncGaiaController(onlinePlayer, item, original, allBlocks, tree));
+			gaiaControllers.put(item, controller);
+		}
 	}
 
-	public boolean correctGaiaItem(ItemStack item) {
-		return gaiaController == null || item.isSimilar(gaiaController.getItem());
+	public void removeGaiaControllers(ItemStack item) {
+		gaiaControllers.remove(item);
 	}
 
-	public boolean correctGaiaTree(GaiaTrees tree) {
-		return gaiaController == null || tree == gaiaController.getTree();
+	public void removeGaiaController(ItemStack item, GaiaTrees tree) {
+		if (gaiaControllers.containsKey(item)) gaiaControllers.get(item).remove(tree);
 	}
 
-	public void removeGaiaController() {
-		gaiaController = null;
+	public void removeNullGaiaControllers() {
+		Iterator<Entry<ItemStack, Map<GaiaTrees, AsyncGaiaController>>> iter = gaiaControllers.entrySet().iterator();
+		while (iter.hasNext()) {
+			Entry<ItemStack, Map<GaiaTrees, AsyncGaiaController>> controller = iter.next();
+			if (controller.getKey() == null || MatData.isAir(controller.getKey().getType())) iter.remove();
+		}
+	}
+
+	public void removeAllGaiaControllers() {
+		Iterator<Entry<ItemStack, Map<GaiaTrees, AsyncGaiaController>>> iter = gaiaControllers.entrySet().iterator();
+		while (iter.hasNext()) {
+			Entry<ItemStack, Map<GaiaTrees, AsyncGaiaController>> controllers = iter.next();
+			Iterator<Entry<GaiaTrees, AsyncGaiaController>> iter2 = controllers.getValue().entrySet().iterator();
+			while (iter2.hasNext()) {
+				Entry<GaiaTrees, AsyncGaiaController> controller = iter2.next();
+				controller.getValue().removeBlocks();
+			}
+			iter.remove();
+		}
+	}
+
+	public void runGaia() {
+		Iterator<Entry<ItemStack, Map<GaiaTrees, AsyncGaiaController>>> iter = gaiaControllers.entrySet().iterator();
+		while (iter.hasNext()) {
+			Entry<ItemStack, Map<GaiaTrees, AsyncGaiaController>> controllers = iter.next();
+			Iterator<Entry<GaiaTrees, AsyncGaiaController>> iter2 = controllers.getValue().entrySet().iterator();
+			while (iter2.hasNext()) {
+				Entry<GaiaTrees, AsyncGaiaController> controller = iter2.next();
+				controller.getValue().breakingBlocks();
+			}
+		}
 	}
 }

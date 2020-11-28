@@ -29,6 +29,7 @@ public class AsyncGaiaController {
 	private final Block original;
 	private List<Location> allBlocks;
 	private List<Location> breaking;
+	private int tick = 19;
 
 	public AsyncGaiaController(Player player, ItemStack item, Block original, List<Location> allBlocks, GaiaTrees tree) {
 		this.player = player;
@@ -40,24 +41,23 @@ public class AsyncGaiaController {
 		breaking = new ArrayList<Location>();
 		for(int i = 0; i < 4; i++)
 			if (allBlocks.size() > i) breaking.add(allBlocks.get(i));
-		breakingBlocks();
 	}
 
-	public boolean addBlocks(Block original, Collection<Location> blocks) {
-		if (breaking.size() == 0) return false;
+	public void addBlocks(Block original, List<Location> blocks) {
 		for(Location loc: blocks) {
 			allBlocks.add(loc);
 			if (BlockUtils.isNextTo(loc.getBlock(), original)) breaking.add(loc);
 		}
-		return breaking.size() != 0;
 	}
 
-	private void breakingBlocks() {
+	public void breakingBlocks() {
+		tick++;
+		tick = tick % 20;
+		if (tick != 0) return;
 		ESPlayer esPlayer = EnchantmentSolution.getESPlayer(player);
 		if (breaking == null || breaking.size() == 0) {
-			for(Location loc: allBlocks)
-				BlockUtils.removeMultiBlockBreak(loc, RegisterEnchantments.GAIA);
-			esPlayer.removeGaiaController();
+			removeBlocks();
+			esPlayer.removeGaiaController(item, tree);
 			return;
 		}
 		Iterator<Location> iter = breaking.iterator();
@@ -67,8 +67,7 @@ public class AsyncGaiaController {
 			Location b = iter.next();
 			if (!esPlayer.canBreakBlock()) break;
 			if (!esPlayer.isInInventory(item) || item == null || MatData.isAir(item.getType())) {
-				for(Location loc: allBlocks)
-					BlockUtils.removeMultiBlockBreak(loc, RegisterEnchantments.GAIA);
+				removeBlocks();
 				return;
 			}
 			BlockUtils.multiBreakBlock(player, item, b, RegisterEnchantments.GAIA);
@@ -93,9 +92,6 @@ public class AsyncGaiaController {
 		for(int i = j; i < 4; i++)
 			if (allBlocks.size() > i) breakNext.add(allBlocks.get(i));
 		breaking = breakNext;
-		Bukkit.getScheduler().runTaskLater(EnchantmentSolution.getPlugin(), () -> {
-			breakingBlocks();
-		}, 20l);
 
 	}
 
@@ -117,6 +113,11 @@ public class AsyncGaiaController {
 
 	public Block getOriginal() {
 		return original;
+	}
+
+	public void removeBlocks() {
+		for(Location loc: allBlocks)
+			BlockUtils.removeMultiBlockBreak(loc, RegisterEnchantments.GAIA);
 	}
 
 }

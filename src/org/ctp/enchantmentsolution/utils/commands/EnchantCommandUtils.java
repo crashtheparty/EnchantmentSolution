@@ -304,6 +304,8 @@ public class EnchantCommandUtils {
 		}
 		List<EnchantmentLevel> levels = new ArrayList<EnchantmentLevel>();
 		Player givePlayer = player;
+		List<ItemStack> books = new ArrayList<ItemStack>();
+		boolean useBooks = ConfigString.USE_ENCHANTED_BOOKS.getBoolean();
 
 		if (args.length > 1) {
 			String arg = args[1];
@@ -330,16 +332,38 @@ public class EnchantCommandUtils {
 			Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(codes, "commands.invalid-player"), Level.WARNING);
 			return false;
 		}
+		int amount = 1;
+		if (args.length > 4) try {
+			amount = Integer.parseInt(args[4]);
+		} catch (NumberFormatException ex) {
+			HashMap<String, Object> codes = ChatUtils.getCodes();
+			codes.put("%amount%", args[4]);
+			Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(codes, "commands.invalid-amount"), Level.WARNING);
+		}
 
 		if (args.length > 2) {
 			String arg = args[2];
 			if (arg.equals("RandomEnchant") || arg.equals("RandomMultiEnchant")) {
 				boolean ignoreLimits = false;
 				if (args.length > 3) ignoreLimits = Boolean.valueOf(args[3]);
-				levels = GenerateUtils.generateBookLoot(givePlayer, new ItemStack(Material.BOOK), ignoreLimits ? EnchantmentLocation.NONE : EnchantmentLocation.CHEST_LOOT);
-				if (arg.equals("RandomEnchant")) for(int i = levels.size() - 1; i > 0; i--)
-					levels.remove(i);
-			} else
+				int randomAmount = amount;
+				while (randomAmount > 0) {
+					levels = GenerateUtils.generateBookLoot(givePlayer, new ItemStack(Material.BOOK), ignoreLimits ? EnchantmentLocation.NONE : EnchantmentLocation.CHEST_LOOT);
+					if (arg.equals("RandomEnchant")) for(int i = levels.size() - 1; i > 0; i--)
+						levels.remove(i);
+					if (levels.size() == 0) {
+						HashMap<String, Object> codes = ChatUtils.getCodes();
+						codes.put("%enchant%", arg);
+						Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(codes, "commands.enchant-not-found"), Level.WARNING);
+					} else {
+						ItemStack book = new ItemStack(Material.BOOK);
+						if (useBooks) book = new ItemStack(Material.ENCHANTED_BOOK);
+						book = EnchantmentUtils.addEnchantmentsToItem(book, levels);
+						books.add(book);
+					}
+					randomAmount--;
+				}
+			} else {
 				for(CustomEnchantment enchant: RegisterEnchantments.getRegisteredEnchantments())
 					if (enchant.getName().equalsIgnoreCase(args[2])) {
 						if (!enchant.isEnabled()) {
@@ -372,33 +396,25 @@ public class EnchantCommandUtils {
 						levels.add(new EnchantmentLevel(enchant, level));
 						break;
 					}
-			if (levels.size() == 0) {
-				HashMap<String, Object> codes = ChatUtils.getCodes();
-				codes.put("%enchant%", arg);
-				Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(codes, "commands.enchant-not-found"), Level.WARNING);
-				return true;
+				if (levels.size() == 0) {
+					HashMap<String, Object> codes = ChatUtils.getCodes();
+					codes.put("%enchant%", arg);
+					Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(codes, "commands.enchant-not-found"), Level.WARNING);
+					return true;
+				}
+
+				ItemStack book = new ItemStack(Material.BOOK);
+				if (useBooks) book = new ItemStack(Material.ENCHANTED_BOOK);
+				book = EnchantmentUtils.addEnchantmentsToItem(book, levels);
+				book.setAmount(amount);
+				books.add(book);
 			}
 		} else {
 			Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(ChatUtils.getCodes(), "commands.enchant-not-specified"), Level.WARNING);
 			return false;
 		}
 
-		int amount = 1;
-		if (args.length > 4) try {
-			amount = Integer.parseInt(args[4]);
-		} catch (NumberFormatException ex) {
-			HashMap<String, Object> codes = ChatUtils.getCodes();
-			codes.put("%amount%", args[4]);
-			Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(codes, "commands.invalid-amount"), Level.WARNING);
-		}
-
-		boolean useBooks = ConfigString.USE_ENCHANTED_BOOKS.getBoolean();
-		ItemStack book = new ItemStack(Material.BOOK);
-		if (useBooks) book = new ItemStack(Material.ENCHANTED_BOOK);
-		book = EnchantmentUtils.addEnchantmentsToItem(book, levels);
-
-		for(int i = 0; i < amount; i++)
-			ItemUtils.giveItemToPlayer(givePlayer, book, givePlayer.getLocation(), false);
+		ItemUtils.giveItemsToPlayer(givePlayer, books, givePlayer.getLocation(), false);
 
 		HashMap<String, Object> codes = ChatUtils.getCodes();
 		if (player != null) codes.put("%player%", player.getDisplayName());

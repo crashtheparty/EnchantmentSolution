@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Block;
@@ -35,7 +34,6 @@ public class AsyncHWDController {
 		breaking = new ArrayList<Location>();
 		for(Location loc: allBlocks)
 			if (BlockUtils.isNextTo(loc.getBlock(), original)) breaking.add(loc);
-		breakingBlocks();
 	}
 
 	protected AsyncHWDController(Player player, ItemStack item, Block original) {
@@ -44,21 +42,18 @@ public class AsyncHWDController {
 		this.original = original;
 	}
 
-	public boolean addBlocks(Block original, List<Location> blocks) {
-		if (breaking.size() == 0) return false;
+	public void addBlocks(Block original, List<Location> blocks) {
 		for(Location loc: blocks) {
 			allBlocks.add(loc);
 			if (BlockUtils.isNextTo(loc.getBlock(), original)) breaking.add(loc);
 		}
-		return breaking.size() != 0;
 	}
 
-	private void breakingBlocks() {
+	public void breakingBlocks() {
 		ESPlayer esPlayer = EnchantmentSolution.getESPlayer(player);
 		if (breaking == null || breaking.size() == 0) {
-			for(Location loc: allBlocks)
-				BlockUtils.removeMultiBlockBreak(loc, RegisterEnchantments.HEIGHT_PLUS_PLUS);
-			esPlayer.removeHWDController();
+			removeBlocks();
+			esPlayer.removeHWDController(item);
 			return;
 		}
 		List<Location> adjacent = new ArrayList<Location>();
@@ -75,8 +70,10 @@ public class AsyncHWDController {
 					break;
 				}
 				if (!esPlayer.isInInventory(item) || item == null || MatData.isAir(item.getType())) {
-					for(Location loc: allBlocks)
-						BlockUtils.removeMultiBlockBreak(loc, RegisterEnchantments.HEIGHT_PLUS_PLUS);
+					removeBlocks();
+					if (item == null) esPlayer.removeNullHWDControllers();
+					else
+						esPlayer.removeHWDController(item);
 					return;
 				}
 				if (BlockUtils.multiBreakBlock(player, item, b, RegisterEnchantments.HEIGHT_PLUS_PLUS)) blocksBrokenTick++;
@@ -95,9 +92,6 @@ public class AsyncHWDController {
 			breakNext = breaking;
 		breaking = breakNext;
 		AdvancementUtils.awardCriteria(player, ESAdvancement.OVER_9000, "stone", blocksBrokenTick);
-		Bukkit.getScheduler().runTaskLater(EnchantmentSolution.getPlugin(), () -> {
-			breakingBlocks();
-		}, 1l);
 	}
 
 	public OfflinePlayer getPlayer() {
@@ -118,5 +112,10 @@ public class AsyncHWDController {
 
 	protected void setAllBlocks(List<Location> allBlocks) {
 		this.allBlocks = allBlocks;
+	}
+
+	public void removeBlocks() {
+		for(Location loc: allBlocks)
+			BlockUtils.removeMultiBlockBreak(loc, RegisterEnchantments.HEIGHT_PLUS_PLUS);
 	}
 }

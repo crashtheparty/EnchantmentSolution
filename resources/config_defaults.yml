@@ -8,6 +8,7 @@ anvil:
     level_divisor: 4
     default_use: false
     max_repair_level: 60
+    repair_cost_limit: 0
     damage: true
     rename: true
 grindstone:
@@ -131,6 +132,11 @@ config_comments:
         max_repair_level: 
         - 'The highest repair level that will be allowed in the anvil'
         - 'Will show ''Too Expensive to Repair'' if using above 39 and using the vanilla GUI'
+
+        repair_cost_limit: 
+        - 'The maximum repair cost an item can have'
+        - 'Repair cost increases on an item every time it is repaired in an anvil'
+        - 'This is NOT the same cost as what is displayed in the anvil because that also includes the cost of adding enchantments, repairing, renaming, etc.'
 
         default_use: 
         - 'Allow default use of anvil GUI via option at bottom right of custom GUI'

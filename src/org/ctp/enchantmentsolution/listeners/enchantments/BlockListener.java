@@ -126,7 +126,7 @@ public class BlockListener extends Enchantmentable {
 		ItemStack item = player.getInventory().getItemInMainHand();
 		GaiaTrees tree = GaiaTrees.getTree(event.getBlock().getType());
 		ESPlayer esPlayer = EnchantmentSolution.getESPlayer(player);
-		if (item != null && esPlayer.correctGaiaItem(item) && esPlayer.correctGaiaTree(tree) && EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.GAIA) && tree != null) {
+		if (item != null && EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.GAIA) && tree != null) {
 			List<Location> logs = new ArrayList<Location>();
 			int level = EnchantmentUtils.getLevel(item, RegisterEnchantments.GAIA);
 			int maxBlocks = 50 + level * level * 50;
@@ -267,7 +267,7 @@ public class BlockListener extends Enchantmentable {
 		if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.SMELTERY)) for(Item i: event.getItems()) {
 			ItemStack from = i.getItemStack();
 			SmelteryMaterial smeltery = SmelteryUtils.getSmelteryItem(data, from, item);
-			if (smeltery != null) {
+			if (smeltery != null && !MatData.isAir(smeltery.getToMaterial())) {
 				ItemStack smelted = smeltery.getSmelted();
 				int experience = 0;
 				boolean fortune = false;
@@ -308,7 +308,7 @@ public class BlockListener extends Enchantmentable {
 		if (player.getGameMode().equals(GameMode.CREATIVE) || player.getGameMode().equals(GameMode.SPECTATOR)) return;
 		ItemStack item = player.getInventory().getItemInMainHand();
 		ESPlayer esPlayer = EnchantmentSolution.getESPlayer(player);
-		if (item != null && esPlayer.correctHWDItem(item) && EnchantmentUtils.hasOneEnchantment(item, RegisterEnchantments.DEPTH_PLUS_PLUS, RegisterEnchantments.HEIGHT_PLUS_PLUS, RegisterEnchantments.WIDTH_PLUS_PLUS)) {
+		if (item != null && EnchantmentUtils.hasOneEnchantment(item, RegisterEnchantments.DEPTH_PLUS_PLUS, RegisterEnchantments.HEIGHT_PLUS_PLUS, RegisterEnchantments.WIDTH_PLUS_PLUS)) {
 			ItemBreakType breakType = ItemBreakType.getType(item.getType());
 			if (breakType == null) return;
 			int xt = 0;
