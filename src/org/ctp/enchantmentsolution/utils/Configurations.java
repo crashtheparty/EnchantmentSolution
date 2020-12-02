@@ -28,6 +28,7 @@ import org.ctp.enchantmentsolution.rpg.RPGUtils;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.WalkerBlock;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.WalkerUtils;
 import org.ctp.enchantmentsolution.utils.config.*;
+import org.ctp.enchantmentsolution.utils.debug.DebugUtils;
 import org.ctp.enchantmentsolution.utils.files.ESLanguageFile;
 
 public class Configurations implements CrashConfigurations {
@@ -92,7 +93,7 @@ public class Configurations implements CrashConfigurations {
 
 		if (!extras.exists()) extras.mkdirs();
 
-		DATA_FILE = new DataFile(EnchantmentSolution.getPlugin(), dataFolder, "data.yml", true);
+		DATA_FILE = new DataFile(EnchantmentSolution.getPlugin(), dataFolder, "data.yml", true, true);
 
 		INITIALIZING = false;
 		save();
@@ -148,7 +149,7 @@ public class Configurations implements CrashConfigurations {
 
 	public void generateDebug() {
 		File dataFolder = EnchantmentSolution.getPlugin().getDataFolder();
-		DataFile data = new DataFile(EnchantmentSolution.getPlugin(), dataFolder, "debug.yml", false);
+		DataFile data = new DataFile(EnchantmentSolution.getPlugin(), dataFolder, "debug.yml", false, false);
 		YamlConfig debug = data.getConfig();
 
 		SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss z Z");
@@ -165,6 +166,18 @@ public class Configurations implements CrashConfigurations {
 		for(Plugin pl: Bukkit.getPluginManager().getPlugins())
 			if (pl.isEnabled()) allPlugins.add(pl.getDescription().getName() + " " + pl.getDescription().getVersion());
 		debug.set("plugins.all_plugins", allPlugins);
+
+		List<String> debugMessages = DebugUtils.getMessages();
+		String num = debugMessages.size() + "";
+
+		for(int i = 0; i < debugMessages.size(); i++) {
+			String m = "";
+			for(int j = 0; j < num.length() - Integer.toString(i).length(); j++)
+				m += "0";
+			m += i + "";
+
+			debug.set("messages." + m, debugMessages.get(i));
+		}
 
 		int i = 0;
 		for(CrashAdvancementProgress progress: EnchantmentSolution.getAdvancementProgress()) {

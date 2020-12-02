@@ -78,15 +78,15 @@ public class PlayerListener extends Enchantmentable {
 			if (player.getGameMode().equals(GameMode.CREATIVE) || player.getGameMode().equals(GameMode.SPECTATOR)) return;
 			ItemStack item = player.getInventory().getItemInMainHand();
 			Block block = event.getClickedBlock();
-			if (block != null && EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.FLOWER_GIFT) && FlowerGiftDrop.isItem(block.getType())) {
+			if (block != null && EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.FLOWER_GIFT) && FlowerGiftDrop.isItem(block.getType()) && FlowerGiftDrop.getItem(block.getType()) != null) {
 				FlowerGiftEvent flowerGiftEvent = new FlowerGiftEvent(player, item, block, FlowerGiftDrop.getItem(block.getType()), LocationUtils.offset(block.getLocation()));
 				Bukkit.getPluginManager().callEvent(flowerGiftEvent);
 
 				if (!flowerGiftEvent.isCancelled() && flowerGiftEvent.overCooldown()) {
 					Location loc = flowerGiftEvent.getDropLocation();
 					ItemStack flowerGift = flowerGiftEvent.getFlower();
-					if (FlowerGiftDrop.isDoubleFlower(flowerGift.getType())) loc.add(0, 1, 0);
 					if (flowerGiftEvent.getFlower() != null) {
+						if (FlowerGiftDrop.isDoubleFlower(flowerGift.getType())) loc.add(0, 1, 0);
 						player.getWorld().spawnParticle(Particle.VILLAGER_HAPPY, loc, 30, 0.2, 0.5, 0.2);
 						if (FlowerGiftDrop.isDoubleFlower(flowerGift.getType())) AdvancementUtils.awardCriteria(player, ESAdvancement.BONEMEAL_PLUS, "bonemeal");
 						else if (FlowerGiftDrop.isWitherRose(flowerGift.getType())) AdvancementUtils.awardCriteria(player, ESAdvancement.JUST_AS_SWEET, "wither_rose");

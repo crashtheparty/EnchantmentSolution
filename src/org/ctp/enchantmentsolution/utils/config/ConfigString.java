@@ -43,6 +43,7 @@ public enum ConfigString {
 	USE_PARTICLES(Type.MAIN, "use_particles", boolean.class),
 	PLAY_SOUND(Type.MAIN, "play_sounds", boolean.class),
 	PRINT_USAGE(Type.MAIN, "print_usage", boolean.class),
+	DEBUG(Type.MAIN, "debug.send", boolean.class),
 	MULTI_BLOCK_ASYNC(Type.MAIN, "multi_block.async", boolean.class),
 	MULTI_BLOCK_BLOCKS_GLOBAL(Type.MAIN, "multi_block.blocks_per_tick.global", int.class),
 	MULTI_BLOCK_BLOCKS_PLAYER(Type.MAIN, "multi_block.blocks_per_tick.player", int.class),

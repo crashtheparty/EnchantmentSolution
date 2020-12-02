@@ -27,7 +27,6 @@ import org.ctp.crashapi.item.ItemSlot;
 import org.ctp.crashapi.item.ItemSlotType;
 import org.ctp.crashapi.listeners.EquipListener;
 import org.ctp.crashapi.resources.advancements.CrashAdvancementProgress;
-import org.ctp.crashapi.utils.ChatUtils;
 import org.ctp.crashapi.version.PluginVersion;
 import org.ctp.crashapi.version.Version;
 import org.ctp.crashapi.version.Version.VersionType;
@@ -64,6 +63,7 @@ import org.ctp.enchantmentsolution.utils.abilityhelpers.EntityAccuracy;
 import org.ctp.enchantmentsolution.utils.commands.ESCommand;
 import org.ctp.enchantmentsolution.utils.compatibility.AuctionHouseUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
+import org.ctp.enchantmentsolution.utils.debug.ESChatUtils;
 import org.ctp.enchantmentsolution.utils.files.SaveUtils;
 import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
 import org.ctp.enchantmentsolution.utils.player.ESPlayer;
@@ -502,8 +502,8 @@ public class EnchantmentSolution extends CrashAPIPlugin {
 	}
 
 	@Override
-	public ChatUtils getChat() {
-		return ChatUtils.getUtils(PLUGIN);
+	public ESChatUtils getChat() {
+		return ESChatUtils.getESChat();
 	}
 
 	@Override

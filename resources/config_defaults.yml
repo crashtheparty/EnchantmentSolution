@@ -99,6 +99,8 @@ gametypes: []
 use_particles: true
 play_sounds: true
 print_usage: true
+debug:
+    send: false
 multi_block:
     async: false
     all_faces: false
@@ -268,6 +270,11 @@ config_comments:
     print_usage: 
     - 'Print usage to player when getting a command wrong.'
     - 'Only works for commands for which they have permission.'
+    
+    debug:
+        send:
+        - 'Whether debug messages will appear as information messages in the console'
+        - 'These messages and all other types of messages will appear in debug.yml after using /esdebug'
     
     multi_block:
         async:

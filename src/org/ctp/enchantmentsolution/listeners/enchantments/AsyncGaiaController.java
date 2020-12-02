@@ -30,6 +30,7 @@ public class AsyncGaiaController {
 	private List<Location> allBlocks;
 	private List<Location> breaking;
 	private int tick = 19;
+	private boolean remove = false;
 
 	public AsyncGaiaController(Player player, ItemStack item, Block original, List<Location> allBlocks, GaiaTrees tree) {
 		this.player = player;
@@ -44,6 +45,7 @@ public class AsyncGaiaController {
 	}
 
 	public void addBlocks(Block original, List<Location> blocks) {
+		remove = false;
 		for(Location loc: blocks) {
 			allBlocks.add(loc);
 			if (BlockUtils.isNextTo(loc.getBlock(), original)) breaking.add(loc);
@@ -56,8 +58,7 @@ public class AsyncGaiaController {
 		if (tick != 0) return;
 		ESPlayer esPlayer = EnchantmentSolution.getESPlayer(player);
 		if (breaking == null || breaking.size() == 0) {
-			removeBlocks();
-			esPlayer.removeGaiaController(item, tree);
+			remove = true;
 			return;
 		}
 		Iterator<Location> iter = breaking.iterator();
@@ -67,7 +68,7 @@ public class AsyncGaiaController {
 			Location b = iter.next();
 			if (!esPlayer.canBreakBlock()) break;
 			if (!esPlayer.isInInventory(item) || item == null || MatData.isAir(item.getType())) {
-				removeBlocks();
+				remove = true;
 				return;
 			}
 			BlockUtils.multiBreakBlock(player, item, b, RegisterEnchantments.GAIA);
@@ -118,6 +119,10 @@ public class AsyncGaiaController {
 	public void removeBlocks() {
 		for(Location loc: allBlocks)
 			BlockUtils.removeMultiBlockBreak(loc, RegisterEnchantments.GAIA);
+	}
+
+	public boolean willRemove() {
+		return remove;
 	}
 
 }

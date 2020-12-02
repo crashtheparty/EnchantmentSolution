@@ -24,6 +24,7 @@ public class AsyncHWDController {
 	private final Block original;
 	private List<Location> allBlocks;
 	private List<Location> breaking;
+	private boolean remove = false;
 
 	public AsyncHWDController(Player player, ItemStack item, Block original, List<Location> allBlocks) {
 		this.player = player;
@@ -43,6 +44,7 @@ public class AsyncHWDController {
 	}
 
 	public void addBlocks(Block original, List<Location> blocks) {
+		remove = false;
 		for(Location loc: blocks) {
 			allBlocks.add(loc);
 			if (BlockUtils.isNextTo(loc.getBlock(), original)) breaking.add(loc);
@@ -52,8 +54,7 @@ public class AsyncHWDController {
 	public void breakingBlocks() {
 		ESPlayer esPlayer = EnchantmentSolution.getESPlayer(player);
 		if (breaking == null || breaking.size() == 0) {
-			removeBlocks();
-			esPlayer.removeHWDController(item);
+			remove = true;
 			return;
 		}
 		List<Location> adjacent = new ArrayList<Location>();
@@ -70,10 +71,7 @@ public class AsyncHWDController {
 					break;
 				}
 				if (!esPlayer.isInInventory(item) || item == null || MatData.isAir(item.getType())) {
-					removeBlocks();
-					if (item == null) esPlayer.removeNullHWDControllers();
-					else
-						esPlayer.removeHWDController(item);
+					remove = true;
 					return;
 				}
 				if (BlockUtils.multiBreakBlock(player, item, b, RegisterEnchantments.HEIGHT_PLUS_PLUS)) blocksBrokenTick++;
@@ -117,5 +115,9 @@ public class AsyncHWDController {
 	public void removeBlocks() {
 		for(Location loc: allBlocks)
 			BlockUtils.removeMultiBlockBreak(loc, RegisterEnchantments.HEIGHT_PLUS_PLUS);
+	}
+	
+	public boolean willRemove() {
+		return remove;
 	}
 }
