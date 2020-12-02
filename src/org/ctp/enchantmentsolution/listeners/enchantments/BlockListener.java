@@ -288,8 +288,8 @@ public class BlockListener extends Enchantmentable {
 
 				if (!smelteryEvent.isCancelled()) {
 					AbilityUtils.dropExperience(smelteryEvent.getBlock().getLocation(), smelteryEvent.getExp());
-					if (from.getType() == smeltery.getFromMaterial()) {
-						from.setType(smeltery.getToMaterial());
+					if (!MatData.isAir(smelteryEvent.getChangeTo())) {
+						from.setType(smelteryEvent.getChangeTo());
 						if (smelteryEvent.willFortune()) from.setAmount(SmelteryUtils.getFortuneForSmeltery(smelteryEvent.getDrop(), item, smeltery.getFromMaterial()));
 						i.setItemStack(from);
 					}
