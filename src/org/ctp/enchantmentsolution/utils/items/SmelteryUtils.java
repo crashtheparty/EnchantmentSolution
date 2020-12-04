@@ -153,7 +153,8 @@ public class SmelteryUtils {
 				case "GOLD_ORE":
 				case "NETHER_GOLD_ORE":
 					int multiply = (int) (Math.random() * (level + 2));
-					return smelted.getAmount() * multiply;
+					if (multiply > 1)
+						return smelted.getAmount() * multiply;
 			}
 		}
 		return smelted.getAmount();
