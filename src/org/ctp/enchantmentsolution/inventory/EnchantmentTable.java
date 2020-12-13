@@ -1,10 +1,13 @@
 package org.ctp.enchantmentsolution.inventory;
 
 import java.util.*;
+import java.util.logging.Level;
 
 import org.bukkit.*;
 import org.bukkit.block.Block;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.event.enchantment.EnchantItemEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -277,11 +280,19 @@ public class EnchantmentTable implements InventoryData {
 				}
 		}
 		List<EnchantmentLevel> enchLevels = table.getEnchantments(new ItemData(enchantableItem))[level].getEnchantments();
+		Map<Enchantment, Integer> defaultLevels = new HashMap<Enchantment, Integer>();
+		for (EnchantmentLevel l : enchLevels)
+			defaultLevels.put(l.getEnchant().getRelativeEnchantment(), l.getLevel());
+		EnchantItemEvent event = new EnchantItemEvent(player, player.getOpenInventory(), block, table.getItem(), level, defaultLevels, level);
+		try {
+			Bukkit.getPluginManager().callEvent(event);
+		} catch (Exception ex) {
+			Chatable.sendDebug("An issue occurred with calling an EnchantItemEvent: " + ex.getMessage(), Level.SEVERE);
+		}
 		if (playerItems.get(slot).getType() == Material.BOOK && ConfigString.USE_ENCHANTED_BOOKS.getBoolean()) enchantableItem = EnchantmentUtils.convertToEnchantedBook(enchantableItem);
 		player.playSound(player.getLocation(), Sound.BLOCK_ENCHANTMENT_TABLE_USE, 1, 1);
 		enchantableItem = EnchantmentUtils.addEnchantmentsToItem(enchantableItem, enchLevels);
 		playerItems.set(slot, enchantableItem);
-
 		TableEnchantments.removeTableEnchantments(player);
 		setInventory(playerItems);
 		player.setStatistic(Statistic.ITEM_ENCHANTED, player.getStatistic(Statistic.ITEM_ENCHANTED) + 1);

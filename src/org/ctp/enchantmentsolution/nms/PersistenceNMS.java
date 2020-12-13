@@ -7,46 +7,46 @@ import java.util.List;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.ctp.crashapi.CrashAPI;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.nms.persistence.LegacyPersistenceUtils;
 import org.ctp.enchantmentsolution.nms.persistence.PersistenceUtils;
+import org.ctp.enchantmentsolution.utils.VersionUtils;
 
 public class PersistenceNMS {
 
 	public static String getEnchantmentString(EnchantmentLevel level) {
-		if (CrashAPI.getPlugin().getBukkitVersion().getVersionNumber() > 11) return PersistenceUtils.getEnchantmentString(level);
+		if (VersionUtils.getVersionNumber() > 11) return PersistenceUtils.getEnchantmentString(level);
 		return LegacyPersistenceUtils.getEnchantmentString(level);
 	}
 
 	public static EnchantmentLevel getEnchantment(String s, ItemMeta meta) {
-		if (CrashAPI.getPlugin().getBukkitVersion().getVersionNumber() > 11) return PersistenceUtils.returnEnchantmentLevel(s, meta);
+		if (VersionUtils.getVersionNumber() > 11) return PersistenceUtils.returnEnchantmentLevel(s, meta);
 		return LegacyPersistenceUtils.getEnchantment(s);
 	}
 
 	public static boolean isEnchantment(ItemMeta meta, String s) {
-		if (CrashAPI.getPlugin().getBukkitVersion().getVersionNumber() > 11) return PersistenceUtils.isEnchantment(meta, s).isEnchant();
+		if (VersionUtils.getVersionNumber() > 11) return PersistenceUtils.isEnchantment(meta, s).isEnchant();
 		return LegacyPersistenceUtils.isEnchantment(s);
 	}
 
 	public static EnchantmentLevel returnEnchantmentLevel(String s, ItemMeta meta) {
-		if (CrashAPI.getPlugin().getBukkitVersion().getVersionNumber() > 11) return PersistenceUtils.returnEnchantmentLevel(s, meta);
+		if (VersionUtils.getVersionNumber() > 11) return PersistenceUtils.returnEnchantmentLevel(s, meta);
 		return LegacyPersistenceUtils.returnEnchantmentLevel(s, meta);
 	}
 
 	public static String returnEnchantmentName(EnchantmentLevel level) {
-		if (CrashAPI.getPlugin().getBukkitVersion().getVersionNumber() > 11) return PersistenceUtils.returnEnchantmentName(level);
+		if (VersionUtils.getVersionNumber() > 11) return PersistenceUtils.returnEnchantmentName(level);
 		return LegacyPersistenceUtils.returnEnchantmentName(level.getEnchant(), level.getLevel());
 	}
 
 	public static String returnEnchantmentName(CustomEnchantment enchant, int level) {
-		if (CrashAPI.getPlugin().getBukkitVersion().getVersionNumber() > 11) return PersistenceUtils.returnEnchantmentName(new EnchantmentLevel(enchant, level));
+		if (VersionUtils.getVersionNumber() > 11) return PersistenceUtils.returnEnchantmentName(new EnchantmentLevel(enchant, level));
 		return LegacyPersistenceUtils.returnEnchantmentName(enchant, level);
 	}
 
 	public static void removeEnchantment(ItemStack item, CustomEnchantment enchant) {
-		if (CrashAPI.getPlugin().getBukkitVersion().getVersionNumber() > 11) PersistenceUtils.removePersistence(item, enchant);
+		if (VersionUtils.getVersionNumber() > 11) PersistenceUtils.removePersistence(item, enchant);
 		else {
 			ItemMeta meta = item.getItemMeta();
 			List<String> lore = meta.getLore();
@@ -59,12 +59,12 @@ public class PersistenceNMS {
 	}
 
 	public static boolean isLegacyEnchantment(String s) {
-		if (CrashAPI.getPlugin().getBukkitVersion().getVersionNumber() <= 11) LegacyPersistenceUtils.isLegacyEnchantment(s);
+		if (VersionUtils.getVersionNumber() <= 11) LegacyPersistenceUtils.isLegacyEnchantment(s);
 		return false;
 	}
 
 	public static boolean addEnchantments(ItemStack item, List<EnchantmentLevel> levels) {
-		if (CrashAPI.getPlugin().getBukkitVersion().getVersionNumber() > 11) return PersistenceUtils.addPersistence(item, levels);
+		if (VersionUtils.getVersionNumber() > 11) return PersistenceUtils.addPersistence(item, levels);
 		else {
 			ItemMeta meta = item.getItemMeta();
 			List<String> lore = meta.getLore();
@@ -78,7 +78,7 @@ public class PersistenceNMS {
 	}
 
 	public static boolean addEnchantment(ItemStack item, EnchantmentLevel level) {
-		if (CrashAPI.getPlugin().getBukkitVersion().getVersionNumber() > 11) return addEnchantments(item, Arrays.asList(level));
+		if (VersionUtils.getVersionNumber() > 11) return addEnchantments(item, Arrays.asList(level));
 		else {
 			ItemMeta meta = item.getItemMeta();
 			List<String> lore = meta.getLore();
@@ -92,7 +92,7 @@ public class PersistenceNMS {
 	}
 
 	public static void setLore(ItemStack item) {
-		if (CrashAPI.getPlugin().getBukkitVersion().getVersionNumber() > 11) PersistenceUtils.setItemLore(item);
+		if (VersionUtils.getVersionNumber() > 11) PersistenceUtils.setItemLore(item);
 		else {
 			ItemMeta meta = item.getItemMeta();
 			List<String> lore = meta.getLore();
@@ -104,52 +104,52 @@ public class PersistenceNMS {
 
 	public static boolean isStickyHold(ItemStack item) {
 		boolean stickyHold = false;
-		if (CrashAPI.getPlugin().getBukkitVersion().getVersionNumber() > 3) stickyHold = PersistenceUtils.isStickyHold(item);
-		if (!stickyHold && CrashAPI.getPlugin().getBukkitVersion().getVersionNumber() <= 11) stickyHold = LegacyPersistenceUtils.isStickyHold(item);
+		if (VersionUtils.getVersionNumber() > 3) stickyHold = PersistenceUtils.isStickyHold(item);
+		if (!stickyHold && VersionUtils.getVersionNumber() <= 11) stickyHold = LegacyPersistenceUtils.isStickyHold(item);
 		return stickyHold;
 	}
 
 	public static Material stickyItemType(ItemStack item) {
 		Material type = null;
-		if (CrashAPI.getPlugin().getBukkitVersion().getVersionNumber() > 3) type = PersistenceUtils.stickyItemType(item);
-		if (type == null && CrashAPI.getPlugin().getBukkitVersion().getVersionNumber() <= 11) type = LegacyPersistenceUtils.stickyItemType(item);
+		if (VersionUtils.getVersionNumber() > 3) type = PersistenceUtils.stickyItemType(item);
+		if (type == null && VersionUtils.getVersionNumber() <= 11) type = LegacyPersistenceUtils.stickyItemType(item);
 		return type;
 	}
 
 	public static ItemStack repairStickyHold(ItemStack item) {
 		ItemStack stickyItem = null;
-		if (CrashAPI.getPlugin().getBukkitVersion().getVersionNumber() > 3) stickyItem = PersistenceUtils.repairStickyHold(item);
-		if (stickyItem == null && CrashAPI.getPlugin().getBukkitVersion().getVersionNumber() <= 11) stickyItem = LegacyPersistenceUtils.repairStickyHold(item);
+		if (VersionUtils.getVersionNumber() > 3) stickyItem = PersistenceUtils.repairStickyHold(item);
+		if (stickyItem == null && VersionUtils.getVersionNumber() <= 11) stickyItem = LegacyPersistenceUtils.repairStickyHold(item);
 		return stickyItem;
 	}
 
 	public static ItemStack createStickyHold(ItemStack stickyItem) {
-		if (CrashAPI.getPlugin().getBukkitVersion().getVersionNumber() > 3) return PersistenceUtils.createStickyHold(stickyItem);
+		if (VersionUtils.getVersionNumber() > 3) return PersistenceUtils.createStickyHold(stickyItem);
 		else
 			return LegacyPersistenceUtils.createStickyHold(stickyItem);
 	}
 
 	public static List<Integer> getAnimalIDsFromItem(ItemStack item) {
 		List<Integer> ids = new ArrayList<Integer>();
-		if (CrashAPI.getPlugin().getBukkitVersion().getVersionNumber() > 3) ids = PersistenceUtils.getAnimalIDsFromItem(item);
-		if (ids.size() == 0 && CrashAPI.getPlugin().getBukkitVersion().getVersionNumber() <= 11) ids = LegacyPersistenceUtils.getAnimalIDsFromItem(item);
+		if (VersionUtils.getVersionNumber() > 3) ids = PersistenceUtils.getAnimalIDsFromItem(item);
+		if (ids.size() == 0 && VersionUtils.getVersionNumber() <= 11) ids = LegacyPersistenceUtils.getAnimalIDsFromItem(item);
 		return ids;
 	}
 
 	public static void removeAnimal(ItemStack item, int id) {
 		boolean remove = false;
-		if (CrashAPI.getPlugin().getBukkitVersion().getVersionNumber() > 3) remove = PersistenceUtils.removeAnimal(item, id);
-		if (!remove && CrashAPI.getPlugin().getBukkitVersion().getVersionNumber() <= 11) LegacyPersistenceUtils.removeAnimal(item, id);
+		if (VersionUtils.getVersionNumber() > 3) remove = PersistenceUtils.removeAnimal(item, id);
+		if (!remove && VersionUtils.getVersionNumber() <= 11) LegacyPersistenceUtils.removeAnimal(item, id);
 	}
 
 	public static void addAnimal(ItemStack item, int id) {
-		if (CrashAPI.getPlugin().getBukkitVersion().getVersionNumber() > 3) PersistenceUtils.addAnimal(item, id);
+		if (VersionUtils.getVersionNumber() > 3) PersistenceUtils.addAnimal(item, id);
 		else
 			LegacyPersistenceUtils.addAnimal(item, id);
 	}
 
 	public static boolean checkItem(ItemStack original) {
-		if (CrashAPI.getPlugin().getBukkitVersion().getVersionNumber() > 11) return PersistenceUtils.checkItem(original);
+		if (VersionUtils.getVersionNumber() > 11) return PersistenceUtils.checkItem(original);
 		else
 			return LegacyPersistenceUtils.checkItem(original) != null;
 	}

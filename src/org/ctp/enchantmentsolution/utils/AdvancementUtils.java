@@ -6,7 +6,6 @@ import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.advancement.AdvancementProgress;
 import org.bukkit.entity.Player;
-import org.ctp.crashapi.CrashAPI;
 import org.ctp.crashapi.resources.advancements.*;
 import org.ctp.crashapi.utils.ChatUtils;
 import org.ctp.enchantmentsolution.Chatable;
@@ -19,7 +18,7 @@ import org.ctp.enchantmentsolution.utils.config.ConfigUtils;
 public class AdvancementUtils {
 
 	public static void createAdvancements() {
-		int version = CrashAPI.getPlugin().getBukkitVersion().getVersionNumber();
+		int version = VersionUtils.getVersionNumber();
 		boolean reload = false;
 
 		for(ESAdvancementTab tab: ESAdvancementTab.getAllTabs()) {

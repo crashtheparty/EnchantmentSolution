@@ -283,6 +283,10 @@ commands:
     help:
         commands_page: '&bCommands Page %page%'
         commands_info_shrink: '&f: %description%'
+    confirm-reload:
+    - 'You have made changes using /esconfig that have not been saved!'
+    - 'Reloading will prevent these changes from being saved.'
+    - 'Use ''/esreload confirm'' to reload.'
 grindstone: 
     legacy-open: '&aOpen the Grindstone'
     name: '&9Grindstone'

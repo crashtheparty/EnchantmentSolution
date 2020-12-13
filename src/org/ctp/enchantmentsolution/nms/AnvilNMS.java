@@ -1,7 +1,7 @@
 package org.ctp.enchantmentsolution.nms;
 
 import org.bukkit.inventory.ItemStack;
-import org.ctp.crashapi.CrashAPI;
+import org.ctp.enchantmentsolution.utils.VersionUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 
 public class AnvilNMS {
@@ -9,7 +9,7 @@ public class AnvilNMS {
 	public static int getRepairCost(ItemStack item) {
 		if (item == null) return 0;
 		int repairCost = 0;
-		switch (CrashAPI.getPlugin().getBukkitVersion().getVersionNumber()) {
+		switch (VersionUtils.getVersionNumber()) {
 			case 1:
 				net.minecraft.server.v1_13_R1.ItemStack nmsV1 = org.bukkit.craftbukkit.v1_13_R1.inventory.CraftItemStack.asNMSCopy(item);
 				repairCost = nmsV1.getRepairCost();
@@ -43,6 +43,7 @@ public class AnvilNMS {
 				repairCost = nmsV6.getRepairCost();
 				break;
 			case 15:
+			case 16:
 				net.minecraft.server.v1_16_R3.ItemStack nmsV7 = org.bukkit.craftbukkit.v1_16_R3.inventory.CraftItemStack.asNMSCopy(item);
 				repairCost = nmsV7.getRepairCost();
 				break;
@@ -53,7 +54,7 @@ public class AnvilNMS {
 
 	public static ItemStack setRepairCost(ItemStack item, int repairCost) {
 		if (ConfigString.REPAIR_COST_LIMIT.getInt() > 0 && repairCost > ConfigString.REPAIR_COST_LIMIT.getInt()) repairCost = ConfigString.REPAIR_COST_LIMIT.getInt();
-		switch (CrashAPI.getPlugin().getBukkitVersion().getVersionNumber()) {
+		switch (VersionUtils.getVersionNumber()) {
 			case 1:
 				net.minecraft.server.v1_13_R1.ItemStack nmsV1 = org.bukkit.craftbukkit.v1_13_R1.inventory.CraftItemStack.asNMSCopy(item);
 				nmsV1.setRepairCost(repairCost);
@@ -87,6 +88,7 @@ public class AnvilNMS {
 				nmsV6.setRepairCost(repairCost);
 				return org.bukkit.craftbukkit.v1_16_R2.inventory.CraftItemStack.asBukkitCopy(nmsV6);
 			case 15:
+			case 16:
 				net.minecraft.server.v1_16_R3.ItemStack nmsV7 = org.bukkit.craftbukkit.v1_16_R3.inventory.CraftItemStack.asNMSCopy(item);
 				nmsV7.setRepairCost(repairCost);
 				return org.bukkit.craftbukkit.v1_16_R3.inventory.CraftItemStack.asBukkitCopy(nmsV7);

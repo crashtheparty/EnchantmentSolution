@@ -14,7 +14,6 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.loot.LootContext;
 import org.bukkit.loot.Lootable;
-import org.ctp.crashapi.CrashAPI;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.CERegister;
@@ -30,6 +29,7 @@ import org.ctp.enchantmentsolution.events.player.RecyclerEvent;
 import org.ctp.enchantmentsolution.listeners.Enchantmentable;
 import org.ctp.enchantmentsolution.nms.animalmob.AnimalMob;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
+import org.ctp.enchantmentsolution.utils.VersionUtils;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.RecyclerDrops;
 import org.ctp.enchantmentsolution.utils.items.AbilityUtils;
 import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
@@ -135,7 +135,7 @@ public class AfterEffectsListener extends Enchantmentable {
 	}
 
 	private void pillage(EntityDeathEvent event) {
-		if (CrashAPI.getPlugin().getBukkitVersion().getVersionNumber() > 3) {
+		if (VersionUtils.getVersionNumber() > 3) {
 			if (!canRun(RegisterEnchantments.PILLAGE, event)) return;
 			LivingEntity entity = event.getEntity();
 			if (entity instanceof Lootable && entity.getKiller() != null) {

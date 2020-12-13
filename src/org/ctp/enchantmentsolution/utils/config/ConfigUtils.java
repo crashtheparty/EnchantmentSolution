@@ -15,7 +15,7 @@ public class ConfigUtils {
 	}
 
 	public static boolean useLegacyGrindstone() {
-		if (VersionUtils.getBukkitVersionNumber() < 4) return ConfigString.LEGACY_GRINDSTONE.getBoolean();
+		if (VersionUtils.getVersionNumber() < 4) return ConfigString.LEGACY_GRINDSTONE.getBoolean();
 		return false;
 	}
 

@@ -2,6 +2,7 @@ package org.ctp.enchantmentsolution.utils.debug;
 
 import java.util.logging.Level;
 
+import org.bukkit.plugin.java.JavaPlugin;
 import org.ctp.crashapi.utils.ChatUtils;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
@@ -21,14 +22,14 @@ public class ESChatUtils extends ChatUtils {
 	}
 
 	@Override
-	public void sendToConsole(Level level, String message) {
-		super.sendToConsole(level, message);
-		DebugUtils.addDebug(message, level);
+	public void sendToConsole(JavaPlugin plugin, Level level, String message) {
+		super.sendToConsole(plugin, level, message);
+		DebugUtils.addDebug(plugin, message, level);
 	}
 
-	public void sendDebug(String message) {
-		if (ConfigString.DEBUG.getBoolean()) super.sendToConsole(getPlugin(), Level.INFO, message);
-		DebugUtils.addDebug(message, Level.INFO);
+	public void sendDebug(String message, Level level) {
+		if (ConfigString.DEBUG.getBoolean()) super.sendToConsole(getPlugin(), level, message);
+		DebugUtils.addDebug(EnchantmentSolution.getPlugin(), message, level);
 	}
 	
 }

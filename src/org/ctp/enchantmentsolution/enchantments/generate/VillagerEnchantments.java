@@ -66,7 +66,7 @@ public class VillagerEnchantments extends LootEnchantments {
 
 		recipe = new MerchantRecipe(EnchantmentUtils.addEnchantmentToItem(new ItemStack(mat), enchant.getEnchant(), enchant.getLevel()), original.getUses(), original.getMaxUses(), original.hasExperienceReward());
 		recipe.setIngredients(ingredients);
-		if (VersionUtils.getBukkitVersionNumber() > 3) recipe.setVillagerExperience(original.getVillagerExperience());
+		if (VersionUtils.getVersionNumber() > 3) recipe.setVillagerExperience(original.getVillagerExperience());
 	}
 
 	public static VillagerEnchantments getVillagerEnchantments(ItemStack result, MerchantRecipe original) {

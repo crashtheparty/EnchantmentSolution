@@ -30,7 +30,7 @@ public class EnchantmentSolutionCommand implements CommandExecutor, TabCompleter
 	private final ESCommand enchant = new ESCommand("enchant", "commands.aliases.enchant", "commands.descriptions.enchant", "commands.usage.enchant", "enchantmentsolution.command.enchant");
 	private final ESCommand enchantUnsafe = new ESCommand("enchantunsafe", "commands.aliases.enchantunsafe", "commands.descriptions.enchantunsafe", "commands.usage.enchantunsafe", "enchantmentsolution.command.enchantunsafe");
 	private final ESCommand enchantInfo = new ESCommand("info", "commands.aliases.info", "commands.descriptions.info", "commands.usage.info", "enchantmentsolution.command.info");
-	private final ESCommand removeEnchant = new ESCommand("removeenchant", "commands.aliases.removeenchant", "commands.descriptions.removeenchant", "commands.usage.removeenchant", "enchantmentsolution.command.removeenchant");
+	private final ESCommand removeEnchant = new ESCommand("removeenchant", "commands.aliases.removeenchant", "commands.descriptions.removeenchant", "commands.usage.removeenchant", "enchantmentsolution.command.enchantremove");
 	private final ESCommand rpg = new ESCommand("esrpg", "commands.aliases.esrpg", "commands.descriptions.esrpg", "commands.usage.esrpg", "enchantmentsolution.command.rpg");
 	private final ESCommand rpgStats = new ESCommand("rpgstats", "commands.aliases.rpgstats", "commands.descriptions.rpgstats", "commands.usage.rpgstats", "enchantmentsolution.command.rpgstats");
 	private final ESCommand rpgTop = new ESCommand("rpgtop", "commands.aliases.rpgtop", "commands.descriptions.rpgtop", "commands.usage.rpgtop", "enchantmentsolution.command.rpgtop");

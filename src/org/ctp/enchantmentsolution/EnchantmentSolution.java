@@ -13,7 +13,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
-import org.ctp.crashapi.CrashAPI;
 import org.ctp.crashapi.CrashAPIPlugin;
 import org.ctp.crashapi.config.yaml.YamlConfig;
 import org.ctp.crashapi.db.BackupDB;
@@ -55,9 +54,7 @@ import org.ctp.enchantmentsolution.mcmmo.McMMOAbility;
 import org.ctp.enchantmentsolution.nms.animalmob.AnimalMob;
 import org.ctp.enchantmentsolution.rpg.listener.RPGListener;
 import org.ctp.enchantmentsolution.threads.*;
-import org.ctp.enchantmentsolution.utils.AdvancementUtils;
-import org.ctp.enchantmentsolution.utils.Configurations;
-import org.ctp.enchantmentsolution.utils.MetricsUtils;
+import org.ctp.enchantmentsolution.utils.*;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.DrownedEntity;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.EntityAccuracy;
 import org.ctp.enchantmentsolution.utils.commands.ESCommand;
@@ -98,6 +95,9 @@ public class EnchantmentSolution extends CrashAPIPlugin {
 		pluginVersion = new PluginVersion(this, new Version(getDescription().getVersion(), VersionType.UNKNOWN));
 
 		if (!getDataFolder().exists()) getDataFolder().mkdirs();
+		Chatable.get().sendInfo("Minecraft Version: " + VersionUtils.getAPIVersion());
+		Chatable.get().sendInfo("CrashAPI Version Number: " + VersionUtils.getVersionNumber());
+		Chatable.get().sendInfo("EnchantmentSolution Version: " + VersionUtils.getESVersionName());
 
 		db = new ESBackup(this);
 		db.load();
@@ -108,7 +108,7 @@ public class EnchantmentSolution extends CrashAPIPlugin {
 
 	@Override
 	public void onEnable() {
-		if (CrashAPI.getPlugin().getBukkitVersion().getVersionNumber() < 4) {
+		if (VersionUtils.getVersionNumber() < 4) {
 			Chatable.get().sendWarning("WARNING: Minecraft 1.13 is now deprecated! Support will not be offered for any issues with enchantments or NMS.");
 			Chatable.get().sendWarning("Please use an older version of EnchantmentSolution (2.3.x) if problems persist.");
 		}
@@ -413,10 +413,11 @@ public class EnchantmentSolution extends CrashAPIPlugin {
 
 	public static List<ESPlayer> getAllESPlayers(boolean online) {
 		List<ESPlayer> players = new ArrayList<ESPlayer>();
-		for(Player player: Bukkit.getOnlinePlayers())
+		if (online) for(Player player: Bukkit.getOnlinePlayers())
 			players.add(getESPlayer(player));
-		if (!online) for(OfflinePlayer player: Bukkit.getOfflinePlayers())
-			players.add(getESPlayer(player));
+		else
+			for(OfflinePlayer player: Bukkit.getOfflinePlayers())
+				players.add(getESPlayer(player));
 		return players;
 	}
 

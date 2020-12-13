@@ -28,6 +28,7 @@ import org.ctp.enchantmentsolution.utils.abilityhelpers.GaiaUtils;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.WalkerBlock;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.WalkerUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
+import org.ctp.enchantmentsolution.utils.player.ESPlayer;
 
 public class SaveUtils {
 
@@ -158,10 +159,11 @@ public class SaveUtils {
 		if (!ConfigString.RESET_ON_RELOAD.getBoolean()) {
 			i = 0;
 			try {
-				for(TableEnchantments table: TableEnchantments.getAllTableEnchantments()) {
-					table.setConfig(config, i);
-					i++;
-				}
+				for(ESPlayer player: EnchantmentSolution.getAllESPlayers(false))
+					for(TableEnchantments table: TableEnchantments.getAllTableEnchantments(player.getPlayer().getUniqueId())) {
+						table.setConfig(config, i);
+						i++;
+					}
 			} catch (NoClassDefFoundError ex) {
 				ex.printStackTrace();
 			}

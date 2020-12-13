@@ -288,7 +288,7 @@ public class RegisterEnchantments {
 		addDefaultEnchantment(CERegister.LUCK_OF_THE_SEA);
 		addDefaultEnchantment(CERegister.LURE);
 		addDefaultEnchantment(CERegister.MENDING);
-		if (VersionUtils.getBukkitVersionNumber() > 3 || VersionUtils.getBukkitVersionNumber() == 0) {
+		if (VersionUtils.getVersionNumber() > 3 || VersionUtils.getVersionNumber() == 0) {
 			addDefaultEnchantment(CERegister.MULTISHOT);
 			addDefaultEnchantment(CERegister.PIERCING);
 		}
@@ -296,13 +296,13 @@ public class RegisterEnchantments {
 		addDefaultEnchantment(CERegister.PROJECTILE_PROTECTION);
 		addDefaultEnchantment(CERegister.PROTECTION);
 		addDefaultEnchantment(CERegister.PUNCH);
-		if (VersionUtils.getBukkitVersionNumber() > 3 || VersionUtils.getBukkitVersionNumber() == 0) addDefaultEnchantment(CERegister.QUICK_CHARGE);
+		if (VersionUtils.getVersionNumber() > 3 || VersionUtils.getVersionNumber() == 0) addDefaultEnchantment(CERegister.QUICK_CHARGE);
 		addDefaultEnchantment(CERegister.RESPIRATION);
 		addDefaultEnchantment(CERegister.RIPTIDE);
 		addDefaultEnchantment(CERegister.SHARPNESS);
 		addDefaultEnchantment(CERegister.SILK_TOUCH);
 		addDefaultEnchantment(CERegister.SMITE);
-		if (VersionUtils.getBukkitVersionNumber() > 11) addDefaultEnchantment(CERegister.SOUL_SPEED);
+		if (VersionUtils.getVersionNumber() > 11) addDefaultEnchantment(CERegister.SOUL_SPEED);
 		addDefaultEnchantment(CERegister.SWEEPING_EDGE);
 		addDefaultEnchantment(CERegister.THORNS);
 		addDefaultEnchantment(CERegister.UNBREAKING);
@@ -349,7 +349,7 @@ public class RegisterEnchantments {
 		addDefaultEnchantment(CERegister.NO_REST);
 		addDefaultEnchantment(CERegister.OVERKILL);
 		addDefaultEnchantment(CERegister.PACIFIED);
-		if (VersionUtils.getBukkitVersionNumber() > 3 || VersionUtils.getBukkitVersionNumber() == 0) addDefaultEnchantment(CERegister.PILLAGE);
+		if (VersionUtils.getVersionNumber() > 3 || VersionUtils.getVersionNumber() == 0) addDefaultEnchantment(CERegister.PILLAGE);
 		addDefaultEnchantment(CERegister.PLYOMETRICS);
 		addDefaultEnchantment(CERegister.PUSHBACK);
 		addDefaultEnchantment(CERegister.QUICK_STRIKE);
@@ -363,7 +363,7 @@ public class RegisterEnchantments {
 		addDefaultEnchantment(CERegister.SOUL_REAPER);
 		addDefaultEnchantment(CERegister.SPLATTER_FEST);
 		addDefaultEnchantment(CERegister.STICKY_HOLD);
-		if (VersionUtils.getBukkitVersionNumber() > 3 || VersionUtils.getBukkitVersionNumber() == 0) addDefaultEnchantment(CERegister.STONE_THROW);
+		if (VersionUtils.getVersionNumber() > 3 || VersionUtils.getVersionNumber() == 0) addDefaultEnchantment(CERegister.STONE_THROW);
 		addDefaultEnchantment(CERegister.STREAK);
 		addDefaultEnchantment(CERegister.TANK);
 		addDefaultEnchantment(CERegister.TELEPATHY);

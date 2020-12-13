@@ -51,7 +51,7 @@ public class SmelteryUtils {
 				material = "TERRACOTTA";
 				break;
 			case "CACTUS":
-				if (VersionUtils.getBukkitVersionNumber() > 3) material = "GREEN_DYE";
+				if (VersionUtils.getVersionNumber() > 3) material = "GREEN_DYE";
 				else
 					material = "CACTUS_GREEN";
 				break;

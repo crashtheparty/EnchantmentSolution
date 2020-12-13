@@ -133,7 +133,7 @@ public class InventoryClickUtils {
 				Anvil anvil = new Anvil(player, stone.getBlock());
 				EnchantmentSolution.getPlugin().addInventory(anvil);
 				anvil.setInventory();
-			} else if (stone.getItems().contains(item)) if (stone.removeItem(slot)) {
+			} else if (stone.getItems().contains(item) && stone.removeItem(slot)) {
 				stone.setInventory();
 				ItemUtils.giveItemToPlayer(player, item, player.getLocation(), false);
 			}

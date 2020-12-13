@@ -79,7 +79,7 @@ public class ESPlayer {
 		telepathyItems = new ArrayList<ItemStack>();
 		removeSoulItems();
 		flyAttribute.addModifier(new AttributeModifier(UUID.fromString("ffffffff-ffff-ffff-ffff-000000000000"), "frequentFlyerFlight", -0.08, Operation.ADD_NUMBER));
-		ESPlayerThread.getThread(this);
+		if (EnchantmentSolution.getPlugin().isEnabled()) ESPlayerThread.getThread(this);
 		hwdControllers = new ArrayList<>();
 		gaiaControllers = new HashMap<>();
 	}

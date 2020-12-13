@@ -206,7 +206,6 @@ public class Grindstone implements InventoryData {
 					}
 					player.setLevel(player.getLevel() - levelCost);
 				}
-				if (player.getGameMode() != GameMode.CREATIVE) player.setLevel(player.getLevel() - levelCost);
 				ItemUtils.giveItemToPlayer(player, grindstone.getTakenItem(), player.getLocation(), false);
 				playGrindstoneSound();
 				grindstone = null;

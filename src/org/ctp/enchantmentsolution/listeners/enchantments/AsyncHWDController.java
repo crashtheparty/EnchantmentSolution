@@ -1,6 +1,5 @@
 package org.ctp.enchantmentsolution.listeners.enchantments;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -23,18 +22,14 @@ public class AsyncHWDController {
 	private final ItemStack item;
 	private final Block original;
 	private List<Location> allBlocks;
-	private List<Location> breaking;
 	private boolean remove = false;
+	private int tick = 2;
 
 	public AsyncHWDController(Player player, ItemStack item, Block original, List<Location> allBlocks) {
 		this.player = player;
 		this.item = item;
 		this.original = original;
 		this.allBlocks = allBlocks;
-
-		breaking = new ArrayList<Location>();
-		for(Location loc: allBlocks)
-			if (BlockUtils.isNextTo(loc.getBlock(), original)) breaking.add(loc);
 	}
 
 	protected AsyncHWDController(Player player, ItemStack item, Block original) {
@@ -45,50 +40,32 @@ public class AsyncHWDController {
 
 	public void addBlocks(Block original, List<Location> blocks) {
 		remove = false;
-		for(Location loc: blocks) {
+		for(Location loc: blocks)
 			allBlocks.add(loc);
-			if (BlockUtils.isNextTo(loc.getBlock(), original)) breaking.add(loc);
-		}
 	}
 
 	public void breakingBlocks() {
+		tick++;
+		tick = tick % 3;
+		if (tick != 0) return;
 		ESPlayer esPlayer = EnchantmentSolution.getESPlayer(player);
-		if (breaking == null || breaking.size() == 0) {
+		if (allBlocks == null || allBlocks.size() == 0) {
 			remove = true;
 			return;
 		}
-		List<Location> adjacent = new ArrayList<Location>();
 		int blocksBrokenTick = 0;
-		boolean combine = false;
-		Iterator<Location> iter = breaking.iterator();
+		Iterator<Location> iter = allBlocks.iterator();
 
-		List<Location> breakNext = new ArrayList<Location>();
-		if (esPlayer.canBreakBlock()) {
-			while (iter.hasNext()) {
-				Location b = iter.next();
-				if (!esPlayer.canBreakBlock()) {
-					combine = true;
-					break;
-				}
-				if (!esPlayer.isInInventory(item) || item == null || MatData.isAir(item.getType())) {
-					remove = true;
-					return;
-				}
-				if (BlockUtils.multiBreakBlock(player, item, b, RegisterEnchantments.HEIGHT_PLUS_PLUS)) blocksBrokenTick++;
-				allBlocks.remove(b);
-				for(Location loc: allBlocks)
-					if (!breaking.contains(loc) && !adjacent.contains(loc) && BlockUtils.isNextTo(loc.getBlock(), b.getBlock())) adjacent.add(loc);
-				iter.remove();
+		if (esPlayer.canBreakBlock()) while (iter.hasNext()) {
+			Location b = iter.next();
+			if (!esPlayer.canBreakBlock()) break;
+			if (!esPlayer.isInInventory(item) || item == null || MatData.isAir(item.getType())) {
+				remove = true;
+				return;
 			}
-			if (combine) {
-				breakNext.addAll(breaking);
-				for(Location loc: adjacent)
-					if (!breakNext.contains(loc)) breakNext.add(loc);
-			} else
-				breakNext.addAll(adjacent);
-		} else
-			breakNext = breaking;
-		breaking = breakNext;
+			if (BlockUtils.multiBreakBlock(player, item, b, RegisterEnchantments.HEIGHT_PLUS_PLUS)) blocksBrokenTick++;
+			iter.remove();
+		}
 		AdvancementUtils.awardCriteria(player, ESAdvancement.OVER_9000, "stone", blocksBrokenTick);
 	}
 

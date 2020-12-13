@@ -12,10 +12,10 @@ import org.bukkit.entity.ExperienceOrb;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.inventory.ItemStack;
-import org.ctp.crashapi.CrashAPI;
 import org.ctp.crashapi.utils.DamageUtils;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
+import org.ctp.enchantmentsolution.utils.VersionUtils;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.ParticleEffect;
 import org.ctp.enchantmentsolution.utils.player.ESPlayer;
 
@@ -52,7 +52,7 @@ public class AbilityUtils {
 
 	public static void giveExperience(Player player, int amount) {
 		List<ItemStack> items = new ArrayList<ItemStack>();
-		int version = CrashAPI.getPlugin().getBukkitVersion().getVersionNumber();
+		int version = VersionUtils.getVersionNumber();
 		ESPlayer esPlayer = EnchantmentSolution.getESPlayer(player);
 		for(ItemStack i: esPlayer.getEquipped())
 			if (EnchantmentUtils.hasEnchantment(i, Enchantment.MENDING)) {

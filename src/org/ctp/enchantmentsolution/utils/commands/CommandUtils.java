@@ -33,6 +33,8 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 public class CommandUtils {
+	
+	private static boolean changed = false;
 
 	public static boolean anvil(CommandSender sender, CrashCommand details, String[] args) {
 		Player player = null;
@@ -93,11 +95,10 @@ public class CommandUtils {
 		Player player = null;
 		Configurations c = Configurations.getConfigurations();
 		if (sender instanceof Player) player = (Player) sender;
-		else if (sender.isOp()) {
+		if (sender.isOp()) {
 			c.generateDebug();
 			Chatable.get().sendInfo(Chatable.get().getMessage(ChatUtils.getCodes(), "commands.debug"));
-		}
-		if (sender.hasPermission(details.getPermission())) {
+		} else if (sender.hasPermission(details.getPermission())) {
 			c.generateDebug();
 			Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(ChatUtils.getCodes(), "commands.debug"), Level.INFO);
 		} else
@@ -269,8 +270,22 @@ public class CommandUtils {
 		Player player = null;
 		if (sender instanceof Player) player = (Player) sender;
 		if (sender.hasPermission(details.getPermission())) {
-			Configurations.getConfigurations().reload();
-			Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(ChatUtils.getCodes(), "commands.reload"), Level.INFO);
+			if (changed || ConfigInventory.hasChanged()) {
+				if (args.length > 1 && args[1].equals("confirm")) {
+					changed = false;
+					Configurations.getConfigurations().reload();
+					Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(ChatUtils.getCodes(), "commands.reload"), Level.INFO);
+				}
+				else {
+					changed = true;
+					List<String> messages = Chatable.get().getMessages(ChatUtils.getCodes(), "commands.confirm-reload");
+					for (String s : messages)
+						Chatable.get().sendMessage(sender, player, s, Level.WARNING);
+				}
+			} else {
+				Configurations.getConfigurations().reload();
+				Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(ChatUtils.getCodes(), "commands.reload"), Level.INFO);
+			}
 		} else
 			Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(ChatUtils.getCodes(), "commands.no-permission"), Level.WARNING);
 		return true;
@@ -721,4 +736,8 @@ public class CommandUtils {
 		return true;
 	}
 
+	public static void change(boolean to) {
+		changed = to;
+	}
+	
 }

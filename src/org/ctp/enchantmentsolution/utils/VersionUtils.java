@@ -5,8 +5,18 @@ import org.ctp.enchantmentsolution.EnchantmentSolution;
 
 public class VersionUtils {
 
-	public static int getBukkitVersionNumber() {
-		return CrashAPI.getPlugin().getBukkitVersion().getVersionNumber();
+	public static String getESVersionName() {
+		return EnchantmentSolution.getPlugin().getPluginVersion().getCurrent().getVersionName();
+	}
+
+	public static int getVersionNumber() {
+		int version = CrashAPI.getPlugin().getBukkitVersion().getVersionNumber();
+		if (version < 3) version = 4;
+		return version;
+	}
+
+	public static String getAPIVersion() {
+		return CrashAPI.getPlugin().getBukkitVersion().getAPIVersion();
 	}
 
 	public static String getMcMMOType() {
