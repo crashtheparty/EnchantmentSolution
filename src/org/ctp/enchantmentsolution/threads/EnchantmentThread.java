@@ -31,7 +31,7 @@ public abstract class EnchantmentThread implements Runnable, Reflectionable {
 	public boolean isRunning() {
 		return running;
 	}
-	
+
 	protected void remove() {
 		Bukkit.getScheduler().cancelTask(getScheduler());
 		running = false;

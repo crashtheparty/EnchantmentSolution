@@ -3,8 +3,8 @@ package org.ctp.enchantmentsolution.utils.abilityhelpers;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
-import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.events.blocks.DamageState;
+import org.ctp.enchantmentsolution.interfaces.WalkerInterface;
 
 public class WalkerBlock {
 	private final Enchantment enchantment;
@@ -14,20 +14,17 @@ public class WalkerBlock {
 	private DamageState damage;
 	private final String meta;
 
-	public WalkerBlock(Enchantment enchantment, Block block, Material replaceType, int tick) {
+	public WalkerBlock(WalkerInterface walker, Block block, int tick) {
 		this.block = block;
 		this.tick = tick;
-		this.enchantment = enchantment;
-		this.replaceType = replaceType;
+		enchantment = walker.getEnchantment();
+		replaceType = walker.getReplaceMaterial();
 		damage = DamageState.NORMAL;
-		if (enchantment == RegisterEnchantments.MAGMA_WALKER) meta = "MagmaWalker";
-		else if (enchantment == RegisterEnchantments.VOID_WALKER) meta = "VoidWalker";
-		else
-			meta = "";
+		meta = walker.getMetadata();
 	}
 
-	public WalkerBlock(Enchantment enchantment, Block block, Material replaceType, int tick, DamageState damage) {
-		this(enchantment, block, replaceType, tick);
+	public WalkerBlock(WalkerInterface walker, Block block, int tick, DamageState damage) {
+		this(walker, block, tick);
 		this.damage = damage;
 	}
 

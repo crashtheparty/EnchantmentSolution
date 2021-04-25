@@ -698,7 +698,7 @@ public class ConfigInventory implements InventoryData, Pageable {
 	public ChatUtils getChat() {
 		return Chatable.get();
 	}
-	
+
 	public static boolean hasChanged() {
 		return HAS_CHANGED;
 	}

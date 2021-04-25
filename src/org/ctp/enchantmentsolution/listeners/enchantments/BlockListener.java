@@ -39,6 +39,7 @@ import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.BlockUtils;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.*;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.GaiaUtils.GaiaTrees;
+import org.ctp.enchantmentsolution.utils.config.ConfigString;
 import org.ctp.enchantmentsolution.utils.items.AbilityUtils;
 import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
 import org.ctp.enchantmentsolution.utils.items.SmelteryUtils;
@@ -310,6 +311,7 @@ public class BlockListener extends Enchantmentable {
 		ESPlayer esPlayer = EnchantmentSolution.getESPlayer(player);
 		if (item != null && EnchantmentUtils.hasOneEnchantment(item, RegisterEnchantments.DEPTH_PLUS_PLUS, RegisterEnchantments.HEIGHT_PLUS_PLUS, RegisterEnchantments.WIDTH_PLUS_PLUS)) {
 			ItemBreakType breakType = ItemBreakType.getType(item.getType());
+
 			if (breakType == null) return;
 			int xt = 0;
 			int yt = 0;
@@ -403,9 +405,19 @@ public class BlockListener extends Enchantmentable {
 				Bukkit.getPluginManager().callEvent(hwd);
 
 				if (!hwd.isCancelled()) {
-					for(Location b: hwd.getBlocks())
-						BlockUtils.addMultiBlockBreak(b, RegisterEnchantments.HEIGHT_PLUS_PLUS);
-					esPlayer.addToHWDController(item, hwd.getBlock(), hwd.getBlocks());
+					boolean async = ConfigString.MULTI_BLOCK_ASYNC.getBoolean();
+					if (async) {
+						for(Location b: hwd.getBlocks())
+							BlockUtils.addMultiBlockBreak(b, RegisterEnchantments.HEIGHT_PLUS_PLUS);
+						esPlayer.addToHWDController(item, hwd.getBlock(), hwd.getBlocks());
+					} else {
+						int blocksBroken = 0;
+						for(Location b: hwd.getBlocks()) {
+							BlockUtils.addMultiBlockBreak(b, RegisterEnchantments.HEIGHT_PLUS_PLUS);
+							if (BlockUtils.multiBreakBlock(player, item, b, RegisterEnchantments.HEIGHT_PLUS_PLUS)) blocksBroken++;
+						}
+						AdvancementUtils.awardCriteria(player, ESAdvancement.OVER_9000, "stone", blocksBroken);
+					}
 				}
 			}
 		}

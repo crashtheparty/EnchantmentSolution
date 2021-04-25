@@ -22,8 +22,9 @@ public class PermissionUtils {
 
 	public static void addPermissions(EnchantmentLevel level) {
 		List<Permission> permissions = getPermissions(level);
-		permissions.add(new Permission("enchantmentsolution." + level.getEnchant().getName() + ".table.level" + level.getLevel(), PermissionDefault.FALSE));
-		permissions.add(new Permission("enchantmentsolution." + level.getEnchant().getName() + ".anvil.level" + level.getLevel(), PermissionDefault.FALSE));
+		String name = getNamespace(level.getEnchant());
+		permissions.add(new Permission(name + "." + level.getEnchant().getName() + ".table.level" + level.getLevel(), PermissionDefault.FALSE));
+		permissions.add(new Permission(name + "." + level.getEnchant().getName() + ".anvil.level" + level.getLevel(), PermissionDefault.FALSE));
 		for(Permission p: permissions)
 			if (Bukkit.getPluginManager().getPermission(p.getName()) == null) Bukkit.getPluginManager().addPermission(p);
 		PERMISSIONS.put(level, permissions);
@@ -50,9 +51,8 @@ public class PermissionUtils {
 		if (player == null) return true;
 		if (usePermissions()) {
 			if (player.hasPermission("enchantmentsolution.permissions.ignore")) return true;
-			String namespace = getNamespace(enchant);
-			String path = namespace + "." + enchant.getName().toLowerCase(Locale.ROOT) + ".advanced.permissions.table.level";
-			String permission = namespace + "." + enchant.getName().toLowerCase(Locale.ROOT) + ".table.level";
+			String path = getLocationName(enchant) + "." + enchant.getName().toLowerCase(Locale.ROOT) + ".advanced.permissions.table.level";
+			String permission = getNamespace(enchant) + "." + enchant.getName().toLowerCase(Locale.ROOT) + ".table.level";
 			return checkPermission(player, level, path, permission);
 		}
 
@@ -63,9 +63,8 @@ public class PermissionUtils {
 		if (player == null) return true;
 		if (usePermissions()) {
 			if (player.hasPermission("enchantmentsolution.permissions.ignore")) return true;
-			String namespace = getNamespace(enchant);
-			String path = namespace + "." + enchant.getName().toLowerCase(Locale.ROOT) + ".advanced.permissions.anvil.level";
-			String permission = namespace + "." + enchant.getName().toLowerCase(Locale.ROOT) + ".anvil.level";
+			String path = getLocationName(enchant) + "." + enchant.getName().toLowerCase(Locale.ROOT) + ".advanced.permissions.anvil.level";
+			String permission = getNamespace(enchant) + "." + enchant.getName().toLowerCase(Locale.ROOT) + ".anvil.level";
 			return checkPermission(player, level, path, permission);
 		}
 
@@ -73,6 +72,18 @@ public class PermissionUtils {
 	}
 
 	private static String getNamespace(CustomEnchantment enchant) {
+		if (enchant.getRelativeEnchantment() instanceof ApiEnchantmentWrapper) {
+			JavaPlugin plugin = ((ApiEnchantmentWrapper) enchant.getRelativeEnchantment()).getPlugin();
+			if (plugin == null) {
+				Chatable.get().sendWarning("Enchantment " + enchant.getName() + " (Display Name " + enchant.getDisplayName() + ")" + " does not have a JavaPlugin set. Refusing to check permissions.");
+				return null;
+			}
+			return plugin.getName().toLowerCase(Locale.ROOT);
+		} else
+			return "enchantmentsolution";
+	}
+
+	private static String getLocationName(CustomEnchantment enchant) {
 		if (enchant.getRelativeEnchantment() instanceof ApiEnchantmentWrapper) {
 			JavaPlugin plugin = ((ApiEnchantmentWrapper) enchant.getRelativeEnchantment()).getPlugin();
 			if (plugin == null) {

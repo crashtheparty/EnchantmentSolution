@@ -29,6 +29,7 @@ import org.ctp.enchantmentsolution.enums.ItemMoisturizeType;
 import org.ctp.enchantmentsolution.events.interact.*;
 import org.ctp.enchantmentsolution.events.modify.IcarusLaunchEvent;
 import org.ctp.enchantmentsolution.events.player.PlayerChangeCoordsEvent;
+import org.ctp.enchantmentsolution.interfaces.WalkerInterface;
 import org.ctp.enchantmentsolution.listeners.Enchantmentable;
 import org.ctp.enchantmentsolution.nms.PersistenceNMS;
 import org.ctp.enchantmentsolution.nms.animalmob.AnimalMob;
@@ -60,8 +61,7 @@ public class PlayerListener extends Enchantmentable {
 	@EventHandler
 	public void onPlayerChangeCoords(PlayerChangeCoordsEvent event) {
 		runMethod(this, "icarus", event, PlayerChangeCoordsEvent.class);
-		runMethod(this, "movementListener", event, RegisterEnchantments.MAGMA_WALKER);
-		runMethod(this, "movementListener", event, RegisterEnchantments.VOID_WALKER);
+		runMethod(this, "movementListener", event, PlayerChangeCoordsEvent.class);
 	}
 
 	@EventHandler
@@ -230,41 +230,27 @@ public class PlayerListener extends Enchantmentable {
 				ItemMoisturizeType type = ItemMoisturizeType.getMoisturizeType(block.getType());
 				if (type != null) {
 					Sound sound = null;
+					Event blockEvent = null;
+					BlockState state = block.getState();
 					switch (type.getName().toLowerCase(Locale.ROOT)) {
 						case "extinguish":
-							if (block.getType() == Material.CAMPFIRE) {
-								Campfire fire = (Campfire) block.getBlockData();
-								if (fire.isLit()) sound = Sound.BLOCK_WATER_AMBIENT;
-							}
+							Campfire fire = (Campfire) block.getBlockData();
+							if (fire.isLit()) sound = Sound.BLOCK_WATER_AMBIENT;
 							break;
 						case "wet":
 						case "unsmelt":
 							sound = Sound.ENTITY_SHEEP_SHEAR;
+							blockEvent = new EntityBlockFormEvent(player, block, state);
 							break;
 						case "waterlog":
 							if (block.getBlockData() instanceof Waterlogged) {
 								Waterlogged water = (Waterlogged) block.getBlockData();
-								if (block.getType().isInteractable() && player.isSneaking() && !water.isWaterlogged() || !block.getType().isInteractable() && !water.isWaterlogged()) sound = Sound.ENTITY_SHEEP_SHEAR;
+								if ((block.getType().isInteractable() && player.isSneaking() || !block.getType().isInteractable() || block.getType().name().contains("STAIRS")) && !water.isWaterlogged()) sound = Sound.ENTITY_SHEEP_SHEAR;
 							}
+							blockEvent = new PlayerBucketEmptyEvent(player, block, block, event.getBlockFace(), Material.WATER_BUCKET, item);
 							break;
 					}
 					if (sound != null) {
-						BlockState state = block.getState();
-
-						Event blockEvent = null;
-
-						switch (type.getName().toLowerCase(Locale.ROOT)) {
-							case "extinguish":
-								break;
-							case "wet":
-							case "unsmelt":
-								blockEvent = new EntityBlockFormEvent(player, block, state);
-								break;
-							case "waterlog":
-								blockEvent = new PlayerBucketEmptyEvent(player, block, block, event.getBlockFace(), Material.WATER_BUCKET, item);
-								break;
-						}
-
 						if (blockEvent != null) {
 							Bukkit.getPluginManager().callEvent(blockEvent);
 							if (((Cancellable) blockEvent).isCancelled()) return;
@@ -287,7 +273,7 @@ public class PlayerListener extends Enchantmentable {
 									break;
 								case "wet":
 									if (moisturizeBlock.getType().name().contains("CONCRETE")) AdvancementUtils.awardCriteria(player, ESAdvancement.JUST_ADD_WATER, "concrete");
-									moisturizeBlock.setType(ItemMoisturizeType.getWet(moisturizeBlock.getType()));
+									moisturizeBlock.setType(ItemMoisturizeType.fromMoisturize(moisturizeBlock.getType()));
 									DamageUtils.damageItem(player, item);
 									player.playSound(player.getLocation(), moisturize.getSound(), 1, 1);
 									player.incrementStatistic(Statistic.USE_ITEM, item.getType());
@@ -295,7 +281,7 @@ public class PlayerListener extends Enchantmentable {
 									break;
 								case "unsmelt":
 									if (moisturizeBlock.getType() == Material.CRACKED_STONE_BRICKS) AdvancementUtils.awardCriteria(player, ESAdvancement.REPAIRED, "broken_bricks");
-									moisturizeBlock.setType(ItemMoisturizeType.getUnsmelt(moisturizeBlock.getType()));
+									moisturizeBlock.setType(ItemMoisturizeType.fromMoisturize(moisturizeBlock.getType()));
 
 									DamageUtils.damageItem(player, item);
 									player.playSound(player.getLocation(), moisturize.getSound(), 1, 1);
@@ -463,16 +449,11 @@ public class PlayerListener extends Enchantmentable {
 		}
 	}
 
-	@SuppressWarnings("deprecation")
-	private void movementListener(PlayerChangeCoordsEvent event, Enchantment enchantment) {
-		if (!canRun(enchantment, event)) return;
+	private void movementListener(PlayerChangeCoordsEvent event) {
 		Player player = event.getPlayer();
-		if (isDisabled(player, enchantment)) return;
-		Location loc = player.getLocation();
 		if (player.isFlying() || player.isGliding() || player.isInsideVehicle()) return;
 		ItemStack boots = player.getInventory().getBoots();
-		if (EnchantmentUtils.hasEnchantment(boots, enchantment) && enchantment == RegisterEnchantments.MAGMA_WALKER && player.isOnGround()) WalkerUtils.updateBlocks(player, boots, loc, enchantment, Arrays.asList(Material.LAVA), Material.MAGMA_BLOCK, "MagmaWalker");
-		else if (EnchantmentUtils.hasEnchantment(boots, enchantment) && enchantment == RegisterEnchantments.VOID_WALKER && LocationUtils.isLocationDifferent(event.getFrom(), event.getTo(), false)) WalkerUtils.updateBlocks(player, boots, loc, enchantment, Arrays.asList(Material.AIR, Material.CAVE_AIR, Material.VOID_AIR), Material.OBSIDIAN, "VoidWalker");
-		else if (EnchantmentUtils.hasEnchantment(boots, enchantment) && enchantment == RegisterEnchantments.VOID_WALKER && LocationUtils.isLocationDifferent(event.getFrom(), event.getTo(), true)) WalkerUtils.updateBlocks(player, boots, event.getTo(), enchantment, Arrays.asList(Material.AIR, Material.CAVE_AIR, Material.VOID_AIR), Material.OBSIDIAN, "VoidWalker");
+
+		if (WalkerInterface.hasWalkerInterface(boots)) WalkerUtils.updateBlocks(this, event, player, boots, event.getFrom(), event.getTo());
 	}
 }

@@ -10,12 +10,12 @@ public class Chatable {
 	public static ChatUtils get() {
 		return EnchantmentSolution.getPlugin().getChat();
 	}
-	
+
 	public static void sendDebug(String s) {
 		ESChatUtils utils = EnchantmentSolution.getPlugin().getChat();
 		utils.sendDebug(s, Level.INFO);
 	}
-	
+
 	public static void sendDebug(String s, Level level) {
 		ESChatUtils utils = EnchantmentSolution.getPlugin().getChat();
 		utils.sendDebug(s, level);

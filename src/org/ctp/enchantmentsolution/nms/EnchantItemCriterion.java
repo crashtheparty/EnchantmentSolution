@@ -10,8 +10,8 @@ import org.ctp.enchantmentsolution.utils.VersionUtils;
 public class EnchantItemCriterion {
 
 	public static void enchantItemTrigger(Player player, ItemStack item) {
-		String packageName = "net.minecraft.server." + VersionUtils.getAPIVersion();
-		String craftPackageName = "org.bukkit.craftbukkit." + VersionUtils.getAPIVersion();
+		String packageName = "net.minecraft.server." + VersionUtils.getMinecraftAPIVersion();
+		String craftPackageName = "org.bukkit.craftbukkit." + VersionUtils.getMinecraftAPIVersion();
 		Object entityPlayer = null;
 		Object itemStack = null;
 		try {

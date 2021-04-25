@@ -188,6 +188,23 @@ public class EnchantmentUtils {
 		return 0;
 	}
 
+	public static EnchantmentLevel getEnchantmentLevel(ItemStack item, Enchantment enchant) {
+		EnchantmentLevel level = new EnchantmentLevel(RegisterEnchantments.getCustomEnchantment(enchant), 0);
+		if (item.getItemMeta() != null) {
+			ItemMeta meta = item.getItemMeta();
+			Map<Enchantment, Integer> enchantments = meta.getEnchants();
+			if (item.getType() == Material.ENCHANTED_BOOK) enchantments = ((EnchantmentStorageMeta) meta).getStoredEnchants();
+			for(Iterator<Entry<Enchantment, Integer>> it = enchantments.entrySet().iterator(); it.hasNext();) {
+				Entry<Enchantment, Integer> e = it.next();
+				if (e.getKey().equals(enchant)) {
+					level.setLevel(e.getValue());
+					break;
+				}
+			}
+		}
+		return level;
+	}
+
 	public static boolean canAddEnchantment(CustomEnchantment customEnchant, ItemStack item) {
 		ItemMeta meta = item.clone().getItemMeta();
 		Map<Enchantment, Integer> enchants = meta.getEnchants();

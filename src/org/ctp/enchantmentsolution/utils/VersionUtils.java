@@ -15,12 +15,16 @@ public class VersionUtils {
 		return version;
 	}
 
-	public static String getAPIVersion() {
+	public static String getMinecraftAPIVersion() {
 		return CrashAPI.getPlugin().getBukkitVersion().getAPIVersion();
 	}
 
 	public static String getMcMMOType() {
 		return EnchantmentSolution.getPlugin().getMcMMOType();
+	}
+
+	public static String getMinecraftVersion() {
+		return CrashAPI.getPlugin().getBukkitVersion().getVersion();
 	}
 
 }

@@ -1,6 +1,5 @@
 package org.ctp.enchantmentsolution.utils.compatibility;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -28,8 +27,6 @@ import com.gamingmesh.jobs.actions.ItemActionInfo;
 import com.gamingmesh.jobs.container.ActionType;
 import com.gamingmesh.jobs.container.FastPayment;
 import com.gamingmesh.jobs.container.JobsPlayer;
-import com.gamingmesh.jobs.listeners.JobsPaymentListener;
-import com.gamingmesh.jobs.stuff.FurnaceBrewingHandling;
 
 public class JobsUtils {
 
@@ -121,9 +118,7 @@ public class JobsUtils {
 		// check if player is riding
 		if (Jobs.getGCManager().disablePaymentIfRiding && player.isInsideVehicle()) return;
 
-		CMIMaterial cmat = CMIMaterial.get(block);
-		if (cmat.equals(CMIMaterial.FURNACE) || cmat.equals(CMIMaterial.SMOKER) || cmat.equals(CMIMaterial.BLAST_FURNACE) && block.hasMetadata(JobsPaymentListener.furnaceOwnerMetadata)) FurnaceBrewingHandling.removeFurnace(block);
-		else if (cmat.equals(CMIMaterial.BREWING_STAND) || cmat.equals(CMIMaterial.LEGACY_BREWING_STAND) && block.hasMetadata(JobsPaymentListener.brewingOwnerMetadata)) FurnaceBrewingHandling.removeBrewing(block);
+		plugin.getBlockOwnerShips().forEach(os -> os.remove(block));
 
 		if (!Jobs.getPermissionHandler().hasWorldPermission(player, player.getLocation().getWorld().getName())) return;
 
@@ -146,7 +141,7 @@ public class JobsUtils {
 		ItemStack item = Jobs.getNms().getItemInMainHand(player);
 		if (item != null && !item.getType().equals(Material.AIR)) // Protection for block break with silktouch
 			if (Jobs.getGCManager().useSilkTouchProtection) for(Entry<Enchantment, Integer> one: item.getEnchantments().entrySet())
-				if (CMIEnchantment.get(one.getKey()) == CMIEnchantment.SILK_TOUCH) if (Jobs.getBpManager().isInBp(block)) return;
+			if (CMIEnchantment.get(one.getKey()) == CMIEnchantment.SILK_TOUCH) if (Jobs.getBpManager().isInBp(block)) return;
 
 		JobsPlayer jPlayer = Jobs.getPlayerManager().getJobsPlayer(player);
 		if (jPlayer == null) return;
@@ -225,7 +220,7 @@ public class JobsUtils {
 		ItemStack hand = Jobs.getNms().getItemInMainHand(p);
 		CMIMaterial cmat = CMIMaterial.get(hand);
 
-		HashMap<Enchantment, Integer> got = Jobs.getGCManager().whiteListedItems.get(cmat);
+		Map<Enchantment, Integer> got = Jobs.getGCManager().whiteListedItems.get(cmat);
 		if (got == null) return false;
 
 		if (Jobs.getNms().getDurability(hand) == 0) return true;
@@ -237,13 +232,12 @@ public class JobsUtils {
 
 		return true;
 	}
-	
+
 	private static Jobs getJobs() {
 		Jobs plugin = null;
 		try {
 			plugin = Jobs.getInstance();
-			if (plugin == null)
-				Chatable.get().sendWarning("Jobs has not been initialized properly - ES will ignore it.");
+			if (plugin == null) Chatable.get().sendWarning("Jobs has not been initialized properly - ES will ignore it.");
 		} catch (Exception ex) {
 			Chatable.get().sendWarning("Jobs is not installed on this server - something is wrong.");
 		}

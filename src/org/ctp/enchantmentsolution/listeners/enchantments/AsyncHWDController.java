@@ -93,7 +93,7 @@ public class AsyncHWDController {
 		for(Location loc: allBlocks)
 			BlockUtils.removeMultiBlockBreak(loc, RegisterEnchantments.HEIGHT_PLUS_PLUS);
 	}
-	
+
 	public boolean willRemove() {
 		return remove;
 	}

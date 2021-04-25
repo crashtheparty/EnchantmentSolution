@@ -10,7 +10,10 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.ctp.crashapi.CrashAPIPlugin;
 import org.ctp.crashapi.commands.CrashCommand;
+import org.ctp.crashapi.compatibility.MMOUtils;
 import org.ctp.crashapi.inventory.InventoryData;
 import org.ctp.crashapi.utils.ChatUtils;
 import org.ctp.crashapi.utils.StringUtils;
@@ -33,7 +36,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 public class CommandUtils {
-	
+
 	private static boolean changed = false;
 
 	public static boolean anvil(CommandSender sender, CrashCommand details, String[] args) {
@@ -275,11 +278,10 @@ public class CommandUtils {
 					changed = false;
 					Configurations.getConfigurations().reload();
 					Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(ChatUtils.getCodes(), "commands.reload"), Level.INFO);
-				}
-				else {
+				} else {
 					changed = true;
 					List<String> messages = Chatable.get().getMessages(ChatUtils.getCodes(), "commands.confirm-reload");
-					for (String s : messages)
+					for(String s: messages)
 						Chatable.get().sendMessage(sender, player, s, Level.WARNING);
 				}
 			} else {
@@ -719,6 +721,14 @@ public class CommandUtils {
 						codes.put("%item%", item.toString().replace(ChatColor.COLOR_CHAR, '&'));
 						obj.put("text", Chatable.get().getMessage(codes, "commands.item-test"));
 						HashMap<Object, Object> action = new HashMap<Object, Object>();
+						if (CrashAPIPlugin.getMMOItems()) {
+							ItemMeta meta = item.getItemMeta();
+							List<String> lore = meta.getLore();
+							lore.add("Item Type: " + MMOUtils.getMMOTypeString(item));
+							lore.add("Item Type Set: " + MMOUtils.getMMOTypeSetString(item));
+							meta.setLore(lore);
+							item.setItemMeta(meta);
+						}
 						action.put("action", "copy_to_clipboard");
 						action.put("value", item.toString());
 						obj.put("clickEvent", action);
@@ -739,5 +749,5 @@ public class CommandUtils {
 	public static void change(boolean to) {
 		changed = to;
 	}
-	
+
 }

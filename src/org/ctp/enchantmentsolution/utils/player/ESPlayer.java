@@ -18,7 +18,6 @@ import org.ctp.crashapi.item.*;
 import org.ctp.crashapi.nms.ServerNMS;
 import org.ctp.crashapi.utils.DamageUtils;
 import org.ctp.crashapi.utils.ItemUtils;
-import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.*;
@@ -619,7 +618,7 @@ public class ESPlayer {
 
 	public void addToHWDController(ItemStack item, Block original, List<Location> allBlocks) {
 		for(AsyncHWDController controller: hwdControllers)
-			if (controller.getItem().equals(item) && !controller.willRemove()) {
+			if (controller.getItem().equals(item)) {
 				controller.addBlocks(original, allBlocks);
 				return;
 			}
@@ -648,13 +647,10 @@ public class ESPlayer {
 
 	public void runHWD() {
 		Iterator<AsyncHWDController> iter = hwdControllers.iterator();
-		if (iter.hasNext()) Chatable.sendDebug("Running HWD: " + hwdControllers.size() + " Controllers");
 		while (iter.hasNext()) {
 			AsyncHWDController controller = iter.next();
-			Chatable.sendDebug("Getting Controller For Player " + controller.getPlayer().getName() + " and Item " + controller.getItem());
 			controller.breakingBlocks();
 			if (controller.willRemove()) {
-				Chatable.sendDebug("Removing All Blocks and the Controller");
 				controller.removeBlocks();
 				iter.remove();
 			}

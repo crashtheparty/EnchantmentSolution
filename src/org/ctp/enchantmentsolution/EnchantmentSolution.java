@@ -3,9 +3,7 @@ package org.ctp.enchantmentsolution;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bukkit.Bukkit;
-import org.bukkit.NamespacedKey;
-import org.bukkit.OfflinePlayer;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.enchantments.Enchantment;
@@ -34,6 +32,8 @@ import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.commands.EnchantmentSolutionCommand;
 import org.ctp.enchantmentsolution.database.ESBackup;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
+import org.ctp.enchantmentsolution.enums.ItemBreakType;
+import org.ctp.enchantmentsolution.interfaces.InterfaceRegistry;
 import org.ctp.enchantmentsolution.listeners.*;
 import org.ctp.enchantmentsolution.listeners.advancements.AdvancementEntityListener;
 import org.ctp.enchantmentsolution.listeners.advancements.AdvancementPlayerListener;
@@ -95,7 +95,8 @@ public class EnchantmentSolution extends CrashAPIPlugin {
 		pluginVersion = new PluginVersion(this, new Version(getDescription().getVersion(), VersionType.UNKNOWN));
 
 		if (!getDataFolder().exists()) getDataFolder().mkdirs();
-		Chatable.get().sendInfo("Minecraft Version: " + VersionUtils.getAPIVersion());
+		Chatable.get().sendInfo("Minecraft Version: " + VersionUtils.getMinecraftVersion());
+		Chatable.get().sendInfo("Minecraft API Version: " + VersionUtils.getMinecraftAPIVersion());
 		Chatable.get().sendInfo("CrashAPI Version Number: " + VersionUtils.getVersionNumber());
 		Chatable.get().sendInfo("EnchantmentSolution Version: " + VersionUtils.getESVersionName());
 
@@ -104,6 +105,10 @@ public class EnchantmentSolution extends CrashAPIPlugin {
 		RegisterEnchantments.addEnchantments();
 		CONFIGURATIONS = Configurations.getConfigurations();
 		CONFIGURATIONS.onEnable();
+
+		Chatable.get().sendInfo("Loading Item Break Types...");
+		ItemBreakType.getType(Material.DIAMOND_PICKAXE);
+		Chatable.get().sendInfo("Item Break Types Loaded!");
 	}
 
 	@Override
@@ -180,6 +185,8 @@ public class EnchantmentSolution extends CrashAPIPlugin {
 		registerEvent(new WikiListener());
 		wiki = new WikiThread();
 		Bukkit.getScheduler().runTaskTimerAsynchronously(PLUGIN, wiki, 20l, 20l);
+
+		InterfaceRegistry.firstLoad();
 
 		Bukkit.getScheduler().runTaskLater(this, () -> {
 			try {
@@ -353,14 +360,14 @@ public class EnchantmentSolution extends CrashAPIPlugin {
 						int num = Integer.parseInt(mcVersion[i]);
 						if (i == 0 && num > 2) warning = true;
 						else if (i == 1 && num > 1) warning = true;
-						else if (i == 2 && num > 156) warning = true;
+						else if (i == 2 && num > 196) warning = true;
 					} catch (NumberFormatException ex) {
 						warning = true;
 					}
 				if (warning) {
 					getChat().sendWarning("McMMO Overhaul updates sporidically. Compatibility may break between versions.");
 					getChat().sendWarning("If there are any compatibility issues, please notify the plugin author immediately.");
-					getChat().sendWarning("Current Working Version: 2.1.156");
+					getChat().sendWarning("Current Working Version: 2.1.196");
 				}
 				mcmmoType = "Overhaul";
 			} else {

@@ -280,7 +280,6 @@ config_comments:
         async:
         - 'Whether the Height/Width/Depth++ enchantments should work asynchronously'
         - 'This increases peformance but nerfs those enchantments slightly'
-        - 'DEPRECATED - now will always be true for performance reasons'
         all_faces:
         - 'Whether the async will only check basic block faces (North, South, East, West, Up, Down) or all faces.'
         blocks_per_tick:

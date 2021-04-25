@@ -1,0 +1,66 @@
+all:
+- acacia_leaves
+- azalea_leaves
+- beetroots
+- birch_leaves
+- carrots
+- dark_oak_leaves
+- flowering_azalea_leaves
+- glowstone
+- grass
+- gravel
+- jungle_leaves
+- melon
+- nether_wart
+- oak_leaves
+- potatoes
+- sea_lantern
+- spruce_leaves
+- twisting_vines
+- weeping_vines
+- wheat
+netherite_pickaxe: []
+diamond_pickaxe: []
+iron_pickaxe:
+- deepslate_diamond_ore
+- deepslate_emerald_ore
+- deepslate_gold_ore
+- deepslate_redstone_ore
+- diamond_ore
+- emerald_ore
+- gold_ore
+- redstone_ore
+stone_pickaxe:
+- copper_ore
+- deepslate_copper_ore
+- deepslate_iron_ore
+- deepslate_lapis_ore
+- iron_ore
+- lapis_ore
+golden_pickaxe: []
+wooden_pickaxe:
+- coal_ore
+- deepslate_coal_ore
+- gilded_blackstone
+- nether_gold_ore
+- nether_quartz_ore
+netherite_axe: []
+diamond_axe: []
+iron_axe: []
+stone_axe: []
+golden_axe: []
+wooden_axe: []
+netherite_shovel: []
+diamond_shovel: []
+iron_shovel: []
+stone_shovel: []
+golden_shovel: []
+wooden_shovel:
+- snow
+- snow_block
+netherite_hoe: []
+diamond_hoe: []
+iron_hoe: []
+stone_hoe: []
+golden_hoe: []
+wooden_hoe: []

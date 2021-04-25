@@ -1,8 +1,7 @@
 package org.ctp.enchantmentsolution.utils.abilityhelpers;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
+import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -16,11 +15,17 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
+import org.ctp.crashapi.item.MatData;
 import org.ctp.crashapi.nms.PacketNMS;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
+import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.events.blocks.*;
+import org.ctp.enchantmentsolution.events.generic.GenericWalkerBlockEvent;
+import org.ctp.enchantmentsolution.events.player.PlayerChangeCoordsEvent;
+import org.ctp.enchantmentsolution.interfaces.WalkerInterface;
+import org.ctp.enchantmentsolution.listeners.Enchantmentable;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
 
@@ -35,47 +40,55 @@ public class WalkerUtils {
 		return false;
 	}
 
-	public static void updateBlocks(Player player, ItemStack boots, Location loc, Enchantment enchantment,
-	List<Material> checkMaterial, Material replaceMaterial, String metadata) {
-		int level = EnchantmentUtils.getLevel(boots, enchantment);
-		int radius = 1 + level;
-		for(int x = -radius; x <= radius; x++)
-			for(int z = -radius; z <= radius; z++) {
-				if (Math.abs(x) + Math.abs(z) > radius + 1) continue;
-				Location blockLoc = new Location(loc.getWorld(), loc.getBlockX() + x, loc.getBlockY() - 1, loc.getBlockZ() + z);
-				Block block = blockLoc.getBlock();
-				BlockState previousState = block.getState();
-				if (checkMaterial.contains(block.getType())) {
-					if (block.getBlockData() instanceof Levelled) {
-						Levelled levelled = (Levelled) block.getBlockData();
-						if (levelled.getLevel() != 0) continue;
-					}
-					if (!hasBlock(block)) if (enchantment == RegisterEnchantments.MAGMA_WALKER) {
-						block.setType(replaceMaterial);
-						WalkerBlock walker = new WalkerBlock(enchantment, block, checkMaterial.get(0), TICK);
-						MagmaWalkerBlockEvent magmaWalker = new MagmaWalkerBlockEvent(block, previousState, player, level);
-						Bukkit.getPluginManager().callEvent(magmaWalker);
+	public static void updateBlocks(Enchantmentable clazz, PlayerChangeCoordsEvent event, Player player, ItemStack boots, Location from, Location to) {
+		Iterator<Entry<Enchantment, WalkerInterface>> iter = WalkerInterface.getWalkerInterfaces(boots).entrySet().iterator();
 
-						if (!magmaWalker.isCancelled()) {
+		while (iter.hasNext()) {
+			Entry<Enchantment, WalkerInterface> entry = iter.next();
+			WalkerInterface inter = entry.getValue();
+
+			Location loc = inter.getProperLocation(player, from, to);
+			Enchantment enchantment = inter.getEnchantment();
+			if (!clazz.canRun(enchantment, event) || clazz.isDisabled(player, enchantment)) continue;
+			Material replaced = inter.getReplacedMaterial();
+			Material replace = inter.getReplaceMaterial();
+
+			int level = EnchantmentUtils.getLevel(boots, enchantment);
+			int radius = 1 + level;
+			for(int x = -radius; x <= radius; x++)
+				for(int z = -radius; z <= radius; z++) {
+					if (Math.abs(x) + Math.abs(z) > radius + 1) continue;
+					Location blockLoc = new Location(loc.getWorld(), loc.getBlockX() + x, loc.getBlockY() - 1, loc.getBlockZ() + z);
+					Block block = blockLoc.getBlock();
+					Material blockType = block.getType();
+					BlockState previousState = block.getState();
+					if (blockType == replace || MatData.isAir(blockType) && inter.replaceAir()) {
+						if (block.getBlockData() instanceof Levelled) {
+							Levelled levelled = (Levelled) block.getBlockData();
+							if (levelled.getLevel() != 0) continue;
+						}
+						if (hasBlock(block)) continue;
+
+						WalkerBlockEvent walkerEvent = null;
+						WalkerBlock walker = new WalkerBlock(inter, block, TICK);
+
+						if (enchantment == RegisterEnchantments.MAGMA_WALKER) walkerEvent = new MagmaWalkerBlockEvent(block, previousState, player, level);
+						else if (enchantment == RegisterEnchantments.VOID_WALKER) walkerEvent = new VoidWalkerBlockEvent(block, previousState, player, level);
+						else
+							walkerEvent = new GenericWalkerBlockEvent(block, previousState, player, new EnchantmentLevel(RegisterEnchantments.getCustomEnchantment(enchantment), level));
+
+						block.setType(replaced);
+						Bukkit.getPluginManager().callEvent(walkerEvent);
+
+						if (!walkerEvent.isCancelled()) {
 							BLOCKS.add(walker);
 							setBlockMeta(walker);
-							if (block.getWorld().getEnvironment() == Environment.THE_END) AdvancementUtils.awardCriteria(player, ESAdvancement.FLAME_KEEPER, "flame");
+							if (entry.getKey() == RegisterEnchantments.MAGMA_WALKER && block.getWorld().getEnvironment() == Environment.THE_END) AdvancementUtils.awardCriteria(player, ESAdvancement.FLAME_KEEPER, "flame");
 						} else
-							block.setType(checkMaterial.get(0));
-					} else if (enchantment == RegisterEnchantments.VOID_WALKER) {
-						block.setType(replaceMaterial);
-						WalkerBlock walker = new WalkerBlock(enchantment, block, checkMaterial.get(0), TICK);
-						VoidWalkerBlockEvent voidWalker = new VoidWalkerBlockEvent(block, previousState, player, level);
-						Bukkit.getPluginManager().callEvent(voidWalker);
-
-						if (!voidWalker.isCancelled()) {
-							BLOCKS.add(walker);
-							setBlockMeta(walker);
-						} else
-							block.setType(checkMaterial.get(0));
+							block.setType(replace);
 					}
 				}
-			}
+		}
 	}
 
 	private static void setBlockMeta(WalkerBlock block) {

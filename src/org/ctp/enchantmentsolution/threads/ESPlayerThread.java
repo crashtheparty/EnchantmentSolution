@@ -16,7 +16,7 @@ public class ESPlayerThread implements Runnable {
 	private ESPlayerThread(ESPlayer esPlayer) {
 		this.esPlayer = esPlayer;
 	}
-	
+
 	public static ESPlayerThread getThread(ESPlayer player) {
 		if (THREADS.containsKey(player.getPlayer())) return THREADS.get(player.getPlayer());
 		ESPlayerThread thread = new ESPlayerThread(player);

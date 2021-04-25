@@ -16,7 +16,7 @@ public class ESChatUtils extends ChatUtils {
 		utils.add(cu);
 		return cu;
 	}
-	
+
 	private ESChatUtils() {
 		super(EnchantmentSolution.getPlugin());
 	}
@@ -31,5 +31,5 @@ public class ESChatUtils extends ChatUtils {
 		if (ConfigString.DEBUG.getBoolean()) super.sendToConsole(getPlugin(), level, message);
 		DebugUtils.addDebug(EnchantmentSolution.getPlugin(), message, level);
 	}
-	
+
 }

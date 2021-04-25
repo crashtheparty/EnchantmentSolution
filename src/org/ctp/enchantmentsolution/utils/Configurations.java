@@ -91,7 +91,7 @@ public class Configurations implements CrashConfigurations {
 
 		File extras = new File(dataFolder + "/extras");
 		File dataBackups = new File(dataFolder + "/extras/backups-data");
-		
+
 		if (!extras.exists()) extras.mkdirs();
 		if (!dataBackups.exists()) dataBackups.mkdirs();
 
@@ -157,7 +157,7 @@ public class Configurations implements CrashConfigurations {
 
 		SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss z Z");
 		debug.set("time", format.format(new Date()));
-		debug.set("version.bukkit", VersionUtils.getVersionNumber());
+		debug.set("version.bukkit", VersionUtils.getMinecraftVersion());
 		debug.set("version.bukkit_num", VersionUtils.getVersionNumber());
 		debug.set("version.plugin", EnchantmentSolution.getPlugin().getPluginVersion().getCurrent().getVersionName());
 		debug.set("plugins.jobs_reborn", EnchantmentSolution.getPlugin().isJobsEnabled());
@@ -200,7 +200,7 @@ public class Configurations implements CrashConfigurations {
 
 		i = 0;
 		try {
-			for (ESPlayer player : EnchantmentSolution.getAllESPlayers(false))
+			for(ESPlayer player: EnchantmentSolution.getAllESPlayers(false))
 				for(TableEnchantments table: TableEnchantments.getAllTableEnchantments(player.getPlayer().getUniqueId())) {
 					table.setConfig(debug, "data_file.", i);
 					i++;
