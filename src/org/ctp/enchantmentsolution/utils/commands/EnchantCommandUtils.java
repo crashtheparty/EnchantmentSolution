@@ -195,10 +195,12 @@ public class EnchantCommandUtils {
 			if (args.length > 1) {
 				String enchantmentName = args[1];
 				boolean all = false;
+				boolean curses = false;
 				boolean includeCurse = false;
 				for(CustomEnchantment enchant: RegisterEnchantments.getRegisteredEnchantments()) {
 					if (enchantmentName.equals("All")) all = true;
-					if (all || enchant.getName().equalsIgnoreCase(enchantmentName)) {
+					if (enchantmentName.equals("Curses")) curses = true;
+					if (all || curses || enchant.getName().equalsIgnoreCase(enchantmentName)) {
 						if (args.length > 2) {
 							String arg = args[2];
 							if (all) includeCurse = Boolean.valueOf(arg);
@@ -252,6 +254,9 @@ public class EnchantCommandUtils {
 							if (all) {
 								itemToEnchant = EnchantmentUtils.removeAllEnchantments(itemToEnchant, includeCurse);
 								codes.put("%enchant%", "All");
+							} else if (curses) {
+								itemToEnchant = EnchantmentUtils.removeCursesFromItem(itemToEnchant);
+								codes.put("%enchant%", "Curse");
 							} else {
 								itemToEnchant = EnchantmentUtils.removeEnchantmentFromItem(itemToEnchant, enchant);
 								codes.put("%enchant%", enchant.getDisplayName());

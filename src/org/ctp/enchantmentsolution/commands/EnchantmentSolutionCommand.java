@@ -219,6 +219,7 @@ public class EnchantmentSolutionCommand implements CommandExecutor, TabCompleter
 		List<String> strings = new ArrayList<String>();
 		strings.addAll(RegisterEnchantments.getEnchantmentNames());
 		strings.add("All");
+		strings.add("Curses");
 		return removeComplete(strings, startsWith);
 	}
 

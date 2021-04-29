@@ -140,6 +140,12 @@ public class EnchantmentUtils {
 		return item;
 	}
 
+	public static ItemStack removeCursesFromItem(ItemStack item) {
+		for(CustomEnchantment enchantment: RegisterEnchantments.getEnchantments())
+			if (enchantment.isCurse()) item = removeEnchantmentFromItem(item, enchantment);
+		return item;
+	}
+
 	public static ItemStack removeAllEnchantments(ItemStack item, boolean removeCurses) {
 		for(CustomEnchantment enchantment: RegisterEnchantments.getEnchantments())
 			if (!removeCurses || !enchantment.isCurse()) item = removeEnchantmentFromItem(item, enchantment);
