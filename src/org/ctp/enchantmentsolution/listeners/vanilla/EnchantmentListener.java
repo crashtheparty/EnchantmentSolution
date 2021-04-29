@@ -80,7 +80,12 @@ public class EnchantmentListener implements Listener {
 				try {
 					if (item.getType() == Material.BOOK && ConfigString.USE_ENCHANTED_BOOKS.getBoolean()) item = EnchantmentUtils.convertToEnchantedBook(item);
 					player.playSound(player.getLocation(), Sound.BLOCK_ENCHANTMENT_TABLE_USE, 1, 1);
+					if (player.getGameMode() != GameMode.CREATIVE) player.setLevel(player.getLevel() - i - 1);
+					ItemStack lapis = event.getInventory().getItem(1).clone();
+					lapis.setAmount(i + 1);
+					event.getInventory().removeItem(lapis);
 					item = EnchantmentUtils.addEnchantmentsToItem(item, enchantments);
+					event.getInventory().setItem(0, item);
 					player.setStatistic(Statistic.ITEM_ENCHANTED, player.getStatistic(Statistic.ITEM_ENCHANTED) + 1);
 					EnchantItemCriterion.enchantItemTrigger(player, item);
 					if (EnchantmentSolution.getPlugin().isJobsEnabled()) JobsUtils.sendEnchantAction(player, item, item, enchantments);
