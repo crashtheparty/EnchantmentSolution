@@ -7,6 +7,7 @@ import java.util.List;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.ctp.crashapi.item.MatData;
+import org.ctp.enchantmentsolution.enums.LogType;
 
 public class GaiaUtils {
 	private static ArrayList<Location> BLOCKS = new ArrayList<Location>();
@@ -33,20 +34,21 @@ public class GaiaUtils {
 	}
 
 	public enum GaiaTrees {
-		ACACIA("ACACIA_LOG", "ACACIA_LEAVES", "ACACIA_SAPLING", GaiaTrees.getOverworldGrow()),
-		BIRCH("BIRCH_LOG", "BIRCH_LEAVES", "BIRCH_SAPLING", GaiaTrees.getOverworldGrow()),
-		DARK_OAK("DARK_OAK_LOG", "DARK_OAK_LEAVES", "DARK_OAK_SAPLING", GaiaTrees.getOverworldGrow()),
-		JUNGLE("JUNGLE_LOG", "JUNGLE_LEAVES", "JUNGLE_SAPLING", GaiaTrees.getOverworldGrow()),
-		OAK("OAK_LOG", "OAK_LEAVES", "OAK_SAPLING", GaiaTrees.getOverworldGrow()),
-		SPRUCE("SPRUCE_LOG", "SPRUCE_LEAVES", "SPRUCE_SAPLING", GaiaTrees.getOverworldGrow()),
-		CRIMSON("CRIMSON_STEM", "NETHER_WART_BLOCK", "CRIMSON_FUNGUS", Arrays.asList("CRIMSON_NYLIUM", "WARPED_NYLIUM")),
-		WARPED("WARPED_STEM", "WARPED_WART_BLOCK", "WARPED_FUNGUS", Arrays.asList("CRIMSON_NYLIUM", "WARPED_NYLIUM"));
-
-		private final MatData log, leaf, sapling;
+		ACACIA(LogType.ACACIA, "ACACIA_LEAVES", "ACACIA_SAPLING", getOverworldGrow()),
+		BIRCH(LogType.BIRCH, "BIRCH_LEAVES", "BIRCH_SAPLING", getOverworldGrow()),
+		DARK_OAK(LogType.DARK_OAK, "DARK_OAK_LEAVES", "DARK_OAK_SAPLING", getOverworldGrow()),
+		JUNGLE(LogType.JUNGLE, "JUNGLE_LEAVES", "JUNGLE_SAPLING", getOverworldGrow()),
+		OAK(LogType.OAK, "OAK_LEAVES", "OAK_SAPLING", getOverworldGrow()),
+		SPRUCE(LogType.SPRUCE, "SPRUCE_LEAVES", "SPRUCE_SAPLING", getOverworldGrow()),
+		CRIMSON(LogType.CRIMSON, "NETHER_WART_BLOCK", "CRIMSON_FUNGUS", Arrays.asList("CRIMSON_NYLIUM", "WARPED_NYLIUM")),
+		WARPED(LogType.WARPED, "WARPED_WART_BLOCK", "WARPED_FUNGUS", Arrays.asList("CRIMSON_NYLIUM", "WARPED_NYLIUM"));
+		
+		private final LogType log;
+		private final MatData leaf, sapling;
 		private List<MatData> growable;
 
-		GaiaTrees(String log, String leaf, String sapling, List<String> grow) {
-			this.log = new MatData(log);
+		GaiaTrees(LogType log, String leaf, String sapling, List<String> grow) {
+			this.log = log;
 			this.leaf = new MatData(leaf);
 			this.sapling = new MatData(sapling);
 			growable = new ArrayList<MatData>();
@@ -55,24 +57,8 @@ public class GaiaUtils {
 		}
 
 		public static GaiaTrees getTree(Material mat) {
-			switch (mat.name()) {
-				case "ACACIA_LOG":
-					return ACACIA;
-				case "BIRCH_LOG":
-					return BIRCH;
-				case "DARK_OAK_LOG":
-					return DARK_OAK;
-				case "JUNGLE_LOG":
-					return JUNGLE;
-				case "OAK_LOG":
-					return OAK;
-				case "SPRUCE_LOG":
-					return SPRUCE;
-				case "CRIMSON_STEM":
-					return CRIMSON;
-				case "WARPED_STEM":
-					return WARPED;
-			}
+			for (GaiaTrees tree : values())
+				if (tree.getLog().hasMaterial(mat)) return tree;
 			return null;
 		}
 
@@ -84,7 +70,7 @@ public class GaiaUtils {
 			return growable;
 		}
 
-		public MatData getLog() {
+		public LogType getLog() {
 			return log;
 		}
 

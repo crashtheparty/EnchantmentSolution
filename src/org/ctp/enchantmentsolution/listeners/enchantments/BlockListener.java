@@ -27,6 +27,7 @@ import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enums.ItemBreakType;
 import org.ctp.enchantmentsolution.enums.ItemPlaceType;
+import org.ctp.enchantmentsolution.enums.LogType;
 import org.ctp.enchantmentsolution.events.blocks.*;
 import org.ctp.enchantmentsolution.events.modify.LagEvent;
 import org.ctp.enchantmentsolution.events.player.ExpShareEvent;
@@ -125,7 +126,8 @@ public class BlockListener extends Enchantmentable {
 		if (!EnchantmentSolution.getPlugin().getMcMMOType().equals("Disabled") && McMMOAbility.getIgnored() != null && McMMOAbility.getIgnored().contains(player)) return;
 		if (player.getGameMode().equals(GameMode.CREATIVE) || player.getGameMode().equals(GameMode.SPECTATOR)) return;
 		ItemStack item = player.getInventory().getItemInMainHand();
-		GaiaTrees tree = GaiaTrees.getTree(event.getBlock().getType());
+		Material mat = event.getBlock().getType();
+		GaiaTrees tree = GaiaTrees.getTree(mat);
 		ESPlayer esPlayer = EnchantmentSolution.getESPlayer(player);
 		if (item != null && EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.GAIA) && tree != null) {
 			List<Location> logs = new ArrayList<Location>();
@@ -133,7 +135,7 @@ public class BlockListener extends Enchantmentable {
 			int maxBlocks = 50 + level * level * 50;
 			logs.add(event.getBlock().getLocation());
 			for(int i = 0; i < logs.size(); i++) {
-				getLikeBlocks(logs, tree.getLog().getMaterial(), logs.get(i));
+				getLikeBlocks(logs, tree.getLog(), logs.get(i));
 				if (logs.size() > maxBlocks) break;
 			}
 			GaiaEvent gaia = new GaiaEvent(logs, player, level);
@@ -160,13 +162,13 @@ public class BlockListener extends Enchantmentable {
 		}
 	}
 
-	private void getLikeBlocks(List<Location> logs, Material log, Location loc) {
+	private void getLikeBlocks(List<Location> logs, LogType type, Location loc) {
 		for(int x = -2; x <= 2; x++)
 			for(int y = -1; y <= 1; y++)
 				for(int z = -2; z <= 2; z++) {
 					Block b = loc.getBlock().getRelative(x, y, z);
 					Location l = b.getLocation();
-					if (!logs.contains(l) && b.getType() == log) logs.add(l);
+					if (!logs.contains(l) && type.hasMaterial(b.getType())) logs.add(l);
 				}
 	}
 
