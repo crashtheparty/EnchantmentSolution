@@ -24,7 +24,7 @@ public enum ItemBreakType {
 	}
 
 	public List<String> getDiamondPickaxeBlocks() {
-		return getFromFile("break.yml", "diamond_pickaxe");
+		return get("break.yml", "diamond_pickaxe");
 	}
 
 	public List<Material> getBreakTypes() {
@@ -67,7 +67,7 @@ public enum ItemBreakType {
 
 	private List<String> fromTool(String file) {
 		List<String> itemTypes = new ArrayList<String>();
-		itemTypes.addAll(getFromFile(file, "all"));
+		itemTypes.addAll(get(file, "all"));
 		switch (name()) {
 			case "NETHERITE_PICKAXE":
 				itemTypes.addAll(get(file, "netherite_pickaxe"));
