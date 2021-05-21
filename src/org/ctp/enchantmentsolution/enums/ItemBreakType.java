@@ -195,12 +195,12 @@ public enum ItemBreakType {
 	private List<String> get(String fileName, String location) {
 		if (TYPES == null) TYPES = new HashMap<String, HashMap<String, List<String>>>();
 		if (TYPES.containsKey(fileName)) {
-			HashMap<String, List<String>> fromFile = TYPES.get(location);
+			HashMap<String, List<String>> fromFile = TYPES.get(fileName);
 			if (fromFile == null) fromFile = new HashMap<String, List<String>>();
 			if (fromFile.containsKey(location)) return fromFile.get(location);
 		}
 		List<String> value = getFromFile(fileName, location);
-		HashMap<String, List<String>> fromFile = TYPES.get(location);
+		HashMap<String, List<String>> fromFile = TYPES.get(fileName);
 		if (fromFile == null) fromFile = new HashMap<String, List<String>>();
 		fromFile.put(location, value);
 		TYPES.put(fileName, fromFile);
