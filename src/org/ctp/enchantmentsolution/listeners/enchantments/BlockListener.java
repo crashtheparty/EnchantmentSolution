@@ -293,7 +293,7 @@ public class BlockListener extends Enchantmentable {
 					AbilityUtils.dropExperience(smelteryEvent.getBlock().getLocation(), smelteryEvent.getExp());
 					if (!MatData.isAir(smelteryEvent.getChangeTo())) {
 						from.setType(smelteryEvent.getChangeTo());
-						if (smelteryEvent.willFortune()) from.setAmount(SmelteryUtils.getFortuneForSmeltery(smelteryEvent.getDrop(), item, smeltery.getFromMaterial()));
+						if (smelteryEvent.willFortune()) from.setAmount(SmelteryUtils.getFortuneForSmeltery(smelteryEvent.getDrop(), item, smeltery.getData().getMaterial()));
 						i.setItemStack(from);
 					}
 					McMMOHandler.handleBlockDrops(event, item, RegisterEnchantments.SMELTERY);
@@ -364,6 +364,50 @@ public class BlockListener extends Enchantmentable {
 				Block block = event.getBlock();
 				item = player.getInventory().getItemInMainHand();
 				if (item == null || MatData.isAir(item.getType())) return;
+
+				if (ConfigString.MULTI_BLOCK_TESTING.getBoolean()) {
+					Location lowRange = null, highRange = null;;
+					if (which.equals("")) {
+						lowRange = new Location(block.getWorld(), block.getX() - xt, block.getY() - yt, block.getZ() - zt);
+						highRange = new Location(block.getWorld(), block.getX() + xt, block.getY() + yt, block.getZ() + zt);
+					} else {
+						int x = xt;
+						int y = yt;
+						int z = zt;
+						switch (which) {
+							case "xt":
+								if (times == -1) {
+									lowRange = new Location(block.getWorld(), block.getX() - xt, block.getY() - yt, block.getZ() - zt);
+									highRange = new Location(block.getWorld(), block.getX(), block.getY() + yt, block.getZ() + zt);
+								} else {
+									lowRange = new Location(block.getWorld(), block.getX(), block.getY() - yt, block.getZ() - zt);
+									highRange = new Location(block.getWorld(), block.getX() + xt, block.getY() + yt, block.getZ() + zt);
+								}
+								break;
+							case "yt":
+								if (times == -1) {
+									lowRange = new Location(block.getWorld(), block.getX() - xt, block.getY() - yt, block.getZ() - zt);
+									highRange = new Location(block.getWorld(), block.getX() + xt, block.getY(), block.getZ() + zt);
+								} else {
+									lowRange = new Location(block.getWorld(), block.getX() - xt, block.getY(), block.getZ() - zt);
+									highRange = new Location(block.getWorld(), block.getX() + xt, block.getY() + yt, block.getZ() + zt);
+								}
+								break;
+							case "zt":
+								if (times == -1) {
+									lowRange = new Location(block.getWorld(), block.getX() - xt, block.getY() - yt, block.getZ() - zt);
+									highRange = new Location(block.getWorld(), block.getX() + xt, block.getY() + yt, block.getZ());
+								} else {
+									lowRange = new Location(block.getWorld(), block.getX() - xt, block.getY() - yt, block.getZ());
+									highRange = new Location(block.getWorld(), block.getX() + xt, block.getY() + yt, block.getZ() + zt);
+								}
+								break;
+						}
+					}
+					esPlayer.createModel(block, lowRange, highRange, item);
+					return;
+				}
+
 				for(int x = 0; x <= xt; x++)
 					for(int y = 0; y <= yt; y++)
 						for(int z = 0; z <= zt; z++) {
@@ -602,7 +646,7 @@ public class BlockListener extends Enchantmentable {
 		Block block = relative.getRelative(x, y, z);
 		if (BlockUtils.multiBlockBreakContains(block.getLocation())) return blocks;
 		List<String> pickBlocks = ItemBreakType.WOODEN_PICKAXE.getDiamondPickaxeBlocks();
-		if (!pickBlocks.contains(original.name()) && pickBlocks.contains(block.getType().name())) return blocks;
+		if (!pickBlocks.contains(original.name().toLowerCase(Locale.ROOT)) && pickBlocks.contains(block.getType().name().toLowerCase(Locale.ROOT))) return blocks;
 
 		if (blocks.contains(block.getLocation())) return blocks;
 

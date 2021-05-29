@@ -13,7 +13,7 @@ import org.ctp.enchantmentsolution.utils.config.ConfigString;
 
 public class AnvilListener implements Listener {
 
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.HIGH)
 	public void onPrepareAnvil(PrepareAnvilEvent event) {
 		ItemStack first = event.getInventory().getItem(0);
 		ItemStack second = event.getInventory().getItem(1);
@@ -23,10 +23,10 @@ public class AnvilListener implements Listener {
 			ItemStack combineItem = anvil.getCombinedItem();
 			if (combineItem != null) {
 				ItemStack combineFinal = combineItem;
+				event.getInventory().setItem(2, combineFinal);
 				EnchantmentSolution.getPlugin().getServer().getScheduler().runTask(EnchantmentSolution.getPlugin(), () -> {
 					if (anvil.getRepairCost() < ConfigString.MAX_REPAIR_LEVEL.getInt()) {
 						event.getInventory().setMaximumRepairCost(ConfigString.MAX_REPAIR_LEVEL.getInt());
-						event.getInventory().setItem(2, combineFinal);
 						event.getInventory().setRepairCost(anvil.getRepairCost());
 					} else
 						event.getInventory().setItem(2, new ItemStack(Material.AIR));

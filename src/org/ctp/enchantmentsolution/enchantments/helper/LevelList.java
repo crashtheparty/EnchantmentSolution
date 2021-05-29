@@ -36,7 +36,7 @@ public class LevelList {
 					list[2] = new Level(2, Math.max(base, bookThirty * 2));
 					break;
 				case 4:
-					if (isLevelFifty && bookThirty == 15) list[3] = new Level(3, base * 2 / 3 + 1 + (int) (addFifty * .75) + 20);
+					if (isLevelFifty && bookThirty == 15) list[3] = new Level(3, Math.max(base / 3, 1) + (int) (addFifty * .75) + 20);
 					else
 						list[3] = new Level(3, -1);
 					break;

@@ -31,6 +31,7 @@ public class ESPlayerThread implements Runnable {
 		if (esPlayer.isOnline()) {
 			esPlayer.runHWD();
 			esPlayer.runGaia();
+			esPlayer.runHWDModel();
 		}
 	}
 

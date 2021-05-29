@@ -202,22 +202,6 @@ public class RegisterEnchantments {
 				}
 				namespace = plugin.getName().toLowerCase(Locale.ROOT);
 			} else if (enchantment.getRelativeEnchantment() instanceof CustomEnchantmentWrapper) namespace = "custom_enchantments";
-			if (!advanced && !(enchantment.getRelativeEnchantment() instanceof CustomEnchantmentWrapper)) {
-				List<ItemType> enchantmentTypes = getTypes(config, namespace, enchantment, "enchantment_item_types");
-				List<ItemType> anvilTypes = getTypes(config, namespace, enchantment, "anvil_item_types");
-				List<EnchantmentLocation> locations = getEnchantmentLocations(config, namespace, enchantment);
-				if (registerEnchantment(enchantment)) enchantment.setEnabled(true);
-				else {
-					enchantment.setEnabled(false);
-					DISABLED_ENCHANTMENTS.add(enchantment);
-				}
-				String description = StringUtils.decodeString(language.getString("enchantment.descriptions.default_enchantments." + enchantment.getName()));
-				enchantment.setDescription(description);
-				if (levelFifty) enchantment.setLevelFifty(enchantmentTypes, anvilTypes, locations);
-				else
-					enchantment.setLevelThirty(enchantmentTypes, anvilTypes, locations);
-				continue;
-			}
 
 			if (registerEnchantment(enchantment)) {
 				if (config.getBoolean(namespace + "." + enchantment.getName() + ".enabled")) enchantment.setEnabled(true);

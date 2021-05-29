@@ -29,7 +29,7 @@ public class SmelteryUtils {
 		MatData mat = getDrop(data, item);
 		if (mat.hasMaterial() && !MatData.isAir(mat.getMaterial())) {
 			Material f = from.getType();
-			return new SmelteryMaterial(new ItemStack(mat.getMaterial()), f, mat.getMaterial());
+			return new SmelteryMaterial(new ItemStack(mat.getMaterial()), f, mat.getMaterial(), data);
 		}
 		return null;
 	}
@@ -49,9 +49,9 @@ public class SmelteryUtils {
 					if (extraAmount > rand) amount++;
 					return amount;
 				case "IRON_ORE":
+				case "NETHER_GOLD_ORE":
 				case "GOLD_ORE":
 					if (VersionUtils.getVersionNumber() > 16) return smelted.getAmount();
-				case "NETHER_GOLD_ORE":
 					int multiply = (int) (Math.random() * (level + 2));
 					if (multiply > 1) return smelted.getAmount() * multiply;
 			}

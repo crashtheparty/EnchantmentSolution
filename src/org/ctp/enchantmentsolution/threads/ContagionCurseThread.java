@@ -49,7 +49,7 @@ public class ContagionCurseThread extends EnchantmentThread {
 		if (isDisabled(p, RegisterEnchantments.CURSE_OF_CONTAGION)) return;
 		List<ItemStack> items = player.getCurseableItems();
 		double random = Math.random();
-		if (player.getContagionChance() > random) {
+		if (player.getContagionChance() > random && items.size() > 0) {
 			int randomItemInt = (int) (Math.random() * items.size());
 			ItemStack randomItem = items.get(randomItemInt);
 			if (Math.random() >= 0.5 && randomItem != null && !EnchantmentUtils.hasEnchantment(randomItem, RegisterEnchantments.CURSE_OF_CONTAGION)) {

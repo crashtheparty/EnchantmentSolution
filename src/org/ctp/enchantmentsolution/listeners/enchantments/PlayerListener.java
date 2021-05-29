@@ -12,9 +12,8 @@ import org.bukkit.entity.*;
 import org.bukkit.event.*;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.EntityBlockFormEvent;
-import org.bukkit.event.player.PlayerBucketEmptyEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerItemBreakEvent;
+import org.bukkit.event.inventory.InventoryEvent;
+import org.bukkit.event.player.*;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
@@ -67,6 +66,27 @@ public class PlayerListener extends Enchantmentable {
 	@EventHandler
 	public void onPlayerItemBreak(PlayerItemBreakEvent event) {
 		runMethod(this, "stickyHold", event, PlayerItemBreakEvent.class);
+	}
+	
+	@EventHandler
+	public void onPlayerQuit(PlayerQuitEvent event) {
+		ESPlayer player = EnchantmentSolution.getESPlayer(event.getPlayer());
+		if (player != null) player.removeHWDModels();
+	}
+	
+	@EventHandler
+	public void onPlayerDropItem(PlayerDropItemEvent event) {
+		ESPlayer player = EnchantmentSolution.getESPlayer(event.getPlayer());
+		if (player != null) player.removeHWDModels(event.getItemDrop().getItemStack());
+	}
+	
+	@EventHandler
+	public void onPlayerDropItem(InventoryEvent event) {
+		for (HumanEntity viewer : event.getViewers())
+			if (viewer instanceof Player) {
+				ESPlayer player = EnchantmentSolution.getESPlayer((Player) viewer);
+				if (player != null) player.removeInvalidHWDModels();
+			}
 	}
 
 	private void flowerGift(PlayerInteractEvent event) {

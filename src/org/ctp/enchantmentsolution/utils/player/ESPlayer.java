@@ -12,6 +12,8 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.ctp.crashapi.events.ItemEquipEvent.HandMethod;
 import org.ctp.crashapi.item.*;
@@ -21,14 +23,17 @@ import org.ctp.crashapi.utils.ItemUtils;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.*;
+import org.ctp.enchantmentsolution.enums.ItemBreakType;
 import org.ctp.enchantmentsolution.events.player.FrequentFlyerEvent;
 import org.ctp.enchantmentsolution.events.player.FrequentFlyerEvent.FFType;
 import org.ctp.enchantmentsolution.listeners.enchantments.AsyncGaiaController;
 import org.ctp.enchantmentsolution.listeners.enchantments.AsyncHWDController;
+import org.ctp.enchantmentsolution.listeners.enchantments.HWDModel;
 import org.ctp.enchantmentsolution.rpg.RPGPlayer;
 import org.ctp.enchantmentsolution.rpg.RPGUtils;
 import org.ctp.enchantmentsolution.threads.ESPlayerThread;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
+import org.ctp.enchantmentsolution.utils.BlockUtils;
 import org.ctp.enchantmentsolution.utils.PermissionUtils;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.GaiaUtils.GaiaTrees;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.ItemEquippedSlot;
@@ -63,6 +68,8 @@ public class ESPlayer {
 	private Runnable telepathyTask;
 	private List<AsyncHWDController> hwdControllers;
 	private Map<GaiaTrees, List<AsyncGaiaController>> gaiaControllers;
+	private List<HWDModel> models;
+	private int modelKey;
 
 	public ESPlayer(OfflinePlayer player) {
 		this.player = player;
@@ -81,6 +88,7 @@ public class ESPlayer {
 		if (EnchantmentSolution.getPlugin().isEnabled()) ESPlayerThread.getThread(this);
 		hwdControllers = new ArrayList<>();
 		gaiaControllers = new HashMap<>();
+		models = new ArrayList<HWDModel>();
 	}
 
 	public OfflinePlayer getPlayer() {
@@ -730,5 +738,97 @@ public class ESPlayer {
 			}
 		}
 		removeNullGaiaControllers();
+	}
+
+	public void createModel(Block start, Location low, Location high, ItemStack item) {
+		NamespacedKey key = new NamespacedKey(EnchantmentSolution.getPlugin(), "hwd_" + player.getName() + "_" + modelKey);
+		modelKey++;
+		ItemMeta meta = item.getItemMeta();
+		meta.getPersistentDataContainer().set(key, PersistentDataType.INTEGER, 1);
+		item.setItemMeta(meta);
+		models.add(new HWDModel(start, low, high, player, key, item));
+	}
+
+	public void runHWDModel() {
+		Iterator<HWDModel> iter = models.iterator();
+		while (iter.hasNext() && canBreakBlock()) {
+			HWDModel model = iter.next();
+			while (canBreakBlock()) {
+				if (model.getCurrent().size() <= 0) {
+					ItemStack item = model.getItem();
+					if (item != null) {
+						ItemMeta meta = item.getItemMeta();
+						meta.getPersistentDataContainer().remove(model.getKey());
+						item.setItemMeta(meta);
+					}
+					iter.remove();
+					break;
+				}
+				if (model.hasItem()) {
+					ItemStack item = model.getItem();
+					Block block = model.getCurrent().get(0);
+					if (!canBreakBlock()) break;
+					List<String> pickBlocks = ItemBreakType.WOODEN_PICKAXE.getDiamondPickaxeBlocks();
+					if (!pickBlocks.contains(model.getStartingPointMaterial().name().toLowerCase(Locale.ROOT)) && pickBlocks.contains(block.getType().name().toLowerCase(Locale.ROOT))) {
+						model.aroundBlock(block);
+						model.setUsed(block);
+						continue;
+					}
+
+					if (ItemBreakType.getType(item.getType()).getBreakTypes().contains(block.getType())) {
+						BlockUtils.addMultiBlockBreak(block.getLocation(), RegisterEnchantments.HEIGHT_PLUS_PLUS);
+						if (BlockUtils.multiBreakBlock(player.getPlayer(), item, block.getLocation(), RegisterEnchantments.HEIGHT_PLUS_PLUS)) breakBlock();
+					}
+					model.aroundBlock(block);
+					model.setUsed(block);
+				} else {
+					iter.remove();
+					break;
+				}
+			}
+		}
+	}
+
+	public void removeHWDModels() {
+		Iterator<HWDModel> iter = models.iterator();
+		while (iter.hasNext()) {
+			HWDModel model = iter.next();
+			if (model.hasItem()) {
+				ItemStack item = model.getItem();
+				ItemMeta meta = item.getItemMeta();
+				meta.getPersistentDataContainer().remove(model.getKey());
+				item.setItemMeta(meta);
+			}
+			iter.remove();
+		}
+	}
+
+	public void removeHWDModels(ItemStack item) {
+		Iterator<HWDModel> iter = models.iterator();
+		while (iter.hasNext()) {
+			HWDModel model = iter.next();
+			if (model.hasItem() && item.isSimilar(model.getItem())) {
+				ItemMeta meta = item.getItemMeta();
+				meta.getPersistentDataContainer().remove(model.getKey());
+				item.setItemMeta(meta);
+			}
+			iter.remove();
+		}
+	}
+
+	public void removeInvalidHWDModels() {
+		Iterator<HWDModel> iter = models.iterator();
+		while (iter.hasNext()) {
+			HWDModel model = iter.next();
+			if (!model.hasItem()) {
+				ItemStack item = model.getPossibleItem();
+				if (item != null) {
+					ItemMeta meta = item.getItemMeta();
+					meta.getPersistentDataContainer().remove(model.getKey());
+					item.setItemMeta(meta);
+				}
+				iter.remove();
+			}
+		}
 	}
 }

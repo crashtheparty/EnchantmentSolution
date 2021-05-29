@@ -45,6 +45,7 @@ public enum ConfigString {
 	PRINT_USAGE(Type.MAIN, "print_usage", boolean.class),
 	DEBUG(Type.MAIN, "debug.send", boolean.class),
 	MULTI_BLOCK_ASYNC(Type.MAIN, "multi_block.async", boolean.class),
+	MULTI_BLOCK_TESTING(Type.MAIN, "multi_block.testing", boolean.class),
 	MULTI_BLOCK_BLOCKS_GLOBAL(Type.MAIN, "multi_block.blocks_per_tick.global", int.class),
 	MULTI_BLOCK_BLOCKS_PLAYER(Type.MAIN, "multi_block.blocks_per_tick.player", int.class),
 	MULTI_BLOCK_ALL_FACES(Type.MAIN, "multi_block.all_faces", boolean.class),
