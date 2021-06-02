@@ -64,7 +64,7 @@ public class VillagerEnchantments extends LootEnchantments {
 			ingredients.add(priceItem);
 		}
 
-		recipe = new MerchantRecipe(EnchantmentUtils.addEnchantmentToItem(new ItemStack(mat), enchant.getEnchant(), enchant.getLevel()), original.getUses(), original.getMaxUses(), original.hasExperienceReward());
+		recipe = new MerchantRecipe(EnchantmentUtils.addEnchantmentToItem(new ItemStack(mat), enchant.getEnchant(), enchant.getLevel()), original.getUses(), original.getMaxUses(), original.hasExperienceReward(), original.getVillagerExperience(), original.getPriceMultiplier() / 2);
 		recipe.setIngredients(ingredients);
 		if (VersionUtils.getVersionNumber() > 3) recipe.setVillagerExperience(original.getVillagerExperience());
 	}

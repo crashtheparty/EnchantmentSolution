@@ -712,6 +712,7 @@ public class CommandUtils {
 					if (sender instanceof Player) {
 						ItemStack item = ((Player) sender).getInventory().getItemInMainHand();
 						if (item == null) break;
+						item = item.clone();
 						JSONArray json = new JSONArray();
 						JSONObject name = new JSONObject();
 						name.put("text", Chatable.get().getStarter());
@@ -724,6 +725,7 @@ public class CommandUtils {
 						if (CrashAPIPlugin.getMMOItems()) {
 							ItemMeta meta = item.getItemMeta();
 							List<String> lore = meta.getLore();
+							if (lore == null) lore = new ArrayList<String>();
 							lore.add("Item Type: " + MMOUtils.getMMOTypeString(item));
 							lore.add("Item Type Set: " + MMOUtils.getMMOTypeSetString(item));
 							meta.setLore(lore);

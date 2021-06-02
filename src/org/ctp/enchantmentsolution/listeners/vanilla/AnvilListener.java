@@ -7,13 +7,14 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.PrepareAnvilEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.generate.AnvilEnchantments;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 
 public class AnvilListener implements Listener {
 
-	@EventHandler(priority = EventPriority.HIGH)
+	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPrepareAnvil(PrepareAnvilEvent event) {
 		ItemStack first = event.getInventory().getItem(0);
 		ItemStack second = event.getInventory().getItem(1);
@@ -26,7 +27,14 @@ public class AnvilListener implements Listener {
 				event.getInventory().setItem(2, combineFinal);
 				EnchantmentSolution.getPlugin().getServer().getScheduler().runTask(EnchantmentSolution.getPlugin(), () -> {
 					if (anvil.getRepairCost() < ConfigString.MAX_REPAIR_LEVEL.getInt()) {
+						ItemStack i = event.getInventory().getItem(2);
+						if (i == null) return;
+						String finalName = i.getItemMeta().getDisplayName();
 						event.getInventory().setMaximumRepairCost(ConfigString.MAX_REPAIR_LEVEL.getInt());
+						ItemMeta meta = combineFinal.getItemMeta();
+						meta.setDisplayName(finalName);
+						combineFinal.setItemMeta(meta);
+						event.getInventory().setItem(2, combineFinal);
 						event.getInventory().setRepairCost(anvil.getRepairCost());
 					} else
 						event.getInventory().setItem(2, new ItemStack(Material.AIR));

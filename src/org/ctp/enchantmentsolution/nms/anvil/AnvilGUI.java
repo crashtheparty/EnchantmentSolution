@@ -43,9 +43,10 @@ public abstract class AnvilGUI {
 		setData(data);
 
 		listener = new Listener() {
+			
 			@EventHandler(priority = EventPriority.HIGHEST)
 			public void onInventoryClick(InventoryClickEvent event) {
-				if (event.getWhoClicked() instanceof Player) if (event.getInventory().equals(inv)) {
+				if (event.getWhoClicked() instanceof Player && event.getInventory().equals(inv)) {
 					event.setCancelled(true);
 					if (data instanceof Anvil) {
 						Anvil anvil = (Anvil) data;
@@ -53,7 +54,7 @@ public abstract class AnvilGUI {
 						int slot = event.getRawSlot();
 						String name = "";
 
-						if (item != null) if (item.hasItemMeta()) {
+						if (item != null && item.hasItemMeta()) {
 							ItemMeta meta = item.getItemMeta();
 
 							if (meta.hasDisplayName()) name = meta.getDisplayName();
