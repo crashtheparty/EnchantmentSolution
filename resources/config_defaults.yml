@@ -104,6 +104,7 @@ debug:
 multi_block:
     async: true
     testing: false
+    delay_on_timeout: 5
     all_faces: false
     blocks_per_tick:
         player: 30
@@ -283,6 +284,9 @@ config_comments:
         - 'This increases peformance but nerfs those enchantments slightly'
         testing:
         - 'Tests for Height/Width/Depth to improve performance and reliability'
+        delay_on_timeout:
+        - 'When HWD is running and may cause lag, HWD will not run for this amount of ticks'
+        - 'This is to keep the server running as smooth as possible'
         all_faces:
         - 'Whether the async will only check basic block faces (North, South, East, West, Up, Down) or all faces.'
         blocks_per_tick:

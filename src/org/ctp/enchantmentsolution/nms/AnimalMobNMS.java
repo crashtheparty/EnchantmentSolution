@@ -33,6 +33,8 @@ public class AnimalMobNMS {
 			case 15:
 			case 16:
 				return new AnimalMob_v1_16_R3(animal, item);
+			case 17:
+				return new AnimalMob_v1_17_R1(animal, item);
 		}
 		return null;
 	}

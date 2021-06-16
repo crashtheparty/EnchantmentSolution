@@ -18,7 +18,6 @@ import org.bukkit.event.player.*;
 import org.bukkit.event.player.PlayerFishEvent.State;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.projectiles.ProjectileSource;
-import org.ctp.crashapi.nms.ItemNMS;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.api.ApiEnchantmentWrapper;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
@@ -227,7 +226,7 @@ public class RPGListener extends Enchantmentable implements Runnable {
 					if (EnchantmentUtils.hasEnchantment(item, VanillaEnchantment.PIERCING.getEnchantment())) giveExperience(player, VanillaEnchantment.PIERCING.getEnchantment(), EnchantmentUtils.getLevel(item, VanillaEnchantment.PIERCING.getEnchantment()));
 
 					if (e2 instanceof Trident) {
-						ItemStack trident = ItemNMS.getTrident((Trident) e2);
+						ItemStack trident = ((Trident) e2).getItem();
 						if (trident.getType() == Material.TRIDENT && EnchantmentUtils.hasEnchantment(trident, Enchantment.CHANNELING) && entity.getLocation().getBlock().getLightFromSky() >= 15 && entity.getWorld().getThunderDuration() > 0) giveExperience(player, Enchantment.CHANNELING, EnchantmentUtils.getLevel(trident, Enchantment.CHANNELING));
 					}
 				}

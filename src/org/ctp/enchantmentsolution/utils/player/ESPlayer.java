@@ -17,9 +17,9 @@ import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.ctp.crashapi.events.ItemEquipEvent.HandMethod;
 import org.ctp.crashapi.item.*;
-import org.ctp.crashapi.nms.ServerNMS;
 import org.ctp.crashapi.utils.DamageUtils;
 import org.ctp.crashapi.utils.ItemUtils;
+import org.ctp.crashapi.utils.ServerUtils;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.*;
@@ -48,6 +48,7 @@ public class ESPlayer {
 
 	private static Map<Long, Integer> GLOBAL_BLOCKS = new HashMap<Long, Integer>();
 	private static double CONTAGION_CHANCE = 0.0005;
+	private static long DELAY_TICKS = Long.MIN_VALUE;
 	private final OfflinePlayer player;
 	private Player onlinePlayer;
 	private RPGPlayer rpg;
@@ -184,7 +185,7 @@ public class ESPlayer {
 	}
 
 	public boolean setCooldown(Enchantment enchant) {
-		cooldowns.put(enchant, ServerNMS.getCurrentTick());
+		cooldowns.put(enchant, ServerUtils.getCurrentTick());
 		return cooldowns.containsKey(enchant);
 	}
 
@@ -205,14 +206,15 @@ public class ESPlayer {
 	}
 
 	public boolean canBreakBlock() {
-		long tick = ServerNMS.getCurrentTick();
+		long tick = ServerUtils.getCurrentTick();
+		if (tick <= DELAY_TICKS) return false;
 		if (GLOBAL_BLOCKS.containsKey(tick) && GLOBAL_BLOCKS.get(tick) >= ConfigString.MULTI_BLOCK_BLOCKS_GLOBAL.getInt()) return false;
 		if (blocksBroken.containsKey(tick) && blocksBroken.get(tick) >= ConfigString.MULTI_BLOCK_BLOCKS_PLAYER.getInt()) return false;
 		return true;
 	}
 
 	public void breakBlock() {
-		long tick = ServerNMS.getCurrentTick();
+		long tick = ServerUtils.getCurrentTick();
 		int blocks = 1;
 		if (blocksBroken.containsKey(tick)) blocks += blocksBroken.get(tick);
 		blocksBroken.put(tick, blocks);
@@ -516,7 +518,7 @@ public class ESPlayer {
 	}
 
 	public void addTimedDisableEnchant(JavaPlugin plugin, Enchantment enchant, int ticks) {
-		long tick = ServerNMS.getCurrentTick() + ticks;
+		long tick = ServerUtils.getCurrentTick() + ticks;
 		if (!isTimedDisableEnchant(plugin, enchant)) timedDisable.add(new EnchantmentTimedDisable(plugin, enchant, tick));
 	}
 
@@ -535,7 +537,7 @@ public class ESPlayer {
 	}
 
 	public void setTimeDisableEnchant(JavaPlugin plugin, Enchantment enchant, int ticks) {
-		long tick = ServerNMS.getCurrentTick() + ticks;
+		long tick = ServerUtils.getCurrentTick() + ticks;
 		if (isTimedDisableEnchant(plugin, enchant)) {
 			EnchantmentTimedDisable disable = getTimedDisable(plugin, enchant);
 			disable.setEndTime(tick);
@@ -750,9 +752,14 @@ public class ESPlayer {
 	}
 
 	public void runHWDModel() {
+		long currentTick = ServerUtils.getCurrentTick();
 		Iterator<HWDModel> iter = models.iterator();
 		while (iter.hasNext() && canBreakBlock()) {
 			HWDModel model = iter.next();
+			if (currentTick != ServerUtils.getCurrentTick()) {
+				DELAY_TICKS = currentTick + ConfigString.MULTI_BLOCK_DELAY.getInt();
+				break;
+			}
 			while (canBreakBlock()) {
 				if (model.getCurrent().size() <= 0) {
 					ItemStack item = model.getItem();

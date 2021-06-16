@@ -24,16 +24,16 @@ public class AnvilListener implements Listener {
 			ItemStack combineItem = anvil.getCombinedItem();
 			if (combineItem != null) {
 				ItemStack combineFinal = combineItem;
-				event.getInventory().setItem(2, combineFinal);
 				EnchantmentSolution.getPlugin().getServer().getScheduler().runTask(EnchantmentSolution.getPlugin(), () -> {
 					if (anvil.getRepairCost() < ConfigString.MAX_REPAIR_LEVEL.getInt()) {
 						ItemStack i = event.getInventory().getItem(2);
-						if (i == null) return;
-						String finalName = i.getItemMeta().getDisplayName();
-						event.getInventory().setMaximumRepairCost(ConfigString.MAX_REPAIR_LEVEL.getInt());
-						ItemMeta meta = combineFinal.getItemMeta();
-						meta.setDisplayName(finalName);
-						combineFinal.setItemMeta(meta);
+						if (i != null) {
+							String finalName = i.getItemMeta().getDisplayName();
+							event.getInventory().setMaximumRepairCost(ConfigString.MAX_REPAIR_LEVEL.getInt());
+							ItemMeta meta = combineFinal.getItemMeta();
+							meta.setDisplayName(finalName);
+							combineFinal.setItemMeta(meta);
+						}
 						event.getInventory().setItem(2, combineFinal);
 						event.getInventory().setRepairCost(anvil.getRepairCost());
 					} else

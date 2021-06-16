@@ -137,7 +137,7 @@ public class BlockUtils {
 			EnchantmentSolution.getESPlayer(player).breakBlock();
 			BlockUtils.removeMultiBlockBreak(b, enchantment);
 			return true;
-		} else if (!newEvent.isCancelled() && item == null || MatData.isAir(item.getType())) {
+		} else if (!newEvent.isCancelled() && (item == null || MatData.isAir(item.getType()))) {
 			Block newBlock = newEvent.getBlock();
 			Location loc = newBlock.getLocation().clone().add(0.5, 0.5, 0.5);
 			if (ConfigString.USE_PARTICLES.getBoolean()) loc.getWorld().spawnParticle(Particle.BLOCK_CRACK, loc, 20, newBlock.getBlockData());

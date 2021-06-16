@@ -11,6 +11,7 @@ public class EnchantItemCriterion {
 
 	public static void enchantItemTrigger(Player player, ItemStack item) {
 		String packageName = "net.minecraft.server." + VersionUtils.getMinecraftAPIVersion();
+		if (VersionUtils.getVersionNumber() > 16) packageName = "net.minecraft.advancements";
 		String craftPackageName = "org.bukkit.craftbukkit." + VersionUtils.getMinecraftAPIVersion();
 		Object entityPlayer = null;
 		Object itemStack = null;

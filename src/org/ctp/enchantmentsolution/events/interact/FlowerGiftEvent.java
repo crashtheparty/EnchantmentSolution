@@ -4,7 +4,7 @@ import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.ctp.crashapi.nms.ServerNMS;
+import org.ctp.crashapi.utils.ServerUtils;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.CERegister;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
@@ -65,7 +65,7 @@ public class FlowerGiftEvent extends InteractEvent implements Cooldownable {
 	public boolean overCooldown() {
 		ESPlayer player = EnchantmentSolution.getESPlayer(getPlayer());
 		long cooldown = player.getCooldown(getEnchantment().getEnchant().getRelativeEnchantment());
-		return !this.cooldown || !(cooldown + getCooldownTicks() > ServerNMS.getCurrentTick() && !ServerNMS.hasOverrun(cooldown));
+		return !this.cooldown || !(cooldown + getCooldownTicks() > ServerUtils.getCurrentTick() && !ServerUtils.hasOverrunCooldown(cooldown));
 	}
 
 }
