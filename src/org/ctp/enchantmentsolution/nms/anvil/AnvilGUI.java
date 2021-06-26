@@ -43,7 +43,7 @@ public abstract class AnvilGUI {
 		setData(data);
 
 		listener = new Listener() {
-			
+
 			@EventHandler(priority = EventPriority.HIGHEST)
 			public void onInventoryClick(InventoryClickEvent event) {
 				if (event.getWhoClicked() instanceof Player && event.getInventory().equals(inv)) {

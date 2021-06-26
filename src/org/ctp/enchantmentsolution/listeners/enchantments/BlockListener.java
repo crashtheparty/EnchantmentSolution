@@ -371,9 +371,6 @@ public class BlockListener extends Enchantmentable {
 						lowRange = new Location(block.getWorld(), block.getX() - xt, block.getY() - yt, block.getZ() - zt);
 						highRange = new Location(block.getWorld(), block.getX() + xt, block.getY() + yt, block.getZ() + zt);
 					} else {
-						int x = xt;
-						int y = yt;
-						int z = zt;
 						switch (which) {
 							case "xt":
 								if (times == -1) {

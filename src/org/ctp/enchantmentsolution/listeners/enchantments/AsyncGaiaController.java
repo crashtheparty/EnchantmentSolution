@@ -74,8 +74,11 @@ public class AsyncGaiaController {
 			BlockUtils.multiBreakBlock(player, item, b, RegisterEnchantments.GAIA);
 			AdvancementUtils.awardCriteria(player, ESAdvancement.DEFORESTATION, "tree", 1);
 			allBlocks.remove(b);
-			for(Location loc: BlockUtils.getNextTo(b, 3))
-				if (loc.getBlock().getType() == tree.getLeaf().getMaterial()) {
+			for(Location loc: BlockUtils.getNextTo(b, 3)) {
+				boolean contains = false;
+				for(MatData leaf: tree.getLeaves())
+					if (loc.getBlock().getType() == leaf.getMaterial()) contains = true;
+				if (contains) {
 					BlockUtils.multiBreakBlock(player, null, loc, RegisterEnchantments.GAIA);
 					if (Math.random() < 0.02) {
 						ItemStack sapling = new ItemStack(tree.getSapling().getMaterial());
@@ -87,6 +90,7 @@ public class AsyncGaiaController {
 						thread.setScheduler(scheduler);
 					}
 				}
+			}
 			iter.remove();
 		}
 		int j = breaking.size();

@@ -68,8 +68,10 @@ public class AnvilGUI_v1_17_R1 extends AnvilGUI {
 
 		// Send the packet
 		p.b.sendPacket(new PacketPlayOutOpenWindow(c, container.getType(), new ChatMessage("Repairing")));
+
 		// Set their active container to the container
 		p.initMenu(container);
+		p.bV = container;
 	}
 
 	public static void createAnvil(Player player, InventoryData data) {

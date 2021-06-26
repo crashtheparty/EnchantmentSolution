@@ -24,21 +24,21 @@ public enum LogType {
 			if (data.hasMaterial()) types[i] = data.getMaterial();
 		}
 	}
-	
+
 	public Material[] getMaterials() {
 		return types;
 	}
-	
+
 	public boolean hasMaterial(Material m) {
-		for (Material type : types)
+		for(Material type: types)
 			if (type != null && m == type) return true;
 		return false;
 	}
-	
+
 	public static LogType fromMaterial(Material m) {
-		for (LogType type : values())
+		for(LogType type: values())
 			if (type.hasMaterial(m)) return type;
-		
+
 		return null;
 	}
 

@@ -67,22 +67,22 @@ public class PlayerListener extends Enchantmentable {
 	public void onPlayerItemBreak(PlayerItemBreakEvent event) {
 		runMethod(this, "stickyHold", event, PlayerItemBreakEvent.class);
 	}
-	
+
 	@EventHandler
 	public void onPlayerQuit(PlayerQuitEvent event) {
 		ESPlayer player = EnchantmentSolution.getESPlayer(event.getPlayer());
 		if (player != null) player.removeHWDModels();
 	}
-	
+
 	@EventHandler
 	public void onPlayerDropItem(PlayerDropItemEvent event) {
 		ESPlayer player = EnchantmentSolution.getESPlayer(event.getPlayer());
 		if (player != null) player.removeHWDModels(event.getItemDrop().getItemStack());
 	}
-	
+
 	@EventHandler
 	public void onPlayerDropItem(InventoryEvent event) {
-		for (HumanEntity viewer : event.getViewers())
+		for(HumanEntity viewer: event.getViewers())
 			if (viewer instanceof Player) {
 				ESPlayer player = EnchantmentSolution.getESPlayer((Player) viewer);
 				if (player != null) player.removeInvalidHWDModels();
