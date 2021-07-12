@@ -28,7 +28,7 @@ public interface WalkerInterface extends ESInterface {
 
 	public static boolean hasWalkerInterface(ItemStack item) {
 		for(EnchantmentLevel enchant: EnchantmentUtils.getEnchantmentLevels(item))
-			if (InterfaceRegistry.getWalkerInterfaces().containsKey(enchant.getEnchant().getRelativeEnchantment())) return true;
+			if (enchant != null && enchant.getEnchant() != null && InterfaceRegistry.getWalkerInterfaces().containsKey(enchant.getEnchant().getRelativeEnchantment())) return true;
 		return false;
 	}
 

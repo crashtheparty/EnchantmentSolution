@@ -325,13 +325,20 @@ public class PersistenceUtils {
 			List<EnchantmentLevel> enchantLore = new ArrayList<EnchantmentLevel>();
 			if (item.hasItemMeta()) {
 				PersistentDataContainer container = item.getItemMeta().getPersistentDataContainer();
-				for(CustomEnchantment enchant: RegisterEnchantments.getEnchantments())
-					if (enchant.getRelativeEnchantment() instanceof CustomEnchantmentWrapper) {
-						NamespacedKey key = EnchantmentSolution.getKey(enchant.getName());
-						NamespacedKey keyLevel = EnchantmentSolution.getKey(enchant.getName() + "_level");
-						if (container.get(key, t) != null && container.get(keyLevel, t) != null) enchantLore.add(new EnchantmentLevel(enchant, Integer.parseInt(container.get(keyLevel, t))));
-					} else if (item.containsEnchantment(enchant.getRelativeEnchantment())) enchantLore.add(new EnchantmentLevel(enchant, EnchantmentUtils.getLevel(item, enchant.getRelativeEnchantment())));
+				for(NamespacedKey key: container.getKeys())
+					if (key.getNamespace().equalsIgnoreCase("enchantmentsolution")) {
+						Enchantment enchant = RegisterEnchantments.getByKey(key);
+						if (enchant != null) {
+							String enchantLevelString = container.get(new NamespacedKey(EnchantmentSolution.getPlugin(), key.getKey() + "_level"), PersistentDataType.STRING);
+							int enchantLevel = 0;
+							try {
+								enchantLevel = Integer.parseInt(enchantLevelString);
+							} catch (Exception ex) {}
+							enchantLore.add(new EnchantmentLevel(RegisterEnchantments.getCustomEnchantment(enchant), enchantLevel));
+						}
+					}
 			}
+			if (enchantMeta.size() == 0 && enchantLore.size() == 0) return false;
 
 			boolean change = !checkSimilar(enchantMeta, enchantLore) && !checkSimilar(enchantLore, enchantMeta);
 			if (change) {
