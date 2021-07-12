@@ -30,6 +30,7 @@ public class VanishListener implements Listener {
 
 		for(EnchantmentLevel level: levels) {
 			CustomEnchantment enchant = level.getEnchant();
+			if (enchant == null) continue;
 			if (!enchant.isEnabled() && ConfigString.DISABLE_ENCHANT_METHOD.getString().equals("vanish")) {
 				changed = 1;
 				item = EnchantmentUtils.removeEnchantmentFromItem(item, enchant);
