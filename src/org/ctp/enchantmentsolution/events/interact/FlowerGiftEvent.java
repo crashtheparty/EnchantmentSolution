@@ -65,7 +65,7 @@ public class FlowerGiftEvent extends InteractEvent implements Cooldownable {
 	public boolean overCooldown() {
 		ESPlayer player = EnchantmentSolution.getESPlayer(getPlayer());
 		long cooldown = player.getCooldown(getEnchantment().getEnchant().getRelativeEnchantment());
-		return !this.cooldown || !(cooldown + getCooldownTicks() > ServerUtils.getCurrentTick() && !ServerUtils.hasOverrunCooldown(cooldown));
+		return !this.cooldown || !(cooldown + getCooldownTicks() > ServerUtils.getCurrentTick());
 	}
 
 }

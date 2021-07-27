@@ -6,7 +6,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
-import org.ctp.crashapi.events.ItemAddEvent;
+import org.ctp.crashapi.events.ItemEquipEvent;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.nms.PersistenceNMS;
@@ -16,10 +16,9 @@ import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
 public class VanishListener implements Listener {
 
 	@EventHandler
-	public void onItemAdd(ItemAddEvent event) {
-		ItemStack item = event.getItem();
+	public void onItemEquip(ItemEquipEvent event) {
+		ItemStack item = event.getNewItem();
 		checkEnchants(event.getPlayer(), item);
-		event.setItem(item);
 	}
 
 	public static int checkEnchants(Player player, ItemStack item) {

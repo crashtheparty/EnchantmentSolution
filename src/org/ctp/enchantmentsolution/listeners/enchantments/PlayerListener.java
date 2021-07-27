@@ -16,6 +16,7 @@ import org.bukkit.event.inventory.InventoryEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.util.Vector;
 import org.ctp.crashapi.utils.DamageUtils;
@@ -335,8 +336,10 @@ public class PlayerListener extends Enchantmentable {
 				event.setCancelled(false);
 				if (!canRun(RegisterEnchantments.OVERKILL, event)) return;
 				boolean takeArrow = player.getGameMode() != GameMode.CREATIVE && !EnchantmentUtils.hasEnchantment(item, Enchantment.ARROW_INFINITE);
-				OverkillEvent overkill = new OverkillEvent(player, item, takeArrow, player.getInventory().all(Material.ARROW).size() > 0, 0.4);
+				boolean hasArrow = player.getInventory().all(Material.ARROW).size() > 0 || player.getInventory().all(Material.TIPPED_ARROW).size() > 0 || player.getInventory().all(Material.SPECTRAL_ARROW).size() > 0;
+				OverkillEvent overkill = new OverkillEvent(player, item, takeArrow, hasArrow, 0.25);
 				Bukkit.getPluginManager().callEvent(overkill);
+				ItemStack arrow = null;
 
 				if (!overkill.isCancelled() && !overkill.willCancel()) {
 					if (overkill.takeArrow() && overkill.hasArrow()) {
@@ -346,21 +349,34 @@ public class PlayerListener extends Enchantmentable {
 						System.arraycopy(extraContents, 0, allContents, contents.length, extraContents.length);
 						for(int i = 0; i < allContents.length; i++) {
 							ItemStack removeItem = player.getInventory().getItem(i);
-							if (removeItem != null && removeItem.getType().equals(Material.ARROW)) if (removeItem.getAmount() - 1 <= 0) {
-								player.getInventory().setItem(i, new ItemStack(Material.AIR));
-								break;
-							} else {
-								removeItem.setAmount(removeItem.getAmount() - 1);
-								break;
+							if (removeItem != null && (removeItem.getType() == Material.ARROW || removeItem.getType() == Material.TIPPED_ARROW || removeItem.getType() == Material.SPECTRAL_ARROW)) {
+								arrow = new ItemStack(removeItem.getType());
+								arrow.setItemMeta(removeItem.getItemMeta());
+								if (removeItem.getAmount() - 1 <= 0) {
+									player.getInventory().setItem(i, new ItemStack(Material.AIR));
+									break;
+								} else {
+									removeItem.setAmount(removeItem.getAmount() - 1);
+									break;
+								}
 							}
 						}
-					}
+					} else
+						arrow = new ItemStack(Material.ARROW);
 					player.incrementStatistic(Statistic.USE_ITEM, item.getType());
-					Arrow arrow = player.launchProjectile(Arrow.class);
-					arrow.setMetadata("overkill", new FixedMetadataValue(EnchantmentSolution.getPlugin(), player.getUniqueId().toString()));
-					if (!overkill.takeArrow()) arrow.setMetadata("no_pickup", new FixedMetadataValue(EnchantmentSolution.getPlugin(), true));
+					AbstractArrow projectile = null;
+					if (arrow.getType() == Material.SPECTRAL_ARROW) projectile = player.launchProjectile(SpectralArrow.class);
+					else
+						projectile = player.launchProjectile(Arrow.class);
+					if (arrow.getType() == Material.TIPPED_ARROW) {
+						PotionMeta meta = (PotionMeta) arrow.getItemMeta();
+						((Arrow) projectile).setBasePotionData(meta.getBasePotionData());
+					}
+					projectile.setMetadata("overkill", new FixedMetadataValue(EnchantmentSolution.getPlugin(), player.getUniqueId().toString()));
+					if (!overkill.takeArrow()) projectile.setMetadata("no_pickup", new FixedMetadataValue(EnchantmentSolution.getPlugin(), true));
+					AbstractArrow proj = projectile;
 					Bukkit.getScheduler().runTaskLater(EnchantmentSolution.getPlugin(), (Runnable) () -> {
-						arrow.setVelocity(arrow.getVelocity().multiply(overkill.getSpeed()));
+						proj.setVelocity(proj.getVelocity().multiply(overkill.getSpeed()));
 						player.getWorld().playSound(player.getLocation(), Sound.ENTITY_ARROW_SHOOT, 1, 1);
 						ESPlayer esPlayer = EnchantmentSolution.getESPlayer(player);
 						esPlayer.setCooldown(RegisterEnchantments.OVERKILL);

@@ -14,6 +14,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.ctp.crashapi.item.MatData;
+import org.ctp.crashapi.nms.ItemNMS;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.*;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentErrorReason;
@@ -337,6 +338,11 @@ public class PersistenceUtils {
 							enchantLore.add(new EnchantmentLevel(RegisterEnchantments.getCustomEnchantment(enchant), enchantLevel));
 						}
 					}
+				for (CustomEnchantment ench : RegisterEnchantments.getEnchantments()) {
+					String name = "ES_" + ench.getName();
+					int level = ItemNMS.getNBTData(item, name);
+					if (level > 0) enchantMeta.add(new EnchantmentLevel(ench, level));
+				}
 			}
 			if (enchantMeta.size() == 0 && enchantLore.size() == 0) return false;
 

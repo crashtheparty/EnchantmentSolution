@@ -48,6 +48,7 @@ public class AnvilNMS {
 				repairCost = nmsV7.getRepairCost();
 				break;
 			case 17:
+			case 18:
 				net.minecraft.world.item.ItemStack nmsV8 = org.bukkit.craftbukkit.v1_17_R1.inventory.CraftItemStack.asNMSCopy(item);
 				repairCost = nmsV8.getRepairCost();
 				break;
@@ -97,6 +98,7 @@ public class AnvilNMS {
 				nmsV7.setRepairCost(repairCost);
 				return org.bukkit.craftbukkit.v1_16_R3.inventory.CraftItemStack.asBukkitCopy(nmsV7);
 			case 17:
+			case 18:
 				net.minecraft.world.item.ItemStack nmsV8 = org.bukkit.craftbukkit.v1_17_R1.inventory.CraftItemStack.asNMSCopy(item);
 				nmsV8.setRepairCost(repairCost);
 				return org.bukkit.craftbukkit.v1_17_R1.inventory.CraftItemStack.asBukkitCopy(nmsV8);
