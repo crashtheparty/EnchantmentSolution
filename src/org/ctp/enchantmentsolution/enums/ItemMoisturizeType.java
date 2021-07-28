@@ -52,16 +52,20 @@ public enum ItemMoisturizeType {
 		File file = CrashConfigUtils.getTempFile(ItemMoisturizeType.WET.getClass(), "/resources/blocks/moisturize.yml");
 		YamlConfig config = new YamlConfig(file, new String[] {});
 		config.getFromConfig();
-		if (config.getStringList(location) == null) return new ArrayList<String>();
-		return config.getStringList(location);
+		List<String> values = config.getStringList(location);
+		if (values == null) values = new ArrayList<String>();
+		file.delete();
+		return values;
 	}
 
 	private static String getFromAbilities(String location) {
 		File file = CrashConfigUtils.getTempFile(ItemMoisturizeType.WET.getClass(), "/resources/abilities/moisturize.yml");
 		YamlConfig config = new YamlConfig(file, new String[] {});
 		config.getFromConfig();
-		if (config.getString(location) == null) return "AIR";
-		return config.getString(location);
+		String value = config.getString(location);
+		if (value == null) value = "AIR";
+		file.delete();
+		return value;
 	}
 
 }

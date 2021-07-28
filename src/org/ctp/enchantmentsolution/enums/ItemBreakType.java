@@ -211,7 +211,9 @@ public enum ItemBreakType {
 		File file = CrashConfigUtils.getTempFile(getClass(), "/resources/blocks/" + fileName);
 		YamlConfig config = new YamlConfig(file, new String[] {});
 		config.getFromConfig();
-		if (config.getStringList(location) == null) return new ArrayList<String>();
-		return config.getStringList(location);
+		List<String> values = config.getStringList(location);
+		if (values == null) values = new ArrayList<String>();
+		file.delete();
+		return values;
 	}
 }

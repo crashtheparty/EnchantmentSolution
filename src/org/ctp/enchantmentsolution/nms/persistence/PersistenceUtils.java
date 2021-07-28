@@ -387,7 +387,7 @@ public class PersistenceUtils {
 		for(EnchantmentLevel level: levels) {
 			EnchantmentLevel hasLevel = null;
 			for(EnchantmentLevel levelTwo: levelsTwo)
-				if (level.getEnchant().getName().equals(levelTwo.getEnchant().getName()) && !(level.getEnchant() instanceof SnapshotEnchantment ^ levelTwo.getEnchant() instanceof SnapshotEnchantment)) {
+				if (level.getEnchant() != null && levelTwo.getEnchant() != null && level.getEnchant().getName().equals(levelTwo.getEnchant().getName()) && !(level.getEnchant() instanceof SnapshotEnchantment ^ levelTwo.getEnchant() instanceof SnapshotEnchantment)) {
 					hasLevel = level;
 					break;
 				}
