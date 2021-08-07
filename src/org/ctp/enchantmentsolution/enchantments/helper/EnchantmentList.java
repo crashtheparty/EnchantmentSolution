@@ -144,7 +144,7 @@ public class EnchantmentList {
 		int totalWeight = 0;
 		Player p = player == null ? null : player.getPlayer();
 		List<CustomEnchantment> customEnchants = new ArrayList<CustomEnchantment>();
-		List<CustomEnchantment> registeredEnchantments = RegisterEnchantments.getEnchantments();
+		List<CustomEnchantment> registeredEnchantments = RegisterEnchantments.getRegisteredEnchantments();
 		for(CustomEnchantment enchantment: registeredEnchantments)
 			if (canAddEnchantment(previousLevels, enchantment) && enchantment.getEnchantLevel(p, enchantability) > 0) {
 				totalWeight += enchantment.getWeight();

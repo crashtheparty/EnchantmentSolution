@@ -338,7 +338,7 @@ public class PersistenceUtils {
 							enchantLore.add(new EnchantmentLevel(RegisterEnchantments.getCustomEnchantment(enchant), enchantLevel));
 						}
 					}
-				for (CustomEnchantment ench : RegisterEnchantments.getEnchantments()) {
+				for(CustomEnchantment ench: RegisterEnchantments.getEnchantments()) {
 					String name = "ES_" + ench.getName();
 					int level = ItemNMS.getNBTData(item, name);
 					if (level > 0) enchantMeta.add(new EnchantmentLevel(ench, level));

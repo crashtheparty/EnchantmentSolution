@@ -32,9 +32,9 @@ import org.ctp.enchantmentsolution.events.player.PlayerChangeCoordsEvent;
 import org.ctp.enchantmentsolution.interfaces.WalkerInterface;
 import org.ctp.enchantmentsolution.listeners.Enchantmentable;
 import org.ctp.enchantmentsolution.nms.PersistenceNMS;
-import org.ctp.enchantmentsolution.nms.animalmob.AnimalMob;
 import org.ctp.enchantmentsolution.threads.IcarusThread;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
+import org.ctp.enchantmentsolution.utils.abilityhelpers.AnimalMob;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.FlowerGiftDrop;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.WalkerUtils;
 import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
@@ -223,9 +223,7 @@ public class PlayerListener extends Enchantmentable {
 							AnimalMob fromLasso = lasso.getAnimal();
 							Location loc = lasso.getBlock().getRelative(lasso.getFace()).getLocation().clone().add(0.5, 0, 0.5);
 							if (loc.getBlock().isPassable()) {
-								Entity e = loc.getWorld().spawnEntity(loc, fromLasso.getMob());
-								if (e == null) return;
-								fromLasso.editProperties(e, true, false);
+								fromLasso.spawnEntity(loc);
 								PersistenceNMS.removeAnimal(item, entityID);
 								DamageUtils.damageItem(player, item, 1, 2);
 								player.incrementStatistic(Statistic.USE_ITEM, item.getType());

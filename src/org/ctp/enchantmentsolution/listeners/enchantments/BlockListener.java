@@ -370,7 +370,7 @@ public class BlockListener extends Enchantmentable {
 					if (which.equals("")) {
 						lowRange = new Location(block.getWorld(), block.getX() - xt, block.getY() - yt, block.getZ() - zt);
 						highRange = new Location(block.getWorld(), block.getX() + xt, block.getY() + yt, block.getZ() + zt);
-					} else {
+					} else
 						switch (which) {
 							case "xt":
 								if (times == -1) {
@@ -400,7 +400,6 @@ public class BlockListener extends Enchantmentable {
 								}
 								break;
 						}
-					}
 					esPlayer.createModel(block, lowRange, highRange, item);
 					return;
 				}

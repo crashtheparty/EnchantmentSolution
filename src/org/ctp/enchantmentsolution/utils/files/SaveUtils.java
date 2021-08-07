@@ -20,14 +20,10 @@ import org.ctp.enchantmentsolution.enchantments.generate.TableEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.events.blocks.DamageState;
 import org.ctp.enchantmentsolution.interfaces.WalkerInterface;
-import org.ctp.enchantmentsolution.nms.AnimalMobNMS;
-import org.ctp.enchantmentsolution.nms.animalmob.AnimalMob;
 import org.ctp.enchantmentsolution.rpg.RPGPlayer;
 import org.ctp.enchantmentsolution.rpg.RPGUtils;
 import org.ctp.enchantmentsolution.utils.Configurations;
-import org.ctp.enchantmentsolution.utils.abilityhelpers.GaiaUtils;
-import org.ctp.enchantmentsolution.utils.abilityhelpers.WalkerBlock;
-import org.ctp.enchantmentsolution.utils.abilityhelpers.WalkerUtils;
+import org.ctp.enchantmentsolution.utils.abilityhelpers.*;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 import org.ctp.enchantmentsolution.utils.player.ESPlayer;
 
@@ -95,7 +91,7 @@ public class SaveUtils {
 		if (config.containsElements("animals")) {
 			int i = 0;
 			while (config.getString("animals." + i + ".entity_type") != null) {
-				AnimalMobNMS.getFromConfig(file, i);
+				AnimalMob.createFromConfig(file, i);
 				i++;
 			}
 			config.removeKeys("animals");

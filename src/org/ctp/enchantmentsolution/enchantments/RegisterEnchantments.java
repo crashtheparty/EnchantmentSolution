@@ -15,6 +15,7 @@ import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.api.ApiEnchantmentWrapper;
 import org.ctp.enchantmentsolution.enchantments.helper.Weight;
 import org.ctp.enchantmentsolution.enums.EnchantmentLocation;
+import org.ctp.enchantmentsolution.nms.persistence.SnapshotEnchantment;
 import org.ctp.enchantmentsolution.utils.Configurations;
 import org.ctp.enchantmentsolution.utils.VersionUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
@@ -129,17 +130,14 @@ public class RegisterEnchantments {
 
 	public static CustomEnchantment getCustomEnchantment(Enchantment enchant) {
 		for(CustomEnchantment enchantment: ENCHANTMENTS)
-			if (enchant.equals(enchantment.getRelativeEnchantment())) {
-				if (!enchantment.isEnabled()) return null;
-				return enchantment;
-			}
-		return null;
+			if (enchant.equals(enchantment.getRelativeEnchantment())) return enchantment;
+		return new SnapshotEnchantment(enchant);
 	}
 
 	public static List<CustomEnchantment> getCurseEnchantments() {
 		if (CURSE_ENCHANTMENTS != null) return CURSE_ENCHANTMENTS;
 		CURSE_ENCHANTMENTS = new ArrayList<CustomEnchantment>();
-		for(CustomEnchantment enchantment: getRegisteredEnchantments()) {
+		for(CustomEnchantment enchantment: ENCHANTMENTS) {
 			if (enchantment.getRelativeEnchantment() == RegisterEnchantments.CURSE_OF_CONTAGION || enchantment.getRelativeEnchantment() == RegisterEnchantments.CURSE_OF_STAGNANCY) continue;
 			if (enchantment.isCurse()) CURSE_ENCHANTMENTS.add(enchantment);
 		}

@@ -36,14 +36,10 @@ import org.ctp.enchantmentsolution.events.teleport.WarpEntityEvent;
 import org.ctp.enchantmentsolution.events.teleport.WarpPlayerEvent;
 import org.ctp.enchantmentsolution.listeners.Enchantmentable;
 import org.ctp.enchantmentsolution.mcmmo.McMMOHandler;
-import org.ctp.enchantmentsolution.nms.AnimalMobNMS;
-import org.ctp.enchantmentsolution.nms.animalmob.AnimalMob;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.ESArrays;
 import org.ctp.enchantmentsolution.utils.VersionUtils;
-import org.ctp.enchantmentsolution.utils.abilityhelpers.DrownedEntity;
-import org.ctp.enchantmentsolution.utils.abilityhelpers.EntityAccuracy;
-import org.ctp.enchantmentsolution.utils.abilityhelpers.ParticleEffect;
+import org.ctp.enchantmentsolution.utils.abilityhelpers.*;
 import org.ctp.enchantmentsolution.utils.items.AbilityUtils;
 import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
 import org.ctp.enchantmentsolution.utils.player.ESPlayer;
@@ -230,14 +226,14 @@ public class DamageListener extends Enchantmentable {
 		if (!canRun(RegisterEnchantments.IRENES_LASSO, event)) return;
 		Entity attacker = event.getDamager();
 		Entity attacked = event.getEntity();
-		if (attacker instanceof Player && (attacked instanceof Animals || attacked instanceof WaterMob)) {
+		if (attacker instanceof Player) {
 			Player player = (Player) attacker;
 			if (isDisabled(player, RegisterEnchantments.IRENES_LASSO)) return;
-			Creature animals = (Creature) attacked;
 			ItemStack attackItem = player.getInventory().getItemInMainHand();
 			if (EnchantmentUtils.hasEnchantment(attackItem, RegisterEnchantments.IRENES_LASSO)) {
-				if (!AnimalMobNMS.canAddMob()) return;
+				if (!AnimalMob.canAddMob(attacked, RegisterEnchantments.IRENES_LASSO)) return;
 				event.setCancelled(true);
+				Creature animals = (Creature) attacked;
 				int max = EnchantmentUtils.getLevel(attackItem, RegisterEnchantments.IRENES_LASSO);
 				int current = 0;
 				boolean animalRemove = false;
@@ -262,7 +258,7 @@ public class DamageListener extends Enchantmentable {
 						AdvancementUtils.awardCriteria(player, ESAdvancement.FREE_PETS, type);
 					}
 					McMMOHandler.customName(attacked);
-					EnchantmentSolution.addAnimals(AnimalMobNMS.getMob(animals, attackItem));
+					EnchantmentSolution.addAnimals(new AnimalMob(animals, attackItem));
 					attacked.remove();
 				}
 				if (animalRemove) {
