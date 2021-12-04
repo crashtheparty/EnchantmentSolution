@@ -28,7 +28,7 @@ import org.ctp.enchantmentsolution.inventory.*;
 import org.ctp.enchantmentsolution.inventory.minigame.Minigame;
 import org.ctp.enchantmentsolution.inventory.rpg.RPGInventory;
 import org.ctp.enchantmentsolution.listeners.VanishListener;
-import org.ctp.enchantmentsolution.nms.PersistenceNMS;
+import org.ctp.enchantmentsolution.persistence.PersistenceUtils;
 import org.ctp.enchantmentsolution.rpg.RPGPlayer;
 import org.ctp.enchantmentsolution.rpg.RPGUtils;
 import org.ctp.enchantmentsolution.utils.Configurations;
@@ -235,7 +235,7 @@ public class CommandUtils {
 									obj.put("text", ChatColor.GREEN + "Click Here");
 									HashMap<Object, Object> action = new HashMap<Object, Object>();
 									action.put("action", "suggest_command");
-									action.put("value", PersistenceNMS.getEnchantmentString(new EnchantmentLevel(enchant, level)).replace(ChatColor.COLOR_CHAR, '&'));
+									action.put("value", PersistenceUtils.getEnchantmentString(new EnchantmentLevel(enchant, level)).replace(ChatColor.COLOR_CHAR, '&'));
 									obj.put("clickEvent", action);
 									json.add(obj);
 									Chatable.get().sendRawMessage(player, json.toJSONString());

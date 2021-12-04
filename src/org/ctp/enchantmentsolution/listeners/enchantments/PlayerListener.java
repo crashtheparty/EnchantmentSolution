@@ -4,14 +4,16 @@ import java.util.*;
 
 import org.bukkit.*;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
+import org.bukkit.block.data.BlockData;
+import org.bukkit.block.data.Levelled;
 import org.bukkit.block.data.Waterlogged;
 import org.bukkit.block.data.type.Campfire;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.event.*;
-import org.bukkit.event.block.Action;
-import org.bukkit.event.block.EntityBlockFormEvent;
+import org.bukkit.event.block.*;
 import org.bukkit.event.inventory.InventoryEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.EquipmentSlot;
@@ -19,6 +21,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.util.Vector;
+import org.ctp.crashapi.item.MatData;
 import org.ctp.crashapi.utils.DamageUtils;
 import org.ctp.crashapi.utils.ItemUtils;
 import org.ctp.crashapi.utils.LocationUtils;
@@ -26,12 +29,15 @@ import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enums.ItemMoisturizeType;
+import org.ctp.enchantmentsolution.events.blocks.FlashBreakEvent;
+import org.ctp.enchantmentsolution.events.blocks.FlashPlaceEvent;
+import org.ctp.enchantmentsolution.events.blocks.FlashUpdateEvent;
 import org.ctp.enchantmentsolution.events.interact.*;
 import org.ctp.enchantmentsolution.events.modify.IcarusLaunchEvent;
 import org.ctp.enchantmentsolution.events.player.PlayerChangeCoordsEvent;
 import org.ctp.enchantmentsolution.interfaces.WalkerInterface;
 import org.ctp.enchantmentsolution.listeners.Enchantmentable;
-import org.ctp.enchantmentsolution.nms.PersistenceNMS;
+import org.ctp.enchantmentsolution.persistence.PersistenceUtils;
 import org.ctp.enchantmentsolution.threads.IcarusThread;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.AnimalMob;
@@ -45,6 +51,7 @@ public class PlayerListener extends Enchantmentable {
 
 	@EventHandler
 	public void onPlayerInteract(PlayerInteractEvent event) {
+		runMethod(this, "flash", event, PlayerInteractEvent.class);
 		runMethod(this, "flowerGift", event, PlayerInteractEvent.class);
 		runMethod(this, "frosty", event, PlayerInteractEvent.class);
 		runMethod(this, "irenesLasso", event, PlayerInteractEvent.class);
@@ -90,6 +97,112 @@ public class PlayerListener extends Enchantmentable {
 			}
 	}
 
+	private void flash(PlayerInteractEvent event) {
+		if (!canRun(RegisterEnchantments.FLASH, event) || isDisabled(event.getPlayer(), RegisterEnchantments.FLASH)) return;
+
+		if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
+			if (event.getHand() == EquipmentSlot.OFF_HAND) return; // off hand packet, ignore.
+			Player player = event.getPlayer();
+			ItemStack item = event.getItem();
+			if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.FLASH)) {
+				Block block = event.getClickedBlock();
+				Block setBlock = block.getRelative(event.getBlockFace());
+				MatData light = new MatData("LIGHT");
+				if (MatData.isAir(setBlock.getType())) {
+					int lightLevel = 1;
+					BlockState state = setBlock.getState();
+					BlockData oldData = setBlock.getBlockData();
+					setBlock.setType(light.getMaterial());
+					BlockData newData = setBlock.getBlockData();
+					((Levelled) newData).setLevel(lightLevel);
+					setBlock.setBlockData(newData);
+					FlashPlaceEvent flash = new FlashPlaceEvent(setBlock, state, block, item, player, true, EquipmentSlot.HAND, lightLevel);
+					Bukkit.getPluginManager().callEvent(flash);
+
+					if (flash.isCancelled()) {
+						setBlock.setType(oldData.getMaterial());
+						setBlock.setBlockData(oldData);
+					} else {
+						BlockPlaceEvent place = new BlockPlaceEvent(setBlock, state, block, item, player, true, EquipmentSlot.HAND);
+						Bukkit.getPluginManager().callEvent(place);
+
+						if (place.isCancelled()) {
+							setBlock.setType(oldData.getMaterial());
+							setBlock.setBlockData(oldData);
+						} else {
+							DamageUtils.damageItem(player, item, 1, 2);
+							setBlock.getWorld().spawnParticle(Particle.ELECTRIC_SPARK, setBlock.getLocation().clone().add(0.5, 0.5, 0.5), lightLevel, 0.2, 0, 0.2);
+							setBlock.getWorld().playSound(setBlock.getLocation(), Sound.ITEM_DYE_USE, 0.5f, 1);
+							BlockFace[] faces = new BlockFace[] {BlockFace.EAST, BlockFace.NORTH, BlockFace.SOUTH, BlockFace.WEST, BlockFace.UP, BlockFace.DOWN};
+							for (BlockFace face : faces)
+								if (setBlock.getRelative(face).getType() == Material.TORCH) AdvancementUtils.awardCriteria(player, ESAdvancement.USELESS, "torch");
+						}
+					}
+				} else if (light.getMaterial() == setBlock.getType()) {
+					BlockData data = setBlock.getBlockData();
+					int lightLevel = ((Levelled) data).getLevel();
+					int newLightLevel = (lightLevel + 1) % 16;
+					FlashUpdateEvent flash = new FlashUpdateEvent(setBlock, data, player, lightLevel, newLightLevel);
+					Bukkit.getPluginManager().callEvent(flash);
+
+					if (!flash.isCancelled()) {
+						BlockData oldData = setBlock.getBlockData();
+						setBlock.setType(light.getMaterial());
+						BlockData newData = setBlock.getBlockData();
+						((Levelled) newData).setLevel(newLightLevel);
+						setBlock.setBlockData(newData);
+						BlockPhysicsEvent physics = new BlockPhysicsEvent(setBlock, data);
+						Bukkit.getPluginManager().callEvent(physics);
+
+						if (physics.isCancelled()) {
+							setBlock.setType(oldData.getMaterial());
+							setBlock.setBlockData(oldData);
+						} else {
+							DamageUtils.damageItem(player, item, 1, 2);
+							if (newLightLevel > 0) setBlock.getWorld().spawnParticle(Particle.ELECTRIC_SPARK, setBlock.getLocation().clone().add(0.2, 0, 0.2), newLightLevel, 0.5, 0, 0.5);
+							else setBlock.getWorld().spawnParticle(Particle.FLAME, setBlock.getLocation(), 20, 0.5, 0, 0.5);
+							setBlock.getWorld().playSound(setBlock.getLocation(), Sound.ITEM_DYE_USE, 0.5f, 1);
+						}
+					}
+
+				}
+			}
+		} else if (event.getAction() == Action.LEFT_CLICK_BLOCK) {
+			if (event.getHand() == EquipmentSlot.OFF_HAND) return; // off hand packet, ignore.
+			Player player = event.getPlayer();
+			ItemStack item = event.getItem();
+			if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.FLASH)) {
+				Block block = event.getClickedBlock();
+				Block setBlock = block.getRelative(event.getBlockFace());
+				MatData light = new MatData("LIGHT");
+				if (light.getMaterial() == setBlock.getType()) {
+					BlockData oldData = setBlock.getBlockData();
+					setBlock.setType(Material.AIR);
+					FlashBreakEvent flash = new FlashBreakEvent(setBlock, player);
+					Bukkit.getPluginManager().callEvent(flash);
+
+					if (!flash.isCancelled()) {
+						BlockBreakEvent breakEvent = new BlockBreakEvent(setBlock, player);
+						Bukkit.getPluginManager().callEvent(breakEvent);
+
+						if (breakEvent.isCancelled()) {
+							setBlock.setType(oldData.getMaterial());
+							setBlock.setBlockData(oldData);
+						} else {
+							DamageUtils.damageItem(player, item, 1, 2);
+							setBlock.getWorld().spawnParticle(Particle.ASH, setBlock.getLocation().clone().add(0.5, 0.5, 0.5), 20, 0.2, 0, 0.2);
+							setBlock.getWorld().playSound(setBlock.getLocation(), Sound.BLOCK_REDSTONE_TORCH_BURNOUT, 0.5f, 1);
+						}
+					} else {
+						setBlock.setType(oldData.getMaterial());
+						setBlock.setBlockData(oldData);
+					}
+
+				}
+			}
+		}
+	}
+
 	private void flowerGift(PlayerInteractEvent event) {
 		if (!canRun(RegisterEnchantments.FLOWER_GIFT, event)) return;
 		if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
@@ -131,7 +244,7 @@ public class PlayerListener extends Enchantmentable {
 			if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.FROSTY)) {
 				event.setCancelled(false);
 				if (!canRun(RegisterEnchantments.FROSTY, event)) return;
-				boolean takeSnow = player.getGameMode() != GameMode.CREATIVE;
+				boolean takeSnow = player.getGameMode() != GameMode.CREATIVE && !EnchantmentUtils.hasEnchantment(item, Enchantment.ARROW_INFINITE);
 				FrostyEvent frosty = new FrostyEvent(player, item, takeSnow, player.getInventory().all(Material.SNOWBALL).size() > 0);
 				Bukkit.getPluginManager().callEvent(frosty);
 
@@ -210,7 +323,7 @@ public class PlayerListener extends Enchantmentable {
 			ItemStack item = player.getInventory().getItemInMainHand();
 			if (event.getHand() == EquipmentSlot.OFF_HAND) item = player.getInventory().getItemInOffHand();
 			if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.IRENES_LASSO)) {
-				List<Integer> entityIDs = PersistenceNMS.getAnimalIDsFromItem(item);
+				List<Integer> entityIDs = PersistenceUtils.getAnimalIDsFromItem(item);
 				if (entityIDs.size() == 0) return;
 				int entityID = entityIDs.get(0);
 				Iterator<AnimalMob> iterator = EnchantmentSolution.getAnimals().iterator();
@@ -224,7 +337,7 @@ public class PlayerListener extends Enchantmentable {
 							Location loc = lasso.getBlock().getRelative(lasso.getFace()).getLocation().clone().add(0.5, 0, 0.5);
 							if (loc.getBlock().isPassable()) {
 								fromLasso.spawnEntity(loc);
-								PersistenceNMS.removeAnimal(item, entityID);
+								PersistenceUtils.removeAnimal(item, entityID);
 								DamageUtils.damageItem(player, item, 1, 2);
 								player.incrementStatistic(Statistic.USE_ITEM, item.getType());
 								iterator.remove();
@@ -393,7 +506,7 @@ public class PlayerListener extends Enchantmentable {
 			if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.SPLATTER_FEST)) {
 				event.setCancelled(false);
 				if (!canRun(RegisterEnchantments.SPLATTER_FEST, event)) return;
-				SplatterFestEvent splatterFest = new SplatterFestEvent(player, item, player.getGameMode() != GameMode.CREATIVE, player.getInventory().all(Material.EGG).size() > 0);
+				SplatterFestEvent splatterFest = new SplatterFestEvent(player, item, player.getGameMode() != GameMode.CREATIVE && !EnchantmentUtils.hasEnchantment(item, Enchantment.ARROW_INFINITE), player.getInventory().all(Material.EGG).size() > 0);
 				Bukkit.getPluginManager().callEvent(splatterFest);
 
 				if (!splatterFest.isCancelled() && !splatterFest.willCancel()) {
@@ -435,7 +548,7 @@ public class PlayerListener extends Enchantmentable {
 		if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.STICKY_HOLD)) {
 			ItemStack finalItem = item.clone();
 			Bukkit.getScheduler().runTaskLater(EnchantmentSolution.getPlugin(), () -> {
-				ItemStack stickItem = PersistenceNMS.createStickyHold(finalItem);
+				ItemStack stickItem = PersistenceUtils.createStickyHold(finalItem);
 				ItemUtils.giveItemToPlayer(player, stickItem, player.getLocation(), false);
 				AdvancementUtils.awardCriteria(player, ESAdvancement.STICKY_BEES, "break", 1);
 			}, 1l);
@@ -450,7 +563,7 @@ public class PlayerListener extends Enchantmentable {
 			if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.ZEAL)) {
 				event.setCancelled(false);
 				if (!canRun(RegisterEnchantments.ZEAL, event)) return;
-				boolean takeFireCharge = player.getGameMode() != GameMode.CREATIVE;
+				boolean takeFireCharge = player.getGameMode() != GameMode.CREATIVE && !EnchantmentUtils.hasEnchantment(item, Enchantment.ARROW_INFINITE);
 				ZealEvent zeal = new ZealEvent(player, item, takeFireCharge, player.getInventory().all(Material.FIRE_CHARGE).size() > 0);
 				Bukkit.getPluginManager().callEvent(zeal);
 

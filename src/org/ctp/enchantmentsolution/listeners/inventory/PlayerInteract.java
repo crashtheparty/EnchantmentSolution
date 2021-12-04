@@ -11,14 +11,10 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.ctp.crashapi.inventory.InventoryData;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
-import org.ctp.enchantmentsolution.inventory.Anvil;
-import org.ctp.enchantmentsolution.inventory.EnchantmentTable;
-import org.ctp.enchantmentsolution.inventory.LegacyAnvil;
+import org.ctp.enchantmentsolution.inventory.*;
 import org.ctp.enchantmentsolution.inventory.minigame.Minigame;
-import org.ctp.enchantmentsolution.nms.playerinteract.PlayerInteract_v1_14;
 import org.ctp.enchantmentsolution.utils.AnvilUtils;
 import org.ctp.enchantmentsolution.utils.MinigameUtils;
-import org.ctp.enchantmentsolution.utils.VersionUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 
 public class PlayerInteract implements Listener {
@@ -95,7 +91,20 @@ public class PlayerInteract implements Listener {
 					inv.setInventory(null);
 				}, 1l);
 			}
-			if (VersionUtils.getVersionNumber() > 3) PlayerInteract_v1_14.onPlayerInteract(event);
+			if (block.getType() == Material.GRINDSTONE && ConfigString.CUSTOM_GRINDSTONE.getBoolean()) Bukkit.getScheduler().scheduleSyncDelayedTask(EnchantmentSolution.getPlugin(), () -> {
+				if (event.isCancelled()) return;
+				Player player = event.getPlayer();
+				InventoryData inv = EnchantmentSolution.getPlugin().getInventory(player);
+				if (inv == null) {
+					inv = new Grindstone(player, block);
+					EnchantmentSolution.getPlugin().addInventory(inv);
+				} else if (!(inv instanceof Grindstone)) {
+					inv.close(true);
+					inv = new Grindstone(player, block);
+					EnchantmentSolution.getPlugin().addInventory(inv);
+				}
+				inv.setInventory(null);
+			}, 1l);
 		}
 	}
 

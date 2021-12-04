@@ -10,6 +10,7 @@ import org.ctp.crashapi.config.yaml.YamlConfig;
 import org.ctp.crashapi.item.MatData;
 import org.ctp.crashapi.utils.CrashConfigUtils;
 import org.ctp.enchantmentsolution.enums.ItemBreakType;
+import org.ctp.enchantmentsolution.utils.files.ItemBreakFile.ItemBreakFileType;
 
 public class SilkTouchUtils {
 
@@ -39,7 +40,7 @@ public class SilkTouchUtils {
 		config.getFromConfig();
 
 		ItemBreakType type = ItemBreakType.getType(item.getType());
-		if (type != null && type.getBreakTypes().contains(block.getType()) || type.getBasicTypes().contains(block.getType())) return new MatData(config.getString(block.getType().name().toLowerCase()));
+		if (type != null && type.getBreakTypes().contains(block.getType()) || ItemBreakType.getBasicTypes(ItemBreakFileType.SILK_TOUCH).contains(block.getType())) return new MatData(config.getString(block.getType().name().toLowerCase()));
 		return new MatData("air");
 	}
 }

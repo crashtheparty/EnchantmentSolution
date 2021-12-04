@@ -12,6 +12,7 @@ import org.ctp.crashapi.utils.CrashConfigUtils;
 import org.ctp.enchantmentsolution.enums.ItemBreakType;
 import org.ctp.enchantmentsolution.utils.VersionUtils;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.SmelteryMaterial;
+import org.ctp.enchantmentsolution.utils.files.ItemBreakFile.ItemBreakFileType;
 
 public class SmelteryUtils {
 
@@ -21,7 +22,7 @@ public class SmelteryUtils {
 		config.getFromConfig();
 
 		ItemBreakType type = ItemBreakType.getType(item.getType());
-		if (type != null && type.getBreakTypes().contains(data.getMaterial()) || type.getBasicTypes().contains(data.getMaterial())) return new MatData(config.getString(data.getMaterial().name().toLowerCase()));
+		if (type != null && type.getBreakTypes().contains(data.getMaterial()) || ItemBreakType.getBasicTypes(ItemBreakFileType.BREAK).contains(data.getMaterial())) return new MatData(config.getString(data.getMaterial().name().toLowerCase()));
 		return new MatData("air");
 	}
 

@@ -12,7 +12,7 @@ import org.ctp.crashapi.config.yaml.YamlConfig;
 import org.ctp.crashapi.nms.MobNMS;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
-import org.ctp.enchantmentsolution.nms.PersistenceNMS;
+import org.ctp.enchantmentsolution.persistence.PersistenceUtils;
 
 public class AnimalMob {
 
@@ -101,7 +101,7 @@ public class AnimalMob {
 	}
 
 	public boolean inItem(ItemStack attackItem) {
-		return getItem() != null && getItem().equals(attackItem) || PersistenceNMS.getAnimalIDsFromItem(attackItem).contains(getEntityID());
+		return getItem() != null && getItem().equals(attackItem) || PersistenceUtils.getAnimalIDsFromItem(attackItem).contains(getEntityID());
 	}
 
 	public boolean inItem(ItemStack item, int entityID) {
@@ -145,7 +145,7 @@ public class AnimalMob {
 
 	public void setEntityID(int entityID, boolean addLore) {
 		this.entityID = entityID;
-		if (addLore) PersistenceNMS.addAnimal(item, entityID);
+		if (addLore) PersistenceUtils.addAnimal(item, entityID);
 	}
 
 	public EntityType getType() {

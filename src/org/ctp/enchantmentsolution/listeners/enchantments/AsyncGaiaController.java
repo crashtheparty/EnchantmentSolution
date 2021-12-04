@@ -16,7 +16,7 @@ import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.threads.GaiaItemThread;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.BlockUtils;
-import org.ctp.enchantmentsolution.utils.abilityhelpers.GaiaUtils.GaiaTrees;
+import org.ctp.enchantmentsolution.utils.abilityhelpers.GaiaTrees;
 import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
 import org.ctp.enchantmentsolution.utils.player.ESPlayer;
 

@@ -1,10 +1,12 @@
 package org.ctp.enchantmentsolution.nms.anvil;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Optional;
 import java.util.function.BiFunction;
 
 import org.bukkit.craftbukkit.v1_17_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_17_R1.inventory.CraftInventoryView;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -14,21 +16,25 @@ import org.ctp.enchantmentsolution.inventory.Anvil;
 
 import net.minecraft.core.BlockPosition;
 import net.minecraft.network.chat.ChatMessage;
+import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.PacketPlayOutOpenWindow;
 import net.minecraft.server.level.EntityPlayer;
+import net.minecraft.server.network.PlayerConnection;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.EntityHuman;
-import net.minecraft.world.inventory.ContainerAccess;
-import net.minecraft.world.inventory.ContainerAnvil;
+import net.minecraft.world.entity.player.PlayerInventory;
+import net.minecraft.world.inventory.*;
 import net.minecraft.world.level.World;
 
 public class AnvilGUI_v1_17_R1 extends AnvilGUI {
 	private class AnvilContainer extends ContainerAnvil {
-		public AnvilContainer(EntityHuman entity, int windowId, World world) {
-			super(windowId, entity.getInventory(), at(world, new BlockPosition(0, 0, 0)));
+		public AnvilContainer(EntityHuman entity, int windowId, World world)
+		throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+			super(windowId, (PlayerInventory) EntityHuman.class.getDeclaredMethod("getInventory").invoke(entity), at(world, new BlockPosition(0, 0, 0)));
 			setTitle(new ChatMessage("container.anvil"));
 		}
 
-		@Override
+		@SuppressWarnings("unused")
 		public boolean canUse(EntityHuman entityhuman) {
 			return true;
 		}
@@ -52,26 +58,57 @@ public class AnvilGUI_v1_17_R1 extends AnvilGUI {
 
 		// Counter stuff that the game uses to keep track of inventories
 		int c = p.nextContainerCounter();
-		World w = p.getWorld();
+		World w = null;
+		try {
+			w = (World) (Entity.class.getDeclaredMethod("getWorld").invoke(p));
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			return;
+		}
 
-		AnvilContainer container = new AnvilContainer(p, c, w);
+		AnvilContainer container;
+		try {
+			container = new AnvilContainer(p, c, w);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return;
+		}
 
 		// Set the items to the items from the inventory given
-		Inventory inv = container.getBukkitView().getTopInventory();
+		Inventory inv = null;
+		CraftInventoryView view = null;
+		try {
+			view = (CraftInventoryView) ContainerAnvil.class.getDeclaredMethod("getBukkitView").invoke(container);
+			inv = view.getTopInventory();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			return;
+		}
 
 		for(AnvilSlot slot: items.keySet())
 			inv.setItem(slot.getSlot(), items.get(slot));
 
 		inv.setItem(0, getItemStack());
 
-		setInventory(container.getBukkitView().getTopInventory());
+		setInventory(view.getTopInventory());
 
 		// Send the packet
-		p.b.sendPacket(new PacketPlayOutOpenWindow(c, container.getType(), new ChatMessage("Repairing")));
+		PlayerConnection b = p.b;
+		try {
+			@SuppressWarnings("unchecked")
+			PacketPlayOutOpenWindow packet = new PacketPlayOutOpenWindow(c, (Containers<ContainerAnvil>) (Container.class.getDeclaredMethod("getType").invoke(container)), new ChatMessage("Repairing"));
+			b.getClass().getDeclaredMethod("sendPacket", Packet.class).invoke(b, packet);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
 
 		// Set their active container to the container
-		p.initMenu(container);
-		p.bV = container;
+		try {
+			p.getClass().getDeclaredMethod("initMenu", Container.class).invoke(p, container);
+			EntityHuman.class.getDeclaredField("bV").set(p, container);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
 	}
 
 	public static void createAnvil(Player player, InventoryData data) {

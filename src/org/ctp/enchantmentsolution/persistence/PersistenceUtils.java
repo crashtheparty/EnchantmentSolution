@@ -1,4 +1,4 @@
-package org.ctp.enchantmentsolution.nms.persistence;
+package org.ctp.enchantmentsolution.persistence;
 
 import java.util.*;
 import java.util.Map.Entry;
@@ -19,7 +19,6 @@ import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.*;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentErrorReason;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
-import org.ctp.enchantmentsolution.nms.PersistenceNMS;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
 
@@ -375,7 +374,7 @@ public class PersistenceUtils {
 				Iterator<EnchantmentLevel> iter = enchantMeta.iterator();
 				while (iter.hasNext()) {
 					EnchantmentLevel entry = iter.next();
-					if (PersistenceNMS.addEnchantment(item, entry)) changed = true;
+					if (PersistenceUtils.addPersistence(item, Arrays.asList(entry))) changed = true;
 				}
 			}
 		}

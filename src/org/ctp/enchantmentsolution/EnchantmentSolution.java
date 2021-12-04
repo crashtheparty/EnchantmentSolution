@@ -14,10 +14,8 @@ import org.bukkit.plugin.Plugin;
 import org.ctp.crashapi.CrashAPIPlugin;
 import org.ctp.crashapi.config.yaml.YamlConfig;
 import org.ctp.crashapi.db.BackupDB;
-import org.ctp.crashapi.events.ArmorEquipEvent;
-import org.ctp.crashapi.events.ArmorEquipEvent.EquipMethod;
-import org.ctp.crashapi.events.ItemEquipEvent;
-import org.ctp.crashapi.events.ItemEquipEvent.HandMethod;
+import org.ctp.crashapi.events.EquipEvent;
+import org.ctp.crashapi.events.EquipEvent.EquipMethod;
 import org.ctp.crashapi.inventory.InventoryData;
 import org.ctp.crashapi.item.ItemSerialization;
 import org.ctp.crashapi.item.ItemSlot;
@@ -32,7 +30,6 @@ import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.commands.EnchantmentSolutionCommand;
 import org.ctp.enchantmentsolution.database.ESBackup;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
-import org.ctp.enchantmentsolution.enums.ItemBreakType;
 import org.ctp.enchantmentsolution.interfaces.InterfaceRegistry;
 import org.ctp.enchantmentsolution.listeners.*;
 import org.ctp.enchantmentsolution.listeners.advancements.AdvancementEntityListener;
@@ -43,7 +40,6 @@ import org.ctp.enchantmentsolution.listeners.fishing.EnchantsFishingListener;
 import org.ctp.enchantmentsolution.listeners.fishing.McMMOFishingListener;
 import org.ctp.enchantmentsolution.listeners.hard.HardModeListener;
 import org.ctp.enchantmentsolution.listeners.inventory.*;
-import org.ctp.enchantmentsolution.listeners.legacy.UpdateEnchantments;
 import org.ctp.enchantmentsolution.listeners.mobs.MobSpawning;
 import org.ctp.enchantmentsolution.listeners.mobs.PiglinTrade;
 import org.ctp.enchantmentsolution.listeners.mobs.Villagers;
@@ -61,13 +57,14 @@ import org.ctp.enchantmentsolution.utils.commands.ESCommand;
 import org.ctp.enchantmentsolution.utils.compatibility.AuctionHouseUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 import org.ctp.enchantmentsolution.utils.debug.ESChatUtils;
+import org.ctp.enchantmentsolution.utils.files.ItemBreakFile;
 import org.ctp.enchantmentsolution.utils.files.SaveUtils;
 import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
 import org.ctp.enchantmentsolution.utils.player.ESPlayer;
 
-import com.leonardobishop.quests.Quests;
+import com.leonardobishop.quests.bukkit.BukkitQuestsPlugin;
 
-import me.prunt.restrictedcreative.RestrictedCreativeAPI;
+import solutions.nuhvel.spigot.rc.RestrictedCreativeAPI;
 
 public class EnchantmentSolution extends CrashAPIPlugin {
 
@@ -88,6 +85,7 @@ public class EnchantmentSolution extends CrashAPIPlugin {
 	private String mcmmoVersion, mcmmoType = "Disabled";
 	private Plugin veinMiner;
 	private RPGListener rpg;
+	private static ArrayList<Location> GAIA_BLOCKS = new ArrayList<Location>();
 
 	@Override
 	public void onLoad() {
@@ -107,7 +105,7 @@ public class EnchantmentSolution extends CrashAPIPlugin {
 		CONFIGURATIONS.onEnable();
 
 		Chatable.get().sendInfo("Loading Item Break Types...");
-		ItemBreakType.getType(Material.DIAMOND_PICKAXE);
+		ItemBreakFile.setFiles();
 		Chatable.get().sendInfo("Item Break Types Loaded!");
 	}
 
@@ -147,7 +145,6 @@ public class EnchantmentSolution extends CrashAPIPlugin {
 		registerEvent(new MobSpawning());
 		registerEvent(new Villagers());
 		registerEvent(new PiglinTrade());
-		registerEvent(new UpdateEnchantments());
 		registerEvent(new ChestLootListener());
 
 		registerEvent(new AdvancementEntityListener());
@@ -360,14 +357,14 @@ public class EnchantmentSolution extends CrashAPIPlugin {
 						int num = Integer.parseInt(mcVersion[i]);
 						if (i == 0 && num > 2) warning = true;
 						else if (i == 1 && num > 1) warning = true;
-						else if (i == 2 && num > 196) warning = true;
+						else if (i == 2 && num > 205) warning = true;
 					} catch (NumberFormatException ex) {
 						warning = true;
 					}
 				if (warning) {
 					getChat().sendWarning("McMMO Overhaul updates sporidically. Compatibility may break between versions.");
 					getChat().sendWarning("If there are any compatibility issues, please notify the plugin author immediately.");
-					getChat().sendWarning("Current Working Version: 2.1.196");
+					getChat().sendWarning("Current Working Version: 2.1.205");
 				}
 				mcmmoType = "Overhaul";
 			} else {
@@ -404,7 +401,8 @@ public class EnchantmentSolution extends CrashAPIPlugin {
 		}
 
 		if (Bukkit.getPluginManager().isPluginEnabled("Quests")) try {
-			Quests.get();
+			Class<?> clazz = BukkitQuestsPlugin.class;
+			clazz.getName();
 			quests = true;
 			getChat().sendInfo("Quests compatibility enabled!");
 		} catch (Exception | Error ex) {}
@@ -459,7 +457,7 @@ public class EnchantmentSolution extends CrashAPIPlugin {
 			for(ItemSlot slot: esPlayer.getArmorAndType()) {
 				ItemStack item = slot.getItem();
 				if (item != null && EnchantmentUtils.getTotalEnchantments(item) > 0) {
-					ArmorEquipEvent armorEquipEvent = new ArmorEquipEvent(p, EquipMethod.COMMAND, slot.getType(), item, item);
+					EquipEvent armorEquipEvent = new EquipEvent(p, EquipMethod.COMMAND, slot.getType(), item, item);
 					Bukkit.getServer().getPluginManager().callEvent(armorEquipEvent);
 				}
 			}
@@ -470,12 +468,12 @@ public class EnchantmentSolution extends CrashAPIPlugin {
 		if (!player.isOnline()) return;
 		ItemStack mainHand = player.getMainHand();
 		if (EnchantmentUtils.hasEnchantment(mainHand, enchantment)) {
-			ItemEquipEvent itemEquipEvent = new ItemEquipEvent(player.getOnlinePlayer(), HandMethod.COMMAND, ItemSlotType.MAIN_HAND, mainHand, mainHand);
+			EquipEvent itemEquipEvent = new EquipEvent(player.getOnlinePlayer(), EquipMethod.COMMAND, ItemSlotType.MAIN_HAND, mainHand, mainHand);
 			Bukkit.getServer().getPluginManager().callEvent(itemEquipEvent);
 		}
 		ItemStack offHand = player.getMainHand();
 		if (EnchantmentUtils.hasEnchantment(offHand, enchantment)) {
-			ItemEquipEvent itemEquipEvent = new ItemEquipEvent(player.getOnlinePlayer(), HandMethod.COMMAND, ItemSlotType.MAIN_HAND, offHand, offHand);
+			EquipEvent itemEquipEvent = new EquipEvent(player.getOnlinePlayer(), EquipMethod.COMMAND, ItemSlotType.MAIN_HAND, offHand, offHand);
 			Bukkit.getServer().getPluginManager().callEvent(itemEquipEvent);
 		}
 	}
@@ -486,7 +484,7 @@ public class EnchantmentSolution extends CrashAPIPlugin {
 			for(ItemSlot slot: esPlayer.getArmorAndType()) {
 				ItemStack item = slot.getItem();
 				if (item != null && EnchantmentUtils.getTotalEnchantments(item) > 0) {
-					ArmorEquipEvent armorEquipEvent = new ArmorEquipEvent(p, EquipMethod.COMMAND, slot.getType(), item, item);
+					EquipEvent armorEquipEvent = new EquipEvent(p, EquipMethod.COMMAND, slot.getType(), item, item);
 					Bukkit.getServer().getPluginManager().callEvent(armorEquipEvent);
 				}
 			}
@@ -498,7 +496,7 @@ public class EnchantmentSolution extends CrashAPIPlugin {
 		for(ItemSlot slot: player.getArmorAndType()) {
 			ItemStack item = slot.getItem();
 			if (EnchantmentUtils.hasEnchantment(item, enchantment)) {
-				ArmorEquipEvent armorEquipEvent = new ArmorEquipEvent(player.getOnlinePlayer(), EquipMethod.COMMAND, slot.getType(), item, item);
+				EquipEvent armorEquipEvent = new EquipEvent(player.getOnlinePlayer(), EquipMethod.COMMAND, slot.getType(), item, item);
 				Bukkit.getServer().getPluginManager().callEvent(armorEquipEvent);
 			}
 		}
@@ -527,5 +525,26 @@ public class EnchantmentSolution extends CrashAPIPlugin {
 	@Override
 	public YamlConfig getLanguageFile() {
 		return CONFIGURATIONS.getLanguage().getConfig();
+	}
+
+	public static boolean gaiaHasLocation(Location loc) {
+		for(Location l: GAIA_BLOCKS)
+			if (loc.getBlock().equals(l.getBlock())) return true;
+		return false;
+	}
+
+	public static boolean gaiaRemoveLocation(Location loc) {
+		return GAIA_BLOCKS.remove(loc);
+	}
+
+	public static void gaiaAddLocation(Location loc) {
+		if (!gaiaHasLocation(loc)) GAIA_BLOCKS.add(loc);
+	}
+
+	public static List<Location> gaiaGetLocations() {
+		List<Location> locs = new ArrayList<Location>();
+		for(Location block: GAIA_BLOCKS)
+			locs.add(block.clone());
+		return locs;
 	}
 }

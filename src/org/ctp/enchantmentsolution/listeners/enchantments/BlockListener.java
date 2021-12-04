@@ -39,7 +39,6 @@ import org.ctp.enchantmentsolution.mcmmo.McMMOHandler;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.BlockUtils;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.*;
-import org.ctp.enchantmentsolution.utils.abilityhelpers.GaiaUtils.GaiaTrees;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 import org.ctp.enchantmentsolution.utils.items.AbilityUtils;
 import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
@@ -59,7 +58,9 @@ public class BlockListener extends Enchantmentable {
 		if (event instanceof BlockDropItemAddEvent) return;
 		runMethod(this, "greenThumb", event, BlockDropItemEvent.class);
 		runMethod(this, "goldDigger", event, BlockDropItemEvent.class);
+		runMethod(this, "rareEarth", event, BlockDropItemEvent.class);
 		runMethod(this, "smeltery", event, BlockDropItemEvent.class);
+		runMethod(this, "curseOfInfestation", event, BlockDropItemEvent.class);
 		runMethod(this, "telepathy", event, BlockDropItemEvent.class);
 	}
 
@@ -611,6 +612,88 @@ public class BlockListener extends Enchantmentable {
 		}
 	}
 
+	private void rareEarth(BlockDropItemEvent event) {
+		if (!canRun(RegisterEnchantments.RARE_EARTH, event)) return;
+		if (event.isCancelled()) return;
+		Player player = event.getPlayer();
+		if (isDisabled(player, RegisterEnchantments.RARE_EARTH)) return;
+		ItemStack item = player.getInventory().getItemInMainHand();
+		BlockData data = event.getBlockState().getBlockData();
+		Material m = data.getMaterial();
+		String name = m.name();
+		if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.RARE_EARTH) && name.contains("_ORE") && name.contains("DEEPSLATE_")) {
+			MatData commonEarth = new MatData(name.substring(name.indexOf("_") + 1));
+			if (commonEarth.hasMaterial()) {
+				int level = EnchantmentUtils.getLevel(item, RegisterEnchantments.RARE_EARTH);
+				double chance = level * .6;
+				int amount = 0;
+				double random = Math.random() * chance;
+				while (random >= 1) {
+					random--;
+					amount++;
+				}
+				if (random > Math.random()) amount++;
+				if (amount > 0) {
+					RareEarthEvent rareEarthEvent = new RareEarthEvent(player, level, event.getBlock(), data, Arrays.asList(new ItemStack(commonEarth.getMaterial(), amount)));
+					Bukkit.getPluginManager().callEvent(rareEarthEvent);
+
+					if (!rareEarthEvent.isCancelled()) {
+						BlockDropItemAddEvent esEvent = new BlockDropItemAddEvent(event.getBlock(), event.getBlockState(), player, ItemUtils.itemStacksToItems(rareEarthEvent.getItems(), event.getBlock().getLocation()));
+						Bukkit.getPluginManager().callEvent(esEvent);
+						if (esEvent.isCancelled()) for(Item i: esEvent.getItems())
+							i.remove();
+						else
+							for(Item i: esEvent.getItems())
+								if (i.getItemStack().getType() == Material.DIAMOND_ORE) AdvancementUtils.awardCriteria(player, ESAdvancement.SPARKLING_FORTUNE, "rare_earth");
+
+					}
+				}
+			}
+		}
+	}
+
+	private void curseOfInfestation(BlockDropItemEvent event) {
+		if (!canRun(RegisterEnchantments.CURSE_OF_INFESTATION, event)) return;
+		if (event.isCancelled()) return;
+		Player player = event.getPlayer();
+		if (isDisabled(player, RegisterEnchantments.CURSE_OF_INFESTATION)) return;
+		ItemStack item = player.getInventory().getItemInMainHand();
+		BlockData data = event.getBlockState().getBlockData();
+		if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.CURSE_OF_INFESTATION)) {
+			List<ItemStack> newItems = new ArrayList<ItemStack>();
+			boolean infested = false;
+			for(Item i: event.getItems()) {
+				String name = i.getItemStack().getType().name();
+				MatData infest = new MatData("INFESTED_" + name);
+				if (infest.hasMaterial()) {
+					infested = true;
+					ItemStack it = i.getItemStack().clone();
+					it.setType(infest.getMaterial());
+					newItems.add(it);
+				} else
+					newItems.add(i.getItemStack());
+			}
+			if (infested) {
+				InfestationEvent infestationEvent = new InfestationEvent(player, event.getBlock(), data, newItems);
+				Bukkit.getPluginManager().callEvent(infestationEvent);
+
+				if (!infestationEvent.isCancelled()) {
+					BlockDropItemAddEvent esEvent = new BlockDropItemAddEvent(event.getBlock(), event.getBlockState(), player, ItemUtils.itemStacksToItems(infestationEvent.getItems(), event.getBlock().getLocation()));
+					Bukkit.getPluginManager().callEvent(esEvent);
+					if (esEvent.isCancelled()) for(Item i: esEvent.getItems())
+						i.remove();
+					else {
+						for(Item i: event.getItems())
+							i.remove();
+						for (Item i : esEvent.getItems())
+							AdvancementUtils.awardCriteria(player, ESAdvancement.SILVER_HORDE, "infested", i.getItemStack().getAmount());
+					}
+
+				}
+			}
+		}
+	}
+
 	private boolean hasItem(Player player, ItemStack item) {
 		if (player.getGameMode() == GameMode.CREATIVE) return true;
 		for(int i = 0; i < 36; i++) {
@@ -641,8 +724,8 @@ public class BlockListener extends Enchantmentable {
 	private Collection<Location> addMultiBlock(Collection<Location> blocks, ItemStack tool, Material original, Block relative, int x, int y, int z) {
 		Block block = relative.getRelative(x, y, z);
 		if (BlockUtils.multiBlockBreakContains(block.getLocation())) return blocks;
-		List<String> pickBlocks = ItemBreakType.WOODEN_PICKAXE.getDiamondPickaxeBlocks();
-		if (!pickBlocks.contains(original.name().toLowerCase(Locale.ROOT)) && pickBlocks.contains(block.getType().name().toLowerCase(Locale.ROOT))) return blocks;
+		List<Material> pickBlocks = ItemBreakType.getDiamondPickaxeBlocks();
+		if (!pickBlocks.contains(original) && pickBlocks.contains(block.getType())) return blocks;
 
 		if (blocks.contains(block.getLocation())) return blocks;
 

@@ -6,17 +6,16 @@ import org.bukkit.Bukkit;
 import org.bukkit.Statistic;
 import org.bukkit.World.Environment;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.ctp.crashapi.events.ArmorEquipEvent;
-import org.ctp.crashapi.events.ArmorEquipEvent.EquipMethod;
+import org.ctp.crashapi.events.EquipEvent;
+import org.ctp.crashapi.events.EquipEvent.EquipMethod;
 import org.ctp.crashapi.events.ItemAddEvent;
-import org.ctp.crashapi.events.ItemEquipEvent;
-import org.ctp.crashapi.events.ItemEquipEvent.HandMethod;
 import org.ctp.crashapi.item.ItemSlot;
 import org.ctp.crashapi.item.ItemSlotType;
 import org.ctp.crashapi.nms.DamageEvent;
@@ -51,15 +50,9 @@ public class AttributeListener extends Enchantmentable {
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST)
-	public void onArmorEquip(ArmorEquipEvent event) {
-		itemEquip(event.getPlayer(), event.getOldArmorPiece(), event.getType(), false, event.getMethod() == EquipMethod.JOIN);
-		itemEquip(event.getPlayer(), event.getNewArmorPiece(), event.getType(), true, event.getMethod() == EquipMethod.JOIN);
-	}
-
-	@EventHandler(priority = EventPriority.HIGHEST)
-	public void onItemEquip(ItemEquipEvent event) {
-		itemEquip(event.getPlayer(), event.getOldItem(), event.getSlot(), false, event.getMethod() == HandMethod.JOIN);
-		itemEquip(event.getPlayer(), event.getNewItem(), event.getSlot(), true, event.getMethod() == HandMethod.JOIN);
+	public void onItemEquip(EquipEvent event) {
+		itemEquip(event.getEntity(), event.getOldItem(), event.getType(), false, event.getMethod() == EquipMethod.JOIN);
+		itemEquip(event.getEntity(), event.getNewItem(), event.getType(), true, event.getMethod() == EquipMethod.JOIN);
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST)
@@ -74,7 +67,9 @@ public class AttributeListener extends Enchantmentable {
 		}
 	}
 
-	private void itemEquip(Player player, ItemStack item, ItemSlotType type, boolean equip, boolean join) {
+	private void itemEquip(HumanEntity humanEntity, ItemStack item, ItemSlotType type, boolean equip, boolean join) {
+		if (!(humanEntity instanceof Player)) return;
+		Player player = (Player) humanEntity;
 		ESPlayer esPlayer = EnchantmentSolution.getESPlayer(player);
 		if (item != null && item.hasItemMeta()) {
 			Iterator<EnchantmentLevel> iterator = EnchantmentUtils.getEnchantmentLevels(item).iterator();

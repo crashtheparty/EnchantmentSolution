@@ -27,6 +27,7 @@ import com.gmail.nossr50.mcMMO;
 import com.gmail.nossr50.api.ItemSpawnReason;
 import com.gmail.nossr50.datatypes.meta.BonusDropMeta;
 import com.gmail.nossr50.events.items.McMMOItemSpawnEvent;
+import com.gmail.nossr50.util.MetadataConstants;
 
 public class McMMOBlockDrops {
 
@@ -34,7 +35,7 @@ public class McMMOBlockDrops {
 		if (VersionUtils.getMcMMOType().equals("Overhaul")) {
 			Location loc = LocationUtils.offset(event.getBlock().getLocation());
 			BlockState state = event.getBlockState();
-			if (state.getMetadata(mcMMO.BONUS_DROPS_METAKEY).size() > 0) for(MetadataValue value: state.getMetadata(mcMMO.BONUS_DROPS_METAKEY)) {
+			if (state.getMetadata(MetadataConstants.METADATA_KEY_BONUS_DROPS).size() > 0) for(MetadataValue value: state.getMetadata(MetadataConstants.METADATA_KEY_BONUS_DROPS)) {
 				Collection<ItemStack> drops = getDoubleDrops(event);
 				ESPlayer player = EnchantmentSolution.getESPlayer(event.getPlayer());
 
@@ -96,15 +97,15 @@ public class McMMOBlockDrops {
 
 			if (dontRewardTE) if (!is.getType().isBlock()) continue;
 
-			if (event.getBlock().getMetadata(mcMMO.BONUS_DROPS_METAKEY).size() > 0) {
-				BonusDropMeta bonusDropMeta = (BonusDropMeta) event.getBlock().getMetadata(mcMMO.BONUS_DROPS_METAKEY).get(0);
+			if (event.getBlock().getMetadata(MetadataConstants.METADATA_KEY_BONUS_DROPS).size() > 0) {
+				BonusDropMeta bonusDropMeta = (BonusDropMeta) event.getBlock().getMetadata(MetadataConstants.METADATA_KEY_BONUS_DROPS).get(0);
 				int bonusCount = bonusDropMeta.asInt();
 
 				if (bonusCount > 0) {
 					if (is.getType() == Material.AIR || event.getBlockState().getLocation().getWorld() == null) continue;
 					is.setAmount(bonusCount);
 
-					McMMOItemSpawnEvent mcmmoEvent = new McMMOItemSpawnEvent(event.getBlockState().getLocation(), is, ItemSpawnReason.BONUS_DROPS);
+					McMMOItemSpawnEvent mcmmoEvent = new McMMOItemSpawnEvent(event.getBlockState().getLocation(), is, ItemSpawnReason.BONUS_DROPS, event.getPlayer());
 					mcMMO.p.getServer().getPluginManager().callEvent(mcmmoEvent);
 
 					if (mcmmoEvent.isCancelled()) continue;
@@ -113,7 +114,7 @@ public class McMMOBlockDrops {
 			}
 		}
 
-		if (event.getBlock().hasMetadata(mcMMO.BONUS_DROPS_METAKEY)) event.getBlock().removeMetadata(mcMMO.BONUS_DROPS_METAKEY, mcMMO.p);
+		if (event.getBlock().hasMetadata(MetadataConstants.METADATA_KEY_BONUS_DROPS)) event.getBlock().removeMetadata(MetadataConstants.METADATA_KEY_BONUS_DROPS, mcMMO.p);
 		return drops;
 	}
 }

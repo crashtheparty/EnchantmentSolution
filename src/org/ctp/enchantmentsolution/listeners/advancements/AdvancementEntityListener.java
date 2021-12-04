@@ -1,7 +1,6 @@
 package org.ctp.enchantmentsolution.listeners.advancements;
 
-import java.util.Locale;
-import java.util.UUID;
+import java.util.*;
 
 import org.bukkit.*;
 import org.bukkit.entity.*;
@@ -14,6 +13,7 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.MetadataValue;
+import org.ctp.crashapi.entity.MobData;
 import org.ctp.crashapi.utils.LocationUtils;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
@@ -34,6 +34,12 @@ public class AdvancementEntityListener implements Listener {
 			Player killer = killed.getKiller();
 			if (killer != null) {
 				ItemStack mainHand = killer.getInventory().getItemInMainHand();
+				if (EnchantmentUtils.hasEnchantment(mainHand, RegisterEnchantments.LANCER) && killer.getVehicle() instanceof AbstractHorse && killed.getType() == EntityType.SKELETON && killed.getVehicle().getType() == EntityType.SKELETON_HORSE) AdvancementUtils.awardCriteria(killer, ESAdvancement.FOUR_HORSEMEN, "skeleton");
+				if (EnchantmentUtils.hasEnchantment(mainHand, RegisterEnchantments.BANE_OF_ANTHROPOIDS)) {
+					List<MobData> types = Arrays.asList(new MobData("PIGLIN"), new MobData("VILLAGER"), new MobData("WANDERING_TRADER"), new MobData("ENDERMAN"), new MobData("EVOKER"), new MobData("PIGLIN_BRUTE"), new MobData("PILLAGER"), new MobData("WITCH"), new MobData("VINDICATOR"));
+					for(MobData type: types)
+						if (type.getEntity() == killed.getType()) AdvancementUtils.awardCriteria(killer, ESAdvancement.APOCALYPSE_NOW, "human", 1);
+				}
 				if (EnchantmentUtils.hasEnchantment(mainHand, RegisterEnchantments.KNOCKUP)) AdvancementUtils.awardCriteria(killer, ESAdvancement.NOT_THAT_KIND, killed.getType().name().toLowerCase(Locale.ROOT));
 				if (killed instanceof Player && EnchantmentUtils.hasEnchantment(mainHand, RegisterEnchantments.QUICK_STRIKE)) AdvancementUtils.awardCriteria(killer, ESAdvancement.PRE_COMBAT_UPDATE, "combat_update");
 				if (EnchantmentUtils.hasEnchantment(mainHand, RegisterEnchantments.BRINE) && mainHand.getType().name().endsWith("SWORD")) if (killed.getType() == EntityType.DROWNED) AdvancementUtils.awardCriteria(killer, ESAdvancement.NOT_VERY_EFFECTIVE, killed.getType().name().toLowerCase(Locale.ROOT));
@@ -95,6 +101,31 @@ public class AdvancementEntityListener implements Listener {
 							esPlayer.setPlyometricsAdvancement(true);
 							break;
 						}
+				}
+			}
+		}
+	}
+
+	@EventHandler(priority = EventPriority.MONITOR)
+	public void onEntityDamage(EntityDamageEvent event) {
+		Entity entity = event.getEntity();
+		if (entity instanceof LivingEntity && entity.getLastDamageCause() instanceof EntityDamageByEntityEvent) {
+			LivingEntity damaged = (LivingEntity) entity;
+			EntityDamageByEntityEvent damageEntityEvent = (EntityDamageByEntityEvent) entity.getLastDamageCause();
+			Entity damager = damageEntityEvent.getDamager();
+			if (damager instanceof Player) {
+				Player human = (Player) damager;
+				ItemStack item = human.getInventory().getItemInMainHand();
+				if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.FLING) && damaged.getType() == EntityType.PLAYER) Bukkit.getScheduler().runTaskLater(EnchantmentSolution.getPlugin(), () -> {
+					if (damaged.isDead()) AdvancementUtils.awardCriteria(human, ESAdvancement.YEET, "player");
+				}, 0l);
+				if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.FLING) && damaged.getType() == EntityType.PIG) {
+					boolean passengerPlayer = false;
+					for(Entity p: damaged.getPassengers())
+						if (p.getType() == EntityType.PLAYER) passengerPlayer = true;
+					if (passengerPlayer) Bukkit.getScheduler().runTaskLater(EnchantmentSolution.getPlugin(), () -> {
+						if (damaged.isDead()) AdvancementUtils.awardCriteria(human, ESAdvancement.FLYING_BACON, "pig");
+					}, 0l);
 				}
 			}
 		}

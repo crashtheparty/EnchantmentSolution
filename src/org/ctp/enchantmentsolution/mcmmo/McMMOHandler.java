@@ -12,7 +12,7 @@ import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.generate.FishingEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 
-import com.gmail.nossr50.mcMMO;
+import com.gmail.nossr50.util.MetadataConstants;
 
 public class McMMOHandler {
 
@@ -23,12 +23,12 @@ public class McMMOHandler {
 	}
 
 	public static void customName(Entity e) {
-		if (e.hasMetadata(mcMMO.customNameKey)) {
-			String oldName = e.getMetadata(mcMMO.customNameKey).get(0).asString();
+		if (e.hasMetadata(MetadataConstants.METADATA_KEY_CUSTOM_NAME_KEY)) {
+			String oldName = e.getMetadata(MetadataConstants.METADATA_KEY_CUSTOM_NAME_KEY).get(0).asString();
 			e.setCustomName(oldName);
 		}
-		if (e.hasMetadata(mcMMO.customVisibleKey)) {
-			boolean oldNameVisible = e.getMetadata(mcMMO.customVisibleKey).get(0).asBoolean();
+		if (e.hasMetadata(MetadataConstants.METADATA_KEY_NAME_VISIBILITY )) {
+			boolean oldNameVisible = e.getMetadata(MetadataConstants.METADATA_KEY_NAME_VISIBILITY ).get(0).asBoolean();
 			e.setCustomNameVisible(oldNameVisible);
 		}
 	}

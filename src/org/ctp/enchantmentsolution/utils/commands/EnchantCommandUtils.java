@@ -14,11 +14,9 @@ import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.ctp.crashapi.commands.CrashCommand;
-import org.ctp.crashapi.events.ArmorEquipEvent;
-import org.ctp.crashapi.events.ArmorEquipEvent.EquipMethod;
+import org.ctp.crashapi.events.EquipEvent;
+import org.ctp.crashapi.events.EquipEvent.EquipMethod;
 import org.ctp.crashapi.events.ItemAddEvent;
-import org.ctp.crashapi.events.ItemEquipEvent;
-import org.ctp.crashapi.events.ItemEquipEvent.HandMethod;
 import org.ctp.crashapi.item.ItemData;
 import org.ctp.crashapi.item.ItemSlotType;
 import org.ctp.crashapi.utils.ChatUtils;
@@ -148,9 +146,9 @@ public class EnchantCommandUtils {
 							Event event = null;
 
 							if (slot == heldSlot || slot > 36) {
-								if (slot == heldSlot || slot == 36) event = new ItemEquipEvent(givePlayer, HandMethod.COMMAND, slot == 36 ? ItemSlotType.OFF_HAND : ItemSlotType.MAIN_HAND, prevItem, itemToEnchant);
+								if (slot == heldSlot || slot == 36) event = new EquipEvent(givePlayer, EquipMethod.COMMAND, slot == 36 ? ItemSlotType.OFF_HAND : ItemSlotType.MAIN_HAND, prevItem, itemToEnchant);
 								else
-									event = new ArmorEquipEvent(givePlayer, EquipMethod.COMMAND, ItemSlotType.getTypeFromSlot(slot), prevItem, itemToEnchant);
+									event = new EquipEvent(givePlayer, EquipMethod.COMMAND, ItemSlotType.getTypeFromSlot(slot), prevItem, itemToEnchant);
 							} else
 								event = new ItemAddEvent(givePlayer, itemToEnchant);
 							Bukkit.getPluginManager().callEvent(event);
@@ -266,9 +264,9 @@ public class EnchantCommandUtils {
 							Event event = null;
 
 							if (slot == heldSlot || slot > 36) {
-								if (slot == heldSlot || slot == 36) event = new ItemEquipEvent(removePlayer, HandMethod.COMMAND, slot == 36 ? ItemSlotType.OFF_HAND : ItemSlotType.MAIN_HAND, prevItem, itemToEnchant);
+								if (slot == heldSlot || slot == 36) event = new EquipEvent(removePlayer, EquipMethod.COMMAND, slot == 36 ? ItemSlotType.OFF_HAND : ItemSlotType.MAIN_HAND, prevItem, itemToEnchant);
 								else
-									event = new ArmorEquipEvent(removePlayer, EquipMethod.COMMAND, ItemSlotType.getTypeFromSlot(slot), prevItem, itemToEnchant);
+									event = new EquipEvent(removePlayer, EquipMethod.COMMAND, ItemSlotType.getTypeFromSlot(slot), prevItem, itemToEnchant);
 							} else
 								event = new ItemAddEvent(removePlayer, itemToEnchant);
 							Bukkit.getPluginManager().callEvent(event);

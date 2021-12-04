@@ -15,7 +15,7 @@ import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.api.ApiEnchantmentWrapper;
 import org.ctp.enchantmentsolution.enchantments.helper.Weight;
 import org.ctp.enchantmentsolution.enums.EnchantmentLocation;
-import org.ctp.enchantmentsolution.nms.persistence.SnapshotEnchantment;
+import org.ctp.enchantmentsolution.persistence.SnapshotEnchantment;
 import org.ctp.enchantmentsolution.utils.Configurations;
 import org.ctp.enchantmentsolution.utils.VersionUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
@@ -100,6 +100,14 @@ public class RegisterEnchantments {
 	public static final Enchantment PACIFIED = new CustomEnchantmentWrapper("pacified", "PACIFIED");
 	public static final Enchantment STREAK = new CustomEnchantmentWrapper("streak", "STREAK");
 	public static final Enchantment GREEN_THUMB = new CustomEnchantmentWrapper("green_thumb", "GREEN_THUMB");
+	public static final Enchantment FLING = new CustomEnchantmentWrapper("fling", "FLING");
+	public static final Enchantment FLASH = new CustomEnchantmentWrapper("flash", "FLASH");
+	public static final Enchantment LANCER = new CustomEnchantmentWrapper("lancer", "LANCER");
+	public static final Enchantment JAVELIN = new CustomEnchantmentWrapper("javelin", "JAVELIN");
+	public static final Enchantment BANE_OF_ANTHROPOIDS = new CustomEnchantmentWrapper("bane_of_anthropoids", "BANE_OF_ANTHROPOIDS");
+	public static final Enchantment RARE_EARTH = new CustomEnchantmentWrapper("rare_earth", "RARE_EARTH");
+	public static final Enchantment WHIPPED = new CustomEnchantmentWrapper("whipped", "WHIPPED");
+	public static final Enchantment CURSE_OF_INFESTATION = new CustomEnchantmentWrapper("infestation_curse", "INFESTATION_CURSE");
 	public static final Enchantment[] HWD = new Enchantment[] { HEIGHT_PLUS_PLUS, WIDTH_PLUS_PLUS, DEPTH_PLUS_PLUS };
 
 	private RegisterEnchantments() {}
@@ -270,7 +278,7 @@ public class RegisterEnchantments {
 		addDefaultEnchantment(CERegister.LUCK_OF_THE_SEA);
 		addDefaultEnchantment(CERegister.LURE);
 		addDefaultEnchantment(CERegister.MENDING);
-		if (VersionUtils.getVersionNumber() > 3 || VersionUtils.getVersionNumber() == 0) {
+		if (VersionUtils.getVersionNumber() > 3) {
 			addDefaultEnchantment(CERegister.MULTISHOT);
 			addDefaultEnchantment(CERegister.PIERCING);
 		}
@@ -278,7 +286,7 @@ public class RegisterEnchantments {
 		addDefaultEnchantment(CERegister.PROJECTILE_PROTECTION);
 		addDefaultEnchantment(CERegister.PROTECTION);
 		addDefaultEnchantment(CERegister.PUNCH);
-		if (VersionUtils.getVersionNumber() > 3 || VersionUtils.getVersionNumber() == 0) addDefaultEnchantment(CERegister.QUICK_CHARGE);
+		if (VersionUtils.getVersionNumber() > 3) addDefaultEnchantment(CERegister.QUICK_CHARGE);
 		addDefaultEnchantment(CERegister.RESPIRATION);
 		addDefaultEnchantment(CERegister.RIPTIDE);
 		addDefaultEnchantment(CERegister.SHARPNESS);
@@ -291,12 +299,14 @@ public class RegisterEnchantments {
 
 		addDefaultEnchantment(CERegister.ANGLER);
 		addDefaultEnchantment(CERegister.ARMORED);
+		addDefaultEnchantment(CERegister.BANE_OF_ANTHROPOIDS);
 		addDefaultEnchantment(CERegister.BEHEADING);
 		addDefaultEnchantment(CERegister.BLINDNESS);
 		addDefaultEnchantment(CERegister.BRINE);
 		addDefaultEnchantment(CERegister.BUTCHER);
 		addDefaultEnchantment(CERegister.CURSE_OF_CONTAGION);
 		addDefaultEnchantment(CERegister.CURSE_OF_EXHAUSTION);
+		addDefaultEnchantment(CERegister.CURSE_OF_INFESTATION);
 		addDefaultEnchantment(CERegister.CURSE_OF_INSTABILITY);
 		addDefaultEnchantment(CERegister.CURSE_OF_LAG);
 		addDefaultEnchantment(CERegister.CURSE_OF_STAGNANCY);
@@ -304,6 +314,8 @@ public class RegisterEnchantments {
 		addDefaultEnchantment(CERegister.DETONATOR);
 		addDefaultEnchantment(CERegister.DROWNED);
 		addDefaultEnchantment(CERegister.EXP_SHARE);
+		if (VersionUtils.getVersionNumber() > 16) addDefaultEnchantment(CERegister.FLASH);
+		addDefaultEnchantment(CERegister.FLING);
 		addDefaultEnchantment(CERegister.FLOWER_GIFT);
 		addDefaultEnchantment(CERegister.FORCE_FEED);
 		addDefaultEnchantment(CERegister.FREQUENT_FLYER);
@@ -320,8 +332,10 @@ public class RegisterEnchantments {
 		addDefaultEnchantment(CERegister.ICARUS);
 		addDefaultEnchantment(CERegister.IRENES_LASSO);
 		addDefaultEnchantment(CERegister.IRON_DEFENSE);
+		addDefaultEnchantment(CERegister.JAVELIN);
 		addDefaultEnchantment(CERegister.JOGGERS);
 		addDefaultEnchantment(CERegister.KNOCKUP);
+		addDefaultEnchantment(CERegister.LANCER);
 		addDefaultEnchantment(CERegister.LIGHT_WEIGHT);
 		addDefaultEnchantment(CERegister.LIFE);
 		addDefaultEnchantment(CERegister.LIFE_DRAIN);
@@ -331,10 +345,11 @@ public class RegisterEnchantments {
 		addDefaultEnchantment(CERegister.NO_REST);
 		addDefaultEnchantment(CERegister.OVERKILL);
 		addDefaultEnchantment(CERegister.PACIFIED);
-		if (VersionUtils.getVersionNumber() > 3 || VersionUtils.getVersionNumber() == 0) addDefaultEnchantment(CERegister.PILLAGE);
+		if (VersionUtils.getVersionNumber() > 3) addDefaultEnchantment(CERegister.PILLAGE);
 		addDefaultEnchantment(CERegister.PLYOMETRICS);
 		addDefaultEnchantment(CERegister.PUSHBACK);
 		addDefaultEnchantment(CERegister.QUICK_STRIKE);
+		if (VersionUtils.getVersionNumber() > 16) addDefaultEnchantment(CERegister.RARE_EARTH);
 		addDefaultEnchantment(CERegister.RECYCLER);
 		addDefaultEnchantment(CERegister.SACRIFICE);
 		addDefaultEnchantment(CERegister.SAND_VEIL);
@@ -345,7 +360,7 @@ public class RegisterEnchantments {
 		addDefaultEnchantment(CERegister.SOUL_REAPER);
 		addDefaultEnchantment(CERegister.SPLATTER_FEST);
 		addDefaultEnchantment(CERegister.STICKY_HOLD);
-		if (VersionUtils.getVersionNumber() > 3 || VersionUtils.getVersionNumber() == 0) addDefaultEnchantment(CERegister.STONE_THROW);
+		if (VersionUtils.getVersionNumber() > 3) addDefaultEnchantment(CERegister.STONE_THROW);
 		addDefaultEnchantment(CERegister.STREAK);
 		addDefaultEnchantment(CERegister.TANK);
 		addDefaultEnchantment(CERegister.TELEPATHY);
@@ -358,6 +373,7 @@ public class RegisterEnchantments {
 		addDefaultEnchantment(CERegister.WAND);
 		addDefaultEnchantment(CERegister.WARP);
 		addDefaultEnchantment(CERegister.WATER_BREATHING);
+		addDefaultEnchantment(CERegister.WHIPPED);
 		addDefaultEnchantment(CERegister.WIDTH_PLUS_PLUS);
 		addDefaultEnchantment(CERegister.WITHERING);
 		addDefaultEnchantment(CERegister.ZEAL);
