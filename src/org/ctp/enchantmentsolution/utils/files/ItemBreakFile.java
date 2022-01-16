@@ -18,18 +18,21 @@ public class ItemBreakFile {
 	private final ItemBreakType type;
 	private final ItemBreakFileType fileType;
 	private final List<ItemBreakSubFile> subFiles;
+	private final YamlConfig config;
 
 	public ItemBreakFile(ItemBreakFileType fileType, ItemBreakType type) {
 		this.fileType = fileType;
 		this.type = type;
 		List<ItemBreakSubFile> files = new ArrayList<ItemBreakSubFile>();
 		File file = getFile(fileType.getFileName());
+		config = new YamlConfig(file, new String[0]);
+		config.getFromConfig();
+		file.delete();
 		do {
 			String typeName = type.name().toLowerCase(Locale.ROOT);
-			files.add(new ItemBreakSubFile(typeName, getValues(file, typeName)));
+			files.add(new ItemBreakSubFile(typeName, getValues(typeName)));
 			type = type.getSubType();
 		} while (type != null);
-		file.deleteOnExit();
 		subFiles = files;
 	}
 
@@ -81,9 +84,7 @@ public class ItemBreakFile {
 		return CrashConfigUtils.getTempFile(getClass(), "/resources/blocks/" + fileName);
 	}
 
-	private List<String> getValues(File file, String section) {
-		YamlConfig config = new YamlConfig(file, new String[] {});
-		config.getFromConfig();
+	private List<String> getValues(String section) {
 		List<String> values = config.getStringList(section);
 		if (values == null) values = new ArrayList<String>();
 		return values;

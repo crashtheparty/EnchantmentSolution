@@ -58,6 +58,7 @@ import org.ctp.enchantmentsolution.utils.compatibility.AuctionHouseUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 import org.ctp.enchantmentsolution.utils.debug.ESChatUtils;
 import org.ctp.enchantmentsolution.utils.files.ItemBreakFile;
+import org.ctp.enchantmentsolution.utils.files.ItemSpecialBreakFile;
 import org.ctp.enchantmentsolution.utils.files.SaveUtils;
 import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
 import org.ctp.enchantmentsolution.utils.player.ESPlayer;
@@ -101,12 +102,12 @@ public class EnchantmentSolution extends CrashAPIPlugin {
 		db = new ESBackup(this);
 		db.load();
 		RegisterEnchantments.addEnchantments();
-		CONFIGURATIONS = Configurations.getConfigurations();
-		CONFIGURATIONS.onEnable();
-
 		Chatable.get().sendInfo("Loading Item Break Types...");
 		ItemBreakFile.setFiles();
+		ItemSpecialBreakFile.setFiles();
 		Chatable.get().sendInfo("Item Break Types Loaded!");
+		CONFIGURATIONS = Configurations.getConfigurations();
+		CONFIGURATIONS.onEnable();
 	}
 
 	@Override

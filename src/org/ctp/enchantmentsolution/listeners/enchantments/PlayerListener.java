@@ -133,8 +133,8 @@ public class PlayerListener extends Enchantmentable {
 							DamageUtils.damageItem(player, item, 1, 2);
 							setBlock.getWorld().spawnParticle(Particle.ELECTRIC_SPARK, setBlock.getLocation().clone().add(0.5, 0.5, 0.5), lightLevel, 0.2, 0, 0.2);
 							setBlock.getWorld().playSound(setBlock.getLocation(), Sound.ITEM_DYE_USE, 0.5f, 1);
-							BlockFace[] faces = new BlockFace[] {BlockFace.EAST, BlockFace.NORTH, BlockFace.SOUTH, BlockFace.WEST, BlockFace.UP, BlockFace.DOWN};
-							for (BlockFace face : faces)
+							BlockFace[] faces = new BlockFace[] { BlockFace.EAST, BlockFace.NORTH, BlockFace.SOUTH, BlockFace.WEST, BlockFace.UP, BlockFace.DOWN };
+							for(BlockFace face: faces)
 								if (setBlock.getRelative(face).getType() == Material.TORCH) AdvancementUtils.awardCriteria(player, ESAdvancement.USELESS, "torch");
 						}
 					}
@@ -160,7 +160,8 @@ public class PlayerListener extends Enchantmentable {
 						} else {
 							DamageUtils.damageItem(player, item, 1, 2);
 							if (newLightLevel > 0) setBlock.getWorld().spawnParticle(Particle.ELECTRIC_SPARK, setBlock.getLocation().clone().add(0.2, 0, 0.2), newLightLevel, 0.5, 0, 0.5);
-							else setBlock.getWorld().spawnParticle(Particle.FLAME, setBlock.getLocation(), 20, 0.5, 0, 0.5);
+							else
+								setBlock.getWorld().spawnParticle(Particle.FLAME, setBlock.getLocation(), 20, 0.5, 0, 0.5);
 							setBlock.getWorld().playSound(setBlock.getLocation(), Sound.ITEM_DYE_USE, 0.5f, 1);
 						}
 					}
@@ -405,7 +406,7 @@ public class PlayerListener extends Enchantmentable {
 									break;
 								case "wet":
 									if (moisturizeBlock.getType().name().contains("CONCRETE")) AdvancementUtils.awardCriteria(player, ESAdvancement.JUST_ADD_WATER, "concrete");
-									moisturizeBlock.setType(ItemMoisturizeType.fromMoisturize(moisturizeBlock.getType()));
+									moisturizeBlock.setType(ItemMoisturizeType.fromMoisturize(moisturizeBlock.getType(), type));
 									DamageUtils.damageItem(player, item);
 									player.playSound(player.getLocation(), moisturize.getSound(), 1, 1);
 									player.incrementStatistic(Statistic.USE_ITEM, item.getType());
@@ -413,7 +414,7 @@ public class PlayerListener extends Enchantmentable {
 									break;
 								case "unsmelt":
 									if (moisturizeBlock.getType() == Material.CRACKED_STONE_BRICKS) AdvancementUtils.awardCriteria(player, ESAdvancement.REPAIRED, "broken_bricks");
-									moisturizeBlock.setType(ItemMoisturizeType.fromMoisturize(moisturizeBlock.getType()));
+									moisturizeBlock.setType(ItemMoisturizeType.fromMoisturize(moisturizeBlock.getType(), type));
 
 									DamageUtils.damageItem(player, item);
 									player.playSound(player.getLocation(), moisturize.getSound(), 1, 1);

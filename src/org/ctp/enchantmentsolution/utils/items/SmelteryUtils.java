@@ -1,36 +1,32 @@
 package org.ctp.enchantmentsolution.utils.items;
 
-import java.io.File;
-
 import org.bukkit.Material;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
-import org.ctp.crashapi.config.yaml.YamlConfig;
 import org.ctp.crashapi.item.MatData;
-import org.ctp.crashapi.utils.CrashConfigUtils;
 import org.ctp.enchantmentsolution.enums.ItemBreakType;
 import org.ctp.enchantmentsolution.utils.VersionUtils;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.SmelteryMaterial;
 import org.ctp.enchantmentsolution.utils.files.ItemBreakFile.ItemBreakFileType;
+import org.ctp.enchantmentsolution.utils.files.ItemSpecialBreakFile;
+import org.ctp.enchantmentsolution.utils.files.ItemSpecialBreakFile.ItemSpecialBreakFileType;
 
 public class SmelteryUtils {
 
-	private static MatData getDrop(BlockData data, ItemStack item) {
-		File file = CrashConfigUtils.getTempFile(new SilkTouchUtils().getClass(), "/resources/abilities/smeltery.yml");
-		YamlConfig config = new YamlConfig(file, new String[] {});
-		config.getFromConfig();
+	private static Material getDrop(BlockData data, ItemStack item) {
+		ItemSpecialBreakFile file = ItemSpecialBreakFile.getFile(ItemSpecialBreakFileType.SMELTERY);
 
 		ItemBreakType type = ItemBreakType.getType(item.getType());
-		if (type != null && type.getBreakTypes().contains(data.getMaterial()) || ItemBreakType.getBasicTypes(ItemBreakFileType.BREAK).contains(data.getMaterial())) return new MatData(config.getString(data.getMaterial().name().toLowerCase()));
-		return new MatData("air");
+		if (type != null && type.getBreakTypes().contains(data.getMaterial()) || ItemBreakType.getBasicTypes(ItemBreakFileType.BREAK).contains(data.getMaterial())) return file.getValues().get(data.getMaterial());
+		return Material.AIR;
 	}
 
 	public static SmelteryMaterial getSmelteryItem(BlockData data, ItemStack from, ItemStack item) {
-		MatData mat = getDrop(data, item);
-		if (mat.hasMaterial() && !MatData.isAir(mat.getMaterial())) {
+		Material type = getDrop(data, item);
+		if (!MatData.isAir(type)) {
 			Material f = from.getType();
-			return new SmelteryMaterial(new ItemStack(mat.getMaterial()), f, mat.getMaterial(), data);
+			return new SmelteryMaterial(new ItemStack(type), f, type, data);
 		}
 		return null;
 	}
