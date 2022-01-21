@@ -166,6 +166,27 @@ public class ESPlayer {
 		return equipped;
 	}
 
+	public ItemSlot[] getEquippedAndType() {
+		ItemSlot[] equipped = new ItemSlot[6];
+		if (!isOnline()) return equipped;
+		equipped[0] = new ItemSlot(getOnlinePlayer().getInventory().getHelmet(), ItemSlotType.HELMET);
+		equipped[1] = new ItemSlot(getOnlinePlayer().getInventory().getChestplate(), ItemSlotType.CHESTPLATE);
+		equipped[2] = new ItemSlot(getOnlinePlayer().getInventory().getLeggings(), ItemSlotType.LEGGINGS);
+		equipped[3] = new ItemSlot(getOnlinePlayer().getInventory().getBoots(), ItemSlotType.BOOTS);
+		equipped[4] = new ItemSlot(getOnlinePlayer().getInventory().getItemInMainHand(), ItemSlotType.MAIN_HAND);
+		equipped[5] = new ItemSlot(getOnlinePlayer().getInventory().getItemInOffHand(), ItemSlotType.OFF_HAND);
+
+		return equipped;
+	}
+	
+	public ItemStack getItemFromType(ItemSlotType type) {
+		for (ItemSlot e : getEquippedAndType()) {
+			if (e == null) continue;
+			if (e.getType() == type) return e.getItem();
+		}
+		return null;
+	}
+
 	public ItemStack[] getInventoryItems() {
 		return isOnline() ? getOnlinePlayer().getInventory().getContents() : new ItemStack[41];
 	}

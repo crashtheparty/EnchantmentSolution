@@ -18,7 +18,8 @@ public class SmelteryUtils {
 		ItemSpecialBreakFile file = ItemSpecialBreakFile.getFile(ItemSpecialBreakFileType.SMELTERY);
 
 		ItemBreakType type = ItemBreakType.getType(item.getType());
-		if (type != null && type.getBreakTypes().contains(data.getMaterial()) || ItemBreakType.getBasicTypes(ItemBreakFileType.BREAK).contains(data.getMaterial())) return file.getValues().get(data.getMaterial());
+		Material material = file.getValues().get(data.getMaterial());
+		if (material != null && (type != null && type.getBreakTypes().contains(data.getMaterial()) || ItemBreakType.getBasicTypes(ItemBreakFileType.BREAK).contains(data.getMaterial()))) return material;
 		return Material.AIR;
 	}
 

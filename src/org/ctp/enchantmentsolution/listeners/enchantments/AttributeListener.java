@@ -150,10 +150,7 @@ public class AttributeListener extends Enchantmentable {
 									ItemSlot ench = null;
 									for(ItemEquippedSlot s: a.getTypes()) {
 										if (s.getType() == slot.getType()) continue;
-										int slotNum = s.getType().getSlot() - 5;
-										if (slotNum > 10 && s.getType() == ItemSlotType.MAIN_HAND) slotNum = player.getInventory().getHeldItemSlot();
-										if (slotNum > 10 && s.getType() == ItemSlotType.OFF_HAND) slotNum = 40;
-										ItemStack armor = esPlayer.getEquipped()[slotNum];
+										ItemStack armor = esPlayer.getItemFromType(s.getType());
 										Enchantment enchant = a.getEnchantment();
 										if (EnchantmentUtils.hasEnchantment(armor, enchant) && (ench == null || EnchantmentUtils.getLevel(ench.getItem(), enchant) > EnchantmentUtils.getLevel(armor, enchant))) ench = new ItemSlot(armor, s.getType());
 									}
