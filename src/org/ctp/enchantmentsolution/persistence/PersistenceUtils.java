@@ -341,6 +341,7 @@ public class PersistenceUtils {
 					String name = "ES_" + ench.getName();
 					int level = ItemNMS.getNBTData(item, name);
 					if (level > 0) enchantMeta.add(new EnchantmentLevel(ench, level));
+					if (!(ench.getRelativeEnchantment() instanceof CustomEnchantmentWrapper) && EnchantmentUtils.hasEnchantment(item, ench.getRelativeEnchantment())) enchantLore.add(new EnchantmentLevel(ench, level));
 				}
 			}
 			if (enchantMeta.size() == 0 && enchantLore.size() == 0) return false;

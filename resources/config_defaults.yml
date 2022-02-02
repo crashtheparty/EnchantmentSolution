@@ -11,6 +11,9 @@ anvil:
     repair_cost_limit: 0
     damage: true
     rename: true
+    no_upgrade_books: false
+    no_upgrade_non_books: false
+    no_upgrade_books_to_non_books: false
 grindstone:
     custom_gui: true
     use_legacy: false
@@ -39,6 +42,7 @@ wiki:
     timer_seconds: 14400
     url: 'https://bit.ly/2N54NzC'
 loots:
+    allow_no_enchantments: false
     mobs:
         use: true
         bookshelves: 0
@@ -153,6 +157,22 @@ config_comments:
         rename: 
         - 'Whether players can use the custom rename without a permission'
 
+        no_upgrade_books: 
+        - 'Whether books should combine levels together if they are the same (i.e. Protection I + Protection I = Protection II).'
+        - 'Protection II + Protection I will still create Protection II, as will Protection I + Protection II.'
+        - 'If false, uses normal settings.'
+
+        no_upgrade_non_books: 
+        - 'Whether items (such as tools, weapons, etc.) should combine levels together if they are the same (i.e. Protection I + Protection I = Protection II).'
+        - 'Protection II + Protection I will still create Protection II, as will Protection I + Protection II.'
+        - 'If false, uses normal settings.'
+
+        no_upgrade_books_to_non_books: 
+        - 'Whether books should combine levels when added to items (such as tools, weapons, etc.).'
+        - 'i.e. Whether a book with Protection I and a helmet with Protection I should combine to make Protection II.'
+        - 'Protection II + Protection I will still create Protection II, as will Protection I + Protection II.'
+        - 'If false, uses normal settings.'
+
     grindstone: 
         custom_gui: 
         - 'Whether to use the custom grindstone gui'
@@ -237,6 +257,9 @@ config_comments:
         - 'The URL to the wiki - the default is the normal EnchantmentSolution wiki'
 
     loots: 
+        allow_no_enchantments:
+        - 'If an item in a chest, villager trade, etc. spawns with no enchantments, put no enchantments on the item.'
+        - 'If set to false, will put the original enchantments generated through vanilla Minecraft on the item.'
         mobs: 
             use: 
             - 'Allow custom and/or high level enchantments to spawn on mobs'

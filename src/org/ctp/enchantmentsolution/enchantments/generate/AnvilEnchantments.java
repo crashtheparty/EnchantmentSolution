@@ -161,6 +161,7 @@ public class AnvilEnchantments extends GenerateEnchantments {
 		if (itemOne.getType() == Material.BOOK || itemOne.getType() == Material.ENCHANTED_BOOK) if (ConfigString.USE_ENCHANTED_BOOKS.getBoolean()) combinedItem = new ItemStack(Material.ENCHANTED_BOOK);
 		else
 			combinedItem = new ItemStack(Material.BOOK);
+		else {}
 		DamageUtils.setDamage(combinedItem, DamageUtils.getDamage(itemOne));
 		RepairType repairType = RepairType.getRepairType(this);
 		if (repairType == null) return;
@@ -275,6 +276,13 @@ public class AnvilEnchantments extends GenerateEnchantments {
 	private int setEnchantments() {
 		int cost = 0;
 		ItemStack item = getItem();
+		boolean noUpgrade = false;
+		if (itemTwo.getType() == Material.BOOK || itemTwo.getType() == Material.ENCHANTED_BOOK) {
+			if (item.getType() == Material.BOOK || item.getType() == Material.ENCHANTED_BOOK) noUpgrade = ConfigString.NO_UPGRADE_BOOKS.getBoolean();
+			else
+				noUpgrade = ConfigString.NO_UPGRADE_BOOKS_TO_NON_BOOKS.getBoolean();
+		} else
+			noUpgrade = ConfigString.NO_UPGRADE_NON_BOOKS.getBoolean();
 		Player player = getPlayer().getPlayer();
 
 		ItemMeta firstMeta = item.clone().getItemMeta();
@@ -343,8 +351,9 @@ public class AnvilEnchantments extends GenerateEnchantments {
 					}
 					if (enchantTwo.getLevel() == enchantOne.getLevel()) {
 						if (enchantTwo.getLevel() >= enchantTwo.getEnchant().getMaxLevel()) levelCost = enchantTwo.getLevel();
+						else if (!noUpgrade) levelCost = enchantTwo.getLevel() + 1;
 						else
-							levelCost = enchantTwo.getLevel() + 1;
+							levelCost = enchantTwo.getLevel();
 					} else if (enchantTwo.getLevel() > enchantOne.getLevel()) levelCost = enchantTwo.getLevel();
 					else
 						levelCost = enchantOne.getLevel();
