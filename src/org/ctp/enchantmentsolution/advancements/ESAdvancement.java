@@ -19,17 +19,17 @@ public enum ESAdvancement implements CrashAdvancement {
 	FISHY_BUSINESS(FED_FOR_A_LIFETIME, "COD", Arrays.asList(new CrashTrigger("cod"), new CrashTrigger("salmon"), new CrashTrigger("tropical_fish"), new CrashTrigger("pufferfish")), 75),
 	NEMO_ENIM_COQUIT(FISH_STICKS, "TROPICAL_FISH", Arrays.asList(new CrashTrigger("tropical_fish")), 25),
 	BONEMEAL_PLUS(AGRICULTURAL_REVOLUTION, "BONE_MEAL", Arrays.asList(new CrashTrigger("bonemeal")), 10),
-	JUST_AS_SWEET(BONEMEAL_PLUS, "WITHER_ROSE", Arrays.asList(new CrashTrigger("wither_rose")), 100, Frame.GOAL, 4),
-	NOT_THAT_KIND(AGRICULTURAL_REVOLUTION, "DIAMOND_SWORD", Arrays.asList(new CrashTrigger("chicken"), new CrashTrigger("strider", 0, 12, 0), new CrashTrigger("hoglin", 0, 12, 0), new CrashTrigger("cat", 0, 4, 0), new CrashTrigger("cow"), new CrashTrigger("fox", 0, 4, 0), new CrashTrigger("horse"), new CrashTrigger("mule"), new CrashTrigger("donkey"), new CrashTrigger("llama"), new CrashTrigger("mushroom_cow"), new CrashTrigger("ocelot", 0, 0, 3), new CrashTrigger("panda", 0, 4, 0), new CrashTrigger("bee", 0, 9, 0), new CrashTrigger("pig"), new CrashTrigger("rabbit"), new CrashTrigger("sheep"), new CrashTrigger("wolf"), new CrashTrigger("turtle")), 25),
+	JUST_AS_SWEET(BONEMEAL_PLUS, "WITHER_ROSE", Arrays.asList(new CrashTrigger("wither_rose")), 100, Frame.GOAL),
+	NOT_THAT_KIND(AGRICULTURAL_REVOLUTION, "DIAMOND_SWORD", Arrays.asList(new CrashTrigger("frog", 0, new int[] {1, 19, 0}, new int[3]), new CrashTrigger("chicken"), new CrashTrigger("strider"), new CrashTrigger("hoglin"), new CrashTrigger("cat"), new CrashTrigger("cow"), new CrashTrigger("fox"), new CrashTrigger("horse"), new CrashTrigger("mule"), new CrashTrigger("donkey"), new CrashTrigger("llama"), new CrashTrigger("mushroom_cow"), new CrashTrigger("panda"), new CrashTrigger("bee"), new CrashTrigger("pig"), new CrashTrigger("rabbit"), new CrashTrigger("sheep"), new CrashTrigger("wolf"), new CrashTrigger("turtle")), 25),
 	HIGH_METABOLISM(NOT_THAT_KIND, "GOLDEN_CARROT", Arrays.asList(new CrashTrigger("exhaustion")), 200, Frame.GOAL),
-	WILDLIFE_CONSERVATION(NOT_THAT_KIND, "COW_SPAWN_EGG", Arrays.asList(new CrashTrigger("chicken"), new CrashTrigger("strider", 0, 12, 0), new CrashTrigger("hoglin", 0, 12, 0), new CrashTrigger("cat", 0, 4, 0), new CrashTrigger("cow"), new CrashTrigger("fox", 0, 4, 0), new CrashTrigger("horse"), new CrashTrigger("mule"), new CrashTrigger("donkey"), new CrashTrigger("llama"), new CrashTrigger("mushroom_cow"), new CrashTrigger("ocelot", 0, 0, 3), new CrashTrigger("panda", 0, 4, 0), new CrashTrigger("bee", 0, 9, 0), new CrashTrigger("pig"), new CrashTrigger("rabbit"), new CrashTrigger("sheep"), new CrashTrigger("wolf"), new CrashTrigger("turtle")), 75),
+	WILDLIFE_CONSERVATION(NOT_THAT_KIND, "COW_SPAWN_EGG", Arrays.asList(new CrashTrigger("frog", 0, new int[] {1, 19, 0}, new int[3]), new CrashTrigger("chicken"), new CrashTrigger("strider"), new CrashTrigger("hoglin"), new CrashTrigger("cat"), new CrashTrigger("cow"), new CrashTrigger("fox"), new CrashTrigger("horse"), new CrashTrigger("mule"), new CrashTrigger("donkey"), new CrashTrigger("llama"), new CrashTrigger("mushroom_cow"), new CrashTrigger("panda"), new CrashTrigger("bee"), new CrashTrigger("pig"), new CrashTrigger("rabbit"), new CrashTrigger("sheep"), new CrashTrigger("wolf"), new CrashTrigger("turtle")), 75),
 	FOURTY_NINERS(BONEMEAL_PLUS, "GOLD_BLOCK", Arrays.asList(new CrashTrigger("goldblock", 81)), 20),
 	THAT_FOOD_IS_FINE(AGRICULTURAL_REVOLUTION, "POISONOUS_POTATO", Arrays.asList(new CrashTrigger("food")), 25),
 	MEAT_READY_TO_EAT(THAT_FOOD_IS_FINE, "COOKED_BEEF", Arrays.asList(new CrashTrigger("beef")), 50),
 	CHICKEN_OR_THE_EGG(AGRICULTURAL_REVOLUTION, "EGG", Arrays.asList(new CrashTrigger("egg")), 25),
 	EGGED_BY_MYSELF(CHICKEN_OR_THE_EGG, "EGG", Arrays.asList(new CrashTrigger("egg")), 40),
 	THORGY(AGRICULTURAL_REVOLUTION, "WOLF_SPAWN_EGG", Arrays.asList(new CrashTrigger("wolf")), 50),
-	FREE_PETS(THORGY, "CARROT_ON_A_STICK", Arrays.asList(new CrashTrigger("wolf"), new CrashTrigger("ocelot", 0, 0, 3), new CrashTrigger("cat", 0, 4, 0), new CrashTrigger("horse"), new CrashTrigger("donkey"), new CrashTrigger("mule"), new CrashTrigger("parrot"), new CrashTrigger("llama"), new CrashTrigger("bee", 0, 9, 0)), 500, Frame.CHALLENGE),
+	FREE_PETS(THORGY, "CARROT_ON_A_STICK", Arrays.asList(new CrashTrigger("frog", 0, new int[] {1, 19, 0}, new int[3]), new CrashTrigger("wolf"), new CrashTrigger("cat"), new CrashTrigger("horse"), new CrashTrigger("donkey"), new CrashTrigger("mule"), new CrashTrigger("parrot"), new CrashTrigger("llama"), new CrashTrigger("bee")), 500, Frame.CHALLENGE),
 	YUMMY_REPAIRS(AGRICULTURAL_REVOLUTION, "ENCHANTED_BOOK", Arrays.asList(new CrashTrigger("repair")), 100, Frame.GOAL),
 	HUNGRY_HIPPOS(YUMMY_REPAIRS, "DIAMOND_CHESTPLATE", Arrays.asList(new CrashTrigger("armor")), 900, Frame.CHALLENGE),
 	THUMBS_UP(AGRICULTURAL_REVOLUTION, "STONE_HOE", Arrays.asList(new CrashTrigger("replant")), 50),
@@ -39,15 +39,15 @@ public enum ESAdvancement implements CrashAdvancement {
 	FLYING_BACON(ANIMAL_TAMER, "COOKED_PORKCHOP", Arrays.asList(new CrashTrigger("pig")), 200, Frame.GOAL),
 
 	INDUSTRIAL_REVOLUTION("DIAMOND_PICKAXE", Arrays.asList(), 0),
-	EASY_OUT(INDUSTRIAL_REVOLUTION, "CAMPFIRE", Arrays.asList(new CrashTrigger("campfire")), 20, Frame.TASK, 4),
+	EASY_OUT(INDUSTRIAL_REVOLUTION, "CAMPFIRE", Arrays.asList(new CrashTrigger("campfire")), 20, Frame.TASK),
 	JUST_ADD_WATER(EASY_OUT, "WHITE_CONCRETE_POWDER", Arrays.asList(new CrashTrigger("concrete")), 20),
 	REPAIRED(JUST_ADD_WATER, "STONE_BRICKS", Arrays.asList(new CrashTrigger("broken_bricks")), 25),
 	FLAME_KEEPER(INDUSTRIAL_REVOLUTION, "FLINT_AND_STEEL", Arrays.asList(new CrashTrigger("flame")), 40),
 	DETERMINED_CHEATER(FLAME_KEEPER, "OBSIDIAN", Arrays.asList(new CrashTrigger("cheater")), 100, Frame.GOAL),
 	IRONT_YOU_GLAD(INDUSTRIAL_REVOLUTION, "IRON_INGOT", Arrays.asList(new CrashTrigger("iron")), 25),
 	STAINLESS_STEEL(IRONT_YOU_GLAD, "IRON_PICKAXE", Arrays.asList(new CrashTrigger("iron_pickaxe")), 150, Frame.GOAL),
-	NETHER_DULL(STAINLESS_STEEL, "NETHERITE_SWORD", Arrays.asList(new CrashTrigger("netherite_sword", 0, 12, 0)), 750, Frame.CHALLENGE, 12),
-	SPARKLING_FORTUNE(NETHER_DULL, "DEEPSLATE_DIAMOND_ORE", Arrays.asList(new CrashTrigger("rare_earth", 0, 17, 0)), 1200, Frame.CHALLENGE, 17),
+	NETHER_DULL(STAINLESS_STEEL, "NETHERITE_SWORD", Arrays.asList(new CrashTrigger("netherite_sword")), 750, Frame.CHALLENGE),
+	SPARKLING_FORTUNE(NETHER_DULL, "DEEPSLATE_DIAMOND_ORE", Arrays.asList(new CrashTrigger("rare_earth", 0, new int[] {1, 17, 0}, new int[3])), 1200, Frame.CHALLENGE, new int[] {1, 17, 0}),
 	FAST_AND_FURIOUS(IRONT_YOU_GLAD, "DIAMOND_PICKAXE", Arrays.asList(new CrashTrigger("diamond_pickaxe")), 40),
 	CARPET_BOMBS(FAST_AND_FURIOUS, "TNT", Arrays.asList(new CrashTrigger("explosion", 100)), 200, Frame.GOAL),
 	OVER_9000(FAST_AND_FURIOUS, "DIAMOND_PICKAXE", Arrays.asList(new CrashTrigger("stone", 9001)), 1000, Frame.CHALLENGE),
@@ -58,7 +58,7 @@ public enum ESAdvancement implements CrashAdvancement {
 
 	SCIENTIFIC_REVOLUTION("ENCHANTED_BOOK", Arrays.asList(), 0),
 	BREAKER_BREAKER(SCIENTIFIC_REVOLUTION, "TORCH", Arrays.asList(new CrashTrigger("torch")), 25),
-	USELESS(BREAKER_BREAKER, "TORCH", Arrays.asList(new CrashTrigger("torch", 0, 17, 0)), 40),
+	USELESS(BREAKER_BREAKER, "TORCH", Arrays.asList(new CrashTrigger("torch", 0, new int[] {1, 17, 0}, new int[3])), 40),
 	DID_YOU_REALLY_WAND_TO_DO_THAT(BREAKER_BREAKER, "CARROT_ON_A_STICK", Arrays.asList(new CrashTrigger("break")), 100, Frame.GOAL),
 	SHARING_IS_CARING(SCIENTIFIC_REVOLUTION, "EXPERIENCE_BOTTLE", Arrays.asList(new CrashTrigger("player")), 10),
 	LAAAGGGGGG(SCIENTIFIC_REVOLUTION, "FIREWORK_ROCKET", Arrays.asList(new CrashTrigger("lag")), 10),
@@ -96,9 +96,9 @@ public enum ESAdvancement implements CrashAdvancement {
 	CERBERUS(POSEIDON_REBORN, "SOUL_SAND", Arrays.asList(new CrashTrigger("obsidian")), 1000, Frame.CHALLENGE),
 	MISSED(IMPERIAL_REVOLUTION, "SAND", Arrays.asList(new CrashTrigger("sand", 16)), 60),
 	SAVING_GRACE(MISSED, "WOLF_SPAWN_EGG", Arrays.asList(new CrashTrigger("animal")), 100, Frame.GOAL),
-	LOOK_WHAT_YOU_MADE_ME_DO(IMPERIAL_REVOLUTION, "CROSSBOW", Arrays.asList(new CrashTrigger("pillage")), 20, Frame.TASK, 4),
-	JUST_DIE_ALREADY(LOOK_WHAT_YOU_MADE_ME_DO, "PHANTOM_SPAWN_EGG", Arrays.asList(new CrashTrigger("phantom")), 75, Frame.TASK, 4),
-	UNDERKILL(LOOK_WHAT_YOU_MADE_ME_DO, "DRAGON_EGG", Arrays.asList(new CrashTrigger("dragon")), 100, Frame.GOAL, 4),
+	LOOK_WHAT_YOU_MADE_ME_DO(IMPERIAL_REVOLUTION, "CROSSBOW", Arrays.asList(new CrashTrigger("pillage")), 20, Frame.TASK),
+	JUST_DIE_ALREADY(LOOK_WHAT_YOU_MADE_ME_DO, "PHANTOM_SPAWN_EGG", Arrays.asList(new CrashTrigger("phantom")), 75, Frame.TASK),
+	UNDERKILL(LOOK_WHAT_YOU_MADE_ME_DO, "DRAGON_EGG", Arrays.asList(new CrashTrigger("dragon")), 100, Frame.GOAL),
 	WHERE_DID_THAT_COME_FROM(UNDERKILL, "ARROW", Arrays.asList(new CrashTrigger("sniper")), 500, Frame.CHALLENGE),
 	KILL_THE_MESSENGER(UNDERKILL, "FIRE_CHARGE", Arrays.asList(new CrashTrigger("ghast")), 200, Frame.GOAL),
 	BLAST_OFF(IMPERIAL_REVOLUTION, "TNT", Arrays.asList(new CrashTrigger("creeper")), 30),
@@ -137,24 +137,24 @@ public enum ESAdvancement implements CrashAdvancement {
 	private boolean isEnabled = false;
 	private NamespacedKey namespace;
 	private List<CrashTrigger> triggers = new ArrayList<CrashTrigger>();
-	private int activatedVersion = 0;
+	private int[] activatedVersion;
 	private Rewards rewards;
 	private Frame frame;
 
 	ESAdvancement(String icon, List<CrashTrigger> triggers, int exp) {
-		this(null, icon, triggers, exp, Frame.TASK, 0);
+		this(null, icon, triggers, exp, Frame.TASK, new int[3]);
 	}
 
 	ESAdvancement(ESAdvancement parent, String icon, List<CrashTrigger> triggers, int exp) {
-		this(parent, icon, triggers, exp, Frame.TASK, 0);
+		this(parent, icon, triggers, exp, Frame.TASK, new int[3]);
 	}
 
 	ESAdvancement(ESAdvancement parent, String icon, List<CrashTrigger> triggers, int exp, Frame frame) {
-		this(parent, icon, triggers, exp, frame, 0);
+		this(parent, icon, triggers, exp, frame, new int[3]);
 	}
 
 	ESAdvancement(ESAdvancement parent, String icon, List<CrashTrigger> triggers, int exp, Frame frame,
-	int activatedVersion) {
+	int[] activatedVersion) {
 		namespace = new NamespacedKey(EnchantmentSolution.getPlugin(), "enchantments/" + name().toLowerCase(Locale.ROOT));
 		for(Material m: Material.values())
 			if (m.name().equals(icon)) {
@@ -209,7 +209,7 @@ public enum ESAdvancement implements CrashAdvancement {
 		this.triggers = triggers;
 	}
 
-	public int getActivatedVersion() {
+	public int[] getActivatedVersion() {
 		return activatedVersion;
 	}
 

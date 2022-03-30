@@ -485,6 +485,7 @@ enchantment:
             smite: 'Increases damage to "undead" mobs (skeletons, zombies, withers, wither skeletons, zombie pigmen, skeleton horses and zombie horses)\nEach level separately adds 2.5 (half heart) extra damage to each hit, to "undead" mobs only.'
             soul_speed: 'Increase speed along soul sand and soul soil.'
             sweeping_edge: 'Increases sweeping attack damage.'
+            swift_sneak: 'Faster movement while sneaking.'
             thorns: 'Attackers are damaged when they attack the wearer.'
             unbreaking: 'Increases effective durability.'
         custom_enchantments: 
@@ -618,6 +619,7 @@ enchantment:
             smite: 'Smite'
             soul_speed: 'Soul Speed'
             sweeping_edge: 'Sweeping Edge'
+            swift_sneak: 'Swift Sneak'
             thorns: 'Thorns'
             unbreaking: 'Unbreaking'
         custom_enchantments: 

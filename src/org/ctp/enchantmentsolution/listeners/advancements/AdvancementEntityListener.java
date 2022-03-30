@@ -19,7 +19,6 @@ import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
-import org.ctp.enchantmentsolution.utils.VersionUtils;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.OverkillDeath;
 import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
 import org.ctp.enchantmentsolution.utils.player.ESPlayer;
@@ -42,10 +41,13 @@ public class AdvancementEntityListener implements Listener {
 				}
 				if (EnchantmentUtils.hasEnchantment(mainHand, RegisterEnchantments.KNOCKUP)) AdvancementUtils.awardCriteria(killer, ESAdvancement.NOT_THAT_KIND, killed.getType().name().toLowerCase(Locale.ROOT));
 				if (killed instanceof Player && EnchantmentUtils.hasEnchantment(mainHand, RegisterEnchantments.QUICK_STRIKE)) AdvancementUtils.awardCriteria(killer, ESAdvancement.PRE_COMBAT_UPDATE, "combat_update");
-				if (EnchantmentUtils.hasEnchantment(mainHand, RegisterEnchantments.BRINE) && mainHand.getType().name().endsWith("SWORD")) if (killed.getType() == EntityType.DROWNED) AdvancementUtils.awardCriteria(killer, ESAdvancement.NOT_VERY_EFFECTIVE, killed.getType().name().toLowerCase(Locale.ROOT));
-				else if (killed.getType() == EntityType.ENDER_DRAGON || killed.getType() == EntityType.WITHER || killed.getType() == EntityType.ELDER_GUARDIAN) AdvancementUtils.awardCriteria(killer, ESAdvancement.SUPER_EFFECTIVE, "boss");
-				else if (VersionUtils.getVersionNumber() > 3) if (killed.getType() == EntityType.RAVAGER) AdvancementUtils.awardCriteria(killer, ESAdvancement.SUPER_EFFECTIVE, "boss");
-				if (EnchantmentUtils.hasEnchantment(mainHand, RegisterEnchantments.EXP_SHARE)) if (killed.getType() == EntityType.ENDER_DRAGON) if (AdvancementUtils.awardCriteria(killer, ESAdvancement.MOTHERLOAD, "dragon")) {
+				if (EnchantmentUtils.hasEnchantment(mainHand, RegisterEnchantments.BRINE)) {
+					EntityType t = killed.getType();
+					if (t == EntityType.DROWNED) AdvancementUtils.awardCriteria(killer, ESAdvancement.NOT_VERY_EFFECTIVE, "drowned");
+					else if (t == EntityType.RAVAGER || t == EntityType.ENDER_DRAGON || t == EntityType.WITHER || t == EntityType.ELDER_GUARDIAN) AdvancementUtils.awardCriteria(killer, ESAdvancement.SUPER_EFFECTIVE, "boss");
+					else if (new MobData("WARDEN").hasEntity() && t == new MobData("WARDEN").getEntity()) AdvancementUtils.awardCriteria(killer, ESAdvancement.SUPER_EFFECTIVE, "boss");
+				}
+				if (EnchantmentUtils.hasEnchantment(mainHand, RegisterEnchantments.EXP_SHARE) && killed.getType() == EntityType.ENDER_DRAGON && AdvancementUtils.awardCriteria(killer, ESAdvancement.MOTHERLOAD, "dragon")) {
 					event.getDrops().add(new ItemStack(Material.DRAGON_HEAD));
 					event.getDrops().add(new ItemStack(Material.DRAGON_EGG, 4));
 					event.getDrops().add(new ItemStack(Material.DRAGON_BREATH, 64));

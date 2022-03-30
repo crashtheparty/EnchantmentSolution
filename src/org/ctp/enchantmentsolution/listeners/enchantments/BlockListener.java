@@ -22,6 +22,7 @@ import org.ctp.crashapi.item.MatData;
 import org.ctp.crashapi.utils.DamageUtils;
 import org.ctp.crashapi.utils.ItemUtils;
 import org.ctp.crashapi.utils.LocationUtils;
+import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
@@ -274,27 +275,20 @@ public class BlockListener extends Enchantmentable {
 			if (smeltery != null && !MatData.isAir(smeltery.getToMaterial())) {
 				ItemStack smelted = smeltery.getSmelted();
 				int experience = 0;
-				boolean fortune = false;
 				MatData mat = new MatData(data.getMaterial().name());
-				if (mat.hasMaterial() && (mat.getMaterial() == Material.IRON_ORE || mat.getMaterial() == Material.GOLD_ORE)) {
-					experience = (int) (Math.random() * 3) + 1;
-					fortune = true;
-				} else if (mat.hasMaterial() && mat.getMaterialName().equals("ANCIENT_DEBRIS")) {
-					experience = (int) (Math.random() * 6) + 2;
-					fortune = true;
-				} else if (mat.hasMaterial() && (mat.getMaterialName().equals("NETHER_GOLD_ORE") || mat.getMaterialName().equals("GILDED_BLACKSTONE"))) {
-					experience = (int) (Math.random() * 2);
-					fortune = mat.getMaterialName().equals("NETHER_GOLD_ORE");
-				}
+				if (mat.hasMaterial() && (mat.getMaterial() == Material.IRON_ORE || mat.getMaterial() == Material.GOLD_ORE)) experience = (int) (Math.random() * 3) + 1;
+				else if (mat.hasMaterial() && mat.getMaterialName().equals("ANCIENT_DEBRIS")) experience = (int) (Math.random() * 6) + 2;
+				else if (mat.hasMaterial() && (mat.getMaterialName().equals("NETHER_GOLD_ORE") || mat.getMaterialName().equals("GILDED_BLACKSTONE"))) experience = (int) (Math.random() * 2);
 				experience = AbilityUtils.setExp(experience, EnchantmentUtils.getLevel(item, RegisterEnchantments.EXP_SHARE));
-				SmelteryEvent smelteryEvent = new SmelteryEvent(event.getBlock(), data, player, smelted, smeltery.getToMaterial(), experience, fortune);
+				SmelteryEvent smelteryEvent = new SmelteryEvent(event.getBlock(), data, player, smelted, smeltery.getToMaterial(), experience);
 				Bukkit.getPluginManager().callEvent(smelteryEvent);
 
 				if (!smelteryEvent.isCancelled()) {
 					AbilityUtils.dropExperience(smelteryEvent.getBlock().getLocation(), smelteryEvent.getExp());
 					if (!MatData.isAir(smelteryEvent.getChangeTo())) {
 						from.setType(smelteryEvent.getChangeTo());
-						if (smelteryEvent.willFortune()) from.setAmount(SmelteryUtils.getFortuneForSmeltery(smelteryEvent.getDrop(), item, smeltery.getData().getMaterial()));
+						from.setAmount(smeltery.getSmelted().getAmount());
+						Chatable.get().sendInfo("From: " + from);
 						i.setItemStack(from);
 					}
 					McMMOHandler.handleBlockDrops(event, item, RegisterEnchantments.SMELTERY);
@@ -685,7 +679,7 @@ public class BlockListener extends Enchantmentable {
 					else {
 						for(Item i: event.getItems())
 							i.remove();
-						for (Item i : esEvent.getItems())
+						for(Item i: esEvent.getItems())
 							AdvancementUtils.awardCriteria(player, ESAdvancement.SILVER_HORDE, "infested", i.getItemStack().getAmount());
 					}
 

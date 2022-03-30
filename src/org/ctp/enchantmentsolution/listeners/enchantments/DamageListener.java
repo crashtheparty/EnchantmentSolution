@@ -39,7 +39,6 @@ import org.ctp.enchantmentsolution.listeners.Enchantmentable;
 import org.ctp.enchantmentsolution.mcmmo.McMMOHandler;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.ESArrays;
-import org.ctp.enchantmentsolution.utils.VersionUtils;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.*;
 import org.ctp.enchantmentsolution.utils.items.AbilityUtils;
 import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
@@ -371,7 +370,7 @@ public class DamageListener extends Enchantmentable {
 					DamageUtils.damageItem(player, ironDefense.getShield(), ironDefense.getShieldDamage());
 
 					if (player instanceof Player) {
-						if ((int) (ironDefense.getNewDamage() * 10) > 0 && VersionUtils.getVersionNumber() > 1) ((Player) player).incrementStatistic(Statistic.DAMAGE_BLOCKED_BY_SHIELD, (int) (ironDefense.getNewDamage() * 10));
+						if ((int) (ironDefense.getNewDamage() * 10) > 0) ((Player) player).incrementStatistic(Statistic.DAMAGE_BLOCKED_BY_SHIELD, (int) (ironDefense.getNewDamage() * 10));
 						if (player.getHealth() <= ironDefense.getDamage() && player.getHealth() > ironDefense.getNewDamage()) AdvancementUtils.awardCriteria((Player) player, ESAdvancement.IRON_MAN, "blocked");
 					}
 				}
@@ -726,50 +725,48 @@ public class DamageListener extends Enchantmentable {
 	}
 
 	private void stoneThrow(EntityDamageByEntityEvent event) {
-		if (VersionUtils.getVersionNumber() > 3) {
-			if (!canRun(RegisterEnchantments.STONE_THROW, event)) return;
-			switch (event.getEntityType().name()) {
-				case "BAT":
-				case "BEE":
-				case "BLAZE":
-				case "ENDER_DRAGON":
-				case "GHAST":
-				case "PARROT":
-				case "PHANTOM":
-				case "VEX":
-				case "WITHER":
-					LivingEntity entity = (LivingEntity) event.getEntity();
-					if (event.getDamager() instanceof Arrow) {
-						Arrow arrow = (Arrow) event.getDamager();
-						ProjectileSource shooter = arrow.getShooter();
-						if (shooter instanceof HumanEntity) {
-							HumanEntity human = (HumanEntity) shooter;
-							if (human instanceof Player && isDisabled((Player) human, RegisterEnchantments.STONE_THROW)) return;
-							ItemStack item = human.getInventory().getItemInOffHand();
-							if (item == null || !EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.STONE_THROW)) item = human.getInventory().getItemInMainHand();
-							if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.STONE_THROW)) {
-								int level = EnchantmentUtils.getLevel(item, RegisterEnchantments.STONE_THROW);
-								double percentage = .4 * level + 1.2;
-								int extraDamage = (int) (percentage * event.getDamage() + .5);
+		if (!canRun(RegisterEnchantments.STONE_THROW, event)) return;
+		switch (event.getEntityType().name()) {
+			case "BAT":
+			case "BEE":
+			case "BLAZE":
+			case "ENDER_DRAGON":
+			case "GHAST":
+			case "PARROT":
+			case "PHANTOM":
+			case "VEX":
+			case "WITHER":
+				LivingEntity entity = (LivingEntity) event.getEntity();
+				if (event.getDamager() instanceof Arrow) {
+					Arrow arrow = (Arrow) event.getDamager();
+					ProjectileSource shooter = arrow.getShooter();
+					if (shooter instanceof HumanEntity) {
+						HumanEntity human = (HumanEntity) shooter;
+						if (human instanceof Player && isDisabled((Player) human, RegisterEnchantments.STONE_THROW)) return;
+						ItemStack item = human.getInventory().getItemInOffHand();
+						if (item == null || !EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.STONE_THROW)) item = human.getInventory().getItemInMainHand();
+						if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.STONE_THROW)) {
+							int level = EnchantmentUtils.getLevel(item, RegisterEnchantments.STONE_THROW);
+							double percentage = .4 * level + 1.2;
+							int extraDamage = (int) (percentage * event.getDamage() + .5);
 
-								StoneThrowEvent stoneThrow = new StoneThrowEvent(entity, level, human, event.getDamage(), extraDamage);
-								Bukkit.getPluginManager().callEvent(stoneThrow);
-								if (!stoneThrow.isCancelled()) {
-									event.setDamage(stoneThrow.getNewDamage());
+							StoneThrowEvent stoneThrow = new StoneThrowEvent(entity, level, human, event.getDamage(), extraDamage);
+							Bukkit.getPluginManager().callEvent(stoneThrow);
+							if (!stoneThrow.isCancelled()) {
+								event.setDamage(stoneThrow.getNewDamage());
 
-									if (human instanceof Player && entity instanceof Phantom) {
-										Phantom phantom = (Phantom) entity;
-										if (phantom.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue() == phantom.getHealth() && phantom.getHealth() <= extraDamage) AdvancementUtils.awardCriteria((Player) human, ESAdvancement.JUST_DIE_ALREADY, "phantom");
-									}
-									if (human instanceof Player && entity instanceof EnderDragon) AdvancementUtils.awardCriteria((Player) human, ESAdvancement.UNDERKILL, "dragon");
+								if (human instanceof Player && entity instanceof Phantom) {
+									Phantom phantom = (Phantom) entity;
+									if (phantom.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue() == phantom.getHealth() && phantom.getHealth() <= extraDamage) AdvancementUtils.awardCriteria((Player) human, ESAdvancement.JUST_DIE_ALREADY, "phantom");
 								}
+								if (human instanceof Player && entity instanceof EnderDragon) AdvancementUtils.awardCriteria((Player) human, ESAdvancement.UNDERKILL, "dragon");
 							}
 						}
 					}
-					break;
-				default:
-					break;
-			}
+				}
+				break;
+			default:
+				break;
 		}
 	}
 
@@ -933,7 +930,15 @@ public class DamageListener extends Enchantmentable {
 			Bukkit.getPluginManager().callEvent(drowned);
 
 			if (!drowned.isCancelled()) {
-				if (drowned.willApplyEffect()) EnchantmentSolution.addDrowned(new DrownedEntity((LivingEntity) drowned.getEntity(), (HumanEntity) drowned.getDamager(), drowned.getTicks(), level));
+				if (drowned.willApplyEffect()) {
+					boolean newEntity = true;
+					for(DrownedEntity e: EnchantmentSolution.getDrowned())
+						if (entity.getUniqueId().equals(e.getHurtEntity().getUniqueId())) {
+							newEntity = false;
+							if (e.getLevel() <= drowned.getEnchantment().getLevel()) e.setDamageTime(drowned.getTicks());
+						}
+					if (newEntity) EnchantmentSolution.addDrowned(new DrownedEntity((LivingEntity) drowned.getEntity(), (HumanEntity) drowned.getDamager(), drowned.getTicks(), level));
+				}
 				event.setDamage(drowned.getNewDamage());
 			}
 		}

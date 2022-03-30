@@ -1,16 +1,5 @@
 package org.ctp.enchantmentsolution.utils.compatibility;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import org.bukkit.Bukkit;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.RegisteredServiceProvider;
-import org.bukkit.plugin.ServicePriority;
-
-import javax.net.ssl.HttpsURLConnection;
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -20,6 +9,19 @@ import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.logging.Level;
 import java.util.zip.GZIPOutputStream;
+
+import javax.net.ssl.HttpsURLConnection;
+
+import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.RegisteredServiceProvider;
+import org.bukkit.plugin.ServicePriority;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 public class Metrics {
 
@@ -49,6 +51,7 @@ public class Metrics {
 
 	private final List<CustomChart> charts = new ArrayList<>();
 
+	@SuppressWarnings("deprecation")
 	public Metrics(Plugin plugin) {
 		if (plugin == null) throw new IllegalArgumentException("Plugin cannot be null!");
 		this.plugin = plugin;
@@ -64,7 +67,6 @@ public class Metrics {
 			config.addDefault("logFailedRequests", false);
 			config.addDefault("logSentData", false);
 			config.addDefault("logResponseStatusText", false);
-
 			config.options().header("bStats collects some data for plugin authors like how many servers are using their plugins.\n" + "To honor their work, you should not disable it.\n" + "This has nearly no effect on the server performance!\n" + "Check out https://bStats.org/ to learn more :)").copyDefaults(true);
 			try {
 				config.save(configFile);

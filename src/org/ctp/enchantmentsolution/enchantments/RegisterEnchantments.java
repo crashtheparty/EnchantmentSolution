@@ -2,6 +2,7 @@ package org.ctp.enchantmentsolution.enchantments;
 
 import java.lang.reflect.Field;
 import java.util.*;
+import java.util.logging.Level;
 
 import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
@@ -159,13 +160,11 @@ public class RegisterEnchantments {
 	public static boolean registerEnchantment(CustomEnchantment enchantment) {
 		if (REGISTERED_ENCHANTMENTS.contains(enchantment)) return true;
 		REGISTERED_ENCHANTMENTS.add(enchantment);
-		JavaPlugin plugin = EnchantmentSolution.getPlugin();
-		if (enchantment.getRelativeEnchantment() instanceof ApiEnchantmentWrapper) plugin = ((ApiEnchantmentWrapper) enchantment.getRelativeEnchantment()).getPlugin();
 		boolean custom = enchantment.getRelativeEnchantment() instanceof CustomEnchantmentWrapper;
 		String error_message = "Trouble adding the " + enchantment.getName() + (custom ? " custom" : "") + " enchantment: ";
 		String success_message = "Added the " + enchantment.getName() + (custom ? " custom" : "") + " enchantment.";
 		if (!custom || Enchantment.getByKey(enchantment.getRelativeEnchantment().getKey()) != null) {
-			Chatable.get().sendInfo(success_message);
+			Chatable.sendDebug(success_message);
 			return true;
 		}
 		try {
@@ -173,12 +172,12 @@ public class RegisterEnchantments {
 			f.setAccessible(true);
 			f.set(null, true);
 			Enchantment.registerEnchantment(enchantment.getRelativeEnchantment());
-			Chatable.get().sendInfo(plugin, success_message);
+			Chatable.sendDebug(success_message);
 			return true;
 		} catch (Exception e) {
 			REGISTERED_ENCHANTMENTS.remove(enchantment);
 
-			Chatable.get().sendWarning(plugin, error_message);
+			Chatable.sendDebug(error_message, Level.WARNING);
 			e.printStackTrace();
 			return false;
 		}
@@ -192,6 +191,7 @@ public class RegisterEnchantments {
 		CURSE_ENCHANTMENTS = null;
 		DISABLED_ENCHANTMENTS = new ArrayList<CustomEnchantment>();
 		boolean levelFifty = ConfigString.LEVEL_FIFTY.getBoolean();
+		Chatable.get().sendInfo("Initializing enchantments...");
 		for(int i = 0; i < ENCHANTMENTS.size(); i++) {
 			CustomEnchantment enchantment = ENCHANTMENTS.get(i);
 			Configurations c = EnchantmentSolution.getPlugin().getConfigurations();
@@ -246,6 +246,7 @@ public class RegisterEnchantments {
 			enchantment.setDisplayName(displayName);
 			enchantment.setDescription(description);
 		}
+		Chatable.get().sendInfo("All enchantments initialized!");
 	}
 
 	public static boolean isEnabled(Enchantment enchant) {
@@ -278,21 +279,20 @@ public class RegisterEnchantments {
 		addDefaultEnchantment(CERegister.LUCK_OF_THE_SEA);
 		addDefaultEnchantment(CERegister.LURE);
 		addDefaultEnchantment(CERegister.MENDING);
-		if (VersionUtils.getVersionNumber() > 3) {
-			addDefaultEnchantment(CERegister.MULTISHOT);
-			addDefaultEnchantment(CERegister.PIERCING);
-		}
+		addDefaultEnchantment(CERegister.MULTISHOT);
+		addDefaultEnchantment(CERegister.PIERCING);
 		addDefaultEnchantment(CERegister.POWER);
 		addDefaultEnchantment(CERegister.PROJECTILE_PROTECTION);
 		addDefaultEnchantment(CERegister.PROTECTION);
 		addDefaultEnchantment(CERegister.PUNCH);
-		if (VersionUtils.getVersionNumber() > 3) addDefaultEnchantment(CERegister.QUICK_CHARGE);
+		addDefaultEnchantment(CERegister.QUICK_CHARGE);
 		addDefaultEnchantment(CERegister.RESPIRATION);
 		addDefaultEnchantment(CERegister.RIPTIDE);
 		addDefaultEnchantment(CERegister.SHARPNESS);
 		addDefaultEnchantment(CERegister.SILK_TOUCH);
 		addDefaultEnchantment(CERegister.SMITE);
-		if (VersionUtils.getVersionNumber() > 11) addDefaultEnchantment(CERegister.SOUL_SPEED);
+		addDefaultEnchantment(CERegister.SOUL_SPEED);
+		if (VersionUtils.isSimilarOrAbove(1, 19, 0)) addDefaultEnchantment(CERegister.SWIFT_SNEAK);
 		addDefaultEnchantment(CERegister.SWEEPING_EDGE);
 		addDefaultEnchantment(CERegister.THORNS);
 		addDefaultEnchantment(CERegister.UNBREAKING);
@@ -314,7 +314,7 @@ public class RegisterEnchantments {
 		addDefaultEnchantment(CERegister.DETONATOR);
 		addDefaultEnchantment(CERegister.DROWNED);
 		addDefaultEnchantment(CERegister.EXP_SHARE);
-		if (VersionUtils.getVersionNumber() > 16) addDefaultEnchantment(CERegister.FLASH);
+		if (VersionUtils.isSimilarOrAbove(1, 17, 0)) addDefaultEnchantment(CERegister.FLASH);
 		addDefaultEnchantment(CERegister.FLING);
 		addDefaultEnchantment(CERegister.FLOWER_GIFT);
 		addDefaultEnchantment(CERegister.FORCE_FEED);
@@ -345,11 +345,11 @@ public class RegisterEnchantments {
 		addDefaultEnchantment(CERegister.NO_REST);
 		addDefaultEnchantment(CERegister.OVERKILL);
 		addDefaultEnchantment(CERegister.PACIFIED);
-		if (VersionUtils.getVersionNumber() > 3) addDefaultEnchantment(CERegister.PILLAGE);
+		addDefaultEnchantment(CERegister.PILLAGE);
 		addDefaultEnchantment(CERegister.PLYOMETRICS);
 		addDefaultEnchantment(CERegister.PUSHBACK);
 		addDefaultEnchantment(CERegister.QUICK_STRIKE);
-		if (VersionUtils.getVersionNumber() > 16) addDefaultEnchantment(CERegister.RARE_EARTH);
+		if (VersionUtils.isSimilarOrAbove(1, 17, 0)) addDefaultEnchantment(CERegister.RARE_EARTH);
 		addDefaultEnchantment(CERegister.RECYCLER);
 		addDefaultEnchantment(CERegister.SACRIFICE);
 		addDefaultEnchantment(CERegister.SAND_VEIL);
@@ -360,7 +360,7 @@ public class RegisterEnchantments {
 		addDefaultEnchantment(CERegister.SOUL_REAPER);
 		addDefaultEnchantment(CERegister.SPLATTER_FEST);
 		addDefaultEnchantment(CERegister.STICKY_HOLD);
-		if (VersionUtils.getVersionNumber() > 3) addDefaultEnchantment(CERegister.STONE_THROW);
+		addDefaultEnchantment(CERegister.STONE_THROW);
 		addDefaultEnchantment(CERegister.STREAK);
 		addDefaultEnchantment(CERegister.TANK);
 		addDefaultEnchantment(CERegister.TELEPATHY);

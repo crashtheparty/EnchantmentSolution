@@ -18,7 +18,7 @@ import org.ctp.crashapi.events.EquipEvent.EquipMethod;
 import org.ctp.crashapi.events.ItemAddEvent;
 import org.ctp.crashapi.item.ItemSlot;
 import org.ctp.crashapi.item.ItemSlotType;
-import org.ctp.crashapi.nms.DamageEvent;
+import org.ctp.crashapi.nms.DamageNMS;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.*;
@@ -98,7 +98,7 @@ public class AttributeListener extends Enchantmentable {
 										EnchantmentLevel attrLevel = new EnchantmentLevel(RegisterEnchantments.getCustomEnchantment(enchantment), attr.getLevel());
 										iter.remove();
 										Attributable.removeAttribute(player, attrLevel, attr.getAttribute(), attr.getSlot());
-										DamageEvent.updateHealth(player);
+										DamageNMS.updateHealth(player);
 									}
 								}
 								else if (!a.doesAllowMultiple()) {

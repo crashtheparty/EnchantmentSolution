@@ -1,5 +1,5 @@
 name: EnchantmentSolution
-version: 2.5.3
+version: 2.5.4
 main: org.ctp.enchantmentsolution.EnchantmentSolution
 api-version: 1.16
 depend: [CrashAPI]

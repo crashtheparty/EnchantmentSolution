@@ -22,7 +22,7 @@ import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentList;
 import org.ctp.enchantmentsolution.enchantments.helper.LevelList;
 import org.ctp.enchantmentsolution.events.ESEnchantItemEvent;
-import org.ctp.enchantmentsolution.nms.EnchantItemCriterion;
+import org.ctp.enchantmentsolution.nms.EnchantNMS;
 import org.ctp.enchantmentsolution.persistence.PersistenceUtils;
 import org.ctp.enchantmentsolution.utils.compatibility.JobsUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
@@ -296,7 +296,7 @@ public class EnchantmentTable implements InventoryData {
 			playerItems.set(slot, enchantableItem);
 			setInventory(playerItems);
 			player.setStatistic(Statistic.ITEM_ENCHANTED, player.getStatistic(Statistic.ITEM_ENCHANTED) + 1);
-			EnchantItemCriterion.enchantItemTrigger(player, enchantableItem);
+			EnchantNMS.updateCriterion(player, enchantableItem);
 			if (EnchantmentSolution.getPlugin().isJobsEnabled()) JobsUtils.sendEnchantAction(player, enchantItem, enchantableItem, enchLevels);
 		} catch (Exception ex) {
 			Chatable.sendDebug("An issue occurred with enchanting items (Custom GUI): " + ex.getMessage(), Level.SEVERE);

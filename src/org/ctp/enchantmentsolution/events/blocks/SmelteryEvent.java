@@ -14,15 +14,13 @@ public class SmelteryEvent extends ESBlockDropAddItemEvent {
 
 	private final ItemStack drop;
 	private Material changeTo;
-	private boolean fortune;
 	private int exp;
 
-	public SmelteryEvent(Block block, BlockData blockData, Player player, ItemStack drop, Material changeTo, int exp, boolean fortune) {
+	public SmelteryEvent(Block block, BlockData blockData, Player player, ItemStack drop, Material changeTo, int exp) {
 		super(block, blockData, new EnchantmentLevel(CERegister.SMELTERY, 1), player, Arrays.asList(drop));
 		this.drop = drop;
 		setChangeTo(changeTo);
 		setExp(exp);
-		setFortune(fortune);
 	}
 
 	public Material getChangeTo() {
@@ -33,15 +31,7 @@ public class SmelteryEvent extends ESBlockDropAddItemEvent {
 		this.changeTo = changeTo;
 	}
 
-	public boolean willFortune() {
-		return fortune;
-	}
-
-	public void setFortune(boolean fortune) {
-		this.fortune = fortune;
-	}
-
-	public int getExp() {
+	public int getExp() { 
 		return exp;
 	}
 

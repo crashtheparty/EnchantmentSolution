@@ -14,6 +14,7 @@ import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.loot.LootContext;
 import org.bukkit.loot.Lootable;
+import org.ctp.crashapi.enchantment.EnchantmentData;
 import org.ctp.enchantmentsolution.enums.EnchantmentLocation;
 import org.ctp.enchantmentsolution.utils.GenerateUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
@@ -34,12 +35,14 @@ public class LootUtils {
 		for(int i = 0; i < inv.getSize(); i++) {
 			ItemStack item = inv.getItem(i);
 			if (item == null) continue;
+			EnchantmentLocation location = EnchantmentLocation.CHEST_LOOT;
+			if (EnchantmentUtils.hasEnchantment(item, Enchantment.SOUL_SPEED)) location = EnchantmentLocation.PIGLIN_TRADES;
+			if (EnchantmentUtils.hasEnchantment(item, new EnchantmentData("SWIFT_SNEAK").getEnchantment())) location = EnchantmentLocation.DEEP_DARK;
 
-			boolean soulSpeed = EnchantmentUtils.hasEnchantment(item, Enchantment.SOUL_SPEED);
 			if (!ConfigString.USE_ENCHANTED_BOOKS.getBoolean() && item.getType() == Material.ENCHANTED_BOOK) {
 				item.setType(Material.BOOK);
-				item = GenerateUtils.generateChestLoot(player, item, type);
-			} else if (item.getEnchantments().size() > 0) item = GenerateUtils.generateChestLoot(player, item, type, soulSpeed ? EnchantmentLocation.PIGLIN_TRADES : EnchantmentLocation.CHEST_LOOT);
+				item = GenerateUtils.generateChestLoot(player, item, type, location);
+			} else if (item.getEnchantments().size() > 0) item = GenerateUtils.generateChestLoot(player, item, type, location);
 			inv.setItem(i, item);
 		}
 	}
@@ -57,11 +60,13 @@ public class LootUtils {
 		for(int i = 0; i < inv.getSize(); i++) {
 			ItemStack item = inv.getItem(i);
 
-			boolean soulSpeed = EnchantmentUtils.hasEnchantment(item, Enchantment.SOUL_SPEED);
+			EnchantmentLocation location = EnchantmentLocation.CHEST_LOOT;
+			if (EnchantmentUtils.hasEnchantment(item, Enchantment.SOUL_SPEED)) location = EnchantmentLocation.PIGLIN_TRADES;
+			if (EnchantmentUtils.hasEnchantment(item, new EnchantmentData("SWIFT_SNEAK").getEnchantment())) location = EnchantmentLocation.DEEP_DARK;
 			if (!ConfigString.USE_ENCHANTED_BOOKS.getBoolean() && item.getType() == Material.ENCHANTED_BOOK) {
 				item.setType(Material.BOOK);
 				item = GenerateUtils.generateChestLoot(player, item, type);
-			} else if (item.getEnchantments().size() > 0) item = GenerateUtils.generateChestLoot(player, item, type, soulSpeed ? EnchantmentLocation.PIGLIN_TRADES : EnchantmentLocation.CHEST_LOOT);
+			} else if (item.getEnchantments().size() > 0) item = GenerateUtils.generateChestLoot(player, item, type, location);
 		}
 	}
 }

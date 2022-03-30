@@ -16,7 +16,8 @@ public enum GaiaTrees {
 	OAK(LogType.OAK, Arrays.asList("OAK_LEAVES", "AZALEA_LEAVES", "FLOWERING_AZALEA_LEAVES"), "OAK_SAPLING", getOverworldGrow()),
 	SPRUCE(LogType.SPRUCE, Arrays.asList("SPRUCE_LEAVES"), "SPRUCE_SAPLING", getOverworldGrow()),
 	CRIMSON(LogType.CRIMSON, Arrays.asList("NETHER_WART_BLOCK"), "CRIMSON_FUNGUS", Arrays.asList("CRIMSON_NYLIUM", "WARPED_NYLIUM")),
-	WARPED(LogType.WARPED, Arrays.asList("WARPED_WART_BLOCK"), "WARPED_FUNGUS", Arrays.asList("CRIMSON_NYLIUM", "WARPED_NYLIUM"));
+	WARPED(LogType.WARPED, Arrays.asList("WARPED_WART_BLOCK"), "WARPED_FUNGUS", Arrays.asList("CRIMSON_NYLIUM", "WARPED_NYLIUM")), 
+	MANGROVE(LogType.MANGROVE, Arrays.asList("MANGROVE_LEAVES"), "MANGROVE_PROPAGULE", getOverworldGrow());
 
 	private final LogType log;
 	private final MatData sapling;
@@ -40,7 +41,7 @@ public enum GaiaTrees {
 	}
 
 	private static List<String> getOverworldGrow() {
-		return Arrays.asList("GRASS_BLOCK", "GRASS_PATH", "DIRT", "PODZOL");
+		return Arrays.asList("GRASS_BLOCK", "GRASS_PATH", "DIRT", "PODZOL", "MUD");
 	}
 
 	public List<MatData> getGrowable() {

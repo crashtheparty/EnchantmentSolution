@@ -6,17 +6,11 @@ import org.ctp.crashapi.config.Configuration;
 import org.ctp.crashapi.config.Language;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.utils.Configurations;
-import org.ctp.enchantmentsolution.utils.VersionUtils;
 
 public class ConfigUtils {
 
 	private ConfigUtils() {
 
-	}
-
-	public static boolean useLegacyGrindstone() {
-		if (VersionUtils.getVersionNumber() < 4) return ConfigString.LEGACY_GRINDSTONE.getBoolean();
-		return false;
 	}
 
 	public static boolean isRepairable(CustomEnchantment enchant) {

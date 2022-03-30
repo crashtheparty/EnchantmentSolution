@@ -114,7 +114,7 @@ public class BlockUtils {
 			Location loc = newBlock.getLocation().clone().add(0.5, 0.5, 0.5);
 			if (ConfigString.USE_PARTICLES.getBoolean()) loc.getWorld().spawnParticle(Particle.BLOCK_CRACK, loc, 20, newBlock.getBlockData());
 			if (ConfigString.PLAY_SOUND.getBoolean()) {
-				BlockSound sound = BlockSound.getSound(newBlock.getType());
+				BlockSound sound = BlockSound.getSound(newBlock, "break");
 				loc.getWorld().playSound(loc, sound.getSound(), sound.getVolume(), sound.getPitch());
 			}
 			Collection<ItemStack> drops = newBlock.getDrops(item, player);
@@ -142,7 +142,7 @@ public class BlockUtils {
 			Location loc = newBlock.getLocation().clone().add(0.5, 0.5, 0.5);
 			if (ConfigString.USE_PARTICLES.getBoolean()) loc.getWorld().spawnParticle(Particle.BLOCK_CRACK, loc, 20, newBlock.getBlockData());
 			if (ConfigString.PLAY_SOUND.getBoolean()) {
-				BlockSound sound = BlockSound.getSound(newBlock.getType());
+				BlockSound sound = BlockSound.getSound(newBlock, "break");
 				loc.getWorld().playSound(loc, sound.getSound(), sound.getVolume(), sound.getPitch());
 			}
 			Collection<ItemStack> drops = newBlock.getDrops(item, player);

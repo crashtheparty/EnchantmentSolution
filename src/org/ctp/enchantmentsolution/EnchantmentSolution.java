@@ -96,7 +96,6 @@ public class EnchantmentSolution extends CrashAPIPlugin {
 		if (!getDataFolder().exists()) getDataFolder().mkdirs();
 		Chatable.get().sendInfo("Minecraft Version: " + VersionUtils.getMinecraftVersion());
 		Chatable.get().sendInfo("Minecraft API Version: " + VersionUtils.getMinecraftAPIVersion());
-		Chatable.get().sendInfo("CrashAPI Version Number: " + VersionUtils.getVersionNumber());
 		Chatable.get().sendInfo("EnchantmentSolution Version: " + VersionUtils.getESVersionName());
 
 		db = new ESBackup(this);
@@ -112,10 +111,6 @@ public class EnchantmentSolution extends CrashAPIPlugin {
 
 	@Override
 	public void onEnable() {
-		if (VersionUtils.getVersionNumber() < 4) {
-			Chatable.get().sendWarning("WARNING: Minecraft 1.13 is now deprecated! Support will not be offered for any issues with enchantments or NMS.");
-			Chatable.get().sendWarning("Please use an older version of EnchantmentSolution (2.3.x) if problems persist.");
-		}
 		registerEvent(new InventoryClick());
 		registerEvent(new InventoryClose());
 		registerEvent(new PlayerInteract());

@@ -23,7 +23,6 @@ import org.ctp.enchantmentsolution.api.ApiEnchantmentWrapper;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.enums.ItemBreakType;
-import org.ctp.enchantmentsolution.enums.VanillaEnchantment;
 import org.ctp.enchantmentsolution.events.AttributeEvent;
 import org.ctp.enchantmentsolution.events.ESPlayerEvent;
 import org.ctp.enchantmentsolution.events.blocks.*;
@@ -86,7 +85,7 @@ public class RPGListener extends Enchantmentable implements Runnable {
 			if (EnchantmentUtils.hasEnchantment(item, Enchantment.ARROW_INFINITE)) giveExperience(player, Enchantment.ARROW_INFINITE, EnchantmentUtils.getLevel(item, Enchantment.ARROW_INFINITE));
 			if (EnchantmentUtils.hasEnchantment(item, Enchantment.QUICK_CHARGE)) giveExperience(player, Enchantment.QUICK_CHARGE, EnchantmentUtils.getLevel(item, Enchantment.QUICK_CHARGE));
 			if (item != null && item.getType() == Material.TRIDENT && EnchantmentUtils.hasEnchantment(item, Enchantment.LOYALTY)) giveExperience(player, Enchantment.LOYALTY, EnchantmentUtils.getLevel(item, Enchantment.LOYALTY));
-			if (EnchantmentUtils.hasEnchantment(item, VanillaEnchantment.MULTISHOT.getEnchantment())) giveExperience(player, VanillaEnchantment.MULTISHOT.getEnchantment(), EnchantmentUtils.getLevel(item, VanillaEnchantment.MULTISHOT.getEnchantment()));
+			if (EnchantmentUtils.hasEnchantment(item, Enchantment.MULTISHOT)) giveExperience(player, Enchantment.MULTISHOT, EnchantmentUtils.getLevel(item, Enchantment.MULTISHOT));
 		}
 	}
 
@@ -223,7 +222,7 @@ public class RPGListener extends Enchantmentable implements Runnable {
 					if (!Arrays.asList("BLAZE", "ZOMBIE_PIGMAN", "ZOMBIE_PIGLIN", "ZOGLIN", "WITHER_SKELETON", "STRIDER").contains(entity.getType().name()) && EnchantmentUtils.hasEnchantment(item, Enchantment.ARROW_FIRE)) giveExperience(player, Enchantment.ARROW_FIRE, EnchantmentUtils.getLevel(item, Enchantment.ARROW_FIRE));
 					if (EnchantmentUtils.hasEnchantment(item, Enchantment.ARROW_DAMAGE)) giveExperience(player, Enchantment.ARROW_DAMAGE, EnchantmentUtils.getLevel(item, Enchantment.ARROW_DAMAGE));
 					if (EnchantmentUtils.hasEnchantment(item, Enchantment.ARROW_KNOCKBACK)) giveExperience(player, Enchantment.ARROW_KNOCKBACK, EnchantmentUtils.getLevel(item, Enchantment.ARROW_KNOCKBACK));
-					if (EnchantmentUtils.hasEnchantment(item, VanillaEnchantment.PIERCING.getEnchantment())) giveExperience(player, VanillaEnchantment.PIERCING.getEnchantment(), EnchantmentUtils.getLevel(item, VanillaEnchantment.PIERCING.getEnchantment()));
+					if (EnchantmentUtils.hasEnchantment(item, Enchantment.PIERCING)) giveExperience(player, Enchantment.PIERCING, EnchantmentUtils.getLevel(item, Enchantment.PIERCING));
 
 					if (e2 instanceof Trident) {
 						ItemStack trident = ((Trident) e2).getItem();

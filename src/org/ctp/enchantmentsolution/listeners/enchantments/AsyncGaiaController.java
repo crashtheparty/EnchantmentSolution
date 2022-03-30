@@ -80,7 +80,9 @@ public class AsyncGaiaController {
 					if (loc.getBlock().getType() == leaf.getMaterial()) contains = true;
 				if (contains) {
 					BlockUtils.multiBreakBlock(player, null, loc, RegisterEnchantments.GAIA);
-					if (Math.random() < 0.02) {
+					double chance = 0.02;
+					if (tree == GaiaTrees.MANGROVE) chance = 0.001;
+					if (Math.random() < chance) {
 						ItemStack sapling = new ItemStack(tree.getSapling().getMaterial());
 						Item i = loc.getWorld().dropItemNaturally(loc, sapling);
 						i.setPickupDelay(Integer.MAX_VALUE);

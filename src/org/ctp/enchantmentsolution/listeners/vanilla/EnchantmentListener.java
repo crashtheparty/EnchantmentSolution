@@ -21,7 +21,7 @@ import org.ctp.enchantmentsolution.enchantments.CustomEnchantmentWrapper;
 import org.ctp.enchantmentsolution.enchantments.generate.TableEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.*;
 import org.ctp.enchantmentsolution.events.ESEnchantItemEvent;
-import org.ctp.enchantmentsolution.nms.EnchantItemCriterion;
+import org.ctp.enchantmentsolution.nms.EnchantNMS;
 import org.ctp.enchantmentsolution.utils.compatibility.JobsUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
@@ -87,7 +87,7 @@ public class EnchantmentListener implements Listener {
 					item = EnchantmentUtils.addEnchantmentsToItem(item, enchantments);
 					event.getInventory().setItem(0, item);
 					player.setStatistic(Statistic.ITEM_ENCHANTED, player.getStatistic(Statistic.ITEM_ENCHANTED) + 1);
-					EnchantItemCriterion.enchantItemTrigger(player, item);
+					EnchantNMS.updateCriterion(player, item);
 					if (EnchantmentSolution.getPlugin().isJobsEnabled()) JobsUtils.sendEnchantAction(player, item, item, enchantments);
 				} catch (Exception ex) {
 					Chatable.sendDebug("An issue occurred with enchanting items (Vanilla GUI): " + ex.getMessage(), java.util.logging.Level.SEVERE);
