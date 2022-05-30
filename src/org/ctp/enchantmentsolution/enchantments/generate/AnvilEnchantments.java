@@ -17,7 +17,7 @@ import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.enums.EnchantmentLocation;
 import org.ctp.enchantmentsolution.nms.AnvilNMS;
-import org.ctp.enchantmentsolution.nms.PersistenceNMS;
+import org.ctp.enchantmentsolution.persistence.PersistenceUtils;
 import org.ctp.enchantmentsolution.utils.PermissionUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 import org.ctp.enchantmentsolution.utils.config.ConfigUtils;
@@ -69,8 +69,8 @@ public class AnvilEnchantments extends GenerateEnchantments {
 			if (enchant.canCombine() || enchant.getItem() != null && enchant.getItem().getType() == Material.STICK && EnchantmentUtils.hasEnchantment(enchant.getItem(), RegisterEnchantments.STICKY_HOLD)) {
 				for(Material data: ItemType.getRepairMaterials())
 					if (data == enchant.getItemTwo().getType() && ItemData.contains(ItemType.getAnvilType(new ItemData(enchant.getItem())).getAnvilMaterials(), data)) return RepairType.REPAIR;
-				if (enchant.getItem().getType() == Material.STICK && EnchantmentUtils.hasEnchantment(enchant.getItem(), RegisterEnchantments.STICKY_HOLD)) if (PersistenceNMS.isStickyHold(enchant.getItem())) for(Material data: ItemType.getRepairMaterials())
-					if (data == enchant.getItemTwo().getType() && ItemData.contains(ItemType.getAnvilType(new ItemData(new ItemStack(PersistenceNMS.stickyItemType(enchant.getItem())))).getAnvilMaterials(true), data)) return RepairType.STICKY_REPAIR;
+				if (enchant.getItem().getType() == Material.STICK && EnchantmentUtils.hasEnchantment(enchant.getItem(), RegisterEnchantments.STICKY_HOLD) && PersistenceUtils.isStickyHold(enchant.getItem())) for(Material data: ItemType.getRepairMaterials())
+					if (data == enchant.getItemTwo().getType() && ItemData.contains(ItemType.getAnvilType(new ItemData(new ItemStack(PersistenceUtils.stickyItemType(enchant.getItem())))).getAnvilMaterials(true), data)) return RepairType.STICKY_REPAIR;
 				return RepairType.COMBINE;
 			}
 			return null;
@@ -161,6 +161,7 @@ public class AnvilEnchantments extends GenerateEnchantments {
 		if (itemOne.getType() == Material.BOOK || itemOne.getType() == Material.ENCHANTED_BOOK) if (ConfigString.USE_ENCHANTED_BOOKS.getBoolean()) combinedItem = new ItemStack(Material.ENCHANTED_BOOK);
 		else
 			combinedItem = new ItemStack(Material.BOOK);
+		else {}
 		DamageUtils.setDamage(combinedItem, DamageUtils.getDamage(itemOne));
 		RepairType repairType = RepairType.getRepairType(this);
 		if (repairType == null) return;
@@ -181,7 +182,7 @@ public class AnvilEnchantments extends GenerateEnchantments {
 			} else
 				itemTwoLeftover = new ItemStack(Material.AIR);
 			repairCost = 20;
-			combinedItem = DamageUtils.setDamage(PersistenceNMS.repairStickyHold(combinedItem), 0);
+			combinedItem = DamageUtils.setDamage(PersistenceUtils.repairStickyHold(combinedItem), 0);
 			List<EnchantmentLevel> levels = EnchantmentUtils.getEnchantmentLevels(itemOne);
 
 			Player player = getPlayer().getPlayer();
@@ -275,6 +276,13 @@ public class AnvilEnchantments extends GenerateEnchantments {
 	private int setEnchantments() {
 		int cost = 0;
 		ItemStack item = getItem();
+		boolean noUpgrade = false;
+		if (itemTwo.getType() == Material.BOOK || itemTwo.getType() == Material.ENCHANTED_BOOK) {
+			if (item.getType() == Material.BOOK || item.getType() == Material.ENCHANTED_BOOK) noUpgrade = ConfigString.NO_UPGRADE_BOOKS.getBoolean();
+			else
+				noUpgrade = ConfigString.NO_UPGRADE_BOOKS_TO_NON_BOOKS.getBoolean();
+		} else
+			noUpgrade = ConfigString.NO_UPGRADE_NON_BOOKS.getBoolean();
 		Player player = getPlayer().getPlayer();
 
 		ItemMeta firstMeta = item.clone().getItemMeta();
@@ -343,8 +351,9 @@ public class AnvilEnchantments extends GenerateEnchantments {
 					}
 					if (enchantTwo.getLevel() == enchantOne.getLevel()) {
 						if (enchantTwo.getLevel() >= enchantTwo.getEnchant().getMaxLevel()) levelCost = enchantTwo.getLevel();
+						else if (!noUpgrade) levelCost = enchantTwo.getLevel() + 1;
 						else
-							levelCost = enchantTwo.getLevel() + 1;
+							levelCost = enchantTwo.getLevel();
 					} else if (enchantTwo.getLevel() > enchantOne.getLevel()) levelCost = enchantTwo.getLevel();
 					else
 						levelCost = enchantOne.getLevel();

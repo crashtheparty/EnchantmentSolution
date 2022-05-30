@@ -5,10 +5,10 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Item;
 import org.ctp.crashapi.item.MatData;
+import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
-import org.ctp.enchantmentsolution.utils.abilityhelpers.GaiaUtils;
-import org.ctp.enchantmentsolution.utils.abilityhelpers.GaiaUtils.GaiaTrees;
+import org.ctp.enchantmentsolution.utils.abilityhelpers.GaiaTrees;
 import org.ctp.enchantmentsolution.utils.player.ESPlayer;
 
 public class GaiaItemThread extends EnchantmentThread {
@@ -30,7 +30,7 @@ public class GaiaItemThread extends EnchantmentThread {
 			for(MatData m: tree.getGrowable())
 				if (m.getMaterial() == below.getType() && loc.getBlock().isEmpty()) {
 					loc.getBlock().setType(item.getItemStack().getType());
-					GaiaUtils.addLocation(loc);
+					EnchantmentSolution.gaiaAddLocation(loc);
 					AdvancementUtils.awardCriteria(getPlayer().getOnlinePlayer(), ESAdvancement.REFORESTATION, "tree", 1);
 				}
 			item.remove();

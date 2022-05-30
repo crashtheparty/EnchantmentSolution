@@ -1,10 +1,10 @@
 package org.ctp.enchantmentsolution.nms.anvil;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Optional;
 import java.util.function.BiFunction;
 
-import org.bukkit.craftbukkit.v1_17_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -14,29 +14,31 @@ import org.ctp.enchantmentsolution.inventory.Anvil;
 
 import net.minecraft.core.BlockPosition;
 import net.minecraft.network.chat.ChatMessage;
+import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.PacketPlayOutOpenWindow;
 import net.minecraft.server.level.EntityPlayer;
+import net.minecraft.server.network.PlayerConnection;
 import net.minecraft.world.entity.player.EntityHuman;
-import net.minecraft.world.inventory.ContainerAccess;
-import net.minecraft.world.inventory.ContainerAnvil;
+import net.minecraft.world.entity.player.PlayerInventory;
+import net.minecraft.world.inventory.*;
 import net.minecraft.world.level.World;
 
-public class AnvilGUI_v1_17_R1 extends AnvilGUI {
+public class AnvilGUI_2 extends AnvilGUI {
 	private class AnvilContainer extends ContainerAnvil {
-		public AnvilContainer(EntityHuman entity, int windowId, World world) {
-			super(windowId, entity.getInventory(), at(world, new BlockPosition(0, 0, 0)));
+		public AnvilContainer(EntityHuman entity, int windowId, World world) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+			super(windowId, (PlayerInventory) EntityHuman.class.getDeclaredMethod("fq").invoke(entity), at(world, new BlockPosition(0, 0, 0)));
 			setTitle(new ChatMessage("container.anvil"));
 		}
 
 		@Override
-		public boolean canUse(EntityHuman entityhuman) {
+		public boolean a(EntityHuman entityhuman) {
 			return true;
 		}
 	}
 
 	private HashMap<AnvilSlot, ItemStack> items = new HashMap<>();
 
-	public AnvilGUI_v1_17_R1(Player player, final ESAnvilClickEventHandler handler, InventoryData data) {
+	public AnvilGUI_2(Player player, final ESAnvilClickEventHandler handler, InventoryData data) {
 		super(player, handler, data);
 	}
 
@@ -48,16 +50,22 @@ public class AnvilGUI_v1_17_R1 extends AnvilGUI {
 	@SuppressWarnings("resource")
 	@Override
 	public void open() {
-		EntityPlayer p = ((CraftPlayer) getPlayer()).getHandle();
+		EntityPlayer p = (EntityPlayer) getCraftBukkitEntity(getPlayer());
 
 		// Counter stuff that the game uses to keep track of inventories
 		int c = p.nextContainerCounter();
-		World w = p.getWorld();
+		World w = p.W();
 
-		AnvilContainer container = new AnvilContainer(p, c, w);
+		AnvilContainer container;
+		try {
+			container = new AnvilContainer(p, c, w);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return;
+		}
 
 		// Set the items to the items from the inventory given
-		Inventory inv = container.getBukkitView().getTopInventory();
+		Inventory inv = getInventory(container);
 
 		for(AnvilSlot slot: items.keySet())
 			inv.setItem(slot.getSlot(), items.get(slot));
@@ -65,19 +73,29 @@ public class AnvilGUI_v1_17_R1 extends AnvilGUI {
 		inv.setItem(0, getItemStack());
 
 		setInventory(container.getBukkitView().getTopInventory());
-
 		// Send the packet
-		p.b.sendPacket(new PacketPlayOutOpenWindow(c, container.getType(), new ChatMessage("Repairing")));
+		PlayerConnection b = p.b;
+		try {
+			@SuppressWarnings("unchecked")
+			PacketPlayOutOpenWindow packet = new PacketPlayOutOpenWindow(c, (Containers<ContainerAnvil>) (Container.class.getDeclaredMethod("a").invoke(container)), new ChatMessage("Repairing"));
+			b.getClass().getDeclaredMethod("a", Packet.class).invoke(b, packet);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
 
 		// Set their active container to the container
-		p.initMenu(container);
-		p.bV = container;
+		try {
+			p.getClass().getDeclaredMethod("a", Container.class).invoke(p, container);
+			EntityHuman.class.getDeclaredField("bW").set(p, container);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
 	}
 
 	public static void createAnvil(Player player, InventoryData data) {
 		ESAnvilClickEventHandler handler = ESAnvilClickEventHandler.getHandler(player, data);
 		if (data instanceof Anvil) ((Anvil) data).setInLegacy(true);
-		AnvilGUI_v1_17_R1 gui = new AnvilGUI_v1_17_R1(player, handler, data);
+		AnvilGUI_2 gui = new AnvilGUI_2(player, handler, data);
 		gui.open();
 	}
 

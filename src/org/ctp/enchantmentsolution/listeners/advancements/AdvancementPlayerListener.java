@@ -8,6 +8,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -17,8 +18,7 @@ import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
-import org.ctp.crashapi.events.ArmorEquipEvent;
-import org.ctp.crashapi.events.ItemEquipEvent;
+import org.ctp.crashapi.events.EquipEvent;
 import org.ctp.crashapi.item.ItemSlotType;
 import org.ctp.crashapi.item.MatData;
 import org.ctp.crashapi.utils.LocationUtils;
@@ -70,39 +70,33 @@ public class AdvancementPlayerListener implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR)
-	public void onArmorEquip(ArmorEquipEvent event) {
-		if (event.isCancelled()) return;
-		Bukkit.getScheduler().runTaskLater(EnchantmentSolution.getPlugin(), () -> {
-			if (EnchantmentUtils.hasEnchantment(event.getNewArmorPiece(), RegisterEnchantments.TANK)) {
-				Player player = event.getPlayer();
-				boolean hasTank = true;
-				for(ItemStack item: player.getInventory().getArmorContents())
-					if (item == null || !(EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.TANK) && EnchantmentUtils.getLevel(item, RegisterEnchantments.TANK) >= CERegister.TANK.getMaxLevel())) hasTank = false;
-
-				if (hasTank) AdvancementUtils.awardCriteria(player, ESAdvancement.PANZER_SOLDIER, "tank");
-			}
-			if (EnchantmentUtils.hasEnchantment(event.getNewArmorPiece(), RegisterEnchantments.FORCE_FEED)) {
-				Player player = event.getPlayer();
-				boolean hasFeed = true;
-				for(ItemStack item: player.getInventory().getArmorContents())
-					if (item == null || !EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.FORCE_FEED)) hasFeed = false;
-
-				if (hasFeed) AdvancementUtils.awardCriteria(player, ESAdvancement.HUNGRY_HIPPOS, "armor");
-			}
-		}, 0l);
-	}
-
-	@EventHandler(priority = EventPriority.MONITOR)
-	public void onItemEquip(ItemEquipEvent event) {
+	public void onEquip(EquipEvent event) {
 		if (event.isCancelled()) return;
 		ItemStack item = event.getNewItem();
-		if (event.getSlot() == ItemSlotType.MAIN_HAND) Bukkit.getScheduler().runTaskLater(EnchantmentSolution.getPlugin(), () -> {
-			if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.CURSE_OF_STAGNANCY)) {
-				Player player = event.getPlayer();
-				if (item.getType() == Material.IRON_PICKAXE && EnchantmentUtils.hasEnchantment(item, Enchantment.DURABILITY) && EnchantmentUtils.getLevel(item, Enchantment.DURABILITY) >= CERegister.UNBREAKING.getMaxLevel()) AdvancementUtils.awardCriteria(player, ESAdvancement.STAINLESS_STEEL, "iron_pickaxe");
-				if (item.getType() == new MatData("NETHERITE_SWORD").getMaterial() && EnchantmentUtils.hasEnchantment(item, Enchantment.DAMAGE_ALL) && EnchantmentUtils.getLevel(item, Enchantment.DAMAGE_ALL) >= CERegister.SHARPNESS.getMaxLevel()) AdvancementUtils.awardCriteria(player, ESAdvancement.NETHER_DULL, "netherite_sword");
-			}
-		}, 0l);
+		HumanEntity entity = event.getEntity();
+		if (entity instanceof Player && event.getType() == ItemSlotType.MAIN_HAND) {
+			Player player = (Player) entity;
+			Bukkit.getScheduler().runTaskLater(EnchantmentSolution.getPlugin(), () -> {
+				if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.CURSE_OF_STAGNANCY)) {
+					if (item.getType() == Material.IRON_PICKAXE && EnchantmentUtils.hasEnchantment(item, Enchantment.DURABILITY) && EnchantmentUtils.getLevel(item, Enchantment.DURABILITY) >= CERegister.UNBREAKING.getMaxLevel()) AdvancementUtils.awardCriteria(player, ESAdvancement.STAINLESS_STEEL, "iron_pickaxe");
+					if (item.getType() == new MatData("NETHERITE_SWORD").getMaterial() && EnchantmentUtils.hasEnchantment(item, Enchantment.DAMAGE_ALL) && EnchantmentUtils.getLevel(item, Enchantment.DAMAGE_ALL) >= CERegister.SHARPNESS.getMaxLevel()) AdvancementUtils.awardCriteria(player, ESAdvancement.NETHER_DULL, "netherite_sword");
+				}
+				if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.TANK)) {
+					boolean hasTank = true;
+					for(ItemStack i: player.getInventory().getArmorContents())
+						if (i == null || !(EnchantmentUtils.hasEnchantment(i, RegisterEnchantments.TANK) && EnchantmentUtils.getLevel(i, RegisterEnchantments.TANK) >= CERegister.TANK.getMaxLevel())) hasTank = false;
+
+					if (hasTank) AdvancementUtils.awardCriteria(player, ESAdvancement.PANZER_SOLDIER, "tank");
+				}
+				if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.FORCE_FEED)) {
+					boolean hasFeed = true;
+					for(ItemStack i: player.getInventory().getArmorContents())
+						if (i == null || !EnchantmentUtils.hasEnchantment(i, RegisterEnchantments.FORCE_FEED)) hasFeed = false;
+
+					if (hasFeed) AdvancementUtils.awardCriteria(player, ESAdvancement.HUNGRY_HIPPOS, "armor");
+				}
+			}, 0l);
+		}
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR)

@@ -49,6 +49,7 @@ all:
 - lime_stained_glass_pane
 - magenta_stained_glass
 - magenta_stained_glass_pane
+- mangrove_leaves
 - melon
 - mushroom_stem
 - mycelium
@@ -64,6 +65,11 @@ all:
 - red_mushroom_block
 - red_stained_glass
 - red_stained_glass_pane
+- sculk
+- sculk_catalyst
+- sculk_sensor
+- sculk_shrieker
+- sculk_vein
 - sea_lantern
 - spruce_leaves
 - tube_coral

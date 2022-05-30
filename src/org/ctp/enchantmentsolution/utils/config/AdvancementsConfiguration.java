@@ -32,7 +32,7 @@ public class AdvancementsConfiguration extends Configuration {
 				config.addDefault("advancements." + advancement.getNamespace().getKey() + ".enable", false);
 				config.addDefault("advancements." + advancement.getNamespace().getKey() + ".toast", false);
 				config.addDefault("advancements." + advancement.getNamespace().getKey() + ".announce", false);
-			} else if (advancement.getActivatedVersion() < VersionUtils.getVersionNumber()) {
+			} else if (VersionUtils.isBelowOrZero(advancement.getActivatedVersion())) {
 				config.addDefault("advancements." + advancement.getNamespace().getKey() + ".enable", true);
 				config.addDefault("advancements." + advancement.getNamespace().getKey() + ".toast", true);
 				config.addDefault("advancements." + advancement.getNamespace().getKey() + ".announce", true);

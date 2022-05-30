@@ -1,0 +1,1285 @@
+starter: '&8[&dEnchantment Solution&8]'
+wiki: 
+    message: '&fVe más información acerca de &dEnchantment Solution&f en: '
+anvil: 
+    name: '&9Yunque'
+    mirror: '&f'
+    rename: '&aRenombra Items'
+    rename-requires-permission: '&cNo tienes permiso para usar esto!'
+    repair-cost: '&aCoste de nivel: &9%repairCost%'
+    repair-cost-high: '&cCoste de nivel: &9%repairCost%'
+    cannot-repair: '&cCoste de nivel: &9No se puede reparar este item'
+    combine: '&aCombina items'
+    cannot-combine: '&cNo se puede combinar'
+    cannot-rename: '&cNo se puede renombrar'
+    message-cannot-combine: 'No puedes combinar esos items!'
+    message-cannot-combine-cost: 'No puedes combinar esos items! El coste de nivel es %level%!'
+    legacy-gui: '&fAbrir el GUI del yunque de Minecraft'
+    legacy-gui-warning: 
+    - '&cLos encantamientos personalizados no funcionan en este yunque y podrían perderse.'
+    - '&cOtras características también no funcionarán.'
+    - '&cEsto sólo debería usarse para recetas personalizadas.'
+
+    legacy-gui-open: '&fEl GUI de Minecraft abrirá con el siguiente click al yunque.'
+    legacy-gui-close: '&fGUI de Minecraft cerrado.'
+table: 
+    name: '&9Mesa de encantamiento'
+    black-mirror: '&f'
+    red-mirror: '&f'
+    blue-mirror: '&1Añade Lapis'
+    blue-mirror-lore: 
+    - '&9Selecciona Lapis en tu inventario y añádelo a esta ranura.'
+
+    instructions-title: 'Instrucción de Encantamientos.'
+    instructions: 
+    - 'Click en tus items para añadirlos a la izquierda.'
+    - 'Verás una lista de libros con los niveles'
+    - 'y lapis necesario para encantar.'
+    - 'Selecciona un libro para encantar.'
+    - 'Selecciona un item de nuevo para remover'
+    - 'Puedes colocar hasta 4 items a la vez.'
+
+    generate-enchants-error: 'Hubo un error generando los encantamientos.'
+    enchant-level: 'Encantamiento de nivel %level%.'
+    enchant-level-lore: 
+    - 'Nvls Req: %levelReq%.'
+    - 'Nvls Coste: %level%.'
+    - 'Nvls Tomados: %levelsTaken%.'
+
+    level-fifty-disabled: 'Encantamientos de nivel 50 deshabilitados.'
+    level-fifty-lack: 'Requiere 15 librerías al rededor de la mesa de encantamientos.'
+    lapis-cost-okay: '&aCoste de Lapis: %cost%'
+    lapis-cost-lack: '&cCoste de Lapis: %cost%'
+    level-cost-okay: '&aNiveles Req: %levelReq%'
+    level-cost-lack: '&cNiveles Req: %levelReq%'
+    level-taken-okay: '&aNiveles Tomados: %levelsTaken%'
+    level-taken-lack: '&cNiveles Tomados: %levelsTaken%'
+    item-enchant-name: 'Encantamiento %name% nivel %level%'
+    enchant-name: '%enchant%...'
+    lack-reqs: 'No tienes los requerimientos para encantar este item.'
+    lack-enchants: 'Este item no tiene encantamientos generados.'
+commands: 
+    no-command: '&cEl subcomando %command% no existe!'
+    no-permission: '&cNo tienes permiso de usar este comando!'
+    no-permission-other: '&cNo tienes permiso de usar este comando en otro jugador!'
+    invalid-level: '%level% no es un nivel válido. Ajustando nivel a 1.'
+    invalid-level-positive-integer: 'Nivel (%level%) debe ser un entero positivo.'
+    level-too-low: 'No puede ser un nivel negativo o 0. Ajustando nivel a 1.'
+    level-too-high: '%level% es un nivel muy alto. Ajustando nivel a %maxLevel%.'
+    invalid-slot: '%slot% no es una ranura válida. Ajustando ranura a la mano principal del jugador.'
+    slot-too-low: 'No se puede establecer una ranura negativa. Ajustando ranura a la mano principal del jugador.'
+    slot-too-high: '%slot% es una ranura muy alta. Ajustando ranura a la mano principal del jugador.'
+    invalid-player: '%player% no es un jugador válido.'
+    add-enchant: 'Encantamiento con nombre %enchant% con el nivel %level% fue añadido al item en la ranura %slot%.'
+    add-enchant-other: 'Encantamiento con nombre %enchant% con el nivel %level% fue añadido al item %give_player% en la ranura %slot%.'
+    other-added-enchant: 'Jugador %player% se le ha dado el encantamiento %enchant% con el nivel %level% al item en la ranura %slot%.'
+    cannot-enchant-item: 'El encantamiento no funciona con este item.'
+    too-many-enchants: 'Este item contiene ya demasiados encantamientos.'
+    enchant-fail: 'Debes intentar encantar un item.'
+    enchant-not-found: 'Encantamiento con el nombre %enchant% no encontrado.'
+    enchant-not-specified: 'Debes espeficiar un encantamiento.'
+    enchant-removed: 'Encantamiento con el nombre %enchant% ha sido removido del item en la ranura %slot%.'
+    enchant-removed-other: 'Encantamiento con el nombre %enchant% ha sido removido del item de %remove_player% en la ranura %slot%.'
+    other-removed-enchant: 'Jugador %player% removió el encantamiento %enchant% del item en la ranura %slot%.'
+    enchant-remove-from-item: 'El item no existe.'
+    reload: 'Configuración de archivos recargado.'
+    enchant-disabled: 'No se puede encantar el item con un encantamiento deshabilitado.'
+    reset-inventory: 'Se han cerrado todos los inventarios personalizados y se ha reiniciado la mesa de encantamientos.'
+    debug: 'La información debug se ha almacenado en debug.yml'
+    invalid-amount: '%amount% no es un monto válido. Ajustando monto a 1.'
+    give-book: 'Te has dado un libro encantado.'
+    give-book-other: 'Has dado a %give_player% un libro encantado.'
+    give-book-other-multiple: 'Has dado a %give_player% %amount% libros encantados.'
+    give-book-multiple: 'Te has dado %amount% libros encantados.'
+    give-book-console: 'La consola debe especificar un jugador válido para darle el libro.'
+    receive-book: '%player% te ha dado un libro encantado.'
+    receive-book-multiple: '%player% te ha dado %amount% libros encantados.'
+    fix-enchants: 'Has arreglado %fixed_items% items encantados del total de %total_items% en tu inventario. %fixed_item_string%'
+    fix-enchants-other: 'Has arreglado %fixed_items% items encantados del total de %total_items% en el inventario de %fix_player%. %fixed_item_string%'
+    other-fixed-enchants: 'Jugador %player% ha arreglado tus items encantados.'
+    fixed-item-string: 'Ranura: %slot% Material: %material%'
+    rpg-set-level: 'Se estableció el nivel ESRPG de %player% a %level%.'
+    specify-level-integer: 'Debes especificar un entero para establecer el nivel del jugador.'
+    invalid-experience-positive-double: 'Experiencia (%experience%) debe ser un doble positivo.'
+    rpg-set-experience: 'Se estableció la experiencia ESRPG del jugador %player% a %experience%.'
+    specify-experience-double: 'Debes especificar un doble para establecer la experiencia del jugador.'
+    rpg-level-too-low: 'No se puede establecer un nivel negativo en ESRPG. Ajustando el nivel a 0'
+    remove-rpg-enchantment: 'Removiendo encantamiento %enchantment% de los valores ESRPG de %player%.'
+    set-rpg-enchantment: 'Ajustando encantamiento %enchantment% al nivel %level% para el valor ESRPG de %player%.'
+    rpg-invalid-edit: 'RPGEdit solo puede editar el nivel, experiencia, y encantamientos para jugadores.'
+    item-test: '&aCopiar al portapapeles: {%item%}'
+    console-player: 'Consola'
+    invalid: 
+        console: 'Enviador de consola'
+        null-player: '**nulo**'
+    alias: 
+        enchant: 
+        - 'e'
+        - 'customenchant'
+        - 'ce'
+        - 'esce'
+
+        enchantunsafe: 
+        - 'eu'
+        - 'customenchantunsafe'
+        - 'esu'
+        - 'ceu'
+        - 'esceu'
+
+        removeenchant: 
+        - 'esr'
+        - 'customenchantremove'
+        - 'er'
+        - 'cer'
+        - 'escer'
+
+        esanvil: 
+        - 'anvil'
+
+        esgrindstone: 
+        - 'grindstone'
+
+        esdebug: 
+        - 'debug'
+
+        esbook: 
+        - 'book'
+        - 'custombook'
+        - 'cb'
+        - 'escb'
+
+        info: 
+        - 'einfo'
+        - 'enchantinfo'
+
+        esreload: 
+        - 'reload'
+
+        esreset: 
+        - 'reset'
+
+        esconfig: 
+        - 'config'
+        - 'esedit'
+        - 'ed'
+
+        configlore: 
+        - 'lore'
+        - 'clore'
+        - 'cl'
+
+        escalc: 
+        - 'calc'
+        - 'calculator'
+        - 'esc'
+
+        eshelp: 
+        - 'help'
+        - 'h'
+
+        esfix: 
+        - 'fix'
+        - 'f'
+
+        esrpg: 
+        - 'rpg'
+
+        rpgstats: 
+        - 'stats'
+        - 'rpgs'
+
+        rpgtop: 
+        - 'top'
+        - 'rpgt'
+
+        rpgedit: 
+        - 'rpge'
+
+        estest: 
+        - 'test'
+
+    aliases: 
+        enchant: 
+        - 'e'
+        - 'customenchant'
+        - 'ce'
+        - 'esce'
+
+        enchantunsafe: 
+        - 'eu'
+        - 'customenchantunsafe'
+        - 'esu'
+        - 'ceu'
+        - 'esceu'
+
+        removeenchant: 
+        - 'esr'
+        - 'customenchantremove'
+        - 'er'
+        - 'cer'
+        - 'escer'
+
+        esanvil: 
+        - 'anvil'
+
+        esgrindstone: 
+        - 'grindstone'
+
+        esdebug: 
+        - 'debug'
+
+        esbook: 
+        - 'book'
+        - 'custombook'
+        - 'cb'
+        - 'escb'
+
+        info: 
+        - 'einfo'
+        - 'enchantinfo'
+
+        esreload: 
+        - 'reload'
+
+        esreset: 
+        - 'reset'
+
+        esconfig: 
+        - 'config'
+        - 'esedit'
+        - 'ed'
+
+        configlore: 
+        - 'lore'
+        - 'clore'
+        - 'cl'
+
+        escalc: 
+        - 'calc'
+        - 'calculator'
+        - 'esc'
+
+        eshelp: 
+        - 'help'
+        - 'h'
+
+        esfix: 
+        - 'fix'
+        - 'f'
+
+        esrpg: 
+        - 'rpg'
+
+        rpgstats: 
+        - 'stats'
+        - 'rpgs'
+
+        rpgtop: 
+        - 'top'
+        - 'rpgt'
+
+        rpgedit: 
+        - 'rpge'
+
+        estest: 
+        - 'test'
+
+    descriptions: 
+        enchant: 'Encanta una ranura especificado para un jugador especificado.'
+        enchantunsafe: 'Encanta una ranura especificado para un jugador especificado. Puede encantar cualquier item con cualquier nivel de encantamiento especificado.'
+        removeenchant: 'Remueve una ranura especificado para un jugador especificado.'
+        esanvil: 'Abre el GUI del yunque de ES para ti.'
+        esgrindstone: 'Abre el GUI de la afiladora de ES para ti.'
+        esdebug: 'Generata un archivo debug.yml para ayudar a la desarrolladora a resolver errores.'
+        esbook: 'Da un libro con el encantamiento especificado o uno al azar a un jugador especificado. ignoreLimits en un encantamiento al azar significa no limitar a los encantamientos de los cofres.'
+        info: 'Obtiene la información para un encantamiento especificado, o una lista de encantamientos.'
+        esreload: 'Recarga la configuración de los archivos del servidor.'
+        esreset: 'Reinicia los inventarios y los datos de la mesa de encantamientos para todos los jugadores.'
+        esconfig: 'Modifica la configuración de los archivos en el juego.'
+        configlore: 'Retorna una cadena de color formateado del chat para permitir compatibilidad con otros plugins.'
+        escalc: 'Muestra los valores de encantabilidad para ciertos items y encantamientos o encantamientos potenciales.'
+        eshelp: 'Muestra la descripción y el uso de un comando o comandos especificados.'
+        esfix: 'Arregla los encantamientos en los items.'
+        esrpg: 'Abre el modo ESRPG.'
+        rpgstats: 'Obtiene las estadísticas ESRPG para un jugador en particular.'
+        rpgtop: 'Lista los mejores jugadores en ESRPG.'
+        rpgedit: 'Edita los valores ESRPG para los jugadores.'
+        test: 'Muestra información en items.'
+    usage: 
+        enchant: 
+            main: 'Uso: %usage%\nAlias: %aliases%'
+            string: 'enchant <enchantment> <level> [player] [slot]'
+        enchantunsafe: 
+            main: 'Uso: %usage%\nAlias: %aliases%'
+            string: 'enchantunsafe <enchantment> <level> [player] [slot]'
+        removeenchant: 
+            main: 'Uso: %usage%\nAlias: %aliases%'
+            string: 'removeenchant <enchantment> [player] [slot]'
+        esanvil: 
+            main: 'Uso: %usage%\nAlias: %aliases%'
+            string: 'esanvil'
+        esgrindstone: 
+            main: 'Uso: %usage%\nAlias: %aliases%'
+            string: 'esgrindstone'
+        esdebug: 
+            main: 'Uso: %usage%\nAlias: %aliases%'
+            string: 'esdebug'
+        esbook: 
+            main: 'Uso: %usage%\nAlias: %aliases%'
+            string: 'esbook <enchantment> <level> [amount] OR book <RandomEnchant/RandomMultiEnchant> [ignoreLimits] [amount]'
+        info: 
+            main: 'Uso: %usage%\nAlias: %aliases%'
+            string: 'info [enchantment/page]'
+        esreload: 
+            main: 'Uso: %usage%\nAlias: %aliases%'
+            string: 'esreload'
+        esreset: 
+            main: 'Uso: %usage%\nAlias: %aliases%'
+            string: 'esreset'
+        esconfig: 
+            main: 'Uso: %usage%\nAlias: %aliases%'
+            string: 'esconfig'
+        configlore: 
+            main: 'Uso: %usage%\nAlias: %aliases%'
+            string: 'configlore enchantment/enchant <enchantment> [level] OR lore string <string...>'
+        escalc: 
+            main: 'Uso: %usage%\nAlias: %aliases%'
+            string: 'escalc'
+        eshelp: 
+            main: 'Uso: %usage%\nAlias: %aliases%'
+            string: 'eshelp [command]'
+        esfix: 
+            main: 'Uso: %usage%\nAlias: %aliases%'
+            string: 'esfix [player]'
+        esrpg: 
+            main: 'Uso: %usage%\nAlias: %aliases%'
+            string: 'esrpg'
+        rpgstats: 
+            main: 'Uso: %usage%\nAlias: %aliases%'
+            string: 'rpgstats [player]'
+        rpgtop: 
+            main: 'Uso: %usage%\nAlias: %aliases%'
+            string: 'rpgtop [page]'
+        rpgedit: 
+            main: 'Uso: %usage%\nAlias: %aliases%'
+            string: 'rpgedit <player> <subcommand> [...]'
+        estest: 
+            main: 'Uso: %usage%\nAlias: %aliases%'
+            string: 'estest [''item'']'
+    help: 
+        commands_page: '&bPágina de comandos %page%'
+        commands_info_shrink: '&f: %description%'
+    confirm-reload: 
+    - 'Has hecho cambios con /esconfig que no fueron guardados!'
+    - 'Recargar evitará que esos cambios sean guardados.'
+    - 'Usa ''/esreload confirm'' para confirmar.'
+
+grindstone: 
+    legacy-open: '&aAbre la afiladora'
+    name: '&9Afiladora'
+    mirror: '&f'
+    combine-lore: '&fRepara los items y remueve encantamientos'
+    combine: '&aCombina'
+    cannot-combine: '&cNo se puede combinar'
+    remove-enchants: '&aRemueve encantamientos'
+    no-items: '&fNo hay items'
+    no-items-lore: 
+    - '&fAñade items seleccionándolos de tu inventario'
+
+    no-enchants: '&fEl item no posee encantamientos'
+    no-enchants-lore: 
+    - '&fAñade un segundo item para reparar'
+
+    anvil: '&aAbre el yunque'
+    switch-to-anvil: '&fIr de vuelta al inventario del yunque'
+    message-cannot-combine: '&cNo se puede combinar esos items.'
+    cannot-take-enchantments: '&cCosto de nivel: &9%levelCost%'
+    message-cannot-take-enchantments: '&cNo se pueden tomar los encantamientos de este item'
+    take-enchantments: '&aCosto de nivel: &9%levelCost%'
+    take-enchantments-lore: 
+    - '&fTodos los encantamientos del item van a ir al libro'
+
+calc: 
+    name: '&9Calculador de encantamientos'
+    enchantments: '&9%name%'
+    enchantments_lore: 
+    - '&6Encantabilidad constante: &3%constant%'
+    - '&6Encantabilidad mofiicante: &3%modifier%'
+
+    pagination: 
+        enchantability_by_level: '&9Ver encantabilidad por nivel'
+    info: 
+        constant: '&9Encantabilidad constante'
+        constant_lore: 
+        - '&6Valor actual: &3%constant%'
+        - '&7Click izquierdo para editar con el yunque'
+        - '&7Click derecho para editar con el chat'
+
+        modifier: '&9Encantabilidad Modificante'
+        modifier_lore: 
+        - '&6Valor actual: &3%modifier%'
+        - '&7Click izquierdo para editar con el yunque'
+        - '&7Click derecho para editar con el chat'
+
+        select_enchantment: '&9Selecciona del encantamiento'
+        calculate: '&9Calcular'
+    enchantability_values: 
+        wooden_tools: '&9Armas y herramientas de Madera'
+        golden_tools: '&9Armas y herramientas de Oro'
+        stone_tools: '&9Armas y herramientas de Piedra'
+        iron_tools: '&9Armas y herramientas de hierro'
+        diamond_tools: '&9Armas y herramientas Diamante'
+        netherite_tools: '&9Armas y herramientas de Netherita'
+        leather_armor: '&9Armadura de Cuero'
+        golden_armor: '&9Armadura de Oro'
+        chainmail_armor: '&9Armadura de Mallas'
+        iron_armor: '&9Armadura de hierro'
+        diamond_armor: '&9Armadura de Diamante'
+        netherite_armor: '&9Armadura de Netherita'
+        other: '&9Libros y otros items'
+    enchantability_lore: 
+    - '&6Recurso de encantabilidad: &3%resource%'
+    - '&6Máximo nivel de encantabilidad: &3%max_level%'
+    - '&6Máximo nivel de encantabilidad al nivel %level%: &3%max_enchantability%'
+
+    by_level: '&9Nivel %level%'
+    by_level_lore: 
+    - '&6Encantabilidad requerida: &3%constant%+'
+
+    invalid_number: 'Número inválido, ajustando a 0.'
+    enter_string: 'Ingresar la cadena de mensaje en el chat.'
+rpg: 
+    name: '&9ESRPG'
+    name_enchantment: '&9ESRPG: &f%enchantment%'
+    name_confirm: '&9Confirma desbloqueo %enchantment% %level%'
+    title: '&9ESRPG Información de página &3%page%'
+    instructions: '&9Instrucciones'
+    instructions_lore: 
+    - '&6Todos tus actuales encantamientos van a mostrarse como libros encantados.'
+    - '&6Para añadir un nivel de encantamiento, selecciona el libro,'
+    - '&6 después selecciona el nivel uno a la vez en la siguiente página.'
+
+    info: '&9Información de jugador'
+    info_lore: 
+    - '&6Nivel de experiencia: &3%level%'
+    - '&6Experiencia: &3%experience%'
+    - '&6Puntos: &3%points% / %total_points%'
+
+    mirror: '&f'
+    enchantments: '&9%name%'
+    enchantments_lore: 
+    - '&6Máximo nivel de jugador: &3%level%'
+    - '&6Puntos para comprar el nivel %level_plus_one%: &3%points%'
+
+    enchantments_lore_unlocked: 
+    - '&6Máximo nivel de jugador: &3%level%'
+    - '&7Nivel más alto alcanzado'
+
+    enchantment_levels: '&9%name%'
+    enchantment_levels_lore: 
+    - '&6Puntos para el nivel %level%: &3%points%'
+    - '&7Click izquierdo para comprar un nivel más alto.'
+
+    enchantment_levels_lore_unlocked: 
+    - '&7Nivel desbloqueado.'
+
+    no-permission: '&7No tienes permiso para comprar este encantamiento!'
+    invalid-enchantment: '&7Encantamiento inválido; por favor contacta un administrador.'
+    unlock: 'Has desbloqueado %enchantment% hasta el nivel %level%.'
+    cancel: '&4Cancelar'
+    cancel_lore: 
+    - '&7Ir de vuelta a la pantalla anterior.'
+
+    confirm: '&aConfirmar'
+    confirm_lore: 
+    - '&6Puntos requeridos: &3%total_points%'
+    - '&6Va a desbloquear: &3%enchantment% &7al nivel &3%level%&7.'
+
+    top_bar: 
+        title: '&aNivel ESRPG &f%level% &7(&f%experience%/%next_experience%&7)'
+        title_level_up: '&aESRPG &6+Nivel! &aNivel &f%level% &7(&f%experience%/%next_experience%&7)'
+    level_up_points: '&6Adquirido &f%added_points% &6puntos! &a(Nuevos puntos totales: &f%new_points%&a)'
+    stats: 
+        exp: '&6Nivel: &3%level% &6Experiencia: &3%experience%'
+        enchantment: '&6Encantamiento desbloqueado: &3%enchantment% &fhasta el nivel &3%level%'
+    top: 
+        page: '&bESRPG Página de mejores jugadores %page%'
+        player_stats: '&b%rank%. &3%player% &f(Nivel &3%level%&f)'
+minigame: 
+    name: '&9Mesa de encantamiento'
+    mirror: '&f'
+    fast: 
+        item: '&9%name%'
+        item_lore: 
+        - '&7Click izquierdo para obtener un libro encantado de esta clase.'
+
+    mondays: 
+        item: '&9%name%'
+        item_lore: 
+        - '&4Coste: &6%cost%'
+        - '&7Click izquierdo para obtener un libro encantado'
+        - '&7 con este encantamiento al nivel 1.'
+
+    custom: 
+        item: 
+            name: '&9Material de encantamiento: &3%material%'
+            enchantment: '&6Encantamiento: &3%enchantment% &6Nivel: &3%level%'
+            enchantment_multiple: 
+            - '&6Encantamientos al azar'
+            - '&6Múltiple: &3%multiple%'
+
+            enchantment_level_cost: '&6Coste de niveles de experiencia: &3%lvl_cost%'
+            enchantment_lapis_cost: '&6Coste de LapisLázuli: &3%lapis_cost%'
+            enchantment_economy_cost: '&6%money_name% Coste: &3%money_sign%%economy_cost%'
+    invalid_enchant_name: '&cNombre de encantamiento inválido %name%!'
+    invalid_random_enchant: '&cNo se pudo generar un encantamiento al azar esta vez!'
+    not_enough_levels: '&cNecesitas más niveles de experiencia para este encantamiento! (tienes %player_level%, necesitas %level_cost%.)'
+    not_enough_lapis: '&cNecesitas más lapislázuli para este encantamiento! (tienes %player_lapis% lapis, necesitas %lapis_cost%.)'
+    not_enough_money: '&cNecesitas más %money_name% para este encantamiento! (tienes %money_sign%%player_economy%, necesitas %money_sign%%economy_cost%.)'
+    cannot_get_enchantment: '&cNo se puede obtener el encantamiento! %level%%lapis%%economy%'
+    default_money_name: 'Dólares'
+    default_money_sign: '\$'
+pagination: 
+    go_back: '&9Anterior'
+    previous_page: '&9Página anterior'
+    next_page: '&9Siguiente'
+enchantment: 
+    name: '&6Nombre para mostrar: &f'
+    description: '&6Descripción: &f'
+    descriptions: 
+        default_enchantments: 
+            aqua_affinity: 'Mejora el minado bajo el agua.'
+            bane_of_arthropods: 'Incrementa el daño a los mobs "artrópodos" (Arañas, Arañas de cueva, Lepisma y Endermites y Abejas).\nCada nivel añade 2.5 (medio corazones) de daño extra a cada golpe.\nEl encantamiento también cause que los "artrópodos" tengan el efecto ralentización IV cuando golpeas.'
+            blast_protection: 'Reduce el daño por explosión.\nTambién reduce el empuje de explosión (15 * nivel)%. Si múltiples piezas tienen el encantamiento, sólo se usará el de mayor nivel.'
+            channeling: 'Convoca un rayo cuando un mob es golpeado por un Tridente lanzado.'
+            binding_curse: 'Previene el removimiento del item maldito.\nEl item maldito no puede ser removido de cualquier ranura de armadura (fuera de modo creativo) a menos que el jugador muera o el item se rompa.'
+            vanishing_curse: 'Causa que el item desaparezca al morir.\nCuando el jugador muere, el item desaparece en vez de caer al suelo. El item aún puede ser tirado normalmente.'
+            depth_strider: 'Incremente la velocidad bajo el agua.'
+            efficiency: 'Incrementa la velocidad de minado.\nUno debe de usar la herramienta apropiada para que la velocidad se aplique. No importa si lo minas con el nivel equivocado.'
+            feather_falling: 'Reduce el daño por caída.'
+            fire_aspect: 'Prende fuego al objetivo.\nAspecto Ígneo añade 80 ticks de fuego (4 segundos de quemar) por nivel al objetivo.'
+            fire_protection: 'Reduce el daño por fuego y lava.'
+            flame: 'Flechas llameantes.\nLas flechas están en llamas al dispararlas e inflingen 4 (2 corazones) de daño de fuego en 5 segundos.'
+            fortune: 'Incrementa el botín por minar minerales.'
+            frost_walker: 'Crea hielo al caminar encima del agua.'
+            impaling: 'Incrementa el daño cuerpo a cuerpo contra mobs oceánicos.\nAñade 2.5 (medio corazones) de daño extra por cada nivel adicional.'
+            infinity: 'Disparar no consume flechas regulares.'
+            knockback: 'Incrementa el empuje.'
+            looting: 'Los mobs pueden soltar más botín.'
+            loyalty: 'Retorna un Tridente lanzado si es que golpea algo.'
+            luck_of_the_sea: 'Incrementa la suerte al pezcar.'
+            lure: 'Incrementa la frecuencia de los peces mordiendo tu anzuelo al pezcar.'
+            mending: 'Repara tus items con experiencia.'
+            multishot: 'Dispara múltiples flechas al mismo tiempo.'
+            piercing: 'Las flechas atraviesan y dañan a múltiples mobs.'
+            power: 'Iincrementa el daño de las flechas por 25% por nivel, redondeado al medio-corazón más cercano.'
+            projectile_protection: 'Reduce el daño por proyectil (flechas, las bolas de fuego de los Ghast/Blaze, etc.).'
+            protection: 'Reduce todo el daño, excepto el daño del vacío, el comando /kill y el daño del hambre.'
+            punch: 'Incrementa el empuje en los arcos.'
+            quick_charge: 'Coloca las flechas en la ballesta más rapido.'
+            respiration: 'Extiende la respiración bajo el agua.'
+            riptide: 'Permite que el tridente se use como medio de transportación rápida.'
+            sharpness: 'Incrementa el daño cuerpo a cuerpo.\nAñade 1 (medio corazón) extra de daño por el primer nivel, y 0.5 (medio corazón) por cada nivel adicional.'
+            silk_touch: 'Los bloques minados dan el bloque en sí en vez de dar el item usual.\nPermite la colección de bloques que normalmente son imposibles de obtener.'
+            smite: 'Incrementa el daño a los mobs "no muertos"  (Esqueletos, Zombies, Withers, Esqueletos Wither, Piglins Zombificados, Caballos Esqueletos y Caballos Zombie)\nCada nivel añade 2.5 (medio corazones) extra de daño a cada golpe.'
+            soul_speed: 'Incrementa tu velocidad en la arena de alma y en la tierra de alma.'
+            sweeping_edge: 'Incrementa el daño por barrido.'
+            swift_sneak: 'Movimiento más rápido mientras se escabulle.'
+            thorns: 'Atacantes son dañados cuando atacan al usuario.'
+            unbreaking: 'Incrementa la efectividad de la durabilidad.'
+        custom_enchantments: 
+            angler: 'Atrapas un pez más por cada nivel si atrapaste un pezcado.'
+            armored: 'Añade puntos de armadura por usar la Elytra.'
+            bane_of_anthropoids: 'Incrementa el daño a los mobs humanoides.'
+            beheading: 'Añade chance de soltar las cabezas de las entidades asesinadas.'
+            blindness: 'Ocasiona ceguera en la entidad atacada.'
+            brine: 'Dobla el daño si el mob atacado está a menos de 50% de vida.'
+            butcher: 'Los animales soltarán carne extra.'
+            contagion_curse: 'Propaga maldiciones a los items en tu inventario.'
+            exhaustion_curse: 'Incrementa el agotamiento cuando se equipa.'
+            infestation_curse: 'Los items minados se vuelven su variante infestada si existe.'
+            instability_curse: 'La durabilidad decae con el tiempo'
+            lagging_curse: 'Ah, fuegos artificiales!'
+            stagnancy_curse: 'Mantiene al item como está y previene futuros encantamientos.'
+            depth_plus_plus: 'Incrementa el radio de minado hacia delante, 1 bloque por nivel adicional.'
+            detonator: 'Enciende Creepers. Desencadena una explosión basado en el nivel.'
+            drowned: 'Ahoga a los mobs no-oceánicos por un corto tiempo.'
+            exp_share: 'Incrementa la experiencia ganada por matar mobs y minar bloques.'
+            flash: 'Coloca y actualiza los bloques de luz.'
+            fling: 'Empuja a la entidad hacia el atacante.'
+            flower_gift: 'Chance de soltar flores al hacerles click derecho.'
+            force_feed: 'Toma saturación para reparar la armadura y los items.'
+            frequent_flyer: 'Permite el vuelo con velocidad de (20% + 16% * nivel). Daña el item cada 3 segundos en vuelo.'
+            fried: 'Cocina los veces al atraparlos.'
+            frosty: 'Dispara bolas de nieve al hacer click derecho con la pala.'
+            gaia: 'Rompe los bloques de los árboles con el tiempo y replanta los brotes.'
+            gold_digger: 'Gana experiencia y monedas de oro por romper los cultivos.'
+            green_thumb: 'Romper los cultivos los replanta si es posible.'
+            gung_ho: 'Reduce la vida al 50% del valor base (usualmente 5 corazones). Los ataques cuerpo a cuerpo hacen el triple de daño.'
+            hard_bounce: 'Los proyectiles rebotan del escudo.'
+            height_plus_plus: 'Incrementa el radio de minado verticalmente, 1 bloque por nivel adicional.'
+            hollow_point: 'Incrementa el daño a las entidades con armadura. Permite daño por proyectil a los Enderman y a los Wither acorazados.'
+            husbandry: 'Matar a un animal adulto da una chance de dejar uno bebé atrás.'
+            icarus: 'Volar hacia arriba ocasionalmente incrementará la velocidad.'
+            lasso_of_irene: 'Agarra un animal para cargarlo contigo y colocarlo después.'
+            iron_defense: 'Tener el escudo equipado hará que el daño se redireccione al escudo.'
+            javelin: 'Mayor daño al lanzar Tridentes.'
+            joggers: 'Otorga mayor velocidad.'
+            knockup: 'Incrementa el empuje hacia arriba.'
+            lancer: 'Montar a mobs incrementa el daño a otros mobs.'
+            life: 'Incrementa la vida en 4 (medio corazones) por nivel cuando se usa.'
+            life_drain: 'Roba la vida de una entidad atacada.'
+            light_weight: 'Previene el pisado de cultivos.'
+            magic_guard: 'Niega las pociones negativas.'
+            magma_walker: 'Permite a los jugadores caminar en lava, convirtiéndolo en Magma.'
+            moisturize: 'Moja los bloques al hacerles click derecho.'
+            no_rest: 'Ningún Fantasma aparecerá cerca tuyo.'
+            overkill: 'Dispara flechas al hacer click izquierdo.'
+            pacified: 'Reduce el daño contra tus propios mobs domesticados.'
+            pillage: 'Los mobs pueden soltar más botín.'
+            plyometrics: 'Otorga un mayor salto.'
+            pushback: 'La entidad que te golpee cuando estés bloqueando con el escudo será empujada.'
+            quick_strike: 'Incrementa la velocidad de ataque.'
+            rare_earth: 'Cuando minas la variante de menas de pizarra profunda, obtén una mena variante regular del bloque también.'
+            recycler: 'Convierte el botín normal de mobs en experiencia.'
+            sacrifice: 'Daña al mob que te asesinó basado en el nivel en que estabas.'
+            sand_veil: 'Reduce la precisión de los ataques de la entidad.'
+            shock_aspect: 'Tiene una chance de ocasionar rayos en el mob atacado.'
+            smeltery: 'Cocina el bloque minado.'
+            sniper: 'Incrementa la velocidad de tus proyectiles.'
+            soulbound: 'Conserva el item al morir.'
+            soul_reaper: 'Roba un item encantado con Atadura de Alma al matar jugadores.'
+            splatter_fest: 'Dispara huevos de la azada con click izquierdo.'
+            sticky_hold: 'Romper el item lo reemplazará con un palo que puede ser usado para recrearlo.'
+            stone_throw: 'Incrmenta el daño a distancia contra mobs aéreos.\nAñade 40% * nivel + 20% daño contra mobs voladores.'
+            streak: 'Matar al mismo mob repetidas veces hará que incremente tu daño contra ese tipo de mob.'
+            tank: 'Proporciona irrompibilidad adicional a tu armadura.'
+            telepathy: 'Los items minados van directamente a tu inventario.'
+            toughness: 'Incrementa la dureza.'
+            transmutation: 'Al matar mobs, todo el botín no-oceánico se convierte en botín oceánico.'
+            truant: 'Ralentiza a la entidad atacada.'
+            unrest: 'Visión Nocturna a coste de más Fantasmas apareciendo.'
+            venom: 'Envenena al jugador atacado.'
+            void_walker: 'Permite a los jugadores caminar en el aire, convirtiéndolo en obsidiana.'
+            wand: 'Coloca bloques desde la mano no principal.'
+            warp: 'Chance te teletransportarte una distancia pequeña al ser golpeado.'
+            water_breathing: 'Otorga al jugador respiración bajo el agua.'
+            whipped: 'Chance de domesticar animales o severamente dañar animales domesticables.'
+            width_plus_plus: 'Incrementa el radio de minado horizontalmente, 1 bloque por nivel adicional.'
+            withering: 'Da al jugador atacado el efecto Wither.'
+            zeal: 'Dispara bolas de fuego de la azada con click izquierdo.'
+    max-level: '&6Nivel máximo: &f'
+    weight: '&6Peso: &f'
+    start-level: '&6Nivel inicial: &f'
+    enchantable-items: '&6Items encantables: &f'
+    anvilable-items: '&6Items forjables: &f'
+    conflicting-enchantments: '&6Encantamientos conflictivos: &f'
+    enabled: '&6Encantamiento habilitado: &f'
+    treasure: '&6Encantamiento de botín: &f'
+    advancement-description: 'Descripción: '
+    advancement-max-level: 'Nivel máximo: '
+    advancement-weight: 'Peso: '
+    advancement-conflicting-enchantments: 'Encantamientos conflictivos: '
+    display_names: 
+        default_enchantments: 
+            aqua_affinity: 'Afinidad acuática'
+            bane_of_arthropods: 'Perdición de los artrópodos'
+            blast_protection: 'Protección contra explosiones'
+            channeling: 'Conductividad'
+            binding_curse: 'Maldición de ligamento'
+            vanishing_curse: 'Maldición de desaparición'
+            depth_strider: 'Agilidad acuática'
+            efficiency: 'Eficiencia'
+            feather_falling: 'Caída de pluma'
+            fire_aspect: 'Aspecto ígneo'
+            fire_protection: 'Protección contra el fuego'
+            flame: 'Fuego'
+            fortune: 'Fortuna'
+            frost_walker: 'Paso helado'
+            impaling: 'Empalamiento'
+            infinity: 'Infinidad'
+            knockback: 'Empuje'
+            looting: 'Saqueo'
+            loyalty: 'Lealtad'
+            luck_of_the_sea: 'Suerte de los mares'
+            lure: 'Atracción'
+            mending: 'Reparación'
+            multishot: 'Multidisparo'
+            piercing: 'Perforación'
+            power: 'Poder'
+            projectile_protection: 'Protección contra proyectiles'
+            protection: 'Protección'
+            punch: 'Golpeo'
+            quick_charge: 'Carga Rápida'
+            respiration: 'Respiración'
+            riptide: 'Propulsión acuática'
+            sharpness: 'Filo'
+            silk_touch: 'Toque de seda'
+            smite: 'Castigo'
+            soul_speed: 'Velocidad de alma'
+            sweeping_edge: 'Barrido'
+            swift_sneak: 'Sigilo rápido'
+            thorns: 'Espinas'
+            unbreaking: 'Irrompibilidad'
+        custom_enchantments: 
+            angler: 'Pescador'
+            armored: 'Blindaje'
+            bane_of_anthropoids: 'Perdición de la humanidad'
+            beheading: 'Decapitar'
+            blindness: 'Ceguera'
+            brine: 'Aplastar al débil'
+            butcher: 'Carnicero'
+            contagion_curse: 'Maldición de contagio'
+            exhaustion_curse: 'Maldición de agotamiento'
+            infestation_curse: 'Maldición de infestación'
+            instability_curse: 'Maldición de inestabilidad'
+            lagging_curse: 'Maldición de Lag'
+            stagnancy_curse: 'Maldición de estancamiento'
+            depth_plus_plus: 'Profundidad++'
+            detonator: 'Detonador'
+            drowned: 'Ahogado'
+            exp_share: 'Exp. Compartida'
+            flash: 'Destello'
+            fling: 'Arrojar'
+            flower_gift: 'Regalo de flor'
+            force_feed: 'Alimentación forzada'
+            frequent_flyer: 'Volador frecuente'
+            fried: 'Freido'
+            frosty: 'Helado'
+            gaia: 'Gaia'
+            gold_digger: 'Cavador de Oro'
+            green_thumb: 'Pulgar verde'
+            gung_ho: 'Letalidad'
+            hard_bounce: 'Rebote'
+            height_plus_plus: 'Altura++'
+            hollow_point: 'Punto vacío'
+            husbandry: 'Fénix'
+            icarus: 'Icarus'
+            lasso_of_irene: 'Lazo de Irene'
+            iron_defense: 'Defensa de hierro'
+            javelin: 'Jabalina'
+            joggers: 'Corredor'
+            knockup: 'Golpe de gracia'
+            lancer: 'Lancero'
+            life: 'Vida'
+            life_drain: 'Drenado de vida'
+            light_weight: 'Peso Ligero'
+            magic_guard: 'Guardia Mágica'
+            magma_walker: 'Caminante de Magma'
+            moisturize: 'Hidratar'
+            no_rest: 'Sin descanso'
+            overkill: 'Desmesurado'
+            pacified: 'Pacifista'
+            pillage: 'Robo'
+            plyometrics: 'Pliometría'
+            pushback: 'Impulso'
+            quick_strike: 'Golpe Rápido'
+            rare_earth: 'Tierra Rara'
+            recycler: 'Reciclador'
+            sacrifice: 'Sacrificio'
+            sand_veil: 'Velo arena'
+            shock_aspect: 'Aspecto de Shock'
+            smeltery: 'Carbonizador'
+            sniper: 'Francotirador'
+            soulbound: 'Atadura de alma'
+            soul_reaper: 'Cosechador de Almas'
+            splatter_fest: 'Salpicado consistente'
+            sticky_hold: 'Agarre pegajoso'
+            stone_throw: 'Tiro de Piedra'
+            streak: 'Racha'
+            tank: 'Tanque'
+            telepathy: 'Telepatía'
+            toughness: 'Acorazado'
+            transmutation: 'Transmutación'
+            truant: 'Haragán'
+            unrest: 'Insomnio'
+            venom: 'Veneno'
+            void_walker: 'Caminante del vacío'
+            wand: 'Varita'
+            warp: 'Transportar'
+            water_breathing: 'Respiración acuática'
+            whipped: 'Azotar'
+            width_plus_plus: 'Anchura++'
+            withering: 'Marchitar'
+            zeal: 'Netherismo'
+    locations: 
+        none: 'Ninguno'
+        table: 'Mesa de Encantamientos'
+        non_book: 'Herramientas/Armas/Armaduras'
+        chest_loot: 'Botín de cofre'
+        mob_loot: 'Botín de mob'
+        fishing_loot: 'Botín de pezca'
+        villager_trades: 'Trueque de aldeanos'
+        piglin_trades: 'Truque de Piglins'
+    locations_string: '&6Ubicaciones de encantamientos: &f'
+    random: 'Al azar'
+irenes_lasso: 
+    error: 'Este animal no te pertenece!'
+vanilla: 
+    item: 
+        minecraft: 
+            leather_boots: 'Botas de cuero'
+            iron_pickaxe: 'Pico de hierro'
+            leather_leggings: 'Pantalones de cuero'
+            diamond_shovel: 'Pala de diamante'
+            iron_chestplate: 'Peto de hierro'
+            diamond_chestplate: 'Peto de diamante'
+            chainmail_leggings: 'Pantalones de mallas'
+            book: 'Libro'
+            leather_chestplate: 'Túnica de cuero'
+            diamond_sword: 'Espada diamante'
+            golden_chestplate: 'Peto de oro'
+            stone_axe: 'Hacha de piedra'
+            enchanted_book: 'Libro encantado'
+            wooden_sword: 'Espada de madera'
+            shears: 'Tijeras'
+            chainmail_chestplate: 'Peto de mallas'
+            iron_sword: 'Espada de hierro'
+            stone_hoe: 'Azada de piedra'
+            golden_leggings: 'Pantalones de oro'
+            carrot_on_a_stick: 'Caña con Zanahoria'
+            warped_fungus_on_a_stick: 'Caña con Hongo Carmesí'
+            stone_pickaxe: 'Pico de piedra'
+            stone_shovel: 'Pala de piedra'
+            stone_sword: 'Espada de piedra'
+            diamond_leggings: 'Pantalones de diamante'
+            iron_leggings: 'Pantalones de hierro'
+            elytra: 'Elytra'
+            golden_helmet: 'Casco de oro'
+            chainmail_helmet: 'Casco de mallas'
+            diamond_helmet: 'Casco de diamante'
+            flint_and_steel: 'Mechero'
+            chainmail_boots: 'Botas de Mallas'
+            iron_boots: 'botas de hierro'
+            wooden_axe: 'Hacha de madera'
+            golden_hoe: 'Azada de oro'
+            golden_boots: 'Botas de oro'
+            shield: 'Escudo'
+            wooden_hoe: 'Azada de madera'
+            golden_pickaxe: 'Pico de oro'
+            wooden_shovel: 'Pala de madera'
+            diamond_boots: 'Botas de diamante'
+            wooden_pickaxe: 'Pico de madera'
+            iron_shovel: 'Pala de hierro'
+            golden_shovel: 'Pala de oro'
+            golden_axe: 'Hacha de oro'
+            iron_hoe: 'Azada de hierro'
+            iron_helmet: 'Casco de hierro'
+            diamond_axe: 'Hacha de diamante'
+            turtle_helmet: 'Caparazón de Tortuga'
+            golden_sword: 'Espada de oro'
+            bow: 'Arco'
+            leather_helmet: 'Casco de cuero'
+            diamond_pickaxe: 'Pico de diamante'
+            diamond_hoe: 'Azada de diamante'
+            iron_axe: 'Hacha de hierro'
+            trident: 'Tridente'
+            fishing_rod: 'Caña de pezcar'
+            crossbow: 'Ballesta'
+            netherite_helmet: 'Casco de Netherite'
+            netherite_chestplate: 'Peto de Netherite'
+            netherite_leggings: 'Pantalones de Netherite'
+            netherite_boots: 'Botas de Netherite'
+            netherite_sword: 'Espada de Netherite'
+            netherite_axe: 'Hacha de Netherite'
+            netherite_pickaxe: 'Pico de Netherite'
+            netherite_shovel: 'Pala de Netherite'
+            netherite_hoe: 'Azada de Netherite'
+item_display_types: 
+    all: 'Todos los items normales'
+    armor: 'Armadura'
+    axes: 'Hachas'
+    book: 'Libros'
+    boots: 'Botas'
+    bow: 'Arcos'
+    chainmail_armor: 'Armaduras de mallas'
+    chestplates: 'Petos'
+    crossbow: 'Ballestas'
+    diamond_armor: 'Armadura de diamante'
+    diamond_tools: 'Herramientas de diamante'
+    elytra: 'Elytra'
+    enchantable: 'Encantable'
+    fishing_rod: 'Caña de pezcar'
+    fishing_stick: 'Caña con zanahoria'
+    flint_and_steel: 'Mechero'
+    golden_armor: 'Armadura de oro'
+    golden_tools: 'Herramientas de oro'
+    helmets: 'Cascos'
+    hoes: 'Azadas'
+    iron_armor: 'Armaduras de hierro'
+    iron_tools: 'Herramientas de hierro'
+    leather_armor: 'Armaduras de Cuero'
+    leggings: 'Pantalones'
+    melee: 'Armas cuerpo a cuerpo'
+    misc: 'Misc'
+    netherite_armor: 'Armadura de netherita'
+    netherite_tools: 'Herramientas de netherite'
+    other: 'Otros'
+    pickaxes: 'Picos'
+    ranged: 'Armas de rango'
+    shears: 'Tijeras'
+    shield: 'Escudo'
+    shovels: 'Palas'
+    shulker_boxes: 'Caja de Shulker'
+    stone_tools: 'Herramientas de piedra'
+    swords: 'Espadas'
+    tools: 'Herramientas'
+    trident: 'Tridente'
+    turtle_helmet: 'Caparazón de Tortuga'
+    wooden_tools: 'Herramientas de madera'
+    none: 'Ninguno'
+misc: 
+    no_conflicting_enchantments: 'Ninguno'
+    true: 'True'
+    false: 'False'
+    beheading_skull: 'Cráneo de &7%player%'
+    null_advancement_name: 'Sin nombre'
+    null_advancement_description: 'Sin descripción'
+    no_enchantment_locations: 'Sin ubicación de encantamientos'
+advancements: 
+    discovery: 
+        name: 'Descubrimiento de encantamientos'
+        description: 'Usa /esinfo para más información.'
+        enchantments: 'Encantamiento: %enchantment%'
+    enchantments/agricultural_revolution: 
+        name: 'Revolución de Agricultura'
+        description: 'A quién le gusta la agricultura y los animales? A nosotros!'
+    enchantments/industrial_revolution: 
+        name: 'Revolución Industrial'
+        description: 'Simplificando tu vida, una manera ambiente-destructivo a la vez.'
+    enchantments/scientific_revolution: 
+        name: 'Revolución Cientifica'
+        description: 'Maravillas maravillosas o pesadillas distópicas? Tú decides.'
+    enchantments/imperial_revolution: 
+        name: 'Revolución Imperial'
+        description: 'Conquista el mundo! No tomes prisioneros.'
+    enchantments/mechanical_revolution: 
+        name: 'Revolución Mecánica'
+        description: 'Entra en tu nuevo traje mecánico y salva el día!'
+    enchantments/fish_sticks: 
+        name: 'Palos de peces'
+        description: 'Cocina un pez con Freidora'
+    enchantments/fed_for_a_lifetime: 
+        name: 'Alimentado por una vida'
+        description: 'Obtén más de un pez de cada tipo con Pezcador'
+    enchantments/nemo_enim_coquit: 
+        name: 'Nemo Enim Coquit'
+        description: 'Atrapa un pez tropical con Freidora'
+    enchantments/breaker_breaker: 
+        name: 'Rompedor, Rompedor'
+        description: 'Coloca una antorcha sobre un bloque usando Varita'
+    enchantments/thorgy: 
+        name: 'Thorgy!'
+        description: 'Agarra a un lobo domesticado con el Lazo de Irene'
+    enchantments/did_you_really_wand_to_do_that: 
+        name: 'Realmente querías hacer eso?'
+        description: 'Quiebra la Caña con Zanahoria con el encantamiento Varita'
+    enchantments/free_pets: 
+        name: 'Mascotas Gratis'
+        description: 'Agarra a todos los animales domesticables usando el Lazo de Irene'
+    enchantments/sharing_is_caring: 
+        name: 'Compartir es importar'
+        description: 'Regala a tu amigo un item con Exp. Compartida'
+    enchantments/not_that_kind: 
+        name: 'Ese tipo no!'
+        description: 'Mata a todos los animales emparejables con Golpe de gracia'
+    enchantments/super_charged: 
+        name: 'Super Cargado'
+        description: 'Crea un Creeper cargado con Aspecto de Shock'
+    enchantments/not_very_effective: 
+        name: 'No es muy efectivo...'
+        description: 'Mata a un ahogado con una espada con el encantamiento Punto débil'
+    enchantments/pre_combat_update: 
+        name: 'Combate pre-actualización'
+        description: 'Mata a un jugador con el encantamiento Golpe Rápido'
+    enchantments/headhunter: 
+        name: 'Cazador de Cabezas'
+        description: 'Roba una cabeza de un jugador'
+    enchantments/double_header: 
+        name: 'Cabeza doble'
+        description: 'Obtén dos cabezas de Esqueletos Wither de un asesinato'
+    enchantments/super_effective: 
+        name: 'Super Efectivo!'
+        description: 'Mata a un jefe de Minecraft con una espada con Punto débil'
+    enchantments/motherload: 
+        name: 'SobreCarga'
+        description: 'Mata al Dragón de Ender con Exp. Compartida'
+    enchantments/hex_bag: 
+        name: 'Bolsa HEX'
+        description: 'Ahoga a un jugador usando Ahogado'
+    enchantments/seven_point_eight: 
+        name: '7.8/10'
+        description: 'Ten 3 mobs ahogándose al mismo tiempo con Ahogado'
+    enchantments/poseidons_day_off: 
+        name: 'Día libre de Poseidón'
+        description: 'Mata a un mob con Transmutación sin cambiar el botín'
+    enchantments/fishy_business: 
+        name: 'Negocio sosPezchoso'
+        description: 'Colecciona a todos los peces usando Transmutación'
+    enchantments/poseidon_reborn: 
+        name: 'Poseidón Renacido'
+        description: 'Usa transmutación para obtener un Tridente'
+    enchantments/cerberus: 
+        name: 'Cerberus?'
+        description: 'Incrementa tu recompensa usando un Tridente con Transmutación'
+    enchantments/bonemeal_plus: 
+        name: 'Polvo de Hueso Plus'
+        description: 'Usa Regalo de Flor en una flor de 2 de altura'
+    enchantments/fourty_niners: 
+        name: '49ers'
+        description: 'Obtén 81 pepitas de oro con Cavador de Oro'
+    enchantments/chicken_or_the_egg: 
+        name: 'Gallina o Huevo?'
+        description: 'Golpea a una Gallina con un huevo usando Salpicado Consistente '
+    enchantments/egged_by_myself: 
+        name: 'Me huevé a mi mismo'
+        description: 'Golpéate a ti mismo con un huevo usando Salpicado Consistente'
+    enchantments/missed: 
+        name: 'Fallaste'
+        description: 'Has 16 ataques fallar con Velo de Arena'
+    enchantments/just_as_sweet: 
+        name: 'Igual de Dulce'
+        description: 'Exitosamente obtén una Rosa de Wither con Regalo de Flor'
+    enchantments/laaagggggg: 
+        name: 'Laaagggggg'
+        description: 'Laggea el servidor con varias efectos de partículas'
+    enchantments/easy_out: 
+        name: 'Salida Fácil'
+        description: 'Apaga la fogata usando Hidratar'
+    enchantments/just_add_water: 
+        name: 'Solamente añade agua'
+        description: 'Añade agua al Hormigón usando Hidratar'
+    enchantments/repaired: 
+        name: 'Reparado'
+        description: 'Repara un bloque dañado con Hidratar'
+    enchantments/kept_on_hand: 
+        name: 'Me pertenece'
+        description: 'Mantener un item después de ser asesinado con Atadura de Alma'
+    enchantments/fear_the_reaper: 
+        name: 'Ten miedo del Cosechero'
+        description: 'Obtén un item de otro jugador Usando Cosechador de Almas'
+    enchantments/high_metabolism: 
+        name: 'Metabolismo Alto'
+        description: 'Cuadruplica el monto de agotamiento experimentado utilizando Maldición de Agotamiento'
+    enchantments/ready_after_death: 
+        name: 'Listo después de la muerte'
+        description: 'Salva 9 tipos únicos de herramientas de diamante, armas y armadura usando Atadura de Alma'
+    enchantments/reaped_the_reaper: 
+        name: 'Cosechar al Cosechero'
+        description: 'Roba Cosechador de Almas de otro jugador usando Cosechador de Almas'
+    enchantments/coffee_break: 
+        name: 'Receso de Café'
+        description: 'Colócate un casco con el encantamiento Sin Descanso cuando los Fantasmas puedan aparecer'
+    enchantments/this_girl_is_on_fire: 
+        name: 'Esta chica está en fuego'
+        description: 'Cuando estés caminando en suelo magma-izado, quémate'
+    enchantments/flame_keeper: 
+        name: 'Conservador de la flama'
+        description: 'Crea magma en un mundo que no debería tener lava'
+    enchantments/made_for_walking: 
+        name: 'Hecho para caminar'
+        description: 'Camina sobre el vacío con Caminante del Vacío'
+    enchantments/determined_cheater: 
+        name: 'Tramposo determinado'
+        description: 'Quiebra obsidiana usando Caminante del Vacío'
+    enchantments/i_aint_afraid_of_no_ghosts: 
+        name: 'No le tengo miedo a los Fantasmas'
+        description: 'Duerme 10 minutos usando un Casco de Insomnio'
+    enchantments/im_you_but_shorter: 
+        name: 'Soy tu, pero más bajo'
+        description: 'Teletransportate lejos de un Enderman usando Teletransportar'
+    enchantments/panzer_soldier: 
+        name: 'Soldado Tanque'
+        description: 'Colócate 4 piezas de armadura con el nivel más alto de Tanque'
+    enchantments/too_close: 
+        name: 'Muy cerca'
+        description: 'Falla el activar Icarus cuando vuelas'
+    enchantments/armored_evolution: 
+        name: 'Evolución Acorazada'
+        description: 'Mejora tu Elytra usando el encantamiento Blindaje'
+    enchantments/extra_power: 
+        name: 'Poder Extra'
+        description: 'Come una manzana dorada encantada cuando tienes el máximo nivel de Vida'
+    enchantments/cruising_altitude: 
+        name: 'Crucero Altitud'
+        description: 'Viaja 12000m usando Volador Frecuente'
+    enchantments/graphene_armor: 
+        name: 'Armadura de Grafeno'
+        description: 'Obtén 20 de dureza usando el encantamiento Acorazado'
+    enchantments/danger_defeated: 
+        name: 'Peligro Vencido'
+        description: 'Mata a un Wither usando Letalidad'
+    enchantments/divine_retribution: 
+        name: 'Retribución Divina'
+        description: 'Mata a un jugador desde la muerte usando un peto con Sacrificio'
+    enchantments/look_what_you_made_me_do: 
+        name: 'Mira lo que me hiciste hacer'
+        description: 'Mata a un Saqueador usando Robo'
+    enchantments/just_die_already: 
+        name: 'Sólo MUÉRETE ya!'
+        description: 'Mata a un Fantasma de un tiro usando Tiro de Piedra'
+    enchantments/underkill: 
+        name: 'Asesino bajo'
+        description: 'Golpea al Dragón Ender usando Tiro de Piedra'
+    enchantments/where_did_that_come_from: 
+        name: 'De dónde vino eso?'
+        description: 'Mata a un esqueleto desde 100 bloques de distancia usando Francotirador'
+    enchantments/that_food_is_fine: 
+        name: 'Esta comida está... Bien?'
+        description: 'Come una pieza de comida con un efecto negativo y remuévela con Guardia Mágica'
+    enchantments/deflection: 
+        name: 'Desviación'
+        description: 'Mata a un mob con una flecha desviada por Rebote'
+    enchantments/iron_man: 
+        name: 'Hombre de hierro'
+        description: 'Vive a través de un golpe mortal gracias a Defensa de Hierro'
+    enchantments/iront_you_glad: 
+        name: 'No estás feliz?'
+        description: 'Obtén más de uno de hierro usando Carbonizador'
+    enchantments/fast_and_furious: 
+        name: 'Veloz y Furioso'
+        description: 'Quiebra múltiples bloques a la vez usando Altura++, Anchura++, y/o Profundidad++'
+    enchantments/hey_it_works: 
+        name: 'Hey, funciona!'
+        description: 'Quiebra una caja de Shulker usando telepatía'
+    enchantments/no_panic: 
+        name: 'Sin Pánico'
+        description: 'Obtén un item directamente de la lava usando telepatía'
+    enchantments/over_9000: 
+        name: 'Más de 9000'
+        description: 'Colecciona 9001 items extra con with Altura++, Anchura++, y/o Profundidad++'
+    enchantments/plague_inc: 
+        name: 'Plague Inc.'
+        description: 'Propaga la maldición de contagio a otro items'
+    enchantments/blast_off: 
+        name: 'Despegar'
+        description: 'Detona un Creeper más rápido de lo usual'
+    enchantments/extermination: 
+        name: 'Exterminación'
+        description: 'Infecta un item con todas las posibles maldiciones'
+    enchantments/penetration: 
+        name: 'Penetración'
+        description: 'Daña a un mob con un proyectil cuando no debería hacer daño'
+    enchantments/carpet_bombs: 
+        name: 'Carpeta de bombas'
+        description: 'Causa 100 explosiones con detonador'
+    enchantments/kilimanjaro: 
+        name: 'Kilimanjaro!'
+        description: 'Mata 10 mobs en 4.5s o menos con Desmesurado'
+    enchantments/environmental_protection: 
+        name: 'Protección Ambiental'
+        description: 'Obtén 1000 puntos de experiencia usando Reclicador'
+    enchantments/simple_repair: 
+        name: 'Reparación Simple'
+        description: 'Vuelve un palo de vuelta a un item'
+    enchantments/sticky_bees: 
+        name: 'Abejas Pegajosas'
+        description: 'Quiebra 8 items a palos'
+    enchantments/knockback_reversed: 
+        name: 'Empuje Revertido'
+        description: 'Empuja un enemigo con Impulso'
+    enchantments/stainless_steel: 
+        name: 'Acero Inoxidable'
+        description: 'Sostén un pico de hierro con el nivel máximo de Irrompibilidad y Maldición de Estancamiento'
+    enchantments/nether_dull: 
+        name: 'Nether Aburrido'
+        description: 'Sostén una espada de netherita con el mayor nivel de Filo y Maldición de Estancamiento'
+    enchantments/yummy_repairs: 
+        name: 'Yummy, reparamientos'
+        description: 'Repara un item con Alimentación Forzada'
+    enchantments/hungry_hippos: 
+        name: 'Hipopótamos Hambrientos'
+        description: 'Usa una armadura completa con el encantamiento Alimentación Forzada'
+    enchantments/light_as_a_feather: 
+        name: 'Liviano como una pluma'
+        description: 'Falla el romper un cultivo totalmente crecido con Peso Liviano'
+    enchantments/wildlife_conservation: 
+        name: 'Conservación de Fauna Silvestre'
+        description: 'Encarna a todos los tipos de animales bebés matando a sus versiones adultas'
+    enchantments/meat_ready_to_eat: 
+        name: 'Carne lista para comer'
+        description: 'Obtén carne extra cocinada usando Carnicero'
+    enchantments/thumbs_up: 
+        name: 'Pulgar Arriba'
+        description: 'Replanta un cultivo usando Pulgar Verde'
+    enchantments/reforestation: 
+        name: 'Reforestación'
+        description: 'Con Gaia, replanta 1000 árboles'
+    enchantments/scourge_of_the_forest: 
+        name: 'Azote del Bosque'
+        description: 'Destruye un Sapling plantado con Gaia'
+    enchantments/deforestation: 
+        name: 'Deforestación'
+        description: 'Con Gaia, rompe 1000 troncos'
+    enchantments/broken_dreams: 
+        name: 'Sueños Rotos'
+        description: 'Ten un item que se rompa con Maldición de Inestabilidad'
+    enchantments/blind_as_a_bat: 
+        name: 'Ciego como un Murciélago'
+        description: 'Has a un Murciélago aún más ciego con Ceguera'
+    enchantments/world_record: 
+        name: 'Récord Mundial'
+        description: 'Quédate bajo el agua por 11 minutos y 35 segundos usando Respiración Acuática'
+    enchantments/replenished: 
+        name: 'Reabastecido'
+        description: 'Reabastece corazones extra con Drenado de Vida'
+    enchantments/the_snowman: 
+        name: 'El Hombre de Nieve'
+        description: 'Ten una pelea de bolas de nieve con el Hombre de Nieve'
+    enchantments/double_damage: 
+        name: 'Daño Doble'
+        description: 'Mata a 100 de un solo tipo de mob seguido con Racha'
+    enchantments/spooky_scary_skeleton: 
+        name: 'Esqueleto Aterrador Espeluznante'
+        description: 'Da a un esqueleto el efecto Wither usando Marchitar'
+    enchantments/saving_grace: 
+        name: 'Salvando a Grace'
+        description: 'Protege a tu animal domesticado de la muerte usando Pacifista'
+    enchantments/kill_the_messenger: 
+        name: 'Mata al mensajero'
+        description: 'Mata a un Ghast con una carga ígnea usando Netherismo'
+    enchantments/before_i_melt_away: 
+        name: 'Antes que me derrita..'
+        description: 'Mata a una entidad que te derritiría con el encantamiento Helado'
+    enchantments/too_high: 
+        name: 'Demasiado Alto'
+        description: 'Muere por caída teniendo Pliometría equipado'
+    enchantments/evening_stroll: 
+        name: 'Paseo de Noche'
+        description: 'Corre de noche con Corredor'
+    enchantments/slackin: 
+        name: 'Holgazaneando'
+        description: 'Se afectado con el efecto de ralentización de Haragán'
+    enchantments/spider_senses: 
+        name: 'Sentido Arácnido'
+        description: 'Afige a un jugador con el efecto veneno usando el encantamiento Veneno'
+    enchantments/animal_abuse: 
+        name: 'Abuso Animal'
+        description: 'Mata a un animal con Azotar'
+    enchantments/animal_tamer: 
+        name: 'Domador de Animales'
+        description: 'Doma un animal con Azotar'
+    enchantments/flying_bacon: 
+        name: 'Bacon Volador'
+        description: 'Arroja a un cerdo con montura y un jugador usando Arrojar'
+    enchantments/sparkling_fortune: 
+        name: 'Fortuna Brillosa'
+        description: 'Recibe menas de diamante extra con Tierra Rara'
+    enchantments/useless: 
+        name: 'Inútil'
+        description: 'Coloca un bloque de Luz al lado de una antorcha con Destello'
+    enchantments/silver_horde: 
+        name: 'Horda Plateada'
+        description: 'Crea una pequeña horda de Lepisma usando Maldición de Infestación'
+    enchantments/yeet: 
+        name: 'YEET!'
+        description: 'Arroja a un jugador a su muerte con el encantamiento Arrojar'
+    enchantments/poseidons_bane: 
+        name: 'Perdición de Poseidón'
+        description: 'Mata a un ahogado o a un guardián con Jabalina'
+    enchantments/four_horsemen: 
+        name: 'Cuatro Jinetes'
+        description: 'Mata a un Esqueleto Jinete usando Lancero'
+    enchantments/apocalypse_now: 
+        name: 'Apocalipsis Ahora'
+        description: 'Mata a 100 criaturas humanoides con Perdición de la Humanidad'

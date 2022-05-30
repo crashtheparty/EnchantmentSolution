@@ -18,7 +18,6 @@ import org.ctp.enchantmentsolution.utils.config.ConfigUtils;
 public class AdvancementUtils {
 
 	public static void createAdvancements() {
-		int version = VersionUtils.getVersionNumber();
 		boolean reload = false;
 
 		for(ESAdvancementTab tab: ESAdvancementTab.getAllTabs()) {
@@ -47,12 +46,12 @@ public class AdvancementUtils {
 						parent = tab.getRegistered(last);
 						last = last.getParent();
 					}
-					if (parent != null && ConfigUtils.isAdvancementActive(namespace) && advancement.getActivatedVersion() < version) {
+					if (parent != null && ConfigUtils.isAdvancementActive(namespace) && VersionUtils.isBelowOrZero(advancement.getActivatedVersion())) {
 						List<CrashTrigger> triggers = advancement.getTriggers();
 						adv = factory.getSimple(namespace, parent, ConfigUtils.getAdvancementName(namespace), ConfigUtils.getAdvancementDescription(namespace), advancement.getIcon(), triggers.get(0).getCriteria(), triggers.get(0).getTrigger());
 						for(int i = 1; i < triggers.size(); i++) {
 							CrashTrigger trigger = triggers.get(i);
-							if (version >= trigger.getVersionMinimum() && (trigger.getVersionMaximum() == 0 || version <= trigger.getVersionMaximum())) adv.addTrigger(trigger.getCriteria(), trigger.getTrigger());
+							if (VersionUtils.isAbove(trigger.getVersionMinimum()) && VersionUtils.isBelowOrZero(trigger.getVersionMaximum())) adv.addTrigger(trigger.getCriteria(), trigger.getTrigger());
 						}
 						adv.setAnnounce(announce);
 						adv.setToast(toast);

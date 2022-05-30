@@ -13,6 +13,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.ctp.crashapi.inventory.InventoryData;
+import org.ctp.crashapi.nms.NMS;
 import org.ctp.crashapi.nms.anvil.AnvilClickEvent;
 import org.ctp.crashapi.nms.anvil.AnvilClickEventHandler;
 import org.ctp.crashapi.nms.anvil.AnvilSlot;
@@ -23,7 +24,7 @@ import org.ctp.enchantmentsolution.inventory.ConfigInventory;
 import org.ctp.enchantmentsolution.nms.AnvilNMS;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 
-public abstract class AnvilGUI {
+public abstract class AnvilGUI extends NMS {
 
 	private Player player;
 

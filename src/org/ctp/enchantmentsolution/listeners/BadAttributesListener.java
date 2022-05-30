@@ -65,6 +65,8 @@ public class BadAttributesListener implements Listener {
 			case OFF_HAND:
 				check = player.getInventory().getItemInOffHand();
 				break;
+			default:
+				break;
 		}
 		if (EnchantmentUtils.hasEnchantment(check, a.getEnchantment())) return;
 		Attributable.removeAttribute(player, new EnchantmentLevel(RegisterEnchantments.getCustomEnchantment(a.getEnchantment()), 0), a, type, legacy);

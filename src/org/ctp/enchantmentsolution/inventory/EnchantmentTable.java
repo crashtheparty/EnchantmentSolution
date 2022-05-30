@@ -22,8 +22,8 @@ import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentList;
 import org.ctp.enchantmentsolution.enchantments.helper.LevelList;
 import org.ctp.enchantmentsolution.events.ESEnchantItemEvent;
-import org.ctp.enchantmentsolution.nms.EnchantItemCriterion;
-import org.ctp.enchantmentsolution.nms.PersistenceNMS;
+import org.ctp.enchantmentsolution.nms.EnchantNMS;
+import org.ctp.enchantmentsolution.persistence.PersistenceUtils;
 import org.ctp.enchantmentsolution.utils.compatibility.JobsUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 import org.ctp.enchantmentsolution.utils.config.ConfigUtils;
@@ -150,7 +150,7 @@ public class EnchantmentTable implements InventoryData {
 							String levelsTaken = Chatable.get().getMessage(loreCodes, "table.level-taken-okay");
 							if (player.getLevel() < levelReq && player.getGameMode().equals(GameMode.SURVIVAL)) levelsTaken = Chatable.get().getMessage(loreCodes, "table.level-taken-lack");
 							loreCodes.remove("%levelsTaken%");
-							loreCodes.put("%enchant%", ChatColor.stripColor(PersistenceNMS.returnEnchantmentName(enchants.get(0).getEnchant(), enchants.get(0).getLevel())));
+							loreCodes.put("%enchant%", ChatColor.stripColor(PersistenceUtils.returnEnchantmentName(enchants.get(0).getEnchant(), enchants.get(0).getLevel())));
 							bookMeta.setLore(Arrays.asList(levelReqString, lapisString, levelsTaken, Chatable.get().getMessage(loreCodes, "table.enchant-name")));
 							book.setItemMeta(bookMeta);
 							inv.setItem(start + extra, book);
@@ -296,12 +296,13 @@ public class EnchantmentTable implements InventoryData {
 			playerItems.set(slot, enchantableItem);
 			setInventory(playerItems);
 			player.setStatistic(Statistic.ITEM_ENCHANTED, player.getStatistic(Statistic.ITEM_ENCHANTED) + 1);
-			EnchantItemCriterion.enchantItemTrigger(player, enchantableItem);
+			EnchantNMS.updateCriterion(player, enchantableItem);
 			if (EnchantmentSolution.getPlugin().isJobsEnabled()) JobsUtils.sendEnchantAction(player, enchantItem, enchantableItem, enchLevels);
 		} catch (Exception ex) {
 			Chatable.sendDebug("An issue occurred with enchanting items (Custom GUI): " + ex.getMessage(), Level.SEVERE);
 		}
 		TableEnchantments.removeTableEnchantments(player);
+		setInventory();
 	}
 
 	@Override

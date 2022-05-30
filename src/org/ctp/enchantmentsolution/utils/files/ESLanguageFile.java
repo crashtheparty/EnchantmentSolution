@@ -42,6 +42,9 @@ public class ESLanguageFile extends CrashLanguageFile {
 				case CHINA_SIMPLE:
 					enchantmentDescription = "没有说明";
 					break;
+				case SPANISH:
+					enchantmentDescription = "Sin descripción especificada";
+					break;
 			}
 			if (enchant.getRelativeEnchantment() instanceof ApiEnchantmentWrapper) {
 				JavaPlugin plugin = ((ApiEnchantmentWrapper) enchant.getRelativeEnchantment()).getPlugin();

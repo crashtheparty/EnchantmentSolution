@@ -1,25 +1,25 @@
 package org.ctp.enchantmentsolution.utils.items;
 
-import java.io.File;
-
+import org.bukkit.Material;
 import org.bukkit.block.Beehive;
 import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BlockStateMeta;
-import org.ctp.crashapi.config.yaml.YamlConfig;
 import org.ctp.crashapi.item.MatData;
-import org.ctp.crashapi.utils.CrashConfigUtils;
 import org.ctp.enchantmentsolution.enums.ItemBreakType;
+import org.ctp.enchantmentsolution.utils.files.ItemBreakFile.ItemBreakFileType;
+import org.ctp.enchantmentsolution.utils.files.ItemSpecialBreakFile;
+import org.ctp.enchantmentsolution.utils.files.ItemSpecialBreakFile.ItemSpecialBreakFileType;
 
 public class SilkTouchUtils {
 
 	public static ItemStack getSilkTouchItem(Block block, ItemStack item) {
-		MatData mat = getDrop(block, item);
-		if (mat.hasMaterial() && !MatData.isAir(mat.getMaterial())) {
+		Material mat = getDrop(block, item);
+		if (!MatData.isAir(mat)) {
 			switch (block.getType().name()) {
 				case "BEE_NEST":
 				case "BEEHIVE":
-					ItemStack drop = new ItemStack(mat.getMaterial());
+					ItemStack drop = new ItemStack(mat);
 					BlockStateMeta im = (BlockStateMeta) drop;
 					Beehive hive = (Beehive) block.getState();
 					im.setBlockState(hive);
@@ -28,18 +28,17 @@ public class SilkTouchUtils {
 				default:
 					break;
 			}
-			return new ItemStack(mat.getMaterial());
+			return new ItemStack(mat);
 		}
 		return null;
 	}
 
-	private static MatData getDrop(Block block, ItemStack item) {
-		File file = CrashConfigUtils.getTempFile(new SilkTouchUtils().getClass(), "/resources/abilities/silk_touch.yml");
-		YamlConfig config = new YamlConfig(file, new String[] {});
-		config.getFromConfig();
+	private static Material getDrop(Block block, ItemStack item) {
+		ItemSpecialBreakFile file = ItemSpecialBreakFile.getFile(ItemSpecialBreakFileType.SILK_TOUCH);
 
 		ItemBreakType type = ItemBreakType.getType(item.getType());
-		if (type != null && type.getBreakTypes().contains(block.getType()) || type.getBasicTypes().contains(block.getType())) return new MatData(config.getString(block.getType().name().toLowerCase()));
-		return new MatData("air");
+		if (type != null && type.getBreakTypes().contains(block.getType()) || ItemBreakType.getBasicTypes(ItemBreakFileType.BREAK).contains(block.getType())) 
+			return file.getValues().get(block.getType());
+		return Material.AIR;
 	}
 }

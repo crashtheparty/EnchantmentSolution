@@ -17,7 +17,7 @@ import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
-import org.ctp.crashapi.nms.DamageEvent;
+import org.ctp.crashapi.nms.DamageNMS;
 import org.ctp.crashapi.utils.LocationUtils;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
@@ -217,14 +217,15 @@ public class ProjectileListener extends Enchantmentable {
 
 				Entity e = null;
 				if (event.getEntity().getShooter() instanceof Entity) e = (Entity) event.getEntity().getShooter();
-				DetonatorExplosionEvent detonator = new DetonatorExplosionEvent(entity, level, loc, e, (float) (0.5 + 0.5 * level), true, true, false);
+				DetonatorExplosionEvent detonator = new DetonatorExplosionEvent(entity, level, loc, e, (float) (0.5 + 0.5 * level), true, true, true);
 				Bukkit.getPluginManager().callEvent(detonator);
 
 				if (!detonator.isCancelled()) if (detonator.willDelayExplosion()) Bukkit.getScheduler().runTaskLater(EnchantmentSolution.getPlugin(), () -> {
 					handleDetonatorExplosion(event, detonator, loc);
-				}, 1l);
+				}, 0l);
 				else
 					handleDetonatorExplosion(event, detonator, loc);
+				else {} // placeholder
 			}
 		}
 	}
@@ -278,11 +279,11 @@ public class ProjectileListener extends Enchantmentable {
 				Player player = (Player) entity;
 				if (isDisabled(player, RegisterEnchantments.HOLLOW_POINT)) return;
 				if (event.getHitEntity().getType() == EntityType.ENDERMAN || event.getHitEntity().getType() == EntityType.WITHER && ((Wither) event.getHitEntity()).getHealth() <= ((Wither) event.getHitEntity()).getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() / 2) {
-					double damage = DamageEvent.getArrowDamage(entity, arrow);
+					double damage = DamageNMS.getArrowDamage(entity, arrow);
 					HollowPointDamageEvent hollowPoint = new HollowPointDamageEvent(event.getEntity(), event.getHitEntity(), DamageCause.PROJECTILE, damage);
 					Bukkit.getPluginManager().callEvent(hollowPoint);
 					if (!hollowPoint.isCancelled()) {
-						DamageEvent.damageEntity((LivingEntity) hollowPoint.getEntity(), player, "arrow", (float) hollowPoint.getDamage());
+						DamageNMS.damageEntity((LivingEntity) hollowPoint.getEntity(), player, "arrow", (float) hollowPoint.getDamage());
 						event.getEntity().remove();
 						AdvancementUtils.awardCriteria(player, ESAdvancement.PENETRATION, "arrow");
 					}

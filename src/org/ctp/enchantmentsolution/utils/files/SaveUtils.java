@@ -23,7 +23,9 @@ import org.ctp.enchantmentsolution.interfaces.WalkerInterface;
 import org.ctp.enchantmentsolution.rpg.RPGPlayer;
 import org.ctp.enchantmentsolution.rpg.RPGUtils;
 import org.ctp.enchantmentsolution.utils.Configurations;
-import org.ctp.enchantmentsolution.utils.abilityhelpers.*;
+import org.ctp.enchantmentsolution.utils.abilityhelpers.AnimalMob;
+import org.ctp.enchantmentsolution.utils.abilityhelpers.WalkerBlock;
+import org.ctp.enchantmentsolution.utils.abilityhelpers.WalkerUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 import org.ctp.enchantmentsolution.utils.player.ESPlayer;
 
@@ -80,7 +82,7 @@ public class SaveUtils {
 				String[] arrayBlock = stringBlock.split(" ");
 				try {
 					Location loc = new Location(Bukkit.getWorld(arrayBlock[0]), Integer.parseInt(arrayBlock[1]), Integer.parseInt(arrayBlock[2]), Integer.parseInt(arrayBlock[3]));
-					GaiaUtils.addLocation(loc);
+					EnchantmentSolution.gaiaAddLocation(loc);
 				} catch (Exception ex) {
 					Chatable.get().sendInfo("Block at position " + i + " was invalid, skipping.");
 				}
@@ -144,7 +146,7 @@ public class SaveUtils {
 			i++;
 		}
 		i = 0;
-		List<Location> locs = GaiaUtils.getLocations();
+		List<Location> locs = EnchantmentSolution.gaiaGetLocations();
 		if (locs != null) for(Location loc: locs) {
 			config.set("gaia." + i, loc.getWorld().getName() + " " + loc.getBlockX() + " " + loc.getBlockY() + " " + loc.getBlockZ());
 			i++;

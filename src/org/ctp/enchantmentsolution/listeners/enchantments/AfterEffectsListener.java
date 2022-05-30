@@ -133,37 +133,35 @@ public class AfterEffectsListener extends Enchantmentable {
 	}
 
 	private void pillage(EntityDeathEvent event) {
-		if (VersionUtils.getVersionNumber() > 3) {
-			if (!canRun(RegisterEnchantments.PILLAGE, event)) return;
-			LivingEntity entity = event.getEntity();
-			if (entity instanceof Lootable && entity.getKiller() != null) {
-				Player player = entity.getKiller();
-				if (player == null || isDisabled(player, RegisterEnchantments.PILLAGE)) return;
-				ItemStack item = player.getInventory().getItemInOffHand();
-				if (item == null || !EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.PILLAGE)) {
-					item = player.getInventory().getItemInMainHand();
-					if (EnchantmentUtils.hasEnchantment(item, Enchantment.LOOT_BONUS_MOBS)) return;
-				}
-				if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.PILLAGE)) {
-					int level = EnchantmentUtils.getLevel(item, RegisterEnchantments.PILLAGE);
-					PillageEvent pillage = new PillageEvent(player, level);
-					Bukkit.getPluginManager().callEvent(pillage);
+		if (!canRun(RegisterEnchantments.PILLAGE, event)) return;
+		LivingEntity entity = event.getEntity();
+		if (entity instanceof Lootable && entity.getKiller() != null) {
+			Player player = entity.getKiller();
+			if (player == null || isDisabled(player, RegisterEnchantments.PILLAGE)) return;
+			ItemStack item = player.getInventory().getItemInOffHand();
+			if (item == null || !EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.PILLAGE)) {
+				item = player.getInventory().getItemInMainHand();
+				if (EnchantmentUtils.hasEnchantment(item, Enchantment.LOOT_BONUS_MOBS)) return;
+			}
+			if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.PILLAGE)) {
+				int level = EnchantmentUtils.getLevel(item, RegisterEnchantments.PILLAGE);
+				PillageEvent pillage = new PillageEvent(player, level);
+				Bukkit.getPluginManager().callEvent(pillage);
 
-					if (!pillage.isCancelled()) {
-						event.getDrops().clear();
-						List<EnchantmentLevel> levels = EnchantmentUtils.getEnchantmentLevels(item);
-						EnchantmentUtils.addEnchantmentToItem(item, CERegister.FORTUNE, level);
-						LootContext.Builder contextBuilder = new LootContext.Builder(event.getEntity().getLocation());
-						contextBuilder.killer(player);
-						contextBuilder.lootedEntity(event.getEntity());
-						contextBuilder.lootingModifier(level);
-						LootContext context = contextBuilder.build();
-						Collection<ItemStack> items = ((Lootable) entity).getLootTable().populateLoot(new Random(), context);
-						event.getDrops().addAll(items);
-						EnchantmentUtils.removeAllEnchantments(item, true);
-						EnchantmentUtils.addEnchantmentsToItem(item, levels);
-						if (event.getEntity().getType() == EntityType.PILLAGER) AdvancementUtils.awardCriteria(player, ESAdvancement.LOOK_WHAT_YOU_MADE_ME_DO, "pillage");
-					}
+				if (!pillage.isCancelled()) {
+					event.getDrops().clear();
+					List<EnchantmentLevel> levels = EnchantmentUtils.getEnchantmentLevels(item);
+					EnchantmentUtils.addEnchantmentToItem(item, CERegister.FORTUNE, level);
+					LootContext.Builder contextBuilder = new LootContext.Builder(event.getEntity().getLocation());
+					contextBuilder.killer(player);
+					contextBuilder.lootedEntity(event.getEntity());
+					contextBuilder.lootingModifier(level);
+					LootContext context = contextBuilder.build();
+					Collection<ItemStack> items = ((Lootable) entity).getLootTable().populateLoot(new Random(), context);
+					event.getDrops().addAll(items);
+					EnchantmentUtils.removeAllEnchantments(item, true);
+					EnchantmentUtils.addEnchantmentsToItem(item, levels);
+					if (event.getEntity().getType() == EntityType.PILLAGER) AdvancementUtils.awardCriteria(player, ESAdvancement.LOOK_WHAT_YOU_MADE_ME_DO, "pillage");
 				}
 			}
 		}

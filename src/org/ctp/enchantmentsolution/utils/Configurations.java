@@ -82,6 +82,7 @@ public class Configurations implements CrashConfigurations {
 
 		LANGUAGE_FILES.add(new ESLanguageFile(dataFolder, Language.US));
 		LANGUAGE_FILES.add(new ESLanguageFile(dataFolder, Language.GERMAN));
+		LANGUAGE_FILES.add(new ESLanguageFile(dataFolder, Language.SPANISH));
 		LANGUAGE_FILES.add(new ESLanguageFile(dataFolder, Language.CHINA_SIMPLE));
 
 		for(ESLanguageFile file: LANGUAGE_FILES)
@@ -158,7 +159,6 @@ public class Configurations implements CrashConfigurations {
 		SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss z Z");
 		debug.set("time", format.format(new Date()));
 		debug.set("version.bukkit", VersionUtils.getMinecraftVersion());
-		debug.set("version.bukkit_num", VersionUtils.getVersionNumber());
 		debug.set("version.plugin", EnchantmentSolution.getPlugin().getPluginVersion().getCurrent().getVersionName());
 		debug.set("plugins.jobs_reborn", EnchantmentSolution.getPlugin().isJobsEnabled());
 		debug.set("plugins.mcmmo", EnchantmentSolution.getPlugin().getMcMMOType());

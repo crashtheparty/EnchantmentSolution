@@ -1,6 +1,8 @@
 package org.ctp.enchantmentsolution.inventory;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -17,7 +19,6 @@ import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.generate.GrindstoneEnchantments;
 import org.ctp.enchantmentsolution.nms.AnvilNMS;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
-import org.ctp.enchantmentsolution.utils.config.ConfigUtils;
 import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
 
 public class Grindstone implements InventoryData {
@@ -46,7 +47,6 @@ public class Grindstone implements InventoryData {
 			takeEnchantments = false;
 			boolean grindstoneTakeEnchantments = ConfigString.TAKE_ENCHANTMENTS.getBoolean();
 			int size = 27;
-			if (ConfigUtils.useLegacyGrindstone()) size = 36;
 			Inventory inv = Bukkit.createInventory(null, size, Chatable.get().getMessage(getCodes(), "grindstone.name"));
 			inv = open(inv);
 
@@ -161,17 +161,6 @@ public class Grindstone implements InventoryData {
 				inv.setItem(7, combinedItem);
 			}
 			inv.setItem(5, combine);
-
-			if (ConfigUtils.useLegacyGrindstone()) {
-				for(int i = 27; i < 36; i++)
-					inv.setItem(i, mirror);
-				ItemStack anvil = new ItemStack(Material.ANVIL);
-				ItemMeta anvilMeta = anvil.getItemMeta();
-				anvilMeta.setDisplayName(Chatable.get().getMessage(getCodes(), "grindstone.anvil"));
-				anvilMeta.setLore(Arrays.asList(Chatable.get().getMessage(getCodes(), "grindstone.switch-to-anvil")));
-				anvil.setItemMeta(anvilMeta);
-				inv.setItem(31, anvil);
-			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			if (playerItems.size() - 1 >= 0) {

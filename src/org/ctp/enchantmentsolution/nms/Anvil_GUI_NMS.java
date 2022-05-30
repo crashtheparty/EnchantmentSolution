@@ -2,46 +2,20 @@ package org.ctp.enchantmentsolution.nms;
 
 import org.bukkit.entity.Player;
 import org.ctp.crashapi.inventory.InventoryData;
+import org.ctp.crashapi.nms.NMS;
 import org.ctp.enchantmentsolution.nms.anvil.*;
-import org.ctp.enchantmentsolution.utils.VersionUtils;
 
-public class Anvil_GUI_NMS {
+public class Anvil_GUI_NMS extends NMS {
 
 	public static void createAnvil(Player player, InventoryData data) {
-		switch (VersionUtils.getVersionNumber()) {
-			case 1:
-				AnvilGUI_v1_13_R1.createAnvil(player, data);
-				break;
-			case 2:
-			case 3:
-				AnvilGUI_v1_13_R2.createAnvil(player, data);
-				break;
-			case 4:
-			case 5:
-			case 6:
-			case 7:
-			case 8:
-				AnvilGUI_v1_14_R1.createAnvil(player, data);
-				break;
-			case 9:
-			case 10:
-			case 11:
-				AnvilGUI_v1_15_R1.createAnvil(player, data);
-				break;
-			case 12:
-				AnvilGUI_v1_16_R1.createAnvil(player, data);
-				break;
-			case 13:
-			case 14:
-				AnvilGUI_v1_16_R2.createAnvil(player, data);
-				break;
-			case 15:
+		switch (getVersionNumber()) {
 			case 16:
 				AnvilGUI_v1_16_R3.createAnvil(player, data);
 				break;
-			case 17:
-			case 18:
-				AnvilGUI_v1_17_R1.createAnvil(player, data);
+			default:
+				if (isSimilarOrAbove(getVersionNumbers(), 1, 18, 2)) AnvilGUI_3.createAnvil(player, data);
+				else if (isSimilarOrAbove(getVersionNumbers(), 1, 18, 0)) AnvilGUI_2.createAnvil(player, data);
+				else if (isSimilarOrAbove(getVersionNumbers(), 1, 17, 0)) AnvilGUI_1.createAnvil(player, data);
 				break;
 		}
 	}

@@ -1,4 +1,4 @@
-package org.ctp.enchantmentsolution.nms.persistence;
+package org.ctp.enchantmentsolution.persistence;
 
 import java.util.List;
 

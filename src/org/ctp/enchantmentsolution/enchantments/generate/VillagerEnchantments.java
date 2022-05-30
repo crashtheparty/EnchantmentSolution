@@ -10,7 +10,6 @@ import org.bukkit.inventory.MerchantRecipe;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentList;
 import org.ctp.enchantmentsolution.enums.EnchantmentLocation;
-import org.ctp.enchantmentsolution.utils.VersionUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
 
@@ -51,22 +50,29 @@ public class VillagerEnchantments extends LootEnchantments {
 		else if (ConfigString.USE_ENCHANTED_BOOKS.getBoolean() && mat == Material.BOOK) mat = Material.ENCHANTED_BOOK;
 
 		List<ItemStack> ingredients = new ArrayList<ItemStack>();
-		EnchantmentLevel enchant = enchantments.get(0);
-		if (mat == Material.BOOK || mat == Material.ENCHANTED_BOOK) {
-			if (!enchant.getEnchant().getEnchantmentLocations().contains(EnchantmentLocation.TABLE)) levelPrice[1] *= 2;
-			if (levelPrice[1] > 64) levelPrice[1] = 64;
-			ItemStack priceItem = new ItemStack(Material.EMERALD, levelPrice[1]);
-			ingredients.add(priceItem);
-			ingredients.add(matItem);
-		} else {
-			ItemStack priceItem = new ItemStack(Material.EMERALD, levelPrice[1]);
-			if (levelPrice[1] > 64) levelPrice[1] = 64;
-			ingredients.add(priceItem);
-		}
+		if (enchantments.size() > 0) {
+			EnchantmentLevel enchant = enchantments.get(0);
+			if (mat == Material.BOOK || mat == Material.ENCHANTED_BOOK) {
+				if (!enchant.getEnchant().getEnchantmentLocations().contains(EnchantmentLocation.TABLE)) levelPrice[1] *= 2;
+				if (levelPrice[1] > 64) levelPrice[1] = 64;
+				ItemStack priceItem = new ItemStack(Material.EMERALD, levelPrice[1]);
+				ingredients.add(priceItem);
+				ingredients.add(matItem);
+			} else {
+				ItemStack priceItem = new ItemStack(Material.EMERALD, levelPrice[1]);
+				if (levelPrice[1] > 64) levelPrice[1] = 64;
+				ingredients.add(priceItem);
+			}
 
-		recipe = new MerchantRecipe(EnchantmentUtils.addEnchantmentToItem(new ItemStack(mat), enchant.getEnchant(), enchant.getLevel()), original.getUses(), original.getMaxUses(), original.hasExperienceReward(), original.getVillagerExperience(), original.getPriceMultiplier() / 2);
-		recipe.setIngredients(ingredients);
-		if (VersionUtils.getVersionNumber() > 3) recipe.setVillagerExperience(original.getVillagerExperience());
+			recipe = new MerchantRecipe(EnchantmentUtils.addEnchantmentToItem(new ItemStack(mat), enchant.getEnchant(), enchant.getLevel()), original.getUses(), original.getMaxUses(), original.hasExperienceReward(), original.getVillagerExperience(), original.getPriceMultiplier() / 2);
+			recipe.setIngredients(ingredients);
+			recipe.setVillagerExperience(original.getVillagerExperience());
+		} else {
+			recipe = new MerchantRecipe(new ItemStack(matItem), original.getUses(), original.getMaxUses(), original.hasExperienceReward(), original.getVillagerExperience(), original.getPriceMultiplier() / 2);
+			ingredients.add(new ItemStack(Material.EMERALD, levelPrice[1] / 4));
+			recipe.setIngredients(ingredients);
+			recipe.setVillagerExperience(original.getVillagerExperience());
+		}
 	}
 
 	public static VillagerEnchantments getVillagerEnchantments(ItemStack result, MerchantRecipe original) {

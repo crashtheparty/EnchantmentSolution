@@ -19,7 +19,7 @@ import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantmentWrapper;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
-import org.ctp.enchantmentsolution.nms.PersistenceNMS;
+import org.ctp.enchantmentsolution.persistence.PersistenceUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 
 public class EnchantmentUtils {
@@ -42,7 +42,7 @@ public class EnchantmentUtils {
 			meta = enchantmentStorage;
 			newItem.setItemMeta(meta);
 			for(EnchantmentLevel level: newLevels)
-				PersistenceNMS.addEnchantment(newItem, new EnchantmentLevel(level.getEnchant(), level.getLevel()));
+				PersistenceUtils.addPersistence(newItem, Arrays.asList(new EnchantmentLevel(level.getEnchant(), level.getLevel())));
 		}
 		return newItem;
 	}
@@ -65,7 +65,7 @@ public class EnchantmentUtils {
 			}
 			newItem.setItemMeta(meta);
 			for(EnchantmentLevel level: newLevels)
-				PersistenceNMS.addEnchantment(newItem, new EnchantmentLevel(level.getEnchant(), level.getLevel()));
+				PersistenceUtils.addPersistence(newItem, Arrays.asList(new EnchantmentLevel(level.getEnchant(), level.getLevel())));
 		}
 		return newItem;
 	}
@@ -115,8 +115,8 @@ public class EnchantmentUtils {
 				meta.addEnchant(level.getEnchant().getRelativeEnchantment(), level.getLevel(), true);
 			item.setItemMeta(meta);
 			if (!item.getItemMeta().hasItemFlag(ItemFlag.HIDE_ENCHANTS) && level.getEnchant().getRelativeEnchantment() instanceof CustomEnchantmentWrapper) {
-				PersistenceNMS.removeEnchantment(item, level.getEnchant());
-				PersistenceNMS.addEnchantment(item, level);
+				PersistenceUtils.removePersistence(item, level.getEnchant());
+				PersistenceUtils.addPersistence(item, Arrays.asList(level));
 			}
 			meta = item.getItemMeta();
 		}
@@ -132,7 +132,7 @@ public class EnchantmentUtils {
 
 	public static ItemStack removeEnchantmentFromItem(ItemStack item, CustomEnchantment enchantment) {
 		if (enchantment == null) return item;
-		if (enchantment instanceof CustomEnchantment) PersistenceNMS.removeEnchantment(item, enchantment);
+		if (enchantment instanceof CustomEnchantment) PersistenceUtils.removePersistence(item, enchantment);
 		ItemMeta meta = item.getItemMeta();
 		if (hasEnchantment(item, enchantment.getRelativeEnchantment()) && meta instanceof EnchantmentStorageMeta) ((EnchantmentStorageMeta) meta).removeStoredEnchant(enchantment.getRelativeEnchantment());
 		else if (hasEnchantment(item, enchantment.getRelativeEnchantment())) meta.removeEnchant(enchantment.getRelativeEnchantment());

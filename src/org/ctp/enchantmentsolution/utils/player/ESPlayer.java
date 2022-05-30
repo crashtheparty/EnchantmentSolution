@@ -15,7 +15,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.ctp.crashapi.events.ItemEquipEvent.HandMethod;
+import org.ctp.crashapi.events.EquipEvent.EquipMethod;
 import org.ctp.crashapi.item.*;
 import org.ctp.crashapi.utils.DamageUtils;
 import org.ctp.crashapi.utils.ItemUtils;
@@ -35,10 +35,7 @@ import org.ctp.enchantmentsolution.threads.ESPlayerThread;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.BlockUtils;
 import org.ctp.enchantmentsolution.utils.PermissionUtils;
-import org.ctp.enchantmentsolution.utils.abilityhelpers.GaiaUtils.GaiaTrees;
-import org.ctp.enchantmentsolution.utils.abilityhelpers.ItemEquippedSlot;
-import org.ctp.enchantmentsolution.utils.abilityhelpers.OverkillDeath;
-import org.ctp.enchantmentsolution.utils.abilityhelpers.Streak;
+import org.ctp.enchantmentsolution.utils.abilityhelpers.*;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 import org.ctp.enchantmentsolution.utils.items.AbilityUtils;
 import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
@@ -167,6 +164,27 @@ public class ESPlayer {
 		equipped[5] = getOnlinePlayer().getInventory().getItemInOffHand();
 
 		return equipped;
+	}
+
+	public ItemSlot[] getEquippedAndType() {
+		ItemSlot[] equipped = new ItemSlot[6];
+		if (!isOnline()) return equipped;
+		equipped[0] = new ItemSlot(getOnlinePlayer().getInventory().getHelmet(), ItemSlotType.HELMET);
+		equipped[1] = new ItemSlot(getOnlinePlayer().getInventory().getChestplate(), ItemSlotType.CHESTPLATE);
+		equipped[2] = new ItemSlot(getOnlinePlayer().getInventory().getLeggings(), ItemSlotType.LEGGINGS);
+		equipped[3] = new ItemSlot(getOnlinePlayer().getInventory().getBoots(), ItemSlotType.BOOTS);
+		equipped[4] = new ItemSlot(getOnlinePlayer().getInventory().getItemInMainHand(), ItemSlotType.MAIN_HAND);
+		equipped[5] = new ItemSlot(getOnlinePlayer().getInventory().getItemInOffHand(), ItemSlotType.OFF_HAND);
+
+		return equipped;
+	}
+	
+	public ItemStack getItemFromType(ItemSlotType type) {
+		for (ItemSlot e : getEquippedAndType()) {
+			if (e == null) continue;
+			if (e.getType() == type) return e.getItem();
+		}
+		return null;
 	}
 
 	public ItemStack[] getInventoryItems() {
@@ -458,7 +476,7 @@ public class ESPlayer {
 		telepathyItems = new ArrayList<ItemStack>();
 		telepathyTask = null;
 		Player p = Bukkit.getPlayer(getOnlinePlayer().getUniqueId());
-		ItemUtils.giveItemsToPlayer(p, newItems, p.getLocation(), true, HandMethod.PICK_UP);
+		ItemUtils.giveItemsToPlayer(p, newItems, p.getLocation(), true, EquipMethod.PICK_UP);
 	}
 
 	public void addTelepathyItems(Collection<ItemStack> items) {
@@ -509,12 +527,13 @@ public class ESPlayer {
 		return streak.getStreak();
 	}
 
-	public EntityType getType() {
-		return streak.getType();
+	public EntityType getStreakType() {
+		return streak == null ? null : streak.getType();
 	}
 
-	public void setStreak(EntityType type, int streak) {
-		this.streak.setStreak(type, streak);
+	public void setStreak(EntityType type, int num) {
+		if (streak == null) streak = new Streak();
+		streak.setStreak(type, num);
 	}
 
 	public void addTimedDisableEnchant(JavaPlugin plugin, Enchantment enchant, int ticks) {
@@ -775,8 +794,8 @@ public class ESPlayer {
 					ItemStack item = model.getItem();
 					Block block = model.getCurrent().get(0);
 					if (!canBreakBlock()) break;
-					List<String> pickBlocks = ItemBreakType.WOODEN_PICKAXE.getDiamondPickaxeBlocks();
-					if (!pickBlocks.contains(model.getStartingPointMaterial().name().toLowerCase(Locale.ROOT)) && pickBlocks.contains(block.getType().name().toLowerCase(Locale.ROOT))) {
+					List<Material> pickBlocks = ItemBreakType.getDiamondPickaxeBlocks();
+					if (!pickBlocks.contains(model.getStartingPointMaterial()) && pickBlocks.contains(block.getType())) {
 						model.aroundBlock(block);
 						model.setUsed(block);
 						continue;

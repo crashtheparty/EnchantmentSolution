@@ -10,7 +10,7 @@ import org.bukkit.attribute.AttributeModifier.Operation;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.ctp.crashapi.item.ItemSlotType;
-import org.ctp.crashapi.nms.DamageEvent;
+import org.ctp.crashapi.nms.DamageNMS;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
@@ -180,7 +180,7 @@ public enum Attributable {
 		ESPlayer esPlayer = EnchantmentSolution.getESPlayer(player);
 		esPlayer.addAttribute(new AttributeLevel(a, level.getLevel(), slot));
 		if (a.getEnchantment() == RegisterEnchantments.TOUGHNESS && player.getAttribute(Attribute.GENERIC_ARMOR_TOUGHNESS).getValue() >= 20) AdvancementUtils.awardCriteria(attrEvent.getPlayer(), ESAdvancement.GRAPHENE_ARMOR, "toughness");
-		if (a.getEnchantment() == RegisterEnchantments.LIFE || a.getEnchantment() == RegisterEnchantments.GUNG_HO) DamageEvent.updateHealth(player);
+		if (a.getEnchantment() == RegisterEnchantments.LIFE || a.getEnchantment() == RegisterEnchantments.GUNG_HO) DamageNMS.updateHealth(player);
 	}
 
 	public static void removeAttribute(Player player, EnchantmentLevel level, Attributable a, ItemEquippedSlot slot) {
@@ -194,7 +194,7 @@ public enum Attributable {
 		a.removeModifier(player, slot.getType(), legacy);
 		ESPlayer esPlayer = EnchantmentSolution.getESPlayer(player);
 		esPlayer.removeAttribute(a, slot);
-		if (a.getEnchantment() == RegisterEnchantments.LIFE || a.getEnchantment() == RegisterEnchantments.GUNG_HO) DamageEvent.updateHealth(player);
+		if (a.getEnchantment() == RegisterEnchantments.LIFE || a.getEnchantment() == RegisterEnchantments.GUNG_HO) DamageNMS.updateHealth(player);
 
 	}
 }

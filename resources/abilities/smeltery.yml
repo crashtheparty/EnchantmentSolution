@@ -17,6 +17,7 @@ copper_ore: copper_ingot
 cyan_terracotta: cyan_glazed_terracotta
 dark_oak_log: charcoal
 dark_oak_wood: charcoal
+deepslate: deepslate
 deepslate_copper_ore: copper_ingot
 deepslate_gold_ore: gold_ingot
 deepslate_iron_ore: iron_ingot
@@ -31,6 +32,8 @@ light_blue_terracotta: light_blue_glazed_terracotta
 light_gray_terracotta: light_gray_glazed_terracotta
 lime_terracotta: lime_glazed_terracotta
 magenta_terracotta: magenta_glazed_terracotta
+mangrove_log: charcoal
+mangrove_wood: charcoal
 netherrack: nether_brick
 nether_gold_ore: gold_ingot
 oak_log: charcoal
@@ -56,6 +59,8 @@ stripped_dark_oak_log: charcoal
 stripped_dark_oak_wood: charcoal
 stripped_jungle_log: charcoal
 stripped_jungle_wood: charcoal
+stripped_mangrove_log: charcoal
+stripped_mangrove_wood: charcoal
 stripped_oak_log: charcoal
 stripped_oak_wood: charcoal
 stripped_spruce_log: charcoal
