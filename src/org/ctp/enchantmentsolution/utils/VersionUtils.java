@@ -19,12 +19,12 @@ public class VersionUtils {
 	
 	public static boolean isAbove(int[] ints) {
 		int[] version = getVersionNumbers();
-		return version[0] > ints[0] && version[1] > ints[1] && version[2] > ints[2];
+		return version[0] > ints[0] || version[0] == ints[0] && version[1] > ints[1] || version[0] == ints[0] && version[1] == ints[1] && version[2] > ints[2];
 	}
 	
 	public static boolean isBelow(int[] ints) {
 		int[] version = getVersionNumbers();
-		return version[0] < ints[0] && version[1] < ints[1] && version[2] < ints[2];
+		return version[0] < ints[0] || version[0] == ints[0] && version[1] < ints[1] || version[0] == ints[0] && version[1] == ints[1] && version[2] < ints[2];
 	}
 
 	public static boolean isZero(int[] ints) {

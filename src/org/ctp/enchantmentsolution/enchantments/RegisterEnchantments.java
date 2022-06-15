@@ -139,7 +139,7 @@ public class RegisterEnchantments {
 
 	public static CustomEnchantment getCustomEnchantment(Enchantment enchant) {
 		for(CustomEnchantment enchantment: ENCHANTMENTS)
-			if (enchant.equals(enchantment.getRelativeEnchantment())) return enchantment;
+			if (enchant == enchantment.getRelativeEnchantment()) return enchantment;
 		return new SnapshotEnchantment(enchant);
 	}
 

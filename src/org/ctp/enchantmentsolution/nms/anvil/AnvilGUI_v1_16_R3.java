@@ -12,7 +12,10 @@ import org.ctp.crashapi.inventory.InventoryData;
 import org.ctp.crashapi.nms.anvil.AnvilSlot;
 import org.ctp.enchantmentsolution.inventory.Anvil;
 
+import net.md_5.bungee.api.chat.TranslatableComponent;
+import net.md_5.bungee.chat.ComponentSerializer;
 import net.minecraft.server.v1_16_R3.*;
+import net.minecraft.server.v1_16_R3.IChatBaseComponent.ChatSerializer;
 
 public class AnvilGUI_v1_16_R3 extends AnvilGUI {
 	private class AnvilContainer extends ContainerAnvil {
@@ -58,7 +61,8 @@ public class AnvilGUI_v1_16_R3 extends AnvilGUI {
 		setInventory(container.getBukkitView().getTopInventory());
 
 		// Send the packet
-		p.playerConnection.sendPacket(new PacketPlayOutOpenWindow(c, container.getType(), new ChatMessage("Repairing")));
+		TranslatableComponent t = new TranslatableComponent("container.repair");
+		p.playerConnection.sendPacket(new PacketPlayOutOpenWindow(c, container.getType(), ChatSerializer.a(ComponentSerializer.toString(t))));
 		// Set their active container to the container
 		p.activeContainer = container;
 

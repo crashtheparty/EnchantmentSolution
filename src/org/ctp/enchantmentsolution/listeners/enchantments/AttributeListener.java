@@ -123,7 +123,7 @@ public class AttributeListener extends Enchantmentable {
 
 									for(ItemSlotType s: ItemSlotType.ARMOR) {
 										if (s == slot.getType()) continue;
-										ItemStack armor = esPlayer.getEquipped()[s.getSlot() - 5];
+										ItemStack armor = esPlayer.getEquipped()[s.getRawSlot() - 5];
 										if (EnchantmentUtils.hasEnchantment(armor, RegisterEnchantments.GUNG_HO)) {
 											gungHo = new ItemSlot(armor, s);
 											break;
