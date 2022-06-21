@@ -452,12 +452,12 @@ public class DamageListener extends Enchantmentable {
 		if (!canRun(RegisterEnchantments.LIFE_DRAIN, event)) return;
 		Entity attacked = event.getEntity();
 		Entity attacker = event.getDamager();
-		if (attacked instanceof LivingEntity && attacker instanceof LivingEntity) if (attacker instanceof HumanEntity) {
+		if (attacked instanceof LivingEntity && attacker instanceof HumanEntity) {
 			HumanEntity human = (HumanEntity) attacker;
 			if (human instanceof Player && isDisabled((Player) human, RegisterEnchantments.LIFE_DRAIN)) return;
 			ItemStack item = human.getInventory().getItemInMainHand();
 			if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.LIFE_DRAIN)) {
-				double damage = event.getDamage() / 2;
+				double damage = event.getDamage();
 				int level = EnchantmentUtils.getLevel(item, RegisterEnchantments.LIFE_DRAIN);
 				double healthBack = damage * 0.10 * level;
 				LifeDrainEvent lifeDrain = new LifeDrainEvent((LivingEntity) attacked, level, human, event.getDamage(), damage, healthBack);
@@ -481,7 +481,7 @@ public class DamageListener extends Enchantmentable {
 			Player player = (Player) event.getEntity();
 			if (isDisabled(player, RegisterEnchantments.MAGIC_GUARD)) return;
 			ItemStack shield = player.getInventory().getItemInOffHand();
-			if (shield.getType().equals(Material.SHIELD)) if (EnchantmentUtils.hasEnchantment(shield, RegisterEnchantments.MAGIC_GUARD)) {
+			if (shield.getType() == Material.SHIELD && EnchantmentUtils.hasEnchantment(shield, RegisterEnchantments.MAGIC_GUARD)) {
 				MagicGuardPotionEvent magicGuard = new MagicGuardPotionEvent(player, ((AreaEffectCloud) event.getDamager()).getBasePotionData().getType().getEffectType());
 				Bukkit.getPluginManager().callEvent(magicGuard);
 

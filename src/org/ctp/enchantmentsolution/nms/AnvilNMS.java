@@ -13,7 +13,11 @@ public class AnvilNMS extends NMS {
 		if (isSimilarOrAbove(getVersionNumbers(), 1, 19, 0)) repairCost = Anvil_4.getRepairCost(item);
 		else if (isSimilarOrAbove(getVersionNumbers(), 1, 18, 2)) repairCost = Anvil_3.getRepairCost(item);
 		else if (isSimilarOrAbove(getVersionNumbers(), 1, 18, 0)) repairCost = Anvil_2.getRepairCost(item);
-		else if (isSimilarOrAbove(getVersionNumbers(), 1, 16, 5)) repairCost = Anvil_1.getRepairCost(item);
+		else if (isSimilarOrAbove(getVersionNumbers(), 1, 17, 0)) repairCost = Anvil_1.getRepairCost(item);
+		else {
+			net.minecraft.server.v1_16_R3.ItemStack nms = org.bukkit.craftbukkit.v1_16_R3.inventory.CraftItemStack.asNMSCopy(item);
+			repairCost = nms.getRepairCost();
+		}
 		if (ConfigString.REPAIR_COST_LIMIT.getInt() > 0 && repairCost > ConfigString.REPAIR_COST_LIMIT.getInt()) repairCost = ConfigString.REPAIR_COST_LIMIT.getInt();
 		return repairCost;
 	}
@@ -22,8 +26,11 @@ public class AnvilNMS extends NMS {
 		if (ConfigString.REPAIR_COST_LIMIT.getInt() > 0 && repairCost > ConfigString.REPAIR_COST_LIMIT.getInt()) repairCost = ConfigString.REPAIR_COST_LIMIT.getInt();
 
 		if (isSimilarOrAbove(getVersionNumbers(), 1, 18, 0)) return Anvil_2.setRepairCost(item, repairCost);
-		else if (isSimilarOrAbove(getVersionNumbers(), 1, 16, 5)) return Anvil_1.setRepairCost(item, repairCost);
-
-		return item;
+		else if (isSimilarOrAbove(getVersionNumbers(), 1, 17, 0)) return Anvil_1.setRepairCost(item, repairCost);
+		else {
+			net.minecraft.server.v1_16_R3.ItemStack nms = org.bukkit.craftbukkit.v1_16_R3.inventory.CraftItemStack.asNMSCopy(item);
+			nms.setRepairCost(repairCost);
+			return org.bukkit.craftbukkit.v1_16_R3.inventory.CraftItemStack.asBukkitCopy(nms);
+		}
 	}
 }
