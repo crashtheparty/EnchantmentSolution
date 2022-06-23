@@ -101,6 +101,7 @@ public class EnchantmentUtils {
 
 	public static ItemStack addEnchantmentsToItem(ItemStack item, List<EnchantmentLevel> levels) {
 		if (levels == null) return item;
+		if (!item.hasItemMeta()) return item;
 		ItemMeta meta = item.getItemMeta();
 		if (meta == null) return item;
 		List<EnchantmentLevel> remove = new ArrayList<EnchantmentLevel>();
