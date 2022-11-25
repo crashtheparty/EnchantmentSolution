@@ -288,7 +288,6 @@ public class BlockListener extends Enchantmentable {
 					if (!MatData.isAir(smelteryEvent.getChangeTo())) {
 						from.setType(smelteryEvent.getChangeTo());
 						from.setAmount(smeltery.getSmelted().getAmount());
-						Chatable.get().sendInfo("From: " + from);
 						i.setItemStack(from);
 					}
 					McMMOHandler.handleBlockDrops(event, item, RegisterEnchantments.SMELTERY);

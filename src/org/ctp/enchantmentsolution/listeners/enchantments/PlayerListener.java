@@ -351,6 +351,7 @@ public class PlayerListener extends Enchantmentable {
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	private void moisturize(PlayerInteractEvent event) {
 		if (!canRun(RegisterEnchantments.MOISTURIZE, event) || isDisabled(event.getPlayer(), RegisterEnchantments.MOISTURIZE)) return;
 

@@ -9,6 +9,8 @@ black_terracotta: black_glazed_terracotta
 blue_terracotta: blue_glazed_terracotta
 brown_terracotta: brown_glazed_terracotta
 cactus: green_dye
+cherry_log: charcoal
+cherry_wood: charcoal
 chorus_fruit: popped_chorus_fruit
 clay: terracotta
 cobbled_deepslate: deepslate
@@ -55,6 +57,8 @@ stripped_acacia_log: charcoal
 stripped_acacia_wood: charcoal
 stripped_birch_log: charcoal
 stripped_birch_wood: charcoal
+stripped_cherry_log: charcoal
+stripped_cherry_wood: charcoal
 stripped_dark_oak_log: charcoal
 stripped_dark_oak_wood: charcoal
 stripped_jungle_log: charcoal

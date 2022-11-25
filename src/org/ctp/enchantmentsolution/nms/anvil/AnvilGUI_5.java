@@ -28,10 +28,10 @@ import net.minecraft.world.entity.player.PlayerInventory;
 import net.minecraft.world.inventory.*;
 import net.minecraft.world.level.World;
 
-public class AnvilGUI_3 extends AnvilGUI {
+public class AnvilGUI_5 extends AnvilGUI {
 	private class AnvilContainer extends ContainerAnvil {
 		public AnvilContainer(EntityHuman entity, int windowId, World world) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
-			super(windowId, (PlayerInventory) EntityHuman.class.getDeclaredMethod("fr").invoke(entity), at(world, new BlockPosition(0, 0, 0)));
+			super(windowId, (PlayerInventory) returnAccessible(EntityHuman.class.getDeclaredMethod("fA"), entity), at(world, new BlockPosition(0, 0, 0)));
 		}
 
 		@Override
@@ -42,7 +42,7 @@ public class AnvilGUI_3 extends AnvilGUI {
 
 	private HashMap<AnvilSlot, ItemStack> items = new HashMap<>();
 
-	public AnvilGUI_3(Player player, final ESAnvilClickEventHandler handler, InventoryData data) {
+	public AnvilGUI_5(Player player, final ESAnvilClickEventHandler handler, InventoryData data) {
 		super(player, handler, data);
 	}
 
@@ -108,7 +108,7 @@ public class AnvilGUI_3 extends AnvilGUI {
 		// Set their active container to the container
 		try {
 			p.getClass().getDeclaredMethod("a", Container.class).invoke(p, container);
-			Field f = EntityHuman.class.getDeclaredField("bV");
+			Field f = EntityHuman.class.getDeclaredField("bU");
 			f.setAccessible(true);
 			f.set(p, container);
 		} catch (Exception ex) {
@@ -119,7 +119,7 @@ public class AnvilGUI_3 extends AnvilGUI {
 	public static void createAnvil(Player player, InventoryData data) {
 		ESAnvilClickEventHandler handler = ESAnvilClickEventHandler.getHandler(player, data);
 		if (data instanceof Anvil) ((Anvil) data).setInLegacy(true);
-		AnvilGUI_3 gui = new AnvilGUI_3(player, handler, data);
+		AnvilGUI_5 gui = new AnvilGUI_5(player, handler, data);
 		gui.open();
 	}
 

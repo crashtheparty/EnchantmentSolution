@@ -39,13 +39,9 @@ public class VanishListener implements Listener {
 				item = EnchantmentUtils.removeEnchantmentFromItem(item, enchant);
 				item = EnchantmentUtils.addEnchantmentToItem(item, enchant, level.getLevel());
 			}
-			boolean lower = false;
 			int maxLevel = enchant.getMaxLevel();
-			if (player != null && player instanceof Player) {
-				lower = player.hasPermission("enchantmentsolution.enchantments.lower-levels");
-				maxLevel = enchant.getMaxLevel((Player) player);
-			}
-			if (lower && maxLevel < level.getLevel()) {
+			if (player != null && player instanceof Player) maxLevel = enchant.getMaxLevel((Player) player);
+			if (maxLevel < level.getLevel()) {
 				if (maxLevel == 0) item = EnchantmentUtils.removeEnchantmentFromItem(item, enchant);
 				else
 					item = EnchantmentUtils.addEnchantmentToItem(item, enchant, maxLevel);

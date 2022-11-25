@@ -7,6 +7,7 @@ import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.event.enchantment.EnchantItemEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -14,6 +15,7 @@ import org.ctp.crashapi.inventory.InventoryData;
 import org.ctp.crashapi.item.ItemData;
 import org.ctp.crashapi.item.ItemSerialization;
 import org.ctp.crashapi.item.ItemType;
+import org.ctp.crashapi.nms.NMS;
 import org.ctp.crashapi.utils.ItemUtils;
 import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
@@ -21,7 +23,6 @@ import org.ctp.enchantmentsolution.enchantments.generate.TableEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentList;
 import org.ctp.enchantmentsolution.enchantments.helper.LevelList;
-import org.ctp.enchantmentsolution.events.ESEnchantItemEvent;
 import org.ctp.enchantmentsolution.nms.EnchantNMS;
 import org.ctp.enchantmentsolution.persistence.PersistenceUtils;
 import org.ctp.enchantmentsolution.utils.compatibility.JobsUtils;
@@ -279,16 +280,18 @@ public class EnchantmentTable implements InventoryData {
 					} else {}
 				}
 		}
+		int tableLevel = table.getLevelList().getList()[level].getLevel();
 		List<EnchantmentLevel> enchLevels = table.getEnchantments(new ItemData(enchantableItem))[level].getEnchantments();
 		Map<Enchantment, Integer> defaultLevels = new HashMap<Enchantment, Integer>();
 		for(EnchantmentLevel l: enchLevels)
 			defaultLevels.put(l.getEnchant().getRelativeEnchantment(), l.getLevel());
-		ESEnchantItemEvent event = new ESEnchantItemEvent(player, player.getOpenInventory(), block, enchantItem, level, defaultLevels, level);
+		EnchantItemEvent event = NMS.enchantItemEvent(player, player.getOpenInventory(), block, enchantItem, tableLevel, defaultLevels, level, enchLevels.get(0).getEnchant().getRelativeEnchantment(), enchLevels.get(0).getLevel());
 		try {
 			Bukkit.getPluginManager().callEvent(event);
 		} catch (Exception ex) {
 			Chatable.sendDebug("An issue occurred with calling an EnchantItemEvent (Custom GUI): " + ex.getMessage(), Level.SEVERE);
 		}
+
 		try {
 			if (playerItems.get(slot).getType() == Material.BOOK && ConfigString.USE_ENCHANTED_BOOKS.getBoolean()) enchantableItem = EnchantmentUtils.convertToEnchantedBook(enchantableItem);
 			player.playSound(player.getLocation(), Sound.BLOCK_ENCHANTMENT_TABLE_USE, 1, 1);

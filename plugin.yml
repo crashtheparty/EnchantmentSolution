@@ -1,5 +1,5 @@
 name: EnchantmentSolution
-version: 2.5.6
+version: 2.5.7
 main: org.ctp.enchantmentsolution.EnchantmentSolution
 api-version: 1.16
 depend: [CrashAPI]
@@ -92,9 +92,6 @@ permissions:
   enchantmentsolution.enchantments.rpg.all: 
     description: Gives access to every enchantment through ESRPG.
     default: op
-  enchantmentsolution.enchantments.lower-levels:
-    description: Only allow the player to have enchantments and enchantment levels that match their permission levels
-    default: false
   enchantmentsolution.anvil.demigod:
     description: Allows players to repair items with enchantments they cannot combine
     default: false

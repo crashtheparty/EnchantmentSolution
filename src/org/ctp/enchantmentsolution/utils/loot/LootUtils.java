@@ -37,7 +37,7 @@ public class LootUtils {
 			if (item == null) continue;
 			EnchantmentLocation location = EnchantmentLocation.CHEST_LOOT;
 			if (EnchantmentUtils.hasEnchantment(item, Enchantment.SOUL_SPEED)) location = EnchantmentLocation.PIGLIN_TRADES;
-			if (EnchantmentUtils.hasEnchantment(item, new EnchantmentData("SWIFT_SNEAK").getEnchantment())) location = EnchantmentLocation.DEEP_DARK;
+			if (EnchantmentUtils.hasEnchantment(item, new EnchantmentData("swift_sneak").getEnchantment())) location = EnchantmentLocation.DEEP_DARK;
 
 			if (!ConfigString.USE_ENCHANTED_BOOKS.getBoolean() && item.getType() == Material.ENCHANTED_BOOK) {
 				item.setType(Material.BOOK);
@@ -59,10 +59,11 @@ public class LootUtils {
 		Inventory inv = ((InventoryHolder) entity).getInventory();
 		for(int i = 0; i < inv.getSize(); i++) {
 			ItemStack item = inv.getItem(i);
+			if (item == null) continue;
 
 			EnchantmentLocation location = EnchantmentLocation.CHEST_LOOT;
 			if (EnchantmentUtils.hasEnchantment(item, Enchantment.SOUL_SPEED)) location = EnchantmentLocation.PIGLIN_TRADES;
-			if (EnchantmentUtils.hasEnchantment(item, new EnchantmentData("SWIFT_SNEAK").getEnchantment())) location = EnchantmentLocation.DEEP_DARK;
+			if (EnchantmentUtils.hasEnchantment(item, new EnchantmentData("swift_sneak").getEnchantment())) location = EnchantmentLocation.DEEP_DARK;
 			if (!ConfigString.USE_ENCHANTED_BOOKS.getBoolean() && item.getType() == Material.ENCHANTED_BOOK) {
 				item.setType(Material.BOOK);
 				item = GenerateUtils.generateChestLoot(player, item, type);
