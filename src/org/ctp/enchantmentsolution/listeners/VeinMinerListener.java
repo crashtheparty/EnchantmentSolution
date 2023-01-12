@@ -9,7 +9,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 
-import wtf.choco.veinminer.api.event.PlayerVeinMineEvent;
+import wtf.choco.veinminer.api.event.player.PlayerVeinMineEvent;
 
 public class VeinMinerListener implements Listener {
 
