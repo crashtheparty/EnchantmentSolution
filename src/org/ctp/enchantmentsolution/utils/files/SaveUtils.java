@@ -19,15 +19,15 @@ import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enchantments.generate.TableEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.events.blocks.DamageState;
-import org.ctp.enchantmentsolution.nms.AnimalMobNMS;
-import org.ctp.enchantmentsolution.nms.animalmob.AnimalMob;
+import org.ctp.enchantmentsolution.interfaces.WalkerInterface;
 import org.ctp.enchantmentsolution.rpg.RPGPlayer;
 import org.ctp.enchantmentsolution.rpg.RPGUtils;
 import org.ctp.enchantmentsolution.utils.Configurations;
-import org.ctp.enchantmentsolution.utils.abilityhelpers.GaiaUtils;
+import org.ctp.enchantmentsolution.utils.abilityhelpers.AnimalMob;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.WalkerBlock;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.WalkerUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
+import org.ctp.enchantmentsolution.utils.player.ESPlayer;
 
 public class SaveUtils {
 
@@ -58,8 +58,14 @@ public class SaveUtils {
 				String[] arrayBlock = stringBlock.split(" ");
 				try {
 					Block block = new Location(Bukkit.getWorld(arrayBlock[1]), Integer.parseInt(arrayBlock[2]), Integer.parseInt(arrayBlock[3]), Integer.parseInt(arrayBlock[4])).getBlock();
-					Enchantment enchantment = RegisterEnchantments.getByName(arrayBlock[0]).getRelativeEnchantment();
-					WalkerBlock walkerBlock = new WalkerBlock(enchantment, block, Material.valueOf(arrayBlock[5]), Integer.parseInt(arrayBlock[6]), DamageState.valueOf(arrayBlock[7]));
+					WalkerInterface inter = WalkerInterface.getFromMetadata(arrayBlock[5]);
+					if (inter == null) try {
+						inter = WalkerInterface.getFromMaterial(Material.valueOf(arrayBlock[5]));
+					} catch (Exception ex) {
+						continue;
+					}
+
+					WalkerBlock walkerBlock = new WalkerBlock(inter, block, Integer.parseInt(arrayBlock[6]), DamageState.valueOf(arrayBlock[7]));
 					blocks.add(walkerBlock);
 				} catch (Exception ex) {
 					Chatable.get().sendInfo("Block at position " + i + " was invalid, skipping.");
@@ -76,7 +82,7 @@ public class SaveUtils {
 				String[] arrayBlock = stringBlock.split(" ");
 				try {
 					Location loc = new Location(Bukkit.getWorld(arrayBlock[0]), Integer.parseInt(arrayBlock[1]), Integer.parseInt(arrayBlock[2]), Integer.parseInt(arrayBlock[3]));
-					GaiaUtils.addLocation(loc);
+					EnchantmentSolution.gaiaAddLocation(loc);
 				} catch (Exception ex) {
 					Chatable.get().sendInfo("Block at position " + i + " was invalid, skipping.");
 				}
@@ -87,7 +93,7 @@ public class SaveUtils {
 		if (config.containsElements("animals")) {
 			int i = 0;
 			while (config.getString("animals." + i + ".entity_type") != null) {
-				AnimalMobNMS.getFromConfig(file, i);
+				AnimalMob.createFromConfig(file, i);
 				i++;
 			}
 			config.removeKeys("animals");
@@ -136,11 +142,11 @@ public class SaveUtils {
 		if (blocks != null) for(WalkerBlock block: blocks) {
 			Block loc = block.getBlock();
 			CustomEnchantment enchantment = RegisterEnchantments.getCustomEnchantment(block.getEnchantment());
-			config.set("blocks." + i, enchantment.getName() + " " + loc.getWorld().getName() + " " + loc.getX() + " " + loc.getY() + " " + loc.getZ() + " " + block.getReplaceType().name() + " " + block.getTick() + " " + block.getDamage().name());
+			config.set("blocks." + i, enchantment.getName() + " " + loc.getWorld().getName() + " " + loc.getX() + " " + loc.getY() + " " + loc.getZ() + " " + block.getMeta() + " " + block.getTick() + " " + block.getDamage().name());
 			i++;
 		}
 		i = 0;
-		List<Location> locs = GaiaUtils.getLocations();
+		List<Location> locs = EnchantmentSolution.gaiaGetLocations();
 		if (locs != null) for(Location loc: locs) {
 			config.set("gaia." + i, loc.getWorld().getName() + " " + loc.getBlockX() + " " + loc.getBlockY() + " " + loc.getBlockZ());
 			i++;
@@ -158,10 +164,11 @@ public class SaveUtils {
 		if (!ConfigString.RESET_ON_RELOAD.getBoolean()) {
 			i = 0;
 			try {
-				for(TableEnchantments table: TableEnchantments.getAllTableEnchantments()) {
-					table.setConfig(config, i);
-					i++;
-				}
+				for(ESPlayer player: EnchantmentSolution.getAllESPlayers(false))
+					for(TableEnchantments table: TableEnchantments.getAllTableEnchantments(player.getPlayer().getUniqueId())) {
+						table.setConfig(config, i);
+						i++;
+					}
 			} catch (NoClassDefFoundError ex) {
 				ex.printStackTrace();
 			}

@@ -13,7 +13,6 @@ import org.ctp.crashapi.utils.CrashConfigUtils;
 import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.utils.Configurations;
-import org.ctp.enchantmentsolution.utils.VersionUtils;
 
 public class MainConfiguration extends Configuration {
 
@@ -49,11 +48,6 @@ public class MainConfiguration extends Configuration {
 		config.addEnum("enchanting_table.enchanting_type", enchantingTypes);
 		config.addEnum("gametypes", Arrays.asList("MINIGAME", "RPG", "HARD"));
 		config.addMinMax("anvil.max_repair_level", 40, 1000000);
-		if (VersionUtils.getBukkitVersionNumber() > 3) {
-			config.addDefault("loots.chests.pillager_outpost.bookshelves", 10);
-			config.addDefault("loots.chests.pillager_outpost.levels", 1);
-			config.addDefault("loots.chests.pillager_outpost.treasure", true);
-		}
 
 		config.writeDefaults();
 

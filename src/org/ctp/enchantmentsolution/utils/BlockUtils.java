@@ -114,8 +114,8 @@ public class BlockUtils {
 			Location loc = newBlock.getLocation().clone().add(0.5, 0.5, 0.5);
 			if (ConfigString.USE_PARTICLES.getBoolean()) loc.getWorld().spawnParticle(Particle.BLOCK_CRACK, loc, 20, newBlock.getBlockData());
 			if (ConfigString.PLAY_SOUND.getBoolean()) {
-				BlockSound sound = BlockSound.getSound(newBlock.getType());
-				loc.getWorld().playSound(loc, sound.getSound(), sound.getVolume(newBlock.getType()), sound.getPitch(newBlock.getType()));
+				BlockSound sound = BlockSound.getSound(newBlock, "break");
+				if (sound != null) loc.getWorld().playSound(loc, sound.getSound(), sound.getVolume(), sound.getPitch());
 			}
 			Collection<ItemStack> drops = newBlock.getDrops(item, player);
 			List<Item> items = new ArrayList<Item>();
@@ -137,13 +137,13 @@ public class BlockUtils {
 			EnchantmentSolution.getESPlayer(player).breakBlock();
 			BlockUtils.removeMultiBlockBreak(b, enchantment);
 			return true;
-		} else if (!newEvent.isCancelled() && item == null || MatData.isAir(item.getType())) {
+		} else if (!newEvent.isCancelled() && (item == null || MatData.isAir(item.getType()))) {
 			Block newBlock = newEvent.getBlock();
 			Location loc = newBlock.getLocation().clone().add(0.5, 0.5, 0.5);
 			if (ConfigString.USE_PARTICLES.getBoolean()) loc.getWorld().spawnParticle(Particle.BLOCK_CRACK, loc, 20, newBlock.getBlockData());
 			if (ConfigString.PLAY_SOUND.getBoolean()) {
-				BlockSound sound = BlockSound.getSound(newBlock.getType());
-				loc.getWorld().playSound(loc, sound.getSound(), sound.getVolume(newBlock.getType()), sound.getPitch(newBlock.getType()));
+				BlockSound sound = BlockSound.getSound(newBlock, "break");
+				if (sound != null) loc.getWorld().playSound(loc, sound.getSound(), sound.getVolume(), sound.getPitch());
 			}
 			Collection<ItemStack> drops = newBlock.getDrops(item, player);
 			List<Item> items = new ArrayList<Item>();

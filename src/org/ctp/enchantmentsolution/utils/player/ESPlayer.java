@@ -1,6 +1,7 @@
 package org.ctp.enchantmentsolution.utils.player;
 
 import java.util.*;
+import java.util.Map.Entry;
 
 import org.bukkit.*;
 import org.bukkit.attribute.AttributeModifier;
@@ -11,27 +12,30 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.ctp.crashapi.events.ItemEquipEvent.HandMethod;
+import org.ctp.crashapi.events.EquipEvent.EquipMethod;
 import org.ctp.crashapi.item.*;
-import org.ctp.crashapi.nms.ServerNMS;
 import org.ctp.crashapi.utils.DamageUtils;
 import org.ctp.crashapi.utils.ItemUtils;
+import org.ctp.crashapi.utils.ServerUtils;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.*;
+import org.ctp.enchantmentsolution.enums.ItemBreakType;
 import org.ctp.enchantmentsolution.events.player.FrequentFlyerEvent;
 import org.ctp.enchantmentsolution.events.player.FrequentFlyerEvent.FFType;
 import org.ctp.enchantmentsolution.listeners.enchantments.AsyncGaiaController;
 import org.ctp.enchantmentsolution.listeners.enchantments.AsyncHWDController;
+import org.ctp.enchantmentsolution.listeners.enchantments.HWDModel;
 import org.ctp.enchantmentsolution.rpg.RPGPlayer;
 import org.ctp.enchantmentsolution.rpg.RPGUtils;
+import org.ctp.enchantmentsolution.threads.ESPlayerThread;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
+import org.ctp.enchantmentsolution.utils.BlockUtils;
 import org.ctp.enchantmentsolution.utils.PermissionUtils;
-import org.ctp.enchantmentsolution.utils.abilityhelpers.GaiaUtils.GaiaTrees;
-import org.ctp.enchantmentsolution.utils.abilityhelpers.ItemEquippedSlot;
-import org.ctp.enchantmentsolution.utils.abilityhelpers.OverkillDeath;
-import org.ctp.enchantmentsolution.utils.abilityhelpers.Streak;
+import org.ctp.enchantmentsolution.utils.abilityhelpers.*;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 import org.ctp.enchantmentsolution.utils.items.AbilityUtils;
 import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
@@ -41,6 +45,7 @@ public class ESPlayer {
 
 	private static Map<Long, Integer> GLOBAL_BLOCKS = new HashMap<Long, Integer>();
 	private static double CONTAGION_CHANCE = 0.0005;
+	private static long DELAY_TICKS = Long.MIN_VALUE;
 	private final OfflinePlayer player;
 	private Player onlinePlayer;
 	private RPGPlayer rpg;
@@ -59,8 +64,10 @@ public class ESPlayer {
 	private ESPlayerAttributeInstance flyAttribute = new FlySpeedAttribute();
 	private Streak streak;
 	private Runnable telepathyTask;
-	private AsyncHWDController hwdController;
-	private AsyncGaiaController gaiaController;
+	private List<AsyncHWDController> hwdControllers;
+	private Map<GaiaTrees, List<AsyncGaiaController>> gaiaControllers;
+	private List<HWDModel> models;
+	private int modelKey;
 
 	public ESPlayer(OfflinePlayer player) {
 		this.player = player;
@@ -76,6 +83,10 @@ public class ESPlayer {
 		telepathyItems = new ArrayList<ItemStack>();
 		removeSoulItems();
 		flyAttribute.addModifier(new AttributeModifier(UUID.fromString("ffffffff-ffff-ffff-ffff-000000000000"), "frequentFlyerFlight", -0.08, Operation.ADD_NUMBER));
+		if (EnchantmentSolution.getPlugin().isEnabled()) ESPlayerThread.getThread(this);
+		hwdControllers = new ArrayList<>();
+		gaiaControllers = new HashMap<>();
+		models = new ArrayList<HWDModel>();
 	}
 
 	public OfflinePlayer getPlayer() {
@@ -88,6 +99,12 @@ public class ESPlayer {
 
 	public Player getOnlinePlayer() {
 		return onlinePlayer;
+	}
+
+	public void logout() {
+		logoutFlyer();
+		removeAllHWDControllers();
+		removeAllGaiaControllers();
 	}
 
 	public void reloadPlayer() {
@@ -149,6 +166,27 @@ public class ESPlayer {
 		return equipped;
 	}
 
+	public ItemSlot[] getEquippedAndType() {
+		ItemSlot[] equipped = new ItemSlot[6];
+		if (!isOnline()) return equipped;
+		equipped[0] = new ItemSlot(getOnlinePlayer().getInventory().getHelmet(), ItemSlotType.HELMET);
+		equipped[1] = new ItemSlot(getOnlinePlayer().getInventory().getChestplate(), ItemSlotType.CHESTPLATE);
+		equipped[2] = new ItemSlot(getOnlinePlayer().getInventory().getLeggings(), ItemSlotType.LEGGINGS);
+		equipped[3] = new ItemSlot(getOnlinePlayer().getInventory().getBoots(), ItemSlotType.BOOTS);
+		equipped[4] = new ItemSlot(getOnlinePlayer().getInventory().getItemInMainHand(), ItemSlotType.MAIN_HAND);
+		equipped[5] = new ItemSlot(getOnlinePlayer().getInventory().getItemInOffHand(), ItemSlotType.OFF_HAND);
+
+		return equipped;
+	}
+	
+	public ItemStack getItemFromType(ItemSlotType type) {
+		for (ItemSlot e : getEquippedAndType()) {
+			if (e == null) continue;
+			if (e.getType() == type) return e.getItem();
+		}
+		return null;
+	}
+
 	public ItemStack[] getInventoryItems() {
 		return isOnline() ? getOnlinePlayer().getInventory().getContents() : new ItemStack[41];
 	}
@@ -165,7 +203,7 @@ public class ESPlayer {
 	}
 
 	public boolean setCooldown(Enchantment enchant) {
-		cooldowns.put(enchant, ServerNMS.getCurrentTick());
+		cooldowns.put(enchant, ServerUtils.getCurrentTick());
 		return cooldowns.containsKey(enchant);
 	}
 
@@ -186,14 +224,15 @@ public class ESPlayer {
 	}
 
 	public boolean canBreakBlock() {
-		long tick = ServerNMS.getCurrentTick();
+		long tick = ServerUtils.getCurrentTick();
+		if (tick <= DELAY_TICKS) return false;
 		if (GLOBAL_BLOCKS.containsKey(tick) && GLOBAL_BLOCKS.get(tick) >= ConfigString.MULTI_BLOCK_BLOCKS_GLOBAL.getInt()) return false;
 		if (blocksBroken.containsKey(tick) && blocksBroken.get(tick) >= ConfigString.MULTI_BLOCK_BLOCKS_PLAYER.getInt()) return false;
 		return true;
 	}
 
 	public void breakBlock() {
-		long tick = ServerNMS.getCurrentTick();
+		long tick = ServerUtils.getCurrentTick();
 		int blocks = 1;
 		if (blocksBroken.containsKey(tick)) blocks += blocksBroken.get(tick);
 		blocksBroken.put(tick, blocks);
@@ -286,7 +325,7 @@ public class ESPlayer {
 
 	public void setFrequentFlyer() {
 		boolean fly = frequentFlyerLevel > 0 && elytra != null;
-		flightDamageLimit = 60;
+		flightDamageLimit = ConfigString.LEGACY_FF.getBoolean() ? frequentFlyerLevel * 2 * 20 : 60;
 		setCanFly(fly);
 		setFlightSpeed(fly);
 		if (reset) flightDamage = flightDamageLimit;
@@ -294,8 +333,9 @@ public class ESPlayer {
 
 	private void setFlightSpeed(boolean canFly) {
 		if (canFly) {
+			double flight = ConfigString.LEGACY_FF.getBoolean() ? 0.08 : 0.016 * frequentFlyerLevel;
 			flyAttribute.removeModifier(UUID.fromString("ffffffff-ffff-ffff-ffff-000000001111"));
-			flyAttribute.addModifier(new AttributeModifier(UUID.fromString("ffffffff-ffff-ffff-ffff-000000001111"), "frequentFlyerLevel", 0.016 * frequentFlyerLevel, Operation.ADD_NUMBER));
+			flyAttribute.addModifier(new AttributeModifier(UUID.fromString("ffffffff-ffff-ffff-ffff-000000001111"), "frequentFlyerLevel", flight, Operation.ADD_NUMBER));
 			player.getPlayer().setFlySpeed((float) flyAttribute.getValue());
 		} else if (player.isOnline()) player.getPlayer().setFlySpeed((float) flyAttribute.getDefaultValue());
 	}
@@ -315,7 +355,7 @@ public class ESPlayer {
 	public void setCanFly(boolean canFly) {
 		if (!isOnline()) return;
 		Player player = getOnlinePlayer();
-		boolean permission = PermissionUtils.check(player, "enchantmentsolution.enable-flight", "enchantmentsolution.abilities.has-external-flight");
+		boolean permission = PermissionUtils.check(player, "enchantmentsolution.abilities.has-external-flight");
 		boolean modifyCanFly = canFly || player.getGameMode().equals(GameMode.CREATIVE) || player.getGameMode().equals(GameMode.SPECTATOR);
 		FrequentFlyerEvent event = null;
 		if (frequentFlyerLevel == 0 && this.canFly && !modifyCanFly) {
@@ -436,7 +476,7 @@ public class ESPlayer {
 		telepathyItems = new ArrayList<ItemStack>();
 		telepathyTask = null;
 		Player p = Bukkit.getPlayer(getOnlinePlayer().getUniqueId());
-		ItemUtils.giveItemsToPlayer(p, newItems, p.getLocation(), true, HandMethod.PICK_UP);
+		ItemUtils.giveItemsToPlayer(p, newItems, p.getLocation(), true, EquipMethod.PICK_UP);
 	}
 
 	public void addTelepathyItems(Collection<ItemStack> items) {
@@ -487,16 +527,17 @@ public class ESPlayer {
 		return streak.getStreak();
 	}
 
-	public EntityType getType() {
-		return streak.getType();
+	public EntityType getStreakType() {
+		return streak == null ? null : streak.getType();
 	}
 
-	public void setStreak(EntityType type, int streak) {
-		this.streak.setStreak(type, streak);
+	public void setStreak(EntityType type, int num) {
+		if (streak == null) streak = new Streak();
+		streak.setStreak(type, num);
 	}
 
 	public void addTimedDisableEnchant(JavaPlugin plugin, Enchantment enchant, int ticks) {
-		long tick = ServerNMS.getCurrentTick() + ticks;
+		long tick = ServerUtils.getCurrentTick() + ticks;
 		if (!isTimedDisableEnchant(plugin, enchant)) timedDisable.add(new EnchantmentTimedDisable(plugin, enchant, tick));
 	}
 
@@ -515,7 +556,7 @@ public class ESPlayer {
 	}
 
 	public void setTimeDisableEnchant(JavaPlugin plugin, Enchantment enchant, int ticks) {
-		long tick = ServerNMS.getCurrentTick() + ticks;
+		long tick = ServerUtils.getCurrentTick() + ticks;
 		if (isTimedDisableEnchant(plugin, enchant)) {
 			EnchantmentTimedDisable disable = getTimedDisable(plugin, enchant);
 			disable.setEndTime(tick);
@@ -605,32 +646,215 @@ public class ESPlayer {
 	}
 
 	public void addToHWDController(ItemStack item, Block original, List<Location> allBlocks) {
-		if (hwdController == null) hwdController = new AsyncHWDController(getOnlinePlayer(), item, original, allBlocks);
-		else if (!hwdController.addBlocks(original, allBlocks)) hwdController = new AsyncHWDController(getOnlinePlayer(), item, original, allBlocks);
+		for(AsyncHWDController controller: hwdControllers)
+			if (controller.getItem().equals(item)) {
+				controller.addBlocks(original, allBlocks);
+				return;
+			}
+		hwdControllers.add(new AsyncHWDController(onlinePlayer, item, original, allBlocks));
 	}
 
-	public boolean correctHWDItem(ItemStack item) {
-		return hwdController == null || item.isSimilar(hwdController.getItem());
+	public void removeNullHWDControllers() {
+		Iterator<AsyncHWDController> iter = hwdControllers.iterator();
+		while (iter.hasNext()) {
+			AsyncHWDController controller = iter.next();
+			if (controller.getItem() == null) {
+				controller.removeBlocks();
+				iter.remove();
+			}
+		}
 	}
 
-	public void removeHWDController() {
-		hwdController = null;
+	public void removeAllHWDControllers() {
+		Iterator<AsyncHWDController> iter = hwdControllers.iterator();
+		while (iter.hasNext()) {
+			AsyncHWDController controller = iter.next();
+			controller.removeBlocks();
+			iter.remove();
+		}
+	}
+
+	public void runHWD() {
+		Iterator<AsyncHWDController> iter = hwdControllers.iterator();
+		while (iter.hasNext()) {
+			AsyncHWDController controller = iter.next();
+			controller.breakingBlocks();
+			if (controller.willRemove()) {
+				controller.removeBlocks();
+				iter.remove();
+			}
+		}
+		removeNullHWDControllers();
 	}
 
 	public void addToGaiaController(ItemStack item, Block original, List<Location> allBlocks, GaiaTrees tree) {
-		if (gaiaController == null) gaiaController = new AsyncGaiaController(getOnlinePlayer(), item, original, allBlocks, tree);
-		else if (!gaiaController.addBlocks(original, allBlocks)) gaiaController = new AsyncGaiaController(getOnlinePlayer(), item, original, allBlocks, tree);
+		List<AsyncGaiaController> controllers = gaiaControllers.get(tree);
+		if (controllers == null) controllers = new ArrayList<AsyncGaiaController>();
+		for(AsyncGaiaController controller: controllers)
+			if (item.equals(controller.getItem()) && !controller.willRemove()) {
+				controller.addBlocks(original, allBlocks);
+				return;
+			}
+		controllers.add(new AsyncGaiaController(onlinePlayer, item, original, allBlocks, tree));
+		gaiaControllers.put(tree, controllers);
 	}
 
-	public boolean correctGaiaItem(ItemStack item) {
-		return gaiaController == null || item.isSimilar(gaiaController.getItem());
+	public void removeGaiaControllers(ItemStack item) {
+		Iterator<Entry<GaiaTrees, List<AsyncGaiaController>>> iter = gaiaControllers.entrySet().iterator();
+		while (iter.hasNext()) {
+			Entry<GaiaTrees, List<AsyncGaiaController>> entry = iter.next();
+			Iterator<AsyncGaiaController> controllers = entry.getValue().iterator();
+			while (controllers.hasNext()) {
+				AsyncGaiaController controller = controllers.next();
+				if (item.equals(controller.getItem())) controllers.remove();
+			}
+		}
 	}
 
-	public boolean correctGaiaTree(GaiaTrees tree) {
-		return gaiaController == null || tree == gaiaController.getTree();
+	public void removeGaiaController(ItemStack item, GaiaTrees tree) {
+		Iterator<AsyncGaiaController> controllers = gaiaControllers.get(tree).iterator();
+		while (controllers.hasNext()) {
+			AsyncGaiaController controller = controllers.next();
+			if (item.equals(controller.getItem())) controllers.remove();
+		}
 	}
 
-	public void removeGaiaController() {
-		gaiaController = null;
+	public void removeNullGaiaControllers() {
+		Iterator<Entry<GaiaTrees, List<AsyncGaiaController>>> iter = gaiaControllers.entrySet().iterator();
+		while (iter.hasNext()) {
+			Entry<GaiaTrees, List<AsyncGaiaController>> entry = iter.next();
+			Iterator<AsyncGaiaController> controllers = entry.getValue().iterator();
+			while (controllers.hasNext()) {
+				AsyncGaiaController controller = controllers.next();
+				if (controller.getItem() == null) controllers.remove();
+			}
+		}
+	}
+
+	public void removeAllGaiaControllers() {
+		Iterator<Entry<GaiaTrees, List<AsyncGaiaController>>> iter = gaiaControllers.entrySet().iterator();
+		while (iter.hasNext()) {
+			Entry<GaiaTrees, List<AsyncGaiaController>> entry = iter.next();
+			Iterator<AsyncGaiaController> controllers = entry.getValue().iterator();
+			while (controllers.hasNext()) {
+				AsyncGaiaController controller = controllers.next();
+				controller.removeBlocks();
+			}
+			iter.remove();
+		}
+	}
+
+	public void runGaia() {
+		Iterator<Entry<GaiaTrees, List<AsyncGaiaController>>> iter = gaiaControllers.entrySet().iterator();
+		while (iter.hasNext()) {
+			Entry<GaiaTrees, List<AsyncGaiaController>> entry = iter.next();
+			Iterator<AsyncGaiaController> controllers = entry.getValue().iterator();
+			while (controllers.hasNext()) {
+				AsyncGaiaController controller = controllers.next();
+				controller.breakingBlocks();
+				if (controller.willRemove()) {
+					controller.removeBlocks();
+					controllers.remove();
+				}
+			}
+		}
+		removeNullGaiaControllers();
+	}
+
+	public void createModel(Block start, Location low, Location high, ItemStack item) {
+		NamespacedKey key = new NamespacedKey(EnchantmentSolution.getPlugin(), "hwd_" + player.getName() + "_" + modelKey);
+		modelKey++;
+		ItemMeta meta = item.getItemMeta();
+		meta.getPersistentDataContainer().set(key, PersistentDataType.INTEGER, 1);
+		item.setItemMeta(meta);
+		models.add(new HWDModel(start, low, high, player, key, item));
+	}
+
+	public void runHWDModel() {
+		long currentTick = ServerUtils.getCurrentTick();
+		Iterator<HWDModel> iter = models.iterator();
+		while (iter.hasNext() && canBreakBlock()) {
+			HWDModel model = iter.next();
+			if (currentTick != ServerUtils.getCurrentTick()) {
+				DELAY_TICKS = currentTick + ConfigString.MULTI_BLOCK_DELAY.getInt();
+				break;
+			}
+			while (canBreakBlock()) {
+				if (model.getCurrent().size() <= 0) {
+					ItemStack item = model.getItem();
+					if (item != null) {
+						ItemMeta meta = item.getItemMeta();
+						meta.getPersistentDataContainer().remove(model.getKey());
+						item.setItemMeta(meta);
+					}
+					iter.remove();
+					break;
+				}
+				if (model.hasItem()) {
+					ItemStack item = model.getItem();
+					Block block = model.getCurrent().get(0);
+					if (!canBreakBlock()) break;
+					List<Material> pickBlocks = ItemBreakType.getDiamondPickaxeBlocks();
+					if (!pickBlocks.contains(model.getStartingPointMaterial()) && pickBlocks.contains(block.getType())) {
+						model.aroundBlock(block);
+						model.setUsed(block);
+						continue;
+					}
+
+					if (ItemBreakType.getType(item.getType()).getBreakTypes().contains(block.getType())) {
+						BlockUtils.addMultiBlockBreak(block.getLocation(), RegisterEnchantments.HEIGHT_PLUS_PLUS);
+						if (BlockUtils.multiBreakBlock(player.getPlayer(), item, block.getLocation(), RegisterEnchantments.HEIGHT_PLUS_PLUS)) breakBlock();
+					}
+					model.aroundBlock(block);
+					model.setUsed(block);
+				} else {
+					iter.remove();
+					break;
+				}
+			}
+		}
+	}
+
+	public void removeHWDModels() {
+		Iterator<HWDModel> iter = models.iterator();
+		while (iter.hasNext()) {
+			HWDModel model = iter.next();
+			if (model.hasItem()) {
+				ItemStack item = model.getItem();
+				ItemMeta meta = item.getItemMeta();
+				meta.getPersistentDataContainer().remove(model.getKey());
+				item.setItemMeta(meta);
+			}
+			iter.remove();
+		}
+	}
+
+	public void removeHWDModels(ItemStack item) {
+		Iterator<HWDModel> iter = models.iterator();
+		while (iter.hasNext()) {
+			HWDModel model = iter.next();
+			if (model.hasItem() && item.isSimilar(model.getItem())) {
+				ItemMeta meta = item.getItemMeta();
+				meta.getPersistentDataContainer().remove(model.getKey());
+				item.setItemMeta(meta);
+			}
+			iter.remove();
+		}
+	}
+
+	public void removeInvalidHWDModels() {
+		Iterator<HWDModel> iter = models.iterator();
+		while (iter.hasNext()) {
+			HWDModel model = iter.next();
+			if (!model.hasItem()) {
+				ItemStack item = model.getPossibleItem();
+				if (item != null) {
+					ItemMeta meta = item.getItemMeta();
+					meta.getPersistentDataContainer().remove(model.getKey());
+					item.setItemMeta(meta);
+				}
+				iter.remove();
+			}
+		}
 	}
 }

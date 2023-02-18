@@ -22,11 +22,13 @@ import org.ctp.crashapi.item.MatData;
 import org.ctp.crashapi.utils.DamageUtils;
 import org.ctp.crashapi.utils.ItemUtils;
 import org.ctp.crashapi.utils.LocationUtils;
+import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enums.ItemBreakType;
 import org.ctp.enchantmentsolution.enums.ItemPlaceType;
+import org.ctp.enchantmentsolution.enums.LogType;
 import org.ctp.enchantmentsolution.events.blocks.*;
 import org.ctp.enchantmentsolution.events.modify.LagEvent;
 import org.ctp.enchantmentsolution.events.player.ExpShareEvent;
@@ -38,7 +40,7 @@ import org.ctp.enchantmentsolution.mcmmo.McMMOHandler;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.BlockUtils;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.*;
-import org.ctp.enchantmentsolution.utils.abilityhelpers.GaiaUtils.GaiaTrees;
+import org.ctp.enchantmentsolution.utils.config.ConfigString;
 import org.ctp.enchantmentsolution.utils.items.AbilityUtils;
 import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
 import org.ctp.enchantmentsolution.utils.items.SmelteryUtils;
@@ -57,7 +59,9 @@ public class BlockListener extends Enchantmentable {
 		if (event instanceof BlockDropItemAddEvent) return;
 		runMethod(this, "greenThumb", event, BlockDropItemEvent.class);
 		runMethod(this, "goldDigger", event, BlockDropItemEvent.class);
+		runMethod(this, "rareEarth", event, BlockDropItemEvent.class);
 		runMethod(this, "smeltery", event, BlockDropItemEvent.class);
+		runMethod(this, "curseOfInfestation", event, BlockDropItemEvent.class);
 		runMethod(this, "telepathy", event, BlockDropItemEvent.class);
 	}
 
@@ -124,15 +128,16 @@ public class BlockListener extends Enchantmentable {
 		if (!EnchantmentSolution.getPlugin().getMcMMOType().equals("Disabled") && McMMOAbility.getIgnored() != null && McMMOAbility.getIgnored().contains(player)) return;
 		if (player.getGameMode().equals(GameMode.CREATIVE) || player.getGameMode().equals(GameMode.SPECTATOR)) return;
 		ItemStack item = player.getInventory().getItemInMainHand();
-		GaiaTrees tree = GaiaTrees.getTree(event.getBlock().getType());
+		Material mat = event.getBlock().getType();
+		GaiaTrees tree = GaiaTrees.getTree(mat);
 		ESPlayer esPlayer = EnchantmentSolution.getESPlayer(player);
-		if (item != null && esPlayer.correctGaiaItem(item) && esPlayer.correctGaiaTree(tree) && EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.GAIA) && tree != null) {
+		if (item != null && EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.GAIA) && tree != null) {
 			List<Location> logs = new ArrayList<Location>();
 			int level = EnchantmentUtils.getLevel(item, RegisterEnchantments.GAIA);
 			int maxBlocks = 50 + level * level * 50;
 			logs.add(event.getBlock().getLocation());
 			for(int i = 0; i < logs.size(); i++) {
-				getLikeBlocks(logs, tree.getLog().getMaterial(), logs.get(i));
+				getLikeBlocks(logs, tree.getLog(), logs.get(i));
 				if (logs.size() > maxBlocks) break;
 			}
 			GaiaEvent gaia = new GaiaEvent(logs, player, level);
@@ -159,13 +164,13 @@ public class BlockListener extends Enchantmentable {
 		}
 	}
 
-	private void getLikeBlocks(List<Location> logs, Material log, Location loc) {
+	private void getLikeBlocks(List<Location> logs, LogType type, Location loc) {
 		for(int x = -2; x <= 2; x++)
 			for(int y = -1; y <= 1; y++)
 				for(int z = -2; z <= 2; z++) {
 					Block b = loc.getBlock().getRelative(x, y, z);
 					Location l = b.getLocation();
-					if (!logs.contains(l) && b.getType() == log) logs.add(l);
+					if (!logs.contains(l) && type.hasMaterial(b.getType())) logs.add(l);
 				}
 	}
 
@@ -267,33 +272,25 @@ public class BlockListener extends Enchantmentable {
 		if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.SMELTERY)) for(Item i: event.getItems()) {
 			ItemStack from = i.getItemStack();
 			SmelteryMaterial smeltery = SmelteryUtils.getSmelteryItem(data, from, item);
-			if (smeltery != null) {
+			if (smeltery != null && !MatData.isAir(smeltery.getToMaterial())) {
 				ItemStack smelted = smeltery.getSmelted();
 				int experience = 0;
-				boolean fortune = false;
 				MatData mat = new MatData(data.getMaterial().name());
-				if (mat.hasMaterial() && (mat.getMaterial() == Material.IRON_ORE || mat.getMaterial() == Material.GOLD_ORE)) {
-					experience = (int) (Math.random() * 3) + 1;
-					fortune = true;
-				} else if (mat.hasMaterial() && mat.getMaterialName().equals("ANCIENT_DEBRIS")) {
-					experience = (int) (Math.random() * 6) + 2;
-					fortune = true;
-				} else if (mat.hasMaterial() && (mat.getMaterialName().equals("NETHER_GOLD_ORE") || mat.getMaterialName().equals("GILDED_BLACKSTONE"))) {
-					experience = (int) (Math.random() * 2);
-					fortune = mat.getMaterialName().equals("NETHER_GOLD_ORE");
-				}
+				if (mat.hasMaterial() && (mat.getMaterial() == Material.IRON_ORE || mat.getMaterial() == Material.GOLD_ORE)) experience = (int) (Math.random() * 3) + 1;
+				else if (mat.hasMaterial() && mat.getMaterialName().equals("ANCIENT_DEBRIS")) experience = (int) (Math.random() * 6) + 2;
+				else if (mat.hasMaterial() && (mat.getMaterialName().equals("NETHER_GOLD_ORE") || mat.getMaterialName().equals("GILDED_BLACKSTONE"))) experience = (int) (Math.random() * 2);
 				experience = AbilityUtils.setExp(experience, EnchantmentUtils.getLevel(item, RegisterEnchantments.EXP_SHARE));
-				SmelteryEvent smelteryEvent = new SmelteryEvent(event.getBlock(), data, player, smelted, smeltery.getToMaterial(), experience, fortune);
+				SmelteryEvent smelteryEvent = new SmelteryEvent(event.getBlock(), data, player, smelted, smeltery.getToMaterial(), experience);
 				Bukkit.getPluginManager().callEvent(smelteryEvent);
 
 				if (!smelteryEvent.isCancelled()) {
 					AbilityUtils.dropExperience(smelteryEvent.getBlock().getLocation(), smelteryEvent.getExp());
-					if (from.getType() == smeltery.getFromMaterial()) {
-						from.setType(smeltery.getToMaterial());
-						if (smelteryEvent.willFortune()) from.setAmount(SmelteryUtils.getFortuneForSmeltery(smelteryEvent.getDrop(), item, smeltery.getFromMaterial()));
+					if (!MatData.isAir(smelteryEvent.getChangeTo())) {
+						from.setType(smelteryEvent.getChangeTo());
+						from.setAmount(smeltery.getSmelted().getAmount());
 						i.setItemStack(from);
 					}
-					McMMOHandler.handleMcMMO(event, item, RegisterEnchantments.SMELTERY);
+					McMMOHandler.handleBlockDrops(event, item, RegisterEnchantments.SMELTERY);
 				}
 			}
 		}
@@ -308,8 +305,9 @@ public class BlockListener extends Enchantmentable {
 		if (player.getGameMode().equals(GameMode.CREATIVE) || player.getGameMode().equals(GameMode.SPECTATOR)) return;
 		ItemStack item = player.getInventory().getItemInMainHand();
 		ESPlayer esPlayer = EnchantmentSolution.getESPlayer(player);
-		if (item != null && esPlayer.correctHWDItem(item) && EnchantmentUtils.hasOneEnchantment(item, RegisterEnchantments.DEPTH_PLUS_PLUS, RegisterEnchantments.HEIGHT_PLUS_PLUS, RegisterEnchantments.WIDTH_PLUS_PLUS)) {
+		if (item != null && EnchantmentUtils.hasOneEnchantment(item, RegisterEnchantments.DEPTH_PLUS_PLUS, RegisterEnchantments.HEIGHT_PLUS_PLUS, RegisterEnchantments.WIDTH_PLUS_PLUS)) {
 			ItemBreakType breakType = ItemBreakType.getType(item.getType());
+
 			if (breakType == null) return;
 			int xt = 0;
 			int yt = 0;
@@ -360,6 +358,46 @@ public class BlockListener extends Enchantmentable {
 				Block block = event.getBlock();
 				item = player.getInventory().getItemInMainHand();
 				if (item == null || MatData.isAir(item.getType())) return;
+
+				if (ConfigString.MULTI_BLOCK_TESTING.getBoolean()) {
+					Location lowRange = null, highRange = null;;
+					if (which.equals("")) {
+						lowRange = new Location(block.getWorld(), block.getX() - xt, block.getY() - yt, block.getZ() - zt);
+						highRange = new Location(block.getWorld(), block.getX() + xt, block.getY() + yt, block.getZ() + zt);
+					} else
+						switch (which) {
+							case "xt":
+								if (times == -1) {
+									lowRange = new Location(block.getWorld(), block.getX() - xt, block.getY() - yt, block.getZ() - zt);
+									highRange = new Location(block.getWorld(), block.getX(), block.getY() + yt, block.getZ() + zt);
+								} else {
+									lowRange = new Location(block.getWorld(), block.getX(), block.getY() - yt, block.getZ() - zt);
+									highRange = new Location(block.getWorld(), block.getX() + xt, block.getY() + yt, block.getZ() + zt);
+								}
+								break;
+							case "yt":
+								if (times == -1) {
+									lowRange = new Location(block.getWorld(), block.getX() - xt, block.getY() - yt, block.getZ() - zt);
+									highRange = new Location(block.getWorld(), block.getX() + xt, block.getY(), block.getZ() + zt);
+								} else {
+									lowRange = new Location(block.getWorld(), block.getX() - xt, block.getY(), block.getZ() - zt);
+									highRange = new Location(block.getWorld(), block.getX() + xt, block.getY() + yt, block.getZ() + zt);
+								}
+								break;
+							case "zt":
+								if (times == -1) {
+									lowRange = new Location(block.getWorld(), block.getX() - xt, block.getY() - yt, block.getZ() - zt);
+									highRange = new Location(block.getWorld(), block.getX() + xt, block.getY() + yt, block.getZ());
+								} else {
+									lowRange = new Location(block.getWorld(), block.getX() - xt, block.getY() - yt, block.getZ());
+									highRange = new Location(block.getWorld(), block.getX() + xt, block.getY() + yt, block.getZ() + zt);
+								}
+								break;
+						}
+					esPlayer.createModel(block, lowRange, highRange, item);
+					return;
+				}
+
 				for(int x = 0; x <= xt; x++)
 					for(int y = 0; y <= yt; y++)
 						for(int z = 0; z <= zt; z++) {
@@ -403,9 +441,19 @@ public class BlockListener extends Enchantmentable {
 				Bukkit.getPluginManager().callEvent(hwd);
 
 				if (!hwd.isCancelled()) {
-					for(Location b: hwd.getBlocks())
-						BlockUtils.addMultiBlockBreak(b, RegisterEnchantments.HEIGHT_PLUS_PLUS);
-					esPlayer.addToHWDController(item, hwd.getBlock(), hwd.getBlocks());
+					boolean async = ConfigString.MULTI_BLOCK_ASYNC.getBoolean();
+					if (async) {
+						for(Location b: hwd.getBlocks())
+							BlockUtils.addMultiBlockBreak(b, RegisterEnchantments.HEIGHT_PLUS_PLUS);
+						esPlayer.addToHWDController(item, hwd.getBlock(), hwd.getBlocks());
+					} else {
+						int blocksBroken = 0;
+						for(Location b: hwd.getBlocks()) {
+							BlockUtils.addMultiBlockBreak(b, RegisterEnchantments.HEIGHT_PLUS_PLUS);
+							if (BlockUtils.multiBreakBlock(player, item, b, RegisterEnchantments.HEIGHT_PLUS_PLUS)) blocksBroken++;
+						}
+						AdvancementUtils.awardCriteria(player, ESAdvancement.OVER_9000, "stone", blocksBroken);
+					}
 				}
 			}
 		}
@@ -551,8 +599,90 @@ public class BlockListener extends Enchantmentable {
 			if (!telepathy.isCancelled()) {
 				ESPlayer esPlayer = EnchantmentSolution.getESPlayer(player);
 				esPlayer.addTelepathyItems(telepathy.getItems());
-				McMMOHandler.handleMcMMO(event, item, RegisterEnchantments.TELEPATHY);
+				McMMOHandler.handleBlockDrops(event, item, RegisterEnchantments.TELEPATHY);
 				event.setCancelled(true);
+			}
+		}
+	}
+
+	private void rareEarth(BlockDropItemEvent event) {
+		if (!canRun(RegisterEnchantments.RARE_EARTH, event)) return;
+		if (event.isCancelled()) return;
+		Player player = event.getPlayer();
+		if (isDisabled(player, RegisterEnchantments.RARE_EARTH)) return;
+		ItemStack item = player.getInventory().getItemInMainHand();
+		BlockData data = event.getBlockState().getBlockData();
+		Material m = data.getMaterial();
+		String name = m.name();
+		if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.RARE_EARTH) && name.contains("_ORE") && name.contains("DEEPSLATE_")) {
+			MatData commonEarth = new MatData(name.substring(name.indexOf("_") + 1));
+			if (commonEarth.hasMaterial()) {
+				int level = EnchantmentUtils.getLevel(item, RegisterEnchantments.RARE_EARTH);
+				double chance = level * .6;
+				int amount = 0;
+				double random = Math.random() * chance;
+				while (random >= 1) {
+					random--;
+					amount++;
+				}
+				if (random > Math.random()) amount++;
+				if (amount > 0) {
+					RareEarthEvent rareEarthEvent = new RareEarthEvent(player, level, event.getBlock(), data, Arrays.asList(new ItemStack(commonEarth.getMaterial(), amount)));
+					Bukkit.getPluginManager().callEvent(rareEarthEvent);
+
+					if (!rareEarthEvent.isCancelled()) {
+						BlockDropItemAddEvent esEvent = new BlockDropItemAddEvent(event.getBlock(), event.getBlockState(), player, ItemUtils.itemStacksToItems(rareEarthEvent.getItems(), event.getBlock().getLocation()));
+						Bukkit.getPluginManager().callEvent(esEvent);
+						if (esEvent.isCancelled()) for(Item i: esEvent.getItems())
+							i.remove();
+						else
+							for(Item i: esEvent.getItems())
+								if (i.getItemStack().getType() == Material.DIAMOND_ORE) AdvancementUtils.awardCriteria(player, ESAdvancement.SPARKLING_FORTUNE, "rare_earth");
+
+					}
+				}
+			}
+		}
+	}
+
+	private void curseOfInfestation(BlockDropItemEvent event) {
+		if (!canRun(RegisterEnchantments.CURSE_OF_INFESTATION, event)) return;
+		if (event.isCancelled()) return;
+		Player player = event.getPlayer();
+		if (isDisabled(player, RegisterEnchantments.CURSE_OF_INFESTATION)) return;
+		ItemStack item = player.getInventory().getItemInMainHand();
+		BlockData data = event.getBlockState().getBlockData();
+		if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.CURSE_OF_INFESTATION)) {
+			List<ItemStack> newItems = new ArrayList<ItemStack>();
+			boolean infested = false;
+			for(Item i: event.getItems()) {
+				String name = i.getItemStack().getType().name();
+				MatData infest = new MatData("INFESTED_" + name);
+				if (infest.hasMaterial()) {
+					infested = true;
+					ItemStack it = i.getItemStack().clone();
+					it.setType(infest.getMaterial());
+					newItems.add(it);
+				} else
+					newItems.add(i.getItemStack());
+			}
+			if (infested) {
+				InfestationEvent infestationEvent = new InfestationEvent(player, event.getBlock(), data, newItems);
+				Bukkit.getPluginManager().callEvent(infestationEvent);
+
+				if (!infestationEvent.isCancelled()) {
+					BlockDropItemAddEvent esEvent = new BlockDropItemAddEvent(event.getBlock(), event.getBlockState(), player, ItemUtils.itemStacksToItems(infestationEvent.getItems(), event.getBlock().getLocation()));
+					Bukkit.getPluginManager().callEvent(esEvent);
+					if (esEvent.isCancelled()) for(Item i: esEvent.getItems())
+						i.remove();
+					else {
+						for(Item i: event.getItems())
+							i.remove();
+						for(Item i: esEvent.getItems())
+							AdvancementUtils.awardCriteria(player, ESAdvancement.SILVER_HORDE, "infested", i.getItemStack().getAmount());
+					}
+
+				}
 			}
 		}
 	}
@@ -587,8 +717,8 @@ public class BlockListener extends Enchantmentable {
 	private Collection<Location> addMultiBlock(Collection<Location> blocks, ItemStack tool, Material original, Block relative, int x, int y, int z) {
 		Block block = relative.getRelative(x, y, z);
 		if (BlockUtils.multiBlockBreakContains(block.getLocation())) return blocks;
-		List<String> pickBlocks = ItemBreakType.WOODEN_PICKAXE.getDiamondPickaxeBlocks();
-		if (!pickBlocks.contains(original.name()) && pickBlocks.contains(block.getType().name())) return blocks;
+		List<Material> pickBlocks = ItemBreakType.getDiamondPickaxeBlocks();
+		if (!pickBlocks.contains(original) && pickBlocks.contains(block.getType())) return blocks;
 
 		if (blocks.contains(block.getLocation())) return blocks;
 

@@ -19,7 +19,7 @@ import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantmentWrapper;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
-import org.ctp.enchantmentsolution.nms.PersistenceNMS;
+import org.ctp.enchantmentsolution.persistence.PersistenceUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 
 public class EnchantmentUtils {
@@ -42,7 +42,7 @@ public class EnchantmentUtils {
 			meta = enchantmentStorage;
 			newItem.setItemMeta(meta);
 			for(EnchantmentLevel level: newLevels)
-				PersistenceNMS.addEnchantment(newItem, new EnchantmentLevel(level.getEnchant(), level.getLevel()));
+				PersistenceUtils.addPersistence(newItem, Arrays.asList(new EnchantmentLevel(level.getEnchant(), level.getLevel())));
 		}
 		return newItem;
 	}
@@ -65,7 +65,7 @@ public class EnchantmentUtils {
 			}
 			newItem.setItemMeta(meta);
 			for(EnchantmentLevel level: newLevels)
-				PersistenceNMS.addEnchantment(newItem, new EnchantmentLevel(level.getEnchant(), level.getLevel()));
+				PersistenceUtils.addPersistence(newItem, Arrays.asList(new EnchantmentLevel(level.getEnchant(), level.getLevel())));
 		}
 		return newItem;
 	}
@@ -115,8 +115,8 @@ public class EnchantmentUtils {
 				meta.addEnchant(level.getEnchant().getRelativeEnchantment(), level.getLevel(), true);
 			item.setItemMeta(meta);
 			if (!item.getItemMeta().hasItemFlag(ItemFlag.HIDE_ENCHANTS) && level.getEnchant().getRelativeEnchantment() instanceof CustomEnchantmentWrapper) {
-				PersistenceNMS.removeEnchantment(item, level.getEnchant());
-				PersistenceNMS.addEnchantment(item, level);
+				PersistenceUtils.removePersistence(item, level.getEnchant());
+				PersistenceUtils.addPersistence(item, Arrays.asList(level));
 			}
 			meta = item.getItemMeta();
 		}
@@ -132,11 +132,17 @@ public class EnchantmentUtils {
 
 	public static ItemStack removeEnchantmentFromItem(ItemStack item, CustomEnchantment enchantment) {
 		if (enchantment == null) return item;
-		if (enchantment instanceof CustomEnchantment) PersistenceNMS.removeEnchantment(item, enchantment);
+		if (enchantment instanceof CustomEnchantment) PersistenceUtils.removePersistence(item, enchantment);
 		ItemMeta meta = item.getItemMeta();
 		if (hasEnchantment(item, enchantment.getRelativeEnchantment()) && meta instanceof EnchantmentStorageMeta) ((EnchantmentStorageMeta) meta).removeStoredEnchant(enchantment.getRelativeEnchantment());
 		else if (hasEnchantment(item, enchantment.getRelativeEnchantment())) meta.removeEnchant(enchantment.getRelativeEnchantment());
 		item.setItemMeta(meta);
+		return item;
+	}
+
+	public static ItemStack removeCursesFromItem(ItemStack item) {
+		for(CustomEnchantment enchantment: RegisterEnchantments.getEnchantments())
+			if (enchantment.isCurse()) item = removeEnchantmentFromItem(item, enchantment);
 		return item;
 	}
 
@@ -186,6 +192,23 @@ public class EnchantmentUtils {
 			}
 		}
 		return 0;
+	}
+
+	public static EnchantmentLevel getEnchantmentLevel(ItemStack item, Enchantment enchant) {
+		EnchantmentLevel level = new EnchantmentLevel(RegisterEnchantments.getCustomEnchantment(enchant), 0);
+		if (item.getItemMeta() != null) {
+			ItemMeta meta = item.getItemMeta();
+			Map<Enchantment, Integer> enchantments = meta.getEnchants();
+			if (item.getType() == Material.ENCHANTED_BOOK) enchantments = ((EnchantmentStorageMeta) meta).getStoredEnchants();
+			for(Iterator<Entry<Enchantment, Integer>> it = enchantments.entrySet().iterator(); it.hasNext();) {
+				Entry<Enchantment, Integer> e = it.next();
+				if (e.getKey().equals(enchant)) {
+					level.setLevel(e.getValue());
+					break;
+				}
+			}
+		}
+		return level;
 	}
 
 	public static boolean canAddEnchantment(CustomEnchantment customEnchant, ItemStack item) {

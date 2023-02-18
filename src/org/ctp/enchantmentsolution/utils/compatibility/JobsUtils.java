@@ -1,6 +1,5 @@
 package org.ctp.enchantmentsolution.utils.compatibility;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -21,15 +20,16 @@ import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 
 import com.gamingmesh.jobs.Jobs;
 import com.gamingmesh.jobs.CMILib.CMIEnchantment;
-import com.gamingmesh.jobs.CMILib.CMIMaterial;
 import com.gamingmesh.jobs.actions.BlockActionInfo;
 import com.gamingmesh.jobs.actions.EnchantActionInfo;
 import com.gamingmesh.jobs.actions.ItemActionInfo;
 import com.gamingmesh.jobs.container.ActionType;
 import com.gamingmesh.jobs.container.FastPayment;
 import com.gamingmesh.jobs.container.JobsPlayer;
-import com.gamingmesh.jobs.listeners.JobsPaymentListener;
-import com.gamingmesh.jobs.stuff.FurnaceBrewingHandling;
+import com.gamingmesh.jobs.stuff.Util;
+
+import net.Zrips.CMILib.Items.CMIItemStack;
+import net.Zrips.CMILib.Items.CMIMaterial;
 
 public class JobsUtils {
 
@@ -113,6 +113,8 @@ public class JobsUtils {
 
 		Player player = event.getPlayer();
 
+		plugin.removeBlockOwnerShip(block);
+
 		if (player == null || !player.isOnline()) return;
 
 		// check if in creative
@@ -120,10 +122,6 @@ public class JobsUtils {
 
 		// check if player is riding
 		if (Jobs.getGCManager().disablePaymentIfRiding && player.isInsideVehicle()) return;
-
-		CMIMaterial cmat = CMIMaterial.get(block);
-		if (cmat.equals(CMIMaterial.FURNACE) || cmat.equals(CMIMaterial.SMOKER) || cmat.equals(CMIMaterial.BLAST_FURNACE) && block.hasMetadata(JobsPaymentListener.furnaceOwnerMetadata)) FurnaceBrewingHandling.removeFurnace(block);
-		else if (cmat.equals(CMIMaterial.BREWING_STAND) || cmat.equals(CMIMaterial.LEGACY_BREWING_STAND) && block.hasMetadata(JobsPaymentListener.brewingOwnerMetadata)) FurnaceBrewingHandling.removeBrewing(block);
 
 		if (!Jobs.getPermissionHandler().hasWorldPermission(player, player.getLocation().getWorld().getName())) return;
 
@@ -143,7 +141,7 @@ public class JobsUtils {
 		// restricted area multiplier
 
 		// Item in hand
-		ItemStack item = Jobs.getNms().getItemInMainHand(player);
+		ItemStack item = CMIItemStack.getItemInMainHand(player);
 		if (item != null && !item.getType().equals(Material.AIR)) // Protection for block break with silktouch
 			if (Jobs.getGCManager().useSilkTouchProtection) for(Entry<Enchantment, Integer> one: item.getEnchantments().entrySet())
 				if (CMIEnchantment.get(one.getKey()) == CMIEnchantment.SILK_TOUCH) if (Jobs.getBpManager().isInBp(block)) return;
@@ -222,13 +220,13 @@ public class JobsUtils {
 	private static boolean payForItemDurabilityLoss(Player p) {
 		if (Jobs.getGCManager().payItemDurabilityLoss) return true;
 
-		ItemStack hand = Jobs.getNms().getItemInMainHand(p);
+		ItemStack hand = CMIItemStack.getItemInMainHand(p);
 		CMIMaterial cmat = CMIMaterial.get(hand);
 
-		HashMap<Enchantment, Integer> got = Jobs.getGCManager().whiteListedItems.get(cmat);
+		Map<Enchantment, Integer> got = Jobs.getGCManager().whiteListedItems.get(cmat);
 		if (got == null) return false;
 
-		if (Jobs.getNms().getDurability(hand) == 0) return true;
+		if (Util.getDurability(hand) == 0) return true;
 
 		for(Entry<Enchantment, Integer> oneG: got.entrySet()) {
 			if (!hand.getEnchantments().containsKey(oneG.getKey())) return false;
@@ -237,13 +235,13 @@ public class JobsUtils {
 
 		return true;
 	}
-	
+
+	@SuppressWarnings("deprecation")
 	private static Jobs getJobs() {
 		Jobs plugin = null;
 		try {
 			plugin = Jobs.getInstance();
-			if (plugin == null)
-				Chatable.get().sendWarning("Jobs has not been initialized properly - ES will ignore it.");
+			if (plugin == null) Chatable.get().sendWarning("Jobs has not been initialized properly - ES will ignore it.");
 		} catch (Exception ex) {
 			Chatable.get().sendWarning("Jobs is not installed on this server - something is wrong.");
 		}

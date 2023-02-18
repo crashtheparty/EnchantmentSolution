@@ -1,10 +1,8 @@
 package org.ctp.enchantmentsolution.listeners.enchantments;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Block;
@@ -24,18 +22,14 @@ public class AsyncHWDController {
 	private final ItemStack item;
 	private final Block original;
 	private List<Location> allBlocks;
-	private List<Location> breaking;
+	private boolean remove = false;
+	private int tick = 2;
 
 	public AsyncHWDController(Player player, ItemStack item, Block original, List<Location> allBlocks) {
 		this.player = player;
 		this.item = item;
 		this.original = original;
 		this.allBlocks = allBlocks;
-
-		breaking = new ArrayList<Location>();
-		for(Location loc: allBlocks)
-			if (BlockUtils.isNextTo(loc.getBlock(), original)) breaking.add(loc);
-		breakingBlocks();
 	}
 
 	protected AsyncHWDController(Player player, ItemStack item, Block original) {
@@ -44,60 +38,35 @@ public class AsyncHWDController {
 		this.original = original;
 	}
 
-	public boolean addBlocks(Block original, List<Location> blocks) {
-		if (breaking.size() == 0) return false;
-		for(Location loc: blocks) {
+	public void addBlocks(Block original, List<Location> blocks) {
+		remove = false;
+		for(Location loc: blocks)
 			allBlocks.add(loc);
-			if (BlockUtils.isNextTo(loc.getBlock(), original)) breaking.add(loc);
-		}
-		return breaking.size() != 0;
 	}
 
-	private void breakingBlocks() {
+	public void breakingBlocks() {
+		tick++;
+		tick = tick % 3;
+		if (tick != 0) return;
 		ESPlayer esPlayer = EnchantmentSolution.getESPlayer(player);
-		if (breaking == null || breaking.size() == 0) {
-			for(Location loc: allBlocks)
-				BlockUtils.removeMultiBlockBreak(loc, RegisterEnchantments.HEIGHT_PLUS_PLUS);
-			esPlayer.removeHWDController();
+		if (allBlocks == null || allBlocks.size() == 0) {
+			remove = true;
 			return;
 		}
-		List<Location> adjacent = new ArrayList<Location>();
 		int blocksBrokenTick = 0;
-		boolean combine = false;
-		Iterator<Location> iter = breaking.iterator();
+		Iterator<Location> iter = allBlocks.iterator();
 
-		List<Location> breakNext = new ArrayList<Location>();
-		if (esPlayer.canBreakBlock()) {
-			while (iter.hasNext()) {
-				Location b = iter.next();
-				if (!esPlayer.canBreakBlock()) {
-					combine = true;
-					break;
-				}
-				if (!esPlayer.isInInventory(item) || item == null || MatData.isAir(item.getType())) {
-					for(Location loc: allBlocks)
-						BlockUtils.removeMultiBlockBreak(loc, RegisterEnchantments.HEIGHT_PLUS_PLUS);
-					return;
-				}
-				if (BlockUtils.multiBreakBlock(player, item, b, RegisterEnchantments.HEIGHT_PLUS_PLUS)) blocksBrokenTick++;
-				allBlocks.remove(b);
-				for(Location loc: allBlocks)
-					if (!breaking.contains(loc) && !adjacent.contains(loc) && BlockUtils.isNextTo(loc.getBlock(), b.getBlock())) adjacent.add(loc);
-				iter.remove();
+		if (esPlayer.canBreakBlock()) while (iter.hasNext()) {
+			Location b = iter.next();
+			if (!esPlayer.canBreakBlock()) break;
+			if (!esPlayer.isInInventory(item) || item == null || MatData.isAir(item.getType())) {
+				remove = true;
+				return;
 			}
-			if (combine) {
-				breakNext.addAll(breaking);
-				for(Location loc: adjacent)
-					if (!breakNext.contains(loc)) breakNext.add(loc);
-			} else
-				breakNext.addAll(adjacent);
-		} else
-			breakNext = breaking;
-		breaking = breakNext;
+			if (BlockUtils.multiBreakBlock(player, item, b, RegisterEnchantments.HEIGHT_PLUS_PLUS)) blocksBrokenTick++;
+			iter.remove();
+		}
 		AdvancementUtils.awardCriteria(player, ESAdvancement.OVER_9000, "stone", blocksBrokenTick);
-		Bukkit.getScheduler().runTaskLater(EnchantmentSolution.getPlugin(), () -> {
-			breakingBlocks();
-		}, 1l);
 	}
 
 	public OfflinePlayer getPlayer() {
@@ -118,5 +87,14 @@ public class AsyncHWDController {
 
 	protected void setAllBlocks(List<Location> allBlocks) {
 		this.allBlocks = allBlocks;
+	}
+
+	public void removeBlocks() {
+		for(Location loc: allBlocks)
+			BlockUtils.removeMultiBlockBreak(loc, RegisterEnchantments.HEIGHT_PLUS_PLUS);
+	}
+
+	public boolean willRemove() {
+		return remove;
 	}
 }

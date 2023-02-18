@@ -8,7 +8,7 @@ import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.ctp.crashapi.nms.DamageEvent;
+import org.ctp.crashapi.nms.DamageNMS;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.events.damage.DrownDamageEvent;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
@@ -58,7 +58,7 @@ public class DrownedEntity {
 			DrownDamageEvent event = new DrownDamageEvent(hurtEntity, this.level, 2, chance <= random ? 2 : 0);
 			Bukkit.getPluginManager().callEvent(event);
 			if (!event.isCancelled() && event.getNewDamage() > 0) {
-				DamageEvent.damageEntity(hurtEntity, "drown", (float) event.getNewDamage());
+				DamageNMS.damageEntity(hurtEntity, "drown", (float) event.getNewDamage());
 				if (hurtEntity.isDead() && hurtEntity instanceof Player && getAttackerEntity() instanceof Player) AdvancementUtils.awardCriteria((Player) getAttackerEntity(), ESAdvancement.HEX_BAG, "player");
 			}
 			ticksLastDamage = 1;

@@ -1,9 +1,9 @@
 name: EnchantmentSolution
-version: 2.4.0
+version: 2.5.6
 main: org.ctp.enchantmentsolution.EnchantmentSolution
-api-version: 1.13
+api-version: 1.16
 depend: [CrashAPI]
-softdepend: [mcMMO, Jobs, VeinMiner, AuctionHouse, MMOLib, MMOItems, Quests, Vault]
+softdepend: [mcMMO, Jobs, VeinMiner, AuctionHouse, MythicLib, MMOItems, Quests, Vault, CMI]
 commands:
   enchantmentsolution:
     aliases: [es]

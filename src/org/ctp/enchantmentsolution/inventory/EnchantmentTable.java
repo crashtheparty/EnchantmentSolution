@@ -1,9 +1,11 @@
 package org.ctp.enchantmentsolution.inventory;
 
 import java.util.*;
+import java.util.logging.Level;
 
 import org.bukkit.*;
 import org.bukkit.block.Block;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -19,8 +21,9 @@ import org.ctp.enchantmentsolution.enchantments.generate.TableEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentList;
 import org.ctp.enchantmentsolution.enchantments.helper.LevelList;
-import org.ctp.enchantmentsolution.nms.EnchantItemCriterion;
-import org.ctp.enchantmentsolution.nms.PersistenceNMS;
+import org.ctp.enchantmentsolution.events.ESEnchantItemEvent;
+import org.ctp.enchantmentsolution.nms.EnchantNMS;
+import org.ctp.enchantmentsolution.persistence.PersistenceUtils;
 import org.ctp.enchantmentsolution.utils.compatibility.JobsUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 import org.ctp.enchantmentsolution.utils.config.ConfigUtils;
@@ -147,7 +150,7 @@ public class EnchantmentTable implements InventoryData {
 							String levelsTaken = Chatable.get().getMessage(loreCodes, "table.level-taken-okay");
 							if (player.getLevel() < levelReq && player.getGameMode().equals(GameMode.SURVIVAL)) levelsTaken = Chatable.get().getMessage(loreCodes, "table.level-taken-lack");
 							loreCodes.remove("%levelsTaken%");
-							loreCodes.put("%enchant%", ChatColor.stripColor(PersistenceNMS.returnEnchantmentName(enchants.get(0).getEnchant(), enchants.get(0).getLevel())));
+							loreCodes.put("%enchant%", ChatColor.stripColor(PersistenceUtils.returnEnchantmentName(enchants.get(0).getEnchant(), enchants.get(0).getLevel())));
 							bookMeta.setLore(Arrays.asList(levelReqString, lapisString, levelsTaken, Chatable.get().getMessage(loreCodes, "table.enchant-name")));
 							book.setItemMeta(bookMeta);
 							inv.setItem(start + extra, book);
@@ -277,16 +280,29 @@ public class EnchantmentTable implements InventoryData {
 				}
 		}
 		List<EnchantmentLevel> enchLevels = table.getEnchantments(new ItemData(enchantableItem))[level].getEnchantments();
-		if (playerItems.get(slot).getType() == Material.BOOK && ConfigString.USE_ENCHANTED_BOOKS.getBoolean()) enchantableItem = EnchantmentUtils.convertToEnchantedBook(enchantableItem);
-		player.playSound(player.getLocation(), Sound.BLOCK_ENCHANTMENT_TABLE_USE, 1, 1);
-		enchantableItem = EnchantmentUtils.addEnchantmentsToItem(enchantableItem, enchLevels);
-		playerItems.set(slot, enchantableItem);
-
+		Map<Enchantment, Integer> defaultLevels = new HashMap<Enchantment, Integer>();
+		for(EnchantmentLevel l: enchLevels)
+			defaultLevels.put(l.getEnchant().getRelativeEnchantment(), l.getLevel());
+		ESEnchantItemEvent event = new ESEnchantItemEvent(player, player.getOpenInventory(), block, enchantItem, level, defaultLevels, level);
+		try {
+			Bukkit.getPluginManager().callEvent(event);
+		} catch (Exception ex) {
+			Chatable.sendDebug("An issue occurred with calling an EnchantItemEvent (Custom GUI): " + ex.getMessage(), Level.SEVERE);
+		}
+		try {
+			if (playerItems.get(slot).getType() == Material.BOOK && ConfigString.USE_ENCHANTED_BOOKS.getBoolean()) enchantableItem = EnchantmentUtils.convertToEnchantedBook(enchantableItem);
+			player.playSound(player.getLocation(), Sound.BLOCK_ENCHANTMENT_TABLE_USE, 1, 1);
+			enchantableItem = EnchantmentUtils.addEnchantmentsToItem(enchantableItem, enchLevels);
+			playerItems.set(slot, enchantableItem);
+			setInventory(playerItems);
+			player.setStatistic(Statistic.ITEM_ENCHANTED, player.getStatistic(Statistic.ITEM_ENCHANTED) + 1);
+			EnchantNMS.updateCriterion(player, enchantableItem);
+			if (EnchantmentSolution.getPlugin().isJobsEnabled()) JobsUtils.sendEnchantAction(player, enchantItem, enchantableItem, enchLevels);
+		} catch (Exception ex) {
+			Chatable.sendDebug("An issue occurred with enchanting items (Custom GUI): " + ex.getMessage(), Level.SEVERE);
+		}
 		TableEnchantments.removeTableEnchantments(player);
-		setInventory(playerItems);
-		player.setStatistic(Statistic.ITEM_ENCHANTED, player.getStatistic(Statistic.ITEM_ENCHANTED) + 1);
-		EnchantItemCriterion.enchantItemTrigger(player, enchantableItem);
-		if (EnchantmentSolution.getPlugin().isJobsEnabled()) JobsUtils.sendEnchantAction(player, enchantItem, enchantableItem, enchLevels);
+		setInventory();
 	}
 
 	@Override

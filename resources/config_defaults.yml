@@ -8,8 +8,12 @@ anvil:
     level_divisor: 4
     default_use: false
     max_repair_level: 60
+    repair_cost_limit: 0
     damage: true
     rename: true
+    no_upgrade_books: false
+    no_upgrade_non_books: false
+    no_upgrade_books_to_non_books: false
 grindstone:
     custom_gui: true
     use_legacy: false
@@ -38,6 +42,7 @@ wiki:
     timer_seconds: 14400
     url: 'https://bit.ly/2N54NzC'
 loots:
+    allow_no_enchantments: false
     mobs:
         use: true
         bookshelves: 0
@@ -98,8 +103,12 @@ gametypes: []
 use_particles: true
 play_sounds: true
 print_usage: true
+debug:
+    send: false
 multi_block:
-    async: false
+    async: true
+    testing: false
+    delay_on_timeout: 5
     all_faces: false
     blocks_per_tick:
         player: 30
@@ -132,6 +141,11 @@ config_comments:
         - 'The highest repair level that will be allowed in the anvil'
         - 'Will show ''Too Expensive to Repair'' if using above 39 and using the vanilla GUI'
 
+        repair_cost_limit: 
+        - 'The maximum repair cost an item can have'
+        - 'Repair cost increases on an item every time it is repaired in an anvil'
+        - 'This is NOT the same cost as what is displayed in the anvil because that also includes the cost of adding enchantments, repairing, renaming, etc.'
+
         default_use: 
         - 'Allow default use of anvil GUI via option at bottom right of custom GUI'
         - 'Only used when custom_gui is true'
@@ -142,6 +156,22 @@ config_comments:
 
         rename: 
         - 'Whether players can use the custom rename without a permission'
+
+        no_upgrade_books: 
+        - 'Whether books should combine levels together if they are the same (i.e. Protection I + Protection I = Protection II).'
+        - 'Protection II + Protection I will still create Protection II, as will Protection I + Protection II.'
+        - 'If false, uses normal settings.'
+
+        no_upgrade_non_books: 
+        - 'Whether items (such as tools, weapons, etc.) should combine levels together if they are the same (i.e. Protection I + Protection I = Protection II).'
+        - 'Protection II + Protection I will still create Protection II, as will Protection I + Protection II.'
+        - 'If false, uses normal settings.'
+
+        no_upgrade_books_to_non_books: 
+        - 'Whether books should combine levels when added to items (such as tools, weapons, etc.).'
+        - 'i.e. Whether a book with Protection I and a helmet with Protection I should combine to make Protection II.'
+        - 'Protection II + Protection I will still create Protection II, as will Protection I + Protection II.'
+        - 'If false, uses normal settings.'
 
     grindstone: 
         custom_gui: 
@@ -227,6 +257,9 @@ config_comments:
         - 'The URL to the wiki - the default is the normal EnchantmentSolution wiki'
 
     loots: 
+        allow_no_enchantments:
+        - 'If an item in a chest, villager trade, etc. spawns with no enchantments, put no enchantments on the item.'
+        - 'If set to false, will put the original enchantments generated through vanilla Minecraft on the item.'
         mobs: 
             use: 
             - 'Allow custom and/or high level enchantments to spawn on mobs'
@@ -263,11 +296,20 @@ config_comments:
     - 'Print usage to player when getting a command wrong.'
     - 'Only works for commands for which they have permission.'
     
+    debug:
+        send:
+        - 'Whether debug messages will appear as information messages in the console'
+        - 'These messages and all other types of messages will appear in debug.yml after using /esdebug'
+    
     multi_block:
         async:
         - 'Whether the Height/Width/Depth++ enchantments should work asynchronously'
         - 'This increases peformance but nerfs those enchantments slightly'
-        - 'DEPRECATED - now will always be true for performance reasons'
+        testing:
+        - 'Tests for Height/Width/Depth to improve performance and reliability'
+        delay_on_timeout:
+        - 'When HWD is running and may cause lag, HWD will not run for this amount of ticks'
+        - 'This is to keep the server running as smooth as possible'
         all_faces:
         - 'Whether the async will only check basic block faces (North, South, East, West, Up, Down) or all faces.'
         blocks_per_tick:

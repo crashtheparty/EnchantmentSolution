@@ -20,23 +20,29 @@ public class TableEnchantments extends GenerateEnchantments {
 	private Map<ItemData, EnchantmentList[]> enchantmentList = new HashMap<ItemData, EnchantmentList[]>();
 	private LevelList levelList;
 	private int bookshelves;
-	private static List<TableEnchantments> TABLES = new ArrayList<TableEnchantments>();
+	private static Map<UUID, List<TableEnchantments>> TABLES = new HashMap<UUID, List<TableEnchantments>>();
 
 	public static TableEnchantments getTableEnchantments(Player player, ItemStack item, int bookshelves) {
-		for(TableEnchantments enchantments: TABLES)
+		UUID uuid = player.getUniqueId();
+		if (!TABLES.containsKey(uuid)) TABLES.put(uuid, new ArrayList<TableEnchantments>());
+		Iterator<TableEnchantments> iter = TABLES.get(uuid).iterator();
+		while (iter.hasNext()) {
+			TableEnchantments enchantments = iter.next();
 			if (enchantments.isSimilar(player, bookshelves)) {
 				if (item != null) enchantments.generateEnchantments(new ItemData(item));
 				return enchantments;
 			}
-
+		}
+		List<TableEnchantments> allEnchantments = TABLES.get(uuid);
 		TableEnchantments enchantments = new TableEnchantments(player, bookshelves);
+		allEnchantments.add(enchantments);
 		if (item != null) enchantments.generateEnchantments(new ItemData(item));
-		TABLES.add(enchantments);
+		TABLES.put(uuid, allEnchantments);
 		return enchantments;
 	}
 
 	public static void removeAllTableEnchantments() {
-		Iterator<TableEnchantments> iterator = TABLES.iterator();
+		Iterator<UUID> iterator = TABLES.keySet().iterator();
 		while (iterator.hasNext()) {
 			iterator.next();
 			iterator.remove();
@@ -44,11 +50,7 @@ public class TableEnchantments extends GenerateEnchantments {
 	}
 
 	public static void removeTableEnchantments(Player player) {
-		Iterator<TableEnchantments> iterator = TABLES.iterator();
-		while (iterator.hasNext()) {
-			TableEnchantments enchantments = iterator.next();
-			if (enchantments.getPlayer().getUniqueId().equals(player.getUniqueId())) iterator.remove();
-		}
+		TABLES.put(player.getUniqueId(), new ArrayList<TableEnchantments>());
 	}
 
 	private TableEnchantments(Player player, int bookshelves) {
@@ -132,12 +134,15 @@ public class TableEnchantments extends GenerateEnchantments {
 			}
 			j++;
 		}
-		TableEnchantments enchantments = new TableEnchantments(player, bookshelves, treasure, levelList, enchantmentList);
-		TABLES.add(enchantments);
+		List<TableEnchantments> allEnchantments = TABLES.get(player.getUniqueId());
+		if (allEnchantments == null) allEnchantments = new ArrayList<TableEnchantments>();
+		allEnchantments.add(new TableEnchantments(player, bookshelves, treasure, levelList, enchantmentList));
+		TABLES.put(player.getUniqueId(), allEnchantments);
 	}
 
-	public static List<TableEnchantments> getAllTableEnchantments() {
-		return TABLES;
+	public static List<TableEnchantments> getAllTableEnchantments(UUID uuid) {
+		if (TABLES.containsKey(uuid)) return TABLES.get(uuid);
+		return new ArrayList<TableEnchantments>();
 	}
 
 	public void setConfig(YamlConfig config, int i) {

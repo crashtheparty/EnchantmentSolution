@@ -11,7 +11,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
-import org.ctp.crashapi.events.ItemAddEvent;
+import org.ctp.crashapi.events.EquipEvent;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.events.player.PlayerChangeCoordsEvent;
@@ -37,15 +37,15 @@ public class GlobalPlayerListener implements Listener {
 	public void onPlayerQuit(PlayerQuitEvent event) {
 		Player player = event.getPlayer();
 		ESPlayer esPlayer = EnchantmentSolution.getESPlayer(player);
-		if (esPlayer != null && esPlayer.canFly(false)) esPlayer.logoutFlyer();
+		if (esPlayer != null && esPlayer.canFly(false)) esPlayer.logout();
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR)
-	public void onInvent(ItemAddEvent event) {
-		ItemStack item = event.getItem();
+	public void onEquip(EquipEvent event) {
+		ItemStack item = event.getNewItem();
 		List<EnchantmentLevel> levels = EnchantmentUtils.getEnchantmentLevels(item);
 		for(EnchantmentLevel level: levels)
-			AdvancementUtils.awardCriteria(event.getPlayer(), level.getEnchant());
+			if (event.getEntity() instanceof Player) AdvancementUtils.awardCriteria((Player) event.getEntity(), level.getEnchant());
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR)

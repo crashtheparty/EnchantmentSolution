@@ -23,7 +23,6 @@ import org.ctp.enchantmentsolution.enchantments.generate.AnvilEnchantments.Repai
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.compatibility.JobsUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
-import org.ctp.enchantmentsolution.utils.config.ConfigUtils;
 
 public class Anvil implements InventoryData {
 
@@ -51,10 +50,9 @@ public class Anvil implements InventoryData {
 		if (block != null && block.getType() == Material.AIR) return;
 		boolean useAnvil = ConfigString.DEFAULT_ANVIL.getBoolean();
 		int maxRepairLevel = ConfigString.MAX_REPAIR_LEVEL.getInt();
-		boolean useLegacyGrindstone = ConfigUtils.useLegacyGrindstone();
 		try {
 			int size = 27;
-			if (useAnvil || useLegacyGrindstone) size = 45;
+			if (useAnvil) size = 45;
 			Inventory inv = Bukkit.createInventory(null, size, Chatable.get().getMessage(getCodes(), "anvil.name"));
 			inv = open(inv);
 
@@ -63,34 +61,16 @@ public class Anvil implements InventoryData {
 			mirrorMeta.setDisplayName(Chatable.get().getMessage(getCodes(), "anvil.mirror"));
 			mirror.setItemMeta(mirrorMeta);
 			int num_mirrors = 27;
-			if (useAnvil || ConfigUtils.useLegacyGrindstone()) num_mirrors = 45;
+			if (useAnvil) num_mirrors = 45;
 			for(int i = 0; i < num_mirrors; i++)
 				if (i != 4 && i != 10 && i != 12 && i != 16) inv.setItem(i, mirror);
-			if (useAnvil && useLegacyGrindstone) {
-				ItemStack anvil = new ItemStack(Material.ANVIL);
-				ItemMeta anvilMeta = anvil.getItemMeta();
-				anvilMeta.setDisplayName(Chatable.get().getMessage(getCodes(), "anvil.legacy-gui"));
-				anvilMeta.setLore(Chatable.get().getMessages(getCodes(), "anvil.legacy-gui-warning"));
-				anvil.setItemMeta(anvilMeta);
-				inv.setItem(30, anvil);
-				ItemStack grindstone = new ItemStack(Material.SMOOTH_STONE);
-				ItemMeta grindstoneMeta = grindstone.getItemMeta();
-				grindstoneMeta.setDisplayName(Chatable.get().getMessage(getCodes(), "grindstone.legacy-open"));
-				grindstone.setItemMeta(grindstoneMeta);
-				inv.setItem(32, grindstone);
-			} else if (useAnvil) {
+			if (useAnvil) {
 				ItemStack anvil = new ItemStack(Material.ANVIL);
 				ItemMeta anvilMeta = anvil.getItemMeta();
 				anvilMeta.setDisplayName(Chatable.get().getMessage(getCodes(), "anvil.legacy-gui"));
 				anvilMeta.setLore(Chatable.get().getMessages(getCodes(), "anvil.legacy-gui-warning"));
 				anvil.setItemMeta(anvilMeta);
 				inv.setItem(31, anvil);
-			} else if (useLegacyGrindstone) {
-				ItemStack grindstone = new ItemStack(Material.SMOOTH_STONE);
-				ItemMeta grindstoneMeta = grindstone.getItemMeta();
-				grindstoneMeta.setDisplayName(Chatable.get().getMessage(getCodes(), "grindstone.legacy-open"));
-				grindstone.setItemMeta(grindstoneMeta);
-				inv.setItem(31, grindstone);
 			}
 
 			ItemStack rename = new ItemStack(Material.LIME_STAINED_GLASS_PANE);
@@ -223,7 +203,7 @@ public class Anvil implements InventoryData {
 				anvil.getCombinedItem().setAmount(1);
 			}
 			ItemUtils.giveItemToPlayer(player, anvil.getCombinedItem(), player.getLocation(), false);
-			if (anvil.getRepairType() == RepairType.REPAIR || anvil.getRepairType() == RepairType.STICKY_REPAIR) ItemUtils.giveItemToPlayer(player, anvil.getItemLeftover(), player.getLocation(), false);
+			if ((anvil.getRepairType() == RepairType.REPAIR || anvil.getRepairType() == RepairType.STICKY_REPAIR) && anvil.dropLeftovers()) ItemUtils.giveItemToPlayer(player, anvil.getItemLeftover(), player.getLocation(), false);
 			if (EnchantmentSolution.getPlugin().isJobsEnabled()) JobsUtils.sendAnvilAction(player, playerItems.get(1), anvil.getCombinedItem());
 			if (anvil.getRepairType() == RepairType.STICKY_REPAIR) AdvancementUtils.awardCriteria(player, ESAdvancement.SIMPLE_REPAIR, "repair");
 			anvil = null;

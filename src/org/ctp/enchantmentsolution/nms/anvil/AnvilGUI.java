@@ -13,6 +13,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.ctp.crashapi.inventory.InventoryData;
+import org.ctp.crashapi.nms.NMS;
 import org.ctp.crashapi.nms.anvil.AnvilClickEvent;
 import org.ctp.crashapi.nms.anvil.AnvilClickEventHandler;
 import org.ctp.crashapi.nms.anvil.AnvilSlot;
@@ -23,7 +24,7 @@ import org.ctp.enchantmentsolution.inventory.ConfigInventory;
 import org.ctp.enchantmentsolution.nms.AnvilNMS;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 
-public abstract class AnvilGUI {
+public abstract class AnvilGUI extends NMS {
 
 	private Player player;
 
@@ -43,9 +44,10 @@ public abstract class AnvilGUI {
 		setData(data);
 
 		listener = new Listener() {
+
 			@EventHandler(priority = EventPriority.HIGHEST)
 			public void onInventoryClick(InventoryClickEvent event) {
-				if (event.getWhoClicked() instanceof Player) if (event.getInventory().equals(inv)) {
+				if (event.getWhoClicked() instanceof Player && event.getInventory().equals(inv)) {
 					event.setCancelled(true);
 					if (data instanceof Anvil) {
 						Anvil anvil = (Anvil) data;
@@ -53,7 +55,7 @@ public abstract class AnvilGUI {
 						int slot = event.getRawSlot();
 						String name = "";
 
-						if (item != null) if (item.hasItemMeta()) {
+						if (item != null && item.hasItemMeta()) {
 							ItemMeta meta = item.getItemMeta();
 
 							if (meta.hasDisplayName()) name = meta.getDisplayName();

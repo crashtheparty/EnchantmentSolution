@@ -7,7 +7,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.type.Hopper;
-import org.ctp.enchantmentsolution.nms.ChestPopulateNMS;
+import org.ctp.enchantmentsolution.utils.loot.LootUtils;
 
 public class ChestLoot {
 
@@ -41,7 +41,7 @@ public class ChestLoot {
 	}
 
 	private void checkChest(Block block) {
-		if (ChestPopulateNMS.isLootChest(block)) lootToCheck.add(block);
+		if (LootUtils.isActiveLootChest(block)) lootToCheck.add(block);
 	}
 
 	protected List<Block> getLootToCheck() throws ChestLootException {

@@ -9,7 +9,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.plugin.Plugin;
-import org.ctp.crashapi.CrashAPI;
 import org.ctp.crashapi.CrashAPIPlugin;
 import org.ctp.crashapi.config.*;
 import org.ctp.crashapi.config.yaml.YamlConfig;
@@ -22,13 +21,14 @@ import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enchantments.generate.TableEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.inventory.minigame.Minigame;
-import org.ctp.enchantmentsolution.nms.animalmob.AnimalMob;
 import org.ctp.enchantmentsolution.rpg.RPGPlayer;
 import org.ctp.enchantmentsolution.rpg.RPGUtils;
+import org.ctp.enchantmentsolution.utils.abilityhelpers.AnimalMob;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.WalkerBlock;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.WalkerUtils;
 import org.ctp.enchantmentsolution.utils.config.*;
 import org.ctp.enchantmentsolution.utils.files.ESLanguageFile;
+import org.ctp.enchantmentsolution.utils.player.ESPlayer;
 
 public class Configurations implements CrashConfigurations {
 
@@ -45,6 +45,7 @@ public class Configurations implements CrashConfigurations {
 
 	private List<ESLanguageFile> LANGUAGE_FILES = new ArrayList<ESLanguageFile>();
 	private DataFile DATA_FILE;
+	private DataFile DEBUG_FILE;
 
 	public static Configurations getConfigurations() {
 		return CONFIGURATIONS;
@@ -81,6 +82,7 @@ public class Configurations implements CrashConfigurations {
 
 		LANGUAGE_FILES.add(new ESLanguageFile(dataFolder, Language.US));
 		LANGUAGE_FILES.add(new ESLanguageFile(dataFolder, Language.GERMAN));
+		LANGUAGE_FILES.add(new ESLanguageFile(dataFolder, Language.SPANISH));
 		LANGUAGE_FILES.add(new ESLanguageFile(dataFolder, Language.CHINA_SIMPLE));
 
 		for(ESLanguageFile file: LANGUAGE_FILES)
@@ -89,10 +91,13 @@ public class Configurations implements CrashConfigurations {
 		if (LANGUAGE == null) LANGUAGE = new LanguageConfiguration(dataFolder, languageFile, LANGUAGE_FILES.get(0), db, header);
 
 		File extras = new File(dataFolder + "/extras");
+		File dataBackups = new File(dataFolder + "/extras/backups-data");
 
 		if (!extras.exists()) extras.mkdirs();
+		if (!dataBackups.exists()) dataBackups.mkdirs();
 
-		DATA_FILE = new DataFile(EnchantmentSolution.getPlugin(), dataFolder, "data.yml", true);
+		DATA_FILE = new DataFile(EnchantmentSolution.getPlugin(), dataFolder, "data.yml", true, true);
+		DEBUG_FILE = new DataFile(EnchantmentSolution.getPlugin(), dataFolder, "debug.yml", true, false);
 
 		INITIALIZING = false;
 		save();
@@ -148,13 +153,12 @@ public class Configurations implements CrashConfigurations {
 
 	public void generateDebug() {
 		File dataFolder = EnchantmentSolution.getPlugin().getDataFolder();
-		DataFile data = new DataFile(EnchantmentSolution.getPlugin(), dataFolder, "debug.yml", false);
+		DataFile data = new DataFile(EnchantmentSolution.getPlugin(), dataFolder, "debug.yml", false, false);
 		YamlConfig debug = data.getConfig();
 
 		SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss z Z");
 		debug.set("time", format.format(new Date()));
-		debug.set("version.bukkit", CrashAPI.getPlugin().getBukkitVersion().getVersion());
-		debug.set("version.bukkit_num", CrashAPI.getPlugin().getBukkitVersion().getVersionNumber());
+		debug.set("version.bukkit", VersionUtils.getMinecraftVersion());
 		debug.set("version.plugin", EnchantmentSolution.getPlugin().getPluginVersion().getCurrent().getVersionName());
 		debug.set("plugins.jobs_reborn", EnchantmentSolution.getPlugin().isJobsEnabled());
 		debug.set("plugins.mcmmo", EnchantmentSolution.getPlugin().getMcMMOType());
@@ -165,6 +169,8 @@ public class Configurations implements CrashConfigurations {
 		for(Plugin pl: Bukkit.getPluginManager().getPlugins())
 			if (pl.isEnabled()) allPlugins.add(pl.getDescription().getName() + " " + pl.getDescription().getVersion());
 		debug.set("plugins.all_plugins", allPlugins);
+
+		debug.copy(DEBUG_FILE.getConfig());
 
 		int i = 0;
 		for(CrashAdvancementProgress progress: EnchantmentSolution.getAdvancementProgress()) {
@@ -194,10 +200,11 @@ public class Configurations implements CrashConfigurations {
 
 		i = 0;
 		try {
-			for(TableEnchantments table: TableEnchantments.getAllTableEnchantments()) {
-				table.setConfig(debug, "data_file.", i);
-				i++;
-			}
+			for(ESPlayer player: EnchantmentSolution.getAllESPlayers(false))
+				for(TableEnchantments table: TableEnchantments.getAllTableEnchantments(player.getPlayer().getUniqueId())) {
+					table.setConfig(debug, "data_file.", i);
+					i++;
+				}
 		} catch (NoClassDefFoundError ex) {
 			ex.printStackTrace();
 		}
@@ -297,6 +304,10 @@ public class Configurations implements CrashConfigurations {
 
 	public DataFile getDataFile() {
 		return DATA_FILE;
+	}
+
+	public DataFile getDebugFile() {
+		return DEBUG_FILE;
 	}
 
 	public MinigameConfiguration getMinigames() {

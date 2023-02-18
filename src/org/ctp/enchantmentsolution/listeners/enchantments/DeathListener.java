@@ -11,7 +11,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.MetadataValue;
-import org.ctp.crashapi.item.MobHeads;
+import org.ctp.crashapi.entity.MobHeads;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
@@ -76,16 +76,14 @@ public class DeathListener extends Enchantmentable {
 	private void streak(EntityDeathEvent event) {
 		if (!canRun(RegisterEnchantments.STREAK, event)) return;
 		EntityDamageEvent e = event.getEntity().getLastDamageCause();
-		if (e instanceof EntityDamageByEntityEvent) {
-			if (event.getEntity().getKiller() != null) {
-				Player killer = event.getEntity().getKiller();
-				if (killer == null || isDisabled(killer, RegisterEnchantments.STREAK)) return;
-				if (EnchantmentUtils.hasEnchantment(killer.getInventory().getItemInMainHand(), RegisterEnchantments.STREAK)) {
-					StreakDeathEvent streak = new StreakDeathEvent(event.getEntity(), killer);
-					if (!streak.isCancelled()) {
-						ESPlayer player = EnchantmentSolution.getESPlayer(killer);
-						player.addToStreak(streak.getEntity());
-					}
+		if (e instanceof EntityDamageByEntityEvent) if (event.getEntity().getKiller() != null) {
+			Player killer = event.getEntity().getKiller();
+			if (killer == null || isDisabled(killer, RegisterEnchantments.STREAK)) return;
+			if (EnchantmentUtils.hasEnchantment(killer.getInventory().getItemInMainHand(), RegisterEnchantments.STREAK)) {
+				StreakDeathEvent streak = new StreakDeathEvent(event.getEntity(), killer);
+				if (!streak.isCancelled()) {
+					ESPlayer player = EnchantmentSolution.getESPlayer(killer);
+					player.addToStreak(streak.getEntity());
 				}
 			}
 		}

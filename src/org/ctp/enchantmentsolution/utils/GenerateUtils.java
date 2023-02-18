@@ -2,6 +2,7 @@ package org.ctp.enchantmentsolution.utils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -33,7 +34,7 @@ public class GenerateUtils {
 		List<EnchantmentLevel> levels = getEnchantments(lists);
 		if (levels == null || levels.size() == 0) {
 			warningMessages(item, "ChestLoot");
-			return item;
+			if (!ConfigString.ALLOW_NO_ENCHANTMENTS.getBoolean()) return item;
 		}
 
 		item = EnchantmentUtils.removeAllEnchantments(item, true);
@@ -47,7 +48,7 @@ public class GenerateUtils {
 		List<EnchantmentLevel> levels = getEnchantments(lists);
 		if (levels == null || levels.size() == 0) {
 			warningMessages(item, "PiglinTrades");
-			return item;
+			if (!ConfigString.ALLOW_NO_ENCHANTMENTS.getBoolean()) return item;
 		}
 
 		item = EnchantmentUtils.removeAllEnchantments(item, true);
@@ -63,7 +64,7 @@ public class GenerateUtils {
 		List<EnchantmentLevel> levels = getEnchantments(lists);
 		if (levels == null || levels.size() == 0) {
 			warningMessages(item, location == EnchantmentLocation.CHEST_LOOT ? "ChestLoot" : "PiglinTrades");
-			return item;
+			if (!ConfigString.ALLOW_NO_ENCHANTMENTS.getBoolean()) return item;
 		}
 
 		item = EnchantmentUtils.removeAllEnchantments(item, true);
@@ -77,7 +78,7 @@ public class GenerateUtils {
 		List<EnchantmentLevel> levels = getEnchantments(lists);
 		if (levels == null || levels.size() == 0) {
 			warningMessages(item, "MinigameLoot");
-			return item;
+			if (!ConfigString.ALLOW_NO_ENCHANTMENTS.getBoolean()) return item;
 		}
 
 		return EnchantmentUtils.addEnchantmentsToItem(item, levels);
@@ -94,7 +95,7 @@ public class GenerateUtils {
 		List<EnchantmentLevel> levels = getEnchantments(lists, item.getMinLevels(), item.getMaxLevels());
 		if (levels == null || levels.size() == 0) {
 			warningMessages(enchant, "MinigameLoot");
-			return enchant;
+			if (!ConfigString.ALLOW_NO_ENCHANTMENTS.getBoolean()) return enchant;
 		}
 
 		if (!item.getType().isMultiple()) while (levels.size() > 1)
@@ -128,7 +129,7 @@ public class GenerateUtils {
 		List<EnchantmentLevel> levels = getEnchantments(lists);
 		if (levels == null || levels.size() == 0) {
 			warningMessages(item, "FishingLoot");
-			return item;
+			if (!ConfigString.ALLOW_NO_ENCHANTMENTS.getBoolean()) return item;
 		}
 
 		item = EnchantmentUtils.removeAllEnchantments(item, true);
@@ -142,7 +143,7 @@ public class GenerateUtils {
 		List<EnchantmentLevel> levels = getEnchantments(lists);
 		if (levels == null || levels.size() == 0) {
 			warningMessages(item, "MobLoot");
-			return item;
+			if (!ConfigString.ALLOW_NO_ENCHANTMENTS.getBoolean()) return item;
 		}
 
 		item = EnchantmentUtils.removeAllEnchantments(item, true);
@@ -179,8 +180,10 @@ public class GenerateUtils {
 	}
 
 	private static void warningMessages(ItemStack item, String type) {
-		Chatable.get().sendWarning("Item couldn't find EnchantmentSolution enchantments. Keeping default enchantments on the item.");
-		Chatable.get().sendWarning("This occurs when items do not have valid enchantments based on the item being spawned (as well as the player spawning them, if applicable). THIS IS ONLY A BUG IF THE ITEM HAS VALID ENCHANTMENTS SPECIFIED FOR IT.");
-		Chatable.get().sendWarning("Item: " + item.toString() + " Type: " + type);
+		String message = "Item couldn't find EnchantmentSolution enchantments.";
+		if (!ConfigString.ALLOW_NO_ENCHANTMENTS.getBoolean()) message += " Keeping default enchantments on the item.";
+		Chatable.sendDebug(message, Level.WARNING);
+		Chatable.sendDebug("This occurs when items do not have valid enchantments based on the item being spawned (as well as the player spawning them, if applicable). THIS IS ONLY A BUG IF THE ITEM HAS VALID ENCHANTMENTS SPECIFIED FOR IT.", Level.WARNING);
+		Chatable.sendDebug("Item: " + item.toString() + " Type: " + type);
 	}
 }

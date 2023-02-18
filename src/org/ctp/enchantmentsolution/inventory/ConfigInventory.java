@@ -29,7 +29,7 @@ public class ConfigInventory implements InventoryData, Pageable {
 	private YamlConfigBackup config, backup;
 	private YamlChild child;
 	private HashMap<YamlConfigBackup, Boolean> isChanged = new HashMap<YamlConfigBackup, Boolean>();
-	private boolean hasChanged = false;
+	private static boolean HAS_CHANGED = false;
 	private final int PAGING = 36;
 	private int page = 0;
 	private String level = null, type = null;
@@ -55,13 +55,13 @@ public class ConfigInventory implements InventoryData, Pageable {
 		isChanged.putAll(DBUtils.getDifferent(configurations.getHardMode()));
 		isChanged.putAll(DBUtils.getDifferent(configurations.getMinigames()));
 
-		hasChanged = isChanged.containsValue(true);
+		HAS_CHANGED = isChanged.containsValue(true);
 	}
 
 	private void change(YamlConfigBackup config) {
 		isChanged.put(config, EnchantmentSolution.getPlugin().getDb().isConfigDifferent(config));
 
-		hasChanged = isChanged.containsValue(true);
+		HAS_CHANGED = isChanged.containsValue(true);
 	}
 
 	public void revert() {
@@ -153,7 +153,7 @@ public class ConfigInventory implements InventoryData, Pageable {
 		ItemStack save = null;
 		ItemStack revert = null;
 
-		if (hasChanged) {
+		if (HAS_CHANGED) {
 			save = new ItemStack(Material.NAME_TAG);
 			revert = new ItemStack(Material.FIREWORK_STAR);
 		} else {
@@ -558,14 +558,6 @@ public class ConfigInventory implements InventoryData, Pageable {
 		this.child = child;
 	}
 
-	public boolean isHasChanged() {
-		return hasChanged;
-	}
-
-	public void setHasChanged(boolean hasChanged) {
-		this.hasChanged = hasChanged;
-	}
-
 	public YamlConfigBackup getConfig() {
 		return config;
 	}
@@ -705,5 +697,9 @@ public class ConfigInventory implements InventoryData, Pageable {
 	@Override
 	public ChatUtils getChat() {
 		return Chatable.get();
+	}
+
+	public static boolean hasChanged() {
+		return HAS_CHANGED;
 	}
 }

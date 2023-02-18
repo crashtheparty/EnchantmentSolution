@@ -12,7 +12,7 @@ public class OverkillEvent extends ProjectileSpawnEvent {
 	private double speed;
 
 	public OverkillEvent(Player who, ItemStack item, boolean takeArrow, boolean hasArrow, double speed) {
-		super(who, new EnchantmentLevel(CERegister.OVERKILL, 1), item, 4);
+		super(who, new EnchantmentLevel(CERegister.OVERKILL, 1), item, 3);
 		setTakeArrow(takeArrow);
 		this.hasArrow = hasArrow;
 		setSpeed(speed);

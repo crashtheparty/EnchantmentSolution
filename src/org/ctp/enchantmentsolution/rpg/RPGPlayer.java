@@ -11,7 +11,6 @@ import org.bukkit.boss.*;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.ctp.crashapi.config.yaml.YamlConfig;
-import org.ctp.crashapi.nms.HotbarNMS;
 import org.ctp.crashapi.utils.ChatUtils;
 import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
@@ -129,7 +128,7 @@ public class RPGPlayer {
 		codes.put("%old_points%", oldPoints.intValue());
 		codes.put("%new_points%", newPoints.intValue());
 
-		HotbarNMS.sendHotBarMessage(player.getPlayer(), Chatable.get().getMessage(codes, "rpg.level_up_points"));
+		Chatable.get().sendHotbarMessage(player.getPlayer(), Chatable.get().getMessage(codes, "rpg.level_up_points"));
 	}
 
 	public void removeFromBar() {

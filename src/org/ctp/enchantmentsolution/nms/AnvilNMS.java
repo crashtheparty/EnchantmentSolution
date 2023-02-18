@@ -1,85 +1,36 @@
 package org.ctp.enchantmentsolution.nms;
 
 import org.bukkit.inventory.ItemStack;
-import org.ctp.crashapi.CrashAPI;
+import org.ctp.crashapi.nms.NMS;
+import org.ctp.enchantmentsolution.nms.anvil.*;
+import org.ctp.enchantmentsolution.utils.config.ConfigString;
 
-public class AnvilNMS {
+public class AnvilNMS extends NMS {
 
 	public static int getRepairCost(ItemStack item) {
 		if (item == null) return 0;
-		switch (CrashAPI.getPlugin().getBukkitVersion().getVersionNumber()) {
-			case 1:
-				net.minecraft.server.v1_13_R1.ItemStack nmsV1 = org.bukkit.craftbukkit.v1_13_R1.inventory.CraftItemStack.asNMSCopy(item);
-				return nmsV1.getRepairCost();
-			case 2:
-			case 3:
-				net.minecraft.server.v1_13_R2.ItemStack nmsV2 = org.bukkit.craftbukkit.v1_13_R2.inventory.CraftItemStack.asNMSCopy(item);
-				return nmsV2.getRepairCost();
-			case 4:
-			case 5:
-			case 6:
-			case 7:
-			case 8:
-				net.minecraft.server.v1_14_R1.ItemStack nmsV3 = org.bukkit.craftbukkit.v1_14_R1.inventory.CraftItemStack.asNMSCopy(item);
-				return nmsV3.getRepairCost();
-			case 9:
-			case 10:
-			case 11:
-				net.minecraft.server.v1_15_R1.ItemStack nmsV4 = org.bukkit.craftbukkit.v1_15_R1.inventory.CraftItemStack.asNMSCopy(item);
-				return nmsV4.getRepairCost();
-			case 12:
-				net.minecraft.server.v1_16_R1.ItemStack nmsV5 = org.bukkit.craftbukkit.v1_16_R1.inventory.CraftItemStack.asNMSCopy(item);
-				return nmsV5.getRepairCost();
-			case 13:
-			case 14:
-				net.minecraft.server.v1_16_R2.ItemStack nmsV6 = org.bukkit.craftbukkit.v1_16_R2.inventory.CraftItemStack.asNMSCopy(item);
-				return nmsV6.getRepairCost();
-			case 15:
-				net.minecraft.server.v1_16_R3.ItemStack nmsV7 = org.bukkit.craftbukkit.v1_16_R3.inventory.CraftItemStack.asNMSCopy(item);
-				return nmsV7.getRepairCost();
+		int repairCost = 0;
+		if (isSimilarOrAbove(getVersionNumbers(), 1, 19, 0)) repairCost = Anvil_4.getRepairCost(item);
+		else if (isSimilarOrAbove(getVersionNumbers(), 1, 18, 2)) repairCost = Anvil_3.getRepairCost(item);
+		else if (isSimilarOrAbove(getVersionNumbers(), 1, 18, 0)) repairCost = Anvil_2.getRepairCost(item);
+		else if (isSimilarOrAbove(getVersionNumbers(), 1, 17, 0)) repairCost = Anvil_1.getRepairCost(item);
+		else {
+			net.minecraft.server.v1_16_R3.ItemStack nms = org.bukkit.craftbukkit.v1_16_R3.inventory.CraftItemStack.asNMSCopy(item);
+			repairCost = nms.getRepairCost();
 		}
-		return 0;
+		if (ConfigString.REPAIR_COST_LIMIT.getInt() > 0 && repairCost > ConfigString.REPAIR_COST_LIMIT.getInt()) repairCost = ConfigString.REPAIR_COST_LIMIT.getInt();
+		return repairCost;
 	}
 
 	public static ItemStack setRepairCost(ItemStack item, int repairCost) {
-		switch (CrashAPI.getPlugin().getBukkitVersion().getVersionNumber()) {
-			case 1:
-				net.minecraft.server.v1_13_R1.ItemStack nmsV1 = org.bukkit.craftbukkit.v1_13_R1.inventory.CraftItemStack.asNMSCopy(item);
-				nmsV1.setRepairCost(repairCost);
-				return org.bukkit.craftbukkit.v1_13_R1.inventory.CraftItemStack.asBukkitCopy(nmsV1);
-			case 2:
-			case 3:
-				net.minecraft.server.v1_13_R2.ItemStack nmsV2 = org.bukkit.craftbukkit.v1_13_R2.inventory.CraftItemStack.asNMSCopy(item);
-				nmsV2.setRepairCost(repairCost);
-				return org.bukkit.craftbukkit.v1_13_R2.inventory.CraftItemStack.asBukkitCopy(nmsV2);
-			case 4:
-			case 5:
-			case 6:
-			case 7:
-			case 8:
-				net.minecraft.server.v1_14_R1.ItemStack nmsV3 = org.bukkit.craftbukkit.v1_14_R1.inventory.CraftItemStack.asNMSCopy(item);
-				nmsV3.setRepairCost(repairCost);
-				return org.bukkit.craftbukkit.v1_14_R1.inventory.CraftItemStack.asBukkitCopy(nmsV3);
-			case 9:
-			case 10:
-			case 11:
-				net.minecraft.server.v1_15_R1.ItemStack nmsV4 = org.bukkit.craftbukkit.v1_15_R1.inventory.CraftItemStack.asNMSCopy(item);
-				nmsV4.setRepairCost(repairCost);
-				return org.bukkit.craftbukkit.v1_15_R1.inventory.CraftItemStack.asBukkitCopy(nmsV4);
-			case 12:
-				net.minecraft.server.v1_16_R1.ItemStack nmsV5 = org.bukkit.craftbukkit.v1_16_R1.inventory.CraftItemStack.asNMSCopy(item);
-				nmsV5.setRepairCost(repairCost);
-				return org.bukkit.craftbukkit.v1_16_R1.inventory.CraftItemStack.asBukkitCopy(nmsV5);
-			case 13:
-			case 14:
-				net.minecraft.server.v1_16_R2.ItemStack nmsV6 = org.bukkit.craftbukkit.v1_16_R2.inventory.CraftItemStack.asNMSCopy(item);
-				nmsV6.setRepairCost(repairCost);
-				return org.bukkit.craftbukkit.v1_16_R2.inventory.CraftItemStack.asBukkitCopy(nmsV6);
-			case 15:
-				net.minecraft.server.v1_16_R3.ItemStack nmsV7 = org.bukkit.craftbukkit.v1_16_R3.inventory.CraftItemStack.asNMSCopy(item);
-				nmsV7.setRepairCost(repairCost);
-				return org.bukkit.craftbukkit.v1_16_R3.inventory.CraftItemStack.asBukkitCopy(nmsV7);
+		if (ConfigString.REPAIR_COST_LIMIT.getInt() > 0 && repairCost > ConfigString.REPAIR_COST_LIMIT.getInt()) repairCost = ConfigString.REPAIR_COST_LIMIT.getInt();
+
+		if (isSimilarOrAbove(getVersionNumbers(), 1, 18, 0)) return Anvil_2.setRepairCost(item, repairCost);
+		else if (isSimilarOrAbove(getVersionNumbers(), 1, 17, 0)) return Anvil_1.setRepairCost(item, repairCost);
+		else {
+			net.minecraft.server.v1_16_R3.ItemStack nms = org.bukkit.craftbukkit.v1_16_R3.inventory.CraftItemStack.asNMSCopy(item);
+			nms.setRepairCost(repairCost);
+			return org.bukkit.craftbukkit.v1_16_R3.inventory.CraftItemStack.asBukkitCopy(nms);
 		}
-		return item;
 	}
 }
