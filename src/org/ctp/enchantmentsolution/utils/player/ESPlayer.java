@@ -4,6 +4,7 @@ import java.util.*;
 import java.util.Map.Entry;
 
 import org.bukkit.*;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.attribute.AttributeModifier.Operation;
 import org.bukkit.block.Block;
@@ -15,8 +16,11 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.potion.PotionEffect;
+import org.ctp.crashapi.events.EquipEvent;
 import org.ctp.crashapi.events.EquipEvent.EquipMethod;
 import org.ctp.crashapi.item.*;
+import org.ctp.crashapi.nms.DamageNMS;
 import org.ctp.crashapi.utils.DamageUtils;
 import org.ctp.crashapi.utils.ItemUtils;
 import org.ctp.crashapi.utils.ServerUtils;
@@ -61,6 +65,7 @@ public class ESPlayer {
 	private FFType currentFFType;
 	private List<OverkillDeath> overkillDeaths;
 	private List<AttributeLevel> attributes;
+	private List<PotionEffect> effects;
 	private ESPlayerAttributeInstance flyAttribute = new FlySpeedAttribute();
 	private Streak streak;
 	private Runnable telepathyTask;
@@ -68,6 +73,7 @@ public class ESPlayer {
 	private Map<GaiaTrees, List<AsyncGaiaController>> gaiaControllers;
 	private List<HWDModel> models;
 	private int modelKey;
+	private CheckTimer equipItem;
 
 	public ESPlayer(OfflinePlayer player) {
 		this.player = player;
@@ -79,6 +85,7 @@ public class ESPlayer {
 		blocksBroken = new HashMap<Long, Integer>();
 		overkillDeaths = new ArrayList<OverkillDeath>();
 		attributes = new ArrayList<AttributeLevel>();
+		effects = new ArrayList<PotionEffect>();
 		currentFFType = FFType.NONE;
 		telepathyItems = new ArrayList<ItemStack>();
 		removeSoulItems();
@@ -87,6 +94,7 @@ public class ESPlayer {
 		hwdControllers = new ArrayList<>();
 		gaiaControllers = new HashMap<>();
 		models = new ArrayList<HWDModel>();
+		equipItem = new CheckTimer(2);
 	}
 
 	public OfflinePlayer getPlayer() {
@@ -178,9 +186,9 @@ public class ESPlayer {
 
 		return equipped;
 	}
-	
+
 	public ItemStack getItemFromType(ItemSlotType type) {
-		for (ItemSlot e : getEquippedAndType()) {
+		for(ItemSlot e: getEquippedAndType()) {
 			if (e == null) continue;
 			if (e.getType() == type) return e.getItem();
 		}
@@ -467,7 +475,26 @@ public class ESPlayer {
 		Iterator<AttributeLevel> iter = attributes.iterator();
 		while (iter.hasNext()) {
 			AttributeLevel level = iter.next();
-			if (level.getAttribute().equals(attribute) && level.getSlot().equals(slot)) iter.remove();
+			if (level.getAttribute().equals(attribute) && level.getSlot().equals(slot)) {
+				level.getAttribute().removeModifier(onlinePlayer, level.getSlot().getType(), false);
+				iter.remove();
+			}
+		}
+	}
+
+	public List<PotionEffect> getEffects() {
+		return effects;
+	}
+
+	public void addPotionEffect(PotionEffect effect) {
+		effects.add(effect);
+	}
+
+	public void removePotionEffect(PotionEffect effect) {
+		Iterator<PotionEffect> iter = effects.iterator();
+		while (iter.hasNext()) {
+			PotionEffect eff = iter.next();
+			if (effect.getType() == eff.getType()) iter.remove();
 		}
 	}
 
@@ -854,6 +881,44 @@ public class ESPlayer {
 					item.setItemMeta(meta);
 				}
 				iter.remove();
+			}
+		}
+	}
+
+	public void setEquipTimer() {
+		equipItem.set(true, ServerUtils.getCurrentTick());
+	}
+
+	public void runEquipTimer() {
+		Player player = getOnlinePlayer();
+		if (equipItem.shouldCheck()) {
+			double health = player.getHealth();
+			equipItem.setCheck(false);
+			Iterator<AttributeLevel> attr = getAttributes().iterator();
+			while (attr.hasNext()) {
+				AttributeLevel level = attr.next();
+				Attributable.removeAttribute(player, null, false, level.getAttribute(), level.getSlot());
+				attr.remove();
+			}
+			Iterator<PotionEffect> effects = getEffects().iterator();
+			while (effects.hasNext()) {
+				PotionEffect effect = effects.next();
+				if (effect.isInfinite()) {
+					player.removePotionEffect(effect.getType());
+					effects.remove();
+				}
+			}
+			for(ItemSlot slot: getEquippedAndType()) {
+				ItemStack item = slot.getItem();
+				if (item != null && EnchantmentUtils.getTotalEnchantments(item) > 0) {
+					EquipEvent armorEquipEvent = new EquipEvent(player, EquipMethod.COMMAND, slot.getType(), item, item);
+					Bukkit.getServer().getPluginManager().callEvent(armorEquipEvent);
+				}
+			}
+			double finalHealth = player.getHealth();
+			if (health != finalHealth && health <= player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()) {
+				player.setHealth(health);
+				DamageNMS.updateHealth(player);
 			}
 		}
 	}

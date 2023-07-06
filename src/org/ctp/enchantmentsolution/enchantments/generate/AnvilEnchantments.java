@@ -310,7 +310,7 @@ public class AnvilEnchantments extends GenerateEnchantments {
 			int level = e.getValue();
 			for(CustomEnchantment customEnchant: registeredEnchantments)
 				if (ConfigUtils.isRepairable(customEnchant) && customEnchant.getRelativeEnchantment().equals(enchant)) {
-					if (enchant == RegisterEnchantments.CURSE_OF_STAGNANCY) containsStagnancyTwo = true;
+					if (RegisterEnchantments.CURSE_OF_STAGNANCY.equals(enchant)) containsStagnancyTwo = true;
 					secondLevels.add(new EnchantmentLevel(customEnchant, level));
 				}
 		}
@@ -321,7 +321,7 @@ public class AnvilEnchantments extends GenerateEnchantments {
 			int level = e.getValue();
 			for(CustomEnchantment customEnchant: registeredEnchantments)
 				if (ConfigUtils.isRepairable(customEnchant) && customEnchant.getRelativeEnchantment().equals(enchant)) {
-					if (enchant == RegisterEnchantments.CURSE_OF_STAGNANCY) containsStagnancyOne = true;
+					if (RegisterEnchantments.CURSE_OF_STAGNANCY.equals(enchant)) containsStagnancyOne = true;
 					firstLevels.add(new EnchantmentLevel(customEnchant, level));
 				}
 		}
@@ -350,7 +350,11 @@ public class AnvilEnchantments extends GenerateEnchantments {
 						if (enchantTwo.getLevel() > enchantTwo.getEnchant().getMaxLevel()) enchantTwo.setLevel(enchantTwo.getEnchant().getMaxLevel());
 					}
 					if (enchantTwo.getLevel() == enchantOne.getLevel()) {
-						if (enchantTwo.getLevel() >= enchantTwo.getEnchant().getMaxLevel()) levelCost = enchantTwo.getLevel();
+						if (!noUpgrade && (godAnvil || demiGodBooks)) {
+							if (demiGodBooks && (itemTwo.getType() == Material.BOOK || itemTwo.getType() == Material.ENCHANTED_BOOK)) levelCost = enchantTwo.getLevel() + 1;
+							else if (godAnvil) levelCost = enchantTwo.getLevel() + 1;
+						}
+						else if (enchantTwo.getLevel() >= enchantTwo.getEnchant().getMaxLevel()) levelCost = enchantTwo.getLevel();
 						else if (!noUpgrade) levelCost = enchantTwo.getLevel() + 1;
 						else
 							levelCost = enchantTwo.getLevel();

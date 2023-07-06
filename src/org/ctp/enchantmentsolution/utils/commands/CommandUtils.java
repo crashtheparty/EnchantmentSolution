@@ -298,7 +298,7 @@ public class CommandUtils {
 		if (sender instanceof Player) player = (Player) sender;
 		if (sender.hasPermission(details.getPermission())) {
 			EnchantmentSolution.getPlugin().closeInventories(null);
-			EnchantmentSolution.getPlugin().reEquipArmor();
+			EnchantmentSolution.getPlugin().reEquipItems();
 			TableEnchantments.removeAllTableEnchantments();
 			Minigame.reset();
 			Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(ChatUtils.getCodes(), "commands.reset-inventory"), Level.INFO);

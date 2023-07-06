@@ -139,7 +139,7 @@ public class RegisterEnchantments {
 
 	public static CustomEnchantment getCustomEnchantment(Enchantment enchant) {
 		for(CustomEnchantment enchantment: ENCHANTMENTS)
-			if (enchant == enchantment.getRelativeEnchantment()) return enchantment;
+			if (enchant.equals(enchantment.getRelativeEnchantment())) return enchantment;
 		return new SnapshotEnchantment(enchant);
 	}
 
@@ -147,7 +147,7 @@ public class RegisterEnchantments {
 		if (CURSE_ENCHANTMENTS != null) return CURSE_ENCHANTMENTS;
 		CURSE_ENCHANTMENTS = new ArrayList<CustomEnchantment>();
 		for(CustomEnchantment enchantment: ENCHANTMENTS) {
-			if (enchantment.getRelativeEnchantment() == RegisterEnchantments.CURSE_OF_CONTAGION || enchantment.getRelativeEnchantment() == RegisterEnchantments.CURSE_OF_STAGNANCY) continue;
+			if (RegisterEnchantments.CURSE_OF_CONTAGION.equals(enchantment.getRelativeEnchantment()) || RegisterEnchantments.CURSE_OF_STAGNANCY.equals(enchantment.getRelativeEnchantment())) continue;
 			if (enchantment.isCurse()) CURSE_ENCHANTMENTS.add(enchantment);
 		}
 		return CURSE_ENCHANTMENTS;

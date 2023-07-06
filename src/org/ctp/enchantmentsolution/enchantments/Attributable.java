@@ -179,22 +179,22 @@ public enum Attributable {
 		a.addModifier(player, level.getLevel(), slot.getType());
 		ESPlayer esPlayer = EnchantmentSolution.getESPlayer(player);
 		esPlayer.addAttribute(new AttributeLevel(a, level.getLevel(), slot));
-		if (a.getEnchantment() == RegisterEnchantments.TOUGHNESS && player.getAttribute(Attribute.GENERIC_ARMOR_TOUGHNESS).getValue() >= 20) AdvancementUtils.awardCriteria(attrEvent.getPlayer(), ESAdvancement.GRAPHENE_ARMOR, "toughness");
-		if (a.getEnchantment() == RegisterEnchantments.LIFE || a.getEnchantment() == RegisterEnchantments.GUNG_HO) DamageNMS.updateHealth(player);
+		if (a.getEnchantment() == null) return;
+		if (a.getEnchantment().equals(RegisterEnchantments.TOUGHNESS) && player.getAttribute(Attribute.GENERIC_ARMOR_TOUGHNESS).getValue() >= 20) AdvancementUtils.awardCriteria(attrEvent.getPlayer(), ESAdvancement.GRAPHENE_ARMOR, "toughness");
+		if (a.getEnchantment().equals(RegisterEnchantments.LIFE) || a.getEnchantment().equals(RegisterEnchantments.GUNG_HO)) DamageNMS.updateHealth(player);
 	}
 
-	public static void removeAttribute(Player player, EnchantmentLevel level, Attributable a, ItemEquippedSlot slot) {
-		removeAttribute(player, level, a, slot, false);
+	public static void removeAttribute(Player player, EnchantmentLevel level, boolean remove, Attributable a, ItemEquippedSlot slot) {
+		removeAttribute(player, level, remove, a, slot, false);
 	}
 
-	public static void removeAttribute(Player player, EnchantmentLevel level, Attributable a, ItemEquippedSlot slot, boolean legacy) {
+	public static void removeAttribute(Player player, EnchantmentLevel level, boolean remove, Attributable a, ItemEquippedSlot slot, boolean legacy) {
 		AttributeEvent attrEvent = new AttributeEvent(player, level, slot.getName(), null);
 		Bukkit.getPluginManager().callEvent(attrEvent);
-
 		a.removeModifier(player, slot.getType(), legacy);
 		ESPlayer esPlayer = EnchantmentSolution.getESPlayer(player);
-		esPlayer.removeAttribute(a, slot);
-		if (a.getEnchantment() == RegisterEnchantments.LIFE || a.getEnchantment() == RegisterEnchantments.GUNG_HO) DamageNMS.updateHealth(player);
+		if (remove) esPlayer.removeAttribute(a, slot);
+		if (!remove && a.getAttr() == Attribute.GENERIC_MAX_HEALTH) DamageNMS.updateHealth(player);
 
 	}
 }

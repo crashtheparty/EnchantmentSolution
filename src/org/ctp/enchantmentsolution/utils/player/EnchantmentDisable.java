@@ -21,6 +21,6 @@ public class EnchantmentDisable {
 	}
 
 	public boolean isSimilar(JavaPlugin plugin, Enchantment enchantment) {
-		return plugin == this.plugin && enchantment == this.enchantment;
+		return plugin.equals(this.plugin) && enchantment.equals(this.enchantment);
 	}
 }

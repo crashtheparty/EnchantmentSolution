@@ -39,7 +39,7 @@ public class McMMOBlockDrops {
 				Collection<ItemStack> drops = getDoubleDrops(event);
 				ESPlayer player = EnchantmentSolution.getESPlayer(event.getPlayer());
 
-				if (enchantment == RegisterEnchantments.TELEPATHY && EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.TELEPATHY)) {
+				if (enchantment.equals(RegisterEnchantments.TELEPATHY) && EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.TELEPATHY)) {
 					TelepathyBonusDropsEvent telepathyBonus = new TelepathyBonusDropsEvent(event.getPlayer(), drops, value.asInt());
 					Bukkit.getPluginManager().callEvent(telepathyBonus);
 
@@ -50,7 +50,7 @@ public class McMMOBlockDrops {
 							num--;
 						}
 					}
-				} else if (enchantment == RegisterEnchantments.SMELTERY && EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.SMELTERY)) for(ItemStack drop: drops) {
+				} else if (enchantment.equals(RegisterEnchantments.SMELTERY) && EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.SMELTERY)) for(ItemStack drop: drops) {
 					SmelteryMaterial smelted = SmelteryUtils.getSmelteryItem(state.getBlockData(), drop, item);
 					if (smelted != null) {
 						SmelteryBonusDropsEvent smelteryBonus = new SmelteryBonusDropsEvent(event.getPlayer(), Arrays.asList(smelted.getSmelted()), value.asInt());

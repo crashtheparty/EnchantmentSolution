@@ -140,7 +140,7 @@ public class Configurations implements CrashConfigurations {
 
 		if (ConfigString.RESET_ON_RELOAD.getBoolean()) TableEnchantments.removeAllTableEnchantments();
 		RegisterEnchantments.setEnchantments();
-		EnchantmentSolution.getPlugin().reEquipArmor();
+		EnchantmentSolution.getPlugin().reEquipItems();
 
 		if (!FIRST_SAVE) {
 			EnchantmentSolution.getPlugin().setVersionCheck(ConfigString.LATEST_VERSION.getBoolean(), ConfigString.EXPERIMENTAL_VERSION.getBoolean());

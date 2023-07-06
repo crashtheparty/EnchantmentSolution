@@ -23,8 +23,8 @@ public class McMMOHandler {
 	}
 
 	public static void customName(Entity e) {
-		if (e.hasMetadata(MetadataConstants.METADATA_KEY_CUSTOM_NAME_KEY)) {
-			String oldName = e.getMetadata(MetadataConstants.METADATA_KEY_CUSTOM_NAME_KEY).get(0).asString();
+		if (e.hasMetadata(MetadataConstants.METADATA_KEY_CUSTOM_NAME)) {
+			String oldName = e.getMetadata(MetadataConstants.METADATA_KEY_CUSTOM_NAME).get(0).asString();
 			e.setCustomName(oldName);
 		}
 		if (e.hasMetadata(MetadataConstants.METADATA_KEY_NAME_VISIBILITY )) {

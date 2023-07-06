@@ -53,6 +53,9 @@ public class AttributeListener extends Enchantmentable {
 	public void onItemEquip(EquipEvent event) {
 		itemEquip(event.getEntity(), event.getOldItem(), event.getType(), false, event.getMethod() == EquipMethod.JOIN);
 		itemEquip(event.getEntity(), event.getNewItem(), event.getType(), true, event.getMethod() == EquipMethod.JOIN);
+		if (!(event.getEntity() instanceof Player) || event.getMethod() == EquipMethod.COMMAND) return;
+		ESPlayer esPlayer = EnchantmentSolution.getESPlayer((Player) event.getEntity());
+		esPlayer.setEquipTimer();
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST)
@@ -86,18 +89,18 @@ public class AttributeListener extends Enchantmentable {
 						if (slot.getType() == type) {
 							Iterator<AttributeLevel> iter = esPlayer.getAttributes().iterator();
 							if (equip) {
-								if (a.getEnchantment() == RegisterEnchantments.LIFE) while (iter.hasNext()) {
+								if (relative.equals(RegisterEnchantments.LIFE)) while (iter.hasNext()) {
 									AttributeLevel attr = iter.next();
 									Enchantment enchantment = attr.getAttribute().getEnchantment();
 									if (enchantment == RegisterEnchantments.GUNG_HO) continue start;
 								}
-								else if (a.getEnchantment() == RegisterEnchantments.GUNG_HO) while (iter.hasNext()) {
+								else if (relative.equals(RegisterEnchantments.GUNG_HO)) while (iter.hasNext()) {
 									AttributeLevel attr = iter.next();
 									Enchantment enchantment = attr.getAttribute().getEnchantment();
-									if (enchantment == RegisterEnchantments.LIFE) {
+									if (enchantment.equals(RegisterEnchantments.LIFE)) {
 										EnchantmentLevel attrLevel = new EnchantmentLevel(RegisterEnchantments.getCustomEnchantment(enchantment), attr.getLevel());
 										iter.remove();
-										Attributable.removeAttribute(player, attrLevel, attr.getAttribute(), attr.getSlot());
+										Attributable.removeAttribute(player, attrLevel, true, attr.getAttribute(), attr.getSlot());
 										DamageNMS.updateHealth(player);
 									}
 								}
@@ -106,16 +109,16 @@ public class AttributeListener extends Enchantmentable {
 									while (iter.hasNext()) {
 										AttributeLevel attr = iter.next();
 										EnchantmentLevel attrLevel = new EnchantmentLevel(RegisterEnchantments.getCustomEnchantment(attr.getAttribute().getEnchantment()), attr.getLevel());
-										if (attr.getAttribute().getEnchantment() == a.getEnchantment() && level.getLevel() >= attr.getLevel()) {
+										if (relative.equals(attr.getAttribute().getEnchantment()) && level.getLevel() >= attr.getLevel()) {
 											iter.remove();
-											Attributable.removeAttribute(player, attrLevel, attr.getAttribute(), attr.getSlot());
-										} else if (attr.getAttribute().getEnchantment() == a.getEnchantment()) hasOther = true;
+											Attributable.removeAttribute(player, attrLevel, true, attr.getAttribute(), attr.getSlot());
+										} else if (relative.equals(attr.getAttribute().getEnchantment())) hasOther = true;
 									}
 									if (hasOther) return;
 								}
 								Attributable.addAttribute(player, level, a, slot);
 							} else {
-								Attributable.removeAttribute(player, level, a, slot);
+								Attributable.removeAttribute(player, level, true, a, slot);
 
 								if (a.getEnchantment() == RegisterEnchantments.GUNG_HO) {
 									ItemSlot gungHo = null;
@@ -208,25 +211,25 @@ public class AttributeListener extends Enchantmentable {
 					if (equip) player.addPotionEffect(new PotionEffect(event.getType(), 10000000, level.getLevel() - 1));
 					else
 						player.removePotionEffect(event.getType());
-				} else if (relative == RegisterEnchantments.FREQUENT_FLYER && equip) {
+				} else if (relative.equals(RegisterEnchantments.FREQUENT_FLYER) && equip) {
 					FrequentFlyerThread thread = FrequentFlyerThread.createThread(player);
 					if (!thread.isRunning()) {
 						int scheduler = Bukkit.getScheduler().scheduleSyncRepeatingTask(EnchantmentSolution.getPlugin(), thread, 0l, 1l);
 						thread.setScheduler(scheduler);
 					}
-				} else if (relative == RegisterEnchantments.FORCE_FEED && equip) {
+				} else if (relative.equals(RegisterEnchantments.FORCE_FEED) && equip) {
 					ForceFeedThread thread = ForceFeedThread.createThread(player);
 					if (!thread.isRunning()) {
 						int scheduler = Bukkit.getScheduler().scheduleSyncRepeatingTask(EnchantmentSolution.getPlugin(), thread, 0l, 1l);
 						thread.setScheduler(scheduler);
 					}
-				} else if (relative == RegisterEnchantments.CURSE_OF_EXHAUSTION && equip) {
+				} else if (relative.equals(RegisterEnchantments.CURSE_OF_EXHAUSTION) && equip) {
 					ExhaustionCurseThread thread = ExhaustionCurseThread.createThread(player);
 					if (!thread.isRunning()) {
 						int scheduler = Bukkit.getScheduler().scheduleSyncRepeatingTask(EnchantmentSolution.getPlugin(), thread, 0l, 1l);
 						thread.setScheduler(scheduler);
 					}
-				} else if (relative == RegisterEnchantments.CURSE_OF_INSTABILITY && equip) {
+				} else if (relative.equals(RegisterEnchantments.CURSE_OF_INSTABILITY) && equip) {
 					InstabilityCurseThread thread = InstabilityCurseThread.createThread(player);
 					if (!thread.isRunning()) {
 						int scheduler = Bukkit.getScheduler().scheduleSyncRepeatingTask(EnchantmentSolution.getPlugin(), thread, 0l, 1l);

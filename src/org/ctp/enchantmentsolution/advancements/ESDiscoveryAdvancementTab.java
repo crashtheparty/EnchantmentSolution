@@ -33,7 +33,7 @@ public class ESDiscoveryAdvancementTab {
 
 	public ESDiscoveryAdvancement getAdvancement(CustomEnchantment enchantment) {
 		if (notNull(enchantment) && notNull(enchantment.getRelativeEnchantment())) for(ESDiscoveryAdvancement adv: advancements)
-			if (notNull(adv) && notNull(adv.getEnchantment()) && adv.getEnchantment().getRelativeEnchantment() == enchantment.getRelativeEnchantment()) return adv;
+			if (notNull(adv) && notNull(adv.getEnchantment()) && adv.getEnchantment().getRelativeEnchantment().equals(enchantment.getRelativeEnchantment())) return adv;
 		return null;
 	}
 

@@ -23,7 +23,7 @@ import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
 public class LootUtils {
 
 	public static boolean isActiveLootChest(Block block) {
-		return block.getState() instanceof Lootable && ((Lootable) block.getState()).getLootTable() != null;
+		return block.getState() instanceof Lootable && block.getState() instanceof Container && ((Lootable) block.getState()).getLootTable() != null;
 	}
 
 	public static void populateLootChest(Player player, Block block) {
