@@ -34,7 +34,7 @@ public class RegisterEnchantments {
 	public static final Enchantment SHOCK_ASPECT = new CustomEnchantmentWrapper("shock_aspect", "SHOCK_ASPECT");
 	public static final Enchantment LIFE = new CustomEnchantmentWrapper("life", "LIFE");
 	public static final Enchantment BEHEADING = new CustomEnchantmentWrapper("beheading", "BEHEADING");
-	public static final Enchantment KNOCKUP = new CustomEnchantmentWrapper("knockip", "KNOCKUP");
+	public static final Enchantment KNOCKUP = new CustomEnchantmentWrapper("knockup", "KNOCKUP");
 	public static final Enchantment WARP = new CustomEnchantmentWrapper("warp", "WARP");
 	public static final Enchantment EXP_SHARE = new CustomEnchantmentWrapper("exp_share", "EXP_SHARE");
 	public static final Enchantment MAGMA_WALKER = new CustomEnchantmentWrapper("magma_walker", "MAGMA_WALKER");
