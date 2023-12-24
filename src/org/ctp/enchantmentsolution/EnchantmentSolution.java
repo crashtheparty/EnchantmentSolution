@@ -6,7 +6,6 @@ import java.util.List;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.command.PluginCommand;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
@@ -28,6 +27,7 @@ import org.ctp.crashapi.version.VersionCheck;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.commands.EnchantmentSolutionCommand;
 import org.ctp.enchantmentsolution.database.ESBackup;
+import org.ctp.enchantmentsolution.enchantments.EnchantmentWrapper;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.interfaces.InterfaceRegistry;
 import org.ctp.enchantmentsolution.listeners.*;
@@ -458,7 +458,7 @@ public class EnchantmentSolution extends CrashAPIPlugin {
 		}
 	}
 
-	public void reEquipItems(ESPlayer player, Enchantment enchantment) {
+	public void reEquipItems(ESPlayer player, EnchantmentWrapper enchantment) {
 		if (!player.isOnline()) return;
 		for(ItemSlot slot: player.getEquippedAndType()) {
 			ItemStack item = slot.getItem();

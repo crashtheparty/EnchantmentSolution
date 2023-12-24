@@ -7,7 +7,6 @@ import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.plugin.Plugin;
 import org.ctp.crashapi.CrashAPIPlugin;
 import org.ctp.crashapi.config.*;
@@ -17,6 +16,7 @@ import org.ctp.crashapi.db.BackupDB;
 import org.ctp.crashapi.resources.advancements.CrashAdvancementProgress;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
+import org.ctp.enchantmentsolution.enchantments.EnchantmentWrapper;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enchantments.generate.TableEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
@@ -215,9 +215,9 @@ public class Configurations implements CrashConfigurations {
 			debug.set("data_file.rpg." + i + ".level", player.getLevel());
 			debug.set("data_file.rpg." + i + ".experience", player.getExperience().toString());
 			List<String> enchants = new ArrayList<String>();
-			Iterator<Entry<Enchantment, Integer>> iterator = player.getEnchantmentList().entrySet().iterator();
+			Iterator<Entry<EnchantmentWrapper, Integer>> iterator = player.getEnchantmentList().entrySet().iterator();
 			while (iterator.hasNext()) {
-				Entry<Enchantment, Integer> entry = iterator.next();
+				Entry<EnchantmentWrapper, Integer> entry = iterator.next();
 				EnchantmentLevel level = new EnchantmentLevel(RegisterEnchantments.getCustomEnchantment(entry.getKey()), entry.getValue());
 				enchants.add(level.toString());
 			}

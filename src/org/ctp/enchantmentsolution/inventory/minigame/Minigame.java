@@ -105,7 +105,7 @@ public class Minigame implements InventoryData, Pageable {
 					ItemStack item = new ItemStack(Material.ENCHANTED_BOOK);
 					ItemMeta itemMeta = item.getItemMeta();
 					HashMap<String, Object> itemCodes = getCodes();
-					itemCodes.put("%name%", enchant == null ? name.equalsIgnoreCase("random") ? c.getLanguage().getString("enchantment.random") : name : enchant.getDisplayName());
+					itemCodes.put("%name%", enchant == null ? name.equalsIgnoreCase("random") ? c.getLanguage().getString("enchantment.random") : name : ChatColor.translateAlternateColorCodes('&', enchant.getDisplayName()) + ChatColor.RESET);
 					HashMap<String, Object> itemLoreCodes = getCodes();
 					itemLoreCodes.put("%cost%", c.getMinigames().getInt("mondays.enchantments." + enchants.get(num) + ".cost"));
 					itemMeta.setDisplayName(Chatable.get().getMessage(itemCodes, "minigame.mondays.item"));

@@ -5,15 +5,12 @@ import java.util.*;
 
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.ctp.crashapi.config.yaml.YamlConfig;
 import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.api.ApiEnchantmentWrapper;
-import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
-import org.ctp.enchantmentsolution.enchantments.CustomEnchantmentWrapper;
-import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
+import org.ctp.enchantmentsolution.enchantments.*;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.utils.Configurations;
 import org.ctp.enchantmentsolution.utils.PermissionUtils;
@@ -47,7 +44,7 @@ public class RPGUtils {
 		return new BigInteger((int) (levelZero + base * level + Math.pow(add * level, addPower) / divisor) + "");
 	}
 
-	public static BigInteger getPointsForEnchantment(Player player, Enchantment key, int value) {
+	public static BigInteger getPointsForEnchantment(Player player, EnchantmentWrapper key, int value) {
 		if (!PermissionUtils.canEnchant(player, RegisterEnchantments.getCustomEnchantment(key), value)) return new BigInteger("-2");
 		CustomEnchantment enchant = RegisterEnchantments.getCustomEnchantment(key);
 		String namespace = "default_enchantments";
@@ -69,8 +66,8 @@ public class RPGUtils {
 		return integer;
 	}
 
-	public static Map<Enchantment, Integer> getFreeEnchantments() {
-		Map<Enchantment, Integer> free = new HashMap<Enchantment, Integer>();
+	public static Map<EnchantmentWrapper, Integer> getFreeEnchantments() {
+		Map<EnchantmentWrapper, Integer> free = new HashMap<EnchantmentWrapper, Integer>();
 		YamlConfig config = Configurations.getConfigurations().getRPG().getConfig();
 		List<String> freeStrings = config.getStringList("free_enchantments");
 		for(String s: freeStrings) {
@@ -159,7 +156,7 @@ public class RPGUtils {
 	public static int getBuyPoints(RPGPlayer rpg, EnchantmentLevel buying) {
 		int maxLevel = buying.getLevel();
 		BigInteger points = new BigInteger("0");
-		Enchantment ench = buying.getEnchant().getRelativeEnchantment();
+		EnchantmentWrapper ench = buying.getEnchant().getRelativeEnchantment();
 		while (!rpg.hasEnchantment(ench, maxLevel) && maxLevel > 0) {
 			points = points.add(getPointsForEnchantment(rpg.getPlayer().getPlayer(), ench, maxLevel));
 			maxLevel--;

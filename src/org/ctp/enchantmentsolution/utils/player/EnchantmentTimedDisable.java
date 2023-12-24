@@ -1,15 +1,15 @@
 package org.ctp.enchantmentsolution.utils.player;
 
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.ctp.enchantmentsolution.enchantments.EnchantmentWrapper;
 
 public class EnchantmentTimedDisable {
 
 	private final JavaPlugin plugin;
-	private final Enchantment enchantment;
+	private final EnchantmentWrapper enchantment;
 	private long endTime;
 
-	public EnchantmentTimedDisable(JavaPlugin plugin, Enchantment enchantment, long endTime) {
+	public EnchantmentTimedDisable(JavaPlugin plugin, EnchantmentWrapper enchantment, long endTime) {
 		this.plugin = plugin;
 		this.enchantment = enchantment;
 		setEndTime(endTime);
@@ -19,7 +19,7 @@ public class EnchantmentTimedDisable {
 		return plugin;
 	}
 
-	public Enchantment getEnchantment() {
+	public EnchantmentWrapper getEnchantment() {
 		return enchantment;
 	}
 
@@ -39,7 +39,7 @@ public class EnchantmentTimedDisable {
 		this.endTime = endTime;
 	}
 
-	public boolean isSimilar(JavaPlugin plugin, Enchantment enchantment) {
+	public boolean isSimilar(JavaPlugin plugin, EnchantmentWrapper enchantment) {
 		return plugin.equals(this.plugin) && enchantment.equals(this.enchantment);
 	}
 

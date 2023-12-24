@@ -18,6 +18,7 @@ import org.ctp.crashapi.utils.DamageUtils;
 import org.ctp.crashapi.utils.ItemUtils;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
+import org.ctp.enchantmentsolution.enchantments.EnchantmentWrapper;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enums.ItemBreakType;
 import org.ctp.enchantmentsolution.events.blocks.BlockBreakMultiEvent;
@@ -27,27 +28,27 @@ import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
 
 public class BlockUtils {
 
-	private static Map<Enchantment, List<Location>> MULTI_BLOCK_BREAK = new HashMap<Enchantment, List<Location>>();
+	private static Map<EnchantmentWrapper, List<Location>> MULTI_BLOCK_BREAK = new HashMap<EnchantmentWrapper, List<Location>>();
 
 	public static boolean multiBlockBreakContains(Location loc) {
-		for(Enchantment enchantment: MULTI_BLOCK_BREAK.keySet())
+		for(EnchantmentWrapper enchantment: MULTI_BLOCK_BREAK.keySet())
 			if (MULTI_BLOCK_BREAK.get(enchantment).contains(loc)) return true;
 		return false;
 	}
 
-	public static boolean multiBlockBreakContains(Location loc, Enchantment enchantment) {
+	public static boolean multiBlockBreakContains(Location loc, EnchantmentWrapper enchantment) {
 		if (!MULTI_BLOCK_BREAK.containsKey(enchantment)) return false;
 		return MULTI_BLOCK_BREAK.get(enchantment).contains(loc);
 	}
 
-	public static void addMultiBlockBreak(Location loc, Enchantment enchantment) {
+	public static void addMultiBlockBreak(Location loc, EnchantmentWrapper enchantment) {
 		List<Location> locs = MULTI_BLOCK_BREAK.get(enchantment);
 		if (locs == null) locs = new ArrayList<Location>();
 		locs.add(loc);
 		MULTI_BLOCK_BREAK.put(enchantment, locs);
 	}
 
-	public static void removeMultiBlockBreak(Location loc, Enchantment enchantment) {
+	public static void removeMultiBlockBreak(Location loc, EnchantmentWrapper enchantment) {
 		List<Location> locs = MULTI_BLOCK_BREAK.get(enchantment);
 		if (locs == null) locs = new ArrayList<Location>();
 		locs.remove(loc);
@@ -74,11 +75,11 @@ public class BlockUtils {
 		return locs;
 	}
 
-	public static boolean multiBreakBlock(Player player, ItemStack item, Location b, Enchantment enchantment) {
+	public static boolean multiBreakBlock(Player player, ItemStack item, Location b, EnchantmentWrapper enchantment) {
 		return multiBreakBlock(player, item, b, enchantment, 1, 1);
 	}
 
-	public static boolean multiBreakBlock(Player player, ItemStack item, Location b, Enchantment enchantment, int damage, float dropChance) {
+	public static boolean multiBreakBlock(Player player, ItemStack item, Location b, EnchantmentWrapper enchantment, int damage, float dropChance) {
 		BlockBreakEvent newEvent = new BlockBreakMultiEvent(b.getBlock(), player);
 		int exp = 0;
 		if (item != null && !EnchantmentUtils.hasEnchantment(item, Enchantment.SILK_TOUCH)) switch (newEvent.getBlock().getType().name()) {

@@ -20,6 +20,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.projectiles.ProjectileSource;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.api.ApiEnchantmentWrapper;
+import org.ctp.enchantmentsolution.enchantments.EnchantmentWrapper;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.enums.ItemBreakType;
@@ -381,6 +382,11 @@ public class RPGListener extends Enchantmentable implements Runnable {
 	}
 
 	private void giveExperience(Player player, Enchantment enchant, int level) {
+		EnchantmentWrapper wrapper = RegisterEnchantments.getByKey(enchant.getKey());
+		giveExperience(player, wrapper, level);
+	}
+
+	private void giveExperience(Player player, EnchantmentWrapper enchant, int level) {
 		if (level <= 0) return;
 		EnchantmentLevel enchLevel = new EnchantmentLevel(RegisterEnchantments.getCustomEnchantment(enchant), level);
 		RPGUtils.giveExperience(player, enchLevel);

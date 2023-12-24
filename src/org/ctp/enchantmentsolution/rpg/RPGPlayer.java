@@ -8,13 +8,13 @@ import java.util.Map.Entry;
 
 import org.bukkit.*;
 import org.bukkit.boss.*;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.ctp.crashapi.config.yaml.YamlConfig;
 import org.ctp.crashapi.utils.ChatUtils;
 import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
+import org.ctp.enchantmentsolution.enchantments.EnchantmentWrapper;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.rpg.threads.RPGThread;
@@ -27,14 +27,14 @@ public class RPGPlayer {
 	private BigDecimal experience;
 	private BossBar bar;
 	private RPGThread run;
-	private Map<Enchantment, Integer> enchantmentList, enchantments;
+	private Map<EnchantmentWrapper, Integer> enchantmentList, enchantments;
 	private long lastLevelUp, lastLevelUpSound;
 
 	public RPGPlayer(OfflinePlayer player) {
 		this.player = player;
 		level = 0;
 		experience = new BigDecimal("0");
-		enchantmentList = new HashMap<Enchantment, Integer>();
+		enchantmentList = new HashMap<EnchantmentWrapper, Integer>();
 		getEnchantmentLevels();
 	}
 
@@ -42,7 +42,7 @@ public class RPGPlayer {
 		this.player = player;
 		this.level = level;
 		this.experience = new BigDecimal(experience).setScale(2, RoundingMode.DOWN);
-		enchantmentList = new HashMap<Enchantment, Integer>();
+		enchantmentList = new HashMap<EnchantmentWrapper, Integer>();
 		getEnchantmentLevels();
 	}
 
@@ -137,32 +137,32 @@ public class RPGPlayer {
 		run = null;
 	}
 
-	public boolean hasEnchantment(Enchantment enchantment, int i) {
+	public boolean hasEnchantment(EnchantmentWrapper enchantment, int i) {
 		return enchantments.containsKey(enchantment) && enchantments.get(enchantment).intValue() >= i;
 	}
 
-	public int getMaxLevel(Enchantment enchantment) {
+	public int getMaxLevel(EnchantmentWrapper enchantment) {
 		if (enchantments.containsKey(enchantment)) return enchantments.get(enchantment);
 		return 0;
 	}
 
-	private Map<Enchantment, Integer> getEnchantmentLevels() {
+	private Map<EnchantmentWrapper, Integer> getEnchantmentLevels() {
 		if (player.isOnline() && player.getPlayer().hasPermission("enchantmentsolution.enchantments.rpg.all")) {
-			enchantments = new HashMap<Enchantment, Integer>();
+			enchantments = new HashMap<EnchantmentWrapper, Integer>();
 			for(CustomEnchantment ench: RegisterEnchantments.getEnchantments())
 				enchantments.put(ench.getRelativeEnchantment(), Integer.MAX_VALUE);
 			return enchantments;
 		}
 		if (enchantments == null) {
-			enchantments = new HashMap<Enchantment, Integer>();
-			Iterator<Entry<Enchantment, Integer>> iter2 = RPGUtils.getFreeEnchantments().entrySet().iterator();
+			enchantments = new HashMap<EnchantmentWrapper, Integer>();
+			Iterator<Entry<EnchantmentWrapper, Integer>> iter2 = RPGUtils.getFreeEnchantments().entrySet().iterator();
 			while (iter2.hasNext()) {
-				Entry<Enchantment, Integer> entry = iter2.next();
+				Entry<EnchantmentWrapper, Integer> entry = iter2.next();
 				enchantments.put(entry.getKey(), entry.getValue());
 			}
-			Iterator<Entry<Enchantment, Integer>> iter = enchantmentList.entrySet().iterator();
+			Iterator<Entry<EnchantmentWrapper, Integer>> iter = enchantmentList.entrySet().iterator();
 			while (iter.hasNext()) {
-				Entry<Enchantment, Integer> entry = iter.next();
+				Entry<EnchantmentWrapper, Integer> entry = iter.next();
 				enchantments.put(entry.getKey(), entry.getValue());
 			}
 		}
@@ -173,7 +173,7 @@ public class RPGPlayer {
 		return level;
 	}
 
-	public Map<Enchantment, Integer> getEnchantmentList() {
+	public Map<EnchantmentWrapper, Integer> getEnchantmentList() {
 		return enchantmentList;
 	}
 
@@ -189,22 +189,22 @@ public class RPGPlayer {
 		return true;
 	}
 
-	public boolean removeEnchantment(Enchantment enchantment) {
+	public boolean removeEnchantment(EnchantmentWrapper enchantment) {
 		enchantments = null;
 		enchantmentList.remove(enchantment);
 		getEnchantmentLevels();
 		return true;
 	}
 
-	public Map<Enchantment, Integer> getEnchantments() {
+	public Map<EnchantmentWrapper, Integer> getEnchantments() {
 		return getEnchantmentLevels();
 	}
 
 	public int getPoints() {
 		BigInteger points = RPGUtils.getPointsForLevel(level);
-		Iterator<Entry<Enchantment, Integer>> iterator = enchantmentList.entrySet().iterator();
+		Iterator<Entry<EnchantmentWrapper, Integer>> iterator = enchantmentList.entrySet().iterator();
 		while (iterator.hasNext()) {
-			Entry<Enchantment, Integer> entry = iterator.next();
+			Entry<EnchantmentWrapper, Integer> entry = iterator.next();
 			int level = entry.getValue();
 			while (level > 0) {
 				BigInteger lowerPoints = RPGUtils.getPointsForEnchantment(player.getPlayer(), entry.getKey(), level);
@@ -216,9 +216,9 @@ public class RPGPlayer {
 		return points.intValue();
 	}
 
-	public int pointsToBuy(Enchantment key, int value) {
+	public int pointsToBuy(EnchantmentWrapper key, int value) {
 		if (RPGUtils.getFreeEnchantments().containsKey(key) && RPGUtils.getFreeEnchantments().get(key) <= value) return -1;
-		Map<Enchantment, Integer> enchantments = getEnchantmentLevels();
+		Map<EnchantmentWrapper, Integer> enchantments = getEnchantmentLevels();
 		int minLevel = 0;
 		if (enchantments.containsKey(key)) minLevel = enchantments.get(key);
 		int points = 0;
@@ -227,7 +227,7 @@ public class RPGPlayer {
 		return points;
 	}
 
-	public boolean canBuy(Enchantment key, int value) {
+	public boolean canBuy(EnchantmentWrapper key, int value) {
 		CustomEnchantment enchant = RegisterEnchantments.getCustomEnchantment(key);
 		return getPoints() >= 0 && pointsToBuy(key, value) >= 0 && getPoints() - pointsToBuy(key, value) >= 0 && enchant.isEnabled() && PermissionUtils.canEnchant(player.getPlayer(), enchant, value);
 	}

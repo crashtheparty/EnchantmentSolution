@@ -2,16 +2,16 @@ package org.ctp.enchantmentsolution.interfaces.walker;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.ctp.crashapi.utils.LocationUtils;
+import org.ctp.enchantmentsolution.enchantments.EnchantmentWrapper;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.interfaces.WalkerInterface;
 
 public class MagmaWalker implements WalkerInterface {
 
 	@Override
-	public Enchantment getEnchantment() {
+	public EnchantmentWrapper getEnchantment() {
 		return RegisterEnchantments.MAGMA_WALKER;
 	}
 

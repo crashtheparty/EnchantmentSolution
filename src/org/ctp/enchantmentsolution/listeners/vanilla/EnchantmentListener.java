@@ -49,7 +49,7 @@ public class EnchantmentListener implements Listener {
 				if (level == null) continue;
 				offer.setCost(level.getLevel());
 				if (!(ench.getEnchant().getRelativeEnchantment() instanceof CustomEnchantmentWrapper)) {
-					offer.setEnchantment(ench.getEnchant().getRelativeEnchantment());
+					offer.setEnchantment(ench.getEnchant().getRelativeEnchantment().getRelativeEnchantment());
 					offer.setEnchantmentLevel(ench.getLevel());
 				}
 			}
@@ -69,8 +69,10 @@ public class EnchantmentListener implements Listener {
 					List<EnchantmentLevel> enchantments = table.getEnchantments(new ItemData(item))[i].getEnchantments();
 					event.getEnchantsToAdd().clear();
 					Map<Enchantment, Integer> defaultLevels = new HashMap<Enchantment, Integer>();
-					for(EnchantmentLevel l: enchantments)
-						defaultLevels.put(l.getEnchant().getRelativeEnchantment(), l.getLevel());
+					for(EnchantmentLevel l: enchantments) {
+						Enchantment e = l.getEnchant().getRelativeEnchantment().getRelativeEnchantment();
+						if (e != null) defaultLevels.put(e, l.getLevel());
+					}
 					try {
 						if (item.getType() == Material.BOOK && ConfigString.USE_ENCHANTED_BOOKS.getBoolean()) item = EnchantmentUtils.convertToEnchantedBook(item);
 						player.playSound(player.getLocation(), Sound.BLOCK_ENCHANTMENT_TABLE_USE, 1, 1);

@@ -4,7 +4,6 @@ import java.util.UUID;
 
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.entity.AbstractArrow.PickupStatus;
 import org.bukkit.event.EventHandler;
@@ -22,6 +21,7 @@ import org.ctp.crashapi.utils.LocationUtils;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.api.ApiEnchantList;
+import org.ctp.enchantmentsolution.enchantments.EnchantmentWrapper;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.events.damage.HollowPointDamageEvent;
 import org.ctp.enchantmentsolution.events.entity.DetonatorExplosionEvent;
@@ -183,7 +183,7 @@ public class ProjectileListener extends Enchantmentable {
 		}
 	}
 
-	private void potion(ProjectileLaunchEvent event, Enchantment enchantment, PotionEffectType type) {
+	private void potion(ProjectileLaunchEvent event, EnchantmentWrapper enchantment, PotionEffectType type) {
 		if (!canRun(enchantment, event)) return;
 		Projectile proj = event.getEntity();
 		if (proj instanceof Trident) {
@@ -272,8 +272,8 @@ public class ProjectileListener extends Enchantmentable {
 
 	private void hollowPoint(ProjectileHitEvent event) {
 		if (!canRun(RegisterEnchantments.HOLLOW_POINT, event)) return;
-		if (event.getHitEntity() != null && event.getEntity().hasMetadata("hollow_point") && event.getEntity() instanceof Arrow && event.getEntity().getShooter() instanceof LivingEntity) {
-			Arrow arrow = (Arrow) event.getEntity();
+		if (event.getHitEntity() != null && event.getEntity().hasMetadata("hollow_point") && event.getEntity() instanceof AbstractArrow && event.getEntity().getShooter() instanceof LivingEntity) {
+			AbstractArrow arrow = (AbstractArrow) event.getEntity();
 			LivingEntity entity = (LivingEntity) arrow.getShooter();
 			if (entity instanceof Player) {
 				Player player = (Player) entity;

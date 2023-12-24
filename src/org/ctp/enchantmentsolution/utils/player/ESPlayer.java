@@ -8,7 +8,6 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.attribute.AttributeModifier.Operation;
 import org.bukkit.block.Block;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -53,7 +52,7 @@ public class ESPlayer {
 	private final OfflinePlayer player;
 	private Player onlinePlayer;
 	private RPGPlayer rpg;
-	private Map<Enchantment, Long> cooldowns;
+	private Map<EnchantmentWrapper, Long> cooldowns;
 	private List<EnchantmentTimedDisable> timedDisable;
 	private List<EnchantmentDisable> disable;
 	private List<ItemStack> soulItems, telepathyItems;
@@ -79,7 +78,7 @@ public class ESPlayer {
 		this.player = player;
 		onlinePlayer = player.getPlayer();
 		rpg = RPGUtils.getPlayer(player);
-		cooldowns = new HashMap<Enchantment, Long>();
+		cooldowns = new HashMap<EnchantmentWrapper, Long>();
 		timedDisable = new ArrayList<EnchantmentTimedDisable>();
 		disable = new ArrayList<EnchantmentDisable>();
 		blocksBroken = new HashMap<Long, Integer>();
@@ -206,11 +205,11 @@ public class ESPlayer {
 		return items;
 	}
 
-	public long getCooldown(Enchantment enchant) {
+	public long getCooldown(EnchantmentWrapper enchant) {
 		return cooldowns.containsKey(enchant) ? cooldowns.get(enchant) : 0;
 	}
 
-	public boolean setCooldown(Enchantment enchant) {
+	public boolean setCooldown(EnchantmentWrapper enchant) {
 		cooldowns.put(enchant, ServerUtils.getCurrentTick());
 		return cooldowns.containsKey(enchant);
 	}
@@ -563,12 +562,12 @@ public class ESPlayer {
 		streak.setStreak(type, num);
 	}
 
-	public void addTimedDisableEnchant(JavaPlugin plugin, Enchantment enchant, int ticks) {
+	public void addTimedDisableEnchant(JavaPlugin plugin, EnchantmentWrapper enchant, int ticks) {
 		long tick = ServerUtils.getCurrentTick() + ticks;
 		if (!isTimedDisableEnchant(plugin, enchant)) timedDisable.add(new EnchantmentTimedDisable(plugin, enchant, tick));
 	}
 
-	public void addTimeToDisableEnchant(JavaPlugin plugin, Enchantment enchant, int moreTicks) {
+	public void addTimeToDisableEnchant(JavaPlugin plugin, EnchantmentWrapper enchant, int moreTicks) {
 		if (isTimedDisableEnchant(plugin, enchant)) {
 			EnchantmentTimedDisable disable = getTimedDisable(plugin, enchant);
 			disable.addToEndTime(moreTicks);
@@ -576,13 +575,13 @@ public class ESPlayer {
 			addTimedDisableEnchant(plugin, enchant, moreTicks);
 	}
 
-	private EnchantmentTimedDisable getTimedDisable(JavaPlugin plugin, Enchantment enchant) {
+	private EnchantmentTimedDisable getTimedDisable(JavaPlugin plugin, EnchantmentWrapper enchant) {
 		for(EnchantmentTimedDisable etd: timedDisable)
 			if (etd.isSimilar(plugin, enchant)) return etd;
 		return null;
 	}
 
-	public void setTimeDisableEnchant(JavaPlugin plugin, Enchantment enchant, int ticks) {
+	public void setTimeDisableEnchant(JavaPlugin plugin, EnchantmentWrapper enchant, int ticks) {
 		long tick = ServerUtils.getCurrentTick() + ticks;
 		if (isTimedDisableEnchant(plugin, enchant)) {
 			EnchantmentTimedDisable disable = getTimedDisable(plugin, enchant);
@@ -591,7 +590,7 @@ public class ESPlayer {
 			addTimedDisableEnchant(plugin, enchant, ticks);
 	}
 
-	public void removeTimedDisableEnchant(JavaPlugin plugin, Enchantment enchant) {
+	public void removeTimedDisableEnchant(JavaPlugin plugin, EnchantmentWrapper enchant) {
 		Iterator<EnchantmentTimedDisable> iter = timedDisable.iterator();
 		while (iter.hasNext()) {
 			EnchantmentTimedDisable etd = iter.next();
@@ -599,36 +598,36 @@ public class ESPlayer {
 		}
 	}
 
-	public void removeTimeFromDisableEnchant(JavaPlugin plugin, Enchantment enchant, int lessTicks) {
+	public void removeTimeFromDisableEnchant(JavaPlugin plugin, EnchantmentWrapper enchant, int lessTicks) {
 		if (isTimedDisableEnchant(plugin, enchant)) {
 			EnchantmentTimedDisable disable = getTimedDisable(plugin, enchant);
 			disable.removeFromEndTime(lessTicks);
 		}
 	}
 
-	public boolean isTimedDisableEnchant(JavaPlugin plugin, Enchantment enchant) {
+	public boolean isTimedDisableEnchant(JavaPlugin plugin, EnchantmentWrapper enchant) {
 		for(EnchantmentTimedDisable etd: timedDisable)
 			if (etd.isSimilar(plugin, enchant)) return true;
 		return false;
 	}
 
-	public boolean hasTimedDisable(Player player, Enchantment enchant) {
+	public boolean hasTimedDisable(Player player, EnchantmentWrapper enchant) {
 		for(EnchantmentTimedDisable etd: timedDisable)
 			if (etd.getEnchantment() == enchant) return true;
 		return false;
 	}
 
-	public void setDisabledEnchant(JavaPlugin plugin, Enchantment enchant) {
+	public void setDisabledEnchant(JavaPlugin plugin, EnchantmentWrapper enchant) {
 		if (!isDisabledEnchant(plugin, enchant)) disable.add(new EnchantmentDisable(plugin, enchant));
 	}
 
-	public boolean isDisabledEnchant(JavaPlugin plugin, Enchantment enchant) {
+	public boolean isDisabledEnchant(JavaPlugin plugin, EnchantmentWrapper enchant) {
 		for(EnchantmentDisable e: disable)
 			if (e.isSimilar(plugin, enchant)) return true;
 		return false;
 	}
 
-	public void removeDisabledEnchant(JavaPlugin plugin, Enchantment enchant) {
+	public void removeDisabledEnchant(JavaPlugin plugin, EnchantmentWrapper enchant) {
 		Iterator<EnchantmentDisable> iter = disable.iterator();
 		while (iter.hasNext()) {
 			EnchantmentDisable e = iter.next();
@@ -636,7 +635,7 @@ public class ESPlayer {
 		}
 	}
 
-	public boolean hasDisabled(Player player, Enchantment enchant) {
+	public boolean hasDisabled(Player player, EnchantmentWrapper enchant) {
 		for(EnchantmentDisable e: disable)
 			if (e.getEnchantment() == enchant) return true;
 		return false;

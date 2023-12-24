@@ -2,13 +2,13 @@ package org.ctp.enchantmentsolution.interfaces;
 
 import java.util.HashMap;
 
-import org.bukkit.enchantments.Enchantment;
+import org.ctp.enchantmentsolution.enchantments.EnchantmentWrapper;
 import org.ctp.enchantmentsolution.interfaces.walker.MagmaWalker;
 import org.ctp.enchantmentsolution.interfaces.walker.VoidWalker;
 
 public class InterfaceRegistry {
 
-	private static HashMap<Enchantment, WalkerInterface> WALKER = new HashMap<Enchantment, WalkerInterface>();
+	private static HashMap<EnchantmentWrapper, WalkerInterface> WALKER = new HashMap<EnchantmentWrapper, WalkerInterface>();
 
 	public static void firstLoad() {
 		registerWalkerEnchantment(new MagmaWalker());
@@ -21,7 +21,7 @@ public class InterfaceRegistry {
 		return true;
 	}
 
-	protected static HashMap<Enchantment, WalkerInterface> getWalkerInterfaces() {
+	protected static HashMap<EnchantmentWrapper, WalkerInterface> getWalkerInterfaces() {
 		return WALKER;
 	}
 }

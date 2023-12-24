@@ -6,9 +6,9 @@ import java.util.Map.Entry;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.ctp.enchantmentsolution.enchantments.EnchantmentWrapper;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
 
@@ -33,10 +33,10 @@ public interface WalkerInterface extends ESInterface {
 	}
 
 	public static WalkerInterface getFromMetadata(String s) {
-		Iterator<Entry<Enchantment, WalkerInterface>> iter = InterfaceRegistry.getWalkerInterfaces().entrySet().iterator();
+		Iterator<Entry<EnchantmentWrapper, WalkerInterface>> iter = InterfaceRegistry.getWalkerInterfaces().entrySet().iterator();
 
 		while (iter.hasNext()) {
-			Entry<Enchantment, WalkerInterface> entry = iter.next();
+			Entry<EnchantmentWrapper, WalkerInterface> entry = iter.next();
 			WalkerInterface inter = entry.getValue();
 			if (inter.getMetadata().equals(s)) return inter;
 		}
@@ -44,22 +44,22 @@ public interface WalkerInterface extends ESInterface {
 	}
 
 	public static WalkerInterface getFromMaterial(Material m) {
-		Iterator<Entry<Enchantment, WalkerInterface>> iter = InterfaceRegistry.getWalkerInterfaces().entrySet().iterator();
+		Iterator<Entry<EnchantmentWrapper, WalkerInterface>> iter = InterfaceRegistry.getWalkerInterfaces().entrySet().iterator();
 
 		while (iter.hasNext()) {
-			Entry<Enchantment, WalkerInterface> entry = iter.next();
+			Entry<EnchantmentWrapper, WalkerInterface> entry = iter.next();
 			WalkerInterface inter = entry.getValue();
 			if (inter.getReplaceMaterial() == m) return inter;
 		}
 		return null;
 	}
 
-	public static HashMap<Enchantment, WalkerInterface> getWalkerInterfaces(ItemStack item) {
-		HashMap<Enchantment, WalkerInterface> inters = new HashMap<Enchantment, WalkerInterface>();
+	public static HashMap<EnchantmentWrapper, WalkerInterface> getWalkerInterfaces(ItemStack item) {
+		HashMap<EnchantmentWrapper, WalkerInterface> inters = new HashMap<EnchantmentWrapper, WalkerInterface>();
 
-		Iterator<Entry<Enchantment, WalkerInterface>> iter = InterfaceRegistry.getWalkerInterfaces().entrySet().iterator();
+		Iterator<Entry<EnchantmentWrapper, WalkerInterface>> iter = InterfaceRegistry.getWalkerInterfaces().entrySet().iterator();
 		while (iter.hasNext()) {
-			Entry<Enchantment, WalkerInterface> entry = iter.next();
+			Entry<EnchantmentWrapper, WalkerInterface> entry = iter.next();
 			WalkerInterface inter = entry.getValue();
 			if (EnchantmentUtils.hasEnchantment(item, inter.getEnchantment())) inters.put(inter.getEnchantment(), inter);
 		}

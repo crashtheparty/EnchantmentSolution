@@ -4,8 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.enchantments.Enchantment;
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.ctp.crashapi.config.Language;
 import org.ctp.crashapi.item.CustomItemType;
@@ -38,7 +39,7 @@ public abstract class CustomEnchantment {
 	protected Weight defaultWeight = Weight.NULL;
 	protected Weight weight = Weight.NULL;
 	protected boolean maxLevelOne = false, curse = false;
-	protected List<Enchantment> conflictingEnchantments = null;
+	protected List<EnchantmentWrapper> conflictingEnchantments = null;
 	protected List<ItemType> enchantmentTypes = null, anvilTypes = null;
 	private final Type lang;
 
@@ -59,7 +60,7 @@ public abstract class CustomEnchantment {
 		lang = Type.LANGUAGE;
 	}
 
-	public abstract Enchantment getRelativeEnchantment();
+	public abstract EnchantmentWrapper getRelativeEnchantment();
 
 	public static boolean conflictsWith(CustomEnchantment enchOne, CustomEnchantment enchTwo) {
 		if (enchOne.conflictsWith(enchTwo) || enchTwo.conflictsWith(enchOne)) return true;
@@ -78,11 +79,11 @@ public abstract class CustomEnchantment {
 		return anvilTypes;
 	}
 
-	protected abstract List<Enchantment> getDefaultConflictingEnchantments();
+	protected abstract List<EnchantmentWrapper> getDefaultConflictingEnchantments();
 
-	public List<Enchantment> getConflictingEnchantments() {
+	public List<EnchantmentWrapper> getConflictingEnchantments() {
 		if (conflictingEnchantments == null) setConflictingEnchantments();
-		List<Enchantment> conflicting = new ArrayList<Enchantment>();
+		List<EnchantmentWrapper> conflicting = new ArrayList<EnchantmentWrapper>();
 		conflicting.add(getRelativeEnchantment());
 		conflicting.addAll(conflictingEnchantments);
 		return conflicting;
@@ -91,7 +92,7 @@ public abstract class CustomEnchantment {
 	public List<String> conflictingDefaultList() {
 		List<String> names = new ArrayList<String>();
 		if (getDefaultConflictingEnchantments() == null) return names;
-		for(Enchantment enchant: getDefaultConflictingEnchantments()) {
+		for(EnchantmentWrapper enchant: getDefaultConflictingEnchantments()) {
 			CustomEnchantment custom = RegisterEnchantments.getCustomEnchantment(enchant);
 			if (custom != null) names.add(custom.getName());
 		}
@@ -99,21 +100,21 @@ public abstract class CustomEnchantment {
 	}
 
 	protected void setConflictingEnchantments() {
-		List<Enchantment> enchantments = new ArrayList<Enchantment>();
+		List<EnchantmentWrapper> enchantments = new ArrayList<EnchantmentWrapper>();
 		enchantments.addAll(getDefaultConflictingEnchantments());
 		if (getRelativeEnchantment() != null && enchantments.contains(getRelativeEnchantment())) enchantments.remove(getRelativeEnchantment());
 		conflictingEnchantments = enchantments;
 	}
 
-	public void setConflictingEnchantments(List<Enchantment> conflictingEnchantments) {
-		List<Enchantment> enchantments = new ArrayList<Enchantment>();
+	public void setConflictingEnchantments(List<EnchantmentWrapper> conflictingEnchantments) {
+		List<EnchantmentWrapper> enchantments = new ArrayList<EnchantmentWrapper>();
 		enchantments.addAll(conflictingEnchantments);
 		if (getRelativeEnchantment() != null && enchantments.contains(getRelativeEnchantment())) enchantments.remove(getRelativeEnchantment());
 		this.conflictingEnchantments = conflictingEnchantments;
 	}
 
 	public String getDetails() {
-		String page = "\n" + "\n" + Chatable.get().getMessage(ChatUtils.getCodes(), "enchantment.name") + getDisplayName() + "\n\n";
+		String page = "\n" + "\n" + Chatable.get().getMessage(ChatUtils.getCodes(), "enchantment.name") + ChatColor.translateAlternateColorCodes('&', getDisplayName()) + ChatColor.RESET + "\n\n";
 		page += Chatable.get().getMessage(ChatUtils.getCodes(), "enchantment.description") + getDescription() + "\n";
 		page += Chatable.get().getMessage(ChatUtils.getCodes(), "enchantment.max-level") + getMaxLevel() + ".\n";
 		page += Chatable.get().getMessage(ChatUtils.getCodes(), "enchantment.weight") + getWeightName() + ".\n";
@@ -153,9 +154,9 @@ public abstract class CustomEnchantment {
 		if (getConflictingEnchantments().size() > 0) {
 			List<String> names = new ArrayList<String>();
 			for(int i = 0; i < getConflictingEnchantments().size(); i++) {
-				Enchantment enchant = getConflictingEnchantments().get(i);
+				EnchantmentWrapper enchant = getConflictingEnchantments().get(i);
 				CustomEnchantment custom = RegisterEnchantments.getCustomEnchantment(enchant);
-				if (custom != null && !custom.getRelativeEnchantment().equals(getRelativeEnchantment())) names.add(custom.getDisplayName());
+				if (custom != null && !custom.getRelativeEnchantment().equals(getRelativeEnchantment())) names.add(ChatColor.translateAlternateColorCodes('&', custom.getDisplayName()) + ChatColor.RESET);
 			}
 
 			if (names.isEmpty()) page += ConfigUtils.getString(lang, "misc.no_conflicting_enchantments");
@@ -199,7 +200,7 @@ public abstract class CustomEnchantment {
 	}
 
 	protected boolean conflictsWith(CustomEnchantment ench) {
-		for(Enchantment enchantment: getConflictingEnchantments())
+		for(EnchantmentWrapper enchantment: getConflictingEnchantments())
 			if (enchantment.equals(ench.getRelativeEnchantment())) return true;
 		return false;
 	}
@@ -497,9 +498,9 @@ public abstract class CustomEnchantment {
 		if (getConflictingEnchantments().size() > 0) {
 			List<String> names = new ArrayList<String>();
 			for(int i = 0; i < getConflictingEnchantments().size(); i++) {
-				Enchantment enchant = getConflictingEnchantments().get(i);
+				EnchantmentWrapper enchant = getConflictingEnchantments().get(i);
 				CustomEnchantment custom = RegisterEnchantments.getCustomEnchantment(enchant);
-				if (custom != null && !custom.getRelativeEnchantment().equals(getRelativeEnchantment())) names.add(custom.getDisplayName());
+				if (custom != null && !custom.getRelativeEnchantment().equals(getRelativeEnchantment())) names.add(ChatColor.translateAlternateColorCodes('&', custom.getDisplayName()) + ChatColor.RESET);
 			}
 
 			if (names.isEmpty()) page += ConfigUtils.getString(lang, "misc.no_conflicting_enchantments");
@@ -558,5 +559,15 @@ public abstract class CustomEnchantment {
 	}
 
 	public abstract List<EnchantmentLocation> getDefaultEnchantmentLocations();
+
+	public NamespacedKey getPersistenceKey() {
+		NamespacedKey relative = getRelativeEnchantment().getKey();
+		return new NamespacedKey(relative.getNamespace(), getName());
+	}
+
+	public NamespacedKey getPersistenceKey(String addition) {
+		NamespacedKey relative = getRelativeEnchantment().getKey();
+		return new NamespacedKey(relative.getNamespace(), getName() + addition);
+	}
 
 }

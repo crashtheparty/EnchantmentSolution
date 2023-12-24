@@ -4,13 +4,13 @@ import java.util.Locale;
 
 import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
 import org.ctp.crashapi.config.Configurable;
 import org.ctp.crashapi.config.yaml.YamlConfig;
 import org.ctp.crashapi.nms.MobNMS;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
+import org.ctp.enchantmentsolution.enchantments.EnchantmentWrapper;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.persistence.PersistenceUtils;
 
@@ -130,8 +130,8 @@ public class AnimalMob {
 		return null;
 	}
 
-	public static boolean canAddMob(Entity entity, Enchantment enchantment) {
-		if (enchantment == RegisterEnchantments.IRENES_LASSO) return entity instanceof WaterMob || entity instanceof Animals;
+	public static boolean canAddMob(Entity entity, EnchantmentWrapper enchantment) {
+		if (RegisterEnchantments.IRENES_LASSO.equals(enchantment)) return entity instanceof WaterMob || entity instanceof Animals;
 		return false;
 	}
 

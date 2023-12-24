@@ -15,9 +15,7 @@ import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.ctp.crashapi.compatibility.MMOUtils;
 import org.ctp.crashapi.item.*;
-import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
-import org.ctp.enchantmentsolution.enchantments.CustomEnchantmentWrapper;
-import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
+import org.ctp.enchantmentsolution.enchantments.*;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.persistence.PersistenceUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
@@ -36,13 +34,13 @@ public class EnchantmentUtils {
 				Enchantment enchant = e.getKey();
 				int level = e.getValue();
 				enchantmentStorage.addStoredEnchant(enchant, level, true);
-				if (enchant instanceof CustomEnchantmentWrapper) newLevels.add(new EnchantmentLevel(RegisterEnchantments.getCustomEnchantment(enchant), level));
+				newLevels.add(new EnchantmentLevel(RegisterEnchantments.getCustomEnchantment(enchant), level));
 				meta.removeEnchant(enchant);
 			}
 			meta = enchantmentStorage;
 			newItem.setItemMeta(meta);
 			for(EnchantmentLevel level: newLevels)
-				PersistenceUtils.addPersistence(newItem, Arrays.asList(new EnchantmentLevel(level.getEnchant(), level.getLevel())));
+				PersistenceUtils.addEnchantments(newItem, Arrays.asList(new EnchantmentLevel(level.getEnchant(), level.getLevel())));
 		}
 		return newItem;
 	}
@@ -60,34 +58,23 @@ public class EnchantmentUtils {
 				Enchantment enchant = e.getKey();
 				int level = e.getValue();
 				meta.addEnchant(enchant, level, true);
-				if (enchant instanceof CustomEnchantmentWrapper) newLevels.add(new EnchantmentLevel(RegisterEnchantments.getCustomEnchantment(enchant), level));
+				newLevels.add(new EnchantmentLevel(RegisterEnchantments.getCustomEnchantment(enchant), level));
 				enchantmentStorage.removeStoredEnchant(enchant);
 			}
 			newItem.setItemMeta(meta);
 			for(EnchantmentLevel level: newLevels)
-				PersistenceUtils.addPersistence(newItem, Arrays.asList(new EnchantmentLevel(level.getEnchant(), level.getLevel())));
+				PersistenceUtils.addEnchantments(newItem, Arrays.asList(new EnchantmentLevel(level.getEnchant(), level.getLevel())));
 		}
 		return newItem;
 	}
 
 	public static List<EnchantmentLevel> getEnchantmentLevels(ItemStack item) {
-		List<EnchantmentLevel> levels = new ArrayList<EnchantmentLevel>();
-		if (item != null && item.getItemMeta() != null) {
-			ItemMeta meta = item.getItemMeta();
-			Map<Enchantment, Integer> enchantments = meta.getEnchants();
-			if (item.getType() == Material.ENCHANTED_BOOK) enchantments = ((EnchantmentStorageMeta) meta).getStoredEnchants();
-			for(Iterator<Entry<Enchantment, Integer>> it = enchantments.entrySet().iterator(); it.hasNext();) {
-				Entry<Enchantment, Integer> e = it.next();
-				levels.add(new EnchantmentLevel(RegisterEnchantments.getCustomEnchantment(e.getKey()), e.getValue()));
-			}
-		}
-		return levels;
+		return PersistenceUtils.getEnchantments(item);
 	}
 
 	public static boolean isEnchantable(ItemStack item) {
 		if (item == null) return false;
-		ItemMeta meta = item.getItemMeta();
-		if (meta.hasEnchants() || item.getType() == Material.ENCHANTED_BOOK && ((EnchantmentStorageMeta) meta).hasStoredEnchants()) return false;
+		if (PersistenceUtils.getEnchantments(item).size() > 0) return false;
 		List<ItemData> all = new ArrayList<ItemData>();
 		all.addAll(ItemType.ALL.getEnchantMaterials());
 		for(String s: ConfigString.EXTRA_ENCHANTING_MATERIALS.getStringList()) {
@@ -110,13 +97,13 @@ public class EnchantmentUtils {
 				remove.add(level);
 				continue;
 			}
-			if (item.getType() == Material.ENCHANTED_BOOK) ((EnchantmentStorageMeta) meta).addStoredEnchant(level.getEnchant().getRelativeEnchantment(), level.getLevel(), true);
-			else
-				meta.addEnchant(level.getEnchant().getRelativeEnchantment(), level.getLevel(), true);
+			Enchantment en = level.getEnchant().getRelativeEnchantment().getRelativeEnchantment();
+			if (en != null && item.getType() == Material.ENCHANTED_BOOK) ((EnchantmentStorageMeta) meta).addStoredEnchant(en, level.getLevel(), true);
+			else if (en != null) meta.addEnchant(en, level.getLevel(), true);
 			item.setItemMeta(meta);
 			if (!item.getItemMeta().hasItemFlag(ItemFlag.HIDE_ENCHANTS) && level.getEnchant().getRelativeEnchantment() instanceof CustomEnchantmentWrapper) {
-				PersistenceUtils.removePersistence(item, level.getEnchant());
-				PersistenceUtils.addPersistence(item, Arrays.asList(level));
+				PersistenceUtils.removeEnchantments(item, level.getEnchant());
+				PersistenceUtils.addEnchantments(item, Arrays.asList(level));
 			}
 			meta = item.getItemMeta();
 		}
@@ -132,10 +119,11 @@ public class EnchantmentUtils {
 
 	public static ItemStack removeEnchantmentFromItem(ItemStack item, CustomEnchantment enchantment) {
 		if (enchantment == null) return item;
-		if (enchantment instanceof CustomEnchantment) PersistenceUtils.removePersistence(item, enchantment);
+		if (enchantment instanceof CustomEnchantment) PersistenceUtils.removeEnchantments(item, enchantment);
 		ItemMeta meta = item.getItemMeta();
-		if (hasEnchantment(item, enchantment.getRelativeEnchantment()) && meta instanceof EnchantmentStorageMeta) ((EnchantmentStorageMeta) meta).removeStoredEnchant(enchantment.getRelativeEnchantment());
-		else if (hasEnchantment(item, enchantment.getRelativeEnchantment())) meta.removeEnchant(enchantment.getRelativeEnchantment());
+		Enchantment en = enchantment.getRelativeEnchantment().getRelativeEnchantment();
+		if (en != null && meta instanceof EnchantmentStorageMeta) ((EnchantmentStorageMeta) meta).removeStoredEnchant(en);
+		else if (en != null) meta.removeEnchant(en);
 		item.setItemMeta(meta);
 		return item;
 	}
@@ -152,76 +140,45 @@ public class EnchantmentUtils {
 		return item;
 	}
 
-	public static boolean hasEnchantment(ItemStack item, Enchantment enchant) {
-		if (item != null && item.getItemMeta() != null) {
-			Map<Enchantment, Integer> enchantments = item.getItemMeta().getEnchants();
-			if (item.getType() == Material.ENCHANTED_BOOK) enchantments = ((EnchantmentStorageMeta) item.getItemMeta()).getStoredEnchants();
-			for(Iterator<Entry<Enchantment, Integer>> it = enchantments.entrySet().iterator(); it.hasNext();) {
-				Entry<Enchantment, Integer> e = it.next();
-				if (e.getKey().equals(enchant)) return true;
-			}
-		}
-		return false;
+	public static boolean hasEnchantment(ItemStack item, EnchantmentWrapper enchant) {
+		return PersistenceUtils.hasEnchantment(item, enchant);
 	}
 
-	public static boolean hasOneEnchantment(ItemStack item, Enchantment... enchantments) {
-		for(Enchantment e: enchantments)
+	public static boolean hasEnchantment(ItemStack item, Enchantment enchantment) {
+		EnchantmentWrapper wrapper = RegisterEnchantments.getByKey(enchantment.getKey());
+		return hasEnchantment(item, wrapper);
+	}
+
+	public static boolean hasOneEnchantment(ItemStack item, EnchantmentWrapper... enchantments) {
+		for(EnchantmentWrapper e: enchantments)
 			if (hasEnchantment(item, e)) return true;
 		return false;
 	}
 
 	public static int getTotalEnchantments(ItemStack item) {
-		if (item.getItemMeta() != null) {
-			ItemMeta meta = item.getItemMeta();
-			Map<Enchantment, Integer> enchantments = meta.getEnchants();
-			if (item.getType() == Material.ENCHANTED_BOOK) enchantments = ((EnchantmentStorageMeta) meta).getStoredEnchants();
-			if (enchantments == null) return 0;
-			return enchantments.size();
-		}
-		return 0;
+		List<EnchantmentLevel> enchantments = PersistenceUtils.getEnchantments(item);
+		return enchantments == null ? 0 : enchantments.size();
 	}
 
-	public static int getLevel(ItemStack item, Enchantment enchant) {
-		if (item.getItemMeta() != null) {
-			ItemMeta meta = item.getItemMeta();
-			Map<Enchantment, Integer> enchantments = meta.getEnchants();
-			if (item.getType() == Material.ENCHANTED_BOOK) enchantments = ((EnchantmentStorageMeta) meta).getStoredEnchants();
-			for(Iterator<Entry<Enchantment, Integer>> it = enchantments.entrySet().iterator(); it.hasNext();) {
-				Entry<Enchantment, Integer> e = it.next();
-				if (e.getKey().equals(enchant)) return e.getValue();
-			}
-		}
-		return 0;
+	public static int getLevel(ItemStack item, EnchantmentWrapper enchant) {
+		return PersistenceUtils.getLevel(item, enchant);
 	}
 
-	public static EnchantmentLevel getEnchantmentLevel(ItemStack item, Enchantment enchant) {
-		EnchantmentLevel level = new EnchantmentLevel(RegisterEnchantments.getCustomEnchantment(enchant), 0);
-		if (item.getItemMeta() != null) {
-			ItemMeta meta = item.getItemMeta();
-			Map<Enchantment, Integer> enchantments = meta.getEnchants();
-			if (item.getType() == Material.ENCHANTED_BOOK) enchantments = ((EnchantmentStorageMeta) meta).getStoredEnchants();
-			for(Iterator<Entry<Enchantment, Integer>> it = enchantments.entrySet().iterator(); it.hasNext();) {
-				Entry<Enchantment, Integer> e = it.next();
-				if (e.getKey().equals(enchant)) {
-					level.setLevel(e.getValue());
-					break;
-				}
-			}
-		}
-		return level;
+	public static int getLevel(ItemStack item, Enchantment enchantment) {
+		EnchantmentWrapper wrapper = RegisterEnchantments.getByKey(enchantment.getKey());
+		return getLevel(item, wrapper);
+	}
+
+	public static EnchantmentLevel getEnchantmentLevel(ItemStack item, EnchantmentWrapper enchant) {
+		return PersistenceUtils.getEnchantmentLevel(item, enchant);
 	}
 
 	public static boolean canAddEnchantment(CustomEnchantment customEnchant, ItemStack item) {
-		ItemMeta meta = item.clone().getItemMeta();
-		Map<Enchantment, Integer> enchants = meta.getEnchants();
-		if (item.getType().equals(Material.ENCHANTED_BOOK)) enchants = ((EnchantmentStorageMeta) meta).getStoredEnchants();
-		else if (!customEnchant.canAnvilItem(new ItemData(item))) return false;
-		for(Iterator<Entry<Enchantment, Integer>> it = enchants.entrySet().iterator(); it.hasNext();) {
-			Entry<Enchantment, Integer> e = it.next();
-			Enchantment enchant = e.getKey();
+		List<EnchantmentLevel> levels = getEnchantmentLevels(item);
+		if (!customEnchant.canAnvilItem(new ItemData(item))) return false;
+		for(EnchantmentLevel level: levels)
 			for(CustomEnchantment custom: RegisterEnchantments.getRegisteredEnchantments())
-				if (custom.getRelativeEnchantment().equals(enchant)) if (CustomEnchantment.conflictsWith(customEnchant, custom) && !customEnchant.equals(custom)) return false;
-		}
+				if (custom.equals(level.getEnchant()) && CustomEnchantment.conflictsWith(customEnchant, custom) && !customEnchant.equals(custom)) return false;
 		return true;
 	}
 

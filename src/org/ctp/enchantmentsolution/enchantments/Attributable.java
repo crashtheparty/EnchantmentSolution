@@ -7,7 +7,6 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.attribute.AttributeModifier.Operation;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.ctp.crashapi.item.ItemSlotType;
 import org.ctp.crashapi.nms.DamageNMS;
@@ -32,13 +31,13 @@ public enum Attributable {
 	private final String legacyAttrName;
 	private final UUID legacyUUID;
 	private final Operation operation;
-	private final Enchantment enchantment;
+	private final EnchantmentWrapper enchantment;
 
-	Attributable(Enchantment enchantment, Attribute attr, List<ItemEquippedSlot> types, boolean allowMultiple, Operation operation) {
+	Attributable(EnchantmentWrapper enchantment, Attribute attr, List<ItemEquippedSlot> types, boolean allowMultiple, Operation operation) {
 		this(enchantment, attr, types, null, allowMultiple, operation, null);
 	}
 
-	Attributable(Enchantment enchantment, Attribute attr, List<ItemEquippedSlot> types, UUID legacyUUID, boolean allowMultiple, Operation operation,
+	Attributable(EnchantmentWrapper enchantment, Attribute attr, List<ItemEquippedSlot> types, UUID legacyUUID, boolean allowMultiple, Operation operation,
 	String legacyAttrName) {
 		this.enchantment = enchantment;
 		this.attr = attr;
@@ -156,7 +155,7 @@ public enum Attributable {
 		return false;
 	}
 
-	public Enchantment getEnchantment() {
+	public EnchantmentWrapper getEnchantment() {
 		return enchantment;
 	}
 

@@ -5,9 +5,7 @@ import java.util.logging.Level;
 
 import org.bukkit.*;
 import org.bukkit.block.Block;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
-import org.bukkit.event.enchantment.EnchantItemEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -15,10 +13,10 @@ import org.ctp.crashapi.inventory.InventoryData;
 import org.ctp.crashapi.item.ItemData;
 import org.ctp.crashapi.item.ItemSerialization;
 import org.ctp.crashapi.item.ItemType;
-import org.ctp.crashapi.nms.NMS;
 import org.ctp.crashapi.utils.ItemUtils;
 import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
+import org.ctp.enchantmentsolution.enchantments.EnchantmentWrapper;
 import org.ctp.enchantmentsolution.enchantments.generate.TableEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentList;
@@ -280,14 +278,14 @@ public class EnchantmentTable implements InventoryData {
 					} else {}
 				}
 		}
-		int tableLevel = table.getLevelList().getList()[level].getLevel();
+//		int tableLevel = table.getLevelList().getList()[level].getLevel();
 		List<EnchantmentLevel> enchLevels = table.getEnchantments(new ItemData(enchantableItem))[level].getEnchantments();
-		Map<Enchantment, Integer> defaultLevels = new HashMap<Enchantment, Integer>();
+		Map<EnchantmentWrapper, Integer> defaultLevels = new HashMap<EnchantmentWrapper, Integer>();
 		for(EnchantmentLevel l: enchLevels)
 			defaultLevels.put(l.getEnchant().getRelativeEnchantment(), l.getLevel());
-		EnchantItemEvent event = NMS.enchantItemEvent(player, player.getOpenInventory(), block, enchantItem, tableLevel, defaultLevels, level, enchLevels.get(0).getEnchant().getRelativeEnchantment(), enchLevels.get(0).getLevel());
+//		EnchantItemEvent event = NMS.enchantItemEvent(player, player.getOpenInventory(), block, enchantItem, tableLevel, defaultLevels, level, Enchantment.PROTECTION_ENVIRONMENTAL, enchLevels.get(0).getLevel());
 		try {
-			Bukkit.getPluginManager().callEvent(event);
+//			Bukkit.getPluginManager().callEvent(event);
 		} catch (Exception ex) {
 			Chatable.sendDebug("An issue occurred with calling an EnchantItemEvent (Custom GUI): " + ex.getMessage(), Level.SEVERE);
 		}

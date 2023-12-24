@@ -1,8 +1,8 @@
 package org.ctp.enchantmentsolution.interfaces;
 
-import org.bukkit.enchantments.Enchantment;
+import org.ctp.enchantmentsolution.enchantments.EnchantmentWrapper;
 
 public interface ESInterface {
 
-	public Enchantment getEnchantment();
+	public EnchantmentWrapper getEnchantment();
 }

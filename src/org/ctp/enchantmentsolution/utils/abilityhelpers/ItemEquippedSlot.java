@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import org.bukkit.enchantments.Enchantment;
 import org.ctp.crashapi.item.ItemSlotType;
+import org.ctp.enchantmentsolution.enchantments.EnchantmentWrapper;
 
 public class ItemEquippedSlot {
 
@@ -29,7 +29,7 @@ public class ItemEquippedSlot {
 		return uuid;
 	}
 
-	public static List<ItemEquippedSlot> getArmorTypes(Enchantment enchant, UUID one, UUID two, UUID three, UUID four) {
+	public static List<ItemEquippedSlot> getArmorTypes(EnchantmentWrapper enchant, UUID one, UUID two, UUID three, UUID four) {
 		List<ItemEquippedSlot> uuids = new ArrayList<ItemEquippedSlot>();
 		uuids.add(new ItemEquippedSlot(ItemSlotType.HELMET, "helmet_" + enchant.getKey().getKey(), one));
 		uuids.add(new ItemEquippedSlot(ItemSlotType.CHESTPLATE, "chestplate_" + enchant.getKey().getKey(), two));
