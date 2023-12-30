@@ -5,7 +5,6 @@ import java.util.*;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -24,6 +23,7 @@ import org.ctp.crashapi.utils.DamageUtils;
 import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
+import org.ctp.enchantmentsolution.enchantments.EnchantmentWrapper;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.events.damage.*;
@@ -475,6 +475,7 @@ public class DamageListener extends Enchantmentable {
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	private void magicGuard(EntityDamageByEntityEvent event) {
 		if (!canRun(RegisterEnchantments.MAGIC_GUARD, event)) return;
 		if (event.getDamager() instanceof AreaEffectCloud) if (event.getEntity() instanceof Player) {
@@ -513,7 +514,7 @@ public class DamageListener extends Enchantmentable {
 		}
 	}
 
-	private void potion(EntityDamageByEntityEvent event, Enchantment enchantment, PotionEffectType type) {
+	private void potion(EntityDamageByEntityEvent event, EnchantmentWrapper enchantment, PotionEffectType type) {
 		if (!canRun(enchantment, event)) return;
 		Entity attacker = event.getDamager();
 		Entity attacked = event.getEntity();

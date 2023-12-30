@@ -2,9 +2,9 @@ package org.ctp.enchantmentsolution.utils.items;
 
 import org.bukkit.Material;
 import org.bukkit.block.data.BlockData;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.ctp.crashapi.item.MatData;
+import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enums.ItemBreakType;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.SmelteryMaterial;
 import org.ctp.enchantmentsolution.utils.files.ItemBreakFile.ItemBreakFileType;
@@ -32,8 +32,8 @@ public class SmelteryUtils {
 	}
 
 	private static int getAmount(ItemStack item, ItemStack from) {
-		if (EnchantmentUtils.hasEnchantment(item, Enchantment.LOOT_BONUS_BLOCKS)) {
-			int level = EnchantmentUtils.getLevel(item, Enchantment.LOOT_BONUS_BLOCKS);
+		if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.LOOT_BONUS_BLOCKS)) {
+			int level = EnchantmentUtils.getLevel(item, RegisterEnchantments.LOOT_BONUS_BLOCKS);
 			if (from.getType() == Material.ANCIENT_DEBRIS) {
 				double extraAmount = Math.random() * (level * 0.15);
 				double rand = Math.random();

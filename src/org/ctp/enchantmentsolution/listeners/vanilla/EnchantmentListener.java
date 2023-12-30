@@ -13,6 +13,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.enchantment.EnchantItemEvent;
 import org.bukkit.event.enchantment.PrepareItemEnchantEvent;
+import org.bukkit.inventory.EnchantingInventory;
 import org.bukkit.inventory.ItemStack;
 import org.ctp.crashapi.item.ItemData;
 import org.ctp.enchantmentsolution.Chatable;
@@ -20,7 +21,6 @@ import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantmentWrapper;
 import org.ctp.enchantmentsolution.enchantments.generate.TableEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.*;
-import org.ctp.enchantmentsolution.events.ESEnchantItemEvent;
 import org.ctp.enchantmentsolution.nms.EnchantNMS;
 import org.ctp.enchantmentsolution.utils.compatibility.JobsUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
@@ -49,7 +49,7 @@ public class EnchantmentListener implements Listener {
 				if (level == null) continue;
 				offer.setCost(level.getLevel());
 				if (!(ench.getEnchant().getRelativeEnchantment() instanceof CustomEnchantmentWrapper)) {
-					offer.setEnchantment(ench.getEnchant().getRelativeEnchantment());
+					offer.setEnchantment(ench.getEnchant().getRelativeEnchantment().getRelativeEnchantment());
 					offer.setEnchantmentLevel(ench.getLevel());
 				}
 			}
@@ -58,43 +58,39 @@ public class EnchantmentListener implements Listener {
 
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onEnchantItem(EnchantItemEvent event) {
-		if (event instanceof ESEnchantItemEvent) return;
-		Player player = event.getEnchanter();
-		int bookshelves = EnchantmentUtils.getBookshelves(event.getEnchantBlock().getLocation());
-		ItemStack item = event.getItem();
-		TableEnchantments table = TableEnchantments.getTableEnchantments(player, item, bookshelves);
-		for(int i = 0; i < table.getLevelList().getList().length; i++) {
-			Integer integer = table.getLevelList().getList()[i].getLevel();
-			if (integer == event.getExpLevelCost()) {
-				List<EnchantmentLevel> enchantments = table.getEnchantments(new ItemData(item))[i].getEnchantments();
-				event.getEnchantsToAdd().clear();
-				Map<Enchantment, Integer> defaultLevels = new HashMap<Enchantment, Integer>();
-				for(EnchantmentLevel l: enchantments)
-					defaultLevels.put(l.getEnchant().getRelativeEnchantment(), l.getLevel());
-				ESEnchantItemEvent enchantEvent = new ESEnchantItemEvent(player, player.getOpenInventory(), event.getEnchantBlock(), item, i, defaultLevels, i);
-				try {
-					Bukkit.getPluginManager().callEvent(enchantEvent);
-				} catch (Exception ex) {
-					Chatable.sendDebug("An issue occurred with calling an EnchantItemEvent (Vanilla GUI): " + ex.getMessage(), java.util.logging.Level.SEVERE);
+		if (event.getInventory() instanceof EnchantingInventory) {
+			Player player = event.getEnchanter();
+			int bookshelves = EnchantmentUtils.getBookshelves(event.getEnchantBlock().getLocation());
+			ItemStack item = event.getItem();
+			TableEnchantments table = TableEnchantments.getTableEnchantments(player, item, bookshelves);
+			for(int i = 0; i < table.getLevelList().getList().length; i++) {
+				Integer integer = table.getLevelList().getList()[i].getLevel();
+				if (integer == event.getExpLevelCost()) {
+					List<EnchantmentLevel> enchantments = table.getEnchantments(new ItemData(item))[i].getEnchantments();
+					event.getEnchantsToAdd().clear();
+					Map<Enchantment, Integer> defaultLevels = new HashMap<Enchantment, Integer>();
+					for(EnchantmentLevel l: enchantments) {
+						Enchantment e = l.getEnchant().getRelativeEnchantment().getRelativeEnchantment();
+						if (e != null) defaultLevels.put(e, l.getLevel());
+					}
+					try {
+						if (item.getType() == Material.BOOK && ConfigString.USE_ENCHANTED_BOOKS.getBoolean()) item = EnchantmentUtils.convertToEnchantedBook(item);
+						player.playSound(player.getLocation(), Sound.BLOCK_ENCHANTMENT_TABLE_USE, 1, 1);
+						if (player.getGameMode() != GameMode.CREATIVE) player.setLevel(player.getLevel() - i - 1);
+						ItemStack lapis = event.getInventory().getItem(1).clone();
+						lapis.setAmount(i + 1);
+						event.getInventory().removeItem(lapis);
+						item = EnchantmentUtils.addEnchantmentsToItem(item, enchantments);
+						event.getInventory().setItem(0, item);
+						player.setStatistic(Statistic.ITEM_ENCHANTED, player.getStatistic(Statistic.ITEM_ENCHANTED) + 1);
+						EnchantNMS.updateCriterion(player, item);
+						if (EnchantmentSolution.getPlugin().isJobsEnabled()) JobsUtils.sendEnchantAction(player, item, item, enchantments);
+					} catch (Exception ex) {
+						Chatable.sendDebug("An issue occurred with enchanting items (Vanilla GUI): " + ex.getMessage(), java.util.logging.Level.SEVERE);
+					}
+					TableEnchantments.removeTableEnchantments(player);
+					return;
 				}
-				try {
-					if (item.getType() == Material.BOOK && ConfigString.USE_ENCHANTED_BOOKS.getBoolean()) item = EnchantmentUtils.convertToEnchantedBook(item);
-					player.playSound(player.getLocation(), Sound.BLOCK_ENCHANTMENT_TABLE_USE, 1, 1);
-					if (player.getGameMode() != GameMode.CREATIVE) player.setLevel(player.getLevel() - i - 1);
-					ItemStack lapis = event.getInventory().getItem(1).clone();
-					lapis.setAmount(i + 1);
-					event.getInventory().removeItem(lapis);
-					item = EnchantmentUtils.addEnchantmentsToItem(item, enchantments);
-					event.getInventory().setItem(0, item);
-					player.setStatistic(Statistic.ITEM_ENCHANTED, player.getStatistic(Statistic.ITEM_ENCHANTED) + 1);
-					EnchantNMS.updateCriterion(player, item);
-					if (EnchantmentSolution.getPlugin().isJobsEnabled()) JobsUtils.sendEnchantAction(player, item, item, enchantments);
-				} catch (Exception ex) {
-					Chatable.sendDebug("An issue occurred with enchanting items (Vanilla GUI): " + ex.getMessage(), java.util.logging.Level.SEVERE);
-
-				}
-				TableEnchantments.removeTableEnchantments(player);
-				return;
 			}
 		}
 	}

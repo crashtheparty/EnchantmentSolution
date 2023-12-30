@@ -7,7 +7,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.enchantments.Enchantment;
 import org.ctp.crashapi.config.DataFile;
 import org.ctp.crashapi.config.yaml.YamlConfig;
 import org.ctp.crashapi.resources.advancements.CrashAdvancementProgress;
@@ -15,6 +14,7 @@ import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
+import org.ctp.enchantmentsolution.enchantments.EnchantmentWrapper;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enchantments.generate.TableEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
@@ -180,9 +180,9 @@ public class SaveUtils {
 			config.set("rpg." + i + ".level", player.getLevel());
 			config.set("rpg." + i + ".experience", player.getExperience().toString());
 			List<String> enchants = new ArrayList<String>();
-			Iterator<Entry<Enchantment, Integer>> iterator = player.getEnchantmentList().entrySet().iterator();
+			Iterator<Entry<EnchantmentWrapper, Integer>> iterator = player.getEnchantmentList().entrySet().iterator();
 			while (iterator.hasNext()) {
-				Entry<Enchantment, Integer> entry = iterator.next();
+				Entry<EnchantmentWrapper, Integer> entry = iterator.next();
 				EnchantmentLevel level = new EnchantmentLevel(RegisterEnchantments.getCustomEnchantment(entry.getKey()), entry.getValue());
 				enchants.add(level.toString());
 			}

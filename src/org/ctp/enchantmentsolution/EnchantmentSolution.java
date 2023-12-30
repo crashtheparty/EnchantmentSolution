@@ -6,7 +6,6 @@ import java.util.List;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.command.PluginCommand;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
@@ -19,7 +18,6 @@ import org.ctp.crashapi.events.EquipEvent.EquipMethod;
 import org.ctp.crashapi.inventory.InventoryData;
 import org.ctp.crashapi.item.ItemSerialization;
 import org.ctp.crashapi.item.ItemSlot;
-import org.ctp.crashapi.item.ItemSlotType;
 import org.ctp.crashapi.listeners.EquipListener;
 import org.ctp.crashapi.resources.advancements.CrashAdvancementProgress;
 import org.ctp.crashapi.version.PluginVersion;
@@ -29,6 +27,7 @@ import org.ctp.crashapi.version.VersionCheck;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.commands.EnchantmentSolutionCommand;
 import org.ctp.enchantmentsolution.database.ESBackup;
+import org.ctp.enchantmentsolution.enchantments.EnchantmentWrapper;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.interfaces.InterfaceRegistry;
 import org.ctp.enchantmentsolution.listeners.*;
@@ -120,7 +119,6 @@ public class EnchantmentSolution extends CrashAPIPlugin {
 		registerEvent(new ExtraBlockListener());
 		registerEvent(new VanishListener());
 		registerEvent(new EquipListener());
-		registerEvent(new BadAttributesListener());
 		registerEvent(new GlobalPlayerListener());
 
 		registerEvent(new FishingListener());
@@ -450,7 +448,7 @@ public class EnchantmentSolution extends CrashAPIPlugin {
 	public void reEquipItems() {
 		for(Player p: Bukkit.getOnlinePlayers()) {
 			ESPlayer esPlayer = getESPlayer(p);
-			for(ItemSlot slot: esPlayer.getArmorAndType()) {
+			for(ItemSlot slot: esPlayer.getEquippedAndType()) {
 				ItemStack item = slot.getItem();
 				if (item != null && EnchantmentUtils.getTotalEnchantments(item) > 0) {
 					EquipEvent armorEquipEvent = new EquipEvent(p, EquipMethod.COMMAND, slot.getType(), item, item);
@@ -460,38 +458,11 @@ public class EnchantmentSolution extends CrashAPIPlugin {
 		}
 	}
 
-	public void reEquipItems(ESPlayer player, Enchantment enchantment) {
+	public void reEquipItems(ESPlayer player, EnchantmentWrapper enchantment) {
 		if (!player.isOnline()) return;
-		ItemStack mainHand = player.getMainHand();
-		if (EnchantmentUtils.hasEnchantment(mainHand, enchantment)) {
-			EquipEvent itemEquipEvent = new EquipEvent(player.getOnlinePlayer(), EquipMethod.COMMAND, ItemSlotType.MAIN_HAND, mainHand, mainHand);
-			Bukkit.getServer().getPluginManager().callEvent(itemEquipEvent);
-		}
-		ItemStack offHand = player.getMainHand();
-		if (EnchantmentUtils.hasEnchantment(offHand, enchantment)) {
-			EquipEvent itemEquipEvent = new EquipEvent(player.getOnlinePlayer(), EquipMethod.COMMAND, ItemSlotType.MAIN_HAND, offHand, offHand);
-			Bukkit.getServer().getPluginManager().callEvent(itemEquipEvent);
-		}
-	}
-
-	public void reEquipArmor() {
-		for(Player p: Bukkit.getOnlinePlayers()) {
-			ESPlayer esPlayer = getESPlayer(p);
-			for(ItemSlot slot: esPlayer.getArmorAndType()) {
-				ItemStack item = slot.getItem();
-				if (item != null && EnchantmentUtils.getTotalEnchantments(item) > 0) {
-					EquipEvent armorEquipEvent = new EquipEvent(p, EquipMethod.COMMAND, slot.getType(), item, item);
-					Bukkit.getServer().getPluginManager().callEvent(armorEquipEvent);
-				}
-			}
-		}
-	}
-
-	public void reEquipArmor(ESPlayer player, Enchantment enchantment) {
-		if (!player.isOnline()) return;
-		for(ItemSlot slot: player.getArmorAndType()) {
+		for(ItemSlot slot: player.getEquippedAndType()) {
 			ItemStack item = slot.getItem();
-			if (EnchantmentUtils.hasEnchantment(item, enchantment)) {
+			if (item != null && EnchantmentUtils.hasEnchantment(item, enchantment)) {
 				EquipEvent armorEquipEvent = new EquipEvent(player.getOnlinePlayer(), EquipMethod.COMMAND, slot.getType(), item, item);
 				Bukkit.getServer().getPluginManager().callEvent(armorEquipEvent);
 			}

@@ -2,12 +2,12 @@ package org.ctp.enchantmentsolution.utils.abilityhelpers;
 
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.enchantments.Enchantment;
+import org.ctp.enchantmentsolution.enchantments.EnchantmentWrapper;
 import org.ctp.enchantmentsolution.events.blocks.DamageState;
 import org.ctp.enchantmentsolution.interfaces.WalkerInterface;
 
 public class WalkerBlock {
-	private final Enchantment enchantment;
+	private final EnchantmentWrapper enchantment;
 	private final Material replaceType;
 	private final Block block;
 	private final int tick;
@@ -36,7 +36,7 @@ public class WalkerBlock {
 		return tick;
 	}
 
-	public Enchantment getEnchantment() {
+	public EnchantmentWrapper getEnchantment() {
 		return enchantment;
 	}
 

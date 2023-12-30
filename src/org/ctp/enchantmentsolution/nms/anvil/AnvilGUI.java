@@ -37,7 +37,7 @@ public abstract class AnvilGUI extends NMS {
 	private Listener listener;
 
 	private InventoryData data;
-
+	
 	public AnvilGUI(Player player, final ESAnvilClickEventHandler handler, InventoryData data) {
 		this.player = player;
 		setHandler(handler);
@@ -125,7 +125,6 @@ public abstract class AnvilGUI extends NMS {
 			public void onInventoryClose(InventoryCloseEvent event) {
 				if (event.getPlayer() instanceof Player) {
 					Inventory inv = event.getInventory();
-
 					if (inv.equals(AnvilGUI.this.inv)) {
 						inv.clear();
 						destroy();

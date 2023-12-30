@@ -2,11 +2,11 @@ package org.ctp.enchantmentsolution.api;
 
 import java.util.*;
 
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
+import org.ctp.enchantmentsolution.enchantments.EnchantmentWrapper;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.utils.Configurations;
@@ -60,7 +60,7 @@ public class ApiEnchantList {
 	 *            - the enchantment to check
 	 * @return boolean - whether the enchantment is enabled
 	 */
-	public static boolean isEnabled(Enchantment enchant) {
+	public static boolean isEnabled(EnchantmentWrapper enchant) {
 		return RegisterEnchantments.isEnabled(enchant);
 	}
 
@@ -71,7 +71,7 @@ public class ApiEnchantList {
 	 *            - the enchantment to check for
 	 * @return CustomEnchantment - a custom enchantment
 	 */
-	public static CustomEnchantment getCustomEnchantment(Enchantment enchant) {
+	public static CustomEnchantment getCustomEnchantment(EnchantmentWrapper enchant) {
 		return RegisterEnchantments.getCustomEnchantment(enchant);
 	}
 
@@ -84,7 +84,7 @@ public class ApiEnchantList {
 	 *            - the enchantment to check for
 	 * @return boolean - whether the item has the enchantment
 	 */
-	public static boolean hasEnchantment(ItemStack item, Enchantment enchant) {
+	public static boolean hasEnchantment(ItemStack item, EnchantmentWrapper enchant) {
 		return EnchantmentUtils.hasEnchantment(item, enchant);
 	}
 
@@ -98,7 +98,7 @@ public class ApiEnchantList {
 	 * @return int - the level of the enchantment on the item, or 0 if the
 	 *         enchantment does not exist on it
 	 */
-	public static int getLevel(ItemStack item, Enchantment enchant) {
+	public static int getLevel(ItemStack item, EnchantmentWrapper enchant) {
 		return EnchantmentUtils.getLevel(item, enchant);
 	}
 

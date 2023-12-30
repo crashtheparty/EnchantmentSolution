@@ -25,7 +25,6 @@ public class InventoryClick implements Listener {
 		if (inv == null) return;
 		InventoryData invData = EnchantmentSolution.getPlugin().getInventory(player);
 		if (invData != null) {
-			if (invData instanceof LegacyAnvil) return;
 			event.setCancelled(true);
 			if (invData instanceof EnchantmentTable) {
 				EnchantmentTable table = (EnchantmentTable) invData;

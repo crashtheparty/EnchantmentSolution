@@ -17,7 +17,8 @@ public enum GaiaTrees {
 	SPRUCE(LogType.SPRUCE, Arrays.asList("SPRUCE_LEAVES"), "SPRUCE_SAPLING", getOverworldGrow()),
 	CRIMSON(LogType.CRIMSON, Arrays.asList("NETHER_WART_BLOCK"), "CRIMSON_FUNGUS", Arrays.asList("CRIMSON_NYLIUM", "WARPED_NYLIUM")),
 	WARPED(LogType.WARPED, Arrays.asList("WARPED_WART_BLOCK"), "WARPED_FUNGUS", Arrays.asList("CRIMSON_NYLIUM", "WARPED_NYLIUM")), 
-	MANGROVE(LogType.MANGROVE, Arrays.asList("MANGROVE_LEAVES"), "MANGROVE_PROPAGULE", getOverworldGrow());
+	MANGROVE(LogType.MANGROVE, Arrays.asList("MANGROVE_LEAVES"), "MANGROVE_PROPAGULE", getOverworldGrow()),
+	CHERRY(LogType.CHERRY, Arrays.asList("CHERRY_LEAVES"), "CHERRY_SAPLING", getOverworldGrow());
 
 	private final LogType log;
 	private final MatData sapling;

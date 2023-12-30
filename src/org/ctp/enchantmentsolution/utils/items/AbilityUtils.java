@@ -8,12 +8,13 @@ import org.bukkit.Particle;
 import org.bukkit.block.data.Ageable;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.ExperienceOrb;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.inventory.ItemStack;
+import org.ctp.crashapi.nms.ExpNMS;
 import org.ctp.crashapi.utils.DamageUtils;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
+import org.ctp.enchantmentsolution.enchantments.EnchantmentWrapper;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.ParticleEffect;
 import org.ctp.enchantmentsolution.utils.player.ESPlayer;
@@ -46,7 +47,8 @@ public class AbilityUtils {
 	}
 
 	public static void dropExperience(Location loc, int amount) {
-		if (amount > 0) loc.getWorld().spawn(loc, ExperienceOrb.class).setExperience(amount);
+		ExpNMS.dropExp(loc, amount, true, null);
+//		if (amount > 0) loc.getWorld().spawn(loc, ExperienceOrb.class).setExperience(amount);
 	}
 
 	public static void giveExperience(Player player, int amount) {
@@ -109,7 +111,7 @@ public class AbilityUtils {
 	}
 
 	public static int getExhaustionCurse(Player player) {
-		Enchantment curse = RegisterEnchantments.CURSE_OF_EXHAUSTION;
+		EnchantmentWrapper curse = RegisterEnchantments.CURSE_OF_EXHAUSTION;
 		int exhaustionCurse = 0;
 		for(ItemStack item: player.getInventory().getArmorContents())
 			if (EnchantmentUtils.hasEnchantment(item, curse)) exhaustionCurse += EnchantmentUtils.getLevel(item, curse);

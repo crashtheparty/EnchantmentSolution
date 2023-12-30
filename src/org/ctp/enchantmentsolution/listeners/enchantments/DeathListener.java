@@ -39,10 +39,11 @@ public class DeathListener extends Enchantmentable {
 		Entity entity = event.getEntity();
 		Player killer = event.getEntity().getKiller();
 		if (killer == null || isDisabled(killer, RegisterEnchantments.BEHEADING)) return;
-		if (entity instanceof LivingEntity && killer != null) {
+		ItemStack item = killer.getInventory().getItemInMainHand();
+		if (entity instanceof LivingEntity && killer != null && item != null) {
 			LivingEntity living = (LivingEntity) entity;
 			if (EnchantmentUtils.hasEnchantment(killer.getInventory().getItemInMainHand(), RegisterEnchantments.BEHEADING)) {
-				int level = EnchantmentUtils.getLevel(killer.getInventory().getItemInMainHand(), RegisterEnchantments.BEHEADING);
+				int level = EnchantmentUtils.getLevel(item, RegisterEnchantments.BEHEADING);
 				double chance = level * .05;
 				double random = Math.random();
 				if (chance > random) {

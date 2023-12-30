@@ -10,7 +10,8 @@ public class AnvilNMS extends NMS {
 	public static int getRepairCost(ItemStack item) {
 		if (item == null) return 0;
 		int repairCost = 0;
-		if (isSimilarOrAbove(getVersionNumbers(), 1, 19, 0)) repairCost = Anvil_4.getRepairCost(item);
+		if (isSimilarOrAbove(getVersionNumbers(), 1, 20, 0)) repairCost = Anvil_5.getRepairCost(item);
+		else if (isSimilarOrAbove(getVersionNumbers(), 1, 19, 0)) repairCost = Anvil_4.getRepairCost(item);
 		else if (isSimilarOrAbove(getVersionNumbers(), 1, 18, 2)) repairCost = Anvil_3.getRepairCost(item);
 		else if (isSimilarOrAbove(getVersionNumbers(), 1, 18, 0)) repairCost = Anvil_2.getRepairCost(item);
 		else if (isSimilarOrAbove(getVersionNumbers(), 1, 17, 0)) repairCost = Anvil_1.getRepairCost(item);

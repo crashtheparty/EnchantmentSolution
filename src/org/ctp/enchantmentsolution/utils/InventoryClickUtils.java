@@ -91,10 +91,6 @@ public class InventoryClickUtils {
 			} else if (slot == 16) {
 				anvil.combine();
 				anvil.setInventory();
-			} else if ((slot == 31 || slot == 30) && item.getType() == Material.ANVIL) {
-				anvil.close(false);
-				AnvilUtils.addLegacyAnvil(player);
-				Chatable.get().sendMessage(player, Chatable.get().getMessage(ChatUtils.getCodes(), "anvil.legacy-gui-open"));
 			} else if ((slot == 31 || slot == 32) && item.getType().equals(Material.SMOOTH_STONE)) {
 				anvil.close(false);
 				Grindstone stone = new Grindstone(player, anvil.getBlock());

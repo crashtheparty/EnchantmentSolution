@@ -6,7 +6,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.BlockState;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Item;
 import org.bukkit.event.block.BlockDropItemEvent;
 import org.bukkit.inventory.ItemStack;
@@ -14,6 +13,7 @@ import org.bukkit.metadata.MetadataValue;
 import org.ctp.crashapi.utils.ItemUtils;
 import org.ctp.crashapi.utils.LocationUtils;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
+import org.ctp.enchantmentsolution.enchantments.EnchantmentWrapper;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.events.drops.SmelteryBonusDropsEvent;
 import org.ctp.enchantmentsolution.events.drops.TelepathyBonusDropsEvent;
@@ -31,7 +31,7 @@ import com.gmail.nossr50.util.MetadataConstants;
 
 public class McMMOBlockDrops {
 
-	protected static void handleBlockDrops(BlockDropItemEvent event, ItemStack item, Enchantment enchantment) {
+	protected static void handleBlockDrops(BlockDropItemEvent event, ItemStack item, EnchantmentWrapper enchantment) {
 		if (VersionUtils.getMcMMOType().equals("Overhaul")) {
 			Location loc = LocationUtils.offset(event.getBlock().getLocation());
 			BlockState state = event.getBlockState();
@@ -39,7 +39,7 @@ public class McMMOBlockDrops {
 				Collection<ItemStack> drops = getDoubleDrops(event);
 				ESPlayer player = EnchantmentSolution.getESPlayer(event.getPlayer());
 
-				if (enchantment == RegisterEnchantments.TELEPATHY && EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.TELEPATHY)) {
+				if (enchantment.equals(RegisterEnchantments.TELEPATHY) && EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.TELEPATHY)) {
 					TelepathyBonusDropsEvent telepathyBonus = new TelepathyBonusDropsEvent(event.getPlayer(), drops, value.asInt());
 					Bukkit.getPluginManager().callEvent(telepathyBonus);
 
@@ -50,7 +50,7 @@ public class McMMOBlockDrops {
 							num--;
 						}
 					}
-				} else if (enchantment == RegisterEnchantments.SMELTERY && EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.SMELTERY)) for(ItemStack drop: drops) {
+				} else if (enchantment.equals(RegisterEnchantments.SMELTERY) && EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.SMELTERY)) for(ItemStack drop: drops) {
 					SmelteryMaterial smelted = SmelteryUtils.getSmelteryItem(state.getBlockData(), drop, item);
 					if (smelted != null) {
 						SmelteryBonusDropsEvent smelteryBonus = new SmelteryBonusDropsEvent(event.getPlayer(), Arrays.asList(smelted.getSmelted()), value.asInt());

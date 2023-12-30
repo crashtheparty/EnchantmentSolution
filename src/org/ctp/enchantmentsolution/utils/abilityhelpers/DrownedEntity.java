@@ -3,13 +3,13 @@ package org.ctp.enchantmentsolution.utils.abilityhelpers;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.ctp.crashapi.nms.DamageNMS;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
+import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.events.damage.DrownDamageEvent;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
@@ -51,7 +51,7 @@ public class DrownedEntity {
 				HumanEntity hEntity = (HumanEntity) hurtEntity;
 				ItemStack helmet = hEntity.getInventory().getHelmet();
 
-				if (helmet != null) level = EnchantmentUtils.getLevel(helmet, Enchantment.OXYGEN);
+				if (helmet != null) level = EnchantmentUtils.getLevel(helmet, RegisterEnchantments.OXYGEN);
 			}
 			double chance = level / ((double) level + 1);
 			double random = Math.random();

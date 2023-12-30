@@ -1,13 +1,13 @@
 package org.ctp.enchantmentsolution.enchantments;
 
-import java.lang.reflect.Field;
 import java.util.*;
-import java.util.logging.Level;
 
+import org.bukkit.ChatColor;
 import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.ctp.crashapi.config.Configuration;
+import org.ctp.crashapi.enchantment.EnchantmentData;
 import org.ctp.crashapi.item.ItemType;
 import org.ctp.crashapi.item.VanillaItemType;
 import org.ctp.crashapi.utils.StringUtils;
@@ -16,7 +16,6 @@ import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.api.ApiEnchantmentWrapper;
 import org.ctp.enchantmentsolution.enchantments.helper.Weight;
 import org.ctp.enchantmentsolution.enums.EnchantmentLocation;
-import org.ctp.enchantmentsolution.persistence.SnapshotEnchantment;
 import org.ctp.enchantmentsolution.utils.Configurations;
 import org.ctp.enchantmentsolution.utils.VersionUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
@@ -29,87 +28,127 @@ public class RegisterEnchantments {
 	private static List<CustomEnchantment> CURSE_ENCHANTMENTS = new ArrayList<CustomEnchantment>();
 	private static List<CustomEnchantment> DISABLED_ENCHANTMENTS = new ArrayList<CustomEnchantment>();
 
-	public static final Enchantment SOULBOUND = new CustomEnchantmentWrapper("soulbound", "SOULBOUND");
-	public static final Enchantment SOUL_REAPER = new CustomEnchantmentWrapper("soul_reaper", "SOUL_REAPER");
-	public static final Enchantment SHOCK_ASPECT = new CustomEnchantmentWrapper("shock_aspect", "SHOCK_ASPECT");
-	public static final Enchantment LIFE = new CustomEnchantmentWrapper("life", "LIFE");
-	public static final Enchantment BEHEADING = new CustomEnchantmentWrapper("beheading", "BEHEADING");
-	public static final Enchantment KNOCKUP = new CustomEnchantmentWrapper("knockip", "KNOCKUP");
-	public static final Enchantment WARP = new CustomEnchantmentWrapper("warp", "WARP");
-	public static final Enchantment EXP_SHARE = new CustomEnchantmentWrapper("exp_share", "EXP_SHARE");
-	public static final Enchantment MAGMA_WALKER = new CustomEnchantmentWrapper("magma_walker", "MAGMA_WALKER");
-	public static final Enchantment SNIPER = new CustomEnchantmentWrapper("sniper", "SNIPER");
-	public static final Enchantment TELEPATHY = new CustomEnchantmentWrapper("telepathy", "TELEPATHY");
-	public static final Enchantment SMELTERY = new CustomEnchantmentWrapper("smeltery", "SMELTERY");
-	public static final Enchantment SACRIFICE = new CustomEnchantmentWrapper("sacrifice", "SACRIFICE");
-	public static final Enchantment ANGLER = new CustomEnchantmentWrapper("angler", "ANGLER");
-	public static final Enchantment FRIED = new CustomEnchantmentWrapper("fried", "FRIED");
-	public static final Enchantment FREQUENT_FLYER = new CustomEnchantmentWrapper("frequent_flyer", "FREQUENT_FLYER");
-	public static final Enchantment TANK = new CustomEnchantmentWrapper("tank", "TANK");
-	public static final Enchantment BRINE = new CustomEnchantmentWrapper("brine", "BRINE");
-	public static final Enchantment DROWNED = new CustomEnchantmentWrapper("drowned", "DROWNED");
-	public static final Enchantment UNREST = new CustomEnchantmentWrapper("unrest", "UNREST");
-	public static final Enchantment NO_REST = new CustomEnchantmentWrapper("no_rest", "NO_REST");
-	public static final Enchantment WIDTH_PLUS_PLUS = new CustomEnchantmentWrapper("width_plus_plus", "WIDTH_PLUS_PLUS");
-	public static final Enchantment HEIGHT_PLUS_PLUS = new CustomEnchantmentWrapper("height_plus_plus", "HEIGHT_PLUS_PLUS");
-	public static final Enchantment VOID_WALKER = new CustomEnchantmentWrapper("void_walker", "VOID_WALKER");
-	public static final Enchantment ICARUS = new CustomEnchantmentWrapper("icarus", "ICARUS");
-	public static final Enchantment IRON_DEFENSE = new CustomEnchantmentWrapper("iron_defense", "IRON_DEFENSE");
-	public static final Enchantment HARD_BOUNCE = new CustomEnchantmentWrapper("hard_bounce", "HARD_BOUNCE");
-	public static final Enchantment MAGIC_GUARD = new CustomEnchantmentWrapper("magic_guard", "MAGIC_GUARD");
-	public static final Enchantment SPLATTER_FEST = new CustomEnchantmentWrapper("splatter_fest", "SPLATTER_FEST");
-	public static final Enchantment SAND_VEIL = new CustomEnchantmentWrapper("sand_veil", "SAND_VEIL");
-	public static final Enchantment TRANSMUTATION = new CustomEnchantmentWrapper("transmutation", "TRANSMUTATION");
-	public static final Enchantment GOLD_DIGGER = new CustomEnchantmentWrapper("gold_digger", "GOLD_DIGGER");
-	public static final Enchantment FLOWER_GIFT = new CustomEnchantmentWrapper("flower_gift", "FLOWER_GIFT");
-	public static final Enchantment STONE_THROW = new CustomEnchantmentWrapper("stone_throw", "STONE_THROW");
-	public static final Enchantment PILLAGE = new CustomEnchantmentWrapper("pillage", "PILLAGE");
-	public static final Enchantment GUNG_HO = new CustomEnchantmentWrapper("gung_ho", "GUNG_HO");
-	public static final Enchantment WAND = new CustomEnchantmentWrapper("wand", "WAND");
-	public static final Enchantment MOISTURIZE = new CustomEnchantmentWrapper("moisturize", "MOISTURIZE");
-	public static final Enchantment IRENES_LASSO = new CustomEnchantmentWrapper("irenes_lasso", "LASSO_OF_IRENE");
-	public static final Enchantment CURSE_OF_LAG = new CustomEnchantmentWrapper("lagging_curse", "LAGGING_CURSE");
-	public static final Enchantment CURSE_OF_EXHAUSTION = new CustomEnchantmentWrapper("exhaustion_curse", "EXHAUSTION_CURSE");
-	public static final Enchantment QUICK_STRIKE = new CustomEnchantmentWrapper("quick_strike", "QUICK_STRIKE");
-	public static final Enchantment TOUGHNESS = new CustomEnchantmentWrapper("toughness", "TOUGHNESS");
-	public static final Enchantment ARMORED = new CustomEnchantmentWrapper("armored", "ARMORED");
-	public static final Enchantment HOLLOW_POINT = new CustomEnchantmentWrapper("hollow_point", "HOLLOW_POINT");
-	public static final Enchantment DETONATOR = new CustomEnchantmentWrapper("detonator", "DETONATOR");
-	public static final Enchantment OVERKILL = new CustomEnchantmentWrapper("overkill", "OVERKILL");
-	public static final Enchantment CURSE_OF_CONTAGION = new CustomEnchantmentWrapper("contagion_curse", "CONTAGION_CURSE");
-	public static final Enchantment RECYCLER = new CustomEnchantmentWrapper("recycler", "RECYCLER");
-	public static final Enchantment LIGHT_WEIGHT = new CustomEnchantmentWrapper("light_weight", "LIGHT_WEIGHT");
-	public static final Enchantment HUSBANDRY = new CustomEnchantmentWrapper("husbandry", "HUSBANDRY");
-	public static final Enchantment BUTCHER = new CustomEnchantmentWrapper("butcher", "BUTCHER");
-	public static final Enchantment CURSE_OF_STAGNANCY = new CustomEnchantmentWrapper("stagnancy_curse", "STAGNANCY_CURSE");
-	public static final Enchantment STICKY_HOLD = new CustomEnchantmentWrapper("sticky_hold", "STICKY_HOLD");
-	public static final Enchantment FORCE_FEED = new CustomEnchantmentWrapper("force_feed", "FORCE_FEED");
-	public static final Enchantment PUSHBACK = new CustomEnchantmentWrapper("pushback", "PUSHBACK");
-	public static final Enchantment WATER_BREATHING = new CustomEnchantmentWrapper("water_breathing", "WATER_BREATHING");
-	public static final Enchantment LIFE_DRAIN = new CustomEnchantmentWrapper("life_drain", "LIFE_DRAIN");
-	public static final Enchantment CURSE_OF_INSTABILITY = new CustomEnchantmentWrapper("instability_curse", "INSTABILITY_CURSE");
-	public static final Enchantment BLINDNESS = new CustomEnchantmentWrapper("blindness", "BLINDNESS");
-	public static final Enchantment JOGGERS = new CustomEnchantmentWrapper("joggers", "JOGGERS");
-	public static final Enchantment PLYOMETRICS = new CustomEnchantmentWrapper("plyometrics", "PLYOMETRICS");
-	public static final Enchantment TRUANT = new CustomEnchantmentWrapper("truant", "TRUANT");
-	public static final Enchantment VENOM = new CustomEnchantmentWrapper("venom", "VENOM");
-	public static final Enchantment WITHERING = new CustomEnchantmentWrapper("withering", "WITHERING");
-	public static final Enchantment FROSTY = new CustomEnchantmentWrapper("frosty", "FROSTY");
-	public static final Enchantment ZEAL = new CustomEnchantmentWrapper("zeal", "ZEAL");
-	public static final Enchantment DEPTH_PLUS_PLUS = new CustomEnchantmentWrapper("depth_plus_plus", "DEPTH_PLUS_PLUS");
-	public static final Enchantment GAIA = new CustomEnchantmentWrapper("gaia", "GAIA");
-	public static final Enchantment PACIFIED = new CustomEnchantmentWrapper("pacified", "PACIFIED");
-	public static final Enchantment STREAK = new CustomEnchantmentWrapper("streak", "STREAK");
-	public static final Enchantment GREEN_THUMB = new CustomEnchantmentWrapper("green_thumb", "GREEN_THUMB");
-	public static final Enchantment FLING = new CustomEnchantmentWrapper("fling", "FLING");
-	public static final Enchantment FLASH = new CustomEnchantmentWrapper("flash", "FLASH");
-	public static final Enchantment LANCER = new CustomEnchantmentWrapper("lancer", "LANCER");
-	public static final Enchantment JAVELIN = new CustomEnchantmentWrapper("javelin", "JAVELIN");
-	public static final Enchantment BANE_OF_ANTHROPOIDS = new CustomEnchantmentWrapper("bane_of_anthropoids", "BANE_OF_ANTHROPOIDS");
-	public static final Enchantment RARE_EARTH = new CustomEnchantmentWrapper("rare_earth", "RARE_EARTH");
-	public static final Enchantment WHIPPED = new CustomEnchantmentWrapper("whipped", "WHIPPED");
-	public static final Enchantment CURSE_OF_INFESTATION = new CustomEnchantmentWrapper("infestation_curse", "INFESTATION_CURSE");
-	public static final Enchantment[] HWD = new Enchantment[] { HEIGHT_PLUS_PLUS, WIDTH_PLUS_PLUS, DEPTH_PLUS_PLUS };
+	public static final EnchantmentWrapper WATER_WORKER = new EnchantmentWrapper(Enchantment.WATER_WORKER.getKey(), "WATER_WORKER");
+	public static final EnchantmentWrapper DAMAGE_ARTHROPODS = new EnchantmentWrapper(Enchantment.DAMAGE_ARTHROPODS.getKey(), "DAMAGE_ARTHROPODS");
+	public static final EnchantmentWrapper PROTECTION_EXPLOSIONS = new EnchantmentWrapper(Enchantment.PROTECTION_EXPLOSIONS.getKey(), "PROTECTION_EXPLOSIONS");
+	public static final EnchantmentWrapper CHANNELING = new EnchantmentWrapper(Enchantment.CHANNELING.getKey(), "CHANNELING");
+	public static final EnchantmentWrapper BINDING_CURSE = new EnchantmentWrapper(Enchantment.BINDING_CURSE.getKey(), "BINDING_CURSE");
+	public static final EnchantmentWrapper VANISHING_CURSE = new EnchantmentWrapper(Enchantment.VANISHING_CURSE.getKey(), "VANISHING_CURSE");
+	public static final EnchantmentWrapper DEPTH_STRIDER = new EnchantmentWrapper(Enchantment.DEPTH_STRIDER.getKey(), "DEPTH_STRIDER");
+	public static final EnchantmentWrapper DIG_SPEED = new EnchantmentWrapper(Enchantment.DIG_SPEED.getKey(), "DIG_SPEED");
+	public static final EnchantmentWrapper PROTECTION_FALL = new EnchantmentWrapper(Enchantment.PROTECTION_FALL.getKey(), "PROTECTION_FALL");
+	public static final EnchantmentWrapper FIRE_ASPECT = new EnchantmentWrapper(Enchantment.FIRE_ASPECT.getKey(), "FIRE_ASPECT");
+	public static final EnchantmentWrapper PROTECTION_FIRE = new EnchantmentWrapper(Enchantment.PROTECTION_FIRE.getKey(), "PROTECTION_FIRE");
+	public static final EnchantmentWrapper ARROW_FIRE = new EnchantmentWrapper(Enchantment.ARROW_FIRE.getKey(), "ARROW_FIRE");
+	public static final EnchantmentWrapper LOOT_BONUS_BLOCKS = new EnchantmentWrapper(Enchantment.LOOT_BONUS_BLOCKS.getKey(), "LOOT_BONUS_BLOCKS");
+	public static final EnchantmentWrapper FROST_WALKER = new EnchantmentWrapper(Enchantment.FROST_WALKER.getKey(), "FROST_WALKER");
+	public static final EnchantmentWrapper IMPALING = new EnchantmentWrapper(Enchantment.IMPALING.getKey(), "IMPALING");
+	public static final EnchantmentWrapper ARROW_INFINITE = new EnchantmentWrapper(Enchantment.ARROW_INFINITE.getKey(), "ARROW_INFINITE");
+	public static final EnchantmentWrapper KNOCKBACK = new EnchantmentWrapper(Enchantment.KNOCKBACK.getKey(), "KNOCKBACK");
+	public static final EnchantmentWrapper LOOT_BONUS_MOBS = new EnchantmentWrapper(Enchantment.LOOT_BONUS_MOBS.getKey(), "LOOT_BONUS_MOBS");
+	public static final EnchantmentWrapper LOYALTY = new EnchantmentWrapper(Enchantment.LOYALTY.getKey(), "LOYALTY");
+	public static final EnchantmentWrapper LUCK = new EnchantmentWrapper(Enchantment.LUCK.getKey(), "LUCK");
+	public static final EnchantmentWrapper LURE = new EnchantmentWrapper(Enchantment.LURE.getKey(), "LURE");
+	public static final EnchantmentWrapper MENDING = new EnchantmentWrapper(Enchantment.MENDING.getKey(), "MENDING");
+	public static final EnchantmentWrapper MULTISHOT = new EnchantmentWrapper(Enchantment.MULTISHOT.getKey(), "MULTISHOT");
+	public static final EnchantmentWrapper PIERCING = new EnchantmentWrapper(Enchantment.PIERCING.getKey(), "PIERCING");
+	public static final EnchantmentWrapper ARROW_DAMAGE = new EnchantmentWrapper(Enchantment.ARROW_DAMAGE.getKey(), "ARROW_DAMAGE");
+	public static final EnchantmentWrapper PROTECTION_PROJECTILE = new EnchantmentWrapper(Enchantment.PROTECTION_PROJECTILE.getKey(), "PROTECTION_PROJECTILE");
+	public static final EnchantmentWrapper PROTECTION_ENVIRONMENTAL = new EnchantmentWrapper(Enchantment.PROTECTION_ENVIRONMENTAL.getKey(), "PROTECTION_ENVIRONMENTAL");
+	public static final EnchantmentWrapper ARROW_KNOCKBACK = new EnchantmentWrapper(Enchantment.ARROW_KNOCKBACK.getKey(), "ARROW_KNOCKBACK");
+	public static final EnchantmentWrapper QUICK_CHARGE = new EnchantmentWrapper(Enchantment.QUICK_CHARGE.getKey(), "QUICK_CHARGE");
+	public static final EnchantmentWrapper OXYGEN = new EnchantmentWrapper(Enchantment.OXYGEN.getKey(), "OXYGEN");
+	public static final EnchantmentWrapper RIPTIDE = new EnchantmentWrapper(Enchantment.RIPTIDE.getKey(), "RIPTIDE");
+	public static final EnchantmentWrapper DAMAGE_ALL = new EnchantmentWrapper(Enchantment.DAMAGE_ALL.getKey(), "DAMAGE_ALL");
+	public static final EnchantmentWrapper SILK_TOUCH = new EnchantmentWrapper(Enchantment.SILK_TOUCH.getKey(), "SILK_TOUCH");
+	public static final EnchantmentWrapper DAMAGE_UNDEAD = new EnchantmentWrapper(Enchantment.DAMAGE_UNDEAD.getKey(), "DAMAGE_UNDEAD");
+	public static final EnchantmentWrapper SOUL_SPEED = new EnchantmentWrapper(Enchantment.SOUL_SPEED.getKey(), "SOUL_SPEED");
+	public static final EnchantmentWrapper SWEEPING_EDGE = new EnchantmentWrapper(Enchantment.SWEEPING_EDGE.getKey(), "SWEEPING_EDGE");
+	public static final EnchantmentWrapper SWIFT_SNEAK = new EnchantmentWrapper(new EnchantmentData("SWIFT_SNEAK") == null ? null : new EnchantmentData("SWIFT_SNEAK").getEnchantment().getKey(), "WATER_WORKER");
+	public static final EnchantmentWrapper THORNS = new EnchantmentWrapper(Enchantment.THORNS.getKey(), "THORNS");
+	public static final EnchantmentWrapper DURABILITY = new EnchantmentWrapper(Enchantment.DURABILITY.getKey(), "DURABILITY");
+	
+	public static final EnchantmentWrapper SOULBOUND = new CustomEnchantmentWrapper("soulbound", "SOULBOUND");
+	public static final EnchantmentWrapper SOUL_REAPER = new CustomEnchantmentWrapper("soul_reaper", "SOUL_REAPER");
+	public static final EnchantmentWrapper SHOCK_ASPECT = new CustomEnchantmentWrapper("shock_aspect", "SHOCK_ASPECT");
+	public static final EnchantmentWrapper LIFE = new CustomEnchantmentWrapper("life", "LIFE");
+	public static final EnchantmentWrapper BEHEADING = new CustomEnchantmentWrapper("beheading", "BEHEADING");
+	public static final EnchantmentWrapper KNOCKUP = new CustomEnchantmentWrapper("knockip", "KNOCKUP");
+	public static final EnchantmentWrapper WARP = new CustomEnchantmentWrapper("warp", "WARP");
+	public static final EnchantmentWrapper EXP_SHARE = new CustomEnchantmentWrapper("exp_share", "EXP_SHARE");
+	public static final EnchantmentWrapper MAGMA_WALKER = new CustomEnchantmentWrapper("magma_walker", "MAGMA_WALKER");
+	public static final EnchantmentWrapper SNIPER = new CustomEnchantmentWrapper("sniper", "SNIPER");
+	public static final EnchantmentWrapper TELEPATHY = new CustomEnchantmentWrapper("telepathy", "TELEPATHY");
+	public static final EnchantmentWrapper SMELTERY = new CustomEnchantmentWrapper("smeltery", "SMELTERY");
+	public static final EnchantmentWrapper SACRIFICE = new CustomEnchantmentWrapper("sacrifice", "SACRIFICE");
+	public static final EnchantmentWrapper ANGLER = new CustomEnchantmentWrapper("angler", "ANGLER");
+	public static final EnchantmentWrapper FRIED = new CustomEnchantmentWrapper("fried", "FRIED");
+	public static final EnchantmentWrapper FREQUENT_FLYER = new CustomEnchantmentWrapper("frequent_flyer", "FREQUENT_FLYER");
+	public static final EnchantmentWrapper TANK = new CustomEnchantmentWrapper("tank", "TANK");
+	public static final EnchantmentWrapper BRINE = new CustomEnchantmentWrapper("brine", "BRINE");
+	public static final EnchantmentWrapper DROWNED = new CustomEnchantmentWrapper("drowned", "DROWNED");
+	public static final EnchantmentWrapper UNREST = new CustomEnchantmentWrapper("unrest", "UNREST");
+	public static final EnchantmentWrapper NO_REST = new CustomEnchantmentWrapper("no_rest", "NO_REST");
+	public static final EnchantmentWrapper WIDTH_PLUS_PLUS = new CustomEnchantmentWrapper("width_plus_plus", "WIDTH_PLUS_PLUS");
+	public static final EnchantmentWrapper HEIGHT_PLUS_PLUS = new CustomEnchantmentWrapper("height_plus_plus", "HEIGHT_PLUS_PLUS");
+	public static final EnchantmentWrapper VOID_WALKER = new CustomEnchantmentWrapper("void_walker", "VOID_WALKER");
+	public static final EnchantmentWrapper ICARUS = new CustomEnchantmentWrapper("icarus", "ICARUS");
+	public static final EnchantmentWrapper IRON_DEFENSE = new CustomEnchantmentWrapper("iron_defense", "IRON_DEFENSE");
+	public static final EnchantmentWrapper HARD_BOUNCE = new CustomEnchantmentWrapper("hard_bounce", "HARD_BOUNCE");
+	public static final EnchantmentWrapper MAGIC_GUARD = new CustomEnchantmentWrapper("magic_guard", "MAGIC_GUARD");
+	public static final EnchantmentWrapper SPLATTER_FEST = new CustomEnchantmentWrapper("splatter_fest", "SPLATTER_FEST");
+	public static final EnchantmentWrapper SAND_VEIL = new CustomEnchantmentWrapper("sand_veil", "SAND_VEIL");
+	public static final EnchantmentWrapper TRANSMUTATION = new CustomEnchantmentWrapper("transmutation", "TRANSMUTATION");
+	public static final EnchantmentWrapper GOLD_DIGGER = new CustomEnchantmentWrapper("gold_digger", "GOLD_DIGGER");
+	public static final EnchantmentWrapper FLOWER_GIFT = new CustomEnchantmentWrapper("flower_gift", "FLOWER_GIFT");
+	public static final EnchantmentWrapper STONE_THROW = new CustomEnchantmentWrapper("stone_throw", "STONE_THROW");
+	public static final EnchantmentWrapper PILLAGE = new CustomEnchantmentWrapper("pillage", "PILLAGE");
+	public static final EnchantmentWrapper GUNG_HO = new CustomEnchantmentWrapper("gung_ho", "GUNG_HO");
+	public static final EnchantmentWrapper WAND = new CustomEnchantmentWrapper("wand", "WAND");
+	public static final EnchantmentWrapper MOISTURIZE = new CustomEnchantmentWrapper("moisturize", "MOISTURIZE");
+	public static final EnchantmentWrapper IRENES_LASSO = new CustomEnchantmentWrapper("irenes_lasso", "LASSO_OF_IRENE");
+	public static final EnchantmentWrapper CURSE_OF_LAG = new CustomEnchantmentWrapper("lagging_curse", "LAGGING_CURSE");
+	public static final EnchantmentWrapper CURSE_OF_EXHAUSTION = new CustomEnchantmentWrapper("exhaustion_curse", "EXHAUSTION_CURSE");
+	public static final EnchantmentWrapper QUICK_STRIKE = new CustomEnchantmentWrapper("quick_strike", "QUICK_STRIKE");
+	public static final EnchantmentWrapper TOUGHNESS = new CustomEnchantmentWrapper("toughness", "TOUGHNESS");
+	public static final EnchantmentWrapper ARMORED = new CustomEnchantmentWrapper("armored", "ARMORED");
+	public static final EnchantmentWrapper HOLLOW_POINT = new CustomEnchantmentWrapper("hollow_point", "HOLLOW_POINT");
+	public static final EnchantmentWrapper DETONATOR = new CustomEnchantmentWrapper("detonator", "DETONATOR");
+	public static final EnchantmentWrapper OVERKILL = new CustomEnchantmentWrapper("overkill", "OVERKILL");
+	public static final EnchantmentWrapper CURSE_OF_CONTAGION = new CustomEnchantmentWrapper("contagion_curse", "CONTAGION_CURSE");
+	public static final EnchantmentWrapper RECYCLER = new CustomEnchantmentWrapper("recycler", "RECYCLER");
+	public static final EnchantmentWrapper LIGHT_WEIGHT = new CustomEnchantmentWrapper("light_weight", "LIGHT_WEIGHT");
+	public static final EnchantmentWrapper HUSBANDRY = new CustomEnchantmentWrapper("husbandry", "HUSBANDRY");
+	public static final EnchantmentWrapper BUTCHER = new CustomEnchantmentWrapper("butcher", "BUTCHER");
+	public static final EnchantmentWrapper CURSE_OF_STAGNANCY = new CustomEnchantmentWrapper("stagnancy_curse", "STAGNANCY_CURSE");
+	public static final EnchantmentWrapper STICKY_HOLD = new CustomEnchantmentWrapper("sticky_hold", "STICKY_HOLD");
+	public static final EnchantmentWrapper FORCE_FEED = new CustomEnchantmentWrapper("force_feed", "FORCE_FEED");
+	public static final EnchantmentWrapper PUSHBACK = new CustomEnchantmentWrapper("pushback", "PUSHBACK");
+	public static final EnchantmentWrapper WATER_BREATHING = new CustomEnchantmentWrapper("water_breathing", "WATER_BREATHING");
+	public static final EnchantmentWrapper LIFE_DRAIN = new CustomEnchantmentWrapper("life_drain", "LIFE_DRAIN");
+	public static final EnchantmentWrapper CURSE_OF_INSTABILITY = new CustomEnchantmentWrapper("instability_curse", "INSTABILITY_CURSE");
+	public static final EnchantmentWrapper BLINDNESS = new CustomEnchantmentWrapper("blindness", "BLINDNESS");
+	public static final EnchantmentWrapper JOGGERS = new CustomEnchantmentWrapper("joggers", "JOGGERS");
+	public static final EnchantmentWrapper PLYOMETRICS = new CustomEnchantmentWrapper("plyometrics", "PLYOMETRICS");
+	public static final EnchantmentWrapper TRUANT = new CustomEnchantmentWrapper("truant", "TRUANT");
+	public static final EnchantmentWrapper VENOM = new CustomEnchantmentWrapper("venom", "VENOM");
+	public static final EnchantmentWrapper WITHERING = new CustomEnchantmentWrapper("withering", "WITHERING");
+	public static final EnchantmentWrapper FROSTY = new CustomEnchantmentWrapper("frosty", "FROSTY");
+	public static final EnchantmentWrapper ZEAL = new CustomEnchantmentWrapper("zeal", "ZEAL");
+	public static final EnchantmentWrapper DEPTH_PLUS_PLUS = new CustomEnchantmentWrapper("depth_plus_plus", "DEPTH_PLUS_PLUS");
+	public static final EnchantmentWrapper GAIA = new CustomEnchantmentWrapper("gaia", "GAIA");
+	public static final EnchantmentWrapper PACIFIED = new CustomEnchantmentWrapper("pacified", "PACIFIED");
+	public static final EnchantmentWrapper STREAK = new CustomEnchantmentWrapper("streak", "STREAK");
+	public static final EnchantmentWrapper GREEN_THUMB = new CustomEnchantmentWrapper("green_thumb", "GREEN_THUMB");
+	public static final EnchantmentWrapper FLING = new CustomEnchantmentWrapper("fling", "FLING");
+	public static final EnchantmentWrapper FLASH = new CustomEnchantmentWrapper("flash", "FLASH");
+	public static final EnchantmentWrapper LANCER = new CustomEnchantmentWrapper("lancer", "LANCER");
+	public static final EnchantmentWrapper JAVELIN = new CustomEnchantmentWrapper("javelin", "JAVELIN");
+	public static final EnchantmentWrapper BANE_OF_ANTHROPOIDS = new CustomEnchantmentWrapper("bane_of_anthropoids", "BANE_OF_ANTHROPOIDS");
+	public static final EnchantmentWrapper RARE_EARTH = new CustomEnchantmentWrapper("rare_earth", "RARE_EARTH");
+	public static final EnchantmentWrapper WHIPPED = new CustomEnchantmentWrapper("whipped", "WHIPPED");
+	public static final EnchantmentWrapper CURSE_OF_INFESTATION = new CustomEnchantmentWrapper("infestation_curse", "INFESTATION_CURSE");
+	public static final EnchantmentWrapper[] HWD = new EnchantmentWrapper[] { HEIGHT_PLUS_PLUS, WIDTH_PLUS_PLUS, DEPTH_PLUS_PLUS };
 
 	private RegisterEnchantments() {}
 
@@ -125,7 +164,7 @@ public class RegisterEnchantments {
 		return REGISTERED_ENCHANTMENTS;
 	}
 
-	public static List<Enchantment> getHWD() {
+	public static List<EnchantmentWrapper> getHWD() {
 		return Arrays.asList(HWD);
 	}
 
@@ -133,54 +172,43 @@ public class RegisterEnchantments {
 		List<CustomEnchantment> alphabetical = new ArrayList<CustomEnchantment>();
 		for(CustomEnchantment enchantment: REGISTERED_ENCHANTMENTS)
 			if (enchantment.isEnabled()) alphabetical.add(enchantment);
-		Collections.sort(alphabetical, (o1, o2) -> o1.getDisplayName().compareTo(o2.getDisplayName()));
+		Collections.sort(alphabetical, (o1, o2) -> ChatColor.stripColor(ChatColor.translateAlternateColorCodes('&', o1.getDisplayName())).compareTo(ChatColor.stripColor(ChatColor.translateAlternateColorCodes('&', o2.getDisplayName()))));
 		return alphabetical;
 	}
 
 	public static CustomEnchantment getCustomEnchantment(Enchantment enchant) {
 		for(CustomEnchantment enchantment: ENCHANTMENTS)
-			if (enchant == enchantment.getRelativeEnchantment()) return enchantment;
-		return new SnapshotEnchantment(enchant);
+			if (enchant.getKey().equals(enchantment.getRelativeEnchantment().getKey())) return enchantment;
+		return null;
+	}
+
+	public static CustomEnchantment getCustomEnchantment(EnchantmentWrapper enchant) {
+		for(CustomEnchantment enchantment: ENCHANTMENTS)
+			if (enchant.equals(enchantment.getRelativeEnchantment())) return enchantment;
+		return null;
 	}
 
 	public static List<CustomEnchantment> getCurseEnchantments() {
 		if (CURSE_ENCHANTMENTS != null) return CURSE_ENCHANTMENTS;
 		CURSE_ENCHANTMENTS = new ArrayList<CustomEnchantment>();
 		for(CustomEnchantment enchantment: ENCHANTMENTS) {
-			if (enchantment.getRelativeEnchantment() == RegisterEnchantments.CURSE_OF_CONTAGION || enchantment.getRelativeEnchantment() == RegisterEnchantments.CURSE_OF_STAGNANCY) continue;
+			if (RegisterEnchantments.CURSE_OF_CONTAGION.equals(enchantment.getRelativeEnchantment()) || RegisterEnchantments.CURSE_OF_STAGNANCY.equals(enchantment.getRelativeEnchantment())) continue;
 			if (enchantment.isCurse()) CURSE_ENCHANTMENTS.add(enchantment);
 		}
 		return CURSE_ENCHANTMENTS;
 	}
 
-	public static List<Enchantment> getProtectionEnchantments() {
-		return Arrays.asList(Enchantment.PROTECTION_ENVIRONMENTAL, Enchantment.PROTECTION_EXPLOSIONS, Enchantment.PROTECTION_FIRE, Enchantment.PROTECTION_PROJECTILE);
+	public static List<EnchantmentWrapper> getProtectionEnchantments() {
+		return Arrays.asList(PROTECTION_ENVIRONMENTAL, PROTECTION_EXPLOSIONS, PROTECTION_FIRE, PROTECTION_PROJECTILE);
 	}
 
 	public static boolean registerEnchantment(CustomEnchantment enchantment) {
 		if (REGISTERED_ENCHANTMENTS.contains(enchantment)) return true;
 		REGISTERED_ENCHANTMENTS.add(enchantment);
 		boolean custom = enchantment.getRelativeEnchantment() instanceof CustomEnchantmentWrapper;
-		String error_message = "Trouble adding the " + enchantment.getName() + (custom ? " custom" : "") + " enchantment: ";
 		String success_message = "Added the " + enchantment.getName() + (custom ? " custom" : "") + " enchantment.";
-		if (!custom || Enchantment.getByKey(enchantment.getRelativeEnchantment().getKey()) != null) {
-			Chatable.sendDebug(success_message);
-			return true;
-		}
-		try {
-			Field f = Enchantment.class.getDeclaredField("acceptingNew");
-			f.setAccessible(true);
-			f.set(null, true);
-			Enchantment.registerEnchantment(enchantment.getRelativeEnchantment());
-			Chatable.sendDebug(success_message);
-			return true;
-		} catch (Exception e) {
-			REGISTERED_ENCHANTMENTS.remove(enchantment);
-
-			Chatable.sendDebug(error_message, Level.WARNING);
-			e.printStackTrace();
-			return false;
-		}
+		Chatable.sendDebug(success_message);
+		return true;
 	}
 
 	public static void addDefaultEnchantment(CustomEnchantment enchant) {
@@ -203,7 +231,7 @@ public class RegisterEnchantments {
 			if (enchantment.getRelativeEnchantment() instanceof ApiEnchantmentWrapper) {
 				JavaPlugin plugin = ((ApiEnchantmentWrapper) enchantment.getRelativeEnchantment()).getPlugin();
 				if (plugin == null) {
-					Chatable.get().sendWarning("Enchantment " + enchantment.getName() + " (Display Name " + enchantment.getDisplayName() + ")" + " does not have a JavaPlugin set. Refusing to set.");
+					Chatable.get().sendWarning("Enchantment " + enchantment.getName() + " (Display Name " + ChatColor.translateAlternateColorCodes('&', enchantment.getDisplayName()) + ")" + " does not have a JavaPlugin set. Refusing to set.");
 					continue;
 				}
 				namespace = plugin.getName().toLowerCase(Locale.ROOT);
@@ -232,7 +260,7 @@ public class RegisterEnchantments {
 				int maxLevel = config.getInt(namespace + "." + enchantment.getName() + ".advanced.enchantability_max_level");
 				Weight weight = Weight.getWeight(config.getString(namespace + "." + enchantment.getName() + ".advanced.weight"));
 				List<String> conflictingEnchantmentsString = config.getStringList(namespace + "." + enchantment.getName() + ".advanced.conflicting_enchantments");
-				List<Enchantment> conflictingEnchantments = new ArrayList<Enchantment>();
+				List<EnchantmentWrapper> conflictingEnchantments = new ArrayList<EnchantmentWrapper>();
 				if (conflictingEnchantmentsString != null) for(String s: conflictingEnchantmentsString) {
 					CustomEnchantment enchant = getByName(s);
 					if (enchant != null) conflictingEnchantments.add(enchant.getRelativeEnchantment());
@@ -249,7 +277,7 @@ public class RegisterEnchantments {
 		Chatable.get().sendInfo("All enchantments initialized!");
 	}
 
-	public static boolean isEnabled(Enchantment enchant) {
+	public static boolean isEnabled(EnchantmentWrapper enchant) {
 		for(CustomEnchantment enchantment: ENCHANTMENTS)
 			if (enchant.equals(enchantment.getRelativeEnchantment())) return enchantment.isEnabled();
 		return false;
@@ -392,7 +420,7 @@ public class RegisterEnchantments {
 		return null;
 	}
 
-	public static Enchantment getByKey(NamespacedKey key) {
+	public static EnchantmentWrapper getByKey(NamespacedKey key) {
 		for(CustomEnchantment enchant: getEnchantments())
 			if (enchant.getRelativeEnchantment().getKey().equals(key)) return enchant.getRelativeEnchantment();
 		return null;

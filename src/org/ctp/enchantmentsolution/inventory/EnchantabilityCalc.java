@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -52,7 +53,7 @@ public class EnchantabilityCalc implements InventoryData, Pageable {
 				ItemStack enchantment = new ItemStack(Material.ENCHANTED_BOOK);
 				ItemMeta enchantmentMeta = enchantment.getItemMeta();
 				HashMap<String, Object> enchCodes = getCodes();
-				enchCodes.put("%name%", enchant.getDisplayName());
+				enchCodes.put("%name%", ChatColor.translateAlternateColorCodes('&', enchant.getDisplayName()) + ChatColor.RESET);
 				enchantmentMeta.setDisplayName(Chatable.get().getMessage(enchCodes, "calc.enchantments"));
 				HashMap<String, Object> enchLoreCodes = getCodes();
 				enchLoreCodes.put("%constant%", enchant.enchantability(0));

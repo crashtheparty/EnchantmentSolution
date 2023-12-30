@@ -4,9 +4,9 @@ import java.math.BigInteger;
 import java.util.*;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -17,6 +17,7 @@ import org.ctp.crashapi.utils.ChatUtils;
 import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
+import org.ctp.enchantmentsolution.enchantments.EnchantmentWrapper;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.rpg.RPGPlayer;
@@ -118,13 +119,13 @@ public class RPGInventory implements InventoryData, Pageable {
 					int num = PAGING * (page - 1) + i;
 					if (enchantments.size() <= num) continue;
 					CustomEnchantment enchant = enchantments.get(num);
-					Enchantment ench = enchant.getRelativeEnchantment();
+					EnchantmentWrapper ench = enchant.getRelativeEnchantment();
 
 					ItemStack enchantment = new ItemStack(Material.BOOK);
 					ItemMeta enchantmentMeta = enchantment.getItemMeta();
 					if (rpg.hasEnchantment(ench, 1)) enchantment.setType(Material.ENCHANTED_BOOK);
 					HashMap<String, Object> enchCodes = getCodes();
-					enchCodes.put("%name%", enchant.getDisplayName());
+					enchCodes.put("%name%", ChatColor.translateAlternateColorCodes('&', enchant.getDisplayName()) + ChatColor.RESET);
 					enchantmentMeta.setDisplayName(Chatable.get().getMessage(enchCodes, "rpg.enchantments"));
 					HashMap<String, Object> enchLoreCodes = getCodes();
 					String path = "rpg.enchantments_lore_unlocked";
@@ -207,7 +208,7 @@ public class RPGInventory implements InventoryData, Pageable {
 					ItemMeta levelItemMeta = levelItem.getItemMeta();
 					if (rpg.hasEnchantment(enchant.getRelativeEnchantment(), level)) levelItem.setType(Material.ENCHANTED_BOOK);
 					HashMap<String, Object> enchCodes = getCodes();
-					enchCodes.put("%name%", enchant.getDisplayName());
+					enchCodes.put("%name%", ChatColor.translateAlternateColorCodes('&', enchant.getDisplayName()) + ChatColor.RESET);
 					levelItemMeta.setDisplayName(Chatable.get().getMessage(enchCodes, "rpg.enchantment_levels"));
 					HashMap<String, Object> enchLoreCodes = getCodes();
 					String path = "rpg.enchantment_levels_lore_unlocked";
@@ -236,7 +237,7 @@ public class RPGInventory implements InventoryData, Pageable {
 				inv.setItem(0, goBack());
 			} else if (screen == Screen.CONFIRM) {
 				HashMap<String, Object> buyingCodes = getCodes();
-				buyingCodes.put("%enchantment%", buying.getEnchant().getDisplayName());
+				buyingCodes.put("%enchantment%", ChatColor.translateAlternateColorCodes('&', buying.getEnchant().getDisplayName()) + ChatColor.RESET);
 				buyingCodes.put("%level%", buying.getLevel());
 				Inventory inv = Bukkit.createInventory(null, 9, Chatable.get().getMessage(buyingCodes, "rpg.name_confirm"));
 				inv = open(inv);
@@ -251,7 +252,7 @@ public class RPGInventory implements InventoryData, Pageable {
 				ItemStack confirm = new ItemStack(Material.EMERALD_BLOCK);
 				ItemMeta confirmMeta = confirm.getItemMeta();
 				HashMap<String, Object> confirmCodes = getCodes();
-				confirmCodes.put("%enchantment%", buying.getEnchant().getDisplayName());
+				confirmCodes.put("%enchantment%", ChatColor.translateAlternateColorCodes('&', buying.getEnchant().getDisplayName()) + ChatColor.RESET);
 				confirmCodes.put("%level%", buying.getLevel());
 				confirmCodes.put("%total_points%", RPGUtils.getBuyPoints(rpg, buying));
 				confirmMeta.setDisplayName(Chatable.get().getMessage(getCodes(), "rpg.confirm"));
@@ -310,7 +311,7 @@ public class RPGInventory implements InventoryData, Pageable {
 		rpg.giveEnchantment(buying);
 		screen = Screen.ENCHANTMENT;
 		HashMap<String, Object> codes = getCodes();
-		codes.put("%enchantment%", buying.getEnchant().getDisplayName());
+		codes.put("%enchantment%", ChatColor.translateAlternateColorCodes('&', buying.getEnchant().getDisplayName()) + ChatColor.RESET);
 		codes.put("%level%", buying.getLevel());
 		Chatable.get().sendMessage(player, Chatable.get().getMessage(codes, "rpg.unlock"));
 		buying = null;

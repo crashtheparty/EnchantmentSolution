@@ -17,21 +17,24 @@ import org.ctp.enchantmentsolution.inventory.Anvil;
 import net.md_5.bungee.api.chat.TranslatableComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
 import net.minecraft.core.BlockPosition;
+import net.minecraft.network.chat.IChatBaseComponent;
 import net.minecraft.network.chat.IChatBaseComponent.ChatSerializer;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.PacketPlayOutOpenWindow;
 import net.minecraft.server.level.EntityPlayer;
 import net.minecraft.server.network.PlayerConnection;
+import net.minecraft.server.network.ServerPlayerConnection;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.EntityHuman;
 import net.minecraft.world.entity.player.PlayerInventory;
 import net.minecraft.world.inventory.*;
 import net.minecraft.world.level.World;
 
-public class AnvilGUI_3 extends AnvilGUI {
+public class AnvilGUI_8 extends AnvilGUI {
 	private class AnvilContainer extends ContainerAnvil {
 		public AnvilContainer(EntityHuman entity, int windowId, World world) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
-			super(windowId, (PlayerInventory) EntityHuman.class.getDeclaredMethod("fr").invoke(entity), at(world, new BlockPosition(0, 0, 0)));
+			super(windowId, (PlayerInventory) returnAccessible(EntityHuman.class.getDeclaredMethod("fR"), entity), at(world, new BlockPosition(0, 0, 0)));
+			this.checkReachable = false;
 		}
 
 		@Override
@@ -42,7 +45,7 @@ public class AnvilGUI_3 extends AnvilGUI {
 
 	private HashMap<AnvilSlot, ItemStack> items = new HashMap<>();
 
-	public AnvilGUI_3(Player player, final ESAnvilClickEventHandler handler, InventoryData data) {
+	public AnvilGUI_8(Player player, final ESAnvilClickEventHandler handler, InventoryData data) {
 		super(player, handler, data);
 	}
 
@@ -60,7 +63,7 @@ public class AnvilGUI_3 extends AnvilGUI {
 		int c = p.nextContainerCounter();
 		World w = null;
 		try {
-			w = (World) (Entity.class.getDeclaredMethod("W").invoke(p));
+			w = (World) (Entity.class.getDeclaredMethod("dL").invoke(p));
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			return;
@@ -69,6 +72,7 @@ public class AnvilGUI_3 extends AnvilGUI {
 		AnvilContainer container;
 		try {
 			container = new AnvilContainer(p, c, w);
+			container.setTitle(IChatBaseComponent.a("Repairing"));
 		} catch (Exception e) {
 			e.printStackTrace();
 			return;
@@ -82,44 +86,44 @@ public class AnvilGUI_3 extends AnvilGUI {
 
 		inv.setItem(0, getItemStack());
 
-		setInventory(inv);
 		// Send the packet
 		PlayerConnection pc = null;
 
 		try {
 			Class<?> clazz = EntityPlayer.class;
-			Field f = clazz.getDeclaredField("b");
+			Field f = clazz.getDeclaredField("c");
 			if (f.get(p) instanceof PlayerConnection) pc = (PlayerConnection) f.get(p);
 			else
 				Chatable.get().sendInfo("Issue with Anvil NMS - Player Connection not found");
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-		
 		try {
 			TranslatableComponent t = new TranslatableComponent("container.repair");
 			@SuppressWarnings("unchecked")
 			PacketPlayOutOpenWindow packet = new PacketPlayOutOpenWindow(c, (Containers<ContainerAnvil>) (Container.class.getDeclaredMethod("a").invoke(container)), ChatSerializer.a(ComponentSerializer.toString(t)));
-			pc.getClass().getDeclaredMethod("a", Packet.class).invoke(pc, packet);
+			ServerPlayerConnection.class.getDeclaredMethod("b", Packet.class).invoke(pc, packet);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
 
 		// Set their active container to the container
 		try {
-			p.getClass().getDeclaredMethod("a", Container.class).invoke(p, container);
-			Field f = EntityHuman.class.getDeclaredField("bV");
+			Field f = EntityHuman.class.getDeclaredField("bS");
 			f.setAccessible(true);
 			f.set(p, container);
+			p.getClass().getDeclaredMethod("a", Container.class).invoke(p, container);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
+
+		setInventory(inv);
 	}
 
 	public static void createAnvil(Player player, InventoryData data) {
 		ESAnvilClickEventHandler handler = ESAnvilClickEventHandler.getHandler(player, data);
 		if (data instanceof Anvil) ((Anvil) data).setInLegacy(true);
-		AnvilGUI_3 gui = new AnvilGUI_3(player, handler, data);
+		AnvilGUI_8 gui = new AnvilGUI_8(player, handler, data);
 		gui.open();
 	}
 

@@ -1,5 +1,6 @@
 package org.ctp.enchantmentsolution.nms.anvil;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Optional;
@@ -10,6 +11,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.ctp.crashapi.inventory.InventoryData;
 import org.ctp.crashapi.nms.anvil.AnvilSlot;
+import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.inventory.Anvil;
 
 import net.md_5.bungee.api.chat.TranslatableComponent;
@@ -84,12 +86,23 @@ public class AnvilGUI_1 extends AnvilGUI {
 		setInventory(inv);
 
 		// Send the packet
-		PlayerConnection b = p.b;
+		PlayerConnection pc = null;
+
+		try {
+			Class<?> clazz = EntityPlayer.class;
+			Field f = clazz.getDeclaredField("b");
+			if (f.get(p) instanceof PlayerConnection) pc = (PlayerConnection) f.get(p);
+			else
+				Chatable.get().sendInfo("Issue with Anvil NMS - Player Connection not found");
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+
 		try {
 			TranslatableComponent t = new TranslatableComponent("container.repair");
 			@SuppressWarnings("unchecked")
 			PacketPlayOutOpenWindow packet = new PacketPlayOutOpenWindow(c, (Containers<ContainerAnvil>) (Container.class.getDeclaredMethod("getType").invoke(container)), ChatSerializer.a(ComponentSerializer.toString(t)));
-			b.getClass().getDeclaredMethod("sendPacket", Packet.class).invoke(b, packet);
+			pc.getClass().getDeclaredMethod("sendPacket", Packet.class).invoke(pc, packet);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}

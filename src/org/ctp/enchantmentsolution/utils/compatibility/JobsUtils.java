@@ -16,6 +16,7 @@ import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.inventory.ItemStack;
 import org.ctp.crashapi.utils.DamageUtils;
 import org.ctp.enchantmentsolution.Chatable;
+import org.ctp.enchantmentsolution.enchantments.EnchantmentWrapper;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 
 import com.gamingmesh.jobs.Jobs;
@@ -33,7 +34,6 @@ import net.Zrips.CMILib.Items.CMIMaterial;
 
 public class JobsUtils {
 
-	@SuppressWarnings("deprecation")
 	public static void sendEnchantAction(Player player, ItemStack item, ItemStack resultStack,
 	List<EnchantmentLevel> levels) {
 		Jobs plugin = getJobs();
@@ -57,7 +57,7 @@ public class JobsUtils {
 		if (jPlayer == null) return;
 
 		for(EnchantmentLevel enchLevel: levels) {
-			Enchantment enchant = enchLevel.getEnchant().getRelativeEnchantment();
+			EnchantmentWrapper enchant = enchLevel.getEnchant().getRelativeEnchantment();
 			int level = enchLevel.getLevel();
 			String enchantName = enchant.getName();
 			if (enchantName == null) continue;
@@ -130,7 +130,7 @@ public class JobsUtils {
 		FastPayment fp = Jobs.FASTPAYMENT.get(player.getUniqueId());
 		if (fp != null) {
 			if (fp.getTime() > System.currentTimeMillis()) if (fp.getInfo().getName().equalsIgnoreCase(bInfo.getName()) || fp.getInfo().getNameWithSub().equalsIgnoreCase(bInfo.getNameWithSub())) {
-				Jobs.perform(fp.getPlayer(), fp.getInfo(), fp.getPayment(), fp.getJob());
+				Jobs.perform(fp.getPlayer(), fp.getInfo(), fp.getPayment(), fp.getJob(), block, null, null);
 				return;
 			}
 			Jobs.FASTPAYMENT.remove(player.getUniqueId());
@@ -236,7 +236,6 @@ public class JobsUtils {
 		return true;
 	}
 
-	@SuppressWarnings("deprecation")
 	private static Jobs getJobs() {
 		Jobs plugin = null;
 		try {

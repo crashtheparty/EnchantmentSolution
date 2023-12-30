@@ -30,7 +30,7 @@ import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
 
 public class ExtraBlockListener implements Listener {
 
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.LOWEST)
 	public void onBlockBreak(BlockBreakEvent event) {
 		if (EnchantmentSolution.gaiaHasLocation(event.getBlock().getLocation())) {
 			for(GaiaTrees tree: GaiaTrees.values())
@@ -46,7 +46,7 @@ public class ExtraBlockListener implements Listener {
 
 		if (WalkerUtils.hasBlock(event.getBlock())) {
 			event.setCancelled(true);
-			if (WalkerUtils.getWalker(event.getBlock()).getEnchantment() == RegisterEnchantments.VOID_WALKER) AdvancementUtils.awardCriteria(event.getPlayer(), ESAdvancement.DETERMINED_CHEATER, "cheater");
+			if (RegisterEnchantments.VOID_WALKER.equals(WalkerUtils.getWalker(event.getBlock()).getEnchantment())) AdvancementUtils.awardCriteria(event.getPlayer(), ESAdvancement.DETERMINED_CHEATER, "cheater");
 		}
 	}
 

@@ -70,7 +70,7 @@ public class EnchantCommandUtils {
 							HashMap<String, Object> codes = ChatUtils.getCodes();
 							codes.put("%level%", level);
 							codes.put("%maxLevel%", enchant.getMaxLevel());
-							codes.put("%enchant%", enchant.getDisplayName());
+							codes.put("%enchant%", ChatColor.translateAlternateColorCodes('&', enchant.getDisplayName()) + ChatColor.RESET);
 							Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(codes, "commands.level-too-high"), Level.WARNING);
 							level = enchant.getMaxLevel();
 						}
@@ -123,7 +123,7 @@ public class EnchantCommandUtils {
 								if (maxEnchants <= 0 || itemEnchants < maxEnchants && maxEnchants > 0) {
 									if (!(enchant.canAnvilItem(new ItemData(itemToEnchant)) || enchant.canEnchantItem(new ItemData(itemToEnchant)))) {
 										HashMap<String, Object> codes = ChatUtils.getCodes();
-										codes.put("%enchant%", enchant.getDisplayName());
+										codes.put("%enchant%", ChatColor.translateAlternateColorCodes('&', enchant.getDisplayName()) + ChatColor.RESET);
 										Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(codes, "commands.cannot-enchant-item"), Level.WARNING);
 										return true;
 									}
@@ -156,7 +156,7 @@ public class EnchantCommandUtils {
 							HashMap<String, Object> codes = ChatUtils.getCodes();
 							codes.put("%level%", level);
 							codes.put("%slot%", slot);
-							codes.put("%enchant%", enchant.getDisplayName());
+							codes.put("%enchant%", ChatColor.translateAlternateColorCodes('&', enchant.getDisplayName()) + ChatColor.RESET);
 							if (player != null) codes.put("%player%", player.getDisplayName());
 							else
 								codes.put("%player%", Chatable.get().getMessage(codes, "commands.console-player"));
@@ -257,7 +257,7 @@ public class EnchantCommandUtils {
 								codes.put("%enchant%", "Curse");
 							} else {
 								itemToEnchant = EnchantmentUtils.removeEnchantmentFromItem(itemToEnchant, enchant);
-								codes.put("%enchant%", enchant.getDisplayName());
+								codes.put("%enchant%", ChatColor.translateAlternateColorCodes('&', enchant.getDisplayName()) + ChatColor.RESET);
 							}
 							if (itemToEnchant.getType() == Material.ENCHANTED_BOOK && !((EnchantmentStorageMeta) itemToEnchant.getItemMeta()).hasStoredEnchants()) itemToEnchant.setType(Material.BOOK);
 
@@ -392,7 +392,7 @@ public class EnchantCommandUtils {
 							HashMap<String, Object> codes = ChatUtils.getCodes();
 							codes.put("%level%", level);
 							codes.put("%maxLevel%", enchant.getMaxLevel());
-							codes.put("%enchant%", enchant.getDisplayName());
+							codes.put("%enchant%", ChatColor.translateAlternateColorCodes('&', enchant.getDisplayName()) + ChatColor.RESET);
 							Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(codes, "commands.level-too-high"), Level.WARNING);
 							level = enchant.getMaxLevel();
 						}
@@ -527,10 +527,10 @@ public class EnchantCommandUtils {
 				JSONObject action = new JSONObject();
 				action.put("action", "run_command");
 				action.put("value", "/enchantinfo " + enchant.getName());
-				name.put("text", shrink(ChatColor.GOLD + enchant.getDisplayName()));
+				name.put("text", shrink(ChatColor.GOLD + ChatColor.translateAlternateColorCodes('&', enchant.getDisplayName()) + ChatColor.RESET));
 				name.put("clickEvent", action);
 				json.add(name);
-				desc.put("text", shrink(ChatColor.GOLD + enchant.getDisplayName() + ChatColor.WHITE + ": " + ChatColor.WHITE + enchant.getDescription()).substring((ChatColor.GOLD + enchant.getDisplayName()).length()) + "\n");
+				desc.put("text", shrink(ChatColor.GOLD + ChatColor.translateAlternateColorCodes('&', enchant.getDisplayName()) + ChatColor.RESET + ChatColor.WHITE + ": " + ChatColor.WHITE + enchant.getDescription()).substring((ChatColor.GOLD + ChatColor.translateAlternateColorCodes('&', enchant.getDisplayName()) + ChatColor.RESET).length()) + "\n");
 				json.add(desc);
 			}
 			json.add(first);
@@ -545,7 +545,7 @@ public class EnchantCommandUtils {
 				int num = i + (page - 1) * 10;
 				if (num >= alphabetical.size()) break;
 				CustomEnchantment enchant = alphabetical.get(num);
-				message += shrink(ChatColor.GOLD + enchant.getDisplayName() + ": " + ChatColor.WHITE + enchant.getDescription()) + "\n";
+				message += shrink(ChatColor.GOLD + ChatColor.translateAlternateColorCodes('&', enchant.getDisplayName()) + ChatColor.RESET + ": " + ChatColor.WHITE + enchant.getDescription()) + "\n";
 			}
 			message += "\n" + ChatColor.DARK_BLUE + "******" + (page > 1 ? "<<<" : "***") + "******" + ChatColor.AQUA + " Enchantments Page " + page + ChatColor.DARK_BLUE + " ******" + (alphabetical.size() < (page - 1) * 10 ? ">>>" : "***") + "******" + "\n";
 			Chatable.get().sendToConsole(Level.INFO, message);

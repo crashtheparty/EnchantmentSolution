@@ -12,14 +12,14 @@ import net.minecraft.advancements.CriterionTriggers;
 import net.minecraft.advancements.critereon.CriterionTriggerEnchantedItem;
 import net.minecraft.server.level.EntityPlayer;
 
-public class Enchant_1 extends NMS {
+public class Enchant_2 extends NMS {
 	
 	public static void updateCriterion(Player player, ItemStack item) {
 		EntityPlayer p = (EntityPlayer) getCraftBukkitEntity(player);
 		net.minecraft.world.item.ItemStack i = asNMSCopy(item);
 		try {
 			Class<?> c1 = CriterionTriggers.class;
-			Field f = c1.getDeclaredField("i");
+			Field f = c1.getDeclaredField("j");
 			Object o = f.get(null);
 			if (o instanceof CriterionTriggerEnchantedItem) {
 				Class<?> c2 = CriterionTriggerEnchantedItem.class;

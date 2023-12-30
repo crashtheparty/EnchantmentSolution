@@ -351,6 +351,7 @@ public class PlayerListener extends Enchantmentable {
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	private void moisturize(PlayerInteractEvent event) {
 		if (!canRun(RegisterEnchantments.MOISTURIZE, event) || isDisabled(event.getPlayer(), RegisterEnchantments.MOISTURIZE)) return;
 
@@ -439,6 +440,7 @@ public class PlayerListener extends Enchantmentable {
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	private void overkill(PlayerInteractEvent event) {
 		if (event.getAction().equals(Action.LEFT_CLICK_AIR)) {
 			Player player = event.getPlayer();

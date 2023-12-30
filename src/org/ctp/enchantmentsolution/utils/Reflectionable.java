@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.potion.PotionEffectType;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
+import org.ctp.enchantmentsolution.enchantments.EnchantmentWrapper;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.utils.player.ESPlayer;
 
@@ -101,23 +102,23 @@ public interface Reflectionable {
 		}
 	}
 
-	default boolean canRun(Enchantment enchantment) {
+	default boolean canRun(EnchantmentWrapper enchantment) {
 		return RegisterEnchantments.isEnabled(enchantment);
 	}
 
-	default boolean canRun(boolean all, Enchantment... enchantments) {
+	default boolean canRun(boolean all, EnchantmentWrapper... enchantments) {
 		if (all) {
-			for(Enchantment enchantment: enchantments)
+			for(EnchantmentWrapper enchantment: enchantments)
 				if (!RegisterEnchantments.isEnabled(enchantment)) all = false;
 			return all;
 		} else {
-			for(Enchantment enchantment: enchantments)
+			for(EnchantmentWrapper enchantment: enchantments)
 				if (RegisterEnchantments.isEnabled(enchantment)) return true;
 			return false;
 		}
 	}
 
-	default boolean isDisabled(Player player, Enchantment enchantment) {
+	default boolean isDisabled(Player player, EnchantmentWrapper enchantment) {
 		ESPlayer esPlayer = EnchantmentSolution.getESPlayer(player);
 		if (esPlayer == null) return false;
 		return esPlayer.hasTimedDisable(player, enchantment) || esPlayer.hasDisabled(player, enchantment);

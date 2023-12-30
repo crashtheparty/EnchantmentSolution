@@ -5,12 +5,12 @@ import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.plugin.Plugin;
 import org.ctp.crashapi.config.yaml.YamlConfig;
 import org.ctp.crashapi.utils.ChatUtils;
 import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
+import org.ctp.enchantmentsolution.enchantments.EnchantmentWrapper;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 
 public class EnchantmentLevel {
@@ -66,8 +66,8 @@ public class EnchantmentLevel {
 				}
 			if (plugin != null) key = new NamespacedKey(plugin, enchString[1]);
 		}
-		if (Enchantment.getByKey(key) != null) for(CustomEnchantment enchantment: RegisterEnchantments.getEnchantments())
-			if (enchantment.getRelativeEnchantment().equals(Enchantment.getByKey(key))) return enchantment;
+		for(CustomEnchantment enchantment: RegisterEnchantments.getEnchantments())
+			if (enchantment.getRelativeEnchantment().getKey().equals(key)) return enchantment;
 		Chatable.get().sendWarning(error);
 		return null;
 	}
@@ -85,8 +85,8 @@ public class EnchantmentLevel {
 				}
 			if (plugin != null) key = new NamespacedKey(plugin, enchString[1]);
 		}
-		if (Enchantment.getByKey(key) != null) for(CustomEnchantment enchantment: RegisterEnchantments.getEnchantments())
-			if (enchantment.getRelativeEnchantment().equals(Enchantment.getByKey(key))) return enchantment;
+		for(CustomEnchantment enchantment: RegisterEnchantments.getEnchantments())
+			if (enchantment.getRelativeEnchantment().getKey().equals(key)) return enchantment;
 		Chatable.get().sendWarning("Bad enchantment in configuration file " + config.getFileName() + ": " + str + ". No chance to get this enchantment.");
 		return null;
 	}
@@ -109,18 +109,18 @@ public class EnchantmentLevel {
 		return key.getNamespace() + "+" + key.getKey() + " " + level;
 	}
 
-	public static List<EnchantmentLevel> fromMap(Map<Enchantment, Integer> enchantmentList) {
-		Iterator<Entry<Enchantment, Integer>> iter = enchantmentList.entrySet().iterator();
+	public static List<EnchantmentLevel> fromMap(Map<EnchantmentWrapper, Integer> enchantmentList) {
+		Iterator<Entry<EnchantmentWrapper, Integer>> iter = enchantmentList.entrySet().iterator();
 		List<EnchantmentLevel> levels = new ArrayList<EnchantmentLevel>();
 		while (iter.hasNext()) {
-			Entry<Enchantment, Integer> entry = iter.next();
+			Entry<EnchantmentWrapper, Integer> entry = iter.next();
 			levels.add(new EnchantmentLevel(RegisterEnchantments.getCustomEnchantment(entry.getKey()), entry.getValue()));
 		}
 		return levels;
 	}
 
-	public static Map<Enchantment, Integer> fromList(List<EnchantmentLevel> levels) {
-		Map<Enchantment, Integer> map = new HashMap<Enchantment, Integer>();
+	public static Map<EnchantmentWrapper, Integer> fromList(List<EnchantmentLevel> levels) {
+		Map<EnchantmentWrapper, Integer> map = new HashMap<EnchantmentWrapper, Integer>();
 		for(EnchantmentLevel level: levels)
 			map.put(level.getEnchant().getRelativeEnchantment(), level.getLevel());
 		return map;

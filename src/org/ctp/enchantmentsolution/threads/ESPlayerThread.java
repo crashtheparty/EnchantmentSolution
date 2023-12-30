@@ -32,6 +32,7 @@ public class ESPlayerThread implements Runnable {
 			esPlayer.runHWD();
 			esPlayer.runGaia();
 			esPlayer.runHWDModel();
+			esPlayer.runEquipTimer();
 		}
 	}
 

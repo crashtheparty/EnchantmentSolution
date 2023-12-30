@@ -5,7 +5,6 @@ import org.ctp.enchantmentsolution.enchantments.helper.Weight;
 
 public abstract class ApiEnchantment extends CustomEnchantment {
 
-	private final ApiEnchantmentWrapper relative;
 	private int pointsLevelOne, pointsIncrease, freeLevel;
 	private double experience;
 	private boolean free;
@@ -41,24 +40,13 @@ public abstract class ApiEnchantment extends CustomEnchantment {
 	 *            Set curses using the setCurse() method, and set if max level is 1
 	 *            using the setMaxLevelOne() method
 	 */
-	public ApiEnchantment(ApiEnchantmentWrapper relative, String englishUSDisplayName, int fiftyConstant,
+	public ApiEnchantment(String englishUSDisplayName, int fiftyConstant,
 	int thirtyConstant, int fiftyModifier, int thirtyModifier, int fiftyStartLevel, int thirtyStartLevel,
 	int fiftyMaxLevel, int thirtyMaxLevel, Weight weight, String englishUSDescription) {
 		super(englishUSDisplayName, fiftyConstant, thirtyConstant, fiftyModifier, thirtyModifier, fiftyStartLevel, thirtyStartLevel, fiftyMaxLevel, thirtyMaxLevel, weight, englishUSDescription);
-		this.relative = relative;
 		setPointsLevelOne(-1);
 		setPointsIncrease(0);
 		setExperience(0);
-	}
-
-	/**
-	 * Get the relative enchantment for this custom enchantment
-	 * 
-	 * @return - the relative enchantment
-	 */
-	@Override
-	public ApiEnchantmentWrapper getRelativeEnchantment() {
-		return relative;
 	}
 
 	public int getPointsLevelOne() {
