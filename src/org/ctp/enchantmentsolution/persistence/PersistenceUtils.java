@@ -129,23 +129,27 @@ public class PersistenceUtils {
 		return 0;
 	}
 
-	public static void removeEnchantments(ItemStack item, CustomEnchantment enchant) {
-		ItemMeta meta = item.getItemMeta();
-		if (!meta.hasLore()) return;
-		PersistentDataContainer container = meta.getPersistentDataContainer();
-		String oldDisplayName = container.get(enchant.getPersistenceKey("_level"), t);
-		if (oldDisplayName == null) return;
-		container.remove(enchant.getPersistenceKey());
-		container.remove(enchant.getPersistenceKey("_level"));
-		List<String> lore = meta.getLore();
-		Iterator<String> iter = lore.iterator();
-		while (iter.hasNext()) {
-			String l = iter.next();
-			if (l.startsWith(ChatColor.translateAlternateColorCodes('&', enchant.getDisplayName()) + ChatColor.RESET) || l.startsWith(oldDisplayName)) iter.remove();
-		}
-		meta.setLore(lore);
-		item.setItemMeta(meta);
-		setItemLore(item);
+	public static ItemStack removeEnchantments(ItemStack item, CustomEnchantment enchant) {
+		if (enchant.getRelativeEnchantment() instanceof CustomEnchantmentWrapper) {
+			ItemMeta meta = item.getItemMeta();
+			if (!meta.hasLore()) return item;
+			PersistentDataContainer container = meta.getPersistentDataContainer();
+			String oldDisplayName = container.get(enchant.getPersistenceKey(), t);
+			if (oldDisplayName == null) oldDisplayName = "";
+			container.remove(enchant.getPersistenceKey());
+			container.remove(enchant.getPersistenceKey("_level"));
+			List<String> lore = meta.getLore();
+			Iterator<String> iter = lore.iterator();
+			while (iter.hasNext()) {
+				String l = iter.next();
+				if (l.startsWith(ChatColor.translateAlternateColorCodes('&', enchant.getDisplayName()) + ChatColor.RESET) || l.startsWith(oldDisplayName)) iter.remove();
+			}
+			meta.setLore(lore);
+			item.setItemMeta(meta);
+			setItemLore(item);
+		} else
+			item.removeEnchantment(enchant.getRelativeEnchantment().getRelativeEnchantment());
+		return item;
 	}
 
 	public static boolean setItemLore(ItemStack item) {

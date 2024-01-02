@@ -1,12 +1,11 @@
 package org.ctp.enchantmentsolution.enchantments.generate;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.bukkit.Material;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.ctp.crashapi.item.ItemData;
 import org.ctp.crashapi.item.ItemType;
@@ -102,8 +101,7 @@ public class AnvilEnchantments extends GenerateEnchantments {
 			canCombine = true;
 			return;
 		}
-		Map<Enchantment, Integer> enchantments = itemTwo.getItemMeta().getEnchants();
-		if (itemTwo.getType() == Material.ENCHANTED_BOOK) enchantments = ((EnchantmentStorageMeta) itemTwo.getItemMeta()).getStoredEnchants();
+		List<EnchantmentLevel> enchantments = PersistenceUtils.getEnchantments(itemTwo);
 
 		if (enchantments.size() > 0 || DamageUtils.getDamage(item) > 0) {
 			boolean willRepair = false;
@@ -128,13 +126,10 @@ public class AnvilEnchantments extends GenerateEnchantments {
 		canCombine = false;
 	}
 
-	private boolean checkEnchantments(Map<Enchantment, Integer> enchantments, ItemStack first) {
-		for(Iterator<java.util.Map.Entry<Enchantment, Integer>> it = enchantments.entrySet().iterator(); it.hasNext();) {
-			java.util.Map.Entry<Enchantment, Integer> e = it.next();
-			Enchantment enchant = e.getKey();
-			for(CustomEnchantment customEnchant: RegisterEnchantments.getEnchantments())
-				if (customEnchant.getRelativeEnchantment().equals(enchant)) if (EnchantmentUtils.canAddEnchantment(customEnchant, first)) return true;
-		}
+	private boolean checkEnchantments(List<EnchantmentLevel> enchantments, ItemStack first) {
+		for(EnchantmentLevel level : enchantments)
+			for(CustomEnchantment customEnchant: RegisterEnchantments.getRegisteredEnchantments())
+				if (customEnchant.getRelativeEnchantment().equals(level.getEnchant().getRelativeEnchantment()) && EnchantmentUtils.canAddEnchantment(customEnchant, first)) return true;
 		return false;
 	}
 
@@ -285,43 +280,29 @@ public class AnvilEnchantments extends GenerateEnchantments {
 			noUpgrade = ConfigString.NO_UPGRADE_NON_BOOKS.getBoolean();
 		Player player = getPlayer().getPlayer();
 
-		ItemMeta firstMeta = item.clone().getItemMeta();
-		Map<Enchantment, Integer> firstEnchants = firstMeta.getEnchants();
-		if (item.getType().equals(Material.ENCHANTED_BOOK)) {
-			EnchantmentStorageMeta meta = (EnchantmentStorageMeta) firstMeta;
-			firstEnchants = meta.getStoredEnchants();
-		}
-		ItemMeta secondMeta = itemTwo.clone().getItemMeta();
-		Map<Enchantment, Integer> secondEnchants = secondMeta.getEnchants();
-		if (itemTwo.getType().equals(Material.ENCHANTED_BOOK)) {
-			EnchantmentStorageMeta meta = (EnchantmentStorageMeta) secondMeta;
-			secondEnchants = meta.getStoredEnchants();
-		}
+		List<EnchantmentLevel> firstEnchants = PersistenceUtils.getEnchantments(item);
+		List<EnchantmentLevel> secondEnchants = PersistenceUtils.getEnchantments(itemTwo);
 		List<EnchantmentLevel> secondLevels = new ArrayList<EnchantmentLevel>();
 		List<EnchantmentLevel> firstLevels = new ArrayList<EnchantmentLevel>();
 		boolean containsStagnancyOne = false;
 		boolean containsStagnancyTwo = false;
 
 		List<EnchantmentLevel> enchantments = new ArrayList<EnchantmentLevel>();
-		List<CustomEnchantment> registeredEnchantments = RegisterEnchantments.getEnchantments();
-		for(Iterator<java.util.Map.Entry<Enchantment, Integer>> it = secondEnchants.entrySet().iterator(); it.hasNext();) {
-			java.util.Map.Entry<Enchantment, Integer> e = it.next();
-			Enchantment enchant = e.getKey();
-			int level = e.getValue();
+		List<CustomEnchantment> registeredEnchantments = RegisterEnchantments.getRegisteredEnchantments();
+		for(EnchantmentLevel enchant : secondEnchants) {
+			int level = enchant.getLevel();
 			for(CustomEnchantment customEnchant: registeredEnchantments)
-				if (ConfigUtils.isRepairable(customEnchant) && customEnchant.getRelativeEnchantment().equals(enchant)) {
-					if (RegisterEnchantments.CURSE_OF_STAGNANCY.equals(enchant)) containsStagnancyTwo = true;
+				if (ConfigUtils.isRepairable(customEnchant) && customEnchant.getRelativeEnchantment().equals(enchant.getEnchant().getRelativeEnchantment())) {
+					if (RegisterEnchantments.CURSE_OF_STAGNANCY.equals(enchant.getEnchant().getRelativeEnchantment())) containsStagnancyTwo = true;
 					secondLevels.add(new EnchantmentLevel(customEnchant, level));
 				}
 		}
 
-		for(Iterator<java.util.Map.Entry<Enchantment, Integer>> it = firstEnchants.entrySet().iterator(); it.hasNext();) {
-			java.util.Map.Entry<Enchantment, Integer> e = it.next();
-			Enchantment enchant = e.getKey();
-			int level = e.getValue();
+		for(EnchantmentLevel enchant : firstEnchants) {
+			int level = enchant.getLevel();
 			for(CustomEnchantment customEnchant: registeredEnchantments)
-				if (ConfigUtils.isRepairable(customEnchant) && customEnchant.getRelativeEnchantment().equals(enchant)) {
-					if (RegisterEnchantments.CURSE_OF_STAGNANCY.equals(enchant)) containsStagnancyOne = true;
+				if (ConfigUtils.isRepairable(customEnchant) && customEnchant.getRelativeEnchantment().equals(enchant.getEnchant().getRelativeEnchantment())) {
+					if (RegisterEnchantments.CURSE_OF_STAGNANCY.equals(enchant.getEnchant().getRelativeEnchantment())) containsStagnancyOne = true;
 					firstLevels.add(new EnchantmentLevel(customEnchant, level));
 				}
 		}

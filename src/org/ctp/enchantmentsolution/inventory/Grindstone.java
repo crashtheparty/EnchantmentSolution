@@ -12,8 +12,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.ctp.crashapi.inventory.InventoryData;
+import org.ctp.crashapi.nms.ExpNMS;
 import org.ctp.crashapi.utils.ItemUtils;
-import org.ctp.crashapi.utils.LocationUtils;
 import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.generate.GrindstoneEnchantments;
@@ -205,9 +205,9 @@ public class Grindstone implements InventoryData {
 			} else {
 				ItemUtils.giveItemToPlayer(player, grindstone.getCombinedItem(), player.getLocation(), false);
 				playGrindstoneSound();
-				if (block == null) LocationUtils.dropExperience(player.getLocation(), grindstone.getExperience(), true);
+				if (block == null) ExpNMS.dropExp(player.getLocation(), grindstone.getExperience(), true, player);
 				else
-					LocationUtils.dropExperience(block.getLocation(), grindstone.getExperience(), true);
+					ExpNMS.dropExp(block.getLocation(), grindstone.getExperience(), true, player);
 				grindstone = null;
 				playerItems.clear();
 			}

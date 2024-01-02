@@ -118,14 +118,7 @@ public class EnchantmentUtils {
 	}
 
 	public static ItemStack removeEnchantmentFromItem(ItemStack item, CustomEnchantment enchantment) {
-		if (enchantment == null) return item;
-		if (enchantment instanceof CustomEnchantment) PersistenceUtils.removeEnchantments(item, enchantment);
-		ItemMeta meta = item.getItemMeta();
-		Enchantment en = enchantment.getRelativeEnchantment().getRelativeEnchantment();
-		if (en != null && meta instanceof EnchantmentStorageMeta) ((EnchantmentStorageMeta) meta).removeStoredEnchant(en);
-		else if (en != null) meta.removeEnchant(en);
-		item.setItemMeta(meta);
-		return item;
+		return PersistenceUtils.removeEnchantments(item, enchantment);
 	}
 
 	public static ItemStack removeCursesFromItem(ItemStack item) {
