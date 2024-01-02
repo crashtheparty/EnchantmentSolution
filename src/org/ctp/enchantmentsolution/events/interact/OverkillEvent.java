@@ -38,9 +38,8 @@ public class OverkillEvent extends ProjectileSpawnEvent {
 		this.speed = speed;
 	}
 
-	@Override
 	public boolean willCancel() {
-		return !hasArrow && takeArrow || super.willCancel();
+		return !hasArrow && takeArrow;
 	}
 
 }

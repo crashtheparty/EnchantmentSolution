@@ -145,11 +145,8 @@ public class EnchantCommandUtils {
 
 							Event event = null;
 
-							if (slot == heldSlot || slot > 36) {
-								if (slot == heldSlot || slot == 36) event = new EquipEvent(givePlayer, EquipMethod.COMMAND, slot == 36 ? ItemSlotType.OFF_HAND : ItemSlotType.MAIN_HAND, prevItem, itemToEnchant);
-								else
-									event = new EquipEvent(givePlayer, EquipMethod.COMMAND, ItemSlotType.getTypeFromSlot(slot), prevItem, itemToEnchant);
-							} else
+							if (slot == heldSlot || slot > 36) event = new EquipEvent(givePlayer, EquipMethod.COMMAND, ItemSlotType.getTypeFromSlot(slot), prevItem, itemToEnchant);
+							else
 								event = new ItemAddEvent(givePlayer, itemToEnchant);
 							Bukkit.getPluginManager().callEvent(event);
 
@@ -263,11 +260,8 @@ public class EnchantCommandUtils {
 
 							Event event = null;
 
-							if (slot == heldSlot || slot > 36) {
-								if (slot == heldSlot || slot == 36) event = new EquipEvent(removePlayer, EquipMethod.COMMAND, slot == 36 ? ItemSlotType.OFF_HAND : ItemSlotType.MAIN_HAND, prevItem, itemToEnchant);
-								else
-									event = new EquipEvent(removePlayer, EquipMethod.COMMAND, ItemSlotType.getTypeFromSlot(slot), prevItem, itemToEnchant);
-							} else
+							if (slot == heldSlot || slot > 36) event = new EquipEvent(removePlayer, EquipMethod.COMMAND, ItemSlotType.getTypeFromSlot(slot), prevItem, itemToEnchant);
+							else
 								event = new ItemAddEvent(removePlayer, itemToEnchant);
 							Bukkit.getPluginManager().callEvent(event);
 							removePlayer.getInventory().setItem(slot, itemToEnchant);

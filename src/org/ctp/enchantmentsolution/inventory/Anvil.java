@@ -17,10 +17,8 @@ import org.ctp.crashapi.utils.ItemUtils;
 import org.ctp.crashapi.utils.LocationUtils;
 import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
-import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.generate.AnvilEnchantments;
 import org.ctp.enchantmentsolution.enchantments.generate.AnvilEnchantments.RepairType;
-import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.compatibility.JobsUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 
@@ -203,9 +201,8 @@ public class Anvil implements InventoryData {
 				anvil.getCombinedItem().setAmount(1);
 			}
 			ItemUtils.giveItemToPlayer(player, anvil.getCombinedItem(), player.getLocation(), false);
-			if ((anvil.getRepairType() == RepairType.REPAIR || anvil.getRepairType() == RepairType.STICKY_REPAIR) && anvil.dropLeftovers()) ItemUtils.giveItemToPlayer(player, anvil.getItemLeftover(), player.getLocation(), false);
+			if (anvil.getRepairType() == RepairType.REPAIR && anvil.dropLeftovers()) ItemUtils.giveItemToPlayer(player, anvil.getItemLeftover(), player.getLocation(), false);
 			if (EnchantmentSolution.getPlugin().isJobsEnabled()) JobsUtils.sendAnvilAction(player, playerItems.get(1), anvil.getCombinedItem());
-			if (anvil.getRepairType() == RepairType.STICKY_REPAIR) AdvancementUtils.awardCriteria(player, ESAdvancement.SIMPLE_REPAIR, "repair");
 			anvil = null;
 			playerItems.clear();
 			LocationUtils.checkAnvilBreak(player, block, this, ConfigString.DAMAGE_ANVIL.getBoolean());

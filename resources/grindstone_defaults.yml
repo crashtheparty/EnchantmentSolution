@@ -1,0 +1,4 @@
+custom_gui: true
+take_enchantments: false
+set_repair_cost: true
+destroy_take_item: true

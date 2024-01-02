@@ -10,9 +10,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.ctp.crashapi.inventory.InventoryData;
-import org.ctp.crashapi.item.ItemData;
-import org.ctp.crashapi.item.ItemSerialization;
-import org.ctp.crashapi.item.ItemType;
+import org.ctp.crashapi.item.*;
 import org.ctp.crashapi.utils.ItemUtils;
 import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
@@ -28,13 +26,14 @@ import org.ctp.enchantmentsolution.utils.config.ConfigString;
 import org.ctp.enchantmentsolution.utils.config.ConfigUtils;
 import org.ctp.enchantmentsolution.utils.config.Type;
 import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
+import org.ctp.enchantmentsolution.utils.player.ESPlayer;
 
 public class EnchantmentTable implements InventoryData {
 
 	private Player player;
 	private Inventory inventory;
 	private List<ItemStack> playerItems;
-	private ItemStack lapisStack;
+	private ItemStack lapisStack, upgrade;
 	private Block block;
 	private boolean opening;
 
@@ -55,11 +54,13 @@ public class EnchantmentTable implements InventoryData {
 			Inventory inv = Bukkit.createInventory(null, 54, Chatable.get().getMessage(getCodes(), "table.name"));
 			inv = open(inv);
 			boolean useLapis = ConfigString.LAPIS_IN_TABLE.getBoolean();
+			boolean useUpgrades = ConfigString.USE_UPGRADES.getBoolean();
 
 			ItemStack topLeft = new ItemStack(Material.BOOK);
 			ItemMeta topLeftMeta = topLeft.getItemMeta();
 			topLeftMeta.setDisplayName(Chatable.get().getMessage(getCodes(), "table.instructions-title"));
 			topLeftMeta.setLore(Chatable.get().getMessages(getCodes(), "table.instructions"));
+			if (useUpgrades) topLeftMeta.setLore(Chatable.get().getMessages(getCodes(), "table.instructions-upgrade"));
 			topLeft.setItemMeta(topLeftMeta);
 			inv.setItem(0, topLeft);
 
@@ -71,7 +72,8 @@ public class EnchantmentTable implements InventoryData {
 			for(int i = 0; i < 54; i++)
 				if (i % 9 == 1 || i % 9 == 2 || i / 9 == 1) inv.setItem(i, mirror);
 
-			TableEnchantments table = TableEnchantments.getTableEnchantments(player, null, getBooks());
+			ESPlayer es = EnchantmentSolution.getESPlayer(player);
+			TableEnchantments table = TableEnchantments.getTableEnchantments(es, null, getBooks());
 			LevelList list = table.getLevelList();
 
 			for(int i = 1; i <= 6; i++) {
@@ -149,8 +151,22 @@ public class EnchantmentTable implements InventoryData {
 							String levelsTaken = Chatable.get().getMessage(loreCodes, "table.level-taken-okay");
 							if (player.getLevel() < levelReq && player.getGameMode().equals(GameMode.SURVIVAL)) levelsTaken = Chatable.get().getMessage(loreCodes, "table.level-taken-lack");
 							loreCodes.remove("%levelsTaken%");
-							loreCodes.put("%enchant%", ChatColor.stripColor(PersistenceUtils.returnEnchantmentName(enchants.get(0).getEnchant(), enchants.get(0).getLevel())));
-							bookMeta.setLore(Arrays.asList(levelReqString, lapisString, levelsTaken, Chatable.get().getMessage(loreCodes, "table.enchant-name")));
+
+							if (es.canSeeEnchantments()) {
+								List<String> lore = new ArrayList<String>();
+								lore.addAll(Arrays.asList(levelReqString, lapisString, levelsTaken));
+								loreCodes.put("%enchantability%", enchantmentList.getEnchantability());
+								lore.add(Chatable.get().getMessage(loreCodes, "table.enchantability"));
+								lore.add(Chatable.get().getMessage(loreCodes, "table.enchantability-upgrade"));
+								for(int j = 0; j < enchants.size(); j++) {
+									loreCodes.put("%enchant%", ChatColor.stripColor(PersistenceUtils.returnEnchantmentName(enchants.get(j).getEnchant(), enchants.get(j).getLevel())));
+									lore.add(Chatable.get().getMessage(loreCodes, "table.enchant-name-known"));
+								}
+								bookMeta.setLore(lore);
+							} else {
+								loreCodes.put("%enchant%", ChatColor.stripColor(PersistenceUtils.returnEnchantmentName(enchants.get(0).getEnchant(), enchants.get(0).getLevel())));
+								bookMeta.setLore(Arrays.asList(levelReqString, lapisString, levelsTaken, Chatable.get().getMessage(loreCodes, "table.enchant-name")));
+							}
 							book.setItemMeta(bookMeta);
 							inv.setItem(start + extra, book);
 						} else
@@ -166,15 +182,61 @@ public class EnchantmentTable implements InventoryData {
 				start += 9;
 			}
 
-			if (useLapis) if (lapisStack == null) {
+			if (useLapis && lapisStack == null) {
 				ItemStack blueMirror = new ItemStack(Material.BLUE_STAINED_GLASS_PANE);
 				ItemMeta blueMirrorMeta = blueMirror.getItemMeta();
 				blueMirrorMeta.setDisplayName(Chatable.get().getMessage(getCodes(), "table.blue-mirror"));
 				blueMirrorMeta.setLore(Chatable.get().getMessages(getCodes(), "table.blue-mirror-lore"));
 				blueMirror.setItemMeta(blueMirrorMeta);
-				inv.setItem(10, blueMirror);
-			} else
-				inv.setItem(10, lapisStack);
+				inv.setItem(1, blueMirror);
+			} else if (useLapis) inv.setItem(1, lapisStack);
+
+			if (useUpgrades && upgrade == null) {
+				ItemStack greenMirror = new ItemStack(Material.GREEN_STAINED_GLASS_PANE);
+				ItemMeta greenMirrorMeta = greenMirror.getItemMeta();
+				greenMirrorMeta.setDisplayName(Chatable.get().getMessage(getCodes(), "table.upgrade-mirror"));
+				HashMap<String, Object> codes = getCodes();
+				codes.put("%shards%", es.getCurrentEchoShards());
+				codes.put("%next_shards%", es.getNextEchoShards());
+				codes.put("%see_enchants%", es.canSeeEnchantments());
+				codes.put("%will_see_enchants%", es.willSeeEnchantments());
+				greenMirrorMeta.setLore(Chatable.get().getMessages(codes, "table.upgrade-mirror-lore"));
+				greenMirror.setItemMeta(greenMirrorMeta);
+				inv.setItem(9, greenMirror);
+				ItemStack redMirror = new ItemStack(Material.RED_STAINED_GLASS_PANE);
+				ItemMeta redMirrorMeta = redMirror.getItemMeta();
+				redMirrorMeta.setDisplayName(Chatable.get().getMessage(getCodes(), "table.disabled-add-upgrade-mirror"));
+				redMirror.setItemMeta(redMirrorMeta);
+				inv.setItem(10, redMirror);
+			} else if (useUpgrades) {
+				ItemStack upgradeClone = upgrade.clone();
+				ItemMeta upgradeCloneMeta = upgradeClone.getItemMeta();
+				upgradeCloneMeta.setDisplayName(Chatable.get().getMessage(getCodes(), "table.upgrade-mirror"));
+				HashMap<String, Object> codes = getCodes();
+				codes.put("%shards%", es.getCurrentEchoShards());
+				codes.put("%next_shards%", es.getNextEchoShards());
+				codes.put("%see_enchants%", es.canSeeEnchantments());
+				codes.put("%will_see_enchants%", es.willSeeEnchantments());
+				upgradeCloneMeta.setLore(Chatable.get().getMessages(codes, "table.upgrade-mirror-lore"));
+				upgradeClone.setItemMeta(upgradeCloneMeta);
+				inv.setItem(9, upgradeClone);
+				ItemStack upgradeMirror = new ItemStack(Material.RED_STAINED_GLASS_PANE);
+				ItemMeta upgradeMirrorMeta = upgradeMirror.getItemMeta();
+				if (canUpgrade()) {
+					upgradeMirror.setType(Material.GREEN_STAINED_GLASS_PANE);
+					upgradeMirrorMeta.setDisplayName(Chatable.get().getMessage(getCodes(), "table.add-upgrade-mirror"));
+					if (upgrade.getType() == Material.NETHER_STAR)
+						upgradeMirrorMeta.setLore(Chatable.get().getMessages(getCodes(), "table.add-upgrade-mirror-stars"));
+					else
+						upgradeMirrorMeta.setLore(Chatable.get().getMessages(getCodes(), "table.add-upgrade-mirror-shards"));
+				} else {
+					upgradeMirrorMeta.setDisplayName(Chatable.get().getMessage(getCodes(), "table.invalid-upgrade-mirror"));
+					upgradeMirrorMeta.setLore(Chatable.get().getMessages(getCodes(), "table.invalid-upgrade-mirror-lore"));
+				}
+				upgradeMirror.setItemMeta(upgradeMirrorMeta);
+				inv.setItem(10, upgradeMirror);
+
+			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -230,6 +292,64 @@ public class EnchantmentTable implements InventoryData {
 		return clone;
 	}
 
+	public ItemStack addUpgrade(ItemStack item) {
+		if (ConfigString.USE_UPGRADES.getBoolean()) {
+			ItemStack clone = item.clone();
+			if (upgrade == null) {
+				upgrade = item;
+				return new ItemStack(Material.AIR);
+			}
+			ItemSerialization serial = EnchantmentSolution.getPlugin().getItemSerial();
+			if (serial.itemToData(upgrade).equals(serial.itemToData(clone))) if (upgrade.getAmount() < upgrade.getType().getMaxStackSize()) if (upgrade.getAmount() + clone.getAmount() > upgrade.getType().getMaxStackSize()) {
+				clone.setAmount(upgrade.getAmount() + clone.getAmount() - upgrade.getType().getMaxStackSize());
+				upgrade.setAmount(upgrade.getType().getMaxStackSize());
+			} else {
+				upgrade.setAmount(upgrade.getAmount() + clone.getAmount());
+				clone = new ItemStack(Material.AIR);
+			}
+			return clone;
+		}
+		return item;
+	}
+
+	public ItemStack removeUpgrade(int amount) {
+		if (upgrade == null) return null;
+		ItemStack clone = upgrade.clone();
+		if (clone.getAmount() > amount) upgrade.setAmount(clone.getAmount() - amount);
+		else
+			upgrade = null;
+		return clone;
+	}
+
+	public ItemStack removeUpgrade() {
+		if (upgrade == null) return null;
+		ItemStack clone = upgrade.clone();
+		upgrade = null;
+		return clone;
+	}
+
+	public boolean canUpgrade() {
+		if (!ConfigString.USE_UPGRADES.getBoolean()) return false;
+		ESPlayer es = EnchantmentSolution.getESPlayer(player);
+		if (es.willSeeEnchantments() && upgrade != null && upgrade.getType() == Material.NETHER_STAR) return false;
+		return true;
+	}
+
+	public void upgrade() {
+		if (!ConfigString.USE_UPGRADES.getBoolean()) return;
+		ESPlayer es = EnchantmentSolution.getESPlayer(player);
+		MatData echoShard = new MatData("ECHO_SHARD");
+		if (upgrade.getType() == Material.NETHER_STAR) {
+			es.setWillSeeEnchantments(true);
+			if (upgrade.getAmount() > 1) upgrade.setAmount(upgrade.getAmount() - 1);
+			else
+				upgrade = null;
+		} else if (upgrade.getType() == echoShard.getMaterial()) {
+			es.addNextEchoShards(upgrade.getAmount());
+			upgrade = null;
+		}
+	}
+
 	public boolean addItem(ItemStack item) {
 		if (playerItems.size() >= 4) return false;
 		playerItems.add(item);
@@ -258,7 +378,8 @@ public class EnchantmentTable implements InventoryData {
 				return;
 			}
 
-		TableEnchantments table = TableEnchantments.getTableEnchantments(player, null, getBooks());
+		ESPlayer es = EnchantmentSolution.getESPlayer(player);
+		TableEnchantments table = TableEnchantments.getTableEnchantments(es, null, getBooks());
 		if (player.getGameMode().equals(GameMode.SURVIVAL) || player.getGameMode().equals(GameMode.ADVENTURE)) {
 			player.setLevel(player.getLevel() - level - 1);
 			int remove = level + 1;
@@ -278,14 +399,16 @@ public class EnchantmentTable implements InventoryData {
 					} else {}
 				}
 		}
-//		int tableLevel = table.getLevelList().getList()[level].getLevel();
+		// int tableLevel = table.getLevelList().getList()[level].getLevel();
 		List<EnchantmentLevel> enchLevels = table.getEnchantments(new ItemData(enchantableItem))[level].getEnchantments();
 		Map<EnchantmentWrapper, Integer> defaultLevels = new HashMap<EnchantmentWrapper, Integer>();
 		for(EnchantmentLevel l: enchLevels)
 			defaultLevels.put(l.getEnchant().getRelativeEnchantment(), l.getLevel());
-//		EnchantItemEvent event = NMS.enchantItemEvent(player, player.getOpenInventory(), block, enchantItem, tableLevel, defaultLevels, level, Enchantment.PROTECTION_ENVIRONMENTAL, enchLevels.get(0).getLevel());
+		// EnchantItemEvent event = NMS.enchantItemEvent(player,
+		// player.getOpenInventory(), block, enchantItem, tableLevel, defaultLevels,
+		// level, Enchantment.PROTECTION_ENVIRONMENTAL, enchLevels.get(0).getLevel());
 		try {
-//			Bukkit.getPluginManager().callEvent(event);
+			// Bukkit.getPluginManager().callEvent(event);
 		} catch (Exception ex) {
 			Chatable.sendDebug("An issue occurred with calling an EnchantItemEvent (Custom GUI): " + ex.getMessage(), Level.SEVERE);
 		}
@@ -302,7 +425,7 @@ public class EnchantmentTable implements InventoryData {
 		} catch (Exception ex) {
 			Chatable.sendDebug("An issue occurred with enchanting items (Custom GUI): " + ex.getMessage(), Level.SEVERE);
 		}
-		TableEnchantments.removeTableEnchantments(player);
+		es.updateEnchantmentSeeds();
 		setInventory();
 	}
 
@@ -354,5 +477,13 @@ public class EnchantmentTable implements InventoryData {
 			inventory.setItem(i, new ItemStack(Material.AIR));
 		if (opening) opening = false;
 		return inv;
+	}
+
+	public ItemStack getUpgrade() {
+		return upgrade;
+	}
+
+	public void setUpgrade(ItemStack upgrade) {
+		this.upgrade = upgrade;
 	}
 }

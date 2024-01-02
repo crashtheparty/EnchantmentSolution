@@ -4,7 +4,7 @@ import org.ctp.crashapi.config.Configuration;
 import org.ctp.enchantmentsolution.utils.Configurations;
 
 public enum Type {
-	MAIN(), FISHING(), ENCHANTMENTS(), LANGUAGE(), ADVANCEMENTS(), RPG(), MINIGAME(), HARD_MODE();
+	MAIN(), ENCHANTING_TABLE(), ANVIL(), GRINDSTONE(), FISHING(), ENCHANTMENTS(), LANGUAGE(), ADVANCEMENTS(), RPG(), MINIGAME(), HARD_MODE(), LOOTS();
 
 	Type() {}
 
@@ -13,6 +13,12 @@ public enum Type {
 		switch (name()) {
 			case "MAIN":
 				return c.getConfig();
+			case "ENCHANTING_TABLE":
+				return c.getEnchantingTable();
+			case "ANVIL":
+				return c.getAnvil();
+			case "GRINDSTONE":
+				return c.getGrindstone();
 			case "FISHING":
 				return c.getFishing();
 			case "ENCHANTMENTS":
@@ -27,6 +33,8 @@ public enum Type {
 				return c.getMinigames();
 			case "HARD_MODE":
 				return c.getHardMode();
+			case "LOOTS":
+				return c.getLoots();
 		}
 		return c.getConfig();
 	}

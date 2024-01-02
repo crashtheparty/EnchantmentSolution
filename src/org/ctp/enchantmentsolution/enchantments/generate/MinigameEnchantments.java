@@ -1,47 +1,33 @@
 package org.ctp.enchantmentsolution.enchantments.generate;
 
-import org.bukkit.block.Block;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.enums.EnchantmentLocation;
+import org.ctp.enchantmentsolution.enums.Loots;
 import org.ctp.enchantmentsolution.inventory.minigame.MinigameItem;
-import org.ctp.enchantmentsolution.utils.config.ConfigString;
-import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
 
 public class MinigameEnchantments extends LootEnchantments {
 
-	public MinigameEnchantments(Player player, ItemStack item, int books, EnchantmentLocation location) {
-		super(player, item, books, location);
+	public MinigameEnchantments(Player player, ItemStack item, EnchantmentLocation location, Loots loot, Location loc) {
+		super(player, item, location, loot, loc);
 	}
 
-	public static MinigameEnchantments generateMinigameLoot(Player player, ItemStack item, Block block) {
-		int books = 0;
-		if (ConfigString.MINIGAME_FAST_RANDOM_BOOKSHELVES.getBoolean()) {
-			int maxBooks = 16;
-			if (ConfigString.LEVEL_FIFTY.getBoolean()) maxBooks = 24;
+	public static MinigameEnchantments generateMinigameLoot(Player player, ItemStack item, Location loc, String type, Loots defaultLoot) {
+		if (item == null) return null;
+		Loots loot = Loots.getLoot(type);
+		if (loot == null) loot = defaultLoot;
 
-			double rand = (Math.random() + Math.random()) / 2;
-
-			int random = (int) (rand * maxBooks);
-			if (random >= maxBooks) random = maxBooks - 1;
-			books = random;
-		} else if (block != null) books = EnchantmentUtils.getBookshelves(block.getLocation());
-		return new MinigameEnchantments(player, item, books, EnchantmentLocation.TABLE);
+		return new MinigameEnchantments(player, item, EnchantmentLocation.TABLE, loot, loc);
 	}
 
-	public static MinigameEnchantments generateMinigameLoot(Player player, ItemStack item, Block block, MinigameItem minigameItem) {
-		int books = 0;
-		if (minigameItem.getType().fromLocation() && block != null) books = EnchantmentUtils.getBookshelves(block.getLocation());
-		else {
-			double rand = (Math.random() + Math.random()) / 2;
-			int min = minigameItem.getMinBooks();
-			int max = minigameItem.getMaxBooks();
+	public static MinigameEnchantments generateMinigameLoot(Player player, ItemStack item, Location loc, String type, Loots defaultLoot,
+	MinigameItem minigameItem) {
+		if (item == null) return null;
+		Loots loot = Loots.getLoot(type);
+		if (loot == null) loot = defaultLoot;
 
-			int random = (int) (rand * (max - min + 1) + min);
-			if (random >= max) random = max - 1;
-			books = random;
-		}
-		return new MinigameEnchantments(player, item, books, EnchantmentLocation.TABLE);
+		return new MinigameEnchantments(player, item, EnchantmentLocation.TABLE, loot, loc);
 	}
 
 }

@@ -13,8 +13,8 @@ public class GreenThumbEvent extends ESBlockDropOverrideItemEvent {
 
 	private final ItemStack seed;
 
-	public GreenThumbEvent(Block theBlock, BlockData blockData, Player player, List<ItemStack> items, List<ItemStack> overrideItems, ItemStack seed) {
-		super(theBlock, blockData, new EnchantmentLevel(CERegister.GREEN_THUMB, 1), player, items, overrideItems);
+	public GreenThumbEvent(Block theBlock, BlockData blockData, Player player, List<ItemStack> items, List<ItemStack> overrideItems, boolean override, int exp, ItemStack seed) {
+		super(theBlock, blockData, new EnchantmentLevel(CERegister.GREEN_THUMB, 1), player, items, overrideItems, override, exp);
 		this.seed = seed;
 	}
 

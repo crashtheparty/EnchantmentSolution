@@ -1,0 +1,53 @@
+custom_gui: true
+level_divisor: 4
+default_use: false
+max_repair_level: 60
+repair_cost_limit: 0
+damage: true
+rename: true
+no_upgrade_books: false
+no_upgrade_non_books: false
+no_upgrade_books_to_non_books: false
+
+config_comments: 
+    custom_gui: 
+    - 'Whether to use the custom anvil gui'
+    
+    level_divisor: 
+    - 'Greater numbers allow more anvil uses'
+
+    max_repair_level: 
+    - 'The highest repair level that will be allowed in the anvil'
+    - 'Will show ''Too Expensive to Repair'' if using above 39 and using the vanilla GUI'
+
+    repair_cost_limit: 
+    - 'The maximum repair cost an item can have'
+    - 'Repair cost increases on an item every time it is repaired in an anvil'
+    - 'This is NOT the same cost as what is displayed in the anvil because that also includes the cost of adding enchantments, repairing, renaming, etc.'
+
+    default_use: 
+    - 'Allow default use of anvil GUI via option at bottom right of custom GUI'
+    - 'Only used when custom_gui is true'
+    - 'Should only be true if anvil is used for custom recipes'
+
+    damage: 
+    - 'The anvil will be damaged while using it - normal vanilla behavior on true'
+
+    rename: 
+    - 'Whether players can use the custom rename without a permission'
+
+    no_upgrade_books: 
+    - 'Whether books should combine levels together if they are the same (i.e. Protection I + Protection I = Protection II).'
+    - 'Protection II + Protection I will still create Protection II, as will Protection I + Protection II.'
+    - 'If false, uses normal settings.'
+
+    no_upgrade_non_books: 
+    - 'Whether items (such as tools, weapons, etc.) should combine levels together if they are the same (i.e. Protection I + Protection I = Protection II).'
+    - 'Protection II + Protection I will still create Protection II, as will Protection I + Protection II.'
+    - 'If false, uses normal settings.'
+
+    no_upgrade_books_to_non_books: 
+    - 'Whether books should combine levels when added to items (such as tools, weapons, etc.).'
+    - 'i.e. Whether a book with Protection I and a helmet with Protection I should combine to make Protection II.'
+    - 'Protection II + Protection I will still create Protection II, as will Protection I + Protection II.'
+    - 'If false, uses normal settings.'

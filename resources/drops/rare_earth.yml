@@ -1,0 +1,120 @@
+deepslate_gold_ore:
+    interact:
+    - deepslate_gold_ore
+    minExp: '0'
+    maxExp: '0'
+    multiple: false
+    override: false
+    poolChance: false
+    drops:
+        0:
+            type: 'gold_ore'
+            min: '0'
+            max: '0.6 * %level%'
+            chance: '1'
+            normAmount: false
+deepslate_iron_ore:
+    interact:
+    - deepslate_iron_ore
+    minExp: '0'
+    maxExp: '0'
+    multiple: false
+    override: false
+    poolChance: false
+    drops:
+        0:
+            type: 'iron_ore'
+            min: '0'
+            max: '0.6 * %level%'
+            chance: '1'
+            normAmount: false
+deepslate_coal_ore:
+    interact:
+    - deepslate_coal_ore
+    minExp: '0'
+    maxExp: '0'
+    multiple: false
+    override: false
+    poolChance: false
+    drops:
+        0:
+            type: 'coal_ore'
+            min: '0'
+            max: '0.6 * %level%'
+            chance: '1'
+            normAmount: false
+deepslate_copper_ore:
+    interact:
+    - deepslate_copper_ore
+    minExp: '0'
+    maxExp: '0'
+    multiple: false
+    override: false
+    poolChance: false
+    drops:
+        0:
+            type: 'copper_ore'
+            min: '0'
+            max: '0.6 * %level%'
+            chance: '1'
+            normAmount: false
+deepslate_lapis_ore:
+    interact:
+    - deepslate_lapis_ore
+    minExp: '0'
+    maxExp: '0'
+    multiple: false
+    override: false
+    poolChance: false
+    drops:
+        0:
+            type: 'lapis_ore'
+            min: '0'
+            max: '0.6 * %level%'
+            chance: '1'
+            normAmount: false
+deepslate_redstone_ore:
+    interact:
+    - deepslate_redstone_ore
+    minExp: '0'
+    maxExp: '0'
+    multiple: false
+    override: false
+    poolChance: false
+    drops:
+        0:
+            type: 'redstone_ore'
+            min: '0'
+            max: '0.6 * %level%'
+            chance: '1'
+            normAmount: false
+deepslate_diamond_ore:
+    interact:
+    - deepslate_diamond_ore
+    minExp: '0'
+    maxExp: '0'
+    multiple: false
+    override: false
+    poolChance: false
+    drops:
+        0:
+            type: 'diamond_ore'
+            min: '0'
+            max: '0.6 * %level%'
+            chance: '1'
+            normAmount: false
+deepslate_emerald_ore:
+    interact:
+    - deepslate_emerald_ore
+    minExp: '0'
+    maxExp: '0'
+    multiple: false
+    override: false
+    poolChance: false
+    drops:
+        0:
+            type: 'emerald_ore'
+            min: '0'
+            max: '0.6 * %level%'
+            chance: '1'
+            normAmount: false

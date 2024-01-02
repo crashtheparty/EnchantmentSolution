@@ -22,7 +22,6 @@ import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enchantments.generate.MinigameEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
-import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentList;
 import org.ctp.enchantmentsolution.enums.EnchantmentLocation;
 import org.ctp.enchantmentsolution.inventory.minigame.MinigameItem.MinigameItemType;
 import org.ctp.enchantmentsolution.utils.Configurations;
@@ -299,24 +298,13 @@ public class Minigame implements InventoryData, Pageable {
 	public void addFastEnchantment(int slot) {
 		int num = fastLocations.indexOf(slot);
 		ItemType type = ItemType.getUniqueEnchantableTypes().get(num);
+		MinigameItem mItem = getMinigameCustomItems().get(num);
 
 		ItemStack item = new ItemStack(getMaterial(type));
-		MinigameEnchantments enchants = GenerateUtils.generateMinigameEnchants(player, item, block);
-		EnchantmentList[] list = enchants.getList();
-		List<EnchantmentList> lists = new ArrayList<EnchantmentList>();
-		if (list != null) for(EnchantmentList l: list)
-			if (l != null) lists.add(l);
-		int random = (int) (Math.random() * lists.size());
+		MinigameEnchantments enchants = GenerateUtils.generateMinigameEnchants(player, item, block.getLocation(), mItem);
 
-		List<EnchantmentLevel> levels = lists.get(random).getEnchantments();
+		List<EnchantmentLevel> levels = enchants.getEnchantments();
 
-		int i = 0;
-
-		while ((levels == null || levels.size() == 0) && lists.size() > i) {
-			levels = lists.get(i).getEnchantments();
-			random = i;
-			i++;
-		}
 		if (levels == null || levels.size() == 0) {
 			Chatable.get().sendWarning("Item couldn't find EnchantmentSolution enchantments.");
 			return;
@@ -326,8 +314,8 @@ public class Minigame implements InventoryData, Pageable {
 
 		boolean useBooks = ConfigString.USE_ENCHANTED_BOOKS.getBoolean();
 		if (item.getType() == Material.BOOK && useBooks) item = EnchantmentUtils.convertToEnchantedBook(item);
-		int lvlCost = MinigameUtils.getTableLevelCost(random + 1);
-		int lapisCost = MinigameUtils.getTableLapisCost(random + 1);
+		int lvlCost = MinigameUtils.getTableLevelCost(1 + enchants.getRandom());
+		int lapisCost = MinigameUtils.getTableLapisCost(1 + enchants.getRandom());
 		int lapis = MinigameUtils.getLapis(player);
 		double economyCost = MinigameUtils.getTableEconomyCost(0);
 		double playerMoney = MinigameUtils.getPlayerMoney(player);
@@ -420,7 +408,7 @@ public class Minigame implements InventoryData, Pageable {
 			if (item.getEconomyMaxCost() > 0 && economyCost > item.getEconomyMaxCost()) economyCost = item.getEconomyMaxCost();
 			if (item.getType() == MinigameItemType.ENCHANTMENT) enchant = EnchantmentUtils.addEnchantmentsToItem(enchant, item.getLevels());
 			else
-				enchant = GenerateUtils.generateMinigameLoot(player, enchant, block, item);
+				enchant = GenerateUtils.generateMinigameLoot(player, enchant, block.getLocation(), item);
 			if ((lvlCost <= player.getLevel() || player.getGameMode() == GameMode.CREATIVE) && (lapisCost <= lapis || player.getGameMode() == GameMode.CREATIVE) && economyCost <= playerMoney) {
 				if (player.getGameMode() != GameMode.CREATIVE) {
 					player.setLevel(player.getLevel() - lvlCost);
@@ -493,7 +481,7 @@ public class Minigame implements InventoryData, Pageable {
 					if (level != null) levels.add(level);
 				}
 				try {
-					items.add(new MinigameItem(new MatData(config.getString(key + ".material.show")), new MatData(config.getString(key + ".material.enchant")), MinigameItemType.valueOf(config.getString(key + ".type").toUpperCase(Locale.ROOT)), config.getInt(key + ".costs.level"), config.getInt(key + ".costs.extra_level_cost_per_use"), config.getInt(key + ".costs.max_level_cost"), config.getInt(key + ".costs.lapis"), config.getInt(key + ".costs.extra_lapis_cost_per_use"), config.getInt(key + ".costs.max_lapis_cost"), config.getDouble(key + ".costs.economy"), config.getDouble(key + ".costs.extra_economy_cost_per_use"), config.getDouble(key + ".costs.max_economy_cost"), config.getStringList(key + ".costs.use"), config.getInt(key + ".books.min"), config.getInt(key + ".books.max"), config.getInt(key + ".levels.min"), config.getInt(key + ".levels.max"), config.getInt(key + ".slot"), config.getBoolean(key + ".costs.use_level_cost_increase"), config.getBoolean(key + ".costs.use_lapis_cost_increase"), config.getBoolean(key + ".costs.use_economy_cost_increase"), levels));
+					items.add(new MinigameItem(key, new MatData(config.getString(key + ".material.show")), new MatData(config.getString(key + ".material.enchant")), MinigameItemType.valueOf(config.getString(key + ".type").toUpperCase(Locale.ROOT)), config.getInt(key + ".costs.level"), config.getInt(key + ".costs.extra_level_cost_per_use"), config.getInt(key + ".costs.max_level_cost"), config.getInt(key + ".costs.lapis"), config.getInt(key + ".costs.extra_lapis_cost_per_use"), config.getInt(key + ".costs.max_lapis_cost"), config.getDouble(key + ".costs.economy"), config.getDouble(key + ".costs.extra_economy_cost_per_use"), config.getDouble(key + ".costs.max_economy_cost"), config.getStringList(key + ".costs.use"), config.getStringList(key + ".loots"), config.getInt(key + ".slot"), config.getBoolean(key + ".costs.use_level_cost_increase"), config.getBoolean(key + ".costs.use_lapis_cost_increase"), config.getBoolean(key + ".costs.use_economy_cost_increase"), levels));
 				} catch (IllegalArgumentException ex) {
 					ex.printStackTrace();
 				}

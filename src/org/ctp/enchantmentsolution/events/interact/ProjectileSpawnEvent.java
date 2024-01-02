@@ -2,11 +2,8 @@ package org.ctp.enchantmentsolution.events.interact;
 
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.ctp.crashapi.utils.ServerUtils;
-import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.events.Cooldownable;
-import org.ctp.enchantmentsolution.utils.player.ESPlayer;
 
 public abstract class ProjectileSpawnEvent extends InteractEvent implements Cooldownable {
 
@@ -16,12 +13,6 @@ public abstract class ProjectileSpawnEvent extends InteractEvent implements Cool
 	public ProjectileSpawnEvent(Player who, EnchantmentLevel enchantment, ItemStack item, int cooldownTicks) {
 		super(who, enchantment, item);
 		this.cooldownTicks = cooldownTicks;
-	}
-
-	public boolean willCancel() {
-		ESPlayer player = EnchantmentSolution.getESPlayer(getPlayer());
-		long cooldown = player.getCooldown(getEnchantment().getEnchant().getRelativeEnchantment());
-		return cooldown + getCooldownTicks() > ServerUtils.getCurrentTick();
 	}
 
 	@Override
@@ -42,6 +33,10 @@ public abstract class ProjectileSpawnEvent extends InteractEvent implements Cool
 	@Override
 	public void setCooldownTicks(int ticks) {
 		cooldownTicks = ticks;
+	}
+
+	public boolean willCancel() {
+		return false;
 	}
 
 }

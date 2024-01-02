@@ -25,15 +25,17 @@ import org.ctp.enchantmentsolution.nms.EnchantNMS;
 import org.ctp.enchantmentsolution.utils.compatibility.JobsUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
+import org.ctp.enchantmentsolution.utils.player.ESPlayer;
 
 public class EnchantmentListener implements Listener {
 
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPrepareEnchant(PrepareItemEnchantEvent event) {
 		Player player = event.getEnchanter();
+		ESPlayer es = EnchantmentSolution.getESPlayer(player);
 		int bookshelves = EnchantmentUtils.getBookshelves(event.getEnchantBlock().getLocation());
 		ItemStack item = event.getItem();
-		TableEnchantments table = TableEnchantments.getTableEnchantments(player, item, bookshelves);
+		TableEnchantments table = TableEnchantments.getTableEnchantments(es, item, bookshelves);
 		if (event.getOffers()[0] == null) return;
 		EnchantmentList[] lists = table.getEnchantments(new ItemData(item));
 		for(int i = 0; i < event.getOffers().length; i++) {
@@ -60,9 +62,10 @@ public class EnchantmentListener implements Listener {
 	public void onEnchantItem(EnchantItemEvent event) {
 		if (event.getInventory() instanceof EnchantingInventory) {
 			Player player = event.getEnchanter();
+			ESPlayer es = EnchantmentSolution.getESPlayer(player);
 			int bookshelves = EnchantmentUtils.getBookshelves(event.getEnchantBlock().getLocation());
 			ItemStack item = event.getItem();
-			TableEnchantments table = TableEnchantments.getTableEnchantments(player, item, bookshelves);
+			TableEnchantments table = TableEnchantments.getTableEnchantments(es, item, bookshelves);
 			for(int i = 0; i < table.getLevelList().getList().length; i++) {
 				Integer integer = table.getLevelList().getList()[i].getLevel();
 				if (integer == event.getExpLevelCost()) {
@@ -88,7 +91,7 @@ public class EnchantmentListener implements Listener {
 					} catch (Exception ex) {
 						Chatable.sendDebug("An issue occurred with enchanting items (Vanilla GUI): " + ex.getMessage(), java.util.logging.Level.SEVERE);
 					}
-					TableEnchantments.removeTableEnchantments(player);
+					es.updateEnchantmentSeeds();
 					return;
 				}
 			}

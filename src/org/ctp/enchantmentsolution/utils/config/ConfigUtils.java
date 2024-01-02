@@ -14,7 +14,7 @@ public class ConfigUtils {
 	}
 
 	public static boolean isRepairable(CustomEnchantment enchant) {
-		if (Configurations.getConfigurations().getConfig().getString("disable_enchant_method").equals("repairable")) return true;
+		if (Configurations.getConfigurations().getEnchantments().getString("disable_enchant_method").equals("repairable")) return true;
 
 		if (enchant.isEnabled()) return true;
 
@@ -79,29 +79,5 @@ public class ConfigUtils {
 		if (desc == null) desc = Configurations.getConfigurations().getLanguage().getString("misc.null_advancement_description");
 		if (desc == null) desc = "No Description";
 		return desc;
-	}
-
-	public static boolean getAdvancedBoolean(ConfigString string, boolean defVal) {
-		if (string.getLocation().contains("advanced")) {
-			if (ConfigString.ADVANCED_OPTIONS.getBoolean()) return string.getBoolean();
-			return defVal;
-		} else
-			throw new IllegalArgumentException("ConfigString must be an advanced option!");
-	}
-
-	public static int getAdvancedInt(ConfigString string, int defVal) {
-		if (string.getLocation().contains("advanced")) {
-			if (ConfigString.ADVANCED_OPTIONS.getBoolean()) return string.getInt();
-			return defVal;
-		} else
-			throw new IllegalArgumentException("ConfigString must be an advanced option!");
-	}
-
-	public static double getAdvancedDouble(ConfigString string, double defVal) {
-		if (string.getLocation().contains("advanced")) {
-			if (ConfigString.ADVANCED_OPTIONS.getBoolean()) return string.getDouble();
-			return defVal;
-		} else
-			throw new IllegalArgumentException("ConfigString must be an advanced option!");
 	}
 }

@@ -25,7 +25,6 @@ import org.ctp.enchantmentsolution.utils.BlockUtils;
 import org.ctp.enchantmentsolution.utils.ESArrays;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.GaiaTrees;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.WalkerUtils;
-import org.ctp.enchantmentsolution.utils.config.ConfigString;
 import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
 
 public class ExtraBlockListener implements Listener {
@@ -42,7 +41,7 @@ public class ExtraBlockListener implements Listener {
 			EnchantmentSolution.gaiaRemoveLocation(event.getBlock().getLocation());
 		}
 
-		if (ConfigString.MULTI_BLOCK_ASYNC.getBoolean() && BlockUtils.multiBlockBreakContains(event.getBlock().getLocation()) && !(event instanceof BlockBreakMultiEvent)) event.setCancelled(true);
+		if (BlockUtils.multiBlockBreakContains(event.getBlock().getLocation()) && !(event instanceof BlockBreakMultiEvent)) event.setCancelled(true);
 
 		if (WalkerUtils.hasBlock(event.getBlock())) {
 			event.setCancelled(true);

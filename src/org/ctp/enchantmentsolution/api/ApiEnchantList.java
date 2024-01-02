@@ -47,7 +47,6 @@ public class ApiEnchantList {
 			RegisterEnchantments.registerEnchantment(enchant);
 		}
 		Configurations c = EnchantmentSolution.getPlugin().getConfigurations();
-		c.getEnchantments().updateExternal(plugin);
 		c.getRPG().updateExternal(plugin);
 		RegisterEnchantments.setEnchantments();
 		c.save();

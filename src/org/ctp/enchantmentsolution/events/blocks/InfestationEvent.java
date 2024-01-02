@@ -9,9 +9,9 @@ import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.enchantments.CERegister;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 
-public class InfestationEvent extends ESBlockDropAddItemEvent {
+public class InfestationEvent extends ESBlockDropOverrideItemEvent {
 
-	public InfestationEvent(Player player, Block theBlock, BlockData blockData, List<ItemStack> infestationItems) {
-		super(theBlock, blockData, new EnchantmentLevel(CERegister.CURSE_OF_INFESTATION, 1), player, infestationItems);
+	public InfestationEvent(Block block, BlockData brokenData, Player player, List<ItemStack> infestationItems, List<ItemStack> originalItems, boolean override, int exp) {
+		super(block, brokenData, new EnchantmentLevel(CERegister.CURSE_OF_INFESTATION, 1), player, infestationItems, originalItems, override, exp);
 	}
 }

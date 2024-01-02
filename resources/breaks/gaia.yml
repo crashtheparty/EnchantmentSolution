@@ -1,0 +1,42 @@
+oak_log:
+    break:
+    - oak_log
+    - stripped_oak_log
+    - oak_wood
+    - stripped_oak_wood
+    surrounding:
+    - azalea_leaves
+    - flowering_azalea_leaves
+    - oak_leaves
+    check_radius: 2
+    break_radius: 3
+    replant_chance: 0.02
+    replant_with:
+    - oak_sapling
+    replant_on:
+    - grass_block
+    - grass_path
+    - dirt
+    - podzol
+    - mud
+    max_blocks: '50 + %level% * %level% * 50'
+birch_log:
+    break:
+    - birch_log
+    - stripped_birch_log
+    - birch_wood
+    - stripped_birch_wood
+    surrounding:
+    - birch_leaves
+    check_radius: 2
+    break_radius: 3
+    replant_chance: 0.02
+    replant_with:
+    - birch_sapling
+    replant_on:
+    - grass_block
+    - grass_path
+    - dirt
+    - podzol
+    - mud
+    max_blocks: '50 + %level% * %level% * 50'

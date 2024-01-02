@@ -2,52 +2,58 @@ package org.ctp.enchantmentsolution.enchantments.helper;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
-import org.bukkit.Material;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
-import org.ctp.crashapi.config.yaml.YamlConfig;
 import org.ctp.crashapi.item.ItemData;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enums.EnchantmentLocation;
+import org.ctp.enchantmentsolution.enums.Loots;
+import org.ctp.enchantmentsolution.utils.MathUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
-import org.ctp.enchantmentsolution.utils.config.ConfigUtils;
+import org.ctp.enchantmentsolution.utils.player.ESPlayer;
 
 public class EnchantmentList {
 
 	private Level level;
-	private OfflinePlayer player;
+	private ESPlayer player;
 	private ItemData item;
 	private int enchantability;
 	private List<EnchantmentLevel> enchantments;
 	private EnchantmentLocation location;
+	private Loots loot;
+	private final Random random;
 
-	public EnchantmentList(OfflinePlayer player, Level level, ItemData item, EnchantmentLocation location) {
+	public EnchantmentList(ESPlayer player, Level level, ItemData item, EnchantmentLocation location, Random random) {
 		this.level = level;
 		this.player = player;
 		this.item = item;
 		this.location = location;
+		this.random = random;
 		setEnchantability();
 
 		generate();
 	}
 
-	private EnchantmentList(OfflinePlayer player, Level level, ItemData item, EnchantmentLocation location, int enchantability,
-	List<EnchantmentLevel> generated) {
+	public EnchantmentList(ESPlayer player, Level level, ItemData item, EnchantmentLocation location, Loots loot, Random random) {
 		this.level = level;
 		this.player = player;
 		this.item = item;
 		this.location = location;
-		this.enchantability = enchantability;
-		enchantments = generated;
+		this.random = random;
+		this.loot = loot;
+		setEnchantability();
+
+		generate();
 	}
 
-	public EnchantmentList(OfflinePlayer player, ItemData item, EnchantmentLocation location, List<EnchantmentLevel> fishing,
+	public EnchantmentList(ESPlayer player, ItemData item, EnchantmentLocation location, List<EnchantmentLevel> fishing,
 	double multiEnchant) {
 		this.player = player;
 		this.item = item;
 		this.location = location;
+		random = new Random();
 
 		generatePreselected(fishing, multiEnchant);
 	}
@@ -61,45 +67,37 @@ public class EnchantmentList {
 			}
 
 		int enchantability_2 = enchantability / 2;
-		int rand_enchantability = 1 + randomInt(enchantability_2 / 2 + 1) + randomInt(enchantability_2 / 2 + 1);
-
-		if (ConfigUtils.getAdvancedBoolean(ConfigString.USE_LAPIS_MODIFIERS, ConfigString.LEVEL_FIFTY.getBoolean())) {
-			double lapisConstant = ConfigUtils.getAdvancedDouble(ConfigString.LAPIS_CONSTANT, ConfigString.LEVEL_FIFTY.getBoolean() ? -1 : 0);
-			double lapisMultiplier = ConfigUtils.getAdvancedDouble(ConfigString.LAPIS_MULTIPLIER, ConfigString.LEVEL_FIFTY.getBoolean() ? 2 : 0);
-			rand_enchantability += (level.getSlot() + lapisConstant) * lapisMultiplier;
-		}
+		int rand1 = MathUtils.randomIntFromSeed(random, enchantability_2 / 2 + 1);
+		int rand2 = MathUtils.randomIntFromSeed(random, enchantability_2 / 2 + 1);
+		float rand3 = MathUtils.randomFloatFromSeed(random);
+		float rand4 = MathUtils.randomFloatFromSeed(random);
+		int rand_enchantability = 1 + rand1 + rand2;
 
 		int k = level.getLevel() + rand_enchantability;
-		float rand_bonus_percent = (float) (1 + (randomFloat() + randomFloat() - 1) * .15);
-		this.enchantability = (int) (k * rand_bonus_percent + 0.5);
-	}
-
-	private static int randomInt(int num) {
-		double random = Math.random();
-
-		return (int) (random * num);
-	}
-
-	private static float randomFloat() {
-		return (float) Math.random();
+		float rand_bonus_percent = (float) (1 + (rand3 + rand4 - 1) * .15);
+		this.enchantability = (int) (k * rand_bonus_percent + 0.5) + (player == null ? 0 : player.getCurrentEchoShards());
 	}
 
 	public void generate() {
-		double multiEnchantDivisor = ConfigUtils.getAdvancedDouble(ConfigString.MULTI_ENCHANT_DIVISOR, ConfigString.LEVEL_FIFTY.getBoolean() ? 75 : 50);
+		double multiEnchantDivisor = ConfigString.LEVEL_FIFTY.getBoolean() ? ConfigString.MULTI_ENCHANT_DIVISOR_FIFTY.getDouble() : ConfigString.MULTI_ENCHANT_DIVISOR_THIRTY.getDouble();
 		List<EnchantmentLevel> enchants = new ArrayList<EnchantmentLevel>();
 		CustomEnchantment enchantment = getEnchantment(enchants);
 		if (enchantment != null) {
-			Player p = player == null ? null : player.getPlayer();
+			Player p = player == null ? null : player.getOnlinePlayer();
 			enchants.add(new EnchantmentLevel(enchantment, enchantment.getEnchantLevel(p, enchantability)));
-			int enchantability = this.enchantability;
-			int finalEnchantability = enchantability / 2;
-			while ((finalEnchantability + 1) / multiEnchantDivisor > Math.random() && (ConfigString.MAX_ENCHANTMENTS.getInt() == 0 ? true : enchants.size() < ConfigString.MAX_ENCHANTMENTS.getInt())) {
-				enchantment = getEnchantment(enchants);
-				if (enchantment == null) break;
-				if (ConfigUtils.getAdvancedBoolean(ConfigString.DECAY, false)) enchants.add(new EnchantmentLevel(enchantment, enchantment.getEnchantLevel(p, finalEnchantability)));
-				else
-					enchants.add(new EnchantmentLevel(enchantment, enchantment.getEnchantLevel(p, enchantability)));
-				finalEnchantability /= 2;
+			if (loot == null || loot.allowMultiple()) {
+				int enchantability = this.enchantability;
+				int finalEnchantability = (int) (loot != null ? loot.lowerChances() ? enchantability * loot.getLowerBy() : enchantability : enchantability / 2);
+				double chance = loot == null || loot.chanceFromDefault() ? (finalEnchantability + 1) / multiEnchantDivisor : loot.getChance();
+				while (chance > MathUtils.randomFloatFromSeed(random) && (ConfigString.MAX_ENCHANTMENTS.getInt() == 0 ? true : enchants.size() < ConfigString.MAX_ENCHANTMENTS.getInt())) {
+					enchantment = getEnchantment(enchants);
+					if (enchantment == null) break;
+					if (ConfigString.DECAY.getBoolean()) enchants.add(new EnchantmentLevel(enchantment, enchantment.getEnchantLevel(p, finalEnchantability)));
+					else
+						enchants.add(new EnchantmentLevel(enchantment, enchantment.getEnchantLevel(p, enchantability)));
+					finalEnchantability = (int) (loot != null ? loot.lowerChances() ? finalEnchantability * loot.getLowerBy() : finalEnchantability : finalEnchantability / 2);
+					chance = loot == null || loot.chanceFromDefault() ? (finalEnchantability + 1) / multiEnchantDivisor : loot.lowerChances() ? chance * loot.getLowerBy() : chance;
+				}
 			}
 		}
 
@@ -111,7 +109,7 @@ public class EnchantmentList {
 		EnchantmentLevel enchantment = getPreselectedEnchantment(enchants, selections);
 		if (enchantment != null) {
 			enchants.add(enchantment);
-			while (multiEnchantDivisor > Math.random() && (ConfigString.MAX_ENCHANTMENTS.getInt() == 0 ? true : enchants.size() < ConfigString.MAX_ENCHANTMENTS.getInt())) {
+			while (multiEnchantDivisor > random.nextFloat() && (ConfigString.MAX_ENCHANTMENTS.getInt() == 0 ? true : enchants.size() < ConfigString.MAX_ENCHANTMENTS.getInt())) {
 				enchantment = getPreselectedEnchantment(enchants, selections);
 				if (enchantment == null) break;
 				enchants.add(enchantment);
@@ -132,34 +130,39 @@ public class EnchantmentList {
 				customEnchants.add(enchantment);
 			}
 		if (totalWeight == 0) return null;
-		int getWeight = (int) (Math.random() * totalWeight);
+		int getWeight = (int) (random.nextFloat() * totalWeight);
 		for(EnchantmentLevel customEnchant: customEnchants) {
-			getWeight -= customEnchant.getEnchant().getWeight();
 			if (getWeight <= 0) return customEnchant;
+			getWeight -= customEnchant.getEnchant().getWeight();
 		}
 		return null;
 	}
 
 	private CustomEnchantment getEnchantment(List<EnchantmentLevel> previousLevels) {
 		int totalWeight = 0;
-		Player p = player == null ? null : player.getPlayer();
+		Player p = player == null ? null : player.getOnlinePlayer();
 		List<CustomEnchantment> customEnchants = new ArrayList<CustomEnchantment>();
 		List<CustomEnchantment> registeredEnchantments = RegisterEnchantments.getRegisteredEnchantments();
 		for(CustomEnchantment enchantment: registeredEnchantments)
 			if (canAddEnchantment(previousLevels, enchantment) && enchantment.getEnchantLevel(p, enchantability) > 0) {
-				totalWeight += enchantment.getWeight();
+				if (loot == null || loot.useWeights()) totalWeight += enchantment.getWeight();
+				else
+					totalWeight++;
 				customEnchants.add(enchantment);
 			}
 		if (totalWeight == 0) return null;
-		int getWeight = (int) (Math.random() * totalWeight);
+		int getWeight = (int) (MathUtils.randomFloatFromSeed(random) * totalWeight);
 		for(CustomEnchantment customEnchant: customEnchants) {
-			getWeight -= customEnchant.getWeight();
+			if (loot == null || loot.useWeights()) getWeight -= customEnchant.getWeight();
+			else
+				getWeight--;
 			if (getWeight <= 0) return customEnchant;
 		}
 		return null;
 	}
 
 	private boolean canAddEnchantment(List<EnchantmentLevel> levels, CustomEnchantment enchantment) {
+		if (loot != null && loot.getBlacklistEnchantments().contains(enchantment)) return false;
 		List<EnchantmentLocation> locations = enchantment.getEnchantmentLocations();
 		if (levels != null) for(EnchantmentLevel level: levels)
 			if (CustomEnchantment.conflictsWith(level.getEnchant(), enchantment)) return false;
@@ -168,8 +171,7 @@ public class EnchantmentList {
 			if (enchantment.isEnabled() && enchantment.canEnchantItem(item) && locations.contains(location)) return true;
 			return false;
 		}
-		if (location != EnchantmentLocation.NONE && !locations.contains(EnchantmentLocation.NON_BOOK) && Material.BOOK != item.getMaterial()) return false;
-		if (enchantment.isEnabled() && enchantment.canEnchantItem(item) && (locations.contains(location) || location == EnchantmentLocation.NONE) && (player == null || player.getPlayer() == null || enchantment.canEnchant(player.getPlayer(), enchantability, level.getLevel()))) return true;
+		if (enchantment.isEnabled() && enchantment.canEnchantItem(item) && (locations.contains(location) || location == EnchantmentLocation.NONE) && (player == null || player.getPlayer() == null || enchantment.canEnchant(player.getOnlinePlayer(), enchantability, level.getLevel()))) return true;
 		return false;
 	}
 
@@ -181,23 +183,7 @@ public class EnchantmentList {
 		this.enchantments = enchantments;
 	}
 
-	public static EnchantmentList fromConfig(YamlConfig config, int i, int j, int k, OfflinePlayer player, Level level, ItemData item) {
-		List<String> enchants = config.getStringList("enchanting_table." + i + ".enchantmentList." + j + "." + k + ".enchants");
-		List<EnchantmentLevel> levels = new ArrayList<EnchantmentLevel>();
-		if (enchants != null) for(String enchant: enchants)
-			levels.add(new EnchantmentLevel(enchant, config));
-		int enchantability = config.getInt("enchanting_table." + i + ".enchantmentList." + j + "." + k + ".enchantability");
-
-		return new EnchantmentList(player, level, item, EnchantmentLocation.TABLE, enchantability, levels);
-	}
-
-	public void setConfig(YamlConfig config, String starting, int i, int k, ItemData item) {
-		String path = starting + "enchanting_table." + i + ".enchantmentList." + k + ".";
-		config.set(path + "itemdata", item.toString());
-		List<String> enchants = new ArrayList<String>();
-		for(EnchantmentLevel level: getEnchantments())
-			enchants.add(level.toString());
-		config.set(path + level.getSlot() + "." + "enchants", enchants);
-		config.set(path + level.getSlot() + "." + "enchantability", enchantability);
+	public int getEnchantability() {
+		return enchantability;
 	}
 }

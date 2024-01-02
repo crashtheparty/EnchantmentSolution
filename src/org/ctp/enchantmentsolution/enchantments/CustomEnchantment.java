@@ -29,7 +29,8 @@ import org.ctp.enchantmentsolution.utils.config.Type;
 public abstract class CustomEnchantment {
 
 	protected boolean enabled = true;
-	protected List<EnchantmentLocation> enchantmentLocations, defaultEnchantmentLocations;
+	protected List<EnchantmentLocation> enchantmentLocations;
+	protected EnchantmentLocation[] defaultEnchantmentLocations;
 	protected String displayName = null, description = "";
 	protected List<EnchantmentDisplayName> defaultDisplayNames = new ArrayList<EnchantmentDisplayName>();
 	protected List<EnchantmentDescription> defaultDescriptions = new ArrayList<EnchantmentDescription>();
@@ -184,7 +185,7 @@ public abstract class CustomEnchantment {
 
 	public boolean canEnchantItem(ItemData item) {
 		for(ItemType type: getEnchantmentItemTypes()) {
-			if (type instanceof CustomItemType) if (ItemUtils.checkItemType(item, (CustomItemType) type)) return true;
+			if (type instanceof CustomItemType && ItemUtils.checkItemType(item, (CustomItemType) type)) return true;
 			if (type.getEnchantMaterials() != null && ItemData.contains(type.getEnchantMaterials(), item.getMaterial())) return true;
 		}
 		return false;
@@ -243,7 +244,7 @@ public abstract class CustomEnchantment {
 	}
 
 	public boolean canEnchant(Player player, int enchantability, int level) {
-		if (ConfigUtils.getAdvancedBoolean(ConfigString.STARTING_LEVEL, ConfigString.LEVEL_FIFTY.getBoolean()) && level < getStartLevel()) return false;
+		if (ConfigString.MINIMUM_LEVEL.getInt() > 0 && level < getStartLevel()) return false;
 		if (getEnchantLevel(player, enchantability) > 0) return true;
 
 		return false;
@@ -288,7 +289,7 @@ public abstract class CustomEnchantment {
 		displayName = getDefaultDisplayName(lang);
 	}
 
-	protected int getDefaultThirtyConstant() {
+	public int getDefaultThirtyConstant() {
 		return defaultThirtyConstant;
 	}
 
@@ -296,7 +297,7 @@ public abstract class CustomEnchantment {
 		defaultThirtyConstant = constant;
 	}
 
-	protected int getDefaultFiftyConstant() {
+	public int getDefaultFiftyConstant() {
 		return defaultFiftyConstant;
 	}
 
@@ -313,7 +314,7 @@ public abstract class CustomEnchantment {
 		this.constant = constant;
 	}
 
-	protected int getDefaultThirtyModifier() {
+	public int getDefaultThirtyModifier() {
 		return defaultThirtyModifier;
 	}
 
@@ -321,7 +322,7 @@ public abstract class CustomEnchantment {
 		defaultThirtyModifier = modifier;
 	}
 
-	protected int getDefaultFiftyModifier() {
+	public int getDefaultFiftyModifier() {
 		return defaultFiftyModifier;
 	}
 
@@ -338,7 +339,7 @@ public abstract class CustomEnchantment {
 		this.modifier = modifier;
 	}
 
-	protected int getDefaultThirtyStartLevel() {
+	public int getDefaultThirtyStartLevel() {
 		return defaultThirtyStartLevel;
 	}
 
@@ -346,7 +347,7 @@ public abstract class CustomEnchantment {
 		defaultThirtyStartLevel = startLevel;
 	}
 
-	protected int getDefaultFiftyStartLevel() {
+	public int getDefaultFiftyStartLevel() {
 		return defaultFiftyStartLevel;
 	}
 
@@ -363,7 +364,7 @@ public abstract class CustomEnchantment {
 		this.startLevel = startLevel;
 	}
 
-	protected int getDefaultThirtyMaxLevel() {
+	public int getDefaultThirtyMaxLevel() {
 		return defaultThirtyMaxLevel;
 	}
 
@@ -371,7 +372,7 @@ public abstract class CustomEnchantment {
 		defaultThirtyMaxLevel = maxLevel;
 	}
 
-	protected int getDefaultFiftyMaxLevel() {
+	public int getDefaultFiftyMaxLevel() {
 		return defaultFiftyMaxLevel;
 	}
 
@@ -558,7 +559,7 @@ public abstract class CustomEnchantment {
 		enchantmentLocations = locations;
 	}
 
-	public abstract List<EnchantmentLocation> getDefaultEnchantmentLocations();
+	public abstract EnchantmentLocation[] getDefaultEnchantmentLocations();
 
 	public NamespacedKey getPersistenceKey() {
 		NamespacedKey relative = getRelativeEnchantment().getKey();

@@ -121,6 +121,6 @@ public interface Reflectionable {
 	default boolean isDisabled(Player player, EnchantmentWrapper enchantment) {
 		ESPlayer esPlayer = EnchantmentSolution.getESPlayer(player);
 		if (esPlayer == null) return false;
-		return esPlayer.hasTimedDisable(player, enchantment) || esPlayer.hasDisabled(player, enchantment);
+		return esPlayer.hasTimedDisable(player, enchantment) || esPlayer.hasDisabled(player, enchantment) || esPlayer.hasCooldown(player, enchantment);
 	}
 }

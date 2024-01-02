@@ -61,10 +61,7 @@ public class MinigameConfiguration extends Configuration {
 			config.addDefault("custom.items.first.costs.use_economy_cost_increase", false, "Whether the economy cost should increase with each use (resets on '/esreset', '/esreload', and server restart.");
 			config.addDefault("custom.items.first.costs.extra_economy_cost_per_use", 0, "The extra economy cost of enchanting an item.");
 			config.addDefault("custom.items.first.costs.max_economy_cost", 0, "The maximum economy cost of enchanting an item. 0 means no max.");
-			config.addDefault("custom.items.first.books.min", 0, "The min number of books randomized around an enchanting table.");
-			config.addDefault("custom.items.first.books.max", 23, "The max number of books randomized around an enchanting table.");
-			config.addDefault("custom.items.first.levels.min", 0, "The min level of randomized enchantments selected.");
-			config.addDefault("custom.items.first.levels.max", 5, "The max level of randomized enchantments selected.");
+			config.addDefault("custom.items.first.loot_types", Arrays.asList("default_minigame_loot_one 1"), "The kind of enchanting loot to randomize to if randomized.");
 			config.addDefault("custom.items.first.enchantments", Arrays.asList(new EnchantmentLevel(CERegister.SHARPNESS, 1).toString()), "The enchantments to be added to the item if not randomized.");
 			config.addDefault("custom.items.first.slot", 1, "The slot the item will appear in.");
 
@@ -84,10 +81,7 @@ public class MinigameConfiguration extends Configuration {
 			config.addDefault("custom.items.second.costs.use_economy_cost_increase", false);
 			config.addDefault("custom.items.second.costs.extra_economy_cost_per_use", 0);
 			config.addDefault("custom.items.second.costs.max_economy_cost", 0);
-			config.addDefault("custom.items.second.books.min", 23);
-			config.addDefault("custom.items.second.books.max", 23);
-			config.addDefault("custom.items.second.levels.min", 5);
-			config.addDefault("custom.items.second.levels.max", 5);
+			config.addDefault("custom.items.second.loot_types", Arrays.asList("default_minigame_loot_two 1"));
 			config.addDefault("custom.items.second.enchantments", Arrays.asList());
 			config.addDefault("custom.items.second.slot", 3);
 
@@ -107,10 +101,7 @@ public class MinigameConfiguration extends Configuration {
 			config.addDefault("custom.items.third.costs.use_economy_cost_increase", false);
 			config.addDefault("custom.items.third.costs.extra_economy_cost_per_use", 0);
 			config.addDefault("custom.items.third.costs.max_economy_cost", 0);
-			config.addDefault("custom.items.third.books.min", 0);
-			config.addDefault("custom.items.third.books.max", 23);
-			config.addDefault("custom.items.third.levels.min", 0);
-			config.addDefault("custom.items.third.levels.max", 5);
+			config.addDefault("custom.items.third.loot", Arrays.asList("default_minigame_loot_three 1"));
 			config.addDefault("custom.items.third.enchantments", Arrays.asList());
 			config.addDefault("custom.items.third.slot", 5);
 		}

@@ -28,9 +28,8 @@ public class FrostyEvent extends ProjectileSpawnEvent {
 		return hasSnowball;
 	}
 
-	@Override
 	public boolean willCancel() {
-		return !hasSnowball && takeSnowball || super.willCancel();
+		return !hasSnowball && takeSnowball;
 	}
 
 }

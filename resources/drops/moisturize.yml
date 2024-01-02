@@ -1,0 +1,585 @@
+black_glazed_terracotta:
+    interact:
+    - black_glazed_terracotta
+    minExp: '0'
+    maxExp: '0'
+    multiple: false
+    override: false
+    poolChance: false
+    drops:
+        0:
+            type: 'black_terracotta'
+            min: '1'
+            max: '1'
+            chance: '1'
+            normAmount: false
+blue_glazed_terracotta:
+    interact:
+    - blue_glazed_terracotta
+    minExp: '0'
+    maxExp: '0'
+    multiple: false
+    override: false
+    poolChance: false
+    drops:
+        0:
+            type: 'blue_terracotta'
+            min: '1'
+            max: '1'
+            chance: '1'
+            normAmount: false
+brown_glazed_terracotta:
+    interact:
+    - brown_glazed_terracotta
+    minExp: '0'
+    maxExp: '0'
+    multiple: false
+    override: false
+    poolChance: false
+    drops:
+        0:
+            type: 'brown_terracotta'
+            min: '1'
+            max: '1'
+            chance: '1'
+            normAmount: false
+cyan_glazed_terracotta:
+    interact:
+    - cyan_glazed_terracotta
+    minExp: '0'
+    maxExp: '0'
+    multiple: false
+    override: false
+    poolChance: false
+    drops:
+        0:
+            type: 'cyan_terracotta'
+            min: '1'
+            max: '1'
+            chance: '1'
+            normAmount: false
+gray_glazed_terracotta:
+    interact:
+    - gray_glazed_terracotta
+    minExp: '0'
+    maxExp: '0'
+    multiple: false
+    override: false
+    poolChance: false
+    drops:
+        0:
+            type: 'gray_terracotta'
+            min: '1'
+            max: '1'
+            chance: '1'
+            normAmount: false
+green_glazed_terracotta:
+    interact:
+    - green_glazed_terracotta
+    minExp: '0'
+    maxExp: '0'
+    multiple: false
+    override: false
+    poolChance: false
+    drops:
+        0:
+            type: 'green_terracotta'
+            min: '1'
+            max: '1'
+            chance: '1'
+            normAmount: false
+light_blue_glazed_terracotta:
+    interact:
+    - light_blue_glazed_terracotta
+    minExp: '0'
+    maxExp: '0'
+    multiple: false
+    override: false
+    poolChance: false
+    drops:
+        0:
+            type: 'light_blue_terracotta'
+            min: '1'
+            max: '1'
+            chance: '1'
+            normAmount: false
+light_gray_glazed_terracotta:
+    interact:
+    - light_gray_glazed_terracotta
+    minExp: '0'
+    maxExp: '0'
+    multiple: false
+    override: false
+    poolChance: false
+    drops:
+        0:
+            type: 'light_gray_terracotta'
+            min: '1'
+            max: '1'
+            chance: '1'
+            normAmount: false
+lime_glazed_terracotta:
+    interact:
+    - lime_glazed_terracotta
+    minExp: '0'
+    maxExp: '0'
+    multiple: false
+    override: false
+    poolChance: false
+    drops:
+        0:
+            type: 'lime_terracotta'
+            min: '1'
+            max: '1'
+            chance: '1'
+            normAmount: false
+magenta_glazed_terracotta:
+    interact:
+    - magenta_glazed_terracotta
+    minExp: '0'
+    maxExp: '0'
+    multiple: false
+    override: false
+    poolChance: false
+    drops:
+        0:
+            type: 'magenta_terracotta'
+            min: '1'
+            max: '1'
+            chance: '1'
+            normAmount: false
+orange_glazed_terracotta:
+    interact:
+    - orange_glazed_terracotta
+    minExp: '0'
+    maxExp: '0'
+    multiple: false
+    override: false
+    poolChance: false
+    drops:
+        0:
+            type: 'orange_terracotta'
+            min: '1'
+            max: '1'
+            chance: '1'
+            normAmount: false
+pink_glazed_terracotta:
+    interact:
+    - pink_glazed_terracotta
+    minExp: '0'
+    maxExp: '0'
+    multiple: false
+    override: false
+    poolChance: false
+    drops:
+        0:
+            type: 'pink_terracotta'
+            min: '1'
+            max: '1'
+            chance: '1'
+            normAmount: false
+purple_glazed_terracotta:
+    interact:
+    - purple_glazed_terracotta
+    minExp: '0'
+    maxExp: '0'
+    multiple: false
+    override: false
+    poolChance: false
+    drops:
+        0:
+            type: 'purple_terracotta'
+            min: '1'
+            max: '1'
+            chance: '1'
+            normAmount: false
+red_glazed_terracotta:
+    interact:
+    - red_glazed_terracotta
+    minExp: '0'
+    maxExp: '0'
+    multiple: false
+    override: false
+    poolChance: false
+    drops:
+        0:
+            type: 'red_terracotta'
+            min: '1'
+            max: '1'
+            chance: '1'
+            normAmount: false
+white_glazed_terracotta:
+    interact:
+    - white_glazed_terracotta
+    minExp: '0'
+    maxExp: '0'
+    multiple: false
+    override: false
+    poolChance: false
+    drops:
+        0:
+            type: 'white_terracotta'
+            min: '1'
+            max: '1'
+            chance: '1'
+            normAmount: false
+yellow_glazed_terracotta:
+    interact:
+    - yellow_glazed_terracotta
+    minExp: '0'
+    maxExp: '0'
+    multiple: false
+    override: false
+    poolChance: false
+    drops:
+        0:
+            type: 'yellow_terracotta'
+            min: '1'
+            max: '1'
+            chance: '1'
+            normAmount: false
+terracotta:
+    interact:
+    - terracotta
+    minExp: '0'
+    maxExp: '0'
+    multiple: false
+    override: false
+    poolChance: false
+    drops:
+        0:
+            type: 'clay'
+            min: '1'
+            max: '1'
+            chance: '1'
+            normAmount: false
+cracked_stone_bricks:
+    interact:
+    - cracked_stone_bricks
+    minExp: '0'
+    maxExp: '0'
+    multiple: false
+    override: false
+    poolChance: false
+    drops:
+        0:
+            type: 'stone_bricks'
+            min: '1'
+            max: '1'
+            chance: '1'
+            normAmount: false
+smooth_basalt:
+    interact:
+    - smooth_basalt
+    minExp: '0'
+    maxExp: '0'
+    multiple: false
+    override: false
+    poolChance: false
+    drops:
+        0:
+            type: 'basalt'
+            min: '1'
+            max: '1'
+            chance: '1'
+            normAmount: false
+smooth_quartz:
+    interact:
+    - smooth_quartz
+    minExp: '0'
+    maxExp: '0'
+    multiple: false
+    override: false
+    poolChance: false
+    drops:
+        0:
+            type: 'quartz_block'
+            min: '1'
+            max: '1'
+            chance: '1'
+            normAmount: false
+smooth_red_sandstone:
+    interact:
+    - smooth_red_sandstone
+    minExp: '0'
+    maxExp: '0'
+    multiple: false
+    override: false
+    poolChance: false
+    drops:
+        0:
+            type: 'red_sandstone'
+            min: '1'
+            max: '1'
+            chance: '1'
+            normAmount: false
+smooth_sandstone:
+    interact:
+    - smooth_sandstone
+    minExp: '0'
+    maxExp: '0'
+    multiple: false
+    override: false
+    poolChance: false
+    drops:
+        0:
+            type: 'sandstone'
+            min: '1'
+            max: '1'
+            chance: '1'
+            normAmount: false
+smooth_stone:
+    interact:
+    - smooth_stone
+    minExp: '0'
+    maxExp: '0'
+    multiple: false
+    override: false
+    poolChance: false
+    drops:
+        0:
+            type: 'stone'
+            min: '1'
+            max: '1'
+            chance: '1'
+            normAmount: false
+black_concrete_powder:
+    interact:
+    - black_concrete_powder
+    minExp: '0'
+    maxExp: '0'
+    multiple: false
+    override: false
+    poolChance: false
+    drops:
+        0:
+            type: 'black_concrete'
+            min: '1'
+            max: '1'
+            chance: '1'
+            normAmount: false
+blue_concrete_powder:
+    interact:
+    - blue_concrete_powder
+    minExp: '0'
+    maxExp: '0'
+    multiple: false
+    override: false
+    poolChance: false
+    drops:
+        0:
+            type: 'blue_concrete'
+            min: '1'
+            max: '1'
+            chance: '1'
+            normAmount: false
+brown_concrete_powder:
+    interact:
+    - brown_concrete_powder
+    minExp: '0'
+    maxExp: '0'
+    multiple: false
+    override: false
+    poolChance: false
+    drops:
+        0:
+            type: 'brown_concrete'
+            min: '1'
+            max: '1'
+            chance: '1'
+            normAmount: false
+cyan_concrete_powder:
+    interact:
+    - cyan_concrete_powder
+    minExp: '0'
+    maxExp: '0'
+    multiple: false
+    override: false
+    poolChance: false
+    drops:
+        0:
+            type: 'cyan_concrete'
+            min: '1'
+            max: '1'
+            chance: '1'
+            normAmount: false
+gray_concrete_powder:
+    interact:
+    - gray_concrete_powder
+    minExp: '0'
+    maxExp: '0'
+    multiple: false
+    override: false
+    poolChance: false
+    drops:
+        0:
+            type: 'gray_concrete'
+            min: '1'
+            max: '1'
+            chance: '1'
+            normAmount: false
+green_concrete_powder:
+    interact:
+    - green_concrete_powder
+    minExp: '0'
+    maxExp: '0'
+    multiple: false
+    override: false
+    poolChance: false
+    drops:
+        0:
+            type: 'green_concrete'
+            min: '1'
+            max: '1'
+            chance: '1'
+            normAmount: false
+light_blue_concrete_powder:
+    interact:
+    - light_blue_concrete_powder
+    minExp: '0'
+    maxExp: '0'
+    multiple: false
+    override: false
+    poolChance: false
+    drops:
+        0:
+            type: 'light_blue_concrete'
+            min: '1'
+            max: '1'
+            chance: '1'
+            normAmount: false
+light_gray_concrete_powder:
+    interact:
+    - light_gray_concrete_powder
+    minExp: '0'
+    maxExp: '0'
+    multiple: false
+    override: false
+    poolChance: false
+    drops:
+        0:
+            type: 'light_gray_concrete'
+            min: '1'
+            max: '1'
+            chance: '1'
+            normAmount: false
+lime_concrete_powder:
+    interact:
+    - lime_concrete_powder
+    minExp: '0'
+    maxExp: '0'
+    multiple: false
+    override: false
+    poolChance: false
+    drops:
+        0:
+            type: 'lime_concrete'
+            min: '1'
+            max: '1'
+            chance: '1'
+            normAmount: false
+magenta_concrete_powder:
+    interact:
+    - magenta_concrete_powder
+    minExp: '0'
+    maxExp: '0'
+    multiple: false
+    override: false
+    poolChance: false
+    drops:
+        0:
+            type: 'magenta_concrete'
+            min: '1'
+            max: '1'
+            chance: '1'
+            normAmount: false
+orange_concrete_powder:
+    interact:
+    - orange_concrete_powder
+    minExp: '0'
+    maxExp: '0'
+    multiple: false
+    override: false
+    poolChance: false
+    drops:
+        0:
+            type: 'orange_concrete'
+            min: '1'
+            max: '1'
+            chance: '1'
+            normAmount: false
+pink_concrete_powder:
+    interact:
+    - pink_concrete_powder
+    minExp: '0'
+    maxExp: '0'
+    multiple: false
+    override: false
+    poolChance: false
+    drops:
+        0:
+            type: 'pink_concrete'
+            min: '1'
+            max: '1'
+            chance: '1'
+            normAmount: false
+purple_concrete_powder:
+    interact:
+    - purple_concrete_powder
+    minExp: '0'
+    maxExp: '0'
+    multiple: false
+    override: false
+    poolChance: false
+    drops:
+        0:
+            type: 'purple_concrete'
+            min: '1'
+            max: '1'
+            chance: '1'
+            normAmount: false
+red_concrete_powder:
+    interact:
+    - red_concrete_powder
+    minExp: '0'
+    maxExp: '0'
+    multiple: false
+    override: false
+    poolChance: false
+    drops:
+        0:
+            type: 'red_concrete'
+            min: '1'
+            max: '1'
+            chance: '1'
+            normAmount: false
+white_concrete_powder:
+    interact:
+    - white_concrete_powder
+    minExp: '0'
+    maxExp: '0'
+    multiple: false
+    override: false
+    poolChance: false
+    drops:
+        0:
+            type: 'white_concrete'
+            min: '1'
+            max: '1'
+            chance: '1'
+            normAmount: false
+yellow_concrete_powder:
+    interact:
+    - yellow_concrete_powder
+    minExp: '0'
+    maxExp: '0'
+    multiple: false
+    override: false
+    poolChance: false
+    drops:
+        0:
+            type: 'yellow_concrete'
+            min: '1'
+            max: '1'
+            chance: '1'
+            normAmount: false

@@ -1,25 +1,19 @@
 package org.ctp.enchantmentsolution.enums;
 
-import java.util.Arrays;
-import java.util.List;
-
 public enum EnchantmentLocation {
 
-	TABLE(), NON_BOOK(), CHEST_LOOT(), MOB_LOOT(), FISHING_LOOT(), VILLAGER_TRADES(), PIGLIN_TRADES(), DEEP_DARK(), NONE();
+	TABLE(), CHEST_LOOT(), MOB_LOOT(), FISHING_LOOT(), VILLAGER(), END_CITY(), PIGLIN(), DEEP_DARK(), NONE();
 
-	public static List<EnchantmentLocation> getDefaultLocations() {
-		return Arrays.asList(TABLE, NON_BOOK, CHEST_LOOT, MOB_LOOT, FISHING_LOOT, VILLAGER_TRADES);
+	public static EnchantmentLocation[] getDefaultLocations() {
+		return new EnchantmentLocation[] { TABLE, CHEST_LOOT, MOB_LOOT, FISHING_LOOT, VILLAGER, DEEP_DARK, END_CITY, PIGLIN };
 	}
 
-	public static List<EnchantmentLocation> getNoBooksLocations() {
-		return Arrays.asList(TABLE, CHEST_LOOT, MOB_LOOT, FISHING_LOOT, VILLAGER_TRADES);
+	public static EnchantmentLocation[] getCurseLocations() {
+		return new EnchantmentLocation[] { CHEST_LOOT, MOB_LOOT, FISHING_LOOT, VILLAGER, DEEP_DARK, END_CITY, PIGLIN };
 	}
 
-	public static List<EnchantmentLocation> getTreasureLocations() {
-		return Arrays.asList(CHEST_LOOT, NON_BOOK, MOB_LOOT, FISHING_LOOT, VILLAGER_TRADES);
+	public static EnchantmentLocation[] getRareLocations() {
+		return new EnchantmentLocation[] { DEEP_DARK, END_CITY, PIGLIN };
 	}
 
-	public static List<EnchantmentLocation> getNoBooksTreasureLocations() {
-		return Arrays.asList(CHEST_LOOT, MOB_LOOT, FISHING_LOOT, VILLAGER_TRADES);
-	}
 }

@@ -38,6 +38,37 @@ table:
     - 'Select a book to enchant.'
     - 'Select the item again to remove.'
     - 'You may see up to 4 items at a time.'
+    instructions-upgrade: 
+    - 'Click items to put them on the left.'
+    - 'You will see a list of books with the level'
+    - ' and lapis needed to enchant.'
+    - 'Select a book to enchant.'
+    - 'Select the item again to remove.'
+    - 'Adding Nether Stars and Echo Shards'
+    - ' can upgrade the table on next use with'
+    - ' good effects.'
+    - 'You may see up to 4 items at a time.'
+
+    upgrade-mirror: 'Add Upgrades.'
+    upgrade-mirror-lore:
+    - 'Current Echo Shards: %shards%'
+    - 'Next Echo Shards: %next_shards%'
+    - 'Can See Enchantments: %see_enchants%'
+    - 'Will See Enchantments: %will_see_enchants%'
+    
+    disabled-add-upgrade-mirror: 'You must insert an item to upgrade.'
+    add-upgrade-mirror: 'Upgrade Next Usage'
+    add-upgrade-mirror-shards:
+    - 'Each shard will increase enchantability by 1.'
+    add-upgrade-mirror-stars:
+    - 'A Nether Star will allow you to see'
+    - ' all enchantments on an item before'
+    - ' selecting it.'
+    invalid-upgrade-mirror: 'Invalid Upgrade'
+    invalid-upgrade-mirror-lore:
+    - 'You have already upgraded this feature'
+    - ' for next use.'
+    - 'Enchant something to upgrade again.'
 
     generate-enchants-error: 'There was an error generating enchantments.'
     enchant-level: 'Level %level% Enchant.'
@@ -55,7 +86,10 @@ table:
     level-taken-okay: '&aLevels Taken: %levelsTaken%'
     level-taken-lack: '&cLevel Taken: %levelsTaken%'
     item-enchant-name: '%name% Level %level% Enchants'
+    enchantability: '&aEnchantability: %enchantability%'
+    enchantability-upgrade: '&aIncrease enchantability by adding Echo Shards'
     enchant-name: '%enchant%...'
+    enchant-name-known: '%enchant%'
     lack-reqs: 'You do not meet the requirements to enchant this item.'
     lack-enchants: 'This item does not have enchantments generated.'
 commands: 
@@ -507,14 +541,12 @@ enchantment:
             drowned: 'Drown non-water mobs for a short time.'
             exp_share: 'Increase experience earned from killing mobs and breaking blocks.'
             flash: 'Places and updates light blocks.'
-            fling: 'Knocks mobs towards the attacker.'
             flower_gift: 'Has a chance of dropping flowers when right clicking them.'
             force_feed: 'Takes saturation to repair equipped armor and items.'
             frequent_flyer: 'Allows flight with (20% + 16% * level) speed. Damages item every 3 seconds in flight.'
             fried: 'Cooks fish upon catching them.'
             frosty: 'Shoots snowballs out of shovel on left click.'
             gaia: 'Breaks the blocks of trees over time. Replants saplings.'
-            gold_digger: 'Earn experience and gold nuggets for breaking crops.'
             green_thumb: 'Breaking crops will replant them if possible.'
             gung_ho: 'Decreases health to 50% of base value (usually 5 hearts). Melee attacks do 3 times the damage.'
             hard_bounce: 'Projectiles bounce back from the shield.'
@@ -528,7 +560,7 @@ enchantment:
             joggers: 'Gives the player speed.'
             knockup: 'Increases knockback upwards.'
             lancer: 'Riding mobs increases damage against other mobs.'
-            life: 'Increases maximum health by 4 (half hearts) per level when worn.'
+            life: 'Increases maximum health by 5 (half hearts) per level when worn.'
             life_drain: 'Steals the health of an attacked mob.'
             light_weight: 'Prevents crop trampling.'
             magic_guard: 'Negates bad potion effects.'
@@ -543,7 +575,6 @@ enchantment:
             quick_strike: 'Increases attack speed.'
             rare_earth: 'When mining deepslate ore variants, gain a regular ore variant of the block as well.'
             recycler: 'Turns common mob loot into experience.'
-            sacrifice: 'Damage the mob who killed you based upon your experience level.'
             sand_veil: 'Lowers accuracy of entity''s attacks.'
             shock_aspect: 'Has a chance to strike lightning on attacked mobs.'
             smeltery: 'Smelts blocks while mining.'
@@ -551,7 +582,6 @@ enchantment:
             soulbound: 'Keep item on death.'
             soul_reaper: 'Steals one item enchanted with Soulbound per level when killing players.'
             splatter_fest: 'Shoots eggs out of hoe on left click.'
-            sticky_hold: 'Breaking the item will replace it with a stick which can be used to recreate it.'
             stone_throw: 'Increases ranged damage against flying mobs.\nAdds 40% * level + 20% damage against flying mobs.'
             streak: 'Killing the same mob repeatedly will increase damage against that mob.'
             tank: 'Gives additional unbreaking protection to armor.'
@@ -563,7 +593,6 @@ enchantment:
             venom: 'Gives the attacked mob poison.'
             void_walker: 'Allows players to walk on air, turning it into obsidian.'
             wand: 'Places blocks from the offhand.'
-            warp: 'Gives a chance of teleporting a small distance away on hit.'
             water_breathing: 'Gives the player water breathing.'
             whipped: 'Chance to tame or severely damage tameable animals.'
             width_plus_plus: 'Increase left/right break radius by 1 per level.'
@@ -641,14 +670,12 @@ enchantment:
             drowned: 'Drowned'
             exp_share: 'Exp. Share'
             flash: 'Flash'
-            fling: 'Fling'
             flower_gift: 'Flower Gift'
             force_feed: 'Force Feed'
             frequent_flyer: 'Frequent Flyer'
             fried: 'Fried'
             frosty: 'Frosty'
             gaia: 'Gaia'
-            gold_digger: 'Gold Digger'
             green_thumb: 'Green Thumb'
             gung_ho: 'Gung-Ho'
             hard_bounce: 'Hard Bounce'
@@ -677,7 +704,6 @@ enchantment:
             quick_strike: 'Quick Strike'
             rare_earth: 'Rare Earth'
             recycler: 'Recycler'
-            sacrifice: 'Sacrifice'
             sand_veil: 'Sand Veil'
             shock_aspect: 'Shock Aspect'
             smeltery: 'Smeltery'
@@ -685,7 +711,6 @@ enchantment:
             soulbound: 'Soulbound'
             soul_reaper: 'Soul Reaper'
             splatter_fest: 'Splatter Fest'
-            sticky_hold: 'Sticky Hold'
             stone_throw: 'Stone Throw'
             streak: 'Streak'
             tank: 'Tank'
@@ -696,7 +721,6 @@ enchantment:
             unrest: 'Unrest'
             venom: 'Venom'
             void_walker: 'Void Walker'
-            wand: 'Wand'
             warp: 'Warp'
             water_breathing: 'Water Breathing'
             whipped: 'Whipped'
@@ -868,15 +892,9 @@ advancements:
     enchantments/nemo_enim_coquit: 
         name: 'Nemo Enim Coquit'
         description: 'Catch a tropical fish with Fried'
-    enchantments/breaker_breaker: 
-        name: 'Breaker, Breaker'
-        description: 'Place blocks over a torch using Wand'
     enchantments/thorgy: 
         name: 'Thorgy!'
         description: 'Put a tamed wolf into your Irene''s Lasso'
-    enchantments/did_you_really_wand_to_do_that: 
-        name: 'Did You Really Wand To Do That?'
-        description: 'Break a Carrot on a Stick with the Wand enchantment'
     enchantments/free_pets: 
         name: 'Free Pets'
         description: 'Grab every tameable animal in Irene''s Lasso'
@@ -928,9 +946,6 @@ advancements:
     enchantments/bonemeal_plus: 
         name: 'Bonemeal Plus'
         description: 'Use Flower Gift on a two-high flower'
-    enchantments/fourty_niners: 
-        name: '49ers'
-        description: 'Get 81 nuggets from using Gold Digger'
     enchantments/chicken_or_the_egg: 
         name: 'Chicken or the Egg?'
         description: 'Hit a chicken with an egg using Splatter Fest'
@@ -988,9 +1003,6 @@ advancements:
     enchantments/i_aint_afraid_of_no_ghosts: 
         name: 'I Ain''t Afraid of No Ghosts'
         description: 'Sleep 10 times while wearing an Unrest helmet'
-    enchantments/im_you_but_shorter: 
-        name: 'I''m You, But Shorter'
-        description: 'Teleport away from an enderman using Warp'
     enchantments/panzer_soldier: 
         name: 'Panzer Soldier'
         description: 'Wear 4 pieces of armor with the highest level of Tank'
@@ -1012,9 +1024,6 @@ advancements:
     enchantments/danger_defeated: 
         name: 'Danger Defeated'
         description: 'Kill a Wither using Gung Ho'
-    enchantments/divine_retribution: 
-        name: 'Divine Retribution'
-        description: 'Kill a player from the dead using a Sacrifice chestplate'
     enchantments/look_what_you_made_me_do: 
         name: 'Look What You Made Me Do'
         description: 'Kill a Pillager using a Pillage crossbow'
@@ -1072,12 +1081,6 @@ advancements:
     enchantments/environmental_protection:
         name: 'Environmental Protection'
         description: 'Earn 1000 experience with Recycler'
-    enchantments/simple_repair:
-        name: 'Simple Repair'
-        description: 'Turn a stick back into an item'
-    enchantments/sticky_bees:
-        name: 'Sticky Bees'
-        description: 'Break 8 items into sticks'
     enchantments/knockback_reversed:
         name: 'Knockback Reversed'
         description: 'Knockback an enemy with Pushback'
@@ -1162,9 +1165,6 @@ advancements:
     enchantments/animal_tamer:
         name: 'Animal Tamer'
         description: 'Tame an animal with Whipped'
-    enchantments/flying_bacon:
-        name: 'Flying Bacon'
-        description: 'Throw a pig saddled with a player using Fling'
     enchantments/sparkling_fortune:
         name: 'Sparkling Fortune'
         description: 'Receive extra diamond ore with Rare Earth'
@@ -1174,9 +1174,6 @@ advancements:
     enchantments/silver_horde:
         name: 'Silver Horde'
         description: 'Create a small army of silverfish with Curse of Infestation'
-    enchantments/yeet:
-        name: 'YEET!'
-        description: 'Throw a player to their death with Fling'
     enchantments/poseidons_bane:
         name: 'Poseidon''s Bane'
         description: 'Kill a drowned or guardian with Javelin'

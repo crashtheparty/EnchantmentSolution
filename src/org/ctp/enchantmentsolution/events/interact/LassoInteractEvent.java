@@ -6,21 +6,21 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.enchantments.CERegister;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
-import org.ctp.enchantmentsolution.utils.abilityhelpers.AnimalMob;
+import org.ctp.enchantmentsolution.utils.abilityhelpers.LassoMob;
 
 public class LassoInteractEvent extends InteractEvent {
 
-	private final AnimalMob animal;
+	private final LassoMob lasso;
 	private BlockFace face;
 
-	public LassoInteractEvent(Player who, int level, ItemStack item, Block block, BlockFace face, AnimalMob animal) {
+	public LassoInteractEvent(Player who, int level, ItemStack item, Block block, BlockFace face, LassoMob lasso) {
 		super(who, new EnchantmentLevel(CERegister.IRENES_LASSO, level), item, block);
-		this.animal = animal;
+		this.lasso = lasso;
 		setFace(face);
 	}
 
-	public AnimalMob getAnimal() {
-		return animal;
+	public LassoMob getLassoMob() {
+		return lasso;
 	}
 
 	public BlockFace getFace() {

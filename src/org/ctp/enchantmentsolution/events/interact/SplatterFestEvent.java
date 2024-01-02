@@ -28,9 +28,8 @@ public class SplatterFestEvent extends ProjectileSpawnEvent {
 		return hasEgg;
 	}
 
-	@Override
 	public boolean willCancel() {
-		return !hasEgg && takeEgg || super.willCancel();
+		return !hasEgg && takeEgg;
 	}
 
 }

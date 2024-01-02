@@ -14,7 +14,6 @@ import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantmentWrapper;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
-import org.ctp.enchantmentsolution.utils.config.ConfigUtils;
 
 public class PermissionUtils {
 
@@ -103,7 +102,7 @@ public class PermissionUtils {
 	}
 
 	private static boolean usePermissions() {
-		return ConfigUtils.getAdvancedBoolean(ConfigString.USE_PERMISSIONS, false);
+		return ConfigString.USE_PERMISSIONS.getBoolean();
 	}
 
 	public static boolean check(Player player, String... permissions) {

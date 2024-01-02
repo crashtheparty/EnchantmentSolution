@@ -13,6 +13,7 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.MetadataValue;
+import org.bukkit.projectiles.ProjectileSource;
 import org.ctp.crashapi.entity.MobData;
 import org.ctp.crashapi.utils.LocationUtils;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
@@ -108,42 +109,19 @@ public class AdvancementEntityListener implements Listener {
 		}
 	}
 
-	@EventHandler(priority = EventPriority.MONITOR)
-	public void onEntityDamage(EntityDamageEvent event) {
-		Entity entity = event.getEntity();
-		if (entity instanceof LivingEntity && entity.getLastDamageCause() instanceof EntityDamageByEntityEvent) {
-			LivingEntity damaged = (LivingEntity) entity;
-			EntityDamageByEntityEvent damageEntityEvent = (EntityDamageByEntityEvent) entity.getLastDamageCause();
-			Entity damager = damageEntityEvent.getDamager();
-			if (damager instanceof Player) {
-				Player human = (Player) damager;
-				ItemStack item = human.getInventory().getItemInMainHand();
-				if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.FLING) && damaged.getType() == EntityType.PLAYER) Bukkit.getScheduler().runTaskLater(EnchantmentSolution.getPlugin(), () -> {
-					if (damaged.isDead()) AdvancementUtils.awardCriteria(human, ESAdvancement.YEET, "player");
-				}, 0l);
-				if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.FLING) && damaged.getType() == EntityType.PIG) {
-					boolean passengerPlayer = false;
-					for(Entity p: damaged.getPassengers())
-						if (p.getType() == EntityType.PLAYER) passengerPlayer = true;
-					if (passengerPlayer) Bukkit.getScheduler().runTaskLater(EnchantmentSolution.getPlugin(), () -> {
-						if (damaged.isDead()) AdvancementUtils.awardCriteria(human, ESAdvancement.FLYING_BACON, "pig");
-					}, 0l);
-				}
-			}
-		}
-	}
-
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
 		Entity damager = event.getDamager();
 		if (damager instanceof Projectile) {
 			Projectile p = (Projectile) damager;
-			if (p instanceof Snowball) {
-				Snowball snowball = (Snowball) p;
-				if (snowball.getMetadata("frosty") != null && snowball.getMetadata("frosty").size() > 0 && event.getEntityType() == EntityType.SNOWMAN) {
-					Player player = Bukkit.getPlayer(UUID.fromString(snowball.getMetadata("frosty").get(0).asString()));
-					if (player != null) AdvancementUtils.awardCriteria(player, ESAdvancement.THE_SNOWMAN, "snowball");
-				}
+			ProjectileSource shooter = p.getShooter();
+			if (shooter instanceof Player) {
+				Player player = (Player) shooter;
+				ItemStack item = player.getInventory().getItemInMainHand();
+				if (p instanceof Snowball && EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.FROSTY) && event.getEntityType() == EntityType.SNOWMAN) AdvancementUtils.awardCriteria(player, ESAdvancement.THE_SNOWMAN, "snowball");
+				else if (p instanceof Egg && EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.SPLATTER_FEST)) if (damager == event.getEntity()) AdvancementUtils.awardCriteria(player, ESAdvancement.EGGED_BY_MYSELF, "egg");
+				else if (event.getEntity().getType() == EntityType.CHICKEN) AdvancementUtils.awardCriteria(player, ESAdvancement.CHICKEN_OR_THE_EGG, "egg");
+				else {/* placeholder */}
 			}
 		}
 	}

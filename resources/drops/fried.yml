@@ -1,0 +1,30 @@
+salmon:
+    interact:
+    - salmon
+    minExp: '0'
+    maxExp: '0'
+    multiple: false
+    override: true
+    poolChance: false
+    drops:
+        0:
+            type: 'cooked_salmon'
+            min: '1'
+            max: '1'
+            chance: '1'
+            normAmount: true
+cod:
+    interact:
+    - cod
+    minExp: '0'
+    maxExp: '0'
+    multiple: false
+    override: true
+    poolChance: false
+    drops:
+        0:
+            type: 'cooked_cod'
+            min: '1'
+            max: '1'
+            chance: '1'
+            normAmount: true

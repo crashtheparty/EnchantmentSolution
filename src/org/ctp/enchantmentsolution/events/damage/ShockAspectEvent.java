@@ -4,16 +4,15 @@ import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
 import org.ctp.enchantmentsolution.enchantments.CERegister;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
-import org.ctp.enchantmentsolution.events.entity.ESEntityDamageEntityEvent;
+import org.ctp.enchantmentsolution.events.ESEntityEvent;
 
-public class ShockAspectEvent extends ESEntityDamageEntityEvent {
+public class ShockAspectEvent extends ESEntityEvent {
 
 	private double chance;
 	private Location location;
 
-	public ShockAspectEvent(LivingEntity damaged, int level, LivingEntity damager, double damage, double newDamage,
-	double chance, Location location) {
-		super(damaged, new EnchantmentLevel(CERegister.SHOCK_ASPECT, level), damager, damage, newDamage);
+	public ShockAspectEvent(LivingEntity entity, int level, double chance, Location location) {
+		super(entity, new EnchantmentLevel(CERegister.SHOCK_ASPECT, level));
 		setChance(chance);
 		setLocation(location);
 	}

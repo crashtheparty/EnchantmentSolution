@@ -61,7 +61,7 @@ public class RPGConfiguration extends Configuration {
 		YamlConfigBackup config = getConfig();
 		@SuppressWarnings("unchecked")
 		List<String> levels = (List<String>) config.getDefaults("free_enchantments");
-		for(CustomEnchantment enchant: RegisterEnchantments.getEnchantments())
+		for(CustomEnchantment enchant: RegisterEnchantments.getRegisteredEnchantments())
 			if (enchant.getRelativeEnchantment() instanceof ApiEnchantmentWrapper) if (plugin.equals(((ApiEnchantmentWrapper) enchant.getRelativeEnchantment()).getPlugin())) {
 				String namespace = "enchantments." + plugin.getName().toLowerCase(Locale.ROOT) + "." + enchant.getName().toLowerCase(Locale.ROOT);
 				if (enchant instanceof ApiEnchantment) {

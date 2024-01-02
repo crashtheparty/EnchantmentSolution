@@ -1,9 +1,8 @@
 package org.ctp.enchantmentsolution.events.drops;
 
-import java.util.List;
+import java.util.Collection;
 
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.enchantments.CERegister;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
@@ -13,9 +12,9 @@ public class BeheadingEvent extends OverrideDropsEvent {
 	private boolean keepInventoryOverride;
 	private final LivingEntity skullOwner;
 
-	public BeheadingEvent(Player who, LivingEntity skullOwner, int level, List<ItemStack> newDrops, List<ItemStack> originalDrops,
-	boolean override, boolean keepInventoryOverride) {
-		super(who, new EnchantmentLevel(CERegister.BEHEADING, level), newDrops, originalDrops, override);
+	public BeheadingEvent(LivingEntity who, LivingEntity skullOwner, int level, Collection<ItemStack> collection, Collection<ItemStack> drops,
+	boolean keepInventoryOverride) {
+		super(who, new EnchantmentLevel(CERegister.BEHEADING, level), collection, drops);
 		setKeepInventoryOverride(keepInventoryOverride);
 		this.skullOwner = skullOwner;
 	}

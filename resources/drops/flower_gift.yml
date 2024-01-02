@@ -1,0 +1,270 @@
+dandelion:
+    interact:
+    - dandelion
+    minExp: '0'
+    maxExp: '0'
+    multiple: false
+    override: false
+    poolChance: false
+    drops:
+        0:
+            type: 'dandelion'
+            min: '1'
+            max: '1'
+            chance: '.5'
+            normAmount: false
+poppy:
+    interact:
+    - poppy
+    minExp: '0'
+    maxExp: '0'
+    multiple: false
+    override: false
+    poolChance: false
+    drops:
+        0:
+            type: 'poppy'
+            min: '1'
+            max: '1'
+            chance: '.5'
+            normAmount: false
+blue_orchid:
+    interact:
+    - blue_orchid
+    minExp: '0'
+    maxExp: '0'
+    multiple: false
+    override: false
+    poolChance: false
+    drops:
+        0:
+            type: 'blue_orchid'
+            min: '1'
+            max: '1'
+            chance: '.5'
+            normAmount: false
+allium:
+    interact:
+    - allium
+    minExp: '0'
+    maxExp: '0'
+    multiple: false
+    override: false
+    poolChance: false
+    drops:
+        0:
+            type: 'allium'
+            min: '1'
+            max: '1'
+            chance: '.5'
+            normAmount: false
+azure_bluet:
+    interact:
+    - azure_bluet
+    minExp: '0'
+    maxExp: '0'
+    multiple: false
+    override: false
+    poolChance: false
+    drops:
+        0:
+            type: 'azure_bluet'
+            min: '1'
+            max: '1'
+            chance: '.5'
+            normAmount: false
+red_tulip:
+    interact:
+    - red_tulip
+    minExp: '0'
+    maxExp: '0'
+    multiple: false
+    override: false
+    poolChance: false
+    drops:
+        0:
+            type: 'red_tulip'
+            min: '1'
+            max: '1'
+            chance: '.5'
+            normAmount: false
+orange_tulip:
+    interact:
+    - orange_tulip
+    minExp: '0'
+    maxExp: '0'
+    multiple: false
+    override: false
+    poolChance: false
+    drops:
+        0:
+            type: 'orange_tulip'
+            min: '1'
+            max: '1'
+            chance: '.5'
+            normAmount: false
+white_tulip:
+    interact:
+    - white_tulip
+    minExp: '0'
+    maxExp: '0'
+    multiple: false
+    override: false
+    poolChance: false
+    drops:
+        0:
+            type: 'white_tulip'
+            min: '1'
+            max: '1'
+            chance: '.5'
+            normAmount: false
+pink_tulip:
+    interact:
+    - pink_tulip
+    minExp: '0'
+    maxExp: '0'
+    multiple: false
+    override: false
+    poolChance: false
+    drops:
+        0:
+            type: 'pink_tulip'
+            min: '1'
+            max: '1'
+            chance: '.5'
+            normAmount: false
+oxeye_daisy:
+    interact:
+    - oxeye_daisy
+    minExp: '0'
+    maxExp: '0'
+    multiple: false
+    override: false
+    poolChance: false
+    drops:
+        0:
+            type: 'oxeye_daisy'
+            min: '1'
+            max: '1'
+            chance: '.5'
+            normAmount: false
+lilac:
+    interact:
+    - lilac
+    minExp: '0'
+    maxExp: '0'
+    multiple: false
+    override: false
+    poolChance: false
+    drops:
+        0:
+            type: 'lilac'
+            min: '1'
+            max: '1'
+            chance: '1'
+            normAmount: false
+rose_bush:
+    interact:
+    - rose_bush
+    minExp: '0'
+    maxExp: '0'
+    multiple: false
+    override: false
+    poolChance: false
+    drops:
+        0:
+            type: 'rose_bush'
+            min: '1'
+            max: '1'
+            chance: '1'
+            normAmount: false
+peony:
+    interact:
+    - peony
+    minExp: '0'
+    maxExp: '0'
+    multiple: false
+    override: false
+    poolChance: false
+    drops:
+        0:
+            type: 'peony'
+            min: '1'
+            max: '1'
+            chance: '1'
+            normAmount: false
+sunflower:
+    interact:
+    - sunflower
+    minExp: '0'
+    maxExp: '0'
+    multiple: false
+    override: false
+    poolChance: false
+    drops:
+        0:
+            type: 'sunflower'
+            min: '1'
+            max: '1'
+            chance: '1'
+            normAmount: false
+cornflower:
+    interact:
+    - cornflower
+    minExp: '0'
+    maxExp: '0'
+    multiple: false
+    override: false
+    poolChance: false
+    drops:
+        0:
+            type: 'cornflower'
+            min: '1'
+            max: '1'
+            chance: '.5'
+            normAmount: false
+lily_of_the_valley:
+    interact:
+    - lily_of_the_valley
+    minExp: '0'
+    maxExp: '0'
+    multiple: false
+    override: false
+    poolChance: false
+    drops:
+        0:
+            type: 'lily_of_the_valley'
+            min: '1'
+            max: '1'
+            chance: '.5'
+            normAmount: false
+wither_rose:
+    interact:
+    - wither_rose
+    minExp: '0'
+    maxExp: '0'
+    multiple: false
+    override: false
+    poolChance: false
+    drops:
+        0:
+            type: 'wither_rose'
+            min: '1'
+            max: '1'
+            chance: '.01'
+            normAmount: false
+torchflower:
+    interact:
+    - torchflower
+    minExp: '0'
+    maxExp: '0'
+    multiple: false
+    override: false
+    poolChance: false
+    drops:
+        0:
+            type: 'torchflower'
+            min: '1'
+            max: '1'
+            chance: '.01'
+            normAmount: false

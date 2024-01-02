@@ -3,7 +3,6 @@ package org.ctp.enchantmentsolution.listeners.vanilla;
 import java.util.HashMap;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -15,9 +14,9 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.GrindstoneInventory;
 import org.bukkit.inventory.ItemStack;
 import org.ctp.crashapi.item.MatData;
+import org.ctp.crashapi.nms.ExpNMS;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.generate.GrindstoneEnchantments;
-import org.ctp.enchantmentsolution.utils.items.AbilityUtils;
 
 public class GrindstoneListener implements Listener {
 
@@ -59,14 +58,14 @@ public class GrindstoneListener implements Listener {
 				inv.getLocation().getWorld().playSound(inv.getLocation(), Sound.BLOCK_GRINDSTONE_USE, 1, 1);
 				player.setItemOnCursor(ench.getCombinedItem());
 				inv.setContents(new ItemStack[3]);
-				AbilityUtils.dropExperience(inv.getLocation().clone().add(new Location(inv.getLocation().getWorld(), 0.5, 0.5, 0.5)), ench.getExperience());
+				ExpNMS.dropExp(inv.getLocation(), ench.getExperience(), true, player);
 				break;
 			case SHIFT_LEFT:
 				inv.getLocation().getWorld().playSound(inv.getLocation(), Sound.BLOCK_GRINDSTONE_USE, 1, 1);
 				HashMap<Integer, ItemStack> items = player.getInventory().addItem(ench.getCombinedItem());
 				if (!items.isEmpty()) return;
 				inv.setContents(new ItemStack[3]);
-				AbilityUtils.dropExperience(inv.getLocation().clone().add(new Location(inv.getLocation().getWorld(), 0.5, 0.5, 0.5)), ench.getExperience());
+				ExpNMS.dropExp(inv.getLocation(), ench.getExperience(), true, player);
 				break;
 			default:
 				break;

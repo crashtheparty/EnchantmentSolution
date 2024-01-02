@@ -15,7 +15,7 @@ public class EnchantsFishingListener implements Listener {
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onPlayerFishMonitor(PlayerFishEvent event) {
-		if (!ConfigString.USE_LOOT.getBoolean("fishing.use")) return;
+		if (!ConfigString.USE_FISHING_LOOT.getBoolean()) return;
 		switch (event.getState()) {
 			case CAUGHT_FISH:
 				handleFishing((Item) event.getCaught(), event.getPlayer());
@@ -27,7 +27,7 @@ public class EnchantsFishingListener implements Listener {
 
 	private void handleFishing(Item item, Player player) {
 		ItemStack itemStack = item.getItemStack().clone();
-		if (EnchantmentUtils.isEnchantable(itemStack) && itemStack.hasItemMeta() && itemStack.getItemMeta().hasEnchants()) itemStack = GenerateUtils.generateFishingLoot(player, itemStack, ConfigString.LOOT_BOOKSHELVES.getInt("fishing.bookshelves"));
+		if (EnchantmentUtils.isEnchantable(itemStack) && itemStack.hasItemMeta() && itemStack.getItemMeta().hasEnchants()) itemStack = GenerateUtils.generateFishingLoot(player, itemStack);
 
 		item.setItemStack(itemStack);
 	}

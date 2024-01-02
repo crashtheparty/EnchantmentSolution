@@ -3,6 +3,7 @@ package org.ctp.enchantmentsolution.interfaces.walker;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventPriority;
 import org.ctp.crashapi.utils.LocationUtils;
 import org.ctp.enchantmentsolution.enchantments.EnchantmentWrapper;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
@@ -44,6 +45,11 @@ public class VoidWalker implements WalkerInterface {
 	public Location getProperLocation(Player player, Location from, Location to) {
 		if (LocationUtils.isLocationDifferent(from, to, true)) return to;
 		return player.getLocation();
+	}
+
+	@Override
+	public EventPriority getPriority() {
+		return EventPriority.NORMAL;
 	}
 
 }

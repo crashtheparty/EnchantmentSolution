@@ -1,6 +1,7 @@
 package org.ctp.enchantmentsolution.inventory;
 
 import java.util.*;
+import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -10,6 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.ctp.crashapi.config.Configuration;
 import org.ctp.crashapi.config.yaml.YamlChild;
 import org.ctp.crashapi.config.yaml.YamlConfigBackup;
 import org.ctp.crashapi.inventory.InventoryData;
@@ -17,9 +19,14 @@ import org.ctp.crashapi.inventory.Pageable;
 import org.ctp.crashapi.utils.ChatUtils;
 import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
+import org.ctp.enchantmentsolution.api.ApiEnchantmentWrapper;
+import org.ctp.enchantmentsolution.enchantments.*;
+import org.ctp.enchantmentsolution.enchantments.config.ConfigEnchantmentWrapper;
 import org.ctp.enchantmentsolution.nms.Anvil_GUI_NMS;
 import org.ctp.enchantmentsolution.utils.Configurations;
 import org.ctp.enchantmentsolution.utils.DBUtils;
+import org.ctp.enchantmentsolution.utils.config.EnchantmentConfiguration;
+import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
 
 public class ConfigInventory implements InventoryData, Pageable {
 
@@ -36,6 +43,7 @@ public class ConfigInventory implements InventoryData, Pageable {
 	private boolean chat = false;
 	private boolean opening;
 	private Configurations configurations;
+	private EnchantmentType enchantmentType;
 
 	public ConfigInventory(Player player) {
 		this.player = player;
@@ -46,14 +54,13 @@ public class ConfigInventory implements InventoryData, Pageable {
 	}
 
 	private void change() {
-		isChanged.putAll(DBUtils.getDifferent(configurations.getConfig()));
-		isChanged.putAll(DBUtils.getDifferent(configurations.getFishing()));
-		isChanged.putAll(DBUtils.getDifferent(configurations.getLanguage()));
-		isChanged.putAll(DBUtils.getDifferent(configurations.getEnchantments()));
-		isChanged.putAll(DBUtils.getDifferent(configurations.getAdvancements()));
-		isChanged.putAll(DBUtils.getDifferent(configurations.getRPG()));
-		isChanged.putAll(DBUtils.getDifferent(configurations.getHardMode()));
-		isChanged.putAll(DBUtils.getDifferent(configurations.getMinigames()));
+		for(Configuration c: Configurations.getConfigurations().getMainConfigurations())
+			isChanged.putAll(DBUtils.getDifferent(c));
+		Iterator<Entry<CustomEnchantment, EnchantmentConfiguration>> iter = Configurations.getConfigurations().getEnchantmentConfigurations().entrySet().iterator();
+		while (iter.hasNext()) {
+			Entry<CustomEnchantment, EnchantmentConfiguration> entry = iter.next();
+			isChanged.putAll(DBUtils.getDifferent(entry.getValue()));
+		}
 
 		HAS_CHANGED = isChanged.containsValue(true);
 	}
@@ -99,56 +106,92 @@ public class ConfigInventory implements InventoryData, Pageable {
 	public void listFiles() {
 		screen = Screen.LIST_FILES;
 
-		Inventory inv = Bukkit.createInventory(null, 27, "List Files");
+		Inventory inv = Bukkit.createInventory(null, 54, "List Files");
 		inv = open(inv);
 
 		ItemStack configFile = new ItemStack(Material.COMMAND_BLOCK);
 		ItemMeta configFileMeta = configFile.getItemMeta();
 		configFileMeta.setDisplayName(ChatColor.GOLD + configurations.getConfig().getConfig().getFileName());
 		configFile.setItemMeta(configFileMeta);
-		inv.setItem(2, configFile);
+		inv.setItem(1, configFile);
 
-		ItemStack fishingFile = new ItemStack(Material.FISHING_ROD);
-		ItemMeta fishingFileMeta = fishingFile.getItemMeta();
-		fishingFileMeta.setDisplayName(ChatColor.GOLD + configurations.getFishing().getConfig().getFileName());
-		fishingFile.setItemMeta(fishingFileMeta);
-		inv.setItem(3, fishingFile);
+		ItemStack enchantingTableFile = new ItemStack(Material.ENCHANTING_TABLE);
+		ItemMeta enchantingTableFileMeta = enchantingTableFile.getItemMeta();
+		enchantingTableFileMeta.setDisplayName(ChatColor.GOLD + configurations.getEnchantingTable().getConfig().getFileName());
+		enchantingTableFile.setItemMeta(enchantingTableFileMeta);
+		inv.setItem(2, enchantingTableFile);
 
-		ItemStack advancementsFile = new ItemStack(Material.KNOWLEDGE_BOOK);
-		ItemMeta advancementsFileMeta = advancementsFile.getItemMeta();
-		advancementsFileMeta.setDisplayName(ChatColor.GOLD + configurations.getAdvancements().getConfig().getFileName());
-		advancementsFile.setItemMeta(advancementsFileMeta);
-		inv.setItem(4, advancementsFile);
+		ItemStack anvilFile = new ItemStack(Material.ANVIL);
+		ItemMeta anvilFileMeta = anvilFile.getItemMeta();
+		anvilFileMeta.setDisplayName(ChatColor.GOLD + configurations.getAnvil().getConfig().getFileName());
+		anvilFile.setItemMeta(anvilFileMeta);
+		inv.setItem(3, anvilFile);
+
+		ItemStack grindstoneFile = new ItemStack(Material.GRINDSTONE);
+		ItemMeta grindstoneFileMeta = grindstoneFile.getItemMeta();
+		grindstoneFileMeta.setDisplayName(ChatColor.GOLD + configurations.getGrindstone().getConfig().getFileName());
+		grindstoneFile.setItemMeta(grindstoneFileMeta);
+		inv.setItem(4, grindstoneFile);
+
+		ItemStack enchantmentFile = new ItemStack(Material.ENCHANTED_GOLDEN_APPLE);
+		ItemMeta enchantmentFileMeta = enchantmentFile.getItemMeta();
+		enchantmentFileMeta.setDisplayName(ChatColor.GOLD + configurations.getEnchantments().getConfig().getFileName());
+		enchantmentFile.setItemMeta(enchantmentFileMeta);
+		inv.setItem(5, enchantmentFile);
 
 		ItemStack languageFile = new ItemStack(Material.BOOK);
 		ItemMeta languageFileMeta = languageFile.getItemMeta();
 		languageFileMeta.setDisplayName(ChatColor.GOLD + configurations.getLanguage().getConfig().getFileName());
 		languageFile.setItemMeta(languageFileMeta);
-		inv.setItem(5, languageFile);
+		inv.setItem(6, languageFile);
 
-		ItemStack enchantmentFile = new ItemStack(Material.GOLDEN_APPLE);
-		ItemMeta enchantmentFileMeta = enchantmentFile.getItemMeta();
-		enchantmentFileMeta.setDisplayName(ChatColor.GOLD + configurations.getEnchantments().getConfig().getFileName());
-		enchantmentFile.setItemMeta(enchantmentFileMeta);
-		inv.setItem(6, enchantmentFile);
+		ItemStack advancementsFile = new ItemStack(Material.KNOWLEDGE_BOOK);
+		ItemMeta advancementsFileMeta = advancementsFile.getItemMeta();
+		advancementsFileMeta.setDisplayName(ChatColor.GOLD + configurations.getAdvancements().getConfig().getFileName());
+		advancementsFile.setItemMeta(advancementsFileMeta);
+		inv.setItem(7, advancementsFile);
 
-		ItemStack minigamesFile = new ItemStack(Material.GOLDEN_SHOVEL);
-		ItemMeta minigamesFileMeta = minigamesFile.getItemMeta();
-		minigamesFileMeta.setDisplayName(ChatColor.GOLD + configurations.getMinigames().getConfig().getFileName());
-		minigamesFile.setItemMeta(minigamesFileMeta);
-		inv.setItem(12, minigamesFile);
+		ItemStack enchantments = new ItemStack(Material.ENCHANTED_BOOK);
+		ItemMeta enchantmentsMeta = enchantments.getItemMeta();
+		enchantmentsMeta.setDisplayName(ChatColor.GOLD + "Enchantments Files");
+		enchantments.setItemMeta(enchantmentsMeta);
+		inv.setItem(31, enchantments);
 
 		ItemStack rpgFile = new ItemStack(Material.GOLDEN_APPLE);
 		ItemMeta rpgFileMeta = rpgFile.getItemMeta();
 		rpgFileMeta.setDisplayName(ChatColor.GOLD + configurations.getRPG().getConfig().getFileName());
 		rpgFile.setItemMeta(rpgFileMeta);
-		inv.setItem(13, rpgFile);
+		inv.setItem(19, rpgFile);
+
+		ItemStack minigamesFile = new ItemStack(Material.GOLDEN_SHOVEL);
+		ItemMeta minigamesFileMeta = minigamesFile.getItemMeta();
+		minigamesFileMeta.setDisplayName(ChatColor.GOLD + configurations.getMinigames().getConfig().getFileName());
+		minigamesFile.setItemMeta(minigamesFileMeta);
+		inv.setItem(20, minigamesFile);
 
 		ItemStack hardModeFile = new ItemStack(Material.SPAWNER);
 		ItemMeta hardModeFileMeta = hardModeFile.getItemMeta();
 		hardModeFileMeta.setDisplayName(ChatColor.GOLD + configurations.getHardMode().getConfig().getFileName());
 		hardModeFile.setItemMeta(hardModeFileMeta);
-		inv.setItem(14, hardModeFile);
+		inv.setItem(21, hardModeFile);
+
+		ItemStack fishingFile = new ItemStack(Material.FISHING_ROD);
+		ItemMeta fishingFileMeta = fishingFile.getItemMeta();
+		fishingFileMeta.setDisplayName(ChatColor.GOLD + configurations.getFishing().getConfig().getFileName());
+		fishingFile.setItemMeta(fishingFileMeta);
+		inv.setItem(23, fishingFile);
+
+		ItemStack lootsFile = new ItemStack(Material.CHEST);
+		ItemMeta lootsFileMeta = lootsFile.getItemMeta();
+		lootsFileMeta.setDisplayName(ChatColor.GOLD + configurations.getLoots().getConfig().getFileName());
+		lootsFile.setItemMeta(lootsFileMeta);
+		inv.setItem(24, lootsFile);
+
+		ItemStack lootTypesFile = new ItemStack(Material.PAPER);
+		ItemMeta lootTypesFileMeta = lootTypesFile.getItemMeta();
+		lootTypesFileMeta.setDisplayName(ChatColor.GOLD + configurations.getLootTypes().getConfig().getFileName());
+		lootTypesFile.setItemMeta(lootTypesFileMeta);
+		inv.setItem(25, lootTypesFile);
 
 		ItemStack save = null;
 		ItemStack revert = null;
@@ -164,12 +207,102 @@ public class ConfigInventory implements InventoryData, Pageable {
 		ItemMeta saveMeta = save.getItemMeta();
 		saveMeta.setDisplayName(ChatColor.GOLD + "Save Changes");
 		save.setItemMeta(saveMeta);
-		inv.setItem(21, save);
+		inv.setItem(48, save);
 
 		ItemMeta revertMeta = revert.getItemMeta();
 		revertMeta.setDisplayName(ChatColor.GOLD + "Revert Changes");
 		revert.setItemMeta(revertMeta);
-		inv.setItem(23, revert);
+		inv.setItem(50, revert);
+	}
+
+	public void listEnchantments() {
+		enchantmentType = null;
+		screen = Screen.ENCHANTMENT_TYPES;
+
+		Inventory inv = Bukkit.createInventory(null, 18, "List Enchantment Types");
+		inv = open(inv);
+
+		ItemStack vanilla = new ItemStack(Material.PAPER);
+		ItemMeta vanillaMeta = vanilla.getItemMeta();
+		vanillaMeta.setDisplayName(ChatColor.GOLD + "Vanilla Enchantments");
+		vanilla.setItemMeta(vanillaMeta);
+		inv.setItem(2, vanilla);
+
+		ItemStack enchantmentSolution = new ItemStack(Material.PAPER);
+		ItemMeta enchantmentSolutionMeta = enchantmentSolution.getItemMeta();
+		enchantmentSolutionMeta.setDisplayName(ChatColor.GOLD + "Enchantment Solution Enchantments");
+		enchantmentSolution.setItemMeta(enchantmentSolutionMeta);
+		inv.setItem(3, enchantmentSolution);
+
+		ItemStack external = new ItemStack(Material.PAPER);
+		ItemMeta externalMeta = external.getItemMeta();
+		externalMeta.setDisplayName(ChatColor.GOLD + "External API Enchantments");
+		external.setItemMeta(externalMeta);
+		inv.setItem(5, external);
+
+		ItemStack custom = new ItemStack(Material.PAPER);
+		ItemMeta customMeta = custom.getItemMeta();
+		customMeta.setDisplayName(ChatColor.GOLD + "Internal API Enchantments");
+		custom.setItemMeta(customMeta);
+		inv.setItem(6, custom);
+
+		inv.setItem(9, goBack());
+	}
+
+	public void listEnchantments(EnchantmentType type) {
+		listEnchantments(type, 1);
+	}
+
+	public void listEnchantments(EnchantmentType type, int page) {
+		setPage(page);
+		screen = Screen.ENCHANTMENTS;
+		enchantmentType = type;
+
+		Inventory inv = Bukkit.createInventory(null, 54, "List Enchantments");
+		inv = open(inv);
+
+		List<CustomEnchantment> allEnchantments = RegisterEnchantments.getRegisteredEnchantmentsAlphabetical();
+		List<CustomEnchantment> enchantments = new ArrayList<CustomEnchantment>();
+
+		for(CustomEnchantment enchant: allEnchantments)
+			switch (type) {
+				case CUSTOM:
+					if (enchant.getRelativeEnchantment() instanceof ConfigEnchantmentWrapper) enchantments.add(enchant);
+					break;
+				case ENCHANTMENT_SOLUTION:
+					if (enchant.getRelativeEnchantment() instanceof CustomEnchantmentWrapper && !(enchant.getRelativeEnchantment() instanceof ConfigEnchantmentWrapper) && !(enchant.getRelativeEnchantment() instanceof ApiEnchantmentWrapper)) enchantments.add(enchant);
+					break;
+				case EXTERNAL:
+					if (enchant.getRelativeEnchantment() instanceof ApiEnchantmentWrapper) enchantments.add(enchant);
+					break;
+				case VANILLA:
+					if (!(enchant.getRelativeEnchantment() instanceof CustomEnchantmentWrapper)) enchantments.add(enchant);
+					break;
+			}
+
+		if (PAGING * (page - 1) >= enchantments.size() && page != 1) {
+			listEnchantments(type, page - 1);
+			return;
+		}
+
+		for(int i = 0; i < PAGING; i++) {
+			int index = i + PAGING * (page - 1);
+			if (enchantments.size() <= index) break;
+			CustomEnchantment key = enchantments.get(index);
+
+			ItemStack keyItem = new ItemStack(Material.PAPER);
+			ItemMeta keyItemMeta = keyItem.getItemMeta();
+			keyItemMeta.setDisplayName(ChatColor.GOLD + "Enchantment: " + key.getDisplayName());
+			keyItem.setItemMeta(keyItemMeta);
+			keyItem = EnchantmentUtils.addEnchantmentToItem(keyItem, key, key.getMaxLevel());
+			inv.setItem(i, keyItem);
+		}
+
+		if (enchantments.size() > PAGING * page) inv.setItem(53, nextPage());
+		if (page != 1) inv.setItem(45, previousPage());
+		else
+			inv.setItem(45, goBack());
+
 	}
 
 	public void listConfigDetails(YamlConfigBackup config, YamlConfigBackup backup) {
@@ -601,8 +734,23 @@ public class ConfigInventory implements InventoryData, Pageable {
 	}
 
 	public enum Screen {
-		LIST_FILES(), LIST_DETAILS(), LIST_EDIT(), LIST_ENUM(), LIST_BACKUP(), LIST_BACKUP_DETAILS(),
+		LIST_FILES(), ENCHANTMENT_TYPES(), ENCHANTMENTS(), LIST_DETAILS(), LIST_EDIT(), LIST_ENUM(), LIST_BACKUP(), LIST_BACKUP_DETAILS(),
 		LIST_BACKUP_LIST(), LIST_ENUM_LIST_SHOW(), LIST_ENUM_LIST_EDIT();
+	}
+
+	public enum EnchantmentType {
+		VANILLA("Vanilla Enchantments"), ENCHANTMENT_SOLUTION("Enchantment Solution Enchantments"), EXTERNAL("External API Enchantments"),
+		CUSTOM("Internal API Enchantments");
+
+		private final String name;
+
+		EnchantmentType(String name) {
+			this.name = name;
+		}
+
+		public String getName() {
+			return name;
+		}
 	}
 
 	@Override
@@ -673,16 +821,8 @@ public class ConfigInventory implements InventoryData, Pageable {
 	@Override
 	public Inventory open(Inventory inv) {
 		opening = true;
-		if (inventory == null) {
-			inventory = inv;
-			player.openInventory(inv);
-		} else if (inv.getSize() == inventory.getSize()) {
-			inv = player.getOpenInventory().getTopInventory();
-			inventory = inv;
-		} else {
-			inventory = inv;
-			player.openInventory(inv);
-		}
+		inventory = inv;
+		player.openInventory(inv);
 		for(int i = 0; i < inventory.getSize(); i++)
 			inventory.setItem(i, new ItemStack(Material.AIR));
 		if (opening) opening = false;
@@ -701,5 +841,9 @@ public class ConfigInventory implements InventoryData, Pageable {
 
 	public static boolean hasChanged() {
 		return HAS_CHANGED;
+	}
+
+	public EnchantmentType getEnchantmentType() {
+		return enchantmentType;
 	}
 }

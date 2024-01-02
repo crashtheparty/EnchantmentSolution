@@ -23,7 +23,6 @@ public enum ESAdvancement implements CrashAdvancement {
 	NOT_THAT_KIND(AGRICULTURAL_REVOLUTION, "DIAMOND_SWORD", Arrays.asList(new CrashTrigger("frog", 0, new int[] {1, 19, 0}, new int[3]), new CrashTrigger("chicken"), new CrashTrigger("strider"), new CrashTrigger("hoglin"), new CrashTrigger("cat"), new CrashTrigger("cow"), new CrashTrigger("fox"), new CrashTrigger("horse"), new CrashTrigger("mule"), new CrashTrigger("donkey"), new CrashTrigger("llama"), new CrashTrigger("mushroom_cow"), new CrashTrigger("panda"), new CrashTrigger("bee"), new CrashTrigger("pig"), new CrashTrigger("rabbit"), new CrashTrigger("sheep"), new CrashTrigger("wolf"), new CrashTrigger("turtle")), 25),
 	HIGH_METABOLISM(NOT_THAT_KIND, "GOLDEN_CARROT", Arrays.asList(new CrashTrigger("exhaustion")), 200, Frame.GOAL),
 	WILDLIFE_CONSERVATION(NOT_THAT_KIND, "COW_SPAWN_EGG", Arrays.asList(new CrashTrigger("frog", 0, new int[] {1, 19, 0}, new int[3]), new CrashTrigger("chicken"), new CrashTrigger("strider"), new CrashTrigger("hoglin"), new CrashTrigger("cat"), new CrashTrigger("cow"), new CrashTrigger("fox"), new CrashTrigger("horse"), new CrashTrigger("mule"), new CrashTrigger("donkey"), new CrashTrigger("llama"), new CrashTrigger("mushroom_cow"), new CrashTrigger("panda"), new CrashTrigger("bee"), new CrashTrigger("pig"), new CrashTrigger("rabbit"), new CrashTrigger("sheep"), new CrashTrigger("wolf"), new CrashTrigger("turtle")), 75),
-	FOURTY_NINERS(BONEMEAL_PLUS, "GOLD_BLOCK", Arrays.asList(new CrashTrigger("goldblock", 81)), 20),
 	THAT_FOOD_IS_FINE(AGRICULTURAL_REVOLUTION, "POISONOUS_POTATO", Arrays.asList(new CrashTrigger("food")), 25),
 	MEAT_READY_TO_EAT(THAT_FOOD_IS_FINE, "COOKED_BEEF", Arrays.asList(new CrashTrigger("beef")), 50),
 	CHICKEN_OR_THE_EGG(AGRICULTURAL_REVOLUTION, "EGG", Arrays.asList(new CrashTrigger("egg")), 25),
@@ -36,7 +35,6 @@ public enum ESAdvancement implements CrashAdvancement {
 	REFORESTATION(THUMBS_UP, "OAK_SAPLING", Arrays.asList(new CrashTrigger("tree", 1000)), 1000, Frame.CHALLENGE),
 	ANIMAL_ABUSE(AGRICULTURAL_REVOLUTION, "DIAMOND_SWORD", Arrays.asList(new CrashTrigger("death")), 5),
 	ANIMAL_TAMER(ANIMAL_ABUSE, "CARROT_ON_A_STICK", Arrays.asList(new CrashTrigger("tamed")), 30),
-	FLYING_BACON(ANIMAL_TAMER, "COOKED_PORKCHOP", Arrays.asList(new CrashTrigger("pig")), 200, Frame.GOAL),
 
 	INDUSTRIAL_REVOLUTION("DIAMOND_PICKAXE", Arrays.asList(), 0),
 	EASY_OUT(INDUSTRIAL_REVOLUTION, "CAMPFIRE", Arrays.asList(new CrashTrigger("campfire")), 20, Frame.TASK),
@@ -57,9 +55,7 @@ public enum ESAdvancement implements CrashAdvancement {
 	DEFORESTATION(SCOURGE_OF_THE_FOREST, "BARRIER", Arrays.asList(new CrashTrigger("tree", 1000)), 500, Frame.CHALLENGE),
 
 	SCIENTIFIC_REVOLUTION("ENCHANTED_BOOK", Arrays.asList(), 0),
-	BREAKER_BREAKER(SCIENTIFIC_REVOLUTION, "TORCH", Arrays.asList(new CrashTrigger("torch")), 25),
-	USELESS(BREAKER_BREAKER, "TORCH", Arrays.asList(new CrashTrigger("torch", 0, new int[] {1, 17, 0}, new int[3])), 40),
-	DID_YOU_REALLY_WAND_TO_DO_THAT(BREAKER_BREAKER, "CARROT_ON_A_STICK", Arrays.asList(new CrashTrigger("break")), 100, Frame.GOAL),
+	USELESS(SCIENTIFIC_REVOLUTION, "TORCH", Arrays.asList(new CrashTrigger("torch", 0, new int[] {1, 17, 0}, new int[3])), 40),
 	SHARING_IS_CARING(SCIENTIFIC_REVOLUTION, "EXPERIENCE_BOTTLE", Arrays.asList(new CrashTrigger("player")), 10),
 	LAAAGGGGGG(SCIENTIFIC_REVOLUTION, "FIREWORK_ROCKET", Arrays.asList(new CrashTrigger("lag")), 10),
 	KEPT_ON_HAND(SCIENTIFIC_REVOLUTION, "ENCHANTED_BOOK", Arrays.asList(new CrashTrigger("soulbound")), 50),
@@ -84,7 +80,6 @@ public enum ESAdvancement implements CrashAdvancement {
 	SEVEN_POINT_EIGHT(HEX_BAG, "WATER_BUCKET", Arrays.asList(new CrashTrigger("drowning")), 40),
 	NOT_VERY_EFFECTIVE(IMPERIAL_REVOLUTION, "NAUTILUS_SHELL", Arrays.asList(new CrashTrigger("drowned")), 50),
 	SUPER_EFFECTIVE(NOT_VERY_EFFECTIVE, "HEART_OF_THE_SEA", Arrays.asList(new CrashTrigger("boss")), 250, Frame.CHALLENGE),
-	YEET(SUPER_EFFECTIVE, "CARROT_ON_A_STICK", Arrays.asList(new CrashTrigger("player")), 400, Frame.CHALLENGE),
 	PRE_COMBAT_UPDATE(NOT_VERY_EFFECTIVE, "IRON_SWORD", Arrays.asList(new CrashTrigger("combat_update")), 80),
 	HEADHUNTER(IMPERIAL_REVOLUTION, "PLAYER_HEAD", Arrays.asList(new CrashTrigger("player_head")), 100, Frame.GOAL),
 	DOUBLE_HEADER(HEADHUNTER, "WITHER_SKELETON_SKULL", Arrays.asList(new CrashTrigger("wither_skull")), 150, Frame.GOAL),
@@ -118,19 +113,15 @@ public enum ESAdvancement implements CrashAdvancement {
 	I_AINT_AFRAID_OF_NO_GHOSTS(COFFEE_BREAK, "WHITE_BED", Arrays.asList(new CrashTrigger("unrest", 10)), 150, Frame.GOAL),
 	THIS_GIRL_IS_ON_FIRE(MECHANICAL_REVOLUTION, "LAVA_BUCKET", Arrays.asList(new CrashTrigger("lava")), 25),
 	MADE_FOR_WALKING(THIS_GIRL_IS_ON_FIRE, "DIAMOND_BOOTS", Arrays.asList(new CrashTrigger("boots")), 60),
-	IM_YOU_BUT_SHORTER(MECHANICAL_REVOLUTION, "ENDER_PEARL", Arrays.asList(new CrashTrigger("enderpearl")), 30),
-	PANZER_SOLDIER(IM_YOU_BUT_SHORTER, "OBSIDIAN", Arrays.asList(new CrashTrigger("tank")), 60),
+	PANZER_SOLDIER(MECHANICAL_REVOLUTION, "OBSIDIAN", Arrays.asList(new CrashTrigger("tank")), 60),
 	ARMORED_EVOLUTION(PANZER_SOLDIER, "IRON_CHESTPLATE", Arrays.asList(new CrashTrigger("armored")), 100, Frame.GOAL),
 	GRAPHENE_ARMOR(PANZER_SOLDIER, "DIAMOND_CHESTPLATE", Arrays.asList(new CrashTrigger("toughness")), 200, Frame.GOAL),
 	DANGER_DEFEATED(GRAPHENE_ARMOR, "NETHER_STAR", Arrays.asList(new CrashTrigger("wither")), 500, Frame.CHALLENGE),
 	EXTRA_POWER(ARMORED_EVOLUTION, "ENCHANTED_GOLDEN_APPLE", Arrays.asList(new CrashTrigger("power")), 150, Frame.GOAL),
-	DIVINE_RETRIBUTION(EXTRA_POWER, "TOTEM_OF_UNDYING", Arrays.asList(new CrashTrigger("retribution")), 1000, Frame.CHALLENGE),
 	TOO_CLOSE(MECHANICAL_REVOLUTION, "ELYTRA", Arrays.asList(new CrashTrigger("failure")), 75),
 	CRUISING_ALTITUDE(TOO_CLOSE, "ELYTRA", Arrays.asList(new CrashTrigger("elytra")), 150, Frame.GOAL),
 	DEFLECTION(MECHANICAL_REVOLUTION, "SHIELD", Arrays.asList(new CrashTrigger("shield")), 100, Frame.GOAL),
-	IRON_MAN(DEFLECTION, "IRON_BLOCK", Arrays.asList(new CrashTrigger("blocked")), 500, Frame.CHALLENGE),
-	SIMPLE_REPAIR(MECHANICAL_REVOLUTION, "STICK", Arrays.asList(new CrashTrigger("repair")), 60),
-	STICKY_BEES(SIMPLE_REPAIR, "STICK", Arrays.asList(new CrashTrigger("break", 8)), 400, Frame.CHALLENGE);
+	IRON_MAN(DEFLECTION, "IRON_BLOCK", Arrays.asList(new CrashTrigger("blocked")), 500, Frame.CHALLENGE);
 
 	private ESAdvancement parent;
 	private Material icon;

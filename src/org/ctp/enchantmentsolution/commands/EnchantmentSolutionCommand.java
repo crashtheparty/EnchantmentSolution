@@ -35,7 +35,7 @@ public class EnchantmentSolutionCommand implements CommandExecutor, TabCompleter
 	private final ESCommand rpgStats = new ESCommand("rpgstats", "commands.aliases.rpgstats", "commands.descriptions.rpgstats", "commands.usage.rpgstats", "enchantmentsolution.command.rpgstats");
 	private final ESCommand rpgTop = new ESCommand("rpgtop", "commands.aliases.rpgtop", "commands.descriptions.rpgtop", "commands.usage.rpgtop", "enchantmentsolution.command.rpgtop");
 	private final ESCommand rpgEdit = new ESCommand("rpgedit", "commands.aliases.rpgedit", "commands.descriptions.rpgedit", "commands.usage.rpgedit", "enchantmentsolution.command.rpgedit");
-
+	
 	public EnchantmentSolutionCommand() {
 		commands = new ArrayList<ESCommand>();
 		commands.add(anvil);

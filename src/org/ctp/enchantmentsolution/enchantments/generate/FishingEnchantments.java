@@ -9,6 +9,7 @@ import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentList;
 import org.ctp.enchantmentsolution.enums.EnchantmentLocation;
+import org.ctp.enchantmentsolution.enums.Loots;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 import org.ctp.enchantmentsolution.utils.config.FishingConfiguration;
 
@@ -21,22 +22,21 @@ public class FishingEnchantments extends LootEnchantments {
 
 	private FishingEnchantments(Player player, ItemStack item, List<EnchantmentLevel> fishing,
 	double multiEnchant) {
-		super(player, item, EnchantmentLocation.FISHING_LOOT);
+		super(player, item, EnchantmentLocation.FISHING_LOOT, null);
 
-		setEnchantmentList(new EnchantmentList(player, new ItemData(item), EnchantmentLocation.FISHING_LOOT, fishing, multiEnchant));
+		setEnchantmentList(new EnchantmentList(EnchantmentSolution.getESPlayer(player), new ItemData(item), EnchantmentLocation.FISHING_LOOT, fishing, multiEnchant));
 	}
 
-	private FishingEnchantments(Player player, ItemStack item, int bookshelves) {
-		super(player, item, bookshelves, EnchantmentLocation.FISHING_LOOT);
+	private FishingEnchantments(Player player, ItemStack item, Loots loot) {
+		super(player, item, EnchantmentLocation.FISHING_LOOT, loot);
 	}
 
-	public static FishingEnchantments getFishingEnchantments(Player player, ItemStack item, int minBookshelves) {
-		int books = 16;
-		if (ConfigString.LEVEL_FIFTY.getBoolean()) books = 24;
-		int random = (int) (Math.random() * books) + minBookshelves;
-		if (random >= books) random = books - 1;
+	public static FishingEnchantments getFishingEnchantments(Player player, ItemStack item, String type, Loots defaultLoot) {
+		if (item == null) return null;
+		Loots loot = Loots.getLoot(type);
+		if (loot == null) loot = defaultLoot;
 
-		return new FishingEnchantments(player, item, books);
+		return new FishingEnchantments(player, item, loot);
 	}
 
 	public static FishingEnchantments getFishingEnchantments(Player player, ItemStack item) {

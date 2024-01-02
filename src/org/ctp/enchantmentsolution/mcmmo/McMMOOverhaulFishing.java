@@ -24,7 +24,7 @@ import com.gmail.nossr50.util.player.UserManager;
 public class McMMOOverhaulFishing extends McMMOFishing {
 
 	public void onMcMMOPlayerFishingTreasure(McMMOPlayerFishingTreasureEvent event) {
-		if (!ConfigString.USE_LOOT.getBoolean("fishing.use")) return;
+		if (!ConfigString.USE_FISHING_LOOT.getBoolean()) return;
 		Player player = event.getPlayer();
 		ItemStack treasure = event.getTreasure();
 

@@ -1,0 +1,617 @@
+acacia_log:
+    interact:
+    - acacia_log
+    - acacia_wood
+    - stripped_acacia_log
+    - stripped_acacia_wood
+    - birch_log
+    - birch_wood
+    - stripped_birch_log
+    - stripped_birch_wood
+    - cherry_log
+    - cherry_wood
+    - stripped_cherry_log
+    - stripped_cherry_wood
+    - dark_oak_log
+    - dark_oak_wood
+    - stripped_dark_oak_log
+    - stripped_dark_oak_wood
+    - jungle_log
+    - jungle_wood
+    - stripped_jungle_log
+    - stripped_jungle_wood
+    - mangrove_log
+    - mangrove_wood
+    - stripped_mangrove_log
+    - stripped_mangrove_wood
+    - oak_log
+    - oak_wood
+    - stripped_oak_log
+    - stripped_oak_wood
+    - spruce_log
+    - spruce_wood
+    - stripped_spruce_log
+    - stripped_spruce_wood
+    minExp: '-3'
+    maxExp: '1'
+    multiple: false
+    override: true
+    poolChance: false
+    drops:
+        0:
+            type: 'charcoal'
+            min: '1'
+            max: '1 + %fortune%'
+            chance: '1'
+            normAmount: false
+ancient_debris:
+    interact:
+    - ancient_debris
+    minExp: '2'
+    maxExp: '7'
+    multiple: false
+    override: true
+    poolChance: false
+    drops:
+        0:
+            type: 'netherite_scrap'
+            min: '1'
+            max: '1 + %fortune% * .15'
+            chance: '1'
+            normAmount: false
+basalt:
+    interact:
+    - basalt
+    minExp: '-2'
+    maxExp: '1'
+    multiple: false
+    override: true
+    poolChance: false
+    drops:
+        0:
+            type: 'smooth_basalt'
+            min: '1'
+            max: '1'
+            chance: '1'
+            normAmount: false
+black_terracotta:
+    interact:
+    - black_terracotta
+    minExp: '-2'
+    maxExp: '1'
+    multiple: false
+    override: true
+    poolChance: false
+    drops:
+        0:
+            type: 'black_glazed_terracotta'
+            min: '1'
+            max: '1'
+            chance: '1'
+            normAmount: false
+blue_terracotta:
+    interact:
+    - blue_terracotta
+    minExp: '-2'
+    maxExp: '1'
+    multiple: false
+    override: true
+    poolChance: false
+    drops:
+        0:
+            type: 'blue_glazed_terracotta'
+            min: '1'
+            max: '1'
+            chance: '1'
+            normAmount: false
+brown_terracotta:
+    interact:
+    - brown_terracotta
+    minExp: '-2'
+    maxExp: '1'
+    multiple: false
+    override: true
+    poolChance: false
+    drops:
+        0:
+            type: 'brown_glazed_terracotta'
+            min: '1'
+            max: '1'
+            chance: '1'
+            normAmount: false
+cyan_terracotta:
+    interact:
+    - cyan_terracotta
+    minExp: '-2'
+    maxExp: '1'
+    multiple: false
+    override: true
+    poolChance: false
+    drops:
+        0:
+            type: 'cyan_glazed_terracotta'
+            min: '1'
+            max: '1'
+            chance: '1'
+            normAmount: false
+gray_terracotta:
+    interact:
+    - gray_terracotta
+    minExp: '-2'
+    maxExp: '1'
+    multiple: false
+    override: true
+    poolChance: false
+    drops:
+        0:
+            type: 'gray_glazed_terracotta'
+            min: '1'
+            max: '1'
+            chance: '1'
+            normAmount: false
+green_terracotta:
+    interact:
+    - green_terracotta
+    minExp: '-2'
+    maxExp: '1'
+    multiple: false
+    override: true
+    poolChance: false
+    drops:
+        0:
+            type: 'green_glazed_terracotta'
+            min: '1'
+            max: '1'
+            chance: '1'
+            normAmount: false
+light_blue_terracotta:
+    interact:
+    - light_blue_terracotta
+    minExp: '-2'
+    maxExp: '1'
+    multiple: false
+    override: true
+    poolChance: false
+    drops:
+        0:
+            type: 'light_blue_glazed_terracotta'
+            min: '1'
+            max: '1'
+            chance: '1'
+            normAmount: false
+light_gray_terracotta:
+    interact:
+    - light_gray_terracotta
+    minExp: '-2'
+    maxExp: '1'
+    multiple: false
+    override: true
+    poolChance: false
+    drops:
+        0:
+            type: 'light_gray_glazed_terracotta'
+            min: '1'
+            max: '1'
+            chance: '1'
+            normAmount: false
+lime_terracotta:
+    interact:
+    - lime_terracotta
+    minExp: '-2'
+    maxExp: '1'
+    multiple: false
+    override: true
+    poolChance: false
+    drops:
+        0:
+            type: 'lime_glazed_terracotta'
+            min: '1'
+            max: '1'
+            chance: '1'
+            normAmount: false
+magenta_terracotta:
+    interact:
+    - magenta_terracotta
+    minExp: '-2'
+    maxExp: '1'
+    multiple: false
+    override: true
+    poolChance: false
+    drops:
+        0:
+            type: 'magenta_glazed_terracotta'
+            min: '1'
+            max: '1'
+            chance: '1'
+            normAmount: false
+orange_terracotta:
+    interact:
+    - orange_terracotta
+    minExp: '-2'
+    maxExp: '1'
+    multiple: false
+    override: true
+    poolChance: false
+    drops:
+        0:
+            type: 'orange_glazed_terracotta'
+            min: '1'
+            max: '1'
+            chance: '1'
+            normAmount: false
+pink_terracotta:
+    interact:
+    - pink_terracotta
+    minExp: '-2'
+    maxExp: '1'
+    multiple: false
+    override: true
+    poolChance: false
+    drops:
+        0:
+            type: 'pink_glazed_terracotta'
+            min: '1'
+            max: '1'
+            chance: '1'
+            normAmount: false
+purple_terracotta:
+    interact:
+    - purple_terracotta
+    minExp: '-2'
+    maxExp: '1'
+    multiple: false
+    override: true
+    poolChance: false
+    drops:
+        0:
+            type: 'purple_glazed_terracotta'
+            min: '1'
+            max: '1'
+            chance: '1'
+            normAmount: false
+red_terracotta:
+    interact:
+    - red_terracotta
+    minExp: '-2'
+    maxExp: '1'
+    multiple: false
+    override: true
+    poolChance: false
+    drops:
+        0:
+            type: 'red_glazed_terracotta'
+            min: '1'
+            max: '1'
+            chance: '1'
+            normAmount: false
+white_terracotta:
+    interact:
+    - white_terracotta
+    minExp: '-2'
+    maxExp: '1'
+    multiple: false
+    override: true
+    poolChance: false
+    drops:
+        0:
+            type: 'white_glazed_terracotta'
+            min: '1'
+            max: '1'
+            chance: '1'
+            normAmount: false
+yellow_terracotta:
+    interact:
+    - yellow_terracotta
+    minExp: '-2'
+    maxExp: '1'
+    multiple: false
+    override: true
+    poolChance: false
+    drops:
+        0:
+            type: 'yellow_glazed_terracotta'
+            min: '1'
+            max: '1'
+            chance: '1'
+            normAmount: false
+clay:
+    interact:
+    - clay
+    minExp: '-3'
+    maxExp: '1'
+    multiple: false
+    override: true
+    poolChance: false
+    drops:
+        0:
+            type: 'terracotta'
+            min: '1'
+            max: '1'
+            chance: '1'
+            normAmount: false
+cactus:
+    interact:
+    - cactus
+    minExp: '-2'
+    maxExp: '1'
+    multiple: false
+    override: true
+    poolChance: false
+    drops:
+        0:
+            type: 'green_dye'
+            min: '1'
+            max: '1 + %fortune%'
+            chance: '1'
+            normAmount: false
+chorus_fruit:
+    interact:
+    - chorus_fruit
+    minExp: '-1'
+    maxExp: '2'
+    multiple: false
+    override: true
+    poolChance: false
+    drops:
+        0:
+            type: 'popped_chorus_fruit'
+            min: '1'
+            max: '1 + %fortune%'
+            chance: '1'
+            normAmount: false
+cobblestone:
+    interact:
+    - cobblestone
+    minExp: '-2'
+    maxExp: '1'
+    multiple: false
+    override: true
+    poolChance: false
+    drops:
+        0:
+            type: 'stone'
+            min: '1'
+            max: '1'
+            chance: '1'
+            normAmount: false
+cobbled_deepslate:
+    interact:
+    - cobbled_deepslate
+    - deepslate
+    minExp: '-2'
+    maxExp: '1'
+    multiple: false
+    override: true
+    poolChance: false
+    drops:
+        0:
+            type: 'deepslate'
+            min: '1'
+            max: '1'
+            chance: '1'
+            normAmount: false
+netherrack:
+    interact:
+    - netherrack
+    minExp: '-4'
+    maxExp: '1'
+    multiple: false
+    override: true
+    poolChance: false
+    drops:
+        0:
+            type: 'nether_brick'
+            min: '1'
+            max: '1 + %fortune%'
+            chance: '1'
+            normAmount: false
+quartz_block:
+    interact:
+    - quartz_block
+    minExp: '-2'
+    maxExp: '1'
+    multiple: false
+    override: true
+    poolChance: false
+    drops:
+        0:
+            type: 'smooth_quartz'
+            min: '1'
+            max: '1'
+            chance: '1'
+            normAmount: false
+red_sandstone:
+    interact:
+    - red_sandstone
+    minExp: '-2'
+    maxExp: '1'
+    multiple: false
+    override: true
+    poolChance: false
+    drops:
+        0:
+            type: 'smooth_red_sandstone'
+            min: '1'
+            max: '1'
+            chance: '1'
+            normAmount: false
+sandstone:
+    interact:
+    - sandstone
+    minExp: '-2'
+    maxExp: '1'
+    multiple: false
+    override: true
+    poolChance: false
+    drops:
+        0:
+            type: 'smooth_sandstone'
+            min: '1'
+            max: '1'
+            chance: '1'
+            normAmount: false
+sand:
+    interact:
+    - sand
+    minExp: '-1'
+    maxExp: '1'
+    multiple: false
+    override: true
+    poolChance: false
+    drops:
+        0:
+            type: 'glass'
+            min: '1'
+            max: '1 + %fortune% * 0.5'
+            chance: '1'
+            normAmount: false
+stone:
+    interact:
+    - stone
+    minExp: '-2'
+    maxExp: '1'
+    multiple: false
+    override: true
+    poolChance: false
+    drops:
+        0:
+            type: 'smooth_stone'
+            min: '1'
+            max: '1'
+            chance: '1'
+            normAmount: false
+stone_bricks:
+    interact:
+    - stone_bricks
+    minExp: '-2'
+    maxExp: '1'
+    multiple: false
+    override: true
+    poolChance: false
+    drops:
+        0:
+            type: 'cracked_stone_bricks'
+            min: '1'
+            max: '1'
+            chance: '1'
+            normAmount: false
+sea_pickle:
+    interact:
+    - sea_pickle
+    minExp: '-1'
+    maxExp: '1'
+    multiple: false
+    override: true
+    poolChance: false
+    drops:
+        0:
+            type: 'lime_dye'
+            min: '1'
+            max: '1'
+            chance: '1'
+            normAmount: true
+wet_sponge:
+    interact:
+    - wet_sponge
+    minExp: '-1'
+    maxExp: '2'
+    multiple: false
+    override: true
+    poolChance: false
+    drops:
+        0:
+            type: 'sponge'
+            min: '1'
+            max: '1'
+            chance: '1'
+            normAmount: false
+copper_ore:
+    interact:
+    - copper_ore
+    minExp: '0'
+    maxExp: '3'
+    multiple: false
+    override: true
+    poolChance: false
+    drops:
+        0:
+            type: 'copper_ingot'
+            min: '2'
+            max: '5 + 5 * %fortune%'
+            chance: '1'
+            normAmount: false
+deepslate_copper_ore:
+    interact:
+    - deepslate_copper_ore
+    minExp: '1'
+    maxExp: '4'
+    multiple: false
+    override: true
+    poolChance: false
+    drops:
+        0:
+            type: 'copper_ingot'
+            min: '2'
+            max: '5 + 5 * %fortune%'
+            chance: '1'
+            normAmount: false
+iron_ore:
+    interact:
+    - iron_ore
+    minExp: '1'
+    maxExp: '4'
+    multiple: false
+    override: true
+    poolChance: false
+    drops:
+        0:
+            type: 'iron_ingot'
+            min: '1'
+            max: '1 + %fortune%'
+            chance: '1'
+            normAmount: false
+deepslate_iron_ore:
+    interact:
+    - deepslate_iron_ore
+    minExp: '2'
+    maxExp: '5'
+    multiple: false
+    override: true
+    poolChance: false
+    drops:
+        0:
+            type: 'iron_ingot'
+            min: '1'
+            max: '1 + %fortune%'
+            chance: '1'
+            normAmount: false
+gold_ore:
+    interact:
+    - gold_ore
+    minExp: '1'
+    maxExp: '5'
+    multiple: false
+    override: true
+    poolChance: false
+    drops:
+        0:
+            type: 'gold_ingot'
+            min: '1'
+            max: '1 + %fortune%'
+            chance: '1'
+            normAmount: false
+deepslate_gold_ore:
+    interact:
+    - deepslate_gold_ore
+    minExp: '3'
+    maxExp: '7'
+    multiple: false
+    override: true
+    poolChance: false
+    drops:
+        0:
+            type: 'gold_ingot'
+            min: '1'
+            max: '1 + %fortune%'
+            chance: '1'
+            normAmount: false

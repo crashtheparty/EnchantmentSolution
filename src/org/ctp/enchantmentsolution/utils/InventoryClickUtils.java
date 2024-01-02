@@ -9,13 +9,16 @@ import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.ctp.crashapi.config.Configuration;
 import org.ctp.crashapi.config.yaml.YamlConfigBackup;
 import org.ctp.crashapi.item.MatData;
 import org.ctp.crashapi.utils.ChatUtils;
 import org.ctp.crashapi.utils.ItemUtils;
 import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
+import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.inventory.*;
+import org.ctp.enchantmentsolution.inventory.ConfigInventory.EnchantmentType;
 import org.ctp.enchantmentsolution.inventory.ConfigInventory.Screen;
 import org.ctp.enchantmentsolution.inventory.minigame.Minigame;
 import org.ctp.enchantmentsolution.inventory.rpg.RPGInventory;
@@ -29,6 +32,7 @@ public class InventoryClickUtils {
 	Inventory clickedInv, int slot) {
 		if (inv.getType() != InventoryType.CHEST) {
 			ItemStack item = clickedInv.getItem(slot);
+			MatData echoShard = new MatData("ECHO_SHARD");
 			if (EnchantmentUtils.isEnchantable(item)) {
 				ItemStack replace = new ItemStack(Material.AIR);
 				int original_amount = item.getAmount();
@@ -44,6 +48,12 @@ public class InventoryClickUtils {
 			} else if (item != null && item.getType() == Material.LAPIS_LAZULI) {
 				player.getInventory().setItem(slot, table.addToLapisStack(item));
 				table.setInventory();
+			} else if (item != null && item.getType() == Material.NETHER_STAR) {
+				player.getInventory().setItem(slot, table.addUpgrade(item));
+				table.setInventory();
+			} else if (item != null && item.getType() == echoShard.getMaterial()) {
+				player.getInventory().setItem(slot, table.addUpgrade(item));
+				table.setInventory();
 			}
 		} else {
 			ItemStack item = clickedInv.getItem(slot);
@@ -56,9 +66,16 @@ public class InventoryClickUtils {
 				int itemSlot = (slot - 18) / 9;
 				int itemLevel = slot % 9 - 3;
 				table.enchantItem(itemSlot, itemLevel);
-			} else if (slot == 10) {
+			} else if (slot == 1) {
 				ItemStack lapisStack = table.removeFromLapisStack();
 				if (lapisStack != null) ItemUtils.giveItemToPlayer(player, lapisStack, player.getLocation(), false);
+				table.setInventory();
+			} else if (slot == 9 && item.getType() != Material.GREEN_STAINED_GLASS_PANE) {
+				ItemStack upgrade = table.removeUpgrade();
+				if (upgrade != null) ItemUtils.giveItemToPlayer(player, upgrade, player.getLocation(), false);
+				table.setInventory();
+			} else if (slot == 10 && item.getType() == Material.GREEN_STAINED_GLASS_PANE) {
+				if (table.canUpgrade()) table.upgrade();
 				table.setInventory();
 			}
 		}
@@ -151,137 +168,188 @@ public class InventoryClickUtils {
 				case LIST_FILES:
 					Configurations c = Configurations.getConfigurations();
 					switch (slot) {
-						case 2:
+						case 1:
 							configInv.listConfigDetails(c.getConfig().getConfig(), null);
-							break;
+							return;
+						case 2:
+							configInv.listConfigDetails(c.getEnchantingTable().getConfig(), null);
+							return;
 						case 3:
-							configInv.listConfigDetails(c.getFishing().getConfig(), null);
-							break;
+							configInv.listConfigDetails(c.getAnvil().getConfig(), null);
+							return;
 						case 4:
-							configInv.listConfigDetails(c.getAdvancements().getConfig(), null);
-							break;
+							configInv.listConfigDetails(c.getGrindstone().getConfig(), null);
+							return;
 						case 5:
-							configInv.listConfigDetails(c.getLanguage().getConfig(), null);
-							break;
-						case 6:
 							configInv.listConfigDetails(c.getEnchantments().getConfig(), null);
-							break;
-						case 12:
-							configInv.listConfigDetails(c.getMinigames().getConfig(), null);
-							break;
-						case 13:
+							return;
+						case 6:
+							configInv.listConfigDetails(c.getLanguage().getConfig(), null);
+							return;
+						case 7:
+							configInv.listConfigDetails(c.getAdvancements().getConfig(), null);
+							return;
+						case 19:
 							configInv.listConfigDetails(c.getRPG().getConfig(), null);
-							break;
-						case 14:
-							configInv.listConfigDetails(c.getHardMode().getConfig(), null);
-							break;
+							return;
+						case 20:
+							configInv.listConfigDetails(c.getMinigames().getConfig(), null);
+							return;
 						case 21:
-							if (item.getType() != Material.BARRIER) configInv.saveAll();
-							break;
+							configInv.listConfigDetails(c.getHardMode().getConfig(), null);
+							return;
 						case 23:
+							configInv.listConfigDetails(c.getFishing().getConfig(), null);
+							return;
+						case 24:
+							configInv.listConfigDetails(c.getLoots().getConfig(), null);
+							return;
+						case 25:
+							configInv.listConfigDetails(c.getLootTypes().getConfig(), null);
+							return;
+						case 31:
+							configInv.listEnchantments();
+							return;
+						case 48:
+							if (item.getType() != Material.BARRIER) configInv.saveAll();
+							return;
+						case 50:
 							if (item.getType() != Material.BARRIER) configInv.revert();
-							break;
+							return;
+					}
+					break;
+				case ENCHANTMENT_TYPES:
+					switch (slot) {
+						case 2:
+							configInv.listEnchantments(EnchantmentType.VANILLA);
+							return;
+						case 3:
+							configInv.listEnchantments(EnchantmentType.ENCHANTMENT_SOLUTION);
+							return;
+						case 5:
+							configInv.listEnchantments(EnchantmentType.EXTERNAL);
+							return;
+						case 6:
+							configInv.listEnchantments(EnchantmentType.CUSTOM);
+							return;
+						case 9:
+							if (checkPagination(item)) configInv.setInventory(Screen.LIST_FILES);
+							return;
+					}
+					break;
+				case ENCHANTMENTS:
+					switch (slot) {
+						case 45:
+							if (configInv.getPage() == 1) configInv.listEnchantments();
+							else if (checkPagination(item)) configInv.listEnchantments(configInv.getEnchantmentType(), page - 1);
+							return;
+						case 53:
+							if (checkPagination(item)) configInv.listEnchantments(configInv.getEnchantmentType(), page + 1);
+							return;
 					}
 					break;
 				case LIST_DETAILS:
 					switch (slot) {
 						case 53:
 							if (checkPagination(item)) configInv.listConfigDetails(config, null, level, page + 1);
-							break;
+							return;
 						case 45:
 							if (checkPagination(item)) configInv.listConfigDetails(config, null, level, page - 1);
-							break;
+							return;
 						case 48:
-							if (checkPagination(item) && (level == null || level.equals(""))) configInv.setInventory(Screen.LIST_FILES);
-							else if (level.indexOf(".") > -1) configInv.listConfigDetails(config, null, level.substring(0, level.lastIndexOf(".")), page);
+							if (checkPagination(item) && (level == null || level.equals(""))) {
+								if (configInv.getEnchantmentType() == null) configInv.setInventory(Screen.LIST_FILES);
+								else
+									configInv.listEnchantments(configInv.getEnchantmentType());
+							} else if (level.indexOf(".") > -1) configInv.listConfigDetails(config, null, level.substring(0, level.lastIndexOf(".")), page);
 							else
 								configInv.listConfigDetails(config, null, null, page);
-							break;
+							return;
 						case 50:
 							if (item.getType() == Material.FIREWORK_STAR) configInv.listBackup(config, 1);
-							break;
+							return;
 					}
 					break;
 				case LIST_EDIT:
 					switch (slot) {
 						case 53:
 							if (checkPagination(item)) configInv.listDetails(config, null, level, type, page + 1);
-							break;
+							return;
 						case 45:
 							if (checkPagination(item)) configInv.listDetails(config, null, level, type, page - 1);
-							break;
+							return;
 						case 48:
 							if (checkPagination(item)) if (level.indexOf(".") > -1) configInv.listConfigDetails(config, null, level.substring(0, level.lastIndexOf(".")));
 							else
 								configInv.listConfigDetails(config, null, null);
-							break;
+							return;
 						case 50:
 							if (item.getType() == Material.NAME_TAG) if (click == ClickType.LEFT) configInv.openAnvil(level, type);
 							else if (click == ClickType.RIGHT) configInv.openChat(level, type);
 							else {}
 							else {}
-							break;
+							return;
 					}
 					break;
 				case LIST_ENUM:
 					switch (slot) {
 						case 53:
 							if (checkPagination(item)) configInv.listEnumDetails(config, level, type, page + 1);
-							break;
+							return;
 						case 45:
 							if (checkPagination(item)) configInv.listEnumDetails(config, level, type, page - 1);
-							break;
+							return;
 						case 49:
 							if (checkPagination(item)) if (level.indexOf(".") > -1) configInv.listConfigDetails(config, null, level.substring(0, level.lastIndexOf(".")));
 							else
 								configInv.listConfigDetails(config, null, null);
 							else {}
-							break;
+							return;
 					}
 					break;
 				case LIST_ENUM_LIST_SHOW:
 					switch (slot) {
 						case 53:
 							if (checkPagination(item)) configInv.listEnumListShow(config, level, type, page + 1);
-							break;
+							return;
 						case 45:
 							if (checkPagination(item)) configInv.listEnumListShow(config, level, type, page - 1);
-							break;
+							return;
 						case 48:
 							if (checkPagination(item)) if (level.indexOf(".") > -1) configInv.listConfigDetails(config, null, level.substring(0, level.lastIndexOf(".")));
 							else
 								configInv.listConfigDetails(config, null, null);
 							else {}
-							break;
+							return;
 						case 50:
 							if (item.getType() == Material.NAME_TAG) configInv.listEnumListEdit(config, level, type, 1);
-							break;
+							return;
 					}
 					break;
 				case LIST_ENUM_LIST_EDIT:
 					switch (slot) {
 						case 53:
 							if (checkPagination(item)) configInv.listEnumListEdit(config, level, type, page + 1);
-							break;
+							return;
 						case 45:
 							if (checkPagination(item)) configInv.listEnumListEdit(config, level, type, page - 1);
-							break;
+							return;
 						case 49:
 							if (checkPagination(item)) configInv.listEnumListShow(config, level, type, 1);
-							break;
+							return;
 					}
 					break;
 				case LIST_BACKUP:
 					switch (slot) {
 						case 53:
 							if (checkPagination(item)) configInv.listConfigDetails(config, backup, level, page + 1);
-							break;
+							return;
 						case 45:
 							if (checkPagination(item)) configInv.listConfigDetails(config, backup, level, page - 1);
-							break;
+							return;
 						case 49:
 							if (checkPagination(item)) configInv.setInventory(Screen.LIST_FILES);
-							break;
+							return;
 					}
 					break;
 
@@ -289,24 +357,24 @@ public class InventoryClickUtils {
 					switch (slot) {
 						case 53:
 							if (checkPagination(item)) configInv.listConfigDetails(config, backup, level, page + 1);
-							break;
+							return;
 						case 45:
 							if (checkPagination(item)) configInv.listConfigDetails(config, backup, level, page - 1);
-							break;
+							return;
 						case 48:
 							if (checkPagination(item)) if (level == null || level.equals("")) configInv.listBackup(config, 1);
 							else if (level.indexOf(".") > -1) configInv.listConfigDetails(config, backup, level.substring(0, level.lastIndexOf(".")), page);
 							else
 								configInv.listConfigDetails(config, backup, null, page);
 							else {}
-							break;
+							return;
 						case 50:
 							if (item.getType() == Material.FIREWORK_STAR) {
 								Chatable.get().sendMessage(player, "Reverting to backup. Saving...");
 								config.setFromBackup(backup);
 								configInv.setInventory(Screen.LIST_FILES);
 							}
-							break;
+							return;
 
 					}
 					break;
@@ -314,15 +382,15 @@ public class InventoryClickUtils {
 					switch (slot) {
 						case 53:
 							if (checkPagination(item)) configInv.listDetails(config, backup, level, type, page + 1);
-							break;
+							return;
 						case 45:
 							if (checkPagination(item)) configInv.listDetails(config, backup, level, type, page + 1);
-							break;
+							return;
 						case 49:
 							if (checkPagination(item)) if (level.indexOf(".") > -1) configInv.listConfigDetails(config, backup, level.substring(0, level.lastIndexOf(".")), 1);
 							else
 								configInv.listConfigDetails(config, backup, null, 1);
-							break;
+							return;
 					}
 					break;
 				default:
@@ -356,6 +424,14 @@ public class InventoryClickUtils {
 							} else if (type.equals("integer") || type.equals("double") || type.equals("string")) configInv.openAnvil(path, type);
 							else if (type.equals("enum")) configInv.listEnumDetails(config, path, type, 1);
 						} else if (click == ClickType.RIGHT) if (type.equals("string")) configInv.openChat(path, type);
+					}
+				}
+			} else if (configInv.getScreen() == Screen.ENCHANTMENTS) {
+				if (slot < 36 && item.hasItemMeta()) {
+					EnchantmentLevel ench = EnchantmentUtils.getEnchantmentLevels(item).get(0);
+					if (ench != null) {
+						Configuration configuration = Configurations.getConfigurations().getEnchantmentConfig(ench.getEnchant());
+						configInv.listConfigDetails(configuration.getConfig(), null, level, 1);
 					}
 				}
 			} else if (configInv.getScreen().equals(Screen.LIST_EDIT)) {

@@ -1,0 +1,52 @@
+custom_gui: true
+level_fifty: true
+lapis_in_table: true
+reset_on_reload: true
+extra_enchantables:
+- 'COMPASS'
+- 'RECOVERY_COMPASS'
+enchantability_decay: false
+use_minimum_level: true
+enchanting_upgrades: false
+
+multi_enchant_divisor:
+    level_fifty: 75.0
+    level_thirty: 50.0
+    
+config_comments:
+    custom_gui: 
+    - 'Whether to use the custom enchanting table gui'
+    - 'This will always be true if level_fifty is true'
+
+    level_fifty: 
+    - 'Whether to use the level fifty system of enchantments'
+    
+    lapis_in_table: 
+    - 'If players need to insert lapis into the custom table for it to work'
+    
+    reset_on_reload: 
+    - 'Resets enchantments in enchanting table whenever the server is reloaded'
+    - 'Setting this to false means the only ways to reset enchantments are through /esreset and enchanting an item'
+
+    extra_enchantables:
+    - 'Additional items that should be allowed to be enchanted in the enchanting table.'
+    - 'Will not add any enchantments for these items.'
+    
+    enchantability_decay:
+    - 'Adds the 1.14-1.14.2 feature of additional enchantments getting lower levels'
+    
+    use_minimum_level:
+    - 'Enchantments will not be available unless the enchanting level is the set value or above'
+    
+    multi_enchant_divisor:
+        level_fifty:
+        - 'Chance of multiple enchantments on one item. Lower value = more enchantments.'
+        - 'Sets the value if level_fifty is set to true.'
+        
+        level_thirty:
+        - 'Chance of multiple enchantments on one item. Lower value = more enchantments.'
+        - 'Sets the value if level_fifty is set to false.'
+    enchanting_upgrades:
+    - 'Allows players to use Nether Stars and Echo Shards to upgrade the enchanting table.'
+    - 'Each Echo Shard increases the final enchantability of the next attempt by 1.'
+    - 'Nether Stars will allow players to see all enchantments that will be placed on an item.'

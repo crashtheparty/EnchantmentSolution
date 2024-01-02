@@ -14,6 +14,7 @@ import org.bukkit.event.block.BlockDropItemEvent;
 import org.bukkit.inventory.ItemStack;
 import org.ctp.crashapi.item.BlockSound;
 import org.ctp.crashapi.item.MatData;
+import org.ctp.crashapi.nms.ExpNMS;
 import org.ctp.crashapi.utils.DamageUtils;
 import org.ctp.crashapi.utils.ItemUtils;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
@@ -23,7 +24,6 @@ import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enums.ItemBreakType;
 import org.ctp.enchantmentsolution.events.blocks.BlockBreakMultiEvent;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
-import org.ctp.enchantmentsolution.utils.items.AbilityUtils;
 import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
 
 public class BlockUtils {
@@ -133,7 +133,7 @@ public class BlockUtils {
 				if (blockDrop.isCancelled()) for(Item i: blockDrop.getItems())
 					i.remove();
 			}
-			AbilityUtils.dropExperience(loc, newEvent.getExpToDrop());
+			ExpNMS.dropExp(loc, newEvent.getExpToDrop(), false, player);
 			DamageUtils.damageItem(player, item, damage);
 			EnchantmentSolution.getESPlayer(player).breakBlock();
 			BlockUtils.removeMultiBlockBreak(b, enchantment);

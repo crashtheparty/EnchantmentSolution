@@ -78,7 +78,7 @@ public class ChestLootListener implements Listener {
 	}
 
 	private boolean shouldPopulate() {
-		return ConfigString.USE_LOOT.getBoolean("chests.use");
+		return ConfigString.USE_ALL_CHEST_LOOT.getBoolean();
 	}
 
 }

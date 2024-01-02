@@ -5,13 +5,14 @@ import java.util.Map.Entry;
 
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.attribute.AttributeModifier.Operation;
 import org.bukkit.block.Block;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -26,9 +27,9 @@ import org.ctp.crashapi.utils.ServerUtils;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.*;
+import org.ctp.enchantmentsolution.enchantments.helper.Seed;
+import org.ctp.enchantmentsolution.enums.EntityItemType;
 import org.ctp.enchantmentsolution.enums.ItemBreakType;
-import org.ctp.enchantmentsolution.events.player.FrequentFlyerEvent;
-import org.ctp.enchantmentsolution.events.player.FrequentFlyerEvent.FFType;
 import org.ctp.enchantmentsolution.listeners.enchantments.AsyncGaiaController;
 import org.ctp.enchantmentsolution.listeners.enchantments.AsyncHWDController;
 import org.ctp.enchantmentsolution.listeners.enchantments.HWDModel;
@@ -38,7 +39,8 @@ import org.ctp.enchantmentsolution.threads.ESPlayerThread;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.BlockUtils;
 import org.ctp.enchantmentsolution.utils.PermissionUtils;
-import org.ctp.enchantmentsolution.utils.abilityhelpers.*;
+import org.ctp.enchantmentsolution.utils.abilityhelpers.GaiaTrees;
+import org.ctp.enchantmentsolution.utils.abilityhelpers.OverkillDeath;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 import org.ctp.enchantmentsolution.utils.items.AbilityUtils;
 import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
@@ -59,19 +61,18 @@ public class ESPlayer {
 	private Map<Long, Integer> blocksBroken;
 	private float currentExhaustion, pastExhaustion;
 	private ItemStack elytra;
-	private boolean canFly, didTick, reset, sacrificeAdvancement, plyometricsAdvancement;
-	private int flightDamage, flightDamageLimit, frequentFlyerLevel, icarusDelay, underwaterTicks;
-	private FFType currentFFType;
+	private boolean canFly, didTick, plyometricsAdvancement, willSeeEnchantments, canSeeEnchantments;
+	private int flightDamage, flightDamageLimit, icarusDelay, underwaterTicks, modelKey, nextEchoShards, currentEchoShards;
 	private List<OverkillDeath> overkillDeaths;
 	private List<AttributeLevel> attributes;
 	private List<PotionEffect> effects;
 	private ESPlayerAttributeInstance flyAttribute = new FlySpeedAttribute();
-	private Streak streak;
 	private Runnable telepathyTask;
 	private List<AsyncHWDController> hwdControllers;
 	private Map<GaiaTrees, List<AsyncGaiaController>> gaiaControllers;
 	private List<HWDModel> models;
-	private int modelKey;
+	private List<Seed> enchantmentSeeds = new ArrayList<Seed>();
+	private long levelSeed;
 	private CheckTimer equipItem;
 
 	public ESPlayer(OfflinePlayer player) {
@@ -85,7 +86,6 @@ public class ESPlayer {
 		overkillDeaths = new ArrayList<OverkillDeath>();
 		attributes = new ArrayList<AttributeLevel>();
 		effects = new ArrayList<PotionEffect>();
-		currentFFType = FFType.NONE;
 		telepathyItems = new ArrayList<ItemStack>();
 		removeSoulItems();
 		flyAttribute.addModifier(new AttributeModifier(UUID.fromString("ffffffff-ffff-ffff-ffff-000000000000"), "frequentFlyerFlight", -0.08, Operation.ADD_NUMBER));
@@ -94,6 +94,7 @@ public class ESPlayer {
 		gaiaControllers = new HashMap<>();
 		models = new ArrayList<HWDModel>();
 		equipItem = new CheckTimer(2);
+		updateEnchantmentSeeds();
 	}
 
 	public OfflinePlayer getPlayer() {
@@ -109,7 +110,7 @@ public class ESPlayer {
 	}
 
 	public void logout() {
-		logoutFlyer();
+		resetFlightSpeed();
 		removeAllHWDControllers();
 		removeAllGaiaControllers();
 	}
@@ -198,6 +199,46 @@ public class ESPlayer {
 		return isOnline() ? getOnlinePlayer().getInventory().getContents() : new ItemStack[41];
 	}
 
+	public ItemSlot[] getInventoryItemsAndType() {
+		ItemSlot[] equipped = new ItemSlot[41];
+		if (!isOnline()) return equipped;
+		PlayerInventory inv = getOnlinePlayer().getInventory();
+
+		for(int i = 0; i < 36; i++)
+			if (i == inv.getHeldItemSlot()) equipped[i] = new ItemSlot(inv.getContents()[i], ItemSlotType.MAIN_HAND);
+			else
+				equipped[i] = new ItemSlot(inv.getContents()[i], ItemSlotType.getTypeFromSlot(i));
+		equipped[36] = new ItemSlot(inv.getHelmet(), ItemSlotType.HELMET);
+		equipped[37] = new ItemSlot(inv.getChestplate(), ItemSlotType.CHESTPLATE);
+		equipped[38] = new ItemSlot(inv.getLeggings(), ItemSlotType.LEGGINGS);
+		equipped[39] = new ItemSlot(inv.getBoots(), ItemSlotType.BOOTS);
+		equipped[40] = new ItemSlot(inv.getItemInOffHand(), ItemSlotType.OFF_HAND);
+		return equipped;
+	}
+
+	public ItemSlot[] getInventoryItemsAndType(ItemSlot item) {
+		ItemSlot[] equipped = new ItemSlot[41];
+		if (!isOnline()) return equipped;
+		PlayerInventory inv = getOnlinePlayer().getInventory();
+
+		for(int i = 0; i < 36; i++)
+			if (i == inv.getHeldItemSlot()) {
+				ItemStack it = inv.getContents()[i];
+				if (item.getItem() != null && item.getType() == ItemSlotType.MAIN_HAND) it = item.getItem();
+				equipped[i] = new ItemSlot(it, ItemSlotType.MAIN_HAND);
+			} else {
+				ItemStack it = inv.getContents()[i];
+				if (item.getItem() != null && item.getType() == ItemSlotType.getTypeFromSlot(i)) it = item.getItem();
+				equipped[i] = new ItemSlot(it, ItemSlotType.getTypeFromSlot(i));
+			}
+		equipped[36] = new ItemSlot(item.getItem() != null && item.getType() == ItemSlotType.HELMET ? item.getItem() : inv.getHelmet(), ItemSlotType.HELMET);
+		equipped[37] = new ItemSlot(item.getItem() != null && item.getType() == ItemSlotType.CHESTPLATE ? item.getItem() : inv.getChestplate(), ItemSlotType.CHESTPLATE);
+		equipped[38] = new ItemSlot(item.getItem() != null && item.getType() == ItemSlotType.LEGGINGS ? item.getItem() : inv.getLeggings(), ItemSlotType.LEGGINGS);
+		equipped[39] = new ItemSlot(item.getItem() != null && item.getType() == ItemSlotType.BOOTS ? item.getItem() : inv.getBoots(), ItemSlotType.BOOTS);
+		equipped[40] = new ItemSlot(item.getItem() != null && item.getType() == ItemSlotType.OFF_HAND ? item.getItem() : inv.getItemInOffHand(), ItemSlotType.OFF_HAND);
+		return equipped;
+	}
+
 	public List<ItemStack> getUnstableItems() {
 		List<ItemStack> items = new ArrayList<ItemStack>();
 		for(ItemStack item: getEquipped())
@@ -205,12 +246,32 @@ public class ESPlayer {
 		return items;
 	}
 
+	public ItemSlot getProjectile(EntityType[] entityTypes) {
+		ItemSlot[] slots = getInventoryItemsAndType();
+		ItemSlot offhand = slots[40];
+		if (offhand != null && offhand.getItem() != null) for(EntityItemType type: EntityItemType.values())
+			if (offhand.getItem().getType() == type.getMaterial() && Arrays.asList(entityTypes).contains(type.getEntityType())) return offhand;
+
+		for(ItemSlot slot: slots)
+			for(EntityItemType type: EntityItemType.values())
+				if (slot != null && slot.getItem() != null && slot.getItem().getType() == type.getMaterial() && Arrays.asList(entityTypes).contains(type.getEntityType())) return slot;
+
+		return null;
+	}
+
+	public void setItem(ItemSlotType type, ItemStack i) {
+		if (isOnline()) if (type.getEquipmentSlot() != null) getOnlinePlayer().getInventory().setItem(type.getEquipmentSlot(), i);
+		else
+			getOnlinePlayer().getInventory().setItem(type.getSlot(), i);
+		else {}
+	}
+
 	public long getCooldown(EnchantmentWrapper enchant) {
 		return cooldowns.containsKey(enchant) ? cooldowns.get(enchant) : 0;
 	}
 
-	public boolean setCooldown(EnchantmentWrapper enchant) {
-		cooldowns.put(enchant, ServerUtils.getCurrentTick());
+	public boolean setCooldown(EnchantmentWrapper enchant, int ticks) {
+		cooldowns.put(enchant, ServerUtils.getCurrentTick() + ticks);
 		return cooldowns.containsKey(enchant);
 	}
 
@@ -233,8 +294,8 @@ public class ESPlayer {
 	public boolean canBreakBlock() {
 		long tick = ServerUtils.getCurrentTick();
 		if (tick <= DELAY_TICKS) return false;
-		if (GLOBAL_BLOCKS.containsKey(tick) && GLOBAL_BLOCKS.get(tick) >= ConfigString.MULTI_BLOCK_BLOCKS_GLOBAL.getInt()) return false;
-		if (blocksBroken.containsKey(tick) && blocksBroken.get(tick) >= ConfigString.MULTI_BLOCK_BLOCKS_PLAYER.getInt()) return false;
+		if (GLOBAL_BLOCKS.containsKey(tick) && GLOBAL_BLOCKS.get(tick) >= ConfigString.ASYNC_BLOCKS_GLOBAL.getInt()) return false;
+		if (blocksBroken.containsKey(tick) && blocksBroken.get(tick) >= ConfigString.ASYNC_BLOCKS_PLAYER.getInt()) return false;
 		return true;
 	}
 
@@ -310,98 +371,28 @@ public class ESPlayer {
 		return currentExhaustion;
 	}
 
-	public ItemStack getElytra() {
-		return elytra;
+	public void setFlightSpeed(double flight) {
+		flyAttribute.removeModifier(UUID.fromString("ffffffff-ffff-ffff-ffff-000000001111"));
+		flyAttribute.addModifier(new AttributeModifier(UUID.fromString("ffffffff-ffff-ffff-ffff-000000001111"), "frequentFlyerLevel", flight, Operation.ADD_NUMBER));
+		player.getPlayer().setFlySpeed((float) flyAttribute.getValue());
 	}
 
-	public boolean hasFrequentFlyer() {
-		frequentFlyerLevel = 0;
-		ItemStack newElytra = null;
-		for(ItemStack item: getArmor())
-			if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.FREQUENT_FLYER) && !DamageUtils.aboveMaxDamage(item)) {
-				int level = EnchantmentUtils.getLevel(item, RegisterEnchantments.FREQUENT_FLYER);
-				if (level > frequentFlyerLevel) {
-					frequentFlyerLevel = level;
-					newElytra = item;
-				}
-			}
-		reset = elytra == null || !elytra.equals(newElytra);
-		elytra = newElytra;
-		return elytra != null;
-	}
-
-	public void setFrequentFlyer() {
-		boolean fly = frequentFlyerLevel > 0 && elytra != null;
-		flightDamageLimit = ConfigString.LEGACY_FF.getBoolean() ? frequentFlyerLevel * 2 * 20 : 60;
-		setCanFly(fly);
-		setFlightSpeed(fly);
-		if (reset) flightDamage = flightDamageLimit;
-	}
-
-	private void setFlightSpeed(boolean canFly) {
-		if (canFly) {
-			double flight = ConfigString.LEGACY_FF.getBoolean() ? 0.08 : 0.016 * frequentFlyerLevel;
-			flyAttribute.removeModifier(UUID.fromString("ffffffff-ffff-ffff-ffff-000000001111"));
-			flyAttribute.addModifier(new AttributeModifier(UUID.fromString("ffffffff-ffff-ffff-ffff-000000001111"), "frequentFlyerLevel", flight, Operation.ADD_NUMBER));
-			player.getPlayer().setFlySpeed((float) flyAttribute.getValue());
-		} else if (player.isOnline()) player.getPlayer().setFlySpeed((float) flyAttribute.getDefaultValue());
-	}
-
-	public boolean canFly(boolean online) {
-		if (online) {
-			if (!isOnline()) return false;
-			if (canFly && !getOnlinePlayer().getAllowFlight()) {
-				resetFlyer();
-				setCanFly(canFly);
-				if (!getOnlinePlayer().getAllowFlight()) return false;
-			}
-		}
-		return canFly;
-	}
-
-	public void setCanFly(boolean canFly) {
+	public void setCanFly(int level) {
 		if (!isOnline()) return;
 		Player player = getOnlinePlayer();
 		boolean permission = PermissionUtils.check(player, "enchantmentsolution.abilities.has-external-flight");
-		boolean modifyCanFly = canFly || player.getGameMode().equals(GameMode.CREATIVE) || player.getGameMode().equals(GameMode.SPECTATOR);
-		FrequentFlyerEvent event = null;
-		if (frequentFlyerLevel == 0 && this.canFly && !modifyCanFly) {
-			if (!permission && currentFFType == FFType.FLIGHT) event = new FrequentFlyerEvent(player, frequentFlyerLevel, FFType.REMOVE_FLIGHT);
-		} else if (!this.canFly && modifyCanFly && currentFFType == FFType.NONE) event = new FrequentFlyerEvent(player, frequentFlyerLevel, FFType.ALLOW_FLIGHT);
-		if (event != null) {
-			Bukkit.getPluginManager().callEvent(event);
-			if (!event.isCancelled()) {
-				this.canFly = modifyCanFly;
-				if (event.getType().doesAllowFlight()) currentFFType = FFType.FLIGHT;
-				else
-					currentFFType = FFType.NONE;
-				if (this.canFly || !permission) {
-					player.setAllowFlight(this.canFly);
-					if (player.isFlying() && !this.canFly) player.setFlying(false);
-				}
-			}
+		boolean modifyCanFly = level > 0 || player.getGameMode() == GameMode.CREATIVE || player.getGameMode() == GameMode.SPECTATOR;
+		this.canFly = modifyCanFly;
+		if (this.canFly || !permission) {
+			player.setAllowFlight(this.canFly);
+			if (player.isFlying() && !this.canFly) player.setFlying(false);
 		}
+		if (!this.canFly) resetFlightSpeed();
+		else if (level > 0 && player.isFlying()) minus();
 	}
 
-	public void resetFlyer() {
-		if (!isOnline()) return;
-		Player player = getOnlinePlayer();
-		FrequentFlyerEvent event = new FrequentFlyerEvent(player, frequentFlyerLevel, FFType.REMOVE_FLIGHT);
-		Bukkit.getPluginManager().callEvent(event);
-		if (!event.isCancelled()) {
-			canFly = false;
-			currentFFType = FFType.NONE;
-			player.setAllowFlight(canFly);
-			if (player.isFlying() && !canFly) player.setFlying(false);
-		}
-	}
-
-	public void logoutFlyer() {
-		currentFFType = FFType.NONE;
-		canFly = false;
-		frequentFlyerLevel = 0;
-		elytra = null;
-		getOnlinePlayer().setAllowFlight(false);
+	public void resetFlightSpeed() {
+		player.getPlayer().setFlySpeed((float) flyAttribute.getDefaultValue());
 	}
 
 	public int getFlightDamage() {
@@ -462,25 +453,6 @@ public class ESPlayer {
 		overkillDeaths.add(death);
 	}
 
-	public List<AttributeLevel> getAttributes() {
-		return attributes;
-	}
-
-	public void addAttribute(AttributeLevel attribute) {
-		attributes.add(attribute);
-	}
-
-	public void removeAttribute(Attributable attribute, ItemEquippedSlot slot) {
-		Iterator<AttributeLevel> iter = attributes.iterator();
-		while (iter.hasNext()) {
-			AttributeLevel level = iter.next();
-			if (level.getAttribute().equals(attribute) && level.getSlot().equals(slot)) {
-				level.getAttribute().removeModifier(onlinePlayer, level.getSlot().getType(), false);
-				iter.remove();
-			}
-		}
-	}
-
 	public List<PotionEffect> getEffects() {
 		return effects;
 	}
@@ -539,27 +511,6 @@ public class ESPlayer {
 			telepathyItems.add(item);
 		}
 		checkTelepathyTask();
-	}
-
-	public int addToStreak(LivingEntity entity) {
-		if (streak == null) streak = new Streak();
-		int entityStreak = streak.addToStreak(entity);
-		if (entityStreak == 100) AdvancementUtils.awardCriteria(onlinePlayer, ESAdvancement.DOUBLE_DAMAGE, "kills");
-		return entityStreak;
-	}
-
-	public int getStreak() {
-		if (streak == null) return 0;
-		return streak.getStreak();
-	}
-
-	public EntityType getStreakType() {
-		return streak == null ? null : streak.getType();
-	}
-
-	public void setStreak(EntityType type, int num) {
-		if (streak == null) streak = new Streak();
-		streak.setStreak(type, num);
 	}
 
 	public void addTimedDisableEnchant(JavaPlugin plugin, EnchantmentWrapper enchant, int ticks) {
@@ -639,14 +590,6 @@ public class ESPlayer {
 		for(EnchantmentDisable e: disable)
 			if (e.getEnchantment() == enchant) return true;
 		return false;
-	}
-
-	public boolean getSacrificeAdvancement() {
-		return sacrificeAdvancement;
-	}
-
-	public void setSacrificeAdvancement(boolean sacrificeAdvancement) {
-		this.sacrificeAdvancement = sacrificeAdvancement;
 	}
 
 	public boolean getPlyometricsAdvancement() {
@@ -802,7 +745,7 @@ public class ESPlayer {
 		while (iter.hasNext() && canBreakBlock()) {
 			HWDModel model = iter.next();
 			if (currentTick != ServerUtils.getCurrentTick()) {
-				DELAY_TICKS = currentTick + ConfigString.MULTI_BLOCK_DELAY.getInt();
+				DELAY_TICKS = currentTick + ConfigString.ASYNC_BLOCK_DELAY.getInt();
 				break;
 			}
 			while (canBreakBlock()) {
@@ -884,6 +827,106 @@ public class ESPlayer {
 		}
 	}
 
+	public void endCooldowns() {
+		Iterator<Entry<EnchantmentWrapper, Long>> iter = cooldowns.entrySet().iterator();
+
+		while (iter.hasNext()) {
+			Entry<EnchantmentWrapper, Long> entry = iter.next();
+			if (!(entry.getValue().longValue() > ServerUtils.getCurrentTick())) {
+				if (entry.getKey() == RegisterEnchantments.ICARUS) {
+					Player p = getOnlinePlayer();
+					if (p == null) return;
+					p.getWorld().spawnParticle(Particle.FIREWORKS_SPARK, p.getLocation(), 250, 2, 2, 2);
+					p.getWorld().playSound(p.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_BLAST, 1, 1);
+				}
+
+				iter.remove();
+			}
+		}
+	}
+
+	public boolean hasCooldown(Player player, EnchantmentWrapper enchantment) {
+		return cooldowns.containsKey(enchantment);
+	}
+
+	public long getEnchantmentSeed(ItemData data, int bookshelves) {
+		Iterator<Seed> iter = enchantmentSeeds.iterator();
+		while (iter.hasNext()) {
+			Seed seed = iter.next();
+			if (seed.getData().equals(data)) return seed.getFinalSeed(bookshelves);
+		}
+		Seed seed = new Seed(data, (int) (Math.random() * Integer.MAX_VALUE));
+		enchantmentSeeds.add(seed);
+		return seed.getFinalSeed(bookshelves);
+	}
+
+	public List<Seed> getEnchantmentSeeds() {
+		return enchantmentSeeds;
+	}
+
+	public void setEnchantmentSeed(ItemData data, int num) {
+		for (Seed s : enchantmentSeeds)
+			if (s.getData().equals(data)) {
+				s.setSeed(num);
+				return;
+			}
+		Seed seed = new Seed(data, num);
+		enchantmentSeeds.add(seed);
+	}
+
+	public void updateEnchantmentSeeds() {
+		Iterator<Seed> iter = enchantmentSeeds.iterator();
+		while (iter.hasNext()) {
+			iter.next();
+			iter.remove();
+		}
+		levelSeed = new Random().nextLong();
+		canSeeEnchantments = willSeeEnchantments;
+		willSeeEnchantments = false;
+		currentEchoShards = nextEchoShards;
+		nextEchoShards = 0;
+	}
+
+	public long getLevelSeed() {
+		return levelSeed;
+	}
+
+	public boolean willSeeEnchantments() {
+		return willSeeEnchantments;
+	}
+
+	public void setWillSeeEnchantments(boolean willSeeEnchantments) {
+		this.willSeeEnchantments = willSeeEnchantments;
+	}
+
+	public boolean canSeeEnchantments() {
+		return canSeeEnchantments;
+	}
+
+	public void setCanSeeEnchantments(boolean canSeeEnchantments) {
+		this.canSeeEnchantments = canSeeEnchantments;
+	}
+
+	public int getNextEchoShards() {
+		return nextEchoShards;
+	}
+
+	public void setNextEchoShards(int nextEchoShards) {
+		this.nextEchoShards = nextEchoShards;
+	}
+
+	public void addNextEchoShards(int nextEchoShards) {
+		this.nextEchoShards += nextEchoShards;
+	}
+
+	public int getCurrentEchoShards() {
+		return currentEchoShards;
+	}
+
+	public void setCurrentEchoShards(int currentEchoShards) {
+		this.currentEchoShards = currentEchoShards;
+	}
+
 	public void setEquipTimer() {
 		equipItem.set(true, ServerUtils.getCurrentTick());
 	}
@@ -896,7 +939,9 @@ public class ESPlayer {
 			Iterator<AttributeLevel> attr = getAttributes().iterator();
 			while (attr.hasNext()) {
 				AttributeLevel level = attr.next();
-				Attributable.removeAttribute(player, null, false, level.getAttribute(), level.getSlot());
+				AttributeInstance instance = player.getAttribute(level.getAttr());
+				instance.removeModifier(level.getAttribute());
+				if (level.getAttr() == Attribute.GENERIC_MAX_HEALTH) DamageNMS.updateHealth(player);
 				attr.remove();
 			}
 			Iterator<PotionEffect> effects = getEffects().iterator();
@@ -920,5 +965,25 @@ public class ESPlayer {
 				DamageNMS.updateHealth(player);
 			}
 		}
+	}
+
+	public List<AttributeLevel> getAttributes() {
+		return attributes;
+	}
+
+	public void addAttribute(AttributeLevel attribute) {
+		attributes.add(attribute);
+	}
+
+	public void removeAttribute(AttributeModifier attribute) {
+		Iterator<AttributeLevel> iter = attributes.iterator();
+		while (iter.hasNext()) {
+			AttributeLevel level = iter.next();
+			if (level.getAttribute().getUniqueId().equals(attribute.getUniqueId())) iter.remove();
+		}
+	}
+
+	public void setLevelSeed(long l) {
+		this.levelSeed = l;
 	}
 }

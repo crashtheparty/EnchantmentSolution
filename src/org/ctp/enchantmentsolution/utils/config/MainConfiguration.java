@@ -2,7 +2,6 @@ package org.ctp.enchantmentsolution.utils.config;
 
 import java.io.File;
 import java.util.Arrays;
-import java.util.List;
 
 import org.ctp.crashapi.config.Configuration;
 import org.ctp.crashapi.config.Language;
@@ -15,8 +14,6 @@ import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.utils.Configurations;
 
 public class MainConfiguration extends Configuration {
-
-	private List<String> enchantingTypes = Arrays.asList("vanilla_30", "vanilla_30_custom", "enhanced_30", "enhanced_30_custom", "enhanced_50", "enhanced_50_custom");
 
 	public MainConfiguration(File dataFolder, BackupDB db, String[] header) {
 		super(EnchantmentSolution.getPlugin(), new File(dataFolder + "/config.yml"), db, header);
@@ -44,10 +41,7 @@ public class MainConfiguration extends Configuration {
 			else
 				config.addDefault(str, defaultConfig.get(str));
 		config.addEnum("language", Language.getValues());
-		config.addEnum("disable_enchant_method", Arrays.asList("vanish", "visible", "repairable"));
-		config.addEnum("enchanting_table.enchanting_type", enchantingTypes);
 		config.addEnum("gametypes", Arrays.asList("MINIGAME", "RPG", "HARD"));
-		config.addMinMax("anvil.max_repair_level", 40, 1000000);
 
 		config.writeDefaults();
 
@@ -84,18 +78,6 @@ public class MainConfiguration extends Configuration {
 		if (config.getBooleanValue("get_latest_version") != null) {
 			config.set("version.get_latest", config.getBoolean("get_latest_version"));
 			config.removeKey("get_latest_version");
-		}
-		String setType = config.getString("enchanting_table.enchanting_type");
-		if (setType != null && !enchantingTypes.contains(setType)) {
-			config.set("enchanting_table.enchanting_type", "enhanced_50");
-			setType = "enhanced_50";
-		}
-
-		if (setType != null) {
-			config.set("enchanting_table.custom_gui", setType.contains("enhanced"));
-			config.set("enchanting_table.level_fifty", setType.contains("50"));
-			config.set("anvil.custom_gui", setType.contains("enhanced"));
-			config.set("grindstone.custom_gui", setType.contains("enhanced"));
 		}
 
 		if (config.getBooleanValue("enchanting_table.use_enchanted_books") != null) {

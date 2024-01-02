@@ -1,43 +1,38 @@
 package org.ctp.enchantmentsolution.events.interact;
 
+import java.util.List;
+
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.ctp.crashapi.utils.ServerUtils;
-import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.CERegister;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.events.Cooldownable;
-import org.ctp.enchantmentsolution.utils.player.ESPlayer;
+import org.ctp.enchantmentsolution.events.Droppable;
 
-public class FlowerGiftEvent extends InteractEvent implements Cooldownable {
+public class FlowerGiftEvent extends InteractEvent implements Cooldownable, Droppable {
 
-	private ItemStack flower;
+	private List<ItemStack> drops;
 	private Location dropLocation;
 	private boolean cooldown;
-	private int cooldownTicks;
+	private int cooldownTicks, exp;
 
-	public FlowerGiftEvent(Player who, ItemStack item, Block block, ItemStack flower, Location dropLocation) {
+	public FlowerGiftEvent(Player who, ItemStack item, Block block, List<ItemStack> drops, int exp, Location dropLocation) {
 		super(who, new EnchantmentLevel(CERegister.FLOWER_GIFT, 1), item, block);
-		setFlower(flower);
+		this.drops = drops;
 		setDropLocation(dropLocation);
 		cooldown = true;
 		cooldownTicks = 20;
+		this.exp = exp;
 	}
 
-	public ItemStack getFlower() {
-		return flower;
-	}
-
-	public void setFlower(ItemStack flower) {
-		this.flower = flower;
-	}
-
+	@Override
 	public Location getDropLocation() {
 		return dropLocation;
 	}
 
+	@Override
 	public void setDropLocation(Location dropLocation) {
 		this.dropLocation = dropLocation;
 	}
@@ -62,10 +57,19 @@ public class FlowerGiftEvent extends InteractEvent implements Cooldownable {
 		this.cooldownTicks = cooldownTicks;
 	}
 
-	public boolean overCooldown() {
-		ESPlayer player = EnchantmentSolution.getESPlayer(getPlayer());
-		long cooldown = player.getCooldown(getEnchantment().getEnchant().getRelativeEnchantment());
-		return !this.cooldown || !(cooldown + getCooldownTicks() > ServerUtils.getCurrentTick());
+	@Override
+	public List<ItemStack> getDrops() {
+		return drops;
+	}
+
+	@Override
+	public int getExp() {
+		return exp;
+	}
+
+	@Override
+	public void setExp(int exp) {
+		this.exp = exp;
 	}
 
 }

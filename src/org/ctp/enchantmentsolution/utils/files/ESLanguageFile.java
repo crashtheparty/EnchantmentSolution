@@ -30,7 +30,7 @@ public class ESLanguageFile extends CrashLanguageFile {
 			else
 				config.addDefault(str, defaultConfig.get(str));
 
-		for(CustomEnchantment enchant: RegisterEnchantments.getEnchantments()) {
+		for(CustomEnchantment enchant: RegisterEnchantments.getRegisteredEnchantments()) {
 			String enchantmentDescription = enchant.getDefaultDescription(Language.US);
 			if (enchantmentDescription == null) switch (language) {
 				case US:

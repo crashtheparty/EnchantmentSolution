@@ -14,16 +14,17 @@ import org.ctp.crashapi.config.yaml.YamlConfig;
 import org.ctp.crashapi.config.yaml.YamlConfigBackup;
 import org.ctp.crashapi.db.BackupDB;
 import org.ctp.crashapi.resources.advancements.CrashAdvancementProgress;
+import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
-import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
-import org.ctp.enchantmentsolution.enchantments.EnchantmentWrapper;
-import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
-import org.ctp.enchantmentsolution.enchantments.generate.TableEnchantments;
+import org.ctp.enchantmentsolution.api.ApiEnchantmentWrapper;
+import org.ctp.enchantmentsolution.enchantments.*;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
+import org.ctp.enchantmentsolution.enchantments.helper.Seed;
+import org.ctp.enchantmentsolution.enums.Loots;
 import org.ctp.enchantmentsolution.inventory.minigame.Minigame;
 import org.ctp.enchantmentsolution.rpg.RPGPlayer;
 import org.ctp.enchantmentsolution.rpg.RPGUtils;
-import org.ctp.enchantmentsolution.utils.abilityhelpers.AnimalMob;
+import org.ctp.enchantmentsolution.utils.abilityhelpers.LassoMob;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.WalkerBlock;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.WalkerUtils;
 import org.ctp.enchantmentsolution.utils.config.*;
@@ -35,6 +36,9 @@ public class Configurations implements CrashConfigurations {
 	private static boolean INITIALIZING = true, FIRST_SAVE = true;
 	private final static Configurations CONFIGURATIONS = new Configurations();
 	private MainConfiguration CONFIG;
+	private EnchantingTableConfiguration ENCHANTING_TABLE;
+	private AnvilConfiguration ANVIL;
+	private GrindstoneConfiguration GRINDSTONE;
 	private FishingConfiguration FISHING;
 	private LanguageConfiguration LANGUAGE;
 	private EnchantmentsConfiguration ENCHANTMENTS;
@@ -42,10 +46,14 @@ public class Configurations implements CrashConfigurations {
 	private RPGConfiguration RPG;
 	private MinigameConfiguration MINIGAME;
 	private HardModeConfiguration HARD_MODE;
+	private LootsConfiguration LOOTS;
+	private LootTypesConfiguration LOOT_TYPES;
+	private List<Configuration> MAIN_CONFIGURATIONS;
 
 	private List<ESLanguageFile> LANGUAGE_FILES = new ArrayList<ESLanguageFile>();
 	private DataFile DATA_FILE;
 	private DataFile DEBUG_FILE;
+	private Map<CustomEnchantment, EnchantmentConfiguration> ENCHANTMENT_CONFIGURATIONS;
 
 	public static Configurations getConfigurations() {
 		return CONFIGURATIONS;
@@ -65,12 +73,18 @@ public class Configurations implements CrashConfigurations {
 		String[] header = { "Enchantment Solution", "Plugin by", "crashtheparty" };
 
 		CONFIG = new MainConfiguration(dataFolder, db, header);
+		ENCHANTING_TABLE = new EnchantingTableConfiguration(dataFolder, db, header);
+		ANVIL = new AnvilConfiguration(dataFolder, db, header);
+		GRINDSTONE = new GrindstoneConfiguration(dataFolder, db, header);
 		FISHING = new FishingConfiguration(dataFolder, db, header);
 		ENCHANTMENTS = new EnchantmentsConfiguration(dataFolder, db, header);
 		ADVANCEMENTS = new AdvancementsConfiguration(dataFolder, db, header);
 		RPG = new RPGConfiguration(dataFolder, db, header);
 		MINIGAME = new MinigameConfiguration(dataFolder, db, header);
 		HARD_MODE = new HardModeConfiguration(dataFolder, db, header);
+		LOOTS = new LootsConfiguration(dataFolder, db, header);
+		LOOT_TYPES = new LootTypesConfiguration(dataFolder, db, header);
+		ENCHANTMENT_CONFIGURATIONS = new HashMap<CustomEnchantment, EnchantmentConfiguration>();
 
 		String languageFile = CONFIG.getString("language_file");
 		Language lang = Language.getLanguage(CONFIG.getString("language"));
@@ -96,6 +110,7 @@ public class Configurations implements CrashConfigurations {
 		if (!extras.exists()) extras.mkdirs();
 		if (!dataBackups.exists()) dataBackups.mkdirs();
 
+		MAIN_CONFIGURATIONS = Arrays.asList(CONFIG, LANGUAGE, ENCHANTING_TABLE, ANVIL, GRINDSTONE, FISHING, ENCHANTMENTS, ADVANCEMENTS, RPG, MINIGAME, HARD_MODE, LOOTS, LOOT_TYPES);
 		DATA_FILE = new DataFile(EnchantmentSolution.getPlugin(), dataFolder, "data.yml", true, true);
 		DEBUG_FILE = new DataFile(EnchantmentSolution.getPlugin(), dataFolder, "debug.yml", true, false);
 
@@ -104,14 +119,14 @@ public class Configurations implements CrashConfigurations {
 	}
 
 	public void revert() {
-		CONFIG.revert();
-		FISHING.revert();
-		LANGUAGE.revert();
-		ENCHANTMENTS.revert();
-		ADVANCEMENTS.revert();
-		RPG.revert();
-		MINIGAME.revert();
-		HARD_MODE.revert();
+		for(Configuration c: MAIN_CONFIGURATIONS)
+			c.revert();
+
+		for(CustomEnchantment enchantment: RegisterEnchantments.getRegisteredEnchantments())
+			if (ENCHANTMENT_CONFIGURATIONS.containsKey(enchantment)) {
+				EnchantmentConfiguration config = ENCHANTMENT_CONFIGURATIONS.get(enchantment);
+				config.revert();
+			}
 	}
 
 	public void revert(Configuration config, int backup) {
@@ -120,35 +135,61 @@ public class Configurations implements CrashConfigurations {
 
 	@Override
 	public void save() {
-		CONFIG.setComments(ConfigString.USE_COMMENTS.getBoolean());
-		FISHING.setComments(ConfigString.USE_COMMENTS.getBoolean());
-		LANGUAGE.setComments(ConfigString.USE_COMMENTS.getBoolean());
-		ENCHANTMENTS.setComments(ConfigString.USE_COMMENTS.getBoolean());
-		ADVANCEMENTS.setComments(ConfigString.USE_COMMENTS.getBoolean());
-		RPG.setComments(ConfigString.USE_COMMENTS.getBoolean());
-		MINIGAME.setComments(ConfigString.USE_COMMENTS.getBoolean());
-		HARD_MODE.setComments(ConfigString.USE_COMMENTS.getBoolean());
+		boolean comments = ConfigString.USE_COMMENTS.getBoolean();
+		for(Configuration c: MAIN_CONFIGURATIONS) {
+			c.setComments(comments);
+			c.save();
+		}
 
-		CONFIG.save();
-		FISHING.save();
-		LANGUAGE.save();
-		ENCHANTMENTS.save();
-		ADVANCEMENTS.save();
-		RPG.save();
-		MINIGAME.save();
-		HARD_MODE.save();
+		File dataFolder = EnchantmentSolution.getPlugin().getDataFolder();
+		BackupDB db = EnchantmentSolution.getPlugin().getDb();
+		String[] header = { "Enchantment Solution", "Plugin by", "crashtheparty", "Using Level " + (ConfigString.LEVEL_FIFTY.getBoolean() ? "Fifty" : "Thirty") + " System!", "Make sure to edit that system under ", "advanced.enchantability", "if you are modifying those values." };
 
-		if (ConfigString.RESET_ON_RELOAD.getBoolean()) TableEnchantments.removeAllTableEnchantments();
+		for(CustomEnchantment enchantment: RegisterEnchantments.getEnchantments()) {
+			if (ENCHANTMENT_CONFIGURATIONS.containsKey(enchantment)) {
+				EnchantmentConfiguration config = ENCHANTMENT_CONFIGURATIONS.get(enchantment);
+				config.setComments(comments);
+				config.save();
+				continue;
+			}
+			File folder = new File(dataFolder + "/enchantments/" + (enchantment.getRelativeEnchantment() instanceof ApiEnchantmentWrapper ? ((ApiEnchantmentWrapper) enchantment.getRelativeEnchantment()).getPlugin().getName().toLowerCase(Locale.ROOT) : enchantment.getRelativeEnchantment() instanceof CustomEnchantmentWrapper ? "enchantmentsolution" : "vanilla"));
+			try {
+				if (!folder.exists()) folder.mkdirs();
+			} catch (final Exception e) {
+				e.printStackTrace();
+			}
+			EnchantmentConfiguration config = new EnchantmentConfiguration(enchantment, new File(folder + "/" + enchantment.getName() + ".yml"), db, header);
+			config.setComments(comments);
+			config.save();
+			ENCHANTMENT_CONFIGURATIONS.put(enchantment, config);
+		}
+
+//		if (ConfigString.RESET_ON_RELOAD.getBoolean()) TableEnchantments.removeAllTableEnchantments();
 		RegisterEnchantments.setEnchantments();
 		EnchantmentSolution.getPlugin().reEquipItems();
 
+		if (FIRST_SAVE) Chatable.get().sendInfo("Loading Loot Types...");
+		Loots.createDefaults();
+		Loots.createCustomLoot();
+		if (FIRST_SAVE) Chatable.get().sendInfo("Loot Types Loaded!");
+
 		if (!FIRST_SAVE) {
 			EnchantmentSolution.getPlugin().setVersionCheck(ConfigString.LATEST_VERSION.getBoolean(), ConfigString.EXPERIMENTAL_VERSION.getBoolean());
-			AdvancementUtils.createAdvancements();
+			generateDataPack();
 			EnchantmentSolution.getPlugin().getWiki().resetRunner();
 		}
 		Minigame.reset();
 		FIRST_SAVE = false;
+	}
+
+	public static void generateDataPack() {
+		boolean advancements = AdvancementUtils.createAdvancements();
+
+		if (advancements) {
+			Chatable.get().sendInfo("Reloading advancements...");
+			Bukkit.reloadData();
+			Chatable.get().sendInfo("Reloaded!");
+		}
 	}
 
 	public void generateDebug() {
@@ -189,22 +230,34 @@ public class Configurations implements CrashConfigurations {
 			i++;
 		}
 		i = 0;
-		try {
-			for(AnimalMob animal: EnchantmentSolution.getAnimals()) {
-				animal.setConfig(data, "data_file.animals.", i);
-				i++;
+		for(EnchantmentWrapper enchantment: EnchantmentSolution.getLassoEnchantments())
+			try {
+				for(LassoMob lasso: EnchantmentSolution.getLassoMobs(enchantment)) {
+					lasso.setConfig(data, "data_file." + lasso.getLocation(i), i);
+					i++;
+				}
+			} catch (NoClassDefFoundError ex) {
+				ex.printStackTrace();
 			}
-		} catch (NoClassDefFoundError ex) {
-			ex.printStackTrace();
-		}
 
 		i = 0;
 		try {
-			for(ESPlayer player: EnchantmentSolution.getAllESPlayers(false))
-				for(TableEnchantments table: TableEnchantments.getAllTableEnchantments(player.getPlayer().getUniqueId())) {
-					table.setConfig(debug, "data_file.", i);
-					i++;
+			for(ESPlayer player: EnchantmentSolution.getAllESPlayers(false)) {
+				debug.set("data_file.es_player." + i + ".uuid", player.getPlayer().getUniqueId());
+				debug.set("data_file.es_player." + i + ".can_see_enchantments", player.canSeeEnchantments());
+				debug.set("data_file.es_player." + i + ".will_see_enchantments", player.willSeeEnchantments());
+				debug.set("data_file.es_player." + i + ".current_echo_shards", player.getCurrentEchoShards());
+				debug.set("data_file.es_player." + i + ".next_echo_shards", player.getNextEchoShards());
+				Iterator<Seed> iter = player.getEnchantmentSeeds().iterator();
+				int j = 0;
+				while (iter.hasNext()) {
+					Seed seed = iter.next();
+					debug.set("data_file.es_player." + i + ".seeds." + j + ".itemdata", seed.getData().toString());
+					debug.set("data_file.es_player." + i + ".seeds." + j + ".seed", seed.getSeed());
+					j++;
 				}
+				i++;
+			}
 		} catch (NoClassDefFoundError ex) {
 			ex.printStackTrace();
 		}
@@ -225,57 +278,41 @@ public class Configurations implements CrashConfigurations {
 			i++;
 		}
 
-		YamlConfigBackup config = CONFIG.getConfig();
-		YamlConfigBackup fishing = FISHING.getConfig();
-		YamlConfigBackup language = LANGUAGE.getConfig();
-		YamlConfigBackup enchantments = ENCHANTMENTS.getConfig();
-		YamlConfigBackup advancements = ADVANCEMENTS.getConfig();
-		YamlConfigBackup rpg = RPG.getConfig();
-		YamlConfigBackup minigame = MINIGAME.getConfig();
-		YamlConfigBackup hardMode = HARD_MODE.getConfig();
-
-		for(String s: config.getAllEntryKeys())
-			if (config.contains(s)) debug.set("config." + s, config.get(s));
-
-		for(String s: fishing.getAllEntryKeys())
-			if (fishing.contains(s)) debug.set("fishing." + s, fishing.get(s));
-
-		for(String s: language.getAllEntryKeys())
-			if (language.contains(s)) debug.set("language." + s, language.get(s));
-
-		for(String s: advancements.getAllEntryKeys())
-			if (advancements.contains(s)) debug.set("advancements." + s, advancements.get(s));
-
-		for(String s: enchantments.getAllEntryKeys())
-			if (enchantments.contains(s)) debug.set("enchantment." + s, enchantments.get(s));
-
-		for(String s: rpg.getAllEntryKeys())
-			if (rpg.contains(s)) debug.set("rpg." + s, rpg.get(s));
-
-		for(String s: minigame.getAllEntryKeys())
-			if (minigame.contains(s)) debug.set("minigame." + s, rpg.get(s));
-
-		for(String s: hardMode.getAllEntryKeys())
-			if (hardMode.contains(s)) debug.set("hard_mode." + s, rpg.get(s));
+		for(Configuration config: MAIN_CONFIGURATIONS) {
+			YamlConfigBackup c = config.getConfig();
+			@SuppressWarnings("unchecked")
+			String s = ((Class<Configuration>) config.getClass()).getName().toLowerCase(Locale.ROOT);
+			for(String key: c.getAllEntryKeys())
+				if (c.contains(key)) debug.set(s + "." + key, c.get(key));
+		}
 
 		debug.saveConfig();
 	}
 
 	public void reload() {
-		CONFIG.reload();
-		FISHING.reload();
-		LANGUAGE.reload();
-		ENCHANTMENTS.reload();
-		ADVANCEMENTS.reload();
-		RPG.reload();
-		MINIGAME.reload();
-		HARD_MODE.reload();
+		for(Configuration c: MAIN_CONFIGURATIONS)
+			c.reload();
+
+		for(CustomEnchantment enchantment: RegisterEnchantments.getEnchantments())
+			if (ENCHANTMENT_CONFIGURATIONS.containsKey(enchantment)) ENCHANTMENT_CONFIGURATIONS.get(enchantment).reload();
 
 		save();
 	}
 
 	public MainConfiguration getConfig() {
 		return CONFIG;
+	}
+
+	public EnchantingTableConfiguration getEnchantingTable() {
+		return ENCHANTING_TABLE;
+	}
+
+	public AnvilConfiguration getAnvil() {
+		return ANVIL;
+	}
+
+	public GrindstoneConfiguration getGrindstone() {
+		return GRINDSTONE;
 	}
 
 	public FishingConfiguration getFishing() {
@@ -318,7 +355,45 @@ public class Configurations implements CrashConfigurations {
 		return HARD_MODE;
 	}
 
+	public LootsConfiguration getLoots() {
+		return LOOTS;
+	}
+
+	public LootTypesConfiguration getLootTypes() {
+		return LOOT_TYPES;
+	}
+
 	public static boolean isInitializing() {
 		return INITIALIZING;
+	}
+
+	public EnchantmentConfiguration getEnchantmentConfig(CustomEnchantment enchantment) {
+		if (ENCHANTMENT_CONFIGURATIONS.containsKey(enchantment)) return ENCHANTMENT_CONFIGURATIONS.get(enchantment);
+
+		// If there's an issue getting the file, should create a new one
+		Chatable.get().sendWarning("WARNING: Enchantment " + enchantment.getName() + " didn't load correctly. Check the code.");
+		File dataFolder = EnchantmentSolution.getPlugin().getDataFolder();
+		BackupDB db = EnchantmentSolution.getPlugin().getDb();
+		String[] header = { "Enchantment Solution", "Plugin by", "crashtheparty", "Using Level " + (ConfigString.LEVEL_FIFTY.getBoolean() ? "Fifty" : "Thirty") + " System!", "Make sure to edit that system under ", "advanced.enchantability", "if you are modifying those values." };
+
+		File folder = new File(dataFolder + "/enchantments/" + (enchantment.getRelativeEnchantment() instanceof ApiEnchantmentWrapper ? ((ApiEnchantmentWrapper) enchantment.getRelativeEnchantment()).getPlugin().getName().toLowerCase(Locale.ROOT) : enchantment.getRelativeEnchantment() instanceof CustomEnchantmentWrapper ? "enchantmentsolution" : "vanilla"));
+		try {
+			if (!folder.exists()) folder.mkdirs();
+		} catch (final Exception e) {
+			e.printStackTrace();
+		}
+		EnchantmentConfiguration config = new EnchantmentConfiguration(enchantment, new File(folder + "/" + enchantment.getName() + ".yml"), db, header);
+		config.setComments(ConfigString.USE_COMMENTS.getBoolean());
+		config.save();
+		ENCHANTMENT_CONFIGURATIONS.put(enchantment, config);
+		return config;
+	}
+
+	public List<Configuration> getMainConfigurations() {
+		return MAIN_CONFIGURATIONS;
+	}
+
+	public Map<CustomEnchantment, EnchantmentConfiguration> getEnchantmentConfigurations() {
+		return ENCHANTMENT_CONFIGURATIONS;
 	}
 }

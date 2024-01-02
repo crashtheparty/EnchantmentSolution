@@ -17,7 +17,7 @@ import org.ctp.enchantmentsolution.utils.config.ConfigUtils;
 
 public class AdvancementUtils {
 
-	public static void createAdvancements() {
+	public static boolean createAdvancements() {
 		boolean reload = false;
 
 		for(ESAdvancementTab tab: ESAdvancementTab.getAllTabs()) {
@@ -96,11 +96,7 @@ public class AdvancementUtils {
 			last = adv;
 		}
 
-		if (reload) {
-			Chatable.get().sendInfo("Reloading recipes and advancements...");
-			Bukkit.reloadData();
-			Chatable.get().sendInfo("Reloaded!");
-		}
+		return reload;
 	}
 
 	public static boolean awardCriteria(Player player, CustomEnchantment enchantment) {

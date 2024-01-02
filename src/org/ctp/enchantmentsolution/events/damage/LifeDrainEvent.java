@@ -9,8 +9,8 @@ public class LifeDrainEvent extends ESEntityDamageEntityEvent {
 
 	private double healthBack;
 
-	public LifeDrainEvent(LivingEntity damaged, int level, LivingEntity damager, double damage, double newDamage, double healthBack) {
-		super(damaged, new EnchantmentLevel(CERegister.LIFE_DRAIN, level), damager, damage, newDamage);
+	public LifeDrainEvent(LivingEntity damaged, int level, LivingEntity damager, double damage, double healthBack) {
+		super(damaged, new EnchantmentLevel(CERegister.LIFE_DRAIN, level), damager, damage, damage);
 		setHealthBack(healthBack);
 	}
 

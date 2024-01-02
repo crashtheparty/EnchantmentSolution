@@ -1,6 +1,8 @@
 package org.ctp.enchantmentsolution.enchantments.helper;
 
-import org.ctp.crashapi.config.yaml.YamlConfig;
+import java.util.Random;
+
+import org.ctp.enchantmentsolution.utils.MathUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 
 public class LevelList {
@@ -8,7 +10,7 @@ public class LevelList {
 	private Level[] list = new Level[6];
 	private int bookshelves;
 
-	public LevelList(int bookshelves) {
+	public LevelList(int bookshelves, Random random) {
 		this.bookshelves = bookshelves;
 		int bookThirty = bookshelves > 15 ? 15 : bookshelves;
 		int bookFifty = bookshelves - 8;
@@ -17,11 +19,11 @@ public class LevelList {
 		boolean isLevelFifty = ConfigString.LEVEL_FIFTY.getBoolean();
 
 		for(int i = 1; i <= 6; i++) {
-			int x = (int) (Math.random() * 8 + 1);
-			int b = (int) (Math.random() * bookThirty);
+			int x = (int) (MathUtils.randomFloatFromSeed(random) * 8 + 1);
+			int b = (int) (MathUtils.randomFloatFromSeed(random) * bookThirty);
 			int floor = bookThirty / 2;
 			if (i >= 4) {
-				b = (int) (Math.random() * bookFifty);
+				b = (int) (MathUtils.randomFloatFromSeed(random) * bookFifty);
 				floor = bookFifty / 2;
 			}
 			int base = x + b + floor;
@@ -61,19 +63,5 @@ public class LevelList {
 
 	public int getBookshelves() {
 		return bookshelves;
-	}
-
-	public static LevelList fromConfig(YamlConfig config, int i, int bookshelves) {
-		LevelList l = new LevelList(bookshelves);
-
-		for(int k = 0; k < 6; k++)
-			l.getList()[k].setLevel(config.getInt("enchanting_table." + i + ".levelList." + k + ".level"));
-
-		return l;
-	}
-
-	public void setConfig(YamlConfig config, int i) {
-		for(Level level: getList())
-			config.set("enchanting_table." + i + ".levelList." + level.getSlot() + ".level", level.getLevel());
 	}
 }

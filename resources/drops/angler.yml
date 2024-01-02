@@ -1,0 +1,60 @@
+salmon:
+    interact:
+    - salmon
+    minExp: '0'
+    maxExp: '0'
+    multiple: false
+    override: true
+    poolChance: false
+    drops:
+        0:
+            type: 'salmon'
+            min: '1 + %level%'
+            max: '1 + %level%'
+            chance: '1'
+            normAmount: false
+cod:
+    interact:
+    - cod
+    minExp: '0'
+    maxExp: '0'
+    multiple: false
+    override: true
+    poolChance: false
+    drops:
+        0:
+            type: 'cod'
+            min: '1 + %level%'
+            max: '1 + %level%'
+            chance: '1'
+            normAmount: false
+pufferfish:
+    interact:
+    - pufferfish
+    minExp: '0'
+    maxExp: '0'
+    multiple: false
+    override: true
+    poolChance: false
+    drops:
+        0:
+            type: 'pufferfish'
+            min: '1 + %level%'
+            max: '1 + %level%'
+            chance: '1'
+            normAmount: false
+tropical_fish:
+    interact:
+    - tropical_fish
+    minExp: '0'
+    maxExp: '0'
+    multiple: false
+    override: true
+    poolChance: false
+    drops:
+        0:
+            type: 'tropical_fish'
+            min: '1 + %level%'
+            max: '1 + %level%'
+            chance: '1'
+            normAmount: false

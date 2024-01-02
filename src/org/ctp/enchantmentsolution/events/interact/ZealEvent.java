@@ -28,9 +28,8 @@ public class ZealEvent extends ProjectileSpawnEvent {
 		return hasFireCharge;
 	}
 
-	@Override
 	public boolean willCancel() {
-		return !hasFireCharge && takeFireCharge || super.willCancel();
+		return !hasFireCharge && takeFireCharge;
 	}
 
 }

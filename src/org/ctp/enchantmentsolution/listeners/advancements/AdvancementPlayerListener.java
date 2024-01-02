@@ -103,10 +103,6 @@ public class AdvancementPlayerListener implements Listener {
 	public void onPlayerRespawn(PlayerRespawnEvent event) {
 		Player player = event.getPlayer();
 		ESPlayer esPlayer = EnchantmentSolution.getESPlayer(player);
-		if (esPlayer.getSacrificeAdvancement()) {
-			esPlayer.setSacrificeAdvancement(false);
-			AdvancementUtils.awardCriteria(player, ESAdvancement.DIVINE_RETRIBUTION, "retribution");
-		}
 		if (esPlayer.getPlyometricsAdvancement()) {
 			esPlayer.setPlyometricsAdvancement(false);
 			AdvancementUtils.awardCriteria(player, ESAdvancement.TOO_HIGH, "fall_damage");

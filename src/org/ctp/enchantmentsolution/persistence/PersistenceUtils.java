@@ -13,10 +13,8 @@ import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
-import org.ctp.crashapi.item.MatData;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.*;
-import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentErrorReason;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
@@ -129,23 +127,27 @@ public class PersistenceUtils {
 		return 0;
 	}
 
-	public static void removeEnchantments(ItemStack item, CustomEnchantment enchant) {
-		ItemMeta meta = item.getItemMeta();
-		if (!meta.hasLore()) return;
-		PersistentDataContainer container = meta.getPersistentDataContainer();
-		String oldDisplayName = container.get(enchant.getPersistenceKey("_level"), t);
-		if (oldDisplayName == null) return;
-		container.remove(enchant.getPersistenceKey());
-		container.remove(enchant.getPersistenceKey("_level"));
-		List<String> lore = meta.getLore();
-		Iterator<String> iter = lore.iterator();
-		while (iter.hasNext()) {
-			String l = iter.next();
-			if (l.startsWith(ChatColor.translateAlternateColorCodes('&', enchant.getDisplayName()) + ChatColor.RESET) || l.startsWith(oldDisplayName)) iter.remove();
-		}
-		meta.setLore(lore);
-		item.setItemMeta(meta);
-		setItemLore(item);
+	public static ItemStack removeEnchantments(ItemStack item, CustomEnchantment enchant) {
+		if (enchant.getRelativeEnchantment() instanceof CustomEnchantmentWrapper) {
+			ItemMeta meta = item.getItemMeta();
+			if (!meta.hasLore()) return item;
+			PersistentDataContainer container = meta.getPersistentDataContainer();
+			String oldDisplayName = container.get(enchant.getPersistenceKey(), t);
+			if (oldDisplayName == null) oldDisplayName = "";
+			container.remove(enchant.getPersistenceKey());
+			container.remove(enchant.getPersistenceKey("_level"));
+			List<String> lore = meta.getLore();
+			Iterator<String> iter = lore.iterator();
+			while (iter.hasNext()) {
+				String l = iter.next();
+				if (l.startsWith(ChatColor.translateAlternateColorCodes('&', enchant.getDisplayName()) + ChatColor.RESET) || l.startsWith(oldDisplayName)) iter.remove();
+			}
+			meta.setLore(lore);
+			item.setItemMeta(meta);
+			setItemLore(item);
+		} else
+			item.removeEnchantment(enchant.getRelativeEnchantment().getRelativeEnchantment());
+		return item;
 	}
 
 	public static boolean setItemLore(ItemStack item) {
@@ -289,69 +291,6 @@ public class PersistenceUtils {
 
 	public static String getEnchantmentString(EnchantmentLevel enchantment) {
 		return ChatColor.GRAY + returnEnchantmentName(enchantment.getEnchant(), enchantment.getLevel());
-	}
-
-	public static ItemStack repairStickyHold(ItemStack stickyItem) {
-		ItemStack item = stickyItem.clone();
-		ItemMeta meta = item.getItemMeta();
-		PersistentDataContainer container = meta.getPersistentDataContainer();
-		MatData data = new MatData(container.get(EnchantmentSolution.getKey("sticky_hold_material"), t));
-		if (data.hasMaterial()) {
-			item = new ItemStack(data.getMaterial());
-			item.setItemMeta(meta);
-			ItemMeta newMeta = item.getItemMeta();
-			container = newMeta.getPersistentDataContainer();
-			container.remove(EnchantmentSolution.getKey("sticky_hold_material"));
-			List<EnchantmentLevel> levels = new ArrayList<EnchantmentLevel>();
-			levels.add(new EnchantmentLevel(CERegister.STICKY_HOLD, 1));
-			for(CustomEnchantment enchant: RegisterEnchantments.getEnchantments()) {
-				String s = container.get(EnchantmentSolution.getKey("sticky_hold_" + enchant.getName()), t);
-				if (s != null) levels.add(new EnchantmentLevel(s, EnchantmentErrorReason.STICKY_HOLD));
-				container.remove(EnchantmentSolution.getKey("sticky_hold_" + enchant.getName()));
-			}
-			item.setItemMeta(newMeta);
-			item = EnchantmentUtils.addEnchantmentsToItem(item, levels);
-		}
-		return item;
-	}
-
-	public static ItemStack createStickyHold(ItemStack item) {
-		ItemStack stickyItem = item.clone();
-		stickyItem.setType(Material.STICK);
-		ItemMeta stickyMeta = stickyItem.getItemMeta();
-		PersistentDataContainer container = stickyMeta.getPersistentDataContainer();
-
-		container.set(EnchantmentSolution.getKey("sticky_hold_material"), t, item.getType().name());
-		Iterator<Entry<Enchantment, Integer>> enchants = stickyMeta.getEnchants().entrySet().iterator();
-		List<CustomEnchantment> remove = new ArrayList<CustomEnchantment>();
-
-		while (enchants.hasNext()) {
-			Entry<Enchantment, Integer> enchant = enchants.next();
-			CustomEnchantment ench = RegisterEnchantments.getCustomEnchantment(enchant.getKey());
-			if (!ench.equals(CERegister.STICKY_HOLD)) {
-				remove.add(ench);
-				container.set(EnchantmentSolution.getKey("sticky_hold_" + ench.getName()), t, new EnchantmentLevel(ench, enchant.getValue()).toString());
-			}
-		}
-		stickyItem.setItemMeta(stickyMeta);
-		for(CustomEnchantment e: remove)
-			EnchantmentUtils.removeEnchantmentFromItem(stickyItem, e);
-
-		return stickyItem;
-	}
-
-	public static boolean isStickyHold(ItemStack item) {
-		ItemMeta meta = item.getItemMeta();
-		PersistentDataContainer container = meta.getPersistentDataContainer();
-		String s = container.get(EnchantmentSolution.getKey("sticky_hold_material"), t);
-		return s != null && new MatData(s).hasMaterial();
-	}
-
-	public static Material stickyItemType(ItemStack item) {
-		ItemMeta meta = item.getItemMeta();
-		PersistentDataContainer container = meta.getPersistentDataContainer();
-		String s = container.get(EnchantmentSolution.getKey("sticky_hold_material"), t);
-		return new MatData(s).getMaterial();
 	}
 
 	public static List<Integer> getAnimalIDsFromItem(ItemStack item) {

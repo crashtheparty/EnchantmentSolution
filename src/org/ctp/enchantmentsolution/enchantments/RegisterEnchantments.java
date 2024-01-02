@@ -14,16 +14,18 @@ import org.ctp.crashapi.utils.StringUtils;
 import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.api.ApiEnchantmentWrapper;
+import org.ctp.enchantmentsolution.enchantments.config.ConfigEnchantment;
 import org.ctp.enchantmentsolution.enchantments.helper.Weight;
 import org.ctp.enchantmentsolution.enums.EnchantmentLocation;
 import org.ctp.enchantmentsolution.utils.Configurations;
 import org.ctp.enchantmentsolution.utils.VersionUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
-import org.ctp.enchantmentsolution.utils.config.EnchantmentsConfiguration;
+import org.ctp.enchantmentsolution.utils.config.EnchantmentConfiguration;
 import org.ctp.enchantmentsolution.utils.config.LanguageConfiguration;
 
 public class RegisterEnchantments {
 	private static List<CustomEnchantment> ENCHANTMENTS = new ArrayList<CustomEnchantment>();
+	private static List<CustomEnchantment> DEFAULT_ENCHANTMENTS = new ArrayList<CustomEnchantment>();
 	private static List<CustomEnchantment> REGISTERED_ENCHANTMENTS = new ArrayList<CustomEnchantment>();
 	private static List<CustomEnchantment> CURSE_ENCHANTMENTS = new ArrayList<CustomEnchantment>();
 	private static List<CustomEnchantment> DISABLED_ENCHANTMENTS = new ArrayList<CustomEnchantment>();
@@ -152,6 +154,15 @@ public class RegisterEnchantments {
 
 	private RegisterEnchantments() {}
 
+	public static List<CustomEnchantment> getDefaultEnchantments() {
+		return DEFAULT_ENCHANTMENTS;
+	}
+
+	public static void resetEnchantments() {
+		ENCHANTMENTS = new ArrayList<CustomEnchantment>();
+		ENCHANTMENTS.addAll(DEFAULT_ENCHANTMENTS);
+	}
+
 	public static List<CustomEnchantment> getEnchantments() {
 		return ENCHANTMENTS;
 	}
@@ -212,6 +223,10 @@ public class RegisterEnchantments {
 	}
 
 	public static void addDefaultEnchantment(CustomEnchantment enchant) {
+		DEFAULT_ENCHANTMENTS.add(enchant);
+	}
+
+	public static void addConfigEnchantment(ConfigEnchantment enchant) {
 		ENCHANTMENTS.add(enchant);
 	}
 
@@ -224,7 +239,7 @@ public class RegisterEnchantments {
 			CustomEnchantment enchantment = ENCHANTMENTS.get(i);
 			Configurations c = EnchantmentSolution.getPlugin().getConfigurations();
 			LanguageConfiguration language = c.getLanguage();
-			EnchantmentsConfiguration config = c.getEnchantments();
+			EnchantmentConfiguration config = c.getEnchantmentConfig(enchantment);
 			boolean advanced = ConfigString.ADVANCED_OPTIONS.getBoolean();
 
 			String namespace = "default_enchantments";
@@ -238,7 +253,7 @@ public class RegisterEnchantments {
 			} else if (enchantment.getRelativeEnchantment() instanceof CustomEnchantmentWrapper) namespace = "custom_enchantments";
 
 			if (registerEnchantment(enchantment)) {
-				if (config.getBoolean(namespace + "." + enchantment.getName() + ".enabled")) enchantment.setEnabled(true);
+				if (config.getBoolean("enabled")) enchantment.setEnabled(true);
 				else {
 					enchantment.setEnabled(false);
 					DISABLED_ENCHANTMENTS.add(enchantment);
@@ -250,16 +265,17 @@ public class RegisterEnchantments {
 			String displayName = StringUtils.decodeString(language.getString("enchantment.display_names." + namespace + "." + enchantment.getName()));
 			String description = StringUtils.decodeString(language.getString("enchantment.descriptions." + namespace + "." + enchantment.getName()));
 
-			List<ItemType> enchantmentTypes = getTypes(config, namespace, enchantment, "enchantment_item_types");
-			List<ItemType> anvilTypes = getTypes(config, namespace, enchantment, "anvil_item_types");
-			List<EnchantmentLocation> locations = getEnchantmentLocations(config, namespace, enchantment);
+			List<ItemType> enchantmentTypes = getTypes(config, enchantment, "enchantment_item_types");
+			List<ItemType> anvilTypes = getTypes(config, enchantment, "anvil_item_types");
+			List<EnchantmentLocation> locations = getEnchantmentLocations(config, enchantment);
 			if (advanced) {
-				int constant = config.getInt(namespace + "." + enchantment.getName() + ".advanced.enchantability_constant");
-				int modifier = config.getInt(namespace + "." + enchantment.getName() + ".advanced.enchantability_modifier");
-				int startLevel = config.getInt(namespace + "." + enchantment.getName() + ".advanced.enchantability_start_level");
-				int maxLevel = config.getInt(namespace + "." + enchantment.getName() + ".advanced.enchantability_max_level");
-				Weight weight = Weight.getWeight(config.getString(namespace + "." + enchantment.getName() + ".advanced.weight"));
-				List<String> conflictingEnchantmentsString = config.getStringList(namespace + "." + enchantment.getName() + ".advanced.conflicting_enchantments");
+				String enchantability = "advanced.enchantability." + (ConfigString.LEVEL_FIFTY.getBoolean() ? "fifty" : "thirty");
+				int constant = config.getInt(enchantability + ".constant");
+				int modifier = config.getInt(enchantability + ".modifier");
+				int startLevel = config.getInt(enchantability + ".start_level");
+				int maxLevel = config.getInt(enchantability + ".max_level");
+				Weight weight = Weight.getWeight(config.getString("advanced.weight"));
+				List<String> conflictingEnchantmentsString = config.getStringList("advanced.conflicting_enchantments");
 				List<EnchantmentWrapper> conflictingEnchantments = new ArrayList<EnchantmentWrapper>();
 				if (conflictingEnchantmentsString != null) for(String s: conflictingEnchantmentsString) {
 					CustomEnchantment enchant = getByName(s);
@@ -343,14 +359,12 @@ public class RegisterEnchantments {
 		addDefaultEnchantment(CERegister.DROWNED);
 		addDefaultEnchantment(CERegister.EXP_SHARE);
 		if (VersionUtils.isSimilarOrAbove(1, 17, 0)) addDefaultEnchantment(CERegister.FLASH);
-		addDefaultEnchantment(CERegister.FLING);
 		addDefaultEnchantment(CERegister.FLOWER_GIFT);
 		addDefaultEnchantment(CERegister.FORCE_FEED);
 		addDefaultEnchantment(CERegister.FREQUENT_FLYER);
 		addDefaultEnchantment(CERegister.FRIED);
 		addDefaultEnchantment(CERegister.FROSTY);
 		addDefaultEnchantment(CERegister.GAIA);
-		addDefaultEnchantment(CERegister.GOLD_DIGGER);
 		addDefaultEnchantment(CERegister.GREEN_THUMB);
 		addDefaultEnchantment(CERegister.GUNG_HO);
 		addDefaultEnchantment(CERegister.HARD_BOUNCE);
@@ -379,7 +393,6 @@ public class RegisterEnchantments {
 		addDefaultEnchantment(CERegister.QUICK_STRIKE);
 		if (VersionUtils.isSimilarOrAbove(1, 17, 0)) addDefaultEnchantment(CERegister.RARE_EARTH);
 		addDefaultEnchantment(CERegister.RECYCLER);
-		addDefaultEnchantment(CERegister.SACRIFICE);
 		addDefaultEnchantment(CERegister.SAND_VEIL);
 		addDefaultEnchantment(CERegister.SHOCK_ASPECT);
 		addDefaultEnchantment(CERegister.SMELTERY);
@@ -387,7 +400,6 @@ public class RegisterEnchantments {
 		addDefaultEnchantment(CERegister.SOULBOUND);
 		addDefaultEnchantment(CERegister.SOUL_REAPER);
 		addDefaultEnchantment(CERegister.SPLATTER_FEST);
-		addDefaultEnchantment(CERegister.STICKY_HOLD);
 		addDefaultEnchantment(CERegister.STONE_THROW);
 		addDefaultEnchantment(CERegister.STREAK);
 		addDefaultEnchantment(CERegister.TANK);
@@ -398,13 +410,12 @@ public class RegisterEnchantments {
 		addDefaultEnchantment(CERegister.UNREST);
 		addDefaultEnchantment(CERegister.VENOM);
 		addDefaultEnchantment(CERegister.VOID_WALKER);
-		addDefaultEnchantment(CERegister.WAND);
-		addDefaultEnchantment(CERegister.WARP);
 		addDefaultEnchantment(CERegister.WATER_BREATHING);
 		addDefaultEnchantment(CERegister.WHIPPED);
 		addDefaultEnchantment(CERegister.WIDTH_PLUS_PLUS);
 		addDefaultEnchantment(CERegister.WITHERING);
 		addDefaultEnchantment(CERegister.ZEAL);
+		resetEnchantments();
 	}
 
 	public static List<String> getEnchantmentNames() {
@@ -426,19 +437,21 @@ public class RegisterEnchantments {
 		return null;
 	}
 
-	private static List<EnchantmentLocation> getEnchantmentLocations(Configuration config, String namespace, CustomEnchantment enchantment) {
+	private static List<EnchantmentLocation> getEnchantmentLocations(Configuration config, CustomEnchantment enchantment) {
 		List<EnchantmentLocation> locations = new ArrayList<EnchantmentLocation>();
-		List<String> enchantmentLocationsString = config.getStringList(namespace + "." + enchantment.getName() + ".enchantment_locations");
-		if (enchantmentLocationsString != null) for(String s: enchantmentLocationsString)
-			try {
-				EnchantmentLocation location = EnchantmentLocation.valueOf(s.toUpperCase(Locale.ROOT));
-				if (location != null) locations.add(location);
-			} catch (Exception ex) {}
+		if (config.getBoolean("locations.enchanting_table")) locations.add(EnchantmentLocation.TABLE);
+		if (config.getBoolean("locations.chests")) locations.add(EnchantmentLocation.CHEST_LOOT);
+		if (config.getBoolean("locations.mobs")) locations.add(EnchantmentLocation.MOB_LOOT);
+		if (config.getBoolean("locations.fishing")) locations.add(EnchantmentLocation.FISHING_LOOT);
+		if (config.getBoolean("locations.villager")) locations.add(EnchantmentLocation.VILLAGER);
+		if (config.getBoolean("locations.piglin")) locations.add(EnchantmentLocation.PIGLIN);
+		if (config.getBoolean("locations.end_city")) locations.add(EnchantmentLocation.END_CITY);
+		if (config.getBoolean("locations.deep_dark")) locations.add(EnchantmentLocation.DEEP_DARK);
 		return locations;
 	}
 
-	private static List<ItemType> getTypes(Configuration config, String namespace, CustomEnchantment enchantment, String path) {
-		List<String> itemTypes = config.getStringList(namespace + "." + enchantment.getName() + "." + path);
+	private static List<ItemType> getTypes(Configuration config, CustomEnchantment enchantment, String path) {
+		List<String> itemTypes = config.getStringList(path);
 		List<ItemType> types = new ArrayList<ItemType>();
 		if (itemTypes != null) for(String s: itemTypes) {
 			ItemType type = null;

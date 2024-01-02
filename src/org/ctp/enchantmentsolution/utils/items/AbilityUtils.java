@@ -2,16 +2,12 @@ package org.ctp.enchantmentsolution.utils.items;
 
 import java.util.*;
 
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
-import org.bukkit.block.data.Ageable;
-import org.bukkit.block.data.BlockData;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.inventory.ItemStack;
-import org.ctp.crashapi.nms.ExpNMS;
 import org.ctp.crashapi.utils.DamageUtils;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.EnchantmentWrapper;
@@ -20,36 +16,6 @@ import org.ctp.enchantmentsolution.utils.abilityhelpers.ParticleEffect;
 import org.ctp.enchantmentsolution.utils.player.ESPlayer;
 
 public class AbilityUtils {
-
-	private static List<Location> WAND_BLOCKS = new ArrayList<Location>();
-	private static List<Material> CROPS = Arrays.asList(Material.WHEAT, Material.CARROTS, Material.POTATOES, Material.NETHER_WART, Material.BEETROOTS, Material.COCOA_BEANS);
-
-	public static ItemStack getGoldDiggerItems(ItemStack item, BlockData data) {
-		if (data instanceof Ageable) {
-			Ageable age = (Ageable) data;
-			if (CROPS.contains(data.getMaterial())) {
-				if (age.getAge() != age.getMaximumAge()) return null;
-			} else
-				return null;
-		} else
-			return null;
-		int level = EnchantmentUtils.getLevel(item, RegisterEnchantments.GOLD_DIGGER);
-		int amount = 0;
-		while (level > 0) {
-			double random = Math.random();
-			double chance = 1.0 / 6.0;
-			if (chance > random) amount++;
-			level--;
-		}
-		if (amount > 0) return new ItemStack(Material.GOLD_NUGGET, amount);
-
-		return null;
-	}
-
-	public static void dropExperience(Location loc, int amount) {
-		ExpNMS.dropExp(loc, amount, true, null);
-//		if (amount > 0) loc.getWorld().spawn(loc, ExperienceOrb.class).setExperience(amount);
-	}
 
 	public static void giveExperience(Player player, int amount) {
 		List<ItemStack> items = new ArrayList<ItemStack>();
@@ -85,24 +51,31 @@ public class AbilityUtils {
 		return totalExp;
 	}
 
-	public static List<ParticleEffect> createEffects(Player player) {
-		int random = (int) (Math.random() * 5 + 2);
+	public static ParticleEffect[] createEffects(int effectMultiple, int effectMinimum, int numMultiple, int numMaximum, Particle[] blacklist,
+	Particle[] whitelist) {
+		int random = (int) (Math.random() * effectMultiple + effectMinimum);
 		List<ParticleEffect> particles = new ArrayList<ParticleEffect>();
 		for(int i = 0; i < random; i++)
-			particles.add(generateParticle());
-		return particles;
+			particles.add(generateParticle(numMultiple, numMaximum, blacklist, whitelist));
+		return particles.toArray(new ParticleEffect[particles.size()]);
 	}
 
-	private static ParticleEffect generateParticle() {
+	private static ParticleEffect generateParticle(int numMultiple, int numMaximum, Particle[] blacklist, Particle[] whitelist) {
 		Particle particle = null;
-		int tries = 0;
-		int numParticles = (int) (Math.random() * 400 + 11);
-		while (particle == null && tries < 10) {
-			int particleType = (int) (Math.random() * Particle.values().length);
-			particle = Particle.values()[particleType];
-			if (!particle.getDataType().isAssignableFrom(Void.class)) particle = null;
-
+		List<Particle> particles = new ArrayList<Particle>();
+		if (whitelist != null && whitelist.length > 0) particles.addAll(Arrays.asList(whitelist));
+		else {
+			particles.addAll(Arrays.asList(Particle.values()));
+			if (blacklist != null && blacklist.length > 0) particles.removeAll(Arrays.asList(blacklist));
 		}
+		Iterator<Particle> iter = particles.iterator();
+		while (iter.hasNext()) {
+			Particle p = iter.next();
+			if (!p.getDataType().isAssignableFrom(Void.class)) iter.remove();
+		}
+		int numParticles = (int) (Math.random() * numMultiple + numMaximum);
+		int particleType = (int) (Math.random() * particles.size());
+		particle = particles.get(particleType);
 		return new ParticleEffect(particle, numParticles);
 	}
 
@@ -126,15 +99,15 @@ public class AbilityUtils {
 		return player.getFoodLevel() * 4 + player.getSaturation() * 4 - player.getExhaustion();
 	}
 
-	public static List<Location> getWandBlocks() {
-		return WAND_BLOCKS;
-	}
-
-	public static void addWandBlock(Location location) {
-		WAND_BLOCKS.add(location);
-	}
-
-	public static void removeWandBlock(Location location) {
-		WAND_BLOCKS.remove(location);
+	public static boolean isDoubleFlower(Material material) {
+		switch (material.name()) {
+			case "SUNFLOWER":
+			case "PEONY":
+			case "ROSE_BUSH":
+			case "LILAC":
+				return true;
+			default:
+				return false;
+		}
 	}
 }

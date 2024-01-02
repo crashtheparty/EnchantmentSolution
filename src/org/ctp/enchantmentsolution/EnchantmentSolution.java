@@ -1,11 +1,11 @@
 package org.ctp.enchantmentsolution;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.command.PluginCommand;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
@@ -18,7 +18,6 @@ import org.ctp.crashapi.events.EquipEvent.EquipMethod;
 import org.ctp.crashapi.inventory.InventoryData;
 import org.ctp.crashapi.item.ItemSerialization;
 import org.ctp.crashapi.item.ItemSlot;
-import org.ctp.crashapi.listeners.EquipListener;
 import org.ctp.crashapi.resources.advancements.CrashAdvancementProgress;
 import org.ctp.crashapi.version.PluginVersion;
 import org.ctp.crashapi.version.Version;
@@ -29,15 +28,18 @@ import org.ctp.enchantmentsolution.commands.EnchantmentSolutionCommand;
 import org.ctp.enchantmentsolution.database.ESBackup;
 import org.ctp.enchantmentsolution.enchantments.EnchantmentWrapper;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
+import org.ctp.enchantmentsolution.enchantments.config.ConfigEnchantmentRegister;
 import org.ctp.enchantmentsolution.interfaces.InterfaceRegistry;
 import org.ctp.enchantmentsolution.listeners.*;
 import org.ctp.enchantmentsolution.listeners.advancements.AdvancementEntityListener;
 import org.ctp.enchantmentsolution.listeners.advancements.AdvancementPlayerListener;
 import org.ctp.enchantmentsolution.listeners.chestloot.ChestLootListener;
-import org.ctp.enchantmentsolution.listeners.enchantments.*;
+import org.ctp.enchantmentsolution.listeners.effects.*;
+import org.ctp.enchantmentsolution.listeners.enchantments.BlockListener;
+import org.ctp.enchantmentsolution.listeners.enchantments.PlayerListener;
+import org.ctp.enchantmentsolution.listeners.enchantments.PotionEffectListener;
 import org.ctp.enchantmentsolution.listeners.fishing.EnchantsFishingListener;
 import org.ctp.enchantmentsolution.listeners.fishing.McMMOFishingListener;
-import org.ctp.enchantmentsolution.listeners.hard.HardModeListener;
 import org.ctp.enchantmentsolution.listeners.inventory.*;
 import org.ctp.enchantmentsolution.listeners.mobs.MobSpawning;
 import org.ctp.enchantmentsolution.listeners.mobs.PiglinTrade;
@@ -48,18 +50,18 @@ import org.ctp.enchantmentsolution.listeners.vanilla.GrindstoneListener;
 import org.ctp.enchantmentsolution.mcmmo.McMMOAbility;
 import org.ctp.enchantmentsolution.rpg.listener.RPGListener;
 import org.ctp.enchantmentsolution.threads.*;
-import org.ctp.enchantmentsolution.utils.*;
-import org.ctp.enchantmentsolution.utils.abilityhelpers.AnimalMob;
-import org.ctp.enchantmentsolution.utils.abilityhelpers.DrownedEntity;
-import org.ctp.enchantmentsolution.utils.abilityhelpers.EntityAccuracy;
+import org.ctp.enchantmentsolution.utils.Configurations;
+import org.ctp.enchantmentsolution.utils.MetricsUtils;
+import org.ctp.enchantmentsolution.utils.VersionUtils;
+import org.ctp.enchantmentsolution.utils.abilityhelpers.LassoMob;
 import org.ctp.enchantmentsolution.utils.commands.ESCommand;
 import org.ctp.enchantmentsolution.utils.compatibility.AuctionHouseUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 import org.ctp.enchantmentsolution.utils.debug.ESChatUtils;
 import org.ctp.enchantmentsolution.utils.files.ItemBreakFile;
-import org.ctp.enchantmentsolution.utils.files.ItemSpecialBreakFile;
 import org.ctp.enchantmentsolution.utils.files.SaveUtils;
 import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
+import org.ctp.enchantmentsolution.utils.player.ESEntity;
 import org.ctp.enchantmentsolution.utils.player.ESPlayer;
 
 import com.leonardobishop.quests.bukkit.BukkitQuestsPlugin;
@@ -70,10 +72,9 @@ public class EnchantmentSolution extends CrashAPIPlugin {
 
 	private static EnchantmentSolution PLUGIN;
 	private static List<CrashAdvancementProgress> PROGRESS = new ArrayList<CrashAdvancementProgress>();
-	private static List<AnimalMob> ANIMALS = new ArrayList<AnimalMob>();
-	private static List<DrownedEntity> DROWNED = new ArrayList<DrownedEntity>();
-	private static List<EntityAccuracy> ACCURACY = new ArrayList<EntityAccuracy>();
+	private static HashMap<EnchantmentWrapper, List<LassoMob>> LASSO = new HashMap<EnchantmentWrapper, List<LassoMob>>();
 	private static List<ESPlayer> PLAYERS = new ArrayList<ESPlayer>();
+	private static List<ESEntity> ENTITIES = new ArrayList<ESEntity>();
 	private static Configurations CONFIGURATIONS;
 	private List<InventoryData> inventories = new ArrayList<InventoryData>();
 	private boolean restrictedCreative = false, quests = false;
@@ -102,7 +103,6 @@ public class EnchantmentSolution extends CrashAPIPlugin {
 		RegisterEnchantments.addEnchantments();
 		Chatable.get().sendInfo("Loading Item Break Types...");
 		ItemBreakFile.setFiles();
-		ItemSpecialBreakFile.setFiles();
 		Chatable.get().sendInfo("Item Break Types Loaded!");
 		CONFIGURATIONS = Configurations.getConfigurations();
 		CONFIGURATIONS.onEnable();
@@ -118,18 +118,20 @@ public class EnchantmentSolution extends CrashAPIPlugin {
 
 		registerEvent(new ExtraBlockListener());
 		registerEvent(new VanishListener());
-		registerEvent(new EquipListener());
 		registerEvent(new GlobalPlayerListener());
+		registerEvent(new CustomPotionEffectListener());
 
-		registerEvent(new FishingListener());
-		registerEvent(new DeathListener());
-		registerEvent(new SoulListener());
+		registerEvent(new org.ctp.enchantmentsolution.listeners.effects.BlockListener());
 		registerEvent(new DamageListener());
-		registerEvent(new PlayerListener());
-		registerEvent(new AfterEffectsListener());
-		registerEvent(new AttributeListener());
+		registerEvent(new DeathListener());
+		registerEvent(new FishingListener());
+		registerEvent(new InteractListener());
+		registerEvent(new ItemListener());
 		registerEvent(new ProjectileListener());
+		registerEvent(new MovementListener());
+
 		registerEvent(new BlockListener());
+		registerEvent(new PlayerListener());
 		registerEvent(new PotionEffectListener());
 
 		registerEvent(new AnvilListener());
@@ -147,11 +149,10 @@ public class EnchantmentSolution extends CrashAPIPlugin {
 		rpg = new RPGListener();
 		registerEvent(rpg);
 		Bukkit.getScheduler().runTaskTimer(PLUGIN, rpg, 1l, 1l);
-		registerEvent(new HardModeListener());
 
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN, new AbilityThreads(), 80l, 80l);
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN, new AdvancementThread(), 1l, 1l);
-		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN, new EntityThreads(), 1l, 1l);
+		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN, new EntityThread(), 1l, 1l);
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(PLUGIN, new WalkerThread(), 1l, 1l);
 
 		EnchantmentSolutionCommand c = new EnchantmentSolutionCommand();
@@ -171,13 +172,15 @@ public class EnchantmentSolution extends CrashAPIPlugin {
 		registerEvent(check);
 		checkVersion();
 		MetricsUtils.init();
-		AdvancementUtils.createAdvancements();
+		Configurations.generateDataPack();
 
 		registerEvent(new WikiListener());
 		wiki = new WikiThread();
 		Bukkit.getScheduler().runTaskTimerAsynchronously(PLUGIN, wiki, 20l, 20l);
 
 		InterfaceRegistry.firstLoad();
+		ConfigEnchantmentRegister register = ConfigEnchantmentRegister.createRegister();
+		register.updateRegister();
 
 		Bukkit.getScheduler().runTaskLater(this, () -> {
 			try {
@@ -186,8 +189,6 @@ public class EnchantmentSolution extends CrashAPIPlugin {
 				getChat().sendWarning("Error in loading data to data.yml - will possibly break.");
 				ex.printStackTrace();
 			}
-			CONFIGURATIONS.getEnchantments().setEnchantmentInformation();
-			CONFIGURATIONS.getEnchantments().save();
 			addCompatibility();
 		}, 1l);
 	}
@@ -275,36 +276,50 @@ public class EnchantmentSolution extends CrashAPIPlugin {
 		return false;
 	}
 
-	public static List<AnimalMob> getAnimals() {
-		return ANIMALS;
+	public static List<LassoMob> getLassoMobs(EnchantmentWrapper enchantment) {
+		if (LASSO.get(enchantment) == null) return new ArrayList<LassoMob>();
+		return LASSO.get(enchantment);
 	}
 
-	public static void setAnimals(List<AnimalMob> animals) {
-		ANIMALS = animals;
+	public static void addLassoMob(EnchantmentWrapper enchantment, LassoMob mob) {
+		List<LassoMob> mobs = getLassoMobs(enchantment);
+		mobs.add(mob);
+		LASSO.put(enchantment, mobs);
 	}
 
-	public static void addAnimals(AnimalMob mob) {
-		ANIMALS.add(mob);
+	public static boolean removeLassoMob(EnchantmentWrapper enchantment, LassoMob mob) {
+		boolean removed = false;
+		List<LassoMob> mobs = getLassoMobs(enchantment);
+		Iterator<LassoMob> iter = mobs.iterator();
+		while (iter.hasNext()) {
+			LassoMob m = iter.next();
+			if (m.equals(mob)) {
+				iter.remove();
+				removed = true;
+			}
+		}
+		LASSO.put(enchantment, mobs);
+		return removed;
 	}
 
-	public static void removeAnimals(AnimalMob remove) {
-		ANIMALS.remove(remove);
+	public static List<EnchantmentWrapper> getLassoEnchantments() {
+		return Arrays.asList(LASSO.keySet().toArray(new EnchantmentWrapper[] {}));
 	}
 
-	public static List<DrownedEntity> getDrowned() {
-		return DROWNED;
+	public static LassoMob getFirstLassoMob(EnchantmentWrapper enchantment, ItemStack[] items) {
+		List<LassoMob> mobs = getLassoMobs(enchantment);
+		for(ItemStack item: items)
+			for(LassoMob mob: mobs)
+				if (mob.inItem(item)) return mob;
+		return null;
 	}
 
-	public static void addDrowned(DrownedEntity drowned) {
-		DROWNED.add(drowned);
-	}
-
-	public static List<EntityAccuracy> getAccuracy() {
-		return ACCURACY;
-	}
-
-	public static void addAccuracy(EntityAccuracy accuracy) {
-		ACCURACY.add(accuracy);
+	public static ItemStack getFirstLassoItem(EnchantmentWrapper enchantment, ItemStack[] items) {
+		List<LassoMob> mobs = getLassoMobs(enchantment);
+		for(ItemStack item: items)
+			for(LassoMob mob: mobs)
+				if (mob.inItem(item)) return item;
+		return null;
 	}
 
 	public void setVersionCheck(boolean getRelease, boolean getExperimental) {
@@ -403,6 +418,7 @@ public class EnchantmentSolution extends CrashAPIPlugin {
 	}
 
 	public static ESPlayer getESPlayer(OfflinePlayer player) {
+		if (player == null) return null;
 		for(ESPlayer es: PLAYERS)
 			if (es.getPlayer().getUniqueId().equals(player.getUniqueId())) return es;
 		ESPlayer es = new ESPlayer(player);
@@ -429,6 +445,23 @@ public class EnchantmentSolution extends CrashAPIPlugin {
 		return players;
 	}
 
+	public static ESEntity getESEntity(LivingEntity living) {
+		for(ESEntity es: ENTITIES)
+			if (es.getEntity().getUniqueId().equals(living.getUniqueId())) return es;
+		ESEntity es = new ESEntity(living);
+		ENTITIES.add(es);
+		return es;
+	}
+
+	public static List<ESEntity> getAllESEntities() {
+		Iterator<ESEntity> iter = ENTITIES.iterator();
+		while (iter.hasNext()) {
+			ESEntity entry = iter.next();
+			if (entry.getEntity() == null || entry.getEntity().isDead() || !entry.hasCustomPotionEffects()) iter.remove();
+		}
+		return ENTITIES;
+	}
+
 	public static NamespacedKey getKey(String name) {
 		return new NamespacedKey(getPlugin(), name);
 	}
@@ -448,21 +481,20 @@ public class EnchantmentSolution extends CrashAPIPlugin {
 	public void reEquipItems() {
 		for(Player p: Bukkit.getOnlinePlayers()) {
 			ESPlayer esPlayer = getESPlayer(p);
-			for(ItemSlot slot: esPlayer.getEquippedAndType()) {
-				ItemStack item = slot.getItem();
-				if (item != null && EnchantmentUtils.getTotalEnchantments(item) > 0) {
-					EquipEvent armorEquipEvent = new EquipEvent(p, EquipMethod.COMMAND, slot.getType(), item, item);
-					Bukkit.getServer().getPluginManager().callEvent(armorEquipEvent);
-				}
-			}
+			reEquipItems(esPlayer);
+
 		}
+	}
+
+	public void reEquipItems(ESPlayer player) {
+		reEquipItems(player, null);
 	}
 
 	public void reEquipItems(ESPlayer player, EnchantmentWrapper enchantment) {
 		if (!player.isOnline()) return;
 		for(ItemSlot slot: player.getEquippedAndType()) {
 			ItemStack item = slot.getItem();
-			if (item != null && EnchantmentUtils.hasEnchantment(item, enchantment)) {
+			if (item != null && ((enchantment == null && EnchantmentUtils.getTotalEnchantments(item) > 0) || (enchantment != null && EnchantmentUtils.hasEnchantment(item, enchantment)))) {
 				EquipEvent armorEquipEvent = new EquipEvent(player.getOnlinePlayer(), EquipMethod.COMMAND, slot.getType(), item, item);
 				Bukkit.getServer().getPluginManager().callEvent(armorEquipEvent);
 			}

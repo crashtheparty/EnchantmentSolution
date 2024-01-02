@@ -9,9 +9,9 @@ import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.enchantments.CERegister;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 
-public class RareEarthEvent extends ESBlockDropAddItemEvent {
+public class RareEarthEvent extends ESBlockDropOverrideItemEvent {
 
-	public RareEarthEvent(Player player, int level, Block theBlock, BlockData blockData, List<ItemStack> rareEarthItems) {
-		super(theBlock, blockData, new EnchantmentLevel(CERegister.RARE_EARTH, level), player, rareEarthItems);
+	public RareEarthEvent(Block block, BlockData blockData, Player player, int level, List<ItemStack> rareEarthItems, List<ItemStack> originalItems, boolean override, int exp) {
+		super(block, blockData, new EnchantmentLevel(CERegister.RARE_EARTH, level), player, rareEarthItems, originalItems, override, exp);
 	}
 }

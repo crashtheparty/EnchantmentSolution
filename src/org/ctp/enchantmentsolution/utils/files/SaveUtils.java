@@ -3,12 +3,11 @@ package org.ctp.enchantmentsolution.utils.files;
 import java.util.*;
 import java.util.Map.Entry;
 
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.ctp.crashapi.config.DataFile;
 import org.ctp.crashapi.config.yaml.YamlConfig;
+import org.ctp.crashapi.item.ItemData;
 import org.ctp.crashapi.resources.advancements.CrashAdvancementProgress;
 import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
@@ -16,17 +15,17 @@ import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.EnchantmentWrapper;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
-import org.ctp.enchantmentsolution.enchantments.generate.TableEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
+import org.ctp.enchantmentsolution.enchantments.helper.Seed;
 import org.ctp.enchantmentsolution.events.blocks.DamageState;
 import org.ctp.enchantmentsolution.interfaces.WalkerInterface;
 import org.ctp.enchantmentsolution.rpg.RPGPlayer;
 import org.ctp.enchantmentsolution.rpg.RPGUtils;
 import org.ctp.enchantmentsolution.utils.Configurations;
-import org.ctp.enchantmentsolution.utils.abilityhelpers.AnimalMob;
+import org.ctp.enchantmentsolution.utils.abilityhelpers.LassoMob;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.WalkerBlock;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.WalkerUtils;
-import org.ctp.enchantmentsolution.utils.config.ConfigString;
+import org.ctp.enchantmentsolution.utils.items.LassoUtils;
 import org.ctp.enchantmentsolution.utils.player.ESPlayer;
 
 public class SaveUtils {
@@ -45,6 +44,7 @@ public class SaveUtils {
 					config.removeKey("advancement_progress." + i);
 				} catch (Exception ex) {
 					ex.printStackTrace();
+					config.removeKey("advancement_progress." + i);
 				}
 				i++;
 			}
@@ -58,6 +58,8 @@ public class SaveUtils {
 				String[] arrayBlock = stringBlock.split(" ");
 				try {
 					Block block = new Location(Bukkit.getWorld(arrayBlock[1]), Integer.parseInt(arrayBlock[2]), Integer.parseInt(arrayBlock[3]), Integer.parseInt(arrayBlock[4])).getBlock();
+					// tests if the world is valid; if not, it will cause an exception and skip
+					block.getWorld().getName();
 					WalkerInterface inter = WalkerInterface.getFromMetadata(arrayBlock[5]);
 					if (inter == null) try {
 						inter = WalkerInterface.getFromMaterial(Material.valueOf(arrayBlock[5]));
@@ -82,6 +84,8 @@ public class SaveUtils {
 				String[] arrayBlock = stringBlock.split(" ");
 				try {
 					Location loc = new Location(Bukkit.getWorld(arrayBlock[0]), Integer.parseInt(arrayBlock[1]), Integer.parseInt(arrayBlock[2]), Integer.parseInt(arrayBlock[3]));
+					// tests if the world is valid; if not, it will cause an exception and skip
+					loc.getWorld().getName();
 					EnchantmentSolution.gaiaAddLocation(loc);
 				} catch (Exception ex) {
 					Chatable.get().sendInfo("Block at position " + i + " was invalid, skipping.");
@@ -90,22 +94,53 @@ public class SaveUtils {
 			}
 			config.removeKeys("gaia");
 		}
+		if (config.containsElements("lasso")) {
+			int i = 0;
+			List<String> keys = config.getLevelEntryKeys("lasso");
+			for(String key: keys) {
+				String location = "lasso." + key + "." + i;
+				while (config.getString(location + ".enchantment") != null) {
+					CustomEnchantment enchantment = RegisterEnchantments.getByName(config.getString(location + ".enchantment"));
+					if (enchantment != null) LassoUtils.createFromConfig(file, i, enchantment.getRelativeEnchantment());
+					i++;
+				}
+			}
+			config.removeKeys("lasso");
+		}
+		// old format, put in new format
 		if (config.containsElements("animals")) {
 			int i = 0;
 			while (config.getString("animals." + i + ".entity_type") != null) {
-				AnimalMob.createFromConfig(file, i);
+				LassoUtils.createFromConfig(file, i, RegisterEnchantments.IRENES_LASSO);
 				i++;
 			}
 			config.removeKeys("animals");
 		}
 
-		if (!ConfigString.RESET_ON_RELOAD.getBoolean() && config.containsElements("enchanting_table")) {
+		if (config.containsElements("es_player")) {
 			int i = 0;
-			while (config.getString("enchanting_table." + i + ".player") != null) {
-				TableEnchantments.getFromConfig(config, i);
+			while (config.getString("es_player." + i + ".uuid") != null) {
+				OfflinePlayer offline = Bukkit.getOfflinePlayer(UUID.fromString(config.getString("es_player." + i + ".uuid")));
+				if (offline != null) {
+					ESPlayer player = EnchantmentSolution.getESPlayer(offline);
+					player.setCanSeeEnchantments(config.getBoolean("es_player." + i + ".can_see_enchantments"));
+					player.setWillSeeEnchantments(config.getBoolean("es_player." + i + ".will_see_enchantments"));
+					player.setCurrentEchoShards(config.getInt("es_player." + i + ".current_echo_shards"));
+					player.setNextEchoShards(config.getInt("es_player." + i + ".next_echo_shards"));
+					player.setLevelSeed(config.getLong("es_player." + i + ".level_seed"));
+					int j = 0;
+					while (config.getString("es_player." + i + ".seeds." + j + ".seed") != null) {
+						ItemData data = ItemData.fromString(config.getString("es_player." + i + ".seeds." + j + ".itemdata"));
+						if (data != null) player.setEnchantmentSeed(data, config.getInt("es_player." + i + ".seeds." + j + ".seed"));
+						j++;
+					}
+				}
 				i++;
 			}
 		}
+		config.removeKeys("es_player");
+
+		// legacy - remove the old values
 		config.removeKeys("enchanting_table");
 		if (config.containsElements("rpg")) {
 			int i = 0;
@@ -140,38 +175,57 @@ public class SaveUtils {
 		i = 0;
 		List<WalkerBlock> blocks = WalkerUtils.getBlocks();
 		if (blocks != null) for(WalkerBlock block: blocks) {
-			Block loc = block.getBlock();
-			CustomEnchantment enchantment = RegisterEnchantments.getCustomEnchantment(block.getEnchantment());
-			config.set("blocks." + i, enchantment.getName() + " " + loc.getWorld().getName() + " " + loc.getX() + " " + loc.getY() + " " + loc.getZ() + " " + block.getMeta() + " " + block.getTick() + " " + block.getDamage().name());
+			try {
+				Block loc = block.getBlock();
+				CustomEnchantment enchantment = RegisterEnchantments.getCustomEnchantment(block.getEnchantment());
+				config.set("blocks." + i, enchantment.getName() + " " + loc.getWorld().getName() + " " + loc.getX() + " " + loc.getY() + " " + loc.getZ() + " " + block.getMeta() + " " + block.getTick() + " " + block.getDamage().name());
+			} catch (Exception ex) {
+
+			}
 			i++;
 		}
 		i = 0;
 		List<Location> locs = EnchantmentSolution.gaiaGetLocations();
 		if (locs != null) for(Location loc: locs) {
-			config.set("gaia." + i, loc.getWorld().getName() + " " + loc.getBlockX() + " " + loc.getBlockY() + " " + loc.getBlockZ());
+			try {
+				config.set("gaia." + i, loc.getWorld().getName() + " " + loc.getBlockX() + " " + loc.getBlockY() + " " + loc.getBlockZ());
+			} catch (Exception ex) {
+
+			}
 			i++;
 		}
 		i = 0;
+		for(EnchantmentWrapper enchantment: EnchantmentSolution.getLassoEnchantments())
+			try {
+				for(LassoMob animal: EnchantmentSolution.getLassoMobs(enchantment)) {
+					animal.setConfig(file, animal.getLocation(i), i);
+					i++;
+				}
+			} catch (NoClassDefFoundError ex) {
+				ex.printStackTrace();
+			}
+
+		i = 0;
 		try {
-			for(AnimalMob animal: EnchantmentSolution.getAnimals()) {
-				animal.setConfig(file, i);
+			for(ESPlayer player: EnchantmentSolution.getAllESPlayers(false)) {
+				config.set("es_player." + i + ".uuid", player.getPlayer().getUniqueId());
+				config.set("es_player." + i + ".can_see_enchantments", player.canSeeEnchantments());
+				config.set("es_player." + i + ".will_see_enchantments", player.willSeeEnchantments());
+				config.set("es_player." + i + ".current_echo_shards", player.getCurrentEchoShards());
+				config.set("es_player." + i + ".next_echo_shards", player.getNextEchoShards());
+				config.set("es_player." + i + ".level_seed", player.getLevelSeed());
+				Iterator<Seed> iter = player.getEnchantmentSeeds().iterator();
+				int j = 0;
+				while (iter.hasNext()) {
+					Seed seed = iter.next();
+					config.set("es_player." + i + ".seeds." + j + ".itemdata", seed.getData().toString());
+					config.set("es_player." + i + ".seeds." + j + ".seed", seed.getSeed());
+					j++;
+				}
 				i++;
 			}
 		} catch (NoClassDefFoundError ex) {
 			ex.printStackTrace();
-		}
-
-		if (!ConfigString.RESET_ON_RELOAD.getBoolean()) {
-			i = 0;
-			try {
-				for(ESPlayer player: EnchantmentSolution.getAllESPlayers(false))
-					for(TableEnchantments table: TableEnchantments.getAllTableEnchantments(player.getPlayer().getUniqueId())) {
-						table.setConfig(config, i);
-						i++;
-					}
-			} catch (NoClassDefFoundError ex) {
-				ex.printStackTrace();
-			}
 		}
 		i = 0;
 		List<RPGPlayer> players = RPGUtils.getPlayers();

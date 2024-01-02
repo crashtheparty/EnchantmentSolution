@@ -19,7 +19,7 @@ public class McMMOHandler {
 	public static void handleBlockDrops(BlockDropItemEvent event, ItemStack item, EnchantmentWrapper enchantment) {
 		if (EnchantmentSolution.getPlugin().getMcMMOType().equals("Disabled")) return;
 
-		McMMOBlockDrops.handleBlockDrops(event, item, enchantment);
+//		McMMOBlockDrops.handleBlockDrops(event, item, enchantment);
 	}
 
 	public static void customName(Entity e) {

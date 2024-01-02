@@ -1,32 +1,22 @@
 package org.ctp.enchantmentsolution.events.drops;
 
-import java.util.List;
+import java.util.Collection;
 
-import org.bukkit.entity.Player;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 
 public abstract class OverrideDropsEvent extends DropEvent {
 
-	private final List<ItemStack> originalDrops;
-	private boolean override;
+	private final Collection<ItemStack> originalDrops;
 
-	public OverrideDropsEvent(Player who, EnchantmentLevel enchantment, List<ItemStack> drops, List<ItemStack> originalDrops, boolean override) {
+	public OverrideDropsEvent(LivingEntity who, EnchantmentLevel enchantment, Collection<ItemStack> drops, Collection<ItemStack> originalDrops) {
 		super(who, enchantment, drops);
 		this.originalDrops = originalDrops;
-		setOverride(override);
 	}
 
-	public List<ItemStack> getOriginalDrops() {
+	public Collection<ItemStack> getOriginalDrops() {
 		return originalDrops;
-	}
-
-	public boolean isOverride() {
-		return override;
-	}
-
-	public void setOverride(boolean override) {
-		this.override = override;
 	}
 
 }

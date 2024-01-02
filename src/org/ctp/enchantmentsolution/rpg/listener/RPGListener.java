@@ -25,6 +25,7 @@ import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.enums.ItemBreakType;
 import org.ctp.enchantmentsolution.events.AttributeEvent;
+import org.ctp.enchantmentsolution.events.ESEntityEvent;
 import org.ctp.enchantmentsolution.events.ESPlayerEvent;
 import org.ctp.enchantmentsolution.events.blocks.*;
 import org.ctp.enchantmentsolution.events.damage.*;
@@ -32,11 +33,8 @@ import org.ctp.enchantmentsolution.events.entity.*;
 import org.ctp.enchantmentsolution.events.interact.ProjectileSpawnEvent;
 import org.ctp.enchantmentsolution.events.player.BonusDropsEvent;
 import org.ctp.enchantmentsolution.events.player.IcarusRefreshEvent;
-import org.ctp.enchantmentsolution.events.potion.MagicGuardPotionEvent;
-import org.ctp.enchantmentsolution.events.potion.PotionAfflictEvent;
-import org.ctp.enchantmentsolution.events.potion.PotionEffectEvent;
+import org.ctp.enchantmentsolution.events.potion.*;
 import org.ctp.enchantmentsolution.events.soul.SoulReaperEvent;
-import org.ctp.enchantmentsolution.events.teleport.WarpPlayerEvent;
 import org.ctp.enchantmentsolution.listeners.Enchantmentable;
 import org.ctp.enchantmentsolution.rpg.RPGUtils;
 import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
@@ -166,8 +164,8 @@ public class RPGListener extends Enchantmentable implements Runnable {
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onLightWeight(LightWeightEvent event) {
 		if (!RPGUtils.isEnabled() || event.isCancelled()) return;
-		Player player = event.getPlayer();
-		giveExperience(player, RegisterEnchantments.LIGHT_WEIGHT, 1);
+		HumanEntity player = event.getPlayer();
+		if (player instanceof Player) giveExperience((Player) player, RegisterEnchantments.LIGHT_WEIGHT, 1);
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR)
@@ -287,13 +285,6 @@ public class RPGListener extends Enchantmentable implements Runnable {
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR)
-	public void onWarpPlayer(WarpPlayerEvent event) {
-		if (!RPGUtils.isEnabled() || event.isCancelled()) return;
-		EnchantmentLevel level = event.getEnchantment();
-		giveExperience(event.getPlayer(), level);
-	}
-
-	@EventHandler(priority = EventPriority.MONITOR)
 	public void onDetonateCreeper(DetonateCreeperEvent event) {
 		if (!RPGUtils.isEnabled() || event.isCancelled()) return;
 		EnchantmentLevel level = event.getEnchantment();
@@ -318,8 +309,19 @@ public class RPGListener extends Enchantmentable implements Runnable {
 
 		Player player = null;
 
-		if ((event instanceof StoneThrowEvent || event instanceof SandVeilEvent || event instanceof SacrificeEvent || event instanceof LassoDamageEvent || event instanceof KnockUpEvent || event instanceof ShockAspectEvent || event instanceof DrownedEvent || event instanceof BrineEvent || event instanceof GungHoEvent) && ((ESEntityDamageEntityEvent) event).getDamager() instanceof Player) player = (Player) ((ESEntityDamageEntityEvent) event).getDamager();
+		if ((event instanceof StoneThrowEvent || event instanceof LassoDamageEvent || event instanceof BrineEvent || event instanceof GungHoEvent) && ((ESEntityDamageEntityEvent) event).getDamager() instanceof Player) player = (Player) ((ESEntityDamageEntityEvent) event).getDamager();
 		else if (event instanceof IronDefenseEvent && event.getEntity() instanceof Player) player = (Player) event.getEntity();
+		if (player != null) giveExperience(player, level);
+	}
+
+	@EventHandler(priority = EventPriority.MONITOR)
+	public void onESEntityEvent(ESEntityEvent event) {
+		if (!RPGUtils.isEnabled() || event.isCancelled()) return;
+		EnchantmentLevel level = event.getEnchantment();
+
+		Player player = null;
+		if (event instanceof ShockAspectEvent && event.getEntity() instanceof Player) player = (Player) event.getEntity();
+
 		if (player != null) giveExperience(player, level);
 	}
 
@@ -340,14 +342,20 @@ public class RPGListener extends Enchantmentable implements Runnable {
 		if (event.getAfflicter() instanceof Player) giveExperience((Player) event.getAfflicter(), event.getEnchantment());
 	}
 
+	@EventHandler(priority = EventPriority.MONITOR)
+	public void onCustomPotionAfflict(CustomPotionAfflictEvent event) {
+		if (event.getAfflicter() instanceof Player) giveExperience((Player) event.getAfflicter(), event.getEnchantment());
+	}
+
 	@Override
 	public void run() {
 		if (!RPGUtils.isEnabled()) return;
 		for(Player player: Bukkit.getOnlinePlayers()) {
 			ESPlayer esPlayer = EnchantmentSolution.getESPlayer(player);
 			if (esPlayer.didTick()) {
-				ItemStack item = esPlayer.getElytra();
-				if (item != null) giveExperience(player, RegisterEnchantments.FREQUENT_FLYER, EnchantmentUtils.getLevel(item, RegisterEnchantments.FREQUENT_FLYER));
+				// TODO: fix this line of code
+//				ItemStack item = esPlayer.getElytra();
+//				if (item != null) giveExperience(player, RegisterEnchantments.FREQUENT_FLYER, EnchantmentUtils.getLevel(item, RegisterEnchantments.FREQUENT_FLYER));
 			}
 			boolean wb = false, ur = false;
 			int jog = 0, plyo = 0;

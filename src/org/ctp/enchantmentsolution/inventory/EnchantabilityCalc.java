@@ -21,7 +21,6 @@ import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantabilityMaterial;
 import org.ctp.enchantmentsolution.nms.Anvil_GUI_NMS;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
-import org.ctp.enchantmentsolution.utils.config.ConfigUtils;
 
 public class EnchantabilityCalc implements InventoryData, Pageable {
 
@@ -299,11 +298,17 @@ public class EnchantabilityCalc implements InventoryData, Pageable {
 
 		int level = 1;
 
-		if (ConfigUtils.getAdvancedBoolean(ConfigString.USE_LAPIS_MODIFIERS, ConfigString.LEVEL_FIFTY.getBoolean())) {
-			double lapisConstant = ConfigUtils.getAdvancedDouble(ConfigString.LAPIS_CONSTANT, ConfigString.LEVEL_FIFTY.getBoolean() ? -1 : 0);
-			double lapisMultiplier = ConfigUtils.getAdvancedDouble(ConfigString.LAPIS_MULTIPLIER, ConfigString.LEVEL_FIFTY.getBoolean() ? 2 : 0);
-			rand_enchantability += ((ConfigString.LEVEL_FIFTY.getBoolean() ? 6 : 3) + lapisConstant) * lapisMultiplier;
-		}
+		// if (ConfigUtils.getAdvancedBoolean(ConfigString.USE_LAPIS_MODIFIERS,
+		// ConfigString.LEVEL_FIFTY.getBoolean())) {
+		// double lapisConstant =
+		// ConfigUtils.getAdvancedDouble(ConfigString.LAPIS_CONSTANT,
+		// ConfigString.LEVEL_FIFTY.getBoolean() ? -1 : 0);
+		// double lapisMultiplier =
+		// ConfigUtils.getAdvancedDouble(ConfigString.LAPIS_MULTIPLIER,
+		// ConfigString.LEVEL_FIFTY.getBoolean() ? 2 : 0);
+		// rand_enchantability += ((ConfigString.LEVEL_FIFTY.getBoolean() ? 6 : 3) +
+		// lapisConstant) * lapisMultiplier;
+		// }
 		int max = (ConfigString.LEVEL_FIFTY.getBoolean() ? 50 : 30) + rand_enchantability;
 		max = (int) (max * 1.15 + 0.5);
 

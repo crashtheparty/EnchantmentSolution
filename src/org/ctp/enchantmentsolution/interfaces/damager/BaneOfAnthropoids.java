@@ -1,0 +1,38 @@
+package org.ctp.enchantmentsolution.interfaces.damager;
+
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.inventory.ItemStack;
+import org.ctp.crashapi.entity.MobData;
+import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
+import org.ctp.enchantmentsolution.events.damage.BaneOfAnthropoidsEvent;
+import org.ctp.enchantmentsolution.interfaces.EnchantmentItemLocation;
+import org.ctp.enchantmentsolution.interfaces.EnchantmentMultipleType;
+import org.ctp.enchantmentsolution.interfaces.conditions.DamageCondition;
+import org.ctp.enchantmentsolution.interfaces.conditions.damage.DamagedIsTypeCondition;
+import org.ctp.enchantmentsolution.interfaces.effects.damage.DamagerEffect;
+
+public class BaneOfAnthropoids extends DamagerEffect {
+
+	public BaneOfAnthropoids() {
+		super(RegisterEnchantments.BANE_OF_ANTHROPOIDS, EnchantmentMultipleType.HIGHEST, EnchantmentItemLocation.ATTACKED, EventPriority.HIGHEST, 0, 1, "1.25 * %level%", "1", false, false, true, false, new DamageCondition[] { new DamagedIsTypeCondition(false, new MobData("PILLAGER"), new MobData("WANDERING_TRADER"), new MobData("VILLAGER"), new MobData("PIGLIN"), new MobData("ENDERMAN"), new MobData("EVOKER"), new MobData("PIGLIN_BRUTE"), new MobData("WITCH"), new MobData("VINDICATOR")) });
+	}
+
+	@Override
+	public DamagerResult run(Entity damager, Entity damaged, ItemStack[] items, EntityDamageByEntityEvent event) {
+		DamagerResult result = super.run(damager, damaged, items, event);
+		if (result.getLevel() == 0) return null;
+		double damage = result.getDamage();
+		BaneOfAnthropoidsEvent bane = new BaneOfAnthropoidsEvent((LivingEntity) damaged, result.getLevel(), (LivingEntity) damager, event.getDamage(), damage);
+		Bukkit.getPluginManager().callEvent(bane);
+		if (!bane.isCancelled()) {
+			event.setDamage(bane.getNewDamage());
+			return new DamagerResult(result.getLevel(), bane.getNewDamage());
+		}
+		return null;
+	}
+
+}

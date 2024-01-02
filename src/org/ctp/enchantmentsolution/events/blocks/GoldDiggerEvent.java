@@ -9,20 +9,11 @@ import org.bukkit.inventory.ItemStack;
 import org.ctp.enchantmentsolution.enchantments.CERegister;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 
-public class GoldDiggerEvent extends ESBlockDropAddItemEvent {
+public class GoldDiggerEvent extends ESBlockDropOverrideItemEvent {
 
-	private int expToDrop;
-
-	public GoldDiggerEvent(Player player, int level, Block theBlock, BlockData blockData, List<ItemStack> goldItems, int expToDrop) {
-		super(theBlock, blockData, new EnchantmentLevel(CERegister.GOLD_DIGGER, level), player, goldItems);
-		setExpToDrop(expToDrop);
+	public GoldDiggerEvent(Block block, BlockData blockData, Player player, int level, List<ItemStack> newDrops, List<ItemStack> oldDrops, boolean override,
+	int exp) {
+		super(block, blockData, new EnchantmentLevel(CERegister.SMELTERY, level), player, newDrops, oldDrops, override, exp);
 	}
 
-	public int getExpToDrop() {
-		return expToDrop;
-	}
-
-	public void setExpToDrop(int expToDrop) {
-		this.expToDrop = expToDrop;
-	}
 }

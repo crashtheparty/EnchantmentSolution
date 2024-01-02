@@ -22,7 +22,6 @@ import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.commands.EnchantmentSolutionCommand;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
-import org.ctp.enchantmentsolution.enchantments.generate.TableEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.inventory.*;
 import org.ctp.enchantmentsolution.inventory.minigame.Minigame;
@@ -299,7 +298,7 @@ public class CommandUtils {
 		if (sender.hasPermission(details.getPermission())) {
 			EnchantmentSolution.getPlugin().closeInventories(null);
 			EnchantmentSolution.getPlugin().reEquipItems();
-			TableEnchantments.removeAllTableEnchantments();
+//			TableEnchantments.removeAllTableEnchantments();
 			Minigame.reset();
 			Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(ChatUtils.getCodes(), "commands.reset-inventory"), Level.INFO);
 		} else

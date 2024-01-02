@@ -5,20 +5,27 @@ import java.util.List;
 import org.ctp.crashapi.CrashAPI;
 import org.ctp.crashapi.item.MatData;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
+import org.ctp.enchantmentsolution.enums.Loots;
 
 public class MinigameItem {
 
+	private final String name;
 	private final MatData show, enchant;
 	private final MinigameItemType type;
-	private final int lvlCost, lvlExtraCost, lvlMaxCost, lapisCost, lapisExtraCost, lapisMaxCost, minBooks, maxBooks, minLevels, maxLevels, slot;
+	private final int lvlCost, lvlExtraCost, lvlMaxCost, lapisCost, lapisExtraCost, lapisMaxCost, slot;
+	private List<String> lootTypes;
+	private Loots defaultLoots;
 	private final double economyCost, economyExtraCost, economyMaxCost;
 	private final boolean increaseLevelCost, increaseLapisCost, increaseEconomyCost;
 	private final List<EnchantmentLevel> levels;
 	private final List<String> costs;
 
-	public MinigameItem(MatData show, MatData enchant, MinigameItemType type, int lvlCost, int lvlExtraCost, int lvlMaxCost, int lapisCost, int lapisExtraCost,
-	int lapisMaxCost, double economyCost, double economyExtraCost, double economyMaxCost, List<String> costs, int minBooks, int maxBooks, int minLevels,
-	int maxLevels, int slot, boolean increaseLevelCost, boolean increaseLapisCost, boolean increaseEconomyCost, List<EnchantmentLevel> levels) {
+	public MinigameItem(String name, MatData show, MatData enchant, MinigameItemType type, int lvlCost, int lvlExtraCost, int lvlMaxCost, int lapisCost,
+	int lapisExtraCost,
+	int lapisMaxCost, double economyCost, double economyExtraCost, double economyMaxCost, List<String> costs, List<String> lootTypes, int slot,
+	boolean increaseLevelCost,
+	boolean increaseLapisCost, boolean increaseEconomyCost, List<EnchantmentLevel> levels) {
+		this.name = name;
 		this.show = show;
 		this.enchant = enchant;
 		this.type = type;
@@ -31,10 +38,22 @@ public class MinigameItem {
 		this.economyCost = economyCost;
 		this.economyExtraCost = economyExtraCost;
 		this.economyMaxCost = economyMaxCost;
-		this.minBooks = minBooks;
-		this.maxBooks = maxBooks;
-		this.minLevels = minLevels;
-		this.maxLevels = maxLevels;
+		setLootTypes(lootTypes);
+		switch (name) {
+			case "first":
+				setDefaultLoots(Loots.getLoot("default_minigame_loot_one"));
+				break;
+			case "second":
+				setDefaultLoots(Loots.getLoot("default_minigame_loot_two"));
+				break;
+			case "third":
+				setDefaultLoots(Loots.getLoot("default_minigame_loot_three"));
+				break;
+			default:
+				setDefaultLoots(Loots.getLoot("default_minigame_loot_other"));
+				break;
+
+		}
 		this.slot = slot;
 		this.increaseLevelCost = increaseLevelCost;
 		this.increaseLapisCost = increaseLapisCost;
@@ -55,28 +74,12 @@ public class MinigameItem {
 		return type;
 	}
 
-	public int getMinBooks() {
-		return minBooks;
-	}
-
-	public int getMaxBooks() {
-		return maxBooks;
-	}
-
 	public int getSlot() {
 		return slot;
 	}
 
 	public List<EnchantmentLevel> getLevels() {
 		return levels;
-	}
-
-	public int getMinLevels() {
-		return minLevels;
-	}
-
-	public int getMaxLevels() {
-		return maxLevels;
 	}
 
 	public int getLvlCost() {
@@ -148,6 +151,26 @@ public class MinigameItem {
 
 	public boolean willIncreaseEconomyCost() {
 		return increaseEconomyCost;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public Loots getDefaultLoots() {
+		return defaultLoots;
+	}
+
+	public void setDefaultLoots(Loots defaultLoots) {
+		this.defaultLoots = defaultLoots;
+	}
+
+	public List<String> getLootTypes() {
+		return lootTypes;
+	}
+
+	public void setLootTypes(List<String> lootTypes) {
+		this.lootTypes = lootTypes;
 	}
 
 	public enum MinigameItemType {

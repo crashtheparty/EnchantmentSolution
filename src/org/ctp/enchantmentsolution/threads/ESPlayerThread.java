@@ -29,6 +29,7 @@ public class ESPlayerThread implements Runnable {
 	@Override
 	public void run() {
 		if (esPlayer.isOnline()) {
+			esPlayer.endCooldowns();
 			esPlayer.runHWD();
 			esPlayer.runGaia();
 			esPlayer.runHWDModel();
