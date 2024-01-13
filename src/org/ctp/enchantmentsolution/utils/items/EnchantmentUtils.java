@@ -170,8 +170,7 @@ public class EnchantmentUtils {
 		List<EnchantmentLevel> levels = getEnchantmentLevels(item);
 		if (!customEnchant.canAnvilItem(new ItemData(item))) return false;
 		for(EnchantmentLevel level: levels)
-			for(CustomEnchantment custom: RegisterEnchantments.getRegisteredEnchantments())
-				if (custom.equals(level.getEnchant()) && CustomEnchantment.conflictsWith(customEnchant, custom) && !customEnchant.equals(custom)) return false;
+			if (CustomEnchantment.conflictsWith(customEnchant, level.getEnchant()) && !customEnchant.equals(level.getEnchant())) return false;
 		return true;
 	}
 

@@ -64,7 +64,7 @@ public class RegisterEnchantments {
 	public static final EnchantmentWrapper DAMAGE_UNDEAD = new EnchantmentWrapper(Enchantment.DAMAGE_UNDEAD.getKey(), "DAMAGE_UNDEAD");
 	public static final EnchantmentWrapper SOUL_SPEED = new EnchantmentWrapper(Enchantment.SOUL_SPEED.getKey(), "SOUL_SPEED");
 	public static final EnchantmentWrapper SWEEPING_EDGE = new EnchantmentWrapper(Enchantment.SWEEPING_EDGE.getKey(), "SWEEPING_EDGE");
-	public static final EnchantmentWrapper SWIFT_SNEAK = new EnchantmentWrapper(new EnchantmentData("SWIFT_SNEAK") == null ? null : new EnchantmentData("SWIFT_SNEAK").getEnchantment().getKey(), "WATER_WORKER");
+	public static final EnchantmentWrapper SWIFT_SNEAK = new EnchantmentWrapper(!new EnchantmentData("SWIFT_SNEAK").hasEnchantment() ? null : new EnchantmentData("SWIFT_SNEAK").getEnchantment().getKey(), "WATER_WORKER");
 	public static final EnchantmentWrapper THORNS = new EnchantmentWrapper(Enchantment.THORNS.getKey(), "THORNS");
 	public static final EnchantmentWrapper DURABILITY = new EnchantmentWrapper(Enchantment.DURABILITY.getKey(), "DURABILITY");
 	
@@ -73,7 +73,7 @@ public class RegisterEnchantments {
 	public static final EnchantmentWrapper SHOCK_ASPECT = new CustomEnchantmentWrapper("shock_aspect", "SHOCK_ASPECT");
 	public static final EnchantmentWrapper LIFE = new CustomEnchantmentWrapper("life", "LIFE");
 	public static final EnchantmentWrapper BEHEADING = new CustomEnchantmentWrapper("beheading", "BEHEADING");
-	public static final EnchantmentWrapper KNOCKUP = new CustomEnchantmentWrapper("knockip", "KNOCKUP");
+	public static final EnchantmentWrapper KNOCKUP = new CustomEnchantmentWrapper("knockup", "KNOCKUP");
 	public static final EnchantmentWrapper WARP = new CustomEnchantmentWrapper("warp", "WARP");
 	public static final EnchantmentWrapper EXP_SHARE = new CustomEnchantmentWrapper("exp_share", "EXP_SHARE");
 	public static final EnchantmentWrapper MAGMA_WALKER = new CustomEnchantmentWrapper("magma_walker", "MAGMA_WALKER");

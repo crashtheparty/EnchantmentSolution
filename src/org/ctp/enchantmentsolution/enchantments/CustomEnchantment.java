@@ -61,6 +61,10 @@ public abstract class CustomEnchantment {
 	}
 
 	public abstract EnchantmentWrapper getRelativeEnchantment();
+	
+	public boolean equals(CustomEnchantment enchantment) {
+		return enchantment != null && enchantment.getRelativeEnchantment() != null && enchantment.getRelativeEnchantment().equals(getRelativeEnchantment());
+	}
 
 	public static boolean conflictsWith(CustomEnchantment enchOne, CustomEnchantment enchTwo) {
 		if (enchOne.conflictsWith(enchTwo) || enchTwo.conflictsWith(enchOne)) return true;
@@ -191,7 +195,6 @@ public abstract class CustomEnchantment {
 	}
 
 	public boolean canAnvilItem(ItemData item) {
-		if (item.getMaterial() == Material.ENCHANTED_BOOK) return true;
 		for(ItemType type: getAnvilItemTypes()) {
 			if (type instanceof CustomItemType && ItemUtils.checkItemType(item, (CustomItemType) type)) return true;
 			if (type.getEnchantMaterials() != null && ItemData.contains(type.getEnchantMaterials(), item.getMaterial())) return true;

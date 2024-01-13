@@ -112,7 +112,7 @@ public class AnvilEnchantments extends GenerateEnchantments {
 					canCombine = false;
 					return;
 				}
-				if (!itemTwo.getType().equals(Material.BOOK) && !itemTwo.getType().equals(Material.ENCHANTED_BOOK) || DamageUtils.getDamage(item) > 0 || !itemTwo.getType().equals(item.getType())) {
+				if (!itemTwo.getType().equals(Material.BOOK) && !itemTwo.getType().equals(Material.ENCHANTED_BOOK) || DamageUtils.getDamage(item) > 0 && willRepair) {
 					canCombine = true;
 					return;
 				}
@@ -127,9 +127,12 @@ public class AnvilEnchantments extends GenerateEnchantments {
 	}
 
 	private boolean checkEnchantments(List<EnchantmentLevel> enchantments, ItemStack first) {
+		Player player = getPlayer().getPlayer();
+		boolean godAnvil = PermissionUtils.check(player, "enchantmentsolution.anvil.god");
+		boolean demiGodAnvil = PermissionUtils.check(player, "enchantmentsolution.anvil.demigod");
+		if (godAnvil || demiGodAnvil) return true;
 		for(EnchantmentLevel level : enchantments)
-			for(CustomEnchantment customEnchant: RegisterEnchantments.getRegisteredEnchantments())
-				if (customEnchant.getRelativeEnchantment().equals(level.getEnchant().getRelativeEnchantment()) && EnchantmentUtils.canAddEnchantment(customEnchant, first)) return true;
+			if (EnchantmentUtils.canAddEnchantment(level.getEnchant(), first)) return true;
 		return false;
 	}
 
@@ -192,7 +195,7 @@ public class AnvilEnchantments extends GenerateEnchantments {
 						added = true;
 						break;
 					}
-				if (!added && (enchantOne.getEnchant().canAnvilItem(new ItemData(combinedItem)) || godAnvil)) {
+				if (!added && (enchantOne.getEnchant().canAnvilItem(new ItemData(combinedItem)) || godAnvil || demiGodAnvil)) {
 					if (demiGodAnvil) {
 						if (!godAnvil) if (enchantOne.getLevel() > enchantOne.getEnchant().getMaxLevel()) enchantOne.setLevel(enchantOne.getEnchant().getMaxLevel());
 					} else if (!enchantOne.getEnchant().canAnvil(player, enchantOne.getLevel())) {

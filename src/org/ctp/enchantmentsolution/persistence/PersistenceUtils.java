@@ -58,6 +58,7 @@ public class PersistenceUtils {
 				if (!hadLore) changed = true;
 				lore.add(returnEnchantmentName(level));
 			}
+
 		meta.setLore(lore);
 		item.setItemMeta(meta);
 		if (setItemLore(item)) changed = true;
@@ -135,14 +136,13 @@ public class PersistenceUtils {
 			if (!meta.hasLore()) return item;
 			PersistentDataContainer container = meta.getPersistentDataContainer();
 			String oldDisplayName = container.get(enchant.getPersistenceKey(), t);
-			if (oldDisplayName == null) oldDisplayName = "";
 			container.remove(enchant.getPersistenceKey());
 			container.remove(enchant.getPersistenceKey("_level"));
 			List<String> lore = meta.getLore();
 			Iterator<String> iter = lore.iterator();
 			while (iter.hasNext()) {
 				String l = iter.next();
-				if (l.startsWith(ChatColor.translateAlternateColorCodes('&', enchant.getDisplayName()) + ChatColor.RESET) || l.startsWith(oldDisplayName)) iter.remove();
+				if (l.startsWith(ChatColor.translateAlternateColorCodes('&', enchant.getDisplayName()) + ChatColor.RESET) || (oldDisplayName != null && l.startsWith(oldDisplayName))) iter.remove();
 			}
 			meta.setLore(lore);
 			item.setItemMeta(meta);
@@ -391,99 +391,28 @@ public class PersistenceUtils {
 		item.setItemMeta(meta);
 	}
 
-	// public static boolean checkItem(ItemStack item) {
-	// boolean changed = false;
-	// if (item != null) {
-	// List<EnchantmentLevel> enchantMeta = getEnchantments(item);
-	// List<EnchantmentLevel> enchantLore = new ArrayList<EnchantmentLevel>();
-	// if (item.hasItemMeta()) {
-	// PersistentDataContainer container =
-	// item.getItemMeta().getPersistentDataContainer();
-	// for(NamespacedKey key: container.getKeys())
-	// if (key.getNamespace().equalsIgnoreCase("enchantmentsolution")) {
-	// Enchantment enchant = RegisterEnchantments.getByKey(key);
-	// if (enchant != null) {
-	// String enchantLevelString = container.get(new
-	// NamespacedKey(EnchantmentSolution.getPlugin(), key.getKey() + "_level"),
-	// PersistentDataType.STRING);
-	// int enchantLevel = 0;
-	// try {
-	// enchantLevel = Integer.parseInt(enchantLevelString);
-	// } catch (Exception ex) {}
-	// enchantLore.add(new
-	// EnchantmentLevel(RegisterEnchantments.getCustomEnchantment(enchant),
-	// enchantLevel));
-	// }
-	// }
-	// for(CustomEnchantment ench: RegisterEnchantments.getEnchantments()) {
-	// String name = "ES_" + ench.getName();
-	// int level = ItemNMS.getNBTData(item, name);
-	// if (level > 0) enchantMeta.add(new EnchantmentLevel(ench, level));
-	// if (!(ench.getRelativeEnchantment() instanceof CustomEnchantmentWrapper) &&
-	// EnchantmentUtils.hasEnchantment(item, ench.getRelativeEnchantment()))
-	// enchantLore.add(new EnchantmentLevel(ench, level));
-	// }
-	// }
-	// if (enchantMeta.size() == 0 && enchantLore.size() == 0) return false;
-	//
-	// boolean change = !checkSimilar(enchantMeta, enchantLore) &&
-	// !checkSimilar(enchantLore, enchantMeta);
-	// if (change) {
-	// changed = true;
-	// Map<Enchantment, Integer> enchants = new HashMap<Enchantment, Integer>();
-	// for(EnchantmentLevel enchant: enchantMeta) {
-	// int level = enchant.getLevel();
-	// Enchantment ench = enchant.getEnchant().getRelativeEnchantment();
-	// if (enchants.containsKey(ench)) level = level > enchants.get(ench) ? level :
-	// enchants.get(ench);
-	// enchants.put(ench, level);
-	// }
-	// for(EnchantmentLevel enchant: enchantLore) {
-	// int level = enchant.getLevel();
-	// Enchantment ench = enchant.getEnchant().getRelativeEnchantment();
-	// if (enchants.containsKey(ench)) level = level > enchants.get(ench) ? level :
-	// enchants.get(ench);
-	// enchants.put(ench, level);
-	// }
-	// if (enchants.size() > 0) {
-	// Iterator<Entry<Enchantment, Integer>> iter = enchants.entrySet().iterator();
-	// while (iter.hasNext()) {
-	// Entry<Enchantment, Integer> entry = iter.next();
-	// CustomEnchantment custom =
-	// RegisterEnchantments.getCustomEnchantment(entry.getKey());
-	// EnchantmentUtils.removeEnchantmentFromItem(item, custom);
-	// EnchantmentUtils.addEnchantmentToItem(item, custom, entry.getValue());
-	// }
-	// }
-	// } else {
-	// Iterator<EnchantmentLevel> iter = enchantMeta.iterator();
-	// while (iter.hasNext()) {
-	// EnchantmentLevel entry = iter.next();
-	// if (PersistenceUtils.addPersistence(item, Arrays.asList(entry))) changed =
-	// true;
-	// }
-	// }
-	// }
-	// return changed;
-	// }
-	//
-	// private static boolean checkSimilar(List<EnchantmentLevel> levels,
-	// List<EnchantmentLevel> levelsTwo) {
-	// boolean similar = levels.size() == levelsTwo.size();
-	// for(EnchantmentLevel level: levels) {
-	// EnchantmentLevel hasLevel = null;
-	// for(EnchantmentLevel levelTwo: levelsTwo)
-	// if (level.getEnchant() != null && levelTwo.getEnchant() != null &&
-	// level.getEnchant().getName().equals(levelTwo.getEnchant().getName()) &&
-	// !(level.getEnchant() instanceof SnapshotEnchantment ^ levelTwo.getEnchant()
-	// instanceof SnapshotEnchantment)) {
-	// hasLevel = level;
-	// break;
-	// }
-	// if (hasLevel == null) similar = false;
-	// }
-	// return similar;
-	// }
+	public static boolean checkItem(ItemStack item) {
+		boolean changed = false;
+		if (item != null) {
+			List<EnchantmentLevel> levels = getEnchantments(item);
+			for (EnchantmentLevel level : levels)
+				if (level.getEnchant().getRelativeEnchantment() instanceof CustomEnchantmentWrapper && !hasLore(item, level.getEnchant())) {
+					PersistenceUtils.removeEnchantments(item, level.getEnchant());
+					PersistenceUtils.addEnchantments(item, Arrays.asList(level));
+					changed = true;
+				}
+		}
+		return changed;
+	}
+	
+	public static boolean hasLore(ItemStack item, CustomEnchantment enchant) {
+		ItemMeta meta = item.getItemMeta();
+		if (meta != null && meta.hasLore()) for (String l : meta.getLore()) {
+			EnchResult result = isEnchantment(meta, l);
+			if (result.hasEnchantment() && result.getEnchantment().equals(enchant)) return true;
+		}
+		return false;
+	}
 
 	public static class EnchResult {
 		private final boolean enchant, change;
@@ -497,6 +426,10 @@ public class PersistenceUtils {
 
 		public CustomEnchantment getEnchantment() {
 			return enchantment;
+		}
+
+		public boolean hasEnchantment() {
+			return enchantment != null;
 		}
 
 		public boolean isEnchant() {
