@@ -96,6 +96,12 @@ public class PersistenceUtils {
 		return levels;
 	}
 
+	public static boolean hasEnchantments(ItemStack item) {
+		for (CustomEnchantment enchant : RegisterEnchantments.getRegisteredEnchantments())
+			if (hasEnchantment(item, enchant.getRelativeEnchantment())) return true;
+		return false;
+	}
+
 	public static boolean hasEnchantment(ItemStack item, EnchantmentWrapper enchant) {
 		if (item != null && item.getItemMeta() != null) {
 			ItemMeta meta = item.getItemMeta();
@@ -142,7 +148,7 @@ public class PersistenceUtils {
 			Iterator<String> iter = lore.iterator();
 			while (iter.hasNext()) {
 				String l = iter.next();
-				if (l.startsWith(ChatColor.translateAlternateColorCodes('&', enchant.getDisplayName()) + ChatColor.RESET) || (oldDisplayName != null && l.startsWith(oldDisplayName))) iter.remove();
+				if (l.contains(ChatColor.translateAlternateColorCodes('&', enchant.getDisplayName()) + ChatColor.RESET) || (oldDisplayName != null && l.contains(oldDisplayName))) iter.remove();
 			}
 			meta.setLore(lore);
 			item.setItemMeta(meta);

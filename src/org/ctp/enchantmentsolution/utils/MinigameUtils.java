@@ -10,12 +10,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.ctp.crashapi.CrashAPI;
 import org.ctp.crashapi.item.MatData;
 import org.ctp.crashapi.utils.ChatUtils;
 import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.enchantments.generate.AnvilEnchantments;
+import org.ctp.enchantmentsolution.persistence.PersistenceUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 
 import net.milkbowl.vault.economy.Economy;
@@ -73,7 +73,7 @@ public class MinigameUtils {
 		ItemStack current = event.getCurrentItem();
 
 		if (!(event.getInventory().getType() == InventoryType.CRAFTING && event.getClickedInventory().getType() == InventoryType.PLAYER && cursor != null && cursor.hasItemMeta())) return;
-		if (cursor.getItemMeta() instanceof EnchantmentStorageMeta && ((EnchantmentStorageMeta) cursor.getItemMeta()).hasStoredEnchants() || cursor.getItemMeta().hasEnchants()) {
+		if (PersistenceUtils.hasEnchantments(cursor)) {
 			List<Material> materials = Arrays.asList(Material.BOOK, Material.ENCHANTED_BOOK);
 			if (materials.contains(cursor.getType()) || cursor.getType() == current.getType()) {
 				if (current == null || MatData.isAir(current.getType()) || current.getAmount() > 1) return;

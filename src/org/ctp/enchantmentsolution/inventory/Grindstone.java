@@ -18,6 +18,7 @@ import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.generate.GrindstoneEnchantments;
 import org.ctp.enchantmentsolution.nms.AnvilNMS;
+import org.ctp.enchantmentsolution.persistence.PersistenceUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
 
@@ -122,7 +123,7 @@ public class Grindstone implements InventoryData {
 					combine.setItemMeta(combineMeta);
 				}
 			} else if (playerItems.size() == 1) {
-				if (playerItems.get(0).getItemMeta().hasEnchants() || playerItems.get(0).getType() == Material.ENCHANTED_BOOK) {
+				if (PersistenceUtils.hasEnchantments(playerItems.get(0)) || playerItems.get(0).getType() == Material.ENCHANTED_BOOK) {
 					combinedItem = grindstone.getCombinedItem();
 					combine = new ItemStack(Material.LIME_STAINED_GLASS_PANE);
 					ItemMeta combineMeta = combine.getItemMeta();
@@ -218,7 +219,7 @@ public class Grindstone implements InventoryData {
 
 	public boolean addItem(ItemStack item) {
 		if (playerItems.size() >= 2) return false;
-		if (item.getItemMeta() instanceof Damageable || item.getItemMeta().hasEnchants()) {
+		if (item.getItemMeta() instanceof Damageable || PersistenceUtils.hasEnchantments(item)) {
 			playerItems.add(item);
 			return true;
 		}

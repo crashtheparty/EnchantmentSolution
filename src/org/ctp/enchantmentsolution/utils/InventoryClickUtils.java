@@ -20,6 +20,7 @@ import org.ctp.enchantmentsolution.inventory.ConfigInventory.Screen;
 import org.ctp.enchantmentsolution.inventory.minigame.Minigame;
 import org.ctp.enchantmentsolution.inventory.rpg.RPGInventory;
 import org.ctp.enchantmentsolution.nms.Anvil_GUI_NMS;
+import org.ctp.enchantmentsolution.persistence.PersistenceUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
 
@@ -71,7 +72,7 @@ public class InventoryClickUtils {
 			if (item == null || MatData.isAir(item.getType())) return;
 			ItemStack replace = new ItemStack(Material.AIR);
 			int original_amount = item.getAmount();
-			if (original_amount > 1 && item.getType() == Material.BOOK && item.hasItemMeta() && item.getItemMeta().hasEnchants()) {
+			if (original_amount > 1 && item.getType() == Material.BOOK && item.hasItemMeta() && PersistenceUtils.hasEnchantments(item)) {
 				replace = item.clone();
 				replace.setAmount(replace.getAmount() - 1);
 				item.setAmount(1);

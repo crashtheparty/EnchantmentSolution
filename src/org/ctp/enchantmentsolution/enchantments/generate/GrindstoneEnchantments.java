@@ -61,7 +61,7 @@ public class GrindstoneEnchantments extends GenerateEnchantments {
 			takeEnchantments = false;
 			return;
 		}
-		if (item.getType() != Material.BOOK && item.getType() != Material.ENCHANTED_BOOK && item.hasItemMeta() && item.getItemMeta().hasEnchants() && itemTwo.getType() == Material.BOOK && (itemTwo.hasItemMeta() && !itemTwo.getItemMeta().hasEnchants() || !itemTwo.hasItemMeta())) takeEnchantments = true;
+		if (item.getType() != Material.BOOK && item.getType() != Material.ENCHANTED_BOOK && PersistenceUtils.hasEnchantments(item) && itemTwo.getType() == Material.BOOK && !PersistenceUtils.hasEnchantments(itemTwo)) takeEnchantments = true;
 		else
 			takeEnchantments = false;
 	}
