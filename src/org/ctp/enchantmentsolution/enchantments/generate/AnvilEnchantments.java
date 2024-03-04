@@ -1,6 +1,7 @@
 package org.ctp.enchantmentsolution.enchantments.generate;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.bukkit.Material;
@@ -11,7 +12,6 @@ import org.ctp.crashapi.item.ItemData;
 import org.ctp.crashapi.item.ItemType;
 import org.ctp.crashapi.item.MatData;
 import org.ctp.crashapi.utils.DamageUtils;
-import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.enums.EnchantmentLocation;
@@ -19,7 +19,6 @@ import org.ctp.enchantmentsolution.nms.AnvilNMS;
 import org.ctp.enchantmentsolution.persistence.PersistenceUtils;
 import org.ctp.enchantmentsolution.utils.PermissionUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
-import org.ctp.enchantmentsolution.utils.config.ConfigUtils;
 import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
 
 public class AnvilEnchantments extends GenerateEnchantments {
@@ -29,11 +28,30 @@ public class AnvilEnchantments extends GenerateEnchantments {
 	private List<EnchantmentLevel> enchantments;
 	private boolean canCombine;
 	private String name;
+	private final boolean allowInvalidEnchantments; // allows for enchantments that are not allowed on certain items to be added
+	// despite this
+	private final boolean allowHigherLevels; // allows for higher than normal level enchantments when using anvil
+	private final boolean combineHigherLevels; // combining levels above normal will set level to one higher - false if
+												// allowHigherLevels is false
+	private final boolean allowConflictingEnchantments; // i.e. Protection and Projectile Protection on same armor
+	private final boolean ignoreAnvilPermissions; // ignore all permissions found in enchantments.yml/enchantments files
+	private final boolean combineLevelsAll; // if true, will set below permissions to true - Combining Protection I and
+	// Protection I will create Protection II
+	private final boolean combineLevelsBooks; // Combining Protection I and Protection I will produce Protection II on books
+	private final boolean combineLevelsItems; // Combining Protection I and Protection I will produce Protection II on items
+	// that aren't books
 
 	public AnvilEnchantments(Player player, ItemStack item, ItemStack itemTwo) {
 		super(player, item, EnchantmentLocation.NONE);
 		this.itemTwo = itemTwo;
-
+		allowInvalidEnchantments = PermissionUtils.check(player, "enchantmentsolution.anvil.allow-invalid-enchantments");
+		allowHigherLevels = PermissionUtils.check(player, "enchantmentsolution.anvil.allow-higher-levels");
+		combineHigherLevels = PermissionUtils.check(player, "enchantmentsolution.anvil.combine-higher-levels");
+		allowConflictingEnchantments = PermissionUtils.check(player, "enchantmentsolution.anvil.allow-conflicting-enchantments");
+		ignoreAnvilPermissions = PermissionUtils.check(player, "enchantmentsolution.anvil.ignore-anvil-permissions");
+		combineLevelsAll = PermissionUtils.check(player, "enchantmentsolution.anvil.combine-levels-all");
+		combineLevelsBooks = PermissionUtils.check(player, "enchantmentsolution.anvil.combine-levels-books") || combineLevelsAll;
+		combineLevelsItems = PermissionUtils.check(player, "enchantmentsolution.anvil.combine-levels-items") || combineLevelsAll;
 		setCanCombine();
 		if (canCombine) setCombinedItem();
 		else
@@ -43,6 +61,14 @@ public class AnvilEnchantments extends GenerateEnchantments {
 	public AnvilEnchantments(Player player, ItemStack item, ItemStack itemTwo, String name) {
 		super(player, item, EnchantmentLocation.NONE);
 		this.itemTwo = itemTwo;
+		allowInvalidEnchantments = PermissionUtils.check(player, "enchantmentsolution.anvil.allow-invalid-enchantments");
+		allowHigherLevels = PermissionUtils.check(player, "enchantmentsolution.anvil.allow-higher-levels");
+		combineHigherLevels = PermissionUtils.check(player, "enchantmentsolution.anvil.combine-higher-levels");
+		allowConflictingEnchantments = PermissionUtils.check(player, "enchantmentsolution.anvil.allow-conflicting-enchantments");
+		ignoreAnvilPermissions = PermissionUtils.check(player, "enchantmentsolution.anvil.ignore-anvil-permissions");
+		combineLevelsAll = PermissionUtils.check(player, "enchantmentsolution.anvil.combine-levels-all");
+		combineLevelsBooks = PermissionUtils.check(player, "enchantmentsolution.anvil.combine-levels-books") || combineLevelsAll;
+		combineLevelsItems = PermissionUtils.check(player, "enchantmentsolution.anvil.combine-levels-items") || combineLevelsAll;
 
 		setCanCombine();
 		if (name != null) this.name = name;
@@ -112,7 +138,7 @@ public class AnvilEnchantments extends GenerateEnchantments {
 					canCombine = false;
 					return;
 				}
-				if (!itemTwo.getType().equals(Material.BOOK) && !itemTwo.getType().equals(Material.ENCHANTED_BOOK) || DamageUtils.getDamage(item) > 0 && willRepair) {
+				if (!MatData.isBook(itemTwo.getType()) || DamageUtils.getDamage(item) > 0 && willRepair) {
 					canCombine = true;
 					return;
 				}
@@ -127,11 +153,8 @@ public class AnvilEnchantments extends GenerateEnchantments {
 	}
 
 	private boolean checkEnchantments(List<EnchantmentLevel> enchantments, ItemStack first) {
-		Player player = getPlayer().getPlayer();
-		boolean godAnvil = PermissionUtils.check(player, "enchantmentsolution.anvil.god");
-		boolean demiGodAnvil = PermissionUtils.check(player, "enchantmentsolution.anvil.demigod");
-		if (godAnvil || demiGodAnvil) return true;
-		for(EnchantmentLevel level : enchantments)
+		if (allowConflictingEnchantments || ignoreAnvilPermissions) return true;
+		for(EnchantmentLevel level: enchantments)
 			if (EnchantmentUtils.canAddEnchantment(level.getEnchant(), first)) return true;
 		return false;
 	}
@@ -156,7 +179,8 @@ public class AnvilEnchantments extends GenerateEnchantments {
 		ItemStack itemOne = getItem();
 		combinedItem = itemOne.clone();
 		combinedItem = EnchantmentUtils.removeAllEnchantments(combinedItem, true);
-		if (itemOne.getType() == Material.BOOK || itemOne.getType() == Material.ENCHANTED_BOOK) if (ConfigString.USE_ENCHANTED_BOOKS.getBoolean()) combinedItem = new ItemStack(Material.ENCHANTED_BOOK);
+
+		if (MatData.isBook(itemOne.getType())) if (ConfigString.USE_ENCHANTED_BOOKS.getBoolean()) combinedItem = new ItemStack(Material.ENCHANTED_BOOK);
 		else
 			combinedItem = new ItemStack(Material.BOOK);
 		else {}
@@ -185,24 +209,31 @@ public class AnvilEnchantments extends GenerateEnchantments {
 
 			Player player = getPlayer().getPlayer();
 			List<EnchantmentLevel> enchantments = new ArrayList<EnchantmentLevel>();
-			boolean godAnvil = PermissionUtils.check(player, "enchantmentsolution.anvil.god");
-			boolean demiGodAnvil = PermissionUtils.check(player, "enchantmentsolution.anvil.demigod");
-			if (godAnvil) demiGodAnvil = true;
 			for(EnchantmentLevel enchantOne: levels) {
 				boolean added = false;
+				int newLevel = 0;
+				int maxLevel = enchantOne.getEnchant().getMaxLevel();
 				for(EnchantmentLevel enchantment: enchantments)
 					if (enchantOne.getEnchant().getRelativeEnchantment().equals(enchantment.getEnchant().getRelativeEnchantment())) {
 						added = true;
 						break;
 					}
-				if (!added && (enchantOne.getEnchant().canAnvilItem(new ItemData(combinedItem)) || godAnvil || demiGodAnvil)) {
-					if (demiGodAnvil) {
-						if (!godAnvil) if (enchantOne.getLevel() > enchantOne.getEnchant().getMaxLevel()) enchantOne.setLevel(enchantOne.getEnchant().getMaxLevel());
-					} else if (!enchantOne.getEnchant().canAnvil(player, enchantOne.getLevel())) {
-						int level = enchantOne.getEnchant().getAnvilLevel(player, enchantOne.getLevel());
-						if (level <= 0) continue;
-					}
-					enchantments.add(enchantOne);
+				boolean conflict = PersistenceUtils.hasConflictingEnchantment(enchantments, enchantOne.getEnchant());
+				// Okay, it wasn't added and it wasn't failed, so let's add it to the final item
+				// as long as it can be!
+				if (!added) {
+					newLevel = enchantOne.getLevel();
+					// Should check if can be added
+					if (newLevel > 0 && !(enchantOne.getEnchant().canAnvilItem(new ItemData(combinedItem)) || allowInvalidEnchantments)) newLevel = 0;
+					// Are there conflicting enchantments on either item?
+					if (newLevel > 0 && (conflict && !allowConflictingEnchantments)) newLevel = 0;
+					// Should the level be lowered?
+					if (newLevel > 0 && (newLevel > maxLevel && !allowHigherLevels)) newLevel = maxLevel;
+					// Do they have permission to use this level?
+					if (newLevel > 0 && !(enchantOne.getEnchant().canAnvil(player, newLevel) || ignoreAnvilPermissions)) newLevel = enchantOne.getEnchant().getAnvilLevel(player, newLevel);
+
+					if (newLevel > 0) // Add enchantment to the enchantments array list
+						enchantments.add(new EnchantmentLevel(enchantOne.getEnchant(), newLevel));
 				}
 			}
 			int maxEnchants = ConfigString.MAX_ENCHANTMENTS.getInt();
@@ -244,13 +275,15 @@ public class AnvilEnchantments extends GenerateEnchantments {
 			if (DamageUtils.getDamage(combinedItem) < 0) DamageUtils.setDamage(combinedItem, 0);
 		}
 		repairCost += setEnchantments();
-		int itemOneRepair = AnvilNMS.getRepairCost(itemOne);
-		int itemTwoRepair = AnvilNMS.getRepairCost(itemTwo);
-		if (itemOneRepair > itemTwoRepair) combinedItem = AnvilNMS.setRepairCost(combinedItem, itemOneRepair * 2 + 1);
-		else
-			combinedItem = AnvilNMS.setRepairCost(combinedItem, itemTwoRepair * 2 + 1);
+		if (!ConfigString.REPAIR_FROM_FINAL.getBoolean()) {
+			int itemOneRepair = AnvilNMS.getRepairCost(itemOne);
+			int itemTwoRepair = AnvilNMS.getRepairCost(itemTwo);
+			if (itemOneRepair > itemTwoRepair) combinedItem = AnvilNMS.setRepairCost(combinedItem, itemOneRepair * 2 + 1);
+			else
+				combinedItem = AnvilNMS.setRepairCost(combinedItem, itemTwoRepair * 2 + 1);
+			repairCost += itemOneRepair + itemTwoRepair;
+		}
 		if (enchantments != null) combinedItem = EnchantmentUtils.addEnchantmentsToItem(combinedItem, enchantments);
-		repairCost += itemOneRepair + itemTwoRepair;
 
 		repairCost = Math.max(repairCost / ConfigString.LEVEL_DIVISOR.getInt(), 1);
 	}
@@ -274,122 +307,93 @@ public class AnvilEnchantments extends GenerateEnchantments {
 	private int setEnchantments() {
 		int cost = 0;
 		ItemStack item = getItem();
-		boolean noUpgrade = false;
-		if (itemTwo.getType() == Material.BOOK || itemTwo.getType() == Material.ENCHANTED_BOOK) {
-			if (item.getType() == Material.BOOK || item.getType() == Material.ENCHANTED_BOOK) noUpgrade = ConfigString.NO_UPGRADE_BOOKS.getBoolean();
-			else
-				noUpgrade = ConfigString.NO_UPGRADE_BOOKS_TO_NON_BOOKS.getBoolean();
-		} else
-			noUpgrade = ConfigString.NO_UPGRADE_NON_BOOKS.getBoolean();
 		Player player = getPlayer().getPlayer();
 
 		List<EnchantmentLevel> firstEnchants = PersistenceUtils.getEnchantments(item);
 		List<EnchantmentLevel> secondEnchants = PersistenceUtils.getEnchantments(itemTwo);
-		List<EnchantmentLevel> secondLevels = new ArrayList<EnchantmentLevel>();
-		List<EnchantmentLevel> firstLevels = new ArrayList<EnchantmentLevel>();
-		boolean containsStagnancyOne = false;
-		boolean containsStagnancyTwo = false;
+		boolean containsStagnancyOne = PersistenceUtils.hasEnchantment(item, RegisterEnchantments.CURSE_OF_STAGNANCY);
+		boolean containsStagnancyTwo = PersistenceUtils.hasEnchantment(item, RegisterEnchantments.CURSE_OF_STAGNANCY);
 
 		List<EnchantmentLevel> enchantments = new ArrayList<EnchantmentLevel>();
-		List<CustomEnchantment> registeredEnchantments = RegisterEnchantments.getRegisteredEnchantments();
-		for(EnchantmentLevel enchant : secondEnchants) {
-			int level = enchant.getLevel();
-			for(CustomEnchantment customEnchant: registeredEnchantments)
-				if (ConfigUtils.isRepairable(customEnchant) && customEnchant.getRelativeEnchantment().equals(enchant.getEnchant().getRelativeEnchantment())) {
-					if (RegisterEnchantments.CURSE_OF_STAGNANCY.equals(enchant.getEnchant().getRelativeEnchantment())) containsStagnancyTwo = true;
-					secondLevels.add(new EnchantmentLevel(customEnchant, level));
-				}
-		}
+		List<EnchantmentLevel> failedEnchantments = new ArrayList<EnchantmentLevel>();
 
-		for(EnchantmentLevel enchant : firstEnchants) {
-			int level = enchant.getLevel();
-			for(CustomEnchantment customEnchant: registeredEnchantments)
-				if (ConfigUtils.isRepairable(customEnchant) && customEnchant.getRelativeEnchantment().equals(enchant.getEnchant().getRelativeEnchantment())) {
-					if (RegisterEnchantments.CURSE_OF_STAGNANCY.equals(enchant.getEnchant().getRelativeEnchantment())) containsStagnancyOne = true;
-					firstLevels.add(new EnchantmentLevel(customEnchant, level));
-				}
-		}
+		if (containsStagnancyOne) {
+			cost += secondEnchants.size();
+			enchantments = firstEnchants;
+		} else if (containsStagnancyTwo) {
+			cost += firstEnchants.size();
+			enchantments = secondEnchants;
+		} else {
+			for(EnchantmentLevel enchantOne: firstEnchants) {
+				int newLevel = 0;
+				int maxLevel = enchantOne.getEnchant().getMaxLevel();
+				// If not added, did it fail to be added?
+				boolean conflict = PersistenceUtils.hasConflictingEnchantment(enchantments, enchantOne.getEnchant());
+				// Okay, it wasn't added and it wasn't failed, so let's add it to the final item
+				// as long as it can be!
+				newLevel = enchantOne.getLevel();
+				// Should check if can be added
+				if (newLevel > 0 && !(enchantOne.getEnchant().canAnvilItem(new ItemData(item)) || allowInvalidEnchantments)) newLevel = 0;
+				// Are there conflicting enchantments on either item?
+				if (newLevel > 0 && (conflict && !allowConflictingEnchantments)) newLevel = 0;
+				// Should the level be lowered?
+				if (newLevel > 0 && (newLevel > maxLevel && !allowHigherLevels)) newLevel = maxLevel;
+				// Do they have permission to use this level?
+				if (newLevel > 0 && !(enchantOne.getEnchant().canAnvil(player, newLevel) || ignoreAnvilPermissions)) newLevel = enchantOne.getEnchant().getAnvilLevel(player, newLevel);
 
-		boolean godAnvil = PermissionUtils.check(player, "enchantmentsolution.anvil.god");
-		boolean demiGodAnvil = PermissionUtils.check(player, "enchantmentsolution.anvil.demigod");
-		if (godAnvil) demiGodAnvil = true;
-		boolean demiGodBooks = PermissionUtils.check(player, "enchantmentsolution.anvil.demigod-books");
-
-		for(EnchantmentLevel enchantTwo: secondLevels) {
-			boolean conflict = false;
-			boolean same = false;
-			boolean canAdd = !containsStagnancyOne;
-			int levelCost = enchantTwo.getLevel();
-			int originalLevel = -1;
-			for(EnchantmentLevel enchantOne: firstLevels)
-				if (enchantTwo.getEnchant().getRelativeEnchantment().equals(enchantOne.getEnchant().getRelativeEnchantment())) {
-					same = true;
-					originalLevel = enchantOne.getLevel();
-					if (containsStagnancyTwo) {
-						levelCost = enchantTwo.getLevel();
-						break;
-					}
-					if (!godAnvil) {
-						if (enchantOne.getLevel() > enchantOne.getEnchant().getMaxLevel()) enchantOne.setLevel(enchantOne.getEnchant().getMaxLevel());
-						if (enchantTwo.getLevel() > enchantTwo.getEnchant().getMaxLevel()) enchantTwo.setLevel(enchantTwo.getEnchant().getMaxLevel());
-					}
-					if (enchantTwo.getLevel() == enchantOne.getLevel()) {
-						if (!noUpgrade && (godAnvil || demiGodBooks)) {
-							if (demiGodBooks && (itemTwo.getType() == Material.BOOK || itemTwo.getType() == Material.ENCHANTED_BOOK)) levelCost = enchantTwo.getLevel() + 1;
-							else if (godAnvil) levelCost = enchantTwo.getLevel() + 1;
-						}
-						else if (enchantTwo.getLevel() >= enchantTwo.getEnchant().getMaxLevel()) levelCost = enchantTwo.getLevel();
-						else if (!noUpgrade) levelCost = enchantTwo.getLevel() + 1;
-						else
-							levelCost = enchantTwo.getLevel();
-					} else if (enchantTwo.getLevel() > enchantOne.getLevel()) levelCost = enchantTwo.getLevel();
-					else
-						levelCost = enchantOne.getLevel();
-				} else if (CustomEnchantment.conflictsWith(enchantOne.getEnchant(), enchantTwo.getEnchant())) conflict = true;
-			if (demiGodAnvil) {
-				if (demiGodBooks && (itemTwo.getType() == Material.BOOK || itemTwo.getType() == Material.ENCHANTED_BOOK)) {
-					// nothing needs to change
-				} else if (!enchantTwo.getEnchant().canAnvil(player, levelCost) && originalLevel >= levelCost) {
-					levelCost = originalLevel;
-					if (!godAnvil && levelCost > enchantTwo.getEnchant().getMaxLevel()) levelCost = enchantTwo.getEnchant().getMaxLevel();
-				} else if (!enchantTwo.getEnchant().canAnvil(player, levelCost)) {
-					int level = enchantTwo.getEnchant().getAnvilLevel(player, levelCost);
-					if (level <= 0) canAdd = false;
-					levelCost = level;
-				}
-			} else if (!enchantTwo.getEnchant().canAnvil(player, levelCost)) {
-				int level = enchantTwo.getEnchant().getAnvilLevel(player, levelCost);
-				if (level <= 0) canAdd = false;
-				levelCost = level;
+				if (newLevel > 0) // Add enchantment to the enchantments array list
+					enchantments.add(new EnchantmentLevel(enchantOne.getEnchant(), newLevel));
 			}
-			if (canAdd && (same || !conflict)) {
-				if (enchantTwo.getEnchant().canAnvilItem(new ItemData(item)) || godAnvil) {
-					enchantments.add(new EnchantmentLevel(enchantTwo.getEnchant(), levelCost));
-					cost += levelCost * enchantTwo.getEnchant().multiplier(itemTwo.getType());
-				} else
-					cost += 1;
-			} else if (godAnvil) {
-				enchantments.add(new EnchantmentLevel(enchantTwo.getEnchant(), levelCost));
-				cost += levelCost * enchantTwo.getEnchant().multiplier(itemTwo.getType());
-			} else
-				cost += 1;
-		}
+			for(EnchantmentLevel enchantTwo: secondEnchants) {
+				int maxLevel = enchantTwo.getEnchant().getMaxLevel();
+				EnchantmentLevel onOtherItem = null;
+				for (EnchantmentLevel e : enchantments)
+					if (enchantTwo.getEnchant().getRelativeEnchantment().equals(e.getEnchant().getRelativeEnchantment())) onOtherItem = e;
+				boolean conflict = PersistenceUtils.hasConflictingEnchantment(enchantments, enchantTwo.getEnchant());
+				int level = enchantTwo.getLevel();
+				int originalLevel = onOtherItem == null ? 0 : onOtherItem.getLevel();
+				int newLevel = 0;
+				// Let's get what the level should be
+				if (originalLevel == 0 || originalLevel < level) newLevel = level;
+				else if (originalLevel > level) newLevel = originalLevel;
+				else {
+					newLevel = originalLevel;
+					// We can combine the levels, so let's try!
+					if (((newLevel < maxLevel) || (combineHigherLevels && newLevel >= maxLevel)) && ((bothBooks(item, itemTwo) && combineLevelsBooks) || (bothSame(item, itemTwo) && combineLevelsItems) || (!bothSame(item, itemTwo) && !bothBooks(item, itemTwo) && combineLevelsAll))) newLevel += 1;
+					// If we combined the books, was it a mistake?
+				}
+				// Should check if can be added
+				if (newLevel > 0 && !(enchantTwo.getEnchant().canAnvilItem(new ItemData(item)) || allowInvalidEnchantments)) newLevel = 0;
+				// Are there conflicting enchantments on either item?
+				if (newLevel > 0 && (conflict && !allowConflictingEnchantments)) newLevel = 0;
+				// Should the level be lowered?
+				if (newLevel > 0 && (newLevel > maxLevel && !allowHigherLevels)) newLevel = maxLevel;
+				// Do they have permission to use this level?
+				if (newLevel > 0 && !(enchantTwo.getEnchant().canAnvil(player, newLevel) || ignoreAnvilPermissions)) newLevel = enchantTwo.getEnchant().getAnvilLevel(player, newLevel);
 
-		for(EnchantmentLevel enchantOne: firstLevels) {
-			boolean added = false;
-			for(EnchantmentLevel enchantment: enchantments)
-				if (enchantOne.getEnchant().getRelativeEnchantment().equals(enchantment.getEnchant().getRelativeEnchantment())) {
-					added = true;
-					break;
+				if (newLevel > 0) {
+					// Add enchantment to the enchantments array list
+					if (onOtherItem != null) {
+						Iterator<EnchantmentLevel> levels = enchantments.iterator();
+						while (levels.hasNext()) {
+							EnchantmentLevel next = levels.next();
+							if (next.getEnchant().getRelativeEnchantment().equals(enchantTwo.getEnchant().getRelativeEnchantment())) levels.remove();
+						}
+					}
+					enchantments.add(new EnchantmentLevel(enchantTwo.getEnchant(), newLevel));
+					cost += newLevel * enchantTwo.getEnchant().multiplier(itemTwo.getType());
+				} else {
+					// Adding enchantment failed, add to the failed enchantments list
+					if (onOtherItem != null) {
+						Iterator<EnchantmentLevel> levels = enchantments.iterator();
+						while (levels.hasNext()) {
+							EnchantmentLevel next = levels.next();
+							if (next.getEnchant().getRelativeEnchantment().equals(enchantTwo.getEnchant().getRelativeEnchantment())) levels.remove();
+						}
+					} else
+						failedEnchantments.add(new EnchantmentLevel(enchantTwo.getEnchant(), newLevel));
+					cost += 1;
 				}
-			if ((!containsStagnancyTwo || godAnvil) && !added && (enchantOne.getEnchant().canAnvilItem(new ItemData(item)) || godAnvil)) {
-				if (demiGodAnvil) {
-					if (!godAnvil) if (enchantOne.getLevel() > enchantOne.getEnchant().getMaxLevel()) enchantOne.setLevel(enchantOne.getEnchant().getMaxLevel());
-				} else if (!enchantOne.getEnchant().canAnvil(player, enchantOne.getLevel())) {
-					int level = enchantOne.getEnchant().getAnvilLevel(player, enchantOne.getLevel());
-					if (level <= 0) continue;
-				}
-				enchantments.add(enchantOne);
 			}
 		}
 		int maxEnchants = ConfigString.MAX_ENCHANTMENTS.getInt();
@@ -397,8 +401,23 @@ public class AnvilEnchantments extends GenerateEnchantments {
 			enchantments.remove(i);
 
 		this.enchantments = enchantments;
+		if (enchantments.size() == 0) canCombine = false;
+
+		if (ConfigString.REPAIR_FROM_FINAL.getBoolean()) {
+			cost = 0;
+			for(EnchantmentLevel enchant: enchantments)
+				cost += enchant.getEnchant().getWeightedCost(enchant.getLevel());
+		}
 
 		return cost;
+	}
+
+	private boolean bothBooks(ItemStack itemOne, ItemStack itemTwo) {
+		return MatData.isBook(itemOne.getType()) && MatData.isBook(itemTwo.getType());
+	}
+
+	private boolean bothSame(ItemStack itemOne, ItemStack itemTwo) {
+		return !bothBooks(itemOne, itemTwo) && itemOne.getType() == itemTwo.getType();
 	}
 
 	public ItemStack getItemTwo() {

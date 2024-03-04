@@ -9,11 +9,9 @@ anvil:
     default_use: false
     max_repair_level: 60
     repair_cost_limit: 0
+    repair_from_final: false
     damage: true
     rename: true
-    no_upgrade_books: false
-    no_upgrade_non_books: false
-    no_upgrade_books_to_non_books: false
 grindstone:
     custom_gui: true
     use_legacy: false
@@ -145,6 +143,11 @@ config_comments:
         - 'The maximum repair cost an item can have'
         - 'Repair cost increases on an item every time it is repaired in an anvil'
         - 'This is NOT the same cost as what is displayed in the anvil because that also includes the cost of adding enchantments, repairing, renaming, etc.'
+        
+        repair_from_final: 
+        - 'Whether the final repair level should be based on the enchantments on the item or not'
+        - 'When true, the repair cost of the item will not be used or incremented, and the item''s cost is only based on repairing the item and the enchantments on the item'
+        - 'Cost increases based on an enchantment''s level and rarity'
 
         default_use: 
         - 'Allow default use of anvil GUI via option at bottom right of custom GUI'
@@ -156,22 +159,6 @@ config_comments:
 
         rename: 
         - 'Whether players can use the custom rename without a permission'
-
-        no_upgrade_books: 
-        - 'Whether books should combine levels together if they are the same (i.e. Protection I + Protection I = Protection II).'
-        - 'Protection II + Protection I will still create Protection II, as will Protection I + Protection II.'
-        - 'If false, uses normal settings.'
-
-        no_upgrade_non_books: 
-        - 'Whether items (such as tools, weapons, etc.) should combine levels together if they are the same (i.e. Protection I + Protection I = Protection II).'
-        - 'Protection II + Protection I will still create Protection II, as will Protection I + Protection II.'
-        - 'If false, uses normal settings.'
-
-        no_upgrade_books_to_non_books: 
-        - 'Whether books should combine levels when added to items (such as tools, weapons, etc.).'
-        - 'i.e. Whether a book with Protection I and a helmet with Protection I should combine to make Protection II.'
-        - 'Protection II + Protection I will still create Protection II, as will Protection I + Protection II.'
-        - 'If false, uses normal settings.'
 
     grindstone: 
         custom_gui: 

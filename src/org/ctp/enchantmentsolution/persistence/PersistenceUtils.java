@@ -97,7 +97,7 @@ public class PersistenceUtils {
 	}
 
 	public static boolean hasEnchantments(ItemStack item) {
-		for (CustomEnchantment enchant : RegisterEnchantments.getRegisteredEnchantments())
+		for(CustomEnchantment enchant: RegisterEnchantments.getRegisteredEnchantments())
 			if (hasEnchantment(item, enchant.getRelativeEnchantment())) return true;
 		return false;
 	}
@@ -111,6 +111,22 @@ public class PersistenceUtils {
 				return container.get(custom.getPersistenceKey(), t) != null;
 			}
 			return item.containsEnchantment(enchant.getRelativeEnchantment());
+		}
+		return false;
+	}
+
+	public static boolean hasConflictingEnchantment(ItemStack item, CustomEnchantment enchant) {
+		if (item != null && item.getItemMeta() != null) for(EnchantmentLevel enchantment: getEnchantments(item)) {
+			CustomEnchantment e = enchantment.getEnchant();
+			if (!e.getRelativeEnchantment().equals(enchant.getRelativeEnchantment()) && CustomEnchantment.conflictsWith(enchant, e)) return true;
+		}
+		return false;
+	}
+
+	public static boolean hasConflictingEnchantment(List<EnchantmentLevel> enchantments, CustomEnchantment enchant) {
+		for(EnchantmentLevel enchantment: enchantments) {
+			CustomEnchantment e = enchantment.getEnchant();
+			if (!e.getRelativeEnchantment().equals(enchant.getRelativeEnchantment()) && CustomEnchantment.conflictsWith(enchant, e)) return true;
 		}
 		return false;
 	}
@@ -401,7 +417,7 @@ public class PersistenceUtils {
 		boolean changed = false;
 		if (item != null) {
 			List<EnchantmentLevel> levels = getEnchantments(item);
-			for (EnchantmentLevel level : levels)
+			for(EnchantmentLevel level: levels)
 				if (level.getEnchant().getRelativeEnchantment() instanceof CustomEnchantmentWrapper && !hasLore(item, level.getEnchant())) {
 					PersistenceUtils.removeEnchantments(item, level.getEnchant());
 					PersistenceUtils.addEnchantments(item, Arrays.asList(level));
@@ -410,10 +426,10 @@ public class PersistenceUtils {
 		}
 		return changed;
 	}
-	
+
 	public static boolean hasLore(ItemStack item, CustomEnchantment enchant) {
 		ItemMeta meta = item.getItemMeta();
-		if (meta != null && meta.hasLore()) for (String l : meta.getLore()) {
+		if (meta != null && meta.hasLore()) for(String l: meta.getLore()) {
 			EnchResult result = isEnchantment(meta, l);
 			if (result.hasEnchantment() && result.getEnchantment().equals(enchant)) return true;
 		}

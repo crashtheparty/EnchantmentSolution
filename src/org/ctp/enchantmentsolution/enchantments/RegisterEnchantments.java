@@ -106,7 +106,7 @@ public class RegisterEnchantments {
 	public static final EnchantmentWrapper GUNG_HO = new CustomEnchantmentWrapper("gung_ho", "GUNG_HO");
 	public static final EnchantmentWrapper WAND = new CustomEnchantmentWrapper("wand", "WAND");
 	public static final EnchantmentWrapper MOISTURIZE = new CustomEnchantmentWrapper("moisturize", "MOISTURIZE");
-	public static final EnchantmentWrapper IRENES_LASSO = new CustomEnchantmentWrapper("irenes_lasso", "LASSO_OF_IRENE");
+	public static final EnchantmentWrapper IRENES_LASSO = new CustomEnchantmentWrapper("lasso_of_irene", "LASSO_OF_IRENE");
 	public static final EnchantmentWrapper CURSE_OF_LAG = new CustomEnchantmentWrapper("lagging_curse", "LAGGING_CURSE");
 	public static final EnchantmentWrapper CURSE_OF_EXHAUSTION = new CustomEnchantmentWrapper("exhaustion_curse", "EXHAUSTION_CURSE");
 	public static final EnchantmentWrapper QUICK_STRIKE = new CustomEnchantmentWrapper("quick_strike", "QUICK_STRIKE");

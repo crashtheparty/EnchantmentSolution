@@ -1,5 +1,5 @@
 name: EnchantmentSolution
-version: 2.5.12
+version: 2.5.13
 main: org.ctp.enchantmentsolution.EnchantmentSolution
 api-version: 1.16
 depend: [CrashAPI]
@@ -92,15 +92,30 @@ permissions:
   enchantmentsolution.enchantments.rpg.all: 
     description: Gives access to every enchantment through ESRPG.
     default: op
-  enchantmentsolution.anvil.demigod:
-    description: Allows players to repair items with enchantments they cannot combine
+  enchantmentsolution.anvil.allow-invalid-enchantments:
+    description: Allows players to add invalid enchantments to an item despite whether it can be added to that item
     default: false
-  enchantmentsolution.anvil.demigod-books:
-    description: Allows players to add levels from enchanted books to items even if they cannot combine the levels
+  enchantmentsolution.anvil.ignore-anvil-permissions:
+    description: Allows players to get higher level enchantments despite whether the 'permissions.anvil.level-x' value is set to true or false
     default: false
-  enchantmentsolution.anvil.god:
-    description: Allows players to combine items higher than their max levels
+  enchantmentsolution.anvil.allow-conflicting-enchantments:
+    description: Allows players to combine enchantments even if they are set to conflict
     default: false
+  enchantmentsolution.anvil.allow-higher-levels:
+    description: Allows players to set enchantment levels higher than their configuration value
+    default: false
+  enchantmentsolution.anvil.combine-higher-levels:
+    description: Allows players to combine enchantment levels (i.e. Prot V + Prot V = Prot VI) higher than their configuration value
+    default: false
+  enchantmentsolution.anvil.combine-levels-all:
+    description: Allows players to combine enchantment levels (i.e. Prot I + Prot I = Prot II) on all combinations of items (including from book to item)
+    default: true
+  enchantmentsolution.anvil.combine-levels-books:
+    description: Allows players to combine enchantment levels (i.e. Prot I + Prot I = Prot II) on books
+    default: true
+  enchantmentsolution.anvil.combine-levels-items:
+    description: Allows players to combine enchantment levels (i.e. Prot I + Prot I = Prot II) between items of the same type
+    default: true
   enchantmentsolution.anvil.rename:
     description: Allows players to rename their items with the custom GUI
     default: op

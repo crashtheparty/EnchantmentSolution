@@ -289,7 +289,7 @@ public class Minigame implements InventoryData, Pageable {
 	public Material getMaterial(ItemType type) {
 		Material m = Material.BOOK;
 		for(ItemData data: type.getEnchantMaterials())
-			if (data.getMaterial() != Material.BOOK && data.getMaterial() != Material.ENCHANTED_BOOK) {
+			if (!MatData.isBook(data.getMaterial())) {
 				m = data.getMaterial();
 				break;
 			}

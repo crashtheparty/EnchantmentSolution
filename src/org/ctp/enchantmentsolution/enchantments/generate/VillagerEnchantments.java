@@ -7,6 +7,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.MerchantRecipe;
+import org.ctp.crashapi.item.MatData;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentList;
 import org.ctp.enchantmentsolution.enums.EnchantmentLocation;
@@ -52,7 +53,7 @@ public class VillagerEnchantments extends LootEnchantments {
 		List<ItemStack> ingredients = new ArrayList<ItemStack>();
 		if (enchantments.size() > 0) {
 			EnchantmentLevel enchant = enchantments.get(0);
-			if (mat == Material.BOOK || mat == Material.ENCHANTED_BOOK) {
+			if (MatData.isBook(mat)) {
 				if (!enchant.getEnchant().getEnchantmentLocations().contains(EnchantmentLocation.TABLE)) levelPrice[1] *= 2;
 				if (levelPrice[1] > 64) levelPrice[1] = 64;
 				ItemStack priceItem = new ItemStack(Material.EMERALD, levelPrice[1]);

@@ -9,9 +9,7 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.ctp.crashapi.config.Language;
-import org.ctp.crashapi.item.CustomItemType;
-import org.ctp.crashapi.item.ItemData;
-import org.ctp.crashapi.item.ItemType;
+import org.ctp.crashapi.item.*;
 import org.ctp.crashapi.utils.ChatUtils;
 import org.ctp.crashapi.utils.ItemUtils;
 import org.ctp.crashapi.utils.StringUtils;
@@ -271,7 +269,7 @@ public abstract class CustomEnchantment {
 	}
 
 	public int multiplier(Material material) {
-		if (!(material.equals(Material.BOOK) || material.equals(Material.ENCHANTED_BOOK))) return weight.getBook();
+		if (MatData.isBook(material)) return weight.getBook();
 		return weight.getItem();
 	}
 
@@ -571,6 +569,10 @@ public abstract class CustomEnchantment {
 	public NamespacedKey getPersistenceKey(String addition) {
 		NamespacedKey relative = getRelativeEnchantment().getKey();
 		return new NamespacedKey(relative.getNamespace(), getName() + addition);
+	}
+
+	public int getWeightedCost(int level) {
+		return weight.getBook() * level;
 	}
 
 }

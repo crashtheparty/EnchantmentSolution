@@ -14,6 +14,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.inventory.ItemStack;
+import org.ctp.crashapi.item.MatData;
 import org.ctp.crashapi.utils.DamageUtils;
 import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.enchantments.EnchantmentWrapper;
@@ -84,7 +85,7 @@ public class JobsUtils {
 		JobsPlayer jPlayer = Jobs.getPlayerManager().getJobsPlayer(player);
 		if (jPlayer == null) return;
 
-		if (Jobs.getGCManager().PayForEnchantingOnAnvil && (combine.getType() == Material.ENCHANTED_BOOK || combine.getType() == Material.BOOK)) {
+		if (Jobs.getGCManager().PayForEnchantingOnAnvil && MatData.isBook(combine.getType())) {
 			Map<Enchantment, Integer> enchants = resultStack.getEnchantments();
 			for(Entry<Enchantment, Integer> oneEnchant: enchants.entrySet()) {
 				Enchantment enchant = oneEnchant.getKey();

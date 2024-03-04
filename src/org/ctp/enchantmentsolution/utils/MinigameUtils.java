@@ -1,7 +1,5 @@
 package org.ctp.enchantmentsolution.utils;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.Locale;
 
 import org.bukkit.Material;
@@ -73,17 +71,14 @@ public class MinigameUtils {
 		ItemStack current = event.getCurrentItem();
 
 		if (!(event.getInventory().getType() == InventoryType.CRAFTING && event.getClickedInventory().getType() == InventoryType.PLAYER && cursor != null && cursor.hasItemMeta())) return;
-		if (PersistenceUtils.hasEnchantments(cursor)) {
-			List<Material> materials = Arrays.asList(Material.BOOK, Material.ENCHANTED_BOOK);
-			if (materials.contains(cursor.getType()) || cursor.getType() == current.getType()) {
-				if (current == null || MatData.isAir(current.getType()) || current.getAmount() > 1) return;
-				event.setCancelled(true);
-				AnvilEnchantments anvil = AnvilEnchantments.getAnvilEnchantments(player, current, cursor);
-				if (anvil.canCombine()) {
-					player.getInventory().setItem(event.getSlot(), anvil.getCombinedItem());
-					player.setItemOnCursor(anvil.getItemLeftover());
-					player.getWorld().playSound(player.getLocation(), Sound.BLOCK_ANVIL_USE, 1, 1);
-				}
+		if (PersistenceUtils.hasEnchantments(cursor)) if (MatData.isBook(cursor.getType()) || cursor.getType() == current.getType()) {
+			if (current == null || MatData.isAir(current.getType()) || current.getAmount() > 1) return;
+			event.setCancelled(true);
+			AnvilEnchantments anvil = AnvilEnchantments.getAnvilEnchantments(player, current, cursor);
+			if (anvil.canCombine()) {
+				player.getInventory().setItem(event.getSlot(), anvil.getCombinedItem());
+				player.setItemOnCursor(anvil.getItemLeftover());
+				player.getWorld().playSound(player.getLocation(), Sound.BLOCK_ANVIL_USE, 1, 1);
 			}
 		}
 	}

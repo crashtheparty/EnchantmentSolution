@@ -14,11 +14,7 @@ public class ConfigUtils {
 	}
 
 	public static boolean isRepairable(CustomEnchantment enchant) {
-		if (Configurations.getConfigurations().getConfig().getString("disable_enchant_method").equals("repairable")) return true;
-
-		if (enchant.isEnabled()) return true;
-
-		return false;
+		return enchant.isEnabled() || Configurations.getConfigurations().getConfig().getString("disable_enchant_method").equals("repairable");
 	}
 
 	public static boolean getBoolean(Type type, String s) {
