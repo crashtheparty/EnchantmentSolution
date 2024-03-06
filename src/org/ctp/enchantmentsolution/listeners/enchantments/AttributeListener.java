@@ -82,6 +82,7 @@ public class AttributeListener extends Enchantmentable {
 				// disabled enchantment, so don't
 				// bother
 				EnchantmentWrapper relative = level.getEnchant().getRelativeEnchantment();
+				if (equip && isDisabled(player, relative)) continue; // shouldnt put on
 				if (attributes.containsKey(relative)) {
 					Attributable a = attributes.get(relative);
 					for(ItemEquippedSlot slot: a.getTypes())
