@@ -16,6 +16,7 @@ import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
+import org.ctp.crashapi.data.items.PotData;
 import org.ctp.crashapi.nms.DamageNMS;
 import org.ctp.crashapi.utils.LocationUtils;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
@@ -172,7 +173,7 @@ public class ProjectileListener extends Enchantmentable {
 			ex.printStackTrace();
 		}
 		try {
-			potion(event, RegisterEnchantments.TRUANT, PotionEffectType.SLOW);
+			potion(event, RegisterEnchantments.TRUANT, PotData.SLOW.getPotionEffect());
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}

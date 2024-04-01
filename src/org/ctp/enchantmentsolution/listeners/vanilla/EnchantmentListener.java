@@ -15,13 +15,14 @@ import org.bukkit.event.enchantment.EnchantItemEvent;
 import org.bukkit.event.enchantment.PrepareItemEnchantEvent;
 import org.bukkit.inventory.EnchantingInventory;
 import org.bukkit.inventory.ItemStack;
-import org.ctp.crashapi.item.ItemData;
+import org.ctp.crashapi.data.items.ItemData;
 import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantmentWrapper;
 import org.ctp.enchantmentsolution.enchantments.generate.TableEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.*;
 import org.ctp.enchantmentsolution.nms.EnchantNMS;
+import org.ctp.enchantmentsolution.persistence.PersistenceUtils;
 import org.ctp.enchantmentsolution.utils.compatibility.JobsUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
@@ -33,6 +34,10 @@ public class EnchantmentListener implements Listener {
 		Player player = event.getEnchanter();
 		int bookshelves = EnchantmentUtils.getBookshelves(event.getEnchantBlock().getLocation());
 		ItemStack item = event.getItem();
+		if (PersistenceUtils.hasEnchantments(item)) {
+			event.setCancelled(true);
+			return;
+		}
 		TableEnchantments table = TableEnchantments.getTableEnchantments(player, item, bookshelves);
 		if (event.getOffers()[0] == null) return;
 		EnchantmentList[] lists = table.getEnchantments(new ItemData(item));
@@ -62,6 +67,10 @@ public class EnchantmentListener implements Listener {
 			Player player = event.getEnchanter();
 			int bookshelves = EnchantmentUtils.getBookshelves(event.getEnchantBlock().getLocation());
 			ItemStack item = event.getItem();
+			if (PersistenceUtils.hasEnchantments(item)) {
+				event.setCancelled(true);
+				return;
+			}
 			TableEnchantments table = TableEnchantments.getTableEnchantments(player, item, bookshelves);
 			for(int i = 0; i < table.getLevelList().getList().length; i++) {
 				Integer integer = table.getLevelList().getList()[i].getLevel();
@@ -76,10 +85,11 @@ public class EnchantmentListener implements Listener {
 					try {
 						if (item.getType() == Material.BOOK && ConfigString.USE_ENCHANTED_BOOKS.getBoolean()) item = EnchantmentUtils.convertToEnchantedBook(item);
 						player.playSound(player.getLocation(), Sound.BLOCK_ENCHANTMENT_TABLE_USE, 1, 1);
-						if (player.getGameMode() != GameMode.CREATIVE) player.setLevel(player.getLevel() - i - 1);
-						ItemStack lapis = event.getInventory().getItem(1).clone();
-						lapis.setAmount(i + 1);
-						event.getInventory().removeItem(lapis);
+						if (player.getGameMode() != GameMode.CREATIVE) {
+							player.setLevel(player.getLevel() - i - 1);
+							int amount = event.getInventory().getItem(1).getAmount();
+							event.getInventory().getItem(1).setAmount(Math.max(amount - (i + 1), 0));
+						}
 						item = EnchantmentUtils.addEnchantmentsToItem(item, enchantments);
 						event.getInventory().setItem(0, item);
 						player.setStatistic(Statistic.ITEM_ENCHANTED, player.getStatistic(Statistic.ITEM_ENCHANTED) + 1);

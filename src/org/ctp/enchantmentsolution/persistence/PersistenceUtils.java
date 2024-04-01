@@ -13,7 +13,7 @@ import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
-import org.ctp.crashapi.item.MatData;
+import org.ctp.crashapi.data.items.MatData;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.*;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentErrorReason;

@@ -6,7 +6,6 @@ import org.bukkit.*;
 import org.bukkit.World.Environment;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
@@ -18,9 +17,10 @@ import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
+import org.ctp.crashapi.data.EnchantmentData;
+import org.ctp.crashapi.data.items.ItemSlotType;
+import org.ctp.crashapi.data.items.MatData;
 import org.ctp.crashapi.events.EquipEvent;
-import org.ctp.crashapi.item.ItemSlotType;
-import org.ctp.crashapi.item.MatData;
 import org.ctp.crashapi.utils.LocationUtils;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
@@ -78,8 +78,8 @@ public class AdvancementPlayerListener implements Listener {
 			Player player = (Player) entity;
 			Bukkit.getScheduler().runTaskLater(EnchantmentSolution.getPlugin(), () -> {
 				if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.CURSE_OF_STAGNANCY)) {
-					if (item.getType() == Material.IRON_PICKAXE && EnchantmentUtils.hasEnchantment(item, Enchantment.DURABILITY) && EnchantmentUtils.getLevel(item, RegisterEnchantments.DURABILITY) >= CERegister.UNBREAKING.getMaxLevel()) AdvancementUtils.awardCriteria(player, ESAdvancement.STAINLESS_STEEL, "iron_pickaxe");
-					if (item.getType() == new MatData("NETHERITE_SWORD").getMaterial() && EnchantmentUtils.hasEnchantment(item, Enchantment.DAMAGE_ALL) && EnchantmentUtils.getLevel(item, RegisterEnchantments.DAMAGE_ALL) >= CERegister.SHARPNESS.getMaxLevel()) AdvancementUtils.awardCriteria(player, ESAdvancement.NETHER_DULL, "netherite_sword");
+					if (item.getType() == Material.IRON_PICKAXE && EnchantmentUtils.hasEnchantment(item, EnchantmentData.UNBREAKING) && EnchantmentUtils.getLevel(item, RegisterEnchantments.UNBREAKING) >= CERegister.UNBREAKING.getMaxLevel()) AdvancementUtils.awardCriteria(player, ESAdvancement.STAINLESS_STEEL, "iron_pickaxe");
+					if (item.getType() == new MatData("NETHERITE_SWORD").getMaterial() && EnchantmentUtils.hasEnchantment(item, EnchantmentData.SHARPNESS) && EnchantmentUtils.getLevel(item, RegisterEnchantments.SHARPNESS) >= CERegister.SHARPNESS.getMaxLevel()) AdvancementUtils.awardCriteria(player, ESAdvancement.NETHER_DULL, "netherite_sword");
 				}
 				if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.TANK)) {
 					boolean hasTank = true;

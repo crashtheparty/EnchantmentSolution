@@ -7,7 +7,7 @@ import java.util.Locale;
 
 import org.bukkit.Material;
 import org.ctp.crashapi.config.yaml.YamlConfig;
-import org.ctp.crashapi.item.MatData;
+import org.ctp.crashapi.data.items.MatData;
 import org.ctp.crashapi.utils.CrashConfigUtils;
 import org.ctp.enchantmentsolution.enums.ItemBreakType;
 

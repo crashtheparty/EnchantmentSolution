@@ -12,7 +12,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.ctp.crashapi.inventory.InventoryData;
+import org.ctp.crashapi.data.inventory.InventoryData;
 import org.ctp.crashapi.nms.NMS;
 import org.ctp.crashapi.nms.anvil.AnvilClickEvent;
 import org.ctp.crashapi.nms.anvil.AnvilClickEventHandler;

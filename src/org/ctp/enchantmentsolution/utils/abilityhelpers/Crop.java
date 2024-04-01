@@ -1,7 +1,7 @@
 package org.ctp.enchantmentsolution.utils.abilityhelpers;
 
 import org.bukkit.Material;
-import org.ctp.crashapi.item.MatData;
+import org.ctp.crashapi.data.items.MatData;
 
 public enum Crop {
 	WHEAT("WHEAT", "WHEAT_SEEDS"), CARROTS("CARROT", "CARROT"), POTATOES("POTATO", "POTATO"), NETHER_WART("NETHER_WART", "NETHER_WART"),

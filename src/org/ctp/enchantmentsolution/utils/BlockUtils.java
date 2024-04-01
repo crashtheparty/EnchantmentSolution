@@ -12,8 +12,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockDropItemEvent;
 import org.bukkit.inventory.ItemStack;
-import org.ctp.crashapi.item.BlockSound;
-import org.ctp.crashapi.item.MatData;
+import org.ctp.crashapi.data.BlockSound;
+import org.ctp.crashapi.data.ParticleData;
+import org.ctp.crashapi.data.items.MatData;
 import org.ctp.crashapi.utils.DamageUtils;
 import org.ctp.crashapi.utils.ItemUtils;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
@@ -103,6 +104,8 @@ public class BlockUtils {
 		}
 		newEvent.setExpToDrop(exp);
 		Bukkit.getServer().getPluginManager().callEvent(newEvent);
+		ParticleData p = new ParticleData("BLOCK_CRACK");
+		if (p.getParticle() == null) p = new ParticleData("BLOCK");
 		if (item != null && !MatData.isAir(item.getType()) && !MatData.isAir(newEvent.getBlock().getType()) && !newEvent.isCancelled()) {
 			Block newBlock = newEvent.getBlock();
 			if (RegisterEnchantments.getHWD().contains(enchantment)) AdvancementUtils.awardCriteria(player, ESAdvancement.FAST_AND_FURIOUS, "diamond_pickaxe");
@@ -113,7 +116,7 @@ public class BlockUtils {
 			player.incrementStatistic(Statistic.MINE_BLOCK, newBlock.getType());
 			player.incrementStatistic(Statistic.USE_ITEM, item.getType());
 			Location loc = newBlock.getLocation().clone().add(0.5, 0.5, 0.5);
-			if (ConfigString.USE_PARTICLES.getBoolean()) loc.getWorld().spawnParticle(Particle.BLOCK_CRACK, loc, 20, newBlock.getBlockData());
+			if (ConfigString.USE_PARTICLES.getBoolean()) loc.getWorld().spawnParticle(p.getParticle(), loc, 20, newBlock.getBlockData());
 			if (ConfigString.PLAY_SOUND.getBoolean()) {
 				BlockSound sound = BlockSound.getSound(newBlock, "break");
 				if (sound != null) loc.getWorld().playSound(loc, sound.getSound(), sound.getVolume(), sound.getPitch());
@@ -141,7 +144,7 @@ public class BlockUtils {
 		} else if (!newEvent.isCancelled() && (item == null || MatData.isAir(item.getType()))) {
 			Block newBlock = newEvent.getBlock();
 			Location loc = newBlock.getLocation().clone().add(0.5, 0.5, 0.5);
-			if (ConfigString.USE_PARTICLES.getBoolean()) loc.getWorld().spawnParticle(Particle.BLOCK_CRACK, loc, 20, newBlock.getBlockData());
+			if (ConfigString.USE_PARTICLES.getBoolean()) loc.getWorld().spawnParticle(p.getParticle(), loc, 20, newBlock.getBlockData());
 			if (ConfigString.PLAY_SOUND.getBoolean()) {
 				BlockSound sound = BlockSound.getSound(newBlock, "break");
 				if (sound != null) loc.getWorld().playSound(loc, sound.getSound(), sound.getVolume(), sound.getPitch());

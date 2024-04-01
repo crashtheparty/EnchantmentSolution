@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.Material;
-import org.ctp.crashapi.item.MatData;
+import org.ctp.crashapi.data.items.MatData;
 import org.ctp.enchantmentsolution.enums.LogType;
 
 public enum GaiaTrees {

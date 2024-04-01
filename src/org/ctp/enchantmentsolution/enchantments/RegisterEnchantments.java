@@ -7,9 +7,9 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.ctp.crashapi.config.Configuration;
-import org.ctp.crashapi.enchantment.EnchantmentData;
-import org.ctp.crashapi.item.ItemType;
-import org.ctp.crashapi.item.VanillaItemType;
+import org.ctp.crashapi.data.EnchantmentData;
+import org.ctp.crashapi.data.items.ItemType;
+import org.ctp.crashapi.data.items.VanillaItemType;
 import org.ctp.crashapi.utils.StringUtils;
 import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
@@ -28,45 +28,45 @@ public class RegisterEnchantments {
 	private static List<CustomEnchantment> CURSE_ENCHANTMENTS = new ArrayList<CustomEnchantment>();
 	private static List<CustomEnchantment> DISABLED_ENCHANTMENTS = new ArrayList<CustomEnchantment>();
 
-	public static final EnchantmentWrapper WATER_WORKER = new EnchantmentWrapper(Enchantment.WATER_WORKER.getKey(), "WATER_WORKER");
-	public static final EnchantmentWrapper DAMAGE_ARTHROPODS = new EnchantmentWrapper(Enchantment.DAMAGE_ARTHROPODS.getKey(), "DAMAGE_ARTHROPODS");
-	public static final EnchantmentWrapper PROTECTION_EXPLOSIONS = new EnchantmentWrapper(Enchantment.PROTECTION_EXPLOSIONS.getKey(), "PROTECTION_EXPLOSIONS");
+	public static final EnchantmentWrapper AQUA_AFFINITY = new EnchantmentWrapper(EnchantmentData.AQUA_AFFINITY.getKey(), "WATER_WORKER");
+	public static final EnchantmentWrapper BANE_OF_ARTHROPODS = new EnchantmentWrapper(EnchantmentData.BANE_OF_ARTHROPODS.getKey(), "DAMAGE_ARTHROPODS");
+	public static final EnchantmentWrapper BLAST_PROTECTION = new EnchantmentWrapper(EnchantmentData.BLAST_PROTECTION.getKey(), "PROTECTION_EXPLOSIONS");
 	public static final EnchantmentWrapper CHANNELING = new EnchantmentWrapper(Enchantment.CHANNELING.getKey(), "CHANNELING");
 	public static final EnchantmentWrapper BINDING_CURSE = new EnchantmentWrapper(Enchantment.BINDING_CURSE.getKey(), "BINDING_CURSE");
 	public static final EnchantmentWrapper VANISHING_CURSE = new EnchantmentWrapper(Enchantment.VANISHING_CURSE.getKey(), "VANISHING_CURSE");
 	public static final EnchantmentWrapper DEPTH_STRIDER = new EnchantmentWrapper(Enchantment.DEPTH_STRIDER.getKey(), "DEPTH_STRIDER");
-	public static final EnchantmentWrapper DIG_SPEED = new EnchantmentWrapper(Enchantment.DIG_SPEED.getKey(), "DIG_SPEED");
-	public static final EnchantmentWrapper PROTECTION_FALL = new EnchantmentWrapper(Enchantment.PROTECTION_FALL.getKey(), "PROTECTION_FALL");
+	public static final EnchantmentWrapper EFFICIENCY = new EnchantmentWrapper(EnchantmentData.EFFICIENCY.getKey(), "DIG_SPEED");
+	public static final EnchantmentWrapper FEATHER_FALLING = new EnchantmentWrapper(EnchantmentData.FEATHER_FALLING.getKey(), "PROTECTION_FALL");
 	public static final EnchantmentWrapper FIRE_ASPECT = new EnchantmentWrapper(Enchantment.FIRE_ASPECT.getKey(), "FIRE_ASPECT");
-	public static final EnchantmentWrapper PROTECTION_FIRE = new EnchantmentWrapper(Enchantment.PROTECTION_FIRE.getKey(), "PROTECTION_FIRE");
-	public static final EnchantmentWrapper ARROW_FIRE = new EnchantmentWrapper(Enchantment.ARROW_FIRE.getKey(), "ARROW_FIRE");
-	public static final EnchantmentWrapper LOOT_BONUS_BLOCKS = new EnchantmentWrapper(Enchantment.LOOT_BONUS_BLOCKS.getKey(), "LOOT_BONUS_BLOCKS");
+	public static final EnchantmentWrapper FIRE_PROTECTION = new EnchantmentWrapper(EnchantmentData.FIRE_PROTECTION.getKey(), "PROTECTION_FIRE");
+	public static final EnchantmentWrapper FLAME = new EnchantmentWrapper(EnchantmentData.FLAME.getKey(), "ARROW_FIRE");
+	public static final EnchantmentWrapper FORTUNE = new EnchantmentWrapper(EnchantmentData.FORTUNE.getKey(), "LOOT_BONUS_BLOCKS");
 	public static final EnchantmentWrapper FROST_WALKER = new EnchantmentWrapper(Enchantment.FROST_WALKER.getKey(), "FROST_WALKER");
 	public static final EnchantmentWrapper IMPALING = new EnchantmentWrapper(Enchantment.IMPALING.getKey(), "IMPALING");
-	public static final EnchantmentWrapper ARROW_INFINITE = new EnchantmentWrapper(Enchantment.ARROW_INFINITE.getKey(), "ARROW_INFINITE");
+	public static final EnchantmentWrapper INFINITY = new EnchantmentWrapper(EnchantmentData.INFINITY.getKey(), "ARROW_INFINITE");
 	public static final EnchantmentWrapper KNOCKBACK = new EnchantmentWrapper(Enchantment.KNOCKBACK.getKey(), "KNOCKBACK");
-	public static final EnchantmentWrapper LOOT_BONUS_MOBS = new EnchantmentWrapper(Enchantment.LOOT_BONUS_MOBS.getKey(), "LOOT_BONUS_MOBS");
+	public static final EnchantmentWrapper LOOTING = new EnchantmentWrapper(EnchantmentData.LOOTING.getKey(), "LOOT_BONUS_MOBS");
 	public static final EnchantmentWrapper LOYALTY = new EnchantmentWrapper(Enchantment.LOYALTY.getKey(), "LOYALTY");
-	public static final EnchantmentWrapper LUCK = new EnchantmentWrapper(Enchantment.LUCK.getKey(), "LUCK");
+	public static final EnchantmentWrapper LUCK_OF_THE_SEA = new EnchantmentWrapper(EnchantmentData.LUCK_OF_THE_SEA.getKey(), "LUCK");
 	public static final EnchantmentWrapper LURE = new EnchantmentWrapper(Enchantment.LURE.getKey(), "LURE");
 	public static final EnchantmentWrapper MENDING = new EnchantmentWrapper(Enchantment.MENDING.getKey(), "MENDING");
 	public static final EnchantmentWrapper MULTISHOT = new EnchantmentWrapper(Enchantment.MULTISHOT.getKey(), "MULTISHOT");
 	public static final EnchantmentWrapper PIERCING = new EnchantmentWrapper(Enchantment.PIERCING.getKey(), "PIERCING");
-	public static final EnchantmentWrapper ARROW_DAMAGE = new EnchantmentWrapper(Enchantment.ARROW_DAMAGE.getKey(), "ARROW_DAMAGE");
-	public static final EnchantmentWrapper PROTECTION_PROJECTILE = new EnchantmentWrapper(Enchantment.PROTECTION_PROJECTILE.getKey(), "PROTECTION_PROJECTILE");
-	public static final EnchantmentWrapper PROTECTION_ENVIRONMENTAL = new EnchantmentWrapper(Enchantment.PROTECTION_ENVIRONMENTAL.getKey(), "PROTECTION_ENVIRONMENTAL");
-	public static final EnchantmentWrapper ARROW_KNOCKBACK = new EnchantmentWrapper(Enchantment.ARROW_KNOCKBACK.getKey(), "ARROW_KNOCKBACK");
+	public static final EnchantmentWrapper POWER = new EnchantmentWrapper(EnchantmentData.POWER.getKey(), "ARROW_DAMAGE");
+	public static final EnchantmentWrapper PROJECTILE_PROTECTION = new EnchantmentWrapper(EnchantmentData.PROJECTILE_PROTECTION.getKey(), "PROTECTION_PROJECTILE");
+	public static final EnchantmentWrapper PROTECTION = new EnchantmentWrapper(EnchantmentData.PROTECTION.getKey(), "PROTECTION_ENVIRONMENTAL");
+	public static final EnchantmentWrapper PUNCH = new EnchantmentWrapper(EnchantmentData.PUNCH.getKey(), "ARROW_KNOCKBACK");
 	public static final EnchantmentWrapper QUICK_CHARGE = new EnchantmentWrapper(Enchantment.QUICK_CHARGE.getKey(), "QUICK_CHARGE");
-	public static final EnchantmentWrapper OXYGEN = new EnchantmentWrapper(Enchantment.OXYGEN.getKey(), "OXYGEN");
+	public static final EnchantmentWrapper RESPIRATION = new EnchantmentWrapper(EnchantmentData.RESPIRATION.getKey(), "OXYGEN");
 	public static final EnchantmentWrapper RIPTIDE = new EnchantmentWrapper(Enchantment.RIPTIDE.getKey(), "RIPTIDE");
-	public static final EnchantmentWrapper DAMAGE_ALL = new EnchantmentWrapper(Enchantment.DAMAGE_ALL.getKey(), "DAMAGE_ALL");
+	public static final EnchantmentWrapper SHARPNESS = new EnchantmentWrapper(EnchantmentData.SHARPNESS.getKey(), "DAMAGE_ALL");
 	public static final EnchantmentWrapper SILK_TOUCH = new EnchantmentWrapper(Enchantment.SILK_TOUCH.getKey(), "SILK_TOUCH");
-	public static final EnchantmentWrapper DAMAGE_UNDEAD = new EnchantmentWrapper(Enchantment.DAMAGE_UNDEAD.getKey(), "DAMAGE_UNDEAD");
+	public static final EnchantmentWrapper SMITE = new EnchantmentWrapper(EnchantmentData.SMITE.getKey(), "DAMAGE_UNDEAD");
 	public static final EnchantmentWrapper SOUL_SPEED = new EnchantmentWrapper(Enchantment.SOUL_SPEED.getKey(), "SOUL_SPEED");
-	public static final EnchantmentWrapper SWEEPING_EDGE = new EnchantmentWrapper(Enchantment.SWEEPING_EDGE.getKey(), "SWEEPING_EDGE");
+	public static final EnchantmentWrapper SWEEPING_EDGE = new EnchantmentWrapper(EnchantmentData.SWEEPING_EDGE.getKey(), "SWEEPING_EDGE");
 	public static final EnchantmentWrapper SWIFT_SNEAK = new EnchantmentWrapper(!new EnchantmentData("SWIFT_SNEAK").hasEnchantment() ? null : new EnchantmentData("SWIFT_SNEAK").getEnchantment().getKey(), "WATER_WORKER");
 	public static final EnchantmentWrapper THORNS = new EnchantmentWrapper(Enchantment.THORNS.getKey(), "THORNS");
-	public static final EnchantmentWrapper DURABILITY = new EnchantmentWrapper(Enchantment.DURABILITY.getKey(), "DURABILITY");
+	public static final EnchantmentWrapper UNBREAKING = new EnchantmentWrapper(EnchantmentData.UNBREAKING.getKey(), "DURABILITY");
 	
 	public static final EnchantmentWrapper SOULBOUND = new CustomEnchantmentWrapper("soulbound", "SOULBOUND");
 	public static final EnchantmentWrapper SOUL_REAPER = new CustomEnchantmentWrapper("soul_reaper", "SOUL_REAPER");
@@ -199,7 +199,7 @@ public class RegisterEnchantments {
 	}
 
 	public static List<EnchantmentWrapper> getProtectionEnchantments() {
-		return Arrays.asList(PROTECTION_ENVIRONMENTAL, PROTECTION_EXPLOSIONS, PROTECTION_FIRE, PROTECTION_PROJECTILE);
+		return Arrays.asList(PROTECTION, BLAST_PROTECTION, FIRE_PROTECTION, PROJECTILE_PROTECTION);
 	}
 
 	public static boolean registerEnchantment(CustomEnchantment enchantment) {

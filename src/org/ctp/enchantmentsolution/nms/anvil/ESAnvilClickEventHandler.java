@@ -3,7 +3,7 @@ package org.ctp.enchantmentsolution.nms.anvil;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.ctp.crashapi.inventory.InventoryData;
+import org.ctp.crashapi.data.inventory.InventoryData;
 import org.ctp.crashapi.nms.anvil.AnvilClickEventHandler;
 import org.ctp.enchantmentsolution.inventory.Anvil;
 

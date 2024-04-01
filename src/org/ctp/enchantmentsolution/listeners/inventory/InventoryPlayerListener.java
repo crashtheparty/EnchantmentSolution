@@ -6,7 +6,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.ctp.crashapi.inventory.InventoryData;
+import org.ctp.crashapi.data.inventory.InventoryData;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 
 public class InventoryPlayerListener implements Listener {

@@ -116,18 +116,18 @@ public class AdvancementUtils {
 	}
 
 	public static boolean awardCriteria(Player player, ESAdvancement advancement, String criteria) {
-		if (advancement.isEnabled()) {
+		if (advancement.isEnabled()) try {
 			AdvancementProgress progress = player.getAdvancementProgress(Bukkit.getAdvancement(advancement.getNamespace()));
 			if (progress.getRemainingCriteria().contains(criteria)) {
 				progress.awardCriteria(criteria);
 				return true;
 			}
-		}
+		} catch (Exception ex) {}
 		return false;
 	}
 
 	public static boolean awardCriteria(Player player, ESAdvancement advancement, String criteria, int amount) {
-		if (advancement.isEnabled()) {
+		if (advancement.isEnabled()) try {
 			AdvancementProgress progress = player.getAdvancementProgress(Bukkit.getAdvancement(advancement.getNamespace()));
 			if (progress.getRemainingCriteria().contains(criteria)) {
 				CrashAdvancementProgress esProgress = EnchantmentSolution.getAdvancementProgress(player, advancement, criteria);
@@ -144,7 +144,7 @@ public class AdvancementUtils {
 					return true;
 				}
 			}
-		}
+		} catch (Exception ex) {}
 		return false;
 	}
 }

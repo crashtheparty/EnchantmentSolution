@@ -1,9 +1,10 @@
 package org.ctp.enchantmentsolution.enchantments;
 
 import org.bukkit.NamespacedKey;
+import org.bukkit.Registry;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
-import org.ctp.crashapi.item.ItemData;
+import org.ctp.crashapi.data.items.ItemData;
 
 public class EnchantmentWrapper {
 	private final NamespacedKey key;
@@ -26,7 +27,7 @@ public class EnchantmentWrapper {
 	}
 	
 	public Enchantment getRelativeEnchantment() {
-		return Enchantment.getByKey(key);
+		return Registry.ENCHANTMENT.get(key);
 	}
 
 	private CustomEnchantment getCustomEnchantment() {

@@ -3,7 +3,7 @@ package org.ctp.enchantmentsolution.inventory.minigame;
 import java.util.List;
 
 import org.ctp.crashapi.CrashAPI;
-import org.ctp.crashapi.item.MatData;
+import org.ctp.crashapi.data.items.MatData;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 
 public class MinigameItem {

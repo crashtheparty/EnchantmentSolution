@@ -8,8 +8,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
 import org.bukkit.inventory.ItemStack;
-import org.ctp.crashapi.item.ItemSlot;
-import org.ctp.crashapi.item.ItemSlotType;
+import org.ctp.crashapi.data.items.ItemSlot;
+import org.ctp.crashapi.data.items.ItemSlotType;
 import org.ctp.enchantmentsolution.utils.GenerateUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 

@@ -9,7 +9,7 @@ import java.util.function.BiFunction;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.ctp.crashapi.inventory.InventoryData;
+import org.ctp.crashapi.data.inventory.InventoryData;
 import org.ctp.crashapi.nms.anvil.AnvilSlot;
 import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.inventory.Anvil;
@@ -17,6 +17,7 @@ import org.ctp.enchantmentsolution.inventory.Anvil;
 import net.md_5.bungee.api.chat.TranslatableComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
 import net.minecraft.core.BlockPosition;
+import net.minecraft.network.chat.IChatBaseComponent;
 import net.minecraft.network.chat.IChatBaseComponent.ChatSerializer;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.PacketPlayOutOpenWindow;
@@ -101,7 +102,7 @@ public class AnvilGUI_1 extends AnvilGUI {
 		try {
 			TranslatableComponent t = new TranslatableComponent("container.repair");
 			@SuppressWarnings("unchecked")
-			PacketPlayOutOpenWindow packet = new PacketPlayOutOpenWindow(c, (Containers<ContainerAnvil>) (Container.class.getDeclaredMethod("getType").invoke(container)), ChatSerializer.a(ComponentSerializer.toString(t)));
+			PacketPlayOutOpenWindow packet = new PacketPlayOutOpenWindow(c, (Containers<ContainerAnvil>) (Container.class.getDeclaredMethod("getType").invoke(container)), (IChatBaseComponent) ChatSerializer.class.getDeclaredMethod("a", String.class).invoke(null, ComponentSerializer.toString(t)));
 			pc.getClass().getDeclaredMethod("sendPacket", Packet.class).invoke(pc, packet);
 		} catch (Exception ex) {
 			ex.printStackTrace();

@@ -12,11 +12,12 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.ctp.crashapi.data.items.ItemSlot;
+import org.ctp.crashapi.data.items.ItemSlotType;
+import org.ctp.crashapi.data.items.PotData;
 import org.ctp.crashapi.events.EquipEvent;
 import org.ctp.crashapi.events.EquipEvent.EquipMethod;
 import org.ctp.crashapi.events.ItemAddEvent;
-import org.ctp.crashapi.item.ItemSlot;
-import org.ctp.crashapi.item.ItemSlotType;
 import org.ctp.crashapi.nms.DamageNMS;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
@@ -44,7 +45,7 @@ public class AttributeListener extends Enchantmentable {
 		attributes.put(RegisterEnchantments.TOUGHNESS, Attributable.TOUGHNESS);
 
 		potions.put(RegisterEnchantments.JOGGERS, PotionEffectType.SPEED);
-		potions.put(RegisterEnchantments.PLYOMETRICS, PotionEffectType.JUMP);
+		potions.put(RegisterEnchantments.PLYOMETRICS, PotData.JUMP.getPotionEffect());
 		potions.put(RegisterEnchantments.WATER_BREATHING, PotionEffectType.WATER_BREATHING);
 	}
 

@@ -14,7 +14,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.ctp.crashapi.CrashAPIPlugin;
 import org.ctp.crashapi.commands.CrashCommand;
 import org.ctp.crashapi.compatibility.MMOUtils;
-import org.ctp.crashapi.inventory.InventoryData;
+import org.ctp.crashapi.data.inventory.InventoryData;
 import org.ctp.crashapi.utils.ChatUtils;
 import org.ctp.crashapi.utils.StringUtils;
 import org.ctp.enchantmentsolution.Chatable;

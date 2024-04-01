@@ -7,7 +7,7 @@ import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.ctp.crashapi.config.yaml.YamlConfig;
-import org.ctp.crashapi.item.ItemData;
+import org.ctp.crashapi.data.items.ItemData;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enums.EnchantmentLocation;

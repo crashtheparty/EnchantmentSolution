@@ -7,7 +7,7 @@ import java.util.List;
 
 import org.bukkit.Material;
 import org.ctp.crashapi.config.yaml.YamlConfig;
-import org.ctp.crashapi.item.MatData;
+import org.ctp.crashapi.data.items.MatData;
 import org.ctp.crashapi.utils.CrashConfigUtils;
 
 public class ItemSpecialBreakFile {

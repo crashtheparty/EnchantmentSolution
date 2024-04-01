@@ -18,6 +18,7 @@ import org.bukkit.event.player.*;
 import org.bukkit.event.player.PlayerFishEvent.State;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.projectiles.ProjectileSource;
+import org.ctp.crashapi.data.EnchantmentData;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.api.ApiEnchantmentWrapper;
 import org.ctp.enchantmentsolution.enchantments.EnchantmentWrapper;
@@ -50,10 +51,10 @@ public class RPGListener extends Enchantmentable implements Runnable {
 		Player player = event.getPlayer();
 		ItemStack item = player.getInventory().getItemInMainHand();
 		if (EnchantmentUtils.hasEnchantment(item, Enchantment.SILK_TOUCH) && ItemBreakType.getType(item.getType()) != null && ItemBreakType.getType(item.getType()).getSilkBreakTypes().contains(event.getBlock().getType())) giveExperience(player, Enchantment.SILK_TOUCH, EnchantmentUtils.getLevel(item, Enchantment.SILK_TOUCH));
-		if (EnchantmentUtils.hasEnchantment(item, Enchantment.DIG_SPEED) && ItemBreakType.getType(item.getType()) != null && ItemBreakType.getType(item.getType()).getBreakTypes().contains(event.getBlock().getType())) giveExperience(player, Enchantment.DIG_SPEED, EnchantmentUtils.getLevel(item, Enchantment.DIG_SPEED));
-		if (EnchantmentUtils.hasEnchantment(item, Enchantment.LOOT_BONUS_BLOCKS) && ItemBreakType.getType(item.getType()) != null && ItemBreakType.getType(item.getType()).getFortuneBreakTypes().contains(event.getBlock().getType())) giveExperience(player, Enchantment.LOOT_BONUS_BLOCKS, EnchantmentUtils.getLevel(item, Enchantment.LOOT_BONUS_BLOCKS));
+		if (EnchantmentUtils.hasEnchantment(item, EnchantmentData.EFFICIENCY) && ItemBreakType.getType(item.getType()) != null && ItemBreakType.getType(item.getType()).getBreakTypes().contains(event.getBlock().getType())) giveExperience(player, EnchantmentData.EFFICIENCY, EnchantmentUtils.getLevel(item, EnchantmentData.EFFICIENCY));
+		if (EnchantmentUtils.hasEnchantment(item, EnchantmentData.FORTUNE) && ItemBreakType.getType(item.getType()) != null && ItemBreakType.getType(item.getType()).getFortuneBreakTypes().contains(event.getBlock().getType())) giveExperience(player, EnchantmentData.FORTUNE, EnchantmentUtils.getLevel(item, EnchantmentData.FORTUNE));
 		ItemStack helmet = player.getInventory().getHelmet();
-		if (EnchantmentUtils.hasEnchantment(helmet, Enchantment.WATER_WORKER) && player.getEyeLocation().getBlock().getType() == Material.WATER) giveExperience(player, Enchantment.WATER_WORKER, EnchantmentUtils.getLevel(helmet, Enchantment.WATER_WORKER));
+		if (EnchantmentUtils.hasEnchantment(helmet, EnchantmentData.AQUA_AFFINITY) && player.getEyeLocation().getBlock().getType() == Material.WATER) giveExperience(player, EnchantmentData.AQUA_AFFINITY, EnchantmentUtils.getLevel(helmet, EnchantmentData.AQUA_AFFINITY));
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR)
@@ -83,7 +84,7 @@ public class RPGListener extends Enchantmentable implements Runnable {
 		if (entity instanceof Player) {
 			Player player = (Player) entity;
 			ItemStack item = player.getInventory().getItemInMainHand();
-			if (EnchantmentUtils.hasEnchantment(item, Enchantment.ARROW_INFINITE)) giveExperience(player, Enchantment.ARROW_INFINITE, EnchantmentUtils.getLevel(item, Enchantment.ARROW_INFINITE));
+			if (EnchantmentUtils.hasEnchantment(item, EnchantmentData.INFINITY)) giveExperience(player, EnchantmentData.INFINITY, EnchantmentUtils.getLevel(item, EnchantmentData.INFINITY));
 			if (EnchantmentUtils.hasEnchantment(item, Enchantment.QUICK_CHARGE)) giveExperience(player, Enchantment.QUICK_CHARGE, EnchantmentUtils.getLevel(item, Enchantment.QUICK_CHARGE));
 			if (item != null && item.getType() == Material.TRIDENT && EnchantmentUtils.hasEnchantment(item, Enchantment.LOYALTY)) giveExperience(player, Enchantment.LOYALTY, EnchantmentUtils.getLevel(item, Enchantment.LOYALTY));
 			if (EnchantmentUtils.hasEnchantment(item, Enchantment.MULTISHOT)) giveExperience(player, Enchantment.MULTISHOT, EnchantmentUtils.getLevel(item, Enchantment.MULTISHOT));
@@ -96,7 +97,7 @@ public class RPGListener extends Enchantmentable implements Runnable {
 		Player player = event.getPlayer();
 		if (event.getState() == State.CAUGHT_FISH) {
 			ItemStack item = player.getInventory().getItemInMainHand();
-			if (EnchantmentUtils.hasEnchantment(item, Enchantment.LUCK)) giveExperience(player, Enchantment.LUCK, EnchantmentUtils.getLevel(item, Enchantment.LUCK));
+			if (EnchantmentUtils.hasEnchantment(item, EnchantmentData.LUCK_OF_THE_SEA)) giveExperience(player, EnchantmentData.LUCK_OF_THE_SEA, EnchantmentUtils.getLevel(item, EnchantmentData.LUCK_OF_THE_SEA));
 			if (EnchantmentUtils.hasEnchantment(item, Enchantment.LURE)) giveExperience(player, Enchantment.LURE, EnchantmentUtils.getLevel(item, Enchantment.LURE));
 		}
 	}
@@ -118,7 +119,7 @@ public class RPGListener extends Enchantmentable implements Runnable {
 		if (!RPGUtils.isEnabled() || event.isCancelled()) return;
 		Player player = event.getPlayer();
 		ItemStack item = player.getInventory().getItemInMainHand();
-		if (EnchantmentUtils.hasEnchantment(item, Enchantment.DURABILITY)) giveExperience(player, Enchantment.DURABILITY, EnchantmentUtils.getLevel(item, Enchantment.DURABILITY));
+		if (EnchantmentUtils.hasEnchantment(item, EnchantmentData.UNBREAKING)) giveExperience(player, EnchantmentData.UNBREAKING, EnchantmentUtils.getLevel(item, EnchantmentData.UNBREAKING));
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR)
@@ -128,7 +129,7 @@ public class RPGListener extends Enchantmentable implements Runnable {
 		if (killer instanceof Player) {
 			Player player = (Player) killer;
 			ItemStack item = player.getInventory().getItemInMainHand();
-			if (EnchantmentUtils.hasEnchantment(item, Enchantment.LOOT_BONUS_MOBS)) giveExperience(player, Enchantment.LOOT_BONUS_MOBS, EnchantmentUtils.getLevel(item, Enchantment.LOOT_BONUS_MOBS));
+			if (EnchantmentUtils.hasEnchantment(item, EnchantmentData.LOOTING)) giveExperience(player, EnchantmentData.LOOTING, EnchantmentUtils.getLevel(item, EnchantmentData.LOOTING));
 			for(ItemStack i: player.getInventory().getArmorContents())
 				if (EnchantmentUtils.hasEnchantment(i, RegisterEnchantments.UNREST)) {
 					giveExperience(player, RegisterEnchantments.UNREST, EnchantmentUtils.getLevel(i, RegisterEnchantments.UNREST));
@@ -144,7 +145,7 @@ public class RPGListener extends Enchantmentable implements Runnable {
 		if (entity instanceof Player) {
 			Player player = (Player) entity;
 			ItemStack item = player.getInventory().getHelmet();
-			if (EnchantmentUtils.hasEnchantment(item, Enchantment.OXYGEN)) giveExperience(player, Enchantment.OXYGEN, EnchantmentUtils.getLevel(item, Enchantment.OXYGEN));
+			if (EnchantmentUtils.hasEnchantment(item, EnchantmentData.RESPIRATION)) giveExperience(player, EnchantmentData.RESPIRATION, EnchantmentUtils.getLevel(item, EnchantmentData.RESPIRATION));
 		}
 	}
 
@@ -177,17 +178,17 @@ public class RPGListener extends Enchantmentable implements Runnable {
 		if (entity instanceof Player) {
 			Player player = (Player) entity;
 			if (Arrays.asList(DamageCause.BLOCK_EXPLOSION, DamageCause.ENTITY_EXPLOSION).contains(event.getCause())) for(ItemStack item: player.getInventory().getArmorContents())
-				if (EnchantmentUtils.hasEnchantment(item, Enchantment.PROTECTION_EXPLOSIONS)) giveExperience(player, Enchantment.PROTECTION_EXPLOSIONS, EnchantmentUtils.getLevel(item, Enchantment.PROTECTION_EXPLOSIONS));
+				if (EnchantmentUtils.hasEnchantment(item, EnchantmentData.BLAST_PROTECTION)) giveExperience(player, EnchantmentData.BLAST_PROTECTION, EnchantmentUtils.getLevel(item, EnchantmentData.BLAST_PROTECTION));
 			if (Arrays.asList(DamageCause.FIRE, DamageCause.FIRE_TICK, DamageCause.LAVA).contains(event.getCause())) for(ItemStack item: player.getInventory().getArmorContents())
-				if (EnchantmentUtils.hasEnchantment(item, Enchantment.PROTECTION_FIRE)) giveExperience(player, Enchantment.PROTECTION_FIRE, EnchantmentUtils.getLevel(item, Enchantment.PROTECTION_FIRE));
+				if (EnchantmentUtils.hasEnchantment(item, EnchantmentData.FIRE_PROTECTION)) giveExperience(player, EnchantmentData.FIRE_PROTECTION, EnchantmentUtils.getLevel(item, EnchantmentData.FIRE_PROTECTION));
 			if (DamageCause.FALL == event.getCause()) {
 				ItemStack item = player.getInventory().getBoots();
-				if (EnchantmentUtils.hasEnchantment(item, Enchantment.PROTECTION_FALL)) giveExperience(player, Enchantment.PROTECTION_FALL, EnchantmentUtils.getLevel(item, Enchantment.PROTECTION_FALL));
+				if (EnchantmentUtils.hasEnchantment(item, EnchantmentData.FEATHER_FALLING)) giveExperience(player, EnchantmentData.FEATHER_FALLING, EnchantmentUtils.getLevel(item, EnchantmentData.FEATHER_FALLING));
 			}
 			if (DamageCause.PROJECTILE == event.getCause()) for(ItemStack item: player.getInventory().getArmorContents())
-				if (EnchantmentUtils.hasEnchantment(item, Enchantment.PROTECTION_PROJECTILE)) giveExperience(player, Enchantment.PROTECTION_PROJECTILE, EnchantmentUtils.getLevel(item, Enchantment.PROTECTION_PROJECTILE));
+				if (EnchantmentUtils.hasEnchantment(item, EnchantmentData.PROJECTILE_PROTECTION)) giveExperience(player, EnchantmentData.PROJECTILE_PROTECTION, EnchantmentUtils.getLevel(item, EnchantmentData.PROJECTILE_PROTECTION));
 			if (!Arrays.asList(DamageCause.CUSTOM, DamageCause.MAGIC, DamageCause.STARVATION, DamageCause.VOID, DamageCause.SUICIDE).contains(event.getCause())) for(ItemStack item: player.getInventory().getArmorContents()) {
-				if (EnchantmentUtils.hasEnchantment(item, Enchantment.PROTECTION_ENVIRONMENTAL)) giveExperience(player, Enchantment.PROTECTION_ENVIRONMENTAL, EnchantmentUtils.getLevel(item, Enchantment.PROTECTION_ENVIRONMENTAL));
+				if (EnchantmentUtils.hasEnchantment(item, EnchantmentData.PROTECTION)) giveExperience(player, EnchantmentData.PROTECTION, EnchantmentUtils.getLevel(item, EnchantmentData.PROTECTION));
 				if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.ARMORED)) giveExperience(player, RegisterEnchantments.ARMORED, EnchantmentUtils.getLevel(item, RegisterEnchantments.ARMORED));
 				if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.LIFE)) giveExperience(player, RegisterEnchantments.LIFE, EnchantmentUtils.getLevel(item, RegisterEnchantments.LIFE));
 				if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.TOUGHNESS)) giveExperience(player, RegisterEnchantments.TOUGHNESS, EnchantmentUtils.getLevel(item, RegisterEnchantments.TOUGHNESS));
@@ -201,9 +202,9 @@ public class RPGListener extends Enchantmentable implements Runnable {
 				Player player = (Player) e2;
 				ItemStack item = player.getInventory().getItemInMainHand();
 				if (entity.getType().isAlive() && item != null) {
-					if (Arrays.asList("SPIDER", "CAVE_SPIDER", "BEE", "SILVERFISH", "ENDERMITE").contains(entity.getType().name()) && EnchantmentUtils.hasEnchantment(item, Enchantment.DAMAGE_ARTHROPODS)) giveExperience(player, Enchantment.DAMAGE_ARTHROPODS, EnchantmentUtils.getLevel(item, Enchantment.DAMAGE_ARTHROPODS));
-					if (Arrays.asList("SKELETON", "STRAY", "WITHER_SKELETON", "ZOMBIE", "DROWNED", "HUSK", "ZOMBIE_PIGMAN", "ZOMBIE_VILLAGER", "PHANTOM", "WITHER", "SKELETON_HORSE", "ZOMBIE_HORSE", "ZOGLIN").contains(entity.getType().name()) && EnchantmentUtils.hasEnchantment(item, Enchantment.DAMAGE_UNDEAD)) giveExperience(player, Enchantment.DAMAGE_UNDEAD, EnchantmentUtils.getLevel(item, Enchantment.DAMAGE_UNDEAD));
-					if (EnchantmentUtils.hasEnchantment(item, Enchantment.DAMAGE_ALL)) giveExperience(player, Enchantment.DAMAGE_ALL, EnchantmentUtils.getLevel(item, Enchantment.DAMAGE_ALL));
+					if (Arrays.asList("SPIDER", "CAVE_SPIDER", "BEE", "SILVERFISH", "ENDERMITE").contains(entity.getType().name()) && EnchantmentUtils.hasEnchantment(item, EnchantmentData.BANE_OF_ARTHROPODS)) giveExperience(player, EnchantmentData.BANE_OF_ARTHROPODS, EnchantmentUtils.getLevel(item, EnchantmentData.BANE_OF_ARTHROPODS));
+					if (Arrays.asList("SKELETON", "STRAY", "WITHER_SKELETON", "ZOMBIE", "DROWNED", "HUSK", "ZOMBIE_PIGMAN", "ZOMBIE_VILLAGER", "PHANTOM", "WITHER", "SKELETON_HORSE", "ZOMBIE_HORSE", "ZOGLIN").contains(entity.getType().name()) && EnchantmentUtils.hasEnchantment(item, EnchantmentData.SMITE)) giveExperience(player, EnchantmentData.SMITE, EnchantmentUtils.getLevel(item, EnchantmentData.SMITE));
+					if (EnchantmentUtils.hasEnchantment(item, EnchantmentData.SHARPNESS)) giveExperience(player, EnchantmentData.SHARPNESS, EnchantmentUtils.getLevel(item, EnchantmentData.SHARPNESS));
 					if (e.getCause() == DamageCause.ENTITY_SWEEP_ATTACK && EnchantmentUtils.hasEnchantment(item, Enchantment.SWEEPING_EDGE)) giveExperience(player, Enchantment.SWEEPING_EDGE, EnchantmentUtils.getLevel(item, Enchantment.SWEEPING_EDGE));
 					if (EnchantmentUtils.hasEnchantment(item, Enchantment.KNOCKBACK)) giveExperience(player, Enchantment.KNOCKBACK, EnchantmentUtils.getLevel(item, Enchantment.KNOCKBACK));
 					if (!Arrays.asList("BLAZE", "ZOMBIE_PIGMAN", "ZOMBIE_PIGLIN", "ZOGLIN", "WITHER_SKELETON", "STRIDER").contains(entity.getType().name()) && EnchantmentUtils.hasEnchantment(item, Enchantment.FIRE_ASPECT)) giveExperience(player, Enchantment.FIRE_ASPECT, EnchantmentUtils.getLevel(item, Enchantment.FIRE_ASPECT));
@@ -220,9 +221,9 @@ public class RPGListener extends Enchantmentable implements Runnable {
 				Player player = (Player) ((Projectile) e2).getShooter();
 				ItemStack item = player.getInventory().getItemInMainHand();
 				if (entity.getType().isAlive() && item != null) {
-					if (!Arrays.asList("BLAZE", "ZOMBIE_PIGMAN", "ZOMBIE_PIGLIN", "ZOGLIN", "WITHER_SKELETON", "STRIDER").contains(entity.getType().name()) && EnchantmentUtils.hasEnchantment(item, Enchantment.ARROW_FIRE)) giveExperience(player, Enchantment.ARROW_FIRE, EnchantmentUtils.getLevel(item, Enchantment.ARROW_FIRE));
-					if (EnchantmentUtils.hasEnchantment(item, Enchantment.ARROW_DAMAGE)) giveExperience(player, Enchantment.ARROW_DAMAGE, EnchantmentUtils.getLevel(item, Enchantment.ARROW_DAMAGE));
-					if (EnchantmentUtils.hasEnchantment(item, Enchantment.ARROW_KNOCKBACK)) giveExperience(player, Enchantment.ARROW_KNOCKBACK, EnchantmentUtils.getLevel(item, Enchantment.ARROW_KNOCKBACK));
+					if (!Arrays.asList("BLAZE", "ZOMBIE_PIGMAN", "ZOMBIE_PIGLIN", "ZOGLIN", "WITHER_SKELETON", "STRIDER").contains(entity.getType().name()) && EnchantmentUtils.hasEnchantment(item, EnchantmentData.FLAME)) giveExperience(player, EnchantmentData.FLAME, EnchantmentUtils.getLevel(item, EnchantmentData.FLAME));
+					if (EnchantmentUtils.hasEnchantment(item, EnchantmentData.POWER)) giveExperience(player, EnchantmentData.POWER, EnchantmentUtils.getLevel(item, EnchantmentData.POWER));
+					if (EnchantmentUtils.hasEnchantment(item, EnchantmentData.PUNCH)) giveExperience(player, EnchantmentData.PUNCH, EnchantmentUtils.getLevel(item, EnchantmentData.PUNCH));
 					if (EnchantmentUtils.hasEnchantment(item, Enchantment.PIERCING)) giveExperience(player, Enchantment.PIERCING, EnchantmentUtils.getLevel(item, Enchantment.PIERCING));
 
 					if (e2 instanceof Trident) {

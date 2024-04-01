@@ -18,6 +18,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.util.Vector;
+import org.ctp.crashapi.data.items.PotData;
 import org.ctp.crashapi.utils.ChatUtils;
 import org.ctp.crashapi.utils.DamageUtils;
 import org.ctp.enchantmentsolution.Chatable;
@@ -483,7 +484,7 @@ public class DamageListener extends Enchantmentable {
 			if (isDisabled(player, RegisterEnchantments.MAGIC_GUARD)) return;
 			ItemStack shield = player.getInventory().getItemInOffHand();
 			if (shield.getType() == Material.SHIELD && EnchantmentUtils.hasEnchantment(shield, RegisterEnchantments.MAGIC_GUARD)) {
-				MagicGuardPotionEvent magicGuard = new MagicGuardPotionEvent(player, ((AreaEffectCloud) event.getDamager()).getBasePotionData().getType().getEffectType());
+				MagicGuardPotionEvent magicGuard = new MagicGuardPotionEvent(player, ((AreaEffectCloud) event.getDamager()).getBasePotionType().getEffectType());
 				Bukkit.getPluginManager().callEvent(magicGuard);
 
 				if (!magicGuard.isCancelled()) event.setCancelled(true);
@@ -503,7 +504,7 @@ public class DamageListener extends Enchantmentable {
 			ex.printStackTrace();
 		}
 		try {
-			potion(event, RegisterEnchantments.TRUANT, PotionEffectType.SLOW);
+			potion(event, RegisterEnchantments.TRUANT, PotData.SLOW.getPotionEffect());
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -543,7 +544,7 @@ public class DamageListener extends Enchantmentable {
 					if (human instanceof Player && living instanceof Bat && potionAfflict.getType() == PotionEffectType.BLINDNESS) AdvancementUtils.awardCriteria((Player) human, ESAdvancement.BLIND_AS_A_BAT, "blindness");
 					if (human instanceof Player && living instanceof Skeleton && !(living instanceof WitherSkeleton) && potionAfflict.getType() == PotionEffectType.WITHER) AdvancementUtils.awardCriteria((Player) human, ESAdvancement.SPOOKY_SCARY_SKELETON, "skeleton_skull");
 					if (human instanceof Player && potionAfflict.getType() == PotionEffectType.POISON && human != living) AdvancementUtils.awardCriteria((Player) human, ESAdvancement.SPIDER_SENSES, "venom");
-					if (living instanceof Player && potionAfflict.getType() == PotionEffectType.SLOW) AdvancementUtils.awardCriteria((Player) living, ESAdvancement.SLACKIN, "truant");
+					if (living instanceof Player && potionAfflict.getType() == PotData.SLOW.getPotionEffect()) AdvancementUtils.awardCriteria((Player) living, ESAdvancement.SLACKIN, "truant");
 				}
 			}
 		} else if (attacker instanceof Projectile) {
@@ -571,7 +572,7 @@ public class DamageListener extends Enchantmentable {
 						if (shooter instanceof Player && living instanceof Bat && potionAfflict.getType() == PotionEffectType.BLINDNESS) AdvancementUtils.awardCriteria((Player) shooter, ESAdvancement.BLIND_AS_A_BAT, "blindness");
 						if (shooter instanceof Player && living instanceof Skeleton && !(living instanceof WitherSkeleton) && potionAfflict.getType() == PotionEffectType.WITHER) AdvancementUtils.awardCriteria((Player) shooter, ESAdvancement.SPOOKY_SCARY_SKELETON, "skeleton_skull");
 						if (shooter instanceof Player && potionAfflict.getType() == PotionEffectType.POISON && shooter != living) AdvancementUtils.awardCriteria((Player) shooter, ESAdvancement.SPIDER_SENSES, "venom");
-						if (living instanceof Player && potionAfflict.getType() == PotionEffectType.SLOW) AdvancementUtils.awardCriteria((Player) living, ESAdvancement.SLACKIN, "truant");
+						if (living instanceof Player && potionAfflict.getType() == PotData.SLOW.getPotionEffect()) AdvancementUtils.awardCriteria((Player) living, ESAdvancement.SLACKIN, "truant");
 					}
 				}
 			}
@@ -588,7 +589,7 @@ public class DamageListener extends Enchantmentable {
 			if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.PACIFIED)) {
 				int level = EnchantmentUtils.getLevel(item, RegisterEnchantments.PACIFIED);
 				Entity damaged = event.getEntity();
-				if (damaged instanceof Tameable && ((Tameable) damaged).getOwner().getUniqueId().equals(player.getUniqueId())) {
+				if (damaged instanceof Tameable && ((Tameable) damaged).getOwner() != null && ((Tameable) damaged).getOwner().getUniqueId().equals(player.getUniqueId())) {
 					LivingEntity living = (LivingEntity) damaged;
 					double damage = event.getDamage();
 					double newDamage = Math.max(damage * (1 - .15 * level), 0);
@@ -951,8 +952,8 @@ public class DamageListener extends Enchantmentable {
 			Player player = (Player) event.getEntity();
 			if (isDisabled(player, RegisterEnchantments.MAGIC_GUARD)) return;
 			ItemStack shield = player.getInventory().getItemInOffHand();
-			if (shield.getType().equals(Material.SHIELD)) if (EnchantmentUtils.hasEnchantment(shield, RegisterEnchantments.MAGIC_GUARD)) {
-				MagicGuardPotionEvent magicGuard = new MagicGuardPotionEvent(player, event.getCause() == DamageCause.POISON ? PotionEffectType.POISON : PotionEffectType.HARM);
+			if (shield.getType().equals(Material.SHIELD) && EnchantmentUtils.hasEnchantment(shield, RegisterEnchantments.MAGIC_GUARD)) {
+				MagicGuardPotionEvent magicGuard = new MagicGuardPotionEvent(player, event.getCause() == DamageCause.POISON ? PotionEffectType.POISON : PotData.HARM.getPotionEffect());
 				Bukkit.getPluginManager().callEvent(magicGuard);
 
 				if (!magicGuard.isCancelled()) event.setCancelled(true);

@@ -9,6 +9,7 @@ public class HollowPointDamageEvent extends EntityDamageByEntityEvent {
 
 	private final EnchantmentLevel enchantment;
 
+	@SuppressWarnings("removal")
 	public HollowPointDamageEvent(Entity damager, Entity damagee, DamageCause cause, double damage) {
 		super(damager, damagee, cause, damage);
 		enchantment = new EnchantmentLevel(CERegister.HOLLOW_POINT, 1);

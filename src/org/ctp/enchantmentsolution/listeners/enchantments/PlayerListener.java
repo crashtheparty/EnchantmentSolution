@@ -10,7 +10,6 @@ import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Levelled;
 import org.bukkit.block.data.Waterlogged;
 import org.bukkit.block.data.type.Campfire;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.event.*;
 import org.bukkit.event.block.*;
@@ -21,7 +20,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.util.Vector;
-import org.ctp.crashapi.item.MatData;
+import org.ctp.crashapi.data.EnchantmentData;
+import org.ctp.crashapi.data.ParticleData;
+import org.ctp.crashapi.data.items.MatData;
 import org.ctp.crashapi.utils.DamageUtils;
 import org.ctp.crashapi.utils.ItemUtils;
 import org.ctp.crashapi.utils.LocationUtils;
@@ -221,13 +222,18 @@ public class PlayerListener extends Enchantmentable {
 					Location loc = flowerGiftEvent.getDropLocation();
 					ItemStack flowerGift = flowerGiftEvent.getFlower();
 					if (flowerGiftEvent.getFlower() != null) {
+						ParticleData p = new ParticleData("VILLAGER_HAPPY");
+						if (p.getParticle() == null) p = new ParticleData("HAPPY_VILLAGER");
 						if (FlowerGiftDrop.isDoubleFlower(flowerGift.getType())) loc.add(0, 1, 0);
-						player.getWorld().spawnParticle(Particle.VILLAGER_HAPPY, loc, 30, 0.2, 0.5, 0.2);
+						player.getWorld().spawnParticle(p.getParticle(), loc, 30, 0.2, 0.5, 0.2);
 						if (FlowerGiftDrop.isDoubleFlower(flowerGift.getType())) AdvancementUtils.awardCriteria(player, ESAdvancement.BONEMEAL_PLUS, "bonemeal");
 						else if (FlowerGiftDrop.isWitherRose(flowerGift.getType())) AdvancementUtils.awardCriteria(player, ESAdvancement.JUST_AS_SWEET, "wither_rose");
 						ItemUtils.dropItem(flowerGift, flowerGiftEvent.getDropLocation());
-					} else
-						player.getWorld().spawnParticle(Particle.VILLAGER_ANGRY, loc, 30, 0.2, 0.5, 0.2);
+					} else {
+						ParticleData p = new ParticleData("VILLAGER_ANGRY");
+						if (p.getParticle() == null) p = new ParticleData("ANGRY_VILLAGER");
+						player.getWorld().spawnParticle(p.getParticle(), loc, 30, 0.2, 0.5, 0.2);
+					}
 					player.incrementStatistic(Statistic.USE_ITEM, item.getType());
 					ESPlayer esPlayer = EnchantmentSolution.getESPlayer(player);
 					esPlayer.setCooldown(RegisterEnchantments.FLOWER_GIFT);
@@ -245,7 +251,7 @@ public class PlayerListener extends Enchantmentable {
 			if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.FROSTY)) {
 				event.setCancelled(false);
 				if (!canRun(RegisterEnchantments.FROSTY, event)) return;
-				boolean takeSnow = player.getGameMode() != GameMode.CREATIVE && !EnchantmentUtils.hasEnchantment(item, Enchantment.ARROW_INFINITE);
+				boolean takeSnow = player.getGameMode() != GameMode.CREATIVE && !EnchantmentUtils.hasEnchantment(item, EnchantmentData.INFINITY);
 				FrostyEvent frosty = new FrostyEvent(player, item, takeSnow, player.getInventory().all(Material.SNOWBALL).size() > 0);
 				Bukkit.getPluginManager().callEvent(frosty);
 
@@ -292,7 +298,9 @@ public class PlayerListener extends Enchantmentable {
 				int num_breaks = DamageUtils.damageItem(player, chestplate, level * 5, 1, false).getDamageAmount();
 				if (DamageUtils.getDamage(chestplate) + num_breaks >= DamageUtils.getMaxDamage(chestplate)) {
 					AdvancementUtils.awardCriteria(player, ESAdvancement.TOO_CLOSE, "failure");
-					player.getWorld().spawnParticle(Particle.EXPLOSION_NORMAL, player.getLocation(), 5, 2, 2, 2);
+					ParticleData p = new ParticleData("EXPLOSION_NORMAL");
+					if (p.getParticle() == null) p = new ParticleData("EXPLOSION");
+					player.getWorld().spawnParticle(p.getParticle(), player.getLocation(), 5, 2, 2, 2);
 					return;
 				}
 				IcarusLaunchEvent icarus = new IcarusLaunchEvent(player, level, additional, 30);
@@ -440,7 +448,6 @@ public class PlayerListener extends Enchantmentable {
 		}
 	}
 
-	@SuppressWarnings("deprecation")
 	private void overkill(PlayerInteractEvent event) {
 		if (event.getAction().equals(Action.LEFT_CLICK_AIR)) {
 			Player player = event.getPlayer();
@@ -449,7 +456,7 @@ public class PlayerListener extends Enchantmentable {
 			if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.OVERKILL)) {
 				event.setCancelled(false);
 				if (!canRun(RegisterEnchantments.OVERKILL, event)) return;
-				boolean takeArrow = player.getGameMode() != GameMode.CREATIVE && !EnchantmentUtils.hasEnchantment(item, Enchantment.ARROW_INFINITE);
+				boolean takeArrow = player.getGameMode() != GameMode.CREATIVE && !EnchantmentUtils.hasEnchantment(item, EnchantmentData.INFINITY);
 				boolean hasArrow = player.getInventory().all(Material.ARROW).size() > 0 || player.getInventory().all(Material.TIPPED_ARROW).size() > 0 || player.getInventory().all(Material.SPECTRAL_ARROW).size() > 0;
 				OverkillEvent overkill = new OverkillEvent(player, item, takeArrow, hasArrow, 0.25);
 				Bukkit.getPluginManager().callEvent(overkill);
@@ -484,7 +491,7 @@ public class PlayerListener extends Enchantmentable {
 						projectile = player.launchProjectile(Arrow.class);
 					if (arrow.getType() == Material.TIPPED_ARROW) {
 						PotionMeta meta = (PotionMeta) arrow.getItemMeta();
-						((Arrow) projectile).setBasePotionData(meta.getBasePotionData());
+						((Arrow) projectile).setBasePotionType(meta.getBasePotionType());
 					}
 					projectile.setMetadata("overkill", new FixedMetadataValue(EnchantmentSolution.getPlugin(), player.getUniqueId().toString()));
 					if (!overkill.takeArrow()) projectile.setMetadata("no_pickup", new FixedMetadataValue(EnchantmentSolution.getPlugin(), true));
@@ -509,7 +516,7 @@ public class PlayerListener extends Enchantmentable {
 			if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.SPLATTER_FEST)) {
 				event.setCancelled(false);
 				if (!canRun(RegisterEnchantments.SPLATTER_FEST, event)) return;
-				SplatterFestEvent splatterFest = new SplatterFestEvent(player, item, player.getGameMode() != GameMode.CREATIVE && !EnchantmentUtils.hasEnchantment(item, Enchantment.ARROW_INFINITE), player.getInventory().all(Material.EGG).size() > 0);
+				SplatterFestEvent splatterFest = new SplatterFestEvent(player, item, player.getGameMode() != GameMode.CREATIVE && !EnchantmentUtils.hasEnchantment(item, EnchantmentData.INFINITY), player.getInventory().all(Material.EGG).size() > 0);
 				Bukkit.getPluginManager().callEvent(splatterFest);
 
 				if (!splatterFest.isCancelled() && !splatterFest.willCancel()) {
@@ -566,7 +573,7 @@ public class PlayerListener extends Enchantmentable {
 			if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.ZEAL)) {
 				event.setCancelled(false);
 				if (!canRun(RegisterEnchantments.ZEAL, event)) return;
-				boolean takeFireCharge = player.getGameMode() != GameMode.CREATIVE && !EnchantmentUtils.hasEnchantment(item, Enchantment.ARROW_INFINITE);
+				boolean takeFireCharge = player.getGameMode() != GameMode.CREATIVE && !EnchantmentUtils.hasEnchantment(item, EnchantmentData.INFINITY);
 				ZealEvent zeal = new ZealEvent(player, item, takeFireCharge, player.getInventory().all(Material.FIRE_CHARGE).size() > 0);
 				Bukkit.getPluginManager().callEvent(zeal);
 

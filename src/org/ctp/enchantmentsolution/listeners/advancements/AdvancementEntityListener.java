@@ -13,7 +13,7 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.MetadataValue;
-import org.ctp.crashapi.entity.MobData;
+import org.ctp.crashapi.data.MobData;
 import org.ctp.crashapi.utils.LocationUtils;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
@@ -140,7 +140,9 @@ public class AdvancementEntityListener implements Listener {
 			Projectile p = (Projectile) damager;
 			if (p instanceof Snowball) {
 				Snowball snowball = (Snowball) p;
-				if (snowball.getMetadata("frosty") != null && snowball.getMetadata("frosty").size() > 0 && event.getEntityType() == EntityType.SNOWMAN) {
+				MobData data = new MobData("snowman");
+				if (data.getEntity() == null) data = new MobData("snow_golem");
+				if (snowball.getMetadata("frosty") != null && snowball.getMetadata("frosty").size() > 0 && event.getEntityType() == data.getEntity()) {
 					Player player = Bukkit.getPlayer(UUID.fromString(snowball.getMetadata("frosty").get(0).asString()));
 					if (player != null) AdvancementUtils.awardCriteria(player, ESAdvancement.THE_SNOWMAN, "snowball");
 				}

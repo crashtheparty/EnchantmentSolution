@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import org.ctp.crashapi.item.ItemSlotType;
+import org.ctp.crashapi.data.items.ItemSlotType;
 import org.ctp.enchantmentsolution.enchantments.EnchantmentWrapper;
 
 public class ItemEquippedSlot {

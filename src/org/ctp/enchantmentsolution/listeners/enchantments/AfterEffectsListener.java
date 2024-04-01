@@ -4,7 +4,6 @@ import java.util.*;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -14,6 +13,7 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.loot.LootContext;
 import org.bukkit.loot.Lootable;
+import org.ctp.crashapi.data.EnchantmentData;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.CERegister;
@@ -28,7 +28,6 @@ import org.ctp.enchantmentsolution.events.player.PillageEvent;
 import org.ctp.enchantmentsolution.events.player.RecyclerEvent;
 import org.ctp.enchantmentsolution.listeners.Enchantmentable;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
-import org.ctp.enchantmentsolution.utils.VersionUtils;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.AnimalMob;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.RecyclerDrops;
 import org.ctp.enchantmentsolution.utils.items.AbilityUtils;
@@ -141,7 +140,7 @@ public class AfterEffectsListener extends Enchantmentable {
 			ItemStack item = player.getInventory().getItemInOffHand();
 			if (item == null || !EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.PILLAGE)) {
 				item = player.getInventory().getItemInMainHand();
-				if (EnchantmentUtils.hasEnchantment(item, Enchantment.LOOT_BONUS_MOBS)) return;
+				if (EnchantmentUtils.hasEnchantment(item, EnchantmentData.LOOTING)) return;
 			}
 			if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.PILLAGE)) {
 				int level = EnchantmentUtils.getLevel(item, RegisterEnchantments.PILLAGE);

@@ -7,9 +7,9 @@ import java.util.Random;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.ctp.crashapi.item.ItemData;
-import org.ctp.crashapi.item.ItemType;
-import org.ctp.crashapi.item.MatData;
+import org.ctp.crashapi.data.items.ItemData;
+import org.ctp.crashapi.data.items.ItemType;
+import org.ctp.crashapi.data.items.MatData;
 import org.ctp.crashapi.utils.DamageUtils;
 import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
 import org.ctp.enchantmentsolution.enchantments.EnchantmentWrapper;
@@ -62,7 +62,7 @@ public class GrindstoneEnchantments extends GenerateEnchantments {
 			takeEnchantments = false;
 			return;
 		}
-		if (MatData.isBook(item.getType()) && PersistenceUtils.hasEnchantments(item) && itemTwo.getType() == Material.BOOK && !PersistenceUtils.hasEnchantments(itemTwo)) takeEnchantments = true;
+		if (!MatData.isBook(item.getType()) && MatData.isBook(itemTwo.getType()) && PersistenceUtils.hasEnchantments(item) && !PersistenceUtils.hasEnchantments(itemTwo)) takeEnchantments = true;
 		else
 			takeEnchantments = false;
 	}

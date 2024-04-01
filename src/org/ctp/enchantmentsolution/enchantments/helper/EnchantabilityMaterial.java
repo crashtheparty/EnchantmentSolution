@@ -3,9 +3,9 @@ package org.ctp.enchantmentsolution.enchantments.helper;
 import java.util.List;
 
 import org.bukkit.Material;
-import org.ctp.crashapi.item.ItemData;
-import org.ctp.crashapi.item.ItemType;
-import org.ctp.crashapi.item.MatData;
+import org.ctp.crashapi.data.items.ItemData;
+import org.ctp.crashapi.data.items.ItemType;
+import org.ctp.crashapi.data.items.MatData;
 import org.ctp.crashapi.utils.ChatUtils;
 import org.ctp.enchantmentsolution.Chatable;
 

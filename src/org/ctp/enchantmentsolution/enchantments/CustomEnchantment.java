@@ -9,7 +9,7 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.ctp.crashapi.config.Language;
-import org.ctp.crashapi.item.*;
+import org.ctp.crashapi.data.items.*;
 import org.ctp.crashapi.utils.ChatUtils;
 import org.ctp.crashapi.utils.ItemUtils;
 import org.ctp.crashapi.utils.StringUtils;

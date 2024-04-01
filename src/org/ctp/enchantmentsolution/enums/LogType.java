@@ -1,7 +1,7 @@
 package org.ctp.enchantmentsolution.enums;
 
 import org.bukkit.Material;
-import org.ctp.crashapi.item.MatData;
+import org.ctp.crashapi.data.items.MatData;
 
 public enum LogType {
 

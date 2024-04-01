@@ -51,7 +51,7 @@ public class DrownedEntity {
 				HumanEntity hEntity = (HumanEntity) hurtEntity;
 				ItemStack helmet = hEntity.getInventory().getHelmet();
 
-				if (helmet != null) level = EnchantmentUtils.getLevel(helmet, RegisterEnchantments.OXYGEN);
+				if (helmet != null) level = EnchantmentUtils.getLevel(helmet, RegisterEnchantments.RESPIRATION);
 			}
 			double chance = level / ((double) level + 1);
 			double random = Math.random();

@@ -14,7 +14,7 @@ import org.bukkit.inventory.meta.BlockStateMeta;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.ctp.crashapi.compatibility.MMOUtils;
-import org.ctp.crashapi.item.*;
+import org.ctp.crashapi.data.items.*;
 import org.ctp.enchantmentsolution.enchantments.*;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.persistence.PersistenceUtils;

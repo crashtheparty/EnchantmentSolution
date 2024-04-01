@@ -4,13 +4,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
+import org.ctp.crashapi.data.ParticleData;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
@@ -77,7 +80,9 @@ public class SoulListener extends Enchantmentable {
 					if (!soulReaperEvent.isCancelled()) {
 						if (soulReaperEvent.getReapedItems().size() > 0) {
 							AdvancementUtils.awardCriteria(player.getKiller(), ESAdvancement.FEAR_THE_REAPER, "reaper");
-							player.getWorld().spawnParticle(Particle.EXPLOSION_HUGE, player.getLocation(), 50, 0.2, 2, 0.2);
+							ParticleData p = new ParticleData("EXPLOSION_NORMAL");
+							if (p.getParticle() == null) p = new ParticleData("EXPLOSION");
+							player.getWorld().spawnParticle(p.getParticle(), player.getLocation(), 50, 0.2, 2, 0.2);
 							player.getWorld().playSound(player.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 0.6f, 0.6f);
 							for(ItemStack item: soulReaperEvent.getReapedItems())
 								if (EnchantmentUtils.hasEnchantment(item, RegisterEnchantments.SOUL_REAPER)) AdvancementUtils.awardCriteria(player.getKiller(), ESAdvancement.REAPED_THE_REAPER, "reaper");

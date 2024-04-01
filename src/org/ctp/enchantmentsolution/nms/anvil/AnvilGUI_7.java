@@ -9,7 +9,7 @@ import java.util.function.BiFunction;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.ctp.crashapi.inventory.InventoryData;
+import org.ctp.crashapi.data.inventory.InventoryData;
 import org.ctp.crashapi.nms.anvil.AnvilSlot;
 import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.inventory.Anvil;
@@ -100,7 +100,7 @@ public class AnvilGUI_7 extends AnvilGUI {
 		try {
 			TranslatableComponent t = new TranslatableComponent("container.repair");
 			@SuppressWarnings("unchecked")
-			PacketPlayOutOpenWindow packet = new PacketPlayOutOpenWindow(c, (Containers<ContainerAnvil>) (Container.class.getDeclaredMethod("a").invoke(container)), ChatSerializer.a(ComponentSerializer.toString(t)));
+			PacketPlayOutOpenWindow packet = new PacketPlayOutOpenWindow(c, (Containers<ContainerAnvil>) (Container.class.getDeclaredMethod("a").invoke(container)), (IChatBaseComponent) ChatSerializer.class.getDeclaredMethod("a", String.class).invoke(null, ComponentSerializer.toString(t)));
 			pc.getClass().getDeclaredMethod("a", Packet.class).invoke(pc, packet);
 		} catch (Exception ex) {
 			ex.printStackTrace();

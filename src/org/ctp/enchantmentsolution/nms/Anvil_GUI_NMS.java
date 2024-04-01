@@ -1,7 +1,7 @@
 package org.ctp.enchantmentsolution.nms;
 
 import org.bukkit.entity.Player;
-import org.ctp.crashapi.inventory.InventoryData;
+import org.ctp.crashapi.data.inventory.InventoryData;
 import org.ctp.crashapi.nms.NMS;
 import org.ctp.enchantmentsolution.nms.anvil.*;
 
@@ -13,7 +13,8 @@ public class Anvil_GUI_NMS extends NMS {
 				AnvilGUI_v1_16_R3.createAnvil(player, data);
 				break;
 			default:
-				if (isSimilarOrAbove(getVersionNumbers(), 1, 20, 3)) AnvilGUI_9.createAnvil(player, data);
+				if (isSimilarOrAbove(getVersionNumbers(), 1, 20, 5)) AnvilGUI_10.createAnvil(player, data);
+				else if (isSimilarOrAbove(getVersionNumbers(), 1, 20, 3)) AnvilGUI_9.createAnvil(player, data);
 				else if (isSimilarOrAbove(getVersionNumbers(), 1, 20, 2)) AnvilGUI_8.createAnvil(player, data);
 				else if (isSimilarOrAbove(getVersionNumbers(), 1, 20, 0)) AnvilGUI_7.createAnvil(player, data);
 				else if (isSimilarOrAbove(getVersionNumbers(), 1, 19, 4)) AnvilGUI_6.createAnvil(player, data);
