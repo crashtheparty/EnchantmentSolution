@@ -98,12 +98,12 @@ public class CommandUtils {
 		Player player = null;
 		Configurations c = Configurations.getConfigurations();
 		if (sender instanceof Player) player = (Player) sender;
-		if (sender.isOp()) {
-			c.generateDebug();
-			Chatable.get().sendInfo(Chatable.get().getMessage(ChatUtils.getCodes(), "commands.debug"));
-		} else if (sender.hasPermission(details.getPermission())) {
+		if (player != null && sender.hasPermission(details.getPermission())) {
 			c.generateDebug();
 			Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(ChatUtils.getCodes(), "commands.debug"), Level.INFO);
+		} else if (sender.isOp() || sender.hasPermission(details.getPermission())) {
+			c.generateDebug();
+			Chatable.get().sendInfo(Chatable.get().getMessage(ChatUtils.getCodes(), "commands.debug"));
 		} else
 			Chatable.get().sendMessage(sender, player, Chatable.get().getMessage(ChatUtils.getCodes(), "commands.no-permission"), Level.WARNING);
 		return true;

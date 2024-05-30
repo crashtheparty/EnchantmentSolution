@@ -94,7 +94,7 @@ public class EnchantmentSolutionCommand implements CommandExecutor, TabCompleter
 			if (containsCommand(command, args[0])) try {
 				return new ESCommandCallable(command, sender, finalArgs).call();
 			} catch (Exception e) {
-				e.printStackTrace();
+				Chatable.sendStackTrace(e);
 			}
 		}
 

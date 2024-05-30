@@ -44,7 +44,7 @@ public class SaveUtils {
 					progress.setCurrentAmount(config.getInt("advancement_progress." + i + ".current_amount"));
 					config.removeKey("advancement_progress." + i);
 				} catch (Exception ex) {
-					ex.printStackTrace();
+					Chatable.sendStackTrace(ex);
 				}
 				i++;
 			}
@@ -158,7 +158,7 @@ public class SaveUtils {
 				i++;
 			}
 		} catch (NoClassDefFoundError ex) {
-			ex.printStackTrace();
+			Chatable.sendStackTrace(ex);
 		}
 
 		if (!ConfigString.RESET_ON_RELOAD.getBoolean()) {
@@ -170,7 +170,7 @@ public class SaveUtils {
 						i++;
 					}
 			} catch (NoClassDefFoundError ex) {
-				ex.printStackTrace();
+				Chatable.sendStackTrace(ex);
 			}
 		}
 		i = 0;

@@ -31,7 +31,7 @@ public class EnchantmentLevel {
 			try {
 				level = Integer.parseInt(split[1]);
 			} catch (NumberFormatException ex) {
-				ex.printStackTrace();
+				Chatable.sendStackTrace(ex);
 				return;
 			}
 			enchant = getEnchantFromString(split[0], Chatable.get().getMessage(reason.getReason(), codes));
@@ -45,7 +45,7 @@ public class EnchantmentLevel {
 			try {
 				level = Integer.parseInt(split[1]);
 			} catch (NumberFormatException ex) {
-				ex.printStackTrace();
+				Chatable.sendStackTrace(ex);
 				return;
 			}
 			enchant = getEnchantFromString(split[0], config);

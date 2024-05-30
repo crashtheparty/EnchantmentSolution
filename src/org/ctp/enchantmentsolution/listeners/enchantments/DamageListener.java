@@ -18,6 +18,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.util.Vector;
+import org.ctp.crashapi.data.DamageCauseType;
 import org.ctp.crashapi.data.items.PotData;
 import org.ctp.crashapi.utils.ChatUtils;
 import org.ctp.crashapi.utils.DamageUtils;
@@ -39,7 +40,6 @@ import org.ctp.enchantmentsolution.events.teleport.WarpPlayerEvent;
 import org.ctp.enchantmentsolution.listeners.Enchantmentable;
 import org.ctp.enchantmentsolution.mcmmo.McMMOHandler;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
-import org.ctp.enchantmentsolution.utils.ESArrays;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.*;
 import org.ctp.enchantmentsolution.utils.items.AbilityUtils;
 import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
@@ -344,7 +344,7 @@ public class DamageListener extends Enchantmentable {
 
 	private void ironDefense(EntityDamageByEntityEvent event) {
 		if (!canRun(RegisterEnchantments.IRON_DEFENSE, event)) return;
-		if (!ESArrays.getContactCauses().contains(event.getCause())) return;
+		if (!DamageCauseType.isContactType(event.getCause())) return;
 		Entity attacked = event.getEntity();
 		Entity attacker = event.getDamager();
 		if (attacker instanceof AreaEffectCloud) return;
@@ -476,7 +476,6 @@ public class DamageListener extends Enchantmentable {
 		}
 	}
 
-	@SuppressWarnings("deprecation")
 	private void magicGuard(EntityDamageByEntityEvent event) {
 		if (!canRun(RegisterEnchantments.MAGIC_GUARD, event)) return;
 		if (event.getDamager() instanceof AreaEffectCloud) if (event.getEntity() instanceof Player) {
@@ -484,7 +483,7 @@ public class DamageListener extends Enchantmentable {
 			if (isDisabled(player, RegisterEnchantments.MAGIC_GUARD)) return;
 			ItemStack shield = player.getInventory().getItemInOffHand();
 			if (shield.getType() == Material.SHIELD && EnchantmentUtils.hasEnchantment(shield, RegisterEnchantments.MAGIC_GUARD)) {
-				MagicGuardPotionEvent magicGuard = new MagicGuardPotionEvent(player, ((AreaEffectCloud) event.getDamager()).getBasePotionType().getEffectType());
+				MagicGuardPotionEvent magicGuard = new MagicGuardPotionEvent(player, PotData.getPotionEffectType((AreaEffectCloud) event.getDamager()));
 				Bukkit.getPluginManager().callEvent(magicGuard);
 
 				if (!magicGuard.isCancelled()) event.setCancelled(true);
@@ -496,22 +495,22 @@ public class DamageListener extends Enchantmentable {
 		try {
 			potion(event, RegisterEnchantments.BLINDNESS, PotionEffectType.BLINDNESS);
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			Chatable.sendStackTrace(ex);
 		}
 		try {
 			potion(event, RegisterEnchantments.VENOM, PotionEffectType.POISON);
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			Chatable.sendStackTrace(ex);
 		}
 		try {
 			potion(event, RegisterEnchantments.TRUANT, PotData.SLOW.getPotionEffect());
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			Chatable.sendStackTrace(ex);
 		}
 		try {
 			potion(event, RegisterEnchantments.WITHERING, PotionEffectType.WITHER);
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			Chatable.sendStackTrace(ex);
 		}
 	}
 
@@ -732,6 +731,7 @@ public class DamageListener extends Enchantmentable {
 			case "BAT":
 			case "BEE":
 			case "BLAZE":
+			case "BREEZE":
 			case "ENDER_DRAGON":
 			case "GHAST":
 			case "PARROT":

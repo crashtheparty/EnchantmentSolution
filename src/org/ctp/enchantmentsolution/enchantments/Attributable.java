@@ -10,6 +10,7 @@ import org.bukkit.attribute.AttributeModifier.Operation;
 import org.bukkit.entity.Player;
 import org.ctp.crashapi.data.items.ItemSlotType;
 import org.ctp.crashapi.nms.DamageNMS;
+import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
@@ -139,7 +140,7 @@ public enum Attributable {
 		try {
 			if (hasExactAttribute(instance, modifier)) instance.removeModifier(modifier);
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			Chatable.sendStackTrace(ex);
 		}
 	}
 

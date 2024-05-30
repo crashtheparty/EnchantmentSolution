@@ -17,12 +17,12 @@ import org.bukkit.event.inventory.InventoryEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.util.Vector;
 import org.ctp.crashapi.data.EnchantmentData;
 import org.ctp.crashapi.data.ParticleData;
 import org.ctp.crashapi.data.items.MatData;
+import org.ctp.crashapi.data.items.PotData;
 import org.ctp.crashapi.utils.DamageUtils;
 import org.ctp.crashapi.utils.ItemUtils;
 import org.ctp.crashapi.utils.LocationUtils;
@@ -489,10 +489,7 @@ public class PlayerListener extends Enchantmentable {
 					if (arrow.getType() == Material.SPECTRAL_ARROW) projectile = player.launchProjectile(SpectralArrow.class);
 					else
 						projectile = player.launchProjectile(Arrow.class);
-					if (arrow.getType() == Material.TIPPED_ARROW) {
-						PotionMeta meta = (PotionMeta) arrow.getItemMeta();
-						((Arrow) projectile).setBasePotionType(meta.getBasePotionType());
-					}
+					if (arrow.getType() == Material.TIPPED_ARROW) PotData.setArrowPotionType(arrow, (Arrow) projectile);
 					projectile.setMetadata("overkill", new FixedMetadataValue(EnchantmentSolution.getPlugin(), player.getUniqueId().toString()));
 					if (!overkill.takeArrow()) projectile.setMetadata("no_pickup", new FixedMetadataValue(EnchantmentSolution.getPlugin(), true));
 					AbstractArrow proj = projectile;

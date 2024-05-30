@@ -63,7 +63,7 @@ public class AnvilGUI_6 extends AnvilGUI {
 		try {
 			w = (World) (Entity.class.getDeclaredMethod("Y").invoke(p));
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			Chatable.sendStackTrace(ex);
 			return;
 		}
 
@@ -72,7 +72,7 @@ public class AnvilGUI_6 extends AnvilGUI {
 			container = new AnvilContainer(p, c, w);
 			container.setTitle(IChatBaseComponent.a("Repairing"));
 		} catch (Exception e) {
-			e.printStackTrace();
+			Chatable.sendStackTrace(e);
 			return;
 		}
 
@@ -95,7 +95,7 @@ public class AnvilGUI_6 extends AnvilGUI {
 			else
 				Chatable.get().sendInfo("Issue with Anvil NMS - Player Connection not found");
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			Chatable.sendStackTrace(ex);
 		}
 		try {
 			TranslatableComponent t = new TranslatableComponent("container.repair");
@@ -103,7 +103,7 @@ public class AnvilGUI_6 extends AnvilGUI {
 			PacketPlayOutOpenWindow packet = new PacketPlayOutOpenWindow(c, (Containers<ContainerAnvil>) (Container.class.getDeclaredMethod("a").invoke(container)), (IChatBaseComponent) ChatSerializer.class.getDeclaredMethod("a", String.class).invoke(null, ComponentSerializer.toString(t)));
 			pc.getClass().getDeclaredMethod("a", Packet.class).invoke(pc, packet);
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			Chatable.sendStackTrace(ex);
 		}
 
 		// Set their active container to the container
@@ -113,7 +113,7 @@ public class AnvilGUI_6 extends AnvilGUI {
 			f.setAccessible(true);
 			f.set(p, container);
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			Chatable.sendStackTrace(ex);
 		}
 	}
 

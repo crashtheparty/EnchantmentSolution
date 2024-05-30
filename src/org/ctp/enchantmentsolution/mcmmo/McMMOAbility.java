@@ -13,6 +13,7 @@ import org.bukkit.event.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
@@ -44,7 +45,7 @@ public class McMMOAbility implements Listener {
 				clazz = Class.forName("com.gmail.nossr50.datatypes.skills.AbilityType");
 				abilityClazz = Class.forName("com.gmail.nossr50.events.skills.abilities.McMMOPlayerAbilityEvent");
 			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
+				Chatable.sendStackTrace(e);
 			}
 			if (clazz != null && abilityClazz != null) for(Object obj: clazz.getEnumConstants()) {
 				String name = obj.toString().toUpperCase(Locale.ROOT);
@@ -53,7 +54,7 @@ public class McMMOAbility implements Listener {
 					Object returnType = method.invoke(event);
 					if (returnType.toString().toUpperCase(Locale.ROOT).equals(name)) return true;
 				} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-					e.printStackTrace();
+					Chatable.sendStackTrace(e);
 				}
 			}
 		}

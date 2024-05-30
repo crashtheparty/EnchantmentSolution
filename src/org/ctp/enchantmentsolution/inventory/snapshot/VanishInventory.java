@@ -33,7 +33,7 @@ public class VanishInventory implements SavedInventory {
 					items[i] = item;
 				} catch (Exception ex) {
 					Chatable.get().sendWarning("There was a problem trying to save item " + item + " in slot " + i + ": ");
-					ex.printStackTrace();
+					Chatable.sendStackTrace(ex);
 				}
 			}
 			ItemStack offhand = inv.getItemInOffHand();
@@ -41,7 +41,7 @@ public class VanishInventory implements SavedInventory {
 				items[36] = offhand;
 			} catch (Exception ex) {
 				Chatable.get().sendWarning("There was a problem trying to save item " + offhand + " in offhand slot: ");
-				ex.printStackTrace();
+				Chatable.sendStackTrace(ex);
 			}
 			for(int i = 0; i < 4; i++) {
 				ItemStack item = inv.getArmorContents()[i];
@@ -49,7 +49,7 @@ public class VanishInventory implements SavedInventory {
 					armor[i] = item;
 				} catch (Exception ex) {
 					Chatable.get().sendWarning("There was a problem trying to save item " + item + " in armor slot " + i + ": ");
-					ex.printStackTrace();
+					Chatable.sendStackTrace(ex);
 				}
 			}
 

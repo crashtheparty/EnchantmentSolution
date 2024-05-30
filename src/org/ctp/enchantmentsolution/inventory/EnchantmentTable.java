@@ -176,7 +176,7 @@ public class EnchantmentTable implements InventoryData {
 			} else
 				inv.setItem(10, lapisStack);
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			Chatable.sendStackTrace(ex);
 		}
 	}
 

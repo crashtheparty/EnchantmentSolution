@@ -2,6 +2,7 @@ package org.ctp.enchantmentsolution.nms.anvil;
 
 import org.bukkit.inventory.ItemStack;
 import org.ctp.crashapi.nms.NMS;
+import org.ctp.enchantmentsolution.Chatable;
 
 public class Anvil_3 extends NMS {
 
@@ -10,7 +11,7 @@ public class Anvil_3 extends NMS {
 		try {
 			return (int) i.getClass().getDeclaredMethod("G").invoke(i);
 		} catch (Exception e) {
-			e.printStackTrace();
+			Chatable.sendStackTrace(e);
 		}
 		return 0;
 	}

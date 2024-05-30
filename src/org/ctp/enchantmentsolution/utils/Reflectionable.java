@@ -8,6 +8,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.potion.PotionEffectType;
+import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.EnchantmentWrapper;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
@@ -21,7 +22,7 @@ public interface Reflectionable {
 			superMethod.setAccessible(true);
 			superMethod.invoke(superClass);
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			Chatable.sendStackTrace(ex);
 		}
 	}
 
@@ -31,7 +32,7 @@ public interface Reflectionable {
 			superMethod.setAccessible(true);
 			superMethod.invoke(superClass, event);
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			Chatable.sendStackTrace(ex);
 		}
 	}
 
@@ -45,7 +46,7 @@ public interface Reflectionable {
 			superMethod.setAccessible(true);
 			superMethod.invoke(superClass, event, enchantment);
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			Chatable.sendStackTrace(ex);
 		}
 	}
 
@@ -61,7 +62,7 @@ public interface Reflectionable {
 			superMethod.setAccessible(true);
 			superMethod.invoke(superClass, event, enchantment, type);
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			Chatable.sendStackTrace(ex);
 		}
 	}
 
@@ -78,7 +79,7 @@ public interface Reflectionable {
 			superMethod.setAccessible(true);
 			superMethod.invoke(superClass, event, enchantment, objs);
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			Chatable.sendStackTrace(ex);
 		}
 	}
 
@@ -98,7 +99,7 @@ public interface Reflectionable {
 			superMethod.setAccessible(true);
 			superMethod.invoke(superClass, objs.toArray());
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			Chatable.sendStackTrace(ex);
 		}
 	}
 

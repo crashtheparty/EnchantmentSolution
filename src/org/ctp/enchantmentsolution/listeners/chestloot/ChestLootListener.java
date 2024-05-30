@@ -17,6 +17,7 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.vehicle.VehicleDestroyEvent;
 import org.bukkit.inventory.EquipmentSlot;
+import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 import org.ctp.enchantmentsolution.utils.loot.LootUtils;
 
@@ -34,7 +35,7 @@ public class ChestLootListener implements Listener {
 				for(Block bLoot: blockLoot)
 					LootUtils.populateLootChest(event.getPlayer(), bLoot);
 			} catch (ChestLootException e) {
-				e.printStackTrace();
+				Chatable.sendStackTrace(e);
 			}
 		}
 	}

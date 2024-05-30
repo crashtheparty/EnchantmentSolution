@@ -8,11 +8,12 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.ctp.crashapi.data.items.MatData;
+import org.ctp.crashapi.data.items.PotData;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.events.potion.MagicGuardPotionEvent;
-import org.ctp.enchantmentsolution.utils.ESArrays;
 import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
 import org.ctp.enchantmentsolution.utils.player.ESPlayer;
 
@@ -49,13 +50,15 @@ public class MagicGuardThread extends EnchantmentThread {
 			return;
 		}
 		Player p = player.getOnlinePlayer();
-		for(PotionEffect effect: p.getActivePotionEffects())
-			if (ESArrays.getBadPotions().contains(effect.getType())) {
-				MagicGuardPotionEvent event = new MagicGuardPotionEvent(p, effect.getType());
+		for (PotionEffect effect : p.getActivePotionEffects()) {
+			PotionEffectType t = effect.getType();
+			if (PotData.isBadPotionEffect(effect.getType())) {
+				MagicGuardPotionEvent event = new MagicGuardPotionEvent(p, t);
 				Bukkit.getPluginManager().callEvent(event);
 
-				if (!event.isCancelled()) p.removePotionEffect(effect.getType());
+				if (!event.isCancelled()) p.removePotionEffect(t);
 			}
+		}
 	}
 
 	@Override

@@ -1,7 +1,5 @@
 package org.ctp.enchantmentsolution.listeners;
 
-import java.util.List;
-
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
@@ -16,13 +14,13 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.metadata.FixedMetadataValue;
+import org.ctp.crashapi.data.items.MatData;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.events.blocks.BlockBreakMultiEvent;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
 import org.ctp.enchantmentsolution.utils.BlockUtils;
-import org.ctp.enchantmentsolution.utils.ESArrays;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.GaiaTrees;
 import org.ctp.enchantmentsolution.utils.abilityhelpers.WalkerUtils;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
@@ -54,11 +52,10 @@ public class ExtraBlockListener implements Listener {
 	public void onBlockDropItem(BlockDropItemEvent event) {
 		BlockState state = event.getBlockState();
 		BlockData data = state.getBlockData();
-		List<Material> shulker = ESArrays.getShulkerBoxes();
 
 		for(Item i: event.getItems()) {
 			ItemStack eventItem = i.getItemStack();
-			if (shulker.contains(data.getMaterial()) && shulker.contains(eventItem.getType())) {
+			if (MatData.isShulkerBox(data.getMaterial()) && MatData.isShulkerBox(eventItem.getType())) {
 				Block block = event.getBlock();
 				if (block.getMetadata("soulbound").size() > 0) {
 					eventItem = EnchantmentUtils.getSoulboundShulkerBox(state, eventItem);
@@ -70,7 +67,7 @@ public class ExtraBlockListener implements Listener {
 
 	@EventHandler
 	public void onBlockPlace(BlockPlaceEvent event) {
-		if (ESArrays.getShulkerBoxes() != null && event.getItemInHand() != null) if (ESArrays.getShulkerBoxes().contains(event.getItemInHand().getType())) {
+		if (event.getItemInHand() != null && MatData.isShulkerBox(event.getItemInHand().getType())) {
 			ItemMeta meta = event.getItemInHand().getItemMeta();
 			if (meta != null) {
 				String name = meta.getDisplayName();

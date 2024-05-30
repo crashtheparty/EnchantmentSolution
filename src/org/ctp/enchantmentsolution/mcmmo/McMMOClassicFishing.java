@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.permissions.Permissible;
+import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
@@ -77,14 +78,14 @@ public class McMMOClassicFishing extends McMMOFishing {
 		try {
 			permissions = Class.forName("com.gmail.nossr50.util.Permissions");
 		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
+			Chatable.sendStackTrace(e);
 		}
 		if (permissions != null) try {
 			Method method = permissions.getDeclaredMethod("secondaryAbilityEnabled", Permissible.class, SecondaryAbility.class);
 			Object returnType = method.invoke(null, player, ability);
 			return returnType instanceof Boolean && ((Boolean) returnType).booleanValue();
 		} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-			e.printStackTrace();
+			Chatable.sendStackTrace(e);
 		}
 
 		return false;
@@ -95,14 +96,14 @@ public class McMMOClassicFishing extends McMMOFishing {
 		try {
 			expConfig = Class.forName("com.gmail.nossr50.config.experience.ExperienceConfig");
 		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
+			Chatable.sendStackTrace(e);
 		}
 		if (expConfig != null) try {
 			Method method = expConfig.getDeclaredMethod("getXp", SkillType.class, Material.class);
 			Object returnType = method.invoke(ExperienceConfig.getInstance(), type, material);
 			if (returnType instanceof Integer) return ((Integer) returnType).intValue();
 		} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-			e.printStackTrace();
+			Chatable.sendStackTrace(e);
 		}
 
 		return 0;
@@ -114,7 +115,7 @@ public class McMMOClassicFishing extends McMMOFishing {
 			Method method = SkillManager.class.getDeclaredMethod("applyXpGain", float.class, XPGainReason.class);
 			method.invoke(manager, exp, XPGainReason.PVE);
 		} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-			e.printStackTrace();
+			Chatable.sendStackTrace(e);
 		}
 	}
 

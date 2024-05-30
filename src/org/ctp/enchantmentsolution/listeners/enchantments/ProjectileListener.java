@@ -19,6 +19,7 @@ import org.bukkit.util.Vector;
 import org.ctp.crashapi.data.items.PotData;
 import org.ctp.crashapi.nms.DamageNMS;
 import org.ctp.crashapi.utils.LocationUtils;
+import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.api.ApiEnchantList;
@@ -165,22 +166,22 @@ public class ProjectileListener extends Enchantmentable {
 		try {
 			potion(event, RegisterEnchantments.BLINDNESS, PotionEffectType.BLINDNESS);
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			Chatable.sendStackTrace(ex);
 		}
 		try {
 			potion(event, RegisterEnchantments.VENOM, PotionEffectType.POISON);
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			Chatable.sendStackTrace(ex);
 		}
 		try {
 			potion(event, RegisterEnchantments.TRUANT, PotData.SLOW.getPotionEffect());
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			Chatable.sendStackTrace(ex);
 		}
 		try {
 			potion(event, RegisterEnchantments.WITHERING, PotionEffectType.WITHER);
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			Chatable.sendStackTrace(ex);
 		}
 	}
 

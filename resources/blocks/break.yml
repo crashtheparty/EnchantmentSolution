@@ -20,7 +20,10 @@ iron_pickaxe:
 - raw_gold_block
 - redstone_ore
 stone_pickaxe:
+- chiseled_copper
 - copper_block
+- copper_bulb
+- copper_grate
 - copper_ore
 - cut_copper
 - deepslate_copper_ore
@@ -72,6 +75,7 @@ wooden_pickaxe:
 - chiseled_polished_blackstone
 - chiseled_polished_blackstone_bricks
 - chiseled_stone_bricks
+- chiseled_tuff
 - coal_block
 - coal_ore
 - cobbled_deepslate
@@ -159,6 +163,7 @@ wooden_pickaxe:
 - polished_deepslate
 - polished_diorite
 - polished_granite
+- polished_tuff
 - powered_rail
 - prismarine
 - prismarine_bricks
@@ -187,6 +192,7 @@ wooden_pickaxe:
 - terracotta
 - tube_coral_block
 - tuff
+- tuff_bricks
 - verdant_froglight
 - warped_nylium
 - white_concrete

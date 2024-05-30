@@ -9,6 +9,7 @@ import org.bukkit.inventory.ItemStack;
 import org.ctp.crashapi.config.Configurable;
 import org.ctp.crashapi.config.yaml.YamlConfig;
 import org.ctp.crashapi.nms.MobNMS;
+import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
 import org.ctp.enchantmentsolution.enchantments.EnchantmentWrapper;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
@@ -116,7 +117,7 @@ public class AnimalMob {
 				if (b1) creature.setHealth(creature.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());
 			}
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			Chatable.sendStackTrace(ex);
 		}
 	}
 

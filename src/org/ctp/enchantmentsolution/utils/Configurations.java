@@ -1,34 +1,25 @@
 package org.ctp.enchantmentsolution.utils;
 
-import java.io.File;
+import java.io.*;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.Map.Entry;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import org.bukkit.Bukkit;
-import org.bukkit.block.Block;
 import org.bukkit.plugin.Plugin;
 import org.ctp.crashapi.CrashAPIPlugin;
 import org.ctp.crashapi.config.*;
 import org.ctp.crashapi.config.yaml.YamlConfig;
-import org.ctp.crashapi.config.yaml.YamlConfigBackup;
 import org.ctp.crashapi.db.BackupDB;
-import org.ctp.crashapi.resources.advancements.CrashAdvancementProgress;
+import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.EnchantmentSolution;
-import org.ctp.enchantmentsolution.enchantments.CustomEnchantment;
-import org.ctp.enchantmentsolution.enchantments.EnchantmentWrapper;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.enchantments.generate.TableEnchantments;
-import org.ctp.enchantmentsolution.enchantments.helper.EnchantmentLevel;
 import org.ctp.enchantmentsolution.inventory.minigame.Minigame;
-import org.ctp.enchantmentsolution.rpg.RPGPlayer;
-import org.ctp.enchantmentsolution.rpg.RPGUtils;
-import org.ctp.enchantmentsolution.utils.abilityhelpers.AnimalMob;
-import org.ctp.enchantmentsolution.utils.abilityhelpers.WalkerBlock;
-import org.ctp.enchantmentsolution.utils.abilityhelpers.WalkerUtils;
 import org.ctp.enchantmentsolution.utils.config.*;
 import org.ctp.enchantmentsolution.utils.files.ESLanguageFile;
-import org.ctp.enchantmentsolution.utils.player.ESPlayer;
 
 public class Configurations implements CrashConfigurations {
 
@@ -58,7 +49,7 @@ public class Configurations implements CrashConfigurations {
 		try {
 			if (!dataFolder.exists()) dataFolder.mkdirs();
 		} catch (final Exception e) {
-			e.printStackTrace();
+			Chatable.sendStackTrace(e);
 		}
 
 		BackupDB db = EnchantmentSolution.getPlugin().getDb();
@@ -171,94 +162,31 @@ public class Configurations implements CrashConfigurations {
 		debug.set("plugins.all_plugins", allPlugins);
 
 		debug.copy(DEBUG_FILE.getConfig());
-
-		int i = 0;
-		for(CrashAdvancementProgress progress: EnchantmentSolution.getAdvancementProgress()) {
-			debug.set("data_file.advancement_progress." + i + ".advancement", progress.getAdvancement().name());
-			debug.set("data_file.advancement_progress." + i + ".player", progress.getPlayer().getUniqueId());
-			debug.set("data_file.advancement_progress." + i + ".criteria", progress.getCriteria());
-			debug.set("data_file.advancement_progress." + i + ".current_amount", progress.getCurrentAmount());
-			i++;
-		}
-		i = 0;
-		List<WalkerBlock> blocks = WalkerUtils.getBlocks();
-		if (blocks != null) for(WalkerBlock block: blocks) {
-			Block loc = block.getBlock();
-			CustomEnchantment enchantment = RegisterEnchantments.getCustomEnchantment(block.getEnchantment());
-			debug.set("data_file.blocks." + i, enchantment.getName() + " " + loc.getWorld().getName() + " " + loc.getX() + " " + loc.getY() + " " + loc.getZ() + " " + block.getReplaceType().name() + " " + block.getTick() + " " + block.getDamage().name());
-			i++;
-		}
-		i = 0;
-		try {
-			for(AnimalMob animal: EnchantmentSolution.getAnimals()) {
-				animal.setConfig(data, "data_file.animals.", i);
-				i++;
-			}
-		} catch (NoClassDefFoundError ex) {
-			ex.printStackTrace();
-		}
-
-		i = 0;
-		try {
-			for(ESPlayer player: EnchantmentSolution.getAllESPlayers(false))
-				for(TableEnchantments table: TableEnchantments.getAllTableEnchantments(player.getPlayer().getUniqueId())) {
-					table.setConfig(debug, "data_file.", i);
-					i++;
-				}
-		} catch (NoClassDefFoundError ex) {
-			ex.printStackTrace();
-		}
-		i = 0;
-		List<RPGPlayer> players = RPGUtils.getPlayers();
-		if (players != null) for(RPGPlayer player: players) {
-			debug.set("data_file.rpg." + i + ".player", player.getPlayer().getUniqueId().toString());
-			debug.set("data_file.rpg." + i + ".level", player.getLevel());
-			debug.set("data_file.rpg." + i + ".experience", player.getExperience().toString());
-			List<String> enchants = new ArrayList<String>();
-			Iterator<Entry<EnchantmentWrapper, Integer>> iterator = player.getEnchantmentList().entrySet().iterator();
-			while (iterator.hasNext()) {
-				Entry<EnchantmentWrapper, Integer> entry = iterator.next();
-				EnchantmentLevel level = new EnchantmentLevel(RegisterEnchantments.getCustomEnchantment(entry.getKey()), entry.getValue());
-				enchants.add(level.toString());
-			}
-			debug.set("data_file.rpg." + i + ".enchants", enchants);
-			i++;
-		}
-
-		YamlConfigBackup config = CONFIG.getConfig();
-		YamlConfigBackup fishing = FISHING.getConfig();
-		YamlConfigBackup language = LANGUAGE.getConfig();
-		YamlConfigBackup enchantments = ENCHANTMENTS.getConfig();
-		YamlConfigBackup advancements = ADVANCEMENTS.getConfig();
-		YamlConfigBackup rpg = RPG.getConfig();
-		YamlConfigBackup minigame = MINIGAME.getConfig();
-		YamlConfigBackup hardMode = HARD_MODE.getConfig();
-
-		for(String s: config.getAllEntryKeys())
-			if (config.contains(s)) debug.set("config." + s, config.get(s));
-
-		for(String s: fishing.getAllEntryKeys())
-			if (fishing.contains(s)) debug.set("fishing." + s, fishing.get(s));
-
-		for(String s: language.getAllEntryKeys())
-			if (language.contains(s)) debug.set("language." + s, language.get(s));
-
-		for(String s: advancements.getAllEntryKeys())
-			if (advancements.contains(s)) debug.set("advancements." + s, advancements.get(s));
-
-		for(String s: enchantments.getAllEntryKeys())
-			if (enchantments.contains(s)) debug.set("enchantment." + s, enchantments.get(s));
-
-		for(String s: rpg.getAllEntryKeys())
-			if (rpg.contains(s)) debug.set("rpg." + s, rpg.get(s));
-
-		for(String s: minigame.getAllEntryKeys())
-			if (minigame.contains(s)) debug.set("minigame." + s, rpg.get(s));
-
-		for(String s: hardMode.getAllEntryKeys())
-			if (hardMode.contains(s)) debug.set("hard_mode." + s, rpg.get(s));
-
 		debug.saveConfig();
+		
+		try {
+			FileOutputStream fos = new FileOutputStream(Paths.get(dataFolder.toURI()).toAbsolutePath() + "/debug.zip");
+	        try (ZipOutputStream zipOut = new ZipOutputStream(fos)) {
+				List<String> files = Arrays.asList(CONFIG.getFile().getPath(), FISHING.getFile().getPath(), LANGUAGE.getFile().getPath(), 
+				ENCHANTMENTS.getFile().getPath(), ADVANCEMENTS.getFile().getPath(), RPG.getFile().getPath(), MINIGAME.getFile().getPath(), 
+				HARD_MODE.getFile().getPath(), DATA_FILE.getFile().getPath(), data.getFile().getPath());
+				
+				for (String srcFile : files) {
+				    File fileToZip = new File(srcFile);
+				    FileInputStream fis = new FileInputStream(fileToZip);
+				    ZipEntry zipEntry = new ZipEntry(fileToZip.getName());
+				    zipOut.putNextEntry(zipEntry);
+
+				    byte[] bytes = new byte[1024];
+				    int length;
+				    while((length = fis.read(bytes)) >= 0)
+						zipOut.write(bytes, 0, length);
+				    fis.close();
+				}
+			}
+		} catch (IOException e) {
+			Chatable.sendStackTrace(e);
+		}
 	}
 
 	public void reload() {

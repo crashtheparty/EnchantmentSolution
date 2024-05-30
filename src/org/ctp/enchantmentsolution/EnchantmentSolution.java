@@ -184,7 +184,7 @@ public class EnchantmentSolution extends CrashAPIPlugin {
 				SaveUtils.getData();
 			} catch (Exception ex) {
 				getChat().sendWarning("Error in loading data to data.yml - will possibly break.");
-				ex.printStackTrace();
+				Chatable.sendStackTrace(ex);
 			}
 			CONFIGURATIONS.getEnchantments().setEnchantmentInformation();
 			CONFIGURATIONS.getEnchantments().save();

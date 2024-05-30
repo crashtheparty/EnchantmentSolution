@@ -261,7 +261,7 @@ public class RPGInventory implements InventoryData, Pageable {
 				inv.setItem(6, confirm);
 			}
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			Chatable.sendStackTrace(ex);
 		}
 	}
 

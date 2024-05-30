@@ -5,7 +5,7 @@ import java.util.List;
 
 public enum EnchantmentLocation {
 
-	TABLE(), NON_BOOK(), CHEST_LOOT(), MOB_LOOT(), FISHING_LOOT(), VILLAGER_TRADES(), PIGLIN_TRADES(), DEEP_DARK(), NONE();
+	TABLE(), NON_BOOK(), CHEST_LOOT(), MOB_LOOT(), FISHING_LOOT(), VILLAGER_TRADES(), PIGLIN_TRADES(), DEEP_DARK(), TRIAL_CHAMBERS(), NONE();
 
 	public static List<EnchantmentLocation> getDefaultLocations() {
 		return Arrays.asList(TABLE, NON_BOOK, CHEST_LOOT, MOB_LOOT, FISHING_LOOT, VILLAGER_TRADES);

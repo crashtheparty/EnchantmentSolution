@@ -7,12 +7,12 @@ import org.bukkit.event.entity.EntityPotionEffectEvent;
 import org.bukkit.event.entity.EntityPotionEffectEvent.Action;
 import org.bukkit.event.entity.EntityPotionEffectEvent.Cause;
 import org.bukkit.inventory.ItemStack;
+import org.ctp.crashapi.data.items.PotData;
 import org.ctp.enchantmentsolution.advancements.ESAdvancement;
 import org.ctp.enchantmentsolution.enchantments.RegisterEnchantments;
 import org.ctp.enchantmentsolution.events.potion.MagicGuardPotionEvent;
 import org.ctp.enchantmentsolution.listeners.Enchantmentable;
 import org.ctp.enchantmentsolution.utils.AdvancementUtils;
-import org.ctp.enchantmentsolution.utils.ESArrays;
 import org.ctp.enchantmentsolution.utils.items.EnchantmentUtils;
 
 public class PotionEffectListener extends Enchantmentable {
@@ -24,7 +24,8 @@ public class PotionEffectListener extends Enchantmentable {
 			Player player = (Player) event.getEntity();
 			if (isDisabled(player, RegisterEnchantments.MAGIC_GUARD)) return;
 			ItemStack shield = player.getInventory().getItemInOffHand();
-			if (EnchantmentUtils.hasEnchantment(shield, RegisterEnchantments.MAGIC_GUARD) && (event.getAction() == Action.ADDED || event.getAction() == Action.CHANGED) && ESArrays.getBadPotions().contains(event.getModifiedType())) {
+			if (EnchantmentUtils.hasEnchantment(shield, RegisterEnchantments.MAGIC_GUARD) && (event.getAction() == Action.ADDED || event.getAction() == Action.CHANGED) && PotData.isBadPotionEffect(event.getModifiedType())) {
+				
 				MagicGuardPotionEvent magicGuard = new MagicGuardPotionEvent(player, event.getModifiedType());
 				Bukkit.getPluginManager().callEvent(magicGuard);
 

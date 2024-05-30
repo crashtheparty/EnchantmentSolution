@@ -2,6 +2,7 @@ package org.ctp.enchantmentsolution.utils.commands;
 
 import org.bukkit.command.CommandSender;
 import org.ctp.crashapi.commands.CrashCommandCallable;
+import org.ctp.enchantmentsolution.Chatable;
 import org.ctp.enchantmentsolution.utils.config.ConfigString;
 
 public class ESCommandCallable implements CrashCommandCallable {
@@ -37,7 +38,7 @@ public class ESCommandCallable implements CrashCommandCallable {
 		try {
 			run = fromCommand();
 		} catch (Exception e) {
-			e.printStackTrace();
+			Chatable.sendStackTrace(e);
 		}
 		if (!run && sender.hasPermission(command.getPermission()) && ConfigString.PRINT_USAGE.getBoolean()) CommandUtils.printHelp(sender, command.getCommand());
 		return true;

@@ -20,4 +20,14 @@ public class Chatable {
 		ESChatUtils utils = EnchantmentSolution.getPlugin().getChat();
 		utils.sendDebug(s, level);
 	}
+
+	public static void sendStackTrace(Exception ex) {
+		ESChatUtils utils = EnchantmentSolution.getPlugin().getChat();
+		utils.sendStackTrace(ex);
+	}
+
+	public static void sendStackTrace(Error ex) {
+		ESChatUtils utils = EnchantmentSolution.getPlugin().getChat();
+		utils.sendStackTrace(ex);
+	}
 }

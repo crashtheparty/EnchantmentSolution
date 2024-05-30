@@ -149,7 +149,7 @@ public class Anvil implements InventoryData {
 				anvil = null;
 			inv.setItem(14, combine);
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			Chatable.sendStackTrace(ex);
 			if (playerItems.size() - 1 >= 0) {
 				ItemStack item = playerItems.get(playerItems.size() - 1);
 				if (removeItem(playerItems.size() - 1)) ItemUtils.giveItemToPlayer(player, item, player.getLocation(), false);

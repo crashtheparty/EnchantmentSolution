@@ -211,7 +211,7 @@ public class Minigame implements InventoryData, Pageable {
 				if (page != 1) inv.setItem(45, previousPage());
 			}
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			Chatable.sendStackTrace(ex);
 		}
 	}
 
@@ -495,7 +495,7 @@ public class Minigame implements InventoryData, Pageable {
 				try {
 					items.add(new MinigameItem(new MatData(config.getString(key + ".material.show")), new MatData(config.getString(key + ".material.enchant")), MinigameItemType.valueOf(config.getString(key + ".type").toUpperCase(Locale.ROOT)), config.getInt(key + ".costs.level"), config.getInt(key + ".costs.extra_level_cost_per_use"), config.getInt(key + ".costs.max_level_cost"), config.getInt(key + ".costs.lapis"), config.getInt(key + ".costs.extra_lapis_cost_per_use"), config.getInt(key + ".costs.max_lapis_cost"), config.getDouble(key + ".costs.economy"), config.getDouble(key + ".costs.extra_economy_cost_per_use"), config.getDouble(key + ".costs.max_economy_cost"), config.getStringList(key + ".costs.use"), config.getInt(key + ".books.min"), config.getInt(key + ".books.max"), config.getInt(key + ".levels.min"), config.getInt(key + ".levels.max"), config.getInt(key + ".slot"), config.getBoolean(key + ".costs.use_level_cost_increase"), config.getBoolean(key + ".costs.use_lapis_cost_increase"), config.getBoolean(key + ".costs.use_economy_cost_increase"), levels));
 				} catch (IllegalArgumentException ex) {
-					ex.printStackTrace();
+					Chatable.sendStackTrace(ex);
 				}
 			}
 

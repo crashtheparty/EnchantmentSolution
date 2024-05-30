@@ -29,7 +29,7 @@ public class Enchant_1 extends NMS {
 			else
 				Chatable.get().sendWarning("Issue with EnchantNMS - unable to find TriggerEnchantedItem");
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			Chatable.sendStackTrace(ex);
 		}
 	}
 
