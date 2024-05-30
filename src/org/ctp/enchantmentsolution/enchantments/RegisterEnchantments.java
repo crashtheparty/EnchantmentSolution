@@ -31,11 +31,11 @@ public class RegisterEnchantments {
 	public static final EnchantmentWrapper AQUA_AFFINITY = new EnchantmentWrapper(EnchantmentData.AQUA_AFFINITY.getKey(), "WATER_WORKER");
 	public static final EnchantmentWrapper BANE_OF_ARTHROPODS = new EnchantmentWrapper(EnchantmentData.BANE_OF_ARTHROPODS.getKey(), "DAMAGE_ARTHROPODS");
 	public static final EnchantmentWrapper BLAST_PROTECTION = new EnchantmentWrapper(EnchantmentData.BLAST_PROTECTION.getKey(), "PROTECTION_EXPLOSIONS");
-	public static final EnchantmentWrapper BREACH = new EnchantmentWrapper(EnchantmentData.BREACH.getKey(), "BREACH");
+	public static final EnchantmentWrapper BREACH = new EnchantmentWrapper(!new EnchantmentData("BREACH").hasEnchantment() ? null : new EnchantmentData("BREACH").getEnchantment().getKey(), "BREACH");
 	public static final EnchantmentWrapper CHANNELING = new EnchantmentWrapper(Enchantment.CHANNELING.getKey(), "CHANNELING");
 	public static final EnchantmentWrapper BINDING_CURSE = new EnchantmentWrapper(Enchantment.BINDING_CURSE.getKey(), "BINDING_CURSE");
 	public static final EnchantmentWrapper VANISHING_CURSE = new EnchantmentWrapper(Enchantment.VANISHING_CURSE.getKey(), "VANISHING_CURSE");
-	public static final EnchantmentWrapper DENSITY = new EnchantmentWrapper(EnchantmentData.DENSITY.getKey(), "DENSITY");
+	public static final EnchantmentWrapper DENSITY = new EnchantmentWrapper(!new EnchantmentData("DENSITY").hasEnchantment() ? null : new EnchantmentData("DENSITY").getEnchantment().getKey(), "DENSITY");
 	public static final EnchantmentWrapper DEPTH_STRIDER = new EnchantmentWrapper(Enchantment.DEPTH_STRIDER.getKey(), "DEPTH_STRIDER");
 	public static final EnchantmentWrapper EFFICIENCY = new EnchantmentWrapper(EnchantmentData.EFFICIENCY.getKey(), "DIG_SPEED");
 	public static final EnchantmentWrapper FEATHER_FALLING = new EnchantmentWrapper(EnchantmentData.FEATHER_FALLING.getKey(), "PROTECTION_FALL");
@@ -69,7 +69,7 @@ public class RegisterEnchantments {
 	public static final EnchantmentWrapper SWIFT_SNEAK = new EnchantmentWrapper(!new EnchantmentData("SWIFT_SNEAK").hasEnchantment() ? null : new EnchantmentData("SWIFT_SNEAK").getEnchantment().getKey(), "WATER_WORKER");
 	public static final EnchantmentWrapper THORNS = new EnchantmentWrapper(Enchantment.THORNS.getKey(), "THORNS");
 	public static final EnchantmentWrapper UNBREAKING = new EnchantmentWrapper(EnchantmentData.UNBREAKING.getKey(), "DURABILITY");
-	public static final EnchantmentWrapper WIND_BURST = new EnchantmentWrapper(EnchantmentData.WIND_BURST.getKey(), "WIND_BURST");
+	public static final EnchantmentWrapper WIND_BURST = new EnchantmentWrapper(!new EnchantmentData("WIND_BURST").hasEnchantment() ? null : new EnchantmentData("WIND_BURST").getEnchantment().getKey(), "WIND_BURST");
 	
 	public static final EnchantmentWrapper SOULBOUND = new CustomEnchantmentWrapper("soulbound", "SOULBOUND");
 	public static final EnchantmentWrapper SOUL_REAPER = new CustomEnchantmentWrapper("soul_reaper", "SOUL_REAPER");
