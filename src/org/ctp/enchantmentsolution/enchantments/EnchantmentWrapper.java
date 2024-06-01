@@ -14,7 +14,7 @@ public class EnchantmentWrapper {
 		this.key = key;
 		this.name = name;
 	}
-	
+
 	protected EnchantmentWrapper(String key, String name) {
 		this.key = NamespacedKey.minecraft(key);
 		this.name = name;
@@ -25,7 +25,7 @@ public class EnchantmentWrapper {
 		if (ench != null && ench.canEnchantItem(new ItemData(arg0))) return true;
 		return false;
 	}
-	
+
 	public Enchantment getRelativeEnchantment() {
 		return Registry.ENCHANTMENT.get(key);
 	}
@@ -60,10 +60,11 @@ public class EnchantmentWrapper {
 	public NamespacedKey getKey() {
 		return key;
 	}
-	
+
 	@Override
 	public boolean equals(Object object) {
-		if(object instanceof EnchantmentWrapper) {
+		if (this.getKey() == null) return false;
+		if (object instanceof EnchantmentWrapper) {
 			EnchantmentWrapper wrapper = (EnchantmentWrapper) object;
 			return this.getKey().equals(wrapper.getKey()) && this.getName().equals(wrapper.getName());
 		}
